@@ -8,6 +8,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Utility;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
@@ -279,11 +280,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             this.maxDepth = maxDepth;
         }
 
-        public void Insert(Vector2 position, FeatureMapping obj) => Insert(root, position, obj, 0);
+        public void RootInsert(FeatureMapping obj) => Insert(root, obj, 0);
 
-        private void Insert(Node node, Vector2 position, FeatureMapping obj, int depth)
+        private void Insert(Node node, FeatureMapping obj, int depth)
         {
-            if (!node.Bounds.Contains(position)) return;
+            if (!node.Bounds.Contains(obj.Position)) return;
 
             if (node.IsLeaf)
             {
@@ -297,20 +298,20 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             else
             {
                 foreach (var child in node.Children)
-                    Insert(child, position, obj, depth + 1);
+                    Insert(child, obj, depth + 1);
             }
         }
 
-        public List<FeatureMapping> Query(Rect area)
+        public List<FeatureMapping> Query(BoundingBox area)
         {
             List<FeatureMapping> results = new();
             Query(root, area, results);
             return results;
         }
 
-        private void Query(Node node, Rect area, List<FeatureMapping> results)
+        private void Query(Node node, BoundingBox area, List<FeatureMapping> results)
         {
-            if (!node.Bounds.Overlaps(area)) return;
+            if (!node.Bounds.Intersects(area)) return;
 
             results.AddRange(node.Mappings);
 
@@ -321,18 +322,37 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
+        //lets keep the tree in a uniform coordinatesystem
         private void Subdivide(Node node)
         {
-            float x = node.Bounds.x, y = node.Bounds.y;
-            float w = node.Bounds.width * 0.5f, h = node.Bounds.height * 0.5f;
+            if(node.Bounds.CoordinateSystem != CoordinateSystem.WGS84) //we need a 2 dimensional coordinatesystem to do the subdivision
+                node.Bounds.Convert(CoordinateSystem.WGS84);
+
+            Coordinate bottomLeft = node.Bounds.BottomLeft;
+            Coordinate topRight = node.Bounds.TopRight;
+
+            //is this allowed!?
+            double centerX = (bottomLeft.value1 + topRight.value1) * 0.5f;
+            double centerY = (bottomLeft.value2 + topRight.value2) * 0.5f;
+
+            Coordinate center = new Coordinate(CoordinateSystem.WGS84, centerX, centerY);
+            Coordinate bottomCenter = new Coordinate(CoordinateSystem.WGS84, centerX, bottomLeft.value2);
+            Coordinate rightCenter = new Coordinate(CoordinateSystem.WGS84, topRight.value1, centerY);
+            Coordinate leftCenter = new Coordinate(CoordinateSystem.WGS84, bottomLeft.value1, centerY);
+            Coordinate topCenter = new Coordinate(CoordinateSystem.WGS84, centerX, topRight.value2);
+
+            BoundingBox bottomLeftCell = new BoundingBox(bottomLeft, center);
+            BoundingBox bottomRightCell = new BoundingBox(bottomCenter, rightCenter);
+            BoundingBox topLeftCell = new BoundingBox(leftCenter, topCenter);
+            BoundingBox topRightCell = new BoundingBox(center, topRight);
 
             node.Children = new[]
             {
-            new Node(new Rect(x, y, w, h)),         // Bottom-left
-            new Node(new Rect(x + w, y, w, h)),     // Bottom-right
-            new Node(new Rect(x, y + h, w, h)),     // Top-left
-            new Node(new Rect(x + w, y + h, w, h))  // Top-right
-        };
+                new Node(bottomLeftCell),         // Bottom-left
+                new Node(bottomRightCell),     // Bottom-right
+                new Node(topLeftCell),     // Top-left
+                new Node(topRightCell)  // Top-right
+            };
         }
 
         private void ReinsertObjects(Node node)
@@ -340,7 +360,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             var objs = node.Mappings;
             node.Mappings = new List<FeatureMapping>();
             foreach (var obj in objs) 
-                Insert(node, node.Bounds.center, obj, 0);
+                RootInsert(obj);
         }
     }
 

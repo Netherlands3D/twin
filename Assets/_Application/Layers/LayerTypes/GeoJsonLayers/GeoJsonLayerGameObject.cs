@@ -195,6 +195,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 mesh.RecalculateBounds();
                 meshes[i] = mesh;
 
+                Vector3 unityPosition = subObject.transform.position;
+                Coordinate coord = new Coordinate(CoordinateSystem.Unity, unityPosition.x, unityPosition.y, unityPosition.z); //before parenting so worldposition
                 subObject.transform.SetParent(layer.Transform);
                 subObject.layer = LayerMask.NameToLayer("Projected");
 
@@ -203,6 +205,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 objectMapping.SetMeshes(meshes);
                 objectMapping.SetVisualisationLayer(layer);
                 objectMapping.SetGeoJsonLayerParent(this);
+                objectMapping.SetPosition(coord);
             }
         }
 

@@ -1,5 +1,6 @@
 using System;
 using Netherlands3D.Coordinates;
+using UnityEngine;
 
 namespace Netherlands3D.Twin.Utility
 {
@@ -11,7 +12,7 @@ namespace Netherlands3D.Twin.Utility
 
         public BoundingBox(Coordinate bottomLeft, Coordinate topRight)
         {
-            if (bottomLeft.Points[0] > topRight.Points[0] || bottomLeft.Points[1] > topRight.Points[1])
+            if (bottomLeft.value1 > topRight.value1 || bottomLeft.value2 > topRight.value2)
             {
                 throw new ArgumentException(
                     "Invalid coordinates for BoundingBox. BottomLeft should have lower values than TopRight."
@@ -54,6 +55,27 @@ namespace Netherlands3D.Twin.Utility
                    other.TopRight.easting <= this.TopRight.easting &&
                    other.TopRight.northing <= this.TopRight.northing &&
                    other.TopRight.height <= this.TopRight.height;
+        }
+
+        public bool Contains(Coordinate coordinate)
+        {
+            if ((CoordinateSystem)coordinate.CoordinateSystem != CoordinateSystem)
+                coordinate = coordinate.Convert(CoordinateSystem);
+
+            if (BottomLeft.PointsLength == 2)
+            {
+                return coordinate.easting >= this.BottomLeft.easting &&
+                       coordinate.northing >= this.BottomLeft.northing &&
+                       coordinate.easting <= this.TopRight.easting &&
+                       coordinate.northing <= this.TopRight.northing;
+            }
+
+            return coordinate.easting >= this.BottomLeft.easting &&
+                   coordinate.northing >= this.BottomLeft.northing &&
+                   coordinate.height >= this.BottomLeft.height &&
+                   coordinate.easting <= this.TopRight.easting &&
+                   coordinate.northing <= this.TopRight.northing &&
+                   coordinate.height <= this.TopRight.height;
         }
 
 
