@@ -119,7 +119,7 @@ namespace Netherlands3D.Functionalities.Wfs
                 bboxContainer.LayerBoundingBoxes.TryAdd(feature.Name, feature.BoundingBox);
             }
 
-            BoundingBoxContainers.Add(url, bboxContainer);
+            BoundingBoxContainers.TryAdd(url, bboxContainer); //use tryadd to avoid issues when adding the same wfs twice in the application
             return bboxContainer;
         }
     }
