@@ -6,11 +6,32 @@ using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Samplers;
+using Netherlands3D.Twin;
+using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Utility;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class FeatureSelector : MonoBehaviour, IObjectSelector
     {
+        public static FeatureMappingTree MappingTree
+        {
+            get
+            {
+                if(mappingTreeInstance == null)
+                {
+                    Coordinate bottomLeft = new Coordinate(CoordinateSystem.WGS84, 50.8037d, 3.31497d);
+                    Coordinate topRight = new Coordinate(CoordinateSystem.WGS84, 53.5104d, 7.09205d);
+                    BoundingBox bbox = new BoundingBox(bottomLeft, topRight);
+                    FeatureMappingTree tree = new FeatureMappingTree(bbox);
+                    mappingTreeInstance = tree;
+                }
+                return mappingTreeInstance;
+            }            
+        }
+
+        private static FeatureMappingTree mappingTreeInstance;
+
         public bool HasFeatureMapping { get { return featureMappings.Count > 0; } }
         public bool HasPolygons
         {
@@ -230,5 +251,138 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             d = Mathf.Clamp(d, 0f, len);
             return start + line * d;
         }
+
+        public void OnDrawGizmos()
+        {
+            MappingTree.DebugTree();
+        }
     }
+
+    public class FeatureMappingTree
+    {
+        private class Node
+        {
+            public BoundingBox Bounds;
+            public List<FeatureMapping> Mappings = new();
+            public Node[] Children;
+            public bool IsLeaf => Children == null;
+
+            public Node(BoundingBox bounds)
+            {
+                Bounds = bounds;
+                Children = null;
+            }
+        }
+
+        private readonly Node root;
+        private readonly int maxMappings;
+        private readonly int maxDepth;
+
+        public FeatureMappingTree(BoundingBox bounds, int maxObjects = 4, int maxDepth = 10)
+        {
+            root = new Node(bounds);
+            this.maxMappings = maxObjects;
+            this.maxDepth = maxDepth;
+        }
+
+        public void RootInsert(FeatureMapping obj) => Insert(root, obj, 0);
+
+        private void Insert(Node node, FeatureMapping obj, int depth)
+        {
+            if (!node.Bounds.Contains(obj.Position)) return;
+
+            if (node.IsLeaf)
+            {
+                node.Mappings.Add(obj);
+                if (node.Mappings.Count > maxMappings && depth < maxDepth)
+                {
+                    Subdivide(node);
+                    ReinsertObjects(node);
+                }
+            }
+            else
+            {
+                foreach (var child in node.Children)
+                    Insert(child, obj, depth + 1);
+            }
+        }
+
+        public List<FeatureMapping> Query(BoundingBox area)
+        {
+            List<FeatureMapping> results = new();
+            Query(root, area, results);
+            return results;
+        }
+
+        private void Query(Node node, BoundingBox area, List<FeatureMapping> results)
+        {
+            if (!node.Bounds.Intersects(area)) return;
+
+            results.AddRange(node.Mappings);
+
+            if (!node.IsLeaf)
+            {
+                foreach (var child in node.Children)
+                    Query(child, area, results);
+            }
+        }
+
+        //lets keep the tree in a uniform coordinatesystem
+        private void Subdivide(Node node)
+        {
+            if(node.Bounds.CoordinateSystem != CoordinateSystem.WGS84) //we need a 2 dimensional coordinatesystem to do the subdivision
+                node.Bounds.Convert(CoordinateSystem.WGS84);
+
+            Coordinate bottomLeft = node.Bounds.BottomLeft;
+            Coordinate topRight = node.Bounds.TopRight;
+
+            //is this allowed!?
+            double centerX = (bottomLeft.value1 + topRight.value1) * 0.5f;
+            double centerY = (bottomLeft.value2 + topRight.value2) * 0.5f;
+
+            Coordinate center = new Coordinate(CoordinateSystem.WGS84, centerX, centerY);
+            Coordinate bottomCenter = new Coordinate(CoordinateSystem.WGS84, centerX, bottomLeft.value2);
+            Coordinate rightCenter = new Coordinate(CoordinateSystem.WGS84, topRight.value1, centerY);
+            Coordinate leftCenter = new Coordinate(CoordinateSystem.WGS84, bottomLeft.value1, centerY);
+            Coordinate topCenter = new Coordinate(CoordinateSystem.WGS84, centerX, topRight.value2);
+
+            BoundingBox bottomLeftCell = new BoundingBox(bottomLeft, center);
+            BoundingBox bottomRightCell = new BoundingBox(bottomCenter, rightCenter);
+            BoundingBox topLeftCell = new BoundingBox(leftCenter, topCenter);
+            BoundingBox topRightCell = new BoundingBox(center, topRight);
+
+            node.Children = new[]
+            {
+                new Node(bottomLeftCell),         // Bottom-left
+                new Node(bottomRightCell),     // Bottom-right
+                new Node(topLeftCell),     // Top-left
+                new Node(topRightCell)  // Top-right
+            };
+        }
+
+        private void ReinsertObjects(Node node)
+        {
+            var objs = node.Mappings;
+            node.Mappings = new List<FeatureMapping>();
+            foreach (var obj in objs) 
+                RootInsert(obj);
+        }
+
+        public void DebugTree()
+        {
+            DebugNode(root, true);
+        }
+
+        private void DebugNode(Node node, bool recursive)
+        {
+            node.Bounds.Debug();
+            foreach (FeatureMapping mapping in node.Mappings)
+                Debug.DrawLine(mapping.Position.ToUnity(), node.Bounds.BottomLeft.ToUnity(), Color.red);
+
+            if (recursive && !node.IsLeaf)
+                foreach (Node child in node.Children)
+                    DebugNode(child, recursive);
+        }
+    }
+
 }

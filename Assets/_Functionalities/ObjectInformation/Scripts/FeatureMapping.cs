@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using GeoJSON.Net.Feature;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
@@ -15,6 +16,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public List<Mesh> FeatureMeshes { get { return visualisationLayer.GetMeshData(feature); } }
         public Feature Feature { get { return feature; } }
         public int LayerOrder { get { return geoJsonLayerParent.LayerData.RootIndex; } }
+        public Coordinate Position;
 
         private Feature feature;
         private List<Mesh> meshes;
@@ -24,6 +26,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public void SetGeoJsonLayerParent(GeoJsonLayerGameObject parentLayer)
         {
             geoJsonLayerParent = parentLayer;
+        }
+
+        public void SetPosition(Coordinate position)
+        {
+            this.Position = position;
         }
 
         public void SetFeature(Feature feature)
