@@ -13,7 +13,7 @@ namespace Netherlands3D.Functionalities.Wms
             return IsSupportedUrl(url, "GetMap");
         }
         
-        public GetMapRequest(Uri sourceUrl, string cachedBodyFilePath) : base(sourceUrl, cachedBodyFilePath)
+        public GetMapRequest(Uri sourceUrl, string xml) : base(sourceUrl, xml)
         {
         }
 

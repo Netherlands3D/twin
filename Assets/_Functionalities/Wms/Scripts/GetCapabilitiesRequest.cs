@@ -56,7 +56,6 @@ namespace Netherlands3D.Functionalities.Wms
             var bboxNode = xmlDocument.SelectSingleNode("//*[local-name()='EX_GeographicBoundingBox']", namespaceManager);
             if (bboxNode != null)
             {
-                Debug.Log(bboxNode.OuterXml);
                 double minX = double.Parse(bboxNode.SelectSingleNode("*[local-name()='westBoundLongitude']", namespaceManager)?.InnerText ?? "0");
                 double minY = double.Parse(bboxNode.SelectSingleNode("*[local-name()='southBoundLatitude']", namespaceManager)?.InnerText ?? "0");
                 double maxX = double.Parse(bboxNode.SelectSingleNode("*[local-name()='eastBoundLongitude']", namespaceManager)?.InnerText ?? "0");

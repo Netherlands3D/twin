@@ -98,7 +98,6 @@ namespace Netherlands3D.Functionalities.Wms
 
         public static BoundingBoxContainer AddWmsBoundingBoxContainer(string url, GetCapabilitiesRequest wmsRequest)
         {
-            print("adding bboxContainer: " + url);
             var bboxContainer = wmsRequest.GetBounds(url);
             BoundingBoxContainers.TryAdd(url, bboxContainer); //use tryadd to avoid issues when adding the same wms twice in the application
             return bboxContainer;
