@@ -19,6 +19,9 @@ namespace Netherlands3D.Functionalities.Wfs
     {
         private const string DefaultEpsgCoordinateSystem = "28992";
         private Netherlands3D.CartesianTiles.TileHandler tileHandler;
+        
+        public BoundingBox BoundingBox { get; set; }
+        
         private string wfsUrl = "";
         public string WfsUrl { 
             get => wfsUrl; 
@@ -42,9 +45,6 @@ namespace Netherlands3D.Functionalities.Wfs
                 wfsGeoJSONLayer.LayerData.LayerDestroyed.AddListener(OnGeoJSONLayerDestroyed);
             }
         }
-
-        public BoundingBox BoundingBox { get; set; }
-
         private void Awake()
         {
             //Make sure Datasets at least has one item
