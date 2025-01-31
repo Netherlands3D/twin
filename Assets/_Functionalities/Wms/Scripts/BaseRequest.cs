@@ -13,12 +13,11 @@ namespace Netherlands3D.Functionalities.Wms
         protected readonly XmlDocument xmlDocument;
         protected readonly XmlNamespaceManager namespaceManager;
 
-        public BaseRequest(Uri sourceUrl, string cachedBodyFilePath)
+        public BaseRequest(Uri sourceUrl, string xml)
         {
             url = sourceUrl;
-
             xmlDocument = new XmlDocument();
-            xmlDocument.Load(cachedBodyFilePath);
+            xmlDocument.Load(xml);
             namespaceManager = CreateNameSpaceManager(this.xmlDocument);
         }
 

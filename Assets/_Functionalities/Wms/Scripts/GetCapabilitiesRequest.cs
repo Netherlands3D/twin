@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Utility;
+using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -15,7 +18,7 @@ namespace Netherlands3D.Functionalities.Wms
                 var rootNode = xmlDocument.SelectSingleNode("/*");
 
                 // Return null if root node or version attribute is not found
-                if (rootNode == null || rootNode.Attributes == null) return null; 
+                if (rootNode == null || rootNode.Attributes == null) return null;
 
                 // if the root node is found and retrieve the version attribute
                 var versionAttribute = rootNode.Attributes["version"];
@@ -23,7 +26,7 @@ namespace Netherlands3D.Functionalities.Wms
                 return versionAttribute?.Value; // Return the version value or null if not found
             }
         }
-        
+
         public bool CapableOfBoundingBoxes
         {
             get
@@ -45,6 +48,61 @@ namespace Netherlands3D.Functionalities.Wms
             }
         }
 
+        public BoundingBoxContainer GetBounds(string wmsUrl)
+        {
+            var container = new BoundingBoxContainer(wmsUrl);
+
+            // Select EX_GeographicBoundingBox node first
+            var bboxNode = xmlDocument.SelectSingleNode("//*[local-name()='EX_GeographicBoundingBox']", namespaceManager);
+            if (bboxNode != null)
+            {
+                Debug.Log(bboxNode.OuterXml);
+                double minX = double.Parse(bboxNode.SelectSingleNode("*[local-name()='westBoundLongitude']", namespaceManager)?.InnerText ?? "0");
+                double minY = double.Parse(bboxNode.SelectSingleNode("*[local-name()='southBoundLatitude']", namespaceManager)?.InnerText ?? "0");
+                double maxX = double.Parse(bboxNode.SelectSingleNode("*[local-name()='eastBoundLongitude']", namespaceManager)?.InnerText ?? "0");
+                double maxY = double.Parse(bboxNode.SelectSingleNode("*[local-name()='northBoundLatitude']", namespaceManager)?.InnerText ?? "0");
+
+                var bl = new Coordinate(CoordinateSystem.CRS84, minX, minY);
+                var tr = new Coordinate(CoordinateSystem.CRS84, maxX, maxY);
+
+                container.GlobalBoundingBox = new BoundingBox(bl, tr);
+            }
+
+            // Select BoundingBox nodes per layer
+            var bboxNodes = xmlDocument.SelectNodes("//*[local-name()='Layer']", namespaceManager);
+            foreach (XmlNode layerNode in bboxNodes)
+            {
+                var layerNameNode = layerNode.SelectSingleNode("*[local-name()='Name']", namespaceManager);
+                var layerName = layerNameNode?.InnerText;
+                if (string.IsNullOrEmpty(layerName)) continue;
+
+                var boundingBoxNode = layerNode.SelectSingleNode("*[local-name()='BoundingBox']", namespaceManager);
+                if (boundingBoxNode != null)
+                {
+                    string crsString = boundingBoxNode.Attributes["CRS"]?.Value;
+                    var hasCRS = CoordinateSystems.FindCoordinateSystem(crsString, out var crs);
+
+                    if (!hasCRS)
+                    {
+                        crs = CoordinateSystem.CRS84; //default
+                        Debug.LogWarning("Custom CRS BBox found, but not able to be parsed, defaulting to WGS84 CRS. Founds CRS string: " + crsString);
+                    }
+
+                    double minX = double.Parse(boundingBoxNode.Attributes["minx"].Value);
+                    double minY = double.Parse(boundingBoxNode.Attributes["miny"].Value);
+                    double maxX = double.Parse(boundingBoxNode.Attributes["maxx"].Value);
+                    double maxY = double.Parse(boundingBoxNode.Attributes["maxy"].Value);
+
+                    var bl = new Coordinate(crs, minX, minY);
+                    var tr = new Coordinate(crs, maxX, maxY);
+
+                    container.LayerBoundingBoxes[layerName] = new BoundingBox(bl, tr);
+                }
+            }
+
+            return container;
+        }
+
         public static bool Supports(Uri url, string contents)
         {
             if (IsSupportedUrl(url, "GetCapabilities"))
@@ -55,8 +113,8 @@ namespace Netherlands3D.Functionalities.Wms
             // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
             return contents.Contains("<WMS_Capabilities") || contents.Contains("<wms:WMS_Capabilities");
         }
-        
-        public GetCapabilitiesRequest(Uri url, string cachedBodyFilePath) : base(url, cachedBodyFilePath)
+
+        public GetCapabilitiesRequest(Uri url, string xml) : base(url, xml)
         {
         }
 
@@ -64,7 +122,7 @@ namespace Netherlands3D.Functionalities.Wms
         {
             // Select the Layer nodes from the WMS capabilities document
             var capabilityNode = GetSingleNodeByName(xmlDocument, "Capability");
-            var mapNodes = capabilityNode.SelectNodes(".//*[local-name()='Layer']/*[local-name()='Layer']", namespaceManager);                
+            var mapNodes = capabilityNode.SelectNodes(".//*[local-name()='Layer']/*[local-name()='Layer']", namespaceManager);
 
             // Create a template that we can use as a basis for individual layers
             var mapTemplate = CreateMapTemplate(width, height, transparent);
@@ -129,6 +187,13 @@ namespace Netherlands3D.Functionalities.Wms
             }
 
             return styles;
+        }
+
+        public static string CreateGetCapabilitiesURL(string wmsUrl)
+        {
+            var uri = new Uri(wmsUrl);
+            var baseUrl = uri.GetLeftPart(UriPartial.Path);
+            return baseUrl + "?request=GetCapabilities&service=WMS";
         }
     }
 }
