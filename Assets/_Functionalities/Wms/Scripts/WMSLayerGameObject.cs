@@ -4,6 +4,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wms
@@ -50,6 +51,7 @@ namespace Netherlands3D.Functionalities.Wms
 
             SetRenderOrder(LayerData.RootIndex);
             Legend.Instance.LoadLegend(this);
+            WMSBoundingBoxCache.Instance.GetBoundingBoxContainer(GetCapabilitiesRequest.CreateGetCapabilitiesURL(WMSProjectionLayer.WmsUrl), SetBoundingBox);
         }
 
         public void SetLegendActive(bool active)
@@ -89,6 +91,25 @@ namespace Netherlands3D.Functionalities.Wms
         private void OnDeselectLayer(LayerData layer)
         {
             Legend.Instance.gameObject.SetActive(false);
+        }
+        
+        public void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)
+        {
+            var wmsUrl = urlPropertyData.Data.ToString();
+            var featureLayerName = GetMapRequest.GetLayerNameFromURL(wmsUrl);
+            
+            if (boundingBoxContainer.LayerBoundingBoxes.ContainsKey(featureLayerName))
+            {
+                SetBoundingBox(boundingBoxContainer.LayerBoundingBoxes[featureLayerName]);
+                return;
+            }
+            
+            SetBoundingBox(boundingBoxContainer.GlobalBoundingBox);
+        }      
+        
+        public void SetBoundingBox(BoundingBox boundingBox)
+        {
+            wmsProjectionLayer.BoundingBox = boundingBox;
         }
     }
 }

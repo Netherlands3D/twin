@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Specialized;
 using KindMen.Uxios;
+using Netherlands3D.Web;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wms
@@ -11,7 +13,7 @@ namespace Netherlands3D.Functionalities.Wms
             return IsSupportedUrl(url, "GetMap");
         }
         
-        public GetMapRequest(Uri sourceUrl, string cachedBodyFilePath) : base(sourceUrl, cachedBodyFilePath)
+        public GetMapRequest(Uri sourceUrl, string xml) : base(sourceUrl, xml)
         {
         }
 
@@ -41,6 +43,15 @@ namespace Netherlands3D.Functionalities.Wms
             wmsParam.spatialReference = !string.IsNullOrEmpty(crs) ? crs : defaultCoordinateSystemReference;
 
             return wmsParam;
+        }
+
+        public static string GetLayerNameFromURL(string wmsUrl)
+        {
+            var uri = new Uri(wmsUrl);
+            var nvc = new NameValueCollection();
+            uri.TryParseQueryString(nvc);
+            var featureLayerName = nvc.Get("layers");
+            return featureLayerName;
         }
     }
 }
