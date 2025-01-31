@@ -75,7 +75,7 @@
       "dependencies": {}
     },
     "com.unity.burst": {
-      "version": "1.8.15",
+      "version": "1.8.18",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -117,7 +117,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.7.0",
+      "version": "1.11.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -236,6 +236,16 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
+    },
+    "com.unity.visualscripting": {
+      "version": "1.9.5",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.virgis.geojson.net": {
       "version": "1.2.17",

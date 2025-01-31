@@ -1,0 +1,48 @@
+ManifestFileVersion: 0
+CRC: 2757442824
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: d137919f0c24d9f7cc132b2a3457a094
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3b6f6e7221d76b86de34fada5a890d5b
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: d137919f0c24d9f7cc132b2a3457a094
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1d5e400e5b4826d40b5e6a971c8ea425, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d2fe5546f775c47d2820aa5e8a715f53, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 95e66c6366d904e98bc83428217d4fd7, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e741851cba3ad425c91ecf922cc6b379, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Unity.VisualScripting.Core
+  ClassName: Unity.VisualScripting.SerializationData
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.UnityEvent
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.UnityEvent`1[UnityEngine.GameObject]
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.UnityEvent`2[Netherlands3D.Twin.FloatingOrigin.WorldTransform,Netherlands3D.Coordinates.Coordinate]
+- AssemblyName: eu.netherlands3d.coordinates.Runtime
+  ClassName: Netherlands3D.Coordinates.CoordinateSystem
+Assets:
+- Assets/_Functionalities/AssetBundles/AssetBundleAssets/VisualScripting/VisualScriptingTestGraph.asset
+- Assets/_Functionalities/AssetBundles/AssetBundleAssets/VisualScripting/Visual Scripting
+  Layer.prefab
+Dependencies: []

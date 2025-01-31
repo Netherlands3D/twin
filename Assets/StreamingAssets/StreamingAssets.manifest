@@ -1,7 +1,10 @@
 ManifestFileVersion: 0
-CRC: 1108042076
+CRC: 3343221801
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: zuidoostbundle
+      Dependencies: {}
+    Info_1:
+      Name: visualscripting
       Dependencies: {}
