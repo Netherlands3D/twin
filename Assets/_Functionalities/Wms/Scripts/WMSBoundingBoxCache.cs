@@ -54,12 +54,12 @@ namespace Netherlands3D.Functionalities.Wms
                 return;
             }
             
-            // if (!GetCapabilitiesRequest.Supports(new Uri(url), ))
-            // {
-            //     Debug.LogError("Bounding boxes not in dictionary, and invalid wfs url provided");
-            //     callback.Invoke(null);
-            //     return;
-            // }
+            if (!BaseRequest.IsSupportedUrl(new Uri(url), "GetCapabilities"))
+            {
+                Debug.LogError("Bounding boxes not in dictionary, and invalid wfs url provided");
+                callback.Invoke(null);
+                return;
+            }
             
             //send request for Bounding Boxes
             StartCoroutine(RequestBoundingBoxes(url, callback));

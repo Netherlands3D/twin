@@ -21,7 +21,7 @@ namespace Netherlands3D.Functionalities.Wms
             namespaceManager = CreateNameSpaceManager(this.xmlDocument);
         }
 
-        protected static bool IsSupportedUrl(Uri url, string requestType)
+        public static bool IsSupportedUrl(Uri url, string requestType)
         {
             var queryString = url.Query.ToLower();
 
