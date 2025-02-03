@@ -38,9 +38,6 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
 
         public static bool IsSupportedUrl(Uri url, ServiceType serviceType, RequestType requestType)
         {
-            Debug.Log("source url: " + url + "\tchecking if it is:" + serviceType.ToString() + requestType);
-            Debug.Log(url.Query);
-            Debug.Log(url.Query.Contains($"service={serviceType}") && url.Query.Contains($"request={requestType}", StringComparison.OrdinalIgnoreCase));
             return url.Query.Contains($"service={serviceType}", StringComparison.OrdinalIgnoreCase) && 
                    url.Query.Contains($"request={requestType}", StringComparison.OrdinalIgnoreCase);
         }
