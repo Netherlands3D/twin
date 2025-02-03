@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
@@ -22,10 +23,11 @@ namespace Netherlands3D.Twin.Samplers
             public Material depthMaterial;
             public Material positionMaterial;
             public RenderTexture renderTexture;
-            public Vector3 screenPoint;
+            public Vector3[] screenPoints;
+            public Matrix4x4[] screenPointMatrices;
             public AsyncGPUReadbackRequest request;
             public Action<AsyncGPUReadbackRequest> callback;
-            public Action<Vector3> resultCallback;
+            public Action<Vector3[]> resultCallback;
             public Action onWaitFrameCallback;
             public int framesActive = 0;
 
@@ -35,6 +37,7 @@ namespace Netherlands3D.Twin.Samplers
                 this.positionMaterial = new Material(positionMaterial);
                 this.renderTexture = rt;
                 this.depthCamera = Instantiate(prefab);
+                screenPointMatrices = new Matrix4x4[rt.width * rt.height];
                 depthCamera.clearFlags = CameraClearFlags.SolidColor;
                 depthCamera.backgroundColor = Color.black;
                 depthCamera.depthTextureMode = DepthTextureMode.Depth;
@@ -53,7 +56,7 @@ namespace Netherlands3D.Twin.Samplers
                 this.callback = callback;
             }
 
-            public void SetResultCallback(Action<Vector3> resultCallback)
+            public void SetResultCallback(Action<Vector3[]> resultCallback)
             {
                 this.resultCallback = resultCallback;
             }
@@ -63,31 +66,41 @@ namespace Netherlands3D.Twin.Samplers
                 this.request = request; 
             }
 
-            public void SetScreenPoint(Vector3 screenPoint)
+            public void SetScreenPoints(Vector3[] screenPoints)
             {
-                this.screenPoint = screenPoint;
+                this.screenPoints = screenPoints;
             }
 
             public void AlignWithMainCamera()
             {
                 depthCamera.transform.position = Camera.main.transform.position;
-                depthCamera.transform.LookAt(Camera.main.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, Camera.main.nearClipPlane)));
+                for (int i = 0; i < screenPoints.Length; i++)
+                {
+                    Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(screenPoints[i].x, screenPoints[i].y, Camera.main.nearClipPlane));
+                    depthCamera.transform.LookAt(worldPoint);
+                    screenPointMatrices[i] = depthCamera.projectionMatrix.inverse;
+                }                
             }
 
             public void UpdateShaders()
             {
                 depthMaterial.SetTexture("_CameraDepthTexture", renderTexture);
-                depthMaterial.SetMatrix("_CameraInvProjection", depthCamera.projectionMatrix.inverse);
+                depthMaterial.SetMatrixArray("_CameraInvProjection", screenPointMatrices);
                 positionMaterial.SetTexture("_WorldPositionTexture", renderTexture);
             }
         }
 
         public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3> callback)
         {
+            GetWorldPointsAsync(new Vector3[1] { screenPoint }, result => callback(result[0]));
+        }
+
+        public void GetWorldPointsAsync(Vector3[] screenPoints, Action<Vector3[]> callback)
+        {
             OpticalRequest opticalRequest = GetRequest();
-            opticalRequest.SetScreenPoint(screenPoint);
+            opticalRequest.SetScreenPoints(screenPoints);
             opticalRequest.AlignWithMainCamera();
-            opticalRequest.UpdateShaders();           
+            opticalRequest.UpdateShaders();
             opticalRequest.SetResultCallback(callback);
             opticalRequest.framesActive = 0;
             activeRequests.Add(opticalRequest);
@@ -117,12 +130,22 @@ namespace Netherlands3D.Twin.Samplers
                 PoolRequest(opticalRequest);
                 return;
             }
-            var worldPosData = opticalRequest.request.GetData<Vector4>();
-            float worldPosX = worldPosData[0].x;
-            float worldPosY = worldPosData[0].y;
-            float worldPosZ = worldPosData[0].z;
-            Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
-            opticalRequest.resultCallback.Invoke(worldPos);
+            //var worldPosData = opticalRequest.request.GetData<Vector4>();
+            //float worldPosX = worldPosData[0].x;
+            //float worldPosY = worldPosData[0].y;
+            //float worldPosZ = worldPosData[0].z;
+            //Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
+
+            NativeArray<Vector4> worldPosData = opticalRequest.request.GetData<Vector4>();
+
+            // Extract four world positions from the 2x2 texture
+            Vector3 bottomLeft = new Vector3(worldPosData[0].x, worldPosData[0].y, worldPosData[0].z);
+            Vector3 bottomRight = new Vector3(worldPosData[1].x, worldPosData[1].y, worldPosData[1].z);
+            Vector3 topLeft = new Vector3(worldPosData[2].x, worldPosData[2].y, worldPosData[2].z);
+            Vector3 topRight = new Vector3(worldPosData[3].x, worldPosData[3].y, worldPosData[3].z);
+            Vector3[] results = new Vector3[4] { bottomLeft, bottomRight, topLeft, topRight };
+
+            opticalRequest.resultCallback.Invoke(results);
             PoolRequest(opticalRequest);            
         }
        
@@ -150,7 +173,7 @@ namespace Netherlands3D.Twin.Samplers
             //RenderTexture.Create failed: format unsupported for random writes - RGBA32 SFloat (52).
             //weirdly enough creating a depthtexture in project and passing it through a serializefield is ok on webgl
             //but we cannot do this since we need a pool and create a rendertexture for each request
-            RenderTexture renderTexture = new RenderTexture(1, 1, 0, RenderTextureFormat.Depth);
+            RenderTexture renderTexture = new RenderTexture(2, 2, 0, RenderTextureFormat.Depth);
             renderTexture.graphicsFormat = SystemInfo.GetCompatibleFormat(GraphicsFormat.R32G32B32A32_SFloat, FormatUsage.Render);
             renderTexture.depthStencilFormat = GraphicsFormat.None;
             renderTexture.Create();
