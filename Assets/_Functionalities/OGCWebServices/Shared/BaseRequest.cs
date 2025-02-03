@@ -36,29 +36,6 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
             namespaceManager = CreateOrReadNamespaceManager(xmlDocument, defaultNameSpaces);
         }
 
-        // private XmlNamespaceManager CreateNameSpaceManager(XmlDocument xmlDocument)
-        // {
-        //     XmlNamespaceManager namespaceManager = new(xmlDocument.NameTable);
-        //     XmlNodeList elementsWithNamespaces = xmlDocument.SelectNodes("//*");
-        //     namespaceManager.AddNamespace("wms", "http://www.opengis.net/wms");
-        //     namespaceManager.AddNamespace("sld", "http://www.opengis.net/sld");
-        //     namespaceManager.AddNamespace("ms", "http://mapserver.gis.umn.edu/mapserver");
-        //
-        //     if (elementsWithNamespaces == null) return namespaceManager;
-        //
-        //     foreach (XmlElement element in elementsWithNamespaces)
-        //     {
-        //         if (string.IsNullOrEmpty(element.NamespaceURI)) continue;
-        //         
-        //         string prefix = element.Name.Split(':')[0];
-        //         if (string.IsNullOrEmpty(prefix) || namespaceManager.LookupNamespace(prefix) != null) continue;
-        //         
-        //         namespaceManager.AddNamespace(prefix, element.NamespaceURI);
-        //     }
-        //
-        //     return namespaceManager;
-        // }
-
         private XmlNamespaceManager CreateOrReadNamespaceManager(XmlDocument xmlDocument, Dictionary<string, string> defaultNamespaces)
         {
             XmlNamespaceManager namespaceManager = new(xmlDocument.NameTable);
@@ -75,7 +52,7 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
 
             // Update namespaces if present in the XML document
             XmlElement rootElement = xmlDocument.DocumentElement;
-            foreach (var ns in defaultNamespaces.Keys) // Use ToList to avoid modifying collection while iterating
+            foreach (var ns in defaultNamespaces.Keys)
             {
                 string attributeName = "xmlns:" + ns;
                 if (rootElement.HasAttribute(attributeName))
@@ -91,38 +68,6 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
                 string schemaLocation = rootElement.GetAttribute("xsi:schemaLocation").Split(' ')[0];
                 namespaceManager.AddNamespace("schemaLocation", schemaLocation);
             }
-            // if (rootElement.HasAttribute("xmlns:ows"))
-            // {
-            //     string owsNamespace = rootElement.GetAttribute("xmlns:ows");
-            //     namespaceManager.AddNamespace("ows", owsNamespace);
-            // }
-            // else
-            // {
-            //     Debug.Log("Adding ows namespace manually: http://www.opengis.net/ows/1.1");
-            //     namespaceManager.AddNamespace("ows", "http://www.opengis.net/ows/1.1");
-            // }
-            //
-            // if (rootElement.HasAttribute("xmlns:wfs"))
-            // {
-            //     string wfsNamespace = rootElement.GetAttribute("xmlns:wfs");
-            //     namespaceManager.AddNamespace("wfs", wfsNamespace);
-            // }
-            // else
-            // {
-            //     Debug.Log("Adding wfs namespace manually: http://www.opengis.net/wfs");
-            //     namespaceManager.AddNamespace("wfs", "http://www.opengis.net/wfs");
-            // }
-            //
-            // if (rootElement.HasAttribute("xsi:schemaLocation"))
-            // {
-            //     string schemaLocation = rootElement.GetAttribute("xsi:schemaLocation").Split(' ')[0];
-            //     namespaceManager.AddNamespace("schemaLocation", schemaLocation);
-            // }
-            // else
-            // {
-            //     Debug.Log("Adding schemaLocation namespace manually: http://www.opengis.net/wfs");
-            //     namespaceManager.AddNamespace("schemaLocation", "http://www.opengis.net/wfs");
-            // }
 
             // Add any namespaces from the XML elements
             if (elementsWithNamespaces != null)
