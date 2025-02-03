@@ -55,7 +55,7 @@ namespace Netherlands3D.Functionalities.Wfs
                 return;
             }
             
-            if (!OgcCWebServicesUtility.IsValidURL(url, ServiceType.Wfs))
+            if (!OgcWebServicesUtility.IsValidURL(url, ServiceType.Wfs))
             {
                 Debug.LogError("Bounding boxes not in dictionary, and invalid wfs url provided");
                 callback.Invoke(null);

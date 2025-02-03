@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Functionalities.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
@@ -23,7 +24,7 @@ namespace Netherlands3D.Functionalities.Wms
             // if this is not a capabilities uri, it should be a GetMap uri; otherwise we do not support this
             if (!GetCapabilitiesRequest.Supports(url, bodyContents))
             {
-                return GetMapRequest.Supports(url);
+                return OgcWebServicesUtility.IsSupportedUrl(url, ServiceType.Wms, RequestType.GetMap);
             }
             
             var request = new GetCapabilitiesRequest(url, bodyContents);
@@ -48,7 +49,7 @@ namespace Netherlands3D.Functionalities.Wms
             if (GetCapabilitiesRequest.Supports(url, bodyContents))
             {
                 var request = new GetCapabilitiesRequest(url, bodyContents);
-                WMSBoundingBoxCache.AddWmsBoundingBoxContainer(localFile.SourceUrl, request);
+                WMSBoundingBoxCache.AddWmsBoundingBoxContainer(request);
 
                 var maps = request.GetMaps(
                     layerPrefab.PreferredImageSize.x, 
@@ -63,7 +64,7 @@ namespace Netherlands3D.Functionalities.Wms
                 return;
             }
 
-            if (GetMapRequest.Supports(url))
+            if (OgcWebServicesUtility.IsSupportedUrl(url, ServiceType.Wms, RequestType.GetMap))
             {
                 var request = new GetMapRequest(url, bodyContents);
                 var map = request.CreateMapFromCapabilitiesUrl(

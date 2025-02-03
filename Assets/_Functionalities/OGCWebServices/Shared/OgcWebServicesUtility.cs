@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using Netherlands3D.Web;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.OgcWebServices.Shared
 {
-    public static class OgcCWebServicesUtility
+    public static class OgcWebServicesUtility
     {
         public static readonly Dictionary<string, string> DefaultWmsNamespaces = new()
         {
@@ -41,6 +43,20 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
             Debug.Log(url.Query.Contains($"service={serviceType}") && url.Query.Contains($"request={requestType}", StringComparison.OrdinalIgnoreCase));
             return url.Query.Contains($"service={serviceType}", StringComparison.OrdinalIgnoreCase) && 
                    url.Query.Contains($"request={requestType}", StringComparison.OrdinalIgnoreCase);
+        }
+        
+        public static string GetParameterFromURL(string url, string parameter)
+        {
+            var uri = new Uri(url);
+            var nvc = new NameValueCollection();
+            uri.TryParseQueryString(nvc);
+            var featureLayerName = nvc.Get(parameter);
+            return featureLayerName;
+        }
+        
+        public static string ParameterNameOfTypeNameBasedOnVersion(string wfsVersion)
+        {
+            return wfsVersion == "1.1.0" ? "typeName" : "typeNames";
         }
     }
 }

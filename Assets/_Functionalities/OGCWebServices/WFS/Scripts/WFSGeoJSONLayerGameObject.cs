@@ -29,7 +29,7 @@ namespace Netherlands3D.Functionalities.Wfs
         {
             var wfsUrl = urlPropertyData.Data.ToString();
             cartesianTileWFSLayer.WfsUrl = wfsUrl;
-            var getCapabilitiesURL = OgcCWebServicesUtility.CreateGetCapabilitiesURL(wfsUrl, "WFS"); //todo not hardcode service
+            var getCapabilitiesURL = OgcWebServicesUtility.CreateGetCapabilitiesURL(wfsUrl, "WFS"); //todo not hardcode service
             WFSBoundingBoxCache.Instance.GetBoundingBoxContainer(getCapabilitiesURL, SetBoundingBox);
         }
 

@@ -9,7 +9,6 @@ using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.Utility;
 
 namespace Netherlands3D.Functionalities.Wfs
 {
@@ -30,7 +29,7 @@ namespace Netherlands3D.Functionalities.Wfs
 
             Debug.Log(sourceUrl);
             
-            var urlContainsWfsSignifier = OgcCWebServicesUtility.IsValidURL(sourceUrl, ServiceType.Wfs);
+            var urlContainsWfsSignifier = OgcWebServicesUtility.IsValidURL(sourceUrl, ServiceType.Wfs);
 
             // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
             var bodyContents = File.ReadAllText(cachedDataPath);
@@ -100,7 +99,7 @@ namespace Netherlands3D.Functionalities.Wfs
                 {
                     NameValueCollection queryParameters = new();
                     new Uri(sourceUrl).TryParseQueryString(queryParameters);
-                    var featureType = queryParameters.Get(WFSRequest.ParameterNameOfTypeNameBasedOnVersion(wfsVersion));
+                    var featureType = queryParameters.Get(OgcWebServicesUtility.ParameterNameOfTypeNameBasedOnVersion(wfsVersion));
 
                     if (string.IsNullOrEmpty(featureType) == false)
                     {
@@ -164,7 +163,7 @@ namespace Netherlands3D.Functionalities.Wfs
             uriBuilder.SetQueryParameter("service", "WFS");
             uriBuilder.SetQueryParameter("request", "GetFeature");
             uriBuilder.SetQueryParameter("version", wfsVersion);
-            uriBuilder.SetQueryParameter(WFSRequest.ParameterNameOfTypeNameBasedOnVersion(wfsVersion), featureType);
+            uriBuilder.SetQueryParameter(OgcWebServicesUtility.ParameterNameOfTypeNameBasedOnVersion(wfsVersion), featureType);
             if (parameters.Get("outputFormat")?.ToLower() is not ("json" or "geojson"))
             {
                 var geoJsonOutputFormatString = getCapabilitiesRequest.GetGeoJsonOutputFormatString();

@@ -10,13 +10,8 @@ namespace Netherlands3D.Functionalities.Wms
 {
     public class GetMapRequest : BaseRequest
     {
-        protected override Dictionary<string, string> defaultNameSpaces => OgcCWebServicesUtility.DefaultWmsNamespaces;
-
-        public static bool Supports(Uri url)
-        {
-            return OgcCWebServicesUtility.IsSupportedUrl(url, ServiceType.Wms, RequestType.GetMap);
-        }
-
+        protected override Dictionary<string, string> defaultNameSpaces => OgcWebServicesUtility.DefaultWmsNamespaces;
+        
         public GetMapRequest(Uri sourceUrl, string xml) : base(sourceUrl, xml)
         {
         }
@@ -47,15 +42,6 @@ namespace Netherlands3D.Functionalities.Wms
             wmsParam.spatialReference = !string.IsNullOrEmpty(crs) ? crs : defaultCoordinateSystemReference;
 
             return wmsParam;
-        }
-
-        public static string GetLayerNameFromURL(string wmsUrl)
-        {
-            var uri = new Uri(wmsUrl);
-            var nvc = new NameValueCollection();
-            uri.TryParseQueryString(nvc);
-            var featureLayerName = nvc.Get("layers");
-            return featureLayerName;
         }
     }
 }

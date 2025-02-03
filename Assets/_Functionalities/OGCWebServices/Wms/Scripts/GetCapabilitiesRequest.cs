@@ -12,56 +12,27 @@ namespace Netherlands3D.Functionalities.Wms
     public class GetCapabilitiesRequest : BaseRequest, IGetCapabilitiesRequest
     {
         public ServiceType ServiceType => ServiceType.Wms;
-        protected override Dictionary<string, string> defaultNameSpaces => OgcCWebServicesUtility.DefaultWmsNamespaces;
+        protected override Dictionary<string, string> defaultNameSpaces => OgcWebServicesUtility.DefaultWmsNamespaces;
+        public bool CapableOfBoundingBoxes => xmlDocument.SelectSingleNode("//*[local-name()='EX_GeographicBoundingBox' or local-name()='BoundingBox']", namespaceManager) != null;
+
+        public GetCapabilitiesRequest(Uri url, string xml) : base(url, xml)
+        {
+        }
+        
+        public string GetTitle()
+        {
+            return GetInnerTextForNode(xmlDocument.DocumentElement, "Title");
+        }
 
         public string GetVersion()
         {
-            // Use XPath to select the root node and get the version attribute
-            var rootNode = xmlDocument.SelectSingleNode("/*");
-
-            // Return null if root node or version attribute is not found
-            if (rootNode == null || rootNode.Attributes == null) return null;
-
-            // if the root node is found and retrieve the version attribute
-            var versionAttribute = rootNode.Attributes["version"];
-
-            return versionAttribute?.Value; // Return the version value or null if not found
-        }
-
-        public string GetTitle()
-        {
-            throw new NotImplementedException();
+            var versionInXml = xmlDocument.DocumentElement.GetAttribute("version");
+            return  string.IsNullOrEmpty(versionInXml) ? versionInXml : defaultFallbackVersion;
         }
 
         public BoundingBoxContainer GetBounds()
         {
-            throw new NotImplementedException();
-        }
-
-        public bool CapableOfBoundingBoxes
-        {
-            get
-            {
-                // Select all BoundingBox nodes in the document
-                var boundingBoxNodes =
-                    xmlDocument.SelectNodes("//*[local-name()='EX_GeographicBoundingBox']", namespaceManager);
-
-                var bboxFilter = boundingBoxNodes?.Count > 0;
-
-                // Loop through each BoundingBox node to check if it exists
-                boundingBoxNodes = xmlDocument.SelectNodes("//*[local-name()='BoundingBox']", namespaceManager);
-                if (boundingBoxNodes?.Count > 0)
-                {
-                    bboxFilter = true; // Set to true if any BoundingBox nodes exist
-                }
-
-                return bboxFilter;
-            }
-        }
-
-        public BoundingBoxContainer GetBounds(string wmsUrl)
-        {
-            var container = new BoundingBoxContainer(wmsUrl);
+            var container = new BoundingBoxContainer(Url.ToString());
 
             // Select EX_GeographicBoundingBox node first
             var bboxNode = xmlDocument.SelectSingleNode("//*[local-name()='EX_GeographicBoundingBox']", namespaceManager);
@@ -115,7 +86,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         public static bool Supports(Uri url, string contents)
         {
-            if (OgcCWebServicesUtility.IsSupportedUrl(url, ServiceType.Wms, RequestType.GetCapabilities))
+            if (OgcWebServicesUtility.IsSupportedUrl(url, ServiceType.Wms, RequestType.GetCapabilities))
             {
                 return true;
             }
@@ -123,11 +94,7 @@ namespace Netherlands3D.Functionalities.Wms
             // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
             return contents.Contains("<WMS_Capabilities") || contents.Contains("<wms:WMS_Capabilities");
         }
-
-        public GetCapabilitiesRequest(Uri url, string xml) : base(url, xml)
-        {
-        }
-
+        
         public List<MapFilters> GetMaps(int width, int height, bool transparent)
         {
             // Select the Layer nodes from the WMS capabilities document

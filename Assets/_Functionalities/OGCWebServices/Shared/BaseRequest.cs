@@ -23,14 +23,14 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
         protected const string defaultFallbackVersion = "1.3.0";
         protected const string defaultCoordinateSystemReference = "EPSG:28992";
 
-        protected readonly Uri url;
+        public readonly Uri Url;
         protected readonly XmlDocument xmlDocument;
         protected readonly XmlNamespaceManager namespaceManager;
         protected abstract Dictionary<string, string> defaultNameSpaces { get; }
 
         protected BaseRequest(Uri sourceUrl, string xml)
         {
-            url = sourceUrl;
+            Url = sourceUrl;
             xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(xml);
             namespaceManager = CreateOrReadNamespaceManager(xmlDocument, defaultNameSpaces);

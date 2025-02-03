@@ -55,7 +55,7 @@ namespace Netherlands3D.Functionalities.Wms
                 return;
             }
             
-            if (!OgcCWebServicesUtility.IsSupportedUrl(new Uri(url), ServiceType.Wms, RequestType.GetCapabilities))
+            if (!OgcWebServicesUtility.IsSupportedUrl(new Uri(url), ServiceType.Wms, RequestType.GetCapabilities))
             {
                 Debug.LogError("Bounding boxes not in dictionary, and invalid wms url provided");
                 callback.Invoke(null);
@@ -90,17 +90,17 @@ namespace Netherlands3D.Functionalities.Wms
             else
             {
                 GetCapabilitiesRequest wmsRequest = new GetCapabilitiesRequest(new Uri(url), webRequest.downloadHandler.text);
-                var bboxContainer = AddWmsBoundingBoxContainer(url, wmsRequest);
+                var bboxContainer = AddWmsBoundingBoxContainer(wmsRequest);
                 callBack.Invoke(bboxContainer);
             }
 
             pendingRequests.Remove(url);
         }
 
-        public static BoundingBoxContainer AddWmsBoundingBoxContainer(string url, GetCapabilitiesRequest wmsRequest)
+        public static BoundingBoxContainer AddWmsBoundingBoxContainer(GetCapabilitiesRequest wmsRequest)
         {
-            var bboxContainer = wmsRequest.GetBounds(url);
-            BoundingBoxContainers.TryAdd(url, bboxContainer); //use tryadd to avoid issues when adding the same wms twice in the application
+            var bboxContainer = wmsRequest.GetBounds();
+            BoundingBoxContainers.TryAdd(wmsRequest.Url.ToString(), bboxContainer); //use tryadd to avoid issues when adding the same wms twice in the application
             return bboxContainer;
         }
     }

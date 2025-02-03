@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Functionalities.OgcWebServices.Shared;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.Web;
 using UnityEngine;
@@ -434,20 +435,12 @@ namespace Netherlands3D.Functionalities.Wfs
 
             return getFeatureOperationNode;
         }
-        
-        public static string ParameterNameOfTypeNameBasedOnVersion(string wfsVersion)
-        {
-            return wfsVersion == "1.1.0" ? "typeName" : "typeNames";
-        }
 
         public static string GetLayerNameFromURL(string url)
         {
-            var uri = new Uri(url);
-            var nvc = new NameValueCollection();
-            uri.TryParseQueryString(nvc);
-            var version = nvc.Get("version");
-            var featureLayerName = nvc.Get(WFSRequest.ParameterNameOfTypeNameBasedOnVersion(version));
-            return featureLayerName;
+            var version = OgcWebServicesUtility.GetParameterFromURL(url, "version"); //todo: use version from interface
+            var typeName = OgcWebServicesUtility.ParameterNameOfTypeNameBasedOnVersion(version);
+            return OgcWebServicesUtility.GetParameterFromURL(url, typeName);
         }
     }
 }
