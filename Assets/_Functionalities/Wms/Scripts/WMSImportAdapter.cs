@@ -25,8 +25,8 @@ namespace Netherlands3D.Functionalities.Wms
             {
                 return GetMapRequest.Supports(url);
             }
-
-            var request = new GetCapabilitiesRequest(url, cachedDataPath);
+            
+            var request = new GetCapabilitiesRequest(url, bodyContents);
                 
             // it should not just be a capabilities file, we also want to support BBOX!
             if (!request.CapableOfBoundingBoxes)
@@ -34,7 +34,6 @@ namespace Netherlands3D.Functionalities.Wms
                 Debug.Log("<color=orange>WMS BBOX filter not supported.</color>");
                 return false;
             }
-
             return true;
         }
 
@@ -48,7 +47,9 @@ namespace Netherlands3D.Functionalities.Wms
 
             if (GetCapabilitiesRequest.Supports(url, bodyContents))
             {
-                var request = new GetCapabilitiesRequest(url, cachedDataPath);
+                var request = new GetCapabilitiesRequest(url, bodyContents);
+                WMSBoundingBoxCache.AddWmsBoundingBoxContainer(localFile.SourceUrl, request);
+
                 var maps = request.GetMaps(
                     layerPrefab.PreferredImageSize.x, 
                     layerPrefab.PreferredImageSize.y,
@@ -64,7 +65,7 @@ namespace Netherlands3D.Functionalities.Wms
 
             if (GetMapRequest.Supports(url))
             {
-                var request = new GetMapRequest(url, cachedDataPath);
+                var request = new GetMapRequest(url, bodyContents);
                 var map = request.CreateMapFromCapabilitiesUrl(
                     url,
                     layerPrefab.PreferredImageSize.x, 
