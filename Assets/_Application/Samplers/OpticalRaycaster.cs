@@ -12,6 +12,7 @@ namespace Netherlands3D.Twin.Samplers
         public Camera depthCameraPrefab; 
         public Material depthToWorldMaterial; //capture depth data shader
         public Material visualizationMaterial; //convert to temp position data
+        public const int MaxActiveRequests = 3;
 
         private Stack<OpticalRequest> requestPool = new Stack<OpticalRequest>();
         private List<OpticalRequest> activeRequests = new List<OpticalRequest>();
@@ -81,9 +82,17 @@ namespace Netherlands3D.Twin.Samplers
                 positionMaterial.SetTexture("_WorldPositionTexture", renderTexture);
             }
         }
-
+                
         public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3> callback)
         {
+            //whenever the update is halted for some reason, the active requests will grow uncontrolled
+            if (activeRequests.Count >= MaxActiveRequests)
+            {
+                //Debug.LogWarning("more requested worldpoints are not allowed for this frame");
+                callback(Vector3.zero);
+                return;
+            }
+
             OpticalRequest opticalRequest = GetRequest();
             opticalRequest.SetScreenPoint(screenPoint);
             opticalRequest.AlignWithMainCamera();
