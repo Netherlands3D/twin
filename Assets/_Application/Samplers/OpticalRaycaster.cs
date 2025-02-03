@@ -13,7 +13,9 @@ namespace Netherlands3D.Twin.Samplers
         public Camera depthCameraPrefab; 
         public Material depthToWorldMaterial; //capture depth data shader
         public Material visualizationMaterial; //convert to temp position data
+        public const int MaxActiveRequests = 3;
 
+        private Vector3[] emptyResult = new Vector3[1];
         private Stack<OpticalRequest> requestPool = new Stack<OpticalRequest>();
         private List<OpticalRequest> activeRequests = new List<OpticalRequest>();
 
@@ -90,13 +92,23 @@ namespace Netherlands3D.Twin.Samplers
             }
         }
 
+        private Vector3[] singlePointRequestArray = new Vector3[1];
         public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3> callback)
         {
-            GetWorldPointsAsync(new Vector3[1] { screenPoint }, result => callback(result[0]));
+            singlePointRequestArray[0] = screenPoint;
+            GetWorldPointsAsync(singlePointRequestArray, result => callback(result[0]));
         }
 
         public void GetWorldPointsAsync(Vector3[] screenPoints, Action<Vector3[]> callback)
         {
+            //whenever the update is halted for some reason, the active requests will grow uncontrolled
+            if (activeRequests.Count >= MaxActiveRequests)
+            {
+                //Debug.LogWarning("more requested worldpoints are not allowed for this frame");
+                callback(emptyResult);
+                return;
+            }
+
             OpticalRequest opticalRequest = GetRequest();
             opticalRequest.SetScreenPoints(screenPoints);
             opticalRequest.AlignWithMainCamera();
@@ -137,15 +149,12 @@ namespace Netherlands3D.Twin.Samplers
             //Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
 
             NativeArray<Vector4> worldPosData = opticalRequest.request.GetData<Vector4>();
-
-            // Extract four world positions from the 2x2 texture
-            Vector3 bottomLeft = new Vector3(worldPosData[0].x, worldPosData[0].y, worldPosData[0].z);
-            Vector3 bottomRight = new Vector3(worldPosData[1].x, worldPosData[1].y, worldPosData[1].z);
-            Vector3 topLeft = new Vector3(worldPosData[2].x, worldPosData[2].y, worldPosData[2].z);
-            Vector3 topRight = new Vector3(worldPosData[3].x, worldPosData[3].y, worldPosData[3].z);
-            Vector3[] results = new Vector3[4] { bottomLeft, bottomRight, topLeft, topRight };
-
-            opticalRequest.resultCallback.Invoke(results);
+            for (int i = 0; i < opticalRequest.screenPoints.Length; i++)
+            {
+                // Extract four world positions from the 2x2 texture and reuse the opticalrequest screenpoints array
+                opticalRequest.screenPoints[i] = new Vector3(worldPosData[i].x, worldPosData[i].y, worldPosData[i].z);
+            }
+            opticalRequest.resultCallback.Invoke(opticalRequest.screenPoints);
             PoolRequest(opticalRequest);            
         }
        
