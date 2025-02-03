@@ -4,6 +4,7 @@ using System;
 using Netherlands3D.Web;
 using System.Collections.Specialized;
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Functionalities.OgcWebServices.Shared;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
@@ -29,7 +30,7 @@ namespace Netherlands3D.Functionalities.Wfs
 
             Debug.Log(sourceUrl);
             
-            var urlContainsWfsSignifier = WFSRequest.IsValidWFSURL(sourceUrl);
+            var urlContainsWfsSignifier = OgcCWebServicesUtility.IsValidURL(sourceUrl, ServiceType.Wfs);
 
             // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
             var bodyContents = File.ReadAllText(cachedDataPath);

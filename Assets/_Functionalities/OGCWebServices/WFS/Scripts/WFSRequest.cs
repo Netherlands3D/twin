@@ -435,21 +435,9 @@ namespace Netherlands3D.Functionalities.Wfs
             return getFeatureOperationNode;
         }
         
-        public static bool IsValidWFSURL(string url)
-        {
-            return url.ToLower().Contains("service=wfs");
-        }
-        
         public static string ParameterNameOfTypeNameBasedOnVersion(string wfsVersion)
         {
             return wfsVersion == "1.1.0" ? "typeName" : "typeNames";
-        }
-        
-        public static string CreateGetCapabilitiesURL(string wfsUrl)
-        {
-            var uri = new Uri(wfsUrl);
-            var baseUrl = uri.GetLeftPart(UriPartial.Path);
-            return baseUrl + "?request=GetCapabilities&service=WFS";
         }
 
         public static string GetLayerNameFromURL(string url)

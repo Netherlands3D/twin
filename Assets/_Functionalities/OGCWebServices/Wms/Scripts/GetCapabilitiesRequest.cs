@@ -3,28 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Functionalities.OgcWebServices.Shared;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wms
 {
-    public class GetCapabilitiesRequest : BaseRequest
+    public class GetCapabilitiesRequest : BaseRequest, IGetCapabilitiesRequest
     {
-        public string Version
+        public ServiceType ServiceType => ServiceType.Wms;
+
+        public string GetVersion()
         {
-            get
-            {
-                // Use XPath to select the root node and get the version attribute
-                var rootNode = xmlDocument.SelectSingleNode("/*");
+            // Use XPath to select the root node and get the version attribute
+            var rootNode = xmlDocument.SelectSingleNode("/*");
 
-                // Return null if root node or version attribute is not found
-                if (rootNode == null || rootNode.Attributes == null) return null;
+            // Return null if root node or version attribute is not found
+            if (rootNode == null || rootNode.Attributes == null) return null;
 
-                // if the root node is found and retrieve the version attribute
-                var versionAttribute = rootNode.Attributes["version"];
+            // if the root node is found and retrieve the version attribute
+            var versionAttribute = rootNode.Attributes["version"];
 
-                return versionAttribute?.Value; // Return the version value or null if not found
-            }
+            return versionAttribute?.Value; // Return the version value or null if not found
+        }
+
+        public string GetTitle()
+        {
+            throw new NotImplementedException();
+        }
+
+        public BoundingBoxContainer GetBounds()
+        {
+            throw new NotImplementedException();
         }
 
         public bool CapableOfBoundingBoxes
@@ -104,7 +114,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         public static bool Supports(Uri url, string contents)
         {
-            if (IsSupportedUrl(url, "GetCapabilities"))
+            if (OgcCWebServicesUtility.IsSupportedUrl(url, ServiceType.Wms, RequestType.GetCapabilities))
             {
                 return true;
             }
@@ -162,13 +172,14 @@ namespace Netherlands3D.Functionalities.Wms
 
         private MapFilters CreateMapTemplate(int width, int height, bool transparent)
         {
+            var version = GetVersion();
             return new MapFilters
             {
-                version = Version,
+                version = version,
                 width = width,
                 height = height,
                 transparent = transparent,
-                spatialReferenceType = MapFilters.SpatialReferenceTypeFromVersion(new Version(Version))
+                spatialReferenceType = MapFilters.SpatialReferenceTypeFromVersion(new Version(version))
             };
         }
 
@@ -186,13 +197,6 @@ namespace Netherlands3D.Functionalities.Wms
             }
 
             return styles;
-        }
-
-        public static string CreateGetCapabilitiesURL(string wmsUrl)
-        {
-            var uri = new Uri(wmsUrl);
-            var baseUrl = uri.GetLeftPart(UriPartial.Path);
-            return baseUrl + "?request=GetCapabilities&service=WMS";
         }
     }
 }

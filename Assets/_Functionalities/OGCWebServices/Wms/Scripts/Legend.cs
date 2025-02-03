@@ -33,8 +33,7 @@ namespace Netherlands3D.Functionalities.Wms
         public LayerData CurrentLayer { get; set; }
 
         private List<LegendImage> graphics = new List<LegendImage>();
-
-
+        
         public void AddGraphic(Sprite sprite)
         {
             LegendImage image = Instantiate(graphicPrefab, graphicPrefab.transform.parent);

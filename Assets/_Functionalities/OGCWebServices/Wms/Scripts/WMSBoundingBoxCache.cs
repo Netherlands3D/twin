@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Functionalities.OgcWebServices.Shared;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -54,7 +55,7 @@ namespace Netherlands3D.Functionalities.Wms
                 return;
             }
             
-            if (!BaseRequest.IsSupportedUrl(new Uri(url), "GetCapabilities"))
+            if (!OgcCWebServicesUtility.IsSupportedUrl(new Uri(url), ServiceType.Wms, RequestType.GetCapabilities))
             {
                 Debug.LogError("Bounding boxes not in dictionary, and invalid wfs url provided");
                 callback.Invoke(null);

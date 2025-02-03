@@ -1,8 +1,10 @@
+using System;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Functionalities.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -51,7 +53,8 @@ namespace Netherlands3D.Functionalities.Wms
 
             SetRenderOrder(LayerData.RootIndex);
             Legend.Instance.LoadLegend(this);
-            WMSBoundingBoxCache.Instance.GetBoundingBoxContainer(GetCapabilitiesRequest.CreateGetCapabilitiesURL(WMSProjectionLayer.WmsUrl), SetBoundingBox);
+            var getCapabilitiesUrl = OgcCWebServicesUtility.CreateGetCapabilitiesURL(WMSProjectionLayer.WmsUrl,"WMS"); //todo not hardcode service
+            WMSBoundingBoxCache.Instance.GetBoundingBoxContainer(getCapabilitiesUrl, SetBoundingBox);
         }
 
         public void SetLegendActive(bool active)

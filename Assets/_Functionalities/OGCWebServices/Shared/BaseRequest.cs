@@ -2,30 +2,36 @@ using System;
 using System.Xml;
 using UnityEngine;
 
-namespace Netherlands3D.Functionalities.Wms
+namespace Netherlands3D.Functionalities.OgcWebServices.Shared
 {
+    public enum ServiceType
+    {
+        Wfs,
+        Wms
+    }
+
+    public enum RequestType
+    {
+        GetCapabilities,
+        GetFeature,
+        GetMap
+    }
+    
     public abstract class BaseRequest
     {
-        internal const string defaultFallbackVersion = "1.3.0";
-        internal const string defaultCoordinateSystemReference = "EPSG:28992";
+        protected const string defaultFallbackVersion = "1.3.0";
+        protected const string defaultCoordinateSystemReference = "EPSG:28992";
 
         protected readonly Uri url;
         protected readonly XmlDocument xmlDocument;
         protected readonly XmlNamespaceManager namespaceManager;
-
+        
         protected BaseRequest(Uri sourceUrl, string xml)
         {
             url = sourceUrl;
             xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(xml);
             namespaceManager = CreateNameSpaceManager(this.xmlDocument);
-        }
-
-        public static bool IsSupportedUrl(Uri url, string requestType)
-        {
-            var queryString = url.Query.ToLower();
-
-            return queryString.Contains("service=wms") && queryString.Contains("request=" + requestType.ToLower());
         }
         
         private XmlNamespaceManager CreateNameSpaceManager(XmlDocument xmlDocument)

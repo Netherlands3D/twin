@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using KindMen.Uxios;
+using Netherlands3D.Functionalities.OgcWebServices.Shared;
 using Netherlands3D.Web;
 using UnityEngine;
 
@@ -10,9 +11,9 @@ namespace Netherlands3D.Functionalities.Wms
     {
         public static bool Supports(Uri url)
         {
-            return IsSupportedUrl(url, "GetMap");
+            return OgcCWebServicesUtility.IsSupportedUrl(url, ServiceType.Wms, RequestType.GetMap);
         }
-        
+
         public GetMapRequest(Uri sourceUrl, string xml) : base(sourceUrl, xml)
         {
         }
@@ -26,7 +27,7 @@ namespace Netherlands3D.Functionalities.Wms
                 version = defaultFallbackVersion;
                 Debug.LogWarning("WMS version could not be determined, defaulting to " + defaultFallbackVersion);
             }
-            
+
             var wmsParam = new MapFilters
             {
                 name = parameters.Get("layers"),

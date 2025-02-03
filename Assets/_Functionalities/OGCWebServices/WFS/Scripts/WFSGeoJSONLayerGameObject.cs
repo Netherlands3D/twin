@@ -4,6 +4,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using Netherlands3D.Functionalities.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.Web;
@@ -28,7 +29,8 @@ namespace Netherlands3D.Functionalities.Wfs
         {
             var wfsUrl = urlPropertyData.Data.ToString();
             cartesianTileWFSLayer.WfsUrl = wfsUrl;
-            WFSBoundingBoxCache.Instance.GetBoundingBoxContainer(WFSRequest.CreateGetCapabilitiesURL(wfsUrl), SetBoundingBox);
+            var getCapabilitiesURL = OgcCWebServicesUtility.CreateGetCapabilitiesURL(wfsUrl, "WFS"); //todo not hardcode service
+            WFSBoundingBoxCache.Instance.GetBoundingBoxContainer(getCapabilitiesURL, SetBoundingBox);
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
