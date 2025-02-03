@@ -12,6 +12,7 @@ namespace Netherlands3D.Functionalities.Wms
     public class GetCapabilitiesRequest : BaseRequest, IGetCapabilitiesRequest
     {
         public ServiceType ServiceType => ServiceType.Wms;
+        protected override Dictionary<string, string> defaultNameSpaces => OgcCWebServicesUtility.DefaultWmsNamespaces;
 
         public string GetVersion()
         {
@@ -198,5 +199,6 @@ namespace Netherlands3D.Functionalities.Wms
 
             return styles;
         }
+
     }
 }

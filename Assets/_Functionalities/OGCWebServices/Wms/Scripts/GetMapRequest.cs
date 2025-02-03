@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using KindMen.Uxios;
 using Netherlands3D.Functionalities.OgcWebServices.Shared;
@@ -9,6 +10,8 @@ namespace Netherlands3D.Functionalities.Wms
 {
     public class GetMapRequest : BaseRequest
     {
+        protected override Dictionary<string, string> defaultNameSpaces => OgcCWebServicesUtility.DefaultWmsNamespaces;
+
         public static bool Supports(Uri url)
         {
             return OgcCWebServicesUtility.IsSupportedUrl(url, ServiceType.Wms, RequestType.GetMap);
