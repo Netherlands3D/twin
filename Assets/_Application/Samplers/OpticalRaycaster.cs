@@ -16,6 +16,8 @@ namespace Netherlands3D.Twin.Samplers
         private Stack<OpticalRequest> requestPool = new Stack<OpticalRequest>();
         private List<OpticalRequest> activeRequests = new List<OpticalRequest>();
 
+        private Stack<MultipointCallback> requestMultipointPool = new Stack<MultipointCallback>();
+
         private class OpticalRequest
         {
             public Camera depthCamera;
@@ -28,6 +30,7 @@ namespace Netherlands3D.Twin.Samplers
             public Action<Vector3> resultCallback;
             public Action onWaitFrameCallback;
             public int framesActive = 0;
+            public int resultCount = 0;
 
             public OpticalRequest(Material depthMaterial, Material positionMaterial, RenderTexture rt, Camera prefab)
             {
@@ -93,6 +96,63 @@ namespace Netherlands3D.Twin.Samplers
             activeRequests.Add(opticalRequest);
         }
 
+
+        public void GetWorldPointsAsync(Vector3[] screenPoints, Action<Vector3[]> callback)
+        {
+            MultipointCallback multipointCallback = GetMultipointCallback();
+            multipointCallback.SetCallbackCompletion(callback);
+
+            for(int i = 0; i < 4; i++)
+            {
+                OpticalRequest opticalRequest = GetRequest();
+                opticalRequest.SetScreenPoint(screenPoints[i]);
+                opticalRequest.AlignWithMainCamera();
+                opticalRequest.UpdateShaders();
+                opticalRequest.SetResultCallback(multipointCallback.pointCallbacks[i]);
+                opticalRequest.framesActive = 0;
+                activeRequests.Add(opticalRequest);
+            }
+        }
+
+        private class MultipointCallback
+        {
+            public Action<Vector3>[] pointCallbacks = new Action<Vector3>[4];
+            private int callbackCount = 0;
+            private Vector3[] result = new Vector3[4];
+            private Action<Vector3[]> callback;
+            private Action onComplete;
+
+            public MultipointCallback(Action onComplete)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    int index = i;
+                    pointCallbacks[index] = p => InvokeCallback(index, p);
+                }
+                this.onComplete = onComplete;
+            }   
+            
+            public void InvokeCallback(int index, Vector3 point)
+            {
+                callbackCount++;
+                result[index] = point;
+                if (callbackCount >= 4)
+                    this.callback.Invoke(result);
+                onComplete.Invoke();
+            }
+
+            public void SetCallbackCompletion(Action<Vector3[]> callback)
+            {
+                this.callback = callback;
+            }
+
+            public void Reset()
+            {
+                callbackCount = 0;
+            }
+        }
+
+
         private void Update()
         {
             if (activeRequests.Count == 0) return;
@@ -125,7 +185,21 @@ namespace Netherlands3D.Twin.Samplers
             opticalRequest.resultCallback.Invoke(worldPos);
             PoolRequest(opticalRequest);            
         }
-       
+
+        private RenderTexture GetRenderTexture()
+        {
+            //because of webgl we cannot create a rendertexture with the prefered format.
+            //the following error will occur in webgl if done so:
+            //RenderTexture.Create failed: format unsupported for random writes - RGBA32 SFloat (52).
+            //weirdly enough creating a depthtexture in project and passing it through a serializefield is ok on webgl
+            //but we cannot do this since we need a pool and create a rendertexture for each request
+            RenderTexture renderTexture = new RenderTexture(1, 1, 0, RenderTextureFormat.Depth);
+            renderTexture.graphicsFormat = SystemInfo.GetCompatibleFormat(GraphicsFormat.R32G32B32A32_SFloat, FormatUsage.Render);
+            renderTexture.depthStencilFormat = GraphicsFormat.None;
+            renderTexture.Create();
+            return renderTexture;
+        }
+
         private OpticalRequest GetRequest()
         {
             OpticalRequest request = null;
@@ -143,24 +217,33 @@ namespace Netherlands3D.Twin.Samplers
             return request;
         }
 
-        private RenderTexture GetRenderTexture()
-        {
-            //because of webgl we cannot create a rendertexture with the prefered format.
-            //the following error will occur in webgl if done so:
-            //RenderTexture.Create failed: format unsupported for random writes - RGBA32 SFloat (52).
-            //weirdly enough creating a depthtexture in project and passing it through a serializefield is ok on webgl
-            //but we cannot do this since we need a pool and create a rendertexture for each request
-            RenderTexture renderTexture = new RenderTexture(1, 1, 0, RenderTextureFormat.Depth);
-            renderTexture.graphicsFormat = SystemInfo.GetCompatibleFormat(GraphicsFormat.R32G32B32A32_SFloat, FormatUsage.Render);
-            renderTexture.depthStencilFormat = GraphicsFormat.None;
-            renderTexture.Create();
-            return renderTexture;
-        }
-
         private void PoolRequest(OpticalRequest request)
         {
             request.depthCamera.enabled = false;
             requestPool.Push(request);
+        }
+
+        private MultipointCallback GetMultipointCallback()
+        {
+            MultipointCallback callback = null;
+            if (requestMultipointPool.Count > 0)
+            {
+                callback = requestMultipointPool.Pop();
+            }
+            else
+            {
+                callback = new MultipointCallback(()=>
+                {
+                    PoolMultipointCallback(callback);
+                });
+            }
+            callback.Reset();
+            return callback;
+        }
+
+        private void PoolMultipointCallback(MultipointCallback callback)
+        {
+            requestMultipointPool.Push(callback);
         }
     }
 }
