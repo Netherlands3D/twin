@@ -55,7 +55,7 @@ namespace Netherlands3D.Functionalities.Wms
                 return;
             }
             
-            if (!OgcWebServicesUtility.IsSupportedUrl(new Uri(url), ServiceType.Wms, RequestType.GetCapabilities))
+            if (!OgcWebServicesUtility.IsValidUrl(new Uri(url), ServiceType.Wms, RequestType.GetCapabilities))
             {
                 Debug.LogError("Bounding boxes not in dictionary, and invalid wms url provided");
                 callback.Invoke(null);

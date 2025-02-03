@@ -22,9 +22,9 @@ namespace Netherlands3D.Functionalities.Wms
             var bodyContents = File.ReadAllText(cachedDataPath);
 
             // if this is not a capabilities uri, it should be a GetMap uri; otherwise we do not support this
-            if (!GetCapabilitiesRequest.Supports(url, bodyContents))
+            if (!GetCapabilitiesRequest.IsSupportedUrl(url, bodyContents))
             {
-                return OgcWebServicesUtility.IsSupportedUrl(url, ServiceType.Wms, RequestType.GetMap);
+                return OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wms, RequestType.GetMap);
             }
             
             var request = new GetCapabilitiesRequest(url, bodyContents);
@@ -46,7 +46,7 @@ namespace Netherlands3D.Functionalities.Wms
             var cachedDataPath = localFile.LocalFilePath;
             var bodyContents = File.ReadAllText(cachedDataPath);
 
-            if (GetCapabilitiesRequest.Supports(url, bodyContents))
+            if (GetCapabilitiesRequest.IsSupportedUrl(url, bodyContents))
             {
                 var request = new GetCapabilitiesRequest(url, bodyContents);
                 WMSBoundingBoxCache.AddWmsBoundingBoxContainer(request);
@@ -64,7 +64,7 @@ namespace Netherlands3D.Functionalities.Wms
                 return;
             }
 
-            if (OgcWebServicesUtility.IsSupportedUrl(url, ServiceType.Wms, RequestType.GetMap))
+            if (OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wms, RequestType.GetMap))
             {
                 var request = new GetMapRequest(url, bodyContents);
                 var map = request.CreateMapFromCapabilitiesUrl(

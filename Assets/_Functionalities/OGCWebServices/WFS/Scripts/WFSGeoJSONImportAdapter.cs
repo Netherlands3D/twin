@@ -46,7 +46,7 @@ namespace Netherlands3D.Functionalities.Wfs
                 return true;
 
             //If the body is a GetCapabilities request; check if the WFS supports BBOX filter and GeoJSON output
-            bool IsGetCapabilitiesRequest = getCapabilitiesRequest.IsGetCapabilitiesRequest();
+            bool IsGetCapabilitiesRequest = WFSRequest.IsSupportedUrl(new Uri(sourceUrl), cachedDataPath);
             if (!IsGetCapabilitiesRequest)
             {
                 Debug.Log("<color=orange>WFS: No GetFeature nor GetCapabilities request type found.</color>");
@@ -76,9 +76,9 @@ namespace Netherlands3D.Functionalities.Wfs
             var sourceUrl = localFile.SourceUrl;
             var wfsFolder = new FolderLayer(!string.IsNullOrEmpty(getCapabilitiesRequest.GetTitle()) ? getCapabilitiesRequest.GetTitle() : sourceUrl);
 
-            switch (getCapabilitiesRequest.requestType)
+            switch (getCapabilitiesRequest.OldRequestType)
             {
-                case WFSRequest.RequestType.GetCapabilities:
+                case WFSRequest.OLDRequestType.GetCapabilities:
                 {
                     // add the bounds directly, since we already have the GetCapabilities information anyway
                     WFSBoundingBoxCache.AddWfsBoundingBoxContainer(sourceUrl, getCapabilitiesRequest);
@@ -95,7 +95,7 @@ namespace Netherlands3D.Functionalities.Wfs
                     getCapabilitiesRequest = null;
                     return;
                 }
-                case WFSRequest.RequestType.GetFeature:
+                case WFSRequest.OLDRequestType.GetFeature:
                 {
                     NameValueCollection queryParameters = new();
                     new Uri(sourceUrl).TryParseQueryString(queryParameters);
@@ -113,7 +113,7 @@ namespace Netherlands3D.Functionalities.Wfs
                     return;
                 }
                 default:
-                    Debug.LogError("Unrecognized WFS request type: " + getCapabilitiesRequest.requestType);
+                    Debug.LogError("Unrecognized WFS request type: " + getCapabilitiesRequest.OldRequestType);
                     break;
             }
         }

@@ -20,10 +20,10 @@ namespace Netherlands3D.Functionalities.Wfs
         private XmlDocument xmlDocument;
         private XmlNamespaceManager namespaceManager;
 
-        public RequestType requestType;
+        public OLDRequestType OldRequestType;
         public BoundingBox wfsBounds;
 
-        public enum RequestType
+        public enum OLDRequestType
         {
             GetCapabilities,
             GetFeature,
@@ -43,20 +43,22 @@ namespace Netherlands3D.Functionalities.Wfs
             this.namespaceManager = ReadNameSpaceManager(this.xmlDocument);
         }
 
-        public bool IsGetCapabilitiesRequest()
+        public static bool IsSupportedUrl(Uri url, string contents)
         {
-            // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
-            var couldBeWfsCapabilities = cachedBodyContent.Contains("<WFS_Capabilities") || cachedBodyContent.Contains("<wfs:WFS_Capabilities");
+            if (OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wfs, RequestType.GetCapabilities))
+            {
+                return true;
+            }
 
-            var getCapabilitiesRequest = this.sourceUrl.ToLower().Contains("request=getcapabilities");
-            requestType = RequestType.GetCapabilities;
-            return getCapabilitiesRequest || couldBeWfsCapabilities;
+            // some of the ows urls we support do return the GetCapabilities, but do not have this in the url.
+            // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
+            return contents.Contains("<WFS_Capabilities") || contents.Contains("<wfs:WFS_Capabilities");
         }
 
         public bool IsGetFeatureRequest()
         {
             var getFeatureRequest = this.sourceUrl.ToLower().Contains("request=getfeature");
-            requestType = RequestType.GetFeature;
+            OldRequestType = OLDRequestType.GetFeature;
             return getFeatureRequest;
         }
 
