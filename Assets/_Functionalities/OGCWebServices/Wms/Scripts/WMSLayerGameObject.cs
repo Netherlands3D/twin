@@ -53,7 +53,7 @@ namespace Netherlands3D.Functionalities.Wms
 
             SetRenderOrder(LayerData.RootIndex);
             Legend.Instance.LoadLegend(this);
-            var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(WMSProjectionLayer.WmsUrl,"WMS"); //todo not hardcode service
+            var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(WMSProjectionLayer.WmsUrl, ServiceType.Wms);
             var getCapabilitiesUrl = new Uri(getCapabilitiesString);
             BoundingBoxCache.Instance.GetBoundingBoxContainer(
                 getCapabilitiesUrl,

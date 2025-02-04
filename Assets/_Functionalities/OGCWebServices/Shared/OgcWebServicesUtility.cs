@@ -24,11 +24,11 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
             { "schemaLocation", "http://www.opengis.net/wfs" }
         };
 
-        public static string CreateGetCapabilitiesURL(string url, string serviceType)
+        public static string CreateGetCapabilitiesURL(string url, ServiceType serviceType)
         {
             var uri = new Uri(url);
             var baseUrl = uri.GetLeftPart(UriPartial.Path);
-            return $"{baseUrl}?request=GetCapabilities&service={serviceType}";
+            return $"{baseUrl}?request=GetCapabilities&service={serviceType.ToString().ToUpper()}";
         }
 
         public static bool IsValidUrl(Uri url, RequestType requestType)
