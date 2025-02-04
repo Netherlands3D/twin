@@ -35,13 +35,13 @@ MonoBehaviour:
   m_CheckForContentUpdateRestrictionsOption: 0
   m_MonoScriptBundleCustomNaming: 
   m_RemoteCatalogBuildPath:
-    m_Id: da18b843378f74546998c2500500e1bc
+    m_Id: e3e77a0aab0b5744bb594226054c9dd2
   m_RemoteCatalogLoadPath:
-    m_Id: 6a2c6d163fe78a34eb01e4051d0e39d3
+    m_Id: a29fc405a895d2d449a2494ba7bb725d
   m_ContentStateBuildPathProfileVariableName: <default settings path>
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
-  m_BuildAddressablesWithPlayerBuild: 0
+  m_BuildAddressablesWithPlayerBuild: 1
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
   - {fileID: 11400000, guid: def7f949a8e26f14994573b9a1ba7615, type: 2}
