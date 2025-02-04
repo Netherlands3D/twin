@@ -206,7 +206,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 objectMapping.SetVisualisationLayer(layer);
                 objectMapping.SetGeoJsonLayerParent(this);
                 objectMapping.SetPosition(coord);
-
+                objectMapping.UpdateBoundingBox();
                 FeatureSelector.MappingTree.RootInsert(objectMapping);
             }
         }

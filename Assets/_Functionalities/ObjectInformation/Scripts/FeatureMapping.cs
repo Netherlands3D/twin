@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
@@ -17,12 +16,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public Feature Feature { get { return feature; } }
         public int LayerOrder { get { return geoJsonLayerParent.LayerData.RootIndex; } }
         public Coordinate Position;
+        public BoundingBox BoundingBox => boundingBox;
 
         private Feature feature;
         private List<Mesh> meshes;
         private IGeoJsonVisualisationLayer visualisationLayer;
         private GeoJsonLayerGameObject geoJsonLayerParent;
-        private Bounds featureBounds;
+        private BoundingBox boundingBox;
 
         public void SetGeoJsonLayerParent(GeoJsonLayerGameObject parentLayer)
         {
@@ -49,6 +49,31 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             this.visualisationLayer = visualisationLayer;
             
         }
+
+        //maybe this should be automated and called within the set visualisation layer
+        public void UpdateBoundingBox()
+        {
+            if (feature == null)
+            {
+                Debug.LogError("must have feature for boundingbox");
+                return;
+            }
+
+            Bounds featureBounds = VisualisationLayer.GetFeatureBounds(feature);
+            Coordinate bottomLeft = new Coordinate(CoordinateSystem.Unity, featureBounds.min.x, featureBounds.min.z);
+            Coordinate topRight = new Coordinate(CoordinateSystem.Unity, featureBounds.max.x, featureBounds.max.z);
+            Coordinate blWgs84 = bottomLeft.Convert(CoordinateSystem.WGS84);
+            Coordinate trWgs84 = topRight.Convert(CoordinateSystem.WGS84);
+            if (boundingBox == null)
+            {                
+                boundingBox = new BoundingBox(blWgs84, trWgs84);
+            }
+            else
+            {
+                boundingBox.SetBounds(blWgs84, trWgs84);
+            }
+        }
+
 
         public void SelectFeature()
         {

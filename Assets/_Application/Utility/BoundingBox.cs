@@ -12,6 +12,11 @@ namespace Netherlands3D.Twin.Utility
 
         public BoundingBox(Coordinate bottomLeft, Coordinate topRight)
         {
+            SetBounds(bottomLeft, topRight);
+        }
+
+        public void SetBounds(Coordinate bottomLeft, Coordinate topRight)
+        {
             if (bottomLeft.value1 > topRight.value1 || bottomLeft.value2 > topRight.value2)
             {
                 throw new ArgumentException(

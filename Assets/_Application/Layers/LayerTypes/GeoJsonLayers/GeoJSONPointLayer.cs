@@ -39,6 +39,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return meshes;
         }
 
+        public Bounds GetFeatureBounds(Feature feature)
+        {
+            return spawnedVisualisations[feature].bounds;
+        }
+
         //here we have to local offset the vertices with the position of the transform because the transform gets shifted
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
         {
