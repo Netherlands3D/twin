@@ -22,6 +22,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private List<Mesh> meshes;
         private IGeoJsonVisualisationLayer visualisationLayer;
         private GeoJsonLayerGameObject geoJsonLayerParent;
+        private Bounds featureBounds;
 
         public void SetGeoJsonLayerParent(GeoJsonLayerGameObject parentLayer)
         {
@@ -46,6 +47,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public void SetVisualisationLayer(IGeoJsonVisualisationLayer visualisationLayer)
         {
             this.visualisationLayer = visualisationLayer;
+            
         }
 
         public void SelectFeature()

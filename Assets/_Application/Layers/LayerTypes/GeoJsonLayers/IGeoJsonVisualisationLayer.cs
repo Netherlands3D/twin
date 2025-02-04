@@ -12,5 +12,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         List<Mesh> GetMeshData(Feature feature);
         void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color);
         void SetVisualisationColorToDefault();
+        Bounds GetFeatureBounds(Feature feature);
     }
 }

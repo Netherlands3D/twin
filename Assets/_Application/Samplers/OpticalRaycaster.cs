@@ -16,74 +16,9 @@ namespace Netherlands3D.Twin.Samplers
         private Stack<OpticalRequest> requestPool = new Stack<OpticalRequest>();
         private List<OpticalRequest> activeRequests = new List<OpticalRequest>();
 
-        private Stack<MultipointCallback> requestMultipointPool = new Stack<MultipointCallback>();
+        private Stack<MultiPointCallback> requestMultipointPool = new Stack<MultiPointCallback>();
 
-        private class OpticalRequest
-        {
-            public Camera depthCamera;
-            public Material depthMaterial;
-            public Material positionMaterial;
-            public RenderTexture renderTexture;
-            public Vector3 screenPoint;
-            public AsyncGPUReadbackRequest request;
-            public Action<AsyncGPUReadbackRequest> callback;
-            public Action<Vector3> resultCallback;
-            public Action onWaitFrameCallback;
-            public int framesActive = 0;
-            public int resultCount = 0;
-
-            public OpticalRequest(Material depthMaterial, Material positionMaterial, RenderTexture rt, Camera prefab)
-            {
-                this.depthMaterial = new Material(depthMaterial);
-                this.positionMaterial = new Material(positionMaterial);
-                this.renderTexture = rt;
-                this.depthCamera = Instantiate(prefab);
-                depthCamera.clearFlags = CameraClearFlags.SolidColor;
-                depthCamera.backgroundColor = Color.black;
-                depthCamera.depthTextureMode = DepthTextureMode.Depth;
-                depthCamera.targetTexture = rt;
-                depthCamera.forceIntoRenderTexture = true;
-                onWaitFrameCallback = () =>
-                {
-                    AsyncGPUReadbackRequest request = AsyncGPUReadback.Request(renderTexture, 0, callback);
-                    SetRequest(request);
-                };
-
-            }        
-            
-            public void SetCallback(Action<AsyncGPUReadbackRequest> callback)
-            {
-                this.callback = callback;
-            }
-
-            public void SetResultCallback(Action<Vector3> resultCallback)
-            {
-                this.resultCallback = resultCallback;
-            }
-
-            public void SetRequest(AsyncGPUReadbackRequest request)
-            {
-                this.request = request; 
-            }
-
-            public void SetScreenPoint(Vector3 screenPoint)
-            {
-                this.screenPoint = screenPoint;
-            }
-
-            public void AlignWithMainCamera()
-            {
-                depthCamera.transform.position = Camera.main.transform.position;
-                depthCamera.transform.LookAt(Camera.main.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, Camera.main.nearClipPlane)));
-            }
-
-            public void UpdateShaders()
-            {
-                depthMaterial.SetTexture("_CameraDepthTexture", renderTexture);
-                depthMaterial.SetMatrix("_CameraInvProjection", depthCamera.projectionMatrix.inverse);
-                positionMaterial.SetTexture("_WorldPositionTexture", renderTexture);
-            }
-        }
+        
 
         public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3> callback)
         {
@@ -99,7 +34,7 @@ namespace Netherlands3D.Twin.Samplers
 
         public void GetWorldPointsAsync(Vector3[] screenPoints, Action<Vector3[]> callback)
         {
-            MultipointCallback multipointCallback = GetMultipointCallback();
+            MultiPointCallback multipointCallback = GetMultipointCallback();
             multipointCallback.SetCallbackCompletion(callback);
 
             for(int i = 0; i < 4; i++)
@@ -114,43 +49,7 @@ namespace Netherlands3D.Twin.Samplers
             }
         }
 
-        private class MultipointCallback
-        {
-            public Action<Vector3>[] pointCallbacks = new Action<Vector3>[4];
-            private int callbackCount = 0;
-            private Vector3[] result = new Vector3[4];
-            private Action<Vector3[]> callback;
-            private Action onComplete;
-
-            public MultipointCallback(Action onComplete)
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    int index = i;
-                    pointCallbacks[index] = p => InvokeCallback(index, p);
-                }
-                this.onComplete = onComplete;
-            }   
-            
-            public void InvokeCallback(int index, Vector3 point)
-            {
-                callbackCount++;
-                result[index] = point;
-                if (callbackCount >= 4)
-                    this.callback.Invoke(result);
-                onComplete.Invoke();
-            }
-
-            public void SetCallbackCompletion(Action<Vector3[]> callback)
-            {
-                this.callback = callback;
-            }
-
-            public void Reset()
-            {
-                callbackCount = 0;
-            }
-        }
+        
 
 
         private void Update()
@@ -223,16 +122,16 @@ namespace Netherlands3D.Twin.Samplers
             requestPool.Push(request);
         }
 
-        private MultipointCallback GetMultipointCallback()
+        private MultiPointCallback GetMultipointCallback()
         {
-            MultipointCallback callback = null;
+            MultiPointCallback callback = null;
             if (requestMultipointPool.Count > 0)
             {
                 callback = requestMultipointPool.Pop();
             }
             else
             {
-                callback = new MultipointCallback(()=>
+                callback = new MultiPointCallback(()=>
                 {
                     PoolMultipointCallback(callback);
                 });
@@ -241,9 +140,115 @@ namespace Netherlands3D.Twin.Samplers
             return callback;
         }
 
-        private void PoolMultipointCallback(MultipointCallback callback)
+        private void PoolMultipointCallback(MultiPointCallback callback)
         {
             requestMultipointPool.Push(callback);
+        }
+
+        //the following classes are private because they should only be used within optical raycaster
+        private sealed class OpticalRequest
+        {
+            public Camera depthCamera;
+            public Material depthMaterial;
+            public Material positionMaterial;
+            public RenderTexture renderTexture;
+            public Vector3 screenPoint;
+            public AsyncGPUReadbackRequest request;
+            public Action<AsyncGPUReadbackRequest> callback;
+            public Action<Vector3> resultCallback;
+            public Action onWaitFrameCallback;
+            public int framesActive = 0;
+            public int resultCount = 0;
+
+            public OpticalRequest(Material depthMaterial, Material positionMaterial, RenderTexture rt, Camera prefab)
+            {
+                this.depthMaterial = new Material(depthMaterial);
+                this.positionMaterial = new Material(positionMaterial);
+                this.renderTexture = rt;
+                this.depthCamera = Instantiate(prefab);
+                depthCamera.clearFlags = CameraClearFlags.SolidColor;
+                depthCamera.backgroundColor = Color.black;
+                depthCamera.depthTextureMode = DepthTextureMode.Depth;
+                depthCamera.targetTexture = rt;
+                depthCamera.forceIntoRenderTexture = true;
+                onWaitFrameCallback = () =>
+                {
+                    AsyncGPUReadbackRequest request = AsyncGPUReadback.Request(renderTexture, 0, callback);
+                    SetRequest(request);
+                };
+
+            }
+
+            public void SetCallback(Action<AsyncGPUReadbackRequest> callback)
+            {
+                this.callback = callback;
+            }
+
+            public void SetResultCallback(Action<Vector3> resultCallback)
+            {
+                this.resultCallback = resultCallback;
+            }
+
+            public void SetRequest(AsyncGPUReadbackRequest request)
+            {
+                this.request = request;
+            }
+
+            public void SetScreenPoint(Vector3 screenPoint)
+            {
+                this.screenPoint = screenPoint;
+            }
+
+            public void AlignWithMainCamera()
+            {
+                depthCamera.transform.position = Camera.main.transform.position;
+                depthCamera.transform.LookAt(Camera.main.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, Camera.main.nearClipPlane)));
+            }
+
+            public void UpdateShaders()
+            {
+                depthMaterial.SetTexture("_CameraDepthTexture", renderTexture);
+                depthMaterial.SetMatrix("_CameraInvProjection", depthCamera.projectionMatrix.inverse);
+                positionMaterial.SetTexture("_WorldPositionTexture", renderTexture);
+            }
+        }
+
+        private sealed class MultiPointCallback
+        {
+            public Action<Vector3>[] pointCallbacks = new Action<Vector3>[4];
+            private int callbackCount = 0;
+            private Vector3[] result = new Vector3[4];
+            private Action<Vector3[]> callback;
+            private Action onComplete;
+
+            public MultiPointCallback(Action onComplete)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    int index = i;
+                    pointCallbacks[index] = p => InvokeCallback(index, p);
+                }
+                this.onComplete = onComplete;
+            }
+
+            public void InvokeCallback(int index, Vector3 point)
+            {
+                callbackCount++;
+                result[index] = point;
+                if (callbackCount >= 4)
+                    this.callback.Invoke(result);
+                onComplete.Invoke();
+            }
+
+            public void SetCallbackCompletion(Action<Vector3[]> callback)
+            {
+                this.callback = callback;
+            }
+
+            public void Reset()
+            {
+                callbackCount = 0;
+            }
         }
     }
 }
