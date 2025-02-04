@@ -31,12 +31,17 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
             return $"{baseUrl}?request=GetCapabilities&service={serviceType}";
         }
 
+        public static bool IsValidUrl(Uri url, RequestType requestType)
+        {
+            return url.Query.Contains($"request={requestType}", StringComparison.OrdinalIgnoreCase);
+        }
+
         public static bool IsValidUrl(Uri url, ServiceType serviceType, RequestType requestType)
         {
-            return url.Query.Contains($"service={serviceType}", StringComparison.OrdinalIgnoreCase) && 
+            return url.Query.Contains($"service={serviceType}", StringComparison.OrdinalIgnoreCase) &&
                    url.Query.Contains($"request={requestType}", StringComparison.OrdinalIgnoreCase);
-        } 
-        
+        }
+
         // some of the ows urls we support do return the GetCapabilities, but do not have this specified in the url query.
         public static bool IsSupportedGetCapabilitiesUrl(Uri url, string bodyContents, ServiceType serviceType)
         {
@@ -52,7 +57,7 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
             // Body should contain ("<WFS_Capabilities") || contents.Contains("<wfs:WFS_Capabilities") for wfs
             return bodyContents.Contains($"<{serviceTypeString}_Capabilities") || bodyContents.Contains($"<{serviceTypeString.ToLower()}:{serviceTypeString}_Capabilities");
         }
-        
+
         public static string GetParameterFromURL(string url, string parameter)
         {
             var uri = new Uri(url);
@@ -61,7 +66,7 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
             var featureLayerName = nvc.Get(parameter);
             return featureLayerName;
         }
-        
+
         public static string ParameterNameOfTypeNameBasedOnVersion(string wfsVersion)
         {
             return wfsVersion == "1.1.0" ? "typeName" : "typeNames";

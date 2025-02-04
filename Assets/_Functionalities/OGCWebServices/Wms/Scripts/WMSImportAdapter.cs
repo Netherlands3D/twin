@@ -27,7 +27,7 @@ namespace Netherlands3D.Functionalities.Wms
                 return OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wms, RequestType.GetMap);
             }
             
-            var request = new WmsGetCapabilitiesRequest(url, bodyContents);
+            var request = new WmsGetCapabilities(url, bodyContents);
                 
             // it should not just be a capabilities file, we also want to support BBOX!
             if (!request.CapableOfBoundingBoxes)
@@ -48,8 +48,8 @@ namespace Netherlands3D.Functionalities.Wms
 
             if (OgcWebServicesUtility.IsSupportedGetCapabilitiesUrl(url, bodyContents, ServiceType.Wms))
             {
-                var request = new WmsGetCapabilitiesRequest(url, bodyContents);
-                WMSBoundingBoxCache.AddWmsBoundingBoxContainer(request);
+                var request = new WmsGetCapabilities(url, bodyContents);
+                BoundingBoxCache.AddBoundingBoxContainer(request);
 
                 var maps = request.GetMaps(
                     layerPrefab.PreferredImageSize.x, 

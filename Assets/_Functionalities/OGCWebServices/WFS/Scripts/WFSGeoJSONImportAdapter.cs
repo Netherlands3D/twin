@@ -18,7 +18,7 @@ namespace Netherlands3D.Functionalities.Wfs
         [SerializeField] private WFSGeoJsonLayerGameObject layerPrefab;
 
         private string wfsVersion = "";
-        private WfsGetCapabilitiesRequest wfsGetCapabilitiesRequest;
+        private WfsGetCapabilities wfsGetCapabilities;
 
         public bool Supports(LocalFile localFile)
         {
@@ -35,7 +35,7 @@ namespace Netherlands3D.Functionalities.Wfs
             }
 
             Debug.Log("Checking source WFS url: " + sourceUrl);
-            wfsGetCapabilitiesRequest = new WfsGetCapabilitiesRequest(new Uri(sourceUrl), bodyContents);
+            wfsGetCapabilities = new WfsGetCapabilities(new Uri(sourceUrl), bodyContents);
 
             //If the body is a specific GetFeature request; directly continue to execute
             // bool isGetFeatureRequest = wfsGetCapabilitiesRequest.IsGetFeatureRequest();
@@ -50,19 +50,19 @@ namespace Netherlands3D.Functionalities.Wfs
                 return false;
             }
 
-            if (!wfsGetCapabilitiesRequest.HasBounds)
+            if (!wfsGetCapabilities.HasBounds)
             {
                 Debug.Log("<color=orange>WFS BBOX filter not supported.</color>");
                 return false;
             }
 
-            if (!wfsGetCapabilitiesRequest.HasGetFeatureAsGeoJSON())
+            if (!wfsGetCapabilities.HasGetFeatureAsGeoJSON())
             {
                 Debug.Log("<color=orange>WFS GetFeature operation does not support GeoJSON output format.</color>");
                 return false;
             }
 
-            wfsVersion = wfsGetCapabilitiesRequest.GetVersion();
+            wfsVersion = wfsGetCapabilities.GetVersion();
 
             return true;
         }
@@ -76,13 +76,13 @@ namespace Netherlands3D.Functionalities.Wfs
 
             var isWfsGetCapabilities = OgcWebServicesUtility.IsSupportedGetCapabilitiesUrl(url, bodyContents, ServiceType.Wfs);
 
-            var wfsFolder = new FolderLayer(!string.IsNullOrEmpty(wfsGetCapabilitiesRequest.GetTitle()) ? wfsGetCapabilitiesRequest.GetTitle() : sourceUrl);
+            var wfsFolder = new FolderLayer(!string.IsNullOrEmpty(wfsGetCapabilities.GetTitle()) ? wfsGetCapabilities.GetTitle() : sourceUrl);
 
             if (isWfsGetCapabilities)
             {
                 // add the bounds directly, since we already have the GetCapabilities information anyway
-                WFSBoundingBoxCache.AddWfsBoundingBoxContainer(wfsGetCapabilitiesRequest);
-                var featureTypes = wfsGetCapabilitiesRequest.GetFeatureTypes();
+                BoundingBoxCache.AddBoundingBoxContainer(wfsGetCapabilities);
+                var featureTypes = wfsGetCapabilities.GetFeatureTypes();
 
                 //Create a folder layer 
                 foreach (var featureType in featureTypes)
@@ -92,7 +92,7 @@ namespace Netherlands3D.Functionalities.Wfs
                     AddWFSLayer(featureType.Name, sourceUrl, crs, wfsFolder, featureType.Title);
                 }
 
-                wfsGetCapabilitiesRequest = null;
+                wfsGetCapabilities = null;
                 return;
             }
 
@@ -111,7 +111,7 @@ namespace Netherlands3D.Functionalities.Wfs
                     AddWFSLayer(featureType, sourceUrl, crs, wfsFolder, featureType);
                 }
 
-                wfsGetCapabilitiesRequest = null;
+                wfsGetCapabilities = null;
                 return;
             }
             
@@ -152,8 +152,8 @@ namespace Netherlands3D.Functionalities.Wfs
             // Make sure we have a wfsVersion set
             if (string.IsNullOrEmpty(wfsVersion))
             {
-                Debug.LogWarning("WFS version could not be determined, defaulting to " + WfsGetCapabilitiesRequest.DefaultFallbackVersion);
-                wfsVersion = WfsGetCapabilitiesRequest.DefaultFallbackVersion;
+                Debug.LogWarning("WFS version could not be determined, defaulting to " + WfsGetCapabilities.DefaultFallbackVersion);
+                wfsVersion = WfsGetCapabilities.DefaultFallbackVersion;
             }
 
             var parameters = new NameValueCollection();
@@ -166,7 +166,7 @@ namespace Netherlands3D.Functionalities.Wfs
             uriBuilder.SetQueryParameter(OgcWebServicesUtility.ParameterNameOfTypeNameBasedOnVersion(wfsVersion), featureType);
             if (parameters.Get("outputFormat")?.ToLower() is not ("json" or "geojson"))
             {
-                var geoJsonOutputFormatString = wfsGetCapabilitiesRequest.GetGeoJsonOutputFormatString();
+                var geoJsonOutputFormatString = wfsGetCapabilities.GetGeoJsonOutputFormatString();
                 uriBuilder.SetQueryParameter(
                     "outputFormat",
                     !string.IsNullOrEmpty(geoJsonOutputFormatString) ? geoJsonOutputFormatString : "application/json"

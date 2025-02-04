@@ -1,9 +1,11 @@
+using System;
 using Netherlands3D.Twin.Utility;
 
 namespace Netherlands3D.Functionalities.OgcWebServices.Shared
 {
-    public interface IGetCapabilitiesRequest
+    public interface IGetCapabilities
     {
+        public Uri Uri { get; }
         public ServiceType ServiceType { get; }
         
         public string GetVersion();

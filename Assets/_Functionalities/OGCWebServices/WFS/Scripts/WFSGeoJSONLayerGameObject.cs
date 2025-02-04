@@ -2,12 +2,10 @@ using System;
 using UnityEngine;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using Netherlands3D.Functionalities.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Utility;
-using Netherlands3D.Web;
 
 namespace Netherlands3D.Functionalities.Wfs
 {
@@ -29,10 +27,15 @@ namespace Netherlands3D.Functionalities.Wfs
         {
             var wfsUrl = urlPropertyData.Data.ToString();
             cartesianTileWFSLayer.WfsUrl = wfsUrl;
-            var getCapabilitiesURL = OgcWebServicesUtility.CreateGetCapabilitiesURL(wfsUrl, "WFS"); //todo not hardcode service
-            WFSBoundingBoxCache.Instance.GetBoundingBoxContainer(getCapabilitiesURL, SetBoundingBox);
+            var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wfsUrl, "WFS"); //todo not hardcode service
+            var getCapabilitiesUrl = new Uri(getCapabilitiesString);
+            BoundingBoxCache.Instance.GetBoundingBoxContainer(
+                getCapabilitiesUrl,
+                (responseText) => new WfsGetCapabilities(getCapabilitiesUrl, responseText), 
+                SetBoundingBox
+            );
         }
-
+        
         public override void LoadProperties(List<LayerPropertyData> properties)
         {
             var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
@@ -45,7 +48,7 @@ namespace Netherlands3D.Functionalities.Wfs
         public void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)
         {
             var wfsUrl = urlPropertyData.Data.ToString();
-            var featureLayerName = WfsGetCapabilitiesRequest.GetLayerNameFromURL(wfsUrl);
+            var featureLayerName = WfsGetCapabilities.GetLayerNameFromURL(wfsUrl);
             
             if (boundingBoxContainer.LayerBoundingBoxes.ContainsKey(featureLayerName))
             {

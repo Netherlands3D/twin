@@ -9,8 +9,9 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wms
 {
-    public class WmsGetCapabilitiesRequest : BaseRequest, IGetCapabilitiesRequest
+    public class WmsGetCapabilities : BaseRequest, IGetCapabilities
     {
+        public Uri Uri => Url;
         private const string defaultFallbackVersion = "1.3.0";
         
         public ServiceType ServiceType => ServiceType.Wms;
@@ -28,7 +29,7 @@ namespace Netherlands3D.Functionalities.Wms
             }
         }
         
-        public WmsGetCapabilitiesRequest(Uri url, string xml) : base(url, xml)
+        public WmsGetCapabilities(Uri url, string xml) : base(url, xml)
         {
         }
 
