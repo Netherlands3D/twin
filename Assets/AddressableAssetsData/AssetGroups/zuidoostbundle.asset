@@ -18,283 +18,297 @@ MonoBehaviour:
   m_GUID: b48ca905552d01c47acb8392426b776a
   m_SerializeEntries:
   - m_GUID: 03c76a158726d8a408bedf43c387ea25
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_3.jpg
+    m_Address: Image_3
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0875a1d6be04142418f26c072f53c8d3
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_1.mat
+    m_Address: Image_1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 099bc0592fd02bd44a7844b1071f0340
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_23.jpg
+    m_Address: Image_23
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0d111818dfaba394cb894d50e133cb0b
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/RubyGardens.001.mat
+    m_Address: RubyGardens.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 11da44bde58081b4e86f96d2c8ff5353
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Paasheuvelweg_PBR.001.mat
+    m_Address: Paasheuvelweg_PBR.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 124f0c8267c6fc5449f0a354b13f8620
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_18.mat
+    m_Address: Image_18
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 18b092d572111154cadd50fb9928dc4c
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_20.jpg
+    m_Address: Image_20
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 18cb75ee2c6cc2547a2e51ba119723b8
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/04_-_Default.001.mat
+    m_Address: 04_-_Default.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1df10b38eb55ccb42bf15262e1e86c8d
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_2.mat
+    m_Address: Image_2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2570a19718319bd4d9682205e405a028
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Spot_E.001.mat
+    m_Address: Spot_E.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 28e89332edc834a439ec0a571a740397
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_8.mat
+    m_Address: Image_8
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 29d414c7f2ce78c439adc9f370b025f6
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/04_-_Default.001.mat
+    m_Address: 04_-_Default.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 39b52fc1e4f895c4eb60139bd9676369
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_18.jpg
+    m_Address: Image_18
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3bdfa972bf0fcfe4eb9914a41d4d2e6e
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_22.jpg
+    m_Address: Image_22
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4575d9ad0614f8646b2d70b48a4ba27b
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/03_-_Default.001.mat
+    m_Address: 03_-_Default.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 51b7f59a4d0e91b4ba20cf6d3b05dd6b
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_0.mat
+    m_Address: Image_0
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 54bc869b18316324f99f0eca9801d007
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/zuidoost.obj
+    m_Address: zuidoost
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 54e2340ee861d7140b664e11a8ab5804
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_22.mat
+    m_Address: Image_22
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 59d606852808d1b4eadd4eaf1cac9eaf
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Brightside.001.mat
+    m_Address: Brightside.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5ad0746edde8ea542bf8f2ba3fef26cb
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_10.jpg
+    m_Address: Image_10
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5fecb2b4347935a4eb8d1aea71582957
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_13.jpg
+    m_Address: Image_13
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 62fd59197a6e41c439209b81afc970e6
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_16.mat
+    m_Address: Image_16
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6828e8d0d7b61fe47931d33b36cdbf06
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_1.jpg
+    m_Address: Image_1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 68633751c4be3f243818c028e211e271
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Spot_C1.001.mat
+    m_Address: Spot_C1.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6aedd6bc5609fcf4e8731170fcc80086
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_10.mat
+    m_Address: Image_10
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6fb7c8c90056fae4c9560680d84f0286
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_20.mat
+    m_Address: Image_20
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7174d6973cd94134091d019ae17e8ebb
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_21.jpg
+    m_Address: Image_21
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7a9cc7ca925e3cd44889efee59b106d6
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Paasheuvelweg_Ground_PBR.001.mat
+    m_Address: Paasheuvelweg_Ground_PBR.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7c462b68f66a73c4dbab2ff812d189ff
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_12.mat
+    m_Address: Image_12
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7db9bd3c786aeaa4194ea4889836dc3f
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_14.jpg
+    m_Address: Image_14
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 91ca27de19a85b241aec3be134cc1e4b
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_9.jpg
+    m_Address: Image_9
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 963f1676073bf414f85077a04a4a21a9
+    m_Address: ZuidOostHider
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 96d778a591e307e48b3f896321843660
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/Ontwikkeling
-      Zuidoost.prefab
+    m_Address: Ontwikkeling Zuidoost
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 979bae03365d8b84abcf6ffa8123c921
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_7.jpg
+    m_Address: Image_7
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 98de6f1c161ed1a46bbc09fdf4a9e652
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_12.jpg
+    m_Address: Image_12
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9bf52fcba053c36409a8058e3b431b85
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_6.jpg
+    m_Address: Image_6
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e00c0494ae876841a666d0dc3db3a6d
+    m_Address: BagIdsHiddenAmsterdamZuidOost
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9e21014b94a76e8469f247a00ebf8193
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Spot_CF.001.mat
+    m_Address: Spot_CF.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a26242582fbffca419483ae8725241f5
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_4.mat
+    m_Address: Image_4
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a50448570d4229545a57df01b8fb1d12
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_11.jpg
+    m_Address: Image_11
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: af905da479f6ed648a4c0d1a137bfd9f
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_17.jpg
+    m_Address: Image_17
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b5fb7394193e54444a35016b7c31e145
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_14.mat
+    m_Address: Image_14
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bba4d3b50de4f63409362ac6aca79709
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Parkside.001.mat
+    m_Address: Parkside.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c280072ff3699b44d8c6e010f160b292
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_4.jpg
+    m_Address: Image_4
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c30e445853ae3cb4eb7442de9131ae79
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_2.jpg
+    m_Address: Image_2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c6524995ff4367946ae4bbb8b3e99f23
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_16.jpg
+    m_Address: Image_16
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ca0aa8ebd604f9643aa85f8035749fde
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_15.jpg
+    m_Address: Image_15
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cc558fe872e81454192c65cc4795ce33
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Spot_D1.001.mat
+    m_Address: Spot_D1.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d1c2297b0ec21234a956fe4c37c648be
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_19.jpg
+    m_Address: Image_19
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d82346da421de8245b7945ae0ddebb8c
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/03_-_Default.001.mat
+    m_Address: 03_-_Default.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ed2f9578cc5c8b44585cfe6ed9588068
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_5.jpg
+    m_Address: Image_5
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ef89af9250bd2bc45b2156fe410e83fd
+    m_Address: BagIdsHiddenGesloopt
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f37487b3c9eec9d49858e144c404080c
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Spot_B2.001.mat
+    m_Address: Spot_B2.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f40da58d18133a7479579ed952fd60a8
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Spot_A1.001.mat
+    m_Address: Spot_A1.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa42bc69f7dad994ca3593d04070737c
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Spot_A2.001.mat
+    m_Address: Spot_A2.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fb521cdb8b6ad694c88d7639eed5564b
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/Materials/Image_6.mat
+    m_Address: Image_6
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fe456caba3059f6479eaf89ea7d9851d
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/ZC.001.mat
+    m_Address: ZC.001
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fe463a74f0d8ce94c8080715d35af3f8
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_0.jpg
+    m_Address: Image_0
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fe4a34385f079084bae4eea428a561c3
-    m_Address: Assets/_Functionalities/AssetBundles/AssetBundleAssets/textures/Image_8.jpg
+    m_Address: Image_8
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

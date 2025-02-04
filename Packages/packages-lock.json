@@ -393,6 +393,12 @@
       },
       "url": "https://package.openupm.com"
     },
+    "eu.netherlands3d.plugin.amsterdam-zuidoost": {
+      "version": "file:eu.netherlands3d.plugin.amsterdam-zuidoost",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "eu.netherlands3d.poly2tri": {
       "version": "2.0.0",
       "depth": 1,
