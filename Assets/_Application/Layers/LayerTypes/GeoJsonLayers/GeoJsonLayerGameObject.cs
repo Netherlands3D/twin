@@ -369,6 +369,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 if(mapping.Feature == feature)
                 {
                     FeatureSelector.MappingTree.Remove(mapping);
+
+                    //destroy featuremapping object, there should be no references anywhere else to this object!
+                    Destroy(mapping.gameObject);
                     break;
                 }
             }

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Coordinates;
@@ -104,8 +105,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         }
 
         private static readonly Color NO_OVERRIDE_COLOR = new Color(0, 0, 1, 0);
-        private static readonly Color THUMBNAIL_COLOR = new Color(1, 0, 0, 0);  
-
-
+        private static readonly Color THUMBNAIL_COLOR = new Color(1, 0, 0, 0);
     }
 }
