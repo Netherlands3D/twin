@@ -62,6 +62,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 21305f97c26eb574eb90f4c32103044b
+    m_Address: Packages/eu.netherlands3d.plugin.amsterdam-zuidoost/Runtime/Meshes/zuidoost.mtl
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2570a19718319bd4d9682205e405a028
     m_Address: Spot_E.001
     m_ReadOnly: 0
