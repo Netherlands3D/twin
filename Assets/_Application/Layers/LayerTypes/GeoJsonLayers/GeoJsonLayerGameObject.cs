@@ -10,6 +10,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
+using Netherlands3D.Twin.Utility;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
@@ -253,6 +254,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             newLineLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
 
             newLineLayerGameObject.LayerData.SetParent(LayerData);
+            newLineLayerGameObject.FeatureRemoved += OnFeatureRemoved;
             return newLineLayerGameObject;
         }
 
@@ -353,6 +355,41 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 polygonFeaturesLayer = CreateOrGetPolygonLayer();
 
             polygonFeaturesLayer.AddAndVisualizeFeature<MultiPolygon>(feature, originalCoordinateSystem);
+        }
+
+        protected virtual void OnFeatureRemoved(Feature feature)
+        {
+            IGeoJsonVisualisationLayer layer = GetVisualisationLayerForFeature(feature);
+            BoundingBox queryBoundingBox = FeatureMapping.CreateBoundingBoxForFeature(feature, layer);
+            //we have to query first to find the corresponding featuremapping, cant do a remove right away
+            //alternative could be to make an extra method to query by feature and do remove
+            List<FeatureMapping> mappings = FeatureSelector.MappingTree.Query(queryBoundingBox);
+            foreach (FeatureMapping mapping in mappings)
+            {
+                if(mapping.Feature == feature)
+                {
+                    FeatureSelector.MappingTree.Remove(mapping);
+                    break;
+                }
+            }
+        }
+
+        public IGeoJsonVisualisationLayer GetVisualisationLayerForFeature(Feature feature)
+        {
+            IGeoJsonVisualisationLayer layer = null;
+            if (feature.Geometry is MultiLineString || feature.Geometry is LineString)
+            {
+                layer = lineFeaturesLayer;
+            }
+            else if (feature.Geometry is MultiPolygon || feature.Geometry is Polygon)
+            {
+                layer = polygonFeaturesLayer;
+            }
+            else if (feature.Geometry is Point || feature.Geometry is MultiPoint)
+            {
+                layer = pointFeaturesLayer;
+            }
+            return layer;
         }
     }
 }

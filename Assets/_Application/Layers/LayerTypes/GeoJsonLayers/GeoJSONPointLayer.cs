@@ -41,7 +41,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public Bounds GetFeatureBounds(Feature feature)
         {
-            return spawnedVisualisations[feature].bounds;
+            return spawnedVisualisations[feature].trueBounds;
         }
 
         //here we have to local offset the vertices with the position of the transform because the transform gets shifted
@@ -141,7 +141,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             keysToRemove.Capacity = spawnedVisualisations.Count;
             foreach (var kvp in spawnedVisualisations)
             {
-                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.bounds);
+                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
                 if (inCameraFrustum) continue;
 
                 keysToRemove.Add(kvp.Key);

@@ -16,6 +16,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     {
         public bool IsPolygon  => false;
         public Transform Transform => transform;
+        public delegate void GeoJSONLineHandler(Feature feature);
+        public event GeoJSONLineHandler FeatureRemoved;
 
         private Dictionary<Feature, FeatureLineVisualisations> spawnedVisualisations = new();
 
@@ -55,7 +57,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public Bounds GetFeatureBounds(Feature feature)
         {
-            return spawnedVisualisations[feature].bounds;
+            return spawnedVisualisations[feature].trueBounds;
         }
 
         //because the transfrom will always be at the V3zero position we dont want to offset with the localoffset
@@ -139,7 +141,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
             foreach (var kvp in spawnedVisualisations.Reverse())
             {
-                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.bounds);
+                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
                 if (inCameraFrustum) continue;
 
                 RemoveFeature(kvp.Value);
@@ -151,8 +153,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             foreach (var line in featureVisualisation.Data)
             {
                 lineRenderer3D.RemoveLine(line);
-            }
-
+            }            
+            FeatureRemoved?.Invoke(featureVisualisation.feature); //TODO, fix the execution order, we need to execute this before its removed from the data
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }
 

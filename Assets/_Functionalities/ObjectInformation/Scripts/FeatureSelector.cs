@@ -14,6 +14,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class FeatureSelector : MonoBehaviour, IObjectSelector
     {
+        public bool debugMappingTree = true;
+
         public static FeatureMappingTree MappingTree
         {
             get
@@ -254,7 +256,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void OnDrawGizmos()
         {
-            MappingTree.DebugTree();
+            if(debugMappingTree)
+                MappingTree.DebugTree();
         }
     }
 
@@ -289,7 +292,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void Insert(Node node, FeatureMapping obj, int depth)
         {
-            if (!node.Bounds.Contains(obj.Position)) return;
+            if (!node.Bounds.Contains(obj.BoundingBox)) return;
 
             if (node.IsLeaf)
             {
@@ -302,8 +305,68 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             else
             {
+                bool inserted = false;
                 foreach (var child in node.Children)
-                    Insert(child, obj, depth + 1);
+                {
+                    if (child.Bounds.Contains(obj.BoundingBox))
+                    {
+                        Insert(child, obj, depth + 1);
+                        inserted = true;
+                        break; 
+                    }
+                }
+
+                //no child fits so up 1 level
+                if (!inserted)
+                    node.Mappings.Add(obj);
+            }
+        }
+
+        public void Remove(FeatureMapping obj)
+        {
+            Remove(root, obj);
+        }
+
+        private bool Remove(Node node, FeatureMapping obj)
+        {
+            if (!node.Bounds.Contains(obj.BoundingBox)) return false;
+            
+            if (node.Mappings.Remove(obj))
+                return true;
+          
+            if (!node.IsLeaf)
+            {
+                foreach (var child in node.Children)
+                {
+                    if (Remove(child, obj))
+                    {
+                        MergeCheck(node);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private void MergeCheck(Node node)
+        {
+            int totalMappings = node.Mappings.Count;
+            if (!node.IsLeaf)
+            {
+                foreach (var child in node.Children)
+                {
+                    totalMappings += child.Mappings.Count;
+                }
+            }
+
+            if (totalMappings <= maxMappings)
+            {
+                foreach (var child in node.Children)
+                {
+                    node.Mappings.AddRange(child.Mappings);
+                }
+                node.Children = null;
             }
         }
 
@@ -375,9 +438,15 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void DebugNode(Node node, bool recursive)
         {
-            node.Bounds.Debug();
+            node.Bounds.Debug(Color.green);
             foreach (FeatureMapping mapping in node.Mappings)
-                Debug.DrawLine(mapping.Position.ToUnity(), node.Bounds.BottomLeft.ToUnity(), Color.red);
+                Debug.DrawLine(mapping.BoundingBox.BottomLeft.ToUnity(), node.Bounds.BottomLeft.ToUnity(), Color.red);
+
+            foreach (FeatureMapping mapping in node.Mappings)
+            {
+                //mapping.UpdateBoundingBox();
+                mapping.BoundingBox.Debug(Color.magenta);
+            }
 
             if (recursive && !node.IsLeaf)
                 foreach (Node child in node.Children)

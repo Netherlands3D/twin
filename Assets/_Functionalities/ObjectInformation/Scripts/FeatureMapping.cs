@@ -58,22 +58,25 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 Debug.LogError("must have feature for boundingbox");
                 return;
             }
-
-            Bounds featureBounds = VisualisationLayer.GetFeatureBounds(feature);
-            Coordinate bottomLeft = new Coordinate(CoordinateSystem.Unity, featureBounds.min.x, featureBounds.min.z);
-            Coordinate topRight = new Coordinate(CoordinateSystem.Unity, featureBounds.max.x, featureBounds.max.z);
-            Coordinate blWgs84 = bottomLeft.Convert(CoordinateSystem.WGS84);
-            Coordinate trWgs84 = topRight.Convert(CoordinateSystem.WGS84);
-            if (boundingBox == null)
-            {                
-                boundingBox = new BoundingBox(blWgs84, trWgs84);
-            }
-            else
+            if (visualisationLayer == null)
             {
-                boundingBox.SetBounds(blWgs84, trWgs84);
+                Debug.LogError("must have a geojson visualisation layer for feature");
+                return;
             }
+
+            boundingBox = CreateBoundingBoxForFeature(feature, visualisationLayer);
         }
 
+        public static BoundingBox CreateBoundingBoxForFeature(Feature feature, IGeoJsonVisualisationLayer layer)
+        {
+            Bounds featureBounds = layer.GetFeatureBounds(feature);
+            Coordinate bottomLeft = new Coordinate(CoordinateSystem.Unity, featureBounds.min.x, featureBounds.min.y, featureBounds.min.z);
+            Coordinate topRight = new Coordinate(CoordinateSystem.Unity, featureBounds.max.x, featureBounds.max.y, featureBounds.max.z);
+            Coordinate blWgs84 = bottomLeft.Convert(CoordinateSystem.WGS84);
+            Coordinate trWgs84 = topRight.Convert(CoordinateSystem.WGS84);
+            BoundingBox boundingBox = new BoundingBox(blWgs84, trWgs84);
+            return boundingBox;
+        }
 
         public void SelectFeature()
         {

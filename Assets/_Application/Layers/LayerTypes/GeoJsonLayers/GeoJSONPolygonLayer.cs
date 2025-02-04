@@ -36,7 +36,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public Bounds GetFeatureBounds(Feature feature)
         {
-            return spawnedVisualisations[feature].bounds;
+            return spawnedVisualisations[feature].trueBounds;
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
             foreach (var kvp in spawnedVisualisations.Reverse())
             {
-                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.bounds);
+                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
                 if (inCameraFrustum)
                     continue;
 
