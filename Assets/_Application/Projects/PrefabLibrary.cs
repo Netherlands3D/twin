@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -15,6 +16,7 @@ namespace Netherlands3D.Twin.Projects
         public string groupName;
         public bool autoPopulateUI;
         public List<LayerGameObject> prefabs;
+        public List<AssetReferenceGameObject> prefabReferences;
     }
 
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/PrefabLibrary", fileName = "PrefabLibrary", order = 0)]

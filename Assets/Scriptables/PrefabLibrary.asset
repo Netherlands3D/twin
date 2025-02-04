@@ -25,6 +25,7 @@ MonoBehaviour:
     - {fileID: 4447745080902320339, guid: 2e71ce721dd3e41c194c6fb05ad10520, type: 3}
     - {fileID: 4913964984048323131, guid: 9462ac35a03ed4ade9a4e14ea76906a3, type: 3}
     - {fileID: 1737505678239128256, guid: ba974bcd30ea6407f8cbbc1779e309b4, type: 3}
+    prefabReferences: []
   - groupName: ObjectenBibliotheek
     autoPopulateUI: 1
     prefabs:
@@ -36,6 +37,11 @@ MonoBehaviour:
     - {fileID: -6065409727045272873, guid: ba57070110ceb4eb3be79e964993f598, type: 3}
     - {fileID: -7062163889935492721, guid: a324f799961a34de6967402e40a749dc, type: 3}
     - {fileID: -5293961980780918241, guid: e78ad354330e64902b24d08795d54efb, type: 3}
+    prefabReferences:
+    - m_AssetGUID: 96d778a591e307e48b3f896321843660
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
   - groupName: 3DTiles
     autoPopulateUI: 0
     prefabs:
@@ -43,6 +49,7 @@ MonoBehaviour:
     - {fileID: 4142489338678956943, guid: 416bb3a0b4137324d860b58a6e8f484e, type: 3}
     - {fileID: 4142489338678956943, guid: 2823e5ec82fe248febd620a0b025bcca, type: 3}
     - {fileID: 4142489338678956943, guid: 71fff5c85650fcd4d9f59e4e182b5e95, type: 3}
+    prefabReferences: []
   - groupName: CustomLayers
     autoPopulateUI: 0
     prefabs:
@@ -56,3 +63,4 @@ MonoBehaviour:
     - {fileID: 2205593157182618917, guid: c57dd4a997e79ce43895144d0702166c, type: 3}
     - {fileID: 8209116542904522024, guid: 34882a73ff6122243a0e3e9811473e20, type: 3}
     - {fileID: 7611614742349668521, guid: 7ddb78a6acbf44d4e84910b5684042b7, type: 3}
+    prefabReferences: []

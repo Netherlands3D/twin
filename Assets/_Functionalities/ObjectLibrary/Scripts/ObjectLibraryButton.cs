@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Samplers;
-using Netherlands3D.Twin.Utility;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Functionalities.ObjectLibrary
@@ -30,35 +28,28 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             button.onClick.RemoveListener(CreateObject);
         }
 
-        //for when this component is created at runtime
-        public void Initialize(GameObject prefab)
+        public void SetPrefab(GameObject prefab)
         {
             this.prefab = prefab;
-            instantiationCallback = w =>
-            {
-                var opticalSpawnPoint = w;
-                var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
-                if (opticalSpawnPoint != Vector3.zero)
-                {
-                    spawnPoint = opticalSpawnPoint;
-                }
-                var newObject = Instantiate(prefab, spawnPoint, prefab.transform.rotation);
-                var layerComponent = newObject.GetComponent<HierarchicalObjectLayerGameObject>();
-                if (!layerComponent)
-                    layerComponent = newObject.AddComponent<HierarchicalObjectLayerGameObject>();
 
-                layerComponent.Name = prefab.name;
-            };
+            instantiationCallback = w => ObjectFactory.Create(w, prefab);
+        }
+
+        // for when this button should load from an Addressable
+        public void SetPrefab(AssetReferenceGameObject reference)
+        {
+            this.prefab = null;
+
+            instantiationCallback = w => ObjectFactory.Create(w, reference);
         }
         
         protected virtual void CreateObject()
         {           
             var opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
-            if (opticalRaycaster)
-            {
-                var centerOfViewport = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);
-                opticalRaycaster.GetWorldPointAsync(centerOfViewport, instantiationCallback);
-            }
+            if (!opticalRaycaster) return;
+
+            var centerOfViewport = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);
+            opticalRaycaster.GetWorldPointAsync(centerOfViewport, instantiationCallback);
         }
     }
 }
