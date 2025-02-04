@@ -32,6 +32,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0bb15cd7db4229848b0fd2045f7b6243
+    m_Address: Packages/eu.netherlands3d.plugin.amsterdam-zuidoost/Runtime/Data
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0d111818dfaba394cb894d50e133cb0b
     m_Address: RubyGardens.001
     m_ReadOnly: 0
@@ -124,6 +129,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5fecb2b4347935a4eb8d1aea71582957
     m_Address: Image_13
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6147d54fe6a16c0418702e41585f49ec
+    m_Address: Packages/eu.netherlands3d.plugin.amsterdam-zuidoost/Runtime/Prefabs
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -242,6 +252,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bc3c5b3022e2db547a768ff8a45829b5
+    m_Address: Packages/eu.netherlands3d.plugin.amsterdam-zuidoost/Runtime/Textures
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c280072ff3699b44d8c6e010f160b292
     m_Address: Image_4
     m_ReadOnly: 0
@@ -277,6 +292,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e8ee2135a70b6db4b93e09fc43a3d23c
+    m_Address: Packages/eu.netherlands3d.plugin.amsterdam-zuidoost/Runtime/Meshes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ed2f9578cc5c8b44585cfe6ed9588068
     m_Address: Image_5
     m_ReadOnly: 0
@@ -294,6 +314,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f40da58d18133a7479579ed952fd60a8
     m_Address: Spot_A1.001
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f6481477cf33fb944a3e8a80d9186eaf
+    m_Address: ShaderVariants
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

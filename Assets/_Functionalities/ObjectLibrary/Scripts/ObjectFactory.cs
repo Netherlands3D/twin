@@ -44,7 +44,17 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
 
         private static void AddressableObjectCreator(Vector3 spawnPoint, AssetReferenceGameObject reference)
         {
-            reference.InstantiateAsync(spawnPoint, Quaternion.identity).Completed += OnAsyncInstantiationComplete;
+            Addressables.LoadAssetAsync<ShaderVariantCollection>("ShaderVariants").Completed += shaderHandle =>
+            {
+                if (shaderHandle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    ShaderVariantCollection svc = shaderHandle.Result;
+                    svc?.WarmUp();
+
+                    // Now load the Addressable asset
+                    reference.InstantiateAsync(spawnPoint, Quaternion.identity).Completed += OnAsyncInstantiationComplete;
+                }
+            };
         }
 
         private static void OnAsyncInstantiationComplete(AsyncOperationHandle<GameObject> handle)
