@@ -19,17 +19,24 @@ namespace Netherlands3D.Functionalities.Wms
         {
         }
 
+        public string GetVersion()
+        {
+            //try to get version from the url
+            var urlLower = Url.ToString().ToLower();
+            var versionQueryKey = "version=";
+            if (urlLower.Contains(versionQueryKey))
+                return urlLower.Split(versionQueryKey)[1].Split("&")[0];
+            
+            //try to get the version from the body, or return the default
+            var versionInXml = xmlDocument.DocumentElement.GetAttribute("version");
+            return string.IsNullOrEmpty(versionInXml) ? versionInXml : defaultFallbackVersion;
+        }
+        
         public string GetTitle()
         {
             return GetInnerTextForNode(xmlDocument.DocumentElement, "Title");
         }
-
-        public string GetVersion()
-        {
-            var versionInXml = xmlDocument.DocumentElement.GetAttribute("version");
-            return string.IsNullOrEmpty(versionInXml) ? versionInXml : defaultFallbackVersion;
-        }
-
+        
         public BoundingBoxContainer GetBounds()
         {
             var container = new BoundingBoxContainer(Url.ToString());
@@ -92,7 +99,7 @@ namespace Netherlands3D.Functionalities.Wms
             return new BoundingBox(bl, tr);
         }
 
-        public static bool IsSupportedUrl(Uri url, string contents)
+        public static bool IsSupportedUrl(Uri url, string contents) //todo: this can probably be merged in the BaseRequest, since it does the same secondary check
         {
             if (OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wms, RequestType.GetCapabilities))
             {
