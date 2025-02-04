@@ -22,12 +22,12 @@ namespace Netherlands3D.Functionalities.Wms
             var bodyContents = File.ReadAllText(cachedDataPath);
 
             // if this is not a capabilities uri, it should be a GetMap uri; otherwise we do not support this
-            if (!GetCapabilitiesRequest.IsSupportedUrl(url, bodyContents))
+            if (!OgcWebServicesUtility.IsSupportedGetCapabilitiesUrl(url, bodyContents, ServiceType.Wms))
             {
                 return OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wms, RequestType.GetMap);
             }
             
-            var request = new GetCapabilitiesRequest(url, bodyContents);
+            var request = new WmsGetCapabilitiesRequest(url, bodyContents);
                 
             // it should not just be a capabilities file, we also want to support BBOX!
             if (!request.CapableOfBoundingBoxes)
@@ -46,9 +46,9 @@ namespace Netherlands3D.Functionalities.Wms
             var cachedDataPath = localFile.LocalFilePath;
             var bodyContents = File.ReadAllText(cachedDataPath);
 
-            if (GetCapabilitiesRequest.IsSupportedUrl(url, bodyContents))
+            if (OgcWebServicesUtility.IsSupportedGetCapabilitiesUrl(url, bodyContents, ServiceType.Wms))
             {
-                var request = new GetCapabilitiesRequest(url, bodyContents);
+                var request = new WmsGetCapabilitiesRequest(url, bodyContents);
                 WMSBoundingBoxCache.AddWmsBoundingBoxContainer(request);
 
                 var maps = request.GetMaps(

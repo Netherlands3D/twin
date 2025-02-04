@@ -18,110 +18,110 @@ namespace Netherlands3D.Functionalities.Wfs
         [SerializeField] private WFSGeoJsonLayerGameObject layerPrefab;
 
         private string wfsVersion = "";
-        private const string defaultFallbackVersion = "2.0.0"; // Default to 2.0.0 (released in 2010, compliant with ISO standards)
-
-        private WFSRequest getCapabilitiesRequest;
+        private WfsGetCapabilitiesRequest wfsGetCapabilitiesRequest;
 
         public bool Supports(LocalFile localFile)
         {
             var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
+            var url = new Uri(sourceUrl);
 
-            Debug.Log(sourceUrl);
-            
-            var urlContainsWfsSignifier = OgcWebServicesUtility.IsValidURL(sourceUrl, ServiceType.Wfs);
-
-            // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
             var bodyContents = File.ReadAllText(cachedDataPath);
-            var couldBeWfsCapabilities = bodyContents.Contains("<WFS_Capabilities") || bodyContents.Contains("<wfs:WFS_Capabilities");
 
-            if (urlContainsWfsSignifier == false && couldBeWfsCapabilities == false) return false;
+            // if this is not a capabilities uri, it should be a GetFeature uri; otherwise we do not support this
+            if (!OgcWebServicesUtility.IsSupportedGetCapabilitiesUrl(url, bodyContents, ServiceType.Wfs))
+            {
+                return OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wfs, RequestType.GetFeature);
+            }
 
             Debug.Log("Checking source WFS url: " + sourceUrl);
-            getCapabilitiesRequest = new WFSRequest(sourceUrl, bodyContents);
+            wfsGetCapabilitiesRequest = new WfsGetCapabilitiesRequest(new Uri(sourceUrl), bodyContents);
 
             //If the body is a specific GetFeature request; directly continue to execute
-            bool isGetFeatureRequest = getCapabilitiesRequest.IsGetFeatureRequest();
-            if (isGetFeatureRequest)
-                return true;
+            // bool isGetFeatureRequest = wfsGetCapabilitiesRequest.IsGetFeatureRequest();
+            // if (isGetFeatureRequest)
+            //     return true;
 
             //If the body is a GetCapabilities request; check if the WFS supports BBOX filter and GeoJSON output
-            bool IsGetCapabilitiesRequest = WFSRequest.IsSupportedUrl(new Uri(sourceUrl), cachedDataPath);
+            bool IsGetCapabilitiesRequest = OgcWebServicesUtility.IsSupportedGetCapabilitiesUrl(new Uri(sourceUrl), bodyContents, ServiceType.Wfs);
             if (!IsGetCapabilitiesRequest)
             {
                 Debug.Log("<color=orange>WFS: No GetFeature nor GetCapabilities request type found.</color>");
                 return false;
             }
 
-            getCapabilitiesRequest.ParseBodyAsXML();
-            if (!getCapabilitiesRequest.HasBboxFilterCapability())
+            if (!wfsGetCapabilitiesRequest.HasBounds)
             {
                 Debug.Log("<color=orange>WFS BBOX filter not supported.</color>");
                 return false;
             }
 
-            if (!getCapabilitiesRequest.HasGetFeatureAsGeoJSON())
+            if (!wfsGetCapabilitiesRequest.HasGetFeatureAsGeoJSON())
             {
                 Debug.Log("<color=orange>WFS GetFeature operation does not support GeoJSON output format.</color>");
                 return false;
             }
 
-            wfsVersion = getCapabilitiesRequest.GetWFSVersion();
+            wfsVersion = wfsGetCapabilitiesRequest.GetVersion();
 
             return true;
         }
 
         public void Execute(LocalFile localFile)
         {
+            var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
-            var wfsFolder = new FolderLayer(!string.IsNullOrEmpty(getCapabilitiesRequest.GetTitle()) ? getCapabilitiesRequest.GetTitle() : sourceUrl);
+            var url = new Uri(sourceUrl);
+            var bodyContents = File.ReadAllText(cachedDataPath);
 
-            switch (getCapabilitiesRequest.OldRequestType)
+            var isWfsGetCapabilities = OgcWebServicesUtility.IsSupportedGetCapabilitiesUrl(url, bodyContents, ServiceType.Wfs);
+
+            var wfsFolder = new FolderLayer(!string.IsNullOrEmpty(wfsGetCapabilitiesRequest.GetTitle()) ? wfsGetCapabilitiesRequest.GetTitle() : sourceUrl);
+
+            if (isWfsGetCapabilities)
             {
-                case WFSRequest.OLDRequestType.GetCapabilities:
+                // add the bounds directly, since we already have the GetCapabilities information anyway
+                WFSBoundingBoxCache.AddWfsBoundingBoxContainer(wfsGetCapabilitiesRequest);
+                var featureTypes = wfsGetCapabilitiesRequest.GetFeatureTypes();
+
+                //Create a folder layer 
+                foreach (var featureType in featureTypes)
                 {
-                    // add the bounds directly, since we already have the GetCapabilities information anyway
-                    WFSBoundingBoxCache.AddWfsBoundingBoxContainer(sourceUrl, getCapabilitiesRequest);
-                    var featureTypes = getCapabilitiesRequest.GetFeatureTypes();
-
-                    //Create a folder layer 
-                    foreach (var featureType in featureTypes)
-                    {
-                        string crs = featureType.DefaultCRS;
-                        Debug.Log("Adding WFS layer for featureType: " + featureType);
-                        AddWFSLayer(featureType.Name, sourceUrl, crs, wfsFolder, featureType.Title);
-                    }
-
-                    getCapabilitiesRequest = null;
-                    return;
+                    string crs = featureType.DefaultCRS;
+                    Debug.Log("Adding WFS layer for featureType: " + featureType);
+                    AddWFSLayer(featureType.Name, sourceUrl, crs, wfsFolder, featureType.Title);
                 }
-                case WFSRequest.OLDRequestType.GetFeature:
-                {
-                    NameValueCollection queryParameters = new();
-                    new Uri(sourceUrl).TryParseQueryString(queryParameters);
-                    var featureType = queryParameters.Get(OgcWebServicesUtility.ParameterNameOfTypeNameBasedOnVersion(wfsVersion));
 
-                    if (string.IsNullOrEmpty(featureType) == false)
-                    {
-                        string crs = queryParameters["srsname"];
-                        // Can't deduct a human-readable title at the moment, we should add that we always query for the
-                        // capabilities; this also helps with things like outputFormat and CRS
-                        AddWFSLayer(featureType, sourceUrl, crs, wfsFolder, featureType);
-                    }
-
-                    getCapabilitiesRequest = null;
-                    return;
-                }
-                default:
-                    Debug.LogError("Unrecognized WFS request type: " + getCapabilitiesRequest.OldRequestType);
-                    break;
+                wfsGetCapabilitiesRequest = null;
+                return;
             }
+
+            var isWfsGetFeature = OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wfs, RequestType.GetFeature);
+            if (isWfsGetFeature)
+            {
+                NameValueCollection queryParameters = new();
+                new Uri(sourceUrl).TryParseQueryString(queryParameters);
+                var featureType = queryParameters.Get(OgcWebServicesUtility.ParameterNameOfTypeNameBasedOnVersion(wfsVersion));
+
+                if (string.IsNullOrEmpty(featureType) == false)
+                {
+                    string crs = queryParameters["srsname"];
+                    // Can't deduct a human-readable title at the moment, we should add that we always query for the
+                    // capabilities; this also helps with things like outputFormat and CRS
+                    AddWFSLayer(featureType, sourceUrl, crs, wfsFolder, featureType);
+                }
+
+                wfsGetCapabilitiesRequest = null;
+                return;
+            }
+            
+            Debug.LogError("Unrecognized WFS request type: " + url);
         }
 
         private void AddWFSLayer(string featureType, string sourceUrl, string crsType, FolderLayer folderLayer, string title)
         {
             // Create a GetFeature URL for the specific featureType
-            UriBuilder uriBuilder = CreateLayerUri(featureType, sourceUrl, crsType);
+            UriBuilder uriBuilder = CreateLayerGetFeatureUri(featureType, sourceUrl, crsType);
             var getFeatureUrl = uriBuilder.Uri.ToString();
 
             Debug.Log($"Adding WFS layer '{featureType}' with url '{getFeatureUrl}'");
@@ -144,7 +144,7 @@ namespace Netherlands3D.Functionalities.Wfs
             symbolizer?.SetStrokeColor(randomLayerColor);
         }
 
-        private UriBuilder CreateLayerUri(string featureType, string sourceUrl, string crs)
+        private UriBuilder CreateLayerGetFeatureUri(string featureType, string sourceUrl, string crs)
         {
             // Start by removing any query parameters we want to inject
             var uriBuilder = new UriBuilder(sourceUrl);
@@ -152,8 +152,8 @@ namespace Netherlands3D.Functionalities.Wfs
             // Make sure we have a wfsVersion set
             if (string.IsNullOrEmpty(wfsVersion))
             {
-                Debug.LogWarning("WFS version could not be determined, defaulting to " + defaultFallbackVersion);
-                wfsVersion = defaultFallbackVersion;
+                Debug.LogWarning("WFS version could not be determined, defaulting to " + WfsGetCapabilitiesRequest.DefaultFallbackVersion);
+                wfsVersion = WfsGetCapabilitiesRequest.DefaultFallbackVersion;
             }
 
             var parameters = new NameValueCollection();
@@ -166,7 +166,7 @@ namespace Netherlands3D.Functionalities.Wfs
             uriBuilder.SetQueryParameter(OgcWebServicesUtility.ParameterNameOfTypeNameBasedOnVersion(wfsVersion), featureType);
             if (parameters.Get("outputFormat")?.ToLower() is not ("json" or "geojson"))
             {
-                var geoJsonOutputFormatString = getCapabilitiesRequest.GetGeoJsonOutputFormatString();
+                var geoJsonOutputFormatString = wfsGetCapabilitiesRequest.GetGeoJsonOutputFormatString();
                 uriBuilder.SetQueryParameter(
                     "outputFormat",
                     !string.IsNullOrEmpty(geoJsonOutputFormatString) ? geoJsonOutputFormatString : "application/json"

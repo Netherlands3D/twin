@@ -20,7 +20,6 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
 
     public abstract class BaseRequest
     {
-        protected const string defaultFallbackVersion = "1.3.0";
         protected const string defaultCoordinateSystemReference = "EPSG:28992";
 
         public readonly Uri Url;

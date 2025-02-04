@@ -9,6 +9,7 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
         public string GetVersion();
         public string GetTitle();
         // public string GetAbstract();
+        public bool HasBounds { get; }
         public BoundingBoxContainer GetBounds();
         // public string[] GetKeyWords();
     }

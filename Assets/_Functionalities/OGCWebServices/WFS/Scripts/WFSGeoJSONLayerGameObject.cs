@@ -45,7 +45,7 @@ namespace Netherlands3D.Functionalities.Wfs
         public void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)
         {
             var wfsUrl = urlPropertyData.Data.ToString();
-            var featureLayerName = WFSRequest.GetLayerNameFromURL(wfsUrl);
+            var featureLayerName = WfsGetCapabilitiesRequest.GetLayerNameFromURL(wfsUrl);
             
             if (boundingBoxContainer.LayerBoundingBoxes.ContainsKey(featureLayerName))
             {

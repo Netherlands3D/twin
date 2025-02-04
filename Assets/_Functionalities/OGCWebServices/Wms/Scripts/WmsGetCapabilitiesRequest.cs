@@ -9,13 +9,26 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wms
 {
-    public class GetCapabilitiesRequest : BaseRequest, IGetCapabilitiesRequest
+    public class WmsGetCapabilitiesRequest : BaseRequest, IGetCapabilitiesRequest
     {
+        private const string defaultFallbackVersion = "1.3.0";
+        
         public ServiceType ServiceType => ServiceType.Wms;
         protected override Dictionary<string, string> defaultNameSpaces => OgcWebServicesUtility.DefaultWmsNamespaces;
         public bool CapableOfBoundingBoxes => xmlDocument.SelectSingleNode("//*[local-name()='EX_GeographicBoundingBox' or local-name()='BoundingBox']", namespaceManager) != null;
 
-        public GetCapabilitiesRequest(Uri url, string xml) : base(url, xml)
+        public bool HasBounds //todo: this is suboptimal because it uses the GetBounds function, maybe cache the bounds
+        {
+            get
+            {
+                var bounds = GetBounds();
+                if (bounds.GlobalBoundingBox == null && bounds.LayerBoundingBoxes.Count == 0)
+                    return false;
+                return true;
+            }
+        }
+        
+        public WmsGetCapabilitiesRequest(Uri url, string xml) : base(url, xml)
         {
         }
 
@@ -97,18 +110,6 @@ namespace Netherlands3D.Functionalities.Wms
             var tr = new Coordinate(crs, maxX, maxY);
 
             return new BoundingBox(bl, tr);
-        }
-
-        public static bool IsSupportedUrl(Uri url, string contents) //todo: this can probably be merged in the BaseRequest, since it does the same secondary check
-        {
-            if (OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wms, RequestType.GetCapabilities))
-            {
-                return true;
-            }
-
-            // some of the ows urls we support do return the GetCapabilities, but do not have this in the url.
-            // light weight -and rather ugly- check if this is a capabilities file without parsing the XML
-            return contents.Contains("<WMS_Capabilities") || contents.Contains("<wms:WMS_Capabilities");
         }
 
         public List<MapFilters> GetMaps(int width, int height, bool transparent)

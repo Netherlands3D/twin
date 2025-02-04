@@ -55,7 +55,7 @@ namespace Netherlands3D.Functionalities.Wfs
                 return;
             }
             
-            if (!OgcWebServicesUtility.IsValidURL(url, ServiceType.Wfs))
+            if (!OgcWebServicesUtility.IsValidUrl(new Uri(url), ServiceType.Wfs, RequestType.GetCapabilities))
             {
                 Debug.LogError("Bounding boxes not in dictionary, and invalid wfs url provided");
                 callback.Invoke(null);
@@ -89,27 +89,19 @@ namespace Netherlands3D.Functionalities.Wfs
             }
             else
             {
-                WFSRequest wfsRequest = new WFSRequest(url, webRequest.downloadHandler.text);
-                var bboxContainer = AddWfsBoundingBoxContainer(url, wfsRequest);
+                WfsGetCapabilitiesRequest getCapabilitiesRequest = new WfsGetCapabilitiesRequest(new Uri(url), webRequest.downloadHandler.text);
+                var bboxContainer = AddWfsBoundingBoxContainer(getCapabilitiesRequest);
                 callBack.Invoke(bboxContainer);
             }
 
             pendingRequests.Remove(url);
         }
 
-        public static BoundingBoxContainer AddWfsBoundingBoxContainer(string url, WFSRequest wfsRequest)
+        public static BoundingBoxContainer AddWfsBoundingBoxContainer(WfsGetCapabilitiesRequest wfsRequest)
         {
-            var bboxContainer = new BoundingBoxContainer(url);
-            var globalBounds = wfsRequest.GetWFSBounds();
-            bboxContainer.GlobalBoundingBox = globalBounds;
-
-            foreach (var feature in wfsRequest.GetFeatureTypes())
-            {
-                bboxContainer.LayerBoundingBoxes.TryAdd(feature.Name, feature.BoundingBox);
-            }
-
-            BoundingBoxContainers.TryAdd(url, bboxContainer); //use tryadd to avoid issues when adding the same wfs twice in the application
-            return bboxContainer;
+            var bounds = wfsRequest.GetBounds();
+            BoundingBoxContainers.TryAdd(wfsRequest.Url.ToString(), bounds); //use tryadd to avoid issues when adding the same wfs twice in the application
+            return bounds;
         }
     }
 }
