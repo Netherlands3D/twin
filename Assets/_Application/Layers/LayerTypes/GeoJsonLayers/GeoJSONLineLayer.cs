@@ -15,11 +15,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
         public bool IsPolygon  => false;
-        public Transform Transform { get => transform; }
+        public Transform Transform => transform;
+
+        public Dictionary<Feature, FeatureLineVisualisations> SpawnedVisualisations = new();
+
+        [SerializeField] private LineRenderer3D lineRenderer3D;
+
+        public LineRenderer3D LineRenderer3D
+        {
+            get => lineRenderer3D;
+            //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
+            set => lineRenderer3D = value;
+        }
 
         public List<Mesh> GetMeshData(Feature feature)
         {
-            FeatureLineVisualisations data = SpawnedVisualisations.Where(f => f.feature == feature).FirstOrDefault();
+            FeatureLineVisualisations data = SpawnedVisualisations[feature];
             List<Mesh> meshes = new List<Mesh>();
             if(data == null)
             {
@@ -64,17 +75,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return LineRenderer3D.LineMaterial.color;
         }
 
-        public List<FeatureLineVisualisations> SpawnedVisualisations = new();
-
-        [SerializeField] private LineRenderer3D lineRenderer3D;
-
-        public LineRenderer3D LineRenderer3D
-        {
-            get => lineRenderer3D;
-            //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
-            set => lineRenderer3D = value;
-        }
-
         public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             LineRenderer3D.gameObject.SetActive(activeInHierarchy);
@@ -84,8 +84,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             where T : GeoJSONObject
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
-            if (SpawnedVisualisations.Any(f => f.feature.GetHashCode() == feature.GetHashCode()))
-                return;
+            if (SpawnedVisualisations.ContainsKey(feature)) return;
 
             var newFeatureVisualisation = new FeatureLineVisualisations { feature = feature };
 
@@ -103,7 +102,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
             
             newFeatureVisualisation.CalculateBounds();
-            SpawnedVisualisations.Add(newFeatureVisualisation);
+            SpawnedVisualisations.Add(feature, newFeatureVisualisation);
         }
 
         public override void InitializeStyling()
@@ -133,29 +132,31 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {         
             // Remove visualisations that are out of view
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
-            for (int i = SpawnedVisualisations.Count - 1; i >= 0 ; i--)
+            foreach (var kvp in SpawnedVisualisations.Reverse())
             {
-                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, SpawnedVisualisations[i].bounds);
-                if (inCameraFrustum)
-                    continue;
+                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.bounds);
+                if (inCameraFrustum) continue;
 
-                var featureVisualisation = SpawnedVisualisations[i];
-                RemoveFeature(featureVisualisation);
+                RemoveFeature(kvp.Value);
             }
         }
         
         private void RemoveFeature(FeatureLineVisualisations featureVisualisation)
         {
             foreach (var line in featureVisualisation.Data)
+            {
                 lineRenderer3D.RemoveLine(line);
+            }
 
-            SpawnedVisualisations.Remove(featureVisualisation);
+            SpawnedVisualisations.Remove(featureVisualisation.feature);
         }
 
         public override void DestroyLayerGameObject()
         {
             if (Application.isPlaying)
-                GameObject.Destroy(LineRenderer3D.gameObject);
+            {
+                Destroy(LineRenderer3D.gameObject);
+            }
 
             base.DestroyLayerGameObject();
         }
