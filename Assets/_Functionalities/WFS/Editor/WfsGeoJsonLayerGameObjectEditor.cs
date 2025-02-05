@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers.Editor
+namespace Netherlands3D.Functionalities.Wfs.Editor
 {
     [CustomEditor(typeof(WFSGeoJsonLayerGameObject))]
     public class WfsGeoJsonLayerGameObjectEditor : UnityEditor.Editor

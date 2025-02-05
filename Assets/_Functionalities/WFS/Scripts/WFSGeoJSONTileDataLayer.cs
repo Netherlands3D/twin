@@ -5,8 +5,10 @@ using Netherlands3D.CartesianTiles;
 using System;
 using Netherlands3D.Coordinates;
 using KindMen.Uxios;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.Utility;
 
-namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
+namespace Netherlands3D.Functionalities.Wfs
 {
     /// <summary>
     /// A custom CartesianTile layer that uses the cartesian tiling system to 'stream' parts of 
@@ -17,6 +19,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     {
         private const string DefaultEpsgCoordinateSystem = "28992";
         private Netherlands3D.CartesianTiles.TileHandler tileHandler;
+        
+        public BoundingBox BoundingBox { get; set; }
+        
         private string wfsUrl = "";
         public string WfsUrl { 
             get => wfsUrl; 
@@ -40,7 +45,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 wfsGeoJSONLayer.LayerData.LayerDestroyed.AddListener(OnGeoJSONLayerDestroyed);
             }
         }
-
         private void Awake()
         {
             //Make sure Datasets at least has one item
@@ -76,6 +80,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             Debug.LogError("No TileHandler found.", gameObject);
         }
 
+        private bool IsInExtents(BoundingBox tileBox)
+        {
+            if (BoundingBox == null) //no bounds set, so we don't know the extents and always need to load the tile
+                return true;
+
+            return BoundingBox.Intersects(tileBox);
+        }
+
         public override void HandleTile(TileChange tileChange, Action<TileChange> callback = null)
         {
             TileAction action = tileChange.action;
@@ -85,7 +97,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 case TileAction.Create:
                     Tile newTile = CreateNewTile(tileKey);
                     tiles.Add(tileKey, newTile);
-                    newTile.runningCoroutine = StartCoroutine(DownloadGeoJSON(tileChange, newTile, callback));
+                    var tileBox = DetermineBoundingBox(tileChange, CoordinateSystem.RD);
+                    if (IsInExtents(tileBox))
+                    {
+                        newTile.runningCoroutine = StartCoroutine(DownloadGeoJSON(tileChange, newTile, callback));
+                    }
+                    else
+                    {
+                        callback?.Invoke(tileChange); //nothing to download, call this to continue loading tiles
+                    }
                     break;
                 case TileAction.Upgrade:
                     tiles[tileKey].unityLOD++;

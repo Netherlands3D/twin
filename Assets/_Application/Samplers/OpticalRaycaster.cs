@@ -1,100 +1,166 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.Experimental.Rendering;
+using UnityEngine.Rendering;
 
 namespace Netherlands3D.Twin.Samplers
 {
-    [RequireComponent(typeof(Camera))]
     public class OpticalRaycaster : MonoBehaviour
     {
-        [SerializeField] private Camera depthCamera;
-        float totalDepth = 0;
-        private Texture2D samplerTexture;
+        public Camera depthCameraPrefab; 
+        public Material depthToWorldMaterial; //capture depth data shader
+        public Material visualizationMaterial; //convert to temp position data
 
-        [Header("Events")] [SerializeField] public UnityEvent<Vector3> OnDepthSampled;
-        
-        void Start()
+        private Stack<OpticalRequest> requestPool = new Stack<OpticalRequest>();
+        private List<OpticalRequest> activeRequests = new List<OpticalRequest>();
+
+        private class OpticalRequest
         {
-            if (depthCamera.targetTexture == null)
+            public Camera depthCamera;
+            public Material depthMaterial;
+            public Material positionMaterial;
+            public RenderTexture renderTexture;
+            public Vector3 screenPoint;
+            public AsyncGPUReadbackRequest request;
+            public Action<AsyncGPUReadbackRequest> callback;
+            public Action<Vector3> resultCallback;
+            public Action onWaitFrameCallback;
+            public int framesActive = 0;
+
+            public OpticalRequest(Material depthMaterial, Material positionMaterial, RenderTexture rt, Camera prefab)
             {
-                Debug.Log("Depth camera has no target texture. Please assign a render texture to the depth camera.", this.gameObject);
-                this.enabled = false;
-                return;
+                this.depthMaterial = new Material(depthMaterial);
+                this.positionMaterial = new Material(positionMaterial);
+                this.renderTexture = rt;
+                this.depthCamera = Instantiate(prefab);
+                depthCamera.clearFlags = CameraClearFlags.SolidColor;
+                depthCamera.backgroundColor = Color.black;
+                depthCamera.depthTextureMode = DepthTextureMode.Depth;
+                depthCamera.targetTexture = rt;
+                depthCamera.forceIntoRenderTexture = true;
+                onWaitFrameCallback = () =>
+                {
+                    AsyncGPUReadbackRequest request = AsyncGPUReadback.Request(renderTexture, 0, callback);
+                    SetRequest(request);
+                };
+
+            }        
+            
+            public void SetCallback(Action<AsyncGPUReadbackRequest> callback)
+            {
+                this.callback = callback;
             }
 
-            //We will only render on demand using camera.Render()
-            depthCamera.enabled = false;
+            public void SetResultCallback(Action<Vector3> resultCallback)
+            {
+                this.resultCallback = resultCallback;
+            }
 
-            //Create a red channel texture that we can sample depth from
-            samplerTexture = new Texture2D(depthCamera.targetTexture.width, depthCamera.targetTexture.height, TextureFormat.RGBAFloat, false);
+            public void SetRequest(AsyncGPUReadbackRequest request)
+            {
+                this.request = request; 
+            }
+
+            public void SetScreenPoint(Vector3 screenPoint)
+            {
+                this.screenPoint = screenPoint;
+            }
+
+            public void AlignWithMainCamera()
+            {
+                depthCamera.transform.position = Camera.main.transform.position;
+                depthCamera.transform.LookAt(Camera.main.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, Camera.main.nearClipPlane)));
+            }
+
+            public void UpdateShaders()
+            {
+                depthMaterial.SetTexture("_CameraDepthTexture", renderTexture);
+                depthMaterial.SetMatrix("_CameraInvProjection", depthCamera.projectionMatrix.inverse);
+                positionMaterial.SetTexture("_WorldPositionTexture", renderTexture);
+            }
         }
 
-        private void OnDestroy()
+        public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3> callback)
         {
-            Destroy(samplerTexture);
+            OpticalRequest opticalRequest = GetRequest();
+            opticalRequest.SetScreenPoint(screenPoint);
+            opticalRequest.AlignWithMainCamera();
+            opticalRequest.UpdateShaders();           
+            opticalRequest.SetResultCallback(callback);
+            opticalRequest.framesActive = 0;
+            activeRequests.Add(opticalRequest);
         }
 
-        /// <summary>
-        /// Only use this method if it is used continiously in Update.
-        /// If one sample is needed, use AlignDepthCameraToScreenPoint, and GetSamplerCameraWorldPoint
-        /// in a Coroutine with a WaitForEndOfFrame between every step.
-        /// </summary>
-        /// <returns></returns>
-        public Vector3 GetWorldPointAtCameraScreenPoint(Camera camera, Vector3 screenPoint)
+        private void Update()
         {
-            AlignDepthCameraToScreenPoint(camera, screenPoint);
-            RenderDepthCamera();
+            if (activeRequests.Count == 0) return;
 
-            return GetDepthCameraWorldPoint();
+            for(int i = activeRequests.Count - 1; i >= 0; i--) 
+            {
+                activeRequests[i].framesActive++;
+                if(activeRequests[i].framesActive > 1)
+                {
+                    //we need to wait a frame to be sure the depth camera is rendered (camera.Render is very heavy to manualy call)
+                    activeRequests[i].onWaitFrameCallback();
+                    activeRequests.RemoveAt(i);
+                }
+            }
         }
 
-        public Vector3 GetWorldPointFromPosition(Vector3 position, Vector3 direction)
+        private void RequestCallback(OpticalRequest opticalRequest)
         {
-            AlignDepthCameraFromPositionToDirection(position, direction);
-            RenderDepthCamera();
-
-            return GetDepthCameraWorldPoint();
+            if (opticalRequest.request.hasError)
+            {
+                Debug.LogError("GPU readback failed!");
+                PoolRequest(opticalRequest);
+                return;
+            }
+            var worldPosData = opticalRequest.request.GetData<Vector4>();
+            float worldPosX = worldPosData[0].x;
+            float worldPosY = worldPosData[0].y;
+            float worldPosZ = worldPosData[0].z;
+            Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
+            opticalRequest.resultCallback.Invoke(worldPos);
+            PoolRequest(opticalRequest);            
+        }
+       
+        private OpticalRequest GetRequest()
+        {
+            OpticalRequest request = null;
+            if(requestPool.Count > 0)
+            {
+                request = requestPool.Pop();
+            }
+            else
+            {
+                request = new OpticalRequest(depthToWorldMaterial, visualizationMaterial, GetRenderTexture(), depthCameraPrefab);
+                request.depthCamera.transform.SetParent(gameObject.transform, false);
+                request.SetCallback(w => RequestCallback(request));
+            }
+            request.depthCamera.enabled = true;
+            return request;
         }
 
-        public void AlignDepthCameraToScreenPoint(Camera camera, Vector3 screenPoint)
+        private RenderTexture GetRenderTexture()
         {
-            //Align and rotate sampler camera to look at screenpoint
-            depthCamera.transform.position = camera.transform.position;
-            depthCamera.transform.LookAt(camera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, camera.nearClipPlane)));
+            //because of webgl we cannot create a rendertexture with the prefered format.
+            //the following error will occur in webgl if done so:
+            //RenderTexture.Create failed: format unsupported for random writes - RGBA32 SFloat (52).
+            //weirdly enough creating a depthtexture in project and passing it through a serializefield is ok on webgl
+            //but we cannot do this since we need a pool and create a rendertexture for each request
+            RenderTexture renderTexture = new RenderTexture(1, 1, 0, RenderTextureFormat.Depth);
+            renderTexture.graphicsFormat = SystemInfo.GetCompatibleFormat(GraphicsFormat.R32G32B32A32_SFloat, FormatUsage.Render);
+            renderTexture.depthStencilFormat = GraphicsFormat.None;
+            renderTexture.Create();
+            return renderTexture;
         }
 
-        public void AlignDepthCameraFromPositionToDirection(Vector3 position, Vector3 direction)
+        private void PoolRequest(OpticalRequest request)
         {
-            //Align depth camera 
-            depthCamera.transform.SetPositionAndRotation(position, Quaternion.LookRotation(direction));
-        }
-
-        public Vector3 GetDepthCameraWorldPoint()
-        {
-            var worldPoint = ReadWorldPositionFromPixel();
-            OnDepthSampled.Invoke(worldPoint);
-
-            return worldPoint;
-        }
-
-        public void RenderDepthCamera()
-        {
-            //Read pixels from the depth texture
-            depthCamera.Render();
-            RenderTexture.active = depthCamera.targetTexture;
-            samplerTexture.ReadPixels(new Rect(0, 0, depthCamera.targetTexture.width, depthCamera.targetTexture.height), 0, 0);
-            samplerTexture.Apply();
-            RenderTexture.active = null;
-        }
-
-        private Vector3 ReadWorldPositionFromPixel()
-        {
-            var worldPosition = samplerTexture.GetPixel(0, 0);
-
-            return new Vector3(
-                worldPosition.r,
-                worldPosition.g,
-                worldPosition.b
-            );
+            request.depthCamera.enabled = false;
+            requestPool.Push(request);
         }
     }
 }
