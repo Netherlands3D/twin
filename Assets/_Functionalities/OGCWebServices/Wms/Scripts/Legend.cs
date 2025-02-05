@@ -11,11 +11,12 @@ namespace Netherlands3D.Functionalities.Wms
 {
     public class LegendUrlContainer
     {
-        // public string getCapabilitiesUrl;
+        public string GetCapabilitiesUrl;
         public Dictionary<string, string> LayerNameLegendUrlDictionary;
 
-        public LegendUrlContainer(Dictionary<string, string> legendDictionary)
+        public LegendUrlContainer(string getCapabilitiesUrl, Dictionary<string, string> legendDictionary)
         {
+            GetCapabilitiesUrl = getCapabilitiesUrl;
             LayerNameLegendUrlDictionary = legendDictionary;
         }
     }
@@ -44,33 +45,34 @@ namespace Netherlands3D.Functionalities.Wms
         [SerializeField] private RectTransform inactive;
         [SerializeField] private LegendImage graphicPrefab;
 
+        private string activeLegendUrl;
         // public LayerData CurrentLayer { get; set; }
 
-        // private List<LegendImage> graphics = new List<LegendImage>();
+        private List<LegendImage> graphics = new List<LegendImage>();
 
         public void AddGraphic(Sprite sprite)
         {
             LegendImage image = Instantiate(graphicPrefab, graphicPrefab.transform.parent);
             image.gameObject.SetActive(true);
             image.SetSprite(sprite);
-            // graphics.Add(image);
+            graphics.Add(image);
 
             GetComponentInChildren<LegendClampHeight>()?.AdjustRectHeight();
             GetComponent<ContentFitterRefresh>()?.RefreshContentFitters();
         }
 
-        // public void ClearGraphics()
-        // {
-        //     if (graphics.Count == 0)
-        //         return;
-        //
-        //     for (int i = graphics.Count - 1; i >= 0; i--)
-        //     {
-        //         Destroy(graphics[i].gameObject);
-        //     }
-        //
-        //     graphics.Clear();
-        // }
+        private void ClearGraphics()
+        {
+            if (graphics.Count == 0)
+                return;
+        
+            for (int i = graphics.Count - 1; i >= 0; i--)
+            {
+                Destroy(graphics[i].gameObject);
+            }
+        
+            graphics.Clear();
+        }
 
         public void GetLegendUrl(string layerUrl, Action<LegendUrlContainer> callback)
         {
@@ -78,7 +80,7 @@ namespace Netherlands3D.Functionalities.Wms
             // legendUri.SetQueryParameter("service", "wms");
             // legendUri.SetQueryParameter("request", "getcapabilities");
             var getCapabilitiesURL = OgcWebServicesUtility.CreateGetCapabilitiesURL(layerUrl, ServiceType.Wms);
-            StartCoroutine(RequestLegendUrls(getCapabilitiesURL, callback));
+            // StartCoroutine(RequestLegendUrls(getCapabilitiesURL, callback));
 
             //     legendUrls =>
             // {
@@ -129,7 +131,7 @@ namespace Netherlands3D.Functionalities.Wms
             else
             {
                 var getCapabilities = new WmsGetCapabilities(new Uri(getCapabilitiesURL), webRequest.downloadHandler.text);
-                var legendUrls = new LegendUrlContainer(getCapabilities.GetLegendUrls());
+                var legendUrls = new LegendUrlContainer(getCapabilitiesURL, getCapabilities.GetLegendUrls());
                 LegendUrlDictionary[getCapabilitiesURL] = legendUrls;
                 onLegendUrlsReceived.Invoke(legendUrls);
             }
@@ -140,23 +142,33 @@ namespace Netherlands3D.Functionalities.Wms
             mainPanel.SetActive(false);
         }
         
-        public void ShowLegend(string url)
+        public void ShowLegend(string wmsUrl)
         {
+            var getCapabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsUrl, ServiceType.Wms);
+            
+            print("showing legend of:" + getCapabilitiesUrl);
+            
             mainPanel.SetActive(true);
-            StartCoroutine(GetLegendGraphics(url));
+            if(activeLegendUrl == getCapabilitiesUrl)
+                return; //legend that should be set active is already loaded, so no further action is needed.
+            
+            ClearGraphics();
+            var urlContainer = LegendUrlDictionary[getCapabilitiesUrl];
+            activeLegendUrl = getCapabilitiesUrl;
+            StartCoroutine(GetLegendGraphics(urlContainer));
         }
         
-        private IEnumerator GetLegendGraphics(string url)
+        private IEnumerator GetLegendGraphics(LegendUrlContainer urlContainer)
         {
-            // ShowInactive(urls.Count == 0);
-            // ClearGraphics();
-            // if (urls.Count == 0)
-            // {
-            //     yield break;
-            // }
+            print("downloading legend graphics");
+            ShowInactive(urlContainer.LayerNameLegendUrlDictionary.Count == 0);
+            if (urlContainer.LayerNameLegendUrlDictionary.Count == 0)
+            {
+                yield break;
+            }
 
-            // foreach (string url in urls)
-            // {
+            foreach (string url in urlContainer.LayerNameLegendUrlDictionary.Values)
+            {
                 UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(url);
                 yield return webRequest.SendWebRequest();
                 if (webRequest.result == UnityWebRequest.Result.Success)
@@ -167,14 +179,10 @@ namespace Netherlands3D.Functionalities.Wms
                     Sprite imageSprite = Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), Vector2.one * 0.5f, 100);
                     AddGraphic(imageSprite);
                 }
-                else
-                {
-                    ShowInactive(true); // no legend available at specified url
-                }
-            // }
+            }
         }
 
-        public void ShowInactive(bool show)
+        private void ShowInactive(bool show)
         {
             inactive.gameObject.SetActive(show);
         }

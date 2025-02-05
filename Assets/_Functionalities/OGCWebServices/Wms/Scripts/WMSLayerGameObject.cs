@@ -24,7 +24,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         private WMSTileDataLayer wmsProjectionLayer;
         protected LayerURLPropertyData urlPropertyData = new();
-        private string legendUrl;
+        // private string legendUrl;
 
         private List<IPropertySectionInstantiator> propertySections = new();
 
@@ -63,7 +63,7 @@ namespace Netherlands3D.Functionalities.Wms
         private void SetLegendUrl(LegendUrlContainer urlContainer)
         {
             var featureLayerName = OgcWebServicesUtility.GetParameterFromURL(wmsProjectionLayer.WmsUrl, "layers");
-            legendUrl = urlContainer.LayerNameLegendUrlDictionary[featureLayerName];
+            var legendUrl = urlContainer.LayerNameLegendUrlDictionary[featureLayerName];
             print("got legend url: " + featureLayerName + "\t" + legendUrl);
         }
 
@@ -78,7 +78,7 @@ namespace Netherlands3D.Functionalities.Wms
             var featureLayerName = OgcWebServicesUtility.GetParameterFromURL(wmsProjectionLayer.WmsUrl, "layers");
             print("should set legend active: " + active + " of " + featureLayerName);
             // Legend.Instance.gameObject.SetActive(active);
-            Legend.Instance.ShowLegend(legendUrl);
+            Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl);
         }
 
         //a higher order means rendering over lower indices
@@ -107,12 +107,12 @@ namespace Netherlands3D.Functionalities.Wms
 
         private void OnSelectLayer(LayerData layer)
         {
-            Legend.Instance.gameObject.SetActive(true);
+            Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl);
         }
 
         private void OnDeselectLayer(LayerData layer)
         {
-            Legend.Instance.gameObject.SetActive(false);
+            Legend.Instance.HideLegend();
         }
 
         public void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)
