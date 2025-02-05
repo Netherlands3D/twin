@@ -44,17 +44,29 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
 
         private static void AddressableObjectCreator(Vector3 spawnPoint, AssetReferenceGameObject reference)
         {
-            Addressables.LoadAssetAsync<ShaderVariantCollection>("ShaderVariants").Completed += shaderHandle =>
+            // Now load the Addressable asset
+            reference.InstantiateAsync(spawnPoint, Quaternion.identity).Completed += OnAsyncInstantiationComplete;
+        }
+        
+        private static void ReloadShaders(GameObject asset)
+        {
+            MeshRenderer[] renderers = asset.GetComponentsInChildren<MeshRenderer>();
+            foreach (MeshRenderer renderer in renderers)
             {
-                if (shaderHandle.Status == AsyncOperationStatus.Succeeded)
+                if (!IsPrefab(asset) && renderer.material)
                 {
-                    ShaderVariantCollection svc = shaderHandle.Result;
-                    svc?.WarmUp();
-
-                    // Now load the Addressable asset
-                    reference.InstantiateAsync(spawnPoint, Quaternion.identity).Completed += OnAsyncInstantiationComplete;
+                    renderer.material.shader = Shader.Find(renderer.material.shader.name);
+                    continue;
                 }
-            };
+
+                renderer.sharedMaterial.shader = Shader.Find(renderer.sharedMaterial.shader.name);
+            }
+        }
+
+        private static bool IsPrefab(GameObject gameObject)
+        {
+            // A prefab will have a `transform` but no parent if it's a root prefab in play mode
+            return string.IsNullOrEmpty(gameObject.scene.name);
         }
 
         private static void OnAsyncInstantiationComplete(AsyncOperationHandle<GameObject> handle)
@@ -66,6 +78,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             }
 
             EnsureItIsALayerGameObjectWithName(handle.Result);
+            ReloadShaders(handle.Result);
         }
 
         private static void EnsureItIsALayerGameObjectWithName(GameObject newObject)
