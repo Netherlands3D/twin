@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: zuidoostbundle
+  m_Name: eu.netherlands3d.plugin.amsterdam-zuidoost
   m_EditorClassIdentifier: 
-  m_GroupName: zuidoostbundle
+  m_GroupName: eu.netherlands3d.plugin.amsterdam-zuidoost
   m_Data:
     m_SerializedData: []
   m_GUID: b48ca905552d01c47acb8392426b776a

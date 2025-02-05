@@ -8,21 +8,29 @@ using Object = UnityEngine.Object;
 
 namespace Netherlands3D.Functionalities.ObjectLibrary
 {
-    public static class ObjectFactory
+    public static class SpatialObjectFactory
     {
-        public static void Create(Vector3 opticalSpawnPoint, GameObject prefab)
+        /// <summary>
+        /// Instantiates and places a spatial object from a prefab at the given spawn point or if that
+        /// point is Vector3.zero, at the optical center of the screen. 
+        /// </summary>
+        public static void Create(Vector3 spawnPoint, GameObject prefab)
         {
             Place(
-                opticalSpawnPoint, 
-                spawnPoint => GameObjectCreationAdapter(prefab, spawnPoint)
+                spawnPoint, 
+                raycastedSpawnPoint => GameObjectCreationAdapter(prefab, raycastedSpawnPoint)
             );
         }
 
-        public static void Create(Vector3 opticalSpawnPoint, AssetReferenceGameObject reference)
+        /// <summary>
+        /// Instantiates and places a spatial object from an addressable reference at the given spawn point or if that
+        /// point is Vector3.zero, at the optical center of the screen. 
+        /// </summary>
+        public static void Create(Vector3 spawnPoint, AssetReferenceGameObject reference)
         {
             Place(
-                opticalSpawnPoint, 
-                spawnPoint => AddressableObjectCreator(spawnPoint, reference)
+                spawnPoint, 
+                raycastedSpawnPoint => AddressableObjectCreator(raycastedSpawnPoint, reference)
             );
         }
 
@@ -44,14 +52,20 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
 
         private static void AddressableObjectCreator(Vector3 spawnPoint, AssetReferenceGameObject reference)
         {
-            // Now load the Addressable asset
             reference.InstantiateAsync(spawnPoint, Quaternion.identity).Completed += OnAsyncInstantiationComplete;
         }
         
-        private static void ReloadShaders(GameObject asset)
+        /// <summary>
+        /// When loading assets with Renderers, it can happen that the shader is not loaded or loaded too late. This
+        /// hack will re-apply the shaders on the given asset so that it will refresh and we know for sure a shader is
+        /// applied.
+        ///
+        /// Without this, you can see pink textures or even no meshes at all in a build.
+        /// </summary>
+        private static void RefreshShaders(GameObject asset)
         {
-            MeshRenderer[] renderers = asset.GetComponentsInChildren<MeshRenderer>();
-            foreach (MeshRenderer renderer in renderers)
+            Renderer[] renderers = asset.GetComponentsInChildren<Renderer>();
+            foreach (var renderer in renderers)
             {
                 if (!IsPrefab(asset) && renderer.material)
                 {
@@ -78,7 +92,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             }
 
             EnsureItIsALayerGameObjectWithName(handle.Result);
-            ReloadShaders(handle.Result);
+            RefreshShaders(handle.Result);
         }
 
         private static void EnsureItIsALayerGameObjectWithName(GameObject newObject)
