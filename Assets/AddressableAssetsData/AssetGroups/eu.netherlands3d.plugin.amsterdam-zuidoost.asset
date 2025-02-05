@@ -317,11 +317,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f6481477cf33fb944a3e8a80d9186eaf
-    m_Address: ShaderVariants
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa42bc69f7dad994ca3593d04070737c
     m_Address: Spot_A2
     m_ReadOnly: 0
