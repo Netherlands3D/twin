@@ -1,4 +1,5 @@
 using System;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -36,7 +37,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         }
 
         // for when this button should load from an Addressable
-        public void SetPrefab(AssetReferenceGameObject reference)
+        public void SetPrefab(PrefabReference reference)
         {
             this.prefab = null;
 

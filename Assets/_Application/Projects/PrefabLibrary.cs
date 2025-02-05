@@ -5,18 +5,24 @@ using Netherlands3D.Twin.Layers;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 #if UNITY_EDITOR
-using UnityEditor;
 #endif
 
 namespace Netherlands3D.Twin.Projects
 {
     [Serializable]
+    public struct PrefabReference
+    {
+        public string label;
+        public AssetReferenceGameObject referenceGameObject;
+    }
+
+    [Serializable]
     public class PrefabGroup
     {
         public string groupName;
         public bool autoPopulateUI;
-        public List<LayerGameObject> prefabs;
-        public List<AssetReferenceGameObject> prefabReferences;
+        public List<LayerGameObject> prefabs = new ();
+        public List<PrefabReference> prefabReferences = new ();
     }
 
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/PrefabLibrary", fileName = "PrefabLibrary", order = 0)]

@@ -1,8 +1,8 @@
 ﻿using System;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Object = UnityEngine.Object;
 
@@ -10,6 +10,23 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
 {
     public static class SpatialObjectFactory
     {
+        public static string GetLabel(GameObject prefab)
+        {
+            return prefab.name;
+        }
+
+        /// <summary>
+        /// Temporary method of obtaining the label to display in the button - this will use the name in the Addressable
+        /// Group to populate the label. In a followup change, we want to load the list of layers from a PluginManifest
+        /// ScriptableObject and we can replace the contents of this method.
+        /// </summary>
+        /// <param name="assetReference"></param>
+        /// <returns>Name of the Addressable asset in the AddressableGroup</returns>
+        public static string GetLabel(PrefabReference assetReference)
+        {
+            return assetReference.label;
+        }
+
         /// <summary>
         /// Instantiates and places a spatial object from a prefab at the given spawn point or if that
         /// point is Vector3.zero, at the optical center of the screen. 
@@ -26,7 +43,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         /// Instantiates and places a spatial object from an addressable reference at the given spawn point or if that
         /// point is Vector3.zero, at the optical center of the screen. 
         /// </summary>
-        public static void Create(Vector3 spawnPoint, AssetReferenceGameObject reference)
+        public static void Create(Vector3 spawnPoint, PrefabReference reference)
         {
             Place(
                 spawnPoint, 
@@ -50,9 +67,11 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             EnsureItIsALayerGameObjectWithName(Object.Instantiate(prefab, spawnPoint, prefab.transform.rotation));
         }
 
-        private static void AddressableObjectCreator(Vector3 spawnPoint, AssetReferenceGameObject reference)
+        private static void AddressableObjectCreator(Vector3 spawnPoint, PrefabReference reference)
         {
-            reference.InstantiateAsync(spawnPoint, Quaternion.identity).Completed += OnAsyncInstantiationComplete;
+            reference.referenceGameObject
+                .InstantiateAsync(spawnPoint, Quaternion.identity)
+                .Completed += handle => OnAsyncInstantiationComplete(reference, handle);
         }
         
         /// <summary>
@@ -69,11 +88,21 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             {
                 if (!IsPrefab(asset) && renderer.material)
                 {
-                    renderer.material.shader = Shader.Find(renderer.material.shader.name);
+                    Material[] materials = renderer.materials;
+                    foreach (var material in materials)
+                    {
+                        material.shader = Shader.Find(material.shader.name);
+                    }
+                    renderer.materials = materials;
                     continue;
                 }
 
-                renderer.sharedMaterial.shader = Shader.Find(renderer.sharedMaterial.shader.name);
+                Material[] sharedMaterials = renderer.sharedMaterials;
+                foreach (var material in sharedMaterials)
+                {
+                    material.shader = Shader.Find(material.shader.name);
+                }
+                renderer.sharedMaterials = sharedMaterials;
             }
         }
 
@@ -83,7 +112,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             return string.IsNullOrEmpty(gameObject.scene.name);
         }
 
-        private static void OnAsyncInstantiationComplete(AsyncOperationHandle<GameObject> handle)
+        private static void OnAsyncInstantiationComplete(PrefabReference reference, AsyncOperationHandle<GameObject> handle)
         {
             if (!handle.IsValid() || handle.Result == null)
             {
@@ -91,12 +120,16 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
                 return;
             }
 
+            handle.Result.name = GetLabel(reference);
             EnsureItIsALayerGameObjectWithName(handle.Result);
             RefreshShaders(handle.Result);
         }
 
         private static void EnsureItIsALayerGameObjectWithName(GameObject newObject)
         {
+            // Ensure the name is a readable one - without this we would get (Clone) as part of the layer names
+            newObject.name = GetLabel(newObject);
+
             var layerComponent = newObject.GetComponent<HierarchicalObjectLayerGameObject>();
             if (!layerComponent)
             {

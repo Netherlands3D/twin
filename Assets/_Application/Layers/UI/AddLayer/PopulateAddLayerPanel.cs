@@ -4,7 +4,6 @@ using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI;
 using TMPro;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.UI.AddLayer
@@ -107,16 +106,16 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
         {
             var button = Instantiate(buttonPrefab, groupPanel.transform);
             button.SetPrefab(prefab.gameObject);
-            button.GetComponentInChildren<TMP_Text>().text = prefab.name;
+            button.GetComponentInChildren<TMP_Text>().text = SpatialObjectFactory.GetLabel(prefab.gameObject);
 
             return button;
         }
 
-        private ObjectLibraryButton CreateButton(AssetReferenceGameObject reference, GameObject groupPanel)
+        private ObjectLibraryButton CreateButton(PrefabReference reference, GameObject groupPanel)
         {
             var button = Instantiate(buttonPrefab, groupPanel.transform);
             button.SetPrefab(reference);
-            button.GetComponentInChildren<TMP_Text>().text = reference.SubObjectName;
+            button.GetComponentInChildren<TMP_Text>().text = SpatialObjectFactory.GetLabel(reference);
 
             return button;
         }

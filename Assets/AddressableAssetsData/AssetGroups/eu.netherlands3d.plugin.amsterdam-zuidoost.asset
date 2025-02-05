@@ -33,17 +33,17 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0bb15cd7db4229848b0fd2045f7b6243
-    m_Address: Packages/eu.netherlands3d.plugin.amsterdam-zuidoost/Runtime/Data
+    m_Address: Data
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0d111818dfaba394cb894d50e133cb0b
-    m_Address: RubyGardens.001
+    m_Address: RubyGardens
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 11da44bde58081b4e86f96d2c8ff5353
-    m_Address: Paasheuvelweg_PBR.001
+    m_Address: Paasheuvelweg_PBR
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -58,7 +58,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 18cb75ee2c6cc2547a2e51ba119723b8
-    m_Address: 04_-_Default.001
+    m_Address: 04_-_Default
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -68,12 +68,12 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 21305f97c26eb574eb90f4c32103044b
-    m_Address: Packages/eu.netherlands3d.plugin.amsterdam-zuidoost/Runtime/Meshes/zuidoost.mtl
+    m_Address: zuidoost
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2570a19718319bd4d9682205e405a028
-    m_Address: Spot_E.001
+    m_Address: Spot_E
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -83,7 +83,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 29d414c7f2ce78c439adc9f370b025f6
-    m_Address: 04_-_Default.001
+    m_Address: 04_-_Default
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -98,7 +98,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4575d9ad0614f8646b2d70b48a4ba27b
-    m_Address: 03_-_Default.001
+    m_Address: 03_-_Default
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -118,7 +118,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 59d606852808d1b4eadd4eaf1cac9eaf
-    m_Address: Brightside.001
+    m_Address: Brightside
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -133,7 +133,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6147d54fe6a16c0418702e41585f49ec
-    m_Address: Packages/eu.netherlands3d.plugin.amsterdam-zuidoost/Runtime/Prefabs
+    m_Address: Prefabs
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -148,7 +148,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 68633751c4be3f243818c028e211e271
-    m_Address: Spot_C1.001
+    m_Address: Spot_C1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -168,7 +168,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7a9cc7ca925e3cd44889efee59b106d6
-    m_Address: Paasheuvelweg_Ground_PBR.001
+    m_Address: Paasheuvelweg_Ground_PBR
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -203,7 +203,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9817af0d612dfdf4b9f0c0fa595310a3
-    m_Address: Packages/eu.netherlands3d.plugin.amsterdam-zuidoost/Runtime/Materials
+    m_Address: Materials
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -223,7 +223,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9e21014b94a76e8469f247a00ebf8193
-    m_Address: Spot_CF.001
+    m_Address: Spot_CF
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -248,12 +248,12 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bba4d3b50de4f63409362ac6aca79709
-    m_Address: Parkside.001
+    m_Address: Parkside
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bc3c5b3022e2db547a768ff8a45829b5
-    m_Address: Packages/eu.netherlands3d.plugin.amsterdam-zuidoost/Runtime/Textures
+    m_Address: Textures
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -278,7 +278,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cc558fe872e81454192c65cc4795ce33
-    m_Address: Spot_D1.001
+    m_Address: Spot_D1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -288,12 +288,12 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d82346da421de8245b7945ae0ddebb8c
-    m_Address: 03_-_Default.001
+    m_Address: 03_-_Default
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e8ee2135a70b6db4b93e09fc43a3d23c
-    m_Address: Packages/eu.netherlands3d.plugin.amsterdam-zuidoost/Runtime/Meshes
+    m_Address: Meshes
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -308,12 +308,12 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f37487b3c9eec9d49858e144c404080c
-    m_Address: Spot_B2.001
+    m_Address: Spot_B2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f40da58d18133a7479579ed952fd60a8
-    m_Address: Spot_A1.001
+    m_Address: Spot_A1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -323,7 +323,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa42bc69f7dad994ca3593d04070737c
-    m_Address: Spot_A2.001
+    m_Address: Spot_A2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -333,7 +333,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fe456caba3059f6479eaf89ea7d9851d
-    m_Address: ZC.001
+    m_Address: ZC
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
