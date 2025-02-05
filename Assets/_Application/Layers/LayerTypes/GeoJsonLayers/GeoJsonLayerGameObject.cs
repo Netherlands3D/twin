@@ -229,9 +229,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // Replace default style with the parent's default style
             newPolygonLayerGameObject.LayerData.RemoveStyle(newPolygonLayerGameObject.LayerData.DefaultStyle);
             newPolygonLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-
             newPolygonLayerGameObject.LayerData.SetParent(LayerData);
-            
+            newPolygonLayerGameObject.FeatureRemoved += OnFeatureRemoved;
             return newPolygonLayerGameObject;
         }
 
@@ -252,7 +251,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // Replace default style with the parent's default style
             newLineLayerGameObject.LayerData.RemoveStyle(newLineLayerGameObject.LayerData.DefaultStyle);
             newLineLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-
             newLineLayerGameObject.LayerData.SetParent(LayerData);
             newLineLayerGameObject.FeatureRemoved += OnFeatureRemoved;
             return newLineLayerGameObject;
@@ -275,9 +273,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // Replace default style with the parent's default style
             newPointLayerGameObject.LayerData.RemoveStyle(newPointLayerGameObject.LayerData.DefaultStyle);
             newPointLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-
             newPointLayerGameObject.LayerData.SetParent(LayerData);
-
+            newPointLayerGameObject.FeatureRemoved += OnFeatureRemoved;
             return newPointLayerGameObject;
         }
         
@@ -363,13 +360,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             BoundingBox queryBoundingBox = FeatureMapping.CreateBoundingBoxForFeature(feature, layer);
             //we have to query first to find the corresponding featuremapping, cant do a remove right away
             //alternative could be to make an extra method to query by feature and do remove
-            List<FeatureMapping> mappings = FeatureSelector.MappingTree.Query(queryBoundingBox);
+            List<FeatureMapping> mappings = FeatureSelector.MappingTree.QueryMappingsContainingNode(queryBoundingBox.Center);
             foreach (FeatureMapping mapping in mappings)
             {
                 if(mapping.Feature == feature)
                 {
                     FeatureSelector.MappingTree.Remove(mapping);
-
                     //destroy featuremapping object, there should be no references anywhere else to this object!
                     Destroy(mapping.gameObject);
                     break;

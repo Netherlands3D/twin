@@ -8,6 +8,16 @@ namespace Netherlands3D.Twin.Utility
     {
         public Coordinate BottomLeft { get; private set; }
         public Coordinate TopRight { get; private set; }
+        public Coordinate Center
+        {
+            get 
+            {                
+                double centerX = (BottomLeft.value1 + TopRight.value1) * 0.5f;
+                double centerY = (BottomLeft.value2 + TopRight.value2) * 0.5f;
+                return new Coordinate(BottomLeft.CoordinateSystem, centerX, centerY);
+            }
+        }
+
         public CoordinateSystem CoordinateSystem { get; private set; }
 
         public BoundingBox(Coordinate bottomLeft, Coordinate topRight)
@@ -44,7 +54,7 @@ namespace Netherlands3D.Twin.Utility
         public bool Contains(BoundingBox other)
         {
             if (other.CoordinateSystem != CoordinateSystem)
-                other = ConvertToCRS(other, CoordinateSystem);
+                other.Convert(CoordinateSystem);
 
             if (BottomLeft.PointsLength == 2)
             {
@@ -83,11 +93,10 @@ namespace Netherlands3D.Twin.Utility
                    coordinate.height <= this.TopRight.height;
         }
 
-
         public bool Intersects(BoundingBox other)
         {
             if (other.CoordinateSystem != CoordinateSystem)
-                other = ConvertToCRS(other, CoordinateSystem);
+                other.Convert(CoordinateSystem);
 
             if (BottomLeft.PointsLength == 2)
             {
@@ -98,14 +107,7 @@ namespace Netherlands3D.Twin.Utility
             return !(TopRight.easting < other.BottomLeft.easting || BottomLeft.easting > other.TopRight.easting ||
                      TopRight.northing < other.BottomLeft.northing || BottomLeft.northing > other.TopRight.northing ||
                      TopRight.height < other.BottomLeft.height || BottomLeft.height > other.TopRight.height);
-        }
-
-        private BoundingBox ConvertToCRS(BoundingBox box, CoordinateSystem newCoordinateSystem)
-        {
-            var bottomLeft = box.BottomLeft.Convert(newCoordinateSystem);
-            var topRight = box.TopRight.Convert(newCoordinateSystem);
-            return new BoundingBox(bottomLeft, topRight);
-        }
+        }               
 
         /// <summary>
         /// Returns the string as a WMS bounding box string

@@ -22,10 +22,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             {
                 if(mappingTreeInstance == null)
                 {
-                    Coordinate bottomLeft = new Coordinate(CoordinateSystem.WGS84, 50.8037d, 3.31497d);
-                    Coordinate topRight = new Coordinate(CoordinateSystem.WGS84, 53.5104d, 7.09205d);
+                    //bottomleft and topright corners of the netherlands
+                    Coordinate bottomLeft = new Coordinate(CoordinateSystem.WGS84_LatLon, 50.8037d, 3.31497d);
+                    Coordinate topRight = new Coordinate(CoordinateSystem.WGS84_LatLon, 53.5104d, 7.09205d);
                     BoundingBox bbox = new BoundingBox(bottomLeft, topRight);
-                    FeatureMappingTree tree = new FeatureMappingTree(bbox);
+                    FeatureMappingTree tree = new FeatureMappingTree(bbox, 16, 12);
                     mappingTreeInstance = tree;
                 }
                 return mappingTreeInstance;
@@ -263,6 +264,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
     public class FeatureMappingTree
     {
+        public static int mostDepth = 0;
+        public static int mostChildren = 0;
+
         private class Node
         {
             public BoundingBox Bounds;
@@ -297,7 +301,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (node.IsLeaf)
             {
                 node.Mappings.Add(obj);
-                if (node.Mappings.Count > maxMappings && depth < maxDepth)
+                if (node.Mappings.Count > mostChildren)
+                {
+                    mostChildren = node.Mappings.Count;
+                    Debug.Log(mostChildren + "mappings");
+                }
+                if (depth > mostDepth)
+                {
+                    mostDepth = depth;
+                    Debug.Log(mostDepth);
+                }
+                if ((node.Mappings.Count > maxMappings && depth < maxDepth) || CouldFitInChild(node, obj))
                 {
                     Subdivide(node);
                     ReinsertObjects(node);
@@ -377,6 +391,39 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return results;
         }
 
+        public List<FeatureMapping> Query(Coordinate coordinate)
+        {
+            List<FeatureMapping> results = new();
+            Query(root, coordinate, results);
+            return results;
+        }
+
+        /// <summary>
+        /// returns a list of featuremappings of featuremappings boundingboxes contain the input coordinate
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="coordinate"></param>
+        /// <param name="results"></param>
+        public List<FeatureMapping> QueryMappingsContainingNode(Coordinate coordinate)
+        {
+            List<FeatureMapping> results = new();
+            QueryMappingsContainingNode(root, coordinate, results);
+            return results;
+        }
+
+        private void Query(Node node, Coordinate coordinate, List<FeatureMapping> results)
+        {
+            if (!node.Bounds.Contains(coordinate)) return;
+
+            results.AddRange(node.Mappings);
+
+            if (!node.IsLeaf)
+            {
+                foreach (var child in node.Children)
+                    Query(child, coordinate, results);
+            }
+        }
+
         private void Query(Node node, BoundingBox area, List<FeatureMapping> results)
         {
             if (!node.Bounds.Intersects(area)) return;
@@ -390,29 +437,36 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
+
+        /// <summary>
+        /// returns a list of featuremappings of featuremappings boundingboxes contain the input coordinate
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="coordinate"></param>
+        /// <param name="results"></param>
+        private void QueryMappingsContainingNode(Node node, Coordinate coordinate, List<FeatureMapping> results)
+        {
+            if (!node.Bounds.Contains(coordinate)) return;
+
+            foreach (FeatureMapping mapping in node.Mappings)
+                if (mapping.BoundingBox.Contains(coordinate))
+                    results.Add(mapping);
+
+            if (!node.IsLeaf)
+            {
+                foreach (var child in node.Children)
+                    QueryMappingsContainingNode(child, coordinate, results);
+            }
+        }
+
         //lets keep the tree in a uniform coordinatesystem
         private void Subdivide(Node node)
-        {
-            if(node.Bounds.CoordinateSystem != CoordinateSystem.WGS84) //we need a 2 dimensional coordinatesystem to do the subdivision
-                node.Bounds.Convert(CoordinateSystem.WGS84);
-
-            Coordinate bottomLeft = node.Bounds.BottomLeft;
-            Coordinate topRight = node.Bounds.TopRight;
-
-            //is this allowed!?
-            double centerX = (bottomLeft.value1 + topRight.value1) * 0.5f;
-            double centerY = (bottomLeft.value2 + topRight.value2) * 0.5f;
-
-            Coordinate center = new Coordinate(CoordinateSystem.WGS84, centerX, centerY);
-            Coordinate bottomCenter = new Coordinate(CoordinateSystem.WGS84, centerX, bottomLeft.value2);
-            Coordinate rightCenter = new Coordinate(CoordinateSystem.WGS84, topRight.value1, centerY);
-            Coordinate leftCenter = new Coordinate(CoordinateSystem.WGS84, bottomLeft.value1, centerY);
-            Coordinate topCenter = new Coordinate(CoordinateSystem.WGS84, centerX, topRight.value2);
-
-            BoundingBox bottomLeftCell = new BoundingBox(bottomLeft, center);
-            BoundingBox bottomRightCell = new BoundingBox(bottomCenter, rightCenter);
-            BoundingBox topLeftCell = new BoundingBox(leftCenter, topCenter);
-            BoundingBox topRightCell = new BoundingBox(center, topRight);
+        {            
+            BoundingBox bottomLeftCell;
+            BoundingBox bottomRightCell;
+            BoundingBox topLeftCell;
+            BoundingBox topRightCell;
+            GetSubdividedBoundingBoxes(node, out bottomLeftCell, out bottomRightCell, out topLeftCell, out topRightCell);
 
             node.Children = new[]
             {
@@ -421,6 +475,39 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 new Node(topLeftCell),     // Top-left
                 new Node(topRightCell)  // Top-right
             };
+        }
+
+        private bool CouldFitInChild(Node node, FeatureMapping mapping)
+        {
+            BoundingBox bottomLeftCell;
+            BoundingBox bottomRightCell;
+            BoundingBox topLeftCell;
+            BoundingBox topRightCell;
+            GetSubdividedBoundingBoxes(node, out bottomLeftCell, out bottomRightCell, out topLeftCell, out topRightCell);            
+
+            return bottomLeftCell.Contains(mapping.BoundingBox) ||
+                bottomRightCell.Contains(mapping.BoundingBox) ||
+                topLeftCell.Contains(mapping.BoundingBox) ||
+                topRightCell.Contains(mapping.BoundingBox);
+        }
+
+        private void GetSubdividedBoundingBoxes(Node node, out BoundingBox bottomLeft, out BoundingBox bottomRight, out BoundingBox topLeft, out BoundingBox topRight)
+        {
+            if (node.Bounds.CoordinateSystem != CoordinateSystem.WGS84_LatLon) //we need a 2 dimensional coordinatesystem to do the subdivision
+                node.Bounds.Convert(CoordinateSystem.WGS84_LatLon);
+
+            Coordinate bl = node.Bounds.BottomLeft;
+            Coordinate tr = node.Bounds.TopRight;
+            Coordinate center = node.Bounds.Center;
+            Coordinate bottomCenter = new Coordinate(CoordinateSystem.WGS84_LatLon, center.value1, bl.value2);
+            Coordinate rightCenter = new Coordinate(CoordinateSystem.WGS84_LatLon, tr.value1, center.value2);
+            Coordinate leftCenter = new Coordinate(CoordinateSystem.WGS84_LatLon, bl.value1, center.value2);
+            Coordinate topCenter = new Coordinate(CoordinateSystem.WGS84_LatLon, center.value1, tr.value2);
+
+            bottomLeft = new BoundingBox(bl, center);
+            bottomRight = new BoundingBox(bottomCenter, rightCenter);
+            topLeft = new BoundingBox(leftCenter, topCenter);
+            topRight = new BoundingBox(center, tr);
         }
 
         private void ReinsertObjects(Node node)
@@ -443,10 +530,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 Debug.DrawLine(mapping.BoundingBox.BottomLeft.ToUnity(), node.Bounds.BottomLeft.ToUnity(), Color.red);
 
             foreach (FeatureMapping mapping in node.Mappings)
-            {
-                //mapping.UpdateBoundingBox();
                 mapping.BoundingBox.Debug(Color.magenta);
-            }
 
             if (recursive && !node.IsLeaf)
                 foreach (Node child in node.Children)

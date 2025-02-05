@@ -16,7 +16,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     {
         public bool IsPolygon => true;
         public Transform Transform { get => transform; }
-        private Dictionary<Feature, FeaturePolygonVisualisations> spawnedVisualisations = new();
+        public delegate void GeoJSONPointHandler(Feature feature);
+        public event GeoJSONPointHandler FeatureRemoved;
+
+        private Dictionary<Feature, FeaturePolygonVisualisations> spawnedVisualisations = new();     
 
         public List<Mesh> GetMeshData(Feature feature)
         {
@@ -214,6 +217,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private void RemoveFeature(FeaturePolygonVisualisations featureVisualisation)
         {
             featureVisualisation.DestroyAllVisualisations();
+            FeatureRemoved?.Invoke(featureVisualisation.feature); //TODO, fix the execution order, we need to execute this before its removed from the data
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }
     }
