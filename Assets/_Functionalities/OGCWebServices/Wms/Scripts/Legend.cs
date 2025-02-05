@@ -23,9 +23,16 @@ namespace Netherlands3D.Functionalities.Wms
     
     public class Legend : MonoBehaviour
     {
+        [SerializeField] private GameObject mainPanel;
+        [SerializeField] private RectTransform inactive;
+        [SerializeField] private LegendImage graphicPrefab;
+
         public static Dictionary<string, LegendUrlContainer> LegendUrlDictionary = new(); //key: getCapabilities url, Value: legend urls for that GetCapabilities
         private List<string> pendingRequests = new();
+        private string activeLegendUrl;
+        private List<LegendImage> graphics = new List<LegendImage>();
 
+        private static Legend instance;
         public static Legend Instance
         {
             get
@@ -38,18 +45,7 @@ namespace Netherlands3D.Functionalities.Wms
                 return instance;
             }
         }
-
-        private static Legend instance;
-
-        [SerializeField] private GameObject mainPanel;
-        [SerializeField] private RectTransform inactive;
-        [SerializeField] private LegendImage graphicPrefab;
-
-        private string activeLegendUrl;
-        // public LayerData CurrentLayer { get; set; }
-
-        private List<LegendImage> graphics = new List<LegendImage>();
-
+        
         public void AddGraphic(Sprite sprite)
         {
             LegendImage image = Instantiate(graphicPrefab, graphicPrefab.transform.parent);
@@ -57,8 +53,8 @@ namespace Netherlands3D.Functionalities.Wms
             image.SetSprite(sprite);
             graphics.Add(image);
 
-            GetComponentInChildren<LegendClampHeight>()?.AdjustRectHeight();
-            GetComponent<ContentFitterRefresh>()?.RefreshContentFitters();
+            GetComponentInChildren<LegendClampHeight>().AdjustRectHeight();
+            mainPanel.GetComponent<ContentFitterRefresh>().RefreshContentFitters();
         }
 
         private void ClearGraphics()
@@ -76,17 +72,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         public void GetLegendUrl(string layerUrl, Action<LegendUrlContainer> callback)
         {
-            // var legendUri = new UriBuilder(propertyData.Data.GetLeftPart(UriPartial.Path));
-            // legendUri.SetQueryParameter("service", "wms");
-            // legendUri.SetQueryParameter("request", "getcapabilities");
             var getCapabilitiesURL = OgcWebServicesUtility.CreateGetCapabilitiesURL(layerUrl, ServiceType.Wms);
-            // StartCoroutine(RequestLegendUrls(getCapabilitiesURL, callback));
-
-            //     legendUrls =>
-            // {
-            //     StartCoroutine(GetLegendGraphics(legendUrls));
-            // }));
-
 
             if (LegendUrlDictionary.ContainsKey(getCapabilitiesURL))
             {
