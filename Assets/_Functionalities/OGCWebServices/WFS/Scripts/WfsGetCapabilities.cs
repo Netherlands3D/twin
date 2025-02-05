@@ -14,7 +14,7 @@ namespace Netherlands3D.Functionalities.Wfs
 {
     public class WfsGetCapabilities : BaseRequest, IGetCapabilities
     {
-        public Uri Uri => Url;
+        public Uri GetCapabilitiesUri => Url;
         public const string DefaultFallbackVersion = "2.0.0"; // Default to 2.0.0 (released in 2010, compliant with ISO standards)
 
         public WfsGetCapabilities(Uri sourceUrl, string xml) : base(sourceUrl, xml)
@@ -49,6 +49,25 @@ namespace Netherlands3D.Functionalities.Wfs
                 .SelectSingleNode("//*[local-name()='ServiceIdentification']/*[local-name()='Title']", namespaceManager);
 
             return title != null ? title.InnerText : "";
+        }
+        
+        public List<string> GetLayerNames()
+        {
+            var layerNames = new List<string>();
+    
+            // Select all FeatureType nodes in the document
+            var featureTypeNodes = xmlDocument.SelectNodes($"//*[local-name()='FeatureType']", namespaceManager);
+    
+            foreach (XmlNode featureTypeNode in featureTypeNodes)
+            {
+                var nameNode = featureTypeNode.SelectSingleNode("*[local-name()='Name']", namespaceManager);
+                if (nameNode != null && !string.IsNullOrEmpty(nameNode.InnerText))
+                {
+                    layerNames.Add(nameNode.InnerText);
+                }
+            }
+
+            return layerNames;
         }
 
         public BoundingBoxContainer GetBounds()

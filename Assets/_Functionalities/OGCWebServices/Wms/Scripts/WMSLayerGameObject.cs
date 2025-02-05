@@ -16,17 +16,15 @@ namespace Netherlands3D.Functionalities.Wms
     /// </summary>
     public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels
     {
-        public WMSTileDataLayer WMSProjectionLayer => wmsProjectionLayer;       
+        public WMSTileDataLayer WMSProjectionLayer => wmsProjectionLayer;
         public bool TransparencyEnabled = true; //this gives the requesting url the extra param to set transparancy enabled by default       
-        public int DefaultEnabledLayersMax = 5;  //in case the dataset is very large with many layers. lets topggle the layers after this count to not visible.
+        public int DefaultEnabledLayersMax = 5; //in case the dataset is very large with many layers. lets topggle the layers after this count to not visible.
         public Vector2Int PreferredImageSize = Vector2Int.one * 512;
         public LayerPropertyData PropertyData => urlPropertyData;
 
         private WMSTileDataLayer wmsProjectionLayer;
         protected LayerURLPropertyData urlPropertyData = new();
-
-        
-        [SerializeField] private Vector2Int legendOffsetFromParent;
+        private string legendUrl;
 
         private List<IPropertySectionInstantiator> propertySections = new();
 
@@ -48,24 +46,40 @@ namespace Netherlands3D.Functionalities.Wms
         {
             base.Start();
             WMSProjectionLayer.WmsUrl = urlPropertyData.Data.ToString();
-            
+
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
 
             SetRenderOrder(LayerData.RootIndex);
-            Legend.Instance.LoadLegend(this);
-            var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(WMSProjectionLayer.WmsUrl, ServiceType.Wms);
+            var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
             var getCapabilitiesUrl = new Uri(getCapabilitiesString);
+            Legend.Instance.GetLegendUrl(wmsProjectionLayer.WmsUrl, SetLegendUrl);
             BoundingBoxCache.Instance.GetBoundingBoxContainer(
                 getCapabilitiesUrl,
-                (responseText) => new WmsGetCapabilities(getCapabilitiesUrl, responseText), 
+                (responseText) => new WmsGetCapabilities(getCapabilitiesUrl, responseText),
                 SetBoundingBox
             );
         }
 
+        private void SetLegendUrl(LegendUrlContainer urlContainer)
+        {
+            var featureLayerName = OgcWebServicesUtility.GetParameterFromURL(wmsProjectionLayer.WmsUrl, "layers");
+            legendUrl = urlContainer.LayerNameLegendUrlDictionary[featureLayerName];
+            print("got legend url: " + featureLayerName + "\t" + legendUrl);
+        }
+
         public void SetLegendActive(bool active)
-        {         
-            Legend.Instance.gameObject.SetActive(active);
-        }        
+        {
+            if (!active)
+            {
+                Legend.Instance.HideLegend();
+                return;
+            }
+
+            var featureLayerName = OgcWebServicesUtility.GetParameterFromURL(wmsProjectionLayer.WmsUrl, "layers");
+            print("should set legend active: " + active + " of " + featureLayerName);
+            // Legend.Instance.gameObject.SetActive(active);
+            Legend.Instance.ShowLegend(legendUrl);
+        }
 
         //a higher order means rendering over lower indices
         public void SetRenderOrder(int order)
@@ -93,28 +107,28 @@ namespace Netherlands3D.Functionalities.Wms
 
         private void OnSelectLayer(LayerData layer)
         {
-            Legend.Instance.gameObject.SetActive(true);           
+            Legend.Instance.gameObject.SetActive(true);
         }
 
         private void OnDeselectLayer(LayerData layer)
         {
             Legend.Instance.gameObject.SetActive(false);
         }
-        
+
         public void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)
         {
             var wmsUrl = urlPropertyData.Data.ToString();
             var featureLayerName = OgcWebServicesUtility.GetParameterFromURL(wmsUrl, "layers");
-            
+
             if (boundingBoxContainer.LayerBoundingBoxes.ContainsKey(featureLayerName))
             {
                 SetBoundingBox(boundingBoxContainer.LayerBoundingBoxes[featureLayerName]);
                 return;
             }
-            
+
             SetBoundingBox(boundingBoxContainer.GlobalBoundingBox);
-        }      
-        
+        }
+
         public void SetBoundingBox(BoundingBox boundingBox)
         {
             wmsProjectionLayer.BoundingBox = boundingBox;

@@ -5,6 +5,8 @@ namespace Netherlands3D.Functionalities.Wms
 {
     public class WMSPropertySection : MonoBehaviour
     {
+        [SerializeField] private Toggle legendToggle; 
+        private WMSLayerGameObject controller;
         public WMSLayerGameObject Controller
         {
             get
@@ -15,8 +17,7 @@ namespace Netherlands3D.Functionalities.Wms
             {
                 controller = value;
                 
-                legendToggle = GetComponentInChildren<Toggle>();
-                if (legendToggle != null && controller != null)
+                if (controller != null)
                 {
                     legendToggle.onValueChanged.AddListener(controller.SetLegendActive);
                     controller.SetLegendActive(legendToggle.isOn);
@@ -24,12 +25,11 @@ namespace Netherlands3D.Functionalities.Wms
             }
         }
        
-        private WMSLayerGameObject controller;
-        private Toggle legendToggle; 
 
         private void OnDestroy()
         {
-            if (legendToggle != null && controller != null)
+            controller.SetLegendActive(false);
+            if (controller != null)
                 legendToggle.onValueChanged.RemoveListener(controller.SetLegendActive);
         }
     }

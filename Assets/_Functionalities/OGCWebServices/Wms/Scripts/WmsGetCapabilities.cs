@@ -11,9 +11,9 @@ namespace Netherlands3D.Functionalities.Wms
 {
     public class WmsGetCapabilities : BaseRequest, IGetCapabilities
     {
-        public Uri Uri => Url;
+        public Uri GetCapabilitiesUri => Url;
         private const string defaultFallbackVersion = "1.3.0";
-        
+
         public ServiceType ServiceType => ServiceType.Wms;
         protected override Dictionary<string, string> defaultNameSpaces => OgcWebServicesUtility.DefaultWmsNamespaces;
         public bool CapableOfBoundingBoxes => xmlDocument.SelectSingleNode("//*[local-name()='EX_GeographicBoundingBox' or local-name()='BoundingBox']", namespaceManager) != null;
@@ -28,7 +28,7 @@ namespace Netherlands3D.Functionalities.Wms
                 return true;
             }
         }
-        
+
         public WmsGetCapabilities(Uri url, string xml) : base(url, xml)
         {
         }
@@ -40,17 +40,33 @@ namespace Netherlands3D.Functionalities.Wms
             var versionQueryKey = "version=";
             if (urlLower.Contains(versionQueryKey))
                 return urlLower.Split(versionQueryKey)[1].Split("&")[0];
-            
+
             //try to get the version from the body, or return the default
             var versionInXml = xmlDocument.DocumentElement.GetAttribute("version");
             return string.IsNullOrEmpty(versionInXml) ? versionInXml : defaultFallbackVersion;
         }
-        
+
         public string GetTitle()
         {
             return GetInnerTextForNode(xmlDocument.DocumentElement, "Title");
         }
-        
+
+        public List<string> GetLayerNames()
+        {
+            List<string> layerNames = new List<string>();
+            var LayerNodes = xmlDocument.SelectNodes("//*[local-name()='Layer']", namespaceManager);
+            foreach (XmlNode layerNode in LayerNodes)
+            {
+                var nameNode = layerNode.SelectSingleNode("*[local-name()='Name']", namespaceManager);
+                if (nameNode != null && !string.IsNullOrEmpty(nameNode.InnerText))
+                {
+                    layerNames.Add(nameNode.InnerText);
+                }
+            }
+
+            return layerNames;
+        }
+
         public BoundingBoxContainer GetBounds()
         {
             var container = new BoundingBoxContainer(Url.ToString());
@@ -63,8 +79,8 @@ namespace Netherlands3D.Functionalities.Wms
             }
 
             // Select BoundingBox nodes per layer
-            var bboxNodes = xmlDocument.SelectNodes("//*[local-name()='Layer']", namespaceManager);
-            foreach (XmlNode layerNode in bboxNodes)
+            var LayerNodes = xmlDocument.SelectNodes("//*[local-name()='Layer']", namespaceManager);
+            foreach (XmlNode layerNode in LayerNodes)
             {
                 string layerName = layerNode.SelectSingleNode("*[local-name()='Name']", namespaceManager)?.InnerText;
                 if (string.IsNullOrEmpty(layerName)) continue;
@@ -97,7 +113,7 @@ namespace Netherlands3D.Functionalities.Wms
             var minYString = node.SelectSingleNode("*[local-name()='southBoundLatitude' or @miny]", namespaceManager)?.InnerText;
             var maxXString = node.SelectSingleNode("*[local-name()='eastBoundLongitude' or @maxx]", namespaceManager)?.InnerText;
             var maxYString = node.SelectSingleNode("*[local-name()='northBoundLatitude' or @maxy]", namespaceManager)?.InnerText;
-            
+
             if (!double.TryParse(minXString, out var minX))
                 return null;
             if (!double.TryParse(minYString, out var minY))
@@ -106,7 +122,7 @@ namespace Netherlands3D.Functionalities.Wms
                 return null;
             if (!double.TryParse(maxYString, out var maxY))
                 return null;
-            
+
             var bl = new Coordinate(crs, minX, minY);
             var tr = new Coordinate(crs, maxX, maxY);
 
@@ -183,6 +199,29 @@ namespace Netherlands3D.Functionalities.Wms
             }
 
             return styles;
+        }
+        public Dictionary<string, string> GetLegendUrls()
+        {
+            Dictionary<string, string> legendUrls = new Dictionary<string, string>();
+            XmlNodeList layers = xmlDocument.GetElementsByTagName("Layer");
+
+            foreach (XmlNode layer in layers)
+            {
+                string layerName = layer.SelectSingleNode("*[local-name()='Name']", namespaceManager)?.InnerText;
+                if (string.IsNullOrEmpty(layerName)) continue;
+
+                XmlNodeList legendNodes = layer.SelectNodes(".//*[local-name()='LegendURL']/*[local-name()='OnlineResource']", namespaceManager);
+                foreach (XmlNode legendNode in legendNodes)
+                {
+                    string legendUrl = legendNode.Attributes["xlink:href"]?.Value;
+                    if (!string.IsNullOrEmpty(legendUrl) && !legendUrls.ContainsKey(layerName))
+                    {
+                        legendUrls.Add(layerName, legendUrl);
+                    }
+                }
+            }
+
+            return legendUrls;
         }
     }
 }

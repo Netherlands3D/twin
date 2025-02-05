@@ -99,7 +99,7 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
         public static BoundingBoxContainer AddBoundingBoxContainer(IGetCapabilities getCapabilities)
         {
             var bounds = getCapabilities.GetBounds();
-            BoundingBoxContainers.TryAdd(getCapabilities.Uri.ToString(), bounds); //use tryadd to avoid issues when adding the same GetCapabilities twice in the application
+            BoundingBoxContainers.TryAdd(getCapabilities.GetCapabilitiesUri.ToString(), bounds); //use tryadd to avoid issues when adding the same GetCapabilities twice in the application
             return bounds;
         }
     }
