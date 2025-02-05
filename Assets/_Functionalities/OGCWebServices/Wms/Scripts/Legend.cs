@@ -27,9 +27,13 @@ namespace Netherlands3D.Functionalities.Wms
         [SerializeField] private RectTransform inactive;
         [SerializeField] private LegendImage graphicPrefab;
 
+        private LegendClampHeight legendClampHeight;
+        private ContentFitterRefresh mainPanelContentFitterRefresh;
+            
         public static Dictionary<string, LegendUrlContainer> LegendUrlDictionary = new(); //key: getCapabilities url, Value: legend urls for that GetCapabilities
         private List<string> pendingRequests = new();
         private string activeLegendUrl;
+        private Coroutine runningCoroutine;
         private List<LegendImage> graphics = new List<LegendImage>();
 
         private static Legend instance;
@@ -45,7 +49,13 @@ namespace Netherlands3D.Functionalities.Wms
                 return instance;
             }
         }
-        
+
+        private void Awake()
+        {
+            legendClampHeight = GetComponentInChildren<LegendClampHeight>();
+            mainPanelContentFitterRefresh = mainPanel.GetComponent<ContentFitterRefresh>();
+        }
+
         public void AddGraphic(Sprite sprite)
         {
             LegendImage image = Instantiate(graphicPrefab, graphicPrefab.transform.parent);
@@ -53,8 +63,8 @@ namespace Netherlands3D.Functionalities.Wms
             image.SetSprite(sprite);
             graphics.Add(image);
 
-            GetComponentInChildren<LegendClampHeight>().AdjustRectHeight();
-            mainPanel.GetComponent<ContentFitterRefresh>().RefreshContentFitters();
+            legendClampHeight.AdjustRectHeight();
+            mainPanelContentFitterRefresh.RefreshContentFitters();
         }
 
         private void ClearGraphics()
@@ -128,7 +138,7 @@ namespace Netherlands3D.Functionalities.Wms
             mainPanel.SetActive(false);
         }
         
-        public void ShowLegend(string wmsUrl)
+        public void ShowLegend(string wmsUrl) //todo: fix behaviour when disabling toggle
         {
             var getCapabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsUrl, ServiceType.Wms);
             
@@ -138,10 +148,14 @@ namespace Netherlands3D.Functionalities.Wms
             if(activeLegendUrl == getCapabilitiesUrl)
                 return; //legend that should be set active is already loaded, so no further action is needed.
             
+            if (runningCoroutine != null)
+                StopCoroutine(runningCoroutine);
+            
             ClearGraphics();
             var urlContainer = LegendUrlDictionary[getCapabilitiesUrl];
             activeLegendUrl = getCapabilitiesUrl;
-            StartCoroutine(GetLegendGraphics(urlContainer));
+            
+            runningCoroutine = StartCoroutine(GetLegendGraphics(urlContainer));
         }
         
         private IEnumerator GetLegendGraphics(LegendUrlContainer urlContainer)
