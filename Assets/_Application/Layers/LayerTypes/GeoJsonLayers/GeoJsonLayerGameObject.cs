@@ -192,10 +192,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     }
                 }
 
-                //if (feature.Geometry is not Point && feature.Geometry is not MultiPoint)
-                //    return;
-
-                    mesh.RecalculateBounds();
+                mesh.RecalculateBounds();
                 meshes[i] = mesh;
 
                 Vector3 unityPosition = subObject.transform.position;
@@ -358,19 +355,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         protected virtual void OnFeatureRemoved(Feature feature)
         {
+            //we have to query first to find the corresponding featuremappings, cant do a remove right away
+            //alternative could be to make an extra method to query by feature and do remove, or as proposed caching cell ids (but this can cause bugs, since spatial data is "truth")           
             IGeoJsonVisualisationLayer layer = GetVisualisationLayerForFeature(feature);
-            BoundingBox queryBoundingBox = FeatureMapping.CreateBoundingBoxForFeature(feature, layer);
-            //we have to query first to find the corresponding featuremapping, cant do a remove right away
-            //alternative could be to make an extra method to query by feature and do remove
-            List<FeatureMapping> mappings = FeatureSelector.MappingTree.QueryMappingsContainingNode(queryBoundingBox.Center);
+            BoundingBox queryBoundingBox = FeatureMapping.CreateBoundingBoxForFeature(feature, layer);            
+            List<FeatureMapping> mappings = FeatureSelector.MappingTree.Query(queryBoundingBox);
             foreach (FeatureMapping mapping in mappings)
             {
                 if(mapping.Feature == feature)
                 {
-                    FeatureSelector.MappingTree.Remove(mapping);
                     //destroy featuremapping object, there should be no references anywhere else to this object!
+                    FeatureSelector.MappingTree.Remove(mapping);                    
                     Destroy(mapping.gameObject);
-                    break;
                 }
             }
         }

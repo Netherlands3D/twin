@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
@@ -137,8 +138,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             };
         }
 
-        private List<Feature> keysToRemove = new List<Feature>();
-
         /// <summary>
         /// Checks the Bounds of the visualisations and checks them against the camera frustum
         /// to remove visualisations that are out of view
@@ -146,31 +145,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public void RemoveFeaturesOutOfView()
         {
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
-            
-            keysToRemove.Capacity = spawnedVisualisations.Count;
-            foreach (var kvp in spawnedVisualisations)
+            foreach (var kvp in spawnedVisualisations.Reverse())
             {
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
                 if (inCameraFrustum) continue;
 
-                keysToRemove.Add(kvp.Key);
-            }
-            foreach (Feature key in keysToRemove)
-            {
-                RemoveFeature(key);
-            }
-
-            keysToRemove.Clear();
+                RemoveFeature(kvp.Value);
+            }            
         }
 
-        private void RemoveFeature(Feature featureVisualisationKey)
+        private void RemoveFeature(FeaturePointVisualisations featureVisualisation)
         {
-            foreach (var pointCollection in spawnedVisualisations[featureVisualisationKey].Data)
+            foreach (var pointCollection in featureVisualisation.Data)
             {
                 PointRenderer3D.RemoveCollection(pointCollection);
             }
-            FeatureRemoved?.Invoke(featureVisualisationKey); //TODO, fix the execution order, we need to execute this before its removed from the data
-            spawnedVisualisations.Remove(featureVisualisationKey);
+            FeatureRemoved?.Invoke(featureVisualisation.feature); 
+            spawnedVisualisations.Remove(featureVisualisation.feature);
         }
 
         public override void DestroyLayerGameObject()

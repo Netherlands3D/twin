@@ -13,9 +13,7 @@ using Netherlands3D.Twin.Utility;
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class FeatureSelector : MonoBehaviour, IObjectSelector
-    {
-        public bool debugMappingTree = true;
-
+    {      
         public static FeatureMappingTree MappingTree
         {
             get
@@ -32,10 +30,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 return mappingTreeInstance;
             }            
         }
-
-        private static FeatureMappingTree mappingTreeInstance;
-
-        public bool HasFeatureMapping { get { return featureMappings.Count > 0; } }
+        public bool HasFeatureMapping => featureMappings.Count > 0;
         public bool HasPolygons
         {
             get
@@ -45,21 +40,16 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     .Any(featureMapping => featureMapping.VisualisationLayer.IsPolygon);
             }
         }
-
+        public bool debugMappingTree = false;
         public List<FeatureMapping> FeatureMappings => featureMappings.SelectMany(entry => entry.Value).ToList();
 
+        private static FeatureMappingTree mappingTreeInstance;
         private GameObject testHitPosition;
         private GameObject testGroundPosition;
         private Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> featureMappings = new();
-        private Camera mainCamera;
-
-        [SerializeField] private float hitDistance = 100000f;
-        private float pointHitRadius = 2.5f; //when points are meshscale 5
-        private float lineHitRadius = 2.5f;
-
+        private Camera mainCamera;       
         private ObjectMapping blockingObjectMapping;
         private Vector3 blockingObjectMappingHitPoint;
-
         private PointerToWorldPosition pointerToWorldPosition;
 
         private void Awake()
@@ -133,7 +123,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 testHitPosition.transform.localScale = Vector3.one * 3;
 
                 testGroundPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                testGroundPosition.transform.localScale = Vector3.one * Mathf.Max(lineHitRadius, pointHitRadius);
+                testGroundPosition.transform.localScale = Vector3.one * 2.5f;
                 testGroundPosition.GetComponent<MeshRenderer>().material.color = Color.red;
             }
 
@@ -220,9 +210,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
     public class FeatureMappingTree
     {
-        public static int mostDepth = 0;
-        public static int mostChildren = 0;
-
         private class Node
         {
             public BoundingBox Bounds;
@@ -256,17 +243,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
             if (node.IsLeaf)
             {
-                node.Mappings.Add(obj);
-                if (node.Mappings.Count > mostChildren)
-                {
-                    mostChildren = node.Mappings.Count;
-                    Debug.Log(mostChildren + "mappings");
-                }
-                if (depth > mostDepth)
-                {
-                    mostDepth = depth;
-                    Debug.Log(mostDepth);
-                }
+                node.Mappings.Add(obj);              
                 if ((node.Mappings.Count > maxMappings && depth < maxDepth) || CouldFitInChild(node, obj))
                 {
                     Subdivide(node);
@@ -294,7 +271,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void Remove(FeatureMapping obj)
         {
-            Remove(root, obj);
+            bool isRemoved = Remove(root, obj);
         }
 
         private bool Remove(Node node, FeatureMapping obj)
@@ -323,7 +300,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             if (node.IsLeaf) return; 
 
-            int totalMappings = 0; // node.Mappings.Count;
+            int totalMappings = 0;
 
             foreach (var child in node.Children)
             {
@@ -336,19 +313,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
             if (totalMappings == 0)
                 node.Children = null;
-           
-            //if (totalMappings <= maxMappings)
-            //{
-            //    foreach (var child in node.Children)
-            //    {
-            //        node.Mappings.AddRange(child.Mappings);
-            //        child.Mappings.Clear(); // Clear child mappings to prevent duplicate removals
-            //    }
-
-            //    // Only remove children if they are truly empty
-            //    if (node.Mappings.Count == totalMappings)
-            //        node.Children = null;
-            //}
         }
 
         public List<FeatureMapping> Query(BoundingBox area)

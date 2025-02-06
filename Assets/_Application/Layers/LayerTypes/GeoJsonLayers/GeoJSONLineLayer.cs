@@ -160,7 +160,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 lineRenderer3D.RemoveLine(line);
             }            
-            FeatureRemoved?.Invoke(featureVisualisation.feature); //TODO, fix the execution order, we need to execute this before its removed from the data
+            FeatureRemoved?.Invoke(featureVisualisation.feature); 
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }
 

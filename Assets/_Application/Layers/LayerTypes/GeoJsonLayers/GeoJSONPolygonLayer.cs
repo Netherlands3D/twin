@@ -223,7 +223,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private void RemoveFeature(FeaturePolygonVisualisations featureVisualisation)
         {
             featureVisualisation.DestroyAllVisualisations();
-            FeatureRemoved?.Invoke(featureVisualisation.feature); //TODO, fix the execution order, we need to execute this before its removed from the data
+            FeatureRemoved?.Invoke(featureVisualisation.feature); 
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }
     }
