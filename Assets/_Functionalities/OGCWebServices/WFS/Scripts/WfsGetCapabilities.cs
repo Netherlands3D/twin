@@ -15,7 +15,7 @@ namespace Netherlands3D.Functionalities.Wfs
     public class WfsGetCapabilities : BaseRequest, IGetCapabilities
     {
         public Uri GetCapabilitiesUri => Url;
-        public const string DefaultFallbackVersion = "2.0.0"; // Default to 2.0.0 (released in 2010, compliant with ISO standards)
+        private const string defaultFallbackVersion = "2.0.0"; // Default to 2.0.0 (released in 2010, compliant with ISO standards)
 
         public WfsGetCapabilities(Uri sourceUrl, string xml) : base(sourceUrl, xml)
         {
@@ -45,7 +45,7 @@ namespace Netherlands3D.Functionalities.Wfs
 
             //try to get the version from the body, or return the default
             var versionInXml = xmlDocument.DocumentElement.GetAttribute("version");
-            return string.IsNullOrEmpty(versionInXml) ? versionInXml : DefaultFallbackVersion;
+            return !string.IsNullOrEmpty(versionInXml) ? versionInXml : defaultFallbackVersion;
         }
 
         public string GetTitle() //todo: check if this can be made the same as wms

@@ -43,7 +43,7 @@ namespace Netherlands3D.Functionalities.Wms
 
             //try to get the version from the body, or return the default
             var versionInXml = xmlDocument.DocumentElement.GetAttribute("version");
-            return string.IsNullOrEmpty(versionInXml) ? versionInXml : defaultFallbackVersion;
+            return !string.IsNullOrEmpty(versionInXml) ? versionInXml : defaultFallbackVersion;
         }
 
         public string GetTitle()
