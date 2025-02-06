@@ -52,7 +52,7 @@ namespace Netherlands3D.Functionalities.Wms
             SetRenderOrder(LayerData.RootIndex);
             var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
             var getCapabilitiesUrl = new Uri(getCapabilitiesString);
-            Legend.Instance.GetLegendUrl(wmsProjectionLayer.WmsUrl, SetLegendUrl);
+            Legend.Instance.GetLegendUrl(wmsProjectionLayer.WmsUrl, OnLegendUrlsReceived);
             BoundingBoxCache.Instance.GetBoundingBoxContainer(
                 getCapabilitiesUrl,
                 (responseText) => new WmsGetCapabilities(getCapabilitiesUrl, responseText),
@@ -60,27 +60,19 @@ namespace Netherlands3D.Functionalities.Wms
             );
         }
 
-        private void SetLegendUrl(LegendUrlContainer urlContainer)
+        private void OnLegendUrlsReceived(LegendUrlContainer urlContainer)
         {
-            var featureLayerName = OgcWebServicesUtility.GetParameterFromURL(wmsProjectionLayer.WmsUrl, "layers");
-            var legendUrl = urlContainer.LayerNameLegendUrlDictionary[featureLayerName];
+            SetLegendActive(ShowLegend);
         }
 
         public void SetLegendActive(bool active)
         {
             ShowLegend = active;
-            if (!active)
-            {
-                Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, false);
-                return;
-            }
-
-            var featureLayerName = OgcWebServicesUtility.GetParameterFromURL(wmsProjectionLayer.WmsUrl, "layers");
-            Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, true);
+            Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, active);
         }
 
         //a higher order means rendering over lower indices
-        public void SetRenderOrder(int order)
+        private void SetRenderOrder(int order)
         {
             //we have to flip the value because a lower layer with a higher index needs a lower render index
             WMSProjectionLayer.RenderIndex = -order;
@@ -105,13 +97,14 @@ namespace Netherlands3D.Functionalities.Wms
 
         private void OnSelectLayer(LayerData layer)
         {
-            Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, ShowLegend);
+            SetLegendActive(ShowLegend);
+            // Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, ShowLegend);
         }
 
         private void OnDeselectLayer(LayerData layer)
         {
             if (!string.IsNullOrEmpty(wmsProjectionLayer.WmsUrl))
-                Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, false);
+                SetLegendActive(false);
         }
 
         public void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)
@@ -132,7 +125,7 @@ namespace Netherlands3D.Functionalities.Wms
         {
             wmsProjectionLayer.BoundingBox = boundingBox;
         }
-        
+
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             if (wmsProjectionLayer.isEnabled != isActive)
