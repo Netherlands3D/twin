@@ -50,7 +50,7 @@ namespace Netherlands3D.Functionalities.Wfs
                 return false;
             }
 
-            if (!wfsGetCapabilities.HasBounds)
+            if (!wfsGetCapabilities.WFSBboxFilterCapability())
             {
                 Debug.Log("<color=orange>WFS BBOX filter not supported.</color>");
                 return false;

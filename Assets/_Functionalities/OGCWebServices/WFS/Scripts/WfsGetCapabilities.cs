@@ -15,7 +15,7 @@ namespace Netherlands3D.Functionalities.Wfs
     public class WfsGetCapabilities : BaseRequest, IGetCapabilities
     {
         public Uri GetCapabilitiesUri => Url;
-        public const string DefaultFallbackVersion = "1.1.0"; 
+        public const string DefaultFallbackVersion = "2.0.0"; // Default to 2.0.0 (released in 2010, compliant with ISO standards)
 
         public WfsGetCapabilities(Uri sourceUrl, string xml) : base(sourceUrl, xml)
         {
@@ -24,12 +24,18 @@ namespace Netherlands3D.Functionalities.Wfs
         protected override Dictionary<string, string> defaultNameSpaces => OgcWebServicesUtility.DefaultWfsNamespaces;
         public ServiceType ServiceType => ServiceType.Wfs;
 
-        public bool HasBounds
+        public bool HasBounds //todo: this is suboptimal because it uses the GetBounds function, maybe cache the bounds
         {
-            get { return WFSBboxFilterCapability(this.xmlDocument, this.namespaceManager); }
+            get
+            {
+                var bounds = GetBounds();
+                if (bounds.GlobalBoundingBox == null && bounds.LayerBoundingBoxes.Count == 0)
+                    return false;
+                return true;
+            }
         }
 
-        public string GetVersion() //todo: move to base request?
+        public string GetVersion()
         {
             //try to get version from the url
             var urlLower = Url.ToString().ToLower();
@@ -183,7 +189,7 @@ namespace Netherlands3D.Functionalities.Wfs
             return CoordinateSystem.Undefined;
         }
 
-        private bool WFSBboxFilterCapability(XmlDocument xmlDocument, XmlNamespaceManager namespaceManager = null)
+        public bool WFSBboxFilterCapability(XmlDocument xmlDocument, XmlNamespaceManager namespaceManager = null)
         {
             if (GetVersion() != "2.0.0")
             {
