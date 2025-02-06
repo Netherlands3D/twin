@@ -42,6 +42,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return spawnedVisualisations[feature].trueBounds;
         }
 
+        public float GetSelectionRange()
+        {
+            return 0; //we want to precisely measure the edge to a polygon so no selection range is applied here
+        }
+
+
         /// <summary>
         /// set the colors for the polygon visualisation within the feature polygon visualisation matching the meshes provided
         /// </summary>

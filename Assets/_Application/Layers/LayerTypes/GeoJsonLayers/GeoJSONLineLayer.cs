@@ -60,6 +60,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return spawnedVisualisations[feature].trueBounds;
         }
 
+        public float GetSelectionRange()
+        {
+            return lineRenderer3D.LineDiameter;
+        }
+
         //because the transfrom will always be at the V3zero position we dont want to offset with the localoffset
         //the vertex positions will equal world space
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
@@ -108,6 +113,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 newFeatureVisualisation.Data.Add(newLine);
             }
             
+            newFeatureVisualisation.padding = Vector3.one * GetSelectionRange();
             newFeatureVisualisation.CalculateBounds();
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
         }

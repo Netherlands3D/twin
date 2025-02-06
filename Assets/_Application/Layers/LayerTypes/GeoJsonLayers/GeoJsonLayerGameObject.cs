@@ -192,8 +192,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     }
                 }
 
-                               
-                mesh.RecalculateBounds();
+                //if (feature.Geometry is not Point && feature.Geometry is not MultiPoint)
+                //    return;
+
+                    mesh.RecalculateBounds();
                 meshes[i] = mesh;
 
                 Vector3 unityPosition = subObject.transform.position;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using GeoJSON.Net.Feature;
+using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Utility;
@@ -10,6 +11,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class FeatureMapping : MonoBehaviour
     {
+        public string DebugID;
+
         public string FeatureID => feature.Id;
         public IGeoJsonVisualisationLayer VisualisationLayer { get { return visualisationLayer; } }
         public GeoJsonLayerGameObject VisualisationParent { get { return geoJsonLayerParent; } }
@@ -38,6 +41,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public void SetFeature(Feature feature)
         {
             this.feature = feature; 
+            
+            DebugID = feature.Id;
         }
 
         public void SetMeshes(List<Mesh> meshes)
@@ -49,6 +54,59 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             this.visualisationLayer = visualisationLayer;
             
+        }
+
+        /// <summary>
+        /// calculating a hit on the XZ plane
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="range"></param>
+        /// <param name="hitPoint"></param>
+        /// <returns></returns>
+        public bool IsPositionHit(Coordinate position, float range, out Vector3 hitPoint)
+        {
+            hitPoint = Vector3.zero;
+            List<Mesh> meshes = FeatureMeshes;
+            Vector3 unityPos = position.ToUnity();
+            Vector2 xzPos = new Vector2(unityPos.x, unityPos.z);
+            for(int i = 0; i < meshes.Count; i++)
+            {
+                if (feature.Geometry is MultiLineString || feature.Geometry is LineString)
+                {
+                    Vector3[] vertices = meshes[i].vertices;
+                    for (int j = 0; j < meshes[i].vertexCount - 1; j++)
+                    {
+                        Vector3 xzStart = new Vector3(vertices[j].x, unityPos.y, vertices[j].z);
+                        Vector3 xzEnd = new Vector3(vertices[j + 1].x, unityPos.y, vertices[j + 1].z);
+                        Vector3 nearest = FeatureSelector.NearestPointOnFiniteLine(xzStart, xzEnd, unityPos);
+                        float dist = Vector2.SqrMagnitude(xzPos - new Vector2(nearest.x, nearest.z));
+                        if (dist < range * range)
+                        {
+                            hitPoint = nearest;
+                            return true;
+                        }
+                    }
+                }
+                else if (feature.Geometry is MultiPolygon || feature.Geometry is Polygon)
+                {
+                   
+                }
+                else if (feature.Geometry is Point || feature.Geometry is MultiPoint)
+                {
+                    Vector3[] vertices = meshes[i].vertices;
+                    for (int j = 0; j < meshes[i].vertexCount; j++)
+                    {
+                        Vector2 xzVertex = new Vector2(vertices[j].x, vertices[j].z);
+                        float dist = Vector2.SqrMagnitude(xzPos - xzVertex);
+                        if (dist < range * range)
+                        {
+                            hitPoint = new Vector3(xzVertex.x, unityPos.y, xzVertex.y);
+                            return true;
+                        }
+                    }
+                }
+            }            
+            return false;
         }
 
         //maybe this should be automated and called within the set visualisation layer

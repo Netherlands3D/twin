@@ -118,8 +118,11 @@ namespace Netherlands3D.Twin.Samplers
 
         private void PoolRequest(OpticalRequest request)
         {
-            request.depthCamera.enabled = false;
-            requestPool.Push(request);
+            if (request.depthCamera != null)
+            {
+                request.depthCamera.enabled = false;
+                requestPool.Push(request);
+            }
         }
 
         private MultiPointCallback GetMultipointCallback()
@@ -202,7 +205,17 @@ namespace Netherlands3D.Twin.Samplers
             public void AlignWithMainCamera()
             {
                 depthCamera.transform.position = Camera.main.transform.position;
-                depthCamera.transform.LookAt(Camera.main.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, Camera.main.nearClipPlane)));
+                if (Camera.main.orthographic)
+                {
+                    Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, Camera.main.nearClipPlane));
+                    depthCamera.transform.position = worldPoint - Camera.main.transform.forward * 10f; //needing a temp offset position to simulate a depth offset, because ortho cameras ignore dpeth
+                    depthCamera.transform.LookAt(worldPoint);
+                }
+                else
+                {
+                    Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, Camera.main.nearClipPlane));
+                    depthCamera.transform.LookAt(worldPoint);
+                }
             }
 
             public void UpdateShaders()

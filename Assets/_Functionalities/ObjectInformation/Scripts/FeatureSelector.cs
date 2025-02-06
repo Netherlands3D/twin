@@ -52,11 +52,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private GameObject testGroundPosition;
         private Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> featureMappings = new();
         private Camera mainCamera;
-        private RaycastHit[] raycastHits = new RaycastHit[16];
 
         [SerializeField] private float hitDistance = 100000f;
-        private float pointHitRadius = 1f; //when points are meshscale 5
-        private float lineHitRadius = 1f;
+        private float pointHitRadius = 2.5f; //when points are meshscale 5
+        private float lineHitRadius = 2.5f;
 
         private ObjectMapping blockingObjectMapping;
         private Vector3 blockingObjectMappingHitPoint;
@@ -99,53 +98,34 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             featureMappings.Clear();
             if (blockingObjectMapping != null)
             {
-                //clear the hit list or else it will use previous collider values
-                raycastHits = new RaycastHit[raycastHits.Length];
-                Collider potentialCollider = blockingObjectMapping.GetComponent<Collider>();
-                if (Physics.RaycastNonAlloc(new Ray(blockingObjectMappingHitPoint, Vector3.down), raycastHits, hitDistance) > 0)
+                Coordinate blockingCoordinate = new Coordinate(blockingObjectMappingHitPoint);
+                List<FeatureMapping> potentialMappingsUnderBlockingObject = mappingTreeInstance.QueryMappingsContainingNode(blockingCoordinate);
+                foreach (FeatureMapping map in potentialMappingsUnderBlockingObject)
                 {
-                    for (int i = 0; i < raycastHits.Length; i++)
+                    Vector3 hitPoint;
+                    if (map.IsPositionHit(blockingCoordinate, map.VisualisationLayer.GetSelectionRange(), out hitPoint))
                     {
-                        if (raycastHits[i].collider == null || raycastHits[i].collider == potentialCollider) continue;
+                        groundPosition = hitPoint;
 
-                        FeatureMapping mapping = raycastHits[i].collider.gameObject.GetComponent<FeatureMapping>();
-                        if (mapping != null)
-                        {
-                            groundPosition = raycastHits[i].point;
-                            break;
-                        }
                     }
                 }
             }
-
             //please dont remove as this can be very useful to check where the user clicked
             //ShowFeatureDebuggingIndicator(groundPosition);
 
-            //clear the hit list or else it will use previous collider values
-            raycastHits = new RaycastHit[raycastHits.Length];
-
-            if (Physics.SphereCastNonAlloc(groundPosition, Mathf.Max(pointHitRadius, lineHitRadius), Vector3.down, raycastHits, hitDistance) > 0)
+            Coordinate targetCoordinate = new Coordinate(groundPosition);
+            List<FeatureMapping> foundMappings = mappingTreeInstance.QueryMappingsContainingNode(targetCoordinate);
+            foreach(FeatureMapping map in foundMappings)
             {
-                for (int i = 0; i < raycastHits.Length; i++)
+                Vector3 hitPoint;
+                if (map.IsPositionHit(targetCoordinate, map.VisualisationLayer.GetSelectionRange(), out hitPoint))
                 {
-                    if (raycastHits[i].collider == null) continue;
-
-                    FeatureMapping mapping = raycastHits[i].collider.gameObject.GetComponent<FeatureMapping>();
-                    if (mapping == null) continue;      
-                    
-                    if(mapping.VisualisationLayer is GeoJSONPointLayer)
-                    {
-                        Vector3 closestPoint = raycastHits[i].collider.ClosestPoint(new Vector3(groundPosition.x, raycastHits[i].collider.bounds.center.y, groundPosition.z)); //xz plane 2d distance check
-                        closestPoint.y = groundPosition.y; //make points equal in xz plane
-                        float dist = Vector3.SqrMagnitude(groundPosition - closestPoint);// Vector3.Distance(closestPoint, groundPosition);
-                        if (dist > pointHitRadius*pointHitRadius)
-                            continue;
-                    }
-
-                    featureMappings.TryAdd(mapping.VisualisationParent, new List<FeatureMapping>());
-                    featureMappings[mapping.VisualisationParent].Add(mapping);
+                    featureMappings.TryAdd(map.VisualisationParent, new List<FeatureMapping>());
+                    featureMappings[map.VisualisationParent].Add(map);
                 }
             }
+
+            //TODO polygons with new mapping tree
 
             //not ideal but better than caching, would be better to have an quadtree approach here
             FeatureMapping[] mappings = FindObjectsOfType<FeatureMapping>().Where(fm => fm.VisualisationLayer.IsPolygon).ToArray();
@@ -365,23 +345,34 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void MergeCheck(Node node)
         {
-            int totalMappings = node.Mappings.Count;
-            if (!node.IsLeaf)
+            if (node.IsLeaf) return; 
+
+            int totalMappings = 0; // node.Mappings.Count;
+
+            foreach (var child in node.Children)
             {
-                foreach (var child in node.Children)
-                {
-                    totalMappings += child.Mappings.Count;
-                }
+                if (!child.IsLeaf)
+                    return;
+
+                totalMappings += child.Mappings.Count;
+
             }
 
-            if (totalMappings <= maxMappings)
-            {
-                foreach (var child in node.Children)
-                {
-                    node.Mappings.AddRange(child.Mappings);
-                }
+            if (totalMappings == 0)
                 node.Children = null;
-            }
+           
+            //if (totalMappings <= maxMappings)
+            //{
+            //    foreach (var child in node.Children)
+            //    {
+            //        node.Mappings.AddRange(child.Mappings);
+            //        child.Mappings.Clear(); // Clear child mappings to prevent duplicate removals
+            //    }
+
+            //    // Only remove children if they are truly empty
+            //    if (node.Mappings.Count == totalMappings)
+            //        node.Children = null;
+            //}
         }
 
         public List<FeatureMapping> Query(BoundingBox area)

@@ -46,6 +46,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return spawnedVisualisations[feature].trueBounds;
         }
 
+        public float GetSelectionRange()
+        {
+            return pointRenderer3D.MeshScale;
+        }
+
+
         //here we have to local offset the vertices with the position of the transform because the transform gets shifted
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
         {
@@ -107,7 +113,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 var newPointCollection = GeometryVisualizationFactory.CreatePointVisualization(point, originalCoordinateSystem, PointRenderer3D);
                 newFeatureVisualisation.Data.Add(newPointCollection);
             }
-            
+
+            newFeatureVisualisation.padding = Vector3.one * GetSelectionRange();
             newFeatureVisualisation.CalculateBounds();
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
         }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using GeoJSON.Net.Feature;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.FloatingOrigin;
@@ -16,6 +17,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             private List<List<Coordinate>> pointCollection = new();
             public Bounds tiledBounds;
             public Bounds trueBounds;
+            public Vector3 padding;
 
             private float boundsRoundingCeiling = 1000;
             public float BoundsRoundingCeiling { get => boundsRoundingCeiling; set => boundsRoundingCeiling = value; }
@@ -42,15 +44,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 // Create combined rounded bounds of all lines
                 tiledBounds = new Bounds();
-                trueBounds = new Bounds();
+                trueBounds = new Bounds(pointCollection.First().First().ToUnity(), Vector3.zero);
                 foreach (var pointCollection in pointCollection)
                 {
                     foreach (var coordinate in pointCollection)
+                    {
                         tiledBounds.Encapsulate(coordinate.ToUnity());
+                        trueBounds.Encapsulate(coordinate.ToUnity());
+                    }
                 }
 
-                trueBounds.size = tiledBounds.size;
-                trueBounds.center = tiledBounds.center;
+                trueBounds.Expand(padding);
+                //trueBounds.center = tiledBounds.center;
                 // Expand bounds to ceiling to steps
                 tiledBounds.size = new Vector3(
                     Mathf.Ceil(tiledBounds.size.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
