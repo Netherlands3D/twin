@@ -143,7 +143,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 			if (!clickedSamePosition || refreshSelection)
 			{
                 featureSelector.SetBlockingObjectMapping(subObjectSelector.Object, lastWorldClickedPosition);
-                featureSelector.FindFeature(ray);
+                featureSelector.FindFeature();
 
 				orderedMappings.Clear();
                 Dictionary<GameObject, int> mappings = new Dictionary<GameObject, int>();		

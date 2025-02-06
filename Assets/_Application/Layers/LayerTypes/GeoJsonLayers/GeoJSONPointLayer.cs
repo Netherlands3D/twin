@@ -16,14 +16,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     {
         [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
         public bool IsPolygon => false;
-
         public Transform Transform => transform;
-        private Dictionary<int, FeaturePointVisualisations> spawnedVisualisationDictionary = new();
+        public delegate void GeoJSONPointHandler(Feature feature);
+        public event GeoJSONPointHandler FeatureRemoved;
+
+        private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();       
 
         public List<Mesh> GetMeshData(Feature feature)
         {
-            //FeaturePointVisualisations data = SpawnedVisualisations.FirstOrDefault(f => f.feature == feature);
-            FeaturePointVisualisations data = spawnedVisualisationDictionary[feature.GetHashCode()];
+            FeaturePointVisualisations data = spawnedVisualisations[feature];
             List<Mesh> meshes = new List<Mesh>();
             foreach (List<Coordinate> points in data.Data)
             {
@@ -40,6 +41,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             return meshes;
         }
+
+        public Bounds GetFeatureBounds(Feature feature)
+        {
+            return spawnedVisualisations[feature].trueBounds;
+        }
+
+        public float GetSelectionRange()
+        {
+            return pointRenderer3D.MeshScale;
+        }
+
 
         //here we have to local offset the vertices with the position of the transform because the transform gets shifted
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
@@ -86,7 +98,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             where T : GeoJSONObject
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
-            if (spawnedVisualisationDictionary.Keys.Contains(feature.GetHashCode()))
+            if (spawnedVisualisations.ContainsKey(feature))
                 return;
 
             var newFeatureVisualisation = new FeaturePointVisualisations { feature = feature };
@@ -102,9 +114,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 var newPointCollection = GeometryVisualizationFactory.CreatePointVisualization(point, originalCoordinateSystem, PointRenderer3D);
                 newFeatureVisualisation.Data.Add(newPointCollection);
             }
-            
+
+            newFeatureVisualisation.padding = Vector3.one * GetSelectionRange();
             newFeatureVisualisation.CalculateBounds();
-            spawnedVisualisationDictionary.Add(feature.GetHashCode(), newFeatureVisualisation);
+            spawnedVisualisations.Add(feature, newFeatureVisualisation);
         }
 
         public override void InitializeStyling()
@@ -129,39 +142,31 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// Checks the Bounds of the visualisations and checks them against the camera frustum
         /// to remove visualisations that are out of view
         /// </summary>
-        private List<int> keysToRemove = new List<int>();
         public void RemoveFeaturesOutOfView()
         {
-            // Remove visualisations that are out of view
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
-            
-            keysToRemove.Capacity = spawnedVisualisationDictionary.Count;
-            foreach (var kvp in spawnedVisualisationDictionary)
+            foreach (var kvp in spawnedVisualisations.Reverse())
             {
-                var visualisation = kvp.Value;
-                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, visualisation.bounds);
-                if (inCameraFrustum)
-                    continue;
+                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
+                if (inCameraFrustum) continue;
 
-                keysToRemove.Add(kvp.Key);
-            }
-            foreach (int key in keysToRemove)
-                RemoveFeature(key);
-
-            keysToRemove.Clear();
+                RemoveFeature(kvp.Value);
+            }            
         }
 
-        private void RemoveFeature(int featureVisualisationKey)
+        private void RemoveFeature(FeaturePointVisualisations featureVisualisation)
         {
-            foreach (var pointCollection in spawnedVisualisationDictionary[featureVisualisationKey].Data)
+            foreach (var pointCollection in featureVisualisation.Data)
+            {
                 PointRenderer3D.RemoveCollection(pointCollection);
-
-            spawnedVisualisationDictionary.Remove(featureVisualisationKey);
+            }
+            FeatureRemoved?.Invoke(featureVisualisation.feature); 
+            spawnedVisualisations.Remove(featureVisualisation.feature);
         }
 
         public override void DestroyLayerGameObject()
         {
-            if (Application.isPlaying && PointRenderer3D && PointRenderer3D.gameObject)
+            if (Application.isPlaying && PointRenderer3D?.gameObject)
                 GameObject.Destroy(PointRenderer3D.gameObject);
 
             base.DestroyLayerGameObject();
