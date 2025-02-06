@@ -52,7 +52,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         private void Awake()
         {
-            legendClampHeight = GetComponentInChildren<LegendClampHeight>();
+            legendClampHeight = GetComponentInChildren<LegendClampHeight>(true);
             mainPanelContentFitterRefresh = mainPanel.GetComponent<ContentFitterRefresh>();
         }
 
