@@ -24,7 +24,7 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Wms
 
         private WMSTileDataLayer wmsProjectionLayer;
         protected LayerURLPropertyData urlPropertyData = new();
-        public bool ShowLegend { get; set; } = true;
+        public bool ShowLegendOnSelect { get; set; } = true;
 
         private List<IPropertySectionInstantiator> propertySections = new();
 
@@ -62,12 +62,11 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Wms
 
         private void OnLegendUrlsReceived(LegendUrlContainer urlContainer)
         {
-            SetLegendActive(ShowLegend);
+            SetLegendActive(ShowLegendOnSelect);
         }
 
         public void SetLegendActive(bool active)
         {
-            ShowLegend = active;
             Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, active);
         }
 
@@ -97,8 +96,7 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Wms
 
         private void OnSelectLayer(LayerData layer)
         {
-            SetLegendActive(ShowLegend);
-            // Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, ShowLegend);
+            SetLegendActive(ShowLegendOnSelect);
         }
 
         private void OnDeselectLayer(LayerData layer)

@@ -19,13 +19,18 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Wms.UI
                 
                 if (controller != null)
                 {
-                    legendToggle.isOn = controller.ShowLegend;
-                    legendToggle.onValueChanged.AddListener(controller.SetLegendActive);
-                    controller.SetLegendActive(legendToggle.isOn);
+                    legendToggle.isOn = controller.ShowLegendOnSelect;
+                    legendToggle.onValueChanged.AddListener(SetLegendActive);
+                    SetLegendActive(legendToggle.isOn);
                 }
             }
         }
-       
+
+        private void SetLegendActive(bool active)
+        {
+            controller.ShowLegendOnSelect = active;
+            controller.SetLegendActive(active);
+        }
 
         private void OnDestroy()
         {
