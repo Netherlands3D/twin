@@ -133,21 +133,17 @@ namespace Netherlands3D.Functionalities.Wms
             }
         }
 
-        public void HideLegend()
-        {
-            mainPanel.SetActive(false);
-        }
-        
-        public void ShowLegend(string wmsUrl) //todo: fix behaviour when disabling toggle
+        public void ShowLegend(string wmsUrl, bool show)
         {
             var getCapabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsUrl, ServiceType.Wms);
-            
-            print("showing legend of:" + getCapabilitiesUrl);
-            
-            mainPanel.SetActive(true);
-            if(activeLegendUrl == getCapabilitiesUrl)
+            mainPanel.SetActive(show);
+            if (activeLegendUrl == getCapabilitiesUrl)
+            {
+                if (!show)
+                    activeLegendUrl = null;
                 return; //legend that should be set active is already loaded, so no further action is needed.
-            
+            }
+
             if (runningCoroutine != null)
                 StopCoroutine(runningCoroutine);
             
@@ -160,7 +156,6 @@ namespace Netherlands3D.Functionalities.Wms
         
         private IEnumerator GetLegendGraphics(LegendUrlContainer urlContainer)
         {
-            print("downloading legend graphics");
             ShowInactive(urlContainer.LayerNameLegendUrlDictionary.Count == 0);
             if (urlContainer.LayerNameLegendUrlDictionary.Count == 0)
             {

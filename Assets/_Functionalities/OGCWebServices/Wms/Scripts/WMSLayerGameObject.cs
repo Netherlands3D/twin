@@ -24,7 +24,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         private WMSTileDataLayer wmsProjectionLayer;
         protected LayerURLPropertyData urlPropertyData = new();
-        // private string legendUrl;
+        public bool ShowLegend { get; set; } = true;
 
         private List<IPropertySectionInstantiator> propertySections = new();
 
@@ -69,16 +69,16 @@ namespace Netherlands3D.Functionalities.Wms
 
         public void SetLegendActive(bool active)
         {
+            ShowLegend = active;
             if (!active)
             {
-                Legend.Instance.HideLegend();
+                Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, false);
                 return;
             }
 
             var featureLayerName = OgcWebServicesUtility.GetParameterFromURL(wmsProjectionLayer.WmsUrl, "layers");
             print("should set legend active: " + active + " of " + featureLayerName);
-            // Legend.Instance.gameObject.SetActive(active);
-            Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl);
+            Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, true);
         }
 
         //a higher order means rendering over lower indices
@@ -107,12 +107,13 @@ namespace Netherlands3D.Functionalities.Wms
 
         private void OnSelectLayer(LayerData layer)
         {
-            Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl);
+            Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, ShowLegend);
         }
 
         private void OnDeselectLayer(LayerData layer)
         {
-            Legend.Instance.HideLegend();
+            if (!string.IsNullOrEmpty(wmsProjectionLayer.WmsUrl))
+                Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, false);
         }
 
         public void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)

@@ -19,6 +19,7 @@ namespace Netherlands3D.Functionalities.Wms
                 
                 if (controller != null)
                 {
+                    legendToggle.isOn = controller.ShowLegend;
                     legendToggle.onValueChanged.AddListener(controller.SetLegendActive);
                     controller.SetLegendActive(legendToggle.isOn);
                 }
@@ -28,7 +29,6 @@ namespace Netherlands3D.Functionalities.Wms
 
         private void OnDestroy()
         {
-            controller.SetLegendActive(false);
             if (controller != null)
                 legendToggle.onValueChanged.RemoveListener(controller.SetLegendActive);
         }
