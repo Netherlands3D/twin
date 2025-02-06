@@ -21,7 +21,8 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
         {
             { "ows", "http://www.opengis.net/ows/1.1" },
             { "wfs", "http://www.opengis.net/wfs" },
-            { "schemaLocation", "http://www.opengis.net/wfs" }
+            { "schemaLocation", "http://www.opengis.net/wfs" },
+            { "fes", "http://www.opengis.net/fes/2.0" }
         };
 
         public static string CreateGetCapabilitiesURL(string url, ServiceType serviceType)
