@@ -64,7 +64,6 @@ namespace Netherlands3D.Functionalities.Wms
         {
             var featureLayerName = OgcWebServicesUtility.GetParameterFromURL(wmsProjectionLayer.WmsUrl, "layers");
             var legendUrl = urlContainer.LayerNameLegendUrlDictionary[featureLayerName];
-            print("got legend url: " + featureLayerName + "\t" + legendUrl);
         }
 
         public void SetLegendActive(bool active)
@@ -77,7 +76,6 @@ namespace Netherlands3D.Functionalities.Wms
             }
 
             var featureLayerName = OgcWebServicesUtility.GetParameterFromURL(wmsProjectionLayer.WmsUrl, "layers");
-            print("should set legend active: " + active + " of " + featureLayerName);
             Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, true);
         }
 
