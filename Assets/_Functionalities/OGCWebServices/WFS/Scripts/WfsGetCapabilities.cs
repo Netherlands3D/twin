@@ -15,7 +15,7 @@ namespace Netherlands3D.Functionalities.Wfs
     public class WfsGetCapabilities : BaseRequest, IGetCapabilities
     {
         public Uri GetCapabilitiesUri => Url;
-        public const string DefaultFallbackVersion = "2.0.0"; // Default to 2.0.0 (released in 2010, compliant with ISO standards)
+        public const string DefaultFallbackVersion = "1.1.0"; 
 
         public WfsGetCapabilities(Uri sourceUrl, string xml) : base(sourceUrl, xml)
         {
