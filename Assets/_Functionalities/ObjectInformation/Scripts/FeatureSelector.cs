@@ -91,9 +91,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             this.blockingObjectMappingHitPoint = blockingObjectMappingHitPoint;
         }
 
-        public void FindFeature(Ray ray)
-        {
-            Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
+        public void FindFeature()
+        {            
             Vector3 groundPosition = pointerToWorldPosition.WorldPoint;
             featureMappings.Clear();
             if (blockingObjectMapping != null)
@@ -124,29 +123,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     featureMappings[map.VisualisationParent].Add(map);
                 }
             }
-
-            //TODO polygons with new mapping tree
-
-            //not ideal but better than caching, would be better to have an quadtree approach here
-            FeatureMapping[] mappings = FindObjectsOfType<FeatureMapping>().Where(fm => fm.VisualisationLayer.IsPolygon).ToArray();
-            for (int i = 0; i < mappings.Length; i++)
-            {
-                GeoJSONPolygonLayer polygonLayer = mappings[i].VisualisationLayer as GeoJSONPolygonLayer;
-                if (polygonLayer == null) continue;
-
-                List<Mesh> meshes = mappings[i].FeatureMeshes;
-
-                for (int j = 0; j < meshes.Count; j++)
-                {
-                    PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes);
-                    bool isSelected = ProcessPolygonSelection(meshes[j], pv.transform, mainCamera, frustumPlanes, groundPosition);
-                    if (!isSelected) continue;
-
-                    featureMappings.TryAdd(mappings[i].VisualisationParent, new List<FeatureMapping>());
-                    featureMappings[mappings[i].VisualisationParent].Add(mappings[i]);
-                    //return; what if there are multiple overlapping polygons
-                }
-            }
         }
 
         private void ShowFeatureDebuggingIndicator(Vector3 groundPosition)
@@ -164,7 +140,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             testGroundPosition.transform.position = groundPosition + Vector3.up * 5f;
         }
 
-        public static bool ProcessPolygonSelection(Mesh polygon, Transform transform, Camera camera, Plane[] frustumPlanes, Vector3 worldPoint)
+        public static bool ProcessPolygonSelection(Mesh polygon, Transform transform, Plane[] frustumPlanes, Vector3 worldPoint)
         {
             Bounds localBounds = polygon.bounds;
             Matrix4x4 localToWorld = transform.localToWorldMatrix;
@@ -461,10 +437,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
             node.Children = new[]
             {
-                new Node(bottomLeftCell),         // Bottom-left
-                new Node(bottomRightCell),     // Bottom-right
-                new Node(topLeftCell),     // Top-left
-                new Node(topRightCell)  // Top-right
+                new Node(bottomLeftCell),
+                new Node(bottomRightCell),
+                new Node(topLeftCell),
+                new Node(topRightCell)
             };
         }
 

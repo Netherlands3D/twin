@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -89,7 +90,15 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 }
                 else if (feature.Geometry is MultiPolygon || feature.Geometry is Polygon)
                 {
-                   
+                    Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
+                    GeoJSONPolygonLayer polygonLayer = visualisationLayer as GeoJSONPolygonLayer;
+                    PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes);
+                    bool isSelected = FeatureSelector.ProcessPolygonSelection(meshes[i], pv.transform, frustumPlanes, unityPos);
+                    if (isSelected)
+                    {
+                        hitPoint = unityPos;
+                        return true;
+                    }
                 }
                 else if (feature.Geometry is Point || feature.Geometry is MultiPoint)
                 {
