@@ -63,5 +63,11 @@ namespace Netherlands3D.Functionalities.Wfs
         {
             cartesianTileWFSLayer.BoundingBox = boundingBox;
         }
+        
+        public override void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            if (cartesianTileWFSLayer.isEnabled != isActive)
+                cartesianTileWFSLayer.isEnabled = isActive;
+        }
     }
 }

@@ -132,5 +132,11 @@ namespace Netherlands3D.Functionalities.Wms
         {
             wmsProjectionLayer.BoundingBox = boundingBox;
         }
+        
+        public override void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            if (wmsProjectionLayer.isEnabled != isActive)
+                wmsProjectionLayer.isEnabled = isActive;
+        }
     }
 }
