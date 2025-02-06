@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using GeoJSON.Net.Feature;
-using GG.Extensions;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;

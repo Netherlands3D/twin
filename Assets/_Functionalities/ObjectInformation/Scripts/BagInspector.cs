@@ -144,7 +144,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 			{
                 featureSelector.SetBlockingObjectMapping(subObjectSelector.Object, lastWorldClickedPosition);
                 featureSelector.FindFeature();
-
 				orderedMappings.Clear();
                 Dictionary<GameObject, int> mappings = new Dictionary<GameObject, int>();		
                 //lets order all mappings by layerorder (rootindex) from layerdata

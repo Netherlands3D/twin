@@ -85,6 +85,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {            
             Vector3 groundPosition = pointerToWorldPosition.WorldPoint;
             featureMappings.Clear();
+
+            //no features are imported yet
+            if (mappingTreeInstance == null)
+                return;
+
             if (blockingObjectMapping != null)
             {
                 Coordinate blockingCoordinate = new Coordinate(blockingObjectMappingHitPoint);
