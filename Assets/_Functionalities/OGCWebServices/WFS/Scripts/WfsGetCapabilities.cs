@@ -189,7 +189,7 @@ namespace Netherlands3D.Functionalities.Wfs
             return CoordinateSystem.Undefined;
         }
 
-        public bool WFSBboxFilterCapability(XmlDocument xmlDocument, XmlNamespaceManager namespaceManager = null)
+        public bool WFSBboxFilterCapability()
         {
             if (GetVersion() != "2.0.0")
             {
