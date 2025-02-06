@@ -34,23 +34,24 @@ namespace Netherlands3D.Twin.Projects
         [NonSerialized] private List<PrefabGroup> prefabRuntimeGroups = new();
         public List<PrefabGroup> PrefabRuntimeGroups => prefabRuntimeGroups;
 
-        public LayerGameObject GetPrefabById(string id)
+        public IPromise<LayerGameObject> GetPrefabById(string id)
         {
-            var prefabById = FindPrefabInGroups(id, prefabGroups);
-            if (prefabById) return prefabById;
+            var prefab = FindPrefabInGroups(id, prefabGroups);
+            if (prefab) return Promise<LayerGameObject>.Resolved(prefab);
             
-            prefabById = FindPrefabInGroups(id, prefabRuntimeGroups);
-            if (prefabById) return prefabById;
+            prefab = FindPrefabInGroups(id, prefabRuntimeGroups);
+            if (prefab) return Promise<LayerGameObject>.Resolved(prefab);
 
-            return fallbackPrefab;
+            return Promise<LayerGameObject>.Resolved(fallbackPrefab);
         }
 
         public IPromise<LayerGameObject> Instantiate(string prefabId)
         {
-            var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
-            var reference = GameObject.Instantiate(prefab);
-
-            return Promise<LayerGameObject>.Resolved(reference);
+            return ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId)
+                .Then(prefab =>
+                {
+                    return GameObject.Instantiate(prefab);
+                });
         }
 
         public void AddPrefabRuntimeGroup(string groupName)
