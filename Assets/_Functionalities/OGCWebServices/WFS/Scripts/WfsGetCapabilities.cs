@@ -1,21 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.OgcWebServices.Shared;
 using Netherlands3D.Twin.Utility;
-using Netherlands3D.Web;
 using UnityEngine;
 
-namespace Netherlands3D.Functionalities.Wfs
+namespace Netherlands3D.Functionalities.OgcWebServices.Wfs
 {
     public class WfsGetCapabilities : BaseRequest, IGetCapabilities
     {
         public Uri GetCapabilitiesUri => Url;
-        private const string defaultFallbackVersion = "2.0.0"; // Default to 2.0.0 (released in 2010, compliant with ISO standards)
+        public const string DefaultFallbackVersion = "2.0.0"; // Default to 2.0.0 (released in 2010, compliant with ISO standards)
 
         public WfsGetCapabilities(Uri sourceUrl, string xml) : base(sourceUrl, xml)
         {
@@ -45,7 +43,7 @@ namespace Netherlands3D.Functionalities.Wfs
 
             //try to get the version from the body, or return the default
             var versionInXml = xmlDocument.DocumentElement.GetAttribute("version");
-            return !string.IsNullOrEmpty(versionInXml) ? versionInXml : defaultFallbackVersion;
+            return !string.IsNullOrEmpty(versionInXml) ? versionInXml : DefaultFallbackVersion;
         }
 
         public string GetTitle() //todo: check if this can be made the same as wms

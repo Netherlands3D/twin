@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Functionalities.Wms
+namespace Netherlands3D.Functionalities.OgcWebServices.Wms.UI
 {
     public class LegendClampHeight : MonoBehaviour
     {

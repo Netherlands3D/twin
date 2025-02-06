@@ -2,7 +2,7 @@ using System;
 using System.Xml.Serialization;
 using Netherlands3D.Twin.Utility;
 
-namespace Netherlands3D.Functionalities.Wfs
+namespace Netherlands3D.Functionalities.OgcWebServices.Wfs
 {
     [Serializable]
     public class FeatureType

@@ -7,7 +7,7 @@ using Netherlands3D.Functionalities.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Utility;
 
-namespace Netherlands3D.Functionalities.Wfs
+namespace Netherlands3D.Functionalities.OgcWebServices.Wfs
 {
     /// <summary>
     /// Extention of GeoJSONLayerGameObject that injects a 'streaming' dataprovider WFSGeoJSONTileDataLayer

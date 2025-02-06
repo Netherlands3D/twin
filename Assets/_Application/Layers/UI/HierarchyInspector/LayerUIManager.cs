@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Functionalities.OGC3DTiles;
-using Netherlands3D.Functionalities.Wms;
+using Netherlands3D.Functionalities.OgcWebServices.Wms;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;

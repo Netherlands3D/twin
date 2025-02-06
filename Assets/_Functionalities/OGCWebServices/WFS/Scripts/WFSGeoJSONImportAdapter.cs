@@ -10,7 +10,7 @@ using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 
-namespace Netherlands3D.Functionalities.Wfs
+namespace Netherlands3D.Functionalities.OgcWebServices.Wfs
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WFSImportAdapter", fileName = "WFSImportAdapter", order = 0)]
     public class WFSGeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter

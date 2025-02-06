@@ -2,7 +2,7 @@ using System;
 using KindMen.Uxios;
 using Netherlands3D.Web;
 
-namespace Netherlands3D.Functionalities.Wms
+namespace Netherlands3D.Functionalities.OgcWebServices.Wms
 {
     public struct MapFilters
     {

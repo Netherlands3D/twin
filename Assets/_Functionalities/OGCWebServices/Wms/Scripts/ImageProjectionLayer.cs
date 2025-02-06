@@ -25,7 +25,7 @@ using Netherlands3D.Twin.Utility;
 using UnityEngine.Networking;
 using UnityEngine.Events;
 
-namespace Netherlands3D.Functionalities.Wms
+namespace Netherlands3D.Functionalities.OgcWebServices.Wms
 {
     public class ImageProjectionLayer : Layer
     {

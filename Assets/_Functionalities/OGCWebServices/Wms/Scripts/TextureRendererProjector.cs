@@ -17,7 +17,7 @@
 */
 using UnityEngine;
 
-namespace Netherlands3D.Functionalities.Wms
+namespace Netherlands3D.Functionalities.OgcWebServices.Wms
 {
     public class TextureRendererProjector : TextureProjectorBase
     {

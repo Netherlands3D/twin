@@ -7,12 +7,12 @@ using Netherlands3D.Functionalities.OgcWebServices.Shared;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
-namespace Netherlands3D.Functionalities.Wms
+namespace Netherlands3D.Functionalities.OgcWebServices.Wms
 {
     public class WmsGetCapabilities : BaseRequest, IGetCapabilities
     {
         public Uri GetCapabilitiesUri => Url;
-        private const string defaultFallbackVersion = "1.3.0";
+        public const string DefaultFallbackVersion = "1.3.0";
 
         public ServiceType ServiceType => ServiceType.Wms;
         protected override Dictionary<string, string> defaultNameSpaces => OgcWebServicesUtility.DefaultWmsNamespaces;
@@ -43,7 +43,7 @@ namespace Netherlands3D.Functionalities.Wms
 
             //try to get the version from the body, or return the default
             var versionInXml = xmlDocument.DocumentElement.GetAttribute("version");
-            return !string.IsNullOrEmpty(versionInXml) ? versionInXml : defaultFallbackVersion;
+            return !string.IsNullOrEmpty(versionInXml) ? versionInXml : DefaultFallbackVersion;
         }
 
         public string GetTitle()

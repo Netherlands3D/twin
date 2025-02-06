@@ -9,7 +9,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
-namespace Netherlands3D.Functionalities.Wms
+namespace Netherlands3D.Functionalities.OgcWebServices.Wms
 {
     /// <summary>
     /// Extention of LayerGameObject that injects a 'streaming' dataprovider WMSTileDataLayer

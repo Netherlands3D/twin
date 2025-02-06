@@ -19,7 +19,7 @@
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-namespace Netherlands3D.Functionalities.Wms
+namespace Netherlands3D.Functionalities.OgcWebServices.Wms
 {
     public class TextureDecalProjector : TextureProjectorBase
     {

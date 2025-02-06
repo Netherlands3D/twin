@@ -1,13 +1,13 @@
-using Netherlands3D.Twin.Layers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.Networking;
 using Netherlands3D.Functionalities.OgcWebServices.Shared;
+using Netherlands3D.Functionalities.OgcWebServices.Wms.UI;
 using Netherlands3D.Twin.UI;
 
-namespace Netherlands3D.Functionalities.Wms
+namespace Netherlands3D.Functionalities.OgcWebServices.Wms
 {
     public class LegendUrlContainer
     {

@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using KindMen.Uxios;
 using Netherlands3D.Functionalities.OgcWebServices.Shared;
-using Netherlands3D.Web;
 using UnityEngine;
 
-namespace Netherlands3D.Functionalities.Wms
+namespace Netherlands3D.Functionalities.OgcWebServices.Wms
 {
     public class GetMapRequest : BaseRequest
     {

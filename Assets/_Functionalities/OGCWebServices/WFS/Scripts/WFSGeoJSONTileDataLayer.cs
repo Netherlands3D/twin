@@ -8,7 +8,7 @@ using KindMen.Uxios;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Utility;
 
-namespace Netherlands3D.Functionalities.Wfs
+namespace Netherlands3D.Functionalities.OgcWebServices.Wfs
 {
     /// <summary>
     /// A custom CartesianTile layer that uses the cartesian tiling system to 'stream' parts of 
