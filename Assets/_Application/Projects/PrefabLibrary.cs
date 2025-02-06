@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers;
+using RSG;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 #if UNITY_EDITOR
@@ -42,6 +43,14 @@ namespace Netherlands3D.Twin.Projects
             if (prefabById) return prefabById;
 
             return fallbackPrefab;
+        }
+
+        public IPromise<LayerGameObject> Instantiate(string prefabId)
+        {
+            var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
+            var reference = GameObject.Instantiate(prefab);
+
+            return Promise<LayerGameObject>.Resolved(reference);
         }
 
         public void AddPrefabRuntimeGroup(string groupName)
