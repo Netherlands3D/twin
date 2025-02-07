@@ -1,6 +1,7 @@
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Events;
 #if UNITY_EDITOR
@@ -46,6 +47,8 @@ namespace Netherlands3D.Twin.Layers
         [Space] 
         public UnityEvent onShow = new();
         public UnityEvent onHide = new();
+
+        public abstract BoundingBox Bounds { get; }
 
 #if UNITY_EDITOR
         private void OnValidate()

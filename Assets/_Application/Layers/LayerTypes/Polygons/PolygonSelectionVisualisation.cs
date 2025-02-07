@@ -1,14 +1,17 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
     public class PolygonSelectionVisualisation : LayerGameObject, ILayerWithPropertyPanels
     {
+        public override BoundingBox Bounds => throw new NotImplementedException(); //todo
         public PolygonVisualisation PolygonVisualisation { get; private set; }
         public Material PolygonMeshMaterial;
 
@@ -25,8 +28,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 PolygonVisualisation.transform.SetParent(transform);
             }
             else
+            {
                 PolygonVisualisation.UpdateVisualisation(polygon3D);
-            
+            }
         }
 
         private PolygonVisualisation CreatePolygonMesh(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial)

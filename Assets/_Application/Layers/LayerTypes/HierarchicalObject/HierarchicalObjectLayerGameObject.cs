@@ -7,6 +7,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -15,6 +16,28 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
     public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, ILayerWithPropertyPanels, ILayerWithPropertyData
     {
+        public override BoundingBox Bounds => CalculateMeshBounds();
+
+        private BoundingBox CalculateMeshBounds()
+        {
+            var mfs = GetComponentsInChildren<MeshFilter>();
+            if (mfs.Length == 0)
+            {
+                return null;
+            }
+
+            var meshBounds = mfs[0].mesh.bounds;
+            for (var i = 1; i < mfs.Length; i++)
+            {
+                var mf = mfs[i];
+                meshBounds.Encapsulate(mf.mesh.bounds);
+            }
+
+            var bl = new Coordinate(meshBounds.min);
+            var tr = new Coordinate(meshBounds.max);
+            return new BoundingBox(bl, tr);
+        }
+
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();

@@ -10,11 +10,14 @@ using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
+using Netherlands3D.Twin.Utility;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
+        public override BoundingBox Bounds => throw new NotImplementedException(); //todo
+
         private GeoJSONParser parser = new GeoJSONParser(0.01f);
         public GeoJSONParser Parser => parser;
 
