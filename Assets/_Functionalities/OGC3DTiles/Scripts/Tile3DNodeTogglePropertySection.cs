@@ -1,9 +1,11 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Netherlands3D.Twin.ExtensionMethods;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Functionalities.OGC3DTiles
@@ -13,6 +15,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         [SerializeField] private RectTransform togglePrefab;
         [SerializeField] private RectTransform togglePanel;
         private Tile3DLayerGameObject controller;
+        private Dictionary<string, HashSet<GameObject>> nodeDictionary;
         private List<Toggle> toggles = new();
 
         public Tile3DLayerGameObject Controller
@@ -20,15 +23,20 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             get { return controller; }
             set
             {
+                
                 controller = value;
-                var nodeDictionary = GetNodes(controller.transform);
+                nodeDictionary = GetNodes(controller.transform);
                 SpawnToggles(nodeDictionary.Keys);
             }
+        }
+        
+        private void RefreshDictionary()
+        {
+            nodeDictionary = GetNodes(controller.transform);
         }
 
         private void SpawnToggles(IEnumerable<string> nodeNames)
         {
-            print("nodecount: " + nodeNames.Count());
             foreach (var nodeName in nodeNames)
             {
                 var nodeToggle = Instantiate(togglePrefab.gameObject, togglePanel);
@@ -36,17 +44,25 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
                 nodeToggle.GetComponentInChildren<TextMeshProUGUI>().text = nodeName;
                 var toggle = nodeToggle.GetComponentInChildren<Toggle>();
                 toggles.Add(toggle);
-                toggle.onValueChanged.AddListener(ToggleNodes);
+                toggle.onValueChanged.AddListener(isOn => ToggleNodes(nodeName, isOn));
             }
 
             var h = Mathf.CeilToInt((float)nodeNames.Count() / 2f);
-            print(h);
+            togglePanel.SetHeight(togglePrefab.sizeDelta.y * h);
             togglePanel.sizeDelta = new Vector2(togglePanel.sizeDelta.x, togglePrefab.sizeDelta.y * h);
         }
 
-        private void ToggleNodes(bool arg0)
+
+        private void ToggleNodes(string nodeName, bool isOn)
         {
-            throw new System.NotImplementedException();
+            RefreshDictionary();
+            if (nodeDictionary.TryGetValue(nodeName, out var nodes))
+            {
+                foreach (var node in nodes)
+                {
+                    node.SetActive(isOn);
+                }
+            }
         }
 
         private static Dictionary<string, HashSet<GameObject>> GetNodes(Transform transform)
