@@ -50,10 +50,5 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
             var featureLayerName = nvc.Get(parameter);
             return featureLayerName;
         }
-
-        public static string ParameterNameOfTypeNameBasedOnVersion(string wfsVersion)
-        {
-            return wfsVersion == "1.1.0" ? "typeName" : "typeNames";
-        }
     }
 }

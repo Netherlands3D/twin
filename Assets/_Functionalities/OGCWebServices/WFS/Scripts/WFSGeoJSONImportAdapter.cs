@@ -101,7 +101,7 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Wfs
             {
                 NameValueCollection queryParameters = new();
                 new Uri(sourceUrl).TryParseQueryString(queryParameters);
-                var featureType = queryParameters.Get(OgcWebServicesUtility.ParameterNameOfTypeNameBasedOnVersion(wfsVersion));
+                var featureType = queryParameters.Get(WfsGetCapabilities.ParameterNameOfTypeNameBasedOnVersion(wfsVersion));
 
                 if (string.IsNullOrEmpty(featureType) == false)
                 {
@@ -163,7 +163,7 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Wfs
             uriBuilder.SetQueryParameter("service", "WFS");
             uriBuilder.SetQueryParameter("request", "GetFeature");
             uriBuilder.SetQueryParameter("version", wfsVersion);
-            uriBuilder.SetQueryParameter(OgcWebServicesUtility.ParameterNameOfTypeNameBasedOnVersion(wfsVersion), featureType);
+            uriBuilder.SetQueryParameter(WfsGetCapabilities.ParameterNameOfTypeNameBasedOnVersion(wfsVersion), featureType);
             if (parameters.Get("outputFormat")?.ToLower() is not ("json" or "geojson"))
             {
                 var geoJsonOutputFormatString = wfsGetCapabilities.GetGeoJsonOutputFormatString();
