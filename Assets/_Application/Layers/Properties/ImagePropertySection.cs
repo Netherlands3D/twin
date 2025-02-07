@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class GoToUrlPropertySection : MonoBehaviour
+    public class ImagePropertySection : MonoBehaviour
     {
         [SerializeField] private TMP_Text urlButtonText;
         [SerializeField] private OpenURLInBrowser openURLInBrowser;
         [SerializeField] private TMP_InputField inputField;
         
-        private LayerWithUrl controller;
-        public  LayerWithUrl Controller
+        private LayerWithImage controller;
+        public  LayerWithImage Controller
         {
             get => controller;
             set
@@ -24,6 +24,8 @@ namespace Netherlands3D.Twin.Layers.Properties
                 inputField.text = layerWithPropertyData.Data.ToString();
                 print("init text "+inputField.text);
                 inputField.onEndEdit.Invoke(inputField.text);
+                
+                // controller.s
             }
         }
 

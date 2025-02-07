@@ -1,4 +1,3 @@
-using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
@@ -11,6 +10,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void AddToProperties(RectTransform properties)
         {
             PropertySection = Instantiate(propertySectionPrefab, properties);
+            PropertySection.Controller = GetComponent<LayerWithUrl>();
         }
     }
 }

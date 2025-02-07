@@ -9,6 +9,9 @@ namespace Netherlands3D.Twin
 
         public void Open()
         {
+            if (!(UrlToOpen.StartsWith("http://") || UrlToOpen.StartsWith("https://")))
+                UrlToOpen = "https://" + UrlToOpen;
+                
             Open(UrlToOpen);
         }
 
