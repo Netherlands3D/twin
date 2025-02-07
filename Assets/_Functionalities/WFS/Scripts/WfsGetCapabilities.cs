@@ -361,7 +361,7 @@ namespace Netherlands3D.Functionalities.Wfs
 
         public static string GetLayerNameFromURL(string url)
         {
-            var version = OgcWebServicesUtility.GetParameterFromURL(url, "version"); //todo: use version from interface
+            var version = OgcWebServicesUtility.GetParameterFromURL(url, "version");
             var typeName = ParameterNameOfTypeNameBasedOnVersion(version);
             return OgcWebServicesUtility.GetParameterFromURL(url, typeName);
         }
