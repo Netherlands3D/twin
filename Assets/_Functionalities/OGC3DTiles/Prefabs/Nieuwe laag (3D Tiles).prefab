@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 2740582493697960923}
   - component: {fileID: 1859171214202950123}
   - component: {fileID: -3598923106467742640}
+  - component: {fileID: -4157900931785716764}
   m_Layer: 7
   m_Name: Nieuwe laag (3D Tiles)
   m_TagString: Untagged
@@ -55,12 +56,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile:
-    isLoading: 0
     level: 0
     X: 0
     Y: 0
     hascontent: 0
     priority: 0
+    childrenCountDelayingDispose: 0
     boundingVolume:
       boundingVolumeType: 0
       values: []
@@ -68,16 +69,40 @@ MonoBehaviour:
       coordinateSystem: 0
       extraLongitudeRotation: 0
       extraLattitudeRotation: 0
-      Points: []
+      value1: 0
+      value2: 0
+      value3: 0
+      PointsLength: 0
     TopRight:
       coordinateSystem: 0
       extraLongitudeRotation: 0
       extraLattitudeRotation: 0
-      Points: []
+      value1: 0
+      value2: 0
+      value3: 0
+      PointsLength: 0
+    inView: 0
     requestedDispose: 0
     requestedUpdate: 0
-    childrenCountDelayingDispose: 0
+    isLoading: 0
     children: []
+    tileTransform:
+      m00: 1
+      m01: 0
+      m02: 0
+      m03: 0
+      m10: 0
+      m11: 1
+      m12: 0
+      m13: 0
+      m20: 0
+      m21: 0
+      m22: 1
+      m23: 0
+      m30: 0
+      m31: 0
+      m32: 0
+      m33: 1
     transform:
     - 1
     - 0
@@ -98,8 +123,6 @@ MonoBehaviour:
     geometricError: 0
     screenSpaceError: 3.4028235e+38
     refine: 
-    inView: 0
-    canRefine: 0
     contentUri: 
     content: {fileID: 0}
     loadedChildren: 0
@@ -134,12 +157,12 @@ MonoBehaviour:
   personalKey: 
   queryKeyName: key
   root:
-    isLoading: 0
     level: 0
     X: 0
     Y: 0
     hascontent: 0
     priority: 0
+    childrenCountDelayingDispose: 0
     boundingVolume:
       boundingVolumeType: 0
       values: []
@@ -147,16 +170,40 @@ MonoBehaviour:
       coordinateSystem: 0
       extraLongitudeRotation: 0
       extraLattitudeRotation: 0
-      Points: []
+      value1: 0
+      value2: 0
+      value3: 0
+      PointsLength: 0
     TopRight:
       coordinateSystem: 0
       extraLongitudeRotation: 0
       extraLattitudeRotation: 0
-      Points: []
+      value1: 0
+      value2: 0
+      value3: 0
+      PointsLength: 0
+    inView: 0
     requestedDispose: 0
     requestedUpdate: 0
-    childrenCountDelayingDispose: 0
+    isLoading: 0
     children: []
+    tileTransform:
+      m00: 1
+      m01: 0
+      m02: 0
+      m03: 0
+      m10: 0
+      m11: 1
+      m12: 0
+      m13: 0
+      m20: 0
+      m21: 0
+      m22: 1
+      m23: 0
+      m30: 0
+      m31: 0
+      m32: 0
+      m33: 1
     transform:
     - 1
     - 0
@@ -177,8 +224,6 @@ MonoBehaviour:
     geometricError: 0
     screenSpaceError: 3.4028235e+38
     refine: 
-    inView: 0
-    canRefine: 0
     contentUri: 
     content: {fileID: 0}
     loadedChildren: 0
@@ -356,12 +401,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217db7c8cb91f974daf1e7f820fb6a30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoApplyCredentials: 1
   inputPropertySectionPrefab: {fileID: 7185160580400989932, guid: f241bd5b609aa4447ae89fb4325470ef,
     type: 3}
-  OnCredentialsPropertySectionInstantiated:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1194273570138351517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,3 +466,17 @@ MonoBehaviour:
   findKeyInVaultOnURLChange: 1
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
   autoApplyCredentials: 1
+--- !u!114 &-4157900931785716764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10a33788563cd483995f364508f26b63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propertySectionPrefab: {fileID: 2338255900015697950, guid: 6019647e66e404497b4d1db349c70215,
+    type: 3}
