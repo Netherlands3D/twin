@@ -15,7 +15,15 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Wms
         public const string DefaultFallbackVersion = "1.3.0";
 
         public ServiceType ServiceType => ServiceType.Wms;
-        protected override Dictionary<string, string> defaultNameSpaces => OgcWebServicesUtility.DefaultWmsNamespaces;
+        protected override Dictionary<string, string> defaultNameSpaces => new()
+        {
+            { "ows", "http://www.opengis.net/ows/1.1" },
+            { "wms", "http://www.opengis.net/wms" },
+            { "sld", "http://www.opengis.net/sld" },
+            { "ms", "http://mapserver.gis.umn.edu/mapserver" },
+            { "schemaLocation", "http://www.opengis.net/wms" }
+        };
+
         public bool CapableOfBoundingBoxes => xmlDocument.SelectSingleNode("//*[local-name()='EX_GeographicBoundingBox' or local-name()='BoundingBox']", namespaceManager) != null;
 
         public bool HasBounds //todo: this is suboptimal because it uses the GetBounds function, maybe cache the bounds

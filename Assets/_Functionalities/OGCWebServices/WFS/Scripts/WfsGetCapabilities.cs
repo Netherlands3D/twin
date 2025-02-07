@@ -19,7 +19,13 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Wfs
         {
         }
 
-        protected override Dictionary<string, string> defaultNameSpaces => OgcWebServicesUtility.DefaultWfsNamespaces;
+        protected override Dictionary<string, string> defaultNameSpaces => new()
+        {
+            { "ows", "http://www.opengis.net/ows/1.1" },
+            { "wfs", "http://www.opengis.net/wfs" },
+            { "schemaLocation", "http://www.opengis.net/wfs" },
+            { "fes", "http://www.opengis.net/fes/2.0" }
+        };
         public ServiceType ServiceType => ServiceType.Wfs;
 
         public bool HasBounds //todo: this is suboptimal because it uses the GetBounds function, maybe cache the bounds

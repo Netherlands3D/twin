@@ -25,7 +25,7 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
         public readonly Uri Url;
         protected readonly XmlDocument xmlDocument;
         protected readonly XmlNamespaceManager namespaceManager;
-        protected abstract Dictionary<string, string> defaultNameSpaces { get; }
+        protected virtual Dictionary<string, string> defaultNameSpaces { get; } = new();
 
         protected BaseRequest(Uri sourceUrl, string xml)
         {

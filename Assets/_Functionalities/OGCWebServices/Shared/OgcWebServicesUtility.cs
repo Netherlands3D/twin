@@ -8,23 +8,6 @@ namespace Netherlands3D.Functionalities.OgcWebServices.Shared
 {
     public static class OgcWebServicesUtility
     {
-        public static readonly Dictionary<string, string> DefaultWmsNamespaces = new()
-        {
-            { "ows", "http://www.opengis.net/ows/1.1" },
-            { "wms", "http://www.opengis.net/wms" },
-            { "sld", "http://www.opengis.net/sld" },
-            { "ms", "http://mapserver.gis.umn.edu/mapserver" },
-            { "schemaLocation", "http://www.opengis.net/wms" }
-        };
-
-        public static readonly Dictionary<string, string> DefaultWfsNamespaces = new()
-        {
-            { "ows", "http://www.opengis.net/ows/1.1" },
-            { "wfs", "http://www.opengis.net/wfs" },
-            { "schemaLocation", "http://www.opengis.net/wfs" },
-            { "fes", "http://www.opengis.net/fes/2.0" }
-        };
-
         public static string CreateGetCapabilitiesURL(string url, ServiceType serviceType)
         {
             var uri = new Uri(url);
