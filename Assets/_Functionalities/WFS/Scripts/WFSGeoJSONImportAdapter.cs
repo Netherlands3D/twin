@@ -38,9 +38,9 @@ namespace Netherlands3D.Functionalities.Wfs
             wfsGetCapabilities = new WfsGetCapabilities(new Uri(sourceUrl), bodyContents);
 
             //If the body is a specific GetFeature request; directly continue to execute
-            // bool isGetFeatureRequest = wfsGetCapabilitiesRequest.IsGetFeatureRequest();
-            // if (isGetFeatureRequest)
-            //     return true;
+            bool isGetFeatureRequest = OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wfs, RequestType.GetFeature);
+            if (isGetFeatureRequest)
+                return true;
 
             //If the body is a GetCapabilities request; check if the WFS supports BBOX filter and GeoJSON output
             bool IsGetCapabilitiesRequest = OgcWebServicesUtility.IsSupportedGetCapabilitiesUrl(new Uri(sourceUrl), bodyContents, ServiceType.Wfs);
