@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 4985722426523753970}
   - component: {fileID: -2932100772395540068}
   - component: {fileID: -18391829949753534}
+  - component: {fileID: 6735962658292202639}
   - component: {fileID: 8526576242229369423}
   m_Layer: 0
   m_Name: POI
@@ -210,6 +211,18 @@ MonoBehaviour:
   onPostShift:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6735962658292202639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3937650689336427930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0636d35a0165f4c7b9ef8f159bacee5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8526576242229369423
 MonoBehaviour:
   m_ObjectHideFlags: 0

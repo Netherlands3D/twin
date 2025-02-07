@@ -11,6 +11,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void AddToProperties(RectTransform properties)
         {
             PropertySection = Instantiate(propertySectionPrefab, properties);
+            PropertySection.Controller = GetComponent<LayerWithUrl>();
         }
     }
 }
