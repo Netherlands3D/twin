@@ -22,7 +22,7 @@ using System;
 using UnityEngine.Networking;
 using System.Collections.Generic;
 using Netherlands3D.CartesianTiles;
-using Netherlands3D.Functionalities.OgcWebServices.Wms;
+using Netherlands3D.Functionalities.Wms;
 using UnityEngine.Rendering.Universal;
 
 namespace Netherlands3D.Functionalities.UrbanReLeaf
