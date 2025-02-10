@@ -11,7 +11,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private class Node
         {
             public BoundingBox Bounds;
-            public List<FeatureMapping> Mappings = new();
+            public List<IMapping> Mappings = new();
             public Node[] Children;
             public bool IsLeaf => Children == null;
 
@@ -33,9 +33,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             this.maxDepth = maxDepth;
         }
 
-        public void RootInsert(FeatureMapping obj) => Insert(root, obj, 0);
+        public void RootInsert(IMapping obj) => Insert(root, obj, 0);
 
-        private void Insert(Node node, FeatureMapping obj, int depth)
+        private void Insert(Node node, IMapping obj, int depth)
         {
             if (!node.Bounds.Contains(obj.BoundingBox)) return;
 
@@ -67,12 +67,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
-        public void Remove(FeatureMapping obj)
+        public void Remove(IMapping obj)
         {
             bool isRemoved = Remove(root, obj);
         }
 
-        private bool Remove(Node node, FeatureMapping obj)
+        private bool Remove(Node node, IMapping obj)
         {
             if (!node.Bounds.Contains(obj.BoundingBox)) return false;
 
@@ -113,17 +113,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 node.Children = null;
         }
 
-        public List<FeatureMapping> Query(BoundingBox area)
+        public List<IMapping> Query<T>(BoundingBox area) where T : IMapping
         {
-            List<FeatureMapping> results = new();
-            Query(root, area, results);
+            List<IMapping> results = new();
+            Query<T>(root, area, results);
             return results;
         }
 
-        public List<FeatureMapping> Query(Coordinate coordinate)
+        public List<IMapping> Query<T>(Coordinate coordinate) where T : IMapping
         {
-            List<FeatureMapping> results = new();
-            Query(root, coordinate, results);
+            List<IMapping> results = new();
+            Query<T>(root, coordinate, results);
             return results;
         }
 
@@ -133,36 +133,40 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         /// <param name="node"></param>
         /// <param name="coordinate"></param>
         /// <param name="results"></param>
-        public List<FeatureMapping> QueryMappingsContainingNode(Coordinate coordinate)
+        public List<IMapping> QueryMappingsContainingNode<T>(Coordinate coordinate) where T : IMapping
         {
-            List<FeatureMapping> results = new();
-            QueryMappingsContainingNode(root, coordinate, results);
+            List<IMapping> results = new();
+            QueryMappingsContainingNode<T>(root, coordinate, results);
             return results;
         }
 
-        private void Query(Node node, Coordinate coordinate, List<FeatureMapping> results)
+        private void Query<T>(Node node, Coordinate coordinate, List<IMapping> results) where T : IMapping
         {
             if (!node.Bounds.Contains(coordinate)) return;
 
-            results.AddRange(node.Mappings);
+            foreach(IMapping map in node.Mappings)
+                if(map is T)
+                    results.Add(map);
 
             if (!node.IsLeaf)
             {
                 foreach (var child in node.Children)
-                    Query(child, coordinate, results);
+                    Query<T>(child, coordinate, results);
             }
         }
 
-        private void Query(Node node, BoundingBox area, List<FeatureMapping> results)
+        private void Query<T>(Node node, BoundingBox area, List<IMapping> results) where T : IMapping
         {
             if (!node.Bounds.Intersects(area)) return;
 
-            results.AddRange(node.Mappings);
+            foreach (IMapping map in node.Mappings)
+                if (map is T)
+                    results.Add(map);
 
             if (!node.IsLeaf)
             {
                 foreach (var child in node.Children)
-                    Query(child, area, results);
+                    Query<T>(child, area, results);
             }
         }
 
@@ -172,18 +176,18 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         /// <param name="node"></param>
         /// <param name="coordinate"></param>
         /// <param name="results"></param>
-        private void QueryMappingsContainingNode(Node node, Coordinate coordinate, List<FeatureMapping> results)
+        private void QueryMappingsContainingNode<T>(Node node, Coordinate coordinate, List<IMapping> results) where T : IMapping
         {
             if (!node.Bounds.Contains(coordinate)) return;
 
-            foreach (FeatureMapping mapping in node.Mappings)
-                if (mapping.BoundingBox.Contains(coordinate))
+            foreach (IMapping mapping in node.Mappings)
+                if (mapping is T && mapping.BoundingBox.Contains(coordinate))
                     results.Add(mapping);
 
             if (!node.IsLeaf)
             {
                 foreach (var child in node.Children)
-                    QueryMappingsContainingNode(child, coordinate, results);
+                    QueryMappingsContainingNode<T>(child, coordinate, results);
             }
         }
 
@@ -205,7 +209,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             };
         }
 
-        private bool CouldFitInChild(Node node, FeatureMapping mapping)
+        private bool CouldFitInChild(Node node, IMapping mapping)
         {
             BoundingBox bottomLeftCell;
             BoundingBox bottomRightCell;
@@ -241,7 +245,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void ReinsertObjects(Node node)
         {
             var objs = node.Mappings;
-            node.Mappings = new List<FeatureMapping>();
+            node.Mappings = new List<IMapping>();
             foreach (var obj in objs)
                 RootInsert(obj);
         }
@@ -254,11 +258,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void DebugNode(Node node, bool recursive)
         {
             node.Bounds.Debug(Color.green);
-            foreach (FeatureMapping mapping in node.Mappings)
-                Debug.DrawLine(mapping.BoundingBox.BottomLeft.ToUnity(), node.Bounds.BottomLeft.ToUnity(), Color.red);
+            foreach (IMapping mapping in node.Mappings)
+                if(mapping is FeatureMapping)
+                    Debug.DrawLine(mapping.BoundingBox.BottomLeft.ToUnity(), node.Bounds.BottomLeft.ToUnity(), Color.red);
+                else
+                    Debug.DrawLine(mapping.BoundingBox.BottomLeft.ToUnity(), node.Bounds.BottomLeft.ToUnity(), Color.yellow);
 
-            foreach (FeatureMapping mapping in node.Mappings)
-                mapping.BoundingBox.Debug(Color.magenta);
+            foreach (IMapping mapping in node.Mappings)
+                if (mapping is FeatureMapping)
+                    mapping.BoundingBox.Debug(Color.magenta);
+                else
+                    mapping.BoundingBox.Debug(Color.cyan);
 
             if (recursive && !node.IsLeaf)
                 foreach (Node child in node.Children)

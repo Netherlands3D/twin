@@ -204,7 +204,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 objectMapping.SetVisualisationLayer(layer);
                 objectMapping.SetGeoJsonLayerParent(this);
                 objectMapping.UpdateBoundingBox();
-                FeatureSelector.MappingTree.RootInsert(objectMapping);
+                BagInspector.MappingTree.RootInsert(objectMapping);
             }
         }
 
@@ -356,13 +356,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             //alternative could be to make an extra method to query by feature and do remove, or as proposed caching cell ids (but this can cause bugs, since spatial data is "truth")           
             IGeoJsonVisualisationLayer layer = GetVisualisationLayerForFeature(feature);
             BoundingBox queryBoundingBox = FeatureMapping.CreateBoundingBoxForFeature(feature, layer);            
-            List<FeatureMapping> mappings = FeatureSelector.MappingTree.Query(queryBoundingBox);
+            List<IMapping> mappings = BagInspector.MappingTree.Query<FeatureMapping>(queryBoundingBox);
             foreach (FeatureMapping mapping in mappings)
             {
                 if(mapping.Feature == feature)
                 {
                     //destroy featuremapping object, there should be no references anywhere else to this object!
-                    FeatureSelector.MappingTree.Remove(mapping);                    
+                    BagInspector.MappingTree.Remove(mapping);                    
                     Destroy(mapping.gameObject);
                 }
             }

@@ -12,22 +12,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class FeatureSelector : MonoBehaviour, IObjectSelector
     {      
-        public static MappingTree MappingTree
-        {
-            get
-            {
-                if(mappingTreeInstance == null)
-                {
-                    //bottomleft and topright corners of the netherlands
-                    Coordinate bottomLeft = new Coordinate(CoordinateSystem.WGS84_LatLon, 50.8037d, 3.31497d);
-                    Coordinate topRight = new Coordinate(CoordinateSystem.WGS84_LatLon, 53.5104d, 7.09205d);
-                    BoundingBox bbox = new BoundingBox(bottomLeft, topRight);
-                    MappingTree tree = new MappingTree(bbox, 16, 12);
-                    mappingTreeInstance = tree;
-                }
-                return mappingTreeInstance;
-            }            
-        }
+        
         public bool HasFeatureMapping => featureMappings.Count > 0;
         public bool HasPolygons
         {
@@ -38,10 +23,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     .Any(featureMapping => featureMapping.VisualisationLayer.IsPolygon);
             }
         }
-        public bool debugMappingTree = false;
+        
         public List<FeatureMapping> FeatureMappings => featureMappings.SelectMany(entry => entry.Value).ToList();
 
-        private static MappingTree mappingTreeInstance;
+        
         private GameObject testHitPosition;
         private GameObject testGroundPosition;
         private Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> featureMappings = new();
@@ -79,19 +64,16 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             this.blockingObjectMappingHitPoint = blockingObjectMappingHitPoint;
         }
 
-        public void FindFeature()
+        public void FindFeature(MappingTree tree)
         {            
             Vector3 groundPosition = pointerToWorldPosition.WorldPoint;
             featureMappings.Clear();
 
-            //no features are imported yet
-            if (mappingTreeInstance == null)
-                return;
-
+            
             if (blockingObjectMapping != null)
             {
                 Coordinate blockingCoordinate = new Coordinate(blockingObjectMappingHitPoint);
-                List<FeatureMapping> potentialMappingsUnderBlockingObject = mappingTreeInstance.QueryMappingsContainingNode(blockingCoordinate);
+                List<IMapping> potentialMappingsUnderBlockingObject = tree.QueryMappingsContainingNode<FeatureMapping>(blockingCoordinate);
                 foreach (FeatureMapping map in potentialMappingsUnderBlockingObject)
                 {
                     Vector3 hitPoint;
@@ -106,7 +88,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             //ShowFeatureDebuggingIndicator(groundPosition);
 
             Coordinate targetCoordinate = new Coordinate(groundPosition);
-            List<FeatureMapping> foundMappings = mappingTreeInstance.QueryMappingsContainingNode(targetCoordinate);
+            List<IMapping> foundMappings = tree.QueryMappingsContainingNode<FeatureMapping>(targetCoordinate);
             foreach(FeatureMapping map in foundMappings)
             {
                 Vector3 hitPoint;
@@ -202,12 +184,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             var d = Vector3.Dot(v, line);
             d = Mathf.Clamp(d, 0f, len);
             return start + line * d;
-        }
-
-        public void OnDrawGizmos()
-        {
-            if(debugMappingTree)
-                MappingTree.DebugTree();
         }
     }    
 }

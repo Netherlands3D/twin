@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GeoJSON.Net.Feature;
 using GG.Extensions;
+using Netherlands3D.Coordinates;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.SubObjects;
@@ -12,6 +13,7 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.UI;
+using Netherlands3D.Twin.Utility;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -73,6 +75,25 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 		private int currentSelectedMappingIndex = -1;
 		private bool filterDuplicateFeatures = true;
 
+        public static MappingTree MappingTree
+        {
+            get
+            {
+                if (mappingTreeInstance == null)
+                {
+                    //bottomleft and topright corners of the netherlands
+                    Coordinate bottomLeft = new Coordinate(CoordinateSystem.WGS84_LatLon, 50.8037d, 3.31497d);
+                    Coordinate topRight = new Coordinate(CoordinateSystem.WGS84_LatLon, 53.5104d, 7.09205d);
+                    BoundingBox bbox = new BoundingBox(bottomLeft, topRight);
+                    MappingTree tree = new MappingTree(bbox, 16, 12);
+                    mappingTreeInstance = tree;
+                }
+                return mappingTreeInstance;
+            }
+        }
+        public bool debugMappingTree = false;
+        private static MappingTree mappingTreeInstance;
+
         private void Awake()
 		{
 			mainCamera = Camera.main;
@@ -82,8 +103,37 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
 			keyValuePairTemplate.gameObject.SetActive(false);
 
+			Interaction.ObjectMappingCheckIn += OnAddObjectMapping;
+			Interaction.ObjectMappingCheckOut += OnRemoveObjectMapping;
+
+
 			HideObjectInformation();
 		}
+
+		private void OnAddObjectMapping(ObjectMapping mapping)
+		{
+			GameObject meshObject = new GameObject(mapping.gameObject.name);
+            MeshMapping objectMapping = meshObject.AddComponent<MeshMapping>();
+			objectMapping.SetMeshObject(mapping);
+            objectMapping.UpdateBoundingBox();
+            MappingTree.RootInsert(objectMapping);
+        }
+
+		private void OnRemoveObjectMapping(ObjectMapping mapping)
+		{
+            //the getcomponent is unfortunate, if its performanc heavy maybe use cellcaching
+            BoundingBox queryBoundingBox = MeshMapping.CreateBoundingBoxForMesh(mapping, mapping.GetComponent<MeshRenderer>()); 
+            List<IMapping> mappings = MappingTree.Query<MeshMapping>(queryBoundingBox);
+            foreach (MeshMapping map in mappings)
+            {
+                if (map.ObjectMapping == mapping)
+                {
+                    //destroy featuremapping object, there should be no references anywhere else to this object!
+                    MappingTree.Remove(map);
+                    Destroy(map.gameObject);
+                }
+            }
+        }
 
 		private void Update()
 		{
@@ -143,7 +193,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 			if (!clickedSamePosition || refreshSelection)
 			{
                 featureSelector.SetBlockingObjectMapping(subObjectSelector.Object, lastWorldClickedPosition);
-                featureSelector.FindFeature();
+
+                //no features are imported yet if mappingTreeInstance is null
+                if (mappingTreeInstance != null)
+					featureSelector.FindFeature(mappingTreeInstance);
+
 				orderedMappings.Clear();
                 Dictionary<GameObject, int> mappings = new Dictionary<GameObject, int>();		
                 //lets order all mappings by layerorder (rootindex) from layerdata
@@ -490,6 +544,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 			}
 			keyValueItems.Clear();
 		}
-		#endregion
-	}
+        #endregion
+
+        public void OnDrawGizmos()
+        {
+            if (debugMappingTree)
+                MappingTree.DebugTree();
+        }
+    }
 }
