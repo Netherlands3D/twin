@@ -122,10 +122,11 @@ namespace Netherlands3D.Functionalities.Wms
             var maxXString = node.SelectSingleNode("*[local-name()='eastBoundLongitude' or @maxx]", namespaceManager)?.InnerText;
             var maxYString = node.SelectSingleNode("*[local-name()='northBoundLatitude' or @maxy]", namespaceManager)?.InnerText;
 
-            Debug.Log("found minXString: " + minXString);
-            Debug.Log("found minyString: " + minYString);
-            Debug.Log("found maxXString: " + maxXString);
-            Debug.Log("found maxYString: " + maxYString);
+            //replace , with . to ensure the parse function works as intended.
+            minXString = minXString.Replace(',', '.');
+            minYString = minXString.Replace(',', '.');
+            maxXString = minXString.Replace(',', '.');
+            maxYString = minXString.Replace(',', '.');
             
             if (!double.TryParse(minXString, out var minX))
                 return null;
@@ -139,7 +140,6 @@ namespace Netherlands3D.Functionalities.Wms
             var bl = new Coordinate(crs, minX, minY);
             var tr = new Coordinate(crs, maxX, maxY);
 
-            Debug.Log("creating bbox: " + bl +"\t" + tr);
             return new BoundingBox(bl, tr);
         }
 
