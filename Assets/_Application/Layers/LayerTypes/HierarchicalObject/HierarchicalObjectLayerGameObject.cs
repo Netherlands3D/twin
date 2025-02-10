@@ -21,35 +21,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private BoundingBox CalculateMeshBounds()
         {
-            var mfs = GetComponentsInChildren<MeshFilter>();
-            if (mfs.Length == 0)
+            var renderers = GetComponentsInChildren<Renderer>();
+            if (renderers.Length == 0)
             {
                 return null;
             }
 
-            var meshBounds = mfs[0].mesh.bounds;
-            var scaledMeshBounds = new Bounds(mfs[0].transform.TransformPoint(mfs[0].mesh.bounds.center), mfs[0].transform.lossyScale);
+            var combinedBounds = renderers[0].bounds;
             
-            for (var i = 1; i < mfs.Length; i++)
+            for (var i = 1; i < renderers.Length; i++)
             {
-                var mf = mfs[i];
-                var scaledBounds = new Bounds(mf.transform.TransformPoint(mf.mesh.bounds.center), mf.transform.lossyScale);
-                scaledMeshBounds.Encapsulate(scaledBounds);
+                var renderer = renderers[i];
+                combinedBounds.Encapsulate(renderer.bounds);
             }
-
-            var bl = new Coordinate(scaledMeshBounds.min);
-            var tr = new Coordinate(scaledMeshBounds.max);
+            
+            var bl = new Coordinate(combinedBounds.min);
+            var tr = new Coordinate(combinedBounds.max);
             return new BoundingBox(bl, tr);
-        }
-
-        private void OnDrawGizmos()
-        {
-            var bounds = CalculateMeshBounds();
-            var center = bounds.Center;
-            var size = bounds.GetSizeMagnitude();
-
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireCube(center.ToUnity(), Vector3.one*(float)size);
         }
 
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
