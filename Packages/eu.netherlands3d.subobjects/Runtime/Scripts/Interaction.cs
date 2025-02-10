@@ -6,6 +6,10 @@ namespace Netherlands3D.SubObjects
     public static class Interaction
     {
         public static readonly Color NO_OVERRIDE_COLOR = new Color(0, 0, 1, 0);
+        public delegate void ObjectMappingHandler(ObjectMapping mapping);
+        public static event ObjectMappingHandler ObjectMappingCheckIn;
+        public static event ObjectMappingHandler ObjectMappingCheckOut;
+
         static List<Color> vertexcolors;
         static List<ObjectMapping> mappings;
 
@@ -18,6 +22,7 @@ namespace Netherlands3D.SubObjects
 
             mappings.Add(mapping);
             ApplyColors(GeometryColorizer.PrioritizedColors, mapping);
+            ObjectMappingCheckIn?.Invoke(mapping);
         }
 
         internal static void CheckOut(ObjectMapping mapping)
@@ -25,6 +30,7 @@ namespace Netherlands3D.SubObjects
             if (mappings.Contains(mapping))
             {
                 mappings.Remove(mapping);
+                ObjectMappingCheckOut?.Invoke(mapping);
             }
         }
 
