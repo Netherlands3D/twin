@@ -396,6 +396,23 @@ namespace Netherlands3D.Coordinates
                 return new Coordinate(a.coordinateSystem, newx, newy);
         }
 
+        public static Coordinate operator *(Coordinate a, double b)
+        {
+            if(a.PointsLength == 2)
+                return new Coordinate(a.coordinateSystem, a.value1*b, a.value2*b);
+            return new Coordinate(a.coordinateSystem, a.value1*b, a.value2*b, a.value3*b);
+        }
+
+        public static Coordinate operator /(Coordinate a, double b)
+        {
+            if (b == 0)
+                throw new DivideByZeroException("Divisor cannot be zero.");
+
+            if (a.PointsLength == 2)
+                return new Coordinate(a.coordinateSystem, a.value1 / b, a.value2 / b);
+            return new Coordinate(a.coordinateSystem, a.value1 / b, a.value2 / b, a.value3 / b);
+        }
+
         public bool IsValid()
         {
             CoordinateSystemOperation converter = CoordinateSystems.operators[(CoordinateSystem)this.CoordinateSystem];
