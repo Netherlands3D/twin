@@ -520,12 +520,13 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void SelectUI()
         {
+            propertyToggle.isOn = true;
             SetHighlight(InteractionState.Selected);
         }
 
         private void DeselectUI()
         {
-            if (propertyToggle.isOn) propertyToggle.isOn = false;
+            propertyToggle.isOn = false;
             SetHighlight(InteractionState.Default);
         }
 
