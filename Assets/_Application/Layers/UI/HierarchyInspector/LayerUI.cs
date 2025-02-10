@@ -456,10 +456,11 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 }
 
                 waitForFullClickToDeselect = true;
-                return;
             }
-
-            ProcessLayerSelection();
+            else
+            {
+                ProcessLayerSelection();
+            }
             lastClickTime = Time.time;
         }
 
