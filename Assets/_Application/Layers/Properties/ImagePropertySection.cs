@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
@@ -66,7 +65,19 @@ namespace Netherlands3D.Twin.Layers.Properties
                 Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
                 Texture2D tex = texture as Texture2D;
                 tex.Apply(false, true);
+
+                // Create the sprite
                 image.sprite = Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), Vector2.one * 0.5f, 100);
+
+                // Adjust the Image component's size
+                RectTransform rectTransform = image.GetComponent<RectTransform>();
+
+                float originalWidth = rectTransform.sizeDelta.x; // Keep width unchanged
+                float aspectRatio = (float)tex.height / tex.width; 
+                float newHeight = originalWidth * aspectRatio; // Scale height based on aspect ratio
+
+                rectTransform.sizeDelta = new Vector2(originalWidth, newHeight);
+                LayoutRebuilder.MarkLayoutForRebuild(GetComponent<RectTransform>());
             }
             else
             {
