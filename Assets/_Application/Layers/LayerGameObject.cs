@@ -145,6 +145,12 @@ namespace Netherlands3D.Twin.Layers
             var center = Bounds.Center;
             var doubleExtents = Bounds.GetSizeMagnitude(); //sizeMagnitude returns 2x the extents
 
+            if (doubleExtents > 20000) //20km limit
+            {
+                Debug.LogWarning("Extents too large, not moving camera");
+                return;
+            }
+
             // Keep the current camera orientation
             var mainCamera = Camera.main;
             Vector3 cameraDirection = mainCamera.transform.forward;
