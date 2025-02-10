@@ -138,5 +138,23 @@ namespace Netherlands3D.Twin.Layers
         {
             //initialize the layer's style        
         }
+
+        public void CenterInView()
+        {
+            //move the camera to the center of the bounds, and move it back by the size of the bounds (2x the extents)
+            var center = Bounds.Center;
+            var doubleExtents = Bounds.GetSizeMagnitude(); //sizeMagnitude returns 2x the extents
+
+            // Keep the current camera orientation
+            var mainCamera = Camera.main;
+            Vector3 cameraDirection = mainCamera.transform.forward;
+
+            // Compute the necessary distance to fit the entire object in view
+            var fovRadians = mainCamera.fieldOfView * Mathf.Deg2Rad;
+            var distance = doubleExtents / (2 * Mathf.Tan(fovRadians / 2));
+            
+            // Move camera backward along its forward axis
+            mainCamera.transform.position = center.ToUnity() - cameraDirection * (float)distance; //todo: do the final offset after origin shift for precision.
+        }
     }
 }

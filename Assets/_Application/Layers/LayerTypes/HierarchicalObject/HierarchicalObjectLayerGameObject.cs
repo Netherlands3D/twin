@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
@@ -27,15 +28,28 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
 
             var meshBounds = mfs[0].mesh.bounds;
+            var scaledMeshBounds = new Bounds(mfs[0].transform.TransformPoint(mfs[0].mesh.bounds.center), mfs[0].transform.lossyScale);
+            
             for (var i = 1; i < mfs.Length; i++)
             {
                 var mf = mfs[i];
-                meshBounds.Encapsulate(mf.mesh.bounds);
+                var scaledBounds = new Bounds(mf.transform.TransformPoint(mf.mesh.bounds.center), mf.transform.lossyScale);
+                scaledMeshBounds.Encapsulate(scaledBounds);
             }
 
-            var bl = new Coordinate(meshBounds.min);
-            var tr = new Coordinate(meshBounds.max);
+            var bl = new Coordinate(scaledMeshBounds.min);
+            var tr = new Coordinate(scaledMeshBounds.max);
             return new BoundingBox(bl, tr);
+        }
+
+        private void OnDrawGizmos()
+        {
+            var bounds = CalculateMeshBounds();
+            var center = bounds.Center;
+            var size = bounds.GetSizeMagnitude();
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(center.ToUnity(), Vector3.one*(float)size);
         }
 
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
