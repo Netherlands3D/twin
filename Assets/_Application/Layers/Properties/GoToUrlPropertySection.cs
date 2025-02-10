@@ -22,15 +22,12 @@ namespace Netherlands3D.Twin.Layers.Properties
                 controller.UrlPropertyData.OnDataChanged.AddListener(UpdatePropertiesPanel);
                 inputField.onEndEdit.AddListener(UpdateUrlInProjectData);
                 inputField.text = layerWithPropertyData.Data.ToString();
-                print("init text "+inputField.text);
                 inputField.onEndEdit.Invoke(inputField.text);
             }
         }
 
         private void UpdatePropertiesPanel(Uri uri)
         {
-            print(uri);
-            
             inputField.SetTextWithoutNotify(uri.ToString());
             openURLInBrowser.UrlToOpen = uri.ToString();
             urlButtonText.text = uri.ToString();
@@ -38,11 +35,9 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void UpdateUrlInProjectData(string url)
         {
-            print("text field url " + url);
             if (!(url.StartsWith("http://") || url.StartsWith("https://")))
                 url = "https://" + url;
             
-            print("new url" + url);
             controller.UrlPropertyData.Data = new Uri(url);
         }
     }

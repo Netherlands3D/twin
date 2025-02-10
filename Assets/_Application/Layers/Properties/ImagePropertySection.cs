@@ -1,14 +1,17 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
     public class ImagePropertySection : MonoBehaviour
     {
-        [SerializeField] private TMP_Text urlButtonText;
-        [SerializeField] private OpenURLInBrowser openURLInBrowser;
+        [SerializeField] private Image image;
         [SerializeField] private TMP_InputField inputField;
+        private Coroutine activeCoroutine;
         
         private LayerWithImage controller;
         public  LayerWithImage Controller
@@ -19,33 +22,66 @@ namespace Netherlands3D.Twin.Layers.Properties
                 controller = value;
                 var layerWithPropertyData = controller.UrlPropertyData;
                 
+                activeCoroutine = StartCoroutine(GetImage(controller.UrlPropertyData.Data));
                 controller.UrlPropertyData.OnDataChanged.AddListener(UpdatePropertiesPanel);
+                
                 inputField.onEndEdit.AddListener(UpdateUrlInProjectData);
                 inputField.text = layerWithPropertyData.Data.ToString();
-                print("init text "+inputField.text);
-                inputField.onEndEdit.Invoke(inputField.text);
                 
-                // controller.s
+                inputField.onEndEdit.Invoke(inputField.text);
             }
         }
-
-        private void UpdatePropertiesPanel(Uri uri)
+        
+        private void UpdatePropertiesPanel(Uri uri) //update uri if it was changed outside of the property panel
         {
-            print(uri);
-            
             inputField.SetTextWithoutNotify(uri.ToString());
-            openURLInBrowser.UrlToOpen = uri.ToString();
-            urlButtonText.text = uri.ToString();
+            DownloadImage(uri);
         }
 
         private void UpdateUrlInProjectData(string url)
         {
-            print("text field url " + url);
             if (!(url.StartsWith("http://") || url.StartsWith("https://")))
                 url = "https://" + url;
             
-            print("new url" + url);
             controller.UrlPropertyData.Data = new Uri(url);
+        }
+        
+        private void DownloadImage(Uri newUrl)
+        {
+            if (activeCoroutine != null)
+            {
+                StopCoroutine(activeCoroutine);
+            }
+
+            activeCoroutine = StartCoroutine(GetImage(newUrl));
+        }
+        
+        private IEnumerator GetImage(Uri url)
+        {
+            UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(url);
+            yield return webRequest.SendWebRequest();
+            if (webRequest.result == UnityWebRequest.Result.Success)
+            {
+                Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
+                Texture2D tex = texture as Texture2D;
+                tex.Apply(false, true);
+
+                image.sprite = Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), Vector2.one * 0.5f, 100);
+
+                // Adjust the Image component's size according to aspect ratio
+                RectTransform rectTransform = image.GetComponent<RectTransform>();
+
+                float originalWidth = rectTransform.sizeDelta.x; // Keep width unchanged
+                float aspectRatio = (float)tex.height / tex.width; 
+                float newHeight = originalWidth * aspectRatio; // Scale height based on aspect ratio
+
+                rectTransform.sizeDelta = new Vector2(originalWidth, newHeight);
+                LayoutRebuilder.MarkLayoutForRebuild(GetComponent<RectTransform>());
+            }
+            else
+            {
+                Debug.LogError(webRequest.error);
+            }
         }
     }
 }
