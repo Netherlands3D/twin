@@ -66,10 +66,9 @@ namespace Netherlands3D.Twin.Layers.Properties
                 Texture2D tex = texture as Texture2D;
                 tex.Apply(false, true);
 
-                // Create the sprite
                 image.sprite = Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), Vector2.one * 0.5f, 100);
 
-                // Adjust the Image component's size
+                // Adjust the Image component's size according to aspect ratio
                 RectTransform rectTransform = image.GetComponent<RectTransform>();
 
                 float originalWidth = rectTransform.sizeDelta.x; // Keep width unchanged
