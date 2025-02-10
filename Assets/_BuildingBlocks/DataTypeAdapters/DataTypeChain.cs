@@ -94,8 +94,6 @@ namespace Netherlands3D.DataTypeAdapters
         /// <returns></returns>
         private IEnumerator DownloadDataToLocalCache(LocalFile urlAndData)
         {
-            new ConsoleLogger();
-
             var futureFileInfo = Resource<FileInfo>.At(urlAndData.SourceUrl).Value;
             
             // We want to use and manipulate urlAndData, so we 'curry' it by wrapping a method call in a lambda 
