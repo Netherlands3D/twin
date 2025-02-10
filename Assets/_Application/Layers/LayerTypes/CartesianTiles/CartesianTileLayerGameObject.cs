@@ -1,11 +1,14 @@
 using UnityEngine;
 using Netherlands3D.CartesianTiles;
+using Netherlands3D.Twin.Utility;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
     [RequireComponent(typeof(Layer))]
     public class CartesianTileLayerGameObject : LayerGameObject
     {
+        public override BoundingBox Bounds => BoundingBox.RDBounds; //assume we cover the entire RD bounds area
+        
         private Layer layer;
         private Netherlands3D.CartesianTiles.TileHandler tileHandler;
 

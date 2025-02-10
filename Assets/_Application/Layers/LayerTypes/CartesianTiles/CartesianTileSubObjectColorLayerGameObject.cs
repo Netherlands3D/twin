@@ -6,6 +6,7 @@ using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.DataSets;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -13,6 +14,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
     public class CartesianTileSubObjectColorLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
+        public override BoundingBox Bounds => BoundingBox.RDBounds; //assume we cover the entire RD bounds area
         public int PriorityIndex
         {
             get { return transform.GetSiblingIndex(); }
