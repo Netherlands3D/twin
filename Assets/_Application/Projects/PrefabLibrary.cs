@@ -5,8 +5,6 @@ using Netherlands3D.Twin.Layers;
 using RSG;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-#if UNITY_EDITOR
-#endif
 
 namespace Netherlands3D.Twin.Projects
 {
@@ -44,7 +42,7 @@ namespace Netherlands3D.Twin.Projects
 
             return Promise<LayerGameObject>.Resolved(fallbackPrefab);
         }
-
+        
         public IPromise<LayerGameObject> Instantiate(string prefabId)
         {
             return ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId)
@@ -80,7 +78,7 @@ namespace Netherlands3D.Twin.Projects
             foreach (var group in prefabGroups)
             {
                 var findPrefabInGroups = FindPrefabInGroup(id, group);
-                if (findPrefabInGroups == null) continue;
+                if (!findPrefabInGroups) continue;
 
                 return findPrefabInGroups;
             }
