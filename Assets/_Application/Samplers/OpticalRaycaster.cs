@@ -15,10 +15,7 @@ namespace Netherlands3D.Twin.Samplers
 
         private Stack<OpticalRequest> requestPool = new Stack<OpticalRequest>();
         private List<OpticalRequest> activeRequests = new List<OpticalRequest>();
-
-        private Stack<MultiPointCallback> requestMultipointPool = new Stack<MultiPointCallback>();
-
-        
+        private Stack<MultiPointCallback> requestMultipointPool = new Stack<MultiPointCallback>();        
 
         public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3> callback)
         {
@@ -30,7 +27,6 @@ namespace Netherlands3D.Twin.Samplers
             opticalRequest.framesActive = 0;
             activeRequests.Add(opticalRequest);
         }
-
 
         public void GetWorldPointsAsync(Vector3[] screenPoints, Action<Vector3[]> callback)
         {
@@ -48,9 +44,6 @@ namespace Netherlands3D.Twin.Samplers
                 activeRequests.Add(opticalRequest);
             }
         }
-
-        
-
 
         private void Update()
         {
@@ -179,7 +172,6 @@ namespace Netherlands3D.Twin.Samplers
                     AsyncGPUReadbackRequest request = AsyncGPUReadback.Request(renderTexture, 0, callback);
                     SetRequest(request);
                 };
-
             }
 
             public void SetCallback(Action<AsyncGPUReadbackRequest> callback)
@@ -226,6 +218,7 @@ namespace Netherlands3D.Twin.Samplers
             }
         }
 
+        //when getting a batch of points async we need to have a callback that can sync all points as one result
         private sealed class MultiPointCallback
         {
             public Action<Vector3>[] pointCallbacks = new Action<Vector3>[4];

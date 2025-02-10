@@ -11,7 +11,10 @@ namespace Netherlands3D.Twin.Utility
         public Coordinate Center
         {
             get 
-            {                
+            {
+                if ((CoordinateSystem)BottomLeft.CoordinateSystem != CoordinateSystem)
+                    BottomLeft = BottomLeft.Convert(CoordinateSystem);
+
                 double centerX = (BottomLeft.value1 + TopRight.value1) * 0.5f;
                 double centerY = (BottomLeft.value2 + TopRight.value2) * 0.5f;
                 return new Coordinate(BottomLeft.CoordinateSystem, centerX, centerY);

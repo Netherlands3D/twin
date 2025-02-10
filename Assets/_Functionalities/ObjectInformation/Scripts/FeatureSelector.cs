@@ -213,7 +213,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         }
     }
 
-    public class FeatureMappingTree
+    public sealed class FeatureMappingTree
     {
         private class Node
         {
@@ -373,7 +373,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
-
         /// <summary>
         /// returns a list of featuremappings of featuremappings boundingboxes contain the input coordinate
         /// </summary>
@@ -473,5 +472,4 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     DebugNode(child, recursive);
         }
     }
-
 }
