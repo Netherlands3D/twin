@@ -1,3 +1,5 @@
+using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -22,6 +24,7 @@ namespace Netherlands3D.Twin.Layers
         }
 
         private ReferencedLayerData layerData;
+
         public ReferencedLayerData LayerData
         {
             get
@@ -30,22 +33,21 @@ namespace Netherlands3D.Twin.Layers
                 {
                     CreateProxy();
                 }
-                    
+
                 return layerData;
             }
             set
             {
                 layerData = value;
-                
+
                 foreach (var layer in GetComponents<ILayerWithPropertyData>())
                 {
                     layer.LoadProperties(layerData.LayerProperties); //initial load
                 }
             }
         }
-        
-        [Space] 
-        public UnityEvent onShow = new();
+
+        [Space] public UnityEvent onShow = new();
         public UnityEvent onHide = new();
 
         public abstract BoundingBox Bounds { get; }
@@ -65,7 +67,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 #endif
-        
+
         protected virtual void Start()
         {
             InitializeVisualisation();
@@ -95,7 +97,7 @@ namespace Netherlands3D.Twin.Layers
         {
             onHide.Invoke();
         }
-        
+
         public virtual void OnSelect()
         {
         }
@@ -128,7 +130,7 @@ namespace Netherlands3D.Twin.Layers
         {
             //called when the Proxy's sibling index changes. Also called when the parent changes but the sibling index stays the same.            
         }
-        
+
         public virtual void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             //called when the Proxy's active state changes.          
@@ -143,23 +145,39 @@ namespace Netherlands3D.Twin.Layers
         {
             //move the camera to the center of the bounds, and move it back by the size of the bounds (2x the extents)
             var center = Bounds.Center;
-            var doubleExtents = Bounds.GetSizeMagnitude(); //sizeMagnitude returns 2x the extents
+            var sizeMagnitude = Bounds.GetSizeMagnitude(); //sizeMagnitude returns 2x the extents
 
-            if (doubleExtents > 2000) //2km limit
+            if (sizeMagnitude > 20000) // if the size of the bounds is larger than 20km, we don't move the camera
             {
                 Debug.LogWarning("Extents too large, not moving camera");
                 return;
             }
 
-            // Keep the current camera orientation
             var mainCamera = Camera.main;
+            // Keep the current camera orientation
             Vector3 cameraDirection = mainCamera.transform.forward;
 
-            // Compute the necessary distance to fit the entire object in view
-            var fovRadians = mainCamera.fieldOfView * Mathf.Deg2Rad;
-            var distance = doubleExtents / (2 * Mathf.Tan(fovRadians / 2));
-            
-            // Move camera backward along its forward axis
+            var distance = 300d;
+
+            //if the object is smaller than 2km in diameter, we will center the object in the view.
+            //if the size of the bounds is larger than 2 km, we will center on the object with a fixed distance instead of trying to fit the object in the view
+            if (sizeMagnitude < 2000)
+            {
+                // Compute the necessary distance to fit the entire object in view
+                var fovRadians = mainCamera.fieldOfView * Mathf.Deg2Rad;
+                distance = sizeMagnitude / (2 * Mathf.Tan(fovRadians / 2));
+            }
+
+            var currentCameraPosition = mainCamera.GetComponent<WorldTransform>().Coordinate;
+            var difference = (currentCameraPosition - center).Convert(CoordinateSystem.RD); //use RD since this expresses the difference in meters, so we can use the SqrDistanceBeforeShifting to check if we need to shift.
+            ulong sqDist = (ulong)(difference.easting * difference.easting + difference.northing * difference.northing);
+            if (sqDist > Origin.current.SqrDistanceBeforeShifting)
+            {
+                // move the origin to the bounds center with height 0, to assure large jumps do not result in errors when centering.
+                var newOrigin = center.Convert(CoordinateSystem.WGS84); //2d coord system to get rid of height.
+                Origin.current.MoveOriginTo(newOrigin);
+            }
+
             mainCamera.transform.position = center.ToUnity() - cameraDirection * (float)distance; //todo: do the final offset after origin shift for precision.
         }
     }
