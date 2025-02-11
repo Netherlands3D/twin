@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d35e5d5ab35da2442889085efad1b87a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maximumConcurrentDownloads: 6
+  maximumConcurrentDownloads: 60
   filterByCameraFrustum: 1
   layers: []
   pendingTileChanges: []

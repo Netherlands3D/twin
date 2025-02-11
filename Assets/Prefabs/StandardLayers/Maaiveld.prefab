@@ -56,7 +56,7 @@ MonoBehaviour:
     geoLOD: 
     path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked/Terrain{x}_{y}.1.bin
     pathQuery: 
-    maximumDistance: 10000
+    maximumDistance: 7000
     maximumDistanceSquared: 0
     enabled: 1
   pauseLoading: 0
@@ -147,7 +147,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {fileID: 0}
   worldTransformShifter: {fileID: 8494173785329764173}
   referenceCoordinateSystem: 2
   onPreShift:
