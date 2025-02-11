@@ -6,6 +6,7 @@ using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Rendering;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
@@ -16,6 +17,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
         public bool IsPolygon => false;
 
+        public override BoundingBox Bounds => throw new NotImplementedException(); //todo
         public Transform Transform => transform;
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
 

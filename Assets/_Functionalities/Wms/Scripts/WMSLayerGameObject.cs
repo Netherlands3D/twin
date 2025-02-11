@@ -14,6 +14,8 @@ namespace Netherlands3D.Functionalities.Wms
     /// </summary>
     public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels
     {
+        public override BoundingBox Bounds => wmsProjectionLayer?.BoundingBox;
+
         public WMSTileDataLayer WMSProjectionLayer => wmsProjectionLayer;       
         public bool TransparencyEnabled = true; //this gives the requesting url the extra param to set transparancy enabled by default       
         public int DefaultEnabledLayersMax = 5;  //in case the dataset is very large with many layers. lets topggle the layers after this count to not visible.
@@ -22,7 +24,6 @@ namespace Netherlands3D.Functionalities.Wms
 
         private WMSTileDataLayer wmsProjectionLayer;
         protected LayerURLPropertyData urlPropertyData = new();
-
         
         [SerializeField] private Vector2Int legendOffsetFromParent;
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.FloatingOrigin;
@@ -8,6 +9,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
@@ -22,6 +24,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     [RequireComponent(typeof(ToggleScatterPropertySectionInstantiator))]
     public class ObjectScatterLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, IPropertySectionInstantiator
     {
+        public override BoundingBox Bounds => new (new Coordinate(polygonBounds.min), new Coordinate(polygonBounds.max));
         public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
 
         private Mesh mesh;

@@ -7,6 +7,7 @@ using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Rendering;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
@@ -14,6 +15,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     [Serializable]
     public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
+        public override BoundingBox Bounds => throw new NotImplementedException(); //todo
         public bool IsPolygon  => false;
         public Transform Transform => transform;
 

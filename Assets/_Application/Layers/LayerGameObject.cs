@@ -1,6 +1,8 @@
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Events;
 #if UNITY_EDITOR
@@ -21,6 +23,7 @@ namespace Netherlands3D.Twin.Layers
         }
 
         private ReferencedLayerData layerData;
+
         public ReferencedLayerData LayerData
         {
             get
@@ -29,23 +32,24 @@ namespace Netherlands3D.Twin.Layers
                 {
                     CreateProxy();
                 }
-                    
+
                 return layerData;
             }
             set
             {
                 layerData = value;
-                
+
                 foreach (var layer in GetComponents<ILayerWithPropertyData>())
                 {
                     layer.LoadProperties(layerData.LayerProperties); //initial load
                 }
             }
         }
-        
-        [Space] 
-        public UnityEvent onShow = new();
+
+        [Space] public UnityEvent onShow = new();
         public UnityEvent onHide = new();
+
+        public abstract BoundingBox Bounds { get; }
 
 #if UNITY_EDITOR
         private void OnValidate()
@@ -62,7 +66,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 #endif
-        
+
         protected virtual void Start()
         {
             InitializeVisualisation();
@@ -92,7 +96,7 @@ namespace Netherlands3D.Twin.Layers
         {
             onHide.Invoke();
         }
-        
+
         public virtual void OnSelect()
         {
         }
@@ -125,7 +129,7 @@ namespace Netherlands3D.Twin.Layers
         {
             //called when the Proxy's sibling index changes. Also called when the parent changes but the sibling index stays the same.            
         }
-        
+
         public virtual void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             //called when the Proxy's active state changes.          
@@ -134,6 +138,11 @@ namespace Netherlands3D.Twin.Layers
         public virtual void InitializeStyling()
         {
             //initialize the layer's style        
+        }
+
+        public void CenterInView()
+        {
+            Camera.main.GetComponent<MoveCameraToBounds>().MoveToBounds(Bounds);
         }
     }
 }
