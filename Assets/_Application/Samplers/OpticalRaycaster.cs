@@ -69,13 +69,24 @@ namespace Netherlands3D.Twin.Samplers
                 PoolRequest(opticalRequest);
                 return;
             }
-            var worldPosData = opticalRequest.request.GetData<Vector4>();
-            float worldPosX = worldPosData[0].x;
-            float worldPosY = worldPosData[0].y;
-            float worldPosZ = worldPosData[0].z;
-            Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
-            opticalRequest.resultCallback.Invoke(worldPos);
-            PoolRequest(opticalRequest);            
+            try
+            {
+                var worldPosData = opticalRequest.request.GetData<Vector4>();
+                float worldPosX = worldPosData[0].x;
+                float worldPosY = worldPosData[0].y;
+                float worldPosZ = worldPosData[0].z;
+                Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
+                opticalRequest.resultCallback.Invoke(worldPos);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Exception in optical request: {e}");
+            }
+            finally
+            {
+                //we must always execute this to prevent crazy frame build ups
+                PoolRequest(opticalRequest);
+            }
         }
 
         private RenderTexture GetRenderTexture()
