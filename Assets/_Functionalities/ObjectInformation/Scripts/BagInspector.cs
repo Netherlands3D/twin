@@ -12,6 +12,7 @@ using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Rendering;
+using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
 using TMPro;
@@ -93,11 +94,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         }
         public bool debugMappingTree = false;
         private static MappingTree mappingTreeInstance;
+        private PointerToWorldPosition pointerToWorldPosition;
 
         private void Awake()
 		{
 			mainCamera = Camera.main;
-			cameraInputSystemProvider = mainCamera.GetComponent<CameraInputSystemProvider>();
+            pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
+            cameraInputSystemProvider = mainCamera.GetComponent<CameraInputSystemProvider>();
 			subObjectSelector = GetComponent<SubObjectSelector>();
 			featureSelector = GetComponent<FeatureSelector>();
 
@@ -110,13 +113,15 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 			HideObjectInformation();
 		}
 
-		private void OnAddObjectMapping(ObjectMapping mapping)
+        
+
+        private void OnAddObjectMapping(ObjectMapping mapping)
 		{
 			GameObject meshObject = new GameObject(mapping.gameObject.name);
             MeshMapping objectMapping = meshObject.AddComponent<MeshMapping>();
 			objectMapping.SetMeshObject(mapping);
             objectMapping.UpdateBoundingBox();
-            MappingTree.RootInsert(objectMapping);
+            MappingTree.RootInsert(objectMapping);			
         }
 
 		private void OnRemoveObjectMapping(ObjectMapping mapping)
@@ -181,11 +186,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 			var ray = mainCamera.ScreenPointToRay(position);
 
 			//the following method calls need to run in order!
-			string bagId = subObjectSelector.FindSubObject(ray, out var hit);			
-			if (hit.collider == null) return;
+			string bagId = subObjectSelector.FindSubObject();			
+			//if (hit.collider == null) return;			
 
-			bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, hit.point) < minClickDistance;
-            lastWorldClickedPosition = hit.point; 
+			bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.WorldPoint) < minClickDistance;
+			lastWorldClickedPosition = pointerToWorldPosition.WorldPoint;
 			
 			bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
 			lastTimeClicked = Time.time;

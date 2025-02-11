@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
+using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
@@ -14,6 +16,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private ColorSetLayer ColorSetLayer { get; set; } = new(0, new());
         private ObjectMapping foundObject;
         private string foundId;
+
+        private PointerToWorldPosition pointerToWorldPosition;
+
+        private void Awake()
+        {
+            pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
+        }
 
         public void Select(string bagId)
         {
@@ -33,18 +42,35 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             ColorSetLayer = null;
         }
 
-        public string FindSubObject(Ray ray, out RaycastHit hit)
+        public string FindSubObject()
         {
             foundObject = null;
-            if (!Physics.Raycast(ray, out hit, hitDistance)) return null;
+            string bagId = null;
+            //if (!Physics.Raycast(ray, out hit, hitDistance)) return null;
 
-            // lets use a capsule cast here to ensure objects are hit (some objects for features are really small) and
-            // use a nonalloc to prevent memory allocations
-            var objectMapping = hit.collider.gameObject.GetComponent<ObjectMapping>();
-            if (!objectMapping) return null;
+            //// lets use a capsule cast here to ensure objects are hit (some objects for features are really small) and
+            //// use a nonalloc to prevent memory allocations
+            //var objectMapping = hit.collider.gameObject.GetComponent<ObjectMapping>();
+            //if (!objectMapping) return null;
 
-            foundObject = objectMapping;
-            var bagId = objectMapping.getObjectID(hit.triangleIndex);
+            Vector3 groundPosition = pointerToWorldPosition.WorldPoint;
+            Coordinate coord = new Coordinate(groundPosition);
+            List<IMapping> mappings = BagInspector.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
+            if (mappings.Count == 0)
+                return bagId;
+
+            foreach (MeshMapping mapping in mappings)
+            {                
+                ObjectMapping objectMapping = mapping.ObjectMapping;
+                //var bagId = objectMapping.getObjectID(hit.triangleIndex);
+                MeshMappingItem item = mapping.FindItemForPosition(groundPosition);
+                if (item != null)
+                {
+                    foundObject = objectMapping;
+                    bagId = item.ObjectMappingItem.objectID;
+                    break;
+                }
+            }
             return bagId;
         }
     }
