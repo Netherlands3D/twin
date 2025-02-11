@@ -115,7 +115,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 newFeatureVisualisation.Data.Add(newPointCollection);
             }
 
-            newFeatureVisualisation.padding = Vector3.one * GetSelectionRange();
+            newFeatureVisualisation.SetBoundsPadding(Vector3.one * GetSelectionRange());
             newFeatureVisualisation.CalculateBounds();
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
         }

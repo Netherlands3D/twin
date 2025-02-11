@@ -16,7 +16,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             private List<List<Coordinate>> lines = new();
             public Bounds tiledBounds;
             public Bounds trueBounds;
-            public Vector3 padding;
+            private Vector3 boundsPadding;
 
             private float boundsRoundingCeiling = 1000;
             public float BoundsRoundingCeiling { get => boundsRoundingCeiling; set => boundsRoundingCeiling = value; }
@@ -36,6 +36,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 CalculateBounds();
             }
 
+            public void SetBoundsPadding(Vector3 padding)
+            {
+                boundsPadding = padding;
+            }
+
             /// <summary>
             /// Calculate bounds by combining all visualisation bounds
             /// </summary>
@@ -52,7 +57,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     }
                 }
                 trueBounds.size = tiledBounds.size;
-                trueBounds.Expand(padding);
+                trueBounds.Expand(boundsPadding);
                 trueBounds.center = tiledBounds.center;
 
                 // Expand bounds to ceiling to steps
