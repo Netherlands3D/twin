@@ -24,7 +24,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     [RequireComponent(typeof(ToggleScatterPropertySectionInstantiator))]
     public class ObjectScatterLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, IPropertySectionInstantiator
     {
-        public override BoundingBox Bounds => new BoundingBox(new Coordinate(polygonBounds.min), new Coordinate(polygonBounds.max));
+        public override BoundingBox Bounds => new (new Coordinate(polygonBounds.min), new Coordinate(polygonBounds.max));
         public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
 
         private Mesh mesh;

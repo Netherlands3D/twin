@@ -21,7 +21,12 @@ namespace Netherlands3D.Twin.Cameras
 
         public void MoveToBounds(BoundingBox bounds)
         {
-              //move the camera to the center of the bounds, and move it back by the size of the bounds (2x the extents)
+            if (bounds == null) 
+            {
+                throw new NullReferenceException("Bounds object is null, no bounds specified to center to.");
+            }
+            
+            //move the camera to the center of the bounds, and move it back by the size of the bounds (2x the extents)
             var center = bounds.Center;
             var sizeMagnitude = bounds.GetSizeMagnitude(); //sizeMagnitude returns 2x the extents
 

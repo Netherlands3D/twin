@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private BoundingBox CalculateMeshBounds()
         {
-            var renderers = GetComponentsInChildren<Renderer>();
+            var renderers = GetComponentsInChildren<Renderer>(); //needs to be optimized if we call this function every frame.
             if (renderers.Length == 0)
             {
                 return null;
