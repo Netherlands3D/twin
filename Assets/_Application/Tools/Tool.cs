@@ -122,5 +122,10 @@ namespace Netherlands3D.Twin.Tools
 
             DestroyPrefabInstances();
         }
+        
+        public void SetInspectorPrefab(GameObject prefab)
+        {
+            InspectorPrefab = prefab;
+        }
     }
 }
