@@ -552,23 +552,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 4c0989c5e9ec1404ab9e3523c94f6b29, type: 3}
   - {fileID: 21300000, guid: 1c8435c321d2348d6b890dae0769264b, type: 3}
   - {fileID: 21300000, guid: 302449484203745dbac0d82605206394, type: 3}
-  disabledLayerTypeSprites:
-  - {fileID: 21300000, guid: 8195ba93da7d54414990e31bfc4040cd, type: 3}
-  - {fileID: 21300000, guid: 564f756d525e542b1a8a4e2f0801dabd, type: 3}
-  - {fileID: 21300000, guid: 8195ba93da7d54414990e31bfc4040cd, type: 3}
-  - {fileID: 21300000, guid: 1922596620fa144e6ae6068957587ee9, type: 3}
-  - {fileID: 21300000, guid: c7c08f8ece25d4fb9bda6ab15c59e8ef, type: 3}
-  - {fileID: 21300000, guid: 30db9e94c1c4c448dbfd765724679bbf, type: 3}
-  - {fileID: 21300000, guid: 60568f85042a643e3b319a4b356e7704, type: 3}
-  - {fileID: 21300000, guid: b4dbc949f58ca6e4c96a1ffdc7c62f63, type: 3}
-  - {fileID: 21300000, guid: 8195ba93da7d54414990e31bfc4040cd, type: 3}
-  - {fileID: 21300000, guid: 8195ba93da7d54414990e31bfc4040cd, type: 3}
   layerUIContainer: {fileID: 4503089938938308058}
   dragGhostPrefab: {fileID: -5549004017849562441, guid: f37464b169eec47cf8d80ee264145f3f,
     type: 3}
   dragLine: {fileID: 3629506645558351958}
-  contextMenuPrefab: {fileID: 5342415080518674038, guid: 0534318c8be404c17855151d32cc8dac,
-    type: 3}
 --- !u!222 &4214680396928346814
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1443,7 +1430,7 @@ PrefabInstance:
     - target: {fileID: 6642786459307162966, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 957.23
+      value: -0.77000046
       objectReference: {fileID: 0}
     - target: {fileID: 6642786459307162966, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
