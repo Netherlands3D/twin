@@ -58,15 +58,6 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             {
                 var centerOfViewport = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);
                 opticalRaycaster.GetWorldPointAsync(centerOfViewport, instantiationCallback);
-
-                //Vector3[] points = new Vector3[4]
-                //{
-                //    new Vector3(0,0),
-                //    new Vector3(Screen.width,0),
-                //    new Vector3(Screen.width,Screen.height),
-                //    new Vector3(0,Screen.height),
-                //};
-                //opticalRaycaster.GetWorldPointsAsync(points, instantiationCallback);
             }
         }
     }

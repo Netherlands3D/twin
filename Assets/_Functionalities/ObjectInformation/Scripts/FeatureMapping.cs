@@ -112,7 +112,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return false;
         }
 
-        //maybe this should be automated and called within the set visualisation layer
+        //TODO maybe this should be automated and called within the set visualisation layer
         public void UpdateBoundingBox()
         {
             if (feature == null)

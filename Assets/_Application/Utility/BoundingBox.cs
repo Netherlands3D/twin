@@ -8,38 +8,22 @@ namespace Netherlands3D.Twin.Utility
     {
         public Coordinate BottomLeft { get; private set; }
         public Coordinate TopRight { get; private set; }
-        public Coordinate Center
-        {
-            get 
-            {
-                if ((CoordinateSystem)BottomLeft.CoordinateSystem != CoordinateSystem)
-                    BottomLeft = BottomLeft.Convert(CoordinateSystem);
-
-                double centerX = (BottomLeft.value1 + TopRight.value1) * 0.5f;
-                double centerY = (BottomLeft.value2 + TopRight.value2) * 0.5f;
-                return new Coordinate(BottomLeft.CoordinateSystem, centerX, centerY);
-            }
-        }
+        public Coordinate Center => (BottomLeft + TopRight) * 0.5f;
 
         public CoordinateSystem CoordinateSystem { get; private set; }
 
         public BoundingBox(Coordinate bottomLeft, Coordinate topRight)
         {
-            SetBounds(bottomLeft, topRight);
-        }
+            if (topRight.CoordinateSystem != bottomLeft.CoordinateSystem)
+            {
+                topRight = topRight.Convert((CoordinateSystem)bottomLeft.CoordinateSystem);
+            }
 
-        public void SetBounds(Coordinate bottomLeft, Coordinate topRight)
-        {
-            if (bottomLeft.value1 > topRight.value1 || bottomLeft.value2 > topRight.value2)
+            if (bottomLeft.easting > topRight.easting || bottomLeft.northing > topRight.northing)
             {
                 throw new ArgumentException(
                     "Invalid coordinates for BoundingBox. BottomLeft should have lower values than TopRight."
                 );
-            }
-
-            if (topRight.CoordinateSystem != bottomLeft.CoordinateSystem)
-            {
-                topRight = topRight.Convert((CoordinateSystem)bottomLeft.CoordinateSystem);
             }
 
             BottomLeft = bottomLeft;
