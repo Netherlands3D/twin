@@ -1,3 +1,4 @@
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -22,6 +23,7 @@ namespace Netherlands3D.Twin.Layers
         }
 
         private ReferencedLayerData layerData;
+
         public ReferencedLayerData LayerData
         {
             get
@@ -30,22 +32,21 @@ namespace Netherlands3D.Twin.Layers
                 {
                     CreateProxy();
                 }
-                    
+
                 return layerData;
             }
             set
             {
                 layerData = value;
-                
+
                 foreach (var layer in GetComponents<ILayerWithPropertyData>())
                 {
                     layer.LoadProperties(layerData.LayerProperties); //initial load
                 }
             }
         }
-        
-        [Space] 
-        public UnityEvent onShow = new();
+
+        [Space] public UnityEvent onShow = new();
         public UnityEvent onHide = new();
 
         public abstract BoundingBox Bounds { get; }
@@ -65,7 +66,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 #endif
-        
+
         protected virtual void Start()
         {
             InitializeVisualisation();
@@ -95,7 +96,7 @@ namespace Netherlands3D.Twin.Layers
         {
             onHide.Invoke();
         }
-        
+
         public virtual void OnSelect()
         {
         }
@@ -128,7 +129,7 @@ namespace Netherlands3D.Twin.Layers
         {
             //called when the Proxy's sibling index changes. Also called when the parent changes but the sibling index stays the same.            
         }
-        
+
         public virtual void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             //called when the Proxy's active state changes.          
@@ -141,26 +142,7 @@ namespace Netherlands3D.Twin.Layers
 
         public void CenterInView()
         {
-            //move the camera to the center of the bounds, and move it back by the size of the bounds (2x the extents)
-            var center = Bounds.Center;
-            var doubleExtents = Bounds.GetSizeMagnitude(); //sizeMagnitude returns 2x the extents
-
-            if (doubleExtents > 2000) //2km limit
-            {
-                Debug.LogWarning("Extents too large, not moving camera");
-                return;
-            }
-
-            // Keep the current camera orientation
-            var mainCamera = Camera.main;
-            Vector3 cameraDirection = mainCamera.transform.forward;
-
-            // Compute the necessary distance to fit the entire object in view
-            var fovRadians = mainCamera.fieldOfView * Mathf.Deg2Rad;
-            var distance = doubleExtents / (2 * Mathf.Tan(fovRadians / 2));
-            
-            // Move camera backward along its forward axis
-            mainCamera.transform.position = center.ToUnity() - cameraDirection * (float)distance; //todo: do the final offset after origin shift for precision.
+            Camera.main.GetComponent<MoveCameraToBounds>().MoveToBounds(Bounds);
         }
     }
 }
