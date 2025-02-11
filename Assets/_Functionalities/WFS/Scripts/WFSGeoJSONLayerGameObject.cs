@@ -2,11 +2,10 @@ using System;
 using UnityEngine;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
+using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Utility;
-using Netherlands3D.Web;
 
 namespace Netherlands3D.Functionalities.Wfs
 {
@@ -28,9 +27,15 @@ namespace Netherlands3D.Functionalities.Wfs
         {
             var wfsUrl = urlPropertyData.Data.ToString();
             cartesianTileWFSLayer.WfsUrl = wfsUrl;
-            WFSBoundingBoxCache.Instance.GetBoundingBoxContainer(WFSRequest.CreateGetCapabilitiesURL(wfsUrl), SetBoundingBox);
+            var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wfsUrl, ServiceType.Wfs);
+            var getCapabilitiesUrl = new Uri(getCapabilitiesString);
+            BoundingBoxCache.Instance.GetBoundingBoxContainer(
+                getCapabilitiesUrl,
+                (responseText) => new WfsGetCapabilities(getCapabilitiesUrl, responseText), 
+                SetBoundingBox
+            );
         }
-
+        
         public override void LoadProperties(List<LayerPropertyData> properties)
         {
             var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
@@ -43,7 +48,7 @@ namespace Netherlands3D.Functionalities.Wfs
         public void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)
         {
             var wfsUrl = urlPropertyData.Data.ToString();
-            var featureLayerName = WFSRequest.GetLayerNameFromURL(wfsUrl);
+            var featureLayerName = WfsGetCapabilities.GetLayerNameFromURL(wfsUrl);
             
             if (boundingBoxContainer.LayerBoundingBoxes.ContainsKey(featureLayerName))
             {
@@ -57,6 +62,12 @@ namespace Netherlands3D.Functionalities.Wfs
         public void SetBoundingBox(BoundingBox boundingBox)
         {
             cartesianTileWFSLayer.BoundingBox = boundingBox;
+        }
+        
+        public override void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            if (cartesianTileWFSLayer.isEnabled != isActive)
+                cartesianTileWFSLayer.isEnabled = isActive;
         }
     }
 }

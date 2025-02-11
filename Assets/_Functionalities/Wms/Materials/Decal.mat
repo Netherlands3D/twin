@@ -21,7 +21,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Decal
-  m_Shader: {fileID: -6465566751694194690, guid: 1f42ae5a1c59a00498938f1c1a5d3489, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 1f42ae5a1c59a00498938f1c1a5d3489,
+    type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -120,7 +121,7 @@ Material:
     - _DecalMeshViewBias: 0
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DrawOrder: 0
+    - _DrawOrder: -2
     - _DstBlend: 0
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
