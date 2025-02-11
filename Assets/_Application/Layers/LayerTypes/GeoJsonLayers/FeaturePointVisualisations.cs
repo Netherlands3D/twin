@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             private List<List<Coordinate>> pointCollection = new();
             public Bounds tiledBounds;
             public Bounds trueBounds;
-            public Vector3 padding;
+            private Vector3 boundsPadding;
 
             private float boundsRoundingCeiling = 1000;
             public float BoundsRoundingCeiling { get => boundsRoundingCeiling; set => boundsRoundingCeiling = value; }
@@ -36,6 +36,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 CalculateBounds();
             }
+
+            public void SetBoundsPadding(Vector3 padding)
+            {
+                boundsPadding = padding; 
+            }
             
             /// <summary>
             /// Calculate bounds by combining all visualisation bounds
@@ -44,18 +49,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 // Create combined rounded bounds of all lines
                 tiledBounds = new Bounds();
-                trueBounds = new Bounds(pointCollection.First().First().ToUnity(), Vector3.zero);
+
+                bool initBounds = false;                
                 foreach (var pointCollection in pointCollection)
                 {
                     foreach (var coordinate in pointCollection)
                     {
-                        tiledBounds.Encapsulate(coordinate.ToUnity());
-                        trueBounds.Encapsulate(coordinate.ToUnity());
+                        Vector3 coordUnity = coordinate.ToUnity();
+                        if(!initBounds)
+                        {
+                            trueBounds = new Bounds(coordUnity, Vector3.zero);
+                            initBounds = true;
+                        }
+
+                        tiledBounds.Encapsulate(coordUnity);
+                        trueBounds.Encapsulate(coordUnity);
                     }
                 }
+                trueBounds.Expand(boundsPadding);
 
-                trueBounds.Expand(padding);
-                //trueBounds.center = tiledBounds.center;
                 // Expand bounds to ceiling to steps
                 tiledBounds.size = new Vector3(
                     Mathf.Ceil(tiledBounds.size.x / BoundsRoundingCeiling) * BoundsRoundingCeiling,
