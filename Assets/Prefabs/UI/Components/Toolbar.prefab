@@ -2382,6 +2382,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4036689451780318589, guid: 8a8677c6eb3f72e4fbac53a581f6192b,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4036689451780318589, guid: 8a8677c6eb3f72e4fbac53a581f6192b,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319,
@@ -2394,6 +2399,11 @@ PrefabInstance:
     - target: {fileID: 4036689451780318589, guid: 8a8677c6eb3f72e4fbac53a581f6192b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4036689451780318589, guid: 8a8677c6eb3f72e4fbac53a581f6192b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4036689451780318589, guid: 8a8677c6eb3f72e4fbac53a581f6192b,
@@ -2414,6 +2424,11 @@ PrefabInstance:
     - target: {fileID: 4036689451780318589, guid: 8a8677c6eb3f72e4fbac53a581f6192b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Netherlands3D.Twin.ToolButton, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4036689451780318589, guid: 8a8677c6eb3f72e4fbac53a581f6192b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
       value: Netherlands3D.Twin.ToolButton, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4036689451780318589, guid: 8a8677c6eb3f72e4fbac53a581f6192b,
@@ -3614,7 +3629,11 @@ PrefabInstance:
     - {fileID: 5212959388185158832, guid: 8a8677c6eb3f72e4fbac53a581f6192b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5702645395749646538, guid: 8a8677c6eb3f72e4fbac53a581f6192b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1150042676989870771}
   m_SourcePrefab: {fileID: 100100000, guid: 8a8677c6eb3f72e4fbac53a581f6192b, type: 3}
 --- !u!224 &1559862168900337521 stripped
 RectTransform:
@@ -3622,3 +3641,22 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 6523010678372126648}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1559862168900337522 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5702645395749646538, guid: 8a8677c6eb3f72e4fbac53a581f6192b,
+    type: 3}
+  m_PrefabInstance: {fileID: 6523010678372126648}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1150042676989870771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559862168900337522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86a6322e8c7d34a6b9bd46a2fdf815d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tool: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
