@@ -95,6 +95,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6567033620470696027, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6567033620470696027, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
       propertyPath: scrollScaleValue
       value: 0.1
       objectReference: {fileID: 0}
@@ -102,6 +107,10 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1107191816428015814, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6931880698281720618}
     - targetCorrespondingSourceObject: {fileID: 1107191816428015814, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
       insertIndex: -1
@@ -114,6 +123,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2623645220532331873}
+    - targetCorrespondingSourceObject: {fileID: 1107191816428015814, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7501783902500771388}
   m_SourcePrefab: {fileID: 100100000, guid: 8a8c1bdd94f08d144a7410a838c895ad, type: 3}
 --- !u!1 &5315891981602308680 stripped
 GameObject:
@@ -121,6 +134,40 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5086919686984667790}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6931880698281720618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5315891981602308680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowDebugText: 0
+  m_ShowCameraFrustum: 1
+  m_IgnoreTimeScale: 0
+  m_WorldUpOverride: {fileID: 0}
+  m_UpdateMethod: 2
+  m_BlendUpdateMethod: 1
+  m_DefaultBlend:
+    m_Style: 1
+    m_Time: 2
+    m_CustomCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  m_CustomBlends: {fileID: 0}
+  m_CameraCutEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_CameraActivatedEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &8068913146316752299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,3 +212,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df4aa35a0a27a974c8bc719b6377f1a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7501783902500771388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5315891981602308680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 461fc492db7994661830a425f59db7b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSizeLimit: 20000
+  zoomSizeLimit: 2000
+  defaultCameraDistance: 300

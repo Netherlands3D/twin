@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 1107191816428015819}
   - component: {fileID: 1107191816428015816}
   - component: {fileID: 1107191816428015818}
-  - component: {fileID: 6567033620470696027}
   - component: {fileID: 262063079913678507}
   - component: {fileID: 942284140123242531}
+  - component: {fileID: 6567033620470696027}
   m_Layer: 0
   m_Name: FreeCamera
   m_TagString: MainCamera
@@ -29,13 +29,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1107191816428015814}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
   m_LocalPosition: {x: 0, y: 100, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 58.588, y: 0, z: 0}
 --- !u!114 &1107191816428015819
 MonoBehaviour:
@@ -80,12 +80,14 @@ MonoBehaviour:
   pointerPosition: {fileID: 11400000, guid: 39c03474ebbc57248b389422f44ff77b, type: 2}
   dragModifier: {fileID: 11400000, guid: f46052d916c896c4c88fefc825961beb, type: 2}
   rotateModifier: {fileID: 11400000, guid: 3469be7c6d4134349bd2dff06d0368ac, type: 2}
-  firstPersonModifier: {fileID: 11400000, guid: 6fe59240ca8b0624fa4655824e47b0da, type: 2}
+  firstPersonModifier: {fileID: 11400000, guid: 6fe59240ca8b0624fa4655824e47b0da,
+    type: 2}
   blockCameraDrag: {fileID: 11400000, guid: 007cc40d489e1ef44857ad3377a33220, type: 2}
   ortographicEnabled: {fileID: 11400000, guid: f355096a1bcfa0c4e9e47f58709c684e, type: 2}
   focusOnObject: {fileID: 11400000, guid: 3ed3264eac0feca4aad3b5ab381cc70f, type: 2}
   focusAngle: 45
   focusDistanceMultiplier: 2
+  orthographicSwitcher: {fileID: 0}
 --- !u!20 &1107191816428015816
 Camera:
   m_ObjectHideFlags: 0
@@ -167,6 +169,7 @@ MonoBehaviour:
   m_Dithering: 0
   m_ClearDepth: 1
   m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
   m_UseScreenCoordOverride: 0
   m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
@@ -174,48 +177,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
---- !u!114 &6567033620470696027
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1107191816428015814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7204b9895ddf9b41af954d4cd920ec6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ingoringInput: 0
-  lockDraggingInput: 0
-  isDragging: 0
-  horizontalInput: {fileID: 11400000, guid: 93242d5c5434ab44c966480e1ff5c8d5, type: 2}
-  verticalInput: {fileID: 11400000, guid: 22faa7b25fade4845812eab67089a12b, type: 2}
-  lookInput: {fileID: 11400000, guid: 2c3816b621c39ad4f8e5937537db770d, type: 2}
-  flyInput: {fileID: 11400000, guid: 6526f090bbfb8a6428528ca199ab146c, type: 2}
-  rotateInput: {fileID: 11400000, guid: c54d68801db42554a8595eef05767c38, type: 2}
-  zoomInput: {fileID: 11400000, guid: 423bbb8003e87cb4589f152e3b8d033b, type: 2}
-  upDownInput: {fileID: 11400000, guid: 3ff45f65e26c59542a8e4f3772860382, type: 2}
-  pointerPosition: {fileID: 11400000, guid: 39c03474ebbc57248b389422f44ff77b, type: 2}
-  draggingModifier: {fileID: 11400000, guid: f46052d916c896c4c88fefc825961beb, type: 2}
-  rotateModifier: {fileID: 11400000, guid: 3469be7c6d4134349bd2dff06d0368ac, type: 2}
-  firstPersonModifier: {fileID: 11400000, guid: 6fe59240ca8b0624fa4655824e47b0da, type: 2}
-  pauseHeavyProcess: {fileID: 11400000, guid: 8e2a533380abfec4dbcc38a827eac488, type: 2}
-  inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6, type: 3}
-  lockInputLayers:
-    serializedVersion: 2
-    m_Bits: 32
-  pinchStrength: 3000
-  rotateThreshold: 0
-  touchRotateMultiplier: 10000
-  pitchThreshold: 10
-  touchPitchMultiplier: 5000
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!114 &262063079913678507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,3 +215,43 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 887
   m_MaxRayIntersections: 0
+--- !u!114 &6567033620470696027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107191816428015814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7204b9895ddf9b41af954d4cd920ec6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ingoringInput: 0
+  lockDraggingInput: 0
+  isDragging: 0
+  horizontalInput: {fileID: 11400000, guid: 93242d5c5434ab44c966480e1ff5c8d5, type: 2}
+  verticalInput: {fileID: 11400000, guid: 22faa7b25fade4845812eab67089a12b, type: 2}
+  lookInput: {fileID: 11400000, guid: 2c3816b621c39ad4f8e5937537db770d, type: 2}
+  flyInput: {fileID: 11400000, guid: 6526f090bbfb8a6428528ca199ab146c, type: 2}
+  rotateInput: {fileID: 11400000, guid: c54d68801db42554a8595eef05767c38, type: 2}
+  zoomInput: {fileID: 11400000, guid: 423bbb8003e87cb4589f152e3b8d033b, type: 2}
+  upDownInput: {fileID: 11400000, guid: 3ff45f65e26c59542a8e4f3772860382, type: 2}
+  pointerPosition: {fileID: 11400000, guid: 39c03474ebbc57248b389422f44ff77b, type: 2}
+  draggingModifier: {fileID: 11400000, guid: f46052d916c896c4c88fefc825961beb, type: 2}
+  rotateModifier: {fileID: 11400000, guid: 3469be7c6d4134349bd2dff06d0368ac, type: 2}
+  firstPersonModifier: {fileID: 11400000, guid: 6fe59240ca8b0624fa4655824e47b0da,
+    type: 2}
+  pauseHeavyProcess: {fileID: 11400000, guid: 8e2a533380abfec4dbcc38a827eac488, type: 2}
+  inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6,
+    type: 3}
+  lockInputLayers:
+    serializedVersion: 2
+    m_Bits: 32
+  pinchStrength: 3000
+  rotateThreshold: 0
+  touchRotateMultiplier: 10000
+  pitchThreshold: 10
+  touchPitchMultiplier: 5000
+  scrollScaleValue: 0.2
+  useZoomScaleValue: 0
