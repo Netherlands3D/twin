@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace Netherlands3D.Functionalities.Wms
+namespace Netherlands3D.Functionalities.Wms.UI
 {
     public class LegendClampHeight : MonoBehaviour
     {

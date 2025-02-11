@@ -1,39 +1,60 @@
-using Netherlands3D.Twin.Layers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Web;
 using UnityEngine.Networking;
-using System.Xml;
+using Netherlands3D.OgcWebServices.Shared;
+using Netherlands3D.Functionalities.Wms.UI;
 using Netherlands3D.Twin.UI;
 
 namespace Netherlands3D.Functionalities.Wms
 {
+    public class LegendUrlContainer
+    {
+        public string GetCapabilitiesUrl;
+        public Dictionary<string, string> LayerNameLegendUrlDictionary;
+
+        public LegendUrlContainer(string getCapabilitiesUrl, Dictionary<string, string> legendDictionary)
+        {
+            GetCapabilitiesUrl = getCapabilitiesUrl;
+            LayerNameLegendUrlDictionary = legendDictionary;
+        }
+    }
+    
     public class Legend : MonoBehaviour
     {
+        [SerializeField] private GameObject mainPanel;
+        [SerializeField] private RectTransform inactive;
+        [SerializeField] private LegendImage graphicPrefab;
+
+        private LegendClampHeight legendClampHeight;
+        private ContentFitterRefresh mainPanelContentFitterRefresh;
+            
+        public static Dictionary<string, LegendUrlContainer> LegendUrlDictionary = new(); //key: getCapabilities url, Value: legend urls for that GetCapabilities
+        private List<string> pendingRequests = new();
+        private string activeLegendUrl;
+        private Coroutine runningCoroutine;
+        private List<LegendImage> graphics = new List<LegendImage>();
+
+        private static Legend instance;
         public static Legend Instance
         {
             get
             {
                 if (instance == null)
-                {   
+                {
                     instance = FindObjectOfType<Legend>(true);
                 }
+
                 return instance;
             }
         }
 
-        private static Legend instance;
-
-        [SerializeField] private RectTransform inactive;
-        [SerializeField] private LegendImage graphicPrefab;
-
-        public LayerData CurrentLayer { get; set; }
-
-        private List<LegendImage> graphics = new List<LegendImage>();
-
+        private void Awake()
+        {
+            legendClampHeight = GetComponentInChildren<LegendClampHeight>(true);
+            mainPanelContentFitterRefresh = mainPanel.GetComponent<ContentFitterRefresh>();
+        }
 
         public void AddGraphic(Sprite sprite)
         {
@@ -42,83 +63,106 @@ namespace Netherlands3D.Functionalities.Wms
             image.SetSprite(sprite);
             graphics.Add(image);
 
-            GetComponentInChildren<LegendClampHeight>()?.AdjustRectHeight();
-            GetComponent<ContentFitterRefresh>()?.RefreshContentFitters();
+            legendClampHeight.AdjustRectHeight();
+            mainPanelContentFitterRefresh.RefreshContentFitters();
         }
 
-        public void ClearGraphics()
+        private void ClearGraphics()
         {
             if (graphics.Count == 0)
                 return;
-
-            for(int i = graphics.Count - 1; i >= 0; i--)
+        
+            for (int i = graphics.Count - 1; i >= 0; i--)
             {
                 Destroy(graphics[i].gameObject);
             }
+        
             graphics.Clear();
         }
 
-        public void LoadLegend(LayerGameObject obj)
+        public void GetLegendUrl(string layerUrl, Action<LegendUrlContainer> callback)
         {
-            if (CurrentLayer == obj.LayerData.ParentLayer)
-                return;
+            var getCapabilitiesURL = OgcWebServicesUtility.CreateGetCapabilitiesURL(layerUrl, ServiceType.Wms);
 
-            CurrentLayer = obj.LayerData.ParentLayer;
-
-            ILayerWithPropertyData layer = obj as ILayerWithPropertyData;
-            LayerURLPropertyData propertyData = layer.PropertyData as LayerURLPropertyData;
-            var legendUri = new UriBuilder(propertyData.Data.GetLeftPart(UriPartial.Path));
-            legendUri.SetQueryParameter("service", "wms");
-            legendUri.SetQueryParameter("request", "getcapabilities");
-            StartCoroutine(GetCapabilities(legendUri.Uri.ToString(), legendUrls =>
+            if (LegendUrlDictionary.ContainsKey(getCapabilitiesURL))
             {
-                StartCoroutine(GetLegendGraphics(legendUrls));
-            }));
+                callback.Invoke(LegendUrlDictionary[getCapabilitiesURL]);
+                return;
+            }
+
+            if (pendingRequests.Contains(getCapabilitiesURL))
+            {
+                StartCoroutine(WaitForExistingRequestToComplete(getCapabilitiesURL, callback));
+                return;
+            }
+
+            if (!OgcWebServicesUtility.IsValidUrl(new Uri(getCapabilitiesURL), RequestType.GetCapabilities))
+            {
+                Debug.LogError("Bounding boxes not in dictionary, and invalid getCapabilities url provided");
+                callback.Invoke(null);
+                return;
+            }
+
+            StartCoroutine(RequestLegendUrls(getCapabilitiesURL, callback));
         }
 
-        private IEnumerator GetCapabilities(string url, Action<List<string>> callBack)
+        private IEnumerator WaitForExistingRequestToComplete(string url, Action<LegendUrlContainer> callback)
         {
-            UnityWebRequest webRequest = UnityWebRequest.Get(url);
+            while (pendingRequests.Contains(url))
+            {
+                yield return null;
+            }
+
+            callback.Invoke(LegendUrlDictionary[url]);
+        }
+
+        private IEnumerator RequestLegendUrls(string getCapabilitiesURL, Action<LegendUrlContainer> onLegendUrlsReceived)
+        {
+            UnityWebRequest webRequest = UnityWebRequest.Get(getCapabilitiesURL);
             yield return webRequest.SendWebRequest();
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogWarning($"Could not download {url}");
+                Debug.LogWarning($"Could not download legends at {getCapabilitiesURL}");
             }
             else
             {
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(webRequest.downloadHandler.text);
-                XmlNamespaceManager namespaceManager = new XmlNamespaceManager(doc.NameTable);
-                namespaceManager.AddNamespace("xlink", "http://www.w3.org/1999/xlink"); // Update this URI if necessary
-
-                List<string> legendUrls = new List<string>();
-                XmlNodeList layers = doc.GetElementsByTagName("Layer");
-                foreach (XmlNode layer in layers)
-                {
-                    XmlNodeList legendNodes = layer.SelectNodes(".//*[local-name()='LegendURL']/*[local-name()='OnlineResource']", namespaceManager);
-                    foreach (XmlNode legendNode in legendNodes)
-                    {
-                        string legendUrl = legendNode.Attributes["xlink:href"]?.Value;
-                        if (!string.IsNullOrEmpty(legendUrl) && !legendUrls.Contains(legendUrl))
-                        {
-                            legendUrls.Add(legendUrl);
-                        }
-                    }
-                }
-                callBack.Invoke(legendUrls);
+                var getCapabilities = new WmsGetCapabilities(new Uri(getCapabilitiesURL), webRequest.downloadHandler.text);
+                var legendUrls = new LegendUrlContainer(getCapabilitiesURL, getCapabilities.GetLegendUrls());
+                LegendUrlDictionary[getCapabilitiesURL] = legendUrls;
+                onLegendUrlsReceived.Invoke(legendUrls);
             }
         }
 
-        private IEnumerator GetLegendGraphics(List<string> urls)
+        public void ShowLegend(string wmsUrl, bool show)
         {
-            ShowInactive(urls.Count == 0);
+            var getCapabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsUrl, ServiceType.Wms);
+            mainPanel.SetActive(show);
+            if (activeLegendUrl == getCapabilitiesUrl)
+            {
+                if (!show)
+                    activeLegendUrl = null;
+                return; //legend that should be set active is already loaded, so no further action is needed.
+            }
+
+            if (runningCoroutine != null)
+                StopCoroutine(runningCoroutine);
+            
             ClearGraphics();
-            if (urls.Count == 0)
+            var urlContainer = LegendUrlDictionary[getCapabilitiesUrl];
+            activeLegendUrl = getCapabilitiesUrl;
+            
+            runningCoroutine = StartCoroutine(GetLegendGraphics(urlContainer));
+        }
+        
+        private IEnumerator GetLegendGraphics(LegendUrlContainer urlContainer)
+        {
+            ShowInactive(urlContainer.LayerNameLegendUrlDictionary.Count == 0);
+            if (urlContainer.LayerNameLegendUrlDictionary.Count == 0)
             {
                 yield break;
             }
 
-            foreach (string url in urls)
+            foreach (string url in urlContainer.LayerNameLegendUrlDictionary.Values)
             {
                 UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(url);
                 yield return webRequest.SendWebRequest();
@@ -133,10 +177,9 @@ namespace Netherlands3D.Functionalities.Wms
             }
         }
 
-        public void ShowInactive(bool show)
+        private void ShowInactive(bool show)
         {
             inactive.gameObject.SetActive(show);
         }
-
     }
 }
