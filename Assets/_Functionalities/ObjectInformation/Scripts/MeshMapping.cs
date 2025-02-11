@@ -1,11 +1,8 @@
 ﻿using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Utility;
-using System;
 using System.Collections.Generic;
-using Unity.Collections;
 using UnityEngine;
-using UnityEngine.XR;
 
 namespace Netherlands3D.Functionalities.ObjectInformation 
 {
@@ -84,21 +81,16 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return boundingBox;
         }
 
-        public void RemoveItems()
+        public void DebugBounds(Color color)
         {
-
+            if (items != null)
+            {
+                foreach (MeshMappingItem item in items)
+                {
+                    item.BoundingBox.Debug(color);
+                }
+            }
         }
-
-        //void Debug(Color color)
-        //{
-        //    if(items != null)
-        //    {
-        //        foreach (MeshMappingItem item in items)
-        //        {
-        //            item.BoundingBox.Debug(color);
-        //        }
-        //    }
-        //}
     }
 
     public class MeshMappingItem 

@@ -200,7 +200,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
 			if (!clickedSamePosition || refreshSelection)
 			{
-                featureSelector.SetBlockingObjectMapping(subObjectSelector.Object.ObjectMapping, lastWorldClickedPosition);
+				if(subObjectSelector.Object != null)
+					featureSelector.SetBlockingObjectMapping(subObjectSelector.Object.ObjectMapping, lastWorldClickedPosition);
 
                 //no features are imported yet if mappingTreeInstance is null
                 if (mappingTreeInstance != null)
