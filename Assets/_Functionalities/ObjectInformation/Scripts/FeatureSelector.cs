@@ -6,12 +6,31 @@ using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Samplers;
+using Netherlands3D.Twin;
+using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Utility;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class FeatureSelector : MonoBehaviour, IObjectSelector
-    {
-        public bool HasFeatureMapping { get { return featureMappings.Count > 0; } }
+    {      
+        public static FeatureMappingTree MappingTree
+        {
+            get
+            {
+                if(mappingTreeInstance == null)
+                {
+                    //bottomleft and topright corners of the netherlands
+                    Coordinate bottomLeft = new Coordinate(CoordinateSystem.WGS84_LatLon, 50.8037d, 3.31497d);
+                    Coordinate topRight = new Coordinate(CoordinateSystem.WGS84_LatLon, 53.5104d, 7.09205d);
+                    BoundingBox bbox = new BoundingBox(bottomLeft, topRight);
+                    FeatureMappingTree tree = new FeatureMappingTree(bbox, 16, 12);
+                    mappingTreeInstance = tree;
+                }
+                return mappingTreeInstance;
+            }            
+        }
+        public bool HasFeatureMapping => featureMappings.Count > 0;
         public bool HasPolygons
         {
             get
@@ -21,22 +40,16 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     .Any(featureMapping => featureMapping.VisualisationLayer.IsPolygon);
             }
         }
-
+        public bool debugMappingTree = false;
         public List<FeatureMapping> FeatureMappings => featureMappings.SelectMany(entry => entry.Value).ToList();
 
+        private static FeatureMappingTree mappingTreeInstance;
         private GameObject testHitPosition;
         private GameObject testGroundPosition;
         private Dictionary<GeoJsonLayerGameObject, List<FeatureMapping>> featureMappings = new();
-        private Camera mainCamera;
-        private RaycastHit[] raycastHits = new RaycastHit[16];
-
-        [SerializeField] private float hitDistance = 100000f;
-        private float pointHitRadius = 1f; //when points are meshscale 5
-        private float lineHitRadius = 1f;
-
+        private Camera mainCamera;       
         private ObjectMapping blockingObjectMapping;
         private Vector3 blockingObjectMappingHitPoint;
-
         private PointerToWorldPosition pointerToWorldPosition;
 
         private void Awake()
@@ -68,79 +81,41 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             this.blockingObjectMappingHitPoint = blockingObjectMappingHitPoint;
         }
 
-        public void FindFeature(Ray ray)
-        {
-            Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
+        public void FindFeature()
+        {            
             Vector3 groundPosition = pointerToWorldPosition.WorldPoint;
             featureMappings.Clear();
+
+            //no features are imported yet
+            if (mappingTreeInstance == null)
+                return;
+
             if (blockingObjectMapping != null)
             {
-                //clear the hit list or else it will use previous collider values
-                raycastHits = new RaycastHit[raycastHits.Length];
-                Collider potentialCollider = blockingObjectMapping.GetComponent<Collider>();
-                if (Physics.RaycastNonAlloc(new Ray(blockingObjectMappingHitPoint, Vector3.down), raycastHits, hitDistance) > 0)
+                Coordinate blockingCoordinate = new Coordinate(blockingObjectMappingHitPoint);
+                List<FeatureMapping> potentialMappingsUnderBlockingObject = mappingTreeInstance.QueryMappingsContainingNode(blockingCoordinate);
+                foreach (FeatureMapping map in potentialMappingsUnderBlockingObject)
                 {
-                    for (int i = 0; i < raycastHits.Length; i++)
+                    Vector3 hitPoint;
+                    if (map.IsPositionHit(blockingCoordinate, map.VisualisationLayer.GetSelectionRange(), out hitPoint))
                     {
-                        if (raycastHits[i].collider == null || raycastHits[i].collider == potentialCollider) continue;
+                        groundPosition = hitPoint;
 
-                        FeatureMapping mapping = raycastHits[i].collider.gameObject.GetComponent<FeatureMapping>();
-                        if (mapping != null)
-                        {
-                            groundPosition = raycastHits[i].point;
-                            break;
-                        }
                     }
                 }
             }
-
             //please dont remove as this can be very useful to check where the user clicked
             //ShowFeatureDebuggingIndicator(groundPosition);
 
-            //clear the hit list or else it will use previous collider values
-            raycastHits = new RaycastHit[raycastHits.Length];
-
-            if (Physics.SphereCastNonAlloc(groundPosition, Mathf.Max(pointHitRadius, lineHitRadius), Vector3.down, raycastHits, hitDistance) > 0)
+            Coordinate targetCoordinate = new Coordinate(groundPosition);
+            List<FeatureMapping> foundMappings = mappingTreeInstance.QueryMappingsContainingNode(targetCoordinate);
+            foreach(FeatureMapping map in foundMappings)
             {
-                for (int i = 0; i < raycastHits.Length; i++)
+                Vector3 hitPoint;
+                if (map.IsPositionHit(targetCoordinate, map.VisualisationLayer.GetSelectionRange(), out hitPoint))
                 {
-                    if (raycastHits[i].collider == null) continue;
-
-                    FeatureMapping mapping = raycastHits[i].collider.gameObject.GetComponent<FeatureMapping>();
-                    if (mapping == null) continue;      
-                    
-                    if(mapping.VisualisationLayer is GeoJSONPointLayer)
-                    {
-                        Vector3 closestPoint = raycastHits[i].collider.ClosestPoint(new Vector3(groundPosition.x, raycastHits[i].collider.bounds.center.y, groundPosition.z)); //xz plane 2d distance check
-                        closestPoint.y = groundPosition.y; //make points equal in xz plane
-                        float dist = Vector3.SqrMagnitude(groundPosition - closestPoint);// Vector3.Distance(closestPoint, groundPosition);
-                        if (dist > pointHitRadius*pointHitRadius)
-                            continue;
-                    }
-
-                    featureMappings.TryAdd(mapping.VisualisationParent, new List<FeatureMapping>());
-                    featureMappings[mapping.VisualisationParent].Add(mapping);
-                }
-            }
-
-            //not ideal but better than caching, would be better to have an quadtree approach here
-            FeatureMapping[] mappings = FindObjectsOfType<FeatureMapping>().Where(fm => fm.VisualisationLayer.IsPolygon).ToArray();
-            for (int i = 0; i < mappings.Length; i++)
-            {
-                GeoJSONPolygonLayer polygonLayer = mappings[i].VisualisationLayer as GeoJSONPolygonLayer;
-                if (polygonLayer == null) continue;
-
-                List<Mesh> meshes = mappings[i].FeatureMeshes;
-
-                for (int j = 0; j < meshes.Count; j++)
-                {
-                    PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes);
-                    bool isSelected = ProcessPolygonSelection(meshes[j], pv.transform, mainCamera, frustumPlanes, groundPosition);
-                    if (!isSelected) continue;
-
-                    featureMappings.TryAdd(mappings[i].VisualisationParent, new List<FeatureMapping>());
-                    featureMappings[mappings[i].VisualisationParent].Add(mappings[i]);
-                    //return; what if there are multiple overlapping polygons
+                    featureMappings.TryAdd(map.VisualisationParent, new List<FeatureMapping>());
+                    featureMappings[map.VisualisationParent].Add(map);
                 }
             }
         }
@@ -153,14 +128,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 testHitPosition.transform.localScale = Vector3.one * 3;
 
                 testGroundPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                testGroundPosition.transform.localScale = Vector3.one * Mathf.Max(lineHitRadius, pointHitRadius);
+                testGroundPosition.transform.localScale = Vector3.one * 2.5f;
                 testGroundPosition.GetComponent<MeshRenderer>().material.color = Color.red;
             }
 
             testGroundPosition.transform.position = groundPosition + Vector3.up * 5f;
         }
 
-        public static bool ProcessPolygonSelection(Mesh polygon, Transform transform, Camera camera, Plane[] frustumPlanes, Vector3 worldPoint)
+        public static bool ProcessPolygonSelection(Mesh polygon, Transform transform, Plane[] frustumPlanes, Vector3 worldPoint)
         {
             Bounds localBounds = polygon.bounds;
             Matrix4x4 localToWorld = transform.localToWorldMatrix;
@@ -229,6 +204,272 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             var d = Vector3.Dot(v, line);
             d = Mathf.Clamp(d, 0f, len);
             return start + line * d;
+        }
+
+        public void OnDrawGizmos()
+        {
+            if(debugMappingTree)
+                MappingTree.DebugTree();
+        }
+    }
+
+    public sealed class FeatureMappingTree
+    {
+        private class Node
+        {
+            public BoundingBox Bounds;
+            public List<FeatureMapping> Mappings = new();
+            public Node[] Children;
+            public bool IsLeaf => Children == null;
+
+            public Node(BoundingBox bounds)
+            {
+                Bounds = bounds;
+                Children = null;
+            }
+        }
+
+        private readonly Node root;
+        private readonly int maxMappings;
+        private readonly int maxDepth;
+
+        public FeatureMappingTree(BoundingBox bounds, int maxObjects = 4, int maxDepth = 10)
+        {
+            root = new Node(bounds);
+            this.maxMappings = maxObjects;
+            this.maxDepth = maxDepth;
+        }
+
+        public void RootInsert(FeatureMapping obj) => Insert(root, obj, 0);
+
+        private void Insert(Node node, FeatureMapping obj, int depth)
+        {
+            if (!node.Bounds.Contains(obj.BoundingBox)) return;
+
+            if (node.IsLeaf)
+            {
+                node.Mappings.Add(obj);              
+                if ((node.Mappings.Count > maxMappings && depth < maxDepth) || CouldFitInChild(node, obj))
+                {
+                    Subdivide(node);
+                    ReinsertObjects(node);
+                }
+            }
+            else
+            {
+                bool inserted = false;
+                foreach (var child in node.Children)
+                {
+                    if (child.Bounds.Contains(obj.BoundingBox))
+                    {
+                        Insert(child, obj, depth + 1);
+                        inserted = true;
+                        break; 
+                    }
+                }
+
+                //no child fits so up 1 level
+                if (!inserted)
+                    node.Mappings.Add(obj);
+            }
+        }
+
+        public void Remove(FeatureMapping obj)
+        {
+            bool isRemoved = Remove(root, obj);
+        }
+
+        private bool Remove(Node node, FeatureMapping obj)
+        {
+            if (!node.Bounds.Contains(obj.BoundingBox)) return false;
+            
+            if (node.Mappings.Remove(obj))
+                return true;
+          
+            if (!node.IsLeaf)
+            {
+                foreach (var child in node.Children)
+                {
+                    if (Remove(child, obj))
+                    {
+                        MergeCheck(node);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private void MergeCheck(Node node)
+        {
+            if (node.IsLeaf) return; 
+
+            int totalMappings = 0;
+
+            foreach (var child in node.Children)
+            {
+                if (!child.IsLeaf)
+                    return;
+
+                totalMappings += child.Mappings.Count;
+
+            }
+
+            if (totalMappings == 0)
+                node.Children = null;
+        }
+
+        public List<FeatureMapping> Query(BoundingBox area)
+        {
+            List<FeatureMapping> results = new();
+            Query(root, area, results);
+            return results;
+        }
+
+        public List<FeatureMapping> Query(Coordinate coordinate)
+        {
+            List<FeatureMapping> results = new();
+            Query(root, coordinate, results);
+            return results;
+        }
+
+        /// <summary>
+        /// returns a list of featuremappings of featuremappings boundingboxes contain the input coordinate
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="coordinate"></param>
+        /// <param name="results"></param>
+        public List<FeatureMapping> QueryMappingsContainingNode(Coordinate coordinate)
+        {
+            List<FeatureMapping> results = new();
+            QueryMappingsContainingNode(root, coordinate, results);
+            return results;
+        }
+
+        private void Query(Node node, Coordinate coordinate, List<FeatureMapping> results)
+        {
+            if (!node.Bounds.Contains(coordinate)) return;
+
+            results.AddRange(node.Mappings);
+
+            if (!node.IsLeaf)
+            {
+                foreach (var child in node.Children)
+                    Query(child, coordinate, results);
+            }
+        }
+
+        private void Query(Node node, BoundingBox area, List<FeatureMapping> results)
+        {
+            if (!node.Bounds.Intersects(area)) return;
+
+            results.AddRange(node.Mappings);
+
+            if (!node.IsLeaf)
+            {
+                foreach (var child in node.Children)
+                    Query(child, area, results);
+            }
+        }
+
+        /// <summary>
+        /// returns a list of featuremappings of featuremappings boundingboxes contain the input coordinate
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="coordinate"></param>
+        /// <param name="results"></param>
+        private void QueryMappingsContainingNode(Node node, Coordinate coordinate, List<FeatureMapping> results)
+        {
+            if (!node.Bounds.Contains(coordinate)) return;
+
+            foreach (FeatureMapping mapping in node.Mappings)
+                if (mapping.BoundingBox.Contains(coordinate))
+                    results.Add(mapping);
+
+            if (!node.IsLeaf)
+            {
+                foreach (var child in node.Children)
+                    QueryMappingsContainingNode(child, coordinate, results);
+            }
+        }
+
+        //lets keep the tree in a uniform coordinatesystem
+        private void Subdivide(Node node)
+        {            
+            BoundingBox bottomLeftCell;
+            BoundingBox bottomRightCell;
+            BoundingBox topLeftCell;
+            BoundingBox topRightCell;
+            GetSubdividedBoundingBoxes(node, out bottomLeftCell, out bottomRightCell, out topLeftCell, out topRightCell);
+
+            node.Children = new[]
+            {
+                new Node(bottomLeftCell),
+                new Node(bottomRightCell),
+                new Node(topLeftCell),
+                new Node(topRightCell)
+            };
+        }
+
+        private bool CouldFitInChild(Node node, FeatureMapping mapping)
+        {
+            BoundingBox bottomLeftCell;
+            BoundingBox bottomRightCell;
+            BoundingBox topLeftCell;
+            BoundingBox topRightCell;
+            GetSubdividedBoundingBoxes(node, out bottomLeftCell, out bottomRightCell, out topLeftCell, out topRightCell);            
+
+            return bottomLeftCell.Contains(mapping.BoundingBox) ||
+                bottomRightCell.Contains(mapping.BoundingBox) ||
+                topLeftCell.Contains(mapping.BoundingBox) ||
+                topRightCell.Contains(mapping.BoundingBox);
+        }
+
+        private void GetSubdividedBoundingBoxes(Node node, out BoundingBox bottomLeft, out BoundingBox bottomRight, out BoundingBox topLeft, out BoundingBox topRight)
+        {
+            if (node.Bounds.CoordinateSystem != CoordinateSystem.WGS84_LatLon) //we need a 2 dimensional coordinatesystem to do the subdivision
+                node.Bounds.Convert(CoordinateSystem.WGS84_LatLon);
+
+            Coordinate bl = node.Bounds.BottomLeft;
+            Coordinate tr = node.Bounds.TopRight;
+            Coordinate center = node.Bounds.Center;
+            Coordinate bottomCenter = new Coordinate(CoordinateSystem.WGS84_LatLon, center.value1, bl.value2);
+            Coordinate rightCenter = new Coordinate(CoordinateSystem.WGS84_LatLon, tr.value1, center.value2);
+            Coordinate leftCenter = new Coordinate(CoordinateSystem.WGS84_LatLon, bl.value1, center.value2);
+            Coordinate topCenter = new Coordinate(CoordinateSystem.WGS84_LatLon, center.value1, tr.value2);
+
+            bottomLeft = new BoundingBox(bl, center);
+            bottomRight = new BoundingBox(bottomCenter, rightCenter);
+            topLeft = new BoundingBox(leftCenter, topCenter);
+            topRight = new BoundingBox(center, tr);
+        }
+
+        private void ReinsertObjects(Node node)
+        {
+            var objs = node.Mappings;
+            node.Mappings = new List<FeatureMapping>();
+            foreach (var obj in objs) 
+                RootInsert(obj);
+        }
+
+        public void DebugTree()
+        {
+            DebugNode(root, true);
+        }
+
+        private void DebugNode(Node node, bool recursive)
+        {
+            node.Bounds.Debug(Color.green);
+            foreach (FeatureMapping mapping in node.Mappings)
+                Debug.DrawLine(mapping.BoundingBox.BottomLeft.ToUnity(), node.Bounds.BottomLeft.ToUnity(), Color.red);
+
+            foreach (FeatureMapping mapping in node.Mappings)
+                mapping.BoundingBox.Debug(Color.magenta);
+
+            if (recursive && !node.IsLeaf)
+                foreach (Node child in node.Children)
+                    DebugNode(child, recursive);
         }
     }
 }
