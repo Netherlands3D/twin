@@ -114,6 +114,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2623645220532331873}
+    - targetCorrespondingSourceObject: {fileID: 1107191816428015814, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4643924372783499398}
   m_SourcePrefab: {fileID: 100100000, guid: 8a8c1bdd94f08d144a7410a838c895ad, type: 3}
 --- !u!1 &5315891981602308680 stripped
 GameObject:
@@ -133,7 +137,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {fileID: 0}
   worldTransformShifter: {fileID: 0}
   referenceCoordinateSystem: 2
   onPreShift:
@@ -166,4 +169,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df4aa35a0a27a974c8bc719b6377f1a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  project: {fileID: 11400000, guid: 7ccd35fc676b4ba41b52cfdea07e34ef, type: 2}
+--- !u!114 &4643924372783499398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5315891981602308680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 461fc492db7994661830a425f59db7b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSizeLimit: 20000
+  zoomSizeLimit: 2000
+  defaultCameraDistance: 300
