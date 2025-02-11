@@ -1,5 +1,6 @@
 using System;
 using Netherlands3D.Coordinates;
+using UnityEngine;
 
 namespace Netherlands3D.Twin.Utility
 {
@@ -11,16 +12,16 @@ namespace Netherlands3D.Twin.Utility
 
         public BoundingBox(Coordinate bottomLeft, Coordinate topRight)
         {
-            if (bottomLeft.Points[0] > topRight.Points[0] || bottomLeft.Points[1] > topRight.Points[1])
+            if (topRight.CoordinateSystem != bottomLeft.CoordinateSystem)
+            {
+                topRight = topRight.Convert((CoordinateSystem)bottomLeft.CoordinateSystem);
+            }
+            
+            if (bottomLeft.easting > topRight.easting || bottomLeft.northing > topRight.northing)
             {
                 throw new ArgumentException(
                     "Invalid coordinates for BoundingBox. BottomLeft should have lower values than TopRight."
                 );
-            }
-
-            if (topRight.CoordinateSystem != bottomLeft.CoordinateSystem)
-            {
-                topRight = topRight.Convert((CoordinateSystem)bottomLeft.CoordinateSystem);
             }
 
             BottomLeft = bottomLeft;
