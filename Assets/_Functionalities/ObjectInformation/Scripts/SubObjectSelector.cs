@@ -9,13 +9,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     public class SubObjectSelector : MonoBehaviour, IObjectSelector
     {
         public bool HasObjectMapping => foundObject != null;
-        public ObjectMapping Object => foundObject; 
-        public string ObjectID => foundId; 
+        public MeshMapping Object => foundObject; 
 
-        [SerializeField] private float hitDistance = 100000f;
         private ColorSetLayer ColorSetLayer { get; set; } = new(0, new());
-        private ObjectMapping foundObject;
-        private string foundId;
+        private MeshMapping foundObject;
 
         private PointerToWorldPosition pointerToWorldPosition;
 
@@ -46,13 +43,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             foundObject = null;
             string bagId = null;
-            //if (!Physics.Raycast(ray, out hit, hitDistance)) return null;
-
-            //// lets use a capsule cast here to ensure objects are hit (some objects for features are really small) and
-            //// use a nonalloc to prevent memory allocations
-            //var objectMapping = hit.collider.gameObject.GetComponent<ObjectMapping>();
-            //if (!objectMapping) return null;
-
             Vector3 groundPosition = pointerToWorldPosition.WorldPoint;
             Coordinate coord = new Coordinate(groundPosition);
             List<IMapping> mappings = BagInspector.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
@@ -62,11 +52,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             foreach (MeshMapping mapping in mappings)
             {                
                 ObjectMapping objectMapping = mapping.ObjectMapping;
-                //var bagId = objectMapping.getObjectID(hit.triangleIndex);
                 MeshMappingItem item = mapping.FindItemForPosition(groundPosition);
                 if (item != null)
                 {
-                    foundObject = objectMapping;
+                    foundObject = mapping;
                     bagId = item.ObjectMappingItem.objectID;
                     break;
                 }

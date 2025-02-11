@@ -4,6 +4,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public interface IMapping 
     {
+        public object MappingObject { get; }
         public BoundingBox BoundingBox { get; }
     }
 }

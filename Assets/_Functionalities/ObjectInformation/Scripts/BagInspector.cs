@@ -69,7 +69,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 		private FeatureSelector featureSelector;
 		private SubObjectSelector subObjectSelector;
 
-		private List<GameObject> orderedMappings = new List<GameObject>();
+		private List<IMapping> orderedMappings = new List<IMapping>();
 		private float minClickDistance = 10;
 		private float minClickTime = 0.5f;
 		private float lastTimeClicked = 0;
@@ -113,7 +113,15 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 			HideObjectInformation();
 		}
 
-        
+        private void Start()
+        {
+			//baginspector could be enabled later on, so it would be missing the already instantiated mappings
+			ObjectMapping[] alreadyActiveMappings = FindObjectsOfType<ObjectMapping>();
+			foreach (ObjectMapping mapping in alreadyActiveMappings)
+			{
+				OnAddObjectMapping(mapping);
+			}
+        }
 
         private void OnAddObjectMapping(ObjectMapping mapping)
 		{
@@ -179,15 +187,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         /// </summary>
         private void FindObjectMapping()
 		{
-			Deselect();		
-
-			// Raycast from pointer position using main camera
-			var position = Pointer.current.position.ReadValue();
-			var ray = mainCamera.ScreenPointToRay(position);
+			Deselect();	
 
 			//the following method calls need to run in order!
-			string bagId = subObjectSelector.FindSubObject();			
-			//if (hit.collider == null) return;			
+			string bagId = subObjectSelector.FindSubObject();	
 
 			bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.WorldPoint) < minClickDistance;
 			lastWorldClickedPosition = pointerToWorldPosition.WorldPoint;
@@ -197,14 +200,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
 			if (!clickedSamePosition || refreshSelection)
 			{
-                featureSelector.SetBlockingObjectMapping(subObjectSelector.Object, lastWorldClickedPosition);
+                featureSelector.SetBlockingObjectMapping(subObjectSelector.Object.ObjectMapping, lastWorldClickedPosition);
 
                 //no features are imported yet if mappingTreeInstance is null
                 if (mappingTreeInstance != null)
 					featureSelector.FindFeature(mappingTreeInstance);
 
 				orderedMappings.Clear();
-                Dictionary<GameObject, int> mappings = new Dictionary<GameObject, int>();		
+                Dictionary<IMapping, int> mappings = new Dictionary<IMapping, int>();		
                 //lets order all mappings by layerorder (rootindex) from layerdata
                 if (featureSelector.HasFeatureMapping)
 				{
@@ -221,17 +224,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 									continue;
 							}
 
-							mappings.TryAdd(feature.gameObject, feature.VisualisationParent.LayerData.RootIndex);
+							mappings.TryAdd(feature, feature.VisualisationParent.LayerData.RootIndex);
 						}
                     }
                 }
 				if (subObjectSelector.HasObjectMapping)
 				{
-					LayerGameObject subObjectParent = subObjectSelector.Object.transform.GetComponentInParent<LayerGameObject>();
+					LayerGameObject subObjectParent = subObjectSelector.Object.ObjectMapping.transform.GetComponentInParent<LayerGameObject>();
 					if (subObjectParent != null)
 					{
 						if(subObjectParent.LayerData.ActiveInHierarchy)
-							mappings.TryAdd(subObjectSelector.Object.gameObject, subObjectParent.LayerData.RootIndex);
+							mappings.TryAdd(subObjectSelector.Object, subObjectParent.LayerData.RootIndex);
 					}
 				}
 
@@ -251,14 +254,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
 			//Debug.Log(orderedMappings[currentSelectedMappingIndex]);
 
-			GameObject selection = orderedMappings[currentSelectedMappingIndex];
-			if (selection.GetComponent<ObjectMapping>())
+			IMapping selection = orderedMappings[currentSelectedMappingIndex];
+			if (selection is MeshMapping)
 			{				
 				SelectBuildingOnHit(bagId);
 			}
 			else
 			{
-                SelectFeatureOnHit(selection.GetComponent<FeatureMapping>());				
+                SelectFeatureOnHit(selection as FeatureMapping);				
 			}
         }
 
