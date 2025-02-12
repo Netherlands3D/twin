@@ -35,5 +35,5 @@ fi
 rm app.config.dist.json
 
 # Boot the application
-echo "Starting Webserver"
-nginx -g "daemon off;"
+echo "Starting Proxy and Webserver"
+node -r cors-anywhere proxy.js & nginx -g "daemon off;"
