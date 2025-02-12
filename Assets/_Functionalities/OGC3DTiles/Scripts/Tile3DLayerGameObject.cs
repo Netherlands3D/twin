@@ -13,10 +13,11 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.Functionalities.OGC3DTiles
 {
+    [RequireComponent(typeof(Read3DTileset))]
     public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, ILayerWithCredentials
     {
-        public override BoundingBox Bounds => throw new NotImplementedException(); //todo
-
+        public override BoundingBox Bounds => tileSet.root != null ? new BoundingBox(tileSet.root.BottomLeft, tileSet.root.TopRight) : null;
+        
         private Read3DTileset tileSet;
         [SerializeField] private bool usePropertySections = true;
         private List<IPropertySectionInstantiator> propertySections = new();
