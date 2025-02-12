@@ -9412,6 +9412,16 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9055551517361465053, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: hoverSize.x
+      value: 288
+      objectReference: {fileID: 0}
+    - target: {fileID: 9055551517361465053, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: hoverSize.y
+      value: 288
+      objectReference: {fileID: 0}
     - target: {fileID: 9062254053285077316, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -9465,6 +9475,21 @@ PrefabInstance:
     - target: {fileID: 9068130755622811387, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9102015529819190753, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9102015529819190753, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9102015529819190753, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9139313303826141759, guid: 9963fec33e379324db2affcb3f83332f,
