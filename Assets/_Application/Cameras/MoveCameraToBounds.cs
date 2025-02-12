@@ -35,6 +35,11 @@ namespace Netherlands3D.Twin.Cameras
                 throw new NullReferenceException("Bounds object is null, no bounds specified to center to.");
             }
 
+            if(bounds.BottomLeft.PointsLength > 2)
+                bounds.Convert(CoordinateSystem.RDNAP);
+            else
+                bounds.Convert(CoordinateSystem.RD);
+
             //move the camera to the center of the bounds, and move it back by the size of the bounds (2x the extents)
             var center = bounds.Center;
             var sizeMagnitude = bounds.GetSizeMagnitude(); //sizeMagnitude returns 2x the extents
@@ -70,7 +75,7 @@ namespace Netherlands3D.Twin.Cameras
                 var newOrigin = center.Convert(CoordinateSystem.WGS84); //2d coord system to get rid of height.
                 Origin.current.MoveOriginTo(newOrigin);
             }
-            
+
             camera.transform.position = center.ToUnity() - cameraDirection * (float)distance; //we can now use unity coordinates, as the origin has been shifted if needed.
         }
     }
