@@ -11,7 +11,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
     public class PolygonSelectionVisualisation : LayerGameObject, ILayerWithPropertyPanels
     {
-        public override BoundingBox Bounds => throw new NotImplementedException(); //todo
+        public override BoundingBox Bounds => throw new NotImplementedException();//new(PolygonVisualisation.bounds, transform.position);
         public PolygonVisualisation PolygonVisualisation { get; private set; }
         public Material PolygonMeshMaterial;
 

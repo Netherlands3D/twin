@@ -13,6 +13,13 @@ namespace Netherlands3D.Twin.Utility
 
         public CoordinateSystem CoordinateSystem { get; private set; }
 
+        public BoundingBox(Bounds bounds, Vector3 offset)
+        {
+            BottomLeft = new Coordinate(bounds.min + offset);
+            TopRight = new Coordinate(bounds.max + offset);
+            CoordinateSystem = (CoordinateSystem)BottomLeft.CoordinateSystem;
+        }
+        
         public BoundingBox(Coordinate bottomLeft, Coordinate topRight)
         {
             if (topRight.CoordinateSystem != bottomLeft.CoordinateSystem)
