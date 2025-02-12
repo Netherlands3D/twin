@@ -1,12 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.SelectionTools;
 using UnityEngine;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Samplers;
-using Netherlands3D.Twin;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Utility;
 
