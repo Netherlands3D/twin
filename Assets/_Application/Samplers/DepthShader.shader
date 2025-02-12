@@ -32,7 +32,6 @@ Shader "Custom/WorldPositionFromDepth"
 
             float4 frag(v2f i) : SV_Target
             {
-                // Sample depth texture
                 float depth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.uv);
 
                 // Convert from screen space to world space

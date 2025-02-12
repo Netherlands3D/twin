@@ -10,6 +10,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
+using Netherlands3D.Twin.Utility;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
@@ -172,37 +173,28 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                         }
                         mesh.vertices = vertices.ToArray();
                         mesh.triangles = triangles.ToArray();
-                        subObject.AddComponent<MeshCollider>();
                         subObject.AddComponent<MeshRenderer>().material = lineLayer.LineRenderer3D.LineMaterial;
-                    }
-                    else if (feature.Geometry is MultiPolygon || feature.Geometry is Polygon)
-                    {
-                        //lets not add a meshcollider since its very heavy
-                    }                   
+                    }           
                 }
                 else
                 {
                     if (feature.Geometry is Point || feature.Geometry is MultiPoint)
                     {
                         subObject.transform.position = verts[0];
-                        GeoJSONPointLayer pointLayer = layer as GeoJSONPointLayer;
-                        subObject.AddComponent<SphereCollider>().radius = pointLayer.PointRenderer3D.MeshScale * 0.5f;
-
                     }
                 }
 
-                               
                 mesh.RecalculateBounds();
                 meshes[i] = mesh;
-
                 subObject.transform.SetParent(layer.Transform);
                 subObject.layer = LayerMask.NameToLayer("Projected");
-
                 FeatureMapping objectMapping = subObject.AddComponent<FeatureMapping>();
                 objectMapping.SetFeature(feature);
                 objectMapping.SetMeshes(meshes);
                 objectMapping.SetVisualisationLayer(layer);
                 objectMapping.SetGeoJsonLayerParent(this);
+                objectMapping.UpdateBoundingBox();
+                FeatureSelector.MappingTree.RootInsert(objectMapping);
             }
         }
 
@@ -223,9 +215,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // Replace default style with the parent's default style
             newPolygonLayerGameObject.LayerData.RemoveStyle(newPolygonLayerGameObject.LayerData.DefaultStyle);
             newPolygonLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-
             newPolygonLayerGameObject.LayerData.SetParent(LayerData);
-            
+            newPolygonLayerGameObject.FeatureRemoved += OnFeatureRemoved;
             return newPolygonLayerGameObject;
         }
 
@@ -246,8 +237,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // Replace default style with the parent's default style
             newLineLayerGameObject.LayerData.RemoveStyle(newLineLayerGameObject.LayerData.DefaultStyle);
             newLineLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-
             newLineLayerGameObject.LayerData.SetParent(LayerData);
+            newLineLayerGameObject.FeatureRemoved += OnFeatureRemoved;
             return newLineLayerGameObject;
         }
 
@@ -268,9 +259,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // Replace default style with the parent's default style
             newPointLayerGameObject.LayerData.RemoveStyle(newPointLayerGameObject.LayerData.DefaultStyle);
             newPointLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-
             newPointLayerGameObject.LayerData.SetParent(LayerData);
-
+            newPointLayerGameObject.FeatureRemoved += OnFeatureRemoved;
             return newPointLayerGameObject;
         }
         
@@ -348,6 +338,41 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 polygonFeaturesLayer = CreateOrGetPolygonLayer();
 
             polygonFeaturesLayer.AddAndVisualizeFeature<MultiPolygon>(feature, originalCoordinateSystem);
+        }
+
+        protected virtual void OnFeatureRemoved(Feature feature)
+        {
+            //we have to query first to find the corresponding featuremappings, cant do a remove right away
+            //alternative could be to make an extra method to query by feature and do remove, or as proposed caching cell ids (but this can cause bugs, since spatial data is "truth")           
+            IGeoJsonVisualisationLayer layer = GetVisualisationLayerForFeature(feature);
+            BoundingBox queryBoundingBox = FeatureMapping.CreateBoundingBoxForFeature(feature, layer);            
+            List<FeatureMapping> mappings = FeatureSelector.MappingTree.Query(queryBoundingBox);
+            foreach (FeatureMapping mapping in mappings)
+            {
+                if(mapping.Feature == feature)
+                {
+                    //destroy featuremapping object, there should be no references anywhere else to this object!
+                    FeatureSelector.MappingTree.Remove(mapping);                    
+                    Destroy(mapping.gameObject);
+                }
+            }
+        }
+
+        public IGeoJsonVisualisationLayer GetVisualisationLayerForFeature(Feature feature)
+        {            
+            if (feature.Geometry is MultiLineString || feature.Geometry is LineString)
+            {
+                return lineFeaturesLayer;
+            }
+            else if (feature.Geometry is MultiPolygon || feature.Geometry is Polygon)
+            {
+                return polygonFeaturesLayer;
+            }
+            else if (feature.Geometry is Point || feature.Geometry is MultiPoint)
+            {
+                return pointFeaturesLayer;
+            }
+            return null;
         }
     }
 }

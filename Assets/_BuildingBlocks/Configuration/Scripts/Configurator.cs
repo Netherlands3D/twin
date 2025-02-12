@@ -98,7 +98,7 @@ namespace Netherlands3D.Twin.Configuration
 
         public IEnumerator Execute()
         {
-            configuration.ShouldStartSetup = true;
+            configuration.ShouldStartSetup = false;
             var indicatorsConfiguration = GetFunctionalityConfigurationOfType<Netherlands3D.Functionalities.Indicators.Configuration.Configuration>();
             indicatorsConfiguration.OnDossierIdChanged.RemoveListener(UpdateDossierIdAfterLoading);
             

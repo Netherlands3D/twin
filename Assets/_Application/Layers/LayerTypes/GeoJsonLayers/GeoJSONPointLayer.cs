@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
@@ -15,9 +16,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     {
         [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
         public bool IsPolygon => false;
-
         public Transform Transform => transform;
-        private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
+        public delegate void GeoJSONPointHandler(Feature feature);
+        public event GeoJSONPointHandler FeatureRemoved;
+
+        private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();       
 
         public List<Mesh> GetMeshData(Feature feature)
         {
@@ -38,6 +41,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             return meshes;
         }
+
+        public Bounds GetFeatureBounds(Feature feature)
+        {
+            return spawnedVisualisations[feature].trueBounds;
+        }
+
+        public float GetSelectionRange()
+        {
+            return pointRenderer3D.MeshScale;
+        }
+
 
         //here we have to local offset the vertices with the position of the transform because the transform gets shifted
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
@@ -100,7 +114,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 var newPointCollection = GeometryVisualizationFactory.CreatePointVisualization(point, originalCoordinateSystem, PointRenderer3D);
                 newFeatureVisualisation.Data.Add(newPointCollection);
             }
-            
+
+            newFeatureVisualisation.SetBoundsPadding(Vector3.one * GetSelectionRange());
             newFeatureVisualisation.CalculateBounds();
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
         }
@@ -123,8 +138,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             };
         }
 
-        private List<Feature> keysToRemove = new List<Feature>();
-
         /// <summary>
         /// Checks the Bounds of the visualisations and checks them against the camera frustum
         /// to remove visualisations that are out of view
@@ -132,31 +145,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public void RemoveFeaturesOutOfView()
         {
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
-            
-            keysToRemove.Capacity = spawnedVisualisations.Count;
-            foreach (var kvp in spawnedVisualisations)
+            foreach (var kvp in spawnedVisualisations.Reverse())
             {
-                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.bounds);
+                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
                 if (inCameraFrustum) continue;
 
-                keysToRemove.Add(kvp.Key);
-            }
-            foreach (Feature key in keysToRemove)
-            {
-                RemoveFeature(key);
-            }
-
-            keysToRemove.Clear();
+                RemoveFeature(kvp.Value);
+            }            
         }
 
-        private void RemoveFeature(Feature featureVisualisationKey)
+        private void RemoveFeature(FeaturePointVisualisations featureVisualisation)
         {
-            foreach (var pointCollection in spawnedVisualisations[featureVisualisationKey].Data)
+            foreach (var pointCollection in featureVisualisation.Data)
             {
                 PointRenderer3D.RemoveCollection(pointCollection);
             }
-
-            spawnedVisualisations.Remove(featureVisualisationKey);
+            FeatureRemoved?.Invoke(featureVisualisation.feature); 
+            spawnedVisualisations.Remove(featureVisualisation.feature);
         }
 
         public override void DestroyLayerGameObject()

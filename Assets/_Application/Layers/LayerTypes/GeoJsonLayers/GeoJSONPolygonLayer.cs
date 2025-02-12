@@ -16,10 +16,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     {
         public bool IsPolygon => true;
         public Transform Transform { get => transform; }
+        public delegate void GeoJSONPointHandler(Feature feature);
+        public event GeoJSONPointHandler FeatureRemoved;
+
+        private Dictionary<Feature, FeaturePolygonVisualisations> spawnedVisualisations = new();     
 
         public List<Mesh> GetMeshData(Feature feature)
         {
-            FeaturePolygonVisualisations data = SpawnedVisualisations[feature];
+            FeaturePolygonVisualisations data = spawnedVisualisations[feature];
             List<Mesh> meshes = new List<Mesh>();
             if (data == null) return meshes;
 
@@ -32,6 +36,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             return meshes;
         }
+
+        public Bounds GetFeatureBounds(Feature feature)
+        {
+            return spawnedVisualisations[feature].trueBounds;
+        }
+
+        public float GetSelectionRange()
+        {
+            return 0; //we want to precisely measure the edge to a polygon so no selection range is applied here
+        }
+
 
         /// <summary>
         /// set the colors for the polygon visualisation within the feature polygon visualisation matching the meshes provided
@@ -57,7 +72,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public PolygonVisualisation GetPolygonVisualisationByMesh(List<Mesh> meshes)
         {
             //TODO would really like to have the meshrenderer cached within the polygonvisualisation (in external package)
-            foreach (KeyValuePair<Feature, FeaturePolygonVisualisations> fpv in SpawnedVisualisations)
+            foreach (KeyValuePair<Feature, FeaturePolygonVisualisations> fpv in spawnedVisualisations)
             {
                 List<PolygonVisualisation> visualisations = fpv.Value.Data;
                 foreach (PolygonVisualisation pv in visualisations)
@@ -74,7 +89,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             //TODO would really like to have the meshrenderer cached within the polygonvisualisation (in external package)
             Color defaultColor = GetRenderColor();
-            foreach (KeyValuePair<Feature, FeaturePolygonVisualisations> fpv in SpawnedVisualisations)
+            foreach (KeyValuePair<Feature, FeaturePolygonVisualisations> fpv in spawnedVisualisations)
             {
                 List<PolygonVisualisation> visualisations = fpv.Value.Data;
                 foreach (PolygonVisualisation pv in visualisations)
@@ -90,7 +105,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return polygonVisualizationMaterialInstance.color;
         }
 
-        public Dictionary<Feature, FeaturePolygonVisualisations> SpawnedVisualisations = new();
 
         [SerializeField] private Material polygonVisualizationMaterial;
         internal Material polygonVisualizationMaterialInstance;
@@ -102,7 +116,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 polygonVisualizationMaterial = value;
                 
-                foreach (var featureVisualisation in SpawnedVisualisations)
+                foreach (var featureVisualisation in spawnedVisualisations)
                 {
                     featureVisualisation.Value.SetMaterial(value);
                 }
@@ -111,7 +125,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
      
         public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            foreach (var visualization in SpawnedVisualisations)
+            foreach (var visualization in spawnedVisualisations)
             {
                 visualization.Value.ShowVisualisations(activeInHierarchy);
             }
@@ -121,7 +135,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             where T : GeoJSONObject
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
-            if (SpawnedVisualisations.ContainsKey(feature))
+            if (spawnedVisualisations.ContainsKey(feature))
                 return;
 
             var newFeatureVisualisation = new FeaturePolygonVisualisations { 
@@ -151,13 +165,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             // bounds are calculated in the AppendVisualisations method, and is therefore not explicitly called here
-            SpawnedVisualisations.Add(feature, newFeatureVisualisation);
+            spawnedVisualisations.Add(feature, newFeatureVisualisation);
             newFeatureVisualisation.ShowVisualisations(LayerData.ActiveInHierarchy);
         }
 
         public override void InitializeStyling()
         {
-            foreach (var visualisations in SpawnedVisualisations)
+            foreach (var visualisations in spawnedVisualisations)
             {
                 visualisations.Value.SetMaterial(GetMaterialInstance());
             }
@@ -179,8 +193,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public override void DestroyLayerGameObject()
         {
             // Remove all SpawnedVisualisations
-            Debug.Log("Destroying all visualisations " + SpawnedVisualisations.Count);
-            foreach (var kvp in SpawnedVisualisations.Reverse())
+            Debug.Log("Destroying all visualisations " + spawnedVisualisations.Count);
+            foreach (var kvp in spawnedVisualisations.Reverse())
             {
                 RemoveFeature(kvp.Value);
             }
@@ -196,9 +210,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {         
             // Remove visualisations that are out of view
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
-            foreach (var kvp in SpawnedVisualisations.Reverse())
+            foreach (var kvp in spawnedVisualisations.Reverse())
             {
-                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.bounds);
+                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
                 if (inCameraFrustum)
                     continue;
 
@@ -209,7 +223,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private void RemoveFeature(FeaturePolygonVisualisations featureVisualisation)
         {
             featureVisualisation.DestroyAllVisualisations();
-            SpawnedVisualisations.Remove(featureVisualisation.feature);
+            FeatureRemoved?.Invoke(featureVisualisation.feature); 
+            spawnedVisualisations.Remove(featureVisualisation.feature);
         }
     }
 }
