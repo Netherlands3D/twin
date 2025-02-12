@@ -7,6 +7,7 @@ using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Rendering;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
@@ -20,7 +21,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public delegate void GeoJSONPointHandler(Feature feature);
         public event GeoJSONPointHandler FeatureRemoved;
 
-        private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();       
+        private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
+        public override BoundingBox Bounds => throw new NotImplementedException();
 
         public List<Mesh> GetMeshData(Feature feature)
         {
@@ -163,7 +165,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             FeatureRemoved?.Invoke(featureVisualisation.feature); 
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }
-
+        
         public override void DestroyLayerGameObject()
         {
             if (Application.isPlaying && PointRenderer3D?.gameObject)

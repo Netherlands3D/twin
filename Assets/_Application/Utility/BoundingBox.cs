@@ -9,6 +9,7 @@ namespace Netherlands3D.Twin.Utility
         public Coordinate BottomLeft { get; private set; }
         public Coordinate TopRight { get; private set; }
         public Coordinate Center => (BottomLeft + TopRight) * 0.5f;
+        public Coordinate Size => TopRight - BottomLeft;
 
         public CoordinateSystem CoordinateSystem { get; private set; }
 
@@ -103,6 +104,17 @@ namespace Netherlands3D.Twin.Utility
         {
             return $"{BottomLeft.easting},{BottomLeft.northing},{TopRight.easting},{TopRight.northing}";
         }
+        
+        public double GetSizeMagnitude()
+        {
+            var size = Size;
+            var d = (size.easting * size.easting) + (size.northing * size.northing) + (size.height * size.height);
+            return Math.Sqrt(d);
+        }
+        
+        //RDBounds as defined by https://epsg.io/28992
+        public static BoundingBox RDBounds => new BoundingBox(new Coordinate(CoordinateSystem.RD, 482.06d, 306602.42d), new Coordinate(CoordinateSystem.RD, 284182.97d, 637049.52d));
+
 
         public void Debug(Color color)
         {
