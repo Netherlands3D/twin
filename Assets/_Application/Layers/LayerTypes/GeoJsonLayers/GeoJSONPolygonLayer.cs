@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     [Serializable]
     public partial class GeoJSONPolygonLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
-        public override BoundingBox Bounds => throw new NotImplementedException(); //todo
+        public override BoundingBox Bounds => null; // since features load and unload when the camera moves, we don't know the bounds of this layer
         public bool IsPolygon => true;
         public Transform Transform { get => transform; }
         public delegate void GeoJSONPointHandler(Feature feature);

@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public event GeoJSONPointHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
-        public override BoundingBox Bounds => throw new NotImplementedException();
+        public override BoundingBox Bounds => null; // since features load and unload when the camera moves, we don't know the bounds of this layer
 
         public List<Mesh> GetMeshData(Feature feature)
         {
