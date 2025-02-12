@@ -12,11 +12,11 @@ namespace Netherlands3D.Twin.Utility
         public Coordinate Size => TopRight - BottomLeft;
 
         public CoordinateSystem CoordinateSystem { get; private set; }
-
-        public BoundingBox(Bounds bounds, Vector3 offset)
+        
+        public BoundingBox(Bounds worldSpaceBounds)
         {
-            BottomLeft = new Coordinate(bounds.min + offset);
-            TopRight = new Coordinate(bounds.max + offset);
+            BottomLeft = new Coordinate(worldSpaceBounds.min);
+            TopRight = new Coordinate(worldSpaceBounds.max);
             CoordinateSystem = (CoordinateSystem)BottomLeft.CoordinateSystem;
         }
         
