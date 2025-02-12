@@ -8,10 +8,9 @@ namespace Netherlands3D.Twin.Utility
     {
         public Coordinate BottomLeft { get; private set; }
         public Coordinate TopRight { get; private set; }
-        public CoordinateSystem CoordinateSystem { get; private set; }
+        public Coordinate Center => (BottomLeft + TopRight) * 0.5f;
 
-        public Coordinate Center => (BottomLeft + TopRight)/2;
-        public Coordinate Size => TopRight - BottomLeft;
+        public CoordinateSystem CoordinateSystem { get; private set; }
 
         public BoundingBox(Coordinate bottomLeft, Coordinate topRight)
         {
@@ -19,7 +18,7 @@ namespace Netherlands3D.Twin.Utility
             {
                 topRight = topRight.Convert((CoordinateSystem)bottomLeft.CoordinateSystem);
             }
-            
+
             if (bottomLeft.easting > topRight.easting || bottomLeft.northing > topRight.northing)
             {
                 throw new ArgumentException(
@@ -42,7 +41,7 @@ namespace Netherlands3D.Twin.Utility
         public bool Contains(BoundingBox other)
         {
             if (other.CoordinateSystem != CoordinateSystem)
-                other = ConvertToCRS(other, CoordinateSystem);
+                other.Convert(CoordinateSystem);
 
             if (BottomLeft.PointsLength == 2)
             {
@@ -60,11 +59,31 @@ namespace Netherlands3D.Twin.Utility
                    other.TopRight.height <= this.TopRight.height;
         }
 
+        public bool Contains(Coordinate coordinate)
+        {
+            if ((CoordinateSystem)coordinate.CoordinateSystem != CoordinateSystem)
+                coordinate = coordinate.Convert(CoordinateSystem);
+
+            if (BottomLeft.PointsLength == 2)
+            {
+                return coordinate.easting >= this.BottomLeft.easting &&
+                       coordinate.northing >= this.BottomLeft.northing &&
+                       coordinate.easting <= this.TopRight.easting &&
+                       coordinate.northing <= this.TopRight.northing;
+            }
+
+            return coordinate.easting >= this.BottomLeft.easting &&
+                   coordinate.northing >= this.BottomLeft.northing &&
+                   coordinate.height >= this.BottomLeft.height &&
+                   coordinate.easting <= this.TopRight.easting &&
+                   coordinate.northing <= this.TopRight.northing &&
+                   coordinate.height <= this.TopRight.height;
+        }
 
         public bool Intersects(BoundingBox other)
         {
             if (other.CoordinateSystem != CoordinateSystem)
-                other = ConvertToCRS(other, CoordinateSystem);
+                other.Convert(CoordinateSystem);
 
             if (BottomLeft.PointsLength == 2)
             {
@@ -75,14 +94,7 @@ namespace Netherlands3D.Twin.Utility
             return !(TopRight.easting < other.BottomLeft.easting || BottomLeft.easting > other.TopRight.easting ||
                      TopRight.northing < other.BottomLeft.northing || BottomLeft.northing > other.TopRight.northing ||
                      TopRight.height < other.BottomLeft.height || BottomLeft.height > other.TopRight.height);
-        }
-
-        private BoundingBox ConvertToCRS(BoundingBox box, CoordinateSystem newCoordinateSystem)
-        {
-            var bottomLeft = box.BottomLeft.Convert(newCoordinateSystem);
-            var topRight = box.TopRight.Convert(newCoordinateSystem);
-            return new BoundingBox(bottomLeft, topRight);
-        }
+        }               
 
         /// <summary>
         /// Returns the string as a WMS bounding box string
@@ -92,14 +104,20 @@ namespace Netherlands3D.Twin.Utility
             return $"{BottomLeft.easting},{BottomLeft.northing},{TopRight.easting},{TopRight.northing}";
         }
 
-        public double GetSizeMagnitude()
+        public void Debug(Color color)
         {
-            var size = Size;
-            var d = (size.easting * size.easting) + (size.northing * size.northing) + (size.height * size.height);
-            return Math.Sqrt(d);
+            float height = 100;
+            Vector3 unityBottomLeft = BottomLeft.ToUnity();
+            unityBottomLeft.y = height;
+            Vector3 unityTopRight = TopRight.ToUnity();
+            unityTopRight.y = height;
+            Vector3 unityBottomRight = new Vector3(unityTopRight.x, height, unityBottomLeft.z);
+            Vector3 unityTopLeft = new Vector3(unityBottomLeft.x, height, unityTopRight.z);
+
+            UnityEngine.Debug.DrawLine(unityBottomLeft, unityBottomRight, color);
+            UnityEngine.Debug.DrawLine(unityBottomRight, unityTopRight, color);
+            UnityEngine.Debug.DrawLine(unityTopRight, unityTopLeft, color);
+            UnityEngine.Debug.DrawLine(unityTopLeft, unityBottomLeft, color);
         }
-        
-        //RDBounds as defined by https://epsg.io/28992
-        public static BoundingBox RDBounds => new BoundingBox(new Coordinate(CoordinateSystem.RD, 482.06d, 306602.42d), new Coordinate(CoordinateSystem.RD, 284182.97d, 637049.52d));
     }
 }
