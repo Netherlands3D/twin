@@ -33,7 +33,7 @@ namespace Netherlands3D.Twin.UI
 
         public void SetInteractable(bool interactable)
         {
-            toggle.interactable = interactable;
+            Toggle.interactable = interactable;
             icon.color = interactable ? enabledIconColor : disabledIconColor;
         }
     }
