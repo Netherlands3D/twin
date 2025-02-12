@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.UI
 {
+    [RequireComponent(typeof(Toggle))]
     public class ToggleGroupItem : MonoBehaviour
     {
         private Toggle toggle;
