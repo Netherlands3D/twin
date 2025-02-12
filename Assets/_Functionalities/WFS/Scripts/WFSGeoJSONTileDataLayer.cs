@@ -179,28 +179,26 @@ namespace Netherlands3D.Functionalities.Wfs
             string spatialReference = queryParameters["srsname"];
             CoordinateSystem system = GetCoordinateSystem(spatialReference);
             var boundingBox = DetermineBoundingBox(tileChange, system);
+            
             //we need to add the coordinate system value to the bbox as 5th value according to the ogc standards
             string url = wfsUrl.Replace("{0}", boundingBox.ToString() + "," + ((int)system).ToString());
 
-            var geoJsonRequest = UnityWebRequest.Get(url);
-            tile.runningWebRequest = geoJsonRequest;
-            yield return geoJsonRequest.SendWebRequest();
+            string jsonString = null;
+            var geoJsonRequest = Uxios.DefaultInstance.Get<string>(new Uri(url));
+            geoJsonRequest.Then(response => jsonString = response.Data as string);
+            geoJsonRequest.Catch(
+                exception => Debug.LogWarning($"Request to {url} failed with message {exception.Message}")
+            );
+            
+            yield return Uxios.WaitForRequest(geoJsonRequest);
 
-            if (geoJsonRequest.result == UnityWebRequest.Result.Success)
+            if (string.IsNullOrEmpty(jsonString) == false)
             {
                 var parser = new GeoJSONParser(0.01f);
                 parser.OnFeatureParsed.AddListener(wfsGeoJSONLayer.AddFeatureVisualisation);
-                yield return parser.ParseJSONString(geoJsonRequest.downloadHandler.text);
+                yield return parser.ParseJSONString(jsonString);
             }
-            else
-            {
-                // Show a message in the console, because otherwise you will never find out
-                // something went wrong. This should be replaced with a better error reporting
-                // system
-                Debug.LogWarning(
-                    $"Request to {url} failed with status code {geoJsonRequest.responseCode} and body \n{geoJsonRequest.downloadHandler.text}"
-                );
-            }
+
             callback?.Invoke(tileChange);
         }
     }

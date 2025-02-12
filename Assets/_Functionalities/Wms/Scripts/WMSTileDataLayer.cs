@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using KindMen.Uxios;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.Rendering.Universal;
 
 namespace Netherlands3D.Functionalities.Wms
@@ -74,29 +74,22 @@ namespace Netherlands3D.Functionalities.Wms
             var boundingBox = DetermineBoundingBox(tileChange, mapData);
             string url = wmsUrl.Replace("{0}", boundingBox.ToString());
 
-            UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(url);
-            tile.runningWebRequest = webRequest;
-            yield return webRequest.SendWebRequest();
-            tile.runningWebRequest = null;
-            if (webRequest.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogWarning($"Could not download {url}");
-                RemoveGameObjectFromTile(tileKey);
-            }
-            else
-            {
-                ClearPreviousTexture(tile);
-                Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
-                Texture2D tex = texture as Texture2D;
-                tex.Compress(true);
-                tex.filterMode = FilterMode.Bilinear;
-                tex.Apply(false, true);
-                
-                if (tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
+            var promise = Uxios.DefaultInstance.Get<Texture>(new Uri(url));
+            promise.Then(response =>
                 {
+                    ClearPreviousTexture(tile);
+                    Texture texture = response.Data as Texture;
+                    Texture2D tex = texture as Texture2D;
+                    tex.Compress(true);
+                    tex.filterMode = FilterMode.Bilinear;
+                    tex.Apply(false, true);
+
+                    if (!tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector)) return;
+
                     projector.SetSize(tileSize, tileSize, tileSize);
                     projector.gameObject.SetActive(isEnabled);                    
                     projector.SetTexture(tex);
+
                     //force the depth to be at least larger than its height to prevent z-fighting
                     DecalProjector decalProjector = tile.gameObject.GetComponent<DecalProjector>();
                     TextureDecalProjector textureDecalProjector = tile.gameObject.GetComponent<TextureDecalProjector>();
@@ -106,8 +99,18 @@ namespace Netherlands3D.Functionalities.Wms
                     //set the render index, to make sure the render order is maintained
                     textureDecalProjector.SetPriority(renderIndex);
                 }
-            }
-            callback(tileChange);
+            );
+            
+            promise.Catch(exception =>
+            {
+                Debug.LogWarning($"Could not download {url}: " + exception.Message);
+                RemoveGameObjectFromTile(tileKey);
+            });
+            
+            // Always issue the callback
+            promise.Finally(() => { callback(tileChange); });
+            
+            yield return Uxios.WaitForRequest(promise);
         }
 
         private BoundingBox DetermineBoundingBox(TileChange tileChange, MapFilters mapFilters)
