@@ -15,11 +15,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     [Serializable]
     public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
-        public override BoundingBox Bounds => throw new NotImplementedException(); //todo
         public bool IsPolygon  => false;
         public Transform Transform => transform;
+        public delegate void GeoJSONLineHandler(Feature feature);
+        public event GeoJSONLineHandler FeatureRemoved;
 
-        public Dictionary<Feature, FeatureLineVisualisations> SpawnedVisualisations = new();
+        private Dictionary<Feature, FeatureLineVisualisations> spawnedVisualisations = new();
+
+        public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
 
@@ -32,7 +35,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public List<Mesh> GetMeshData(Feature feature)
         {
-            FeatureLineVisualisations data = SpawnedVisualisations[feature];
+            FeatureLineVisualisations data = spawnedVisualisations[feature];
             List<Mesh> meshes = new List<Mesh>();
             if(data == null)
             {
@@ -54,7 +57,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             return meshes;
         }
-        
+
+        public Bounds GetFeatureBounds(Feature feature)
+        {
+            return spawnedVisualisations[feature].trueBounds;
+        }
+
+        public float GetSelectionRange()
+        {
+            return lineRenderer3D.LineDiameter;
+        }
+
         //because the transfrom will always be at the V3zero position we dont want to offset with the localoffset
         //the vertex positions will equal world space
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
@@ -86,7 +99,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             where T : GeoJSONObject
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
-            if (SpawnedVisualisations.ContainsKey(feature)) return;
+            if (spawnedVisualisations.ContainsKey(feature)) return;
 
             var newFeatureVisualisation = new FeatureLineVisualisations { feature = feature };
 
@@ -103,8 +116,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 newFeatureVisualisation.Data.Add(newLine);
             }
             
+            newFeatureVisualisation.SetBoundsPadding(Vector3.one * GetSelectionRange());
             newFeatureVisualisation.CalculateBounds();
-            SpawnedVisualisations.Add(feature, newFeatureVisualisation);
+            
+            spawnedVisualisations.Add(feature, newFeatureVisualisation);
         }
 
         public override void InitializeStyling()
@@ -134,9 +149,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {         
             // Remove visualisations that are out of view
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
-            foreach (var kvp in SpawnedVisualisations.Reverse())
+            foreach (var kvp in spawnedVisualisations.Reverse())
             {
-                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.bounds);
+                var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
                 if (inCameraFrustum) continue;
 
                 RemoveFeature(kvp.Value);
@@ -148,9 +163,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             foreach (var line in featureVisualisation.Data)
             {
                 lineRenderer3D.RemoveLine(line);
-            }
-
-            SpawnedVisualisations.Remove(featureVisualisation.feature);
+            }            
+            FeatureRemoved?.Invoke(featureVisualisation.feature); 
+            spawnedVisualisations.Remove(featureVisualisation.feature);
         }
 
         public override void DestroyLayerGameObject()
@@ -161,6 +176,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             base.DestroyLayerGameObject();
+        }
+        
+        public BoundingBox GetBoundingBoxOfVisibleFeatures()
+        {
+            if (spawnedVisualisations.Count == 0)
+                return null;
+
+            BoundingBox bbox = null;
+            foreach (var vis in spawnedVisualisations.Values)
+            {
+                if (bbox == null)
+                    bbox = new BoundingBox(vis.trueBounds);
+                else
+                    bbox.Encapsulate(vis.trueBounds);
+            }
+
+            return bbox;
         }
     }
 }

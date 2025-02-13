@@ -8,12 +8,21 @@ namespace Netherlands3D.Twin.Cameras
 {
     public class MoveCameraToBounds : MonoBehaviour
     {
-        [SerializeField] private float moveSizeLimit = 20000f; //if the bounds are larger than this number, the camera won't move.
-        [SerializeField] private float zoomSizeLimit = 2000f; //if the bounds are larger than this number, the camera won't zoom to fit the bounds on the screen, but will use the default distance.
-        [SerializeField] private float defaultCameraDistance = 300f; //default distance of the camera when zooming to the extents is not possible. 
+        [Tooltip("if the bounds are larger than this number, the camera won't move.")] 
+        [SerializeField] private float moveSizeLimit = 20000f;
+
+        [Tooltip("if the bounds are larger than this number, the camera won't zoom to fit the bounds on the screen, but will use the default distance.")] 
+        [SerializeField] private float zoomSizeLimit = 2000f;
+
+        [Tooltip("default distance of the camera when zooming to the extents is not possible. ")] 
+        [SerializeField] private float defaultCameraDistance = 300f;
+
+        [Tooltip("multiply the zoom distance for objects that are zoomed to by this amount so the objects don't take up the entire screen")] 
+        [SerializeField] private float zoomDistanceMultiplier = 4f;
+        [SerializeField] double decayRate = 0.007d; // Decay rate
 
         private Camera camera;
-        
+
         private void Awake()
         {
             camera = GetComponent<Camera>();
@@ -21,11 +30,16 @@ namespace Netherlands3D.Twin.Cameras
 
         public void MoveToBounds(BoundingBox bounds)
         {
-            if (bounds == null) 
+            if (bounds == null)
             {
                 throw new NullReferenceException("Bounds object is null, no bounds specified to center to.");
             }
-            
+
+            if(bounds.BottomLeft.PointsLength > 2)
+                bounds.Convert(CoordinateSystem.RDNAP);
+            else
+                bounds.Convert(CoordinateSystem.RD);
+
             //move the camera to the center of the bounds, and move it back by the size of the bounds (2x the extents)
             var center = bounds.Center;
             var sizeMagnitude = bounds.GetSizeMagnitude(); //sizeMagnitude returns 2x the extents
@@ -44,16 +58,14 @@ namespace Netherlands3D.Twin.Cameras
             //if the size of the bounds is larger than 2 km, we will center on the object with a fixed distance instead of trying to fit the object in the view
             if (sizeMagnitude < zoomSizeLimit)
             {
-                print("centering on object");
                 // Compute the necessary distance to fit the entire object in view
                 var fovRadians = camera.fieldOfView * Mathf.Deg2Rad;
                 distance = sizeMagnitude / (2 * Mathf.Tan(fovRadians / 2));
+                var distanceFactor = Math.Exp(-decayRate * distance); //if an object is larger, we move away less.
+                var t = Mathf.Lerp(1, zoomDistanceMultiplier, (float)distanceFactor);
+                distance *= t; //increase distance so that objects don't take up too much screen space
             }
-            else
-            {
-                print("using default dist");
-            }
-            
+
             var currentCameraPosition = camera.GetComponent<WorldTransform>().Coordinate;
             var difference = (currentCameraPosition - center).Convert(CoordinateSystem.RD); //use RD since this expresses the difference in meters, so we can use the SqrDistanceBeforeShifting to check if we need to shift.
             ulong sqDist = (ulong)(difference.easting * difference.easting + difference.northing * difference.northing);

@@ -11,7 +11,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
     public class PolygonSelectionVisualisation : LayerGameObject, ILayerWithPropertyPanels
     {
-        public override BoundingBox Bounds => throw new NotImplementedException(); //todo
+        private BoundingBox polygonBounds;
+        public override BoundingBox Bounds => polygonBounds;
         public PolygonVisualisation PolygonVisualisation { get; private set; }
         public Material PolygonMeshMaterial;
 
@@ -26,10 +27,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 PolygonVisualisation = CreatePolygonMesh(polygon3D, extrusionHeight, PolygonMeshMaterial);
                 PolygonVisualisation.transform.SetParent(transform);
+                polygonBounds = new(PolygonVisualisation.GetComponent<Renderer>().bounds);
             }
             else
             {
                 PolygonVisualisation.UpdateVisualisation(polygon3D);
+                polygonBounds = new(PolygonVisualisation.GetComponent<Renderer>().bounds);
             }
         }
 
@@ -41,7 +44,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             //Add the polygon shifter to the polygon visualisation, so it can move with our origin shifts
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("Projected");
-
+            
             return polygonVisualisation;
         }
 
