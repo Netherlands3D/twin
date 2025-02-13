@@ -2155,6 +2155,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 730d7bdcdd4a2446dbe4df81938266f4, type: 3}
   - {fileID: 21300000, guid: b6c64162c3e9c4e6ea68a7f37a4bcdee, type: 3}
   propertyToggle: {fileID: 1850104207184435544}
+  doubleClickThreshold: 0.5
 --- !u!114 &1244387766270603908
 MonoBehaviour:
   m_ObjectHideFlags: 0
