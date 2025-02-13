@@ -148,10 +148,12 @@ namespace Netherlands3D.Functionalities.Wms
                 StopCoroutine(runningCoroutine);
             
             ClearGraphics();
+
+            if (!LegendUrlDictionary.ContainsKey(getCapabilitiesUrl)) return;
+            
             var urlContainer = LegendUrlDictionary[getCapabilitiesUrl];
             activeLegendUrl = getCapabilitiesUrl;
-            
-            runningCoroutine = StartCoroutine(GetLegendGraphics(urlContainer));
+            runningCoroutine = StartCoroutine(GetLegendGraphics(urlContainer));            
         }
         
         private IEnumerator GetLegendGraphics(LegendUrlContainer urlContainer)
