@@ -8,13 +8,16 @@ using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Networking;
+using Netherlands3D.Twin.Layers.LayerTypes.Credentials;
 
 namespace Netherlands3D.Functionalities.Wms
 {
     /// <summary>
     /// Extention of LayerGameObject that injects a 'streaming' dataprovider WMSTileDataLayer
     /// </summary>
-    public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels
+    public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, ILayerWithCredentials
     {
         public WMSTileDataLayer WMSProjectionLayer => wmsProjectionLayer;
         public bool TransparencyEnabled = true; //this gives the requesting url the extra param to set transparancy enabled by default       
@@ -25,6 +28,17 @@ namespace Netherlands3D.Functionalities.Wms
         private WMSTileDataLayer wmsProjectionLayer;
         protected LayerURLPropertyData urlPropertyData = new();
         public bool ShowLegendOnSelect { get; set; } = true;
+
+        public UnityEvent<Uri> OnURLChanged => urlPropertyData.OnDataChanged;
+
+        public UnityEvent<UnityWebRequest> OnServerResponseReceived => throw new NotImplementedException();
+
+        UnityEvent<string> ILayerWithCredentials.OnURLChanged => throw new NotImplementedException();
+
+        public string URL { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public UnityEvent<string> UnsupportedExtensionsMessage;
+        //public UnityEvent<UnityWebRequest> OnServerResponseReceived => tileSet.OnServerResponseReceived;
 
         private List<IPropertySectionInstantiator> propertySections = new();
 
@@ -46,10 +60,14 @@ namespace Netherlands3D.Functionalities.Wms
         {
             base.Start();
             WMSProjectionLayer.WmsUrl = urlPropertyData.Data.ToString();
-
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
-
             SetRenderOrder(LayerData.RootIndex);
+
+
+            //[HideInInspector] public UnityEvent<UnityWebRequest> OnServerResponseReceived = new();
+
+
+
             var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
             var getCapabilitiesUrl = new Uri(getCapabilitiesString);
             Legend.Instance.GetLegendUrl(wmsProjectionLayer.WmsUrl, OnLegendUrlsReceived);
@@ -130,6 +148,36 @@ namespace Netherlands3D.Functionalities.Wms
         {
             if (wmsProjectionLayer.isEnabled != isActive)
                 wmsProjectionLayer.isEnabled = isActive;
+        }
+
+        public void SetCredentials(string username, string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetBearerToken(string token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetKey(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetToken(string token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetCode(string code)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ClearCredentials()
+        {
+            throw new NotImplementedException();
         }
     }
 }

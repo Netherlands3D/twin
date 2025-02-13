@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: -8300356283678966299}
   - component: {fileID: -7699739382070360042}
   - component: {fileID: -5316186976888283285}
+  - component: {fileID: 527577383205972196}
+  - component: {fileID: -8306873876181076549}
   m_Layer: 0
   m_Name: WMSLayer
   m_TagString: Untagged
@@ -59,9 +61,9 @@ MonoBehaviour:
   TransparencyEnabled: 1
   DefaultEnabledLayersMax: 5
   PreferredImageSize: {x: 1024, y: 1024}
-  legendPanelPrefab: {fileID: 5078733024073835164, guid: ed26e06119f9534478c33195b229d17a,
-    type: 3}
-  legendOffsetFromParent: {x: 12, y: 58}
+  UnsupportedExtensionsMessage:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1347090001780688696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,3 +170,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propertySectionPrefab: {fileID: -7746774530263894800, guid: b7f01bf4e2af2954a9f88ac89da5ed51,
     type: 3}
+--- !u!114 &527577383205972196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418701555395206593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 217db7c8cb91f974daf1e7f820fb6a30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputPropertySectionPrefab: {fileID: 7185160580400989932, guid: f241bd5b609aa4447ae89fb4325470ef,
+    type: 3}
+--- !u!114 &-8306873876181076549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418701555395206593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3b2880c796b146d191c4b41da5c526b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  findKeyInVaultOnURLChange: 1
+  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
+  autoApplyCredentials: 1
