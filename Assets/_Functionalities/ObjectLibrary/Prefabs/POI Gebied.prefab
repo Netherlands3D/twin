@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 441155551083732336}
   - component: {fileID: 4139156887059762084}
   m_Layer: 0
-  m_Name: POI
+  m_Name: POI Gebied
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
