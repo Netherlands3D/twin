@@ -133,25 +133,26 @@ namespace Netherlands3D.Functionalities.Wms
 
         public void ShowLegend(string wmsUrl, bool show)
         {
-            var getCapabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsUrl, ServiceType.Wms);
             mainPanel.SetActive(show);
+            if (!show)
+                return;
+
+            var getCapabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsUrl, ServiceType.Wms);
             if (activeLegendUrl == getCapabilitiesUrl)
-            {
-                if (!show)
-                    activeLegendUrl = null;
                 return; //legend that should be set active is already loaded, so no further action is needed.
-            }
 
             if (runningCoroutine != null)
                 StopCoroutine(runningCoroutine);
-            
+
             ClearGraphics();
-            var urlContainer = LegendUrlDictionary[getCapabilitiesUrl];
             activeLegendUrl = getCapabilitiesUrl;
-            
+            if (!LegendUrlDictionary.ContainsKey(getCapabilitiesUrl))
+                return;
+
+            var urlContainer = LegendUrlDictionary[getCapabilitiesUrl];
             runningCoroutine = StartCoroutine(GetLegendGraphics(urlContainer));
         }
-        
+
         private IEnumerator GetLegendGraphics(LegendUrlContainer urlContainer)
         {
             ShowInactive(urlContainer.LayerNameLegendUrlDictionary.Count == 0);

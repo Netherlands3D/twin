@@ -44,8 +44,11 @@ namespace Netherlands3D.OgcWebServices.Shared
             {
                 yield return null;
             }
-            
-            callback.Invoke(BoundingBoxContainers[url]);
+
+            if (BoundingBoxContainers.ContainsKey(url))
+                callback.Invoke(BoundingBoxContainers[url]);
+            else
+                callback.Invoke(null); // in case the request fails we don't have this url in the cache
         }
         
         public void GetBoundingBoxContainer(Uri uri, Func<string, IGetCapabilities> stringToIGetCapabilitiesFactory, Action<BoundingBoxContainer> callback)
