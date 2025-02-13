@@ -1,4 +1,5 @@
 using Netherlands3D.Twin.ExtensionMethods;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -38,9 +39,9 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             }
         }
 
-        public void DisplayURL(string url)
+        public void DisplayURL(Uri url)
         {
-            urlInputField.text = url;
+            urlInputField.text = url.ToString();
         }
 
         public void ShowServerWarningFeedback(UnityWebRequest webRequest)

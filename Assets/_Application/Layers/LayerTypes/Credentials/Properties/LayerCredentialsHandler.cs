@@ -3,6 +3,7 @@ using Netherlands3D.Twin.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Events;
+using System;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
@@ -50,7 +51,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
             layerWithCredentials.OnServerResponseReceived.AddListener(HandleServerResponse);
 
-            UrlHasChanged(layerWithCredentials.URL);
+            if(!string.IsNullOrEmpty(layerWithCredentials.URL))
+                UrlHasChanged(new Uri(layerWithCredentials.URL));
         }
 
         private void OnDisable()
@@ -81,12 +83,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             SetAuthorizationInputType(authorizationType);
         }
 
-        private void UrlHasChanged(string newURL)
+        private void UrlHasChanged(Uri newURL)
         {
             //New url. If we already got this one in the vault, apply the credentials
             if (findKeyInVaultOnURLChange)
             {
-                storedAuthorization = keyVault.GetStoredAuthorization(newURL);
+                string url = newURL.ToString();
+                storedAuthorization = keyVault.GetStoredAuthorization(url);
 
                 if (storedAuthorization != null)
                 {
@@ -96,7 +99,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
                 }
                 else
                 {
-                    authorizationType = keyVault.GetKnownAuthorizationTypeForURL(newURL);
+                    authorizationType = keyVault.GetKnownAuthorizationTypeForURL(url);
                     CredentialsAccepted.Invoke(false);
                 }
 

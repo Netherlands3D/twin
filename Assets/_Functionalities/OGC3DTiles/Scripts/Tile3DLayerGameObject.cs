@@ -20,7 +20,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         private Tile3DLayerPropertyData urlPropertyData;
         LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
-        public UnityEvent<string> OnURLChanged => urlPropertyData.OnUrlChanged;
+        public UnityEvent<Uri> OnURLChanged => urlPropertyData.OnUrlChanged;
         public UnityEvent<string> UnsupportedExtensionsMessage;
         public UnityEvent<UnityWebRequest> OnServerResponseReceived => tileSet.OnServerResponseReceived;
 
@@ -92,9 +92,9 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             urlPropertyData.OnUrlChanged.AddListener(UpdateURL);
         }
 
-        private void UpdateURL(string urlWithoutQuery)
+        private void UpdateURL(Uri urlWithoutQuery)
         {
-            tileSet.tilesetUrl = urlWithoutQuery;
+            tileSet.tilesetUrl = urlWithoutQuery.ToString();
             EnableTileset();
         }
 
@@ -175,7 +175,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             {
                 urlPropertyData = urlProperty; //use existing object to overwrite the current instance
                 URL = urlProperty.Url;
-                UpdateURL(urlProperty.Url);
+                UpdateURL(new Uri(urlProperty.Url));
             }
         }
 

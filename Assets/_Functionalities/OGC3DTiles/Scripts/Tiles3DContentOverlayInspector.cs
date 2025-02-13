@@ -4,6 +4,7 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using Netherlands3D.Twin.Tools.UI;
+using System;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -73,9 +74,9 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
         }
 
-        private void UrlHasChanged(string newURL)
+        private void UrlHasChanged(Uri newURL)
         {
-            keyVault.TryToFindSpecificCredentialType(newURL, "");
+            keyVault.TryToFindSpecificCredentialType(newURL.ToString(), "");
         }
 
         private void DeterminedAuthorizationType(string url, AuthorizationType authorizationType)

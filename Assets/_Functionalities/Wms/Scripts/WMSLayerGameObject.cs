@@ -30,15 +30,9 @@ namespace Netherlands3D.Functionalities.Wms
         public bool ShowLegendOnSelect { get; set; } = true;
 
         public UnityEvent<Uri> OnURLChanged => urlPropertyData.OnDataChanged;
-
         public UnityEvent<UnityWebRequest> OnServerResponseReceived => throw new NotImplementedException();
 
-        UnityEvent<string> ILayerWithCredentials.OnURLChanged => throw new NotImplementedException();
-
         public string URL { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public UnityEvent<string> UnsupportedExtensionsMessage;
-        //public UnityEvent<UnityWebRequest> OnServerResponseReceived => tileSet.OnServerResponseReceived;
 
         private List<IPropertySectionInstantiator> propertySections = new();
 
@@ -62,10 +56,6 @@ namespace Netherlands3D.Functionalities.Wms
             WMSProjectionLayer.WmsUrl = urlPropertyData.Data.ToString();
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
-
-
-            //[HideInInspector] public UnityEvent<UnityWebRequest> OnServerResponseReceived = new();
-
 
 
             var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);

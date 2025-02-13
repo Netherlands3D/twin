@@ -1,3 +1,4 @@
+using System;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 
@@ -6,7 +7,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials
     public interface ILayerWithCredentials
     {
         public UnityEvent<UnityWebRequest> OnServerResponseReceived { get; }
-        public UnityEvent<string> OnURLChanged { get; }
+        public UnityEvent<Uri> OnURLChanged { get; }
 
         public string URL { get; set; } //The base URL to check the credentials for
 
