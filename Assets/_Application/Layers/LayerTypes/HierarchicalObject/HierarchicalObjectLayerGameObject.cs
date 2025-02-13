@@ -188,9 +188,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void OnSelect()
         {
             var transformInterfaceToggle = FindAnyObjectByType<TransformHandleInterfaceToggle>(FindObjectsInactive.Include); //todo remove FindObjectOfType
-
-            if (transformInterfaceToggle)
+            
+            if (!transformInterfaceToggle)
+            {
+                Debug.LogError("Transform handles interface toggles not found, cannot set transform target");
+            }
+            else
+            {
                 transformInterfaceToggle.SetTransformTarget(gameObject);
+            }
         }
 
         public override void OnDeselect()

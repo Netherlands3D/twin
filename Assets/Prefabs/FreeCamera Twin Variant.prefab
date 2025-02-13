@@ -227,3 +227,5 @@ MonoBehaviour:
   moveSizeLimit: 20000
   zoomSizeLimit: 2000
   defaultCameraDistance: 300
+  zoomDistanceMultiplier: 4
+  decayRate: 0.007

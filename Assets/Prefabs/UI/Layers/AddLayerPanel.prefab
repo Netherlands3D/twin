@@ -5034,8 +5034,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 7974831043381414785, guid: 395dd4e52bd3b42cfb24f183f3839bba, type: 3}
-  initialRotation: {x: 0, y: 0, z: 0}
-  initialScale: {x: 1, y: 1, z: 1}
 --- !u!1 &2530314180397596136
 GameObject:
   m_ObjectHideFlags: 0

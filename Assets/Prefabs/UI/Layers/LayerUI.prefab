@@ -2155,6 +2155,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 730d7bdcdd4a2446dbe4df81938266f4, type: 3}
   - {fileID: 21300000, guid: b6c64162c3e9c4e6ea68a7f37a4bcdee, type: 3}
   propertyToggle: {fileID: 1850104207184435544}
+  doubleClickThreshold: 0.5
 --- !u!114 &1244387766270603908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3215,11 +3216,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6443985419094450393}
     m_Modifications:
-    - target: {fileID: 4067009126913448724, guid: 994a472eae9b932499df188f0a8c6da7,
-        type: 3}
-      propertyPath: m_IsOn
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6976806185474757910, guid: 994a472eae9b932499df188f0a8c6da7,
         type: 3}
       propertyPath: m_Name
