@@ -123,10 +123,10 @@ namespace Netherlands3D.Functionalities.Wms
             var maxYString = node.SelectSingleNode("*[local-name()='northBoundLatitude' or @maxy]", namespaceManager)?.InnerText;
 
             //replace , with . to ensure the parse function works as intended.
-            minXString = minXString.Replace(',', '.');
-            minYString = minXString.Replace(',', '.');
-            maxXString = minXString.Replace(',', '.');
-            maxYString = minXString.Replace(',', '.');
+            minXString = minXString?.Replace(',', '.');
+            minYString = minXString?.Replace(',', '.');
+            maxXString = minXString?.Replace(',', '.');
+            maxYString = minXString?.Replace(',', '.');
             
             if (!double.TryParse(minXString, out var minX))
                 return null;
