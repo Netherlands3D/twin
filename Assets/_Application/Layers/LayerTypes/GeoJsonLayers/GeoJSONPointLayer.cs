@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public event GeoJSONPointHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
-        public override BoundingBox Bounds => null; // since features load and unload when the camera moves, we don't know the bounds of this layer
+        public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
         public List<Mesh> GetMeshData(Feature feature)
         {
@@ -172,6 +172,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 GameObject.Destroy(PointRenderer3D.gameObject);
 
             base.DestroyLayerGameObject();
+        }
+        
+        public BoundingBox GetBoundingBoxOfVisibleFeatures()
+        {
+            if (spawnedVisualisations.Count == 0)
+                return null;
+
+            BoundingBox bbox = null;
+            foreach (var vis in spawnedVisualisations.Values)
+            {
+                if (bbox == null)
+                    bbox = new BoundingBox(vis.trueBounds);
+                else
+                    bbox.Encapsulate(vis.trueBounds);
+            }
+
+            return bbox;
         }
     }
 }

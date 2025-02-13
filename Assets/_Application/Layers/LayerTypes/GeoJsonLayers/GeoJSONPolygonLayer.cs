@@ -15,13 +15,30 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     [Serializable]
     public partial class GeoJSONPolygonLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
-        public override BoundingBox Bounds => null; // since features load and unload when the camera moves, we don't know the bounds of this layer
+        public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
         public bool IsPolygon => true;
         public Transform Transform { get => transform; }
         public delegate void GeoJSONPointHandler(Feature feature);
         public event GeoJSONPointHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePolygonVisualisations> spawnedVisualisations = new();     
+        
+        [SerializeField] private Material polygonVisualizationMaterial;
+        internal Material polygonVisualizationMaterialInstance;
+
+        public Material PolygonVisualizationMaterial
+        {
+            get => polygonVisualizationMaterial;
+            set
+            {
+                polygonVisualizationMaterial = value;
+                
+                foreach (var featureVisualisation in spawnedVisualisations)
+                {
+                    featureVisualisation.Value.SetMaterial(value);
+                }
+            }
+        }
 
         public List<Mesh> GetMeshData(Feature feature)
         {
@@ -48,8 +65,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             return 0; //we want to precisely measure the edge to a polygon so no selection range is applied here
         }
-
-
+        
         /// <summary>
         /// set the colors for the polygon visualisation within the feature polygon visualisation matching the meshes provided
         /// </summary>
@@ -105,24 +121,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public Color GetRenderColor()
         {
             return polygonVisualizationMaterialInstance.color;
-        }
-
-
-        [SerializeField] private Material polygonVisualizationMaterial;
-        internal Material polygonVisualizationMaterialInstance;
-
-        public Material PolygonVisualizationMaterial
-        {
-            get => polygonVisualizationMaterial;
-            set
-            {
-                polygonVisualizationMaterial = value;
-                
-                foreach (var featureVisualisation in spawnedVisualisations)
-                {
-                    featureVisualisation.Value.SetMaterial(value);
-                }
-            }
         }
      
         public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
@@ -227,6 +225,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             featureVisualisation.DestroyAllVisualisations();
             FeatureRemoved?.Invoke(featureVisualisation.feature); 
             spawnedVisualisations.Remove(featureVisualisation.feature);
+        }
+
+        public BoundingBox GetBoundingBoxOfVisibleFeatures()
+        {
+            if (spawnedVisualisations.Count == 0)
+                return null;
+
+            BoundingBox bbox = null;
+            foreach (var vis in spawnedVisualisations.Values)
+            {
+                if (bbox == null)
+                    bbox = new BoundingBox(vis.trueBounds);
+                else
+                    bbox.Encapsulate(vis.trueBounds);
+            }
+
+            return bbox;
         }
     }
 }

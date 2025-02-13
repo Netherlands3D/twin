@@ -118,6 +118,50 @@ namespace Netherlands3D.Twin.Utility
             var d = (size.easting * size.easting) + (size.northing * size.northing) + (size.height * size.height);
             return Math.Sqrt(d);
         }
+
+        public void Encapsulate(Bounds bounds)
+        {
+            Encapsulate(new Coordinate(bounds.center - bounds.extents));
+            Encapsulate(new Coordinate(bounds.center + bounds.extents));
+        }
+        
+        public void Encapsulate(BoundingBox bounds)
+        {
+            if(bounds == null)
+                return;
+            
+            Encapsulate(bounds.Center - bounds.Size/2);
+            Encapsulate(bounds.Center + bounds.Size/2);
+        }
+        
+        public void Encapsulate(Coordinate coordinate)
+        {
+            var blv1 = Min(coordinate.value1, BottomLeft.value1);
+            var blv2 = Min(coordinate.value2, BottomLeft.value2);
+            var trv1 = Max(coordinate.value1, TopRight.value1);
+            var trv2 = Max(coordinate.value2, TopRight.value2);
+            if (BottomLeft.PointsLength == 2)
+            {
+                BottomLeft = new Coordinate(CoordinateSystem, blv1, blv2);
+                TopRight = new Coordinate(CoordinateSystem, trv1, trv2);
+                return;
+            }
+            var blv3 = Min(coordinate.value3, BottomLeft.value3);
+            var trv3 = Max(coordinate.value3, TopRight.value3);
+            
+            BottomLeft = new Coordinate(CoordinateSystem, blv1, blv2, blv3);
+            TopRight = new Coordinate(CoordinateSystem, trv1, trv2, trv3);
+        }
+
+        private static double Min(double lhs, double rhs)
+        {
+            return lhs < rhs ? lhs : rhs;
+        }
+
+        private static double Max(double lhs, double rhs)
+        {
+            return lhs > rhs ? lhs : rhs;
+        }
         
         //RDBounds as defined by https://epsg.io/28992
         public static BoundingBox RDBounds => new BoundingBox(new Coordinate(CoordinateSystem.RD, 482.06d, 306602.42d), new Coordinate(CoordinateSystem.RD, 284182.97d, 637049.52d));

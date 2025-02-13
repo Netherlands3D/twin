@@ -15,13 +15,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     [Serializable]
     public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
-        public override BoundingBox Bounds => null; // since features load and unload when the camera moves, we don't know the bounds of this layer
         public bool IsPolygon  => false;
         public Transform Transform => transform;
         public delegate void GeoJSONLineHandler(Feature feature);
         public event GeoJSONLineHandler FeatureRemoved;
 
         private Dictionary<Feature, FeatureLineVisualisations> spawnedVisualisations = new();
+
+        public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
 
@@ -117,6 +118,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             
             newFeatureVisualisation.SetBoundsPadding(Vector3.one * GetSelectionRange());
             newFeatureVisualisation.CalculateBounds();
+            
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
         }
 
@@ -174,6 +176,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             base.DestroyLayerGameObject();
+        }
+        
+        public BoundingBox GetBoundingBoxOfVisibleFeatures()
+        {
+            if (spawnedVisualisations.Count == 0)
+                return null;
+
+            BoundingBox bbox = null;
+            foreach (var vis in spawnedVisualisations.Values)
+            {
+                if (bbox == null)
+                    bbox = new BoundingBox(vis.trueBounds);
+                else
+                    bbox.Encapsulate(vis.trueBounds);
+            }
+
+            return bbox;
         }
     }
 }
