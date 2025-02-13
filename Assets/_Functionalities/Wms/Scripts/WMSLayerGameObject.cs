@@ -108,6 +108,8 @@ namespace Netherlands3D.Functionalities.Wms
 
         public void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)
         {
+            if (boundingBoxContainer == null) return;
+
             var wmsUrl = urlPropertyData.Data.ToString();
             var featureLayerName = OgcWebServicesUtility.GetParameterFromURL(wmsUrl, "layers");
 
