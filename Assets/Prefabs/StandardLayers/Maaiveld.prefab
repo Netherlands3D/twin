@@ -63,14 +63,14 @@ MonoBehaviour:
     geoLOD: 
     path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked-12m/Terrain{x}_{y}.12.bin
     pathQuery: 
-    maximumDistance: 8000
+    maximumDistance: 6000
     maximumDistanceSquared: 0
     enabled: 1
   - Description: 
     geoLOD: 
     path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked-6m/Terrain{x}_{y}.6.bin
     pathQuery: 
-    maximumDistance: 4000
+    maximumDistance: 3000
     maximumDistanceSquared: 0
     enabled: 1
   - Description: 
