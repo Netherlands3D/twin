@@ -162,7 +162,7 @@ namespace Netherlands3D.Twin.Configuration
             // Add an Uxios interceptor to prefix all URLs with the given CORS Proxy URL - we assume that the chosen
             // proxy works by treating the real URL as a path to the proxy URL. This is consistent with how the 
             // CORS Anywhere proxy works, but if we were to use another proxy it may not work anymore.
-            Uxios.Interceptors.request.Add(new RequestInterceptor(request =>
+            Uxios.DefaultInstance.Interceptors.request.Add(new RequestInterceptor(request =>
             {
                 request.Url = new Uri($"{configuration.CorsProxyUrl}/{request.Url}");
                 request.Headers.Add("X-Requested-With", "Netherlands3D");

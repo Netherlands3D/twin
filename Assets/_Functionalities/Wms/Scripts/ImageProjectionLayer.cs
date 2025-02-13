@@ -168,7 +168,7 @@ namespace Netherlands3D.Functionalities.Wms
             Tile tile = tiles[tileKey];
             string url = Datasets[tiles[tileKey].unityLOD].path;
 
-            var webRequest = Uxios.DefaultInstance.Get<Texture>(new Uri(url));
+            var webRequest = Uxios.DefaultInstance.Get<Texture2D>(new Uri(url));
             webRequest.Then(_ => ClearPreviousTexture(tile));
             webRequest.Catch(exception =>
             {

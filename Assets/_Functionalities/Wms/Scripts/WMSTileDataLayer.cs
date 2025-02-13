@@ -74,12 +74,15 @@ namespace Netherlands3D.Functionalities.Wms
             var boundingBox = DetermineBoundingBox(tileChange, mapData);
             string url = wmsUrl.Replace("{0}", boundingBox.ToString());
 
-            var promise = Uxios.DefaultInstance.Get<Texture>(new Uri(url));
+            var promise = Uxios.DefaultInstance.Get<Texture2D>(
+                new Uri(url), 
+                new Config() { TypeOfResponseType = ExpectedTypeOfResponse.Texture(true)}
+            );
+
             promise.Then(response =>
                 {
                     ClearPreviousTexture(tile);
-                    Texture texture = response.Data as Texture;
-                    Texture2D tex = texture as Texture2D;
+                    Texture2D tex = response.Data as Texture2D;
                     tex.Compress(true);
                     tex.filterMode = FilterMode.Bilinear;
                     tex.Apply(false, true);

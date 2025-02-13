@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using KindMen.Uxios;
+using KindMen.Uxios.ExpectedTypesOfResponse;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Functionalities.Wms.UI;
 using Netherlands3D.Twin.UI;
@@ -163,11 +164,13 @@ namespace Netherlands3D.Functionalities.Wms
 
             foreach (string url in urlContainer.LayerNameLegendUrlDictionary.Values)
             {
-                var promise = Uxios.DefaultInstance.Get<Texture>(new Uri(url));
+                var promise = Uxios.DefaultInstance.Get<Texture2D>(
+                    new Uri(url), 
+                    new Config() { TypeOfResponseType = new TextureResponse() {Readable = true}}
+                );
                 promise.Then(response =>
                 {
-                    Texture texture = response.Data as Texture;
-                    Texture2D tex = texture as Texture2D;
+                    Texture2D tex = response.Data as Texture2D;
                     tex.Apply(false, true);
                     AddGraphic(Sprite.Create(
                         tex, 
