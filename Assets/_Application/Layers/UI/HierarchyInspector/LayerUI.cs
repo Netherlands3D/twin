@@ -54,7 +54,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         [SerializeField] private Sprite[] foldoutSprites;
         [SerializeField] private Sprite[] backgroundSprites;
         [SerializeField] private Toggle propertyToggle;
-        [SerializeField] private float doubleClickThreshold = 0.3f;
+        [SerializeField] private float doubleClickThreshold = 0.5f;
 
         private LayerUI ParentUI;
         private LayerUI[] ChildrenUI = Array.Empty<LayerUI>();
