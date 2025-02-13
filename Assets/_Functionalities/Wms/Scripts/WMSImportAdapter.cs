@@ -1,11 +1,10 @@
 using System;
-using System.Collections;
 using System.IO;
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -23,12 +22,12 @@ namespace Netherlands3D.Functionalities.Wms
             var bodyContents = File.ReadAllText(cachedDataPath);
 
             // if this is not a capabilities uri, it should be a GetMap uri; otherwise we do not support this
-            if (!GetCapabilitiesRequest.Supports(url, bodyContents))
+            if (!OgcWebServicesUtility.IsSupportedGetCapabilitiesUrl(url, bodyContents, ServiceType.Wms))
             {
-                return GetMapRequest.Supports(url);
+                return OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wms, RequestType.GetMap);
             }
-
-            var request = new GetCapabilitiesRequest(url, cachedDataPath);
+            
+            var request = new WmsGetCapabilities(url, bodyContents);
                 
             // it should not just be a capabilities file, we also want to support BBOX!
             if (!request.CapableOfBoundingBoxes)
@@ -36,7 +35,6 @@ namespace Netherlands3D.Functionalities.Wms
                 Debug.Log("<color=orange>WMS BBOX filter not supported.</color>");
                 return false;
             }
-
             return true;
         }
 
@@ -48,9 +46,11 @@ namespace Netherlands3D.Functionalities.Wms
             var cachedDataPath = localFile.LocalFilePath;
             var bodyContents = File.ReadAllText(cachedDataPath);
 
-            if (GetCapabilitiesRequest.Supports(url, bodyContents))
+            if (OgcWebServicesUtility.IsSupportedGetCapabilitiesUrl(url, bodyContents, ServiceType.Wms))
             {
-                var request = new GetCapabilitiesRequest(url, cachedDataPath);
+                var request = new WmsGetCapabilities(url, bodyContents);
+                BoundingBoxCache.AddBoundingBoxContainer(request);
+
                 var maps = request.GetMaps(
                     layerPrefab.PreferredImageSize.x, 
                     layerPrefab.PreferredImageSize.y,
@@ -64,9 +64,9 @@ namespace Netherlands3D.Functionalities.Wms
                 return;
             }
 
-            if (GetMapRequest.Supports(url))
+            if (OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wms, RequestType.GetMap))
             {
-                var request = new GetMapRequest(url, cachedDataPath);
+                var request = new GetMapRequest(url, bodyContents);
                 var map = request.CreateMapFromCapabilitiesUrl(
                     url,
                     layerPrefab.PreferredImageSize.x, 
