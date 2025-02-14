@@ -187,6 +187,10 @@ namespace Netherlands3D.Functionalities.Wms
                 // CRS/SRS may be defined in the current MapNode, but can also inherit from a parent if it is not
                 // specified the flag at the end of this function will check the current node and its parents
                 var spatialReference = GetInnerTextForNode(mapNode, mapTemplate.spatialReferenceType, true);
+                
+                // TODO: Really ugly fix to deal issues around EPSG:4326. So we fixate on CRS:84 now, hoping that will
+                // work in all situations
+                spatialReference = "CRS:84";
 
                 var map = new MapFilters()
                 {
