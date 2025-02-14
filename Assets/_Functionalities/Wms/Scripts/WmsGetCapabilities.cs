@@ -142,7 +142,7 @@ namespace Netherlands3D.Functionalities.Wms
             maxYString ??= node.Attributes["maxy"]?.Value;
 
             // replace , with . to ensure the parse function works as intended because some Dutch agencies use the wrong
-            // decimal separators. Because Fuck standards?
+            // decimal separators.
             minXString = minXString?.Replace(',', '.');
             minYString = minYString?.Replace(',', '.');
             maxXString = maxXString?.Replace(',', '.');
