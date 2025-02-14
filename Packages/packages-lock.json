@@ -275,7 +275,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.coordinates": {
-      "version": "1.9.0",
+      "version": "1.9.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
