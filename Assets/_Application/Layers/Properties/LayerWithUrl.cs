@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
+            var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p.GetType() == typeof(LayerURLPropertyData)); //use explicit check to avoid confusion with LayerImageURLPropertyData 
             if (urlProperty != null)
             {
                 UrlPropertyData = urlProperty; //take existing property to overwrite the unlinked one of this class
