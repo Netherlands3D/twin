@@ -8,6 +8,7 @@ namespace Netherlands3D.Twin.Cameras
 {
     [RequireComponent(typeof(Camera))]
     [RequireComponent(typeof(FreeCamera))]
+    [RequireComponent(typeof(WorldTransform))]
     public class MoveCameraToCoordinate : MonoBehaviour
     {
         [Tooltip("if the bounds are larger than this number, the camera won't move.")] 
@@ -25,11 +26,13 @@ namespace Netherlands3D.Twin.Cameras
 
         private Camera camera;
         private FreeCamera cameraMover; //move through the FreeCamera script to make sure we only move the camera through a single point of entry
-
+        private WorldTransform cameraWorldTransform;
+        
         private void Awake()
         {
             camera = GetComponent<Camera>();
             cameraMover = GetComponent<FreeCamera>();
+            cameraWorldTransform = GetComponent<WorldTransform>();
         }
         
         public void LookAtTarget(Coordinate targetLookAt, double targetDistance)
@@ -56,7 +59,7 @@ namespace Netherlands3D.Twin.Cameras
                 distance *= t; //increase distance so that objects don't take up too much screen space
             }
 
-            var currentCameraPosition = camera.GetComponent<WorldTransform>().Coordinate; //todo cache
+            var currentCameraPosition = cameraWorldTransform.Coordinate; 
             var difference = (currentCameraPosition - targetLookAt).Convert(CoordinateSystem.RD); //use RD since this expresses the difference in meters, so we can use the SqrDistanceBeforeShifting to check if we need to shift.
             ulong sqDist = (ulong)(difference.easting * difference.easting + difference.northing * difference.northing);
             if (sqDist > Origin.current.SqrDistanceBeforeShifting) //this distance is not exact since there is still an offset we will apply to the camera, but close enough to fix the issue of floating point errors.
