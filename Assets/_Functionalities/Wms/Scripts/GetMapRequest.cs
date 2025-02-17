@@ -1,17 +1,13 @@
 using System;
-using System.Collections.Specialized;
 using KindMen.Uxios;
-using Netherlands3D.Web;
+using Netherlands3D.OgcWebServices.Shared;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wms
 {
     public class GetMapRequest : BaseRequest
     {
-        public static bool Supports(Uri url)
-        {
-            return IsSupportedUrl(url, "GetMap");
-        }
+        private const string defaultFallbackVersion = "1.3.0"; //todo: make shared between wms classes?
         
         public GetMapRequest(Uri sourceUrl, string xml) : base(sourceUrl, xml)
         {
@@ -26,7 +22,7 @@ namespace Netherlands3D.Functionalities.Wms
                 version = defaultFallbackVersion;
                 Debug.LogWarning("WMS version could not be determined, defaulting to " + defaultFallbackVersion);
             }
-            
+
             var wmsParam = new MapFilters
             {
                 name = parameters.Get("layers"),
@@ -43,15 +39,6 @@ namespace Netherlands3D.Functionalities.Wms
             wmsParam.spatialReference = !string.IsNullOrEmpty(crs) ? crs : defaultCoordinateSystemReference;
 
             return wmsParam;
-        }
-
-        public static string GetLayerNameFromURL(string wmsUrl)
-        {
-            var uri = new Uri(wmsUrl);
-            var nvc = new NameValueCollection();
-            uri.TryParseQueryString(nvc);
-            var featureLayerName = nvc.Get("layers");
-            return featureLayerName;
         }
     }
 }
