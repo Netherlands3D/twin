@@ -192,6 +192,13 @@ namespace Netherlands3D.Functionalities.Wms
                 // work in all situations
                 spatialReference = "CRS:84";
 
+                //Op dit moment wordt altijd CRS:89 toegepast, maar sommige WMSen - zoals de luchtfotos-hebben geen CRS:89.Voor accuraatheid is het sowieso opportuun om de volgende lijst van CRSen op volgorde te gebruiken:
+                //EPSG: 28992(RD)
+                //EPSG: 4326(WGS - 84 van GeoJSON)
+                //CRS: 84
+                //Als geen van deze aanwezig zijn moet de eerste uit de lijst gekozen worden die wij ondersteunen
+                //Als geen van de CRSen door ons ondersteunt wordt, dan moet het inladen falen met een foutmelding
+
                 var map = new MapFilters()
                 {
                     name = layerNameNode,
