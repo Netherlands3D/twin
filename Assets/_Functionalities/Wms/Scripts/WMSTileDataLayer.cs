@@ -121,10 +121,16 @@ namespace Netherlands3D.Functionalities.Wms
             var bottomLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
             var topRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);
 
-            var splitReferenceCode = mapFilters.spatialReference.Split(':');
-            string coordinateSystemAsString = splitReferenceCode[0].ToLower() == "epsg" 
-                ? splitReferenceCode[^1] 
-                : DefaultEpsgCoordinateSystem;
+            // Yes, there is a semicolon missing, this is on purpose because FindCoordinateSystem finds this and not 
+            // with the semicolon
+            string coordinateSystemAsString = "CRS84";
+            if (mapFilters.spatialReference != "CRS:84")
+            {
+                var splitReferenceCode = mapFilters.spatialReference.Split(':');
+                coordinateSystemAsString = splitReferenceCode[0].ToLower() == "epsg"
+                    ? splitReferenceCode[^1]
+                    : DefaultEpsgCoordinateSystem;
+            }
 
             CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString, out var foundCoordinateSystem);
             
