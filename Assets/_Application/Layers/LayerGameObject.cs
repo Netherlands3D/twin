@@ -1,3 +1,5 @@
+using System;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
@@ -152,7 +154,19 @@ namespace Netherlands3D.Twin.Layers
 
         public void CenterInView(LayerData layer)
         {
-            Camera.main.GetComponent<MoveCameraToBounds>().MoveToTarget(Bounds);
+            if (Bounds == null)
+            {
+                Debug.LogError("Bounds object is null, no bounds specified to center to.");
+                return;
+            }
+
+            if(Bounds.BottomLeft.PointsLength > 2)
+                Bounds.Convert(CoordinateSystem.RDNAP); //todo: make this CRS independent
+            else
+                Bounds.Convert(CoordinateSystem.RD);
+            
+            //move the camera to the center of the bounds, and move it back by the size of the bounds (2x the extents)
+            Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(Bounds.Center, Bounds.GetSizeMagnitude());//sizeMagnitude returns 2x the extents
         }
     }
 }
