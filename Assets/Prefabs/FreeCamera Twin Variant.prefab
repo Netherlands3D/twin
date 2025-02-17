@@ -226,6 +226,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSizeLimit: 20000
   zoomSizeLimit: 2000
-  defaultCameraDistance: 300
+  defaultCameraDistance: 500
   zoomDistanceMultiplier: 4
   decayRate: 0.007
