@@ -6,6 +6,8 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Cameras
 {
+    [RequireComponent(typeof(Camera))]
+    [RequireComponent(typeof(FreeCamera))]
     public class MoveCameraToBounds : MonoBehaviour
     {
         [Tooltip("if the bounds are larger than this number, the camera won't move.")] 
@@ -22,13 +24,15 @@ namespace Netherlands3D.Twin.Cameras
         [SerializeField] double decayRate = 0.007d; // Decay rate
 
         private Camera camera;
+        private FreeCamera cameraMover; //move through the FreeCamera script to make sure we only move the camera through a single point of entry
 
         private void Awake()
         {
             camera = GetComponent<Camera>();
+            cameraMover = GetComponent<FreeCamera>();
         }
 
-        public void MoveToBounds(BoundingBox bounds)
+        public void MoveToTarget(BoundingBox bounds)
         {
             if (bounds == null)
             {
@@ -36,7 +40,7 @@ namespace Netherlands3D.Twin.Cameras
             }
 
             if(bounds.BottomLeft.PointsLength > 2)
-                bounds.Convert(CoordinateSystem.RDNAP);
+                bounds.Convert(CoordinateSystem.RDNAP); //todo: make this CRS independent
             else
                 bounds.Convert(CoordinateSystem.RD);
 
@@ -60,13 +64,13 @@ namespace Netherlands3D.Twin.Cameras
             {
                 // Compute the necessary distance to fit the entire object in view
                 var fovRadians = camera.fieldOfView * Mathf.Deg2Rad;
-                distance = sizeMagnitude / (2 * Mathf.Tan(fovRadians / 2));
+                distance = sizeMagnitude / (2 * Mathf.Tan(fovRadians * 0.5f));
                 var distanceFactor = Math.Exp(-decayRate * distance); //if an object is larger, we move away less.
                 var t = Mathf.Lerp(1, zoomDistanceMultiplier, (float)distanceFactor);
                 distance *= t; //increase distance so that objects don't take up too much screen space
             }
 
-            var currentCameraPosition = camera.GetComponent<WorldTransform>().Coordinate;
+            var currentCameraPosition = camera.GetComponent<WorldTransform>().Coordinate; //todo cache
             var difference = (currentCameraPosition - center).Convert(CoordinateSystem.RD); //use RD since this expresses the difference in meters, so we can use the SqrDistanceBeforeShifting to check if we need to shift.
             ulong sqDist = (ulong)(difference.easting * difference.easting + difference.northing * difference.northing);
             if (sqDist > Origin.current.SqrDistanceBeforeShifting) //this distance is not exact since there is still an offset we will apply to the camera, but close enough to fix the issue of floating point errors.
@@ -76,7 +80,8 @@ namespace Netherlands3D.Twin.Cameras
                 Origin.current.MoveOriginTo(newOrigin);
             }
 
-            camera.transform.position = center.ToUnity() - cameraDirection * (float)distance; //we can now use unity coordinates, as the origin has been shifted if needed.
+            var unityTargetPosition = center.ToUnity() - cameraDirection * (float)distance;
+            cameraMover.MoveToTarget(unityTargetPosition); //we can now use unity coordinates, as the origin has been shifted if needed.
         }
     }
 }

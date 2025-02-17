@@ -171,6 +171,7 @@ namespace Netherlands3D.Twin.Layers
 
         [JsonIgnore] public readonly UnityEvent<LayerData> LayerSelected = new();
         [JsonIgnore] public readonly UnityEvent<LayerData> LayerDeselected = new();
+        [JsonIgnore] public UnityEvent<LayerData> LayerDoubleClicked = new();
 
         [JsonIgnore] public readonly UnityEvent ParentChanged = new();
         [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
@@ -204,6 +205,11 @@ namespace Netherlands3D.Twin.Layers
         {
             Root.RemoveLayerFromSelection(this);
             LayerDeselected.Invoke(this);
+        }
+
+        public virtual void DoubleClickLayer()
+        {
+            LayerDoubleClicked.Invoke(this);
         }
 
         public LayerData(string name) //initialize without layer properties, needed when creating an object at runtime.

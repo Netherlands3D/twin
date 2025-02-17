@@ -467,7 +467,9 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private void JumpCameraToLayer()
         {
             if (Layer is ReferencedLayerData referencedLayerData)
-                referencedLayerData.Reference.CenterInView();
+            {
+                Layer.DoubleClickLayer();
+            }
         }
 
         private void OnRightButtonDown(PointerEventData eventData)
