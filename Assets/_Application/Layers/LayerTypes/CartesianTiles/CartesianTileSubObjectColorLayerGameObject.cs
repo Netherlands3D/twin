@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
     public class CartesianTileSubObjectColorLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
-        public override BoundingBox Bounds => BoundingBox.RDBounds; //assume we cover the entire RD bounds area
+        public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
         public int PriorityIndex
         {
             get { return transform.GetSiblingIndex(); }
