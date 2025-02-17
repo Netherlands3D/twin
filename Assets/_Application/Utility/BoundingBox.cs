@@ -130,8 +130,8 @@ namespace Netherlands3D.Twin.Utility
             if(bounds == null)
                 return;
             
-            Encapsulate(bounds.Center - bounds.Size/2);
-            Encapsulate(bounds.Center + bounds.Size/2);
+            Encapsulate(bounds.Center - bounds.Size * 0.5f);
+            Encapsulate(bounds.Center + bounds.Size * 0.5f);
         }
         
         public void Encapsulate(Coordinate coordinate)
