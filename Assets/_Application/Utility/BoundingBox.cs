@@ -1,5 +1,6 @@
 using System;
 using Netherlands3D.Coordinates;
+using UnityEngine;
 
 namespace Netherlands3D.Twin.Utility
 {
@@ -7,20 +8,22 @@ namespace Netherlands3D.Twin.Utility
     {
         public Coordinate BottomLeft { get; private set; }
         public Coordinate TopRight { get; private set; }
+        public Coordinate Center => (BottomLeft + TopRight) * 0.5f;
+
         public CoordinateSystem CoordinateSystem { get; private set; }
 
         public BoundingBox(Coordinate bottomLeft, Coordinate topRight)
         {
-            if (bottomLeft.Points[0] > topRight.Points[0] || bottomLeft.Points[1] > topRight.Points[1])
+            if (topRight.CoordinateSystem != bottomLeft.CoordinateSystem)
+            {
+                topRight = topRight.Convert((CoordinateSystem)bottomLeft.CoordinateSystem);
+            }
+
+            if (bottomLeft.easting > topRight.easting || bottomLeft.northing > topRight.northing)
             {
                 throw new ArgumentException(
                     "Invalid coordinates for BoundingBox. BottomLeft should have lower values than TopRight."
                 );
-            }
-
-            if (topRight.CoordinateSystem != bottomLeft.CoordinateSystem)
-            {
-                topRight = topRight.Convert((CoordinateSystem)bottomLeft.CoordinateSystem);
             }
 
             BottomLeft = bottomLeft;
@@ -38,7 +41,7 @@ namespace Netherlands3D.Twin.Utility
         public bool Contains(BoundingBox other)
         {
             if (other.CoordinateSystem != CoordinateSystem)
-                other = ConvertToCRS(other, CoordinateSystem);
+                other.Convert(CoordinateSystem);
 
             if (BottomLeft.PointsLength == 2)
             {
@@ -56,11 +59,31 @@ namespace Netherlands3D.Twin.Utility
                    other.TopRight.height <= this.TopRight.height;
         }
 
+        public bool Contains(Coordinate coordinate)
+        {
+            if ((CoordinateSystem)coordinate.CoordinateSystem != CoordinateSystem)
+                coordinate = coordinate.Convert(CoordinateSystem);
+
+            if (BottomLeft.PointsLength == 2)
+            {
+                return coordinate.easting >= this.BottomLeft.easting &&
+                       coordinate.northing >= this.BottomLeft.northing &&
+                       coordinate.easting <= this.TopRight.easting &&
+                       coordinate.northing <= this.TopRight.northing;
+            }
+
+            return coordinate.easting >= this.BottomLeft.easting &&
+                   coordinate.northing >= this.BottomLeft.northing &&
+                   coordinate.height >= this.BottomLeft.height &&
+                   coordinate.easting <= this.TopRight.easting &&
+                   coordinate.northing <= this.TopRight.northing &&
+                   coordinate.height <= this.TopRight.height;
+        }
 
         public bool Intersects(BoundingBox other)
         {
             if (other.CoordinateSystem != CoordinateSystem)
-                other = ConvertToCRS(other, CoordinateSystem);
+                other.Convert(CoordinateSystem);
 
             if (BottomLeft.PointsLength == 2)
             {
@@ -71,14 +94,7 @@ namespace Netherlands3D.Twin.Utility
             return !(TopRight.easting < other.BottomLeft.easting || BottomLeft.easting > other.TopRight.easting ||
                      TopRight.northing < other.BottomLeft.northing || BottomLeft.northing > other.TopRight.northing ||
                      TopRight.height < other.BottomLeft.height || BottomLeft.height > other.TopRight.height);
-        }
-
-        private BoundingBox ConvertToCRS(BoundingBox box, CoordinateSystem newCoordinateSystem)
-        {
-            var bottomLeft = box.BottomLeft.Convert(newCoordinateSystem);
-            var topRight = box.TopRight.Convert(newCoordinateSystem);
-            return new BoundingBox(bottomLeft, topRight);
-        }
+        }               
 
         /// <summary>
         /// Returns the string as a WMS bounding box string
@@ -86,6 +102,22 @@ namespace Netherlands3D.Twin.Utility
         public override string ToString()
         {
             return $"{BottomLeft.easting},{BottomLeft.northing},{TopRight.easting},{TopRight.northing}";
+        }
+
+        public void Debug(Color color)
+        {
+            float height = 100;
+            Vector3 unityBottomLeft = BottomLeft.ToUnity();
+            unityBottomLeft.y = height;
+            Vector3 unityTopRight = TopRight.ToUnity();
+            unityTopRight.y = height;
+            Vector3 unityBottomRight = new Vector3(unityTopRight.x, height, unityBottomLeft.z);
+            Vector3 unityTopLeft = new Vector3(unityBottomLeft.x, height, unityTopRight.z);
+
+            UnityEngine.Debug.DrawLine(unityBottomLeft, unityBottomRight, color);
+            UnityEngine.Debug.DrawLine(unityBottomRight, unityTopRight, color);
+            UnityEngine.Debug.DrawLine(unityTopRight, unityTopLeft, color);
+            UnityEngine.Debug.DrawLine(unityTopLeft, unityBottomLeft, color);
         }
     }
 }
