@@ -13,6 +13,7 @@ namespace Netherlands3D.Functionalities.Wms
     {
         public Uri GetCapabilitiesUri => Url;
         public const string DefaultFallbackVersion = "1.3.0";
+        private string[] preferredCRS = { "EPSG:28992", "EPSG:4326", "CRS:84" };
 
         public ServiceType ServiceType => ServiceType.Wms;
         protected override Dictionary<string, string> defaultNameSpaces => new()
@@ -184,20 +185,32 @@ namespace Netherlands3D.Functionalities.Wms
                 // Extract styles for the layer
                 var styles = ExtractStyles(mapNode);
 
-                // CRS/SRS may be defined in the current MapNode, but can also inherit from a parent if it is not
-                // specified the flag at the end of this function will check the current node and its parents
-                var spatialReference = GetInnerTextForNode(mapNode, mapTemplate.spatialReferenceType, true);
-                
-                // TODO: Really ugly fix to deal issues around EPSG:4326. So we fixate on CRS:84 now, hoping that will
-                // work in all situations
-                spatialReference = "CRS:84";
-
-                //Op dit moment wordt altijd CRS:89 toegepast, maar sommige WMSen - zoals de luchtfotos-hebben geen CRS:89.Voor accuraatheid is het sowieso opportuun om de volgende lijst van CRSen op volgorde te gebruiken:
-                //EPSG: 28992(RD)
-                //EPSG: 4326(WGS - 84 van GeoJSON)
-                //CRS: 84
-                //Als geen van deze aanwezig zijn moet de eerste uit de lijst gekozen worden die wij ondersteunen
-                //Als geen van de CRSen door ons ondersteunt wordt, dan moet het inladen falen met een foutmelding
+                string spatialReference = null;
+                var spatialReferenceType = MapFilters.SpatialReferenceTypeFromVersion(new Version(mapTemplate.version));
+                XmlNodeList crsNodes = GetNodesByName(mapNode, spatialReferenceType);
+                if (crsNodes.Count > 0)
+                { 
+                    for (int i = 0; i < preferredCRS.Length; i++)
+                    {
+                        foreach (XmlNode crsNode in crsNodes)
+                        {
+                            if (preferredCRS[i] == crsNode.InnerText)
+                            {
+                                spatialReference = crsNode.InnerText;
+                                goto referenceFound;
+                            }
+                        }
+                    }
+                    if (string.IsNullOrEmpty(spatialReference))
+                    {
+                        spatialReference = crsNodes[0].InnerText;
+                    }
+                }
+                if(string.IsNullOrEmpty(spatialReference))
+                {
+                    spatialReference = preferredCRS[0];
+                }
+                referenceFound:
 
                 var map = new MapFilters()
                 {

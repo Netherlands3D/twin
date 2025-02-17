@@ -105,6 +105,18 @@ namespace Netherlands3D.OgcWebServices.Shared
             }
         }
 
+        //protected XmlNodeList GetNodesByName(XmlNode layerNode, string nodeName)
+        //{
+        //    var queryForNode = $"*[local-name()='{nodeName}']";
+        //    return layerNode.SelectNodes($".//{queryForNode}", namespaceManager);
+        //}
+
+        protected XmlNodeList GetNodesByName(XmlNode layerNode, string nodeName)
+        {
+            var queryForNode = $"//*[local-name()='{nodeName}' or @*='{nodeName}']";
+            return layerNode.SelectNodes(queryForNode, namespaceManager);
+        }
+
         protected XmlNode GetSingleNodeByName(XmlNode layerNode, string nodeName, bool searchInParents = false)
         {
             // Base query that will attempt to find the node; but we need more ...
