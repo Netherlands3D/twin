@@ -1,4 +1,5 @@
 using Netherlands3D.Twin.Layers;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -6,12 +7,12 @@ namespace Netherlands3D.Twin.Tools.UI
 {
     public class OverlayInstantiator : MonoBehaviour
     {
-        [SerializeField] private OverlayInspector overlayPrefab;
+        [SerializeField] private List<OverlayInspector> overlayPrefabs;
         
         [FormerlySerializedAs("referencedLayer")]
         [Header("(Optional)")]
         [SerializeField] private LayerGameObject layerGameObject;
-        [SerializeField] private bool instantiateOnStart = false;
+        [SerializeField] private bool instantiateOnStart = false;        
         
         private void Start() 
         {   
@@ -21,10 +22,15 @@ namespace Netherlands3D.Twin.Tools.UI
 
         public void InstantiateOverlay(bool clearExistingContent = true)
         {
-            var spawnedOverlay = ContentOverlayContainer.Instance.ShowOverlay(overlayPrefab, clearExistingContent);
+            if(clearExistingContent)
+                ContentOverlayContainer.Instance.ClearAllOverlays();
 
-            if(layerGameObject != null)
-                spawnedOverlay.SetReferencedLayer(layerGameObject);
+            foreach (OverlayInspector overlay in overlayPrefabs)
+            {
+                var spawnedOverlay = ContentOverlayContainer.Instance.AddOverlay(overlay);
+                if (layerGameObject != null)
+                    spawnedOverlay.SetReferencedLayer(layerGameObject);
+            }
         }
     }
 }
