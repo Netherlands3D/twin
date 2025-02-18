@@ -79,7 +79,7 @@ namespace Netherlands3D.Twin.Cameras
             if (sqDist > Origin.current.SqrDistanceBeforeShifting)
             {
                 // move the origin to the bounds center with height 0, to assure large jumps do not result in errors when centering.
-                var newOrigin = targetCoordinate.Convert(CoordinateSystem.RD); //2D coord system to get rid of height.
+                var newOrigin = targetCoordinate.Convert(CoordinateSystem.WGS84_LatLon); //2D coord system to get rid of height.
                 Origin.current.MoveOriginTo(newOrigin);
             }
         }
