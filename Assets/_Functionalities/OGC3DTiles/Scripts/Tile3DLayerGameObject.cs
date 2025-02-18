@@ -12,6 +12,8 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.Functionalities.OGC3DTiles
 {
+    [RequireComponent(typeof(ReadSubtree))]
+    [RequireComponent(typeof(Read3DTileset))]
     public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, ILayerWithCredentials
     {
         private Read3DTileset tileSet;
