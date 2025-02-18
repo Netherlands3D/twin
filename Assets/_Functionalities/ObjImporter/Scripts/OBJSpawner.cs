@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -106,8 +108,8 @@ namespace Netherlands3D.Functionalities.OBJImporter
             {
                 SetObjectPosition(returnedGameObject, hasTransformProperty);
                 Debug.Log("Geo-referenced object importer, moving camera to this position: " + returnedGameObject.transform.position);
-                var mainCam = Camera.main;
-                mainCam.transform.position = returnedGameObject.transform.position + (-cameraDistanceFromGeoReferencedObject * mainCam.transform.forward);
+                var cameraMover = Camera.main.GetComponent<MoveCameraToCoordinate>();
+                cameraMover.LookAtTarget(new Coordinate(returnedGameObject.transform.position), cameraDistanceFromGeoReferencedObject);
             }
 
             // In case the returned object is georeferenced, or this (parent) object has its transform set from a property, we will use either of those positionings, and need to retain the world position.
