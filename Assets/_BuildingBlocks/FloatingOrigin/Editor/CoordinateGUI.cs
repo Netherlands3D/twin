@@ -18,11 +18,11 @@ namespace Netherlands3D.Twin.FloatingOrigin.Editor
                 ? ((CoordinateSystem)coordinate.CoordinateSystem).ToString()
                 : "Undefined";
             EditorGUILayout.LabelField("Coordinate System", coordinateSystemAsString);
-
-            var coordinatePoints = coordinate.Points ?? new double[]{};
             EditorGUILayout.LabelField(
                 "Points",
-                coordinatePoints.Length > 0 ? string.Join(", ", coordinatePoints) : "There are no points defined"
+                coordinate.PointsLength == 2 ? string.Join(", ", coordinate.value1, coordinate.value2) :
+                coordinate.PointsLength == 3 ? string.Join(", ", coordinate.value1, coordinate.value2, coordinate.value3) :
+                "There are no points defined"
             );
             EditorGUI.indentLevel--;
 
