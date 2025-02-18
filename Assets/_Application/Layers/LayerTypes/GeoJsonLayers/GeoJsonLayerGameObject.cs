@@ -386,21 +386,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         }
 
         public IGeoJsonVisualisationLayer GetVisualisationLayerForFeature(Feature feature)
-        {
-            IGeoJsonVisualisationLayer layer = null;
+        {            
             if (feature.Geometry is MultiLineString || feature.Geometry is LineString)
             {
-                layer = lineFeaturesLayer;
+                return lineFeaturesLayer;
             }
             else if (feature.Geometry is MultiPolygon || feature.Geometry is Polygon)
             {
-                layer = polygonFeaturesLayer;
+                return polygonFeaturesLayer;
             }
             else if (feature.Geometry is Point || feature.Geometry is MultiPoint)
             {
-                layer = pointFeaturesLayer;
+                return pointFeaturesLayer;
             }
-            return layer;
+            return null;
         }
     }
 }

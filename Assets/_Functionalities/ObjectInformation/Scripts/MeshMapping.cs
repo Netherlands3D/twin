@@ -73,11 +73,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public static BoundingBox CreateBoundingBoxForMesh(ObjectMapping mapping, MeshRenderer renderer)
         {
             Bounds featureBounds = renderer.bounds;
-            Coordinate bottomLeft = new Coordinate(CoordinateSystem.Unity, featureBounds.min.x, featureBounds.min.y, featureBounds.min.z);
-            Coordinate topRight = new Coordinate(CoordinateSystem.Unity, featureBounds.max.x, featureBounds.max.y, featureBounds.max.z);
-            Coordinate blWgs84 = bottomLeft.Convert(CoordinateSystem.WGS84_LatLon);
-            Coordinate trWgs84 = topRight.Convert(CoordinateSystem.WGS84_LatLon);
-            BoundingBox boundingBox = new(blWgs84, trWgs84);
+            
+            BoundingBox boundingBox = new BoundingBox(featureBounds);
+            boundingBox.Convert(CoordinateSystem.WGS84_LatLon);
             return boundingBox;
         }
 
@@ -124,12 +122,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 max = Vector3.Max(max, vertexWorld);
             }            
             Bounds bounds = new Bounds();
-            bounds.SetMinMax(min, max);
-            Coordinate bottomLeft = new Coordinate(CoordinateSystem.Unity, bounds.min.x, bounds.min.y, bounds.min.z);
-            Coordinate topRight = new Coordinate(CoordinateSystem.Unity, bounds.max.x, bounds.max.y, bounds.max.z);
-            Coordinate blWgs84 = bottomLeft.Convert(CoordinateSystem.WGS84_LatLon);
-            Coordinate trWgs84 = topRight.Convert(CoordinateSystem.WGS84_LatLon);
-            boundingBox = new BoundingBox(blWgs84, trWgs84);
+            bounds.SetMinMax(min, max);            
+            boundingBox = new BoundingBox(bounds);
+            boundingBox.Convert(CoordinateSystem.WGS84_LatLon);
         }
 
         public bool IsPositionHit(Vector3 worldPosition, Vector3[] vertices, int[] triangles, Transform meshTransform)

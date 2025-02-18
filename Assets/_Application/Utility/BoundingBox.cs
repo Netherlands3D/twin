@@ -11,20 +11,19 @@ namespace Netherlands3D.Twin.Utility
         public Coordinate Center => (BottomLeft + TopRight) * 0.5f;
         public Coordinate Size => TopRight - BottomLeft;
 
-        public CoordinateSystem CoordinateSystem { get; private set; }
+        public CoordinateSystem CoordinateSystem => (CoordinateSystem)BottomLeft.CoordinateSystem;
         
         public BoundingBox(Bounds worldSpaceBounds)
         {
             BottomLeft = new Coordinate(worldSpaceBounds.min);
             TopRight = new Coordinate(worldSpaceBounds.max);
-            CoordinateSystem = (CoordinateSystem)BottomLeft.CoordinateSystem;
         }
         
         public BoundingBox(Coordinate bottomLeft, Coordinate topRight)
         {
             if (topRight.CoordinateSystem != bottomLeft.CoordinateSystem)
             {
-                topRight = topRight.Convert((CoordinateSystem)bottomLeft.CoordinateSystem);
+                topRight = topRight.Convert(CoordinateSystem);
             }
 
             if (bottomLeft.easting > topRight.easting || bottomLeft.northing > topRight.northing)
@@ -36,7 +35,6 @@ namespace Netherlands3D.Twin.Utility
 
             BottomLeft = bottomLeft;
             TopRight = topRight;
-            CoordinateSystem = (CoordinateSystem)bottomLeft.CoordinateSystem;
         }
 
         public void Convert(CoordinateSystem coordinateSystem)

@@ -135,7 +135,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 		private void OnRemoveObjectMapping(ObjectMapping mapping)
 		{
             //the getcomponent is unfortunate, if its performanc heavy maybe use cellcaching
-            BoundingBox queryBoundingBox = MeshMapping.CreateBoundingBoxForMesh(mapping, mapping.GetComponent<MeshRenderer>()); 
+            BoundingBox queryBoundingBox = new BoundingBox(mapping.GetComponent<MeshRenderer>().bounds);
+			queryBoundingBox.Convert(CoordinateSystem.WGS84_LatLon);
             List<IMapping> mappings = MappingTree.Query<MeshMapping>(queryBoundingBox);
             foreach (MeshMapping map in mappings)
             {
