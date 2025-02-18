@@ -34,7 +34,13 @@ namespace Netherlands3D.Twin.Cameras
             cameraMover = GetComponent<FreeCamera>();
             cameraWorldTransform = GetComponent<WorldTransform>();
         }
-        
+
+        public void MoveToCoordinate(Coordinate coordinate)
+        {
+            ShiftOriginIfNeeded(coordinate);
+            cameraMover.MoveToTarget(coordinate.ToUnity()); //we can now use unity coordinates, as the origin has been shifted if needed.
+        }
+
         public void LookAtTarget(Coordinate targetLookAt, double targetDistance)
         {
             if (targetDistance > moveSizeLimit) // if the size of the bounds is larger than 20km, we don't move the camera
@@ -59,18 +65,23 @@ namespace Netherlands3D.Twin.Cameras
                 distance *= t; //increase distance so that objects don't take up too much screen space
             }
 
-            var currentCameraPosition = cameraWorldTransform.Coordinate; 
-            var difference = (currentCameraPosition - targetLookAt).Convert(CoordinateSystem.RD); //use RD since this expresses the difference in meters, so we can use the SqrDistanceBeforeShifting to check if we need to shift.
-            ulong sqDist = (ulong)(difference.easting * difference.easting + difference.northing * difference.northing);
-            if (sqDist > Origin.current.SqrDistanceBeforeShifting) //this distance is not exact since there is still an offset we will apply to the camera, but close enough to fix the issue of floating point errors.
-            {
-                // move the origin to the bounds center with height 0, to assure large jumps do not result in errors when centering.
-                var newOrigin = targetLookAt.Convert(CoordinateSystem.WGS84_LatLon); //2d coord system to get rid of height.
-                Origin.current.MoveOriginTo(newOrigin);
-            }
+            ShiftOriginIfNeeded(targetLookAt); //this distance is not exact since there is still an offset we will apply to the camera, but close enough to fix the issue of floating point errors.
 
             var unityTargetPosition = targetLookAt.ToUnity() - cameraDirection * (float)distance;
             cameraMover.MoveToTarget(unityTargetPosition); //we can now use unity coordinates, as the origin has been shifted if needed.
+        }
+
+        private void ShiftOriginIfNeeded(Coordinate targetCoordinate)
+        {
+            var currentCameraPosition = cameraWorldTransform.Coordinate;
+            var difference = (currentCameraPosition - targetCoordinate).Convert(CoordinateSystem.RD); //use RD since this expresses the difference in meters, so we can use the SqrDistanceBeforeShifting to check if we need to shift.
+            ulong sqDist = (ulong)(difference.easting * difference.easting + difference.northing * difference.northing);
+            if (sqDist > Origin.current.SqrDistanceBeforeShifting)
+            {
+                // move the origin to the bounds center with height 0, to assure large jumps do not result in errors when centering.
+                var newOrigin = targetCoordinate.Convert(CoordinateSystem.WGS84_LatLon); //2D coord system to get rid of height.
+                Origin.current.MoveOriginTo(newOrigin);
+            }
         }
     }
 }
