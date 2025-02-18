@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using Netherlands3D.Twin.Layers;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Netherlands3D.Plugins
+namespace Netherlands3D.Plugins.Editor
 {
     [CustomPropertyDrawer(typeof(PluginManifestLayerReference))]
     public class PluginManifestLayerReferenceDrawer : PropertyDrawer
@@ -39,20 +40,34 @@ namespace Netherlands3D.Plugins
             assetField.RegisterValueChangeCallback(evt =>
             {
                 var target = property.serializedObject.targetObject as PluginManifest;
-                if (target != null)
+                if (target != null && fieldInfo.GetValue(target) is List<PluginManifestLayerReference> layerRefs)
                 {
-                    if (fieldInfo.GetValue(target) is List<PluginManifestLayerReference> layerRefs)
+                    foreach (var layerRef in layerRefs)
                     {
-                        foreach (var layerRef in layerRefs)
-                        {
-                            layerRef.UpdateFields();
-                        }
+                        UpdateFields(layerRef);
                     }
                 }
                 property.serializedObject.ApplyModifiedProperties();
             });
 
             return container;
+        }
+
+        private void UpdateFields(PluginManifestLayerReference layerRef)
+        {
+            layerRef.identifier = "";
+            if (layerRef.asset == null  || string.IsNullOrEmpty(layerRef.asset.AssetGUID)) return;
+            
+            string path = AssetDatabase.GUIDToAssetPath(layerRef.asset.AssetGUID);
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+            if (prefab == null) return;
+                
+            LayerGameObject layerComponent = prefab.GetComponent<LayerGameObject>();
+            if (layerComponent == null) return;
+                
+            layerRef.identifier = layerComponent.PrefabIdentifier;
+            layerRef.layerName = layerComponent.name;
         }
     }
 }

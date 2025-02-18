@@ -2,10 +2,10 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace Netherlands3D.Plugins
+namespace Netherlands3D.Plugins.Editor
 {
     [CustomEditor(typeof(Plugins))]
-    public class PluginsEditor : Editor
+    public class PluginsEditor : UnityEditor.Editor
     {
         private Plugins plugins;
         private Vector2 scrollPosition;
