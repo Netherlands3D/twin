@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml;
 using Netherlands3D.Coordinates;
 using Netherlands3D.OgcWebServices.Shared;
+using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ namespace Netherlands3D.Functionalities.Wms
     {
         public Uri GetCapabilitiesUri => Url;
         public const string DefaultFallbackVersion = "1.3.0";
+        private CoordinateSystem[] preferredCRS = { CoordinateSystem.RD, CoordinateSystem.WGS84_LatLon, CoordinateSystem.CRS84 };
 
         public ServiceType ServiceType => ServiceType.Wms;
         protected override Dictionary<string, string> defaultNameSpaces => new()
@@ -23,6 +25,8 @@ namespace Netherlands3D.Functionalities.Wms
             { "ms", "http://mapserver.gis.umn.edu/mapserver" },
             { "schemaLocation", "http://www.opengis.net/wms" }
         };
+
+        private Dictionary<CoordinateSystem, string> supportedCrsDictionary = new Dictionary<CoordinateSystem, string>();
 
         public bool CapableOfBoundingBoxes => xmlDocument.SelectSingleNode("//*[local-name()='EX_GeographicBoundingBox' or local-name()='BoundingBox']", namespaceManager) != null;
 
@@ -184,13 +188,18 @@ namespace Netherlands3D.Functionalities.Wms
                 // Extract styles for the layer
                 var styles = ExtractStyles(mapNode);
 
-                // CRS/SRS may be defined in the current MapNode, but can also inherit from a parent if it is not
-                // specified the flag at the end of this function will check the current node and its parents
-                var spatialReference = GetInnerTextForNode(mapNode, mapTemplate.spatialReferenceType, true);
-                
-                // TODO: Really ugly fix to deal issues around EPSG:4326. So we fixate on CRS:84 now, hoping that will
-                // work in all situations
-                spatialReference = "CRS:84";
+                string spatialReference = null;
+                var spatialReferenceType = MapFilters.SpatialReferenceTypeFromVersion(new Version(mapTemplate.version));
+                XmlNodeList crsNodes = GetNodesByName(mapNode, spatialReferenceType);
+                if (crsNodes.Count == 0)
+                    crsNodes = GetNodesByNameAndAttributes(mapNode, spatialReferenceType);
+
+                HasSupportedCRS(crsNodes, out spatialReference);
+                if (string.IsNullOrEmpty(spatialReference))
+                {
+                    Debug.LogError("there is no CRS/SRS defined in the xml for this layer");
+                    continue;
+                }
 
                 var map = new MapFilters()
                 {
@@ -208,6 +217,44 @@ namespace Netherlands3D.Functionalities.Wms
 
             // Return the list of layer names as an array
             return maps;
+        }
+
+        private bool HasSupportedCRS(XmlNodeList crsNodes, out string crsToUse)
+        {
+            supportedCrsDictionary.Clear();
+
+            //parse all available crs nodes
+            foreach (XmlNode crsNode in crsNodes)
+            {
+                var crsText = crsNode.InnerText;
+                crsText = crsText == "CRS:84" ? "CRS84" : crsText;
+                var hasCRS = CoordinateSystems.FindCoordinateSystem(crsText, out var crs);
+                if (hasCRS)
+                {
+                    supportedCrsDictionary.Add(crs, crsNode.InnerText);
+                }
+            }
+
+            //try to get the preferred crs out of the list of available crses  
+            foreach (var crs in preferredCRS)
+            {
+                if (supportedCrsDictionary.ContainsKey(crs))
+                {
+                    crsToUse = supportedCrsDictionary[crs];
+                    return true;
+                }
+            }
+
+            // our preferred crses are not available, use the first supported one
+            if (supportedCrsDictionary.Count > 0)
+            {
+                crsToUse = supportedCrsDictionary.Values.First();
+                return true;
+            }
+
+            //none of the crsses available in the WMS are supported by us
+            crsToUse = null;
+            return false;
         }
 
         private MapFilters CreateMapTemplate(int width, int height, bool transparent)

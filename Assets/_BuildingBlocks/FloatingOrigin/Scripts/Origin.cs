@@ -27,6 +27,8 @@ namespace Netherlands3D.Twin.FloatingOrigin
         /// </summary>
         private ulong sqrDistanceBeforeShifting = 100000000;
 
+        public ulong SqrDistanceBeforeShifting => sqrDistanceBeforeShifting;
+
         public UnityEvent<Coordinate, Coordinate> onPreShift = new(); 
         public UnityEvent<Coordinate, Coordinate> onPostShift = new();
 
