@@ -278,7 +278,7 @@ MonoBehaviour:
   OnMobileModeEnabled:
     m_PersistentCalls:
       m_Calls: []
-  maxSimultaneousDownloads: 60
+  maxSimultaneousDownloads: 600
   maxTilesInDisposeList: 4
   screenSpaceErrorScoreMultiplier: 1
   screenCenterScore: 1000
