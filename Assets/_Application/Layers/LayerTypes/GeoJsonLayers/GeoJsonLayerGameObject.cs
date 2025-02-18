@@ -173,22 +173,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                         }
                         mesh.vertices = vertices.ToArray();
                         mesh.triangles = triangles.ToArray();
-                        //subObject.AddComponent<MeshCollider>();
                         subObject.AddComponent<MeshRenderer>().material = lineLayer.LineRenderer3D.LineMaterial;
-                    }
-                    else if (feature.Geometry is MultiPolygon || feature.Geometry is Polygon)
-                    {
-                        //lets not add a meshcollider since its very heavy
-                    }                   
+                    }                             
                 }
                 else
                 {
                     if (feature.Geometry is Point || feature.Geometry is MultiPoint)
                     {
                         subObject.transform.position = verts[0];
-                        GeoJSONPointLayer pointLayer = layer as GeoJSONPointLayer;
-                        //subObject.AddComponent<SphereCollider>().radius = pointLayer.PointRenderer3D.MeshScale * 0.5f;
-
                     }
                 }
 
