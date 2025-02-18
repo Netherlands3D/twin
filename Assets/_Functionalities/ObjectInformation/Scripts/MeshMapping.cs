@@ -31,7 +31,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public MeshMappingItem FindItemForPosition(Vector3 position)
         {
-            Coordinate target = new Coordinate(CoordinateSystem.Unity, position.x, position.y, position.z).Convert(CoordinateSystem.WGS84_LatLon);
+            Coordinate target = new Coordinate(position).Convert(CoordinateSystem.WGS84_LatLon);
             Vector3[] vertices = meshFilter.sharedMesh.vertices;
             int[] triangles = meshFilter.sharedMesh.triangles;
             Transform mTransform = meshFilter.gameObject.transform;

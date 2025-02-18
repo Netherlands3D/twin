@@ -141,7 +141,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 {
                     //destroy featuremapping object, there should be no references anywhere else to this object!
                     MappingTree.Remove(map);
-                    Destroy(map.gameObject);
+					if(map.gameObject != null)
+						Destroy(map.gameObject);
                 }
             }
         }
