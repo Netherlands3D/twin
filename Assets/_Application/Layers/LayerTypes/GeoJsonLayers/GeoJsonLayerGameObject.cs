@@ -16,6 +16,31 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
+        public override BoundingBox Bounds
+        {
+            get
+            {
+                var pointBounds = pointFeaturesLayer?.Bounds;
+                var lineBounds = lineFeaturesLayer?.Bounds;
+                var polygonBounds = polygonFeaturesLayer?.Bounds;
+
+                if (pointBounds != null)
+                {
+                    pointBounds.Encapsulate(lineBounds);
+                    pointBounds.Encapsulate(polygonBounds);
+                    return pointBounds;
+                }
+
+                if (lineBounds != null)
+                {
+                    lineBounds.Encapsulate(polygonBounds);
+                    return lineBounds;
+                }
+                
+                return polygonBounds;
+            }
+        }
+
         private GeoJSONParser parser = new GeoJSONParser(0.01f);
         public GeoJSONParser Parser => parser;
 
