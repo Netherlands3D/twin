@@ -65,7 +65,7 @@ namespace Netherlands3D.Twin.Cameras
             if (sqDist > Origin.current.SqrDistanceBeforeShifting) //this distance is not exact since there is still an offset we will apply to the camera, but close enough to fix the issue of floating point errors.
             {
                 // move the origin to the bounds center with height 0, to assure large jumps do not result in errors when centering.
-                var newOrigin = targetLookAt.Convert(CoordinateSystem.RD); //2d coord system to get rid of height.
+                var newOrigin = targetLookAt.Convert(CoordinateSystem.WGS84_LatLon); //2d coord system to get rid of height.
                 Origin.current.MoveOriginTo(newOrigin);
             }
 
