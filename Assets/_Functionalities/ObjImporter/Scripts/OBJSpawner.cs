@@ -4,6 +4,7 @@ using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Utility;
@@ -97,35 +98,55 @@ namespace Netherlands3D.Functionalities.OBJImporter
         private void OnObjImported(GameObject returnedGameObject)
         {
             bool isGeoReferenced = !importer.createdGameobjectIsMoveable;
-            bool hasTransformProperty = false;
-
             var holgo = GetComponent<HierarchicalObjectLayerGameObject>();
-            if (holgo)
-                hasTransformProperty = holgo.TransformIsSetFromProperty;
+
+            if (isGeoReferenced)
+                PositionGeoReferencedObj(returnedGameObject, holgo);
+            else
+                PositionNonGeoReferencedObj(returnedGameObject, holgo);
 
             importedObject = returnedGameObject;
-            if (isGeoReferenced)
-            {
-                SetObjectPosition(returnedGameObject, hasTransformProperty);
-                Debug.Log("Geo-referenced object importer, moving camera to this position: " + returnedGameObject.transform.position);
-                var cameraMover = Camera.main.GetComponent<MoveCameraToCoordinate>();
-                cameraMover.LookAtTarget(new Coordinate(returnedGameObject.transform.position), cameraDistanceFromGeoReferencedObject);
-            }
-
-            // In case the returned object is georeferenced, or this (parent) object has its transform set from a property, we will use either of those positionings, and need to retain the world position.
-            returnedGameObject.transform.SetParent(this.transform, isGeoReferenced || hasTransformProperty);
             returnedGameObject.AddComponent<MeshCollider>();
-
             DisposeImporter();
         }
 
-        private void SetObjectPosition(GameObject returnedGameObject, bool hasTransformProperty)
+        private void PositionNonGeoReferencedObj(GameObject returnedGameObject, HierarchicalObjectLayerGameObject holgo)
         {
-            // if we already have a position from the transform properties, match the returned object's positioning to this saved position, otherwise set it to the returned object's positioning, since this is the georeferenced position.
-            if (hasTransformProperty)
-                returnedGameObject.transform.position = transform.position;
+            //if we have saved transform data, we will use that position, otherwise we will use this object's current position.
+            if (holgo.TransformIsSetFromProperty)
+            {
+                //apply any transformation if present in the data
+                var transformPropterty = (TransformLayerPropertyData)((ILayerWithPropertyData)holgo).PropertyData;
+                transform.position = transformPropterty.Position.ToUnity();
+                returnedGameObject.transform.SetParent(transform, false); // imported object should move to saved (parent's) position
+            }
             else
-                transform.position = returnedGameObject.transform.position;
+            {
+                //no transform property or georeference present, this object should just take on the parent's position
+                returnedGameObject.transform.SetParent(transform, false); // imported object should move to saved (parent's) position
+            }
+        }
+
+        private void PositionGeoReferencedObj(GameObject returnedGameObject, HierarchicalObjectLayerGameObject holgo)
+        {
+            var targetPosition = new Coordinate(returnedGameObject.transform.position); //georeferenced position as coordinate. todo: there is already precision lost in the importer, this should be preserved while parsing, as there is nothing we can do now anymore.
+
+            if (!holgo.TransformIsSetFromProperty) //move the camera only if this is is a user imported object, not if this is a project import. We know this because a project import has its Transform property set.
+            {
+                var cameraMover = Camera.main.GetComponent<MoveCameraToCoordinate>();
+                cameraMover.LookAtTarget(targetPosition, cameraDistanceFromGeoReferencedObject); //move the camera to the georeferenced position, this also shifts the origin if needed.
+            }
+
+            transform.position = targetPosition.ToUnity(); //set this object to the georeferenced position, since this is the correct position.
+            returnedGameObject.transform.SetParent(transform, false); // we set the parent and reset its localPosition, since the origin might have changed.
+            returnedGameObject.transform.localPosition = Vector3.zero;
+
+            // imported object should stay where it is initially, and only then apply any user transformations if present.
+            if (holgo.TransformIsSetFromProperty)
+            {
+                var transformPropterty = (TransformLayerPropertyData)((ILayerWithPropertyData)holgo).PropertyData;
+                transform.position = transformPropterty.Position.ToUnity(); //apply saved user changes to position.
+            }
         }
 
         private void DisposeImporter()
