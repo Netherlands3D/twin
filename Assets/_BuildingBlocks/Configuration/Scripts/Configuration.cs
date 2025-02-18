@@ -20,6 +20,7 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private string title = "Amersfoort";
         [SerializeField] private Coordinate origin = new(CoordinateSystem.RDNAP, 155207, 462945, 0);
         [SerializeField] public List<Functionality> Functionalities = new();
+        [SerializeField] private string corsProxyUrl = null;
 
         public string Title
         {
@@ -30,6 +31,8 @@ namespace Netherlands3D.Twin.Configuration
                 OnTitleChanged.Invoke(value);
             }
         }
+
+        public string CorsProxyUrl => corsProxyUrl;
 
         public Coordinate Origin
         {
@@ -121,6 +124,11 @@ namespace Netherlands3D.Twin.Configuration
             if (jsonNode["allowUserSettings"] != null)
             {
                 AllowUserSettings = jsonNode["allowUserSettings"].AsBool;
+            }
+
+            if (jsonNode["corsProxyUrl"] != null)
+            {
+                corsProxyUrl = jsonNode["corsProxyUrl"];
             }
 
             Origin = new Coordinate(

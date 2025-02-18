@@ -1,3 +1,5 @@
+using System;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
@@ -72,11 +74,15 @@ namespace Netherlands3D.Twin.Layers
             InitializeVisualisation();
         }
 
+        //Use this function to initialize anything that has to be done after either:
+        // 1. Instantiating prefab -> creating new LayerData, or
+        // 2. Creating LayerData (from project), Instantiating prefab, coupling that LayerData to this LayerGameObject
         protected virtual void InitializeVisualisation()
         {
-            if (LayerData == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
+            if (layerData == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
                 CreateProxy();
 
+            layerData.LayerDoubleClicked.AddListener(CenterInView); //only subscribe to this event once the layerData component has been initialized
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 
             InitializeStyling();
@@ -95,6 +101,12 @@ namespace Netherlands3D.Twin.Layers
         protected virtual void OnDisable()
         {
             onHide.Invoke();
+        }
+
+        private void OnDestroy()
+        {
+            //don't unsubscribe in OnDisable, because we still want to be able to center to a 
+            layerData.LayerDoubleClicked.RemoveListener(CenterInView);
         }
 
         public virtual void OnSelect()
@@ -140,9 +152,21 @@ namespace Netherlands3D.Twin.Layers
             //initialize the layer's style        
         }
 
-        public void CenterInView()
+        public void CenterInView(LayerData layer)
         {
-            Camera.main.GetComponent<MoveCameraToBounds>().MoveToBounds(Bounds);
+            if (Bounds == null)
+            {
+                Debug.LogError("Bounds object is null, no bounds specified to center to.");
+                return;
+            }
+
+            if(Bounds.BottomLeft.PointsLength > 2)
+                Bounds.Convert(CoordinateSystem.RDNAP); //todo: make this CRS independent
+            else
+                Bounds.Convert(CoordinateSystem.RD);
+            
+            //move the camera to the center of the bounds, and move it back by the size of the bounds (2x the extents)
+            Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(Bounds.Center, Bounds.GetSizeMagnitude());//sizeMagnitude returns 2x the extents
         }
     }
 }

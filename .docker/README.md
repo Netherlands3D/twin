@@ -18,6 +18,8 @@ digital twin application while offering flexibility through a series of environm
 
 ## Environment Variables
 
+### Application Configuration
+
 - `NL3D_ORIGIN_X`: *The starting position's X coordinate when starting the application, in Rijksdriehoekformaat*
 - `NL3D_ORIGIN_Y`: *The starting position's Y coordinate when starting the application, in Rijksdriehoekformaat*
 - `NL3D_ORIGIN_Z`: *The starting position's elevation of the camera when starting the application, ranging from 0 to 1400*
@@ -43,6 +45,20 @@ digital twin application while offering flexibility through a series of environm
 - `NL3D_SUN`: *true/false, is the Sun and Shadows feature enabled*
 - `NL3D_TIMELINE`: *true/false, is the Timeline feature enabled*
 - `NL3D_TRAFFIC`: *true/false, is the Traffic Simulation feature enabled*
+
+### CORS Proxy settings
+
+By default, Netherlands3D does not make use of a CORS proxy. However, because quite a few GIS applications do not 
+provide full support for CORS, it can be necessary to use a CORS proxy to route traffic through.
+
+**Warning**: using a CORS Proxy does not come without risk or possible abuse. Please consult your infrastructure 
+specialist and security officer before enabling this. It is recommended to only enable the local CORS Proxy if you 
+have a good Web Application Firewall in place and cap the amount of spending that traffic can generate in your setup.
+
+- `NL3D_CORS_PROXY_LOCAL`: *true/false, whether to start a local CORS Proxy on this server*
+- `NL3D_CORS_PROXY_URL`: *String defining the URL, including port, of a CORS Proxy that can be used to route requests through, set to `http://<HOST OF WEBSITE>:8080` for the local proxy*
+- `NL3D_CORS_PROXY_HOST`: *String defining the HOST/IP on which the local CORS Proxy should listen to. `0.0.0.0` by default*
+- `NL3D_CORS_PROXY_PORT`: *String defining the port on which the local CORS Proxy should listen to. `8080` by default*
 
 **Note:** For detailed information on available environment variables and their impact on the application's behavior,
 refer to the subsequent section in the documentation.
@@ -185,6 +201,34 @@ After successful build, you can try it out using the following command:
 ```bash
 docker run --rm -ti --name nl3d -p 8011:80 nl3d:test
 ```
+
+### Testing with the local proxy on
+
+When you want to test with the local CORS proxy enabled, you need to start with different settings:
+
+1. Environment variable `NL3D_CORS_PROXY_LOCAL` must be passed with the value `true`
+2. Environment variable `NL3D_CORS_PROXY_URL` must be passed with the value `http://localhost:8080` - note the port number, this must be `8080`
+3. The local port on which the webserver is running must be equal to the port in the docker container - ie. `80:80`
+4. The local port on which the proxy is running must be equal to the port in the docker container - ie. `8080:8080`
+
+Thus, the following would work:
+
+```bash
+docker run --rm -ti --name nl3d -p 80:80 -p 8080:8080 -e "NL3D_CORS_PROXY_LOCAL=true" -e "NL3D_CORS_PROXY_URL=http://localhost:8080"  nl3d:test
+```
+
+The reason for this is due to the lack of DNS. When retrieving the default `ProjectTemplate.nl3d` file it will query 
+the 'localhost'. Because the proxy runs from _within_ the docker container, its `localhost` entry is not the same as
+your browser. The CORS Proxy's localhost will point to the docker container itself. This means that if a URL with 
+`localhost` is called, it will need the port number as known inside the container -80 by default for the webserver, 8080
+for the proxy-. 
+
+In effect, if you have different port numbers exposed to your host machine than the docker container uses internally, it
+will try to load the ProjectTemplate from the wrong port; as such: the exposed and internal port must be the same when
+testing with the local cors proxy enabled.
+
+This will not be an issue when testing without a cors proxy. When testing with a remote CORS proxy, your test build must
+have a DNS address that it reachable from that proxy, thus: on the internet.
 
 ## Using a customized Project file as default
 

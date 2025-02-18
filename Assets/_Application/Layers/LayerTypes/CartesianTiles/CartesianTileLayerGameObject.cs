@@ -7,7 +7,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
     [RequireComponent(typeof(Layer))]
     public class CartesianTileLayerGameObject : LayerGameObject
     {
-        public override BoundingBox Bounds => BoundingBox.RDBounds; //assume we cover the entire RD bounds area
+        public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
         
         private Layer layer;
         private Netherlands3D.CartesianTiles.TileHandler tileHandler;
