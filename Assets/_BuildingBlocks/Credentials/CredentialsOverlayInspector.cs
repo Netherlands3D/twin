@@ -1,6 +1,6 @@
-using Netherlands3D.Credentials;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.Credentials;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using Netherlands3D.Twin.Tools.UI;
@@ -8,34 +8,31 @@ using System;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Netherlands3D.Functionalities.OGC3DTiles
+namespace Netherlands3D.Credentials
 {
-    public class Tiles3DContentOverlayInspector : OverlayInspector
+    public class CredentialsOverlayInspector : OverlayInspector
     {
         [SerializeField] private KeyVault keyVault;
 
         [Tooltip("The same URL input is used here, as the one used in the property panel")] [SerializeField]
-        private Tile3DLayerPropertySection tile3DLayerPropertySection;
+        private ILayerWithCredentials credentialObject;
 
         [Tooltip("The same credentials input is used here, as the one used in the property panel")] 
         [SerializeField] private CredentialsInputPropertySection credentialsPropertySection;
 
         [SerializeField] private RectTransform credentialExplanation;
 
-        private Tile3DLayerGameObject layerGameObjectWithCredentials;
         private AuthorizationType authorizationType = AuthorizationType.Unknown;
 
         public override void SetReferencedLayer(LayerGameObject layerGameObject)
         {
             base.SetReferencedLayer(layerGameObject);
             credentialsPropertySection.Handler = layerGameObject.GetComponent<LayerCredentialsHandler>();
-
-            layerGameObjectWithCredentials = layerGameObject as Tile3DLayerGameObject;
             CloseRightProperties(layerGameObject.LayerData);
 
-            tile3DLayerPropertySection.Tile3DLayerGameObject = layerGameObjectWithCredentials;
-            layerGameObjectWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
-            layerGameObjectWithCredentials.OnServerResponseReceived.AddListener(ServerResponseReceived);
+            credentialObject = layerGameObject as ILayerWithCredentials;
+            credentialObject.OnURLChanged.AddListener(UrlHasChanged);
+            credentialObject.OnServerResponseReceived.AddListener(ServerResponseReceived);
         }
 
         private void CloseRightProperties(LayerData layer)
@@ -68,9 +65,12 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         {
             //If we close the overlay without getting access to the layer we 'cancel' and remove the layer.
             if (authorizationType == AuthorizationType.Unknown || authorizationType == AuthorizationType.InferableSingleKey)
-                layerGameObjectWithCredentials.DestroyLayer();
+            {
+                if(credentialObject is LayerGameObject layerGameObject)
+                    layerGameObject.DestroyLayer();
+            }
 
-            layerGameObjectWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
+            credentialObject.OnURLChanged.RemoveListener(UrlHasChanged);
             keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
         }
 
