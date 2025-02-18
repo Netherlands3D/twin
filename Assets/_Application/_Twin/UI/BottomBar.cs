@@ -44,8 +44,8 @@ namespace Netherlands3D.Twin.UI
             {
                 builder.Clear();
                 AppendValueString(position.x, xyz[0], builder);
-                AppendValueString(position.z, xyz[1], builder);
-                AppendValueString(position.y, xyz[2], builder);
+                AppendValueString(position.y, xyz[1], builder);
+                AppendValueString(position.z, xyz[2], builder);
                 coordinatesText.text = builder.ToString();
                 lastPosition = position;
             }
