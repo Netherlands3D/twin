@@ -142,8 +142,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             // Check for position change
             if (transform.position != previousPosition)
             {
-                var rdCoordinate = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
-                transformPropertyData.Position = rdCoordinate;
+                var positionCoordinate = new Coordinate(transform.position);
+                transformPropertyData.Position = positionCoordinate;
                 previousPosition = transform.position;
             }
 
