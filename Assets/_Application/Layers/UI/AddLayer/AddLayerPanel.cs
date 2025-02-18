@@ -72,7 +72,7 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
                 elapsedTime += Time.deltaTime;
                 if (open)
                 {
-                    var newY = Mathf.SmoothStep(rectTransform.sizeDelta.y, targetHeight, elapsedTime/smoothTime);
+                    var newY = Mathf.SmoothStep(rectTransform.sizeDelta.y, targetHeight, (elapsedTime/smoothTime)*2f);
                     var newSizeDelta = new Vector2(0, newY);
                     if (elapsedTime > smoothTime)
                     {
@@ -88,7 +88,7 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
                 }
                 else
                 {
-                    var newY = Mathf.SmoothStep(rectTransform.sizeDelta.y, minHeight, elapsedTime/smoothTime);
+                    var newY = Mathf.SmoothStep(rectTransform.sizeDelta.y, minHeight, (elapsedTime / smoothTime) * 2f);
                     var newSizeDelta = new Vector2(0, newY);
                     if (elapsedTime > smoothTime)
                     {
