@@ -34,6 +34,12 @@ fi
 # Always delete the dist file
 rm app.config.dist.json
 
+# Start a CORS Proxy in the background if one is set
+if [ "${NL3D_CORS_PROXY_LOCAL}" == "true" ]; then
+echo "Proxy URL provided, starting Proxy in the background"
+node -r cors-anywhere proxy.js &
+fi
+
 # Boot the application
-echo "Starting Webserver"
+echo "Starting Webserver" 
 nginx -g "daemon off;"

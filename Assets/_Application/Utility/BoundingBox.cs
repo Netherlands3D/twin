@@ -11,20 +11,19 @@ namespace Netherlands3D.Twin.Utility
         public Coordinate Center => (BottomLeft + TopRight) * 0.5f;
         public Coordinate Size => TopRight - BottomLeft;
 
-        public CoordinateSystem CoordinateSystem { get; private set; }
+        public CoordinateSystem CoordinateSystem => (CoordinateSystem)BottomLeft.CoordinateSystem;
         
         public BoundingBox(Bounds worldSpaceBounds)
         {
             BottomLeft = new Coordinate(worldSpaceBounds.min);
             TopRight = new Coordinate(worldSpaceBounds.max);
-            CoordinateSystem = (CoordinateSystem)BottomLeft.CoordinateSystem;
         }
         
         public BoundingBox(Coordinate bottomLeft, Coordinate topRight)
         {
             if (topRight.CoordinateSystem != bottomLeft.CoordinateSystem)
             {
-                topRight = topRight.Convert((CoordinateSystem)bottomLeft.CoordinateSystem);
+                topRight = topRight.Convert(CoordinateSystem);
             }
 
             if (bottomLeft.easting > topRight.easting || bottomLeft.northing > topRight.northing)
@@ -36,7 +35,6 @@ namespace Netherlands3D.Twin.Utility
 
             BottomLeft = bottomLeft;
             TopRight = topRight;
-            CoordinateSystem = (CoordinateSystem)bottomLeft.CoordinateSystem;
         }
 
         public void Convert(CoordinateSystem coordinateSystem)
@@ -130,8 +128,8 @@ namespace Netherlands3D.Twin.Utility
             if(bounds == null)
                 return;
             
-            Encapsulate(bounds.Center - bounds.Size/2);
-            Encapsulate(bounds.Center + bounds.Size/2);
+            Encapsulate(bounds.Center - bounds.Size * 0.5f);
+            Encapsulate(bounds.Center + bounds.Size * 0.5f);
         }
         
         public void Encapsulate(Coordinate coordinate)
@@ -163,10 +161,6 @@ namespace Netherlands3D.Twin.Utility
             return lhs > rhs ? lhs : rhs;
         }
         
-        //RDBounds as defined by https://epsg.io/28992
-        public static BoundingBox RDBounds => new BoundingBox(new Coordinate(CoordinateSystem.RD, 482.06d, 306602.42d), new Coordinate(CoordinateSystem.RD, 284182.97d, 637049.52d));
-
-
         public void Debug(Color color)
         {
             float height = 100;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GeoJSON.Net.Feature;
 using GG.Extensions;
+using Netherlands3D.Coordinates;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.SubObjects;
@@ -11,7 +12,9 @@ using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Rendering;
+using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.UI;
+using Netherlands3D.Twin.Utility;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -66,24 +69,83 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 		private FeatureSelector featureSelector;
 		private SubObjectSelector subObjectSelector;
 
-		private List<GameObject> orderedMappings = new List<GameObject>();
+		private List<IMapping> orderedMappings = new List<IMapping>();
 		private float minClickDistance = 10;
 		private float minClickTime = 0.5f;
 		private float lastTimeClicked = 0;
 		private int currentSelectedMappingIndex = -1;
 		private bool filterDuplicateFeatures = true;
 
+        public static MappingTree MappingTree
+        {
+            get
+            {
+                if (mappingTreeInstance == null)
+                {                   
+                    BoundingBox bbox = StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds;
+                    MappingTree tree = new MappingTree(bbox, 16, 12);
+                    mappingTreeInstance = tree;
+                }
+                return mappingTreeInstance;
+            }
+        }
+        public bool debugMappingTree = false;
+        private static MappingTree mappingTreeInstance;
+        private PointerToWorldPosition pointerToWorldPosition;
+
         private void Awake()
 		{
 			mainCamera = Camera.main;
-			cameraInputSystemProvider = mainCamera.GetComponent<CameraInputSystemProvider>();
+            pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
+            cameraInputSystemProvider = mainCamera.GetComponent<CameraInputSystemProvider>();
 			subObjectSelector = GetComponent<SubObjectSelector>();
 			featureSelector = GetComponent<FeatureSelector>();
 
 			keyValuePairTemplate.gameObject.SetActive(false);
 
+			Interaction.ObjectMappingCheckIn += OnAddObjectMapping;
+			Interaction.ObjectMappingCheckOut += OnRemoveObjectMapping;
+
+
 			HideObjectInformation();
 		}
+
+        private void Start()
+        {
+			//baginspector could be enabled later on, so it would be missing the already instantiated mappings
+			ObjectMapping[] alreadyActiveMappings = FindObjectsOfType<ObjectMapping>();
+			foreach (ObjectMapping mapping in alreadyActiveMappings)
+			{
+				OnAddObjectMapping(mapping);
+			}
+        }
+
+        private void OnAddObjectMapping(ObjectMapping mapping)
+		{
+			GameObject meshObject = new GameObject(mapping.gameObject.name);
+            MeshMapping objectMapping = meshObject.AddComponent<MeshMapping>();
+			objectMapping.SetMeshObject(mapping);
+            objectMapping.UpdateBoundingBox();
+            MappingTree.RootInsert(objectMapping);			
+        }
+
+		private void OnRemoveObjectMapping(ObjectMapping mapping)
+		{
+            //the getcomponent is unfortunate, if its performanc heavy maybe use cellcaching
+            BoundingBox queryBoundingBox = new BoundingBox(mapping.GetComponent<MeshRenderer>().bounds);
+			queryBoundingBox.Convert(CoordinateSystem.WGS84_LatLon);
+            List<IMapping> mappings = MappingTree.Query<MeshMapping>(queryBoundingBox);
+            foreach (MeshMapping map in mappings)
+            {
+                if (map.ObjectMapping == mapping)
+                {
+                    //destroy featuremapping object, there should be no references anywhere else to this object!
+                    MappingTree.Remove(map);
+					if(map.gameObject != null)
+						Destroy(map.gameObject);
+                }
+            }
+        }
 
 		private void Update()
 		{
@@ -124,28 +186,28 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         /// </summary>
         private void FindObjectMapping()
 		{
-			Deselect();		
-
-			// Raycast from pointer position using main camera
-			var position = Pointer.current.position.ReadValue();
-			var ray = mainCamera.ScreenPointToRay(position);
+			Deselect();	
 
 			//the following method calls need to run in order!
-			string bagId = subObjectSelector.FindSubObject(ray, out var hit);			
-			if (hit.collider == null) return;
+			string bagId = subObjectSelector.FindSubObject();	
 
-			bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, hit.point) < minClickDistance;
-            lastWorldClickedPosition = hit.point; 
+			bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.WorldPoint) < minClickDistance;
+			lastWorldClickedPosition = pointerToWorldPosition.WorldPoint;
 			
 			bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
 			lastTimeClicked = Time.time;
 
 			if (!clickedSamePosition || refreshSelection)
 			{
-                featureSelector.SetBlockingObjectMapping(subObjectSelector.Object, lastWorldClickedPosition);
-                featureSelector.FindFeature();
+				if(subObjectSelector.Object != null)
+					featureSelector.SetBlockingObjectMapping(subObjectSelector.Object.ObjectMapping, lastWorldClickedPosition);
+
+                //no features are imported yet if mappingTreeInstance is null
+                if (mappingTreeInstance != null)
+					featureSelector.FindFeature(mappingTreeInstance);
+
 				orderedMappings.Clear();
-                Dictionary<GameObject, int> mappings = new Dictionary<GameObject, int>();		
+                Dictionary<IMapping, int> mappings = new Dictionary<IMapping, int>();		
                 //lets order all mappings by layerorder (rootindex) from layerdata
                 if (featureSelector.HasFeatureMapping)
 				{
@@ -162,17 +224,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 									continue;
 							}
 
-							mappings.TryAdd(feature.gameObject, feature.VisualisationParent.LayerData.RootIndex);
+							mappings.TryAdd(feature, feature.VisualisationParent.LayerData.RootIndex);
 						}
                     }
                 }
 				if (subObjectSelector.HasObjectMapping)
 				{
-					LayerGameObject subObjectParent = subObjectSelector.Object.transform.GetComponentInParent<LayerGameObject>();
+					LayerGameObject subObjectParent = subObjectSelector.Object.ObjectMapping.transform.GetComponentInParent<LayerGameObject>();
 					if (subObjectParent != null)
 					{
 						if(subObjectParent.LayerData.ActiveInHierarchy)
-							mappings.TryAdd(subObjectSelector.Object.gameObject, subObjectParent.LayerData.RootIndex);
+							mappings.TryAdd(subObjectSelector.Object, subObjectParent.LayerData.RootIndex);
 					}
 				}
 
@@ -192,14 +254,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
 			//Debug.Log(orderedMappings[currentSelectedMappingIndex]);
 
-			GameObject selection = orderedMappings[currentSelectedMappingIndex];
-			if (selection.GetComponent<ObjectMapping>())
+			IMapping selection = orderedMappings[currentSelectedMappingIndex];
+			if (selection is MeshMapping)
 			{				
 				SelectBuildingOnHit(bagId);
 			}
 			else
 			{
-                SelectFeatureOnHit(selection.GetComponent<FeatureMapping>());				
+                SelectFeatureOnHit(selection as FeatureMapping);				
 			}
         }
 
@@ -491,5 +553,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 			keyValueItems.Clear();
 		}
 		#endregion
-	}
+
+#if UNITY_EDITOR
+		public void OnDrawGizmos()
+        {
+            if (debugMappingTree)
+                MappingTree.DebugTree();
+        }
+#endif
+    }
 }

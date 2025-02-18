@@ -44,7 +44,7 @@
       "url": "https://package.openupm.com"
     },
     "com.kind-men.uxios": {
-      "version": "0.1.3",
+      "version": "0.3.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -433,7 +433,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.subobjects": {
-      "version": "1.3.0",
+      "version": "1.4.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {},

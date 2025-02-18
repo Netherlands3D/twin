@@ -17,9 +17,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
     public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, ILayerWithPropertyPanels, ILayerWithPropertyData
     {
-        public override BoundingBox Bounds => CalculateMeshBounds();
+        public override BoundingBox Bounds => CalculateWorldBoundsFromRenderers();
 
-        private BoundingBox CalculateMeshBounds()
+        private BoundingBox CalculateWorldBoundsFromRenderers()
         {
             var renderers = GetComponentsInChildren<Renderer>(); //needs to be optimized if we call this function every frame.
             if (renderers.Length == 0)
@@ -142,8 +142,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             // Check for position change
             if (transform.position != previousPosition)
             {
-                var rdCoordinate = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
-                transformPropertyData.Position = rdCoordinate;
+                var positionCoordinate = new Coordinate(transform.position);
+                transformPropertyData.Position = positionCoordinate;
                 previousPosition = transform.position;
             }
 
