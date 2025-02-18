@@ -10,10 +10,11 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
-    public class FeatureMapping : MonoBehaviour
+    public class FeatureMapping : MonoBehaviour, IMapping
     {
         public string DebugID;
 
+        public object MappingObject => feature;
         public string FeatureID => feature.Id;
         public IGeoJsonVisualisationLayer VisualisationLayer { get { return visualisationLayer; } }
         public GeoJsonLayerGameObject VisualisationParent { get { return geoJsonLayerParent; } }
