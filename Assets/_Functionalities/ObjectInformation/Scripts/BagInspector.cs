@@ -81,11 +81,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             get
             {
                 if (mappingTreeInstance == null)
-                {
-                    //bottomleft and topright corners of the netherlands
-                    Coordinate bottomLeft = new Coordinate(CoordinateSystem.WGS84_LatLon, 50.8037d, 3.31497d);
-                    Coordinate topRight = new Coordinate(CoordinateSystem.WGS84_LatLon, 53.5104d, 7.09205d);
-                    BoundingBox bbox = new BoundingBox(bottomLeft, topRight);
+                {                   
+                    BoundingBox bbox = StandardBoundingBoxes.Wgs84_LatLonBounds;
                     MappingTree tree = new MappingTree(bbox, 16, 12);
                     mappingTreeInstance = tree;
                 }
@@ -554,12 +551,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 			}
 			keyValueItems.Clear();
 		}
-        #endregion
+		#endregion
 
-        public void OnDrawGizmos()
+#if UNITY_EDITOR
+		public void OnDrawGizmos()
         {
             if (debugMappingTree)
                 MappingTree.DebugTree();
         }
+#endif
     }
 }
