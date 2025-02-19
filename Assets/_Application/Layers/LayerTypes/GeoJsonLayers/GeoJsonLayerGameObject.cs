@@ -144,85 +144,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void CreateFeatureMappings(IGeoJsonVisualisationLayer layer, Feature feature, List<Mesh> meshes)
         {
-            for(int i = 0; i < meshes.Count; i++)
-            {
-                Mesh mesh = meshes[i];                
-                Vector3[] verts = mesh.vertices;
-                float width = 1f;
-                GameObject subObject = new GameObject(feature.Geometry.ToString() + "_submesh_" + layer.Transform.transform.childCount.ToString());
-                subObject.AddComponent<MeshFilter>().mesh = mesh;
-                if (verts.Length >= 2)
-                {
-                    //generate collider extruded lines for lines
-                    if (feature.Geometry is MultiLineString || feature.Geometry is LineString)
-                    {
-                        GeoJSONLineLayer lineLayer = layer as GeoJSONLineLayer;
-                        width = lineLayer.LineRenderer3D.LineDiameter;
-                        float halfWidth = width * 0.5f;
-
-                        int segmentCount = verts.Length - 1;
-                        int vertexCount = segmentCount * 4;  // 4 vertices per segment
-                        int triangleCount = segmentCount * 6; // 2 triangles per segment, 3 vertices each
-
-                        Vector3[] vertices = new Vector3[vertexCount];
-                        int[] triangles = new int[triangleCount];
-
-                        for (int j = 0; j < segmentCount; j++)
-                        {
-                            Vector3 p1 = verts[j];
-                            Vector3 p2 = verts[j + 1];
-                            Vector3 edgeDir = (p2 - p1).normalized;
-                            Vector3 perpDir = new Vector3(edgeDir.z, 0, -edgeDir.x);
-
-                            Vector3 v1 = p1 + perpDir * halfWidth;
-                            Vector3 v2 = p1 - perpDir * halfWidth;
-                            Vector3 v3 = p2 + perpDir * halfWidth;
-                            Vector3 v4 = p2 - perpDir * halfWidth;
-
-                            int baseIndex = j * 4;
-                            vertices[baseIndex + 0] = v1; // Top left
-                            vertices[baseIndex + 1] = v2; // Bottom left
-                            vertices[baseIndex + 2] = v3; // Top right
-                            vertices[baseIndex + 3] = v4; // Bottom right
-
-                            int triBaseIndex = j * 6;
-                            // Triangle 1
-                            triangles[triBaseIndex + 0] = baseIndex + 0;
-                            triangles[triBaseIndex + 1] = baseIndex + 1;
-                            triangles[triBaseIndex + 2] = baseIndex + 2;
-
-                            // Triangle 2
-                            triangles[triBaseIndex + 3] = baseIndex + 2;
-                            triangles[triBaseIndex + 4] = baseIndex + 1;
-                            triangles[triBaseIndex + 5] = baseIndex + 3;
-                        }
-                        mesh.vertices = vertices.ToArray();
-                        mesh.triangles = triangles.ToArray();
-                        subObject.AddComponent<MeshRenderer>().material = lineLayer.LineRenderer3D.LineMaterial;
-                    }                             
-                }
-                else
-                {
-                    if (feature.Geometry is Point || feature.Geometry is MultiPoint)
-                    {
-                        subObject.transform.position = verts[0];
-                    }
-                }
-
-                mesh.RecalculateBounds();
-                meshes[i] = mesh;
-
-                subObject.transform.SetParent(layer.Transform);
-                subObject.layer = LayerMask.NameToLayer("Projected");
-
-                FeatureMapping objectMapping = subObject.AddComponent<FeatureMapping>();
-                objectMapping.SetFeature(feature);
-                objectMapping.SetMeshes(meshes);
-                objectMapping.SetVisualisationLayer(layer);
-                objectMapping.SetGeoJsonLayerParent(this);
-                objectMapping.UpdateBoundingBox();
-                BagInspector.MappingTree.RootInsert(objectMapping);
-            }
+            FeatureMapping objectMapping = new FeatureMapping();
+            objectMapping.SetFeature(feature);
+            objectMapping.SetMeshes(meshes);
+            objectMapping.SetVisualisationLayer(layer);
+            objectMapping.SetGeoJsonLayerParent(this);
+            objectMapping.UpdateBoundingBox();
+            BagInspector.MappingTree.RootInsert(objectMapping);           
         }
 
         private GeoJSONPolygonLayer CreateOrGetPolygonLayer()

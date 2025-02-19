@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
@@ -10,7 +11,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
-    public class FeatureMapping : MonoBehaviour, IMapping
+    public class FeatureMapping : IMapping
     {
         public string DebugID;
 
@@ -141,10 +142,122 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return boundingBox;
         }
 
+        //these gameobjects can represent selected features or thumbnail meshes
+        private List<GameObject> CreateFeatureGameObjects()
+        {
+            List<GameObject> subObjects = new List<GameObject>();
+            for (int i = 0; i < meshes.Count; i++)
+            {
+                Mesh mesh = meshes[i];
+                Vector3[] verts = mesh.vertices;
+                float width = 1f;
+                GameObject subObject = new GameObject(feature.Geometry.ToString() + "_submesh_" + visualisationLayer.Transform.transform.childCount.ToString());
+                subObject.AddComponent<MeshFilter>().mesh = mesh;
+                if (verts.Length >= 2)
+                {
+                    //generate collider extruded lines for lines
+                    if (feature.Geometry is MultiLineString || feature.Geometry is LineString)
+                    {
+                        GeoJSONLineLayer lineLayer = visualisationLayer as GeoJSONLineLayer;
+                        width = lineLayer.LineRenderer3D.LineDiameter;
+                        float halfWidth = width * 0.5f;
+
+                        int segmentCount = verts.Length - 1;
+                        int vertexCount = segmentCount * 4;  // 4 vertices per segment
+                        int triangleCount = segmentCount * 6; // 2 triangles per segment, 3 vertices each
+
+                        Vector3[] vertices = new Vector3[vertexCount];
+                        int[] triangles = new int[triangleCount];
+
+                        for (int j = 0; j < segmentCount; j++)
+                        {
+                            Vector3 p1 = verts[j];
+                            Vector3 p2 = verts[j + 1];
+                            Vector3 edgeDir = (p2 - p1).normalized;
+                            Vector3 perpDir = new Vector3(edgeDir.z, 0, -edgeDir.x);
+
+                            Vector3 v1 = p1 + perpDir * halfWidth;
+                            Vector3 v2 = p1 - perpDir * halfWidth;
+                            Vector3 v3 = p2 + perpDir * halfWidth;
+                            Vector3 v4 = p2 - perpDir * halfWidth;
+
+                            int baseIndex = j * 4;
+                            vertices[baseIndex + 0] = v1; // Top left
+                            vertices[baseIndex + 1] = v2; // Bottom left
+                            vertices[baseIndex + 2] = v3; // Top right
+                            vertices[baseIndex + 3] = v4; // Bottom right
+
+                            int triBaseIndex = j * 6;
+                            // Triangle 1
+                            triangles[triBaseIndex + 0] = baseIndex + 0;
+                            triangles[triBaseIndex + 1] = baseIndex + 1;
+                            triangles[triBaseIndex + 2] = baseIndex + 2;
+
+                            // Triangle 2
+                            triangles[triBaseIndex + 3] = baseIndex + 2;
+                            triangles[triBaseIndex + 4] = baseIndex + 1;
+                            triangles[triBaseIndex + 5] = baseIndex + 3;
+                        }
+                        mesh.vertices = vertices.ToArray();
+                        mesh.triangles = triangles.ToArray();
+                        subObject.AddComponent<MeshRenderer>().material = lineLayer.LineRenderer3D.LineMaterial;
+                    }
+                }
+                else
+                {
+                    if (feature.Geometry is Point || feature.Geometry is MultiPoint)
+                    {
+                        int segments = 12;
+                        float radius = ((GeoJSONPointLayer)VisualisationLayer).PointRenderer3D.MeshScale;
+                        subObject.transform.position = verts[0];
+                        Vector3 centerVertex = Vector3.zero;
+                        Vector3[] vertices = new Vector3[segments + 1];
+                        int[] triangles = new int[segments * 3];
+                        float angleIncrement = 360.0f / segments;
+                        for (int j = 0; j < segments; j++)
+                        {
+                            float angle = Mathf.Deg2Rad * (j * angleIncrement);
+                            float x = Mathf.Cos(angle) * radius;
+                            float z = Mathf.Sin(angle) * radius;
+                            vertices[j + 1] = new Vector3(centerVertex.x + x, centerVertex.y, centerVertex.z + z);
+                            triangles[j * 3] = 0;
+                            triangles[j * 3 + 1] = (j + 2 > segments) ? 1 : j + 2;
+                            triangles[j * 3 + 2] = j + 1;
+                        }
+                        mesh.vertices = vertices.ToArray();
+                        mesh.triangles = triangles.ToArray();
+                        subObject.AddComponent<MeshRenderer>().material = ((GeoJSONPointLayer)VisualisationLayer).PointRenderer3D.Material;
+                    }
+                }
+
+                mesh.RecalculateBounds();
+                meshes[i] = mesh;
+
+                subObject.transform.SetParent(visualisationLayer.Transform);
+                subObject.layer = LayerMask.NameToLayer("Projected");
+                subObjects.Add(subObject);
+            }
+            return subObjects;
+        }
+
+        private Transform GetSelectionTransform()
+        {
+           
+            
+            return null;
+        }
+
+        private List<GameObject> selectedGameObjects = new List<GameObject>();
+
         public void SelectFeature()
         {
+            //transform for mesh world matrix
+            selectedGameObjects = CreateFeatureGameObjects();
+            Transform t = GetSelectionTransform();
+            if (selectedGameObjects.Count == 0) return; 
+
             Color selectionColor = Color.blue;
-            visualisationLayer.SetVisualisationColor(transform, meshes, selectionColor);
+            visualisationLayer.SetVisualisationColor(selectedGameObjects[0].transform, meshes, selectionColor);
             foreach (Mesh mesh in meshes)
             {
                 Color[] colors = new Color[mesh.vertexCount];
@@ -156,6 +269,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void DeselectFeature()
         {
+            if(selectedGameObjects.Count > 0)
+            {
+                for (int i = selectedGameObjects.Count - 1; i >= 0; i--)
+                    GameObject.Destroy(selectedGameObjects[i]);
+            }
+            selectedGameObjects.Clear();
+
             visualisationLayer.SetVisualisationColorToDefault();
             foreach (Mesh mesh in meshes)
             {
