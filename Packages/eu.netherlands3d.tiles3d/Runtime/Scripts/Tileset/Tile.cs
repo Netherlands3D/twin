@@ -254,28 +254,32 @@ namespace Netherlands3D.Tiles3D
 
         bool IsPointInbounds(Coordinate point, double margin)
         {
-           
-            if (point.Points[0]+margin < BottomLeft.Points[0])
+            if (point.PointsLength > 2)
+            {
+                if (point.value3 + margin < BottomLeft.value3)
+                {
+                    return false;
+                }
+
+                if (point.value3 - margin > TopRight.value3)
+                {
+                    return false;
+                }
+            }
+
+            if (point.value1 + margin < BottomLeft.value1)
             {
                 return false;
             }
-            if (point.Points[1] + margin < BottomLeft.Points[1])
+            if (point.value2 + margin < BottomLeft.value2)
             {
                 return false;
             }
-            if (point.Points[2] + margin < BottomLeft.Points[2])
+            if (point.value1 - margin > TopRight.value1)
             {
                 return false;
             }
-            if (point.Points[0] - margin > TopRight.Points[0])
-            {
-                return false;
-            }
-            if (point.Points[1] - margin > TopRight.Points[1])
-            {
-                return false;
-            }
-            if (point.Points[2] - margin > TopRight.Points[2])
+            if (point.value2 - margin > TopRight.value2)
             {
                 return false;
             }
@@ -322,8 +326,8 @@ namespace Netherlands3D.Tiles3D
                     double deltaX =  Math.Abs(Xaxis.value1) + Math.Abs(Yaxis.value1) + Math.Abs(Zaxis.value1);
                     double deltaY = Math.Abs(Xaxis.value2) + Math.Abs(Yaxis.value2) + Math.Abs(Zaxis.value2);
                     double deltaZ = Math.Abs(Xaxis.value3) + Math.Abs(Yaxis.value3) + Math.Abs(Zaxis.value3);
-                    BottomLeft = new Coordinate(CoordinateSystem.WGS84_ECEF , boxCenterEcef.Points[0]-deltaX, boxCenterEcef.Points[1] - deltaY, boxCenterEcef.Points[2] - deltaZ);
-                    TopRight = new Coordinate(CoordinateSystem.WGS84_ECEF, boxCenterEcef.Points[0] + deltaX, boxCenterEcef.Points[1] + deltaY, boxCenterEcef.Points[2] + deltaZ);
+                    BottomLeft = new Coordinate(CoordinateSystem.WGS84_ECEF , boxCenterEcef.value1-deltaX, boxCenterEcef.value2 - deltaY, boxCenterEcef.value3 - deltaZ);
+                    TopRight = new Coordinate(CoordinateSystem.WGS84_ECEF, boxCenterEcef.value1 + deltaX, boxCenterEcef.value2 + deltaY, boxCenterEcef.value3 + deltaZ);
 
 
                     break;
