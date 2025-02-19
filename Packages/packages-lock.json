@@ -275,7 +275,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.coordinates": {
-      "version": "1.9.1",
+      "version": "1.9.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -422,7 +422,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "1.10.3",
+      "version": "1.10.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
