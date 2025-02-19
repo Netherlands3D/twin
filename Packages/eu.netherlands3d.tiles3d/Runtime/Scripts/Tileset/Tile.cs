@@ -254,28 +254,32 @@ namespace Netherlands3D.Tiles3D
 
         bool IsPointInbounds(Coordinate point, double margin)
         {
-           
-            if (point.Points[0]+margin < BottomLeft.Points[0])
+            if (point.PointsLength > 2)
+            {
+                if (point.value3 + margin < BottomLeft.value3)
+                {
+                    return false;
+                }
+
+                if (point.value3 - margin > TopRight.value3)
+                {
+                    return false;
+                }
+            }
+
+            if (point.value1 + margin < BottomLeft.value1)
             {
                 return false;
             }
-            if (point.Points[1] + margin < BottomLeft.Points[1])
+            if (point.value2 + margin < BottomLeft.value2)
             {
                 return false;
             }
-            if (point.Points[2] + margin < BottomLeft.Points[2])
+            if (point.value1 - margin > TopRight.value1)
             {
                 return false;
             }
-            if (point.Points[0] - margin > TopRight.Points[0])
-            {
-                return false;
-            }
-            if (point.Points[1] - margin > TopRight.Points[1])
-            {
-                return false;
-            }
-            if (point.Points[2] - margin > TopRight.Points[2])
+            if (point.value2 - margin > TopRight.value2)
             {
                 return false;
             }
