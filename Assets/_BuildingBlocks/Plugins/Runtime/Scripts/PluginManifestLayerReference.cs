@@ -8,6 +8,7 @@ namespace Netherlands3D.Plugins
     {
         public AssetReferenceGameObject asset;
         public string identifier = "";
+        public string groupName;
         public string layerName = "";
     }
 }

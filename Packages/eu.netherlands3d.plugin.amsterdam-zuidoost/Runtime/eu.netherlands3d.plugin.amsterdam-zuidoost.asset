@@ -21,4 +21,8 @@ MonoBehaviour:
       m_SubObjectType: 
       m_EditorAssetChanged: 0
     identifier: 96d778a591e307e48b3f896321843660
+    groupName: Gemeente Amsterdam
     layerName: Ontwikkeling Zuidoost
+  registered:
+    m_PersistentCalls:
+      m_Calls: []

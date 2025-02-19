@@ -71,10 +71,17 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
         private GameObject GetGroupPanel(string groupName)
         {
             Transform[] panels = contentParent.transform.GetComponentsInChildren<Transform>(true);
-            return panels
+            var panel = panels
                 .Where(t => t.gameObject.name == groupName)
                 .Select(t => t.gameObject)
                 .FirstOrDefault();
+
+            if (!panel)
+            {
+                panel = CreateGroupPanel(groupName);
+            }
+            
+            return panel;
         }
 
         private GameObject CreateGroupPanel(string groupGroupName)
@@ -84,11 +91,13 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
             title.SetActive(false);
             
             var button = Instantiate(panelButtonPrefab, mainButtonPanel);
+            button.GetComponentInChildren<TMP_Text>().text = groupGroupName;
+
             var groupPanel = Instantiate(groupPanelPrefab, contentParent);
             groupPanel.name = groupGroupName;
         
             mainButtonPanel.GetComponent<EqualSpacingCalculator>().AddLayoutGroup(groupPanel.GetComponent<LayoutGroup>());
-            
+
             //todo: add functionality listener if needed
             
             button.onClick.AddListener(()=>mainButtonPanel.gameObject.SetActive(false));

@@ -46,22 +46,21 @@ namespace Netherlands3D.Twin.Projects
         public IPromise<LayerGameObject> Instantiate(string prefabId)
         {
             return ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId)
-                .Then(prefab =>
-                {
-                    return GameObject.Instantiate(prefab);
-                });
+                .Then(GameObject.Instantiate);
         }
 
-        public void AddPrefabRuntimeGroup(string groupName)
+        public PrefabGroup AddPrefabRuntimeGroup(string groupName)
         {
-            prefabRuntimeGroups.Add(
-                new PrefabGroup
-                {
-                    groupName = groupName,
-                    autoPopulateUI = true,
-                    prefabs = new List<LayerGameObject>()
-                }
-            );
+            var prefabGroup = new PrefabGroup
+            {
+                groupName = groupName,
+                autoPopulateUI = true,
+                prefabs = new List<LayerGameObject>(),
+                prefabReferences = new List<PrefabReference>()
+            };
+            prefabRuntimeGroups.Add(prefabGroup);
+
+            return prefabGroup;
         }
 
         public void AddObjectToPrefabRuntimeGroup(string groupName, LayerGameObject layerObject)
@@ -71,6 +70,20 @@ namespace Netherlands3D.Twin.Projects
                 group.prefabs.RemoveAll(go => go.name == layerObject.name);
                 group.prefabs.Add(layerObject);
             }
+        }
+
+        public void AddObjectToPrefabRuntimeGroup(string groupName, string label, AssetReferenceGameObject layerObject)
+        {
+            var group = prefabGroups.FirstOrDefault(group => group.groupName == groupName) 
+                ?? AddPrefabRuntimeGroup(groupName);
+
+            group.prefabReferences.Add(
+                new PrefabReference
+                {
+                    referenceGameObject = layerObject,
+                    label = label
+                }
+            );
         }
 
         private LayerGameObject FindPrefabInGroups(string id, List<PrefabGroup> prefabGroups)

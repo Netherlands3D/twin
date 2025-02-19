@@ -27,7 +27,12 @@ namespace Netherlands3D.Plugins
         [SerializeField] private List<AssetReferenceT<PluginManifest>> preloadedLocalPlugins = new();
         public UnityEvent completedPreloadingLocalPlugins = new();
         
-        private IEnumerator Start()
+        public void Load()
+        {
+            StartCoroutine(PreloadLocalPlugins());
+        }
+
+        public IEnumerator PreloadLocalPlugins()
         {
             foreach (var plugin in preloadedLocalPlugins)
             {
@@ -59,7 +64,12 @@ namespace Netherlands3D.Plugins
         {
             foreach (var layerReference in pluginManifest.Layers)
             {
-                // prefabLibrary
+                Debug.Log($"Registering layer '{layerReference.layerName}' with PrefabLibrary in group {layerReference.groupName}");
+                prefabLibrary.AddObjectToPrefabRuntimeGroup(
+                    layerReference.groupName, 
+                    layerReference.layerName,
+                    layerReference.asset
+                );
             }
         }
     }
