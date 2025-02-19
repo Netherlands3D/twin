@@ -29,7 +29,7 @@ namespace Netherlands3D.Coordinates
         }
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
         {
-            Coordinate result = new Coordinate(CoordinateSystem.ETRS89_LatLonHeight, coordinate.Points);
+            Coordinate result = new Coordinate(CoordinateSystem.ETRS89_LatLonHeight, coordinate.value1, coordinate.value2, coordinate.value3);
             result.extraLattitudeRotation = coordinate.extraLattitudeRotation;
             result.extraLongitudeRotation = coordinate.extraLongitudeRotation;
             return result;
@@ -37,7 +37,7 @@ namespace Netherlands3D.Coordinates
 
         public override Coordinate ConvertToWGS84LatLonH(Coordinate coordinate)
         {
-            Coordinate result = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, coordinate.Points);
+            Coordinate result = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, coordinate.value1, coordinate.value2, coordinate.value3);
             result.extraLattitudeRotation = coordinate.extraLattitudeRotation;
             result.extraLongitudeRotation = coordinate.extraLongitudeRotation;
             return result;
