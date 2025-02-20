@@ -124,10 +124,12 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         // the y equals the center of the bound) or a 3D results (containing the full bounds)
         private (Coordinate southWest, Coordinate northEast) ConvertBoundsToCoordinates(Bounds bounds)
         {
-            var min = new Coordinate(CoordinateSystem.Unity, bounds.min.x, bounds.center.y, bounds.min.z);
+            var minUnityPosition = new Vector3(bounds.min.x, bounds.center.y, bounds.min.z);
+            var min = new Coordinate(minUnityPosition);
             var southWest = CoordinateConverter.ConvertTo(min, DisplayCrs);
-            
-            var max = new Coordinate(CoordinateSystem.Unity, bounds.max.x, bounds.center.y, bounds.max.z);
+
+            var maxUnityPosition = new Vector3(bounds.max.x, bounds.center.y, bounds.max.z);
+            var max = new Coordinate(maxUnityPosition);
             var northEast = CoordinateConverter.ConvertTo(max, DisplayCrs);
 
             return (southWest, northEast);

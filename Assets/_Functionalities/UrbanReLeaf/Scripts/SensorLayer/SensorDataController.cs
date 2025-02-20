@@ -77,12 +77,7 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
         
         public Vector2Int GetTileKeyFromUnityPosition(Vector3 position, int tileSize)
         {
-            var unityCoordinate = new Coordinate(
-                CoordinateSystem.Unity,
-                position.x,
-                position.y,
-                position.z
-            );
+            var unityCoordinate = new Coordinate(position);
             Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.RD);
             Vector2Int key = new Vector2Int(Mathf.RoundToInt(((float)coord.Points[0] - 0.5f * tileSize) / 1000) * 1000, Mathf.RoundToInt(((float)coord.Points[1] - 0.5f * tileSize) / 1000) * 1000);
             return key;
@@ -90,12 +85,7 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
 
         public Vector2Int GetRDPositionFromUnityPosition(Vector3 position)
         {
-            var unityCoordinate = new Coordinate(
-                CoordinateSystem.Unity,
-                position.x,
-                position.y,
-                position.z
-            );
+            var unityCoordinate = new Coordinate(position);
             Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.RD);
             Vector2Int key = new Vector2Int((int)coord.Points[0], (int)coord.Points[1]);
             return key;
@@ -150,11 +140,9 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
                 coordinate[1],
                 coordinate[0],
                 0
-            );
-            Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.Unity);
-            Vector3 position = coord.ToUnity();
-            position.y = height;
-            return position;
+            ).ToUnity();
+            unityCoordinate.y = height;
+            return unityCoordinate;
         }
     }
 }
