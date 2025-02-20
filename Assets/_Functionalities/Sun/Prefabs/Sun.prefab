@@ -45,7 +45,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 3
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -221,6 +221,9 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   useCurrentTimeChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  isAnimatingChanged:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &4406432131298064742
