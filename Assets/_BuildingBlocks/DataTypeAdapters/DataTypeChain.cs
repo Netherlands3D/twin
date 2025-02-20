@@ -21,6 +21,7 @@ namespace Netherlands3D.DataTypeAdapters
         [Header("Events invoked on failures")] [Space(5)]
         public UnityEvent<string> CouldNotFindAdapter = new();
         public UnityEvent<string> OnDownloadFailed = new();
+        public UnityEvent<string> OnAuthenticationFailed = new();
 
         private string targetUrl = "";
 
