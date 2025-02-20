@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 4142489338678956943}
   - component: {fileID: -2324982978833452817}
   - component: {fileID: 7164105335501555170}
-  - component: {fileID: 1194273570138351517}
   - component: {fileID: 2740582493697960923}
   - component: {fileID: 1859171214202950123}
   - component: {fileID: -3598923106467742640}
@@ -387,22 +386,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputPropertySectionPrefab: {fileID: 7185160580400989932, guid: f241bd5b609aa4447ae89fb4325470ef,
     type: 3}
---- !u!114 &1194273570138351517
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7974831043381414785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62b1e01edbedb4752ad91f429fe11682, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  overlayPrefab: {fileID: -5551926652888725166, guid: 3242028f86f3dad4a8d336a5e171cab1,
-    type: 3}
-  layerGameObject: {fileID: 4142489338678956943}
-  instantiateOnStart: 1
 --- !u!114 &2740582493697960923
 MonoBehaviour:
   m_ObjectHideFlags: 0
