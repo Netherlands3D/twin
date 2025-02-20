@@ -21,14 +21,18 @@ namespace Netherlands3D.Twin.Tools.UI
             Instance = this;
         }
 
-        public OverlayInspector AddOverlay(OverlayInspector overlay)
+        public OverlayInspector ShowOverlay(OverlayInspector overlay, bool clear)
         {
+            if(clear)
+                ClearAllOverlays();
+
             var newOverlay = Instantiate(overlay, transform);
-            background.enabled = true;            
+            background.enabled = true;
+            
             return newOverlay;
         }
 
-        public void ClearAllOverlays()
+        private void ClearAllOverlays()
         {
             foreach (Transform child in transform)
             {
