@@ -19,15 +19,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
                     handler.CredentialsAccepted.RemoveListener(OnCredentialsAccepted);
 
                 handler = value;
+                if (!handler.StatusEnabled) return;
 
                 OnCredentialsAccepted(handler.HasValidCredentials);
-
                 handler.CredentialsAccepted.AddListener(OnCredentialsAccepted);
             }
         }
 
         private void Start()
         {
+            if (!handler.StatusEnabled)
+            {
+                gameObject.SetActive(false);
+                return;
+            }
+
             if (handler != null)
                 handler.CredentialsAccepted.AddListener(OnCredentialsAccepted);
         }

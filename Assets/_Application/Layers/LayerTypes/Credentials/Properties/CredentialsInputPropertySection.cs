@@ -81,12 +81,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         /// </summary>
         public void SetAuthorizationInputType(int type)
         {
-            handler.SetAuthorizationInputType((AuthorizationType)type);
+            if(handler != null)
+                handler.SetAuthorizationInputType((AuthorizationType)type);
         }
 
         public void SetAuthorizationInputType(AuthorizationType type)
         {
-            handler.SetAuthorizationInputType(type);
+            if (handler != null)
+                handler.SetAuthorizationInputType(type);
 
             credentialTypeDropdown.value = (int)type;
 

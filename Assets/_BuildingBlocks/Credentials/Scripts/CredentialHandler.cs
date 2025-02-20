@@ -13,6 +13,7 @@ namespace Netherlands3D.Credentials
 {
     public class CredentialHandler : MonoBehaviour, ICredentialHandler
     {
+        public bool StatusEnabled => false;
         public string UserName { get; set; }
         public string PasswordOrKeyOrTokenOrCode { get; set; }
         public AuthorizationType AuthorizationType => authorizationType;
