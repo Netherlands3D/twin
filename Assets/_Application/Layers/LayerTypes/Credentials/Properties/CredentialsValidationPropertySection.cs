@@ -28,7 +28,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
         private void Start()
         {
-            if (!handler.StatusEnabled)
+            //validation/status panel should be disabled so no handler would be present (maybe validation panel should not be included in the credential input prefab?)            
+            if (handler == null || !handler.StatusEnabled)
             {
                 gameObject.SetActive(false);
                 return;
