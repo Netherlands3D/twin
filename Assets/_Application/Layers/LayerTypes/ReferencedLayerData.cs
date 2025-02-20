@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
     public class ReferencedLayerData : LayerData
     {
         [DataMember] private string prefabId;
-        [JsonIgnore] public LayerGameObject Reference { get; }
+        [JsonIgnore] public LayerGameObject Reference { get; private set; }
         [JsonIgnore] public bool KeepReferenceOnDestroy { get; set; } = false;
 
         public ReferencedLayerData(string name, LayerGameObject reference) : base(name)
@@ -31,8 +31,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         public ReferencedLayerData(string name, string prefabId, List<LayerPropertyData> layerProperties) : base(name, layerProperties)
         {
             this.prefabId = prefabId;
-            var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
-            Reference = GameObject.Instantiate(prefab);
+            ProjectData.Current.PrefabLibrary
+                .Instantiate(prefabId)
+                .Then(layerGameObject => OnSuccessfullyInstantiated(layerGameObject, layerProperties));
+        }
+
+        private LayerGameObject OnSuccessfullyInstantiated(
+            LayerGameObject layerGameObject, 
+            List<LayerPropertyData> layerProperties
+        ) {
+            Reference = layerGameObject;
             Reference.LayerData = this;
             Reference.gameObject.name = Name;
             this.layerProperties = layerProperties;
@@ -42,6 +50,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             ChildrenChanged.AddListener(OnChildrenChanged);
             ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+            
+            return layerGameObject;
         }
 
         ~ReferencedLayerData()
