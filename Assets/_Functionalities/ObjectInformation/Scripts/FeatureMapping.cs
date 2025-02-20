@@ -145,6 +145,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         //these gameobjects can represent selected features or thumbnail meshes
         private List<GameObject> CreateFeatureGameObjects()
         {
+            //polygons are already visible and need no new subobjects to be rendered
             List<GameObject> subObjects = new List<GameObject>();
             for (int i = 0; i < meshes.Count; i++)
             {
@@ -246,6 +247,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             
             return null;
         }
+
+        public GameObject SelectedGameObject => selectedGameObjects.First();
 
         private List<GameObject> selectedGameObjects = new List<GameObject>();
 

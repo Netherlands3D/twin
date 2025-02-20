@@ -307,8 +307,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 if(mapping.Feature == feature)
                 {
                     //destroy featuremapping object, there should be no references anywhere else to this object!
-                    BagInspector.MappingTree.Remove(mapping);                    
-                    Destroy(mapping.gameObject);
+                    BagInspector.MappingTree.Remove(mapping);  
                 }
             }
         }
