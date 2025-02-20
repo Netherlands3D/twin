@@ -77,10 +77,10 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         {
             var southWestAndNorthEast = ConvertBoundsToCoordinates(selectedArea);
             
-            northExtentTextField.text = southWestAndNorthEast.northEast.Points[0].ToString("0");
-            southExtentTextField.text = southWestAndNorthEast.southWest.Points[0].ToString("0");
-            eastExtentTextField.text = southWestAndNorthEast.northEast.Points[1].ToString("0");
-            westExtentTextField.text = southWestAndNorthEast.southWest.Points[1].ToString("0");
+            northExtentTextField.text = southWestAndNorthEast.northEast.northing.ToString("0");
+            southExtentTextField.text = southWestAndNorthEast.southWest.northing.ToString("0");
+            eastExtentTextField.text = southWestAndNorthEast.northEast.easting.ToString("0");
+            westExtentTextField.text = southWestAndNorthEast.southWest.easting.ToString("0");
 
             southWestTooltip.Show($"X: {southExtentTextField.text}\nY: {westExtentTextField.text}", southWestAndNorthEast.Item1, true);
             northEastTooltip.Show($"X: {northExtentTextField.text}\nY: {eastExtentTextField.text}", southWestAndNorthEast.Item2, true);
