@@ -45,11 +45,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void ReregisterAllPolygons(ProjectData newData)
         {
+            layers.Clear();
+            
             foreach (var layer in newData.RootLayer.ChildrenLayers)
             {
                 if (layer is PolygonSelectionLayer polygon)
+                {
                     polygon.polygonSelected.AddListener(ProcessPolygonSelection);
+                    layers.Add(polygon.PolygonVisualisation, polygon);
+                }
             }
+
+            ShowPolygonVisualisations(false); //disable the visualisations, because the layer panel is not opened
         }
 
         private void OnDisable()
