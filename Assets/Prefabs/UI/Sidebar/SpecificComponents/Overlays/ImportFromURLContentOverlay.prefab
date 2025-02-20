@@ -911,6 +911,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3325231446690083424}
+    - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_TargetUrl
+      objectReference: {fileID: 0}
+    - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.DataTypeAdapters.DataTypeChain, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 3855538420454465561, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -970,6 +985,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: URLInputFieldPropertySection
+      objectReference: {fileID: 0}
+    - target: {fileID: 6700836756665989274, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
+      propertyPath: onFileDownloaded.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 2605067482200781903}
+    - target: {fileID: 6700836756665989274, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
+      propertyPath: onFileDownloadFailed.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6700836756665989274, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
+      propertyPath: onFileDownloadFailed.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 874098107377493464}
+    - target: {fileID: 6700836756665989274, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
+      propertyPath: onFileDownloadFailed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 6700836756665989274, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
+      propertyPath: onFileDownloaded.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: Netherlands3D.Twin.Tools.UI.OverlayInspector, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6700836756665989274, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
+      propertyPath: onFileDownloadFailed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6890644075776270205, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
@@ -1083,6 +1128,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13d604e32abf3494fb16b5a7b8170c14, type: 3}
+--- !u!1 &874098107377493464 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2671290606618389916, guid: 13d604e32abf3494fb16b5a7b8170c14,
+    type: 3}
+  m_PrefabInstance: {fileID: 2968786121971992644}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &4588794675527260647 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1629620604472758691, guid: 13d604e32abf3494fb16b5a7b8170c14,
