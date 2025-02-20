@@ -10,17 +10,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
     [RequireComponent(typeof(ILayerWithCredentials))]
     [RequireComponent(typeof(LayerGameObject))]
     public class LayerCredentialsHandler : MonoBehaviour, ICredentialHandler
-    {
+    {        
         public string UserName { get; set; }
         public string PasswordOrKeyOrTokenOrCode { get; set; }
+        public AuthorizationType AuthorizationType => authorizationType;
+
+        private AuthorizationType authorizationType = AuthorizationType.Public;
+
+        [Tooltip("KeyVault Scriptable Object")]
+        [SerializeField] private KeyVault keyVault;
 
         [Header("Settings")] 
         [SerializeField] private bool findKeyInVaultOnURLChange = true;
 
-        [Tooltip("KeyVault Scriptable Object")] 
-        [SerializeField] private KeyVault keyVault;
+        
 
-        private AuthorizationType authorizationType = AuthorizationType.Public;
         private StoredAuthorization storedAuthorization;
 
         [SerializeField] private bool autoApplyCredentials = false;
@@ -29,9 +33,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         {
             get => autoApplyCredentials;
             set => autoApplyCredentials = value;
-        }
-
-        public AuthorizationType AuthorizationType => authorizationType;
+        }       
 
         private ILayerWithCredentials layerWithCredentials;
         private LayerGameObject layerGameObject;

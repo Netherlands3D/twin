@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
-    public class CredentialsValidationPropertySection : MonoBehaviour, ILayerCredentialInterface
+    public class CredentialsValidationPropertySection : MonoBehaviour, ICredentialInterface
     {
         private ICredentialHandler handler;
 

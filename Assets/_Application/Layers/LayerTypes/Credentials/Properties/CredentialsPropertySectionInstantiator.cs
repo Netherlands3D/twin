@@ -15,7 +15,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             var settings = Instantiate(inputPropertySectionPrefab, properties);
             var handler = GetComponent<ICredentialHandler>();
             
-            foreach (var credentialInterface in settings.GetComponentsInChildren<ILayerCredentialInterface>(true))
+            //maybe we should make this class more explicit for layers
+            foreach (var credentialInterface in settings.GetComponentsInChildren<ICredentialInterface>(true))
             {
                 credentialInterface.Handler = handler;
             }

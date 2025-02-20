@@ -5,11 +5,9 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
-    public class CredentialsInputPropertySection : MonoBehaviour, ILayerCredentialInterface
+    public class CredentialsInputPropertySection : MonoBehaviour, ICredentialInterface
     {
         private ICredentialHandler handler;
-
-        public MonoBehaviour MonoBehaviour => this;
 
         [SerializeField] private GameObject inputPanel;
         [SerializeField] private GameObject errorMessage;
