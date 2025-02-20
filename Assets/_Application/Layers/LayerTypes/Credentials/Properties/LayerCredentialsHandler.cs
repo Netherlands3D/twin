@@ -9,7 +9,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
     [RequireComponent(typeof(ILayerWithCredentials))]
     [RequireComponent(typeof(LayerGameObject))]
-    public class LayerCredentialsHandler : MonoBehaviour
+    public class LayerCredentialsHandler : MonoBehaviour, ICredentialHandler
     {
         public string UserName { get; set; }
         public string PasswordOrKeyOrTokenOrCode { get; set; }

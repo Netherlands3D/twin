@@ -7,7 +7,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
     public class CredentialsInputPropertySection : MonoBehaviour, ILayerCredentialInterface
     {
-        private LayerCredentialsHandler handler;
+        private ICredentialHandler handler;
+
+        public MonoBehaviour MonoBehaviour => this;
 
         [SerializeField] private GameObject inputPanel;
         [SerializeField] private GameObject errorMessage;
@@ -18,12 +20,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         [SerializeField] private TMP_Dropdown credentialTypeDropdown;
         private bool skipFirstCredentialErrorMessage = true;
 
-        public LayerCredentialsHandler Handler
+        public ICredentialHandler Handler
         {
             get => handler;
             set
             {
-                if (handler)
+                if (handler != null)
                     handler.CredentialsAccepted.RemoveListener(OnCredentialsAccepted);
 
                 handler = value;

@@ -1,7 +1,11 @@
+using Netherlands3D.Credentials;
+using UnityEngine;
+
 namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
+
     public interface ILayerCredentialInterface
     {
-        public LayerCredentialsHandler Handler { get; set; }
+        public ICredentialHandler Handler { get; set; }
     }
 }

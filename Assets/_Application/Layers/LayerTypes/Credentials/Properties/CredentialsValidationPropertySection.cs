@@ -1,20 +1,21 @@
+using Netherlands3D.Credentials;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
     public class CredentialsValidationPropertySection : MonoBehaviour, ILayerCredentialInterface
     {
-        private LayerCredentialsHandler handler;
+        private ICredentialHandler handler;
 
         [SerializeField] private GameObject validCredentialsPanel;
         [SerializeField] private GameObject invalidCredentialsPanel;
 
-        public LayerCredentialsHandler Handler
+        public ICredentialHandler Handler
         {
             get => handler;
             set
             {
-                if (handler)
+                if(handler != null)
                     handler.CredentialsAccepted.RemoveListener(OnCredentialsAccepted);
 
                 handler = value;
@@ -27,13 +28,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
         private void Start()
         {
-            if (handler)
+            if (handler != null)
                 handler.CredentialsAccepted.AddListener(OnCredentialsAccepted);
         }
 
         private void OnDestroy()
         {
-            if (handler)
+            if (handler != null)
                 handler.CredentialsAccepted.RemoveListener(OnCredentialsAccepted);
         }
 
