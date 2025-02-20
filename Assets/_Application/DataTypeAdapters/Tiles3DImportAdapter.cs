@@ -20,55 +20,42 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
         public bool Supports(LocalFile localFile)
         {
+            //TODO, check if reading the geojson check is potentially very large, maybe a timeout, maybe putting the tile3d import adapter
+
+
             // Check if the file has JSON content
-            if (!LooksLikeA3DTileset(localFile.LocalFilePath))
+            if (!LooksLikeAJSONFile(localFile.LocalFilePath))
                 return false;
 
-            // Stream-read the JSON to find 3D Tileset properties
+            // Streamread the JSON until we find some GeoJSON properties
             using var reader = new StreamReader(localFile.LocalFilePath);
             using var jsonReader = new JsonTextReader(reader);
 
-            bool inAssetObject = false;
-            bool foundVersion = false;
-
             while (jsonReader.Read())
             {
-                if (jsonReader.TokenType == JsonToken.PropertyName)
+                if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "type")
                 {
-                    string propertyName = (string)jsonReader.Value;
-
-                    if (propertyName == "asset")
-                        inAssetObject = true;  // Entering "asset" object
-
-                    if (inAssetObject && propertyName == "version")
-                    {
-                        jsonReader.Read();
-                        if (jsonReader.TokenType == JsonToken.String) // Ensure "version" is a string
-                            foundVersion = true;
-                    }
+                    jsonReader.Read(); //reads value
+                    if ((string)jsonReader.Value == "FeatureCollection" || (string)jsonReader.Value == "Feature")
+                        return false; //this is a GeoJson, not a 3D Tileset
                 }
 
-                // If we finished reading the "asset" object and found "version", confirm it's a 3D Tileset
-                if (foundVersion)
-                    return true;
+                if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "asset")
+                {
+                    jsonReader.Read(); //reads StartObject {
+                    jsonReader.Read(); //reads new object key which should be the version
+                    if ((string)jsonReader.Value == "version")
+                        return true;
+                }
             }
-
             return false;
         }
 
-        private bool LooksLikeA3DTileset(string filePath)
+        private bool LooksLikeAJSONFile(string filePath)
         {
             using var reader = new StreamReader(filePath);
-            int linesToCheck = 10; // Read up to 10 lines to find "asset" and "version"
-
-            while (!reader.EndOfStream && linesToCheck-- > 0)
-            {
-                string line = reader.ReadLine();
-                if (line != null && line.Contains("\"asset\"") && line.Contains("\"version\""))
-                    return true;
-            }
-
-            return false;
+            var firstChar = reader.Read();
+            return firstChar == '{' || firstChar == '[';
         }
     }
 }
