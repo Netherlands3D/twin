@@ -31,12 +31,7 @@ namespace Netherlands3D.Twin.UI
         private void ApplyCameraPositionToText()
         {
             //Use coordinate convert to convert camera to rd coordinates
-            var cameraCoordinate = new Coordinate(
-                CoordinateSystem.Unity,
-                Camera.main.transform.position.x,
-                Camera.main.transform.position.y,
-                Camera.main.transform.position.z
-             );
+            var cameraCoordinate = new Coordinate(Camera.main.transform.position);
             var rd = CoordinateConverter.ConvertTo(cameraCoordinate, CoordinateSystem.RDNAP);
 
             Vector3Int position = new Vector3Int((int)rd.value1, (int)rd.value2, (int)rd.value3);

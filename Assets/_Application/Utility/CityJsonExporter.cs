@@ -71,7 +71,7 @@ namespace Netherlands3D.Twin.Utility
             // Write transform
             stringWriter.WriteLine("  \"transform\": {");
             stringWriter.WriteLine($"    \"scale\": [{scale.x}, {scale.y}, {scale.z}],");
-            stringWriter.WriteLine($"    \"translate\": [{rdCoordinate.Points[0]}, {rdCoordinate.Points[1]}, {rdCoordinate.Points[2]}]");
+            stringWriter.WriteLine($"    \"translate\": [{rdCoordinate.value1}, {rdCoordinate.value2}, {rdCoordinate.value3}]");
             stringWriter.WriteLine("  },");
 
             stringWriter.WriteLine("  \"CityObjects\": {");

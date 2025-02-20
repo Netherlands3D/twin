@@ -227,9 +227,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
         {
             var rdCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RDNAP);
             
-            position.xField.SetTextWithoutNotify($"{rdCoordinate.Points[0].ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
-            position.yField.SetTextWithoutNotify($"{rdCoordinate.Points[1].ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
-            position.zField.SetTextWithoutNotify($"{rdCoordinate.Points[2].ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
+            position.xField.SetTextWithoutNotify($"{rdCoordinate.easting.ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
+            position.yField.SetTextWithoutNotify($"{rdCoordinate.northing.ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
+            position.zField.SetTextWithoutNotify($"{rdCoordinate.height.ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
         }
 
         private void UpdateRotationFields(Vector3 eulerAngles)

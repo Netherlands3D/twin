@@ -133,8 +133,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public static BoundingBox CreateBoundingBoxForFeature(Feature feature, IGeoJsonVisualisationLayer layer)
         {
             Bounds featureBounds = layer.GetFeatureBounds(feature);
-            Coordinate bottomLeft = new Coordinate(CoordinateSystem.Unity, featureBounds.min.x, featureBounds.min.y, featureBounds.min.z);
-            Coordinate topRight = new Coordinate(CoordinateSystem.Unity, featureBounds.max.x, featureBounds.max.y, featureBounds.max.z);
+            Coordinate bottomLeft = new Coordinate(featureBounds.min);
+            Coordinate topRight = new Coordinate(featureBounds.max);
             Coordinate blWgs84 = bottomLeft.Convert(CoordinateSystem.WGS84_LatLon);
             Coordinate trWgs84 = topRight.Convert(CoordinateSystem.WGS84_LatLon);
             BoundingBox boundingBox = new BoundingBox(blWgs84, trWgs84);

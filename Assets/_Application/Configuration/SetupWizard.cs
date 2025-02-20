@@ -60,8 +60,11 @@ namespace Netherlands3D.Twin.Configuration
                 return;
 
             //If we are not setting the origin from the coordinate input fields; use the origin of the camera position
-            var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
-            ProjectData.Current.CameraPosition = cameraCoordinate.Convert(CoordinateSystem.RDNAP).Points;
+            var cameraCoordinate = new Coordinate(Camera.main.transform.position).Convert(CoordinateSystem.RDNAP);
+            ProjectData.Current.CameraPosition = new double[]
+            {
+                cameraCoordinate.value1, cameraCoordinate.value2, cameraCoordinate.value3
+            };
             
             //Update url with some cooldown (browsers do not like setting url too often)
             if(urlNeedsUpdate && Time.frameCount - lastUrlUpdate > urlUpdateFrameCooldown)
