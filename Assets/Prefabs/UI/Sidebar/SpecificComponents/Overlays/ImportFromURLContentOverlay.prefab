@@ -174,7 +174,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2605067482200781903}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.OverlayInspector, Assembly-CSharp
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Tools.UI.OverlayInspector, Assembly-CSharp
         m_MethodName: CloseOverlay
         m_Mode: 1
         m_Arguments:
@@ -188,7 +188,7 @@ MonoBehaviour:
   CouldNotFindAdapter:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 874098107377493464}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -200,7 +200,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4744025270149040516}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -215,7 +215,7 @@ MonoBehaviour:
   OnDownloadFailed:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 874098107377493464}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -227,7 +227,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4744025270149040516}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -1137,6 +1137,12 @@ GameObject:
 --- !u!224 &4588794675527260647 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1629620604472758691, guid: 13d604e32abf3494fb16b5a7b8170c14,
+    type: 3}
+  m_PrefabInstance: {fileID: 2968786121971992644}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4744025270149040516 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7558472729108005312, guid: 13d604e32abf3494fb16b5a7b8170c14,
     type: 3}
   m_PrefabInstance: {fileID: 2968786121971992644}
   m_PrefabAsset: {fileID: 0}
