@@ -11,9 +11,11 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.Credentials
 {
+    //this is the handler for the ui flow to check credentials
+    //will be active in the layerpanel when trying to add a layer through url
     public class CredentialHandler : MonoBehaviour, ICredentialHandler
     {
-        public bool StatusEnabled => false;
+        public bool StatusEnabled => false; //no status here because the layer panel will close on authentication
         public string UserName { get; set; }
         public string PasswordOrKeyOrTokenOrCode { get; set; }
         public AuthorizationType AuthorizationType => authorizationType;

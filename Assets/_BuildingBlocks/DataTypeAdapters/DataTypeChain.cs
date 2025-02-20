@@ -111,6 +111,9 @@ namespace Netherlands3D.DataTypeAdapters
 
         private void DownloadFailed(LocalFile urlAndData, Exception error)
         {
+            //if(error == )
+
+
             urlAndData.LocalFilePath = "";
             if (debugLog)
             {
