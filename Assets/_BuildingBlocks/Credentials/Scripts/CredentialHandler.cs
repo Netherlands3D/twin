@@ -20,9 +20,23 @@ namespace Netherlands3D.Credentials
         public string PasswordOrKeyOrTokenOrCode { get; set; }
         public AuthorizationType AuthorizationType => authorizationType;
 
-        public UnityEvent<bool> CredentialsAccepted => throw new NotImplementedException();
+        public UnityEvent<bool> HasValidCredentialsChanged = new();
+        public UnityEvent<bool> CredentialsAccepted => HasValidCredentialsChanged;
 
-        public bool HasValidCredentials => throw new NotImplementedException();
+        public bool HasValidCredentials
+        {
+            get
+            {
+                return hasValidCredentials;
+            }
+            set
+            {
+                hasValidCredentials = value;
+                HasValidCredentialsChanged.Invoke(value);
+            }
+        }
+
+        private bool hasValidCredentials = false;
 
         private AuthorizationType authorizationType = AuthorizationType.Unknown;
 
@@ -37,71 +51,31 @@ namespace Netherlands3D.Credentials
             view.Handler = this;
         }
 
-        private void CloseRightProperties(LayerData layer)
-        {
-            var layerManager = FindAnyObjectByType<LayerUIManager>();
-            var ui = layerManager.GetLayerUI(layer);
-            ui.ToggleProperties(false);
-        }
-
-        private void ServerResponseReceived(UnityWebRequest webRequestResult)
-        {
-            //Hide the credentials section if the server request failed due to a connection error or data processing error
-            if (webRequestResult.ReturnedServerError())
-            {
-                //credentialExplanation.gameObject.SetActive(false);
-                //credentialsPropertySection.gameObject.SetActive(false);
-            }
-        }
-
         private void OnEnable()
         {
             keyVault.OnAuthorizationTypeDetermined.AddListener(DeterminedAuthorizationType);
-
-            //Hide the credentials section by default. Only activated if we determine the URL needs credentials
-            //credentialsPropertySection.gameObject.SetActive(false);
-            //credentialExplanation.gameObject.SetActive(false);
         }
 
         private void OnDestroy()
-        {            
-            //credentialObject.OnURLChanged.RemoveListener(UrlHasChanged);
+        {
             keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
         }
 
-        private void UrlHasChanged(Uri newURL)
+        public void UrlHasChanged(string newURL)
         {
+            this.url = newURL;
             keyVault.TryToFindSpecificCredentialType(newURL.ToString(), "");
         }
 
         private void DeterminedAuthorizationType(string url, AuthorizationType authorizationType)
         {
             this.authorizationType = authorizationType;
-            this.url = url;
-            //Debug.Log("Determined authorization type: " + authorizationType + " for url: " + url, this.gameObject);
-
-            //// It appears the current url needs authentication/authorization
-            //switch (authorizationType)
-            //{
-            //    case AuthorizationType.Public:
-            //    case AuthorizationType.UsernamePassword:
-            //    case AuthorizationType.Key:
-            //    case AuthorizationType.Token:
-            //    case AuthorizationType.Code:
-            //    case AuthorizationType.BearerToken:
-            //        //We are in. Close overlay wizard.
-            //        Debug.Log("Close overlay;");
-            //        CloseOverlay();
-            //        break;
-            //    case AuthorizationType.InferableSingleKey:
-            //    default:
-            //        //Something went wrong, show the credentials section, starting with a default authentication input type
-            //        var startingAuthenticationType = keyVault.GetKnownAuthorizationTypeForURL(url);
-            //        credentialsPropertySection.SetAuthorizationInputType(startingAuthenticationType);
-            //        credentialsPropertySection.gameObject.SetActive(true);
-            //        credentialExplanation.gameObject.SetActive(true);
-            //        break;
-            //}
+            hasValidCredentials = authorizationType != AuthorizationType.Unknown;
+            Debug.Log("Determined authorization type: " + authorizationType + " for url: " + url, this.gameObject);
+            if(hasValidCredentials)
+            {
+                //ContentOverlayContainer.Instance.CloseOverlay();
+            }
         }
 
         public void ApplyCredentials()

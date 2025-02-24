@@ -24,6 +24,7 @@ namespace Netherlands3D.DataTypeAdapters
         public UnityEvent<string> CouldNotFindAdapter = new();
         public UnityEvent<string> OnDownloadFailed = new();
         public UnityEvent<string> OnAuthenticationFailed = new();
+        public UnityEvent<string> OnAuthenticationSucceeded = new();
 
         private string targetUrl = "";
 
@@ -96,9 +97,13 @@ namespace Netherlands3D.DataTypeAdapters
         private IEnumerator DownloadDataToLocalCache(LocalFile urlAndData)
         {
             var futureFileInfo = Resource<FileInfo>.At(urlAndData.SourceUrl).Value;
-            
+
             // We want to use and manipulate urlAndData, so we 'curry' it by wrapping a method call in a lambda 
-            futureFileInfo.Then(info => DownloadSucceeded(urlAndData, info));
+            futureFileInfo.Then(info =>
+            {
+                
+                DownloadSucceeded(urlAndData, info);
+            });        
             futureFileInfo.Catch(error =>
             {
                 if(error is AuthenticationError)

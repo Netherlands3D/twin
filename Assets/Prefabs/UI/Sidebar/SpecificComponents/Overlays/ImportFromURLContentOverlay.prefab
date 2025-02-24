@@ -1019,9 +1019,29 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 3325231446690083424}
+    - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 7423577321212389381}
+    - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -1029,8 +1049,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: UrlHasChanged
+      objectReference: {fileID: 0}
+    - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Netherlands3D.DataTypeAdapters.DataTypeChain, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Netherlands3D.Credentials.CredentialHandler, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 2116771285175269051, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}

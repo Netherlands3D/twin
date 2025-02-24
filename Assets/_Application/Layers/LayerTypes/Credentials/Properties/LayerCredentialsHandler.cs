@@ -22,9 +22,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         [SerializeField] private KeyVault keyVault;
 
         [Header("Settings")] 
-        [SerializeField] private bool findKeyInVaultOnURLChange = true;
-
-        
+        [SerializeField] private bool findKeyInVaultOnURLChange = true;       
 
         private StoredAuthorization storedAuthorization;
 
