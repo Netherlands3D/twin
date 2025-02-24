@@ -19,6 +19,12 @@ namespace Netherlands3D.Twin.Projects
 
         private void Start()
         {
+            // Only add this check in the editor - in production this should never happen and
+            // thus throw an error
+#if UNITY_EDITOR
+            if (!ProjectData.Current) return;
+#endif
+
             OnProjectDataChanged(ProjectData.Current); //set initial position based on the current project
         }
 
@@ -45,6 +51,12 @@ namespace Netherlands3D.Twin.Projects
 
         private void SaveCurrentCameraTransform()
         {
+            // Only add this check in the editor - in production this should never happen and
+            // thus throw an error
+#if UNITY_EDITOR
+            if (!ProjectData.Current) return;
+#endif
+
             var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
             var cameraCoordinateRD = cameraCoordinate.Convert(CoordinateSystem.RDNAP).ToVector3RD();
             var cameraRotation = transform.eulerAngles;
