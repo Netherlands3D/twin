@@ -1707,7 +1707,7 @@ MonoBehaviour:
   minHeight: 0
   minResizeHeightThreshold: 50
   maxHeight: 450
-  smoothTime: 1
+  smoothTime: 0.5
   toggle: {fileID: 0}
   OnRectTransformSizeChanged:
     m_PersistentCalls:
