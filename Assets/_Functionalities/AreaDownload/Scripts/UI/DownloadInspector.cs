@@ -82,8 +82,8 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
             eastExtentTextField.text = southWestAndNorthEast.northEast.easting.ToString("0");
             westExtentTextField.text = southWestAndNorthEast.southWest.easting.ToString("0");
 
-            southWestTooltip.Show($"X: {southExtentTextField.text}\nY: {westExtentTextField.text}", southWestAndNorthEast.Item1, true);
-            northEastTooltip.Show($"X: {northExtentTextField.text}\nY: {eastExtentTextField.text}", southWestAndNorthEast.Item2, true);
+            southWestTooltip.Show($"X: {westExtentTextField.text}\nY: {southExtentTextField.text}", southWestAndNorthEast.Item1, true);
+            northEastTooltip.Show($"X: {eastExtentTextField.text}\nY: {northExtentTextField.text}", southWestAndNorthEast.Item2, true);
         }
 
         private void OnSelectionBoundsChanged(Bounds selectedArea)

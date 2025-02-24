@@ -1142,10 +1142,10 @@ MonoBehaviour:
   DisplayCrs: 28992
   areaSelection: {fileID: 11400000, guid: e64696f66bdcc5343ad26d8c620d845a, type: 2}
   renderedThumbnail: {fileID: 6867477000835044279}
-  northExtentTextField: {fileID: 3135639470450376762}
-  southExtentTextField: {fileID: 8598277423336867337}
-  eastExtentTextField: {fileID: 3719487516998976869}
-  westExtentTextField: {fileID: 1784231394480833021}
+  northExtentTextField: {fileID: 3719487516998976869}
+  southExtentTextField: {fileID: 1784231394480833021}
+  eastExtentTextField: {fileID: 3135639470450376762}
+  westExtentTextField: {fileID: 8598277423336867337}
   copyNorthEastExtentButton: {fileID: 197758433612143890}
   copySouthWestExtentButton: {fileID: 2551304673583623924}
   popoutPrefab: {fileID: 3977518503646692406, guid: 0c75754029f6c6940848c9f8bfe7edb9,
@@ -2124,8 +2124,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 956.5, y: -519.7088}
-  m_SizeDelta: {x: 1909, y: 0}
+  m_AnchoredPosition: {x: 1921, y: -519.7088}
+  m_SizeDelta: {x: 3838, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5195422349626505141
 CanvasRenderer:
@@ -4741,6 +4741,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrollbar Vertical
       objectReference: {fileID: 0}
+    - target: {fileID: 1781802643554129927, guid: 115ed422e629e4645bfb5c97e46c2e9b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3286731148600885667, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_Pivot.x
@@ -4844,17 +4849,17 @@ PrefabInstance:
     - target: {fileID: 3690174632879616221, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3690174632879616221, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_Size
-      value: 0.99989283
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
