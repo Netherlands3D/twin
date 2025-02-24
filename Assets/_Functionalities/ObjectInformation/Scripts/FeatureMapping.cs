@@ -241,14 +241,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return subObjects;
         }
 
-        private Transform GetSelectionTransform()
-        {
-           
-            
-            return null;
-        }
-
-        public GameObject SelectedGameObject => selectedGameObjects.First();
+        public GameObject SelectedGameObject => selectedGameObjects.FirstOrDefault();
 
         private List<GameObject> selectedGameObjects = new List<GameObject>();
 
@@ -256,7 +249,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             //transform for mesh world matrix
             selectedGameObjects = CreateFeatureGameObjects();
-            Transform t = GetSelectionTransform();
             if (selectedGameObjects.Count == 0) return; 
 
             Color selectionColor = Color.blue;
