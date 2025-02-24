@@ -19,10 +19,10 @@
 using System.Collections;
 using UnityEngine;
 using System;
+using KindMen.Uxios;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Utility;
-using UnityEngine.Networking;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Functionalities.Wms
@@ -142,7 +142,7 @@ namespace Netherlands3D.Functionalities.Wms
                 origin.y,
                 0.0d
             );
-            var originCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
+            var originCoordinate = rdCoordinate.ToUnity();
 
             originCoordinate.y = ProjectorHeight;
             tile.gameObject.transform.position = originCoordinate; //projector is now at same position as the layer !?          
@@ -168,21 +168,16 @@ namespace Netherlands3D.Functionalities.Wms
             Tile tile = tiles[tileKey];
             string url = Datasets[tiles[tileKey].unityLOD].path;
 
-            var webRequest = UnityWebRequest.Get(url);
-            tile.runningWebRequest = webRequest;
-            yield return webRequest.SendWebRequest();
-            tile.runningWebRequest = null;
-            if (webRequest.result != UnityWebRequest.Result.Success)
+            var webRequest = Uxios.DefaultInstance.Get<Texture2D>(new Uri(url));
+            webRequest.Then(_ => ClearPreviousTexture(tile));
+            webRequest.Catch(exception =>
             {
-                Debug.LogWarning($"Could not download {url}");
+                Debug.LogWarning($"Could not download {url}: {exception.Message}");
                 RemoveGameObjectFromTile(tileKey);
-                callback(tileChange);
-            }
-            else
-            {
-                ClearPreviousTexture(tile);
-                callback(tileChange);
-            }
+            });
+            webRequest.Finally(() => callback?.Invoke(tileChange));
+            
+            yield return Uxios.WaitForRequest(webRequest);
         }
 
         /// <summary>

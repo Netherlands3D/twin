@@ -20,6 +20,7 @@ namespace Netherlands3D.Twin.Configuration
         [SerializeField] private string title = "Amersfoort";
         [SerializeField] private Coordinate origin = new(CoordinateSystem.RDNAP, 155207, 462945, 0);
         [SerializeField] public List<Functionality> Functionalities = new();
+        [SerializeField] private string corsProxyUrl = null;
 
         public string Title
         {
@@ -31,12 +32,14 @@ namespace Netherlands3D.Twin.Configuration
             }
         }
 
+        public string CorsProxyUrl => corsProxyUrl;
+
         public Coordinate Origin
         {
             get => origin;
             set
             {
-                var roundedValue = new Coordinate(value.CoordinateSystem, (int)value.Points[0], (int)value.Points[1], (int)value.Points[2]);
+                var roundedValue = new Coordinate(value.CoordinateSystem, (int)value.value1, (int)value.value2, (int)value.value3);
                 origin = roundedValue;
                 OnOriginChanged.Invoke(roundedValue);
             }
@@ -123,6 +126,11 @@ namespace Netherlands3D.Twin.Configuration
                 AllowUserSettings = jsonNode["allowUserSettings"].AsBool;
             }
 
+            if (jsonNode["corsProxyUrl"] != null)
+            {
+                corsProxyUrl = jsonNode["corsProxyUrl"];
+            }
+
             Origin = new Coordinate(
                 jsonNode["origin"]["epsg"],
                 jsonNode["origin"]["x"],
@@ -191,7 +199,7 @@ namespace Netherlands3D.Twin.Configuration
             var enabledfunctionalities = Functionalities.Where(functionality => functionality.IsEnabled).Select(functionality => functionality.Id);
 
             var originRDNAP = origin.Convert(CoordinateSystem.RDNAP);
-            urlBuilder.AddQueryParameter("origin", $"{(int)originRDNAP.Points[0]},{(int)originRDNAP.Points[1]},{(int)originRDNAP.Points[2]}");
+            urlBuilder.AddQueryParameter("origin", $"{(int)originRDNAP.value1},{(int)originRDNAP.value2},{(int)originRDNAP.value3}");
             urlBuilder.AddQueryParameter("functionalities", string.Join(',', enabledfunctionalities.ToArray()));
             foreach (var functionality in Functionalities)
             {
@@ -215,9 +223,9 @@ namespace Netherlands3D.Twin.Configuration
                 ["origin"] = new JSONObject()
                 {
                     ["epsg"] = origin.CoordinateSystem,
-                    ["x"] = origin.Points[0],
-                    ["y"] = origin.Points[1],
-                    ["z"] = origin.Points[2],
+                    ["x"] = origin.value1,
+                    ["y"] = origin.value2,
+                    ["z"] = origin.value3,
                 },
                 ["functionalities"] = new JSONObject()
             };

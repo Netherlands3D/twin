@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Minimap;
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Projects;
 using TMPro;
@@ -41,10 +42,10 @@ namespace Netherlands3D.Twin.Configuration
         {
             var origin = new Coordinate(CoordinateSystem.RDNAP, ProjectData.Current.CameraPosition);
 
-            originXField.text = origin.Points[0].ToString(CultureInfo.InvariantCulture);
+            originXField.text = origin.easting.ToString(CultureInfo.InvariantCulture);
             originXField.onEndEdit.AddListener(OnOriginXChanged);
 
-            originYField.text = origin.Points[1].ToString(CultureInfo.InvariantCulture);
+            originYField.text = origin.northing.ToString(CultureInfo.InvariantCulture);
             originYField.onEndEdit.AddListener(OnOriginYChanged);
 
             ProjectData.Current.OnCameraPositionChanged.Invoke(origin);
@@ -59,8 +60,11 @@ namespace Netherlands3D.Twin.Configuration
                 return;
 
             //If we are not setting the origin from the coordinate input fields; use the origin of the camera position
-            var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
-            ProjectData.Current.CameraPosition = cameraCoordinate.Convert(CoordinateSystem.RDNAP).Points;
+            var cameraCoordinate = new Coordinate(Camera.main.transform.position).Convert(CoordinateSystem.RDNAP);
+            ProjectData.Current.CameraPosition = new double[]
+            {
+                cameraCoordinate.value1, cameraCoordinate.value2, cameraCoordinate.value3
+            };
             
             //Update url with some cooldown (browsers do not like setting url too often)
             if(urlNeedsUpdate && Time.frameCount - lastUrlUpdate > urlUpdateFrameCooldown)
@@ -112,15 +116,12 @@ namespace Netherlands3D.Twin.Configuration
         public void UpdateInterfaceToNewOrigin(Coordinate coordinate)
         {
             var convertedCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RD);
-            var roundedCoordinate = new Coordinate(
-                convertedCoordinate.CoordinateSystem, 
-                (int)convertedCoordinate.Points[0], 
-                (int)convertedCoordinate.Points[1], 
-                (int)convertedCoordinate.Points[2]
-            );
 
-            var xText = roundedCoordinate.Points[0].ToString(CultureInfo.InvariantCulture);
-            var yText = roundedCoordinate.Points[1].ToString(CultureInfo.InvariantCulture);
+            var roundedEasting = (int)convertedCoordinate.easting;
+            var roundedNorthing = (int)convertedCoordinate.northing;
+            
+            var xText = roundedEasting.ToString(CultureInfo.InvariantCulture);
+            var yText = roundedNorthing.ToString(CultureInfo.InvariantCulture);
 
             //Update fields and browser URL if rounded coordinate is different from current text
             if(yText != originYField.text || xText != originXField.text){
@@ -149,38 +150,30 @@ namespace Netherlands3D.Twin.Configuration
 
         private void OnOriginYChanged(string value)
         {
-            int.TryParse(value, out int y);
-
-            var cameraPosition = Camera.main.transform.position;
-            var cameraRD = new Coordinate(cameraPosition).Convert(CoordinateSystem.RD);
-            cameraRD.Points[1] = y;
-
-            var newCameraCoordinate = CoordinateConverter
-                .ConvertTo(cameraRD, CoordinateSystem.Unity)
-                .ToVector3();
-
-            newCameraCoordinate.y = cameraPosition.y;
-
-            Camera.main.transform.position = newCameraCoordinate;
+            if (!int.TryParse(value, out int y))
+                return;
+            
+            var mainCam = Camera.main;
+            
+            var cameraPosition = mainCam.transform.position;
+            var cameraRD = new Coordinate(cameraPosition).Convert(CoordinateSystem.RDNAP);
+            var targetCoordinate = new Coordinate(CoordinateSystem.RDNAP, cameraRD.easting, y, cameraRD.height);
+            mainCam.GetComponent<MoveCameraToCoordinate>().MoveToCoordinate(targetCoordinate);
 
             OnSettingsChanged.Invoke();
         }
 
         private void OnOriginXChanged(string value)
         {
-            int.TryParse(value, out int x);
+            if (!int.TryParse(value, out int x))
+                return;
 
-            var cameraPosition = Camera.main.transform.position;
-            var cameraRD = new Coordinate(cameraPosition).Convert(CoordinateSystem.RD);
-            cameraRD.Points[0] = x;
-
-            var newCameraCoordinate = CoordinateConverter
-                .ConvertTo(cameraRD, CoordinateSystem.Unity)
-                .ToVector3();
-
-            newCameraCoordinate.y = cameraPosition.y;
-
-            Camera.main.transform.position = newCameraCoordinate;
+            var mainCam = Camera.main;
+            
+            var cameraPosition = mainCam.transform.position;
+            var cameraRD = new Coordinate(cameraPosition).Convert(CoordinateSystem.RDNAP);
+            var targetCoordinate = new Coordinate(CoordinateSystem.RDNAP, x, cameraRD.northing, cameraRD.height);
+            mainCam.GetComponent<MoveCameraToCoordinate>().MoveToCoordinate(targetCoordinate);
 
             OnSettingsChanged.Invoke();
         }

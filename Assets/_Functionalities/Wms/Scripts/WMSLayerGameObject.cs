@@ -28,6 +28,7 @@ namespace Netherlands3D.Functionalities.Wms
         private WMSTileDataLayer wmsProjectionLayer;
         protected LayerURLPropertyData urlPropertyData = new();
         public bool ShowLegendOnSelect { get; set; } = true;
+        public override BoundingBox Bounds => wmsProjectionLayer?.BoundingBox;
 
         public UnityEvent<Uri> OnURLChanged => urlPropertyData.OnDataChanged;
         public UnityEvent<UnityWebRequest> OnServerResponseReceived => throw new NotImplementedException();

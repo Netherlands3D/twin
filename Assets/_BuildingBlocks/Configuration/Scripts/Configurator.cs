@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.IO;
+using KindMen.Uxios;
+using KindMen.Uxios.Interceptors;
+using KindMen.Uxios.Interceptors.NetworkInspector;
 #if UNITY_WEBGL && !UNITY_EDITOR
 using System.Runtime.InteropServices;
 #endif
@@ -14,6 +17,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using RequestInterceptor = KindMen.Uxios.Interceptors.RequestInterceptor;
 
 namespace Netherlands3D.Twin.Configuration
 {
@@ -129,7 +133,9 @@ namespace Netherlands3D.Twin.Configuration
             
             //add any missing functionalities to the projectData (e.g. when a project was saved before the functionality was added to the application)
             configuration.AddFunctionalityDataToProject();
-            
+
+            ConfigureCorsProxy();
+
             OnLoaded.Invoke(configuration);
             
             indicatorsConfiguration.OnDossierIdChanged.AddListener(UpdateDossierIdAfterLoading);
@@ -142,6 +148,26 @@ namespace Netherlands3D.Twin.Configuration
             };
 
             yield return null;
+        }
+
+        private void ConfigureCorsProxy()
+        {
+            // Just add the console logger for now - it will be auto-disposed as soon as the application is done.
+            // TODO: Remove this line when done with this story
+            new ConsoleLogger();
+            
+            if (string.IsNullOrEmpty(configuration.CorsProxyUrl)) return;
+            Debug.LogWarning("Configured CORS proxy is: " + configuration.CorsProxyUrl);
+
+            // Add an Uxios interceptor to prefix all URLs with the given CORS Proxy URL - we assume that the chosen
+            // proxy works by treating the real URL as a path to the proxy URL. This is consistent with how the 
+            // CORS Anywhere proxy works, but if we were to use another proxy it may not work anymore.
+            Uxios.DefaultInstance.Interceptors.request.Add(new RequestInterceptor(request =>
+            {
+                request.Url = new Uri($"{configuration.CorsProxyUrl}/{request.Url}");
+                request.Headers.Add("X-Requested-With", "Netherlands3D");
+                return request;
+            }));
         }
 
         private T GetFunctionalityConfigurationOfType<T>() where T : ScriptableObject,IConfiguration
