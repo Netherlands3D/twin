@@ -100,8 +100,8 @@ namespace Netherlands3D.DataTypeAdapters
             })
             .Catch(error =>
             {
-                error.
-                Debug.LogError("Request failed: " + error.Message);
+                //error.
+                //Debug.LogError("Request failed: " + error.Message);
             });
         }
 
