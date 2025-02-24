@@ -57,8 +57,8 @@ namespace Netherlands3D.Twin.Projects
             if (!ProjectData.Current) return;
 #endif
 
-            var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
-            var cameraCoordinateRD = cameraCoordinate.Convert(CoordinateSystem.RDNAP).ToVector3RD();
+            var cameraCoordinate = new Coordinate(transform.position).Convert(CoordinateSystem.RDNAP);
+            var cameraCoordinateRD = cameraCoordinate.ToVector3RD();
             var cameraRotation = transform.eulerAngles;
 
             ProjectData.Current.CameraPosition = new double[] { cameraCoordinateRD.x, cameraCoordinateRD.y, cameraCoordinateRD.z };

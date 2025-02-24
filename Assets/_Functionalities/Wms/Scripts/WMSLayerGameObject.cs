@@ -25,6 +25,7 @@ namespace Netherlands3D.Functionalities.Wms
         private WMSTileDataLayer wmsProjectionLayer;
         protected LayerURLPropertyData urlPropertyData = new();
         public bool ShowLegendOnSelect { get; set; } = true;
+        public override BoundingBox Bounds => wmsProjectionLayer?.BoundingBox;
 
         private List<IPropertySectionInstantiator> propertySections = new();
 

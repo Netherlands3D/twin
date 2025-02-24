@@ -1,6 +1,6 @@
 FROM alpine
 ARG SOURCE_PATH=Build
-RUN apk add jq brotli nginx nginx-mod-http-brotli
+RUN apk add jq brotli nginx nginx-mod-http-brotli npm
 
 # Install envcat (linux-x86_64): https://github.com/busyloop/envcat
 ARG ENVCAT_VERSION=1.1.0
@@ -18,5 +18,11 @@ COPY .docker/bin/startup.sh /startup.sh
 RUN chmod +x /startup.sh
 
 WORKDIR /usr/share/nginx/html
+
+# needed to run the local cors proxy in proxy.js
+RUN npm install cors-anywhere
+COPY .docker/proxy.js /usr/share/nginx/html/
+
 CMD ["/startup.sh"]
 EXPOSE 80
+EXPOSE 8080

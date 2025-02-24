@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
@@ -7,6 +8,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.UI;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -15,6 +17,29 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
     public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, ILayerWithPropertyPanels, ILayerWithPropertyData
     {
+        public override BoundingBox Bounds => CalculateWorldBoundsFromRenderers();
+
+        private BoundingBox CalculateWorldBoundsFromRenderers()
+        {
+            var renderers = GetComponentsInChildren<Renderer>(); //needs to be optimized if we call this function every frame.
+            if (renderers.Length == 0)
+            {
+                return null;
+            }
+
+            var combinedBounds = renderers[0].bounds;
+            
+            for (var i = 1; i < renderers.Length; i++)
+            {
+                var renderer = renderers[i];
+                combinedBounds.Encapsulate(renderer.bounds);
+            }
+            
+            var bl = new Coordinate(combinedBounds.min);
+            var tr = new Coordinate(combinedBounds.max);
+            return new BoundingBox(bl, tr);
+        }
+
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
@@ -117,8 +142,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             // Check for position change
             if (transform.position != previousPosition)
             {
-                var rdCoordinate = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
-                transformPropertyData.Position = rdCoordinate;
+                var positionCoordinate = new Coordinate(transform.position);
+                transformPropertyData.Position = positionCoordinate;
                 previousPosition = transform.position;
             }
 

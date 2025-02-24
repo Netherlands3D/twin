@@ -287,6 +287,11 @@ namespace Netherlands3D.Twin.Cameras
             this.transform.Translate(value.x * gamepadMoveSpeed * Time.deltaTime, 0, value.y * gamepadMoveSpeed * Time.deltaTime, Space.Self);
         }
 
+        public void MoveToTarget(Vector3 newPosition)
+        {
+            transform.position = newPosition;
+        }
+
         /// <summary>
         /// Activate rotation modifier
         /// </summary>

@@ -805,6 +805,8 @@ GameObject:
   - component: {fileID: 4349820417869818976}
   - component: {fileID: 9055248403649816541}
   - component: {fileID: 599364596740144376}
+  - component: {fileID: 1753087756576893688}
+  - component: {fileID: 6861576300041967030}
   m_Layer: 5
   m_Name: BagObjectInformation
   m_TagString: Untagged
@@ -940,17 +942,47 @@ MonoBehaviour:
   geoJsonBagRequestURL: https://service.pdok.nl/lv/bag/wfs/v2_0?SERVICE=WFS&VERSION=2.0.0&outputFormat=geojson&REQUEST=GetFeature&typeName=bag:pand&count=100&outputFormat=xml&srsName=EPSG:28992&filter=%3cFilter%3e%3cPropertyIsEqualTo%3e%3cPropertyName%3eidentificatie%3c/PropertyName%3e%3cLiteral%3e{BagID}%3c/Literal%3e%3c/PropertyIsEqualTo%3e%3c/Filter%3e
   geoJsonAddressesRequestURL: https://service.pdok.nl/lv/bag/wfs/v2_0?service=wfs&request=getFeature&version=2.0.0&outputFormat=geojson&typeName=bag:verblijfsobject&filter=%3CFilter%3E%3CPropertyIsEqualTo%3E%3CPropertyName%3Epandidentificatie%3C/PropertyName%3E%3CLiteral%3E{BagID}%3C/Literal%3E%3C/PropertyIsEqualTo%3E%3C/Filter%3E
   removeFromID: NL.IMBAG.Pand.
+  addressTitle: {fileID: 0}
   addressTemplate: {fileID: 0}
   loadingIndicatorPrefab: {fileID: 8319948408523725000, guid: 86adcad0d70ce534ebb23bd5bf66bff4,
     type: 3}
+  keyValuePairTemplate: {fileID: 0}
   buildingThumbnail: {fileID: 0}
-  contentRectTransform: {fileID: 0}
+  featureThumbnail: {fileID: 0}
+  buildingContentRectTransform: {fileID: 0}
+  featureContentRectTransform: {fileID: 0}
   badIdText: {fileID: 4042587292460530120}
   districtText: {fileID: 2159788604065006343}
   buildYearText: {fileID: 5146780079818365382}
   statusText: {fileID: 7219750878033322209}
   placeholderPanel: {fileID: 4952085622066055273}
-  contentPanel: {fileID: 6967532619824739639}
+  buildingContentPanel: {fileID: 0}
+  featureContentPanel: {fileID: 0}
+  debugMappingTree: 0
+--- !u!114 &1753087756576893688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5078733024073835164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbe41a1d9a1344e68547cd79cbf79eeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6861576300041967030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5078733024073835164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce91ff1673954890bb4c9ca10bc79c7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6323226283059294918
 GameObject:
   m_ObjectHideFlags: 0

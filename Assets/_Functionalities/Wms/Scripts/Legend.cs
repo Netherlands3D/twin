@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.Networking;
+using KindMen.Uxios;
+using KindMen.Uxios.ExpectedTypesOfResponse;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Functionalities.Wms.UI;
 using Netherlands3D.Twin.UI;
@@ -118,19 +119,17 @@ namespace Netherlands3D.Functionalities.Wms
 
         private IEnumerator RequestLegendUrls(string getCapabilitiesURL, Action<LegendUrlContainer> onLegendUrlsReceived)
         {
-            UnityWebRequest webRequest = UnityWebRequest.Get(getCapabilitiesURL);
-            yield return webRequest.SendWebRequest();
-            if (webRequest.result != UnityWebRequest.Result.Success)
+            var promise = Uxios.DefaultInstance.Get<string>(new Uri(getCapabilitiesURL));
+            promise.Then(response =>
             {
-                Debug.LogWarning($"Could not download legends at {getCapabilitiesURL}");
-            }
-            else
-            {
-                var getCapabilities = new WmsGetCapabilities(new Uri(getCapabilitiesURL), webRequest.downloadHandler.text);
+                var getCapabilities = new WmsGetCapabilities(new Uri(getCapabilitiesURL), response.Data as string);
                 var legendUrls = new LegendUrlContainer(getCapabilitiesURL, getCapabilities.GetLegendUrls());
                 LegendUrlDictionary[getCapabilitiesURL] = legendUrls;
                 onLegendUrlsReceived.Invoke(legendUrls);
-            }
+            });
+            promise.Catch(_ => Debug.LogWarning($"Could not download legends at {getCapabilitiesURL}"));
+
+            yield return Uxios.WaitForRequest(promise);
         }
 
         public void ShowLegend(string wmsUrl, bool show)
@@ -165,16 +164,23 @@ namespace Netherlands3D.Functionalities.Wms
 
             foreach (string url in urlContainer.LayerNameLegendUrlDictionary.Values)
             {
-                UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(url);
-                yield return webRequest.SendWebRequest();
-                if (webRequest.result == UnityWebRequest.Result.Success)
+                var promise = Uxios.DefaultInstance.Get<Texture2D>(
+                    new Uri(url), 
+                    new Config() { TypeOfResponseType = new TextureResponse() {Readable = true}}
+                );
+                promise.Then(response =>
                 {
-                    Texture texture = ((DownloadHandlerTexture)webRequest.downloadHandler).texture;
-                    Texture2D tex = texture as Texture2D;
+                    Texture2D tex = response.Data as Texture2D;
                     tex.Apply(false, true);
-                    Sprite imageSprite = Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), Vector2.one * 0.5f, 100);
-                    AddGraphic(imageSprite);
-                }
+                    AddGraphic(Sprite.Create(
+                        tex, 
+                        new Rect(0f, 0f, tex.width, tex.height), 
+                        Vector2.one * 0.5f,
+                        100
+                    ));
+                });
+                
+                yield return Uxios.WaitForRequest(promise);
             }
         }
 

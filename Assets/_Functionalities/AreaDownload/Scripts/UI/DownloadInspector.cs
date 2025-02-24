@@ -77,13 +77,13 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         {
             var southWestAndNorthEast = ConvertBoundsToCoordinates(selectedArea);
             
-            northExtentTextField.text = southWestAndNorthEast.northEast.Points[0].ToString("0");
-            southExtentTextField.text = southWestAndNorthEast.southWest.Points[0].ToString("0");
-            eastExtentTextField.text = southWestAndNorthEast.northEast.Points[1].ToString("0");
-            westExtentTextField.text = southWestAndNorthEast.southWest.Points[1].ToString("0");
+            northExtentTextField.text = southWestAndNorthEast.northEast.northing.ToString("0");
+            southExtentTextField.text = southWestAndNorthEast.southWest.northing.ToString("0");
+            eastExtentTextField.text = southWestAndNorthEast.northEast.easting.ToString("0");
+            westExtentTextField.text = southWestAndNorthEast.southWest.easting.ToString("0");
 
-            southWestTooltip.Show($"X: {southExtentTextField.text}\nY: {westExtentTextField.text}", southWestAndNorthEast.Item1, true);
-            northEastTooltip.Show($"X: {northExtentTextField.text}\nY: {eastExtentTextField.text}", southWestAndNorthEast.Item2, true);
+            southWestTooltip.Show($"X: {westExtentTextField.text}\nY: {southExtentTextField.text}", southWestAndNorthEast.Item1, true);
+            northEastTooltip.Show($"X: {eastExtentTextField.text}\nY: {northExtentTextField.text}", southWestAndNorthEast.Item2, true);
         }
 
         private void OnSelectionBoundsChanged(Bounds selectedArea)
@@ -124,10 +124,12 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         // the y equals the center of the bound) or a 3D results (containing the full bounds)
         private (Coordinate southWest, Coordinate northEast) ConvertBoundsToCoordinates(Bounds bounds)
         {
-            var min = new Coordinate(CoordinateSystem.Unity, bounds.min.x, bounds.center.y, bounds.min.z);
+            var minUnityPosition = new Vector3(bounds.min.x, bounds.center.y, bounds.min.z);
+            var min = new Coordinate(minUnityPosition);
             var southWest = CoordinateConverter.ConvertTo(min, DisplayCrs);
-            
-            var max = new Coordinate(CoordinateSystem.Unity, bounds.max.x, bounds.center.y, bounds.max.z);
+
+            var maxUnityPosition = new Vector3(bounds.max.x, bounds.center.y, bounds.max.z);
+            var max = new Coordinate(maxUnityPosition);
             var northEast = CoordinateConverter.ConvertTo(max, DisplayCrs);
 
             return (southWest, northEast);
