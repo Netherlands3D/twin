@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82a8644b52b7e46a2b6fd0fd6066d300, type: 3}
   m_Name: PrefabLibrary
   m_EditorClassIdentifier: 
+  loadingScreenPrefab: {fileID: -7367316030453654964, guid: 80a8632455a59a343997b163d46048ef,
+    type: 3}
   fallbackPrefab: {fileID: 221556199992705649, guid: 754eb7a73e57a46f8bb8de137184cc10,
     type: 3}
   prefabGroups:
