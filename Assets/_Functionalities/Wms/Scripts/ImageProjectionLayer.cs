@@ -142,7 +142,7 @@ namespace Netherlands3D.Functionalities.Wms
                 origin.y,
                 0.0d
             );
-            var originCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
+            var originCoordinate = rdCoordinate.ToUnity();
 
             originCoordinate.y = ProjectorHeight;
             tile.gameObject.transform.position = originCoordinate; //projector is now at same position as the layer !?          
