@@ -2,13 +2,14 @@
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Utility;
+using RSG;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Object = UnityEngine.Object;
 
-namespace Netherlands3D.Functionalities.ObjectLibrary
+namespace Netherlands3D.Twin.Layers
 {
-    public static class SpatialObjectFactory
+    public static class LayerGameObjectFactory
     {
         public static string GetLabel(GameObject prefab)
         {
@@ -51,6 +52,19 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             );
         }
 
+        /// <summary>
+        /// Instantiates and places a spatial object from a layer game object prefab at the location provided in the
+        /// layer game object.
+        /// </summary>
+        public static IPromise<LayerGameObject> Create(LayerGameObject layerGameObjectPrefab)
+        {
+            var layerGameObject = GameObject.Instantiate(layerGameObjectPrefab);
+            RefreshShaders(layerGameObject.gameObject);
+            EnsureItIsALayerGameObjectWithName(layerGameObject.gameObject);
+            
+            return Promise<LayerGameObject>.Resolved(layerGameObject);
+        }
+
         private static void Place(Vector3 opticalSpawnPoint, Action<Vector3> creationAdapter)
         {
             var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
@@ -81,7 +95,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         ///
         /// Without this, you can see pink textures or even no meshes at all in a build.
         /// </summary>
-        private static void RefreshShaders(GameObject asset)
+        public static void RefreshShaders(GameObject asset)
         {
             Renderer[] renderers = asset.GetComponentsInChildren<Renderer>();
             foreach (var renderer in renderers)
@@ -127,16 +141,21 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
 
         private static void EnsureItIsALayerGameObjectWithName(GameObject newObject)
         {
-            // Ensure the name is a readable one - without this we would get (Clone) as part of the layer names
-            newObject.name = GetLabel(newObject);
-
-            var layerComponent = newObject.GetComponent<HierarchicalObjectLayerGameObject>();
+            var layerComponent = newObject.GetComponent<LayerGameObject>();
             if (!layerComponent)
             {
+                // We assume it must be a hierarchical object if there is no LayerGameObject attached
                 layerComponent = newObject.AddComponent<HierarchicalObjectLayerGameObject>();
             }
 
-            layerComponent.Name = newObject.name;
+            EnsureItIsALayerGameObjectWithName(layerComponent);
+        }
+
+        private static void EnsureItIsALayerGameObjectWithName(LayerGameObject newObject)
+        {
+            // Ensure the name is a readable one - without this we would get (Clone) as part of the layer names
+            newObject.gameObject.name = GetLabel(newObject.gameObject);
+            newObject.Name = newObject.gameObject.name;
         }
     }
 }

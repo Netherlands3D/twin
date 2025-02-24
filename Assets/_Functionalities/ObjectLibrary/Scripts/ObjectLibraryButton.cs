@@ -1,8 +1,8 @@
 using System;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Functionalities.ObjectLibrary
@@ -33,7 +33,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         {
             this.prefab = prefab;
 
-            instantiationCallback = w => SpatialObjectFactory.Create(w, prefab);
+            instantiationCallback = w => LayerGameObjectFactory.Create(w, prefab);
         }
 
         // for when this button should load from an Addressable
@@ -41,7 +41,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         {
             this.prefab = null;
 
-            instantiationCallback = w => SpatialObjectFactory.Create(w, reference);
+            instantiationCallback = w => LayerGameObjectFactory.Create(w, reference);
         }
         
         protected virtual void CreateObject()

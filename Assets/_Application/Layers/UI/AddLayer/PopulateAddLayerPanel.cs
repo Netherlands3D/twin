@@ -115,7 +115,7 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
         {
             var button = Instantiate(buttonPrefab, groupPanel.transform);
             button.SetPrefab(prefab.gameObject);
-            button.GetComponentInChildren<TMP_Text>().text = SpatialObjectFactory.GetLabel(prefab.gameObject);
+            button.GetComponentInChildren<TMP_Text>().text = LayerGameObjectFactory.GetLabel(prefab.gameObject);
 
             return button;
         }
@@ -124,7 +124,7 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
         {
             var button = Instantiate(buttonPrefab, groupPanel.transform);
             button.SetPrefab(reference);
-            button.GetComponentInChildren<TMP_Text>().text = SpatialObjectFactory.GetLabel(reference);
+            button.GetComponentInChildren<TMP_Text>().text = LayerGameObjectFactory.GetLabel(reference);
 
             return button;
         }

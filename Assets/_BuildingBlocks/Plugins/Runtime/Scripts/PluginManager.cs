@@ -32,7 +32,7 @@ namespace Netherlands3D.Plugins
             StartCoroutine(PreloadLocalPlugins());
         }
 
-        public IEnumerator PreloadLocalPlugins()
+        private IEnumerator PreloadLocalPlugins()
         {
             foreach (var plugin in preloadedLocalPlugins)
             {
@@ -67,6 +67,7 @@ namespace Netherlands3D.Plugins
                 Debug.Log($"Registering layer '{layerReference.layerName}' with PrefabLibrary in group {layerReference.groupName}");
                 prefabLibrary.AddObjectToPrefabRuntimeGroup(
                     layerReference.groupName, 
+                    layerReference.identifier, // Must be a universally Unique identifier - otherwise the PrefabLibrary can get confused 
                     layerReference.layerName,
                     layerReference.asset
                 );

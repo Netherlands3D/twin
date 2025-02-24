@@ -5,12 +5,14 @@ using Netherlands3D.Twin.Layers;
 using RSG;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Netherlands3D.Twin.Projects
 {
     [Serializable]
     public struct PrefabReference
     {
+        public string id;
         public string label;
         public AssetReferenceGameObject referenceGameObject;
     }
@@ -36,17 +38,46 @@ namespace Netherlands3D.Twin.Projects
         {
             var prefab = FindPrefabInGroups(id, prefabGroups);
             if (prefab) return Promise<LayerGameObject>.Resolved(prefab);
-            
+
+            var prefabReference = FindPrefabReferenceInGroups(id, prefabGroups);
+            if (prefabReference.HasValue) return GetPrefabByReference(prefabReference.Value);
+
             prefab = FindPrefabInGroups(id, prefabRuntimeGroups);
             if (prefab) return Promise<LayerGameObject>.Resolved(prefab);
 
+            prefabReference = FindPrefabReferenceInGroups(id, prefabRuntimeGroups);
+            if (prefabReference.HasValue) return GetPrefabByReference(prefabReference.Value);
+            
             return Promise<LayerGameObject>.Resolved(fallbackPrefab);
         }
-        
+
+        private static IPromise<LayerGameObject> GetPrefabByReference(PrefabReference prefabReference)
+        {
+            var promise = new Promise<LayerGameObject>();
+
+            void OnCompleted(AsyncOperationHandle<GameObject> handle)
+            {
+                if (handle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    promise.Resolve(handle.Result.GetComponent<LayerGameObject>());
+                    return;
+                }
+
+                promise.Reject(handle.OperationException);
+            }
+            
+            Addressables.LoadAssetAsync<GameObject>(prefabReference.referenceGameObject).Completed += OnCompleted;
+
+            return promise;
+        }
+
         public IPromise<LayerGameObject> Instantiate(string prefabId)
         {
-            return ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId)
-                .Then(GameObject.Instantiate);
+            IPromise<LayerGameObject> promise = GetPrefabById(prefabId);
+            promise.Then(LayerGameObjectFactory.Create);
+            promise.Catch(Debug.LogException);
+            
+            return promise;
         }
 
         public PrefabGroup AddPrefabRuntimeGroup(string groupName)
@@ -72,7 +103,7 @@ namespace Netherlands3D.Twin.Projects
             }
         }
 
-        public void AddObjectToPrefabRuntimeGroup(string groupName, string label, AssetReferenceGameObject layerObject)
+        public void AddObjectToPrefabRuntimeGroup(string groupName, string id, string label, AssetReferenceGameObject layerObject)
         {
             var group = prefabGroups.FirstOrDefault(group => group.groupName == groupName) 
                 ?? AddPrefabRuntimeGroup(groupName);
@@ -80,10 +111,24 @@ namespace Netherlands3D.Twin.Projects
             group.prefabReferences.Add(
                 new PrefabReference
                 {
+                    id = id,
                     referenceGameObject = layerObject,
                     label = label
                 }
             );
+        }
+
+        private PrefabReference? FindPrefabReferenceInGroups(string id, List<PrefabGroup> prefabGroups)
+        {
+            foreach (var group in prefabGroups)
+            {
+                var findPrefabInGroups = FindPrefabReferenceInGroup(id, group);
+                if (string.IsNullOrEmpty(findPrefabInGroups.id)) continue;
+
+                return findPrefabInGroups;
+            }
+
+            return null;
         }
 
         private LayerGameObject FindPrefabInGroups(string id, List<PrefabGroup> prefabGroups)
@@ -102,6 +147,11 @@ namespace Netherlands3D.Twin.Projects
         private LayerGameObject FindPrefabInGroup(string id, PrefabGroup group)
         {
             return group.prefabs.FirstOrDefault(prefab => prefab.PrefabIdentifier == id);
+        }
+
+        private PrefabReference FindPrefabReferenceInGroup(string id, PrefabGroup group)
+        {
+            return group.prefabReferences.FirstOrDefault(prefab => prefab.id == id);
         }
     }
 }
