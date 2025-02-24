@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using KindMen.Uxios;
 using KindMen.Uxios.Api;
+using KindMen.Uxios.Errors;
+using KindMen.Uxios.Errors.Http;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -72,7 +73,6 @@ namespace Netherlands3D.DataTypeAdapters
         {
             // Start by download the file, so we can do a detailed check of the content to determine the type
             var urlAndData = new LocalFile { SourceUrl = url, LocalFilePath = "" };
-            GetAuth(url);
 
             yield return DownloadDataToLocalCache(urlAndData);
 
@@ -87,24 +87,6 @@ namespace Netherlands3D.DataTypeAdapters
             yield return AdapterChain(urlAndData);
         }
 
-        private void GetAuth(string url)
-        {
-            var uxios = new Uxios();
-            Uri uri = new Uri(url);
-
-            // Perform GET request with custom configuration
-            uxios.Get<FileInfo>(uri)
-            .Then(response =>
-            {
-                Debug.Log("Status: " + response.Status);            
-            })
-            .Catch(error =>
-            {
-                //error.
-                //Debug.LogError("Request failed: " + error.Message);
-            });
-        }
-
         /// <summary>
         /// We download the file to a local cache so we can check the content from the adapters using streamreading.
         /// This way we keep the heap memory usage low and can handle large files (like large obj's, or large WFS responses)
@@ -114,11 +96,15 @@ namespace Netherlands3D.DataTypeAdapters
         private IEnumerator DownloadDataToLocalCache(LocalFile urlAndData)
         {
             var futureFileInfo = Resource<FileInfo>.At(urlAndData.SourceUrl).Value;
-
+            
             // We want to use and manipulate urlAndData, so we 'curry' it by wrapping a method call in a lambda 
             futureFileInfo.Then(info => DownloadSucceeded(urlAndData, info));
             futureFileInfo.Catch(error =>
             {
+                if(error is AuthenticationError)
+                {
+                    OnAuthenticationFailed?.Invoke(urlAndData.SourceUrl);
+                }
                 DownloadFailed(urlAndData, error);
             });
             
@@ -134,9 +120,6 @@ namespace Netherlands3D.DataTypeAdapters
 
         private void DownloadFailed(LocalFile urlAndData, Exception error)
         {
-            
-
-
             urlAndData.LocalFilePath = "";
             if (debugLog)
             {
