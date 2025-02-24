@@ -28,6 +28,7 @@ namespace Netherlands3D.Credentials
 
         [Tooltip("KeyVault Scriptable Object")]
         [SerializeField] private KeyVault keyVault;
+        private string url;
 
         private void Awake()
         {
@@ -76,6 +77,7 @@ namespace Netherlands3D.Credentials
         private void DeterminedAuthorizationType(string url, AuthorizationType authorizationType)
         {
             this.authorizationType = authorizationType;
+            this.url = url;
             //Debug.Log("Determined authorization type: " + authorizationType + " for url: " + url, this.gameObject);
 
             //// It appears the current url needs authentication/authorization
@@ -104,12 +106,35 @@ namespace Netherlands3D.Credentials
 
         public void ApplyCredentials()
         {
-            throw new NotImplementedException();
+            switch (authorizationType)
+            {
+                case AuthorizationType.UsernamePassword:
+                    keyVault.TryBasicAuthentication(
+                        url,
+                        UserName,
+                        PasswordOrKeyOrTokenOrCode
+                    );
+                    break;
+                case AuthorizationType.InferableSingleKey:
+                    keyVault.TryToFindSpecificCredentialType(
+                        url,
+                        PasswordOrKeyOrTokenOrCode
+                    );
+                    break;
+            }
         }
 
         public void SetAuthorizationInputType(AuthorizationType type)
         {
-            throw new NotImplementedException();
+            if (
+                type == AuthorizationType.Key
+                || type == AuthorizationType.Token
+                || type == AuthorizationType.BearerToken
+                || type == AuthorizationType.Code
+            )
+                type = AuthorizationType.InferableSingleKey;
+
+            authorizationType = type;
         }
     }
 }
