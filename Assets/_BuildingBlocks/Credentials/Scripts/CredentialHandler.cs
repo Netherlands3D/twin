@@ -20,21 +20,9 @@ namespace Netherlands3D.Credentials
         public string PasswordOrKeyOrTokenOrCode { get; set; }
         public AuthorizationType AuthorizationType => authorizationType;
 
-        public UnityEvent<bool> HasValidCredentialsChanged = new();
-        public UnityEvent<bool> CredentialsAccepted => HasValidCredentialsChanged;
-
-        public bool HasValidCredentials
-        {
-            get
-            {
-                return hasValidCredentials;
-            }
-            set
-            {
-                hasValidCredentials = value;
-                HasValidCredentialsChanged.Invoke(value);
-            }
-        }
+        public UnityEvent<bool> CredentialsSucceeded = new();
+        public UnityEvent<bool> CredentialsAccepted => CredentialsSucceeded;       
+        public bool HasValidCredentials => hasValidCredentials;       
 
         private bool hasValidCredentials = false;
 
@@ -49,10 +37,7 @@ namespace Netherlands3D.Credentials
             //were are not using an instantiator for the user interface, so lets set it here
             ICredentialInterface view = GetComponentInChildren<ICredentialInterface>();
             view.Handler = this;
-        }
 
-        private void OnEnable()
-        {
             keyVault.OnAuthorizationTypeDetermined.AddListener(DeterminedAuthorizationType);
         }
 
@@ -74,7 +59,7 @@ namespace Netherlands3D.Credentials
             Debug.Log("Determined authorization type: " + authorizationType + " for url: " + url, this.gameObject);
             if(hasValidCredentials)
             {
-                //ContentOverlayContainer.Instance.CloseOverlay();
+                CredentialsSucceeded?.Invoke(false); //we dont wanto hide this window
             }
         }
 

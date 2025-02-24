@@ -100,8 +100,7 @@ namespace Netherlands3D.DataTypeAdapters
 
             // We want to use and manipulate urlAndData, so we 'curry' it by wrapping a method call in a lambda 
             futureFileInfo.Then(info =>
-            {
-                
+            {                
                 DownloadSucceeded(urlAndData, info);
             });        
             futureFileInfo.Catch(error =>

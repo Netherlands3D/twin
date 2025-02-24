@@ -148,6 +148,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CredentialsSucceeded:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3325231446690083424}
+        m_TargetAssemblyTypeName: Netherlands3D.DataTypeAdapters.DataTypeChain, Assembly-CSharp
+        m_MethodName: DetermineAdapter
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
 --- !u!114 &3325231446690083424
 MonoBehaviour:
@@ -278,6 +293,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+  OnAuthenticationSucceeded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4552448576029480976
 GameObject:
   m_ObjectHideFlags: 0
