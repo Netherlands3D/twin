@@ -15,7 +15,14 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
         public void Execute(LocalFile localFile)
         {
-            
+            var layerParent = GameObject.FindWithTag("3DTileParent").transform;
+            var newObject = Instantiate(layerPrefab, Vector3.zero, layerPrefab.transform.rotation, layerParent);
+
+            var layerComponent = newObject.gameObject.GetComponent<Tile3DLayerGameObject>();
+            if (!layerComponent)
+                layerComponent = newObject.gameObject.AddComponent<Tile3DLayerGameObject>();
+
+            layerComponent.Name = layerPrefab.name;
         }
 
         public bool Supports(LocalFile localFile)
