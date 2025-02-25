@@ -80,7 +80,7 @@ namespace Netherlands3D.DataTypeAdapters
             // No local cache? Download failed.
             if (string.IsNullOrEmpty(urlAndData.LocalFilePath))
             {
-                OnDownloadFailed.Invoke(url);
+               
                 yield break;
             }
 
@@ -105,11 +105,14 @@ namespace Netherlands3D.DataTypeAdapters
             });        
             futureFileInfo.Catch(error =>
             {
-                if(error is AuthenticationError)
+                if (error is AuthenticationError)
                 {
                     OnAuthenticationFailed?.Invoke(urlAndData.SourceUrl);
                 }
-                DownloadFailed(urlAndData, error);
+                else
+                {
+                    DownloadFailed(urlAndData, error);
+                }
             });
             
             yield return Uxios.WaitForRequest(futureFileInfo);
@@ -125,6 +128,7 @@ namespace Netherlands3D.DataTypeAdapters
         private void DownloadFailed(LocalFile urlAndData, Exception error)
         {
             urlAndData.LocalFilePath = "";
+            OnDownloadFailed.Invoke(urlAndData.SourceUrl);
             if (debugLog)
             {
                 Debug.LogError("Download failed: " + error.Message);
