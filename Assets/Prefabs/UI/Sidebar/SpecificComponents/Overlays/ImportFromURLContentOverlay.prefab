@@ -148,9 +148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CredentialsAcceptedSkipped:
-    m_PersistentCalls:
-      m_Calls: []
   CredentialsSucceeded:
     m_PersistentCalls:
       m_Calls:
