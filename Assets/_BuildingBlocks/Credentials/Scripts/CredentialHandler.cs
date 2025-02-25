@@ -27,7 +27,6 @@ namespace Netherlands3D.Credentials
         public UnityEvent<bool> CredentialsAccepted => CredentialsAcceptedDoNothing;        
         public UnityEvent<string> CredentialsSucceeded = new();
         public bool HasValidCredentials => false;        
-        public string URL { get => url; set => url = value; }
         private UnityEvent<bool> CredentialsAcceptedDoNothing = new();
 
         private bool hasValidCredentials = false;
@@ -40,7 +39,7 @@ namespace Netherlands3D.Credentials
 
         [Tooltip("KeyVault Scriptable Object")]
         [SerializeField] private KeyVault keyVault;
-        private string url;
+        private string urlWithoutCredentials;
 
         private void Awake()
         {
@@ -56,25 +55,27 @@ namespace Netherlands3D.Credentials
             keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
         }
 
-        public void UpdateCredentialUrl(string url)
+        public void UpdateUrl(string url)
         {
             if (!string.IsNullOrEmpty(url))
             {
-                this.url = url;
+                this.urlWithoutCredentials = url;
                 UrlHasChanged(url);
             }
         }
 
-        public void UrlHasChanged(string newURL)
+        private void UrlHasChanged(string newURL)
         {
-            this.url = newURL;
+            this.urlWithoutCredentials = newURL;
             keyVault.TryToFindSpecificCredentialType(newURL.ToString(), "");
         }
 
         private void DeterminedAuthorizationType(string url, AuthorizationType authorizationType)
         {
             this.authorizationType = authorizationType;
+            //we check if the authorized type is different from unkown. The keyvault webrequests can never return unknown if authorization was valid
             hasAuthorizationType = authorizationType != AuthorizationType.Unknown;
+
             //Debug.Log("Determined authorization type: " + authorizationType + " for url: " + url, this.gameObject);
             if (hasAuthorizationType)
             {
@@ -89,14 +90,14 @@ namespace Netherlands3D.Credentials
             {
                 case AuthorizationType.UsernamePassword:
                     keyVault.TryBasicAuthentication(
-                        url,
+                        urlWithoutCredentials,
                         UserName,
                         PasswordOrKeyOrTokenOrCode
                     );
                     break;
                 case AuthorizationType.InferableSingleKey:
                     keyVault.TryToFindSpecificCredentialType(
-                        url,
+                        urlWithoutCredentials,
                         PasswordOrKeyOrTokenOrCode
                     );
                     break;               
@@ -127,9 +128,9 @@ namespace Netherlands3D.Credentials
         public bool ConstructURLWithKey()
         {
             ClearKeyFromURL(); //remove existing key if any is there
-            if (string.IsNullOrEmpty(url)) return false;
+            if (string.IsNullOrEmpty(urlWithoutCredentials)) return false;
 
-            UriBuilder uriBuilder = new UriBuilder(url);
+            UriBuilder uriBuilder = new UriBuilder(urlWithoutCredentials);
 
             //Keep an existing query
             if (uriBuilder.Query != null && uriBuilder.Query.Length > 1)

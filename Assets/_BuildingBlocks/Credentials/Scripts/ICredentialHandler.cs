@@ -15,6 +15,6 @@ namespace Netherlands3D.Credentials
         bool HasValidCredentials { get; }
         public void ApplyCredentials();
         public void SetAuthorizationInputType(AuthorizationType type);
-        public void UpdateCredentialUrl(string url);
+        public void UpdateUrl(string url);
     }
 }

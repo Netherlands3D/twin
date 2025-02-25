@@ -5,7 +5,6 @@ using Netherlands3D.Functionalities.OGC3DTiles;
 using System.IO;
 using Newtonsoft.Json;
 using Netherlands3D.Credentials;
-using Netherlands3D.Twin.Layers.LayerTypes.Credentials;
 
 namespace Netherlands3D.Twin.DataTypeAdapters
 {
@@ -27,7 +26,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             layerComponent.Name = layerPrefab.name;
 
             ICredentialHandler credentialHandler = layerComponent.GetComponent<ICredentialHandler>();
-            credentialHandler.UpdateCredentialUrl(localFile.SourceUrl);
+            credentialHandler.UpdateUrl(localFile.SourceUrl);
             layerComponent.URL = localFile.SourceUrl;
         }
 

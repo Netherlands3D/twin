@@ -52,10 +52,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
             layerWithCredentials.OnServerResponseReceived.AddListener(HandleServerResponse);
 
-            UpdateCredentialUrl(layerWithCredentials.URL);
+            UpdateUrl(layerWithCredentials.URL);
         }
 
-        public void UpdateCredentialUrl(string url)
+        public void UpdateUrl(string url)
         {
             if (!string.IsNullOrEmpty(url))
             {

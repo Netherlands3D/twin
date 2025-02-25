@@ -18,6 +18,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
     public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, ILayerWithCredentials
     {
         public override BoundingBox Bounds => tileSet.root != null ? new BoundingBox(tileSet.root.BottomLeft, tileSet.root.TopRight) : null;
+        public Tile3DLayerPropertyData PropertyData => urlPropertyData;
 
         private Read3DTileset tileSet;
         [SerializeField] private bool usePropertySections = true;
