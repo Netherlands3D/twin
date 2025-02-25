@@ -82,16 +82,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         private void InitializeScatterMesh(string prefabId)
         {
-            ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId).Then(scatterObjectPrefab =>
-            {
-                var meshRenderer = scatterObjectPrefab.GetComponentInChildren<MeshRenderer>();
-
-                this.mesh = CombineHierarchicalMeshes(scatterObjectPrefab.transform);
-
-                //todo: make this work with multiple materials for hierarchical meshes?
-                this.material = meshRenderer.sharedMaterial; 
-                this.material.enableInstancing = true;
-            });
+            var scatterObjectPrefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
+            this.mesh = CombineHierarchicalMeshes(scatterObjectPrefab.transform);
+            this.material = scatterObjectPrefab.GetComponentInChildren<MeshRenderer>().sharedMaterial; //todo: make this work with multiple materials for hierarchical meshes?
+            this.material.enableInstancing = true;
         }
         
         private void InitializeNewScatterProperties(string originalObjectPrefabId, ShapeType shapeType)
@@ -342,23 +336,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public void RevertToHierarchicalObjectLayer()
         {
-            ProjectData.Current.PrefabLibrary.Instantiate(settings.OriginalPrefabId)
-                .Then(OnRevertScatterLayer);
-        }
-
-        private void OnRevertScatterLayer(LayerGameObject layerGameObject)
-        {
-            var revertedLayer = layerGameObject as HierarchicalObjectLayerGameObject;
-            if (!revertedLayer)
-            {
-                Debug.LogError(
-                    "Expected the instantiated layer to be a HierarchicalObjectLayer when reverting a Scatter Layer, " 
-                    + $"but received {layerGameObject.GetType()}"
-                );
-                layerGameObject.DestroyLayer();
-                return;
-            }
-
+            var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(settings.OriginalPrefabId);
+            var revertedLayer = GameObject.Instantiate(prefab) as HierarchicalObjectLayerGameObject;
             revertedLayer.LoadProperties(LayerData.LayerProperties); //load the saved (transform) properties in this object 
             revertedLayer.LayerData.ActiveSelf = LayerData.ActiveSelf;
             revertedLayer.LayerData.AddProperty(settings); //add the scatter settings to the object properties so it can be reloaded if the user decides to turn the scatter on again

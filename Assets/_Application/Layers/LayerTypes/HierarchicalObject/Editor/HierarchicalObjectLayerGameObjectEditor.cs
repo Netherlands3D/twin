@@ -1,7 +1,6 @@
 using Netherlands3D.Twin.Layers.Editor;
 using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Editor
@@ -15,11 +14,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Editor
 
             InspectorElement.FillDefaultInspector(root, serializedObject, this);
 
-            if (Application.IsPlaying(this))
-            {
-                var layerGameObject = (HierarchicalObjectLayerGameObject)target;
-                LayerDataVisualElements.LayerData(layerGameObject.LayerData, root);
-            }
+            var layerGameObject = (HierarchicalObjectLayerGameObject)target;
+            LayerDataVisualElements.LayerData(layerGameObject.LayerData, root);
 
             return root;
         }
