@@ -15,27 +15,24 @@ namespace Netherlands3D.Credentials
     //this is the handler for the ui flow to check credentials
     //will be active in the layerpanel when trying to add a layer through url
     //we also use this credentialhandler for storing credential data while not having active layers yet
-    public class CredentialHandler : MonoBehaviour, ICredentialHandler, ICredentialsObject
+    public class CredentialHandler : MonoBehaviour, ICredentialHandler
     {
-        public bool StatusEnabled => false; //no status here because the layer panel will close on authentication
+        //no status here because the layer panel will close on authentication
+        public bool StatusEnabled => false; 
         public string UserName { get; set; }
         public string PasswordOrKeyOrTokenOrCode { get; set; }
         public AuthorizationType AuthorizationType => authorizationType;
 
-        public UnityEvent<bool> CredentialsAccepted => CredentialsAcceptedSkipped;
-        public UnityEvent<bool> CredentialsAcceptedSkipped = new();
+        //Todo, event maybe not in interface? we dont want to use this event because after importing the panel needs to be closed
+        public UnityEvent<bool> CredentialsAccepted => CredentialsAcceptedDoNothing;        
         public UnityEvent<string> CredentialsSucceeded = new();
-        public bool HasValidCredentials => false;
-        private bool hasAuthorizationType = false;
+        public bool HasValidCredentials => false;        
         public string URL { get => url; set => url = value; }
+        private UnityEvent<bool> CredentialsAcceptedDoNothing = new();
 
         private bool hasValidCredentials = false;
-
+        private bool hasAuthorizationType = false;
         private AuthorizationType authorizationType = AuthorizationType.Unknown;
-
-        private Dictionary<string, string> customHeaders = new Dictionary<string, string>();
-        public Dictionary<string, string> CustomHeaders { get => customHeaders; private set => customHeaders = value; }
-
         public string CredentialQuery { get; private set; } = string.Empty;
         public string credentialUrl;
         [SerializeField] private string queryKeyName = "key";
@@ -52,18 +49,11 @@ namespace Netherlands3D.Credentials
             view.Handler = this;
 
             keyVault.OnAuthorizationTypeDetermined.AddListener(DeterminedAuthorizationType);
-            CredentialsAcceptedSkipped.AddListener(SkipCredentialsAccepted);
         }
 
         private void OnDestroy()
         {
             keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
-            CredentialsAcceptedSkipped.RemoveListener(SkipCredentialsAccepted);
-        }
-
-        private void SkipCredentialsAccepted(bool accepted)
-        {
-            
         }
 
         public void UpdateCredentialUrl(string url)
@@ -85,7 +75,7 @@ namespace Netherlands3D.Credentials
         {
             this.authorizationType = authorizationType;
             hasAuthorizationType = authorizationType != AuthorizationType.Unknown;
-            Debug.Log("Determined authorization type: " + authorizationType + " for url: " + url, this.gameObject);
+            //Debug.Log("Determined authorization type: " + authorizationType + " for url: " + url, this.gameObject);
             if (hasAuthorizationType)
             {
                 if(ConstructURLWithKey())
@@ -98,7 +88,6 @@ namespace Netherlands3D.Credentials
             switch (authorizationType)
             {
                 case AuthorizationType.UsernamePassword:
-                    SetCredentials(UserName, PasswordOrKeyOrTokenOrCode);
                     keyVault.TryBasicAuthentication(
                         url,
                         UserName,
@@ -125,41 +114,6 @@ namespace Netherlands3D.Credentials
                 type = AuthorizationType.InferableSingleKey;
 
             authorizationType = type;
-        }
-
-        public void SetCredentials(string username, string password)
-        {
-            UserName = username;
-            PasswordOrKeyOrTokenOrCode = password;
-        }
-
-        public void SetKey(string key)
-        {
-            PasswordOrKeyOrTokenOrCode = key;
-        }
-
-        public void SetBearerToken(string token)
-        {
-            PasswordOrKeyOrTokenOrCode = token;
-        }
-
-        public void SetCode(string code)
-        {
-            PasswordOrKeyOrTokenOrCode = code;
-        }
-
-        public void SetToken(string token)
-        {
-            PasswordOrKeyOrTokenOrCode = token;
-            QueryKeyName = "token";
-        }
-
-        public void ClearCredentials()
-        {
-            PasswordOrKeyOrTokenOrCode = "";
-            UserName = "";
-            QueryKeyName = "key";
-            ClearKeyFromURL();
         }
 
         public void ClearKeyFromURL()
