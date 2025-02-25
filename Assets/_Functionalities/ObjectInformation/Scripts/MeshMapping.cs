@@ -9,7 +9,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     /// <summary>
     /// in the future/when production ready, this should probably be renamed to a feature mapping type, as it contains geometry and a boundingbox
     /// </summary>
-    public class MeshMapping : MonoBehaviour, IMapping
+    public class MeshMapping : IMapping
     {
         public object MappingObject => objectMapping;
         public ObjectMapping ObjectMapping => objectMapping;

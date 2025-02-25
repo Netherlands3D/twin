@@ -31,6 +31,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         public ReferencedLayerData(string name, string prefabId, List<LayerPropertyData> layerProperties) : base(name, layerProperties)
         {
             this.prefabId = prefabId;
+            // TODO: S3DA-1386 - the reference is null while an asynchronous layergameobject would be loading, this
+            //   could cause issues for layers of a type different than HierarchicalLayerGameObject; to address this
+            //   we want a null -or dummy- layer gameobject while loading happens and once that finishes, the definitive
+            //   layergameobject should swap into place, and take in all that state of the dummy (selected or not,
+            //   register as part of a bigger whole, etc)
             ProjectData.Current.PrefabLibrary
                 .Instantiate(prefabId)
                 .Then(layerGameObject => OnSuccessfullyInstantiated(layerGameObject, layerProperties));
