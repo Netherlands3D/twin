@@ -40,12 +40,15 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (!node.Bounds.Contains(obj.BoundingBox)) return;
 
             if (node.IsLeaf)
-            {
-                node.Mappings.Add(obj);
+            {  
                 if ((node.Mappings.Count > maxMappings && depth < maxDepth) || CouldFitInChild(node, obj))
                 {
                     Subdivide(node);
                     ReinsertObjects(node);
+                }
+                else
+                {
+                    node.Mappings.Add(obj);
                 }
             }
             else
