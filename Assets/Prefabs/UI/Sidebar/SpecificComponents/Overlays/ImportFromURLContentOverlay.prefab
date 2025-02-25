@@ -167,7 +167,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   credentialUrl: 
-  queryKeyName: key
+  queryKeyName: token
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
 --- !u!114 &3325231446690083424
 MonoBehaviour:
