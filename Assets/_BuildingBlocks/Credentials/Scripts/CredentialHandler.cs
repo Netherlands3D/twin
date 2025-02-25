@@ -44,7 +44,7 @@ namespace Netherlands3D.Credentials
         private void Awake()
         {
             //were are not using an instantiator for the user interface, so lets set it here
-            ICredentialInterface view = GetComponentInChildren<ICredentialInterface>();
+            ICredentialsPropertySection view = GetComponentInChildren<ICredentialsPropertySection>();
             view.Handler = this;
 
             keyVault.OnAuthorizationTypeDetermined.AddListener(DeterminedAuthorizationType);
