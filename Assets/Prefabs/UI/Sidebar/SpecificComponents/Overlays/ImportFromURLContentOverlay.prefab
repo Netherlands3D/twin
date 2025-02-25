@@ -148,13 +148,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CredentialsAcceptedSkipped:
+    m_PersistentCalls:
+      m_Calls: []
   CredentialsSucceeded:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3325231446690083424}
         m_TargetAssemblyTypeName: Netherlands3D.DataTypeAdapters.DataTypeChain, Assembly-CSharp
         m_MethodName: DetermineAdapter
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -163,13 +166,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  HasValidCredentialsChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  publicKey: 
-  personalKey: 
+  credentialUrl: 
   queryKeyName: key
-  tilesetUrl: https://storage.googleapis.com/ahp-research/maquette/kadaster/3dbasisvoorziening/test/landuse_1_1/tileset.json
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
 --- !u!114 &3325231446690083424
 MonoBehaviour:

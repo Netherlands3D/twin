@@ -21,11 +21,12 @@ namespace Netherlands3D.Credentials
         public string UserName { get; set; }
         public string PasswordOrKeyOrTokenOrCode { get; set; }
         public AuthorizationType AuthorizationType => authorizationType;
-                
-        public UnityEvent<bool> CredentialsAccepted => null;
-        public UnityEvent<string> CredentialsSucceeded = new();
-        public bool HasValidCredentials => hasValidCredentials;
 
+        public UnityEvent<bool> CredentialsAccepted => CredentialsAcceptedSkipped;
+        public UnityEvent<bool> CredentialsAcceptedSkipped = new();
+        public UnityEvent<string> CredentialsSucceeded = new();
+        public bool HasValidCredentials => false;
+        private bool hasAuthorizationType = false;
         public string URL { get => url; set => url = value; }
 
         private bool hasValidCredentials = false;
@@ -35,16 +36,10 @@ namespace Netherlands3D.Credentials
         private Dictionary<string, string> customHeaders = new Dictionary<string, string>();
         public Dictionary<string, string> CustomHeaders { get => customHeaders; private set => customHeaders = value; }
 
-        [Header("API Key (Optional)")]
-        [Tooltip("Public API key for production use. This key will be used in production builds.")]
-        public string publicKey;
-        [Tooltip("Personal API key for testing purposes. This key will override the public key in Unity editor.")]
-        public string personalKey;
-        [Tooltip("The key name to use for the API key in the query string like 'key', or 'code' etc. Default is 'key' for Google Maps API.")]
+        public string CredentialQuery { get; private set; } = string.Empty;
+        public string credentialUrl;
         [SerializeField] private string queryKeyName = "key";
         public string QueryKeyName { get => queryKeyName; set => queryKeyName = value; }
-        public string CredentialQuery { get; private set; } = string.Empty;
-        public string tilesetUrl = "https://storage.googleapis.com/ahp-research/maquette/kadaster/3dbasisvoorziening/test/landuse_1_1/tileset.json";
 
         [Tooltip("KeyVault Scriptable Object")]
         [SerializeField] private KeyVault keyVault;
@@ -57,11 +52,18 @@ namespace Netherlands3D.Credentials
             view.Handler = this;
 
             keyVault.OnAuthorizationTypeDetermined.AddListener(DeterminedAuthorizationType);
+            CredentialsAcceptedSkipped.AddListener(SkipCredentialsAccepted);
         }
 
         private void OnDestroy()
         {
             keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
+            CredentialsAcceptedSkipped.RemoveListener(SkipCredentialsAccepted);
+        }
+
+        private void SkipCredentialsAccepted(bool accepted)
+        {
+            
         }
 
         public void UrlHasChanged(string newURL)
@@ -73,11 +75,12 @@ namespace Netherlands3D.Credentials
         private void DeterminedAuthorizationType(string url, AuthorizationType authorizationType)
         {
             this.authorizationType = authorizationType;
-            hasValidCredentials = authorizationType != AuthorizationType.Unknown;
+            hasAuthorizationType = authorizationType != AuthorizationType.Unknown;
             Debug.Log("Determined authorization type: " + authorizationType + " for url: " + url, this.gameObject);
-            if (hasValidCredentials)
+            if (hasAuthorizationType)
             {
-                CredentialsSucceeded?.Invoke(false); //we dont wanto hide this window
+                if(ConstructURLWithKey())
+                    CredentialsSucceeded?.Invoke(credentialUrl);
             }
         }
 
@@ -98,42 +101,7 @@ namespace Netherlands3D.Credentials
                         url,
                         PasswordOrKeyOrTokenOrCode
                     );
-                    break;
-                case AuthorizationType.BearerToken:
-                    SetBearerToken(PasswordOrKeyOrTokenOrCode);
-                    keyVault.TryToFindSpecificCredentialType(
-                        url,
-                        PasswordOrKeyOrTokenOrCode
-                    );
-                    break;
-                case AuthorizationType.Key:
-                    SetKey(PasswordOrKeyOrTokenOrCode);
-                    keyVault.TryToFindSpecificCredentialType(
-                        url,
-                        PasswordOrKeyOrTokenOrCode
-                    );
-                    break;
-                case AuthorizationType.Code:
-                    SetCode(PasswordOrKeyOrTokenOrCode);
-                    keyVault.TryToFindSpecificCredentialType(
-                        url,
-                        PasswordOrKeyOrTokenOrCode
-                    );
-                    break;
-                case AuthorizationType.Token:
-                    SetToken(PasswordOrKeyOrTokenOrCode);
-                    keyVault.TryToFindSpecificCredentialType(
-                        url,
-                        PasswordOrKeyOrTokenOrCode
-                    );
-                    break;
-                case AuthorizationType.Public:
-                    ClearCredentials();
-                    break;
-                case AuthorizationType.Unknown:
-                    ClearCredentials();
-                    CredentialsAccepted.Invoke(false);
-                    break;
+                    break;               
             }
         }
 
@@ -152,60 +120,70 @@ namespace Netherlands3D.Credentials
 
         public void SetCredentials(string username, string password)
         {
-            AddCustomHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password)), true);           
+            UserName = username;
+            PasswordOrKeyOrTokenOrCode = password;
         }
 
         public void SetKey(string key)
         {
-            personalKey = key;
-            publicKey = key;
-            QueryKeyName = "key";
+            PasswordOrKeyOrTokenOrCode = key;
         }
 
         public void SetBearerToken(string token)
         {
-            AddCustomHeader("Authorization", "Bearer " + token);
+            PasswordOrKeyOrTokenOrCode = token;
         }
 
         public void SetCode(string code)
         {
-            personalKey = code;
-            publicKey = code;
-            QueryKeyName = "code";
+            PasswordOrKeyOrTokenOrCode = code;
         }
 
         public void SetToken(string token)
         {
-            personalKey = token;
-            publicKey = token;
+            PasswordOrKeyOrTokenOrCode = token;
             QueryKeyName = "token";
         }
 
         public void ClearCredentials()
         {
-            personalKey = "";
-            publicKey = "";
+            PasswordOrKeyOrTokenOrCode = "";
+            UserName = "";
             QueryKeyName = "key";
             ClearKeyFromURL();
-        }
-
-        /// <summary>
-        /// Add custom headers for all internal WebRequests
-        /// </summary>
-        public void AddCustomHeader(string key, string value, bool replace = true)
-        {
-            if (replace && customHeaders.ContainsKey(key))
-                customHeaders[key] = value;
-            else
-                customHeaders.Add(key, value);
         }
 
         public void ClearKeyFromURL()
         {
             if (CredentialQuery != string.Empty)
             {
-                tilesetUrl = tilesetUrl.Replace(CredentialQuery, string.Empty);
+                credentialUrl = credentialUrl.Replace(CredentialQuery, string.Empty);
             }
+        }
+
+        public bool ConstructURLWithKey()
+        {
+            ClearKeyFromURL(); //remove existing key if any is there
+            UriBuilder uriBuilder = new UriBuilder(url);
+
+            //Keep an existing query
+            if (uriBuilder.Query != null && uriBuilder.Query.Length > 1)
+            {
+                uriBuilder.Query = uriBuilder.Query.Substring(1) + "&";
+            }
+            else
+            {
+                uriBuilder.Query = "";
+            }
+
+            if (!string.IsNullOrEmpty(PasswordOrKeyOrTokenOrCode))
+            {
+                CredentialQuery = $"{QueryKeyName}={PasswordOrKeyOrTokenOrCode}";
+                uriBuilder.Query += CredentialQuery;
+            }
+
+            credentialUrl = uriBuilder.ToString();
+            return !string.IsNullOrEmpty(CredentialQuery);
         }
     }
 }
