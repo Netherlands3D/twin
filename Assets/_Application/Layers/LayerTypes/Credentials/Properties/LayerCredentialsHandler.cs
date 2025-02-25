@@ -52,8 +52,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
             layerWithCredentials.OnServerResponseReceived.AddListener(HandleServerResponse);
 
-            if(!string.IsNullOrEmpty(layerWithCredentials.URL))
+            UpdateCredentialUrl(layerWithCredentials.URL);
+        }
+
+        public void UpdateCredentialUrl(string url)
+        {
+            if (!string.IsNullOrEmpty(url))
+            {
+                layerWithCredentials.URL = url;
                 UrlHasChanged(new Uri(layerWithCredentials.URL));
+            }
         }
 
         private void OnDisable()
@@ -96,6 +104,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
                 {
                     Debug.Log("Found stored authorization for: " + newURL + " with type: " + storedAuthorization.authorizationType);
                     authorizationType = storedAuthorization.authorizationType;
+                    UserName = storedAuthorization.username;
+                    PasswordOrKeyOrTokenOrCode = storedAuthorization.key;
                     CredentialsAccepted.Invoke(true);
                 }
                 else

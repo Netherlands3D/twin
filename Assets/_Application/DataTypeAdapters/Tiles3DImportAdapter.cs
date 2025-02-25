@@ -4,6 +4,8 @@ using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.OGC3DTiles;
 using System.IO;
 using Newtonsoft.Json;
+using Netherlands3D.Credentials;
+using Netherlands3D.Twin.Layers.LayerTypes.Credentials;
 
 namespace Netherlands3D.Twin.DataTypeAdapters
 {
@@ -23,6 +25,11 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 layerComponent = newObject.gameObject.AddComponent<Tile3DLayerGameObject>();
 
             layerComponent.Name = layerPrefab.name;
+
+            ICredentialHandler credentialHandler = layerComponent.GetComponent<ICredentialHandler>();
+            credentialHandler.UpdateCredentialUrl(localFile.SourceUrl);
+            //StoredAuthorization stored = keyva
+            //credentialHandler.SetCredentials()
         }
 
         public bool Supports(LocalFile localFile)

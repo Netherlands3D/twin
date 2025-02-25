@@ -66,6 +66,15 @@ namespace Netherlands3D.Credentials
             
         }
 
+        public void UpdateCredentialUrl(string url)
+        {
+            if (!string.IsNullOrEmpty(url))
+            {
+                this.url = url;
+                UrlHasChanged(url);
+            }
+        }
+
         public void UrlHasChanged(string newURL)
         {
             this.url = newURL;
@@ -164,6 +173,8 @@ namespace Netherlands3D.Credentials
         public bool ConstructURLWithKey()
         {
             ClearKeyFromURL(); //remove existing key if any is there
+            if (string.IsNullOrEmpty(url)) return false;
+
             UriBuilder uriBuilder = new UriBuilder(url);
 
             //Keep an existing query
