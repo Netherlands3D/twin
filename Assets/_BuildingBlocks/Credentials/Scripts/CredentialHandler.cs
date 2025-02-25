@@ -21,9 +21,9 @@ namespace Netherlands3D.Credentials
         public string UserName { get; set; }
         public string PasswordOrKeyOrTokenOrCode { get; set; }
         public AuthorizationType AuthorizationType => authorizationType;
-
-        public UnityEvent<bool> CredentialsSucceeded = new();
-        public UnityEvent<bool> CredentialsAccepted => CredentialsSucceeded;       
+                
+        public UnityEvent<bool> CredentialsAccepted => null;
+        public UnityEvent<string> CredentialsSucceeded = new();
         public bool HasValidCredentials => hasValidCredentials;
 
         public string URL { get => url; set => url = value; }
@@ -75,10 +75,10 @@ namespace Netherlands3D.Credentials
             this.authorizationType = authorizationType;
             hasValidCredentials = authorizationType != AuthorizationType.Unknown;
             Debug.Log("Determined authorization type: " + authorizationType + " for url: " + url, this.gameObject);
-            //if(hasValidCredentials)
-            //{
-            //    CredentialsSucceeded?.Invoke(false); //we dont wanto hide this window
-            //}
+            if (hasValidCredentials)
+            {
+                CredentialsSucceeded?.Invoke(false); //we dont wanto hide this window
+            }
         }
 
         public void ApplyCredentials()
