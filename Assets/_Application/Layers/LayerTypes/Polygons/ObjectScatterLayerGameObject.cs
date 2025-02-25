@@ -355,7 +355,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     "Expected the instantiated layer to be a HierarchicalObjectLayer when reverting a Scatter Layer, " 
                     + $"but received {layerGameObject.GetType()}"
                 );
-                layerGameObject.DestroyLayerGameObject();
+                layerGameObject.DestroyLayer();
                 return;
             }
 
