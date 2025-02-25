@@ -28,8 +28,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
             ICredentialHandler credentialHandler = layerComponent.GetComponent<ICredentialHandler>();
             credentialHandler.UpdateCredentialUrl(localFile.SourceUrl);
-            //StoredAuthorization stored = keyva
-            //credentialHandler.SetCredentials()
+            layerComponent.URL = localFile.SourceUrl;
         }
 
         public bool Supports(LocalFile localFile)

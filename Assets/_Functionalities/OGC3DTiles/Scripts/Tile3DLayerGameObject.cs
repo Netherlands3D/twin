@@ -64,6 +64,8 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         {
             tileSet = GetComponent<Read3DTileset>();
             urlPropertyData = new Tile3DLayerPropertyData(TilesetURLWithoutQuery(tileSet.tilesetUrl));
+            //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
+            urlPropertyData.OnUrlChanged.AddListener(UpdateURL);
 
             if (usePropertySections)
                 propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
@@ -93,8 +95,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         protected override void Start()
         {
             base.Start();
-            //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
-            urlPropertyData.OnUrlChanged.AddListener(UpdateURL);
+            
         }
 
         private void UpdateURL(Uri urlWithoutQuery)
