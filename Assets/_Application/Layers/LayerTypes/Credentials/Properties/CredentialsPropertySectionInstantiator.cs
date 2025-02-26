@@ -1,3 +1,4 @@
+using Netherlands3D.Credentials;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
@@ -12,9 +13,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             if (!inputPropertySectionPrefab) return;
 
             var settings = Instantiate(inputPropertySectionPrefab, properties);
-            var handler = GetComponent<LayerCredentialsHandler>();
+            var handler = GetComponent<ICredentialHandler>();
             
-            foreach (var credentialInterface in settings.GetComponentsInChildren<ILayerCredentialInterface>(true))
+            //maybe we should make this class more explicit for layers
+            foreach (var credentialInterface in settings.GetComponentsInChildren<ICredentialsPropertySection>(true))
             {
                 credentialInterface.Handler = handler;
             }
