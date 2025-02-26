@@ -11,6 +11,8 @@ namespace Netherlands3D.Twin.Layers
 {
     public static class LayerGameObjectFactory
     {
+        private static AsyncLoadingScreenSpawner loadingScreenSpawner;
+
         public static string GetLabel(GameObject prefab)
         {
             return prefab.name;
@@ -83,9 +85,11 @@ namespace Netherlands3D.Twin.Layers
 
         private static void AddressableObjectCreator(Vector3 spawnPoint, PrefabReference reference)
         {
-            reference.referenceGameObject
-                .InstantiateAsync(spawnPoint, Quaternion.identity)
-                .Completed += handle => OnAsyncInstantiationComplete(reference, handle);
+            var handle = reference.referenceGameObject.InstantiateAsync(spawnPoint, Quaternion.identity);
+
+            AsyncLoadingScreenSpawner.Instance().Spawn(reference.label + " aan het maken", handle);
+
+            handle.Completed += operationHandle => OnAsyncInstantiationComplete(reference, operationHandle);
         }
         
         /// <summary>
