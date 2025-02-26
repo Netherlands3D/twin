@@ -1,12 +1,9 @@
 {
-    "name": "eu.netherlands3d.twin.Tests",
-    "rootNamespace": "",
+    "name": "eu.netherlands3d.e2e-testing",
+    "rootNamespace": "Netherlands3D",
     "references": [
         "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner",
-        "Netherlands3D.Minimap",
-        "eu.netherlands3d.twin",
-        "eu.netherlands3d.e2e-testing"
+        "UnityEditor.TestRunner"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -89,7 +89,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
-      "version": "1.8.18",
+      "version": "1.8.15",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -131,7 +131,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.11.2",
+      "version": "1.7.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -301,6 +301,12 @@
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
+    },
+    "eu.netherlands3d.e2e-testing": {
+      "version": "file:eu.netherlands3d.e2e-testing",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.event-containers": {
       "version": "0.1.1",
