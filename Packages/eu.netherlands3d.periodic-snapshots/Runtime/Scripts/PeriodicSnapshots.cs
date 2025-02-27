@@ -37,6 +37,8 @@ namespace Netherlands3D.Snapshots
             }
         }
 
+        public List<Moment> Moments => moments;
+
         [SerializeField] private Camera sourceCamera;
         [SerializeField] private SunTime sunTime;
         [SerializeField] private int snapshotWidth = 1024;
