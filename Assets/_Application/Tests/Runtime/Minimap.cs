@@ -1,9 +1,10 @@
+using Netherlands3D.E2ETesting;
 using Netherlands3D.Minimap;
 using NUnit.Framework;
 
 namespace Netherlands3D.Twin.Tests
 {
-    public class Minimap : E2ETestCase
+    public class Minimap : TestCase
     {
         [Test]
         public void MinimapIsShownOnScreen()

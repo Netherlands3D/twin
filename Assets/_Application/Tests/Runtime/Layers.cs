@@ -1,18 +1,51 @@
-﻿using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Netherlands3D.Twin.Tests
 {
-    public class Layers : E2ETestCase
+    public class Layers : TestCase
     {
         [Test]
         public void CanOpenLayerPanel()
         {
-            E2E.Given.LayerPanelIsOpen();
+            Assert.IsFalse(Sidebar.Inspectors.Layers.IsOpen);
+            
+            Sidebar.ToolButtons.Layers.Click();
+            E2E.Then(Sidebar.Inspectors.Layers.IsOpen, Is.True);
+        }
 
-            var layerUIManager = E2E.FindComponentOfType<LayerUIManager>();
-            E2E.Then(layerUIManager, Is.Not.Null);
-            E2E.Then(layerUIManager.Value.isActiveAndEnabled, Is.True);
+        [Test]
+        public void TerrainLayerShouldBeVisible()
+        {
+            if (Sidebar.Inspectors.Layers.IsOpen == false)
+            {
+                Sidebar.ToolButtons.Layers.Click();
+            }
+
+            var terrainLayer = Sidebar.Inspectors.Layers.Maaiveld;
+
+            E2E.Then(terrainLayer.Visibility.IsOn, Is.True);
+            E2E.Then(terrainLayer.IsActive, Is.True);
+            
+            // TODO: Move these calls into the Page Object Model
+            E2E.Then(E2E.Find("Functionalities/CartesianTiles/Maaiveld(Clone)").Value.activeSelf, Is.False);
+        }
+
+        [Test]
+        public void TerrainLayerCanBeMadeBeInvisible()
+        {
+            if (Sidebar.Inspectors.Layers.IsOpen == false)
+            {
+                Sidebar.ToolButtons.Layers.Click();
+            }
+            
+            var terrainLayer = Sidebar.Inspectors.Layers.Maaiveld;
+
+            terrainLayer.Visibility.Toggle();
+            E2E.Then(terrainLayer.Visibility.IsOn, Is.False);
+            E2E.Then(terrainLayer.IsActive, Is.False);
+
+            // TODO: Move these calls into the Page Object Model
+            E2E.Then(E2E.Find("Functionalities/CartesianTiles/Maaiveld(Clone)").Value.activeSelf, Is.False);
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
+using Netherlands3D.E2ETesting.PageObjectModel;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace Netherlands3D
 {
@@ -31,7 +33,7 @@ namespace Netherlands3D
             while (SceneManager.GetActiveScene().name != mainScene) yield return null;
         }
         
-        public static void Then<T>(Element<T> testSubject, IResolveConstraint expression)
+        public static void Then<T>(Element<T> testSubject, IResolveConstraint expression) where T : Object
         {
             Assert.That(testSubject.Value, expression);
         }
@@ -41,7 +43,7 @@ namespace Netherlands3D
             Assert.That(testSubject, expression);
         }
 
-        public static void Then<T>(Element<T> testSubject, IResolveConstraint expression, string message)
+        public static void Then<T>(Element<T> testSubject, IResolveConstraint expression, string message) where T : Object
         {
             Assert.That(testSubject.Value, expression, message);
         }

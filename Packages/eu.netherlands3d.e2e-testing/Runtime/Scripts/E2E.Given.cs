@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
+using UnityEngine.UI;
 
 namespace Netherlands3D
 {
@@ -6,10 +7,6 @@ namespace Netherlands3D
     {
         public static partial class Given
         {
-            public static void LayerPanelIsOpen()
-            {
-                FindComponentOnGameObject<Button>("ToolbarButton_Layers").Click();
-            }
         }
     }
 }

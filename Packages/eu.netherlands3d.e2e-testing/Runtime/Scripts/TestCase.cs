@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine.TestTools;
 
-namespace Netherlands3D
+namespace Netherlands3D.E2ETesting
 {
-    public abstract class E2ETestCase
+    public abstract class TestCase
     {
         [UnitySetUp]
         public virtual IEnumerator LoadSceneOnce()
