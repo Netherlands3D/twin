@@ -37,20 +37,18 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void Insert(Node node, IMapping obj, int depth)
         {
-            if (!node.Bounds.Contains(obj.BoundingBox)) return;
+            //we should check for an intersect because a node that exactly lands on the edges of the center of the quadtree will not be added
+            if (!node.Bounds.Intersects(obj.BoundingBox)) return; 
 
             if (node.IsLeaf)
-            {  
-                if ((node.Mappings.Count > maxMappings && depth < maxDepth) || CouldFitInChild(node, obj))
+            {
+                node.Mappings.Add(obj);
+                //does the cell contain more than the preferred amount of objects and is still a cell less than max subdivision depth and also fits in a child then subdivide
+                if (node.Mappings.Count > maxMappings && depth < maxDepth && CouldFitInChild(node, obj))
                 {
-                    Subdivide(node);
-                    //we did not add the node to this leaf node, so no need for removal
+                    Subdivide(node);                   
                     ReinsertObjects(node); 
-                }
-                else
-                {
-                    node.Mappings.Add(obj);
-                }
+                }                
             }
             else
             {
