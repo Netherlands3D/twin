@@ -21,13 +21,12 @@ namespace Netherlands3D.Twin.Tests
                 Sidebar.ToolButtons.Layers.Click();
             }
 
-            var terrainLayer = Sidebar.Inspectors.Layers.Maaiveld;
+            var layersPanel = Sidebar.Inspectors.Layers;
+            var terrainLayer = layersPanel.Maaiveld;
 
             E2E.Then(terrainLayer.Visibility.IsOn, Is.True);
             E2E.Then(terrainLayer.IsActive, Is.True);
-            
-            // TODO: Move these calls into the Page Object Model
-            E2E.Then(E2E.Find("Functionalities/CartesianTiles/Maaiveld(Clone)").Value.activeSelf, Is.False);
+            E2E.Then(WorldView.DefaultMaaiveld.IsActive, Is.True);
         }
 
         [Test]
@@ -38,14 +37,13 @@ namespace Netherlands3D.Twin.Tests
                 Sidebar.ToolButtons.Layers.Click();
             }
             
-            var terrainLayer = Sidebar.Inspectors.Layers.Maaiveld;
-
+            var layersPanel = Sidebar.Inspectors.Layers;
+            var terrainLayer = layersPanel.Maaiveld;
             terrainLayer.Visibility.Toggle();
+            
             E2E.Then(terrainLayer.Visibility.IsOn, Is.False);
             E2E.Then(terrainLayer.IsActive, Is.False);
-
-            // TODO: Move these calls into the Page Object Model
-            E2E.Then(E2E.Find("Functionalities/CartesianTiles/Maaiveld(Clone)").Value.activeSelf, Is.False);
+            E2E.Then(WorldView.DefaultMaaiveld.IsActive, Is.False);
         }
     }
 }

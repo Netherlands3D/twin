@@ -3,12 +3,8 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.E2ETesting.UI
 {
-    public class ButtonElement : Element<Button>
+    public class ButtonElement : Element<Button, ButtonElement>
     {
-        public ButtonElement(Button value) : base(value)
-        {
-        }
-        
         public void Click()
         {
             Value.onClick.Invoke();

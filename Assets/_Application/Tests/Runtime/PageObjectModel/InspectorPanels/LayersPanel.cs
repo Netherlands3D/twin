@@ -1,32 +1,35 @@
 ﻿using Netherlands3D.E2ETesting.PageObjectModel;
 using Netherlands3D.E2ETesting.UI;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Tests.PageObjectModel.InspectorPanels
 {
-    public class LayersPanel : InspectorPanel<LayerUIManager>
+    public class LayersPanel : InspectorPanel<LayerUIManager, LayersPanel>
     {
-        public class LayerListItemElement : Element<GameObject>
+        public class LayerListItemElement : Element<GameObject, LayerListItemElement>
         {
             public ToggleElement Visibility;
-            public Element<LayerUI> LayerUI;
+            private Element<LayerUI> LayerUiData;
+            private LayerData LayerData;
 
-            public LayerListItemElement(GameObject value) : base(value)
+            protected override void Setup()
             {
-                Visibility = new(GameObject("ParentRow/EnableToggle").Component<Toggle>().Value);
-                LayerUI = Component<LayerUI>();
+                Visibility = ToggleElement.For(GameObject("ParentRow/EnableToggle")?.Component<Toggle>());
+                LayerUiData = Component<LayerUI>();
+                LayerData = LayerUiData?.Value.Layer;
             }
 
-            public override bool IsActive => base.IsActive && LayerUI.Value.Layer.ActiveInHierarchy;
+            public override bool IsActive => base.IsActive && LayerData.ActiveInHierarchy;
         }
 
-        public LayerListItemElement Maaiveld { get; }
-        
-        public LayersPanel(LayerUIManager value) : base(value)
+        public LayerListItemElement Maaiveld { get; private set; }
+
+        protected override void Setup()
         {
-            Maaiveld = new LayerListItemElement(GameObject("Layers/Maaiveld").Value);
+            Maaiveld = LayerListItemElement.For(GameObject("Layers/Maaiveld")?.Value);
         }
     }
 }

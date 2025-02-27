@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.Tests.PageObjectModel
         // Computed properties because inspectors are only there when they are open
         public struct InspectorsCollection
         {
-            public LayersPanel Layers => new (E2E.FindComponentOfType<LayerUIManager>().Value);
+            public LayersPanel Layers => LayersPanel.For(E2E.FindComponentOfType<LayerUIManager>());
         }
 
         public ToolButtonsCollection ToolButtons;
@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.Tests.PageObjectModel
 
         public Sidebar()
         {
-            ToolButtons.Layers = new ButtonElement(E2E.FindComponentOnGameObject<Button>("ToolbarButton_Layers").Value);
+            ToolButtons.Layers = ButtonElement.For(E2E.FindComponentOnGameObject<Button>("ToolbarButton_Layers"));
         }
     }
 }

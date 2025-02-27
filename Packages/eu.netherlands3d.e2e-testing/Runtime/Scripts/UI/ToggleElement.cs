@@ -3,12 +3,8 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.E2ETesting.UI
 {
-    public class ToggleElement : Element<Toggle>
+    public class ToggleElement : Element<Toggle, ToggleElement>
     {
-        public ToggleElement(Toggle value) : base(value)
-        {
-        }
-
         public bool IsOn => Value.isOn;
 
         public void Toggle()

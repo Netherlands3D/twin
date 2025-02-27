@@ -2,12 +2,10 @@
 
 namespace Netherlands3D.Twin.Tests.PageObjectModel
 {
-    public class InspectorPanel<T> : Element<T> where T : UnityEngine.Object  
+    public abstract class InspectorPanel<T, TDerived> : Element<T, TDerived> 
+        where T : UnityEngine.Object  
+        where TDerived : Element<T, TDerived>, new()
     {
-        public InspectorPanel(T value) : base(value)
-        {
-        }
-
         public bool IsOpen => IsActive;
     }
 }
