@@ -83,7 +83,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 if (mappingTreeInstance == null)
                 {                   
                     BoundingBox bbox = StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds;
-                    MappingTree tree = new MappingTree(bbox, 16, 12);
+                    MappingTree tree = new MappingTree(bbox, 4, 12);
                     mappingTreeInstance = tree;
                 }
                 return mappingTreeInstance;
