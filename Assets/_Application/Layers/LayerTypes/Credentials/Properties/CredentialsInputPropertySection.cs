@@ -1,4 +1,5 @@
 using Netherlands3D.Credentials;
+using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Twin.UI;
 using TMPro;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         [SerializeField] private TMP_InputField keyTokenOrCodeInputField;
         [SerializeField] private TMP_Dropdown credentialTypeDropdown;
         private bool skipFirstCredentialErrorMessage = true;
+        private TMP_InputField inputFieldToUseForPasswordOrKey;
 
         public ICredentialHandler Handler
         {
@@ -24,18 +26,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             set
             {
                 if (handler != null)
-                    handler.CredentialsAccepted.RemoveListener(OnCredentialsAccepted);
+                    handler.OnAuthorizationHandled.RemoveListener(OnCredentialsAccepted);
 
                 handler = value;
-
                 skipFirstCredentialErrorMessage = true;
 
-                handler.CredentialsAccepted.AddListener(OnCredentialsAccepted);
+                handler.OnAuthorizationHandled.AddListener(OnCredentialsAccepted);
             }
         }
 
-        private void OnCredentialsAccepted(bool accepted)
+        private void OnCredentialsAccepted(StoredAuthorization auth)
         {
+            var accepted = auth is not FailedOrUnsupported;
+            
             ShowCredentialsWarning(!accepted);
             if (accepted)
             {
@@ -45,7 +48,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
         private void OnEnable()
         {
-            ShowCredentialsWarning(false);
+            // ShowCredentialsWarning(false);
         }
 
         public void ShowCredentialsWarning(bool show)
@@ -56,39 +59,38 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             if (!show)
                 SetAuthorizationInputType(credentialTypeDropdown.value);
         }
-        
+
         /// <summary>
         /// Apply the credentials input fields and start checking our authorization vault
         /// </summary>
         public void ApplyCredentials()
         {
-            switch (handler.AuthorizationType)
-            {
-                case AuthorizationType.UsernamePassword:
-                    handler.UserName = userNameInputField.text;
-                    handler.PasswordOrKeyOrTokenOrCode = passwordInputField.text;
-                    break;
-                case AuthorizationType.InferableSingleKey:
-                    handler.PasswordOrKeyOrTokenOrCode = keyTokenOrCodeInputField.text.Trim();
-                    break;
-            }
+            handler.UserName = userNameInputField.text;
+            handler.PasswordOrKeyOrTokenOrCode = inputFieldToUseForPasswordOrKey.text;
 
             handler.ApplyCredentials();
         }
 
         /// <summary>
-        /// Set the authorization input type and update the UI
+        /// Set the authorization input type and update the UI.
+        /// In the UI, there are 2 panels: username/password and key input. We need to use the input field to set the credentials for the KeyVault based on which one is visible (controlled by the dropdown). 
         /// </summary>
-        public void SetAuthorizationInputType(int type)
+        public void SetAuthorizationInputType(int dropdownValue)
         {
-            if(handler != null)
-                handler.SetAuthorizationInputType((AuthorizationType)type);
+            if (dropdownValue == 0)
+            {
+                inputFieldToUseForPasswordOrKey = passwordInputField;
+            }
+            else
+            {
+                inputFieldToUseForPasswordOrKey = keyTokenOrCodeInputField;
+            }
         }
 
-        public void SetAuthorizationInputType(AuthorizationType type)
+        public void SetAuthorizationInputType(AuthorizationType type) //todo make property panel match StoredAuthorization type 
         {
-            if (handler != null)
-                handler.SetAuthorizationInputType(type);
+            // if (handler != null)
+            //     handler.SetAuthorizationInputType(type);
 
             credentialTypeDropdown.value = (int)type;
 
@@ -100,7 +102,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         /// <summary>
         /// Fill the inputs with predefined values
         /// </summary>
-        
+
         //Todo: This function is no longer used. This does cause the currently used key to not show up when re-opening the properties panel, this should be re-implemented if deemed a useful feature.
         public void SetInputFieldsValues(string username = "", string password = "", string key = "")
         {

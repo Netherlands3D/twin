@@ -17,7 +17,7 @@ namespace Netherlands3D.Functionalities.Wms
     /// <summary>
     /// Extention of LayerGameObject that injects a 'streaming' dataprovider WMSTileDataLayer
     /// </summary>
-    public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, ILayerWithCredentials
+    public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels
     {
         public WMSTileDataLayer WMSProjectionLayer => wmsProjectionLayer;
         public bool TransparencyEnabled = true; //this gives the requesting url the extra param to set transparancy enabled by default       
@@ -31,9 +31,6 @@ namespace Netherlands3D.Functionalities.Wms
         public override BoundingBox Bounds => wmsProjectionLayer?.BoundingBox;
 
         public UnityEvent<Uri> OnURLChanged => urlPropertyData.OnDataChanged;
-        public UnityEvent<UnityWebRequest> OnServerResponseReceived => throw new NotImplementedException();
-
-        public string URL { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         private List<IPropertySectionInstantiator> propertySections = new();
 
@@ -139,36 +136,6 @@ namespace Netherlands3D.Functionalities.Wms
         {
             if (wmsProjectionLayer.isEnabled != isActive)
                 wmsProjectionLayer.isEnabled = isActive;
-        }
-
-        public void SetCredentials(string username, string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetBearerToken(string token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetKey(string key)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetToken(string token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetCode(string code)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ClearCredentials()
-        {
-            throw new NotImplementedException();
         }
     }
 }

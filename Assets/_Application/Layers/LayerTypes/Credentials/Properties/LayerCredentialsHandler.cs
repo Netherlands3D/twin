@@ -4,69 +4,76 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Events;
 using System;
+using Netherlands3D.Credentials.StoredAuthorization;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
-    [RequireComponent(typeof(ILayerWithCredentials))]
+    // [RequireComponent(typeof(ILayerWithCredentials))]
     [RequireComponent(typeof(LayerGameObject))]
-    public class LayerCredentialsHandler : MonoBehaviour, ICredentialHandler
+    public class LayerCredentialsHandler : MonoBehaviour//, ICredentialHandler
     {
-        public bool StatusEnabled => true;
+        [Tooltip("KeyVault Scriptable Object")] 
+        [SerializeField] private KeyVault keyVault;
+        [Header("Settings")] 
+        [SerializeField] private bool findKeyInVaultOnURLChange = true;
+        [SerializeField] private bool autoApplyCredentials = false;
+
+        private Uri baseUri;
+        public Uri BaseUri
+        {
+            get { return baseUri; }
+            set
+            {
+                baseUri = new Uri(value.GetLeftPart(UriPartial.Path));
+                // keyVault.Authorize(value, UserName, PasswordOrKeyOrTokenOrCode);
+            }
+        }
         public string UserName { get; set; }
         public string PasswordOrKeyOrTokenOrCode { get; set; }
-        public AuthorizationType AuthorizationType => authorizationType;
+        public UnityEvent<StoredAuthorization> OnAuthorizationHandled { get; set; } = new();
+        public StoredAuthorization Authorization { get; set; }
 
-        private AuthorizationType authorizationType = AuthorizationType.Public;
-
-        [Tooltip("KeyVault Scriptable Object")]
-        [SerializeField] private KeyVault keyVault;
-
-        [Header("Settings")] 
-        [SerializeField] private bool findKeyInVaultOnURLChange = true;       
-
-        private StoredAuthorization storedAuthorization;
-
-        [SerializeField] private bool autoApplyCredentials = false;
 
         public bool AutoApplyCredentials
         {
             get => autoApplyCredentials;
             set => autoApplyCredentials = value;
-        }       
+        }
 
-        private ILayerWithCredentials layerWithCredentials;
         private LayerGameObject layerGameObject;
 
         public bool HasValidCredentials => layerGameObject && layerGameObject.LayerData.HasValidCredentials;
         public UnityEvent<bool> CredentialsAccepted => layerGameObject.LayerData.HasValidCredentialsChanged;
 
-        private void Awake()
+        public UnityEvent<string> OnURLChanged;
+        
+      /*  private void Awake()
         {
-            layerWithCredentials = GetComponent<ILayerWithCredentials>();
+            // layerWithCredentials = GetComponent<ILayerWithCredentials>();
             layerGameObject = GetComponent<LayerGameObject>();
         }
 
         private void OnEnable()
         {
-            keyVault.OnAuthorizationTypeDetermined.AddListener(OnCredentialTypeDetermined);
-            layerWithCredentials.OnURLChanged.AddListener(UrlHasChanged);
-            layerWithCredentials.OnServerResponseReceived.AddListener(HandleServerResponse);
+            // keyVault.OnAuthorizationTypeDetermined.AddListener(OnCredentialTypeDetermined);
+            OnURLChanged.AddListener(UrlHasChanged);
+            OnServerResponseReceived.AddListener(HandleServerResponse);
 
-            UpdateUrl(layerWithCredentials.URL);
+            Url = layerWithCredentials.URL;
         }
-
+        
         public void UpdateUrl(string url)
         {
             if (!string.IsNullOrEmpty(url))
             {
-                layerWithCredentials.URL = url;
+                BaseUri = new(url);
                 UrlHasChanged(new Uri(layerWithCredentials.URL));
             }
         }
 
         private void OnDisable()
         {
-            keyVault.OnAuthorizationTypeDetermined.RemoveListener(OnCredentialTypeDetermined);
+            // keyVault.OnAuthorizationTypeDetermined.RemoveListener(OnCredentialTypeDetermined);
 
             layerWithCredentials.OnURLChanged.RemoveListener(UrlHasChanged);
             layerWithCredentials.OnServerResponseReceived.RemoveListener(HandleServerResponse);
@@ -75,7 +82,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         public void HandleServerResponse(UnityWebRequest webRequest)
         {
             layerGameObject.LayerData.HasValidCredentials = webRequest.result == UnityWebRequest.Result.Success;
-            
+
             if (webRequest.RequiresCredentials())
             {
                 Debug.LogWarning("Credentials required: " + webRequest);
@@ -88,8 +95,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             CredentialsAccepted.Invoke(false);
 
             //Gob back to our generic guess field type so we can retry again
-            authorizationType = AuthorizationType.InferableSingleKey;
-            SetAuthorizationInputType(authorizationType);
+            // authorizationType = AuthorizationType.InferableSingleKey;
+            // SetAuthorizationInputType(authorizationType);
         }
 
         private void UrlHasChanged(Uri newURL)
@@ -98,54 +105,79 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             if (findKeyInVaultOnURLChange)
             {
                 string url = newURL.ToString();
-                storedAuthorization = keyVault.GetStoredAuthorization(url);
 
-                if (storedAuthorization != null)
-                {
-                    Debug.Log("Found stored authorization for: " + newURL + " with type: " + storedAuthorization.authorizationType);
-                    authorizationType = storedAuthorization.authorizationType;
-                    UserName = storedAuthorization.username;
-                    PasswordOrKeyOrTokenOrCode = storedAuthorization.key;
-                    CredentialsAccepted.Invoke(true);
-                }
-                else
-                {
-                    authorizationType = keyVault.GetKnownAuthorizationTypeForURL(url);
-                    CredentialsAccepted.Invoke(false);
-                }
+                keyVault.Authorize(url, UserName, PasswordOrKeyOrTokenOrCode, OnCredentialTypeDetermined);
 
-                SetAuthorizationInputType(authorizationType);
+                // if (keyVault.TryGetStoredAuthorization(url, out storedAuthorization))
+                // {
+                //     Debug.Log("Found stored authorization for: " + newURL + " with type: " + storedAuthorization.AuthorizationType);
+                //     authorizationType = storedAuthorization.AuthorizationType;
+                //
+                //     if (storedAuthorization is Public publicAuthorization)
+                //     {                    
+                //         CredentialsAccepted.Invoke(true);
+                //         return;
+                //     }
+                //     if (storedAuthorization is InferableSingleKey inferableSingleKey)
+                //     {
+                //         PasswordOrKeyOrTokenOrCode = inferableSingleKey.key;
+                //         CredentialsAccepted.Invoke(true);
+                //         return;
+                //     }
+                //     if (storedAuthorization is UsernamePassword usernamePassword)
+                //     {
+                //         UserName = usernamePassword.username;
+                //         PasswordOrKeyOrTokenOrCode = usernamePassword.password;
+                //         CredentialsAccepted.Invoke(true);
+                //         return;
+                //     }
+                // }
+                // else
+                // {
+                //     authorizationType = keyVault.GetKnownAuthorizationTypeForURL(url);
+                //     CredentialsAccepted.Invoke(false);
+                // }
+
+                // SetAuthorizationInputType(authorizationType);
 
                 if (AutoApplyCredentials)
                     ApplyCredentials();
             }
         }
 
+        // private void OnAuthorizationTypeDetermined(string url, StoredAuthorization auth)
+        // {
+        //     if (url != layerWithCredentials.URL.ToString()) //todo: check only base uri?
+        //         return;
+        //     
+        //     if(auth is )
+        // }
+
         public void ApplyCredentials()
         {
-            switch (authorizationType)
-            {
-                case AuthorizationType.UsernamePassword:
-                    keyVault.TryBasicAuthentication(
-                        layerWithCredentials.URL,
-                        UserName,
-                        PasswordOrKeyOrTokenOrCode
-                    );
-                    break;
-                case AuthorizationType.InferableSingleKey:
-                    keyVault.TryToFindSpecificCredentialType(
-                        layerWithCredentials.URL,
-                        PasswordOrKeyOrTokenOrCode
-                    );
-                    break;
-            }
+            keyVault.Authorize(layerWithCredentials.URL, UserName, PasswordOrKeyOrTokenOrCode, OnCredentialTypeDetermined);
+            // if (Authorization is UsernamePassword usernamePassword)
+            // {
+            //     keyVault.TryBasicAuthentication(
+            //         layerWithCredentials.URL,
+            //         UserName,
+            //         PasswordOrKeyOrTokenOrCode
+            //     );
+            // }
+            // else if (Authorization is InferableSingleKey inferableSingleKey)
+            // {
+            //     keyVault.TryToFindSpecificCredentialType(
+            //         layerWithCredentials.URL,
+            //         PasswordOrKeyOrTokenOrCode
+            //     );
+            // }
         }
 
-        private void OnCredentialTypeDetermined(string url, AuthorizationType type)
+        private void OnCredentialTypeDetermined(string url, StoredAuthorization type)
         {
-            authorizationType = type;
+            var authorizationType = type.AuthorizationType;
 
-            switch (type)
+            switch (authorizationType)
             {
                 case AuthorizationType.UsernamePassword:
                     layerWithCredentials.SetCredentials(UserName, PasswordOrKeyOrTokenOrCode);
@@ -165,27 +197,27 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
                 case AuthorizationType.Public:
                     layerWithCredentials.ClearCredentials();
                     break;
-                case AuthorizationType.Unknown:
+                case AuthorizationType.FailedOrUnsupported:
                     layerWithCredentials.ClearCredentials();
                     CredentialsAccepted.Invoke(false);
                     break;
             }
-        }
+        }*/
 
         /// <summary>
         /// Set the authorization input type and update the UI
         /// </summary>
-        public void SetAuthorizationInputType(AuthorizationType type)
-        {
-            if (
-                type == AuthorizationType.Key
-                || type == AuthorizationType.Token
-                || type == AuthorizationType.BearerToken
-                || type == AuthorizationType.Code
-            )
-                type = AuthorizationType.InferableSingleKey;
-
-            authorizationType = type;
-        }
+        // public void SetAuthorizationInputType(AuthorizationType type)
+        // {
+        //     if (
+        //         type == AuthorizationType.Key
+        //         || type == AuthorizationType.Token
+        //         || type == AuthorizationType.BearerToken
+        //         || type == AuthorizationType.Code
+        //     )
+        //         type = AuthorizationType.InferableSingleKey;
+        //
+        //     authorizationType = type;
+        // }
     }
 }

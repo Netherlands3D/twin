@@ -1,4 +1,5 @@
 using Netherlands3D.Credentials;
+using Netherlands3D.Credentials.StoredAuthorization;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
@@ -16,37 +17,31 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             set
             {
                 if(handler != null)
-                    handler.CredentialsAccepted.RemoveListener(OnCredentialsAccepted);
+                    handler.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
 
                 handler = value;
-                if (!handler.StatusEnabled) return;
 
-                OnCredentialsAccepted(handler.HasValidCredentials);
-                handler.CredentialsAccepted.AddListener(OnCredentialsAccepted);
+                OnCredentialsHandled(handler.Authorization);
+                handler.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
             }
         }
 
         private void Start()
         {
-            //validation/status panel should be disabled so no handler would be present (maybe validation panel should not be included in the credential input prefab?)            
-            if (handler == null || !handler.StatusEnabled)
-            {
-                gameObject.SetActive(false);
-                return;
-            }
-
             if (handler != null)
-                handler.CredentialsAccepted.AddListener(OnCredentialsAccepted);
+                handler.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
         }
 
         private void OnDestroy()
         {
             if (handler != null)
-                handler.CredentialsAccepted.RemoveListener(OnCredentialsAccepted);
+                handler.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
         }
 
-        private void OnCredentialsAccepted(bool accepted)
+        private void OnCredentialsHandled(StoredAuthorization auth)
         {
+            var accepted = auth is not FailedOrUnsupported;
+
             if(accepted)
                 gameObject.SetActive(true);
     

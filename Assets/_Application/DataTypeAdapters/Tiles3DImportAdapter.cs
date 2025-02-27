@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using Netherlands3D.DataTypeAdapters;
@@ -26,8 +27,8 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             layerComponent.Name = layerPrefab.name;
 
             ICredentialHandler credentialHandler = layerComponent.GetComponent<ICredentialHandler>();
-            credentialHandler.UpdateUrl(localFile.SourceUrl);
-            layerComponent.URL = localFile.SourceUrl;
+            credentialHandler.BaseUri = new Uri(localFile.SourceUrl); //set url to check for credentials
+            layerComponent.URL = localFile.SourceUrl; //set url to get tiles
         }
 
         public bool Supports(LocalFile localFile)

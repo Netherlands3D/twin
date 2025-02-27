@@ -15,7 +15,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 {
     [RequireComponent(typeof(ReadSubtree))]
     [RequireComponent(typeof(Read3DTileset))]
-    public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, ILayerWithCredentials
+    public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels// ILayerWithCredentials
     {
         public override BoundingBox Bounds => tileSet.root != null ? new BoundingBox(tileSet.root.BottomLeft, tileSet.root.TopRight) : null;
         public Tile3DLayerPropertyData PropertyData => urlPropertyData;
@@ -26,10 +26,15 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         private Tile3DLayerPropertyData urlPropertyData;
         LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
+        
+        [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
         public UnityEvent<Uri> OnURLChanged => urlPropertyData.OnUrlChanged;
         public UnityEvent<string> UnsupportedExtensionsMessage;
+        
+        [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
         public UnityEvent<UnityWebRequest> OnServerResponseReceived => tileSet.OnServerResponseReceived;
-
+        
+        [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
         public string URL
         {
             get => urlPropertyData.Url;
@@ -129,12 +134,14 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             return propertySections;
         }
 
+        [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
         public void SetCredentials(string username, string password)
         {
             tileSet.AddCustomHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password)), true);
             tileSet.RefreshTiles();
         }
 
+        [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
         public void SetKey(string key)
         {
             tileSet.personalKey = key;
@@ -144,12 +151,14 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             tileSet.RefreshTiles();
         }
 
+        [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
         public void SetBearerToken(string token)
         {
             tileSet.AddCustomHeader("Authorization", "Bearer " + token);
             tileSet.RefreshTiles();
         }
 
+        [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
         public void SetCode(string code)
         {
             tileSet.personalKey = code;
@@ -158,6 +167,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             tileSet.RefreshTiles();
         }
 
+        [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
         public void SetToken(string token)
         {
             tileSet.personalKey = token;
@@ -166,6 +176,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             tileSet.RefreshTiles();
         }
 
+        [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
         public void ClearCredentials()
         {
             tileSet.personalKey = "";

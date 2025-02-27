@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 2740582493697960923}
   - component: {fileID: 1859171214202950123}
   - component: {fileID: -3598923106467742640}
+  - component: {fileID: -2689954650890677593}
   m_Layer: 7
   m_Name: Nieuwe laag (3D Tiles)
   m_TagString: Untagged
@@ -430,6 +431,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3b2880c796b146d191c4b41da5c526b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  findKeyInVaultOnURLChange: 1
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
+  findKeyInVaultOnURLChange: 1
   autoApplyCredentials: 1
+  OnURLChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &-2689954650890677593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
+  CredentialsSucceeded:
+    m_PersistentCalls:
+      m_Calls: []
