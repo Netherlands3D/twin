@@ -261,10 +261,16 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             node.Bounds.Debug(Color.green);
             foreach (IMapping mapping in node.Mappings)
-                if(mapping is FeatureMapping)
-                    Debug.DrawLine(mapping.BoundingBox.BottomLeft.ToUnity(), node.Bounds.BottomLeft.ToUnity(), Color.red);
-                else if(mapping is MeshMapping)
-                    Debug.DrawLine(mapping.BoundingBox.BottomLeft.ToUnity(), node.Bounds.BottomLeft.ToUnity(), Color.yellow);
+            {
+                Vector3 bl = mapping.BoundingBox.BottomLeft.ToUnity();
+                Vector3 nbl = node.Bounds.BottomLeft.ToUnity();
+                bl.y = 100;
+                nbl.y = 100;
+                if (mapping is FeatureMapping)
+                    Debug.DrawLine(bl, nbl, Color.red);
+                else if (mapping is MeshMapping)
+                    Debug.DrawLine(bl, nbl, Color.yellow);
+            }
 
 
             foreach (IMapping mapping in node.Mappings)
