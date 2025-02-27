@@ -9,6 +9,7 @@ using Netherlands3D.Credentials.StoredAuthorization;
 
 namespace Netherlands3D.Credentials
 {
+    [Obsolete("this enum will be removed in the future, use a type check instead")]
     public enum AuthorizationType
     {
         //Specific order in items used in dropdown index
@@ -49,16 +50,13 @@ namespace Netherlands3D.Credentials
             if (storedAuthorizations.TryGetValue(uri, out var authorization))
             {
                 OnAuthorizationTypeDetermined.Invoke(authorization);
-                // callback.Invoke(authorization);
                 return;
             }
 
-            // OnAuthorizationTypeDetermined.AddListener(callback);
             TryBasicAuthentication(uri, username, passwordOrKey);
             TryToFindSpecificCredentialType(uri, passwordOrKey);
         }
 
-        [Obsolete("this enum will be removed in the future, use a type check instead")]
         public AuthorizationType GetKnownAuthorizationTypeForURL(Uri uri)
         {
             if (log) Debug.Log("GetKnownAuthorizationTypeForURL for: " + uri);
@@ -195,16 +193,7 @@ namespace Netherlands3D.Credentials
                 NewURLAuthorizationDetermined(uri, foundType);
                 yield break;
             }
-
-            // No key provided, but credentials are needed
-            // if (key == "")
-            // {
-            //     Debug.Log("No key provided for this layer: " + url);
-            //     foundType = AuthorizationType.InferableSingleKey;
-            //     NewURLAuthorizationDetermined(url, foundType);
-            //     yield break;
-            // }
-
+            
             // Try input key as bearer token
             var bearerTokenRequest = UnityWebRequest.Get(uri);
             bearerTokenRequest.SetRequestHeader("Authorization", "Bearer " + key);
