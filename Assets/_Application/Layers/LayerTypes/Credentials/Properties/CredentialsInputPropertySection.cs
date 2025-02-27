@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Twin.UI;
@@ -9,7 +10,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
     public class CredentialsInputPropertySection : MonoBehaviour, ICredentialsPropertySection
     {
         private ICredentialHandler handler;
-
+        
         [SerializeField] private GameObject inputPanel;
         [SerializeField] private GameObject errorMessage;
 
@@ -38,12 +39,28 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         private void OnCredentialsAccepted(StoredAuthorization auth)
         {
             var accepted = auth is not FailedOrUnsupported;
+
+            if (!gameObject.activeSelf)
+            {
+                gameObject.SetActive(true);
+                ShowCredentialsWarning(false);
+                return;
+            }
             
             ShowCredentialsWarning(!accepted);
             if (accepted)
             {
+                inputPanel.gameObject.SetActive(false);
                 gameObject.SetActive(false);
             }
+        }
+
+        private void Awake()
+        {
+            if(Handler == null) //we might want to set the handler explicitly
+                Handler = GetComponentInParent<ICredentialHandler>();
+
+            gameObject.SetActive(false); //always start disabled because we assume we don't need credentials, but we need to assign our handler above
         }
 
         private void OnEnable()
