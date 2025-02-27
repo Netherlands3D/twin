@@ -35,7 +35,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
                     tile3DLayerGameObject.OnServerResponseReceived.AddListener(ShowServerWarningFeedback);
                 }
 
-                urlInputField.text = tile3DLayerGameObject.URL;
+                urlInputField.text = tile3DLayerGameObject.PropertyData.Url;
             }
         }
 
@@ -72,7 +72,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             }        
 
             colorFeedbackImage.color = defaultColor;
-            tile3DLayerGameObject.URL = sanitizedURL;
+            tile3DLayerGameObject.PropertyData.Url = sanitizedURL;
         }
 
         private string SanitizeURL(string url)

@@ -108,9 +108,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
         public void SetAuthorizationInputType(AuthorizationType type) //todo make property panel match StoredAuthorization type 
         {
-            // if (handler != null)
-            //     handler.SetAuthorizationInputType(type);
-
             credentialTypeDropdown.value = (int)type;
 
             //Similar values are not reapplied, so make sure to the dropdown items appear

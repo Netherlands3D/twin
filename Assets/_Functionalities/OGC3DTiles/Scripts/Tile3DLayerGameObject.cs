@@ -35,17 +35,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         
         [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
         public UnityEvent<UnityWebRequest> OnServerResponseReceived => tileSet.OnServerResponseReceived;
-        
-        public string URL
-        {
-            get => urlPropertyData.Url;
-            set
-            {
-                //Always query parameters (tileset key's must be set via our credentials system)
-                string urlWithoutQuery = TilesetURLWithoutQuery(value);
-                urlPropertyData.Url = urlWithoutQuery;
-            }
-        }
 
         private ICredentialHandler credentialHandler;
         

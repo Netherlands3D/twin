@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 layerComponent = newObject.gameObject.AddComponent<Tile3DLayerGameObject>();
 
             layerComponent.Name = layerPrefab.name;
-            layerComponent.URL = localFile.SourceUrl; //set url to get tiles
+            layerComponent.PropertyData.Url = localFile.SourceUrl; //set url to get tiles
         }
 
         public bool Supports(LocalFile localFile)

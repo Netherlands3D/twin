@@ -22,7 +22,6 @@ namespace Netherlands3D.Credentials
             set
             {
                 baseUri = new Uri(value.GetLeftPart(UriPartial.Path));
-                // keyVault.Authorize(value, UserName, PasswordOrKeyOrTokenOrCode);
             }
         }
         public string UserName { get; set; }
@@ -32,26 +31,6 @@ namespace Netherlands3D.Credentials
         
         //needed to start for example the DataTypeChain
         public UnityEvent<string> CredentialsSucceeded = new();
-        
-        // public UnityEvent<Uri> OnURLChanged { get; }
-
-        // public AuthorizationType AuthorizationType => authorizationType;
-
-        //Todo, event maybe not in interface? we dont want to use this event because after importing the panel needs to be closed
-        // public UnityEvent<bool> CredentialsAccepted => CredentialsAcceptedDoNothing;        
-        // public bool HasValidCredentials => false;        
-        // private UnityEvent<bool> CredentialsAcceptedDoNothing = new();
-
-        // private bool hasValidCredentials = false;
-        // private bool hasAuthorizationType = false;
-        // private AuthorizationType authorizationType = AuthorizationType.Unsupported;
-        // public string CredentialQuery { get; private set; } = string.Empty;
-        // public Uri credentialUrl;
-        // [SerializeField] private string queryKeyName = "key";
-        // public string QueryKeyName { get => queryKeyName; set => queryKeyName = value; }
-        // private string urlWithoutCredentials;
-
-        
         
         //called in the inspector on end edit of url input field
         public void SetUri(string url)
@@ -75,10 +54,6 @@ namespace Netherlands3D.Credentials
 
         private void Awake()
         {
-            //were are not using an instantiator for the user interface, so lets set it here
-            // ICredentialsPropertySection view = GetComponentInChildren<ICredentialsPropertySection>(true); //view will set the Username/Password/Key
-            // view.Handler = this;
-
             keyVault.OnAuthorizationTypeDetermined.AddListener(DeterminedAuthorizationType);
         }
 
