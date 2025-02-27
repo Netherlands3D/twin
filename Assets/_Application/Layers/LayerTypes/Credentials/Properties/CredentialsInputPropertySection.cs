@@ -21,6 +21,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         private bool skipFirstCredentialErrorMessage = true;
         private TMP_InputField inputFieldToUseForPasswordOrKey;
 
+        [SerializeField] private bool visibleOnAwake; //todo: find a better way to do this
+
         public ICredentialHandler Handler
         {
             get => handler;
@@ -60,7 +62,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             if(Handler == null) //we might want to set the handler explicitly
                 Handler = GetComponentInParent<ICredentialHandler>();
 
-            gameObject.SetActive(false); //always start disabled because we assume we don't need credentials, but we need to assign our handler above
+            gameObject.SetActive(visibleOnAwake); //always start disabled because we assume we don't need credentials, but we need to assign our handler above
         }
 
         private void OnEnable()

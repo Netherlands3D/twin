@@ -1,11 +1,9 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.OGC3DTiles;
 using System.IO;
 using Newtonsoft.Json;
-using Netherlands3D.Credentials;
 
 namespace Netherlands3D.Twin.DataTypeAdapters
 {
@@ -25,9 +23,6 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 layerComponent = newObject.gameObject.AddComponent<Tile3DLayerGameObject>();
 
             layerComponent.Name = layerPrefab.name;
-
-            ICredentialHandler credentialHandler = layerComponent.GetComponent<ICredentialHandler>();
-            credentialHandler.BaseUri = new Uri(localFile.SourceUrl); //set url to check for credentials
             layerComponent.URL = localFile.SourceUrl; //set url to get tiles
         }
 

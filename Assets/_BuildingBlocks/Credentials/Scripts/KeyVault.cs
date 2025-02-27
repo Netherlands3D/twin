@@ -258,7 +258,7 @@ namespace Netherlands3D.Credentials
             }
             
             // Nothing worked, return unsupported
-            Debug.Log("No supported credential type worked to get access for this layer: " + uri);
+            Debug.Log("Invalid credentials provided or no supported credential type worked to get access for this layer: " + uri);
             NewURLAuthorizationDetermined(uri, AuthorizationType.FailedOrUnsupported);
         }
     }
