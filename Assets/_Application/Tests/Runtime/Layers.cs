@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using Netherlands3D.CartesianTiles;
 using NUnit.Framework;
 using UnityEngine.TestTools;
 
@@ -18,8 +20,10 @@ namespace Netherlands3D.Twin.Tests
             public const int WhenLayerPanelIsOpen = 1;
             public const int WhileTerrainInvisible = 2;
         }
-        
-        [UnityTest, Order(TestMoment.WhileOpeningLayerPanel)]
+
+        [UnityTest]
+        [Order(TestMoment.WhileOpeningLayerPanel)]
+        [Category("Layers")]
         public IEnumerator CanOpenLayerPanel()
         {
             yield return E2E.Assume(() => Sidebar.Inspectors.Layers.IsOpen, Is.False);
@@ -29,7 +33,10 @@ namespace Netherlands3D.Twin.Tests
             E2E.Then(Sidebar.Inspectors.Layers.IsOpen);
         }
 
-        [UnityTest, Order(TestMoment.WhenLayerPanelIsOpen)]
+        [UnityTest]
+        [Order(TestMoment.WhenLayerPanelIsOpen)]
+        [Category("Layers")]
+        [Category("Layers/CartesianTiles")]
         public IEnumerator TerrainLayerShouldBeVisible()
         {
             Sidebar.LayerPanelShouldBeOpen();
@@ -38,31 +45,39 @@ namespace Netherlands3D.Twin.Tests
 
             E2E.Then(terrainLayer.Visibility.IsOn);
             E2E.Then(terrainLayer.IsActive);
-            yield return E2E.Expect(() => WorldView.DefaultMaaiveld.IsActive);
+            yield return E2E.Expect(() => Scene.DefaultMaaiveld.IsActive);
         }
 
-        [UnityTest, Order(TestMoment.WhileTerrainInvisible)]
+        [UnityTest]
+        [Order(TestMoment.WhileTerrainInvisible)]
+        [Category("Layers")]
+        [Category("Layers/CartesianTiles")]
         public IEnumerator TerrainLayerCanBeMadeBeInvisible()
         {
             Sidebar.LayerPanelShouldBeOpen();
-
+            
             yield return E2E.Assume(
-                () => WorldView.DefaultMaaiveld.IsActive,
+                IsMaaiveldEnabled,
                 message: "Maaiveld is expected to be visible at the start of this test"
             );
 
-            // var terrainLayer = Sidebar.Inspectors.Layers.Maaiveld;
-            //
-            // terrainLayer.Visibility.Toggle();
-            //
-            // E2E.ThenNot(terrainLayer.Visibility.IsOn);
-            // E2E.ThenNot(terrainLayer.IsActive);
-            //
-            // yield return E2E.Expect(
-            //     () => WorldView.DefaultMaaiveld.IsActive, 
-            //     Is.False,
-            //     message: "Maaiveld is expected to be invisible, but wasn't"
-            // );
+            var terrainLayer = Sidebar.Inspectors.Layers.Maaiveld;
+            
+            terrainLayer.Visibility.Toggle();
+            
+            E2E.ThenNot(terrainLayer.Visibility.IsOn);
+            E2E.ThenNot(terrainLayer.IsActive);
+
+            yield return E2E.Expect(
+                IsMaaiveldEnabled, 
+                Is.False,
+                message: "Maaiveld is expected to be invisible, but wasn't"
+            );
+        }
+
+        private object IsMaaiveldEnabled()
+        {
+            return ((BinaryMeshLayer)Scene.DefaultMaaiveld.Component<BinaryMeshLayer>())?.isEnabled;
         }
     }
 }

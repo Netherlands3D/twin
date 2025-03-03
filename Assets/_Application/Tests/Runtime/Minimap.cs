@@ -1,4 +1,5 @@
 using System.Collections;
+using NUnit.Framework;
 using UnityEngine.TestTools;
 
 namespace Netherlands3D.Twin.Tests
@@ -6,10 +7,11 @@ namespace Netherlands3D.Twin.Tests
     public class Minimap : TestCase
     {
         [UnityTest]
+        [Category("Minimap")]
         public IEnumerator MinimapIsShownOnScreen()
         {
             E2E.Then(
-                WorldView.Minimap.IsActive,
+                Scene.Minimap.IsActive,
                 message: "No active object of type Minimap UI was found in the current scene"
             );
             
@@ -17,9 +19,10 @@ namespace Netherlands3D.Twin.Tests
         }
 
         [UnityTest]
+        [Category("Minimap")]
         public IEnumerator MinimapHasAPointer()
         {
-            E2E.Then(WorldView.Minimap.Pointer.IsActive, message: "No pointer could be found on the minimap");
+            E2E.Then(Scene.Minimap.Pointer.IsActive, message: "No pointer could be found on the minimap");
 
             yield return null;
         }

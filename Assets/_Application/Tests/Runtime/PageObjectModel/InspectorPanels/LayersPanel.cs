@@ -13,16 +13,16 @@ namespace Netherlands3D.Twin.Tests.PageObjectModel.InspectorPanels
         {
             public ToggleElement Visibility;
             private Element<LayerUI> LayerUiData;
-            private LayerData LayerData;
+            private LayerData layerData;
 
             protected override void Setup()
             {
                 Visibility = ToggleElement.For(GameObject("ParentRow/EnableToggle")?.Component<Toggle>());
                 LayerUiData = Component<LayerUI>();
-                LayerData = LayerUiData?.Value.Layer;
+                layerData = LayerUiData?.Value?.Layer;
             }
 
-            public override bool IsActive => base.IsActive && LayerData.ActiveInHierarchy;
+            public override bool IsActive => base.IsActive && layerData.ActiveInHierarchy;
         }
 
         public LayerListItemElement Maaiveld { get; private set; }

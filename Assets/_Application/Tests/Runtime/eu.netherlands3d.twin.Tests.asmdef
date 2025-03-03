@@ -6,7 +6,8 @@
         "UnityEditor.TestRunner",
         "Netherlands3D.Minimap",
         "eu.netherlands3d.twin",
-        "eu.netherlands3d.e2e-testing"
+        "eu.netherlands3d.e2e-testing",
+        "eu.netherlands3d.cartesiantiles.runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

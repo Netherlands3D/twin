@@ -7,14 +7,14 @@ namespace Netherlands3D.Twin.Tests
     {
         internal Sidebar Sidebar { get; private set; }
         
-        internal WorldView WorldView { get; private set; }
+        internal Scene Scene { get; private set; }
 
         public override IEnumerator LoadSceneOnce()
         {
             yield return base.LoadSceneOnce();
             
             this.Sidebar = new Sidebar();
-            this.WorldView = new WorldView();
+            this.Scene = new Scene();
         }
     }
 }
