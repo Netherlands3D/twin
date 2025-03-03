@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using RSG;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -71,10 +72,10 @@ namespace Netherlands3D.Twin.Projects
             return promise;
         }
 
-        public IPromise<LayerGameObject> Instantiate(string prefabId)
+        public IPromise<LayerGameObject> Instantiate(string prefabId, ReferencedLayerData layerData = null)
         {
             IPromise<LayerGameObject> promise = GetPrefabById(prefabId);
-            promise.Then(LayerGameObjectFactory.Create);
+            promise.Then(lgo => LayerGameObjectFactory.Create(lgo, layerData));
             promise.Catch(Debug.LogException);
             
             return promise;

@@ -1,4 +1,5 @@
 ﻿using System;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Utility;
@@ -56,9 +57,14 @@ namespace Netherlands3D.Twin.Layers
         /// Instantiates and places a spatial object from a layer game object prefab at the location provided in the
         /// layer game object.
         /// </summary>
-        public static IPromise<LayerGameObject> Create(LayerGameObject layerGameObjectPrefab)
+        public static IPromise<LayerGameObject> Create(LayerGameObject layerGameObjectPrefab, ReferencedLayerData layerData = null)
         {
             var layerGameObject = GameObject.Instantiate(layerGameObjectPrefab);
+            if (layerData != null)
+            {
+                layerGameObject.LayerData = layerData;
+            }
+
             RefreshShaders(layerGameObject.gameObject);
             EnsureItIsALayerGameObjectWithName(layerGameObject.gameObject);
             
@@ -155,7 +161,7 @@ namespace Netherlands3D.Twin.Layers
         {
             // Ensure the name is a readable one - without this we would get (Clone) as part of the layer names
             newObject.gameObject.name = GetLabel(newObject.gameObject);
-            newObject.Name = newObject.gameObject.name;
+            // newObject.Name = newObject.gameObject.name;
         }
     }
 }

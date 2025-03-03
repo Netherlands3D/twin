@@ -18,6 +18,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
         public ReferencedLayerData(string name, LayerGameObject reference) : base(name)
         {
+            Debug.Log("Created referenced layer data from scratch");
             prefabId = reference.PrefabIdentifier;
             SetReference(reference);
 
@@ -27,16 +28,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         [JsonConstructor]
         public ReferencedLayerData(string name, string prefabId, List<LayerPropertyData> layerProperties) : base(name, layerProperties)
         {
+            Debug.Log("Created referenced layer data from project");
             this.prefabId = prefabId;
             this.layerProperties = layerProperties;
+
+            ProjectData.Current.AddStandardLayer(this);
 
             SetReference(Object.Instantiate(ProjectData.Current.PrefabLibrary.fallbackPrefab));
 
             RegisterEventListeners();
 
             ProjectData.Current.PrefabLibrary
-                .Instantiate(prefabId)
-                .Then(SetReference);
+               .Instantiate(prefabId, this)
+               .Then(SetReference);
         }
 
         ~ReferencedLayerData()
@@ -54,14 +58,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             Reference = newReference;
             Reference.LayerData = this;
             Reference.gameObject.name = Name;
-
-            ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
-            
+           
             // Trigger all events on the new layer game object so that it is properly initialized
-            OnParentChanged();
-            OnChildrenChanged();
-            OnSiblingIndexOrParentChanged(SiblingIndex);
-            OnLayerActiveInHierarchyChanged(ActiveInHierarchy);
+            // OnParentChanged();
+            // OnChildrenChanged();
+            // OnSiblingIndexOrParentChanged(SiblingIndex);
+            // OnLayerActiveInHierarchyChanged(ActiveInHierarchy);
 
             // Cause any selection handling on the Reference to trigger so that it is in the right state
             if (IsSelected)
@@ -128,6 +130,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
         private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
+            Debug.Log(Reference);
             Reference.OnLayerActiveInHierarchyChanged(activeInHierarchy);
         }
     }

@@ -218,13 +218,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 toggleScatterPropertySectionInstantiator.PropertySection?.TogglePropertyToggle();
         }
 
-        public static void ConvertToScatterLayer(HierarchicalObjectLayerGameObject objectLayerGameObject)
+        public void ConvertToScatterLayer()
         {
             ProjectData.Current.PrefabLibrary
-                .Instantiate(ObjectScatterLayerGameObject.ScatterBasePrefabID)
+                .Instantiate(ObjectScatterLayerGameObject.ScatterBasePrefabID, this.LayerData)
                 .Then(
                     layerGameObject => OnScatterLayerConversion(
-                        objectLayerGameObject, 
+                        this, 
                         layerGameObject as ObjectScatterLayerGameObject
                     )
                 );
