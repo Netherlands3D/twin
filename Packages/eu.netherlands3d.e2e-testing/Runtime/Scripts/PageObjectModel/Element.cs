@@ -94,7 +94,7 @@ namespace Netherlands3D.E2ETesting.PageObjectModel
                 {
                     GameObject gameObject => gameObject.activeInHierarchy,
                     MonoBehaviour component => component.isActiveAndEnabled,
-                    _ => true
+                    _ => false
                 };
             }
         }

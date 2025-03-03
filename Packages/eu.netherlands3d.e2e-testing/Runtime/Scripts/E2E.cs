@@ -109,6 +109,7 @@ namespace Netherlands3D
             float timeoutInSeconds = 1f, 
             string message = null
         ) {
+            assertion ??= Is.True; 
             float start = Time.time;
             InconclusiveException lastAssertionException;
             do
