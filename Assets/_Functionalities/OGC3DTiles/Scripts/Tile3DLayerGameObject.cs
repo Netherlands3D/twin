@@ -13,18 +13,20 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.Functionalities.OGC3DTiles
 {
+    [RequireComponent(typeof(ReadSubtree))]
     [RequireComponent(typeof(Read3DTileset))]
     public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, ILayerWithCredentials
     {
         public override BoundingBox Bounds => tileSet.root != null ? new BoundingBox(tileSet.root.BottomLeft, tileSet.root.TopRight) : null;
-        
+        public Tile3DLayerPropertyData PropertyData => urlPropertyData;
+
         private Read3DTileset tileSet;
         [SerializeField] private bool usePropertySections = true;
         private List<IPropertySectionInstantiator> propertySections = new();
 
         private Tile3DLayerPropertyData urlPropertyData;
         LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
-        public UnityEvent<string> OnURLChanged => urlPropertyData.OnUrlChanged;
+        public UnityEvent<Uri> OnURLChanged => urlPropertyData.OnUrlChanged;
         public UnityEvent<string> UnsupportedExtensionsMessage;
         public UnityEvent<UnityWebRequest> OnServerResponseReceived => tileSet.OnServerResponseReceived;
 
@@ -63,6 +65,8 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         {
             tileSet = GetComponent<Read3DTileset>();
             urlPropertyData = new Tile3DLayerPropertyData(TilesetURLWithoutQuery(tileSet.tilesetUrl));
+            //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
+            urlPropertyData.OnUrlChanged.AddListener(UpdateURL);
 
             if (usePropertySections)
                 propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
@@ -92,13 +96,12 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         protected override void Start()
         {
             base.Start();
-            //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
-            urlPropertyData.OnUrlChanged.AddListener(UpdateURL);
+            
         }
 
-        private void UpdateURL(string urlWithoutQuery)
+        private void UpdateURL(Uri urlWithoutQuery)
         {
-            tileSet.tilesetUrl = urlWithoutQuery;
+            tileSet.tilesetUrl = urlWithoutQuery.ToString();
             EnableTileset();
         }
 
@@ -179,7 +182,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             {
                 urlPropertyData = urlProperty; //use existing object to overwrite the current instance
                 URL = urlProperty.Url;
-                UpdateURL(urlProperty.Url);
+                UpdateURL(new Uri(urlProperty.Url));
             }
         }
 
