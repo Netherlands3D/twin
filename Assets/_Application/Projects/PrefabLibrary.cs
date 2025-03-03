@@ -33,6 +33,10 @@ namespace Netherlands3D.Twin.Projects
         public LayerGameObject fallbackPrefab;
         public List<PrefabGroup> prefabGroups;
         [NonSerialized] private List<PrefabGroup> prefabRuntimeGroups = new();
+        
+        // Cached spawner - will become null if scene changes
+        private AsyncLoadingScreenSpawner loadingScreenSpawner;
+
         public List<PrefabGroup> PrefabRuntimeGroups => prefabRuntimeGroups;
 
         public IPromise<LayerGameObject> GetPrefabById(string id)
@@ -52,10 +56,10 @@ namespace Netherlands3D.Twin.Projects
             return Promise<LayerGameObject>.Resolved(fallbackPrefab);
         }
 
-        private static IPromise<LayerGameObject> GetPrefabByReference(PrefabReference prefabReference)
+        private IPromise<LayerGameObject> GetPrefabByReference(PrefabReference prefabReference)
         {
             var promise = new Promise<LayerGameObject>();
-
+            
             void OnCompleted(AsyncOperationHandle<GameObject> handle)
             {
                 if (handle.Status == AsyncOperationStatus.Succeeded)
@@ -66,8 +70,11 @@ namespace Netherlands3D.Twin.Projects
 
                 promise.Reject(handle.OperationException);
             }
-            
-            Addressables.LoadAssetAsync<GameObject>(prefabReference.referenceGameObject).Completed += OnCompleted;
+
+            var handle = Addressables.LoadAssetAsync<GameObject>(prefabReference.referenceGameObject);
+            handle.Completed += OnCompleted;
+
+            AsyncLoadingScreenSpawner.Instance().Spawn(prefabReference.label + " aan het plaatsen", handle);
 
             return promise;
         }
