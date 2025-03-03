@@ -214,7 +214,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnProxyTransformParentChanged()
         {
-            if (toggleScatterPropertySectionInstantiator.PropertySection != null)
+            if (toggleScatterPropertySectionInstantiator?.PropertySection != null)
                 toggleScatterPropertySectionInstantiator.PropertySection?.TogglePropertyToggle();
         }
 

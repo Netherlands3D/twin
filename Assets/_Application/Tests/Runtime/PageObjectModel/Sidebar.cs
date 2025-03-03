@@ -27,5 +27,12 @@ namespace Netherlands3D.Twin.Tests.PageObjectModel
         {
             ToolButtons.Layers = ButtonElement.For(E2E.FindComponentOnGameObject<Button>("ToolbarButton_Layers"));
         }
+
+        public void LayerPanelShouldBeOpen()
+        {
+            if (Inspectors.Layers.IsOpen) return;
+            
+            ToolButtons.Layers.Click();
+        }
     }
 }

@@ -5,6 +5,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes
 {
@@ -17,49 +18,71 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
         public ReferencedLayerData(string name, LayerGameObject reference) : base(name)
         {
-            Reference = reference;
             prefabId = reference.PrefabIdentifier;
+            SetReference(reference);
 
-            ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
-            ParentChanged.AddListener(OnParentChanged);
-            ChildrenChanged.AddListener(OnChildrenChanged);
-            ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
-            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+            RegisterEventListeners();
         }
 
         [JsonConstructor]
         public ReferencedLayerData(string name, string prefabId, List<LayerPropertyData> layerProperties) : base(name, layerProperties)
         {
             this.prefabId = prefabId;
-            // TODO: S3DA-1386 - the reference is null while an asynchronous layergameobject would be loading, this
-            //   could cause issues for layers of a type different than HierarchicalLayerGameObject; to address this
-            //   we want a null -or dummy- layer gameobject while loading happens and once that finishes, the definitive
-            //   layergameobject should swap into place, and take in all that state of the dummy (selected or not,
-            //   register as part of a bigger whole, etc)
-            ProjectData.Current.PrefabLibrary
-                .Instantiate(prefabId)
-                .Then(layerGameObject => OnSuccessfullyInstantiated(layerGameObject, layerProperties));
-        }
-
-        private LayerGameObject OnSuccessfullyInstantiated(
-            LayerGameObject layerGameObject, 
-            List<LayerPropertyData> layerProperties
-        ) {
-            Reference = layerGameObject;
-            Reference.LayerData = this;
-            Reference.gameObject.name = Name;
             this.layerProperties = layerProperties;
 
+            SetReference(Object.Instantiate(ProjectData.Current.PrefabLibrary.fallbackPrefab));
+
+            RegisterEventListeners();
+
+            ProjectData.Current.PrefabLibrary
+                .Instantiate(prefabId)
+                .Then(SetReference);
+        }
+
+        ~ReferencedLayerData()
+        {
+            RemoveEventListeners();
+        }
+
+        private void SetReference(LayerGameObject newReference)
+        {
+            if (Reference && Reference != newReference)
+            {
+                Reference.DestroyLayerGameObject();
+                ProjectData.Current.RemoveLayer(this);
+            }
+            Reference = newReference;
+            Reference.LayerData = this;
+            Reference.gameObject.name = Name;
+
             ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
+            
+            // Trigger all events on the new layer game object so that it is properly initialized
+            OnParentChanged();
+            OnChildrenChanged();
+            OnSiblingIndexOrParentChanged(SiblingIndex);
+            OnLayerActiveInHierarchyChanged(ActiveInHierarchy);
+
+            // Cause any selection handling on the Reference to trigger so that it is in the right state
+            if (IsSelected)
+            {
+                Reference.OnSelect();
+            }
+            else
+            {
+                Reference.OnDeselect();
+            }
+        }
+
+        private void RegisterEventListeners()
+        {
             ParentChanged.AddListener(OnParentChanged);
             ChildrenChanged.AddListener(OnChildrenChanged);
             ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
-            
-            return layerGameObject;
         }
 
-        ~ReferencedLayerData()
+        private void RemoveEventListeners()
         {
             ParentChanged.RemoveListener(OnParentChanged);
             ChildrenChanged.RemoveListener(OnChildrenChanged);
@@ -71,7 +94,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         {
             base.DestroyLayer();
             if (!KeepReferenceOnDestroy && Reference)
+            {
                 Reference.DestroyLayerGameObject();
+            }
         }
 
         public override void SelectLayer(bool deselectOthers = false)

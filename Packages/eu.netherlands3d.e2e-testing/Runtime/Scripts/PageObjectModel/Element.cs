@@ -42,7 +42,6 @@ namespace Netherlands3D.E2ETesting.PageObjectModel
 
         public static TDerived For(T value)
         {
-            Debug.Log(value);
             var element = new TDerived
             {
                 Value = value

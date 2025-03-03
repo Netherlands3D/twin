@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.Threading.Tasks;
 using Netherlands3D.E2ETesting.PageObjectModel;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
@@ -32,26 +34,106 @@ namespace Netherlands3D
             while (!asyncOperation.isDone) yield return null;
             while (SceneManager.GetActiveScene().name != mainScene) yield return null;
         }
-        
-        public static void Then<T>(Element<T> testSubject, IResolveConstraint expression) where T : Object
+
+        public static void ThenNot(object testSubject, string message = null)
         {
-            Assert.That(testSubject.Value, expression);
+            Then(testSubject, Is.False, message);
         }
 
-        public static void Then(object testSubject, IResolveConstraint expression)
+        public static void Then(object testSubject, IResolveConstraint expression = null, string message = null)
         {
-            Assert.That(testSubject, expression);
-        }
+            // By default, we test on True, a lot of assertions are of this type and it makes the tests a bit more
+            // readable
+            expression ??= Is.True;
 
-        public static void Then<T>(Element<T> testSubject, IResolveConstraint expression, string message) where T : Object
-        {
-            Assert.That(testSubject.Value, expression, message);
-        }
-
-        public static void Then(object testSubject, IResolveConstraint expression, string message)
-        {
             Assert.That(testSubject, expression, message);
         }
 
+        public static void Then<T>(Element<T> testSubject, IResolveConstraint expression = null, string message = null) where T : Object
+        {
+            Then(testSubject.Value, expression, message);
+        }
+
+        /// <summary>
+        /// Expect is similar to Then, except that it will wait for a given timeout in seconds for the constraint to
+        /// evaluate. If it doesn't, then the assertion exception is thrown.
+        /// </summary>
+        /// <param name="testSubject">
+        /// A callable that will return the value to assert - we assume this value will not be constant, but might
+        /// change over time, as such we use a Func. The changes are actually what we want to verify, as Expect is meant
+        /// to track whether the subject will achieve the state as defined by the assertion
+        /// </param>
+        /// <param name="assertion">
+        /// The assertion that we expect the subject to succeed on within the given timeout
+        /// </param>
+        /// <param name="timeoutInSeconds">How long to wait for the assertion to become true</param>
+        /// <param name="message">
+        /// A text to show when the assertion fails - it is recommended to use as it will test results clearer
+        /// </param>
+        public static IEnumerator Expect(
+            Func<object> testSubject, 
+            IResolveConstraint assertion = null, 
+            float timeoutInSeconds = 1f, 
+            string message = null
+        ) {
+            float start = Time.time;
+            AssertionException lastAssertionException;
+            do
+            {
+                // First: wait until the end of the frame so that all processing is complete
+                yield return new WaitForEndOfFrame(); 
+
+                try
+                {
+                    Then(testSubject(), assertion, message);
+
+                    // No exception means it was successful
+                    yield break;
+                }
+                catch (AssertionException e)
+                {
+                    // Remember the exception to re-throw it after the timeout has occurred
+                    lastAssertionException = e;
+                }
+            } while (Time.time < start + timeoutInSeconds);
+
+            // timeout reached - let's throw the last assertion timeout
+            // This should always have a value because of the "do .. while" and a success should have returned before
+            // this.
+            throw lastAssertionException;
+        }
+
+        public static IEnumerator Assume(
+            Func<object> testSubject, 
+            IResolveConstraint assertion = null, 
+            float timeoutInSeconds = 1f, 
+            string message = null
+        ) {
+            float start = Time.time;
+            InconclusiveException lastAssertionException;
+            do
+            {
+                // First: wait until the end of the frame so that all processing is complete
+                yield return new WaitForEndOfFrame(); 
+
+                try
+                {
+                    NUnit.Framework.Assume.That(testSubject(), assertion, message);
+
+                    // No exception means it was successful
+                    yield break;
+                }
+                catch (InconclusiveException e)
+                {
+                    // Remember the exception to re-throw it after the timeout has occurred
+                    lastAssertionException = e;
+                }
+            } while (Time.time < start + timeoutInSeconds);
+
+            // timeout reached - let's throw the last assertion timeout
+            // This should always have a value because of the "do .. while" and a success should have returned before
+            // this.
+            throw lastAssertionException;
+        }
     }
 }

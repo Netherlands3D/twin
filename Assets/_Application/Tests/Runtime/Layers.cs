@@ -1,49 +1,68 @@
-﻿using NUnit.Framework;
+﻿using System.Collections;
+using NUnit.Framework;
+using UnityEngine.TestTools;
 
 namespace Netherlands3D.Twin.Tests
 {
     public class Layers : TestCase
     {
-        [Test]
-        public void CanOpenLayerPanel()
+        // Warning: Ordering tests is not recommended and should only be done for performance reasons and if
+        // there are unexpected side-effects when tests run out of order.
+        //
+        // Tests should also be written in such a way they do not depend on the previous state, this enables them to be
+        // written independently
+        private struct TestMoment
         {
-            Assert.IsFalse(Sidebar.Inspectors.Layers.IsOpen);
+            public const int Any = 0;
+            public const int WhileOpeningLayerPanel = 0;
+            public const int WhenLayerPanelIsOpen = 1;
+            public const int WhileTerrainInvisible = 2;
+        }
+        
+        [UnityTest, Order(TestMoment.WhileOpeningLayerPanel)]
+        public IEnumerator CanOpenLayerPanel()
+        {
+            yield return E2E.Assume(() => Sidebar.Inspectors.Layers.IsOpen, Is.False);
             
             Sidebar.ToolButtons.Layers.Click();
-            E2E.Then(Sidebar.Inspectors.Layers.IsOpen, Is.True);
+
+            E2E.Then(Sidebar.Inspectors.Layers.IsOpen);
         }
 
-        [Test]
-        public void TerrainLayerShouldBeVisible()
+        [UnityTest, Order(TestMoment.WhenLayerPanelIsOpen)]
+        public IEnumerator TerrainLayerShouldBeVisible()
         {
-            if (Sidebar.Inspectors.Layers.IsOpen == false)
-            {
-                Sidebar.ToolButtons.Layers.Click();
-            }
+            Sidebar.LayerPanelShouldBeOpen();
 
-            var layersPanel = Sidebar.Inspectors.Layers;
-            var terrainLayer = layersPanel.Maaiveld;
+            var terrainLayer = Sidebar.Inspectors.Layers.Maaiveld;
 
-            E2E.Then(terrainLayer.Visibility.IsOn, Is.True);
-            E2E.Then(terrainLayer.IsActive, Is.True);
-            E2E.Then(WorldView.DefaultMaaiveld.IsActive, Is.True);
+            E2E.Then(terrainLayer.Visibility.IsOn);
+            E2E.Then(terrainLayer.IsActive);
+            yield return E2E.Expect(() => WorldView.DefaultMaaiveld.IsActive);
         }
 
-        [Test]
-        public void TerrainLayerCanBeMadeBeInvisible()
+        [UnityTest, Order(TestMoment.WhileTerrainInvisible)]
+        public IEnumerator TerrainLayerCanBeMadeBeInvisible()
         {
-            if (Sidebar.Inspectors.Layers.IsOpen == false)
-            {
-                Sidebar.ToolButtons.Layers.Click();
-            }
+            Sidebar.LayerPanelShouldBeOpen();
             
-            var layersPanel = Sidebar.Inspectors.Layers;
-            var terrainLayer = layersPanel.Maaiveld;
+            yield return E2E.Assume(
+                () => WorldView.DefaultMaaiveld.IsActive,
+                message: "Maaiveld is expected to be visible at the start of this test"
+            );
+
+            var terrainLayer = Sidebar.Inspectors.Layers.Maaiveld;
+            
             terrainLayer.Visibility.Toggle();
             
-            E2E.Then(terrainLayer.Visibility.IsOn, Is.False);
-            E2E.Then(terrainLayer.IsActive, Is.False);
-            E2E.Then(WorldView.DefaultMaaiveld.IsActive, Is.False);
+            E2E.ThenNot(terrainLayer.Visibility.IsOn);
+            E2E.ThenNot(terrainLayer.IsActive);
+
+            yield return E2E.Expect(
+                () => WorldView.DefaultMaaiveld.IsActive, 
+                Is.False,
+                message: "Maaiveld is expected to be invisible, but wasn't"
+            );
         }
     }
 }
