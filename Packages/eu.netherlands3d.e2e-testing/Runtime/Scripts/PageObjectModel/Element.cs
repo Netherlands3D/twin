@@ -38,7 +38,13 @@ namespace Netherlands3D.E2ETesting.PageObjectModel
         where T : Object 
         where TDerived : Element<T, TDerived>, new()
     {
+        [CanBeNull]
         public T Value { get; internal set; }
+
+        public static explicit operator T(Element<T, TDerived> element)
+        {
+            return element.Value;
+        }
 
         public static TDerived For(T value)
         {
