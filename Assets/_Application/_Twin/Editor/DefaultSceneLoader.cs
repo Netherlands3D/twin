@@ -24,11 +24,18 @@ namespace Netherlands3D.Twin.Editor
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
             }
 
-            if (state == PlayModeStateChange.EnteredPlayMode && SceneManager.GetActiveScene().buildIndex != 0)
-            {
-                Debug.Log("Switching to ConfigLoader scene via DefaultSceneLoader.cs"); //added this log to make sure devs who don't know about this script know why their scene keeps switching when entering play mode
-                EditorSceneManager.LoadScene(0);
-            }
+            if (state != PlayModeStateChange.EnteredPlayMode) return;
+            if (SceneManager.GetActiveScene().buildIndex == 0) return;
+            if (IsRunningPlayModeTests()) return;
+
+            //added this log to make sure devs who don't know about this script know why their scene keeps switching when entering play mode
+            Debug.Log("Switching to ConfigLoader scene via DefaultSceneLoader.cs"); 
+            SceneManager.LoadScene(0);
+        }
+
+        private static bool IsRunningPlayModeTests()
+        {
+            return SceneManager.GetActiveScene().name.StartsWith("InitTestScene");
         }
     }
 }
