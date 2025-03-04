@@ -16,6 +16,9 @@ namespace Netherlands3D.Snapshots
         [DllImport("__Internal")]
         private static extern void DownloadFile(string gameObjectName, string methodName, string filename, byte[] byteArray, int byteArraySize);
 
+        [DllImport("__Internal")]
+        private static extern void TriggerDownload(string gameObjectName, string methodName, string filename, byte[] byteArray, int byteArraySize);
+
         public UnityEvent<string> DownloadSnapshotComplete = new();
 
         [Serializable]
@@ -99,6 +102,8 @@ namespace Netherlands3D.Snapshots
             var archivePath = FetchArchivePath(timestamp);
             var bytes = File.ReadAllBytes(archivePath);
             DownloadFile(gameObject.name, "OnSnapshotDownloadComplete", Path.GetFileName(archivePath), bytes, bytes.Length);
+
+            TriggerDownload(gameObject.name, "OnSnapshotDownloadComplete", Path.GetFileName(archivePath), bytes, bytes.Length);
 #endif
         }
 
