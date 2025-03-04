@@ -5,6 +5,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes
 {
@@ -12,39 +13,78 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
     public class ReferencedLayerData : LayerData
     {
         [DataMember] private string prefabId;
-        [JsonIgnore] public LayerGameObject Reference { get; }
+        [JsonIgnore] public LayerGameObject Reference { get; private set; }
         [JsonIgnore] public bool KeepReferenceOnDestroy { get; set; } = false;
 
         public ReferencedLayerData(string name, LayerGameObject reference) : base(name)
         {
-            Reference = reference;
+            Debug.Log("Created referenced layer data from scratch");
             prefabId = reference.PrefabIdentifier;
+            SetReference(reference);
 
-            ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
-            ParentChanged.AddListener(OnParentChanged);
-            ChildrenChanged.AddListener(OnChildrenChanged);
-            ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
-            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+            RegisterEventListeners();
         }
 
         [JsonConstructor]
         public ReferencedLayerData(string name, string prefabId, List<LayerPropertyData> layerProperties) : base(name, layerProperties)
         {
+            Debug.Log("Created referenced layer data from project");
             this.prefabId = prefabId;
-            var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
-            Reference = GameObject.Instantiate(prefab);
-            Reference.LayerData = this;
-            Reference.gameObject.name = Name;
             this.layerProperties = layerProperties;
 
-            ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
+            ProjectData.Current.AddStandardLayer(this);
+
+            SetReference(Object.Instantiate(ProjectData.Current.PrefabLibrary.fallbackPrefab));
+
+            RegisterEventListeners();
+
+            ProjectData.Current.PrefabLibrary
+               .Instantiate(prefabId, this)
+               .Then(SetReference);
+        }
+
+        ~ReferencedLayerData()
+        {
+            RemoveEventListeners();
+        }
+
+        private void SetReference(LayerGameObject newReference)
+        {
+            if (Reference && Reference != newReference)
+            {
+                Reference.DestroyLayerGameObject();
+                ProjectData.Current.RemoveLayer(this);
+            }
+            Reference = newReference;
+            Reference.LayerData = this;
+            Reference.gameObject.name = Name;
+           
+            // Trigger all events on the new layer game object so that it is properly initialized
+            // OnParentChanged();
+            // OnChildrenChanged();
+            // OnSiblingIndexOrParentChanged(SiblingIndex);
+            // OnLayerActiveInHierarchyChanged(ActiveInHierarchy);
+
+            // Cause any selection handling on the Reference to trigger so that it is in the right state
+            if (IsSelected)
+            {
+                Reference.OnSelect();
+            }
+            else
+            {
+                Reference.OnDeselect();
+            }
+        }
+
+        private void RegisterEventListeners()
+        {
             ParentChanged.AddListener(OnParentChanged);
             ChildrenChanged.AddListener(OnChildrenChanged);
             ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
         }
 
-        ~ReferencedLayerData()
+        private void RemoveEventListeners()
         {
             ParentChanged.RemoveListener(OnParentChanged);
             ChildrenChanged.RemoveListener(OnChildrenChanged);
@@ -56,7 +96,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         {
             base.DestroyLayer();
             if (!KeepReferenceOnDestroy && Reference)
+            {
                 Reference.DestroyLayerGameObject();
+            }
         }
 
         public override void SelectLayer(bool deselectOthers = false)
@@ -88,6 +130,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
         private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
+            Debug.Log(Reference);
             Reference.OnLayerActiveInHierarchyChanged(activeInHierarchy);
         }
     }
