@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.2.0] - 2025-03-04
 
-### Added
+### Changed
 
-- Now using the triggerdownload from the filebrowser package to skip user input
+- Now using the indexeddb for triggering a download
 
 ## [2.1.0] - 2025-02-27
 
