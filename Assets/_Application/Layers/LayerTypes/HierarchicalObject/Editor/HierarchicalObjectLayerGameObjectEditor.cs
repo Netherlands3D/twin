@@ -15,7 +15,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Editor
             InspectorElement.FillDefaultInspector(root, serializedObject, this);
 
             var layerGameObject = (HierarchicalObjectLayerGameObject)target;
-            LayerDataVisualElements.LayerData(layerGameObject.LayerData, root);
+            if (layerGameObject.HasLayerData)
+            {
+                LayerDataVisualElements.LayerData(layerGameObject.LayerData, root);
+            }
 
             return root;
         }

@@ -342,7 +342,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public void RevertToHierarchicalObjectLayer()
         {
-            ProjectData.Current.PrefabLibrary.Instantiate(settings.OriginalPrefabId, LayerData)
+            ProjectData.Current.PrefabLibrary.Instantiate(settings.OriginalPrefabId)
                 .Then(OnRevertScatterLayer);
         }
 

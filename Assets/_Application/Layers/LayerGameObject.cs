@@ -26,11 +26,14 @@ namespace Netherlands3D.Twin.Layers
 
         private ReferencedLayerData layerData;
 
+        // Sometimes we need to check whether there is layerdata without triggering the creation of the proxy
+        public bool HasLayerData => layerData != null;
+
         public ReferencedLayerData LayerData
         {
             get
             {
-                if (layerData == null)
+                if (!HasLayerData)
                 {
                     CreateProxy();
                 }
@@ -79,10 +82,7 @@ namespace Netherlands3D.Twin.Layers
         // 2. Creating LayerData (from project), Instantiating prefab, coupling that LayerData to this LayerGameObject
         protected virtual void InitializeVisualisation()
         {
-            if (layerData == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
-                CreateProxy();
-
-            layerData.LayerDoubleClicked.AddListener(CenterInView); //only subscribe to this event once the layerData component has been initialized
+            LayerData.LayerDoubleClicked.AddListener(CenterInView); //only subscribe to this event once the layerData component has been initialized
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 
             InitializeStyling();

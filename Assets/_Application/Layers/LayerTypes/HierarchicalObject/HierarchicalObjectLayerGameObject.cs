@@ -214,14 +214,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnProxyTransformParentChanged()
         {
-            if (toggleScatterPropertySectionInstantiator.PropertySection != null)
+            if (toggleScatterPropertySectionInstantiator?.PropertySection != null)
                 toggleScatterPropertySectionInstantiator.PropertySection?.TogglePropertyToggle();
         }
 
         public void ConvertToScatterLayer()
         {
             ProjectData.Current.PrefabLibrary
-                .Instantiate(ObjectScatterLayerGameObject.ScatterBasePrefabID, this.LayerData)
+                .Instantiate(ObjectScatterLayerGameObject.ScatterBasePrefabID)
                 .Then(
                     layerGameObject => OnScatterLayerConversion(
                         this, 
