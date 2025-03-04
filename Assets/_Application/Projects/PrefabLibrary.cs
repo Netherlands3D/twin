@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes;
+using RSG;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace Netherlands3D.Twin.Projects
 {
@@ -14,7 +13,7 @@ namespace Netherlands3D.Twin.Projects
     {
         public string groupName;
         public bool autoPopulateUI;
-        public List<LayerGameObject> prefabs;
+        public List<LayerGameObject> prefabs = new ();
     }
 
     [CreateAssetMenu(menuName = "Netherlands3D/Twin/PrefabLibrary", fileName = "PrefabLibrary", order = 0)]
@@ -25,27 +24,37 @@ namespace Netherlands3D.Twin.Projects
         [NonSerialized] private List<PrefabGroup> prefabRuntimeGroups = new();
         public List<PrefabGroup> PrefabRuntimeGroups => prefabRuntimeGroups;
 
-        public LayerGameObject GetPrefabById(string id)
+        public IPromise<LayerGameObject> GetPrefabById(string id)
         {
-            var prefabById = FindPrefabInGroups(id, prefabGroups);
-            if (prefabById) return prefabById;
-            
-            prefabById = FindPrefabInGroups(id, prefabRuntimeGroups);
-            if (prefabById) return prefabById;
+            var prefab = FindPrefabInGroups(id, prefabGroups);
+            if (prefab) return Promise<LayerGameObject>.Resolved(prefab);
 
-            return fallbackPrefab;
+            prefab = FindPrefabInGroups(id, prefabRuntimeGroups);
+            if (prefab) return Promise<LayerGameObject>.Resolved(prefab);
+
+            return Promise<LayerGameObject>.Resolved(fallbackPrefab);
         }
 
-        public void AddPrefabRuntimeGroup(string groupName)
+        public IPromise<LayerGameObject> Instantiate(string prefabId, ReferencedLayerData layerData = null)
         {
-            prefabRuntimeGroups.Add(
-                new PrefabGroup
-                {
-                    groupName = groupName,
-                    autoPopulateUI = true,
-                    prefabs = new List<LayerGameObject>()
-                }
-            );
+            IPromise<LayerGameObject> promise = GetPrefabById(prefabId);
+            promise.Then(LayerGameObjectFactory.Create);
+            promise.Catch(Debug.LogException);
+            
+            return promise;
+        }
+
+        public PrefabGroup AddPrefabRuntimeGroup(string groupName)
+        {
+            var prefabGroup = new PrefabGroup
+            {
+                groupName = groupName,
+                autoPopulateUI = true,
+                prefabs = new List<LayerGameObject>()
+            };
+            prefabRuntimeGroups.Add(prefabGroup);
+
+            return prefabGroup;
         }
 
         public void AddObjectToPrefabRuntimeGroup(string groupName, LayerGameObject layerObject)
@@ -62,7 +71,7 @@ namespace Netherlands3D.Twin.Projects
             foreach (var group in prefabGroups)
             {
                 var findPrefabInGroups = FindPrefabInGroup(id, group);
-                if (findPrefabInGroups == null) continue;
+                if (!findPrefabInGroups) continue;
 
                 return findPrefabInGroups;
             }
