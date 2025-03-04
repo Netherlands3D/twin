@@ -112,7 +112,7 @@ namespace Netherlands3D.Twin.Layers
         {
             // Ensure the name is a readable one - without this we would get (Clone) as part of the layer names
             newObject.gameObject.name = GetLabel(newObject.gameObject);
-            // newObject.Name = newObject.gameObject.name;
+            newObject.Name = newObject.gameObject.name;
         }
     }
 }
