@@ -16,7 +16,12 @@ namespace Netherlands3D.Snapshots
         [DllImport("__Internal")]
         private static extern void DownloadFromIndexedDB(string filePath, string callbackObject, string callbackMethod);
 
+        [DllImport("__Internal")]
+        private static extern void SyncFilesToIndexedDB(string callbackObjectName, string callbackMethodName);
+
         public UnityEvent<string> DownloadSnapshotComplete = new();
+
+        public Font font;
 
         [Serializable]
         public class Moment
@@ -96,14 +101,18 @@ namespace Netherlands3D.Snapshots
             yield return TakeSnapshotsAcrossFrames(timestamp, path);
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-            var archivePath = FetchArchivePath(timestamp);  
-            DownloadFromIndexedDB(Path.GetFileName(archivePath), gameObject.name, "OnSnapshotDownloadComplete");
+            var archivePath = FetchArchivePath(timestamp);
+            SyncFilesToIndexedDB(gameObject.name, "SnapshotSavedToIndexedDB");
+            lastSavePath = Path.GetFileName(archivePath);
 #endif
         }
 
-        public void OnSnapshotDownloadComplete(string message)
+        private string lastSavePath;
+
+        public void SnapshotSavedToIndexedDB()
         {
-            DownloadSnapshotComplete.Invoke(message);
+            var fileName = Path.GetFileName(lastSavePath);
+            DownloadFromIndexedDB($"{fileName}", gameObject.name, "OnSnapshotDownloadComplete");
         }
 
         private IEnumerator TakeSnapshotsAcrossFrames(string timestamp, string path)
@@ -133,12 +142,13 @@ namespace Netherlands3D.Snapshots
 
         private static string FetchArchivePath(string timestamp)
         {
-            return $"{Application.persistentDataPath}{Path.DirectorySeparatorChar}snapshot-series-{timestamp}.zip";
+            return $"{Application.persistentDataPath}{Path.DirectorySeparatorChar}{timestamp}-schaduwstudie.zip";
+            //2025-03-04T15-51-schaduwstudie.zip
         }
 
         private static string FetchPath(string timestamp)
         {
-            string path = $"{Application.persistentDataPath}{Path.DirectorySeparatorChar}snapshot-series-{timestamp}";
+            string path = $"{Application.persistentDataPath}{Path.DirectorySeparatorChar}{timestamp}-schaduwstudie";
             if (Directory.Exists(path))
             {
                 throw new Exception(
@@ -171,7 +181,80 @@ namespace Netherlands3D.Snapshots
             );
 
             DateTime dateTime = moment.ToDateTime();
+
+            Texture2D texture = CreateTimestampTexture(bytes, dateTime, snapshotWidth, snapshotHeight);
+            bytes = texture.EncodeToPNG();
+            Destroy(texture );
+
             File.WriteAllBytes($"{path}{Path.DirectorySeparatorChar}{dateTime:yyyy-MM-ddTHH-mm}.png", bytes);
+        }
+
+        public Texture2D CreateTimestampTexture(byte[] bytes, DateTime time, int width, int height)
+        {
+            Texture2D texture = new Texture2D(width, height);
+            texture.LoadImage(bytes);
+
+            Camera customCamera = new GameObject("TimestampCamera").AddComponent<Camera>(); //coudl be optimized
+            customCamera.orthographic = true;
+            customCamera.orthographicSize = 1;
+            customCamera.clearFlags = CameraClearFlags.SolidColor;
+            customCamera.backgroundColor = Color.clear;
+            customCamera.cullingMask = 1 << LayerMask.NameToLayer("UI");
+
+            int textureWidth = 256;
+            int textureHeight = 50;
+
+            RenderTexture renderTexture = new RenderTexture(textureWidth, textureHeight, 24);
+            RenderTexture.active = renderTexture;
+            GL.Clear(true, true, Color.clear);  //clear buffer
+            GameObject textObject = new GameObject("TimestampText");
+            textObject.layer = LayerMask.NameToLayer("UI");
+            textObject.transform.SetParent(transform);
+            TextMesh textComponent = textObject.AddComponent<TextMesh>();
+            textComponent.font = font;
+            textComponent.text = time.ToString("yyyy-MM-dd HH:mm:ss");
+            textComponent.fontSize = 200;
+            textComponent.color = Color.white;
+            textComponent.characterSize = 1;
+            textComponent.alignment = TextAlignment.Center;
+            textComponent.anchor = TextAnchor.MiddleCenter;
+
+            customCamera.orthographic = true;
+            customCamera.orthographicSize = textureHeight * 0.5f;
+            customCamera.transform.position = new Vector3(0, 0, -1);
+            customCamera.transform.rotation = Quaternion.identity;
+            customCamera.targetTexture = renderTexture;
+            customCamera.Render();
+
+            Texture2D finalTexture = new Texture2D(textureWidth, textureHeight);
+            finalTexture.ReadPixels(new Rect(0, 0, textureWidth, textureHeight), 0, 0);
+            finalTexture.Apply();
+
+            //make see through
+            for (int y = 0; y < textureHeight; y++)
+            {
+                for (int x = 0; x < textureWidth; x++)
+                {
+                    Color col = Color.Lerp(finalTexture.GetPixel(x, y), texture.GetPixel(width - textureWidth + x, height - textureHeight + y), 0.5f);
+                    finalTexture.SetPixel(x, y, col);
+                }
+            }
+
+            finalTexture.Apply();
+
+            Destroy(textObject);
+            RenderTexture.active = null;
+            customCamera.targetTexture = null;
+
+            int posX = width - finalTexture.width;
+            int posY = height - finalTexture.height;
+
+            Color[] pixels = finalTexture.GetPixels();
+            texture.SetPixels(posX, posY, finalTexture.width, finalTexture.height, pixels);
+            texture.Apply();
+
+            Destroy(customCamera.gameObject);
+            return texture;
         }
     }
 }
