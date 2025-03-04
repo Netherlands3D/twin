@@ -1074,6 +1074,7 @@ GameObject:
   - component: {fileID: 4349820417869818976}
   - component: {fileID: 9055248403649816541}
   - component: {fileID: 2422592599334020071}
+  - component: {fileID: 2979032996850479108}
   m_Layer: 5
   m_Name: ShadowScreenshotsPanel
   m_TagString: Untagged
@@ -1284,6 +1285,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &2979032996850479108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5078733024073835164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9548e180eff7a744b59750050abdd32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  downloadButton: {fileID: 2865887013197197531}
 --- !u!1 &5422203556322709958
 GameObject:
   m_ObjectHideFlags: 0
@@ -2129,3 +2143,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 5797522870323125029}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2865887013197197531 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8624777396393225214, guid: 9b03494031e3bb643997bd5432bc015b,
+    type: 3}
+  m_PrefabInstance: {fileID: 5797522870323125029}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
