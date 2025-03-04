@@ -235,8 +235,17 @@ namespace Netherlands3D.Snapshots
             {
                 for (int x = 0; x < textureWidth; x++)
                 {
-                    Color col = Color.Lerp(finalTexture.GetPixel(x, y), texture.GetPixel(width - textureWidth + x, height - textureHeight + y), 0.5f);
-                    finalTexture.SetPixel(x, y, col);
+                    Color col = finalTexture.GetPixel(x, y);
+                    
+                    if (col.a == 0) 
+                    {
+                        Color bgPixelColor = texture.GetPixel(width - textureWidth + x, height - textureHeight + y);
+                        finalTexture.SetPixel(x, y, Color.Lerp(bgPixelColor, col, 0.5f));
+                    }
+                    else
+                    {                       
+                        finalTexture.SetPixel(x, y, col);
+                    }
                 }
             }
 
