@@ -12,12 +12,9 @@ namespace Netherlands3D.Snapshots
 {
     public class PeriodicSnapshots : MonoBehaviour
     {
-        //import this from filebrowser package which includes tghe download functions in its jslib
+        //import this from filebrowser package which includes tghe download functions in its jslib        
         [DllImport("__Internal")]
-        private static extern void DownloadFile(string gameObjectName, string methodName, string filename, byte[] byteArray, int byteArraySize);
-
-        [DllImport("__Internal")]
-        private static extern void TriggerDownload(string gameObjectName, string methodName, string filename, byte[] byteArray, int byteArraySize);
+        private static extern void DownloadFromIndexedDB(string filePath, string callbackObject, string callbackMethod);
 
         public UnityEvent<string> DownloadSnapshotComplete = new();
 
@@ -99,11 +96,8 @@ namespace Netherlands3D.Snapshots
             yield return TakeSnapshotsAcrossFrames(timestamp, path);
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-            var archivePath = FetchArchivePath(timestamp);
-            var bytes = File.ReadAllBytes(archivePath);
-            DownloadFile(gameObject.name, "OnSnapshotDownloadComplete", Path.GetFileName(archivePath), bytes, bytes.Length);
-
-            TriggerDownload(gameObject.name, "OnSnapshotDownloadComplete", Path.GetFileName(archivePath), bytes, bytes.Length);
+            var archivePath = FetchArchivePath(timestamp);  
+            DownloadFromIndexedDB(Path.GetFileName(archivePath), gameObject.name, "OnSnapshotDownloadComplete");
 #endif
         }
 
