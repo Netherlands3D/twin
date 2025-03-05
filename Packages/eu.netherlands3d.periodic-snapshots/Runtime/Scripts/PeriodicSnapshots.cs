@@ -23,6 +23,8 @@ namespace Netherlands3D.Snapshots
 
         public Font font;
 
+        public Texture2D testTexture;
+
         [Serializable]
         public class Moment
         {
@@ -55,6 +57,10 @@ namespace Netherlands3D.Snapshots
         [SerializeField] private SunTime sunTime;
         [SerializeField] private int snapshotWidth = 1024;
         [SerializeField] private int snapshotHeight = 768;
+        [SerializeField] private Texture2D timeStampLabel;
+        [SerializeField] private int labelPaddingWidth = 10;
+        [SerializeField] private int labelPaddingHeight = 10;
+
         [SerializeField] private LayerMask snapshotLayers;
         [SerializeField] private List<Moment> moments = new();
 
@@ -183,8 +189,12 @@ namespace Netherlands3D.Snapshots
             DateTime dateTime = moment.ToDateTime();
 
             Texture2D texture = CreateTimestampTexture(bytes, dateTime, snapshotWidth, snapshotHeight);
+
+
+
+            testTexture = texture;
             bytes = texture.EncodeToPNG();
-            Destroy(texture );
+            //Destroy(texture);
 
             File.WriteAllBytes($"{path}{Path.DirectorySeparatorChar}{dateTime:yyyy-MM-ddTHH-mm}.png", bytes);
         }
@@ -201,8 +211,8 @@ namespace Netherlands3D.Snapshots
             customCamera.backgroundColor = Color.clear;
             customCamera.cullingMask = 1 << LayerMask.NameToLayer("UI");
 
-            int textureWidth = 256;
-            int textureHeight = 50;
+            int textureWidth = timeStampLabel.width;
+            int textureHeight = timeStampLabel.height;
 
             RenderTexture renderTexture = new RenderTexture(textureWidth, textureHeight, 24);
             RenderTexture.active = renderTexture;
@@ -212,8 +222,8 @@ namespace Netherlands3D.Snapshots
             textObject.transform.SetParent(transform);
             TextMesh textComponent = textObject.AddComponent<TextMesh>();
             textComponent.font = font;
-            textComponent.text = time.ToString("yyyy-MM-dd HH:mm:ss");
-            textComponent.fontSize = 200;
+            textComponent.text = time.ToString("yyyy-MM-dd HH:mm");
+            textComponent.fontSize = 150;
             textComponent.color = Color.white;
             textComponent.characterSize = 1;
             textComponent.alignment = TextAlignment.Center;
@@ -226,40 +236,47 @@ namespace Netherlands3D.Snapshots
             customCamera.targetTexture = renderTexture;
             customCamera.Render();
 
-            Texture2D finalTexture = new Texture2D(textureWidth, textureHeight);
-            finalTexture.ReadPixels(new Rect(0, 0, textureWidth, textureHeight), 0, 0);
-            finalTexture.Apply();
+            Texture2D textTexture = new Texture2D(textureWidth, textureHeight);
+            textTexture.ReadPixels(new Rect(0, 0, textureWidth, textureHeight), 0, 0);
+            textTexture.Apply();
+
+            Texture2D timeStampTexture = new Texture2D(textureWidth, textureHeight);
+
 
             //make see through
             for (int y = 0; y < textureHeight; y++)
             {
                 for (int x = 0; x < textureWidth; x++)
                 {
-                    Color col = finalTexture.GetPixel(x, y);
-                    
-                    if (col.a == 0) 
+                    Color textCol = textTexture.GetPixel(x, y);
+                    Color col = timeStampLabel.GetPixel(x, y);
+                    if (textCol.a == 0)
                     {
-                        Color bgPixelColor = texture.GetPixel(width - textureWidth + x, height - textureHeight + y);
-                        finalTexture.SetPixel(x, y, Color.Lerp(bgPixelColor, col, 0.5f));
+                        Color baseCol = texture.GetPixel(width - textureWidth - labelPaddingWidth + x, height - textureHeight - labelPaddingHeight + y);
+
+                        float alpha = col.a;
+                        Color blendedColor = Color.Lerp(baseCol, col, alpha);
+
+                        timeStampTexture.SetPixel(x, y, blendedColor);
                     }
                     else
-                    {                       
-                        finalTexture.SetPixel(x, y, col);
+                    {
+                        timeStampTexture.SetPixel(x, y, textCol);
                     }
                 }
             }
 
-            finalTexture.Apply();
+            timeStampTexture.Apply();
 
             Destroy(textObject);
             RenderTexture.active = null;
             customCamera.targetTexture = null;
 
-            int posX = width - finalTexture.width;
-            int posY = height - finalTexture.height;
+            int posX = width - timeStampTexture.width - labelPaddingWidth;
+            int posY = height - timeStampTexture.height - labelPaddingHeight;
 
-            Color[] pixels = finalTexture.GetPixels();
-            texture.SetPixels(posX, posY, finalTexture.width, finalTexture.height, pixels);
+            Color[] pixels = timeStampTexture.GetPixels();
+            texture.SetPixels(posX, posY, timeStampTexture.width, timeStampTexture.height, pixels);
             texture.Apply();
 
             Destroy(customCamera.gameObject);
