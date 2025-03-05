@@ -23,8 +23,6 @@ namespace Netherlands3D.Snapshots
 
         public Font font;
 
-        public Texture2D testTexture;
-
         [Serializable]
         public class Moment
         {
@@ -189,12 +187,8 @@ namespace Netherlands3D.Snapshots
             DateTime dateTime = moment.ToDateTime();
 
             Texture2D texture = CreateTimestampTexture(bytes, dateTime, snapshotWidth, snapshotHeight);
-
-
-
-            testTexture = texture;
             bytes = texture.EncodeToPNG();
-            //Destroy(texture);
+            Destroy(texture);
 
             File.WriteAllBytes($"{path}{Path.DirectorySeparatorChar}{dateTime:yyyy-MM-ddTHH-mm}.png", bytes);
         }
