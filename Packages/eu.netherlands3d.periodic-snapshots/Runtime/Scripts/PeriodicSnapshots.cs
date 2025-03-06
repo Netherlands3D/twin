@@ -55,10 +55,12 @@ namespace Netherlands3D.Snapshots
         [SerializeField] private SunTime sunTime;
         [SerializeField] private int snapshotWidth = 1024;
         [SerializeField] private int snapshotHeight = 768;
-        [SerializeField] private Texture2D timeStampLabel;
+        [SerializeField] private Texture2D timeStampLabelBackground;
         [SerializeField] private int labelPaddingWidth = 10;
         [SerializeField] private int labelPaddingHeight = 10;
+        [SerializeField] private Color timeStampTextColor = Color.white;
         [SerializeField] private string archiveName = "snapshot-series-";
+        [SerializeField] private string timeStampDateFormat = "yyyy-MM-dd HH:mm";
 
         [SerializeField] private LayerMask snapshotLayers;
         [SerializeField] private List<Moment> moments = new();
@@ -125,7 +127,7 @@ namespace Netherlands3D.Snapshots
 
         private IEnumerator TakeSnapshotsAcrossFrames(string timestamp, string path)
         {
-            if (timeStampLabel == null)
+            if (timeStampLabelBackground == null)
             {
                 Debug.LogError("You are missing a label texture for the timestamp of the periodic snapshots");
                 yield break;
@@ -204,37 +206,17 @@ namespace Netherlands3D.Snapshots
         public Texture2D CreateTimestampTexture(byte[] bytes, DateTime time, int width, int height)
         {
             Texture2D texture = new Texture2D(width, height);
-            texture.LoadImage(bytes);
+            texture.LoadImage(bytes);          
 
-            Camera customCamera = new GameObject("TimestampCamera").AddComponent<Camera>(); //coudl be optimized
-            customCamera.orthographic = true;
-            customCamera.orthographicSize = 1;
-            customCamera.clearFlags = CameraClearFlags.SolidColor;
-            customCamera.backgroundColor = Color.clear;
-            customCamera.cullingMask = 1 << LayerMask.NameToLayer("UI");
-
-            int textureWidth = timeStampLabel.width;
-            int textureHeight = timeStampLabel.height;
+            int textureWidth = timeStampLabelBackground.width;
+            int textureHeight = timeStampLabelBackground.height;
 
             RenderTexture renderTexture = new RenderTexture(textureWidth, textureHeight, 24);
             RenderTexture.active = renderTexture;
             GL.Clear(true, true, Color.clear);  //clear buffer
-            GameObject textObject = new GameObject("TimestampText");
-            textObject.layer = LayerMask.NameToLayer("UI");
-            textObject.transform.SetParent(transform);
-            TextMesh textComponent = textObject.AddComponent<TextMesh>();
-            textComponent.font = font;
-            textComponent.text = time.ToString("yyyy-MM-dd HH:mm");
-            textComponent.fontSize = 150;
-            textComponent.color = Color.white;
-            textComponent.characterSize = 1;
-            textComponent.alignment = TextAlignment.Center;
-            textComponent.anchor = TextAnchor.MiddleCenter;
 
-            customCamera.orthographic = true;
-            customCamera.orthographicSize = textureHeight * 0.5f;
-            customCamera.transform.position = new Vector3(0, 0, -1);
-            customCamera.transform.rotation = Quaternion.identity;
+            TextMesh textComponent = GetTimeStampTextComponent(time);
+            Camera customCamera = GetTextRenderCamera();
             customCamera.targetTexture = renderTexture;
             customCamera.Render();
 
@@ -242,19 +224,68 @@ namespace Netherlands3D.Snapshots
             textTexture.ReadPixels(new Rect(0, 0, textureWidth, textureHeight), 0, 0);
             textTexture.Apply();
 
-            Texture2D timeStampTexture = new Texture2D(textureWidth, textureHeight);
+            Texture2D timeStampTexture = GetBlendedTimestampTexture(textureWidth, textureHeight, textTexture, texture);
+
+            Destroy(textComponent.gameObject);
+            renderTexture.Release();
+            RenderTexture.active = null;
+            customCamera.targetTexture = null;
+
+            int posX = width - timeStampTexture.width - labelPaddingWidth;
+            int posY = height - timeStampTexture.height - labelPaddingHeight;
+
+            Color[] pixels = timeStampTexture.GetPixels();
+            texture.SetPixels(posX, posY, timeStampTexture.width, timeStampTexture.height, pixels);
+            texture.Apply();
+
+            Destroy(customCamera.gameObject);
+            return texture;
+        }
+
+        private Camera GetTextRenderCamera()
+        {
+            Camera customCamera = new GameObject("TimestampCamera").AddComponent<Camera>(); //coudl be optimized          
+            customCamera.clearFlags = CameraClearFlags.SolidColor;
+            customCamera.backgroundColor = Color.clear;
+            customCamera.cullingMask = 1 << LayerMask.NameToLayer("UI");
+            customCamera.orthographic = true;
+            customCamera.orthographicSize = timeStampLabelBackground.height * 0.5f;
+            customCamera.transform.position = new Vector3(0, 0, -1);
+            customCamera.transform.rotation = Quaternion.identity;
+            return customCamera;
+        }
+
+        private TextMesh GetTimeStampTextComponent(DateTime time)
+        {
+            GameObject textObject = new GameObject("TimestampText");
+            textObject.layer = LayerMask.NameToLayer("UI");
+            textObject.transform.SetParent(transform);
+            TextMesh textComponent = textObject.AddComponent<TextMesh>();
+            textComponent.font = font;
+            textComponent.text = time.ToString(timeStampDateFormat);
+            textComponent.fontSize = 150;
+            textComponent.color = timeStampTextColor;
+            textComponent.characterSize = 1;
+            textComponent.alignment = TextAlignment.Center;
+            textComponent.anchor = TextAnchor.MiddleCenter;
+            return textComponent;
+        }
+
+        private Texture2D GetBlendedTimestampTexture(int width, int height, Texture2D textTexture, Texture2D baseTexture)
+        {
+            Texture2D timeStampTexture = new Texture2D(width, height);
             //make see through
-            for (int y = 0; y < textureHeight; y++)
+            for (int y = 0; y < height; y++)
             {
-                for (int x = 0; x < textureWidth; x++)
+                for (int x = 0; x < width; x++)
                 {
                     Color textCol = textTexture.GetPixel(x, y);
-                    Color col = timeStampLabel.GetPixel(x, y);
+                    Color col = timeStampLabelBackground.GetPixel(x, y);
                     //if the alpha is 0 it means there are no text texture pixels present, so lets take the label pixels here and blend it into the screenshot background
                     if (textCol.a == 0)
                     {
                         //get the pixel of the actual screenshot
-                        Color baseCol = texture.GetPixel(width - textureWidth - labelPaddingWidth + x, height - textureHeight - labelPaddingHeight + y);
+                        Color baseCol = baseTexture.GetPixel(width - width - labelPaddingWidth + x, height - height - labelPaddingHeight + y);
                         float alpha = col.a;
                         //blend the pixel of label into the base pixel by its alpha (basic blending)
                         Color blendedColor = Color.Lerp(baseCol, col, alpha);
@@ -269,20 +300,7 @@ namespace Netherlands3D.Snapshots
             }
 
             timeStampTexture.Apply();
-
-            Destroy(textObject);
-            RenderTexture.active = null;
-            customCamera.targetTexture = null;
-
-            int posX = width - timeStampTexture.width - labelPaddingWidth;
-            int posY = height - timeStampTexture.height - labelPaddingHeight;
-
-            Color[] pixels = timeStampTexture.GetPixels();
-            texture.SetPixels(posX, posY, timeStampTexture.width, timeStampTexture.height, pixels);
-            texture.Apply();
-
-            Destroy(customCamera.gameObject);
-            return texture;
+            return timeStampTexture;
         }
     }
 }
