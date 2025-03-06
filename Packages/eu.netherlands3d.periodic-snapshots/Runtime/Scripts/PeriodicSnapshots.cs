@@ -244,6 +244,7 @@ namespace Netherlands3D.Snapshots
                 {
                     Color textCol = textTexture.GetPixel(x, y);
                     Color col = timeStampLabel.GetPixel(x, y);
+                    //if the alpha is 0 it means there are no text texture pixels present, so lets take the label pixels here and blend it into the screenshot background
                     if (textCol.a == 0)
                     {
                         Color baseCol = texture.GetPixel(width - textureWidth - labelPaddingWidth + x, height - textureHeight - labelPaddingHeight + y);
