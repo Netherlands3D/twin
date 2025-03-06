@@ -7,12 +7,16 @@ namespace Netherlands3D.LayerStyles
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling", Name = "LayerStyle")]
     public class LayerStyle
     {
+        private const string DefaultRuleName = "default";
+        
         [DataMember(Name = "metadata")] public Metadata Metadata { get; } = new();
 
         [DataMember(Name = "stylingRules")] public Dictionary<string, StylingRule> StylingRules { get; } = new()
         {
-            { "default", new StylingRule("default") }
+            { DefaultRuleName, new StylingRule(DefaultRuleName) }
         };
+        
+        public StylingRule Default => StylingRules[DefaultRuleName];
 
         /// <summary>
         /// Static factory method to construct a default style with.
@@ -25,7 +29,7 @@ namespace Netherlands3D.LayerStyles
         /// <returns></returns>
         public static LayerStyle CreateDefaultStyle()
         {
-            return new LayerStyle("default");
+            return new LayerStyle(DefaultRuleName);
         }
 
         /// <summary>
