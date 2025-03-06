@@ -69,16 +69,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 if (visualisations.Count > 0)
                 {
-                    tiledBounds = GetVisualisationBounds(visualisations[0]);
+                    trueBounds = GetVisualisationBounds(visualisations[0]);
 
                     for (int i = 1; i < visualisations.Count; i++)
                     {
-                        GetVisualisationBounds(visualisations[i]);
+                        trueBounds.Encapsulate(GetVisualisationBounds(visualisations[i]));
                     }
                 }
 
-                trueBounds.size = tiledBounds.size;
-                trueBounds.center = tiledBounds.center;
+                tiledBounds.size = trueBounds.size;
+                tiledBounds.center = trueBounds.center;
 
                 // Expand bounds to ceiling to steps
                 tiledBounds.size = new Vector3(

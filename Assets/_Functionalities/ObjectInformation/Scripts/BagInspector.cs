@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GeoJSON.Net.Feature;
 using GG.Extensions;
+using Netherlands3D.Coordinates;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.SubObjects;
@@ -11,7 +12,9 @@ using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Rendering;
+using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.UI;
+using Netherlands3D.Twin.Utility;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -66,24 +69,80 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 		private FeatureSelector featureSelector;
 		private SubObjectSelector subObjectSelector;
 
-		private List<GameObject> orderedMappings = new List<GameObject>();
+		private List<IMapping> orderedMappings = new List<IMapping>();
 		private float minClickDistance = 10;
 		private float minClickTime = 0.5f;
 		private float lastTimeClicked = 0;
 		private int currentSelectedMappingIndex = -1;
 		private bool filterDuplicateFeatures = true;
 
+        public static MappingTree MappingTree
+        {
+            get
+            {
+                if (mappingTreeInstance == null)
+                {                   
+                    BoundingBox bbox = StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds;
+                    MappingTree tree = new MappingTree(bbox, 4, 12);
+                    mappingTreeInstance = tree;
+                }
+                return mappingTreeInstance;
+            }
+        }
+        public bool debugMappingTree = false;
+        private static MappingTree mappingTreeInstance;
+        private PointerToWorldPosition pointerToWorldPosition;
+
         private void Awake()
 		{
 			mainCamera = Camera.main;
-			cameraInputSystemProvider = mainCamera.GetComponent<CameraInputSystemProvider>();
+            pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
+            cameraInputSystemProvider = mainCamera.GetComponent<CameraInputSystemProvider>();
 			subObjectSelector = GetComponent<SubObjectSelector>();
 			featureSelector = GetComponent<FeatureSelector>();
 
 			keyValuePairTemplate.gameObject.SetActive(false);
 
+			Interaction.ObjectMappingCheckIn += OnAddObjectMapping;
+			Interaction.ObjectMappingCheckOut += OnRemoveObjectMapping;
+
+
 			HideObjectInformation();
 		}
+
+        private void Start()
+        {
+			//baginspector could be enabled later on, so it would be missing the already instantiated mappings
+			ObjectMapping[] alreadyActiveMappings = FindObjectsOfType<ObjectMapping>();
+			foreach (ObjectMapping mapping in alreadyActiveMappings)
+			{
+				OnAddObjectMapping(mapping);
+			}
+        }
+
+        private void OnAddObjectMapping(ObjectMapping mapping)
+		{
+			MeshMapping objectMapping = new MeshMapping();
+			objectMapping.SetMeshObject(mapping);
+            objectMapping.UpdateBoundingBox();
+            MappingTree.RootInsert(objectMapping);			
+        }
+
+		private void OnRemoveObjectMapping(ObjectMapping mapping)
+		{
+            //the getcomponent is unfortunate, if its performanc heavy maybe use cellcaching
+            BoundingBox queryBoundingBox = new BoundingBox(mapping.GetComponent<MeshRenderer>().bounds);
+			queryBoundingBox.Convert(CoordinateSystem.WGS84_LatLon);
+            List<IMapping> mappings = MappingTree.Query<MeshMapping>(queryBoundingBox);
+            foreach (MeshMapping map in mappings)
+            {
+                if (map.ObjectMapping == mapping)
+                {
+                    //destroy featuremapping object, there should be no references anywhere else to this object!
+                    MappingTree.Remove(map);					
+                }
+            }
+        }
 
 		private void Update()
 		{
@@ -124,28 +183,28 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         /// </summary>
         private void FindObjectMapping()
 		{
-			Deselect();		
-
-			// Raycast from pointer position using main camera
-			var position = Pointer.current.position.ReadValue();
-			var ray = mainCamera.ScreenPointToRay(position);
+			Deselect();	
 
 			//the following method calls need to run in order!
-			string bagId = subObjectSelector.FindSubObject(ray, out var hit);			
-			if (hit.collider == null) return;
+			string bagId = subObjectSelector.FindSubObject();	
 
-			bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, hit.point) < minClickDistance;
-            lastWorldClickedPosition = hit.point; 
+			bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.WorldPoint) < minClickDistance;
+			lastWorldClickedPosition = pointerToWorldPosition.WorldPoint;
 			
 			bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
 			lastTimeClicked = Time.time;
 
 			if (!clickedSamePosition || refreshSelection)
 			{
-                featureSelector.SetBlockingObjectMapping(subObjectSelector.Object, lastWorldClickedPosition);
-                featureSelector.FindFeature();
+				if(subObjectSelector.Object != null)
+					featureSelector.SetBlockingObjectMapping(subObjectSelector.Object.ObjectMapping, lastWorldClickedPosition);
+
+                //no features are imported yet if mappingTreeInstance is null
+                if (mappingTreeInstance != null)
+					featureSelector.FindFeature(mappingTreeInstance);
+
 				orderedMappings.Clear();
-                Dictionary<GameObject, int> mappings = new Dictionary<GameObject, int>();		
+                Dictionary<IMapping, int> mappings = new Dictionary<IMapping, int>();		
                 //lets order all mappings by layerorder (rootindex) from layerdata
                 if (featureSelector.HasFeatureMapping)
 				{
@@ -162,17 +221,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 									continue;
 							}
 
-							mappings.TryAdd(feature.gameObject, feature.VisualisationParent.LayerData.RootIndex);
+							mappings.TryAdd(feature, feature.VisualisationParent.LayerData.RootIndex);
 						}
                     }
                 }
 				if (subObjectSelector.HasObjectMapping)
 				{
-					LayerGameObject subObjectParent = subObjectSelector.Object.transform.GetComponentInParent<LayerGameObject>();
+					LayerGameObject subObjectParent = subObjectSelector.Object.ObjectMapping.transform.GetComponentInParent<LayerGameObject>();
 					if (subObjectParent != null)
 					{
 						if(subObjectParent.LayerData.ActiveInHierarchy)
-							mappings.TryAdd(subObjectSelector.Object.gameObject, subObjectParent.LayerData.RootIndex);
+							mappings.TryAdd(subObjectSelector.Object, subObjectParent.LayerData.RootIndex);
 					}
 				}
 
@@ -192,14 +251,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
 			//Debug.Log(orderedMappings[currentSelectedMappingIndex]);
 
-			GameObject selection = orderedMappings[currentSelectedMappingIndex];
-			if (selection.GetComponent<ObjectMapping>())
+			IMapping selection = orderedMappings[currentSelectedMappingIndex];
+			if (selection is MeshMapping)
 			{				
 				SelectBuildingOnHit(bagId);
 			}
 			else
 			{
-                SelectFeatureOnHit(selection.GetComponent<FeatureMapping>());				
+                SelectFeatureOnHit(selection as FeatureMapping);				
 			}
         }
 
@@ -214,45 +273,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 		private void SelectFeatureOnHit(FeatureMapping mapping)
 		{
 		    ShowFeatureInformation();
-			ExtrudePointsForSelection(mapping);
             featureSelector.Select(mapping);
 			LoadFeatureContent(mapping);
 			RenderThumbnailForFeature(mapping);            
-        }
-
-		//we need to make the points visible, so temporary extrude the feature point mesh to a disc 
-		//TODO reduce the dics back to a vertex after deselecting
-		private void ExtrudePointsForSelection(FeatureMapping mapping)
-		{
-            if (mapping.VisualisationLayer is GeoJSONPointLayer)
-            {
-                float radius = ((GeoJSONPointLayer)mapping.VisualisationLayer).PointRenderer3D.MeshScale;
-                List<Mesh> meshes = mapping.FeatureMeshes;
-                int segments = 12;
-                for (int i = 0; i < meshes.Count; i++)
-                {
-                    Vector3 centerVertex = Vector3.zero;
-                    Vector3[] vertices = new Vector3[segments + 1];
-                    int[] triangles = new int[segments * 3];                    
-                    float angleIncrement = 360.0f / segments;
-                    for (int j = 0; j < segments; j++)
-                    {
-                        float angle = Mathf.Deg2Rad * (j * angleIncrement);
-                        float x = Mathf.Cos(angle) * radius;
-                        float z = Mathf.Sin(angle) * radius;
-                        vertices[j + 1] = new Vector3(centerVertex.x + x, centerVertex.y, centerVertex.z + z);
-                        triangles[j * 3] = 0;
-                        triangles[j * 3 + 1] = (j + 2 > segments) ? 1 : j + 2;
-                        triangles[j * 3 + 2] = j + 1;
-                    }
-                    meshes[i].vertices = vertices;
-                    meshes[i].triangles = triangles;
-                }
-                mapping.SetMeshes(meshes);
-				//todo make this more efficient through the featuremapper
-                mapping.gameObject.GetComponent<MeshFilter>().mesh = meshes[0];
-                mapping.gameObject.GetOrAddComponent<MeshRenderer>().material = ((GeoJSONPointLayer)mapping.VisualisationLayer).PointRenderer3D.Material;
-            }
         }
 
 		private void RenderThumbnailForFeature(FeatureMapping mapping)
@@ -268,7 +291,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     featureThumbnail.RenderThumbnail(currentObjectBounds);
                     break;
                 }
+				return;
             }
+
+			if (mapping.SelectedGameObject == null) return;
+
             if (mapping.VisualisationLayer is GeoJSONLineLayer)
             {
                 Vector3 centroid = Vector3.zero;
@@ -280,12 +307,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 size.y = Mathf.Min(50, size.y);
                 size.x = Mathf.Clamp(size.x, 50, 100);
                 size.z = Mathf.Clamp(size.z, 50, 100);
-                Bounds currentObjectBounds = new Bounds(mapping.gameObject.transform.position + centroid, size);
+                Bounds currentObjectBounds = new Bounds(mapping.SelectedGameObject.transform.position + centroid, size);
                 featureThumbnail.RenderThumbnail(currentObjectBounds);
             }
             else if (mapping.VisualisationLayer is GeoJSONPointLayer)
             {
-                Bounds currentObjectBounds = new Bounds(mapping.gameObject.transform.position + mapping.FeatureMeshes[0].vertices[0] - mapping.FeatureMeshes[0].bounds.center, Vector3.one * 50);
+                Bounds currentObjectBounds = new Bounds(mapping.SelectedGameObject.transform.position + mapping.FeatureMeshes[0].vertices[0] - mapping.FeatureMeshes[0].bounds.center, Vector3.one * 50);
                 featureThumbnail.RenderThumbnail(currentObjectBounds);
             }
         }
@@ -491,5 +518,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 			keyValueItems.Clear();
 		}
 		#endregion
-	}
+
+#if UNITY_EDITOR
+		public void OnDrawGizmos()
+        {
+            if (debugMappingTree)
+                MappingTree.DebugTree();
+        }
+#endif
+    }
 }

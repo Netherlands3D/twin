@@ -9,14 +9,21 @@ namespace Netherlands3D.Twin.Utility
         public Coordinate BottomLeft { get; private set; }
         public Coordinate TopRight { get; private set; }
         public Coordinate Center => (BottomLeft + TopRight) * 0.5f;
+        public Coordinate Size => TopRight - BottomLeft;
 
-        public CoordinateSystem CoordinateSystem { get; private set; }
-
+        public CoordinateSystem CoordinateSystem => (CoordinateSystem)BottomLeft.CoordinateSystem;
+        
+        public BoundingBox(Bounds worldSpaceBounds)
+        {
+            BottomLeft = new Coordinate(worldSpaceBounds.min);
+            TopRight = new Coordinate(worldSpaceBounds.max);
+        }
+        
         public BoundingBox(Coordinate bottomLeft, Coordinate topRight)
         {
             if (topRight.CoordinateSystem != bottomLeft.CoordinateSystem)
             {
-                topRight = topRight.Convert((CoordinateSystem)bottomLeft.CoordinateSystem);
+                topRight = topRight.Convert(CoordinateSystem);
             }
 
             if (bottomLeft.easting > topRight.easting || bottomLeft.northing > topRight.northing)
@@ -28,7 +35,6 @@ namespace Netherlands3D.Twin.Utility
 
             BottomLeft = bottomLeft;
             TopRight = topRight;
-            CoordinateSystem = (CoordinateSystem)bottomLeft.CoordinateSystem;
         }
 
         public void Convert(CoordinateSystem coordinateSystem)
@@ -103,7 +109,58 @@ namespace Netherlands3D.Twin.Utility
         {
             return $"{BottomLeft.easting},{BottomLeft.northing},{TopRight.easting},{TopRight.northing}";
         }
+        
+        public double GetSizeMagnitude()
+        {
+            var size = Size;
+            var d = (size.easting * size.easting) + (size.northing * size.northing) + (size.height * size.height);
+            return Math.Sqrt(d);
+        }
 
+        public void Encapsulate(Bounds bounds)
+        {
+            Encapsulate(new Coordinate(bounds.center - bounds.extents));
+            Encapsulate(new Coordinate(bounds.center + bounds.extents));
+        }
+        
+        public void Encapsulate(BoundingBox bounds)
+        {
+            if(bounds == null)
+                return;
+            
+            Encapsulate(bounds.Center - bounds.Size * 0.5f);
+            Encapsulate(bounds.Center + bounds.Size * 0.5f);
+        }
+        
+        public void Encapsulate(Coordinate coordinate)
+        {
+            var blv1 = Min(coordinate.value1, BottomLeft.value1);
+            var blv2 = Min(coordinate.value2, BottomLeft.value2);
+            var trv1 = Max(coordinate.value1, TopRight.value1);
+            var trv2 = Max(coordinate.value2, TopRight.value2);
+            if (BottomLeft.PointsLength == 2)
+            {
+                BottomLeft = new Coordinate(CoordinateSystem, blv1, blv2);
+                TopRight = new Coordinate(CoordinateSystem, trv1, trv2);
+                return;
+            }
+            var blv3 = Min(coordinate.value3, BottomLeft.value3);
+            var trv3 = Max(coordinate.value3, TopRight.value3);
+            
+            BottomLeft = new Coordinate(CoordinateSystem, blv1, blv2, blv3);
+            TopRight = new Coordinate(CoordinateSystem, trv1, trv2, trv3);
+        }
+
+        private static double Min(double lhs, double rhs)
+        {
+            return lhs < rhs ? lhs : rhs;
+        }
+
+        private static double Max(double lhs, double rhs)
+        {
+            return lhs > rhs ? lhs : rhs;
+        }
+        
         public void Debug(Color color)
         {
             float height = 100;

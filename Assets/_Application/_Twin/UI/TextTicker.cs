@@ -1,9 +1,10 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Netherlands3D.Twin.UI
 {
-    public class TextTicker : MonoBehaviour
+    public class TextTicker : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         public RectTransform childRect; // Assign the child RectTransform in the inspector  
         public float scrollSpeed = 200f; // Speed of scrolling
@@ -83,6 +84,16 @@ namespace Netherlands3D.Twin.UI
                 // Reset position when stopping  
                 childRect.anchoredPosition = new Vector2(0, childRect.anchoredPosition.y);
             }
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            CheckAndStartScrolling();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            StopScrolling();
         }
     }
 }
