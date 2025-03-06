@@ -58,6 +58,7 @@ namespace Netherlands3D.Snapshots
         [SerializeField] private Texture2D timeStampLabel;
         [SerializeField] private int labelPaddingWidth = 10;
         [SerializeField] private int labelPaddingHeight = 10;
+        [SerializeField] private string archiveName = "snapshot-series-";
 
         [SerializeField] private LayerMask snapshotLayers;
         [SerializeField] private List<Moment> moments = new();
@@ -152,13 +153,13 @@ namespace Netherlands3D.Snapshots
 
         private static string FetchArchivePath(string timestamp)
         {
-            return $"{Application.persistentDataPath}{Path.DirectorySeparatorChar}{timestamp}-schaduwstudie.zip";
+            return $"{Application.persistentDataPath}{Path.DirectorySeparatorChar}{timestamp}{archiveName}.zip";
             //2025-03-04T15-51-schaduwstudie.zip
         }
 
         private static string FetchPath(string timestamp)
         {
-            string path = $"{Application.persistentDataPath}{Path.DirectorySeparatorChar}{timestamp}-schaduwstudie";
+            string path = $"{Application.persistentDataPath}{Path.DirectorySeparatorChar}{timestamp}{archiveName}";
             if (Directory.Exists(path))
             {
                 throw new Exception(
