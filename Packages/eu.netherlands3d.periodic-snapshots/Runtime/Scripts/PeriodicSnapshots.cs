@@ -121,6 +121,12 @@ namespace Netherlands3D.Snapshots
 
         private IEnumerator TakeSnapshotsAcrossFrames(string timestamp, string path)
         {
+            if (timeStampLabel == null)
+            {
+                Debug.LogError("You are missing a label texture for the timestamp of the periodic snapshots");
+                yield break;
+            }
+
             onStartGenerating.Invoke();
 
             var cachedTimeOfDay = sunTime.GetTime();
@@ -185,7 +191,6 @@ namespace Netherlands3D.Snapshots
             );
 
             DateTime dateTime = moment.ToDateTime();
-
             Texture2D texture = CreateTimestampTexture(bytes, dateTime, snapshotWidth, snapshotHeight);
             bytes = texture.EncodeToPNG();
             Destroy(texture);
@@ -235,8 +240,6 @@ namespace Netherlands3D.Snapshots
             textTexture.Apply();
 
             Texture2D timeStampTexture = new Texture2D(textureWidth, textureHeight);
-
-
             //make see through
             for (int y = 0; y < textureHeight; y++)
             {
@@ -247,9 +250,10 @@ namespace Netherlands3D.Snapshots
                     //if the alpha is 0 it means there are no text texture pixels present, so lets take the label pixels here and blend it into the screenshot background
                     if (textCol.a == 0)
                     {
+                        //get the pixel of the actual screenshot
                         Color baseCol = texture.GetPixel(width - textureWidth - labelPaddingWidth + x, height - textureHeight - labelPaddingHeight + y);
-
                         float alpha = col.a;
+                        //blend the pixel of label into the base pixel by its alpha (basic blending)
                         Color blendedColor = Color.Lerp(baseCol, col, alpha);
 
                         timeStampTexture.SetPixel(x, y, blendedColor);
