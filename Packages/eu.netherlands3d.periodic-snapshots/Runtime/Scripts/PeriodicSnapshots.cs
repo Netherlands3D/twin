@@ -74,11 +74,8 @@ namespace Netherlands3D.Snapshots
         [Tooltip("Generating can take a while, this event can be used to hide a loader")]
         public UnityEvent onFinishedGenerating = new();
 
-        private static string archivedName;
-
         private void Start()
         {
-            archivedName = archiveName;
             if (!sourceCamera) sourceCamera = Camera.main;
         }
 
@@ -156,14 +153,14 @@ namespace Netherlands3D.Snapshots
             onFinishedGenerating.Invoke();
         }
 
-        private static string FetchArchivePath(string timestamp)
+        private string FetchArchivePath(string timestamp)
         {
-            return $"{Application.persistentDataPath}{Path.DirectorySeparatorChar}{timestamp}{archivedName}.zip";
+            return $"{Application.persistentDataPath}{Path.DirectorySeparatorChar}{timestamp}{archiveName}.zip";
         }
 
-        private static string FetchPath(string timestamp)
+        private string FetchPath(string timestamp)
         {
-            string path = $"{Application.persistentDataPath}{Path.DirectorySeparatorChar}{timestamp}{archivedName}";
+            string path = $"{Application.persistentDataPath}{Path.DirectorySeparatorChar}{timestamp}{archiveName}";
             if (Directory.Exists(path))
             {
                 throw new Exception(

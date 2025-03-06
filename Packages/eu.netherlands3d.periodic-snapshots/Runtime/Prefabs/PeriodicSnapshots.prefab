@@ -52,9 +52,13 @@ MonoBehaviour:
   sunTime: {fileID: 0}
   snapshotWidth: 1024
   snapshotHeight: 768
-  timeStampLabel: {fileID: 2800000, guid: 4c4ffdbbaceb2cb48a91019729b4a2d2, type: 3}
+  timeStampLabelBackground: {fileID: 2800000, guid: 4c4ffdbbaceb2cb48a91019729b4a2d2,
+    type: 3}
   labelPaddingWidth: 10
   labelPaddingHeight: 10
+  timeStampTextColor: {r: 1, g: 1, b: 1, a: 1}
+  archiveName: snapshot-series-
+  timeStampDateFormat: yyyy-MM-dd HH:mm
   snapshotLayers:
     serializedVersion: 2
     m_Bits: 2007
