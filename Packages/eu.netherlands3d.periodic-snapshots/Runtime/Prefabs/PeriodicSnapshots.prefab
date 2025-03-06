@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3954744856188821063}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8822905259358557482
 MonoBehaviour:
@@ -44,10 +44,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ae36eb508bd25b4ebaefd0bf38a8a87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DownloadSnapshotComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  font: {fileID: 0}
   sourceCamera: {fileID: 0}
   sunTime: {fileID: 0}
   snapshotWidth: 1024
   snapshotHeight: 768
+  timeStampLabel: {fileID: 2800000, guid: 4c4ffdbbaceb2cb48a91019729b4a2d2, type: 3}
+  labelPaddingWidth: 10
+  labelPaddingHeight: 10
   snapshotLayers:
     serializedVersion: 2
     m_Bits: 2007
