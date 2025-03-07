@@ -1,7 +1,7 @@
 {
   "name": "eu.netherlands3d.periodic-snapshots",
   "displayName": "Netherlands3D - Periodic Snapshots",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "unity": "2022.2",
   "description": "This package provides the means to do take a series of snapshots for specific moments throughout the year",
   "keywords": [

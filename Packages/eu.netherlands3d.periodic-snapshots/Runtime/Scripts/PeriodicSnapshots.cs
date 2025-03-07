@@ -221,7 +221,7 @@ namespace Netherlands3D.Snapshots
             textTexture.ReadPixels(new Rect(0, 0, textureWidth, textureHeight), 0, 0);
             textTexture.Apply();
 
-            Texture2D timeStampTexture = GetBlendedTimestampTexture(textureWidth, textureHeight, textTexture, texture);
+            Texture2D timeStampTexture = GetBlendedTimestampTexture(width, height, textureWidth, textureHeight, textTexture, texture);
 
             Destroy(textComponent.gameObject);
             renderTexture.Release();
@@ -268,7 +268,7 @@ namespace Netherlands3D.Snapshots
             return textComponent;
         }
 
-        private Texture2D GetBlendedTimestampTexture(int width, int height, Texture2D textTexture, Texture2D baseTexture)
+        private Texture2D GetBlendedTimestampTexture(int baseTextureWidth, int baseTextureHeight, int width, int height, Texture2D textTexture, Texture2D baseTexture)
         {
             Texture2D timeStampTexture = new Texture2D(width, height);
             //make see through
@@ -282,7 +282,7 @@ namespace Netherlands3D.Snapshots
                     if (textCol.a == 0)
                     {
                         //get the pixel of the actual screenshot
-                        Color baseCol = baseTexture.GetPixel(width - width - labelPaddingWidth + x, height - height - labelPaddingHeight + y);
+                        Color baseCol = baseTexture.GetPixel(baseTextureWidth - width - labelPaddingWidth + x, baseTextureHeight - height - labelPaddingHeight + y);
                         float alpha = col.a;
                         //blend the pixel of label into the base pixel by its alpha (basic blending)
                         Color blendedColor = Color.Lerp(baseCol, col, alpha);
