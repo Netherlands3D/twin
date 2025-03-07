@@ -227,6 +227,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5764104647733272860}
     m_Modifications:
+    - target: {fileID: 193157022321339173, guid: eacd2d5be98dec243bc44bf8b2083c85,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 464194535855973160, guid: eacd2d5be98dec243bc44bf8b2083c85,
         type: 3}
       propertyPath: m_Pivot.x
@@ -305,12 +310,12 @@ PrefabInstance:
     - target: {fileID: 464194535855973160, guid: eacd2d5be98dec243bc44bf8b2083c85,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 150
+      value: 146
       objectReference: {fileID: 0}
     - target: {fileID: 464194535855973160, guid: eacd2d5be98dec243bc44bf8b2083c85,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -157.5
+      value: -149.5
       objectReference: {fileID: 0}
     - target: {fileID: 464194535855973160, guid: eacd2d5be98dec243bc44bf8b2083c85,
         type: 3}
@@ -402,6 +407,37 @@ PrefabInstance:
       propertyPath: m_Name
       value: ColorPicker
       objectReference: {fileID: 0}
+    - target: {fileID: 7275114998268791187, guid: eacd2d5be98dec243bc44bf8b2083c85,
+        type: 3}
+      propertyPath: colorChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7275114998268791187, guid: eacd2d5be98dec243bc44bf8b2083c85,
+        type: 3}
+      propertyPath: colorChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: -7451032918455945531}
+    - target: {fileID: 7275114998268791187, guid: eacd2d5be98dec243bc44bf8b2083c85,
+        type: 3}
+      propertyPath: colorChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7275114998268791187, guid: eacd2d5be98dec243bc44bf8b2083c85,
+        type: 3}
+      propertyPath: colorChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnPickedColor
+      objectReference: {fileID: 0}
+    - target: {fileID: 7275114998268791187, guid: eacd2d5be98dec243bc44bf8b2083c85,
+        type: 3}
+      propertyPath: colorChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.Functionalities.ObjectLibrary.FillColorPropertySection,
+        Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7275114998268791187, guid: eacd2d5be98dec243bc44bf8b2083c85,
+        type: 3}
+      propertyPath: colorChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 7908207433689781745, guid: eacd2d5be98dec243bc44bf8b2083c85,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -440,6 +476,11 @@ PrefabInstance:
     - target: {fileID: 8065810425275369335, guid: eacd2d5be98dec243bc44bf8b2083c85,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8182448705666320927, guid: eacd2d5be98dec243bc44bf8b2083c85,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -32,7 +32,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             // TODO: unregister listener on colorpicker to change the color: OnPickedColor
         }
 
-        private void OnPickedColor(Color color)
+        public void OnPickedColor(Color color)
         {
             layer.DefaultStyle.Default.Symbolizer.SetFillColor(color);
         }
