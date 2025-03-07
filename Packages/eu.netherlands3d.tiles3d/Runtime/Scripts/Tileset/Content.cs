@@ -3,6 +3,7 @@ using GLTFast.Schema;
 using Netherlands3D.Coordinates;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -266,7 +267,42 @@ namespace Netherlands3D.Tiles3D
             {
                 gltf.Dispose();     
             }
+            Renderer[] meshrenderers = this.gameObject.GetComponentsInChildren<Renderer>();
+            foreach (var renderer in meshrenderers)
+            {
+                DestroyMaterials(renderer.materials);
+                DestroyMaterials(renderer.sharedMaterials);
+
+            }
+            MeshFilter[] meshFilters = this.gameObject.GetComponentsInChildren<MeshFilter>();
+            foreach (var meshFilter in meshFilters)
+            {
+                if (meshFilter.mesh!=null)
+                {
+                    DestroyImmediate(meshFilter.mesh);
+                }
+                if (meshFilter.sharedMesh != null)
+                {
+                    DestroyImmediate(meshFilter.sharedMesh);
+                }
+            }
+
+
             Destroy(this.gameObject);
+        }
+
+        private void DestroyMaterials(UnityEngine.Material[] materials)
+        {
+            foreach (var material in materials)
+            {
+                int[] texturepropertyIDs = material.GetTexturePropertyNameIDs();
+                foreach (int texturepropertyID in texturepropertyIDs)
+                    if (material.GetTexture(texturepropertyID) != null)
+                    {
+                        Destroy(material.GetTexture(texturepropertyID));
+                    }
+                Destroy(material);
+            }
         }
     }
 }
