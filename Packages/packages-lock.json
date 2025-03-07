@@ -256,14 +256,14 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.cartesiantiles": {
-      "version": "1.1.3",
+      "version": "https://github.com/Netherlands3D/CartesianTiles.git#fix/memoryleak",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {
         "eu.netherlands3d.coordinates": "1.2.0",
         "com.unity.textmeshpro": "3.0.6"
       },
-      "url": "https://package.openupm.com"
+      "hash": "44e719e30b1c64ce639cd5d1f659518afeedf969"
     },
     "eu.netherlands3d.collada": {
       "version": "0.1.1",
@@ -422,15 +422,15 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "1.10.4",
+      "version": "https://github.com/Netherlands3D/3DTiles.git#feature/cleanup-textures",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {
         "eu.netherlands3d.coordinates": "1.3.0",
         "eu.netherlands3d.gltfast": "5.0.3",
         "com.unity.meshopt.decompress": "0.1.0-preview.5"
       },
-      "url": "https://package.openupm.com"
+      "hash": "d86a1d63e47054c37cf4c4ba5ab3519c5e83782a"
     },
     "eu.netherlands3d.transform-handles": {
       "version": "1.1.2",
