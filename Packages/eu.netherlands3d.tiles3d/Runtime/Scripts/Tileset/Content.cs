@@ -277,14 +277,13 @@ namespace Netherlands3D.Tiles3D
             MeshFilter[] meshFilters = this.gameObject.GetComponentsInChildren<MeshFilter>();
             foreach (var meshFilter in meshFilters)
             {
-                if (meshFilter.mesh!=null)
+                if (meshFilter.sharedMesh!=null)
                 {
-                    DestroyImmediate(meshFilter.mesh);
+                    UnityEngine.Mesh mesh = meshFilter.sharedMesh;
+                    meshFilter.sharedMesh.Clear();
+                    Destroy(mesh);
                 }
-                if (meshFilter.sharedMesh != null)
-                {
-                    DestroyImmediate(meshFilter.sharedMesh);
-                }
+                
             }
 
 
