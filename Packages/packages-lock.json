@@ -362,7 +362,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.periodic-snapshots": {
-      "version": "2.3.0",
+      "version": "2.3.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
