@@ -11,6 +11,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials;
+using Netherlands3D.Credentials;
+using Netherlands3D.Credentials.StoredAuthorization;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -34,6 +36,8 @@ namespace Netherlands3D.Functionalities.Wms
 
         private List<IPropertySectionInstantiator> propertySections = new();
 
+        private ICredentialHandler credentialHandler;
+
         public List<IPropertySectionInstantiator> GetPropertySections()
         {
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
@@ -44,6 +48,10 @@ namespace Netherlands3D.Functionalities.Wms
         {
             base.Awake();
             wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
+
+            credentialHandler = GetComponent<ICredentialHandler>();
+            credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+
             LayerData.LayerSelected.AddListener(OnSelectLayer);
             LayerData.LayerDeselected.AddListener(OnDeselectLayer);
         }
@@ -51,7 +59,7 @@ namespace Netherlands3D.Functionalities.Wms
         protected override void Start()
         {
             base.Start();
-            WMSProjectionLayer.WmsUrl = urlPropertyData.Data.ToString();
+            UpdateURL(urlPropertyData.Data);  
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
 
@@ -83,13 +91,48 @@ namespace Netherlands3D.Functionalities.Wms
             WMSProjectionLayer.RenderIndex = -order;
         }
 
+        private void HandleCredentials(StoredAuthorization auth)
+        {
+            ClearCredentials();
+
+            if (auth is BearerToken bearerToken) //todo: moet BearerToken inheriten van InferableSingle key of niet?
+            {
+                WMSProjectionLayer.AddCustomHeader("Authorization", "Bearer " + bearerToken.key);
+                WMSProjectionLayer.RefreshTiles();
+            }
+            else if (auth is InferableSingleKey inferableSingleKey)
+            {
+                WMSProjectionLayer.AddCustomQueryParameter(inferableSingleKey.queryKeyName, inferableSingleKey.key);
+                WMSProjectionLayer.RefreshTiles();
+            }
+            else if (auth is UsernamePassword usernamePassword)
+            {
+                wmsProjectionLayer.AddCustomHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(usernamePassword.username + ":" + usernamePassword.password)), true);
+                WMSProjectionLayer.RefreshTiles();
+            }
+        }
+
+        public void ClearCredentials()
+        {
+            WMSProjectionLayer.ClearCustomHeaders();
+            WMSProjectionLayer.ClearCustomQueryParameters();
+        }
+
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
             if (urlProperty != null)
             {
                 this.urlPropertyData = urlProperty;
+                UpdateURL(urlPropertyData.Data);
             }
+        }
+
+        private void UpdateURL(Uri urlWithoutQuery)
+        {
+            credentialHandler.BaseUri = urlWithoutQuery; //apply the URL from what is stored in the Project data
+            WMSProjectionLayer.WmsUrl = urlWithoutQuery.ToString();
+            credentialHandler.ApplyCredentials();
         }
 
         protected override void OnDestroy()

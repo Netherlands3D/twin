@@ -14,6 +14,11 @@ namespace Netherlands3D.Functionalities.Wms
     {
         private const string DefaultEpsgCoordinateSystem = "28992";
 
+        private Dictionary<string, string> customHeaders = new Dictionary<string, string>();
+        public Dictionary<string, string> CustomHeaders { get => customHeaders; private set => customHeaders = value; }
+        private Dictionary<string, string> customQueryParams = new Dictionary<string, string>();
+        public Dictionary<string, string> CustomQueryParameters { get => customQueryParams; private set => customQueryParams = value; }
+
         public int RenderIndex 
         { 
             get => renderIndex;
@@ -54,6 +59,35 @@ namespace Netherlands3D.Functionalities.Wms
             }
         }
 
+        /// <summary>
+        /// Add custom headers for all internal WebRequests
+        /// </summary>
+        public void AddCustomHeader(string key, string value, bool replace = true)
+        {
+            if (replace && customHeaders.ContainsKey(key))
+                customHeaders[key] = value;
+            else
+                customHeaders.Add(key, value);
+        }
+
+        public void ClearCustomHeaders()
+        {
+            customHeaders.Clear();
+        }
+
+        public void AddCustomQueryParameter(string key, string value, bool replace = true)
+        {
+            if (replace && customQueryParams.ContainsKey(key))
+                customQueryParams[key] = value;
+            else
+                customQueryParams.Add(key, value);
+        }
+
+        public void ClearCustomQueryParameters()
+        {
+            customQueryParams.Clear();
+        }
+
         protected override IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
         {
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
@@ -74,9 +108,15 @@ namespace Netherlands3D.Functionalities.Wms
             var boundingBox = DetermineBoundingBox(tileChange, mapData);
             string url = wmsUrl.Replace("{0}", boundingBox.ToString());
 
+            var config = new Config() { TypeOfResponseType = ExpectedTypeOfResponse.Texture(true) };
+            foreach (var header in customHeaders)
+                config.Headers.Add(header.Key, header.Value);
+            foreach(var param in customQueryParams)
+                config.Params.Add(param.Key, param.Value);
+
             var promise = Uxios.DefaultInstance.Get<Texture2D>(
                 new Uri(url), 
-                new Config() { TypeOfResponseType = ExpectedTypeOfResponse.Texture(true)}
+                config
             );
 
             promise.Then(response =>
