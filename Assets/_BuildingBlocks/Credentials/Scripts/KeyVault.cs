@@ -5,9 +5,11 @@ using UnityEngine.Networking;
 using System;
 using System.Collections;
 using Netherlands3D.Web;
+using Netherlands3D.Credentials.StoredAuthorization;
 
 namespace Netherlands3D.Credentials
 {
+    [Obsolete("this enum will be removed in the future, use a type check instead")]
     public enum AuthorizationType
     {
         //Specific order in items used in dropdown index
@@ -18,55 +20,58 @@ namespace Netherlands3D.Credentials
         BearerToken,
         Code,
         Token,
-        Unknown
+        FailedOrUnsupported
     }
 
     [CreateAssetMenu(fileName = "KeyVault", menuName = "ScriptableObjects/KeyVault", order = 1)]
     public class KeyVault : ScriptableObject
     {
-        [TextArea(3, 10)]
-        public string Description = "";
+        [TextArea(3, 10)] public string Description = "";
+
         public List<KnownUrlAuthorizationType> knownUrlAuthorizationTypes = new()
         {
             new KnownUrlAuthorizationType() { baseUrl = "https://tile.googleapis.com/v1/3dtiles/root.json", authorizationType = AuthorizationType.InferableSingleKey },
             new KnownUrlAuthorizationType() { baseUrl = "https://engine.tygron.com/web/3dtiles/tileset.json", authorizationType = AuthorizationType.InferableSingleKey },
             new KnownUrlAuthorizationType() { baseUrl = "https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json", authorizationType = AuthorizationType.Public }
         };
-        public List<StoredAuthorization> storedAuthorizations = new();
+
+        public Dictionary<Uri, StoredAuthorization.StoredAuthorization> storedAuthorizations = new();
 
         public bool log = false;
         private MonoBehaviour coroutineMonoBehaviour;
-        public UnityEvent<string,AuthorizationType> OnAuthorizationTypeDetermined = new();
+        public UnityEvent<StoredAuthorization.StoredAuthorization> OnAuthorizationTypeDetermined = new();
 
         /// <summary>
         /// Get the stored authorization for a specific URL
         /// </summary>
-        public StoredAuthorization GetStoredAuthorization(string url)
+
+        public void Authorize(Uri uri, string username, string passwordOrKey)
         {
-            if(log) Debug.Log("GetStoredAuthorization for: " + url);
-            return storedAuthorizations.Find(x => x.url == url);
+            if (storedAuthorizations.TryGetValue(uri, out var authorization))
+            {
+                OnAuthorizationTypeDetermined.Invoke(authorization);
+                return;
+            }
+
+            TryBasicAuthentication(uri, username, passwordOrKey);
+            TryToFindSpecificCredentialType(uri, passwordOrKey);
         }
 
-        public AuthorizationType GetKnownAuthorizationTypeForURL(string url)
+        public AuthorizationType GetKnownAuthorizationTypeForURL(Uri uri)
         {
-            if(log) Debug.Log("GetKnownAuthorizationTypeForURL for: " + url);
+            if (log) Debug.Log("GetKnownAuthorizationTypeForURL for: " + uri);
             // Check if the url is known, like Google Maps or PDOK
             foreach (var knownUrlAuthorizationType in knownUrlAuthorizationTypes)
             {
-                if (url.Equals(knownUrlAuthorizationType.baseUrl))
+                if (uri.Equals(knownUrlAuthorizationType.baseUrl))
                 {
                     return knownUrlAuthorizationType.authorizationType;
                 }
             }
 
             // Check our own saved credentials.
-            foreach (var storedAuthorization in storedAuthorizations)
-            {
-                if (url.Equals(storedAuthorization.url))
-                {
-                    return storedAuthorization.authorizationType;
-                }
-            }
+            if (storedAuthorizations.ContainsKey(uri))
+                return storedAuthorizations[uri].AuthorizationType;
 
             return AuthorizationType.Public;
         }
@@ -74,124 +79,143 @@ namespace Netherlands3D.Credentials
         /// <summary>
         /// Add a new known URL with a specific authorization type
         /// </summary>
-        public void NewURLAuthorizationDetermined(string url, AuthorizationType authorizationType, string username = "", string password = "", string key = "")
+        private void NewURLAuthorizationDetermined(Uri uri, AuthorizationType authorizationType, string username = "", string password = "", string key = "")
         {
-            ClearURLFromStoredAuthorizations(url);
+            ClearURLFromStoredAuthorizations(uri);
 
-            storedAuthorizations.Add(
-                new StoredAuthorization() { 
-                    url = url, 
-                    authorizationType = authorizationType, 
-                    username = username, 
-                    password = password, 
-                    key = key 
-                });
+            StoredAuthorization.StoredAuthorization auth = new FailedOrUnsupported(uri);
+            switch (authorizationType)
+            {
+                case AuthorizationType.Public:
+                    auth = new Public(uri);
+                    storedAuthorizations.Add(uri, auth);
+                    break;
+                case AuthorizationType.UsernamePassword:
+                    auth = new UsernamePassword(uri, username, password);
+                    storedAuthorizations.Add(uri, auth);
+                    break;
+                case AuthorizationType.InferableSingleKey:
+                    auth = new InferableSingleKey(uri, key);
+                    storedAuthorizations.Add(uri, auth);
+                    break;
+                case AuthorizationType.Key:
+                    auth = new Key(uri, key);
+                    storedAuthorizations.Add(uri, auth);
+                    break;
+                case AuthorizationType.BearerToken:
+                    auth = new BearerToken(uri, key);
+                    storedAuthorizations.Add(uri, auth);
+                    break;
+                case AuthorizationType.Code:
+                    auth = new Code(uri, key);
+                    storedAuthorizations.Add(uri, auth);
+                    break;
+                case AuthorizationType.Token:
+                    auth = new Token(uri, key);
+                    storedAuthorizations.Add(uri, auth);
+                    break;
+                case AuthorizationType.FailedOrUnsupported:
+                    // storedAuthorizations.Add(uri, auth); // todo: do we want to store a failed authorization, or try again next time this url is passed? 
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(authorizationType), authorizationType, "authorisation type not defined");
+            }
 
-            OnAuthorizationTypeDetermined.Invoke(url, authorizationType);
+            OnAuthorizationTypeDetermined.Invoke(auth);
         }
 
-        public void ClearURLFromStoredAuthorizations(string url)
-        {
-            if(storedAuthorizations.Exists(x => x.url == url))
-                storedAuthorizations.RemoveAll(x => x.url == url);
+        public void ClearURLFromStoredAuthorizations(Uri url)
+        { 
+            storedAuthorizations.Remove(url);
         }
 
         /// <summary>
         /// Try to find the specific type of credential (key, token or code) that is needed for the layer
         /// </summary>
-        public void TryToFindSpecificCredentialType(string url, string key)
+        public void TryToFindSpecificCredentialType(Uri uri, string key)
         {
             //Only allow one simultaneous coroutine for now
-            if(coroutineMonoBehaviour != null)
+            if (coroutineMonoBehaviour != null)
                 Destroy(coroutineMonoBehaviour.gameObject);
 
             var coroutineGameObject = new GameObject("KeyVaultCoroutine_FindSpecificAuthorizationType");
             coroutineMonoBehaviour = coroutineGameObject.AddComponent<KeyVaultCoroutines>();
-            coroutineMonoBehaviour.StartCoroutine(FindSpecificAuthorizationType(url, key));
+            coroutineMonoBehaviour.StartCoroutine(FindSpecificAuthorizationType(uri, key));
         }
 
         /// <summary>
         /// Try to access a URL with a username and password.
         /// OnAuthorizationTypeDetermined will be called with the result.
         /// </summary>
-        public void TryBasicAuthentication(string url, string username, string password)
+        public void TryBasicAuthentication(Uri uri, string username, string password)
         {
             //Only allow one simultaneous coroutine for now
-            if(coroutineMonoBehaviour != null)
+            if (coroutineMonoBehaviour != null)
                 Destroy(coroutineMonoBehaviour.gameObject);
 
             var coroutineGameObject = new GameObject("KeyVaultCoroutine_AccessWithUsernameAndPassword");
             coroutineMonoBehaviour = coroutineGameObject.AddComponent<KeyVaultCoroutines>();
-            coroutineMonoBehaviour.StartCoroutine(AccessWithUsernameAndPassword(url,username, password));
+            coroutineMonoBehaviour.StartCoroutine(AccessWithUsernameAndPassword(uri, username, password));
         }
 
-        private IEnumerator AccessWithUsernameAndPassword(string url, string username,string password)
+        private IEnumerator AccessWithUsernameAndPassword(Uri uri, string username, string password)
         {
-            var request = UnityWebRequest.Get(url);
+            var request = UnityWebRequest.Get(uri);
             request.SetRequestHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password)));
             yield return request.SendWebRequest();
 
-            if(request.result == UnityWebRequest.Result.Success)
+            if (request.result == UnityWebRequest.Result.Success)
             {
-                if(log) Debug.Log("Access granted with username and password for: " + url);
-                NewURLAuthorizationDetermined(url, AuthorizationType.UsernamePassword, username: username, password: password);
+                if (log) Debug.Log("Access granted with username and password for: " + uri);
+                NewURLAuthorizationDetermined(uri, AuthorizationType.UsernamePassword, username: username, password: password);
             }
             else
             {
-                Debug.LogError("Access denied with username and password for: " + url);
+                Debug.LogError("Access denied with username and password for: " + uri);
                 //todo: send an event here so UI can update
             }
         }
 
-        private IEnumerator FindSpecificAuthorizationType(string url, string key)
+        private IEnumerator FindSpecificAuthorizationType(Uri uri, string key)
         {
-            AuthorizationType foundType = AuthorizationType.Unknown;
-            
+            AuthorizationType foundType = AuthorizationType.FailedOrUnsupported;
+
             //Start with resetting this url history to unkown
-            ClearURLFromStoredAuthorizations(url);
+            ClearURLFromStoredAuthorizations(uri);
 
             // Try a request without credentials
-            var noCredentialsRequest = UnityWebRequest.Get(url);
+            var noCredentialsRequest = UnityWebRequest.Get(uri);
             yield return noCredentialsRequest.SendWebRequest();
-            if(noCredentialsRequest.result == UnityWebRequest.Result.Success)
+            if (noCredentialsRequest.result == UnityWebRequest.Result.Success)
             {
-                if(log) Debug.Log("Found no credentials needed for this layer: " + url);
+                if (log) Debug.Log("Found no credentials needed for this layer: " + uri);
                 foundType = AuthorizationType.Public;
-                NewURLAuthorizationDetermined(url, foundType);
-                yield break;
-            }
-
-            // No key provided, but credentials are needed
-            if(key == "")
-            {
-                Debug.Log("No key provided for this layer: " + url);
-                foundType = AuthorizationType.InferableSingleKey;
-                NewURLAuthorizationDetermined(url, foundType);
-                yield break;
-            }
-
-            // Try input key as bearer token
-            var bearerTokenRequest = UnityWebRequest.Get(url);
-            bearerTokenRequest.SetRequestHeader("Authorization", "Bearer " + key);
-            yield return bearerTokenRequest.SendWebRequest();
-            if(bearerTokenRequest.result == UnityWebRequest.Result.Success)
-            {
-                if(log) Debug.Log("Found bearer token needed for this layer: " + url);
-                foundType = AuthorizationType.BearerToken;
-                NewURLAuthorizationDetermined(url, foundType, key: key);
+                NewURLAuthorizationDetermined(uri, foundType);
                 yield break;
             }
             
+            // Try input key as bearer token
+            var bearerTokenRequest = UnityWebRequest.Get(uri);
+            bearerTokenRequest.SetRequestHeader("Authorization", "Bearer " + key);
+            yield return bearerTokenRequest.SendWebRequest();
+            if (bearerTokenRequest.result == UnityWebRequest.Result.Success)
+            {
+                if (log) Debug.Log("Found bearer token needed for this layer: " + uri);
+                foundType = AuthorizationType.BearerToken;
+                NewURLAuthorizationDetermined(uri, foundType, key: key);
+                yield break;
+            }
+
             // Try input key as 'key' query parameter (remove a possible existing key query parameter and add the new one)
-            var uriBuilder = new UriBuilder(url);
+            var uriBuilder = new UriBuilder(uri);
             uriBuilder.AddQueryParameter("key", key);
             var keyRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
             yield return keyRequestUrl.SendWebRequest();
-            if(keyRequestUrl.result == UnityWebRequest.Result.Success)
+            if (keyRequestUrl.result == UnityWebRequest.Result.Success)
             {
-                if(log) Debug.Log("Found key needed for this layer: " + url);
+                if (log) Debug.Log("Found key needed for this layer: " + uri);
                 foundType = AuthorizationType.Key;
-                NewURLAuthorizationDetermined(url, foundType, key: key);
+                NewURLAuthorizationDetermined(uri, foundType, key: key);
                 yield break;
             }
 
@@ -201,11 +225,11 @@ namespace Netherlands3D.Credentials
             uriBuilder.AddQueryParameter("code", key);
             var codeRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
             yield return codeRequestUrl.SendWebRequest();
-            if(codeRequestUrl.result == UnityWebRequest.Result.Success)
+            if (codeRequestUrl.result == UnityWebRequest.Result.Success)
             {
-                if(log) Debug.Log("Found code needed for this layer: " + url);
+                if (log) Debug.Log("Found code needed for this layer: " + uri);
                 foundType = AuthorizationType.Code;
-                NewURLAuthorizationDetermined(url, foundType, key: key);
+                NewURLAuthorizationDetermined(uri, foundType, key: key);
                 yield break;
             }
 
@@ -214,19 +238,21 @@ namespace Netherlands3D.Credentials
             uriBuilder.AddQueryParameter("token", key);
             var tokenRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
             yield return tokenRequestUrl.SendWebRequest();
-            if(tokenRequestUrl.result == UnityWebRequest.Result.Success)
+            if (tokenRequestUrl.result == UnityWebRequest.Result.Success)
             {
-                if(log) Debug.Log("Found token needed for this layer: " + url);
+                if (log) Debug.Log("Found token needed for this layer: " + uri);
                 foundType = AuthorizationType.Token;
-                NewURLAuthorizationDetermined(url, foundType, key: key);
+                NewURLAuthorizationDetermined(uri, foundType, key: key);
                 yield break;
             }
-
-            // Nothing worked, return unknown
-            Debug.Log("No credential type worked to get access for this layer: " + url);
-            NewURLAuthorizationDetermined(url, AuthorizationType.Unknown);
+            
+            // Nothing worked, return unsupported
+            Debug.Log("Invalid credentials provided or no supported credential type worked to get access for this layer: " + uri);
+            NewURLAuthorizationDetermined(uri, AuthorizationType.FailedOrUnsupported);
         }
     }
 
-    public class KeyVaultCoroutines : MonoBehaviour {}
+    public class KeyVaultCoroutines : MonoBehaviour
+    {
+    }
 }

@@ -11,13 +11,15 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials;
+using Netherlands3D.Credentials;
+using Netherlands3D.Credentials.StoredAuthorization;
 
 namespace Netherlands3D.Functionalities.Wms
 {
     /// <summary>
     /// Extention of LayerGameObject that injects a 'streaming' dataprovider WMSTileDataLayer
     /// </summary>
-    public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, ILayerWithCredentials
+    public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels
     {
         public WMSTileDataLayer WMSProjectionLayer => wmsProjectionLayer;
         public bool TransparencyEnabled = true; //this gives the requesting url the extra param to set transparancy enabled by default       
@@ -31,11 +33,10 @@ namespace Netherlands3D.Functionalities.Wms
         public override BoundingBox Bounds => wmsProjectionLayer?.BoundingBox;
 
         public UnityEvent<Uri> OnURLChanged => urlPropertyData.OnDataChanged;
-        public UnityEvent<UnityWebRequest> OnServerResponseReceived => throw new NotImplementedException();
-
-        public string URL { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         private List<IPropertySectionInstantiator> propertySections = new();
+
+        private ICredentialHandler credentialHandler;
 
         public List<IPropertySectionInstantiator> GetPropertySections()
         {
@@ -47,6 +48,10 @@ namespace Netherlands3D.Functionalities.Wms
         {
             base.Awake();
             wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
+
+            credentialHandler = GetComponent<ICredentialHandler>();
+            credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+
             LayerData.LayerSelected.AddListener(OnSelectLayer);
             LayerData.LayerDeselected.AddListener(OnDeselectLayer);
         }
@@ -54,7 +59,7 @@ namespace Netherlands3D.Functionalities.Wms
         protected override void Start()
         {
             base.Start();
-            WMSProjectionLayer.WmsUrl = urlPropertyData.Data.ToString();
+            UpdateURL(urlPropertyData.Data);  
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
 
@@ -86,13 +91,48 @@ namespace Netherlands3D.Functionalities.Wms
             WMSProjectionLayer.RenderIndex = -order;
         }
 
+        private void HandleCredentials(StoredAuthorization auth)
+        {
+            ClearCredentials();
+
+            if (auth is BearerToken bearerToken) //todo: moet BearerToken inheriten van InferableSingle key of niet?
+            {
+                WMSProjectionLayer.AddCustomHeader("Authorization", "Bearer " + bearerToken.key);
+                WMSProjectionLayer.RefreshTiles();
+            }
+            else if (auth is InferableSingleKey inferableSingleKey)
+            {
+                WMSProjectionLayer.AddCustomQueryParameter(inferableSingleKey.queryKeyName, inferableSingleKey.key);
+                WMSProjectionLayer.RefreshTiles();
+            }
+            else if (auth is UsernamePassword usernamePassword)
+            {
+                wmsProjectionLayer.AddCustomHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(usernamePassword.username + ":" + usernamePassword.password)), true);
+                WMSProjectionLayer.RefreshTiles();
+            }
+        }
+
+        public void ClearCredentials()
+        {
+            WMSProjectionLayer.ClearCustomHeaders();
+            WMSProjectionLayer.ClearCustomQueryParameters();
+        }
+
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
             if (urlProperty != null)
             {
                 this.urlPropertyData = urlProperty;
+                UpdateURL(urlPropertyData.Data);
             }
+        }
+
+        private void UpdateURL(Uri urlWithoutQuery)
+        {
+            credentialHandler.BaseUri = urlWithoutQuery; //apply the URL from what is stored in the Project data
+            WMSProjectionLayer.WmsUrl = urlWithoutQuery.ToString();
+            credentialHandler.ApplyCredentials();
         }
 
         protected override void OnDestroy()
@@ -139,36 +179,6 @@ namespace Netherlands3D.Functionalities.Wms
         {
             if (wmsProjectionLayer.isEnabled != isActive)
                 wmsProjectionLayer.isEnabled = isActive;
-        }
-
-        public void SetCredentials(string username, string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetBearerToken(string token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetKey(string key)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetToken(string token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetCode(string code)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ClearCredentials()
-        {
-            throw new NotImplementedException();
         }
     }
 }

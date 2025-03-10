@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Credentials;
+using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Tiles3D;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.Layers.LayerTypes.Credentials;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 {
     [RequireComponent(typeof(ReadSubtree))]
     [RequireComponent(typeof(Read3DTileset))]
-    public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, ILayerWithCredentials
+    public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels// ILayerWithCredentials
     {
         public override BoundingBox Bounds => tileSet.root != null ? new BoundingBox(tileSet.root.BottomLeft, tileSet.root.TopRight) : null;
         public Tile3DLayerPropertyData PropertyData => urlPropertyData;
@@ -26,21 +27,16 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         private Tile3DLayerPropertyData urlPropertyData;
         LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
+        
+        [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
         public UnityEvent<Uri> OnURLChanged => urlPropertyData.OnUrlChanged;
         public UnityEvent<string> UnsupportedExtensionsMessage;
+        
+        [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
         public UnityEvent<UnityWebRequest> OnServerResponseReceived => tileSet.OnServerResponseReceived;
 
-        public string URL
-        {
-            get => urlPropertyData.Url;
-            set
-            {
-                //Always query parameters (tileset key's must be set via our credentials system)
-                string urlWithoutQuery = TilesetURLWithoutQuery(value);
-                urlPropertyData.Url = urlWithoutQuery;
-            }
-        }
-
+        private ICredentialHandler credentialHandler;
+        
         private string TilesetURLWithoutQuery(string value)
         {
             if (!value.Contains("?"))
@@ -64,6 +60,12 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         protected void Awake()
         {
             tileSet = GetComponent<Read3DTileset>();
+            
+            credentialHandler = GetComponent<ICredentialHandler>();
+            if(!string.IsNullOrEmpty(tileSet.tilesetUrl))
+                credentialHandler.BaseUri = new Uri(tileSet.tilesetUrl); //apply the URL from what is serialized in the tileset component.
+            
+            credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             urlPropertyData = new Tile3DLayerPropertyData(TilesetURLWithoutQuery(tileSet.tilesetUrl));
             //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
             urlPropertyData.OnUrlChanged.AddListener(UpdateURL);
@@ -72,6 +74,29 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
                 propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             else
                 propertySections = new();
+        }
+
+        private void HandleCredentials(StoredAuthorization auth)
+        {
+            ClearCredentials();
+            
+            if (auth is BearerToken bearerToken) //todo: moet BearerToken inheriten van InferableSingle key of niet?
+            {
+                tileSet.AddCustomHeader("Authorization", "Bearer " + bearerToken.key);
+                tileSet.RefreshTiles();
+            }
+            else if (auth is InferableSingleKey inferableSingleKey)
+            {
+                tileSet.personalKey = inferableSingleKey.key;
+                tileSet.publicKey = inferableSingleKey.key;
+                tileSet.QueryKeyName = inferableSingleKey.queryKeyName;
+                tileSet.RefreshTiles();
+            }
+            else if (auth is UsernamePassword usernamePassword)
+            {
+                tileSet.AddCustomHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(usernamePassword.username + ":" + usernamePassword.password)), true);
+                tileSet.RefreshTiles();
+            } 
         }
 
         protected override void OnEnable()
@@ -93,15 +118,11 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             LayerData.HasValidCredentials = request.result == UnityWebRequest.Result.Success;
         }
 
-        protected override void Start()
-        {
-            base.Start();
-            
-        }
-
         private void UpdateURL(Uri urlWithoutQuery)
         {
+            credentialHandler.BaseUri = urlWithoutQuery; //apply the URL from what is stored in the Project data
             tileSet.tilesetUrl = urlWithoutQuery.ToString();
+            credentialHandler.ApplyCredentials();
             EnableTileset();
         }
 
@@ -128,44 +149,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         {
             return propertySections;
         }
-
-        public void SetCredentials(string username, string password)
-        {
-            tileSet.AddCustomHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password)), true);
-            tileSet.RefreshTiles();
-        }
-
-        public void SetKey(string key)
-        {
-            tileSet.personalKey = key;
-            tileSet.publicKey = key;
-
-            tileSet.QueryKeyName = "key";
-            tileSet.RefreshTiles();
-        }
-
-        public void SetBearerToken(string token)
-        {
-            tileSet.AddCustomHeader("Authorization", "Bearer " + token);
-            tileSet.RefreshTiles();
-        }
-
-        public void SetCode(string code)
-        {
-            tileSet.personalKey = code;
-            tileSet.publicKey = code;
-            tileSet.QueryKeyName = "code";
-            tileSet.RefreshTiles();
-        }
-
-        public void SetToken(string token)
-        {
-            tileSet.personalKey = token;
-            tileSet.publicKey = token;
-            tileSet.QueryKeyName = "token";
-            tileSet.RefreshTiles();
-        }
-
+        
         public void ClearCredentials()
         {
             tileSet.personalKey = "";
@@ -181,7 +165,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             if (urlProperty != null)
             {
                 urlPropertyData = urlProperty; //use existing object to overwrite the current instance
-                URL = urlProperty.Url;
                 UpdateURL(new Uri(urlProperty.Url));
             }
         }
