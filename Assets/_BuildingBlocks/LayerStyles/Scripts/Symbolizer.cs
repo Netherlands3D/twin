@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -18,6 +19,8 @@ namespace Netherlands3D.LayerStyles
         [DataMember(Name = "properties")] 
         private Dictionary<string, string> properties = new();
 
+        public Action<string, string> PropertyChanged;
+
         internal object GetProperty(string key)
         {
             // explicitly return null when value is not present, so that caller knows it should ignore using this field 
@@ -27,6 +30,7 @@ namespace Netherlands3D.LayerStyles
         internal void SetProperty(string key, string value)
         {
             properties[key] = value;
+            PropertyChanged?.Invoke(key, value);
         }
 
         public override string ToString()

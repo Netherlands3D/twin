@@ -16,7 +16,12 @@ namespace Netherlands3D.LayerStyles
             { DefaultRuleName, new StylingRule(DefaultRuleName) }
         };
         
-        public StylingRule Default => StylingRules[DefaultRuleName];
+        /// <summary>
+        /// The default rule - or the one that is applied to all features inside this layer - this stylingrule
+        /// is not expected to have any expression associated with it so that a shorthand is available to apply styling
+        /// to all elements in this style,
+        /// </summary>
+        public StylingRule AnyFeature => StylingRules[DefaultRuleName];
 
         /// <summary>
         /// Static factory method to construct a default style with.
