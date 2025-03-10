@@ -33,12 +33,15 @@ namespace Netherlands3D.Twin.UI.ColorPicker
         private Texture2D pickerTexture; // To sample colors from the image  
         private RectTransform pickerTransform; // To cache calls to obtain the RectTransform  
 
-        private void Start()
+        private void Awake()
         {
             // Cache calls
             pickerTexture = pickerImage.sprite.texture;
             pickerTransform = pickerImage.rectTransform;
-            
+        }
+
+        private void Start()
+        {
             // Initialize UI to the pre-set color.
             UpdateUI(color);
         }
