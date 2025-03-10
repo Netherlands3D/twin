@@ -7,6 +7,7 @@ using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
@@ -169,7 +170,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             newFeatureVisualisation.ShowVisualisations(LayerData.ActiveInHierarchy);
         }
 
-        public override void InitializeStyling()
+        public override void ApplyStyling()
         {
             foreach (var visualisations in spawnedVisualisations)
             {
@@ -179,8 +180,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private Material GetMaterialInstance()
         {
-            if (!polygonVisualizationMaterialInstance)
-            {
+            if (
+                !polygonVisualizationMaterialInstance 
+                || polygonVisualizationMaterialInstance.color != LayerData.DefaultSymbolizer.GetFillColor()
+            ) {
                 polygonVisualizationMaterialInstance = new Material(PolygonVisualizationMaterial)
                 {
                     color = LayerData.DefaultSymbolizer.GetFillColor() ?? Color.white
@@ -242,6 +245,27 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             return bbox;
+        }
+
+        private List<IPropertySectionInstantiator> propertySections;
+
+        protected List<IPropertySectionInstantiator> PropertySections
+        {
+            get
+            {
+                if (propertySections == null)
+                {
+                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
+                }
+
+                return propertySections;
+            }
+            set => propertySections = value;
+        }
+
+        public List<IPropertySectionInstantiator> GetPropertySections()
+        {
+            return PropertySections;
         }
     }
 }

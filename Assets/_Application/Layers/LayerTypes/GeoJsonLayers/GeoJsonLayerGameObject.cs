@@ -14,7 +14,7 @@ using Netherlands3D.Twin.Utility;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
-    public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels
+    public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
         public override BoundingBox Bounds
         {
@@ -58,24 +58,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         [Space]
         protected LayerURLPropertyData urlPropertyData = new();
-
-        private List<IPropertySectionInstantiator> propertySections;
         
         public LayerPropertyData PropertyData => urlPropertyData;
-
-        protected List<IPropertySectionInstantiator> PropertySections
-        {
-            get
-            {
-                if (propertySections == null)
-                {
-                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
-                }
-
-                return propertySections;
-            }
-            set => propertySections = value;
-        }
 
         private void Awake()
         {
@@ -123,11 +107,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 this.urlPropertyData = urlProperty;
             }
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return PropertySections;
         }
 
         /// <summary>

@@ -68,16 +68,6 @@ PrefabInstance:
       propertyPath: m_Padding.m_Top
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8597775257156953464, guid: e3342ba09b3c3e245ac1e7d9f4102026,
-        type: 3}
-      propertyPath: m_Padding.m_Left
-      value: -4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8597775257156953464, guid: e3342ba09b3c3e245ac1e7d9f4102026,
-        type: 3}
-      propertyPath: m_Padding.m_Right
-      value: -4
-      objectReference: {fileID: 0}
     - target: {fileID: 9193392669041292004, guid: e3342ba09b3c3e245ac1e7d9f4102026,
         type: 3}
       propertyPath: m_Pivot.x
@@ -218,7 +208,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  colorPicker: {fileID: 0}
+  colorPicker: {fileID: 5991820789294285947}
 --- !u!1001 &8528826791854523121
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -310,7 +300,7 @@ PrefabInstance:
     - target: {fileID: 464194535855973160, guid: eacd2d5be98dec243bc44bf8b2083c85,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 146
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 464194535855973160, guid: eacd2d5be98dec243bc44bf8b2083c85,
         type: 3}
@@ -488,6 +478,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eacd2d5be98dec243bc44bf8b2083c85, type: 3}
+--- !u!114 &5991820789294285947 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2700826638051772042, guid: eacd2d5be98dec243bc44bf8b2083c85,
+    type: 3}
+  m_PrefabInstance: {fileID: 8528826791854523121}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dc85356250718d4bbd600418b5f7166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &8083218882129404377 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 464194535855973160, guid: eacd2d5be98dec243bc44bf8b2083c85,
