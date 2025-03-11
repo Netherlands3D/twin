@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using Netherlands3D.Web;
 using Netherlands3D.Credentials.StoredAuthorization;
+using System.Collections.Specialized;
 
 namespace Netherlands3D.Credentials
 {
@@ -44,17 +45,84 @@ namespace Netherlands3D.Credentials
         /// <summary>
         /// Get the stored authorization for a specific URL
         /// </summary>
-
-        public void Authorize(Uri uri, string username, string passwordOrKey)
+        public void Authorize(Uri inputUri, string username, string passwordOrKey)
         {
-            if (storedAuthorizations.TryGetValue(uri, out var authorization))
+            Uri baseUri = new Uri(inputUri.GetLeftPart(UriPartial.Path));
+            if (storedAuthorizations.TryGetValue(baseUri, out var authorization))
             {
                 OnAuthorizationTypeDetermined.Invoke(authorization);
                 return;
             }
 
-            TryBasicAuthentication(uri, username, passwordOrKey);
-            TryToFindSpecificCredentialType(uri, passwordOrKey);
+            //Only allow one simultaneous coroutine for now
+            if (coroutineMonoBehaviour != null)
+                Destroy(coroutineMonoBehaviour.gameObject);
+
+            var coroutineGameObject = new GameObject("KeyVaultCoroutine_TryParseAuthorizationInput");
+            coroutineMonoBehaviour = coroutineGameObject.AddComponent<KeyVaultCoroutines>();
+            coroutineMonoBehaviour.StartCoroutine(AuthorizeInput(inputUri, authorized => 
+            {
+                if (!authorized)
+                {
+                    TryBasicAuthentication(baseUri, username, passwordOrKey);
+                    TryToFindSpecificCredentialType(baseUri, passwordOrKey);
+                }
+            }));
+        }
+
+        public IEnumerator AuthorizeInput(Uri uri, Action<bool> authorizationCallback)
+        {
+            Uri baseUri = new Uri(uri.GetLeftPart(UriPartial.Path));
+            //parse key token or code van query + make new request with callback
+            var queryParameters = new NameValueCollection();
+            uri.TryParseQueryString(queryParameters);
+            string key = queryParameters.Get("key");
+            if(!string.IsNullOrEmpty(key))
+            {
+                AuthorizationType foundType = AuthorizationType.Key;
+                var tokenRequestUrl = UnityWebRequest.Get(uri);
+                yield return tokenRequestUrl.SendWebRequest();
+                if (tokenRequestUrl.result == UnityWebRequest.Result.Success)
+                {
+                    if (log) Debug.Log("Found key needed for this layer: " + uri);
+
+                    NewURLAuthorizationDetermined(baseUri, foundType, key: key);
+                    authorizationCallback?.Invoke(true);
+                    yield break;
+                }               
+            }
+            
+            string token = queryParameters.Get("token");
+            if (!string.IsNullOrEmpty(token))
+            {
+                AuthorizationType foundType = AuthorizationType.Token;
+                var tokenRequestUrl = UnityWebRequest.Get(uri);
+                yield return tokenRequestUrl.SendWebRequest();
+                if (tokenRequestUrl.result == UnityWebRequest.Result.Success)
+                {
+                    if (log) Debug.Log("Found token needed for this layer: " + uri);
+
+                    NewURLAuthorizationDetermined(baseUri, foundType, key: token);
+                    authorizationCallback?.Invoke(true);
+                    yield break;
+                }
+            }
+            string code = queryParameters.Get("code");
+            if (!string.IsNullOrEmpty(code))
+            {
+                AuthorizationType foundType = AuthorizationType.Code;
+                var tokenRequestUrl = UnityWebRequest.Get(uri);
+                yield return tokenRequestUrl.SendWebRequest();
+                if (tokenRequestUrl.result == UnityWebRequest.Result.Success)
+                {
+                    if (log) Debug.Log("Found code needed for this layer: " + uri);
+
+                    NewURLAuthorizationDetermined(baseUri, foundType, key: code);
+                    authorizationCallback?.Invoke(true);
+                    yield break;
+                }
+            }
+            authorizationCallback?.Invoke(false);
         }
 
         public AuthorizationType GetKnownAuthorizationTypeForURL(Uri uri)

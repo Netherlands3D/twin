@@ -15,12 +15,14 @@ namespace Netherlands3D.Credentials
         [SerializeField] private KeyVault keyVault;
         
         private Uri baseUri;
+        private Uri inputUri;
 
         public Uri BaseUri
         {
             get { return baseUri; }
             set
             {
+                inputUri = value;
                 baseUri = new Uri(value.GetLeftPart(UriPartial.Path));
             }
         }
@@ -41,9 +43,9 @@ namespace Netherlands3D.Credentials
 
         //called in the inspector on button press
         public void ApplyCredentials()
-        {
+        {          
             // try to get credentials from keyVault
-            keyVault.Authorize(baseUri, UserName, PasswordOrKeyOrTokenOrCode);
+            keyVault.Authorize(inputUri, UserName, PasswordOrKeyOrTokenOrCode);
         }
 
         public void ClearCredentials()
