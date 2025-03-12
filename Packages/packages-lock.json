@@ -413,13 +413,13 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.sun": {
-      "version": "1.3.0",
+      "version": "https://github.com/Netherlands3D/Sun.git#feature/time-zone-support-2",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {
         "eu.netherlands3d.coordinates": "1.1.0"
       },
-      "url": "https://package.openupm.com"
+      "hash": "59a7386b2076e0104923cc3c0f16c06fa432f4c5"
     },
     "eu.netherlands3d.tiles3d": {
       "version": "1.10.4",
