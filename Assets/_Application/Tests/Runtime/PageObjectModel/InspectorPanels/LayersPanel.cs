@@ -1,4 +1,5 @@
-﻿using Netherlands3D.E2ETesting.PageObjectModel;
+﻿using JetBrains.Annotations;
+using Netherlands3D.E2ETesting.PageObjectModel;
 using Netherlands3D.E2ETesting.UI;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
@@ -13,6 +14,7 @@ namespace Netherlands3D.Twin.Tests.PageObjectModel.InspectorPanels
         {
             public ToggleElement Visibility;
             private Element<LayerUI> LayerUiData;
+            [CanBeNull]
             private LayerData layerData;
 
             protected override void Setup()
@@ -22,7 +24,7 @@ namespace Netherlands3D.Twin.Tests.PageObjectModel.InspectorPanels
                 layerData = LayerUiData?.Value?.Layer;
             }
 
-            public override bool IsActive => base.IsActive && layerData.ActiveInHierarchy;
+            public override bool IsActive => base.IsActive && (layerData?.ActiveInHierarchy ?? false);
         }
 
         public LayerListItemElement Maaiveld { get; private set; }
