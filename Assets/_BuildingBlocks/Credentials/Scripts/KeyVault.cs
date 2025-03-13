@@ -50,6 +50,7 @@ namespace Netherlands3D.Credentials
             Uri baseUri = new Uri(inputUri.GetLeftPart(UriPartial.Path));
             if (storedAuthorizations.TryGetValue(baseUri, out var authorization))
             {
+                authorization.SetInputUri(inputUri); //we need this later on to determine the specific endpoint
                 OnAuthorizationTypeDetermined.Invoke(authorization);
                 return;
             }
@@ -73,8 +74,7 @@ namespace Netherlands3D.Credentials
 
         public IEnumerator AuthorizeInput(Uri uri, Action<bool> authorizationCallback)
         {
-            AuthorizationType foundType = AuthorizationType.FailedOrUnsupported;
-            Uri baseUri = new Uri(uri.GetLeftPart(UriPartial.Path));
+            AuthorizationType foundType = AuthorizationType.FailedOrUnsupported;            
             //parse key token or code van query + make new request with callback
             var queryParameters = new NameValueCollection();
             uri.TryParseQueryString(queryParameters);
@@ -88,7 +88,7 @@ namespace Netherlands3D.Credentials
                 {
                     if (log) Debug.Log("Found key needed for this layer: " + uri);
 
-                    NewURLAuthorizationDetermined(baseUri, foundType, key: key);
+                    NewURLAuthorizationDetermined(uri, foundType, key: key);
                     authorizationCallback?.Invoke(true);
                     yield break;
                 }               
@@ -104,7 +104,7 @@ namespace Netherlands3D.Credentials
                 {
                     if (log) Debug.Log("Found token needed for this layer: " + uri);
 
-                    NewURLAuthorizationDetermined(baseUri, foundType, key: token);
+                    NewURLAuthorizationDetermined(uri, foundType, key: token);
                     authorizationCallback?.Invoke(true);
                     yield break;
                 }
@@ -119,7 +119,7 @@ namespace Netherlands3D.Credentials
                 {
                     if (log) Debug.Log("Found code needed for this layer: " + uri);
 
-                    NewURLAuthorizationDetermined(baseUri, foundType, key: code);
+                    NewURLAuthorizationDetermined(uri, foundType, key: code);
                     authorizationCallback?.Invoke(true);
                     yield break;
                 }
@@ -167,38 +167,40 @@ namespace Netherlands3D.Credentials
         /// </summary>
         private void NewURLAuthorizationDetermined(Uri uri, AuthorizationType authorizationType, string username = "", string password = "", string key = "")
         {
-            ClearURLFromStoredAuthorizations(uri);
+            Uri baseUri = new Uri(uri.GetLeftPart(UriPartial.Path)); //we use only the root of the url as a authorization identifier
+
+            ClearURLFromStoredAuthorizations(baseUri);
 
             StoredAuthorization.StoredAuthorization auth = new FailedOrUnsupported(uri);
             switch (authorizationType)
             {
                 case AuthorizationType.Public:
                     auth = new Public(uri);
-                    storedAuthorizations.Add(uri, auth);
+                    storedAuthorizations.Add(baseUri, auth);
                     break;
                 case AuthorizationType.UsernamePassword:
                     auth = new UsernamePassword(uri, username, password);
-                    storedAuthorizations.Add(uri, auth);
+                    storedAuthorizations.Add(baseUri, auth);
                     break;
                 case AuthorizationType.InferableSingleKey:
                     auth = new InferableSingleKey(uri, key);
-                    storedAuthorizations.Add(uri, auth);
+                    storedAuthorizations.Add(baseUri, auth);
                     break;
                 case AuthorizationType.Key:
                     auth = new Key(uri, key);
-                    storedAuthorizations.Add(uri, auth);
+                    storedAuthorizations.Add(baseUri, auth);
                     break;
                 case AuthorizationType.BearerToken:
                     auth = new BearerToken(uri, key);
-                    storedAuthorizations.Add(uri, auth);
+                    storedAuthorizations.Add(baseUri, auth);
                     break;
                 case AuthorizationType.Code:
                     auth = new Code(uri, key);
-                    storedAuthorizations.Add(uri, auth);
+                    storedAuthorizations.Add(baseUri, auth);
                     break;
                 case AuthorizationType.Token:
                     auth = new Token(uri, key);
-                    storedAuthorizations.Add(uri, auth);
+                    storedAuthorizations.Add(baseUri, auth);
                     break;
                 case AuthorizationType.FailedOrUnsupported:
                     // storedAuthorizations.Add(uri, auth); // todo: do we want to store a failed authorization, or try again next time this url is passed? 

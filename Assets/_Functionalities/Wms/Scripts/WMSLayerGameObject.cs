@@ -138,7 +138,6 @@ namespace Netherlands3D.Functionalities.Wms
         {
             credentialHandler.BaseUri = urlWithoutQuery; //apply the URL from what is stored in the Project data
             WMSProjectionLayer.WmsUrl = urlWithoutQuery.ToString();
-            credentialHandler.SetTargetUrlOnSucceed(WMSProjectionLayer.WmsUrl);
             credentialHandler.ApplyCredentials();
         }
 

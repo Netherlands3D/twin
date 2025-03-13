@@ -13,7 +13,6 @@ namespace Netherlands3D.Credentials
         public StoredAuthorization.StoredAuthorization Authorization { get; set; }
         public void ApplyCredentials();
         public void ClearCredentials();
-        public void SetTargetUrlOnSucceed(string url);
 
     }
 }

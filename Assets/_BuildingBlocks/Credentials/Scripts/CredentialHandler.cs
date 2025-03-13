@@ -16,7 +16,6 @@ namespace Netherlands3D.Credentials
         
         private Uri baseUri;
         private Uri inputUri;
-        private string targetUrlOnSucceed = null;
 
         public Uri BaseUri
         {
@@ -50,11 +49,6 @@ namespace Netherlands3D.Credentials
             keyVault.Authorize(inputUri, UserName, PasswordOrKeyOrTokenOrCode);
         }
 
-        public void SetTargetUrlOnSucceed(string url)
-        {
-            targetUrlOnSucceed = url;
-        }
-
         public void ClearCredentials()
         {
             UserName = "";
@@ -76,15 +70,11 @@ namespace Netherlands3D.Credentials
             if (!auth.baseUri.Equals(BaseUri)) //ensure the returned authorization is our uri
                 return;
 
-            Authorization = auth;
-            
+            Authorization = auth;            
 
-            //we check if the authorized type is different from unknown. The keyvault webrequests can never return unknown if authorization was valid
-            var credentialUrl = auth.GetUriWithCredentials();
-            if (!string.IsNullOrEmpty(targetUrlOnSucceed))
-                credentialUrl = new Uri(targetUrlOnSucceed);
+            //we check if the authorized type is different from unknown. The keyvault webrequests can never return unknown if authorization was valid          
             if(Authorization is not FailedOrUnsupported)
-                CredentialsSucceeded?.Invoke(credentialUrl.ToString());
+                CredentialsSucceeded?.Invoke(auth.GetUriWithCredentials().ToString());
             
             OnAuthorizationHandled.Invoke(Authorization);
         }

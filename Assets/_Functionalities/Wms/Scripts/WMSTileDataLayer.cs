@@ -109,11 +109,6 @@ namespace Netherlands3D.Functionalities.Wms
             string url = wmsUrl.Replace("{0}", boundingBox.ToString());
 
             var config = new Config() { TypeOfResponseType = ExpectedTypeOfResponse.Texture(true) };
-            foreach (var header in customHeaders)
-                config.Headers.Add(header.Key, header.Value);
-            foreach(var param in customQueryParams)
-                config.Params.Add(param.Key, param.Value);
-
             var promise = Uxios.DefaultInstance.Get<Texture2D>(
                 new Uri(url), 
                 config
