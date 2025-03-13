@@ -58,6 +58,7 @@ namespace Netherlands3D.Credentials
             if (coroutineMonoBehaviour != null)
                 Destroy(coroutineMonoBehaviour.gameObject);
 
+            //lets try to to find any credentials in the given input url
             var coroutineGameObject = new GameObject("KeyVaultCoroutine_TryParseAuthorizationInput");
             coroutineMonoBehaviour = coroutineGameObject.AddComponent<KeyVaultCoroutines>();
             coroutineMonoBehaviour.StartCoroutine(AuthorizeInput(inputUri, authorized => 
@@ -72,6 +73,7 @@ namespace Netherlands3D.Credentials
 
         public IEnumerator AuthorizeInput(Uri uri, Action<bool> authorizationCallback)
         {
+            AuthorizationType foundType = AuthorizationType.FailedOrUnsupported;
             Uri baseUri = new Uri(uri.GetLeftPart(UriPartial.Path));
             //parse key token or code van query + make new request with callback
             var queryParameters = new NameValueCollection();
@@ -79,7 +81,7 @@ namespace Netherlands3D.Credentials
             string key = queryParameters.Get("key");
             if(!string.IsNullOrEmpty(key))
             {
-                AuthorizationType foundType = AuthorizationType.Key;
+                foundType = AuthorizationType.Key;
                 var tokenRequestUrl = UnityWebRequest.Get(uri);
                 yield return tokenRequestUrl.SendWebRequest();
                 if (tokenRequestUrl.result == UnityWebRequest.Result.Success)
@@ -95,7 +97,7 @@ namespace Netherlands3D.Credentials
             string token = queryParameters.Get("token");
             if (!string.IsNullOrEmpty(token))
             {
-                AuthorizationType foundType = AuthorizationType.Token;
+                foundType = AuthorizationType.Token;
                 var tokenRequestUrl = UnityWebRequest.Get(uri);
                 yield return tokenRequestUrl.SendWebRequest();
                 if (tokenRequestUrl.result == UnityWebRequest.Result.Success)
@@ -110,7 +112,7 @@ namespace Netherlands3D.Credentials
             string code = queryParameters.Get("code");
             if (!string.IsNullOrEmpty(code))
             {
-                AuthorizationType foundType = AuthorizationType.Code;
+                foundType = AuthorizationType.Code;
                 var tokenRequestUrl = UnityWebRequest.Get(uri);
                 yield return tokenRequestUrl.SendWebRequest();
                 if (tokenRequestUrl.result == UnityWebRequest.Result.Success)
@@ -122,6 +124,22 @@ namespace Netherlands3D.Credentials
                     yield break;
                 }
             }
+
+            //no key token or code is found in the input url, maybe its just public
+            foundType = AuthorizationType.Public;
+            var noCredentialsRequest = UnityWebRequest.Get(uri);
+            yield return noCredentialsRequest.SendWebRequest();
+            if (noCredentialsRequest.result == UnityWebRequest.Result.Success)
+            {
+                if (log) Debug.Log("Found no credentials needed for this layer: " + uri);
+               
+                NewURLAuthorizationDetermined(uri, foundType);
+                authorizationCallback?.Invoke(true);
+                yield break;
+            }
+
+
+            foundType = AuthorizationType.FailedOrUnsupported;
             authorizationCallback?.Invoke(false);
         }
 
