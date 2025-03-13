@@ -1,0 +1,19 @@
+{
+    "name": "eu.netherlands3d.twin.editor.layers.hierarchicalobject",
+    "rootNamespace": "",
+    "references": [
+        "GUID:62201132dbbaf094ea723182597cd288",
+        "GUID:75d2a6b2c0f38fb4c875767ef50ae072"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
