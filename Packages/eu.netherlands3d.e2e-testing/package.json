@@ -1,0 +1,11 @@
+﻿{
+  "name": "eu.netherlands3d.e2e-testing",
+  "version": "1.0.0",
+  "displayName": "Netherlands 3D - E2E Testing",
+  "description": "Netherlands3D library with utilities to help with E2E testing",
+  "unity": "2022.3",
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://netherlands3d.eu/"
+  }
+}
