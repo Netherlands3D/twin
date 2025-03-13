@@ -58,13 +58,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         [Space]
         protected LayerURLPropertyData urlPropertyData = new();
+        
         public LayerPropertyData PropertyData => urlPropertyData;
 
         private void Awake()
         {
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
         }
-        
+
         protected override void Start()
         {
             base.Start();

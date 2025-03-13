@@ -1,5 +1,8 @@
 namespace Netherlands3D.LayerStyles
 {
+    /// <summary>
+    /// https://docs.ogc.org/DRAFTS/18-067r4.html#_expressions
+    /// </summary>
     public abstract class Expression
     {
         /// <summary>
@@ -11,7 +14,6 @@ namespace Netherlands3D.LayerStyles
         /// that you "resolve" an expression.
         /// </summary>
         /// <param name="context">An object containing information on the current visualisation, dataLayer and/or feature</param>
-        /// <returns></returns>
         public abstract object Resolve(ExpressionContext context);
     }
 }

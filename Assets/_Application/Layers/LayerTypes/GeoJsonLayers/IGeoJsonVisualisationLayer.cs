@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
-    public interface IGeoJsonVisualisationLayer
+    public interface IGeoJsonVisualisationLayer : ILayerWithPropertyPanels
     {
         bool IsPolygon { get; }
         Transform Transform { get; }

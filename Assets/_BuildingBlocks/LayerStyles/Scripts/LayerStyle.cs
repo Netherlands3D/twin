@@ -7,12 +7,21 @@ namespace Netherlands3D.LayerStyles
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling", Name = "LayerStyle")]
     public class LayerStyle
     {
+        private const string DefaultRuleName = "default";
+        
         [DataMember(Name = "metadata")] public Metadata Metadata { get; } = new();
 
         [DataMember(Name = "stylingRules")] public Dictionary<string, StylingRule> StylingRules { get; } = new()
         {
-            { "default", new StylingRule("default") }
+            { DefaultRuleName, new StylingRule(DefaultRuleName) }
         };
+        
+        /// <summary>
+        /// The default rule - or the one that is applied to all features inside this layer - this stylingrule
+        /// is not expected to have any expression associated with it so that a shorthand is available to apply styling
+        /// to all elements in this style,
+        /// </summary>
+        public StylingRule AnyFeature => StylingRules[DefaultRuleName];
 
         /// <summary>
         /// Static factory method to construct a default style with.
@@ -25,7 +34,7 @@ namespace Netherlands3D.LayerStyles
         /// <returns></returns>
         public static LayerStyle CreateDefaultStyle()
         {
-            return new LayerStyle("default");
+            return new LayerStyle(DefaultRuleName);
         }
 
         /// <summary>

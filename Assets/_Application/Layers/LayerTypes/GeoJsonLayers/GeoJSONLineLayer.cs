@@ -6,6 +6,7 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -103,7 +104,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             var newFeatureVisualisation = new FeatureLineVisualisations { feature = feature };
 
-            ApplyStyling();
+            ApplyStyling(feature);
 
             if (feature.Geometry is MultiLineString multiLineString)
             {
@@ -122,12 +123,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
         }
 
-        public override void InitializeStyling()
+        public override void ApplyStyling()
         {
             lineRenderer3D.LineMaterial = GetMaterialInstance();
         }
 
-        public void ApplyStyling()
+        public void ApplyStyling(Feature feature)
         {
             // Currently we don't apply individual styling per feature
         }
@@ -193,6 +194,27 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             return bbox;
+        }
+        
+        private List<IPropertySectionInstantiator> propertySections;
+
+        protected List<IPropertySectionInstantiator> PropertySections
+        {
+            get
+            {
+                if (propertySections == null)
+                {
+                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
+                }
+
+                return propertySections;
+            }
+            set => propertySections = value;
+        }
+
+        public List<IPropertySectionInstantiator> GetPropertySections()
+        {
+            return PropertySections;
         }
     }
 }

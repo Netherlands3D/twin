@@ -1,5 +1,6 @@
-using System;
+using System.Collections.Generic;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
@@ -13,7 +14,7 @@ using UnityEditor;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public abstract class LayerGameObject : MonoBehaviour
+    public abstract class LayerGameObject : MonoBehaviour, ISupportsStyling
     {
         [SerializeField] private string prefabIdentifier;
         public string PrefabIdentifier => prefabIdentifier;
@@ -24,6 +25,8 @@ namespace Netherlands3D.Twin.Layers
             set => LayerData.Name = value;
         }
 
+        public bool HasLayerData => layerData != null;
+        
         private ReferencedLayerData layerData;
 
         public ReferencedLayerData LayerData
@@ -48,8 +51,11 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
+        Dictionary<string, LayerStyle> ISupportsStyling.Styles => LayerData.Styles;
+
         [Space] public UnityEvent onShow = new();
         public UnityEvent onHide = new();
+        private Dictionary<string, LayerStyle> styles;
 
         public abstract BoundingBox Bounds { get; }
 
@@ -85,7 +91,7 @@ namespace Netherlands3D.Twin.Layers
             layerData.LayerDoubleClicked.AddListener(CenterInView); //only subscribe to this event once the layerData component has been initialized
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 
-            InitializeStyling();
+            ApplyStyling();
         }
 
         private void CreateProxy()
@@ -96,11 +102,18 @@ namespace Netherlands3D.Twin.Layers
         protected virtual void OnEnable()
         {
             onShow.Invoke();
+            LayerData.DefaultStyle.AnyFeature.Symbolizer.PropertyChanged += OnSymbolizerPropertyChanged;
         }
 
         protected virtual void OnDisable()
         {
+            LayerData.DefaultStyle.AnyFeature.Symbolizer.PropertyChanged -= OnSymbolizerPropertyChanged;
             onHide.Invoke();
+        }
+
+        private void OnSymbolizerPropertyChanged(string key, string value)
+        {
+            ApplyStyling();
         }
 
         private void OnDestroy()
@@ -147,7 +160,7 @@ namespace Netherlands3D.Twin.Layers
             //called when the Proxy's active state changes.          
         }
 
-        public virtual void InitializeStyling()
+        public virtual void ApplyStyling()
         {
             //initialize the layer's style        
         }

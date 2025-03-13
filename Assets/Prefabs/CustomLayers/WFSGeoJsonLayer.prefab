@@ -59,10 +59,6 @@ MonoBehaviour:
     type: 3}
   pointLayerPrefab: {fileID: 3618778040791522139, guid: 267c8f33152cac142b8e40a7bdc54523,
     type: 3}
-  randomizeColorPerFeature: 1
-  OnParseError:
-    m_PersistentCalls:
-      m_Calls: []
   cartesianTileWFSLayer: {fileID: -2609350098801323660}
 --- !u!114 &-2609350098801323660
 MonoBehaviour:
