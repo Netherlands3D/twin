@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
-  CredentialsSucceeded:
+  OnCredentialsSucceeded:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3325231446690083424}
@@ -2143,7 +2143,7 @@ PrefabInstance:
     - target: {fileID: 3259352152404739228, guid: 63fccc9491de61645b43763357399bad,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 68.32
       objectReference: {fileID: 0}
     - target: {fileID: 3259352152404739228, guid: 63fccc9491de61645b43763357399bad,
         type: 3}

@@ -16,6 +16,7 @@ namespace Netherlands3D.Credentials
         
         private Uri baseUri;
         private Uri inputUri;
+        private string targetUrlOnSucceed = null;
 
         public Uri BaseUri
         {
@@ -32,7 +33,8 @@ namespace Netherlands3D.Credentials
         public StoredAuthorization.StoredAuthorization Authorization { get; set; }
         
         //needed to start for example the DataTypeChain
-        public UnityEvent<string> CredentialsSucceeded = new();
+        public UnityEvent<string> CredentialsSucceeded { get { return OnCredentialsSucceeded; } set { OnCredentialsSucceeded = value; } }
+        public UnityEvent<string> OnCredentialsSucceeded = new();
         
         //called in the inspector on end edit of url input field
         public void SetUri(string url)
@@ -46,6 +48,11 @@ namespace Netherlands3D.Credentials
         {          
             // try to get credentials from keyVault
             keyVault.Authorize(inputUri, UserName, PasswordOrKeyOrTokenOrCode);
+        }
+
+        public void SetTargetUrlOnSucceed(string url)
+        {
+            targetUrlOnSucceed = url;
         }
 
         public void ClearCredentials()
@@ -71,8 +78,11 @@ namespace Netherlands3D.Credentials
 
             Authorization = auth;
             
+
             //we check if the authorized type is different from unknown. The keyvault webrequests can never return unknown if authorization was valid
             var credentialUrl = auth.GetUriWithCredentials();
+            if (!string.IsNullOrEmpty(targetUrlOnSucceed))
+                credentialUrl = new Uri(targetUrlOnSucceed);
             if(Authorization is not FailedOrUnsupported)
                 CredentialsSucceeded?.Invoke(credentialUrl.ToString());
             

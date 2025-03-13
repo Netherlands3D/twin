@@ -13,6 +13,7 @@ using UnityEngine.Networking;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.DataTypeAdapters;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -51,6 +52,11 @@ namespace Netherlands3D.Functionalities.Wms
 
             credentialHandler = GetComponent<ICredentialHandler>();
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+
+            //we need to resolve the listener to the datatypechain because this is a prefab and it doesnt know about whats present in the scene
+            DataTypeChain chain = FindObjectOfType<DataTypeChain>();
+            if(chain != null) 
+                credentialHandler.CredentialsSucceeded.AddListener(chain.DetermineAdapter);
 
             LayerData.LayerSelected.AddListener(OnSelectLayer);
             LayerData.LayerDeselected.AddListener(OnDeselectLayer);
@@ -132,6 +138,7 @@ namespace Netherlands3D.Functionalities.Wms
         {
             credentialHandler.BaseUri = urlWithoutQuery; //apply the URL from what is stored in the Project data
             WMSProjectionLayer.WmsUrl = urlWithoutQuery.ToString();
+            credentialHandler.SetTargetUrlOnSucceed(WMSProjectionLayer.WmsUrl);
             credentialHandler.ApplyCredentials();
         }
 
