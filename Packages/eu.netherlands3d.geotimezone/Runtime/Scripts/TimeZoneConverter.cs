@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
@@ -28,8 +30,13 @@ namespace GeoTimeZone
 
         static TimeZoneConverter()
         {
-            var tzData = Resources.Load<TextAsset>("iana-tz-data");
-            timeZoneData = JObject.Parse(tzData.text);
+            var compressedData = Resources.Load<TextAsset>("iana-tz-data.json.gz"); //The Time zone data is stored as GZ files, but since Unity's Resources.Load cannot recognize these, a .txt extension is added as a workaround.
+            using var compressedStream = new MemoryStream(compressedData.bytes);
+
+            using var stream = new GZipStream(compressedStream!, CompressionMode.Decompress);
+            using var reader = new StreamReader(stream);
+            
+            timeZoneData = JObject.Parse(reader.ReadToEnd());
         }
 
         public static DateTime ConvertToUTC(DateTime localTime, string localTimeZone)
