@@ -1,12 +1,20 @@
-TimeZoneConverter
-Copyright (c) 2017 Matt Johnson-Pint
-https://github.com/mattjohnsonpint/TimeZoneConverter
+GeoTimeZone
+Copyright (c) 2014 Matt Johnson-Pint & Simon Bartlett
+https://github.com/mattjohnsonpint/GeoTimeZone
 
 While we certainly hope this software is useful, none of the authors or
 contributors place any guarantees as to the accuracy of the data or the
-results returned by using this library.
+results returned by querying it using this library.
 
-This library is distributed under the terms of the MIT License:
+Contains code from Geohash-net
+Copyright (c) 2011 Sharon Lourduraj
+https://github.com/sharonjl/geohash-net
+
+Geohash-net is a port of Geohash-js
+Copyright (c) 2008 David Troy
+https://github.com/davetroy/geohash-js
+
+GeoTimeZone, Geohash-net and Geohash-js are distributed under the MIT License:
 
 -----------------------------------------------------------------------------
 The MIT License (MIT)
@@ -28,3 +36,10 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -----------------------------------------------------------------------------
+
+Time zone boundary data is sourced from Open Street Map (OSM), and correlated via
+the Time Zone Boundary Builder, by Evan Siroky.
+https://github.com/evansiroky/timezone-boundary-builder
+
+The data is licensed under the Open Data Commons Open Database License (ODbL).
+http://opendatacommons.org/licenses/odbl/
