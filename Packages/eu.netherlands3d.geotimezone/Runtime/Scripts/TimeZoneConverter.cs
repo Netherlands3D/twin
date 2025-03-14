@@ -43,7 +43,6 @@ namespace GeoTimeZone
         {
             if (localTimeZone != currentTimeZoneId)
             {
-                Debug.Log("getting time zone: " + localTimeZone);
                 currentTimeZoneInfo = GetZoneInfo(localTimeZone);
             }
 
@@ -53,7 +52,6 @@ namespace GeoTimeZone
             }
 
             var offset = GetUTCOffset(localTime, currentTimeZoneInfo);
-            Debug.Log("time offset: " + offset);
             return localTime + offset;
         }
 
