@@ -166,9 +166,7 @@ namespace GeoTimeZone
 
         private static IList<string> LoadLookupData()
         {
-            // var assembly = typeof(TimeZoneLookup).Assembly;
-            // using var compressedStream = assembly.GetManifestResourceStream("GeoTimeZone.TZL.dat.gz");
-            var compressedData = Resources.Load<TextAsset>("TZL.dat.gz");
+            var compressedData = Resources.Load<TextAsset>("TZL.dat.gz"); //The Time zone data is stored as GZ files, but since Unity's Resources.Load cannot recognize these, a .txt extension is added as a workaround.
             using var compressedStream = new MemoryStream(compressedData.bytes);
 
             using var stream = new GZipStream(compressedStream!, CompressionMode.Decompress);

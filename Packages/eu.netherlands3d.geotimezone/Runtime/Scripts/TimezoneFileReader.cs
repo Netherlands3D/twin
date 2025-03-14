@@ -14,25 +14,10 @@ namespace GeoTimeZone
         private static readonly Lazy<MemoryStream> LazyData = new(LoadData);
         private static readonly Lazy<int> LazyCount = new(GetCount);
 
-        // private static MemoryStream LoadData()
-        // {
-        //     var rawData = Resources.Load<TextAsset>("TZ");
-        //     // var compressedData = Resources.Load<TextAsset>("TZ.dat");
-        //     // using var compressedStream = new MemoryStream(compressedData.bytes);
-        //     
-        //     // var assembly = typeof(TimezoneFileReader).Assembly;
-        //     // using var compressedStream = assembly.GetManifestResourceStream("GeoTimeZone.TZ.dat.gz");
-        //     // using var stream = new GZipStream(compressedStream!, CompressionMode.Decompress);
-        //     var ms = new StreamReader();
-        //     stream.CopyTo(ms);
-        //     ms.Seek(0, SeekOrigin.Begin);
-        //     return ms;
-        // }
-        //
         private static MemoryStream LoadData()
         {
             // Load the compressed file from Unity's Resources
-            var compressedData = Resources.Load<TextAsset>("TZ.dat.gz");
+            var compressedData = Resources.Load<TextAsset>("TZ.dat.gz"); //The Time zone data is stored as GZ files, but since Unity's Resources.Load cannot recognize these, a .txt extension is added as a workaround.
 
             using var compressedStream = new MemoryStream(compressedData.bytes);
             using var stream = new GZipStream(compressedStream, CompressionMode.Decompress);

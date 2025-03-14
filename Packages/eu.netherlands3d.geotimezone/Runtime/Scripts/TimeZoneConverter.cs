@@ -120,33 +120,5 @@ namespace GeoTimeZone
 
             throw new InvalidOperationException("Unable to determine the time zone offset.");
         }
-
-        // private static int GetUTCOffset(DateTime localTime, JToken zoneInfo)
-        // {
-        //     Debug.Log(zoneInfo);
-        //     
-        //     var abbrs = zoneInfo["abbrs"].ToObject<List<string>>();
-        //     var untils = zoneInfo["untils"].ToObject<List<long?>>();
-        //     var offsets = zoneInfo["offsets"].ToObject<List<double>>();
-        //     var isdsts = zoneInfo["isdsts"].ToObject<List<int>>();
-        //
-        //     for (int i = 0; i < untils.Count; i++)
-        //     {
-        //         if (untils[i].HasValue && localTime.Ticks < untils[i].Value)
-        //         {
-        //             continue;
-        //         }
-        //
-        //         var offset = offsets[i];
-        //         if (isdsts[i] == 1)
-        //         {
-        //             offset += 60; // Add 1 hour for DST
-        //         }
-        //
-        //         return (int)offset;
-        //     }
-        //
-        //     throw new ArgumentException("Unable to determine UTC offset");
-        // }
     }
 }
