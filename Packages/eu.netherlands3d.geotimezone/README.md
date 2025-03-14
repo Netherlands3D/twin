@@ -28,6 +28,8 @@ This library uses the time zone border definitions from the [Timezone Boundary B
 which in-turn derive from [Open Street Map][2].  As some international borders are the subject of dispute,
 the results may or may not align with your worldview.  Use at your own risk.
 
+The Time zone data is stored as GZ files, but since Unity's Resources.Load cannot recognize these, a .txt extension is added as a workaround.
+
 ## Acknowledgements
 
 Huge thank you to the following people:
