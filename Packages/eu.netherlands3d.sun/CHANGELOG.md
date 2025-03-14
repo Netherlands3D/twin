@@ -5,6 +5,11 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2023-03-14
+
+### Added
+- Added Support for time zones and local time. To convert the time to UTC for proper calculation of the sun position. This replaces the built in ToUniversalTime function since it did not work correctly in WebGL. The time zones of the GeoTimeZone package are read form a local table of information which is valid for historical data from 1916 to 2019, and has assumed correct data from 2019 until 2037 (this period can possibli no longer be valid if a country changes its time zone or DST).
+
 ## [1.3.0] - 2023-09-03
 
 ### Added
