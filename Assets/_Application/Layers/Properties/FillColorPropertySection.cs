@@ -34,6 +34,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void OnPickedColor(Color color)
         {
             layer.LayerData.DefaultStyle.AnyFeature.Symbolizer.SetFillColor(color);
+            layer.ApplyStyling();
         }
     }
 }

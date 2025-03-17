@@ -1,12 +1,15 @@
 using System.Runtime.Serialization;
+using Netherlands3D.Twin.Layers;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Netherlands3D.LayerStyles
 {
     /// <summary>
     /// A Styling Rule is a set of styling instructions -symbology- that happens when a given Selector is matched.
     ///
-    /// A matching analogy is a styling block in CSS, for example:
+    /// A matching analogy is a style rule in CSS (see https://drafts.csswg.org/cssom/#the-cssstylerule-interface),
+    /// for example:
     /// 
     /// ```css
     /// .className .childElementClassName {
@@ -63,6 +66,14 @@ namespace Netherlands3D.LayerStyles
         {
             Name = name;
             Selector = selector;
+        }
+        
+        public Symbolizer CollectSymbologyFor<T>(Symbolizer symbolizer, LayerFeature<T> feature) where T : Component
+        {
+            // if the rule's selector does not match the given attributes - then this symbology does not apply
+            if (Selector.Resolve(feature.Attributes) is false or null) return symbolizer;
+                
+            return Symbolizer.Merge(symbolizer, Symbolizer);
         }
     }
 }

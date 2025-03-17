@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
@@ -232,6 +232,40 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
             objectLayerGameObject.LayerData.DestroyLayer();
             return scatterLayer;
+        }
+
+        public override void ApplyStyling()
+        {
+            var features = GetFeatures<MeshRenderer>();
+
+            // TODO: How will this hold up when dealing with 1000's of features?
+            foreach (var feature in features)
+            {
+                ApplyStyling(feature);
+            }
+        }
+
+        private void ApplyStyling(LayerFeature<MeshRenderer> feature)
+        {
+            var symbolizer = GetSymbologyForFeature(feature);
+
+            foreach (var material in feature.Component.materials)
+            {
+                var fillColor = symbolizer.GetFillColor();
+                if (fillColor.HasValue) material.color = fillColor.Value;
+            }
+        }
+
+        protected override LayerFeature<T> CreateFeature<T>(T component)
+        {
+            var feature = base.CreateFeature(component);
+
+            if (component is not MeshRenderer meshRenderer) return feature;
+
+            var materialNames = meshRenderer.materials.Select(material => material.name);
+            feature.Attributes.Add("materials", string.Join(',', materialNames));
+
+            return feature;
         }
     }
 }

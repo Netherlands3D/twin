@@ -102,12 +102,10 @@ namespace Netherlands3D.Twin.Layers
         protected virtual void OnEnable()
         {
             onShow.Invoke();
-            LayerData.DefaultStyle.AnyFeature.Symbolizer.PropertyChanged += OnSymbolizerPropertyChanged;
         }
 
         protected virtual void OnDisable()
         {
-            LayerData.DefaultStyle.AnyFeature.Symbolizer.PropertyChanged -= OnSymbolizerPropertyChanged;
             onHide.Invoke();
         }
 
@@ -181,5 +179,54 @@ namespace Netherlands3D.Twin.Layers
             //move the camera to the center of the bounds, and move it back by the size of the bounds (2x the extents)
             Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(Bounds.Center, Bounds.GetSizeMagnitude());//sizeMagnitude returns 2x the extents
         }
+
+        
+#region Features
+        public virtual List<LayerFeature<T>> GetFeatures<T>() where T : Component
+        {
+            List<LayerFeature<T>> features = new();
+
+            // By default, consider each Unity.Component of type T as a "Feature" and create an ExpressionContext to
+            // select the correct styling Rule to apply to the given "Feature". 
+            var components = GetComponentsInChildren<T>();
+            
+            foreach (var component in components)
+            {
+                var feature = CreateFeature(component);
+                features.Add(feature);
+            }
+
+            return features;
+        }
+
+        /// <summary>
+        /// Create a Feature object from the given Component of type T, this method is meant as an extension point
+        /// for LayerGameObjects to add more information to the Attribute (ExpressionContext) of the given Feature.
+        ///
+        /// For example: to be able to match on material names.
+        /// </summary>
+        protected virtual LayerFeature<T> CreateFeature<T>(T component) where T : Component
+        {
+            return new LayerFeature<T>(
+                component, 
+                new ExpressionContext
+                {
+                    { "nl3d_layer_id", LayerData.Id.ToString() },
+                    { "nl3d_layer_name", LayerData.Name }
+                }
+            );
+        }
+
+        protected Symbolizer GetSymbologyForFeature(LayerFeature<MeshRenderer> feature)
+        {
+            var symbolizer = new Symbolizer();
+            foreach (var style in LayerData.Styles)
+            {
+                symbolizer = style.Value.CollectSymbologyFor(symbolizer, feature);
+            }
+
+            return symbolizer;
+        }
+#endregion
     }
 }
