@@ -122,7 +122,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        public void ClearCredentials()
+        public virtual void ClearCredentials()
         {
             ClearCustomHeaders();
             ClearCustomQueryParameters();
