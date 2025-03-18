@@ -50,7 +50,10 @@ namespace Netherlands3D.Functionalities.Wms
         public void ClearTexture()
         {
             if (texture)
+            {
                 Destroy(texture);
+                texture = null;
+            }
         }
 
         public void OnDestroy()
