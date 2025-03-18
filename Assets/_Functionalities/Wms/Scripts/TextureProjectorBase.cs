@@ -40,13 +40,14 @@ namespace Netherlands3D.Functionalities.Wms
         public virtual void SetTexture(Texture2D texture)
         {
             //Always start by clearing previous texture from memory
-            if (this.texture) Destroy(this.texture);
+            ClearTexture();
+            this.texture = texture;
         }
 
         /// <summary>
         /// Clear current projector texture from memory
         /// </summary>
-        public virtual void ClearTexture()
+        public void ClearTexture()
         {
             if (texture)
                 Destroy(texture);
@@ -55,7 +56,7 @@ namespace Netherlands3D.Functionalities.Wms
         public void OnDestroy()
         {
             ClearTexture();
-
+            
             if (materialInstance)
                 Destroy(materialInstance);
         }
