@@ -24,7 +24,7 @@ namespace Netherlands3D.CartesianTiles
         public string brotliCompressedExtention = ".br";
         
         private GameObject container;
-        private Mesh mesh;
+        
         private MeshRenderer meshRenderer;
 
         [System.Obsolete("This field is obsolete, use the CreateMeshColliders property instead.")]
@@ -53,7 +53,10 @@ namespace Netherlands3D.CartesianTiles
                     callback?.Invoke(tileChange);
                     return;
             }
-            tiles[tileKey].runningCoroutine = StartCoroutine(DownloadBinaryMesh(tileChange, callback));
+            if (action != TileAction.Remove)
+            {
+                tiles[tileKey].runningCoroutine = StartCoroutine(DownloadBinaryMesh(tileChange, callback));
+            }
         }
 
         private Tile CreateNewTile(Vector2Int tileKey)
@@ -71,16 +74,23 @@ namespace Netherlands3D.CartesianTiles
             if (!tiles.TryGetValue(tileKey, out var tile)) return;
 
             var tileGameObject = tile.gameObject;
-            if (!tileGameObject) return;
+            if (tileGameObject==null) return;
             
             RemoveGameObject(tileGameObject);
         }
 
         private static void RemoveGameObject(GameObject tileGameObject)
         {
-            MeshFilter mf = tileGameObject.GetComponent<MeshFilter>();
-            if (mf) {
-                Destroy(mf.sharedMesh);
+            MeshFilter[] meshFilters = tileGameObject.GetComponentsInChildren<MeshFilter>();
+            foreach (var meshFilter in meshFilters)
+            {
+                if (meshFilter.sharedMesh != null)
+                {
+                    Mesh sharedmesh = meshFilter.sharedMesh;
+                    meshFilter.sharedMesh.Clear();
+                    //DestroyImmediate(sharedmesh,true);
+                    Destroy(sharedmesh);
+                }
             }
             Destroy(tileGameObject);
         }
@@ -238,14 +248,14 @@ namespace Netherlands3D.CartesianTiles
 
             container.SetActive(isEnabled);
 
-            mesh = BinaryMeshConversion.ReadBinaryMesh(binaryMeshData, out int[] submeshIndices);
+            Mesh mesh = BinaryMeshConversion.ReadBinaryMesh(binaryMeshData, out int[] submeshIndices);
 
 #if !UNITY_EDITOR && UNITY_WEBGL
 		    if(brotliCompressedExtention.Length>0 && source.EndsWith(brotliCompressedExtention))
 				source = source.Replace(brotliCompressedExtention,"");
 #endif
             mesh.name = source;
-            container.AddComponent<MeshFilter>().sharedMesh = mesh;
+            container.AddComponent<MeshFilter>().mesh = mesh;
 
             container.transform.parent = transform.gameObject.transform; //set parent after adding meshFilter to not cause SubObjects to give a missing component exception
             container.layer = container.transform.parent.gameObject.layer;
