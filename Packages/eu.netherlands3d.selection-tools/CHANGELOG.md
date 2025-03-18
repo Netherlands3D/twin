@@ -5,6 +5,17 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.7.0]
+
+### Fixed
+
+* Cleaned up meshes after destroying the object to fix memory leaks.
+
+### Added
+
+* Added properties to allow direct access to the mesh and material reference to avoid accidentally duplicating the data
+
+
 ## [2.6.1]
 
 ### Fixed
