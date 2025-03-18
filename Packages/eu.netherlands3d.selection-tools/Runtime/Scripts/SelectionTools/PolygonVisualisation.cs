@@ -10,17 +10,14 @@ namespace Netherlands3D.SelectionTools
         private List<List<Vector3>> polygons;
         public List<List<Vector3>> Polygons => polygons; //todo make read only
 
-        [Header("Events")]
+        [Header("Events")] 
         public UnityEvent<PolygonVisualisation> reselectVisualisedPolygon = new UnityEvent<PolygonVisualisation>();
 
-        [SerializeField]
-        private bool drawMesh = true;
+        [SerializeField] private bool drawMesh = true;
+
         public bool DrawMesh
         {
-            get
-            {
-                return drawMesh;
-            }
+            get { return drawMesh; }
             set
             {
                 drawMesh = value;
@@ -33,14 +30,11 @@ namespace Netherlands3D.SelectionTools
         private bool createInwardMesh;
         private Vector2 uvCoordinate;
 
-        [SerializeField]
-        private bool activeCollider = true;
+        [SerializeField] private bool activeCollider = true;
+
         public bool ActiveCollider
         {
-            get
-            {
-                return activeCollider;
-            }
+            get { return activeCollider; }
             set
             {
                 activeCollider = value;
@@ -49,31 +43,42 @@ namespace Netherlands3D.SelectionTools
         }
 
         private List<LineRenderer> lineRenderers = new List<LineRenderer>();
-        [SerializeField]
-        private bool drawLine = true;
+        [SerializeField] private bool drawLine = true;
+
         public bool DrawLine
         {
-            get
-            {
-                return drawLine;
-            }
+            get { return drawLine; }
             set
             {
                 drawLine = value;
                 EnableLineRenderers(value);
             }
         }
+
         private Material lineMaterial;
         private Color lineColor;
+        public Mesh PolygonMesh { get; private set; }
+        private Renderer renderer;
 
+        public Material VisualisationMaterial
+        {
+            get => renderer.material;
+            set => renderer.material = value;
+        }
+        
 #if UNITY_EDITOR
-        private void OnValidate()
+            private void OnValidate()
         {
             EnableLineRenderers(drawLine);
             EnableMeshRenderers(drawMesh);
             EnableColliders(activeCollider);
         }
 #endif
+
+        private void Awake()
+        {
+            renderer = GetComponent<Renderer>();
+        }
 
         /// <summary>
         /// Sets a reference of the polygon to be visualised
@@ -125,12 +130,16 @@ namespace Netherlands3D.SelectionTools
                 }
             }
 
-            var mesh = PolygonVisualisationUtility.CreatePolygonMesh(polygons, extrusionHeight, addBottom, uvCoordinate);
-            GetComponent<MeshFilter>().mesh = mesh;
+            DestroyPolygonMesh(); //cleanup to avoid memory leaks
+
+            PolygonMesh = PolygonVisualisationUtility.CreatePolygonMesh(polygons, extrusionHeight, addBottom, uvCoordinate);
+            var meshFilter = GetComponent<MeshFilter>();
+
+            meshFilter.sharedMesh = PolygonMesh;
 
             var mc = GetComponent<MeshCollider>();
             if (mc)
-                mc.sharedMesh = mesh;
+                mc.sharedMesh = PolygonMesh;
 
             UpdateLineRenderers();
 
@@ -150,6 +159,7 @@ namespace Netherlands3D.SelectionTools
             {
                 Destroy(lineRenderers[i].gameObject);
             }
+
             lineRenderers = new List<LineRenderer>();
         }
 
@@ -173,6 +183,21 @@ namespace Netherlands3D.SelectionTools
                 mc.enabled = value;
             else
                 Debug.LogWarning("This PolygonVisualisation has to collider to enable/disable", gameObject);
+        }
+        
+        private void DestroyPolygonMesh()
+        {
+            if (PolygonMesh)
+            {
+                Destroy(PolygonMesh);
+                PolygonMesh = null;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            DestroyPolygonMesh();
+            // VisualisationMaterial is global (for now), so they don't have to be destroyed here
         }
     }
 }
