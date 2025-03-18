@@ -1,4 +1,5 @@
 using System.Runtime.Serialization;
+using Netherlands3D.LayerStyles.Expressions;
 using Netherlands3D.Twin.Layers;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -68,7 +69,7 @@ namespace Netherlands3D.LayerStyles
             Selector = selector;
         }
         
-        public Symbolizer CollectSymbologyFor<T>(Symbolizer symbolizer, LayerFeature<T> feature) where T : Component
+        public Symbolizer ResolveSymbologyForFeature(Symbolizer symbolizer, LayerFeature feature)
         {
             // if the rule's selector does not match the given attributes - then this symbology does not apply
             if (Selector.Resolve(feature.Attributes) is false or null) return symbolizer;

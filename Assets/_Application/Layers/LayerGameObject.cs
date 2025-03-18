@@ -109,11 +109,6 @@ namespace Netherlands3D.Twin.Layers
             onHide.Invoke();
         }
 
-        private void OnSymbolizerPropertyChanged(string key, string value)
-        {
-            ApplyStyling();
-        }
-
         private void OnDestroy()
         {
             //don't unsubscribe in OnDisable, because we still want to be able to center to a 
@@ -158,11 +153,6 @@ namespace Netherlands3D.Twin.Layers
             //called when the Proxy's active state changes.          
         }
 
-        public virtual void ApplyStyling()
-        {
-            //initialize the layer's style        
-        }
-
         public void CenterInView(LayerData layer)
         {
             if (Bounds == null)
@@ -180,53 +170,55 @@ namespace Netherlands3D.Twin.Layers
             Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(Bounds.Center, Bounds.GetSizeMagnitude());//sizeMagnitude returns 2x the extents
         }
 
-        
-#region Features
-        public virtual List<LayerFeature<T>> GetFeatures<T>() where T : Component
+#region Styling
+        protected Symbolizer GetStyling(LayerFeature feature)
         {
-            List<LayerFeature<T>> features = new();
+            var symbolizer = new Symbolizer();
+            foreach (var style in LayerData.Styles)
+            {
+                symbolizer = style.Value.ResolveSymbologyForFeature(symbolizer, feature);
+            }
 
+            return symbolizer;
+        }
+
+        public virtual void ApplyStyling()
+        {
+            //initialize the layer's style        
+        }
+#endregion
+
+#region Features
+        public List<LayerFeature> GetFeatures<T>() where T : Component
+        {
             // By default, consider each Unity.Component of type T as a "Feature" and create an ExpressionContext to
             // select the correct styling Rule to apply to the given "Feature". 
             var components = GetComponentsInChildren<T>();
             
+            List<LayerFeature> features = new();
             foreach (var component in components)
             {
-                var feature = CreateFeature(component);
-                features.Add(feature);
+                features.Add(CreateFeature(component));
             }
 
             return features;
         }
 
         /// <summary>
-        /// Create a Feature object from the given Component of type T, this method is meant as an extension point
+        /// Create a Feature object from the given Component, this method is meant as an extension point
         /// for LayerGameObjects to add more information to the Attribute (ExpressionContext) of the given Feature.
         ///
-        /// For example: to be able to match on material names.
+        /// For example: to be able to match on material names you need to include the material names in the attributes.
         /// </summary>
-        protected virtual LayerFeature<T> CreateFeature<T>(T component) where T : Component
+        protected LayerFeature CreateFeature(Component component)
         {
-            return new LayerFeature<T>(
-                component, 
-                new ExpressionContext
-                {
-                    { "nl3d_layer_id", LayerData.Id.ToString() },
-                    { "nl3d_layer_name", LayerData.Name }
-                }
-            );
+            return AddAttributesToLayerFeature(LayerFeature.Create(this, component));
         }
 
-        protected Symbolizer GetSymbologyForFeature(LayerFeature<MeshRenderer> feature)
+        protected virtual LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
         {
-            var symbolizer = new Symbolizer();
-            foreach (var style in LayerData.Styles)
-            {
-                symbolizer = style.Value.CollectSymbologyFor(symbolizer, feature);
-            }
-
-            return symbolizer;
+            return feature;
         }
-#endregion
+        #endregion
     }
 }

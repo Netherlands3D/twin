@@ -245,25 +245,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
         }
 
-        private void ApplyStyling(LayerFeature<MeshRenderer> feature)
+        private void ApplyStyling(LayerFeature feature)
         {
-            var symbolizer = GetSymbologyForFeature(feature);
+            if (feature.Component is not MeshRenderer meshRenderer) return;
 
-            foreach (var material in feature.Component.materials)
+            var symbolizer = GetStyling(feature);
+            foreach (var material in meshRenderer.materials)
             {
                 var fillColor = symbolizer.GetFillColor();
+
+                // Keep the original material color if fill color is not set (null)
                 if (fillColor.HasValue) material.color = fillColor.Value;
             }
         }
 
-        protected override LayerFeature<T> CreateFeature<T>(T component)
+        protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
         {
-            var feature = base.CreateFeature(component);
+            if (feature.Component is not MeshRenderer meshRenderer) return feature;
 
-            if (component is not MeshRenderer meshRenderer) return feature;
-
-            var materialNames = meshRenderer.materials.Select(material => material.name);
-            feature.Attributes.Add("materials", string.Join(',', materialNames));
+            feature.Attributes.Add("materials", meshRenderer.materials.Select(material => material.name));
 
             return feature;
         }

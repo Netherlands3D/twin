@@ -62,11 +62,11 @@ namespace Netherlands3D.LayerStyles
         /// pre-creating it in the caller we can achieve immutability with just one instantiation.
         /// </summary>
         /// <returns></returns>
-        public Symbolizer CollectSymbologyFor<T>(Symbolizer symbolizer, LayerFeature<T> feature) where T : Component
+        public Symbolizer ResolveSymbologyForFeature(Symbolizer symbolizer, LayerFeature feature)
         {
             foreach (var rule in StylingRules)
             {
-                symbolizer = rule.Value.CollectSymbologyFor(symbolizer, feature);
+                symbolizer = rule.Value.ResolveSymbologyForFeature(symbolizer, feature);
             }
             
             return symbolizer;

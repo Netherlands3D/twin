@@ -8,7 +8,7 @@ namespace Netherlands3D.Twin.Layers.Properties
     {
         private LayerGameObject layer;
         
-        [SerializeField] private Color defaultColor = Color.gray;
+        [SerializeField] private Color defaultColor = Color.white;
         [SerializeField] private ColorWheel colorPicker;
         
         public override LayerGameObject LayerGameObject
