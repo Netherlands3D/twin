@@ -125,7 +125,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
-            Debug.Log("Applying styling");
             pointRenderer3D.Material = GetMaterialInstance();
         }
 
@@ -136,14 +135,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private Material GetMaterialInstance()
         {
-            var materialInstance = new Material(pointRenderer3D.Material)
+            return new Material(pointRenderer3D.Material)
             {
                 color = LayerData.DefaultSymbolizer?.GetFillColor() ?? Color.white
             };
-            
-            Debug.Log("Material color: " + materialInstance.GetColor("_Color"));
-
-            return materialInstance;
         }
 
         /// <summary>

@@ -237,8 +237,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void ApplyStyling()
         {
             var features = GetFeatures<MeshRenderer>();
-
-            // TODO: How will this hold up when dealing with 1000's of features?
             foreach (var feature in features)
             {
                 ApplyStyling(feature);
