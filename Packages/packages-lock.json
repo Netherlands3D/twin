@@ -293,7 +293,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.cartesiantiles": {
-      "version": "1.1.3",
+      "version": "1.1.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -348,6 +348,13 @@
         "com.virgis.geojson.net": "1.2.17",
         "eu.netherlands3d.coordinates": "1.1.0"
       },
+      "url": "https://package.openupm.com"
+    },
+    "eu.netherlands3d.geotimezone": {
+      "version": "1.1.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.gltfast": {
@@ -456,11 +463,12 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.sun": {
-      "version": "1.3.0",
+      "version": "1.4.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "eu.netherlands3d.coordinates": "1.1.0"
+        "eu.netherlands3d.coordinates": "1.1.0",
+        "eu.netherlands3d.geotimezone": "1.1.0"
       },
       "url": "https://package.openupm.com"
     },
