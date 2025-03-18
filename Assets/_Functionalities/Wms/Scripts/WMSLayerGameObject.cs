@@ -9,8 +9,6 @@ using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Networking;
-using Netherlands3D.Twin.Layers.LayerTypes.Credentials;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.DataTypeAdapters;
@@ -53,7 +51,7 @@ namespace Netherlands3D.Functionalities.Wms
             credentialHandler = GetComponent<ICredentialHandler>();
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
 
-            //we need to resolve the listener to the datatypechain because this is a prefab and it doesnt know about whats present in the scene
+            //we need to resolve the listener to the datatypechain because this is a prefab and it doesnt know about what is present in the scene
             DataTypeChain chain = FindObjectOfType<DataTypeChain>();
             if(chain != null) 
                 credentialHandler.CredentialsSucceeded.AddListener(chain.DetermineAdapter);

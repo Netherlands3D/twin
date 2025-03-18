@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8363319932289052987}
   - component: {fileID: 5593278776292583182}
   - component: {fileID: -2609350098801323660}
+  - component: {fileID: 2555668832052529068}
+  - component: {fileID: 3667126051570850181}
   m_Layer: 0
   m_Name: WFSGeoJsonLayer
   m_TagString: Untagged
@@ -59,10 +61,6 @@ MonoBehaviour:
     type: 3}
   pointLayerPrefab: {fileID: 3618778040791522139, guid: 267c8f33152cac142b8e40a7bdc54523,
     type: 3}
-  randomizeColorPerFeature: 1
-  OnParseError:
-    m_PersistentCalls:
-      m_Calls: []
   cartesianTileWFSLayer: {fileID: -2609350098801323660}
 --- !u!114 &-2609350098801323660
 MonoBehaviour:
@@ -85,5 +83,35 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onLayerDisabled:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2555668832052529068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418701555395206593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 217db7c8cb91f974daf1e7f820fb6a30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputPropertySectionPrefab: {fileID: 7185160580400989932, guid: f241bd5b609aa4447ae89fb4325470ef,
+    type: 3}
+--- !u!114 &3667126051570850181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418701555395206593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
+  OnCredentialsSucceeded:
     m_PersistentCalls:
       m_Calls: []

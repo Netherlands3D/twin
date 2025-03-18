@@ -11,6 +11,9 @@ using System.Linq;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.Credentials;
+using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Credentials.StoredAuthorization;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
@@ -60,9 +63,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         protected LayerURLPropertyData urlPropertyData = new();
         public LayerPropertyData PropertyData => urlPropertyData;
 
+        private ICredentialHandler credentialHandler;
+        private Dictionary<string, string> customHeaders = new Dictionary<string, string>();
+        public Dictionary<string, string> CustomHeaders { get => customHeaders; private set => customHeaders = value; }
+        private Dictionary<string, string> customQueryParams = new Dictionary<string, string>();
+        public Dictionary<string, string> CustomQueryParameters { get => customQueryParams; private set => customQueryParams = value; }
+
         private void Awake()
         {
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
+
+            credentialHandler = GetComponent<ICredentialHandler>();
+            credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+
+            //we need to resolve the listener to the datatypechain because this is a prefab and it doesnt know about what is present in the scene
+            DataTypeChain chain = FindObjectOfType<DataTypeChain>();
+            if (chain != null)
+                credentialHandler.CredentialsSucceeded.AddListener(chain.DetermineAdapter);
         }
         
         protected override void Start()
@@ -82,6 +99,62 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 StartCoroutine(parser.ParseGeoJSONStreamRemote(urlPropertyData.Data));
             }
+        }
+
+        private void HandleCredentials(StoredAuthorization auth)
+        {
+            ClearCredentials();
+
+            if (auth is BearerToken bearerToken) //todo: moet BearerToken inheriten van InferableSingle key of niet?
+            {
+                AddCustomHeader("Authorization", "Bearer " + bearerToken.key);
+                StartLoadingData();
+            }
+            else if (auth is InferableSingleKey inferableSingleKey)
+            {
+                AddCustomQueryParameter(inferableSingleKey.queryKeyName, inferableSingleKey.key);
+                StartLoadingData();
+            }
+            else if (auth is UsernamePassword usernamePassword)
+            {
+                AddCustomHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(usernamePassword.username + ":" + usernamePassword.password)), true);
+                StartLoadingData();
+            }
+        }
+
+        public void ClearCredentials()
+        {
+            ClearCustomHeaders();
+            ClearCustomQueryParameters();
+        }
+
+        /// <summary>
+        /// Add custom headers for all internal WebRequests
+        /// </summary>
+        public void AddCustomHeader(string key, string value, bool replace = true)
+        {
+            if (replace && customHeaders.ContainsKey(key))
+                customHeaders[key] = value;
+            else
+                customHeaders.Add(key, value);
+        }
+
+        public void ClearCustomHeaders()
+        {
+            customHeaders.Clear();
+        }
+
+        public void AddCustomQueryParameter(string key, string value, bool replace = true)
+        {
+            if (replace && customQueryParams.ContainsKey(key))
+                customQueryParams[key] = value;
+            else
+                customQueryParams.Add(key, value);
+        }
+
+        public void ClearCustomQueryParameters()
+        {
+            customQueryParams.Clear();
         }
 
         private void OnDestroy()
@@ -105,7 +178,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             if (urlProperty != null)
             {
                 this.urlPropertyData = urlProperty;
+                UpdateURL(urlPropertyData.Data);
             }
+        }
+
+        private void UpdateURL(Uri urlWithoutQuery)
+        {
+            credentialHandler.BaseUri = urlWithoutQuery; //apply the URL from what is stored in the Project data
+            //WMSProjectionLayer.WmsUrl = urlWithoutQuery.ToString();
+            credentialHandler.ApplyCredentials();
         }
 
         /// <summary>
