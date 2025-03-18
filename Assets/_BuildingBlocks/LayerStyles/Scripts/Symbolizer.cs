@@ -19,8 +19,6 @@ namespace Netherlands3D.LayerStyles
         [DataMember(Name = "properties")] 
         private Dictionary<string, string> properties = new();
 
-        public Action<string, string> PropertyChanged;
-
         internal object GetProperty(string key)
         {
             // explicitly return null when value is not present, so that caller knows it should ignore using this field 

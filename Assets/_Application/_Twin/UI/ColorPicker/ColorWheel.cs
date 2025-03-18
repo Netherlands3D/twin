@@ -8,7 +8,7 @@ namespace Netherlands3D.Twin.UI.ColorPicker
 {
     public class ColorWheel : MonoBehaviour
     {
-        private float WheelRadius => pickerTransform.sizeDelta.x / 2;
+        private float WheelRadius => pickerTransform.sizeDelta.x * .5f;
         private static float CircumferenceInRadians => Mathf.PI * 2f;
 
         [SerializeField] private Color color = Color.white;
@@ -125,7 +125,11 @@ namespace Netherlands3D.Twin.UI.ColorPicker
             // Grab the color value from the currently selected color, and use that in the sampled color ..
             Color.RGBToHSV(color, out _, out _, out var value);
             
-            var colorSample = Color.HSVToRGB(hue, saturation, value);
+            var colorSample = Color.HSVToRGB(
+                Mathf.Clamp01(hue), 
+                Mathf.Clamp01(saturation), 
+                Mathf.Clamp01(value)
+            );
             
             // And lastly, re-apply the alpha value as well
             colorSample.a = color.a;
@@ -139,7 +143,11 @@ namespace Netherlands3D.Twin.UI.ColorPicker
         public void SetColorValue(float value)
         {
             Color.RGBToHSV(color, out var hue, out var saturation, out _);
-            var newColor = Color.HSVToRGB(hue, saturation, value);
+            var newColor = Color.HSVToRGB(
+                Mathf.Clamp01(hue), 
+                Mathf.Clamp01(saturation), 
+                Mathf.Clamp01(value)
+            );
             newColor.a = color.a;
 
             SetColor(newColor);
@@ -150,7 +158,7 @@ namespace Netherlands3D.Twin.UI.ColorPicker
         /// </summary>
         public void SetOpacity(float value)
         {
-            SetColor(new Color(color.r, color.g, color.b, value));
+            SetColor(new Color(color.r, color.g, color.b, Mathf.Clamp01(value)));
         }
 
         private void SampleColor(PointerEventData eventData)

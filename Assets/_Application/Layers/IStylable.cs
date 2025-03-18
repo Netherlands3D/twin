@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin.Layers
     ///
     /// TODO: Write documentation and add that to this interface
     /// </summary>
-    public interface ISupportsStyling
+    public interface IStylable
     {
         /// <summary>
         /// Convenience property to acquire all associated styles, this is usually a proxy to LayerData's Styles

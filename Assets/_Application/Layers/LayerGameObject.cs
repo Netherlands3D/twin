@@ -14,7 +14,7 @@ using UnityEditor;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public abstract class LayerGameObject : MonoBehaviour, ISupportsStyling
+    public abstract class LayerGameObject : MonoBehaviour, IStylable
     {
         [SerializeField] private string prefabIdentifier;
         public string PrefabIdentifier => prefabIdentifier;
@@ -51,11 +51,11 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        Dictionary<string, LayerStyle> ISupportsStyling.Styles => LayerData.Styles;
+        Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;
+        private readonly List<LayerFeature> cachedFeatures = new();
 
         [Space] public UnityEvent onShow = new();
         public UnityEvent onHide = new();
-        private Dictionary<string, LayerStyle> styles;
 
         public abstract BoundingBox Bounds { get; }
 
@@ -191,17 +191,18 @@ namespace Netherlands3D.Twin.Layers
 #region Features
         public List<LayerFeature> GetFeatures<T>() where T : Component
         {
+            cachedFeatures.Clear();
+
             // By default, consider each Unity.Component of type T as a "Feature" and create an ExpressionContext to
             // select the correct styling Rule to apply to the given "Feature". 
             var components = GetComponentsInChildren<T>();
-            
-            List<LayerFeature> features = new();
+
             foreach (var component in components)
             {
-                features.Add(CreateFeature(component));
+                cachedFeatures.Add(CreateFeature(component));
             }
 
-            return features;
+            return cachedFeatures;
         }
 
         /// <summary>
