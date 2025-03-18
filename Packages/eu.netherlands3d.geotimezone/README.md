@@ -16,6 +16,7 @@ Older version may be supported, but this is not tested.
 ## Example Usage
 
 ```csharp
+TimeZoneLookup.CacheDatabase = true; //Set this to true only if your time zone changes often. It will use more memory and cache the table as a JObject, if set to false it will release this memory which is preferable in WebGL 
 string tz = TimeZoneLookup.GetTimeZone(52.4372, 4.5559).Result;  // "Europe/Amsterdam"
 DateTime utcTime = TimeZoneConverter.ConvertToUTC(DateTime.Now, timeZoneId); //current time converted to UTC
 ```
@@ -29,6 +30,8 @@ which in-turn derive from [Open Street Map][2].  As some international borders a
 the results may or may not align with your worldview.  Use at your own risk.
 
 The Time zone data is stored as GZ files, but since Unity's Resources.Load cannot recognize these, a .txt extension is added as a workaround.
+
+This library is optimized for WebGL, and therefore does not store the Time Zone Geotable in memory by default. If you need to change time zones often, set TimeZoneLookup.CacheDatabase to true. It will use more memory but cache the table as a JObject, and thus not requiring a reparse if the time zone changes.
 
 ## Acknowledgements
 
