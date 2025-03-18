@@ -49,8 +49,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             List<PolygonVisualisation> visualisations = data.Data;
             foreach (PolygonVisualisation polygon in visualisations)
             {
-                //TODO would really like to have the meshfilter or mesh cached within the polygonvisualisation (in external package)
-                meshes.Add(polygon.GetComponent<MeshFilter>().mesh);
+                meshes.Add(polygon.PolygonMesh);
             }
 
             return meshes;
@@ -73,11 +72,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// <param name="vertexColors"></param>
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
         {
-            //TODO would really like to have the meshrenderer cached within the polygonvisualisation (in external package)
             PolygonVisualisation visualisation = GetPolygonVisualisationByMesh(meshes);
             if(visualisation != null)
             {
-                visualisation.gameObject.GetComponent<MeshRenderer>().material.color = color;
+                visualisation.VisualisationMaterial.color = color;
             }
         }
 
@@ -89,13 +87,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// <returns></returns>
         public PolygonVisualisation GetPolygonVisualisationByMesh(List<Mesh> meshes)
         {
-            //TODO would really like to have the meshrenderer cached within the polygonvisualisation (in external package)
             foreach (KeyValuePair<Feature, FeaturePolygonVisualisations> fpv in spawnedVisualisations)
             {
                 List<PolygonVisualisation> visualisations = fpv.Value.Data;
                 foreach (PolygonVisualisation pv in visualisations)
                 {
-                    if (!meshes.Contains(pv.GetComponent<MeshFilter>().mesh)) continue;
+                    if (!meshes.Contains(pv.PolygonMesh)) continue;
     
                     return pv;
                 }
@@ -105,7 +102,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public void SetVisualisationColorToDefault()
         {
-            //TODO would really like to have the meshrenderer cached within the polygonvisualisation (in external package)
             Color defaultColor = GetRenderColor();
             foreach (KeyValuePair<Feature, FeaturePolygonVisualisations> fpv in spawnedVisualisations)
             {
@@ -113,7 +109,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 foreach (PolygonVisualisation pv in visualisations)
                 {
                     if (pv != null)
-                        pv.gameObject.GetComponent<MeshRenderer>().material.color = defaultColor;
+                        pv.VisualisationMaterial.color = defaultColor;
                 }
             }
         }

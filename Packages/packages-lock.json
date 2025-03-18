@@ -430,7 +430,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.selection-tools": {
-      "version": "2.6.1",
+      "version": "2.7.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
