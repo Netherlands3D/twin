@@ -21,6 +21,6 @@
   },
   "dependencies": {
     "eu.netherlands3d.coordinates": "1.1.0",
-    "eu.netherlands3d.geotimezone": "1.0.0"
+    "eu.netherlands3d.geotimezone": "1.1.0"
   }
 }
