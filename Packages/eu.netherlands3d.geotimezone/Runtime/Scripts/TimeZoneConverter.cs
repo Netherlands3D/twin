@@ -24,19 +24,42 @@ namespace GeoTimeZone
 
     public static class TimeZoneConverter
     {
-        private static readonly JObject timeZoneData;
         private static string currentTimeZoneId;
         private static TimeZoneConversionInfo currentTimeZoneInfo;
+        private static JObject timeZoneData;
 
-        static TimeZoneConverter()
+        private static bool cacheDatabase = false;
+
+        public static bool CacheDatabase
+        {
+            get => cacheDatabase;
+            set
+            {
+                if (value == cacheDatabase)
+                    return;
+
+                if (value)
+                {
+                    timeZoneData = ParseTimeZoneFile();
+                    cacheDatabase = value;
+                    return;
+                }
+
+                timeZoneData = null;
+                cacheDatabase = value;
+            }
+        } //set to false if your time zone does not change often to free up memory and to only re-parse the file when the time zone changes.
+        
+        private static JObject ParseTimeZoneFile()
         {
             var compressedData = Resources.Load<TextAsset>("iana-tz-data.json.gz"); //The Time zone data is stored as GZ files, but since Unity's Resources.Load cannot recognize these, a .txt extension is added as a workaround.
             using var compressedStream = new MemoryStream(compressedData.bytes);
 
             using var stream = new GZipStream(compressedStream!, CompressionMode.Decompress);
             using var reader = new StreamReader(stream);
+            Resources.UnloadAsset(compressedData);
             
-            timeZoneData = JObject.Parse(reader.ReadToEnd());
+            return JObject.Parse(reader.ReadToEnd());
         }
 
         public static DateTime ConvertToUTC(DateTime localTime, string localTimeZone)
@@ -54,12 +77,17 @@ namespace GeoTimeZone
             var offset = GetUTCOffset(localTime, currentTimeZoneInfo);
             return localTime + offset;
         }
-
+        
         private static TimeZoneConversionInfo GetZoneInfo(string localTimeZone)
         {
+            var data = timeZoneData;
+            
+            if(data == null)
+                data = ParseTimeZoneFile();
+            
             currentTimeZoneId = localTimeZone;
             
-            var zones = timeZoneData["zoneData"] as JObject;
+            var zones = data["zoneData"] as JObject;
             if (zones == null)
             {
                 throw new ArgumentException("Invalid zone data format.");

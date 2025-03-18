@@ -25,6 +25,7 @@ namespace GeoTimeZone
             var ms = new MemoryStream();
             stream.CopyTo(ms);
             ms.Seek(0, SeekOrigin.Begin);
+            Resources.UnloadAsset(compressedData);
             return ms;
         }
 
