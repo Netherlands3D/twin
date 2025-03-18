@@ -3,6 +3,7 @@
     "rootNamespace": "Netherlands3D.Sun",
     "references": [
         "GUID:19c45768ddcd67943afbf0cb4e4ff0b3",
+        "GUID:dc9cb57b6d4af4e78826d53f28a1278f",
         "GUID:15fc0a57446b3144c949da3e2b9737a9"
     ],
     "includePlatforms": [],

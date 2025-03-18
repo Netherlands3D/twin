@@ -3,6 +3,7 @@
 * http://guideving.blogspot.co.uk/2010/08/sun-position-in-c.html
 */
 using System;
+using GeoTimeZone;
 
 namespace Netherlands3D.Sun
 {
@@ -28,9 +29,9 @@ namespace Netherlands3D.Sun
         public static void CalculateSunPosition(
             DateTime dateTime, double latitude, double longitude, out double outAzimuth, out double outAltitude)
         {
-            // Convert to UTC  
-            dateTime = dateTime.ToUniversalTime();
-
+            var timeZoneId = TimeZoneLookup.GetTimeZone(latitude, longitude).Result; //get the local time zone
+            dateTime = TimeZoneConverter.ConvertToUTC(dateTime, timeZoneId); //convert the time to UTC
+            
             // Number of days from J2000.0.  
             double julianDate = 367 * dateTime.Year -
                 (int)((7.0 / 4.0) * (dateTime.Year +
