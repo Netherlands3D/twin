@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Functionalities.Snapshots
 {
     public class SnapshotsPanel : MonoBehaviour
     {
