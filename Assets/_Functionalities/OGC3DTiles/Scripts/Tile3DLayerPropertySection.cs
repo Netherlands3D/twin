@@ -1,4 +1,5 @@
 using Netherlands3D.Twin.ExtensionMethods;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -34,13 +35,13 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
                     tile3DLayerGameObject.OnServerResponseReceived.AddListener(ShowServerWarningFeedback);
                 }
 
-                urlInputField.text = tile3DLayerGameObject.URL;
+                urlInputField.text = tile3DLayerGameObject.PropertyData.Url;
             }
         }
 
-        public void DisplayURL(string url)
+        public void DisplayURL(Uri url)
         {
-            urlInputField.text = url;
+            urlInputField.text = url.ToString();
         }
 
         public void ShowServerWarningFeedback(UnityWebRequest webRequest)
@@ -71,7 +72,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             }        
 
             colorFeedbackImage.color = defaultColor;
-            tile3DLayerGameObject.URL = sanitizedURL;
+            tile3DLayerGameObject.PropertyData.Url = sanitizedURL;
         }
 
         private string SanitizeURL(string url)

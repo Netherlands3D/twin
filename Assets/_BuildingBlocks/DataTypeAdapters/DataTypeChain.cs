@@ -3,6 +3,8 @@ using System.Collections;
 using System.IO;
 using KindMen.Uxios;
 using KindMen.Uxios.Api;
+using KindMen.Uxios.Errors;
+using KindMen.Uxios.Errors.Http;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,6 +23,8 @@ namespace Netherlands3D.DataTypeAdapters
         [Header("Events invoked on failures")] [Space(5)]
         public UnityEvent<string> CouldNotFindAdapter = new();
         public UnityEvent<string> OnDownloadFailed = new();
+        public UnityEvent<string> OnAuthenticationFailed = new();
+        public UnityEvent<string> OnAuthenticationSucceeded = new();
 
         private string targetUrl = "";
 
@@ -76,7 +80,7 @@ namespace Netherlands3D.DataTypeAdapters
             // No local cache? Download failed.
             if (string.IsNullOrEmpty(urlAndData.LocalFilePath))
             {
-                OnDownloadFailed.Invoke(url);
+               
                 yield break;
             }
 
@@ -93,10 +97,23 @@ namespace Netherlands3D.DataTypeAdapters
         private IEnumerator DownloadDataToLocalCache(LocalFile urlAndData)
         {
             var futureFileInfo = Resource<FileInfo>.At(urlAndData.SourceUrl).Value;
-            
+
             // We want to use and manipulate urlAndData, so we 'curry' it by wrapping a method call in a lambda 
-            futureFileInfo.Then(info => DownloadSucceeded(urlAndData, info));
-            futureFileInfo.Catch(error => DownloadFailed(urlAndData, error));
+            futureFileInfo.Then(info =>
+            {                
+                DownloadSucceeded(urlAndData, info);
+            });        
+            futureFileInfo.Catch(error =>
+            {
+                if (error is AuthenticationError)
+                {
+                    OnAuthenticationFailed?.Invoke(urlAndData.SourceUrl);
+                }
+                else
+                {
+                    DownloadFailed(urlAndData, error);
+                }
+            });
             
             yield return Uxios.WaitForRequest(futureFileInfo);
         }
@@ -111,6 +128,7 @@ namespace Netherlands3D.DataTypeAdapters
         private void DownloadFailed(LocalFile urlAndData, Exception error)
         {
             urlAndData.LocalFilePath = "";
+            OnDownloadFailed.Invoke(urlAndData.SourceUrl);
             if (debugLog)
             {
                 Debug.LogError("Download failed: " + error.Message);

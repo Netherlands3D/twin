@@ -8,6 +8,10 @@ using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
+using UnityEngine.Events;
+using Netherlands3D.Credentials;
+using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.DataTypeAdapters;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -27,7 +31,11 @@ namespace Netherlands3D.Functionalities.Wms
         public bool ShowLegendOnSelect { get; set; } = true;
         public override BoundingBox Bounds => wmsProjectionLayer?.BoundingBox;
 
+        public UnityEvent<Uri> OnURLChanged => urlPropertyData.OnDataChanged;
+
         private List<IPropertySectionInstantiator> propertySections = new();
+
+        private ICredentialHandler credentialHandler;
 
         public List<IPropertySectionInstantiator> GetPropertySections()
         {
@@ -39,6 +47,15 @@ namespace Netherlands3D.Functionalities.Wms
         {
             base.Awake();
             wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
+
+            credentialHandler = GetComponent<ICredentialHandler>();
+            credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+
+            //we need to resolve the listener to the datatypechain because this is a prefab and it doesnt know about what is present in the scene
+            DataTypeChain chain = FindObjectOfType<DataTypeChain>();
+            if(chain != null) 
+                credentialHandler.CredentialsSucceeded.AddListener(chain.DetermineAdapter);
+
             LayerData.LayerSelected.AddListener(OnSelectLayer);
             LayerData.LayerDeselected.AddListener(OnDeselectLayer);
         }
@@ -46,11 +63,11 @@ namespace Netherlands3D.Functionalities.Wms
         protected override void Start()
         {
             base.Start();
-            WMSProjectionLayer.WmsUrl = urlPropertyData.Data.ToString();
-
+            UpdateURL(urlPropertyData.Data);  
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
-
             SetRenderOrder(LayerData.RootIndex);
+
+
             var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
             var getCapabilitiesUrl = new Uri(getCapabilitiesString);
             Legend.Instance.GetLegendUrl(wmsProjectionLayer.WmsUrl, OnLegendUrlsReceived);
@@ -78,13 +95,48 @@ namespace Netherlands3D.Functionalities.Wms
             WMSProjectionLayer.RenderIndex = -order;
         }
 
+        private void HandleCredentials(StoredAuthorization auth)
+        {
+            ClearCredentials();
+
+            if (auth is BearerToken bearerToken) //todo: moet BearerToken inheriten van InferableSingle key of niet?
+            {
+                WMSProjectionLayer.AddCustomHeader("Authorization", "Bearer " + bearerToken.key);
+                WMSProjectionLayer.RefreshTiles();
+            }
+            else if (auth is InferableSingleKey inferableSingleKey)
+            {
+                WMSProjectionLayer.AddCustomQueryParameter(inferableSingleKey.queryKeyName, inferableSingleKey.key);
+                WMSProjectionLayer.RefreshTiles();
+            }
+            else if (auth is UsernamePassword usernamePassword)
+            {
+                wmsProjectionLayer.AddCustomHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(usernamePassword.username + ":" + usernamePassword.password)), true);
+                WMSProjectionLayer.RefreshTiles();
+            }
+        }
+
+        public void ClearCredentials()
+        {
+            WMSProjectionLayer.ClearCustomHeaders();
+            WMSProjectionLayer.ClearCustomQueryParameters();
+        }
+
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
             if (urlProperty != null)
             {
                 this.urlPropertyData = urlProperty;
+                UpdateURL(urlPropertyData.Data);
             }
+        }
+
+        private void UpdateURL(Uri urlWithoutQuery)
+        {
+            credentialHandler.BaseUri = urlWithoutQuery; //apply the URL from what is stored in the Project data
+            WMSProjectionLayer.WmsUrl = urlWithoutQuery.ToString();
+            credentialHandler.ApplyCredentials();
         }
 
         protected override void OnDestroy()
