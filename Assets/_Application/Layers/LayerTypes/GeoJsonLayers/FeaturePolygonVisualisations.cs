@@ -127,7 +127,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 foreach (var visualisation in visualisations)
                 {
-                    visualisation.GetComponent<Renderer>().material = material;
+                    visualisation.VisualisationMaterial = material;
                 }
             }
 

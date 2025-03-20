@@ -42,12 +42,6 @@ namespace Netherlands3D.Functionalities.Wms
             materialInstance.mainTexture = texture;
         }
 
-        public override void ClearTexture()
-        {
-            if (texture)
-                Destroy(texture);
-        }
-
         public void SetPriority(int priority)
         {
             projector.material.SetInt("_DrawOrder", priority);

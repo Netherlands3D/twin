@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
@@ -232,6 +232,51 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
             objectLayerGameObject.LayerData.DestroyLayer();
             return scatterLayer;
+        }
+
+        public override void ApplyStyling()
+        {
+            var features = GetFeatures<MeshRenderer>();
+            foreach (var feature in features)
+            {
+                ApplyStyling(feature);
+            }
+        }
+
+        /// <summary>
+        /// Finds the styling for this feature and applies it.
+        ///
+        /// It is expected that the features for a HierarchicalObjectLayerGameObject are meshRenderers, if they are not
+        /// we do not know how to style that and we ignore that feature.
+        /// </summary>
+        private void ApplyStyling(LayerFeature feature)
+        {
+            if (feature.Component is not MeshRenderer meshRenderer) return;
+
+            var symbolizer = GetStyling(feature);
+            foreach (var material in meshRenderer.materials)
+            {
+                var fillColor = symbolizer.GetFillColor();
+
+                // Keep the original material color if fill color is not set (null)
+                if (fillColor.HasValue) material.color = fillColor.Value;
+            }
+        }
+
+        /// <summary>
+        /// Will add additional attributes to a newly created feature.
+        ///
+        /// For this class, we only have a few:
+        ///
+        /// * "materials" (array of strings) - only provided when the feature contains a meshrenderer
+        /// </summary>
+        protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
+        {
+            if (feature.Component is not MeshRenderer meshRenderer) return feature;
+
+            feature.Attributes.Add("materials", meshRenderer.materials.Select(material => material.name));
+
+            return feature;
         }
     }
 }

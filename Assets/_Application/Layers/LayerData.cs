@@ -18,6 +18,8 @@ namespace Netherlands3D.Twin.Layers
         private const string NameOfDefaultStyle = "default";
 
         [SerializeField, DataMember] protected Guid UUID = Guid.NewGuid();
+        public Guid Id => UUID;
+
         [SerializeField, DataMember] protected string name;
         [SerializeField, DataMember] protected bool activeSelf = true;
         

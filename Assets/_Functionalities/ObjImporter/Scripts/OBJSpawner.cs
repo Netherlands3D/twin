@@ -108,6 +108,9 @@ namespace Netherlands3D.Functionalities.OBJImporter
             importedObject = returnedGameObject;
             returnedGameObject.AddComponent<MeshCollider>();
             DisposeImporter();
+            
+            // Object is loaded / replaced - trigger the application of styling
+            holgo.ApplyStyling();
         }
 
         private void PositionNonGeoReferencedObj(GameObject returnedGameObject, HierarchicalObjectLayerGameObject holgo)

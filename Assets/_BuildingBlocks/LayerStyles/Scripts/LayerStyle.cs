@@ -1,18 +1,29 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Netherlands3D.Twin.Layers;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Netherlands3D.LayerStyles
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling", Name = "LayerStyle")]
     public class LayerStyle
     {
+        private const string DefaultRuleName = "default";
+        
         [DataMember(Name = "metadata")] public Metadata Metadata { get; } = new();
 
         [DataMember(Name = "stylingRules")] public Dictionary<string, StylingRule> StylingRules { get; } = new()
         {
-            { "default", new StylingRule("default") }
+            { DefaultRuleName, new StylingRule(DefaultRuleName) }
         };
+        
+        /// <summary>
+        /// The default rule - or the one that is applied to all features inside this layer - this stylingrule
+        /// is not expected to have any expression associated with it so that a shorthand is available to apply styling
+        /// to all elements in this style,
+        /// </summary>
+        public StylingRule AnyFeature => StylingRules[DefaultRuleName];
 
         /// <summary>
         /// Static factory method to construct a default style with.
@@ -25,7 +36,7 @@ namespace Netherlands3D.LayerStyles
         /// <returns></returns>
         public static LayerStyle CreateDefaultStyle()
         {
-            return new LayerStyle("default");
+            return new LayerStyle(DefaultRuleName);
         }
 
         /// <summary>
@@ -41,6 +52,24 @@ namespace Netherlands3D.LayerStyles
         public LayerStyle(string name)
         {
             Metadata.Name = name;
+        }
+
+        /// <summary>
+        /// Attempts to combine the symbology of all matching rules into one Symbolizer so that a calling method
+        /// does not care about cascading rules or how the values are determined; that is handled in this function.
+        ///
+        /// The provided Symbolizer is a new instance where all matching symbology rules are merged into one, by
+        /// pre-creating it in the caller we can achieve immutability with just one instantiation.
+        /// </summary>
+        /// <returns></returns>
+        public Symbolizer ResolveSymbologyForFeature(Symbolizer symbolizer, LayerFeature feature)
+        {
+            foreach (var rule in StylingRules)
+            {
+                symbolizer = rule.Value.ResolveSymbologyForFeature(symbolizer, feature);
+            }
+            
+            return symbolizer;
         }
     }
 }
