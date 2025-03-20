@@ -9,11 +9,6 @@ namespace Netherlands3D.Credentials.StoredAuthorization
         public string key = "";
         public virtual string queryKeyName { get; protected set; } = "";
 
-        public string GetQueryString()
-        {
-            return $"?{queryKeyName}={key}";
-        }
-
         public override AuthorizationType AuthorizationType => AuthorizationType.InferableSingleKey;
 
         public QueryStringAuthorization(Uri url, string key) : base(url)

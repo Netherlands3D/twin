@@ -23,6 +23,7 @@ namespace Netherlands3D.DataTypeAdapters
         [Header("Events invoked on failures")] [Space(5)]
         public UnityEvent<string> CouldNotFindAdapter = new();
         public UnityEvent<string> OnDownloadFailed = new();
+        public UnityEvent<string> OnLocalCacheFailed = new();
         public UnityEvent<string> OnAuthenticationFailed = new();
         public UnityEvent<string> OnAuthenticationSucceeded = new();
 
@@ -80,7 +81,8 @@ namespace Netherlands3D.DataTypeAdapters
             // No local cache? Download failed.
             if (string.IsNullOrEmpty(urlAndData.LocalFilePath))
             {
-               
+                Debug.LogError("No local cache found, download failed");
+                OnLocalCacheFailed?.Invoke(urlAndData.SourceUrl);
                 yield break;
             }
 

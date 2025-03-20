@@ -3,6 +3,7 @@ using System;
 
 namespace Netherlands3D.Credentials.StoredAuthorization
 {
+    [Serializable]
     public class Public : StoredAuthorization
     {        
         public override AuthorizationType AuthorizationType => AuthorizationType.Public;
