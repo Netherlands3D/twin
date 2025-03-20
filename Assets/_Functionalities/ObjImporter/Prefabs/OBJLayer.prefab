@@ -73,7 +73,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8e90ae85fbb6e04d973829e034985aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseMaterial: {fileID: 2100000, guid: e7abf7682d4d0b64884c45680338eba2, type: 2}
+  baseMaterial: {fileID: 2100000, guid: 2750d0d1f9de43c40b93e8aae8cb7e7e, type: 2}
   importerPrefab: {fileID: 7917579944522795273, guid: acc34c0ad9fa48c45ad404982fa0a6b9,
     type: 3}
   createSubMeshes: 0
@@ -165,5 +165,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6303d72dc2aa4f61bcacd10f6b5e3e43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: -7451032918455945531, guid: 406f5bee41b4db1468d9ccf9d1e5be2c,
+  propertySectionPrefab: {fileID: 470222656515864098, guid: 0abb37c7616acf44dbafc477afb67932,
     type: 3}
