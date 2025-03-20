@@ -67,7 +67,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
         private void OnEnable()
         {
-            // ShowCredentialsWarning(false);
+             ShowCredentialsWarning(false);
         }
 
         public void ShowCredentialsWarning(bool show)

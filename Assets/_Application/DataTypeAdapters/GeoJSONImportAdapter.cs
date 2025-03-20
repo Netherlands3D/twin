@@ -26,6 +26,8 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             using var reader = new StreamReader(localFile.LocalFilePath);
             using var jsonReader = new JsonTextReader(reader);
 
+
+            //todo, we should check against a schema for optimization https://geojson.org/schema/GeoJSON.json
             while (jsonReader.Read())
             {
                 if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "type")

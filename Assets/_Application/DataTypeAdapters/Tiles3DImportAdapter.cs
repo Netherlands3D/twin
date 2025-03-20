@@ -11,16 +11,17 @@ namespace Netherlands3D.Twin.DataTypeAdapters
     public class Tiles3DImportAdapter : ScriptableObject, IDataTypeAdapter
     {
         [SerializeField] private Tile3DLayerGameObject layerPrefab;
-        [SerializeField] private UnityEvent<string> displayErrorMessageEvent;
+        [SerializeField] private string layerParentTag;
 
         public void Execute(LocalFile localFile)
         {
-            var layerParent = GameObject.FindWithTag("3DTileParent").transform;
+            var layerParent = GameObject.FindWithTag(layerParentTag).transform;
             var newObject = Instantiate(layerPrefab, Vector3.zero, layerPrefab.transform.rotation, layerParent);
 
-            var layerComponent = newObject.gameObject.GetComponent<Tile3DLayerGameObject>();
-            if (!layerComponent)
-                layerComponent = newObject.gameObject.AddComponent<Tile3DLayerGameObject>();
+            if (!newObject.gameObject.TryGetComponent<Tile3DLayerGameObject>(out var layerComponent))
+            {
+                throw new MissingComponentException("Missing the Tile3DLayerGameObject component!");
+            }
 
             layerComponent.Name = layerPrefab.name;
             layerComponent.PropertyData.Url = localFile.SourceUrl; //set url to get tiles
@@ -28,7 +29,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
         public bool Supports(LocalFile localFile)
         {
-            //TODO, check if reading the geojson check is potentially very large, maybe a timeout, maybe putting the tile3d import adapter
+            //TODO, check if reading the geojson check is potentially very large, maybe a timeout or a schema https://github.com/CesiumGS/3d-tiles/blob/main/specification/schema/tileset.schema.json
 
 
             // Check if the file has JSON content
