@@ -58,7 +58,3 @@ MonoBehaviour:
     type: 3}
   pointLayerPrefab: {fileID: 3618778040791522139, guid: 267c8f33152cac142b8e40a7bdc54523,
     type: 3}
-  randomizeColorPerFeature: 0
-  OnParseError:
-    m_PersistentCalls:
-      m_Calls: []

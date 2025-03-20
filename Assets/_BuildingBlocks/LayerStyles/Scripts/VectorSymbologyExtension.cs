@@ -15,6 +15,7 @@ namespace Netherlands3D.LayerStyles
         public static Color? GetFillColor(this Symbolizer symbology)
         {
             var property = symbology.GetProperty("fill-color") as string;
+            if (property == null) return null;
 
             // Previous versions of project files were missing a '#', this auto-corrects this 
             if (property.StartsWith('#') == false) property = "#" + property;
@@ -34,6 +35,7 @@ namespace Netherlands3D.LayerStyles
         public static Color? GetStrokeColor(this Symbolizer symbology)
         {
             var property = symbology.GetProperty("stroke-color") as string;
+            if (property == null) return null;
 
             // Previous versions of project files were missing a '#', this auto-corrects this 
             if (property.StartsWith('#') == false) property = "#" + property;

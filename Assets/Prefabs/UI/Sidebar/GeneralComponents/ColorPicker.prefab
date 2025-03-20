@@ -1164,7 +1164,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5896101608450184957}
   - component: {fileID: 5245968652744260035}
-  - component: {fileID: 7275114998268791187}
   - component: {fileID: 2760761420786384123}
   - component: {fileID: 2542324566150064882}
   m_Layer: 5
@@ -1201,29 +1200,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 461818845306885959}
   m_CullTransparentMesh: 1
---- !u!114 &7275114998268791187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 461818845306885959}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2dc85356250718d4bbd600418b5f7166, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colorDisplays:
-  - {fileID: 8346595411931782716}
-  - {fileID: 2187690929824377542}
-  - {fileID: 7848659035972318433}
-  pickerImage: {fileID: 2760761420786384123}
-  reticle: {fileID: 8611582285443630981}
-  opacitySlider: {fileID: 4037926383491291878}
-  darknessSlider: {fileID: 7343330776194991604}
-  hexColorText: {fileID: 521111293735071925}
-  hexInputField: {fileID: 2308799934881513566}
-  pickColorButton: {fileID: 522899966216368028}
 --- !u!114 &2760761420786384123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1244,7 +1220,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cf50de00ff5152f4ba8cc0866045245f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6091c567679207040ad33193d33e28bb, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1271,6 +1247,40 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls: []
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2700826638051772042}
+          m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.ColorPicker.ColorWheel,
+            Assembly-CSharp
+          m_MethodName: OnClickOnWheel
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 5
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2700826638051772042}
+          m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.ColorPicker.ColorWheel,
+            Assembly-CSharp
+          m_MethodName: OnDragOverWheel
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &476838866953328499
 GameObject:
   m_ObjectHideFlags: 0
@@ -4535,7 +4545,7 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7275114998268791187}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.ColorWheel, Assembly-CSharp
         m_MethodName: OnHexInputChanged
         m_Mode: 1
@@ -6392,7 +6402,7 @@ GameObject:
   - component: {fileID: 6726475949778066493}
   - component: {fileID: 4037926383491291878}
   m_Layer: 5
-  m_Name: Alpha_Slider
+  m_Name: Opacity_Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6945,6 +6955,7 @@ GameObject:
   m_Component:
   - component: {fileID: 464194535855973160}
   - component: {fileID: 936243622650991644}
+  - component: {fileID: 2700826638051772042}
   - component: {fileID: 5232048520427897968}
   - component: {fileID: 6778223411237904173}
   - component: {fileID: 4349820417869818976}
@@ -6985,6 +6996,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5078733024073835164}
   m_CullTransparentMesh: 1
+--- !u!114 &2700826638051772042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5078733024073835164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dc85356250718d4bbd600418b5f7166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 1}
+  colorDisplays:
+  - {fileID: 8346595411931782716}
+  - {fileID: 7848659035972318433}
+  pickerImage: {fileID: 2760761420786384123}
+  reticle: {fileID: 8611582285443630981}
+  opacitySlider: {fileID: 4037926383491291878}
+  maxColorValueIndication: {fileID: 2187690929824377542}
+  colorValueSlider: {fileID: 7343330776194991604}
+  hexColorText: {fileID: 521111293735071925}
+  hexInputField: {fileID: 2308799934881513566}
+  pickColorButton: {fileID: 522899966216368028}
+  colorChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &5232048520427897968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8406,19 +8444,7 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7275114998268791187}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.ColorWheel, Assembly-CSharp
-        m_MethodName: OnHexInputChanged
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -11169,7 +11195,7 @@ GameObject:
   - component: {fileID: 2726862308938530996}
   - component: {fileID: 7343330776194991604}
   m_Layer: 5
-  m_Name: Darkness_Slider
+  m_Name: ColorValue_Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11240,11 +11266,11 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5992650513667255597}
   m_FillRect: {fileID: 0}
   m_HandleRect: {fileID: 7908207433689781745}
-  m_Direction: 3
+  m_Direction: 2
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

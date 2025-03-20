@@ -516,6 +516,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Content
       objectReference: {fileID: 0}
+    - target: {fileID: 3095510254022388171, guid: 185c7919999266341a9928dbc508a6e3,
+        type: 3}
+      propertyPath: m_Spacing
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 6935823428538729233, guid: 185c7919999266341a9928dbc508a6e3,
         type: 3}
       propertyPath: m_Pivot.x
@@ -678,6 +683,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4009327588814984237, guid: f7077719a26f620419d79c06e86b12f4,
+        type: 3}
+      propertyPath: m_PreferredHeight
+      value: 48
       objectReference: {fileID: 0}
     - target: {fileID: 6249795452537205949, guid: f7077719a26f620419d79c06e86b12f4,
         type: 3}

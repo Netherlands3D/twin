@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace Netherlands3D.LayerStyles
+namespace Netherlands3D.LayerStyles.Expressions
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling/expressions", Name = "Bool")]
     public class BoolExpression : LiteralExpression
