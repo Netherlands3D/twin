@@ -28,8 +28,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             get => handler;
             set
             {
-                if (handler != null)
-                    handler.OnAuthorizationHandled.RemoveListener(OnCredentialsAccepted);
+                handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsAccepted);
 
                 handler = value;
                 skipFirstCredentialErrorMessage = true;

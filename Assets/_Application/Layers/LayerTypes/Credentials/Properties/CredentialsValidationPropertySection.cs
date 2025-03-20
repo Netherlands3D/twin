@@ -16,8 +16,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             get => handler;
             set
             {
-                if(handler != null)
-                    handler.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
+                handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
 
                 handler = value;
 
@@ -27,15 +26,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         }
 
         private void Start()
-        {
-            if (handler != null)
-                handler.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
+        {            
+            handler?.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
         }
 
         private void OnDestroy()
         {
-            if (handler != null)
-                handler.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
+            handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
         }
 
         private void OnCredentialsHandled(StoredAuthorization auth)
