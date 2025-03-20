@@ -14,7 +14,7 @@ public class PackageSwitcher : EditorWindow
 
     private string packageNamePrefix = "eu.netherlands3d";
     private static string localPackagesFolderPrefix = "../../Packages";
-    private static string originalVersionsFilePath = "../Packages/original_versions.json";
+    private static string originalVersionsFilePath = "../Packages/manifest_original_versions.json";
     private static string localPackagesFolderFullPath = "";
     
     [MenuItem("Tools/Package Switcher")]
