@@ -20,8 +20,13 @@ namespace Netherlands3D.Credentials.StoredAuthorization
         public UnityWebRequest GetWebRequestWithHeader()
         {
             var uwr = new UnityWebRequest();
-            uwr.SetRequestHeader(headerName, headerPrefix + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password)));
+            uwr.SetRequestHeader(headerName, headerPrefix + GetUserNamePassWordQuery());
             return uwr;
+        }
+
+        public string GetUserNamePassWordQuery()
+        {
+            return Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password));
         }
     }
 }

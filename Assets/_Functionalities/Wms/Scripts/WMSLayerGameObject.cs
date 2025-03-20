@@ -113,7 +113,7 @@ namespace Netherlands3D.Functionalities.Wms
             }
             else if (auth is UsernamePassword usernamePassword)
             {
-                wmsProjectionLayer.AddCustomHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(usernamePassword.username + ":" + usernamePassword.password)), true);
+                WMSProjectionLayer.AddCustomHeader(usernamePassword.headerName, usernamePassword.headerPrefix + usernamePassword.GetUserNamePassWordQuery(), true);
                 WMSProjectionLayer.RefreshTiles();
             }
         }

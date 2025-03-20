@@ -82,7 +82,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             
             if (auth is BearerToken bearerToken) //todo: moet BearerToken inheriten van InferableSingle key of niet?
             {
-                tileSet.AddCustomHeader("Authorization", "Bearer " + bearerToken.key);
+                tileSet.AddCustomHeader(bearerToken.headerName, bearerToken.headerPrefix + bearerToken.key);
                 tileSet.RefreshTiles();
             }
             else if (auth is QueryStringAuthorization inferableSingleKey)
@@ -94,7 +94,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             }
             else if (auth is UsernamePassword usernamePassword)
             {
-                tileSet.AddCustomHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(usernamePassword.username + ":" + usernamePassword.password)), true);
+                tileSet.AddCustomHeader(usernamePassword.headerName, usernamePassword.headerPrefix + usernamePassword.GetUserNamePassWordQuery(), true);
                 tileSet.RefreshTiles();
             } 
         }
