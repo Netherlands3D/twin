@@ -6,7 +6,7 @@ namespace Netherlands3D.Credentials.StoredAuthorization
     public class HeaderBasedAuthorization : StoredAuthorization
     {
         public string key = "";
-        public virtual string headerName { get; protected set; } = "";
+        public virtual string headerName { get; protected set; } = "Authorization";
 
         public override AuthorizationType AuthorizationType => AuthorizationType.InferableSingleKey;
 
