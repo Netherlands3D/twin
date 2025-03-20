@@ -7,6 +7,7 @@ namespace Netherlands3D.Credentials.StoredAuthorization
     {
         public Uri baseUri;
         protected Uri inputUri; //the initial endpoint
+        public virtual string headerName { get; protected set; } = "Authorization";
         public abstract Uri GetUriWithCredentials();
 
         protected StoredAuthorization(Uri uri)

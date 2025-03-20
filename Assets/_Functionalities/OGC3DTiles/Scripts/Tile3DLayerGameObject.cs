@@ -16,7 +16,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 {
     [RequireComponent(typeof(ReadSubtree))]
     [RequireComponent(typeof(Read3DTileset))]
-    public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels// ILayerWithCredentials
+    public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels
     {
         public override BoundingBox Bounds => tileSet.root != null ? new BoundingBox(tileSet.root.BottomLeft, tileSet.root.TopRight) : null;
         public Tile3DLayerPropertyData PropertyData => urlPropertyData;

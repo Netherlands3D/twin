@@ -103,7 +103,7 @@ namespace Netherlands3D.Functionalities.Wms
 
             if (auth is BearerToken bearerToken) //todo: moet BearerToken inheriten van InferableSingle key of niet?
             {
-                WMSProjectionLayer.AddCustomHeader("Authorization", "Bearer " + bearerToken.key);
+                WMSProjectionLayer.AddCustomHeader(bearerToken.headerName, bearerToken.headerPrefix + bearerToken.key);
                 WMSProjectionLayer.RefreshTiles();
             }
             else if (auth is QueryStringAuthorization inferableSingleKey)
