@@ -106,7 +106,7 @@ namespace Netherlands3D.Functionalities.Wms
                 WMSProjectionLayer.AddCustomHeader("Authorization", "Bearer " + bearerToken.key);
                 WMSProjectionLayer.RefreshTiles();
             }
-            else if (auth is InferableSingleKey inferableSingleKey)
+            else if (auth is QueryStringAuthorization inferableSingleKey)
             {
                 WMSProjectionLayer.AddCustomQueryParameter(inferableSingleKey.queryKeyName, inferableSingleKey.key);
                 WMSProjectionLayer.RefreshTiles();

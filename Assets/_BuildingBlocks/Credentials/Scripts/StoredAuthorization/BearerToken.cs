@@ -4,8 +4,9 @@ using UnityEngine.Networking;
 namespace Netherlands3D.Credentials.StoredAuthorization
 {
     [Serializable]
-    public class BearerToken : InferableSingleKey
+    public class BearerToken : HeaderBasedAuthorization
     {
+        private string headerPrefix = "Bearer ";
         public override AuthorizationType AuthorizationType => AuthorizationType.BearerToken;
         
         public BearerToken(Uri url, string key) : base(url, key)
@@ -15,13 +16,8 @@ namespace Netherlands3D.Credentials.StoredAuthorization
         public UnityWebRequest GetWebRequestWithHeader()
         {
             var uwr = new UnityWebRequest();
-            uwr.SetRequestHeader("Authorization", "Bearer " + key);
+            uwr.SetRequestHeader(headerName, headerPrefix + key);
             return uwr;
-        }
-        
-        public override Uri GetUriWithCredentials()
-        {
-            return baseUri;
         }
     }
 }

@@ -85,7 +85,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
                 tileSet.AddCustomHeader("Authorization", "Bearer " + bearerToken.key);
                 tileSet.RefreshTiles();
             }
-            else if (auth is InferableSingleKey inferableSingleKey)
+            else if (auth is QueryStringAuthorization inferableSingleKey)
             {
                 tileSet.personalKey = inferableSingleKey.key;
                 tileSet.publicKey = inferableSingleKey.key;

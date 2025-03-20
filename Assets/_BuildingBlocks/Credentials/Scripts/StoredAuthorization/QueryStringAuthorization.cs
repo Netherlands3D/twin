@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Specialized;
-using KindMen.Uxios;
 using Netherlands3D.Web;
 
 namespace Netherlands3D.Credentials.StoredAuthorization
 {
     [Serializable]
-    public class InferableSingleKey : StoredAuthorization
+    public class QueryStringAuthorization : StoredAuthorization
     {
         public string key = "";
         public virtual string queryKeyName { get; protected set; } = "";
@@ -18,7 +16,7 @@ namespace Netherlands3D.Credentials.StoredAuthorization
 
         public override AuthorizationType AuthorizationType => AuthorizationType.InferableSingleKey;
 
-        public InferableSingleKey(Uri url, string key) : base(url)
+        public QueryStringAuthorization(Uri url, string key) : base(url)
         {
             this.key = key;
         }

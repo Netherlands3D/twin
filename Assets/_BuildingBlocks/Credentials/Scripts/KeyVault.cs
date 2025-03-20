@@ -183,7 +183,7 @@ namespace Netherlands3D.Credentials
                     storedAuthorizations.Add(baseUri, auth);
                     break;
                 case AuthorizationType.InferableSingleKey:
-                    auth = new InferableSingleKey(uri, key);
+                    auth = new QueryStringAuthorization(uri, key);
                     storedAuthorizations.Add(baseUri, auth);
                     break;
                 case AuthorizationType.Key:
