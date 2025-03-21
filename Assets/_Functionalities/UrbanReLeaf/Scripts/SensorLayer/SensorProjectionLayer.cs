@@ -31,13 +31,7 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
     {        
         public SensorDataController SensorDataController { get { return dataController; } private set { } }
 
-        private SensorDataController dataController;
-        private float lastUpdatedTimeStamp = 0;
-        private float lastUpdatedInterval = 1f;
-        private bool visibleTilesDirty = false;
-        private List<TileChange> queuedChanges = new List<TileChange>();
-        private WaitForSeconds wfs = new WaitForSeconds(0.5f);
-        private Coroutine updateTilesRoutine = null;
+        private SensorDataController dataController;            
 
         public int RenderIndex
         {
@@ -128,76 +122,11 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
                 callback(tileChange);
         }
 
-        public void SetVisibleTilesDirty()
+        protected override void OnPreUpdateTile(Tile tile)
         {
-            //is the update already running cancel it
-            if (visibleTilesDirty && updateTilesRoutine != null)
-            {                
-                queuedChanges.Clear();
-                StopCoroutine(updateTilesRoutine);
-            }
-
-            lastUpdatedTimeStamp = Time.time;
-            visibleTilesDirty = true;
-            updateTilesRoutine = StartCoroutine(UpdateVisibleTiles());
-        }   
-        
-        private IEnumerator UpdateVisibleTiles()
-        {
-            //get current tiles
-            foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
-            {
-                if (tile.Value == null || tile.Value.gameObject == null)
-                    continue;
-
-                if (tile.Value.runningCoroutine != null)
-                    StopCoroutine(tile.Value.runningCoroutine);
-
-                TextureDecalProjector projector = tile.Value.gameObject.GetComponent<TextureDecalProjector>();
-                projector.gameObject.SetActive(false);
-
-                TileSensorDataController controller = tile.Value.gameObject.GetComponent<TileSensorDataController>();
-                controller.DestroySelectedHexagon();
-
-                TileChange tileChange = new TileChange();
-                tileChange.X = tile.Key.x;
-                tileChange.Y = tile.Key.y;
-                queuedChanges.Add(tileChange);
-            }
-
-            if (!isEnabled)
-            {
-                queuedChanges.Clear();
-                yield break;
-            }
-
-            bool ready = true;
-            while (queuedChanges.Count > 0)
-            {
-                //lets wait half a second in case a slider is moving
-                if (Time.time - lastUpdatedTimeStamp > lastUpdatedInterval && ready)
-                {
-                    ready = false;
-                    TileChange next = queuedChanges[0];
-                    queuedChanges.RemoveAt(0);
-                    Vector2Int key = new Vector2Int(next.X, next.Y);
-                    if (tiles.ContainsKey(key))
-                    {
-                        tiles[key].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(next, key =>
-                        {
-                            ready = true;
-                        }));
-                    }
-                    else
-                    {
-                        ready = true;
-                    }
-                }
-                yield return wfs;
-            }           
-            
-            updateTilesRoutine = null;
-            visibleTilesDirty = false;
+            base.OnPreUpdateTile(tile);
+            TileSensorDataController controller = tile.gameObject.GetComponent<TileSensorDataController>();
+            controller.DestroySelectedHexagon();
         }
 
         public override void LayerToggled()
