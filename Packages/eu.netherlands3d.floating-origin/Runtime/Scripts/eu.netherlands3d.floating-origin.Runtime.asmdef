@@ -1,13 +1,12 @@
 {
-    "name": "eu.netherlands3d.floating-origin.editor",
+    "name": "eu.netherlands3d.floating-origin.Runtime",
     "rootNamespace": "",
     "references": [
-        "GUID:62201132dbbaf094ea723182597cd288",
-        "GUID:19c45768ddcd67943afbf0cb4e4ff0b3"
+        "eu.netherlands3d.selection-tools.Runtime",
+        "eu.netherlands3d.coordinates.Runtime",
+        "eu.Netherlands3D.Runtime.Tiles3D"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
