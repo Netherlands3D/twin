@@ -1,0 +1,17 @@
+﻿{
+  "name": "eu.netherlands3d.twin.functionalities",
+  "version": "1.0.0",
+  "displayName": "Netherlands3D - Functionalities",
+  "description": "Library for Netherlands3D to expose and toggle functionalities",
+  "unity": "2022.3",
+  "license": "EUPL-1.2",
+  "keywords": [
+    "netherlands3d",
+    "buildingblock",
+    "functionalities"
+  ],
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://netherlands3d.eu/"
+  }
+}
