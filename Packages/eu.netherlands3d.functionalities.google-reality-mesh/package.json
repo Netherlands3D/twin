@@ -1,0 +1,19 @@
+﻿{
+  "name": "eu.netherlands3d.functionalities.google-reality-mesh",
+  "version": "1.0.0",
+  "displayName": "Netherlands3D - Google Reality Mesh",
+  "description": "Twin functionality to render Google's photo-realistic tiles in the world",
+  "unity": "2022.3",
+  "license": "EUPL-1.2",
+  "keywords": [
+    "netherlands3d",
+    "functionality",
+    "google",
+    "3dtiles",
+    "realitymesh"
+  ],
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://netherlands3d.eu/"
+  }
+}
