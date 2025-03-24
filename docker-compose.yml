@@ -1,0 +1,15 @@
+﻿version: '3.8'
+
+services:
+  dev-proxy:
+    build:
+      context: .docker/dev-proxy
+      dockerfile: Dockerfile
+    ports:
+      - "8100:80"
+#    volumes:
+#      - ./local_files:/usr/share/nginx/html/local_files
+#      - ./nginx/htpasswd:/etc/nginx/.htpasswd
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
