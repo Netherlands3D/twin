@@ -58,15 +58,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
         private void Awake()
         {
-            if(Handler == null) //we might want to set the handler explicitly
-                Handler = GetComponentInParent<ICredentialHandler>();
-
             gameObject.SetActive(visibleOnAwake); //always start disabled because we assume we don't need credentials, but we need to assign our handler above
         }
 
         private void OnEnable()
         {
              ShowCredentialsWarning(false);
+        }
+
+        private void Start()
+        {
+            if(Handler == null) //we might want to set the handler explicitly, in which case we don't want to get it in the parent
+                Handler = GetComponentInParent<ICredentialHandler>();
         }
 
         public void ShowCredentialsWarning(bool show)
@@ -124,6 +127,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             if (username.Length > 0) userNameInputField.text = username;
             if (password.Length > 0) passwordInputField.text = password;
             if (key.Length > 0) keyTokenOrCodeInputField.text = key;
+        }
+
+        private void OnDestroy()
+        {
+            handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsAccepted);
         }
     }
 }
