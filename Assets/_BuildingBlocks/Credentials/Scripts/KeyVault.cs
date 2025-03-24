@@ -55,6 +55,8 @@ namespace Netherlands3D.Credentials
                 return;
             }
 
+            //todo: is a queryKey present in the inputUri? parse it and try this authorization type immediately.
+            
             //Only allow one simultaneous coroutine for now
             if (coroutineMonoBehaviour != null)
                 Destroy(coroutineMonoBehaviour.gameObject);
