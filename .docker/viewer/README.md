@@ -190,7 +190,7 @@ This can be done, after performing a successful WebGL build of the application i
 Build folder, by executing the following command:
 
 ```bash
-docker build -f .docker/Dockerfile -t nl3d:test .
+docker build -f .docker/viewer/Dockerfile -t nl3d:test .
 ```
 
 In the example above you may want to replace `nl3d:test` with any image name that you

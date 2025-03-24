@@ -11,6 +11,7 @@ namespace Netherlands3D.Twin.UI.ColorPicker
         private float WheelRadius => pickerTransform.sizeDelta.x * .5f;
         private static float CircumferenceInRadians => Mathf.PI * 2f;
 
+        [SerializeField] private bool supportsTransparency = true;
         [SerializeField] private Color color = Color.white;
         public Color Color
         {
@@ -48,6 +49,8 @@ namespace Netherlands3D.Twin.UI.ColorPicker
 
         private void OnEnable()
         {
+            opacitySlider.gameObject.SetActive(supportsTransparency);
+
             hexInputField.onEndEdit.AddListener(SetColor);
             opacitySlider.onValueChanged.AddListener(SetOpacity);
             colorValueSlider.onValueChanged.AddListener(SetColorValue);

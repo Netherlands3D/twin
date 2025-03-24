@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.LayerStyles.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
@@ -254,13 +255,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             if (feature.Component is not MeshRenderer meshRenderer) return;
 
             var symbolizer = GetStyling(feature);
-            foreach (var material in meshRenderer.materials)
-            {
-                var fillColor = symbolizer.GetFillColor();
+            var fillColor = symbolizer.GetFillColor();
 
-                // Keep the original material color if fill color is not set (null)
-                if (fillColor.HasValue) material.color = fillColor.Value;
-            }
+            // Keep the original material color if fill color is not set (null)
+            if (!fillColor.HasValue) return;
+
+            meshRenderer.SetUrpLitColorOptimized(fillColor.Value);
         }
 
         /// <summary>
