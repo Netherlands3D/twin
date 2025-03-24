@@ -502,6 +502,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "eu.netherlands3d.web": {
+      "version": "file:eu.netherlands3d.web",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "eu.netherlands3d.web-cursors": {
       "version": "2.0.0",
       "depth": 0,
