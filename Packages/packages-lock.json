@@ -338,6 +338,12 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
+    "eu.netherlands3d.functionalities.google-reality-mesh": {
+      "version": "file:eu.netherlands3d.functionalities.google-reality-mesh",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "eu.netherlands3d.floating-origin": {
       "version": "file:eu.netherlands3d.floating-origin",
       "depth": 0,
