@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             {
                 if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "type")
                 {
-                    jsonReader.Read(); //reads value
+                    jsonReader.Read(); //reads the value of the type object
                     if ((string)jsonReader.Value == "FeatureCollection" || (string)jsonReader.Value == "Feature")
                         return true;
                 }
