@@ -1,8 +1,8 @@
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.FloatingOrigin
+namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
     [RequireComponent(typeof(ObjectScatterLayerGameObject))]
     public class ScatterLayerShifter : WorldTransformShifter

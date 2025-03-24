@@ -1,0 +1,11 @@
+﻿{
+  "name": "eu.netherlands3d.web",
+  "version": "1.0.0",
+  "displayName": "Netherlands 3D - Web (Deprecated)",
+  "description": "HTTP Client for easy interaction with the web. Deprecated: use KindMen.Uxios instead",
+  "unity": "2022.3",
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://netherlands3d.eu/"
+  }
+}
