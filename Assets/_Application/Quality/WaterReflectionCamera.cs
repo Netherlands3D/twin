@@ -11,7 +11,7 @@ namespace Netherlands3D.Twin.Quality
 
         [SerializeField] private float scaleMultiplier = 0.1f;
 
-        private Camera camera;
+        private new Camera camera;
         private Camera followCamera;
 
         private int screenWidthOnInit = 512;

@@ -284,13 +284,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             {
                 GeoJSONPolygonLayer polygonLayer = mapping.VisualisationLayer as GeoJSONPolygonLayer;
                 List<Mesh> meshes = mapping.FeatureMeshes;
-                for (int j = 0; j < meshes.Count; j++)
-                {
-                    PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes);
-                    Bounds currentObjectBounds = new Bounds(pv.transform.position, meshes[j].bounds.size);
-                    featureThumbnail.RenderThumbnail(currentObjectBounds);
-                    break;
-                }
+                
+                PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes);
+                Bounds currentObjectBounds = new Bounds(pv.transform.position, meshes[0].bounds.size);
+                featureThumbnail.RenderThumbnail(currentObjectBounds);
 				return;
             }
 

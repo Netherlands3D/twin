@@ -15,5 +15,15 @@ namespace Netherlands3D.Twin.Functionalities
 
             return functionalityData.Id == Id;
         }
+
+        protected bool Equals(FunctionalityData other)
+        {
+            return Id == other.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id);
+        }
     }
 }
