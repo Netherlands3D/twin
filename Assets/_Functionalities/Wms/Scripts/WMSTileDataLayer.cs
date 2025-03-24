@@ -118,11 +118,16 @@ namespace Netherlands3D.Functionalities.Wms
                 {
                     ClearPreviousTexture(tile);
                     Texture2D tex = response.Data as Texture2D;
+                    tex.name = tile.tileKey.ToString();
                     tex.Compress(true);
                     tex.filterMode = FilterMode.Bilinear;
                     tex.Apply(false, true);
 
-                    if (!tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector)) return;
+                    if (!tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
+                    {
+                        Destroy(tex);
+                        return;
+                    }
 
                     projector.SetSize(tileSize, tileSize, tileSize);
                     projector.gameObject.SetActive(isEnabled);                    
