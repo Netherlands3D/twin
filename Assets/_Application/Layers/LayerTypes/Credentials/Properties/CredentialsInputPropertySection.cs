@@ -9,7 +9,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
     public class CredentialsInputPropertySection : MonoBehaviour, ICredentialsPropertySection
     {
-        private ICredentialHandlerPanel handlerPanel;
+        private ICredentialHandler handler;
         
         [SerializeField] private GameObject inputPanel;
         [SerializeField] private GameObject errorMessage;
@@ -23,24 +23,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
         [SerializeField] private bool visibleOnAwake; //todo: find a better way to do this
 
-        public ICredentialHandlerPanel HandlerPanel
+        public ICredentialHandler Handler
         {
-            get => handlerPanel;
+            get => handler;
             set
             {
-                handlerPanel?.OnAuthorizationHandled.RemoveListener(OnCredentialsAccepted);
+                handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsAccepted);
 
-                handlerPanel = value;
+                handler = value;
                 skipFirstCredentialErrorMessage = true;
 
-                handlerPanel.OnAuthorizationHandled.AddListener(OnCredentialsAccepted);
+                handler.OnAuthorizationHandled.AddListener(OnCredentialsAccepted);
             }
         }
 
         private void OnCredentialsAccepted(StoredAuthorization auth)
         {
             var accepted = auth is not FailedOrUnsupported;
-
+print(accepted);
             if (!gameObject.activeSelf)
             {
                 gameObject.SetActive(true);
@@ -68,8 +68,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
         private void Start()
         {
-            if(HandlerPanel == null) //we might want to set the handler explicitly, in which case we don't want to get it in the parent
-                HandlerPanel = GetComponentInParent<ICredentialHandlerPanel>();
+            if(Handler == null) //we might want to set the handler explicitly, in which case we don't want to get it in the parent
+                Handler = GetComponentInParent<ICredentialHandler>();
         }
 
         public void ShowCredentialsWarning(bool show)
@@ -86,10 +86,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         /// </summary>
         public void ApplyCredentials()
         {
-            handlerPanel.UserName = userNameInputField.text;
-            handlerPanel.PasswordOrKeyOrTokenOrCode = inputFieldToUseForPasswordOrKey.text;
+            handler.UserName = userNameInputField.text;
+            handler.PasswordOrKeyOrTokenOrCode = inputFieldToUseForPasswordOrKey.text;
 
-            handlerPanel.ApplyCredentials();
+            handler.ApplyCredentials();
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
         private void OnDestroy()
         {
-            handlerPanel?.OnAuthorizationHandled.RemoveListener(OnCredentialsAccepted);
+            handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsAccepted);
         }
     }
 }

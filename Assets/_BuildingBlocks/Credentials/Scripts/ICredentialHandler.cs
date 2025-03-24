@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Credentials
 {
-    public interface ICredentialHandlerPanel
+    public interface ICredentialHandler
     {
         public Uri BaseUri { get; set; } //The base URL to check the credentials for
         public string UserName { get; set; }

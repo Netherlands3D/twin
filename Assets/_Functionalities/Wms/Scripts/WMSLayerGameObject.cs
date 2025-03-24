@@ -37,7 +37,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         private List<IPropertySectionInstantiator> propertySections = new();
 
-        private ICredentialHandlerPanel credentialHandlerPanel;
+        private ICredentialHandler credentialHandler;
 
         public List<IPropertySectionInstantiator> GetPropertySections()
         {
@@ -50,13 +50,13 @@ namespace Netherlands3D.Functionalities.Wms
             base.Awake();
             wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
 
-            credentialHandlerPanel = GetComponent<ICredentialHandlerPanel>();
-            credentialHandlerPanel.OnAuthorizationHandled.AddListener(HandleCredentials);
+            credentialHandler = GetComponent<ICredentialHandler>();
+            credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
 
             //we need to resolve the listener to the datatypechain because this is a prefab and it doesnt know about whats present in the scene
             DataTypeChain chain = FindObjectOfType<DataTypeChain>();
             if(chain != null) 
-                credentialHandlerPanel.CredentialsSucceeded.AddListener(chain.DetermineAdapter);
+                credentialHandler.CredentialsSucceeded.AddListener(chain.DetermineAdapter);
 
             LayerData.LayerSelected.AddListener(OnSelectLayer);
             LayerData.LayerDeselected.AddListener(OnDeselectLayer);
@@ -137,9 +137,9 @@ namespace Netherlands3D.Functionalities.Wms
 
         private void UpdateURL(Uri urlWithoutQuery)
         {
-            credentialHandlerPanel.BaseUri = urlWithoutQuery; //apply the URL from what is stored in the Project data
+            credentialHandler.BaseUri = urlWithoutQuery; //apply the URL from what is stored in the Project data
             WMSProjectionLayer.WmsUrl = urlWithoutQuery.ToString();
-            credentialHandlerPanel.ApplyCredentials();
+            credentialHandler.ApplyCredentials();
         }
 
         protected override void OnDestroy()

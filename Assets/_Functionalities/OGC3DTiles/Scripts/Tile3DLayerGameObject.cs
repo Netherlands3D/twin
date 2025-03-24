@@ -35,7 +35,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
         public UnityEvent<UnityWebRequest> OnServerResponseReceived => tileSet.OnServerResponseReceived;
 
-        private ICredentialHandlerPanel credentialHandlerPanel;
+        private ICredentialHandler credentialHandler;
         
         private string TilesetURLWithoutQuery(string value)
         {
@@ -61,11 +61,11 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         {
             tileSet = GetComponent<Read3DTileset>();
             
-            credentialHandlerPanel = GetComponent<ICredentialHandlerPanel>();
+            credentialHandler = GetComponent<ICredentialHandler>();
             if(!string.IsNullOrEmpty(tileSet.tilesetUrl))
-                credentialHandlerPanel.BaseUri = new Uri(tileSet.tilesetUrl); //apply the URL from what is serialized in the tileset component.
+                credentialHandler.BaseUri = new Uri(tileSet.tilesetUrl); //apply the URL from what is serialized in the tileset component.
             
-            credentialHandlerPanel.OnAuthorizationHandled.AddListener(HandleCredentials);
+            credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             urlPropertyData = new Tile3DLayerPropertyData(TilesetURLWithoutQuery(tileSet.tilesetUrl));
             //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
             urlPropertyData.OnUrlChanged.AddListener(UpdateURL);
@@ -121,9 +121,9 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         private void UpdateURL(Uri urlWithoutQuery)
         {
-            credentialHandlerPanel.BaseUri = urlWithoutQuery; //apply the URL from what is stored in the Project data
+            credentialHandler.BaseUri = urlWithoutQuery; //apply the URL from what is stored in the Project data
             tileSet.tilesetUrl = urlWithoutQuery.ToString();
-            credentialHandlerPanel.ApplyCredentials();
+            credentialHandler.ApplyCredentials();
             EnableTileset();
         }
 
