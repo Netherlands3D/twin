@@ -20,27 +20,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         [SerializeField] private TMP_Dropdown credentialTypeDropdown;
         private bool skipFirstCredentialErrorMessage = true;
         private TMP_InputField inputFieldToUseForPasswordOrKey;
-
-        [SerializeField] private bool visibleOnAwake; //todo: find a better way to do this
-
+        
         public ICredentialHandler Handler
         {
             get => handler;
             set
             {
-                handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsAccepted);
+                handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
 
                 handler = value;
                 skipFirstCredentialErrorMessage = true;
 
-                handler.OnAuthorizationHandled.AddListener(OnCredentialsAccepted);
+                handler.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
             }
         }
 
-        private void OnCredentialsAccepted(StoredAuthorization auth)
+        private void OnCredentialsHandled(StoredAuthorization auth)
         {
             var accepted = auth is not FailedOrUnsupported;
-print(accepted);
+
             if (!gameObject.activeSelf)
             {
                 gameObject.SetActive(true);
@@ -54,11 +52,6 @@ print(accepted);
                 inputPanel.gameObject.SetActive(false);
                 gameObject.SetActive(false);
             }
-        }
-
-        private void Awake()
-        {
-            gameObject.SetActive(visibleOnAwake); //always start disabled because we assume we don't need credentials, but we need to assign our handler above
         }
 
         private void OnEnable()
@@ -131,7 +124,7 @@ print(accepted);
 
         private void OnDestroy()
         {
-            handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsAccepted);
+            handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
         }
     }
 }

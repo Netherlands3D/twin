@@ -1,4 +1,3 @@
-using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using System;
 using Netherlands3D.Credentials.StoredAuthorization;
 using UnityEngine;
@@ -6,9 +5,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Credentials
 {
-    //this is the handler for the ui flow to check credentials
-    //will be active in the layerpanel when trying to add a layer through url
-    //we also use this credentialhandler for storing credential data while not having active layers yet
+    //this is the handler to query the keyvault and return the credentials object to be processed further
     public class CredentialHandler : MonoBehaviour, ICredentialHandler
     {
         [Tooltip("KeyVault Scriptable Object")] 
@@ -31,9 +28,7 @@ namespace Netherlands3D.Credentials
         public UnityEvent<StoredAuthorization.StoredAuthorization> OnAuthorizationHandled { get; set; } = new();
         public StoredAuthorization.StoredAuthorization Authorization { get; set; }
         
-        //needed to start for example the DataTypeChain
-        public UnityEvent<string> CredentialsSucceeded { get { return OnCredentialsSucceeded; } set { OnCredentialsSucceeded = value; } }
-        public UnityEvent<string> OnCredentialsSucceeded = new();
+        public UnityEvent<bool> CredentialsSucceeded { get; set; }
         
         //called in the inspector on end edit of url input field
         public void SetUri(string url)
@@ -46,6 +41,7 @@ namespace Netherlands3D.Credentials
         public void ApplyCredentials()
         {          
             // try to get credentials from keyVault
+            print("applying credentials: " + inputUri);
             keyVault.Authorize(inputUri, UserName, PasswordOrKeyOrTokenOrCode);
         }
 
@@ -72,17 +68,6 @@ namespace Netherlands3D.Credentials
                 return;
 
             Authorization = auth;         
-            print("got " + Authorization.GetType());
-
-            //we check if the authorized type is different from unknown. The keyvault webrequests can never return unknown if authorization was valid          
-            if (Authorization is not FailedOrUnsupported)
-            {
-                if(Authorization is QueryStringAuthorization queryStringAuthorization)
-                    CredentialsSucceeded.Invoke(queryStringAuthorization.GetUriWithCredentials().ToString());
-                else
-                    CredentialsSucceeded.Invoke(Authorization.BaseUri.ToString());
-            }
-            
             OnAuthorizationHandled.Invoke(Authorization);
         }
     }

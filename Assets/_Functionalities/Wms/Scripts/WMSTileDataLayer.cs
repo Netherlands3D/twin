@@ -15,9 +15,7 @@ namespace Netherlands3D.Functionalities.Wms
         private const string DefaultEpsgCoordinateSystem = "28992";
 
         private Dictionary<string, string> customHeaders = new Dictionary<string, string>();
-        public Dictionary<string, string> CustomHeaders { get => customHeaders; private set => customHeaders = value; }
         private Dictionary<string, string> customQueryParams = new Dictionary<string, string>();
-        public Dictionary<string, string> CustomQueryParameters { get => customQueryParams; private set => customQueryParams = value; }
 
         public int RenderIndex 
         { 

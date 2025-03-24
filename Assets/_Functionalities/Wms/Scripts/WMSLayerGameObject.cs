@@ -53,11 +53,6 @@ namespace Netherlands3D.Functionalities.Wms
             credentialHandler = GetComponent<ICredentialHandler>();
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
 
-            //we need to resolve the listener to the datatypechain because this is a prefab and it doesnt know about whats present in the scene
-            DataTypeChain chain = FindObjectOfType<DataTypeChain>();
-            if(chain != null) 
-                credentialHandler.CredentialsSucceeded.AddListener(chain.DetermineAdapter);
-
             LayerData.LayerSelected.AddListener(OnSelectLayer);
             LayerData.LayerDeselected.AddListener(OnDeselectLayer);
         }

@@ -3,8 +3,8 @@ using System.Collections;
 using System.IO;
 using KindMen.Uxios;
 using KindMen.Uxios.Api;
-using KindMen.Uxios.Errors;
-using KindMen.Uxios.Errors.Http;
+using KindMen.Uxios.Http;
+using Netherlands3D.Credentials.StoredAuthorization;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -24,25 +24,7 @@ namespace Netherlands3D.DataTypeAdapters
         public UnityEvent<string> CouldNotFindAdapter = new();
         public UnityEvent<string> OnDownloadFailed = new();
         public UnityEvent<string> OnLocalCacheFailed = new();
-        public UnityEvent<string> OnAuthenticationFailed = new();
-        public UnityEvent<string> OnAuthenticationSucceeded = new();
-
-        private string targetUrl = "";
-
-        /// <summary>
-        /// The target url can be set directly from an input field.
-        /// Using <ref> DetermineAdapter </ref> without an url will start the chain of responsibility using the set url.
-        /// </summary>
-        public string TargetUrl 
-        { 
-            get => targetUrl; 
-            set
-            {
-                AbortChain();
-                targetUrl = value;   
-            }
-        }
-
+        
         private Coroutine chain;
 
         private void OnDisable() {
@@ -53,15 +35,10 @@ namespace Netherlands3D.DataTypeAdapters
         /// Determine the type of data using chain of responsibility
         /// </summary>
         /// <param name="url">Url to file or service</param>
-        public void DetermineAdapter(string url)
-        {
-            TargetUrl = url;
-            DetermineAdapter();
-        }
-        public void DetermineAdapter()
+        public void DetermineAdapter(StoredAuthorization auth)
         {
             AbortChain();
-            chain = StartCoroutine(DownloadAndCheckSupport(TargetUrl));
+            chain = StartCoroutine(DownloadAndCheckSupport(auth));
         }
 
         private void AbortChain()
@@ -71,12 +48,13 @@ namespace Netherlands3D.DataTypeAdapters
             StopCoroutine(chain);
         }
 
-        private IEnumerator DownloadAndCheckSupport(string url)
+        private IEnumerator DownloadAndCheckSupport(StoredAuthorization auth)
         {
             // Start by download the file, so we can do a detailed check of the content to determine the type
-            var urlAndData = new LocalFile { SourceUrl = url, LocalFilePath = "" };
+            var url = auth is QueryStringAuthorization queryStringAuthorization ? queryStringAuthorization.GetUriWithCredentials() : auth.BaseUri;
+            var urlAndData = new LocalFile { SourceUrl = url.ToString(), LocalFilePath = "" };
 
-            yield return DownloadDataToLocalCache(urlAndData);
+            yield return DownloadDataToLocalCache(auth, urlAndData);
 
             // No local cache? Download failed.
             if (string.IsNullOrEmpty(urlAndData.LocalFilePath))
@@ -96,10 +74,17 @@ namespace Netherlands3D.DataTypeAdapters
         /// </summary>
         /// <param name="urlAndData">The local file object where the path will set</param>
         /// <returns></returns>
-        private IEnumerator DownloadDataToLocalCache(LocalFile urlAndData)
+        private IEnumerator DownloadDataToLocalCache(StoredAuthorization auth, LocalFile urlAndData)
         {
-            var futureFileInfo = Resource<FileInfo>.At(urlAndData.SourceUrl).Value;
+            var url = auth is QueryStringAuthorization queryStringAuthorization ? queryStringAuthorization.GetUriWithCredentials() : auth.BaseUri;
+            var request = Resource<FileInfo>.At(url);
+            if (auth is HeaderBasedAuthorization headerBasedAuthorization)
+            {
+                var header = (Header)headerBasedAuthorization.GetHeaderKeyAndValue();
+                request = request.With(header);
+            }
 
+            var futureFileInfo = request.Value;
             // We want to use and manipulate urlAndData, so we 'curry' it by wrapping a method call in a lambda 
             futureFileInfo.Then(info =>
             {                
@@ -107,14 +92,7 @@ namespace Netherlands3D.DataTypeAdapters
             });        
             futureFileInfo.Catch(error =>
             {
-                if (error is AuthenticationError)
-                {
-                    OnAuthenticationFailed?.Invoke(urlAndData.SourceUrl);
-                }
-                else
-                {
-                    DownloadFailed(urlAndData, error);
-                }
+                DownloadFailed(urlAndData, error);
             });
             
             yield return Uxios.WaitForRequest(futureFileInfo);
