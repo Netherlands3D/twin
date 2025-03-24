@@ -6,33 +6,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
     public class CredentialsValidationPropertySection : MonoBehaviour, ICredentialsPropertySection
     {
-        private ICredentialHandler handler;
+        private ICredentialHandlerPanel handlerPanel;
 
         [SerializeField] private GameObject validCredentialsPanel;
         [SerializeField] private GameObject invalidCredentialsPanel;
 
-        public ICredentialHandler Handler
+        public ICredentialHandlerPanel HandlerPanel
         {
-            get => handler;
+            get => handlerPanel;
             set
             {
-                handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
+                handlerPanel?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
 
-                handler = value;
+                handlerPanel = value;
 
-                OnCredentialsHandled(handler.Authorization);
-                handler.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
+                OnCredentialsHandled(handlerPanel.Authorization);
+                handlerPanel.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
             }
         }
 
         private void Start()
         {            
-            handler?.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
+            handlerPanel?.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
         }
 
         private void OnDestroy()
         {
-            handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
+            handlerPanel?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
         }
 
         private void OnCredentialsHandled(StoredAuthorization auth)

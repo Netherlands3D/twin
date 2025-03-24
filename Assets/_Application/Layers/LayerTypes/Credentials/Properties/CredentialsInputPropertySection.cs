@@ -9,7 +9,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
     public class CredentialsInputPropertySection : MonoBehaviour, ICredentialsPropertySection
     {
-        private ICredentialHandler handler;
+        private ICredentialHandlerPanel handlerPanel;
         
         [SerializeField] private GameObject inputPanel;
         [SerializeField] private GameObject errorMessage;
@@ -23,17 +23,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
         [SerializeField] private bool visibleOnAwake; //todo: find a better way to do this
 
-        public ICredentialHandler Handler
+        public ICredentialHandlerPanel HandlerPanel
         {
-            get => handler;
+            get => handlerPanel;
             set
             {
-                handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsAccepted);
+                handlerPanel?.OnAuthorizationHandled.RemoveListener(OnCredentialsAccepted);
 
-                handler = value;
+                handlerPanel = value;
                 skipFirstCredentialErrorMessage = true;
 
-                handler.OnAuthorizationHandled.AddListener(OnCredentialsAccepted);
+                handlerPanel.OnAuthorizationHandled.AddListener(OnCredentialsAccepted);
             }
         }
 
@@ -68,8 +68,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
         private void Start()
         {
-            if(Handler == null) //we might want to set the handler explicitly, in which case we don't want to get it in the parent
-                Handler = GetComponentInParent<ICredentialHandler>();
+            if(HandlerPanel == null) //we might want to set the handler explicitly, in which case we don't want to get it in the parent
+                HandlerPanel = GetComponentInParent<ICredentialHandlerPanel>();
         }
 
         public void ShowCredentialsWarning(bool show)
@@ -86,10 +86,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         /// </summary>
         public void ApplyCredentials()
         {
-            handler.UserName = userNameInputField.text;
-            handler.PasswordOrKeyOrTokenOrCode = inputFieldToUseForPasswordOrKey.text;
+            handlerPanel.UserName = userNameInputField.text;
+            handlerPanel.PasswordOrKeyOrTokenOrCode = inputFieldToUseForPasswordOrKey.text;
 
-            handler.ApplyCredentials();
+            handlerPanel.ApplyCredentials();
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
         private void OnDestroy()
         {
-            handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsAccepted);
+            handlerPanel?.OnAuthorizationHandled.RemoveListener(OnCredentialsAccepted);
         }
     }
 }

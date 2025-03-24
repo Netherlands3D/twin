@@ -6,6 +6,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
     public interface ICredentialsPropertySection
     {
-        public ICredentialHandler Handler { get; set; }
+        public ICredentialHandlerPanel HandlerPanel { get; set; }
     }
 }

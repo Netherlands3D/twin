@@ -9,7 +9,7 @@ namespace Netherlands3D.Credentials
     //this is the handler for the ui flow to check credentials
     //will be active in the layerpanel when trying to add a layer through url
     //we also use this credentialhandler for storing credential data while not having active layers yet
-    public class CredentialHandlerPanel : MonoBehaviour, ICredentialHandler
+    public class CredentialHandlerPanelPanel : MonoBehaviour, ICredentialHandlerPanel
     {
         [Tooltip("KeyVault Scriptable Object")] 
         [SerializeField] private KeyVault keyVault;

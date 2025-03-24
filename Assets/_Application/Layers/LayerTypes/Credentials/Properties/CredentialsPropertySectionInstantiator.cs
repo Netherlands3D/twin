@@ -13,10 +13,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             if (!inputPropertySectionPrefab) return;
 
             var settings = Instantiate(inputPropertySectionPrefab, properties);
-            var handler = GetComponent<ICredentialHandler>();
+            var handler = GetComponent<ICredentialHandlerPanel>();
             foreach (var credentialInterface in settings.GetComponentsInChildren<ICredentialsPropertySection>(true))
             {
-                credentialInterface.Handler = handler;
+                credentialInterface.HandlerPanel = handler;
             }
         }
     }
