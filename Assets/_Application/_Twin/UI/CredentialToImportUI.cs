@@ -20,7 +20,6 @@ namespace Netherlands3D
         private CredentialHandler handler;
         private DataTypeChain chain;
 
-        [SerializeField] private GameObject UrlInputUI;
         [SerializeField] private GameObject credentialsUI;
 
         private void Awake()
@@ -56,7 +55,6 @@ namespace Netherlands3D
         private void SetCredentialsUIActive(bool enabled)
         {
             credentialsUI.SetActive(enabled);
-            UrlInputUI.SetActive(!enabled);
         }
     }
 }
