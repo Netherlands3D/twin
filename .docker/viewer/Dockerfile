@@ -9,19 +9,19 @@ ADD https://github.com/busyloop/envcat/releases/download/v${ENVCAT_VERSION}/envc
 RUN chmod +x /envcat
 
 # We assume the context/path to be the project root and not this folder 
-COPY .docker/nginx/nginx.conf /etc/nginx/http.d/default.conf
+COPY .docker/viewer/nginx/nginx.conf /etc/nginx/http.d/default.conf
 ADD $SOURCE_PATH /usr/share/nginx/html
-COPY .docker/app.config.dist.json /usr/share/nginx/html
+COPY .docker/viewer/app.config.dist.json /usr/share/nginx/html
 
 # Inject startup script
-COPY .docker/bin/startup.sh /startup.sh
+COPY .docker/viewer/bin/startup.sh /startup.sh
 RUN chmod +x /startup.sh
 
 WORKDIR /usr/share/nginx/html
 
 # needed to run the local cors proxy in proxy.js
 RUN npm install cors-anywhere
-COPY .docker/proxy.js /usr/share/nginx/html/
+COPY .docker/viewer/proxy.js /usr/share/nginx/html/
 
 CMD ["/startup.sh"]
 EXPOSE 80
