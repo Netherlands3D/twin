@@ -6,7 +6,7 @@ namespace Netherlands3D.Credentials.StoredAuthorization
     [Serializable]
     public class QueryStringAuthorization : StoredAuthorization
     {
-        public string key = "";
+        public readonly string key = "";
         public virtual string queryKeyName => "";
         public override AuthorizationType AuthorizationType => AuthorizationType.InferableSingleKey; //todo: once this enum is removed, this class can (and should) become abstract
 
