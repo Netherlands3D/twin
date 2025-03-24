@@ -102,17 +102,16 @@ namespace Netherlands3D.Tiles3D
             ClearKeyFromURL(); //remove existing key if any is there
             UriBuilder uriBuilder = new UriBuilder(tilesetUrl);
 
-            //Keep an existing query
-            if (uriBuilder.Query != null && uriBuilder.Query.Length > 1)
+            // Keep an existing query and ensure the leading `?` and, if so, a trailing `&` is stripped
+            var queryString = uriBuilder.Query.TrimStart('?').TrimEnd('&') ?? string.Empty;
+            if (!string.IsNullOrEmpty(queryString))
             {
-                uriBuilder.Query = uriBuilder.Query.Substring(1) + "&";
-            }
-            else
-            {
-                uriBuilder.Query = "";
+                queryString += "&";
             }
 
-            //Append the key query parameter
+            uriBuilder.Query = queryString;
+
+            // Append the key query parameter
 #if UNITY_EDITOR
             if (!string.IsNullOrEmpty(personalKey))
             {
