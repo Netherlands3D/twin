@@ -3,11 +3,11 @@ using System;
 namespace Netherlands3D.Credentials.StoredAuthorization
 {
     [Serializable]
-    public class HeaderBasedAuthorization : StoredAuthorization
+    public abstract class HeaderBasedAuthorization : StoredAuthorization
     {
         public string key = "";
-        public virtual string headerPrefix { get; protected set; } = "";
-        public virtual string headerName { get; protected set; } = "Authorization";
+        public virtual string headerPrefix => "";
+        public virtual string headerName => "Authorization";
 
         public override AuthorizationType AuthorizationType => AuthorizationType.InferableSingleKey;
 
@@ -20,5 +20,7 @@ namespace Netherlands3D.Credentials.StoredAuthorization
         {
             return baseUri;
         }
+
+        public abstract (string, string) GetHeaderKeyAndValue();
     }
 }

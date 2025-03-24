@@ -80,23 +80,24 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         {
             ClearCredentials();
             
-            if (auth is BearerToken bearerToken) //todo: moet BearerToken inheriten van InferableSingle key of niet?
+            if (auth is HeaderBasedAuthorization headerBasedAuthorization)
             {
-                tileSet.AddCustomHeader(bearerToken.headerName, bearerToken.headerPrefix + bearerToken.key);
+                var (headerName, headerValue) = headerBasedAuthorization.GetHeaderKeyAndValue();
+                tileSet.AddCustomHeader(headerName, headerValue, true);
                 tileSet.RefreshTiles();
+                return;
             }
-            else if (auth is QueryStringAuthorization inferableSingleKey)
+            
+            if (auth is QueryStringAuthorization inferableSingleKey)
             {
                 tileSet.personalKey = inferableSingleKey.key;
                 tileSet.publicKey = inferableSingleKey.key;
                 tileSet.QueryKeyName = inferableSingleKey.queryKeyName;
                 tileSet.RefreshTiles();
+                return;
             }
-            else if (auth is UsernamePassword usernamePassword)
-            {
-                tileSet.AddCustomHeader(usernamePassword.headerName, usernamePassword.headerPrefix + usernamePassword.GetUserNamePassWordQuery(), true);
-                tileSet.RefreshTiles();
-            } 
+
+            throw new NotImplementedException("Authorization type " + auth.GetType() + " is not implemented in " + GetType());
         }
 
         protected override void OnEnable()

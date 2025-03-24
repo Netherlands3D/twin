@@ -101,21 +101,22 @@ namespace Netherlands3D.Functionalities.Wms
         {
             ClearCredentials();
 
-            if (auth is BearerToken bearerToken) //todo: moet BearerToken inheriten van InferableSingle key of niet?
+            if (auth is HeaderBasedAuthorization headerBasedAuthorization)
             {
-                WMSProjectionLayer.AddCustomHeader(bearerToken.headerName, bearerToken.headerPrefix + bearerToken.key);
+                var (headerName, headerValue) = headerBasedAuthorization.GetHeaderKeyAndValue();
+                WMSProjectionLayer.AddCustomHeader(headerName, headerValue, true);
                 WMSProjectionLayer.RefreshTiles();
+                return;
             }
-            else if (auth is QueryStringAuthorization inferableSingleKey)
+            
+            if (auth is QueryStringAuthorization inferableSingleKey)
             {
                 WMSProjectionLayer.AddCustomQueryParameter(inferableSingleKey.queryKeyName, inferableSingleKey.key);
                 WMSProjectionLayer.RefreshTiles();
+                return;
             }
-            else if (auth is UsernamePassword usernamePassword)
-            {
-                WMSProjectionLayer.AddCustomHeader(usernamePassword.headerName, usernamePassword.headerPrefix + usernamePassword.GetUserNamePassWordQuery(), true);
-                WMSProjectionLayer.RefreshTiles();
-            }
+            
+            throw new NotImplementedException("Authorization type " + auth.GetType() + " is not implemented in " + GetType());
         }
 
         public void ClearCredentials()

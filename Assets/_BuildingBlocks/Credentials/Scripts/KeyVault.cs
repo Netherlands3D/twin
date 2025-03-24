@@ -11,7 +11,7 @@ using System.Collections.Specialized;
 namespace Netherlands3D.Credentials
 {
     [Obsolete("this enum will be removed in the future, use a type check instead")]
-    public enum AuthorizationType
+    public enum AuthorizationType //todo: remove this enum
     {
         //Specific order in items used in dropdown index
         Public = -1,
@@ -143,25 +143,6 @@ namespace Netherlands3D.Credentials
             authorizationCallback?.Invoke(false);
         }
 
-        public AuthorizationType GetKnownAuthorizationTypeForURL(Uri uri)
-        {
-            if (log) Debug.Log("GetKnownAuthorizationTypeForURL for: " + uri);
-            // Check if the url is known, like Google Maps or PDOK
-            foreach (var knownUrlAuthorizationType in knownUrlAuthorizationTypes)
-            {
-                if (uri.Equals(knownUrlAuthorizationType.baseUrl))
-                {
-                    return knownUrlAuthorizationType.authorizationType;
-                }
-            }
-
-            // Check our own saved credentials.
-            if (storedAuthorizations.ContainsKey(uri))
-                return storedAuthorizations[uri].AuthorizationType;
-
-            return AuthorizationType.Public;
-        }
-
         /// <summary>
         /// Add a new known URL with a specific authorization type
         /// </summary>
@@ -203,7 +184,8 @@ namespace Netherlands3D.Credentials
                     storedAuthorizations.Add(baseUri, auth);
                     break;
                 case AuthorizationType.FailedOrUnsupported:
-                    // storedAuthorizations.Add(uri, auth); // todo: do we want to store a failed authorization, or try again next time this url is passed? 
+                    // we don't want to save a failed auth, since this could be a typo and it should not automatically fail if the user retries.
+                    // If possible we want to make a distinction between Failed and Unsupported, and only save if it's unsupported, since then retrying is futile.
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(authorizationType), authorizationType, "authorisation type not defined");
