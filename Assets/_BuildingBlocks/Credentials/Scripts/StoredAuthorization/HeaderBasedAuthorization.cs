@@ -11,14 +11,14 @@ namespace Netherlands3D.Credentials.StoredAuthorization
 
         public override AuthorizationType AuthorizationType => AuthorizationType.InferableSingleKey;
 
-        public HeaderBasedAuthorization(Uri url, string key) : base(url)
+        protected HeaderBasedAuthorization(Uri url, string key) : base(url)
         {
             this.key = key;
         }
 
         public override Uri GetUriWithCredentials()
         {
-            return baseUri;
+            return BaseUri;
         }
 
         public abstract (string, string) GetHeaderKeyAndValue();

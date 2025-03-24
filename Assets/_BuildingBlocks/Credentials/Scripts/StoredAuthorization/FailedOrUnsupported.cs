@@ -15,7 +15,7 @@ namespace Netherlands3D.Credentials.StoredAuthorization
         
         public override Uri GetUriWithCredentials()
         {
-            return baseUri;
+            return BaseUri;
         }
     }
 }

@@ -111,7 +111,7 @@ namespace Netherlands3D.Functionalities.Wms
             
             if (auth is QueryStringAuthorization inferableSingleKey)
             {
-                WMSProjectionLayer.AddCustomQueryParameter(inferableSingleKey.queryKeyName, inferableSingleKey.key);
+                WMSProjectionLayer.AddCustomQueryParameter(inferableSingleKey.QueryKeyName, inferableSingleKey.Key);
                 WMSProjectionLayer.RefreshTiles();
                 return;
             }

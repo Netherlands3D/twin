@@ -6,22 +6,22 @@ namespace Netherlands3D.Credentials.StoredAuthorization
     [Serializable]
     public class QueryStringAuthorization : StoredAuthorization
     {
-        public readonly string key = "";
-        public virtual string queryKeyName => "";
+        public string QueryKeyValue { get; } = "";
+        public virtual string QueryKeyName => "";
         public override AuthorizationType AuthorizationType => AuthorizationType.InferableSingleKey; //todo: once this enum is removed, this class can (and should) become abstract
 
-        public QueryStringAuthorization(Uri url, string key) : base(url)
+        public QueryStringAuthorization(Uri url, string key ) : base(url)
         {
-            this.key = key;
+            QueryKeyValue = key;
         }
 
         public override Uri GetUriWithCredentials()
         {
-            if (string.IsNullOrEmpty(queryKeyName))
-                return baseUri;
+            if (string.IsNullOrEmpty(QueryKeyName))
+                return BaseUri;
 
-            var uriBuilder = new UriBuilder(baseUri);
-            uriBuilder.SetQueryParameter(queryKeyName, key);
+            var uriBuilder = new UriBuilder(BaseUri);
+            uriBuilder.SetQueryParameter(QueryKeyName, QueryKeyValue);
             return uriBuilder.Uri;
         }
     }

@@ -6,9 +6,9 @@ namespace Netherlands3D.Credentials.StoredAuthorization
     public class Code : QueryStringAuthorization
     {
         public override AuthorizationType AuthorizationType => AuthorizationType.Code;
-        public override string queryKeyName => "code";
+        public override string QueryKeyName => "code";
 
-        public Code(Uri url, string key) : base(url, key)
+        public Code(Uri url, string queryKeyValue) : base(url, queryKeyValue)
         {
         }
     }

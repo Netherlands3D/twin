@@ -90,9 +90,9 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             
             if (auth is QueryStringAuthorization inferableSingleKey)
             {
-                tileSet.personalKey = inferableSingleKey.key;
-                tileSet.publicKey = inferableSingleKey.key;
-                tileSet.QueryKeyName = inferableSingleKey.queryKeyName;
+                tileSet.personalKey = inferableSingleKey.Key;
+                tileSet.publicKey = inferableSingleKey.Key;
+                tileSet.QueryKeyName = inferableSingleKey.QueryKeyName;
                 tileSet.RefreshTiles();
                 return;
             }
