@@ -56,15 +56,12 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             else
                 tileSet.RefreshTiles();
         }
-        
+
         protected void Awake()
         {
             tileSet = GetComponent<Read3DTileset>();
-            
+
             credentialHandler = GetComponent<ICredentialHandler>();
-            if(!string.IsNullOrEmpty(tileSet.tilesetUrl))
-                credentialHandler.BaseUri = new Uri(tileSet.tilesetUrl); //apply the URL from what is serialized in the tileset component.
-            
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             urlPropertyData = new Tile3DLayerPropertyData(TilesetURLWithoutQuery(tileSet.tilesetUrl));
             //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
@@ -75,7 +72,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             else
                 propertySections = new();
         }
-
+        
         private void HandleCredentials(StoredAuthorization auth)
         {
             ClearCredentials();
@@ -112,6 +109,15 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             base.OnDisable();
             tileSet.unsupportedExtensionsParsed.RemoveListener(InvokeUnsupportedExtensionsMessage);
             OnServerResponseReceived.RemoveListener(ProcessServerResponse);
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            if (!string.IsNullOrEmpty(urlPropertyData.Url))
+            {
+                UpdateURL(new Uri(tileSet.tilesetUrl));
+            }
         }
 
         private void ProcessServerResponse(UnityWebRequest request)
@@ -157,7 +163,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             tileSet.publicKey = "";
             tileSet.QueryKeyName = "key";
             tileSet.ClearKeyFromURL();
-            tileSet.RefreshTiles();
+            tileSet.RefreshTiles(); 
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -166,7 +172,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             if (urlProperty != null)
             {
                 urlPropertyData = urlProperty; //use existing object to overwrite the current instance
-                UpdateURL(new Uri(urlProperty.Url));
             }
         }
 
