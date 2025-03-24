@@ -185,7 +185,10 @@ namespace Netherlands3D.Functionalities.Wms
                     continue;
 
                 if (tile.Value.runningCoroutine != null)
+                {
                     StopCoroutine(tile.Value.runningCoroutine);
+                    tile.Value.runningCoroutine = null;
+                }
 
                 OnPreUpdateTile(tile.Value);
 
