@@ -73,8 +73,13 @@ namespace Netherlands3D.Credentials
             Authorization = auth;            
 
             //we check if the authorized type is different from unknown. The keyvault webrequests can never return unknown if authorization was valid          
-            if(Authorization is not FailedOrUnsupported)
-                CredentialsSucceeded.Invoke(auth.GetUriWithCredentials().ToString());
+            if (Authorization is not FailedOrUnsupported)
+            {
+                if(Authorization is QueryStringAuthorization queryStringAuthorization)
+                    CredentialsSucceeded.Invoke(queryStringAuthorization.GetUriWithCredentials().ToString());
+                else
+                    CredentialsSucceeded.Invoke(Authorization.BaseUri.ToString());
+            }
             
             OnAuthorizationHandled.Invoke(Authorization);
         }

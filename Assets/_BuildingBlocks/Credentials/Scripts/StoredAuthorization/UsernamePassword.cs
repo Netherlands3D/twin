@@ -9,8 +9,7 @@ namespace Netherlands3D.Credentials.StoredAuthorization
         protected string username;
         protected string password => key;
         protected override string headerPrefix => "Basic ";
-        public override AuthorizationType AuthorizationType => AuthorizationType.UsernamePassword;
-
+        
         public UsernamePassword(Uri url, string username, string password) : base(url, password)
         {
             this.username = username;

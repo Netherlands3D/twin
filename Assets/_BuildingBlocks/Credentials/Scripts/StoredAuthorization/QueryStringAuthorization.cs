@@ -4,22 +4,21 @@ using Netherlands3D.Web;
 namespace Netherlands3D.Credentials.StoredAuthorization
 {
     [Serializable]
-    public class QueryStringAuthorization : StoredAuthorization
+    public abstract class QueryStringAuthorization : StoredAuthorization
     {
         public string QueryKeyValue { get; } = "";
         public virtual string QueryKeyName => "";
-        public override AuthorizationType AuthorizationType => AuthorizationType.InferableSingleKey; //todo: once this enum is removed, this class can (and should) become abstract
 
-        public QueryStringAuthorization(Uri url, string key ) : base(url)
+        protected QueryStringAuthorization(Uri url, string key ) : base(url)
         {
             QueryKeyValue = key;
         }
 
-        public override Uri GetUriWithCredentials()
+        public Uri GetUriWithCredentials()
         {
             if (string.IsNullOrEmpty(QueryKeyName))
-                return BaseUri;
-
+                throw new Exception("The Query name should be overriden to provide a value in the inherited class, it is still set to an empty string");
+            
             var uriBuilder = new UriBuilder(BaseUri);
             uriBuilder.SetQueryParameter(QueryKeyName, QueryKeyValue);
             return uriBuilder.Uri;

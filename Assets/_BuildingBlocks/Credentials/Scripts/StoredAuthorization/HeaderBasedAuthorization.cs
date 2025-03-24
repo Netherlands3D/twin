@@ -8,17 +8,10 @@ namespace Netherlands3D.Credentials.StoredAuthorization
         protected string key = "";
         protected virtual string headerPrefix => "";
         protected virtual string headerName => "Authorization";
-
-        public override AuthorizationType AuthorizationType => AuthorizationType.InferableSingleKey;
-
+        
         protected HeaderBasedAuthorization(Uri url, string key) : base(url)
         {
             this.key = key;
-        }
-
-        public override Uri GetUriWithCredentials()
-        {
-            return BaseUri;
         }
 
         public abstract (string, string) GetHeaderKeyAndValue();

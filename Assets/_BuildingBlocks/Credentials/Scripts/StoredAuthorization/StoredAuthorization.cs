@@ -7,7 +7,6 @@ namespace Netherlands3D.Credentials.StoredAuthorization
     {
         public Uri BaseUri { get; }
         protected Uri inputUri; //the initial endpoint
-        public abstract Uri GetUriWithCredentials();
 
         protected StoredAuthorization(Uri uri)
         {
@@ -19,7 +18,5 @@ namespace Netherlands3D.Credentials.StoredAuthorization
         {
             inputUri = uri;
         }
-
-        public abstract AuthorizationType AuthorizationType { get; }
     }
 }

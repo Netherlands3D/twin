@@ -16,7 +16,7 @@ namespace Netherlands3D.Credentials
         //Specific order in items used in dropdown index
         Public = -1,
         UsernamePassword = 0,
-        InferableSingleKey = 1, //Single field key, token or code (we dont know specifically yet but can infer it)
+        // InferableSingleKey = 1, //Single field key, token or code (we dont know specifically yet but can infer it)
         Key,
         BearerToken,
         Code,
@@ -31,9 +31,9 @@ namespace Netherlands3D.Credentials
 
         public List<KnownUrlAuthorizationType> knownUrlAuthorizationTypes = new()
         {
-            new KnownUrlAuthorizationType() { baseUrl = "https://tile.googleapis.com/v1/3dtiles/root.json", authorizationType = AuthorizationType.InferableSingleKey },
-            new KnownUrlAuthorizationType() { baseUrl = "https://engine.tygron.com/web/3dtiles/tileset.json", authorizationType = AuthorizationType.InferableSingleKey },
-            new KnownUrlAuthorizationType() { baseUrl = "https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json", authorizationType = AuthorizationType.Public }
+            // new KnownUrlAuthorizationType() { baseUrl = "https://tile.googleapis.com/v1/3dtiles/root.json", authorizationType = AuthorizationType.InferableSingleKey },
+            // new KnownUrlAuthorizationType() { baseUrl = "https://engine.tygron.com/web/3dtiles/tileset.json", authorizationType = AuthorizationType.InferableSingleKey },
+            // new KnownUrlAuthorizationType() { baseUrl = "https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json", authorizationType = AuthorizationType.Public }
         };
 
         public Dictionary<Uri, StoredAuthorization.StoredAuthorization> storedAuthorizations = new();
@@ -165,10 +165,10 @@ namespace Netherlands3D.Credentials
                     auth = new UsernamePassword(uri, username, password);
                     storedAuthorizations.Add(baseUri, auth);
                     break;
-                case AuthorizationType.InferableSingleKey:
-                    auth = new QueryStringAuthorization(uri, key);
-                    storedAuthorizations.Add(baseUri, auth);
-                    break;
+                // case AuthorizationType.InferableSingleKey:
+                    // auth = new QueryStringAuthorization(uri, key);
+                    // storedAuthorizations.Add(baseUri, auth);
+                    // break;
                 case AuthorizationType.Key:
                     auth = new Key(uri, key);
                     storedAuthorizations.Add(baseUri, auth);

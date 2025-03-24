@@ -7,7 +7,6 @@ namespace Netherlands3D.Credentials.StoredAuthorization
     public class BearerToken : HeaderBasedAuthorization
     {
         protected override string headerPrefix => "Bearer ";
-        public override AuthorizationType AuthorizationType => AuthorizationType.BearerToken;
         
         public BearerToken(Uri url, string key) : base(url, key)
         {

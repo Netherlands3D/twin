@@ -6,15 +6,8 @@ namespace Netherlands3D.Credentials.StoredAuthorization
     [Serializable]
     public class FailedOrUnsupported : StoredAuthorization
     {
-        public override AuthorizationType AuthorizationType => AuthorizationType.FailedOrUnsupported;
-
         public FailedOrUnsupported(Uri uri) : base(uri)
         {
-        }
-        
-        public override Uri GetUriWithCredentials()
-        {
-            return BaseUri;
         }
     }
 }
