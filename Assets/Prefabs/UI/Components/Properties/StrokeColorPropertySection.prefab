@@ -36,7 +36,7 @@ PrefabInstance:
     - target: {fileID: 6482568267866771571, guid: e3342ba09b3c3e245ac1e7d9f4102026,
         type: 3}
       propertyPath: m_Name
-      value: FillColorPropertySection
+      value: StrokeColorPropertySection
       objectReference: {fileID: 0}
     - target: {fileID: 8226166663201219730, guid: e3342ba09b3c3e245ac1e7d9f4102026,
         type: 3}
@@ -181,7 +181,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6482568267866771571, guid: e3342ba09b3c3e245ac1e7d9f4102026,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: -7451032918455945531}
+      addedObject: {fileID: 7588534404346000142}
   m_SourcePrefab: {fileID: 100100000, guid: e3342ba09b3c3e245ac1e7d9f4102026, type: 3}
 --- !u!224 &5764104647733272860 stripped
 RectTransform:
@@ -195,7 +195,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3488965140189221880}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-7451032918455945531
+--- !u!114 &7588534404346000142
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -204,10 +204,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7610518432015451019}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28ccc7c6e87e4f299071221695e549b9, type: 3}
+  m_Script: {fileID: 11500000, guid: edfd6acd1a9d45e1b219828e54d131d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
   colorPicker: {fileID: 5991820789294285947}
 --- !u!1001 &8528826791854523121
 PrefabInstance:
@@ -402,11 +402,6 @@ PrefabInstance:
       propertyPath: colorChanged.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7275114998268791187, guid: eacd2d5be98dec243bc44bf8b2083c85,
-        type: 3}
-      propertyPath: colorChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: -7451032918455945531}
     - target: {fileID: 7275114998268791187, guid: eacd2d5be98dec243bc44bf8b2083c85,
         type: 3}
       propertyPath: colorChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
