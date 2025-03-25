@@ -2131,8 +2131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   doubleClickThreshold: 0.5
   indentWidth: 24
-  buttonGroupWidth: 46
-  layerNameSpacing: 4
+  buttonGroupWidth: 60
   layerTypeImage: {fileID: 1356745287749164724}
   layerNameText: {fileID: 4813776858706825396}
   layerNameField: {fileID: 8882207419444401735}
