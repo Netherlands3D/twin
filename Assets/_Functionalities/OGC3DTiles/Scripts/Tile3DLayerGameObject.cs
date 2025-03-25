@@ -28,13 +28,14 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         private Tile3DLayerPropertyData urlPropertyData;
         LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
-        
+
         [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
         public UnityEvent<Uri> OnURLChanged => urlPropertyData.OnUrlChanged;
+
         public UnityEvent<string> UnsupportedExtensionsMessage;
 
         private ICredentialHandler credentialHandler;
-        
+
         private string TilesetURLWithoutQuery(string value)
         {
             if (!value.Contains("?"))
@@ -70,11 +71,11 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             else
                 propertySections = new();
         }
-        
+
         private void HandleCredentials(StoredAuthorization auth)
         {
             ClearCredentials();
-            
+
             switch (auth)
             {
                 case FailedOrUnsupported:
@@ -82,21 +83,20 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
                     tileSet.enabled = false;
                     return;
                 case HeaderBasedAuthorization headerBasedAuthorization:
-                    LayerData.HasValidCredentials = true;
                     var (headerName, headerValue) = headerBasedAuthorization.GetHeaderKeyAndValue();
                     tileSet.AddCustomHeader(headerName, headerValue, true);
-                    tileSet.RefreshTiles();
-                    tileSet.enabled = LayerData.ActiveInHierarchy;
-                    return;
+                    break;
                 case QueryStringAuthorization queryStringAuthorization:
-                    LayerData.HasValidCredentials = true;
                     tileSet.personalKey = queryStringAuthorization.QueryKeyValue;
                     tileSet.publicKey = queryStringAuthorization.QueryKeyValue;
                     tileSet.QueryKeyName = queryStringAuthorization.QueryKeyName;
-                    tileSet.RefreshTiles();
-                    tileSet.enabled = true;
-                    return;
+                    break;
             }
+
+            //also do this for public
+            LayerData.HasValidCredentials = true;
+            tileSet.RefreshTiles();
+            tileSet.enabled = true;
         }
 
         protected override void OnEnable()
@@ -124,6 +124,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             {
                 UpdateURL(new Uri(urlPropertyData.Url));
             }
+
             var layerParent = GameObject.FindWithTag(layerParentTag).transform;
             transform.SetParent(layerParent);
         }
@@ -164,14 +165,14 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         {
             return propertySections;
         }
-        
+
         public void ClearCredentials()
         {
             tileSet.personalKey = "";
             tileSet.publicKey = "";
             tileSet.QueryKeyName = "key";
             tileSet.ClearKeyFromURL();
-            tileSet.RefreshTiles(); 
+            tileSet.RefreshTiles();
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)

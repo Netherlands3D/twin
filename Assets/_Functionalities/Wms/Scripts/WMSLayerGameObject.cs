@@ -98,20 +98,19 @@ namespace Netherlands3D.Functionalities.Wms
                     LayerData.HasValidCredentials = false;
                     WMSProjectionLayer.isEnabled = false;
                     return;
+
                 case HeaderBasedAuthorization headerBasedAuthorization:
-                    LayerData.HasValidCredentials = true;
                     var (headerName, headerValue) = headerBasedAuthorization.GetHeaderKeyAndValue();
                     WMSProjectionLayer.SetCustomHeader(headerName, headerValue);
-                    WMSProjectionLayer.RefreshTiles();
-                    WMSProjectionLayer.isEnabled = true;
-                    return;
+                    break;
                 case QueryStringAuthorization queryStringAuthorization:
-                    LayerData.HasValidCredentials = true;
                     WMSProjectionLayer.SetCustomQueryParameter(queryStringAuthorization.QueryKeyName, queryStringAuthorization.QueryKeyValue);
-                    WMSProjectionLayer.RefreshTiles();
-                    WMSProjectionLayer.isEnabled = true;
-                    return;
+                    break;
             }
+            //also do this for public
+            LayerData.HasValidCredentials = true;
+            WMSProjectionLayer.RefreshTiles();
+            WMSProjectionLayer.isEnabled = true;
         }
 
         public void ClearCredentials()
