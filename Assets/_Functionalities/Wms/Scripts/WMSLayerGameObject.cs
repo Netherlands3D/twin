@@ -96,19 +96,25 @@ namespace Netherlands3D.Functionalities.Wms
         {
             ClearCredentials();
 
-            if (auth is HeaderBasedAuthorization headerBasedAuthorization)
+            switch (auth)
             {
-                var (headerName, headerValue) = headerBasedAuthorization.GetHeaderKeyAndValue();
-                WMSProjectionLayer.AddCustomHeader(headerName, headerValue, true);
-                WMSProjectionLayer.RefreshTiles();
-                return;
-            }
-            
-            if (auth is QueryStringAuthorization inferableSingleKey)
-            {
-                WMSProjectionLayer.AddCustomQueryParameter(inferableSingleKey.QueryKeyName, inferableSingleKey.QueryKeyValue);
-                WMSProjectionLayer.RefreshTiles();
-                return;
+                case FailedOrUnsupported:
+                    LayerData.HasValidCredentials = false;
+                    WMSProjectionLayer.isEnabled = false;
+                    return;
+                case HeaderBasedAuthorization headerBasedAuthorization:
+                    LayerData.HasValidCredentials = true;
+                    var (headerName, headerValue) = headerBasedAuthorization.GetHeaderKeyAndValue();
+                    WMSProjectionLayer.AddCustomHeader(headerName, headerValue, true);
+                    WMSProjectionLayer.RefreshTiles();
+                    WMSProjectionLayer.isEnabled = true;
+                    return;
+                case QueryStringAuthorization inferableSingleKey:
+                    LayerData.HasValidCredentials = true;
+                    WMSProjectionLayer.AddCustomQueryParameter(inferableSingleKey.QueryKeyName, inferableSingleKey.QueryKeyValue);
+                    WMSProjectionLayer.RefreshTiles();
+                    WMSProjectionLayer.isEnabled = true;
+                    return;
             }
         }
 
