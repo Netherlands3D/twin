@@ -2223,11 +2223,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 840209856476251670, guid: 782b1efec9cddc249a806396adc4599c,
         type: 3}
-      propertyPath: dataTypeAdapters.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 840209856476251670, guid: 782b1efec9cddc249a806396adc4599c,
-        type: 3}
       propertyPath: dataTypeAdapters.Array.data[1]
       value: 
       objectReference: {fileID: 11400000, guid: 4ba05b8b9d9de4889b11a1d074708458,

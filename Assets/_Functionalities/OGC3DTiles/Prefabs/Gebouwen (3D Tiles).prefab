@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -2324982978833452817}
   - component: {fileID: -3206187947326476088}
   - component: {fileID: -250617364918305391}
+  - component: {fileID: 1356503853171272600}
   m_Layer: 7
   m_Name: Gebouwen (3D Tiles)
   m_TagString: Untagged
@@ -51,27 +52,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile:
-    isLoading: 0
     level: 0
     X: 0
     Y: 0
     hascontent: 0
     priority: 0
+    childrenCountDelayingDispose: 0
     boundingVolume:
       boundingVolumeType: 0
       values: []
     BottomLeft:
+      coordinateSystem: 0
       extraLongitudeRotation: 0
       extraLattitudeRotation: 0
-      Points: []
+      value1: 0
+      value2: 0
+      value3: 0
+      PointsLength: 0
     TopRight:
+      coordinateSystem: 0
       extraLongitudeRotation: 0
       extraLattitudeRotation: 0
-      Points: []
+      value1: 0
+      value2: 0
+      value3: 0
+      PointsLength: 0
+    inView: 0
     requestedDispose: 0
     requestedUpdate: 0
-    childrenCountDelayingDispose: 0
+    isLoading: 0
     children: []
+    tileTransform:
+      m00: 1
+      m01: 0
+      m02: 0
+      m03: 0
+      m10: 0
+      m11: 1
+      m12: 0
+      m13: 0
+      m20: 0
+      m21: 0
+      m22: 1
+      m23: 0
+      m30: 0
+      m31: 0
+      m32: 0
+      m33: 1
     transform:
     - 1
     - 0
@@ -92,8 +119,6 @@ MonoBehaviour:
     geometricError: 0
     screenSpaceError: 3.4028235e+38
     refine: 
-    inView: 0
-    canRefine: 0
     contentUri: 
     content: {fileID: 0}
     loadedChildren: 0
@@ -128,27 +153,53 @@ MonoBehaviour:
   personalKey: 
   queryKeyName: key
   root:
-    isLoading: 0
     level: 0
     X: 0
     Y: 0
     hascontent: 0
     priority: 0
+    childrenCountDelayingDispose: 0
     boundingVolume:
       boundingVolumeType: 0
       values: []
     BottomLeft:
+      coordinateSystem: 0
       extraLongitudeRotation: 0
       extraLattitudeRotation: 0
-      Points: []
+      value1: 0
+      value2: 0
+      value3: 0
+      PointsLength: 0
     TopRight:
+      coordinateSystem: 0
       extraLongitudeRotation: 0
       extraLattitudeRotation: 0
-      Points: []
+      value1: 0
+      value2: 0
+      value3: 0
+      PointsLength: 0
+    inView: 0
     requestedDispose: 0
     requestedUpdate: 0
-    childrenCountDelayingDispose: 0
+    isLoading: 0
     children: []
+    tileTransform:
+      m00: 1
+      m01: 0
+      m02: 0
+      m03: 0
+      m10: 0
+      m11: 1
+      m12: 0
+      m13: 0
+      m20: 0
+      m21: 0
+      m22: 1
+      m23: 0
+      m30: 0
+      m31: 0
+      m32: 0
+      m33: 1
     transform:
     - 1
     - 0
@@ -169,8 +220,6 @@ MonoBehaviour:
     geometricError: 0
     screenSpaceError: 3.4028235e+38
     refine: 
-    inView: 0
-    canRefine: 0
     contentUri: 
     content: {fileID: 0}
     loadedChildren: 0
@@ -189,6 +238,7 @@ MonoBehaviour:
     boundingRegion: []
   tileCount: 0
   nestingDepth: 0
+  parseAssetMetadata: 0
   parseSubObjects: 0
   maxScreenHeightInPixels: 1080
   maximumScreenSpaceError: 5
@@ -198,7 +248,13 @@ MonoBehaviour:
   unsupportedExtensionsParsed:
     m_PersistentCalls:
       m_Calls: []
+  OnServerResponseReceived:
+    m_PersistentCalls:
+      m_Calls: []
   OnServerRequestFailed:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLoadAssetMetadata:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &7109194962515795805
@@ -260,14 +316,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284d1c20d5a85488d9fd5444dc075baf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabIdentifier: 416bb3a0b4137324d860b58a6e8f484e
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
     m_PersistentCalls:
       m_Calls: []
-  allowURLEditInPropertySection: 0
-  openPropertiesOnStart: 1
+  usePropertySections: 1
   UnsupportedExtensionsMessage:
     m_PersistentCalls:
       m_Calls:
@@ -327,7 +383,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {fileID: 0}
   worldTransformShifter: {fileID: -250617364918305391}
   referenceCoordinateSystem: 4326
   onPreShift:
@@ -348,3 +403,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89676a9f69324d308c537c8970b47571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1356503853171272600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
+  CredentialsSucceeded:
+    m_PersistentCalls:
+      m_Calls: []

@@ -1,18 +1,25 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using KindMen.Uxios;
+using KindMen.Uxios.Http;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.Web;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using QueryParameters = KindMen.Uxios.Http.QueryParameters;
 
 namespace Netherlands3D.Functionalities.Wms
 {
     public class WMSTileDataLayer : ImageProjectionLayer
     {
         private const string DefaultEpsgCoordinateSystem = "28992";
+
+        private Headers customHeaders = new();
+        private QueryParameters customQueryParams = new();
 
         public int RenderIndex 
         { 
@@ -54,6 +61,29 @@ namespace Netherlands3D.Functionalities.Wms
             }
         }
 
+        /// <summary>
+        /// Set custom header for all internal WebRequests
+        /// </summary>
+        public void SetCustomHeader(string key, string value)
+        {
+            customHeaders[key] = value;
+        }
+
+        public void ClearCustomHeaders()
+        {
+            customHeaders.Clear();
+        }
+
+        public void SetCustomQueryParameter(string key, string value)
+        {
+            customQueryParams.Set(key, value);
+        }
+
+        public void ClearCustomQueryParameters()
+        {
+            customQueryParams.Clear();
+        }
+
         protected override IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
         {
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
@@ -73,11 +103,14 @@ namespace Netherlands3D.Functionalities.Wms
 
             var boundingBox = DetermineBoundingBox(tileChange, mapData);
             string url = wmsUrl.Replace("{0}", boundingBox.ToString());
-
-            var promise = Uxios.DefaultInstance.Get<Texture2D>(
-                new Uri(url), 
-                new Config() { TypeOfResponseType = ExpectedTypeOfResponse.Texture(true)}
-            );
+            
+            var config = new Config
+            {
+                TypeOfResponseType = ExpectedTypeOfResponse.Texture(true), 
+                Headers = customHeaders, 
+                Params = customQueryParams
+            };
+            var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(url), config);
 
             promise.Then(response =>
                 {
@@ -111,7 +144,7 @@ namespace Netherlands3D.Functionalities.Wms
             
             promise.Catch(exception =>
             {
-                Debug.LogWarning($"Could not download {url}: " + exception.Message);
+                Debug.LogError($"Could not download {url}: " + exception.Message);
                 RemoveGameObjectFromTile(tileKey);
             });
             
