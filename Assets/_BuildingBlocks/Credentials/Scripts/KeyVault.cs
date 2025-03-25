@@ -50,7 +50,7 @@ namespace Netherlands3D.Credentials
             Uri baseUri = new Uri(inputUri.GetLeftPart(UriPartial.Path));
             if (storedAuthorizations.TryGetValue(baseUri, out var authorization))
             {
-                authorization.SetInputUri(inputUri); //we need this later on to determine the specific endpoint
+                // authorization.SetInputUri(inputUri); //we need this later on to determine the specific endpoint
                 OnAuthorizationTypeDetermined.Invoke(authorization);
                 return;
             }

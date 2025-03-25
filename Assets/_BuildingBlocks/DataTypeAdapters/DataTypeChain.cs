@@ -51,8 +51,7 @@ namespace Netherlands3D.DataTypeAdapters
         private IEnumerator DownloadAndCheckSupport(StoredAuthorization auth)
         {
             // Start by download the file, so we can do a detailed check of the content to determine the type
-            var url = auth.GetFullUri();
-            var urlAndData = new LocalFile { SourceUrl = url.ToString(), LocalFilePath = "" };
+            var urlAndData = new LocalFile { SourceUrl = auth.InputUri.ToString(), LocalFilePath = "" };
 
             yield return DownloadDataToLocalCache(auth, urlAndData);
 
@@ -76,8 +75,12 @@ namespace Netherlands3D.DataTypeAdapters
         /// <returns></returns>
         private IEnumerator DownloadDataToLocalCache(StoredAuthorization auth, LocalFile urlAndData)
         {
-            var url = auth.GetFullUri();
+            var url = auth.InputUri;
+            if (auth is QueryStringAuthorization queryStringAuthorization)
+                url = queryStringAuthorization.GetFullUri();
+            
             var request = Resource<FileInfo>.At(url);
+            
             if (auth is HeaderBasedAuthorization headerBasedAuthorization)
             {
                 var header = (Header)headerBasedAuthorization.GetHeaderKeyAndValue();

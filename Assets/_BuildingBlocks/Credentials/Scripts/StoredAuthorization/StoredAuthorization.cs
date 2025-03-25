@@ -6,19 +6,12 @@ namespace Netherlands3D.Credentials.StoredAuthorization
     public abstract class StoredAuthorization
     {
         public Uri BaseUri { get; }
-        protected Uri inputUri; //the initial endpoint
+        public Uri InputUri { get; } //the uri received from the user
 
         protected StoredAuthorization(Uri uri)
         {
-            inputUri = uri;
+            InputUri = uri;
             BaseUri = new Uri(uri.GetLeftPart(UriPartial.Path));
         }
-
-        public void SetInputUri(Uri uri)
-        {
-            inputUri = uri;
-        }
-
-        public abstract Uri GetFullUri();
     }
 }

@@ -9,10 +9,5 @@ namespace Netherlands3D.Credentials.StoredAuthorization
         public FailedOrUnsupported(Uri uri) : base(uri)
         {
         }
-
-        public override Uri GetFullUri()
-        {
-            return inputUri;
-        }
     }
 }

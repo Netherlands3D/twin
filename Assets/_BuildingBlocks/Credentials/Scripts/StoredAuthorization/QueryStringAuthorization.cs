@@ -14,12 +14,12 @@ namespace Netherlands3D.Credentials.StoredAuthorization
             QueryKeyValue = key;
         }
 
-        public override Uri GetFullUri()
+        public Uri GetFullUri()
         {
             if (string.IsNullOrEmpty(QueryKeyName))
                 throw new Exception("The Query name should be overriden to provide a value in the inherited class, it is still set to an empty string");
             
-            var uriBuilder = new UriBuilder(inputUri);
+            var uriBuilder = new UriBuilder(InputUri);
             uriBuilder.SetQueryParameter(QueryKeyName, QueryKeyValue);
             return uriBuilder.Uri;
         }

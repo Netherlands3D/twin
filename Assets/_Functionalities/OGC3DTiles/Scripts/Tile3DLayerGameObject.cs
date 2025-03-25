@@ -93,8 +93,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
                 tileSet.RefreshTiles();
                 return;
             }
-
-            throw new NotImplementedException("Authorization type " + auth.GetType() + " is not implemented in " + GetType());
         }
 
         protected override void OnEnable()
@@ -114,7 +112,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         protected override void Start()
         {
             base.Start();
-            if (!string.IsNullOrEmpty(urlPropertyData.Url))
+            if (string.IsNullOrEmpty(urlPropertyData.Url) && !string.IsNullOrEmpty(tileSet.tilesetUrl)) //if we are making a new layer, we should take the serialized url from the tileset if it exists.
             {
                 UpdateURL(new Uri(tileSet.tilesetUrl));
             }

@@ -110,8 +110,6 @@ namespace Netherlands3D.Functionalities.Wms
                 WMSProjectionLayer.RefreshTiles();
                 return;
             }
-            
-            throw new NotImplementedException("Authorization type " + auth.GetType() + " is not implemented in " + GetType());
         }
 
         public void ClearCredentials()

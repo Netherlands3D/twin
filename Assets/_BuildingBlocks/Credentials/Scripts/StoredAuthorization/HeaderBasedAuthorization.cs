@@ -13,10 +13,6 @@ namespace Netherlands3D.Credentials.StoredAuthorization
         {
             this.key = key;
         }
-        public override Uri GetFullUri()
-        {
-            return inputUri;
-        }
 
         public abstract (string, string) GetHeaderKeyAndValue();
     }
