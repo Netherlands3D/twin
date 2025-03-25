@@ -18,5 +18,7 @@ namespace Netherlands3D.Credentials.StoredAuthorization
         {
             inputUri = uri;
         }
+
+        public abstract Uri GetFullUri();
     }
 }
