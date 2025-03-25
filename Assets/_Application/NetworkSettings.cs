@@ -45,6 +45,7 @@ namespace Netherlands3D.Twin
                 case false: DisableLogging(); break;
             }
         }
+        #endif
 
         private void EnableLogging()
         {
@@ -60,6 +61,5 @@ namespace Netherlands3D.Twin
             this.networkLogger.Dispose();
             this.networkLogger = null;
         }
-#endif
     }
 }
