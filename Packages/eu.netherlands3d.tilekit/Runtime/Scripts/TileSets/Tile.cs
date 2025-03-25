@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
-using JetBrains.Annotations;
 using Netherlands3D.Tilekit.TileSets.ImplicitTiling;
+using UnityEngine;
 
 namespace Netherlands3D.Tilekit.TileSets
 {
@@ -16,10 +16,10 @@ namespace Netherlands3D.Tilekit.TileSets
         public BoundingVolume BoundingVolume;
         public double GeometricError;
         public TileContents TileContents = new();
-        [CanBeNull] public string Transform;
+        public Matrix4x4 Transform;
         public Metadata Metadata = new();
         public Tiles Children = new();
-        [CanBeNull] public ImplicitTilingScheme ImplicitTiling = new None();
+        public ImplicitTilingScheme ImplicitTiling = new None();
         public MethodOfRefinement Refine = MethodOfRefinement.Replace;
 
         public Tile(BoundingVolume boundingVolume, double geometricError)
