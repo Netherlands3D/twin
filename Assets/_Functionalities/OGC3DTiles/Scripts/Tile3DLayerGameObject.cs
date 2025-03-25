@@ -18,6 +18,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
     [RequireComponent(typeof(Read3DTileset))]
     public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels
     {
+        [SerializeField] private string layerParentTag = "3DTileParent";
         public override BoundingBox Bounds => tileSet.root != null ? new BoundingBox(tileSet.root.BottomLeft, tileSet.root.TopRight) : null;
         public Tile3DLayerPropertyData PropertyData => urlPropertyData;
 
@@ -120,6 +121,8 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             {
                 UpdateURL(new Uri(urlPropertyData.Url));
             }
+            var layerParent = GameObject.FindWithTag(layerParentTag).transform;
+            transform.SetParent(layerParent);
         }
 
         private void ProcessServerResponse(UnityWebRequest request)

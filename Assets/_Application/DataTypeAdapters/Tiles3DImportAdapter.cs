@@ -11,12 +11,10 @@ namespace Netherlands3D.Twin.DataTypeAdapters
     public class Tiles3DImportAdapter : ScriptableObject, IDataTypeAdapter
     {
         [SerializeField] private Tile3DLayerGameObject layerPrefab;
-        [SerializeField] private string layerParentTag;
 
         public void Execute(LocalFile localFile)
         {
-            var layerParent = GameObject.FindWithTag(layerParentTag).transform;
-            var newObject = Instantiate(layerPrefab, Vector3.zero, layerPrefab.transform.rotation, layerParent);
+            var newObject = Instantiate(layerPrefab, Vector3.zero, layerPrefab.transform.rotation);
 
             if (!newObject.gameObject.TryGetComponent<Tile3DLayerGameObject>(out var layerComponent))
             {
