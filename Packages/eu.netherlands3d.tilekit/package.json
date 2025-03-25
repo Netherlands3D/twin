@@ -1,0 +1,16 @@
+﻿{
+  "name": "eu.netherlands3d.tilekit",
+  "version": "0.1.0",
+  "displayName": "Netherlands3D - Tilekit",
+  "description": "A Tiling Framework inspired by 3D Tiles, for all tiling systems.",
+  "unity": "2022.3",
+  "license": "EUPL-1.2",
+  "keywords": [
+    "netherlands3d",
+    "tiles"
+  ],
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://netherlands3d.eu/"
+  }
+}

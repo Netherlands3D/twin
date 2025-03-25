@@ -20,6 +20,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         
         protected virtual void Awake()
         {
+            // TODO: No longer directly register this object as a Cartesian Tile layer, but instead spawn it using
+            // the new Tilekit
             tileHandler = FindAnyObjectByType<Netherlands3D.CartesianTiles.TileHandler>();
             transform.SetParent(tileHandler.transform);
             layer = GetComponent<Layer>();

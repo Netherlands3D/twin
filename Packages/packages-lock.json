@@ -338,14 +338,14 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
-    "eu.netherlands3d.functionalities.google-reality-mesh": {
-      "version": "file:eu.netherlands3d.functionalities.google-reality-mesh",
+    "eu.netherlands3d.floating-origin": {
+      "version": "file:eu.netherlands3d.floating-origin",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
-    "eu.netherlands3d.floating-origin": {
-      "version": "file:eu.netherlands3d.floating-origin",
+    "eu.netherlands3d.functionalities.google-reality-mesh": {
+      "version": "file:eu.netherlands3d.functionalities.google-reality-mesh",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
@@ -483,6 +483,12 @@
         "eu.netherlands3d.geotimezone": "1.1.0"
       },
       "url": "https://package.openupm.com"
+    },
+    "eu.netherlands3d.tilekit": {
+      "version": "file:eu.netherlands3d.tilekit",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.tiles3d": {
       "version": "1.10.4",
