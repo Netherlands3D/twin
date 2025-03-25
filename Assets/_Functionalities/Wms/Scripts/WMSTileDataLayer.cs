@@ -62,14 +62,11 @@ namespace Netherlands3D.Functionalities.Wms
         }
 
         /// <summary>
-        /// Add custom headers for all internal WebRequests
+        /// Set custom header for all internal WebRequests
         /// </summary>
-        public void AddCustomHeader(string key, string value, bool replace = true)
+        public void SetCustomHeader(string key, string value)
         {
-            if (replace && customHeaders.ContainsKey(key))
-                customHeaders[key] = value;
-            else
-                customHeaders.Add(key, value);
+            customHeaders[key] = value;
         }
 
         public void ClearCustomHeaders()
@@ -77,12 +74,9 @@ namespace Netherlands3D.Functionalities.Wms
             customHeaders.Clear();
         }
 
-        public void AddCustomQueryParameter(string key, string value, bool replace = true)
+        public void SetCustomQueryParameter(string key, string value)
         {
-            if (replace && customQueryParams.AllKeys.Contains(key))
-                customQueryParams[key] = value;
-            else
-                customQueryParams.Add(key, value);
+            customQueryParams.Set(key, value);
         }
 
         public void ClearCustomQueryParameters()
@@ -110,11 +104,13 @@ namespace Netherlands3D.Functionalities.Wms
             var boundingBox = DetermineBoundingBox(tileChange, mapData);
             string url = wmsUrl.Replace("{0}", boundingBox.ToString());
             
-            var config = new Config() { TypeOfResponseType = ExpectedTypeOfResponse.Texture(true), Headers = customHeaders, Params = customQueryParams};
-            var promise = Uxios.DefaultInstance.Get<Texture2D>(
-                new Uri(url), 
-                config
-            );
+            var config = new Config
+            {
+                TypeOfResponseType = ExpectedTypeOfResponse.Texture(true), 
+                Headers = customHeaders, 
+                Params = customQueryParams
+            };
+            var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(url), config);
 
             promise.Then(response =>
                 {

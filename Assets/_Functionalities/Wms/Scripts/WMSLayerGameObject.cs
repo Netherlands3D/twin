@@ -61,7 +61,6 @@ namespace Netherlands3D.Functionalities.Wms
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
 
-
             var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
             var getCapabilitiesUrl = new Uri(getCapabilitiesString);
             Legend.Instance.GetLegendUrl(wmsProjectionLayer.WmsUrl, OnLegendUrlsReceived);
@@ -102,13 +101,13 @@ namespace Netherlands3D.Functionalities.Wms
                 case HeaderBasedAuthorization headerBasedAuthorization:
                     LayerData.HasValidCredentials = true;
                     var (headerName, headerValue) = headerBasedAuthorization.GetHeaderKeyAndValue();
-                    WMSProjectionLayer.AddCustomHeader(headerName, headerValue, true);
+                    WMSProjectionLayer.SetCustomHeader(headerName, headerValue);
                     WMSProjectionLayer.RefreshTiles();
                     WMSProjectionLayer.isEnabled = true;
                     return;
                 case QueryStringAuthorization queryStringAuthorization:
                     LayerData.HasValidCredentials = true;
-                    WMSProjectionLayer.AddCustomQueryParameter(queryStringAuthorization.QueryKeyName, queryStringAuthorization.QueryKeyValue);
+                    WMSProjectionLayer.SetCustomQueryParameter(queryStringAuthorization.QueryKeyName, queryStringAuthorization.QueryKeyValue);
                     WMSProjectionLayer.RefreshTiles();
                     WMSProjectionLayer.isEnabled = true;
                     return;
