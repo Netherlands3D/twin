@@ -2129,17 +2129,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b11ede34fd97b49abb51ce020e6e9bdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentRowRectTransform: {fileID: 6443985419094450393}
-  enabledToggle: {fileID: 271022142622327280}
-  colorButton: {fileID: 7584764445228330592}
-  spacer: {fileID: 6333340918868435643}
+  doubleClickThreshold: 0.5
   indentWidth: 24
-  foldoutToggle: {fileID: 2274689754544140435}
+  buttonGroupWidth: 46
+  layerNameSpacing: 4
   layerTypeImage: {fileID: 1356745287749164724}
   layerNameText: {fileID: 4813776858706825396}
   layerNameField: {fileID: 8882207419444401735}
-  childrenPanel: {fileID: 4186340492675122666}
-  debugIndexText: {fileID: 1923971936609307019}
+  foldoutToggle: {fileID: 2274689754544140435}
+  enabledToggle: {fileID: 271022142622327280}
+  colorButton: {fileID: 7584764445228330592}
+  propertyToggle: {fileID: 1850104207184435544}
+  legendToggle: {fileID: 938648644379494618}
   visibilitySprites:
   - {fileID: 21300000, guid: 29296650b38894fed952bbfaae3724a0, type: 3}
   - {fileID: 21300000, guid: 91bc36cf0b91144d6bf80029e4a4f944, type: 3}
@@ -2153,8 +2154,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 02a156bd7b363440fab221037cc5aef2, type: 3}
   - {fileID: 21300000, guid: 730d7bdcdd4a2446dbe4df81938266f4, type: 3}
   - {fileID: 21300000, guid: b6c64162c3e9c4e6ea68a7f37a4bcdee, type: 3}
-  propertyToggle: {fileID: 1850104207184435544}
-  doubleClickThreshold: 0.5
+  debugIndexText: {fileID: 1923971936609307019}
+  parentRowRectTransform: {fileID: 6443985419094450393}
+  spacer: {fileID: 6333340918868435643}
+  childrenPanel: {fileID: 4186340492675122666}
 --- !u!114 &1244387766270603908
 MonoBehaviour:
   m_ObjectHideFlags: 0
