@@ -26,17 +26,27 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             using var reader = new StreamReader(localFile.LocalFilePath);
             using var jsonReader = new JsonTextReader(reader);
 
+
+            //todo, we should check against a schema for optimization https://geojson.org/schema/GeoJSON.json
             while (jsonReader.Read())
             {
                 if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "type")
                 {
-                    jsonReader.Read();
+                    jsonReader.Read(); //reads the value of the type object
                     if ((string)jsonReader.Value == "FeatureCollection" || (string)jsonReader.Value == "Feature")
                         return true;
                 }
+
+                if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "asset")
+                {
+                    jsonReader.Read(); //reads StartObject {
+                    jsonReader.Read(); //reads new object key which should be the version
+                    if ((string)jsonReader.Value == "version")
+                        return false; //this is a 3D Tileset, not a GeoJson
+                }
             }
 
-            return true;
+            return false;
         }
 
         private bool LooksLikeAJSONFile(string filePath)

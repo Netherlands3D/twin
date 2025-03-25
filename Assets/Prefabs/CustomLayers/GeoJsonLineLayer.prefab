@@ -138,5 +138,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6303d72dc2aa4f61bcacd10f6b5e3e43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: -7451032918455945531, guid: 41c27df684583e94bad8230b4609cddb,
+  propertySectionPrefab: {fileID: 7588534404346000142, guid: 41c27df684583e94bad8230b4609cddb,
     type: 3}

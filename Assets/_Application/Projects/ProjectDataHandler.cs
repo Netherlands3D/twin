@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using JetBrains.Annotations;
+using Netherlands3D.Credentials;
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Twin.DataTypeAdapters;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -19,6 +21,7 @@ namespace Netherlands3D.Twin.Projects
         private static extern void PreventDefaultShortcuts();
 
         [UsedImplicitly] private DataTypeChain fileImporter; // don't remove, this is used in LoadDefaultProject()
+        [UsedImplicitly] private CredentialHandler credentialHandler;// don't remove, this is used in LoadDefaultProject()
         [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
         [SerializeField] private ProjectDataStore projectDataStore;
 
@@ -77,6 +80,7 @@ namespace Netherlands3D.Twin.Projects
             }
 
             fileImporter = GetComponent<DataTypeChain>();
+            credentialHandler = GetComponent<CredentialHandler>();
             ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
 
 #if !UNITY_EDITOR && UNITY_WEBGL
@@ -99,6 +103,9 @@ namespace Netherlands3D.Twin.Projects
 
             redoAction.Enable();
             redoAction.performed += OnRedoAction;
+            
+            credentialHandler.OnAuthorizationHandled.AddListener(fileImporter.DetermineAdapter);
+
         }
 
         private void OnDisable()
@@ -114,6 +121,8 @@ namespace Netherlands3D.Twin.Projects
 
             redoAction.performed -= OnRedoAction;
             redoAction.Disable();
+            
+            credentialHandler.OnAuthorizationHandled.RemoveListener(fileImporter.DetermineAdapter);
         }
 
         private void OnProjectDataChanged(ProjectData project)
@@ -163,7 +172,8 @@ namespace Netherlands3D.Twin.Projects
 #if UNITY_WEBGL && !UNITY_EDITOR
             var url = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
             Debug.Log("loading default project file: " + url);
-            fileImporter.DetermineAdapter(url);
+            credentialHandler.SetUri(url);
+            credentialHandler.ApplyCredentials();
 #else
             var filePath = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
             Debug.Log("loading default project file: " + filePath);

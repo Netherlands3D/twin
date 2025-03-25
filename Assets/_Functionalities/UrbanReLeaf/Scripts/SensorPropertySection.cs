@@ -113,14 +113,14 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
         private void HandleMinimum(float newValue) 
         {
             if(newValue != controller.Minimum)
-                projectionLayer.SetVisibleTilesDirty();
+                projectionLayer.RefreshTiles();
             controller.Minimum = newValue;            
         }
 
         private void HandleMaximum(float newValue) 
         {
             if(newValue != controller.Maximum)
-                projectionLayer.SetVisibleTilesDirty();
+                projectionLayer.RefreshTiles();
             controller.Maximum = newValue;            
         }
 
@@ -129,7 +129,7 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             if (controller)
             {
                 if(newValue != controller.MinColor)
-                    projectionLayer.SetVisibleTilesDirty();
+                    projectionLayer.RefreshTiles();
                 controller.MinColor = newValue;                
             }
         }
@@ -139,7 +139,7 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             if (controller)
             {
                 if(newValue != controller.MaxColor)
-                    projectionLayer.SetVisibleTilesDirty();
+                    projectionLayer.RefreshTiles();
                 controller.MaxColor = newValue;                
             }
         }
@@ -153,7 +153,7 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             startTimeMonthInputField.text = startTimeMonthField.text;
             startTimeYearInputField.text = startTimeYearField.text;
 
-            projectionLayer.SetVisibleTilesDirty();
+            projectionLayer.RefreshTiles();
             int day = int.Parse(startTimeDayField.text);
             int month = int.Parse(startTimeMonthField.text);
             int year = int.Parse(startTimeYearField.text);
@@ -171,7 +171,7 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             endTimeMonthInputField.text = endTimeMonthField.text;
             endTimeYearInputField.text = endTimeYearField.text;
 
-            projectionLayer.SetVisibleTilesDirty();
+            projectionLayer.RefreshTiles();
             int day = int.Parse(endTimeDayField.text);
             int month = int.Parse(endTimeMonthField.text);
             int year = int.Parse(endTimeYearField.text);
