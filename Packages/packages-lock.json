@@ -473,7 +473,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "1.10.4",
+      "version": "1.10.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {
