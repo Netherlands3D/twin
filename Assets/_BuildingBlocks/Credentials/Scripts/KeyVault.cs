@@ -68,8 +68,8 @@ namespace Netherlands3D.Credentials
             {
                 if (!authorized)
                 {
-                    TryBasicAuthentication(baseUri, username, passwordOrKey);
-                    TryToFindSpecificCredentialType(baseUri, passwordOrKey);
+                    TryBasicAuthentication(inputUri, username, passwordOrKey);
+                    TryToFindSpecificCredentialType(inputUri, passwordOrKey);
                 }
             }));
         }

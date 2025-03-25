@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using KindMen.Uxios;
+using KindMen.Uxios.Http;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.Web;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -14,7 +16,7 @@ namespace Netherlands3D.Functionalities.Wms
     {
         private const string DefaultEpsgCoordinateSystem = "28992";
 
-        private Dictionary<string, string> customHeaders = new Dictionary<string, string>();
+        private Headers customHeaders = new Headers();
         private Dictionary<string, string> customQueryParams = new Dictionary<string, string>();
 
         public int RenderIndex 
@@ -105,8 +107,13 @@ namespace Netherlands3D.Functionalities.Wms
 
             var boundingBox = DetermineBoundingBox(tileChange, mapData);
             string url = wmsUrl.Replace("{0}", boundingBox.ToString());
+            var uriBuilder = new UriBuilder(url);
+            foreach (var queryParam in customQueryParams)
+            {
+                uriBuilder.SetQueryParameter(queryParam.Key, queryParam.Value);
+            }
 
-            var config = new Config() { TypeOfResponseType = ExpectedTypeOfResponse.Texture(true) };
+            var config = new Config() { TypeOfResponseType = ExpectedTypeOfResponse.Texture(true), Headers = customHeaders };
             var promise = Uxios.DefaultInstance.Get<Texture2D>(
                 new Uri(url), 
                 config
