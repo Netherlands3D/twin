@@ -32,9 +32,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
         public UnityEvent<Uri> OnURLChanged => urlPropertyData.OnUrlChanged;
         public UnityEvent<string> UnsupportedExtensionsMessage;
-        
-        [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
-        public UnityEvent<UnityWebRequest> OnServerResponseReceived => tileSet.OnServerResponseReceived;
 
         private ICredentialHandler credentialHandler;
         
@@ -100,14 +97,14 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         {
             base.OnEnable();
             tileSet.unsupportedExtensionsParsed.AddListener(InvokeUnsupportedExtensionsMessage);
-            OnServerResponseReceived.AddListener(ProcessServerResponse);
+            tileSet.OnServerResponseReceived.AddListener(ProcessServerResponse);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
             tileSet.unsupportedExtensionsParsed.RemoveListener(InvokeUnsupportedExtensionsMessage);
-            OnServerResponseReceived.RemoveListener(ProcessServerResponse);
+            tileSet.OnServerResponseReceived.RemoveListener(ProcessServerResponse);
         }
 
         protected override void Start()
