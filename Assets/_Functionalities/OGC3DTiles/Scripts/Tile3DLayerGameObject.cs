@@ -75,21 +75,27 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         {
             ClearCredentials();
             
-            if (auth is HeaderBasedAuthorization headerBasedAuthorization)
+            switch (auth)
             {
-                var (headerName, headerValue) = headerBasedAuthorization.GetHeaderKeyAndValue();
-                tileSet.AddCustomHeader(headerName, headerValue, true);
-                tileSet.RefreshTiles();
-                return;
-            }
-            
-            if (auth is QueryStringAuthorization inferableSingleKey)
-            {
-                tileSet.personalKey = inferableSingleKey.QueryKeyValue;
-                tileSet.publicKey = inferableSingleKey.QueryKeyValue;
-                tileSet.QueryKeyName = inferableSingleKey.QueryKeyName;
-                tileSet.RefreshTiles();
-                return;
+                case FailedOrUnsupported:
+                    LayerData.HasValidCredentials = false;
+                    tileSet.enabled = false;
+                    return;
+                case HeaderBasedAuthorization headerBasedAuthorization:
+                    LayerData.HasValidCredentials = true;
+                    var (headerName, headerValue) = headerBasedAuthorization.GetHeaderKeyAndValue();
+                    tileSet.AddCustomHeader(headerName, headerValue, true);
+                    tileSet.RefreshTiles();
+                    tileSet.enabled = LayerData.ActiveInHierarchy;
+                    return;
+                case QueryStringAuthorization queryStringAuthorization:
+                    LayerData.HasValidCredentials = true;
+                    tileSet.personalKey = queryStringAuthorization.QueryKeyValue;
+                    tileSet.publicKey = queryStringAuthorization.QueryKeyValue;
+                    tileSet.QueryKeyName = queryStringAuthorization.QueryKeyName;
+                    tileSet.RefreshTiles();
+                    tileSet.enabled = true;
+                    return;
             }
         }
 

@@ -9,11 +9,8 @@ using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Networking;
-using Netherlands3D.Twin.Layers.LayerTypes.Credentials;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
-using Netherlands3D.DataTypeAdapters;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -109,9 +106,9 @@ namespace Netherlands3D.Functionalities.Wms
                     WMSProjectionLayer.RefreshTiles();
                     WMSProjectionLayer.isEnabled = true;
                     return;
-                case QueryStringAuthorization inferableSingleKey:
+                case QueryStringAuthorization queryStringAuthorization:
                     LayerData.HasValidCredentials = true;
-                    WMSProjectionLayer.AddCustomQueryParameter(inferableSingleKey.QueryKeyName, inferableSingleKey.QueryKeyValue);
+                    WMSProjectionLayer.AddCustomQueryParameter(queryStringAuthorization.QueryKeyName, queryStringAuthorization.QueryKeyValue);
                     WMSProjectionLayer.RefreshTiles();
                     WMSProjectionLayer.isEnabled = true;
                     return;
