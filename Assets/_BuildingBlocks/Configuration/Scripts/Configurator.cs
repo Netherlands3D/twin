@@ -152,10 +152,6 @@ namespace Netherlands3D.Twin.Configuration
 
         private void ConfigureCorsProxy()
         {
-            // Just add the console logger for now - it will be auto-disposed as soon as the application is done.
-            // TODO: Remove this line when done with this story
-            new ConsoleLogger();
-            
             if (string.IsNullOrEmpty(configuration.CorsProxyUrl)) return;
             Debug.LogWarning("Configured CORS proxy is: " + configuration.CorsProxyUrl);
 
