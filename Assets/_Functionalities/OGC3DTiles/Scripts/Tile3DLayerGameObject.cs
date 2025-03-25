@@ -116,6 +116,10 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             {
                 UpdateURL(new Uri(tileSet.tilesetUrl));
             }
+            else
+            {
+                UpdateURL(new Uri(urlPropertyData.Url));
+            }
         }
 
         private void ProcessServerResponse(UnityWebRequest request)
