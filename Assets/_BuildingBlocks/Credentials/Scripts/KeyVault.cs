@@ -86,7 +86,7 @@ namespace Netherlands3D.Credentials
                 foundType = AuthorizationType.Key;
                 var tokenRequestUrl = UnityWebRequest.Get(uri);
                 yield return tokenRequestUrl.SendWebRequest();
-                if (tokenRequestUrl.result == UnityWebRequest.Result.Success)
+                if (IsAuthorized(tokenRequestUrl))
                 {
                     if (log) Debug.Log("Found key needed for this layer: " + uri);
 
@@ -102,7 +102,7 @@ namespace Netherlands3D.Credentials
                 foundType = AuthorizationType.Token;
                 var tokenRequestUrl = UnityWebRequest.Get(uri);
                 yield return tokenRequestUrl.SendWebRequest();
-                if (tokenRequestUrl.result == UnityWebRequest.Result.Success)
+                if (IsAuthorized(tokenRequestUrl))
                 {
                     if (log) Debug.Log("Found token needed for this layer: " + uri);
 
@@ -117,7 +117,7 @@ namespace Netherlands3D.Credentials
                 foundType = AuthorizationType.Code;
                 var tokenRequestUrl = UnityWebRequest.Get(uri);
                 yield return tokenRequestUrl.SendWebRequest();
-                if (tokenRequestUrl.result == UnityWebRequest.Result.Success)
+                if (IsAuthorized(tokenRequestUrl))
                 {
                     if (log) Debug.Log("Found code needed for this layer: " + uri);
 
@@ -131,7 +131,7 @@ namespace Netherlands3D.Credentials
             foundType = AuthorizationType.Public;
             var noCredentialsRequest = UnityWebRequest.Get(uri);
             yield return noCredentialsRequest.SendWebRequest();
-            if (noCredentialsRequest.result == UnityWebRequest.Result.Success)
+            if (IsAuthorized(noCredentialsRequest))
             {
                 if (log) Debug.Log("Found no credentials needed for this layer: " + uri);
                
@@ -139,9 +139,7 @@ namespace Netherlands3D.Credentials
                 authorizationCallback?.Invoke(true);
                 yield break;
             }
-
-
-            foundType = AuthorizationType.FailedOrUnsupported;
+            
             authorizationCallback?.Invoke(false);
         }
 
@@ -236,7 +234,7 @@ namespace Netherlands3D.Credentials
             request.SetRequestHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password)));
             yield return request.SendWebRequest();
 
-            if (request.result == UnityWebRequest.Result.Success)
+            if (IsAuthorized(request))
             {
                 if (log) Debug.Log("Access granted with username and password for: " + uri);
                 NewURLAuthorizationDetermined(uri, AuthorizationType.UsernamePassword, username: username, password: password);
@@ -258,7 +256,7 @@ namespace Netherlands3D.Credentials
             // Try a request without credentials
             var noCredentialsRequest = UnityWebRequest.Get(uri);
             yield return noCredentialsRequest.SendWebRequest();
-            if (noCredentialsRequest.result == UnityWebRequest.Result.Success)
+            if (IsAuthorized(noCredentialsRequest))
             {
                 if (log) Debug.Log("Found no credentials needed for this layer: " + uri);
                 foundType = AuthorizationType.Public;
@@ -270,7 +268,7 @@ namespace Netherlands3D.Credentials
             var bearerTokenRequest = UnityWebRequest.Get(uri);
             bearerTokenRequest.SetRequestHeader("Authorization", "Bearer " + key);
             yield return bearerTokenRequest.SendWebRequest();
-            if (bearerTokenRequest.result == UnityWebRequest.Result.Success)
+            if (IsAuthorized(bearerTokenRequest))
             {
                 if (log) Debug.Log("Found bearer token needed for this layer: " + uri);
                 foundType = AuthorizationType.BearerToken;
@@ -283,7 +281,7 @@ namespace Netherlands3D.Credentials
             uriBuilder.AddQueryParameter("key", key);
             var keyRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
             yield return keyRequestUrl.SendWebRequest();
-            if (keyRequestUrl.result == UnityWebRequest.Result.Success)
+            if (IsAuthorized(keyRequestUrl))
             {
                 if (log) Debug.Log("Found key needed for this layer: " + uri);
                 foundType = AuthorizationType.Key;
@@ -297,7 +295,7 @@ namespace Netherlands3D.Credentials
             uriBuilder.AddQueryParameter("code", key);
             var codeRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
             yield return codeRequestUrl.SendWebRequest();
-            if (codeRequestUrl.result == UnityWebRequest.Result.Success)
+            if (IsAuthorized(codeRequestUrl))
             {
                 if (log) Debug.Log("Found code needed for this layer: " + uri);
                 foundType = AuthorizationType.Code;
@@ -310,7 +308,7 @@ namespace Netherlands3D.Credentials
             uriBuilder.AddQueryParameter("token", key);
             var tokenRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
             yield return tokenRequestUrl.SendWebRequest();
-            if (tokenRequestUrl.result == UnityWebRequest.Result.Success)
+            if (IsAuthorized(tokenRequestUrl))
             {
                 if (log) Debug.Log("Found token needed for this layer: " + uri);
                 foundType = AuthorizationType.Token;
@@ -321,6 +319,11 @@ namespace Netherlands3D.Credentials
             // Nothing worked, return unsupported
             Debug.Log("Invalid credentials provided or no supported credential type worked to get access for this layer: " + uri);
             NewURLAuthorizationDetermined(uri, AuthorizationType.FailedOrUnsupported);
+        }
+        
+        private static bool IsAuthorized(UnityWebRequest uwr)
+        {
+            return uwr.responseCode != 401 && uwr.responseCode != 403;
         }
     }
 
