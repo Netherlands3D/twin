@@ -1,11 +1,10 @@
-using System.Collections.Generic;
-using Netherlands3D.Tilekit.TileSets;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 namespace Netherlands3D.Tilekit
 {
-    public class TilingManager : MonoBehaviour
+    public class Timer : MonoBehaviour
     {
         // Constant used to signal the UpdateInterval that it needs to trigger each frame.
         public const int UpdateEveryFrame = 0;
@@ -15,6 +14,8 @@ namespace Netherlands3D.Tilekit
         [Tooltip("Update interval in ms; or 'UpdateEveryFrame' (0) for every frame")]
         [SerializeField] private int updateInterval = 200;
 
+        public UnityEvent tick = new();
+        
         public bool AutoStart
         {
             get => autoStart;
@@ -29,50 +30,36 @@ namespace Netherlands3D.Tilekit
 
         public bool IsPaused { get; private set; } = false;
         
-        private TileSet tileSet;
-        [SerializeField] private TileSetFactory tileSetFactory;
-        [SerializeField] private List<TileSetRenderer> tileSetRenderers = new ();
-
         private void Start()
         {
-            tileSet = tileSetFactory.CreateTileSet();
-
             if (AutoStart) Resume();
         }
 
         public void Pause()
         {
             IsPaused = true;
-            CancelInvoke(nameof(Compute));
+            CancelInvoke(nameof(tick));
         }
 
-        public void Resume()
+        private void Resume()
         {
             IsPaused = false;
-            if (UpdateInterval != UpdateEveryFrame)
-            {
-                InvokeRepeating(nameof(Compute), 0.0f, UpdateInterval * 0.001f);
-            }
+            if (UpdateInterval == UpdateEveryFrame) return;
+
+            InvokeRepeating(nameof(OnTick), 0.0f, UpdateInterval * 0.001f);
         }
 
         private void Update()
         {
-            if (UpdateInterval == UpdateEveryFrame && IsPaused == false)
-            {
-                Compute();
-            }
+            if (UpdateInterval != UpdateEveryFrame || IsPaused) return;
+            
+            OnTick();
         }
 
 
-        public void Compute()
+        public void OnTick()
         {
-            if (tileSet == null) return;
-
-            foreach (var tileSetRenderer in tileSetRenderers)
-            {
-                tileSetRenderer.Stage(tileSet);
-                tileSetRenderer.Render(tileSet);
-            }
+            this.tick.Invoke();
         }
     }
 }
