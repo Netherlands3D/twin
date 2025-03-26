@@ -267,12 +267,11 @@ namespace Netherlands3D.Tiles3D
             {
                 gltf.Dispose();     
             }
-            Renderer[] meshrenderers = this.gameObject.GetComponentsInChildren<Renderer>();
-            foreach (var renderer in meshrenderers)
-            {
-                DestroyMaterials(renderer.materials);
-                DestroyMaterials(renderer.sharedMaterials);
 
+            if (overrideMaterial == null)
+            {
+                Renderer[] meshrenderers = this.gameObject.GetComponentsInChildren<Renderer>();
+                ClearRenderers(meshrenderers);
             }
             MeshFilter[] meshFilters = this.gameObject.GetComponentsInChildren<MeshFilter>();
             foreach (var meshFilter in meshFilters)
@@ -290,17 +289,42 @@ namespace Netherlands3D.Tiles3D
             Destroy(this.gameObject);
         }
 
-        private void DestroyMaterials(UnityEngine.Material[] materials)
+        private void ClearRenderers(Renderer[] renderers)
         {
-            foreach (var material in materials)
-            {
-                int[] texturepropertyIDs = material.GetTexturePropertyNameIDs();
-                foreach (int texturepropertyID in texturepropertyIDs)
-                    if (material.GetTexture(texturepropertyID) != null)
+            foreach(Renderer r in renderers)
+            {                
+                UnityEngine.Material mat = r.material;
+                if (mat != null)
+                {
+                    UnityEngine.Texture tex = mat.mainTexture;
+                    if (tex)
+                        Destroy(tex);
+                    else
                     {
-                        Destroy(material.GetTexture(texturepropertyID));
+                        tex = mat.GetTexture("_MainTex");
+                        if (tex)
+                            Destroy(tex);
                     }
-                Destroy(material);
+                    mat.mainTexture = null;
+                    Destroy(mat);
+                    r.material = null;
+                }
+                UnityEngine.Material sharedMat = r.sharedMaterial;
+                if(sharedMat != null)
+                {
+                    UnityEngine.Texture tex = sharedMat.mainTexture;
+                    if (tex)
+                        Destroy(tex);
+                    else
+                    {
+                        tex = sharedMat.GetTexture("_MainTex");
+                        if (tex)
+                            Destroy(tex);
+                    }
+                    sharedMat.mainTexture = null;
+                    Destroy(sharedMat);
+                    r.sharedMaterial = null;
+                }
             }
         }
     }
