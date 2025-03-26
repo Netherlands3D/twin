@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Tilekit.Changes.ChangeSchedulers
 {
-    [CreateAssetMenu(menuName = "Tilekit/Schedulers/Immediate", fileName = "ImmediateChangeScheduler", order = 0)]
+    [CreateAssetMenu(menuName = "Netherlands3D/Tilekit/Schedulers/Immediate", fileName = "ImmediateChangeScheduler", order = 0)]
     public class ImmediateChangeScheduler : ChangeScheduler
     {
         public override IEnumerator Apply()

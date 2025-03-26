@@ -1,13 +1,15 @@
-﻿using Netherlands3D.Tilekit.Changes;
+﻿using System;
+using Netherlands3D.Tilekit.Changes;
 using Netherlands3D.Tilekit.TileSets;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit.TileSetRenderers
 {
-    public class ComposableTileSetRenderer : TileSetRenderer
+    public class ComposableTileMapper : TileMapper
     {
         public Tiles TilesInView { get; } = new();
 
+        [SerializeField] private TileSetFactory TileSetFactory;
         public TileSelector TileSelector;
         public ChangeScheduler ChangeScheduler;
         public TileRenderer TileRenderer;
@@ -20,10 +22,23 @@ namespace Netherlands3D.Tilekit.TileSetRenderers
         {
             mainCamera = Camera.main;
             GeometryUtility.CalculateFrustumPlanes(mainCamera, frustumPlanes);
+            
+            // If a factory was provided - load the tileset from there. Otherwise, depend on a custom controller
+            // that should call the Load() method first.
+            if (TileSetFactory)
+            {
+                Load(TileSetFactory.CreateTileSet());
+            }
         }
 
-        public override void Stage(TileSet tileSet)
+        public override void Stage()
         {
+            if (tileSet == null)
+            {
+                Debug.LogError("Unable to stage tiles from a tileSet, none was loaded");
+                return;
+            }
+
             // Move this so that you can 'force' invoke a computation because outside forces influence the selection
             // or make this another adapter
             if (FrustumChanged() == false) return;
@@ -47,8 +62,14 @@ namespace Netherlands3D.Tilekit.TileSetRenderers
             }
         }
 
-        public override void Render(TileSet tileSet)
+        public override void Render()
         {
+            if (tileSet == null)
+            {
+                Debug.LogError("Unable to render tileSet, none was loaded");
+                return;
+            }
+
             StartCoroutine(ChangeScheduler.Apply());
         }
         
