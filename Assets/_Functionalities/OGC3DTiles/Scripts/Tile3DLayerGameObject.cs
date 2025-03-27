@@ -91,6 +91,10 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
                     tileSet.publicKey = queryStringAuthorization.QueryKeyValue;
                     tileSet.QueryKeyName = queryStringAuthorization.QueryKeyName;
                     break;
+                case Public:
+                    break; //nothing specific needed, but it needs to be excluded from default
+                default:
+                    throw new NotImplementedException("Credential type " + auth.GetType() + " is not supported by " + GetType());
             }
 
             //also do this for public

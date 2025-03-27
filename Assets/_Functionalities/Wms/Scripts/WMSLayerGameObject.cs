@@ -106,6 +106,10 @@ namespace Netherlands3D.Functionalities.Wms
                 case QueryStringAuthorization queryStringAuthorization:
                     WMSProjectionLayer.SetCustomQueryParameter(queryStringAuthorization.QueryKeyName, queryStringAuthorization.QueryKeyValue);
                     break;
+                case Public:
+                    break; //nothing specific needed, but it needs to be excluded from default
+                default:
+                    throw new NotImplementedException("Credential type " + auth.GetType() + " is not supported by " + GetType());
             }
             //also do this for public
             LayerData.HasValidCredentials = true;

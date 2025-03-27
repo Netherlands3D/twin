@@ -7,6 +7,7 @@ using System.Collections;
 using Netherlands3D.Web;
 using Netherlands3D.Credentials.StoredAuthorization;
 using System.Collections.Specialized;
+using KindMen.Uxios.Errors;
 
 namespace Netherlands3D.Credentials
 {
@@ -323,7 +324,21 @@ namespace Netherlands3D.Credentials
         
         private static bool IsAuthorized(UnityWebRequest uwr)
         {
-            return uwr.responseCode != 401 && uwr.responseCode != 403;
+            if (uwr.result == UnityWebRequest.Result.Success)
+                return true;
+
+            if (uwr.responseCode == 401 || uwr.responseCode == 403)
+                return false;
+
+            if (uwr.result != UnityWebRequest.Result.ProtocolError)
+                throw new Exception("the request returned an connection or data processing error: " + uwr.responseCode + "from Uri: " + uwr.uri);
+
+            if (uwr.responseCode >= 500)
+                throw new Exception("the request returned a response that is not implemented: " + uwr.responseCode + " from Uri: " + uwr.uri);
+            
+            // We kinda assume that anything below error code 500 -except for 401 and 403- would probably be OK since the server
+            // has processed the request and deemed it to contain a client side error
+            return true;
         }
     }
 
