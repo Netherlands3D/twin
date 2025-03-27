@@ -130,10 +130,10 @@ namespace Netherlands3D.Functionalities.Wms
             }
         }
 
-        private void UpdateURL(Uri urlWithoutQuery)
+        private void UpdateURL(Uri storedUri)
         {
-            credentialHandler.BaseUri = urlWithoutQuery; //apply the URL from what is stored in the Project data
-            WMSProjectionLayer.WmsUrl = urlWithoutQuery.ToString();
+            credentialHandler.Uri = storedUri; //apply the URL from what is stored in the Project data
+            WMSProjectionLayer.WmsUrl = storedUri.ToString();
             credentialHandler.ApplyCredentials();
         }
 

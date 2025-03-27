@@ -14,7 +14,7 @@ namespace Netherlands3D.Credentials
         private Uri baseUri;
         private Uri inputUri;
 
-        public Uri BaseUri
+        public Uri Uri
         {
             get { return baseUri; }
             set
@@ -34,7 +34,7 @@ namespace Netherlands3D.Credentials
         public void SetUri(string url)
         {
             if (!string.IsNullOrEmpty(url))
-                BaseUri = new Uri(url);
+                Uri = new Uri(url);
         }
 
         //called in the inspector on button press
@@ -62,7 +62,7 @@ namespace Netherlands3D.Credentials
 
         private void DeterminedAuthorizationType(StoredAuthorization.StoredAuthorization auth)
         {
-            if (!auth.BaseUri.Equals(BaseUri)) //ensure the returned authorization is our uri
+            if (!auth.InputUri.Equals(Uri)) //ensure the returned authorization is our uri
                 return;
 
             Authorization = auth;         

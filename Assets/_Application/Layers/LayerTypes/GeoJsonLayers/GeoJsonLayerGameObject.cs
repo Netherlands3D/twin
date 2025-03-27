@@ -8,6 +8,8 @@ using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Linq;
+using Netherlands3D.Credentials;
+using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
@@ -36,7 +38,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     lineBounds.Encapsulate(polygonBounds);
                     return lineBounds;
                 }
-                
+
                 return polygonBounds;
             }
         }
@@ -47,18 +49,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private GeoJSONPolygonLayer polygonFeaturesLayer;
         private GeoJSONLineLayer lineFeaturesLayer;
         private GeoJSONPointLayer pointFeaturesLayer;
-        
-        [Header("Visualizer settings")]
-        [SerializeField] private int maxFeatureVisualsPerFrame = 20;
+
+        [Header("Visualizer settings")] [SerializeField]
+        private int maxFeatureVisualsPerFrame = 20;
+
         [SerializeField] private GeoJSONPolygonLayer polygonLayerPrefab;
         [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
         [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
-        
-        public int MaxFeatureVisualsPerFrame { get => maxFeatureVisualsPerFrame; set => maxFeatureVisualsPerFrame = value; }
 
-        [Space]
-        protected LayerURLPropertyData urlPropertyData = new();
-        
+        public int MaxFeatureVisualsPerFrame
+        {
+            get => maxFeatureVisualsPerFrame;
+            set => maxFeatureVisualsPerFrame = value;
+        }
+
+        [Space] protected LayerURLPropertyData urlPropertyData = new();
+
         public LayerPropertyData PropertyData => urlPropertyData;
 
         private void Awake()
@@ -81,8 +87,32 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
             else if (urlPropertyData.Data.IsRemoteAsset())
             {
-                StartCoroutine(parser.ParseGeoJSONStreamRemote(urlPropertyData.Data));
+                RequestCredentials();
             }
+        }
+
+        private void RequestCredentials()
+        {
+            var credentialHandler = GetComponent<ICredentialHandler>();
+            if (credentialHandler != null)
+            {
+                credentialHandler.Uri = urlPropertyData.Data;
+                credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+                credentialHandler.ApplyCredentials();
+            }
+        }
+
+        private void HandleCredentials(StoredAuthorization auth)
+        {
+            switch (auth)
+            {
+                case FailedOrUnsupported:
+                    LayerData.HasValidCredentials = false;
+                    return;
+            }
+
+            LayerData.HasValidCredentials = true;
+            StartCoroutine(parser.ParseGeoJSONStreamRemote(auth));
         }
 
         private void OnDestroy()
@@ -131,16 +161,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 CreateFeatureMappings(polygonFeaturesLayer, feature, polygonData);
             }
+
             var lineData = lineFeaturesLayer?.GetMeshData(feature);
             if (lineData != null)
             {
                 CreateFeatureMappings(lineFeaturesLayer, feature, lineData);
             }
+
             var pointData = pointFeaturesLayer?.GetMeshData(feature);
             if (pointData != null)
             {
                 CreateFeatureMappings(pointFeaturesLayer, feature, pointData);
-            }          
+            }
         }
 
         private void CreateFeatureMappings(IGeoJsonVisualisationLayer layer, Feature feature, List<Mesh> meshes)
@@ -151,7 +183,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             objectMapping.SetVisualisationLayer(layer);
             objectMapping.SetGeoJsonLayerParent(this);
             objectMapping.UpdateBoundingBox();
-            BagInspector.MappingTree.RootInsert(objectMapping);           
+            BagInspector.MappingTree.RootInsert(objectMapping);
         }
 
         private GeoJSONPolygonLayer CreateOrGetPolygonLayer()
@@ -219,7 +251,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             newPointLayerGameObject.FeatureRemoved += OnFeatureRemoved;
             return newPointLayerGameObject;
         }
-        
+
         private void VisualizeFeature(Feature feature)
         {
             var originalCoordinateSystem = GeoJSONParser.GetCoordinateSystem(feature.CRS);
@@ -301,20 +333,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             //we have to query first to find the corresponding featuremappings, cant do a remove right away
             //alternative could be to make an extra method to query by feature and do remove, or as proposed caching cell ids (but this can cause bugs, since spatial data is "truth")           
             IGeoJsonVisualisationLayer layer = GetVisualisationLayerForFeature(feature);
-            BoundingBox queryBoundingBox = FeatureMapping.CreateBoundingBoxForFeature(feature, layer);            
+            BoundingBox queryBoundingBox = FeatureMapping.CreateBoundingBoxForFeature(feature, layer);
             List<IMapping> mappings = BagInspector.MappingTree.Query<FeatureMapping>(queryBoundingBox);
             foreach (FeatureMapping mapping in mappings)
             {
-                if(mapping.Feature == feature)
+                if (mapping.Feature == feature)
                 {
                     //destroy featuremapping object, there should be no references anywhere else to this object!
-                    BagInspector.MappingTree.Remove(mapping);  
+                    BagInspector.MappingTree.Remove(mapping);
                 }
             }
         }
 
         public IGeoJsonVisualisationLayer GetVisualisationLayerForFeature(Feature feature)
-        {            
+        {
             if (feature.Geometry is MultiLineString || feature.Geometry is LineString)
             {
                 return lineFeaturesLayer;
@@ -327,6 +359,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 return pointFeaturesLayer;
             }
+
             return null;
         }
     }
