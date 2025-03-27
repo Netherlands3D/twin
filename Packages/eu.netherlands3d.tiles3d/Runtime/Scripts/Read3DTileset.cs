@@ -415,6 +415,7 @@ namespace Netherlands3D.Tiles3D
             else
             {
                 tile.content.Dispose();
+                tile.content = null;                
             }
         }
 
