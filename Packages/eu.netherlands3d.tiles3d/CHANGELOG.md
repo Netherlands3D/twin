@@ -5,6 +5,9 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.10.6] - 27-03-2025
+- removing native and managed shells from memory
+
 ## [1.10.5] - 07-02-2025
 - remove textures and meshes from memory when a tile is destroyed
 
