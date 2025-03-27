@@ -10,25 +10,13 @@ namespace Netherlands3D.Credentials
     {
         [Tooltip("KeyVault Scriptable Object")] 
         [SerializeField] private KeyVault keyVault;
-        
-        private Uri baseUri;
-        private Uri inputUri;
 
-        public Uri Uri
-        {
-            get { return baseUri; }
-            set
-            {
-                inputUri = value;
-                baseUri = new Uri(value.GetLeftPart(UriPartial.Path));
-            }
-        }
+        public Uri Uri { get; set; }
+
         public string UserName { get; set; }
         public string PasswordOrKeyOrTokenOrCode { get; set; }
         public UnityEvent<StoredAuthorization.StoredAuthorization> OnAuthorizationHandled { get; set; } = new();
         public StoredAuthorization.StoredAuthorization Authorization { get; set; }
-        
-        public UnityEvent<bool> CredentialsSucceeded { get; set; }
         
         //called in the inspector on end edit of url input field
         public void SetUri(string url)
@@ -41,7 +29,8 @@ namespace Netherlands3D.Credentials
         public void ApplyCredentials()
         {          
             // try to get credentials from keyVault
-            keyVault.Authorize(inputUri, UserName, PasswordOrKeyOrTokenOrCode);
+            print("try get cred: " + Uri);
+            keyVault.Authorize(Uri, UserName, PasswordOrKeyOrTokenOrCode);
         }
 
         public void ClearCredentials()
