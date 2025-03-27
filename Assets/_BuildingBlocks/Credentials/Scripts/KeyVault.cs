@@ -16,6 +16,7 @@ namespace Netherlands3D.Credentials
         //Specific order in items used in dropdown index
         Public = -1,
         UsernamePassword = 0,
+
         // InferableSingleKey = 1, //Single field key, token or code (we dont know specifically yet but can infer it)
         Key,
         BearerToken,
@@ -38,6 +39,13 @@ namespace Netherlands3D.Credentials
 
         public Dictionary<Uri, StoredAuthorization.StoredAuthorization> storedAuthorizations = new();
 
+        private Dictionary<AuthorizationType, string> supportedQueryAuthorizationTypes = new()
+        {
+            { AuthorizationType.Token, "token" }, // !!IMPORTANT start with "token" since we need to Support Tygron, and tygron blocks requests for a while after a few wrong attempts. When starting with "token" we minimize the risk of being blocked 
+            { AuthorizationType.Key, "key" },
+            { AuthorizationType.Code, "code" }
+        };
+
         public bool log = false;
         private MonoBehaviour coroutineMonoBehaviour;
         public UnityEvent<StoredAuthorization.StoredAuthorization> OnAuthorizationTypeDetermined = new();
@@ -56,7 +64,7 @@ namespace Netherlands3D.Credentials
             }
 
             //todo: is a queryKey present in the inputUri? parse it and try this authorization type immediately.
-            
+
             //Only allow one simultaneous coroutine for now
             if (coroutineMonoBehaviour != null)
                 Destroy(coroutineMonoBehaviour.gameObject);
@@ -64,7 +72,7 @@ namespace Netherlands3D.Credentials
             //lets try to to find any credentials in the given input url
             var coroutineGameObject = new GameObject("KeyVaultCoroutine_TryParseAuthorizationInput");
             coroutineMonoBehaviour = coroutineGameObject.AddComponent<KeyVaultCoroutines>();
-            coroutineMonoBehaviour.StartCoroutine(AuthorizeInput(inputUri, authorized => 
+            coroutineMonoBehaviour.StartCoroutine(TryToFindAuthorizationInUriQuery(inputUri, authorized =>
             {
                 if (!authorized)
                 {
@@ -74,72 +82,46 @@ namespace Netherlands3D.Credentials
             }));
         }
 
-        public IEnumerator AuthorizeInput(Uri uri, Action<bool> authorizationCallback)
+        public IEnumerator TryToFindAuthorizationInUriQuery(Uri uri, Action<bool> authorizationCallback)
         {
-            AuthorizationType foundType = AuthorizationType.FailedOrUnsupported;            
+            AuthorizationType foundType = AuthorizationType.FailedOrUnsupported;
             //parse key token or code van query + make new request with callback
             var queryParameters = new NameValueCollection();
             uri.TryParseQueryString(queryParameters);
-            string key = queryParameters.Get("key");
-            if(!string.IsNullOrEmpty(key))
-            {
-                foundType = AuthorizationType.Key;
-                var tokenRequestUrl = UnityWebRequest.Get(uri);
-                yield return tokenRequestUrl.SendWebRequest();
-                if (IsAuthorized(tokenRequestUrl))
-                {
-                    if (log) Debug.Log("Found key needed for this layer: " + uri);
 
-                    NewURLAuthorizationDetermined(uri, foundType, key: key);
-                    authorizationCallback?.Invoke(true);
-                    yield break;
-                }               
-            }
-            
-            string token = queryParameters.Get("token");
-            if (!string.IsNullOrEmpty(token))
+            foreach (var type in supportedQueryAuthorizationTypes)
             {
-                foundType = AuthorizationType.Token;
-                var tokenRequestUrl = UnityWebRequest.Get(uri);
-                yield return tokenRequestUrl.SendWebRequest();
-                if (IsAuthorized(tokenRequestUrl))
+                string token = queryParameters.Get(type.Value);
+                if (!string.IsNullOrEmpty(token))
                 {
-                    if (log) Debug.Log("Found token needed for this layer: " + uri);
-
-                    NewURLAuthorizationDetermined(uri, foundType, key: token);
-                    authorizationCallback?.Invoke(true);
-                    yield break;
-                }
-            }
-            string code = queryParameters.Get("code");
-            if (!string.IsNullOrEmpty(code))
-            {
-                foundType = AuthorizationType.Code;
-                var tokenRequestUrl = UnityWebRequest.Get(uri);
-                yield return tokenRequestUrl.SendWebRequest();
-                if (IsAuthorized(tokenRequestUrl))
-                {
-                    if (log) Debug.Log("Found code needed for this layer: " + uri);
-
-                    NewURLAuthorizationDetermined(uri, foundType, key: code);
-                    authorizationCallback?.Invoke(true);
-                    yield break;
+                    foundType = type.Key;
+                    var tokenRequestUrl = UnityWebRequest.Get(uri);
+                    yield return tokenRequestUrl.SendWebRequest();
+                    if (IsAuthorized(tokenRequestUrl))
+                    {
+                        if (log) Debug.Log("Found token needed for this layer: " + uri);
+                        UriBuilder builder = new UriBuilder(uri);
+                        builder.RemoveQueryParameter(type.Value); // we do not want to store the credentials in the project, so we need to remove it
+                        NewURLAuthorizationDetermined(builder.Uri, foundType, key: token);
+                        authorizationCallback?.Invoke(true);
+                        yield break;
+                    }
                 }
             }
 
-            //no key token or code is found in the input url, maybe its just public
-            foundType = AuthorizationType.Public;
-            var noCredentialsRequest = UnityWebRequest.Get(uri);
-            yield return noCredentialsRequest.SendWebRequest();
-            if (IsAuthorized(noCredentialsRequest))
-            {
-                if (log) Debug.Log("Found no credentials needed for this layer: " + uri);
-               
-                NewURLAuthorizationDetermined(uri, foundType);
-                authorizationCallback?.Invoke(true);
-                yield break;
-            }
-            
+            // //no key token or code is found in the input url, maybe its just public
+            // foundType = AuthorizationType.Public;
+            // var noCredentialsRequest = UnityWebRequest.Get(uri);
+            // yield return noCredentialsRequest.SendWebRequest();
+            // if (IsAuthorized(noCredentialsRequest))
+            // {
+            //     if (log) Debug.Log("Found no credentials needed for this layer: " + uri);
+            //    
+            //     NewURLAuthorizationDetermined(uri, foundType);
+            //     authorizationCallback?.Invoke(true);
+            //     yield break;
+            // }
+            //
             authorizationCallback?.Invoke(false);
         }
 
@@ -164,9 +146,9 @@ namespace Netherlands3D.Credentials
                     storedAuthorizations.Add(baseUri, auth);
                     break;
                 // case AuthorizationType.InferableSingleKey:
-                    // auth = new QueryStringAuthorization(uri, key);
-                    // storedAuthorizations.Add(baseUri, auth);
-                    // break;
+                // auth = new QueryStringAuthorization(uri, key);
+                // storedAuthorizations.Add(baseUri, auth);
+                // break;
                 case AuthorizationType.Key:
                     auth = new Key(uri, key);
                     storedAuthorizations.Add(baseUri, auth);
@@ -195,7 +177,7 @@ namespace Netherlands3D.Credentials
         }
 
         public void ClearURLFromStoredAuthorizations(Uri url)
-        { 
+        {
             storedAuthorizations.Remove(url);
         }
 
@@ -263,7 +245,7 @@ namespace Netherlands3D.Credentials
                 NewURLAuthorizationDetermined(uri, foundType);
                 yield break;
             }
-            
+
             // Try input key as bearer token
             var bearerTokenRequest = UnityWebRequest.Get(uri);
             bearerTokenRequest.SetRequestHeader("Authorization", "Bearer " + key);
@@ -276,51 +258,29 @@ namespace Netherlands3D.Credentials
                 yield break;
             }
 
-            // Try input key as 'key' query parameter (remove a possible existing key query parameter and add the new one)
-            var uriBuilder = new UriBuilder(uri);
-            uriBuilder.AddQueryParameter("key", key);
-            var keyRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
-            yield return keyRequestUrl.SendWebRequest();
-            if (IsAuthorized(keyRequestUrl))
+            // Try input key as all supported query key parameters
+            foreach (var type in supportedQueryAuthorizationTypes)
             {
-                if (log) Debug.Log("Found key needed for this layer: " + uri);
-                foundType = AuthorizationType.Key;
-                NewURLAuthorizationDetermined(uri, foundType, key: key);
-                yield break;
+                var uriBuilder = new UriBuilder(uri);
+                uriBuilder.AddQueryParameter(type.Value, key);
+                var request = UnityWebRequest.Get(uriBuilder.Uri);
+                yield return request.SendWebRequest();
+                if (IsAuthorized(request))
+                {
+                    if (log) Debug.Log("Found type " + type.Key + " is needed for this layer: " + uri);
+                    foundType = type.Key;
+                    NewURLAuthorizationDetermined(uri, foundType, key: key);
+                    yield break;
+                }
+
+                uriBuilder.RemoveQueryParameter(type.Value);
             }
 
-            // Try input key as 'code' query parameter (remove a possible existing code query parameter and add the new one)
-            uriBuilder.RemoveQueryParameter("key");
-            uriBuilder.RemoveQueryParameter("code");
-            uriBuilder.AddQueryParameter("code", key);
-            var codeRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
-            yield return codeRequestUrl.SendWebRequest();
-            if (IsAuthorized(codeRequestUrl))
-            {
-                if (log) Debug.Log("Found code needed for this layer: " + uri);
-                foundType = AuthorizationType.Code;
-                NewURLAuthorizationDetermined(uri, foundType, key: key);
-                yield break;
-            }
-
-            // Try input key as 'token' query parameter (remove a possible existing code query parameter and add the new one)
-            uriBuilder.RemoveQueryParameter("code");
-            uriBuilder.AddQueryParameter("token", key);
-            var tokenRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
-            yield return tokenRequestUrl.SendWebRequest();
-            if (IsAuthorized(tokenRequestUrl))
-            {
-                if (log) Debug.Log("Found token needed for this layer: " + uri);
-                foundType = AuthorizationType.Token;
-                NewURLAuthorizationDetermined(uri, foundType, key: key);
-                yield break;
-            }
-            
             // Nothing worked, return unsupported
             Debug.Log("Invalid credentials provided or no supported credential type worked to get access for this layer: " + uri);
             NewURLAuthorizationDetermined(uri, AuthorizationType.FailedOrUnsupported);
         }
-        
+
         private static bool IsAuthorized(UnityWebRequest uwr)
         {
             if (uwr.result == UnityWebRequest.Result.Success)
@@ -334,7 +294,7 @@ namespace Netherlands3D.Credentials
 
             if (uwr.responseCode >= 500)
                 throw new Exception("the request returned a response that is not implemented: " + uwr.responseCode + " from Uri: " + uwr.uri);
-            
+
             // We kinda assume that anything below error code 500 -except for 401 and 403- would probably be OK since the server
             // has processed the request and deemed it to contain a client side error
             return true;
