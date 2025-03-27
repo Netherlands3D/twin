@@ -91,7 +91,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             var config = new Config
             {
-                TypeOfResponseType = ExpectedTypeOfResponse.Texture(true),
                 Headers = headers,
                 Params = customQueryParams
             };
@@ -99,13 +98,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             string jsonString = string.Empty;
 
             var promise = Uxios.DefaultInstance.Get<string>(auth.InputUri, config);
-            promise.Then(response => jsonString = response.Data as string);
+            promise.Then(response => jsonString = response.Data as string
+            );
             promise.Catch(response =>
                 OnParseError.Invoke("Dit GeoJSON bestand kon niet worden ingeladen vanaf de URL: " + response.InnerException)
             );
-
-            yield return Uxios.WaitForRequest(promise);
             
+            yield return Uxios.WaitForRequest(promise);
+
             if(!string.IsNullOrEmpty(jsonString))
                 yield return ParseJSONString(jsonString);
         }

@@ -29,7 +29,6 @@ namespace Netherlands3D.Credentials
         public void ApplyCredentials()
         {          
             // try to get credentials from keyVault
-            print("try get cred: " + Uri);
             keyVault.Authorize(Uri, UserName, PasswordOrKeyOrTokenOrCode);
         }
 

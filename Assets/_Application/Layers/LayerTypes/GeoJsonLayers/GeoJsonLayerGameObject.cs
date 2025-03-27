@@ -16,6 +16,7 @@ using Netherlands3D.Twin.Utility;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
+    [RequireComponent(typeof(ICredentialHandler))]
     public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
         public override BoundingBox Bounds
@@ -94,12 +95,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private void RequestCredentials()
         {
             var credentialHandler = GetComponent<ICredentialHandler>();
-            if (credentialHandler != null)
-            {
-                credentialHandler.Uri = urlPropertyData.Data;
-                credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
-                credentialHandler.ApplyCredentials();
-            }
+            credentialHandler.Uri = urlPropertyData.Data;
+            credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+            credentialHandler.ApplyCredentials();
         }
 
         private void HandleCredentials(StoredAuthorization auth)
@@ -110,7 +108,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     LayerData.HasValidCredentials = false;
                     return;
             }
-
+            
             LayerData.HasValidCredentials = true;
             StartCoroutine(parser.ParseGeoJSONStreamRemote(auth));
         }
