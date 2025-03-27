@@ -302,15 +302,15 @@ namespace Netherlands3D.Tiles3D
                 UnityEngine.Material sharedMat = r.sharedMaterial;
                 if (sharedMat != null)
                 {
-                    UnityEngine.Texture tex = sharedMat.mainTexture;
-                    if (tex)
-                        Destroy(tex);
-                    else
+                    if (sharedMat.HasTexture("_MainTex"))
                     {
-                        tex = sharedMat.GetTexture("_MainTex");
+                        UnityEngine.Texture tex = sharedMat.mainTexture;
                         if (tex)
+                        {
                             Destroy(tex);
+                        }
                     }
+
                     sharedMat.SetTexture("_MainTex", null);
                     sharedMat.shader = null;
                     sharedMat.mainTexture = null;
@@ -321,15 +321,12 @@ namespace Netherlands3D.Tiles3D
                 UnityEngine.Material mat = r.material;
                 if (mat != null)
                 {
-                    UnityEngine.Texture tex = mat.mainTexture;
-                    if (tex)
-                        Destroy(tex);
-                    else
+                    if (mat.HasTexture("_MainTex"))
                     {
-                        tex = mat.GetTexture("_MainTex");
-                        if (tex)
-                            Destroy(tex);
+                        UnityEngine.Texture tex = sharedMat.mainTexture;
+                        Destroy(tex);
                     }
+
                     mat.SetTexture("_MainTex", null);
                     mat.shader = null;
                     mat.mainTexture = null;
