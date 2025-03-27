@@ -1,9 +1,7 @@
 using GLTFast;
-using GLTFast.Schema;
 using Netherlands3D.Coordinates;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -316,7 +314,6 @@ namespace Netherlands3D.Tiles3D
                     sharedMat.SetTexture("_MainTex", null);
                     sharedMat.shader = null;
                     sharedMat.mainTexture = null;
-                    sharedMat.shader = null;
                     Destroy(sharedMat);
                     r.sharedMaterial = null;
                 }
