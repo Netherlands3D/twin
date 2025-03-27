@@ -275,9 +275,9 @@ namespace Netherlands3D.Tiles3D
             }
             MeshFilter[] meshFilters = this.gameObject.GetComponentsInChildren<MeshFilter>();
             foreach (var meshFilter in meshFilters)
-            {                
+            {
                 //the order of destroying sharedmesh before mesh matters for cleaning up native shells
-                if (meshFilter.sharedMesh!=null)
+                if (meshFilter.sharedMesh != null)
                 {
                     UnityEngine.Mesh mesh = meshFilter.sharedMesh;
                     meshFilter.sharedMesh.Clear();
