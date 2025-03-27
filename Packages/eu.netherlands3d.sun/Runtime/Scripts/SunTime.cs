@@ -101,12 +101,6 @@ namespace Netherlands3D.Sun
             RecalculateOrigin();
         }
 
-        private void OnValidate()
-        {
-            var newTime = new DateTime(year, month, day, hour, minutes, seconds, dateTimeKind);
-            Time = newTime;
-        }
-
         private void Update()
         {
             if (!animate) return;
