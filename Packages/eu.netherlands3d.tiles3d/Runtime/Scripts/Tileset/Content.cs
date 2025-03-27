@@ -275,24 +275,52 @@ namespace Netherlands3D.Tiles3D
             }
             MeshFilter[] meshFilters = this.gameObject.GetComponentsInChildren<MeshFilter>();
             foreach (var meshFilter in meshFilters)
-            {
+            {                
+                //the order of destroying sharedmesh before mesh matters for cleaning up native shells
                 if (meshFilter.sharedMesh!=null)
                 {
                     UnityEngine.Mesh mesh = meshFilter.sharedMesh;
                     meshFilter.sharedMesh.Clear();
                     Destroy(mesh);
+                    meshFilter.sharedMesh = null;
                 }
-                
+                if (meshFilter.mesh != null)
+                {
+                    UnityEngine.Mesh mesh = meshFilter.mesh;
+                    meshFilter.mesh.Clear();
+                    Destroy(mesh);
+                    meshFilter.mesh = null;
+                }
             }
 
-
-            Destroy(this.gameObject);
+            Destroy(this.gameObject);            
         }
 
         private void ClearRenderers(Renderer[] renderers)
         {
             foreach(Renderer r in renderers)
-            {                
+            {
+                //the order of destroying sharedmaterial before material matters for cleaning up native shells
+                UnityEngine.Material sharedMat = r.sharedMaterial;
+                if (sharedMat != null)
+                {
+                    UnityEngine.Texture tex = sharedMat.mainTexture;
+                    if (tex)
+                        Destroy(tex);
+                    else
+                    {
+                        tex = sharedMat.GetTexture("_MainTex");
+                        if (tex)
+                            Destroy(tex);
+                    }
+                    sharedMat.SetTexture("_MainTex", null);
+                    sharedMat.shader = null;
+                    sharedMat.mainTexture = null;
+                    sharedMat.shader = null;
+                    Destroy(sharedMat);
+                    r.sharedMaterial = null;
+                }
+
                 UnityEngine.Material mat = r.material;
                 if (mat != null)
                 {
@@ -305,26 +333,13 @@ namespace Netherlands3D.Tiles3D
                         if (tex)
                             Destroy(tex);
                     }
+                    mat.SetTexture("_MainTex", null);
+                    mat.shader = null;
                     mat.mainTexture = null;
                     Destroy(mat);
                     r.material = null;
                 }
-                UnityEngine.Material sharedMat = r.sharedMaterial;
-                if(sharedMat != null)
-                {
-                    UnityEngine.Texture tex = sharedMat.mainTexture;
-                    if (tex)
-                        Destroy(tex);
-                    else
-                    {
-                        tex = sharedMat.GetTexture("_MainTex");
-                        if (tex)
-                            Destroy(tex);
-                    }
-                    sharedMat.mainTexture = null;
-                    Destroy(sharedMat);
-                    r.sharedMaterial = null;
-                }
+                
             }
         }
     }
