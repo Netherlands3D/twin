@@ -7,7 +7,6 @@ using System.Collections;
 using Netherlands3D.Web;
 using Netherlands3D.Credentials.StoredAuthorization;
 using System.Collections.Specialized;
-using KindMen.Uxios.Errors;
 
 namespace Netherlands3D.Credentials
 {
