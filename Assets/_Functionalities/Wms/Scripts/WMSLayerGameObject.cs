@@ -61,15 +61,6 @@ namespace Netherlands3D.Functionalities.Wms
             UpdateURL(urlPropertyData.Data);  
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
-
-            var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
-            var getCapabilitiesUrl = new Uri(getCapabilitiesString);
-            Legend.Instance.GetLegendUrl(wmsProjectionLayer.WmsUrl, OnLegendUrlsReceived);
-            BoundingBoxCache.Instance.GetBoundingBoxContainer(
-                getCapabilitiesUrl,
-                (responseText) => new WmsGetCapabilities(getCapabilitiesUrl, responseText),
-                SetBoundingBox
-            );
         }
 
         private void OnLegendUrlsReceived(LegendUrlContainer urlContainer)
@@ -99,6 +90,15 @@ namespace Netherlands3D.Functionalities.Wms
                 WMSProjectionLayer.isEnabled = false;
                 return;
             }
+            
+            var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
+            var getCapabilitiesUrl = new Uri(getCapabilitiesString);
+            Legend.Instance.GetLegendUrl(wmsProjectionLayer.WmsUrl, OnLegendUrlsReceived); //todo: make this work with credentials
+            BoundingBoxCache.Instance.GetBoundingBoxContainer(
+                getCapabilitiesUrl,
+                (responseText) => new WmsGetCapabilities(getCapabilitiesUrl, responseText),
+                SetBoundingBox
+            );
             
             WMSProjectionLayer.SetConfig(auth.GetConfig());
             LayerData.HasValidCredentials = true;
