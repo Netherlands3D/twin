@@ -107,6 +107,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private void OnDestroy()
         {
             parser.OnFeatureParsed.RemoveListener(AddFeatureVisualisation);
+            var credentialHandler = GetComponent<ICredentialHandler>();
+            credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
         }
 
         public void AddFeatureVisualisation(Feature feature)
