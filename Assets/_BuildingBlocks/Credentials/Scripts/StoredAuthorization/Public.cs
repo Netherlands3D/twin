@@ -1,5 +1,6 @@
 
 using System;
+using KindMen.Uxios;
 
 namespace Netherlands3D.Credentials.StoredAuthorization
 {
@@ -8,6 +9,11 @@ namespace Netherlands3D.Credentials.StoredAuthorization
     {        
         public Public(Uri url) : base(url)
         {
+        }
+
+        public override Config GetConfig()
+        {
+            return Config.Default();
         }
     }
 }
