@@ -4,6 +4,7 @@ using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
 using System.Linq;
+using KindMen.Uxios;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
@@ -92,26 +93,14 @@ namespace Netherlands3D.Functionalities.Wms
         {
             ClearCredentials();
 
-            switch (auth)
+            if(auth is FailedOrUnsupported)
             {
-                case FailedOrUnsupported:
-                    LayerData.HasValidCredentials = false;
-                    WMSProjectionLayer.isEnabled = false;
-                    return;
-
-                case HeaderBasedAuthorization headerBasedAuthorization:
-                    var (headerName, headerValue) = headerBasedAuthorization.GetHeaderKeyAndValue();
-                    WMSProjectionLayer.SetCustomHeader(headerName, headerValue);
-                    break;
-                case QueryStringAuthorization queryStringAuthorization:
-                    WMSProjectionLayer.SetCustomQueryParameter(queryStringAuthorization.QueryKeyName, queryStringAuthorization.QueryKeyValue);
-                    break;
-                case Public:
-                    break; //nothing specific needed, but it needs to be excluded from default
-                default:
-                    throw new NotImplementedException("Credential type " + auth.GetType() + " is not supported by " + GetType());
+                LayerData.HasValidCredentials = false;
+                WMSProjectionLayer.isEnabled = false;
+                return;
             }
-            //also do this for public
+            
+            WMSProjectionLayer.SetConfig(auth.GetConfig());
             LayerData.HasValidCredentials = true;
             WMSProjectionLayer.RefreshTiles();
             WMSProjectionLayer.isEnabled = true;
@@ -119,8 +108,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         public void ClearCredentials()
         {
-            WMSProjectionLayer.ClearCustomHeaders();
-            WMSProjectionLayer.ClearCustomQueryParameters();
+            WMSProjectionLayer.SetConfig(Config.Default());
         }
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)

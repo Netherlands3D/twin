@@ -168,6 +168,7 @@ namespace Netherlands3D.Credentials
             foreach (var supportedAuthorization in supportedAuthorizationTypes.Keys)
             {
                 yield return TrySupportedAuthorization(supportedAuthorization, uri, username, passwordOrKey);
+                if (storedAuthorizations.ContainsKey(uri)) yield break; // if the Auth test was succesful, stop looking.
             }
         }
 
