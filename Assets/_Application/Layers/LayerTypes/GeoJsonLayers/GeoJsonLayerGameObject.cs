@@ -51,18 +51,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private GeoJSONLineLayer lineFeaturesLayer;
         private GeoJSONPointLayer pointFeaturesLayer;
 
-        [Header("Visualizer settings")] [SerializeField]
-        private int maxFeatureVisualsPerFrame = 20;
-
+        [Header("Visualizer settings")]
         [SerializeField] private GeoJSONPolygonLayer polygonLayerPrefab;
         [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
         [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
-
-        public int MaxFeatureVisualsPerFrame
-        {
-            get => maxFeatureVisualsPerFrame;
-            set => maxFeatureVisualsPerFrame = value;
-        }
 
         [Space] protected LayerURLPropertyData urlPropertyData = new();
 
