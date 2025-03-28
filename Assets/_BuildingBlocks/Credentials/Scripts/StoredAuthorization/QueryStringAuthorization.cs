@@ -1,4 +1,6 @@
 using System;
+using KindMen.Uxios;
+using KindMen.Uxios.Http;
 using Netherlands3D.Web;
 
 namespace Netherlands3D.Credentials.StoredAuthorization
@@ -7,13 +9,21 @@ namespace Netherlands3D.Credentials.StoredAuthorization
     public abstract class QueryStringAuthorization : StoredAuthorization
     {
         public string QueryKeyValue { get; } = "";
-        public virtual string QueryKeyName => "";
+        public abstract string QueryKeyName { get; }
 
         protected QueryStringAuthorization(Uri url, string key ) : base(url)
         {
             QueryKeyValue = key;
         }
 
+        public override Config GetConfig()
+        {
+            return new Config()
+            {
+                Params = new QueryParameters(){ {QueryKeyName, QueryKeyValue} }
+            };
+        }
+        
         public Uri GetFullUri()
         {
             if (string.IsNullOrEmpty(QueryKeyName))

@@ -1,4 +1,5 @@
 using System;
+using KindMen.Uxios;
 
 namespace Netherlands3D.Credentials.StoredAuthorization
 {
@@ -13,5 +14,7 @@ namespace Netherlands3D.Credentials.StoredAuthorization
             InputUri = uri;
             BaseUri = new Uri(uri.GetLeftPart(UriPartial.Path));
         }
+
+        public abstract Config GetConfig();
     }
 }
