@@ -72,11 +72,11 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
                 propertySections = new();
         }
 
-        private void HandleCredentials(StoredAuthorization auth)
+        private void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
             ClearCredentials();
 
-            switch (auth)
+            switch (auth) //todo: pass auth.GetConfig to the tileset instead of this switch statement.
             {
                 case FailedOrUnsupported:
                     LayerData.HasValidCredentials = false;

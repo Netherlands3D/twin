@@ -88,7 +88,7 @@ namespace Netherlands3D.Functionalities.Wms
             WMSProjectionLayer.RenderIndex = -order;
         }
 
-        private void HandleCredentials(StoredAuthorization auth)
+        private void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
             ClearCredentials();
 

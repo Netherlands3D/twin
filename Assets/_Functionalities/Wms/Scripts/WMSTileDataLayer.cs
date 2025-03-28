@@ -7,7 +7,6 @@ using KindMen.Uxios.Http;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Utility;
-using Netherlands3D.Web;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using QueryParameters = KindMen.Uxios.Http.QueryParameters;

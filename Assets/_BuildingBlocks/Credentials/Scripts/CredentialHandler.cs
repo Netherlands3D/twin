@@ -15,7 +15,7 @@ namespace Netherlands3D.Credentials
 
         public string UserName { get; set; }
         public string PasswordOrKeyOrTokenOrCode { get; set; }
-        public UnityEvent<StoredAuthorization.StoredAuthorization> OnAuthorizationHandled { get; set; } = new();
+        public UnityEvent<Uri, StoredAuthorization.StoredAuthorization> OnAuthorizationHandled { get; set; } = new();
         public StoredAuthorization.StoredAuthorization Authorization { get; set; }
         
         //called in the inspector on end edit of url input field
@@ -48,14 +48,13 @@ namespace Netherlands3D.Credentials
             keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
         }
 
-        private void DeterminedAuthorizationType(StoredAuthorization.StoredAuthorization auth)
+        private void DeterminedAuthorizationType(Uri inputUri, StoredAuthorization.StoredAuthorization auth)
         {
-            var baseUri = new Uri(Uri.GetLeftPart(UriPartial.Path));
-            if (!auth.BaseUri.Equals(baseUri)) //ensure the returned authorization is relevant to us
+            if(inputUri != Uri)//ensure the returned authorization is relevant to us
                 return;
 
             Authorization = auth;         
-            OnAuthorizationHandled.Invoke(Authorization);
+            OnAuthorizationHandled.Invoke(Uri, Authorization);
         }
     }
 }

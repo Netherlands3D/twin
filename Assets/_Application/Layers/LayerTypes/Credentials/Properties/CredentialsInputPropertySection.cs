@@ -35,7 +35,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             }
         }
 
-        private void OnCredentialsHandled(StoredAuthorization auth)
+        private void OnCredentialsHandled(Uri uri, StoredAuthorization auth)
         {
             var accepted = auth is not FailedOrUnsupported;
 
