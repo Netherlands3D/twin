@@ -10,38 +10,26 @@ namespace Netherlands3D.Credentials
     {
         [Tooltip("KeyVault Scriptable Object")] 
         [SerializeField] private KeyVault keyVault;
-        
-        private Uri baseUri;
-        private Uri inputUri;
 
-        public Uri BaseUri
-        {
-            get { return baseUri; }
-            set
-            {
-                inputUri = value;
-                baseUri = new Uri(value.GetLeftPart(UriPartial.Path));
-            }
-        }
+        public Uri Uri { get; set; }
+
         public string UserName { get; set; }
         public string PasswordOrKeyOrTokenOrCode { get; set; }
-        public UnityEvent<StoredAuthorization.StoredAuthorization> OnAuthorizationHandled { get; set; } = new();
+        public UnityEvent<Uri, StoredAuthorization.StoredAuthorization> OnAuthorizationHandled { get; set; } = new();
         public StoredAuthorization.StoredAuthorization Authorization { get; set; }
-        
-        public UnityEvent<bool> CredentialsSucceeded { get; set; }
         
         //called in the inspector on end edit of url input field
         public void SetUri(string url)
         {
             if (!string.IsNullOrEmpty(url))
-                BaseUri = new Uri(url);
+                Uri = new Uri(url);
         }
 
         //called in the inspector on button press
         public void ApplyCredentials()
         {          
             // try to get credentials from keyVault
-            keyVault.Authorize(inputUri, UserName, PasswordOrKeyOrTokenOrCode);
+            keyVault.Authorize(Uri, UserName, PasswordOrKeyOrTokenOrCode);
         }
 
         public void ClearCredentials()
@@ -60,13 +48,13 @@ namespace Netherlands3D.Credentials
             keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
         }
 
-        private void DeterminedAuthorizationType(StoredAuthorization.StoredAuthorization auth)
+        private void DeterminedAuthorizationType(Uri inputUri, StoredAuthorization.StoredAuthorization auth)
         {
-            if (!auth.BaseUri.Equals(BaseUri)) //ensure the returned authorization is our uri
+            if(inputUri != Uri)//ensure the returned authorization is relevant to us
                 return;
 
             Authorization = auth;         
-            OnAuthorizationHandled.Invoke(Authorization);
+            OnAuthorizationHandled.Invoke(Uri, Authorization);
         }
     }
 }

@@ -25,12 +25,12 @@ namespace Netherlands3D.Twin
             handler.ApplyCredentials();
         }
 
-        private void DetermineAdapter(StoredAuthorization auth)
-        {
-            if(url != auth.BaseUri.ToString())
+        private void DetermineAdapter(Uri uri, StoredAuthorization auth)
+        {            
+            if(url != uri.ToString())
                 return;
                 
-            dataTypeChain.DetermineAdapter(auth);
+            dataTypeChain.DetermineAdapter(uri, auth);
             handler.OnAuthorizationHandled.RemoveListener(DetermineAdapter);
         }
     }

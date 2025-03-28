@@ -72,11 +72,11 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
                 propertySections = new();
         }
 
-        private void HandleCredentials(StoredAuthorization auth)
+        private void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
             ClearCredentials();
 
-            switch (auth)
+            switch (auth) //todo: pass auth.GetConfig to the tileset instead of this switch statement.
             {
                 case FailedOrUnsupported:
                     LayerData.HasValidCredentials = false;
@@ -138,10 +138,10 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             LayerData.HasValidCredentials = request.result == UnityWebRequest.Result.Success;
         }
 
-        private void UpdateURL(Uri urlWithoutQuery)
+        private void UpdateURL(Uri storedUri)
         {
-            credentialHandler.BaseUri = urlWithoutQuery; //apply the URL from what is stored in the Project data
-            tileSet.tilesetUrl = urlWithoutQuery.ToString();
+            credentialHandler.Uri = storedUri; //apply the URL from what is stored in the Project data
+            tileSet.tilesetUrl = storedUri.ToString();
             credentialHandler.ApplyCredentials();
             EnableTileset();
         }
