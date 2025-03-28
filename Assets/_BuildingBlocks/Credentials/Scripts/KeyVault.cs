@@ -10,21 +10,6 @@ using System.Collections.Specialized;
 
 namespace Netherlands3D.Credentials
 {
-    [Obsolete("this enum will be removed in the future, use a type check instead")]
-    public enum AuthorizationType //todo: remove this enum
-    {
-        //Specific order in items used in dropdown index
-        Public = -1,
-        UsernamePassword = 0,
-
-        // InferableSingleKey = 1, //Single field key, token or code (we dont know specifically yet but can infer it)
-        Key,
-        BearerToken,
-        Code,
-        Token,
-        FailedOrUnsupported
-    }
-
     [CreateAssetMenu(fileName = "KeyVault", menuName = "ScriptableObjects/KeyVault", order = 1)]
     public class KeyVault : ScriptableObject
     {
