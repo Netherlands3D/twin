@@ -1,4 +1,6 @@
 using System;
+using KindMen.Uxios;
+using KindMen.Uxios.Http;
 using Netherlands3D.Web;
 
 namespace Netherlands3D.Credentials.StoredAuthorization
@@ -14,6 +16,14 @@ namespace Netherlands3D.Credentials.StoredAuthorization
             QueryKeyValue = key;
         }
 
+        public override Config GetConfig()
+        {
+            return new Config()
+            {
+                Params = new QueryParameters(){ {QueryKeyName, QueryKeyValue} }
+            };
+        }
+        
         public Uri GetFullUri()
         {
             if (string.IsNullOrEmpty(QueryKeyName))
