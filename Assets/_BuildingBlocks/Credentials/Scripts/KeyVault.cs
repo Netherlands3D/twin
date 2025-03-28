@@ -46,7 +46,33 @@ namespace Netherlands3D.Credentials
             { AuthorizationType.Code, "code" }
         };
 
+        private static readonly Dictionary<Type, Func<Uri, string[], StoredAuthorization.StoredAuthorization>> supportedAuthorizationTypes = new()
+        {
+            { typeof(Public), (uri, args) => new Public(uri) },
+            { typeof(FailedOrUnsupported), (uri, args) => new FailedOrUnsupported(uri) },
+            { typeof(Token), (uri, args) => new Token(uri, args[0]) },
+            { typeof(Key), (uri, args) => new Key(uri, args[0]) },
+            { typeof(Code), (uri, args) => new Code(uri, args[0]) },
+            { typeof(UsernamePassword), (uri, args) => new UsernamePassword(uri, args[0], args[1]) },
+            { typeof(BearerToken), (uri, args) => new BearerToken(uri, args[0]) }
+        };
+
+
+        private StoredAuthorization.StoredAuthorization CreateStoredAuthorization<T>(Uri uri, params string[] args) where T : StoredAuthorization.StoredAuthorization
+        {
+            if (supportedAuthorizationTypes.TryGetValue(typeof(T), out var factory))
+            {
+                var auth = factory(uri, args);
+                Uri baseUri = new Uri(uri.GetLeftPart(UriPartial.Path));
+                storedAuthorizations.Add(baseUri, auth);
+                return auth;
+            }
+        
+            throw new InvalidOperationException($"Unsupported authorization type: {typeof(T).Name}");
+        }
+
         public bool log = false;
+        
         private MonoBehaviour coroutineMonoBehaviour;
         public UnityEvent<StoredAuthorization.StoredAuthorization> OnAuthorizationTypeDetermined = new();
 
@@ -56,15 +82,15 @@ namespace Netherlands3D.Credentials
         public void Authorize(Uri inputUri, string username, string passwordOrKey)
         {
             Uri baseUri = new Uri(inputUri.GetLeftPart(UriPartial.Path));
+            
+            //1. check if we already have an authorization for this url 
             if (storedAuthorizations.TryGetValue(baseUri, out var authorization))
             {
                 // authorization.SetInputUri(inputUri); //we need this later on to determine the specific endpoint
                 OnAuthorizationTypeDetermined.Invoke(authorization);
                 return;
             }
-
-            //todo: is a queryKey present in the inputUri? parse it and try this authorization type immediately.
-
+            
             //Only allow one simultaneous coroutine for now
             if (coroutineMonoBehaviour != null)
                 Destroy(coroutineMonoBehaviour.gameObject);
@@ -72,6 +98,8 @@ namespace Netherlands3D.Credentials
             //lets try to to find any credentials in the given input url
             var coroutineGameObject = new GameObject("KeyVaultCoroutine_TryParseAuthorizationInput");
             coroutineMonoBehaviour = coroutineGameObject.AddComponent<KeyVaultCoroutines>();
+            
+            //2. try to find a queryStringAuthorization in the provided url
             coroutineMonoBehaviour.StartCoroutine(TryToFindAuthorizationInUriQuery(inputUri, authorized =>
             {
                 if (!authorized)
@@ -81,6 +109,16 @@ namespace Netherlands3D.Credentials
                 }
             }));
         }
+
+        // private IEnumerator TryFindAuthorization(Uri inputUri, string username, string passwordOrKey)
+        // {
+        //     //1. Try to find credentials in the url
+        //     yield return TryToFindAuthorizationInUriQuery(inputUri);
+        //     //2. Try username/password authentication
+        //     TryBasicAuthentication(inputUri, username, passwordOrKey);
+        //     //3. Try others
+        //     TryToFindSpecificCredentialType(inputUri, passwordOrKey);
+        // }
 
         public IEnumerator TryToFindAuthorizationInUriQuery(Uri uri, Action<bool> authorizationCallback)
         {
@@ -128,14 +166,21 @@ namespace Netherlands3D.Credentials
         /// <summary>
         /// Add a new known URL with a specific authorization type
         /// </summary>
-        private void NewURLAuthorizationDetermined(Uri uri, AuthorizationType authorizationType, string username = "", string password = "", string key = "")
+        private void NewURLAuthorizationDetermined(Uri uri, AuthorizationType at, string username = "", string password = "", string key = "")
         {
+            // if (!authorizationType.IsSubclassOf(typeof(StoredAuthorization.StoredAuthorization)))
+            //     throw new ArgumentException("the determined authorizationType " + authorizationType + " does not extend from type " + typeof(StoredAuthorization.StoredAuthorization) + " which is required.");
+            
             Uri baseUri = new Uri(uri.GetLeftPart(UriPartial.Path)); //we use only the root of the url as a authorization identifier
-
             ClearURLFromStoredAuthorizations(baseUri);
+            // switch (authorizationType)
+            // {
+            //     var a= Activator.CreateInstance(authorizationType);
+            // }
+            
 
             StoredAuthorization.StoredAuthorization auth = new FailedOrUnsupported(uri);
-            switch (authorizationType)
+            switch (at)
             {
                 case AuthorizationType.Public:
                     auth = new Public(uri);
@@ -145,10 +190,6 @@ namespace Netherlands3D.Credentials
                     auth = new UsernamePassword(uri, username, password);
                     storedAuthorizations.Add(baseUri, auth);
                     break;
-                // case AuthorizationType.InferableSingleKey:
-                // auth = new QueryStringAuthorization(uri, key);
-                // storedAuthorizations.Add(baseUri, auth);
-                // break;
                 case AuthorizationType.Key:
                     auth = new Key(uri, key);
                     storedAuthorizations.Add(baseUri, auth);
@@ -170,7 +211,7 @@ namespace Netherlands3D.Credentials
                     // If possible we want to make a distinction between Failed and Unsupported, and only save if it's unsupported, since then retrying is futile.
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(authorizationType), authorizationType, "authorisation type not defined");
+                    throw new ArgumentOutOfRangeException(nameof(at), at, "authorisation type not defined");
             }
 
             OnAuthorizationTypeDetermined.Invoke(auth);

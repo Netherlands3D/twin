@@ -7,7 +7,7 @@ namespace Netherlands3D.Credentials.StoredAuthorization
     public abstract class QueryStringAuthorization : StoredAuthorization
     {
         public string QueryKeyValue { get; } = "";
-        public virtual string QueryKeyName => "";
+        public abstract string QueryKeyName { get; }
 
         protected QueryStringAuthorization(Uri url, string key ) : base(url)
         {
