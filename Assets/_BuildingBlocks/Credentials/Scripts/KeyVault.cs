@@ -112,7 +112,7 @@ namespace Netherlands3D.Credentials
             //1. Try to find credentials in the url, and if found, we verify that this is a valid Auth method
             if (TryToFindAuthorizationInUriQuery(inputUri, out var potentialAuthorisation))
             {
-                Debug.Log("found potential query key type " + potentialAuthorisation.GetType() + " with key " + potentialAuthorisation.QueryKeyValue);
+                if(log) Debug.Log("found potential query key type in url: " + potentialAuthorisation.GetType() + " with key " + potentialAuthorisation.QueryKeyValue);
 
                 //try this one
                 yield return TryQueryKeyAuthentication(potentialAuthorisation);
@@ -161,7 +161,7 @@ namespace Netherlands3D.Credentials
             yield return request.SendWebRequest();
             if (IsAuthorized(request))
             {
-                if (log) Debug.Log("Found token needed for this layer: " + request);
+                if (log) Debug.Log("Access granted with authorization type: " + queryStringAuthorization.GetType() +" for: " + queryStringAuthorization.GetFullUri());
                 NewAuthorizationDetermined(queryStringAuthorization);
             }
         }
@@ -170,11 +170,9 @@ namespace Netherlands3D.Credentials
         {
             foreach (var supportedAuthorization in supportedAuthorizationTypes.Keys)
             {
-                if(log) Debug.Log("trying auth type " + supportedAuthorization);
                 var potentialAuth = CreateStoredAuthorization(supportedAuthorization, uri, passwordOrKey, username); //passwordOrKey before userName to get the correct constructor order
                 if (potentialAuth is QueryStringAuthorization queryStringAuthorization) // todo: temp fix to not have to manually alter the url query, if possible replace the UnityWebrequest with Uxios so we can just pass the Config object without further thought
                 {
-                    Debug.Log("test");
                     yield return TryQueryKeyAuthentication(queryStringAuthorization);
                     continue;
                 }
