@@ -50,7 +50,8 @@ namespace Netherlands3D.Credentials
 
         private void DeterminedAuthorizationType(StoredAuthorization.StoredAuthorization auth)
         {
-            if (!auth.InputUri.Equals(Uri)) //ensure the returned authorization is our uri
+            var baseUri = new Uri(Uri.GetLeftPart(UriPartial.Path));
+            if (!auth.BaseUri.Equals(baseUri)) //ensure the returned authorization is relevant to us
                 return;
 
             Authorization = auth;         
