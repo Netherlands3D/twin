@@ -15,7 +15,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void Start()
         {
             base.Start();
-            transformPropertyData.Position = new Coordinate(coordinateSystem, new double[3] { Coordinates.y, Coordinates.x, Coordinates.z });
+            transformPropertyData.Position = new Coordinate(coordinateSystem, Coordinates.y, Coordinates.x, Coordinates.z);
+            transformPropertyData.EulerRotation = Rotation;
+            transformPropertyData.LocalScale = Scale;
+        }
+
+        private void OnValidate()
+        {
+            if (transformPropertyData == null) return;
+
+            transformPropertyData.Position = new Coordinate(coordinateSystem, Coordinates.y, Coordinates.x, Coordinates.z );
             transformPropertyData.EulerRotation = Rotation;
             transformPropertyData.LocalScale = Scale;
         }
