@@ -102,15 +102,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void HandleCredentials(StoredAuthorization auth)
         {
-            switch (auth)
+            if(auth is FailedOrUnsupported)
             {
-                case FailedOrUnsupported:
                     LayerData.HasValidCredentials = false;
                     return;
             }
             
             LayerData.HasValidCredentials = true;
-            StartCoroutine(parser.ParseGeoJSONStreamRemote(auth));
+            StartCoroutine(parser.ParseGeoJSONStreamRemote(auth.InputUri, auth.GetConfig()));
         }
 
         private void OnDestroy()

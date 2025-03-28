@@ -6,9 +6,7 @@ using GeoJSON.Net;
 using GeoJSON.Net.CoordinateReferenceSystem;
 using GeoJSON.Net.Feature;
 using KindMen.Uxios;
-using KindMen.Uxios.Http;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Credentials.StoredAuthorization;
 using Newtonsoft.Json;
 using SimpleJSON;
 using UnityEngine;
@@ -69,35 +67,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             yield return ParseFeatures(jsonReader, serializer);
         }
 
-        public IEnumerator ParseGeoJSONStreamRemote(StoredAuthorization auth)
+        public IEnumerator ParseGeoJSONStreamRemote(Uri uri, Config config)
         {
-            var headers = new Headers();
-            var customQueryParams = new KindMen.Uxios.Http.QueryParameters();
-
-            switch (auth)
-            {
-                case HeaderBasedAuthorization headerBasedAuthorization:
-                    var (headerName, headerValue) = headerBasedAuthorization.GetHeaderKeyAndValue();
-                    headers.Add(headerName, headerValue);
-                    break;
-                case QueryStringAuthorization queryStringAuthorization:
-                    customQueryParams.Add(queryStringAuthorization.QueryKeyName, queryStringAuthorization.QueryKeyValue);
-                    break;
-                case Public:
-                    break; //nothing specific needed, but it needs to be excluded from default
-                default:
-                    throw new NotImplementedException("Credential type " + auth.GetType() + " is not supported by " + GetType());
-            }
-
-            var config = new Config
-            {
-                Headers = headers,
-                Params = customQueryParams
-            };
-
             string jsonString = string.Empty;
 
-            var promise = Uxios.DefaultInstance.Get<string>(auth.InputUri, config);
+            var promise = Uxios.DefaultInstance.Get<string>(uri, config);
             promise.Then(response => jsonString = response.Data as string
             );
             promise.Catch(response =>
