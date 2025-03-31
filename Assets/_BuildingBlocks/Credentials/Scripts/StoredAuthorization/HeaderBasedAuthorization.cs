@@ -18,13 +18,12 @@ namespace Netherlands3D.Credentials.StoredAuthorization
 
         public abstract (string, string) GetHeaderKeyAndValue();
         
-        public override Config GetConfig()
+        public override Config AddToConfig(Config config)
         {
+            var newConfig = Config.BasedOn(config);
             var (headerKey, headerValue) = GetHeaderKeyAndValue();
-            return new Config()
-            {
-                Headers = new Headers { { headerKey, headerValue } }
-            };
+            newConfig.AddHeader(headerKey, headerValue);
+            return newConfig;
         }
     }
 }

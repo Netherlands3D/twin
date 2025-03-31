@@ -1,5 +1,4 @@
 using System;
-using Netherlands3D.Credentials.StoredAuthorization;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,16 +7,16 @@ namespace Netherlands3D.Credentials
     //this is the handler to query the keyvault and return the credentials object to be processed further
     public class CredentialHandler : MonoBehaviour, ICredentialHandler
     {
-        [Tooltip("KeyVault Scriptable Object")] 
-        [SerializeField] private KeyVault keyVault;
+        [Tooltip("KeyVault Scriptable Object")] [SerializeField]
+        private KeyVault keyVault;
 
         public Uri Uri { get; set; }
 
         public string UserName { get; set; }
         public string PasswordOrKeyOrTokenOrCode { get; set; }
         public UnityEvent<Uri, StoredAuthorization.StoredAuthorization> OnAuthorizationHandled { get; set; } = new();
-        public StoredAuthorization.StoredAuthorization Authorization { get; set; }
-        
+        public StoredAuthorization.StoredAuthorization Authorization { get; private set; }
+
         //called in the inspector on end edit of url input field
         public void SetUri(string url)
         {
@@ -27,7 +26,7 @@ namespace Netherlands3D.Credentials
 
         //called in the inspector on button press
         public void ApplyCredentials()
-        {          
+        {
             // try to get credentials from keyVault
             keyVault.Authorize(Uri, UserName, PasswordOrKeyOrTokenOrCode);
         }
@@ -48,13 +47,13 @@ namespace Netherlands3D.Credentials
             keyVault.OnAuthorizationTypeDetermined.RemoveListener(DeterminedAuthorizationType);
         }
 
-        private void DeterminedAuthorizationType(Uri inputUri, StoredAuthorization.StoredAuthorization auth)
+        private void DeterminedAuthorizationType(StoredAuthorization.StoredAuthorization auth)
         {
-            if(inputUri != Uri)//ensure the returned authorization is relevant to us
+            if (Uri == null || auth.Domain != new Uri(Uri.GetLeftPart(UriPartial.Path))) //ensure the returned authorization is relevant to us
                 return;
 
-            Authorization = auth;         
-            OnAuthorizationHandled.Invoke(Uri, Authorization);
+            Authorization = auth;
+            OnAuthorizationHandled.Invoke(auth.SanitizeUrl(Uri), auth);
         }
     }
 }

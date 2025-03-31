@@ -101,7 +101,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
             
             LayerData.HasValidCredentials = true;
-            StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth.GetConfig()));
+            StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
         }
 
         private void OnDestroy()

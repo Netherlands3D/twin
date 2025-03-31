@@ -11,9 +11,9 @@ namespace Netherlands3D.Credentials.StoredAuthorization
         {
         }
 
-        public override Config GetConfig()
+        public override Config AddToConfig(Config config)
         {
-            return Config.Default();
+            return config;
         }
     }
 }

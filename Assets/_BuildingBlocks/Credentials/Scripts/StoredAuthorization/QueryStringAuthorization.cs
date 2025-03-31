@@ -11,17 +11,17 @@ namespace Netherlands3D.Credentials.StoredAuthorization
         public string QueryKeyValue { get; } = "";
         public abstract string QueryKeyName { get; }
 
-        protected QueryStringAuthorization(Uri url, string key ) : base(url)
+        protected QueryStringAuthorization(Uri url, string key) : base(url)
         {
-            QueryKeyValue = key;
+            if(key != null)
+                QueryKeyValue = key;
         }
 
-        public override Config GetConfig()
+        public override Config AddToConfig(Config config)
         {
-            return new Config()
-            {
-                Params = new QueryParameters(){ {QueryKeyName, QueryKeyValue} }
-            };
+            var newConfig = Config.BasedOn(config);
+            newConfig.AddParam(QueryKeyName, QueryKeyValue);
+            return newConfig;
         }
         
         public Uri GetFullUri(Uri uri) //you have to provide a Uri because it can contain other query parameters that we don't want to touch
@@ -31,6 +31,13 @@ namespace Netherlands3D.Credentials.StoredAuthorization
             
             var uriBuilder = new UriBuilder(uri);
             uriBuilder.SetQueryParameter(QueryKeyName, QueryKeyValue);
+            return uriBuilder.Uri;
+        }
+
+        public override Uri SanitizeUrl(Uri uri)
+        {
+            var uriBuilder = new UriBuilder(uri);
+            uriBuilder.RemoveQueryParameter(QueryKeyName);
             return uriBuilder.Uri;
         }
     }

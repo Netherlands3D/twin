@@ -7,6 +7,9 @@ using System.Collections;
 using Netherlands3D.Web;
 using Netherlands3D.Credentials.StoredAuthorization;
 using System.Collections.Specialized;
+using KindMen.Uxios;
+using KindMen.Uxios.Errors;
+using KindMen.Uxios.Errors.Http;
 
 namespace Netherlands3D.Credentials
 {
@@ -18,7 +21,7 @@ namespace Netherlands3D.Credentials
         [SerializeField] private Dictionary<Uri, StoredAuthorization.StoredAuthorization> storedAuthorizations = new();
 
         private MonoBehaviour coroutineMonoBehaviour;
-        public UnityEvent<Uri, StoredAuthorization.StoredAuthorization> OnAuthorizationTypeDetermined = new();
+        public UnityEvent<StoredAuthorization.StoredAuthorization> OnAuthorizationTypeDetermined = new();
 
         public Dictionary<string, Type> expectedAuthorizationTypes = new()
         {
@@ -68,12 +71,12 @@ namespace Netherlands3D.Credentials
         /// </summary>
         public void Authorize(Uri inputUri, string username, string passwordOrKey)
         {
-            Uri baseUri = new Uri(inputUri.GetLeftPart(UriPartial.Path));
+            var domain = new Uri(inputUri.GetLeftPart(UriPartial.Path));
 
             //check if we already have an authorization for this url 
-            if (storedAuthorizations.TryGetValue(baseUri, out var authorization))
+            if (storedAuthorizations.TryGetValue(domain, out var authorization))
             {
-                OnAuthorizationTypeDetermined.Invoke(inputUri, authorization);
+                OnAuthorizationTypeDetermined.Invoke(authorization);
                 return;
             }
 
@@ -101,16 +104,16 @@ namespace Netherlands3D.Credentials
                 yield return TryQueryKeyAuthentication(inputUri, potentialAuthorisation);
                 if (storedAuthorizations.ContainsKey(baseUri)) yield break; // if the Auth test was succesful, stop looking.
             }
-            
+
             //2. In case we know the type for this base Uri, try that first
             if (expectedAuthorizationTypes.TryGetValue(baseUri.Host, out var expectedType))
             {
                 if (expectedType != typeof(Public) && string.IsNullOrEmpty(passwordOrKey)) //it's not public, so we need some kind of authorization. if the passwordOrKey is empty, we already know it will fail. Maybe expand this in the future with a more robust check
                 {
-                    OnAuthorizationTypeDetermined.Invoke(inputUri, new FailedOrUnsupported(inputUri));
+                    OnAuthorizationTypeDetermined.Invoke(new FailedOrUnsupported(inputUri));
                     yield break;
                 }
-                
+
                 yield return TrySupportedAuthorization(expectedType, inputUri, username, passwordOrKey);
                 if (storedAuthorizations.ContainsKey(baseUri)) yield break; // if the Auth test was succesful, stop looking.
             }
@@ -121,7 +124,7 @@ namespace Netherlands3D.Credentials
 
             //4. nothing worked, this url either has invalid credentials, or we don't support the credential type. We will not store this in the storedAuthorizations, so the user can retry
             if (log) Debug.Log("This url either has invalid credentials, or we don't support the credential type: " + inputUri);
-            OnAuthorizationTypeDetermined.Invoke(inputUri, new FailedOrUnsupported(inputUri));
+            OnAuthorizationTypeDetermined.Invoke(new FailedOrUnsupported(inputUri));
         }
 
         private bool TryToFindAuthorizationInUriQuery(Uri uri, out QueryStringAuthorization potentialAuthorisation)
@@ -151,7 +154,7 @@ namespace Netherlands3D.Credentials
         }
 
         private IEnumerator TryQueryKeyAuthentication(Uri inputUri, QueryStringAuthorization queryStringAuthorization)
-        {
+        {            
             var fullUri = queryStringAuthorization.GetFullUri(inputUri);
             var request = UnityWebRequest.Get(fullUri);
             if (log) Debug.Log("Trying query sting auth: " + fullUri);
@@ -175,21 +178,19 @@ namespace Netherlands3D.Credentials
         private IEnumerator TrySupportedAuthorization(Type authType, Uri uri, string username, string passwordOrKey)
         {
             var potentialAuth = CreateStoredAuthorization(authType, uri, passwordOrKey, username); //passwordOrKey before userName to get the correct constructor order
-            if (potentialAuth is QueryStringAuthorization queryStringAuthorization) // todo: temp fix to not have to manually alter the url query, if possible replace the UnityWebrequest with Uxios so we can just pass the Config object without further thought
-            {
-                yield return TryQueryKeyAuthentication(uri, queryStringAuthorization);
-                yield break;
-            }
+            
+            var config = Config.Default();
+            config = potentialAuth.AddToConfig(config);
+            var request = Uxios.DefaultInstance.Get<byte[]>(uri, config); //get as byte[] so Uxios doesn't try to interpret the response
 
-            var config = potentialAuth.GetConfig();
-            var request = UnityWebRequest.Get(uri);
-            foreach (var header in config.Headers)
-            {
-                request.SetRequestHeader(header.Key, header.Value);
-            }
+            bool isAuthorized = false;
+            
+            request.Then(response => { isAuthorized = true; });
+            request.Catch(exception => { isAuthorized = CheckErrorAuthentication(exception); });
 
-            yield return request.SendWebRequest();
-            if (IsAuthorized(request))
+            yield return Uxios.WaitForRequest(request);
+            
+            if (isAuthorized)
             {
                 if (log) Debug.Log("Access granted with authorization type: " + potentialAuth.GetType() + " for: " + uri);
                 NewAuthorizationDetermined(uri, potentialAuth);
@@ -201,14 +202,29 @@ namespace Netherlands3D.Credentials
             }
         }
 
+        private static bool CheckErrorAuthentication(Exception exception)
+        {
+            switch (exception)
+            {
+                case AuthenticationError:
+                    return false;
+                case HttpClientError:
+                    return true;
+                case HttpServerError error:
+                    throw new Exception("the request returned a response that is not implemented: " + error.Status + " from Uri: " + error.Config.Url);
+                default:
+                    throw new Exception("the request returned an connection or data processing error: " + exception.Message + "from Uri: " + ((Error)exception).Config.Url);
+            }
+        }
+
         /// <summary>
         /// Add a new known URL with a specific authorization type
         /// </summary>
         private void NewAuthorizationDetermined(Uri uri, StoredAuthorization.StoredAuthorization auth) //called when a authorization attempt was successful and stores it for future easy access via its baseUri
         {
-            ClearURLFromStoredAuthorizations(auth.BaseUri);
-            storedAuthorizations.Add(auth.BaseUri, auth);
-            OnAuthorizationTypeDetermined.Invoke(uri, auth);
+            ClearURLFromStoredAuthorizations(auth.Domain);
+            storedAuthorizations.Add(auth.Domain, auth);
+            OnAuthorizationTypeDetermined.Invoke(auth);
         }
 
         public void ClearURLFromStoredAuthorizations(Uri url)

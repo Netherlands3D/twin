@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using KindMen.Uxios;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -13,7 +14,11 @@ namespace Netherlands3D.Functionalities.Wms
     public class WMSTileDataLayer : ImageProjectionLayer
     {
         private const string DefaultEpsgCoordinateSystem = "28992";
-        private Config requestConfig { get; set; }
+
+        private Config requestConfig { get; set; } = new Config()
+        {
+            TypeOfResponseType = ExpectedTypeOfResponse.Texture(true)
+        };
 
         public int RenderIndex
         {
@@ -56,12 +61,20 @@ namespace Netherlands3D.Functionalities.Wms
             }
         }
 
-        public void SetConfig(Config config)
+        public void SetAuthorization(StoredAuthorization auth)
         {
-            requestConfig = config;
-            config.TypeOfResponseType = ExpectedTypeOfResponse.Texture(true);
+            ClearConfig();
+            requestConfig = auth.AddToConfig(requestConfig);
         }
 
+        public void ClearConfig()
+        {
+            requestConfig = new Config()
+            {
+                TypeOfResponseType = ExpectedTypeOfResponse.Texture(true)
+            };
+        }
+        
         protected override IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
         {
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);

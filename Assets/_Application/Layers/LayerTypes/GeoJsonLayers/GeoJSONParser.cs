@@ -7,6 +7,7 @@ using GeoJSON.Net.CoordinateReferenceSystem;
 using GeoJSON.Net.Feature;
 using KindMen.Uxios;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Credentials.StoredAuthorization;
 using Newtonsoft.Json;
 using SimpleJSON;
 using UnityEngine;
@@ -67,10 +68,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             yield return ParseFeatures(jsonReader, serializer);
         }
 
-        public IEnumerator ParseGeoJSONStreamRemote(Uri uri, Config config)
+        public IEnumerator ParseGeoJSONStreamRemote(Uri uri, StoredAuthorization auth)
         {
             string jsonString = string.Empty;
 
+            var config = new Config();
+            config = auth.AddToConfig(config);
             var promise = Uxios.DefaultInstance.Get<string>(uri, config);
             promise.Then(response => jsonString = response.Data as string
             );

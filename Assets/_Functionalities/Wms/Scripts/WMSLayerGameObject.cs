@@ -100,7 +100,7 @@ namespace Netherlands3D.Functionalities.Wms
                 SetBoundingBox
             );
             
-            WMSProjectionLayer.SetConfig(auth.GetConfig());
+            WMSProjectionLayer.SetAuthorization(auth);
             LayerData.HasValidCredentials = true;
             WMSProjectionLayer.RefreshTiles();
             WMSProjectionLayer.isEnabled = true;
@@ -108,7 +108,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         public void ClearCredentials()
         {
-            WMSProjectionLayer.SetConfig(Config.Default());
+            WMSProjectionLayer.ClearConfig();
         }
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)

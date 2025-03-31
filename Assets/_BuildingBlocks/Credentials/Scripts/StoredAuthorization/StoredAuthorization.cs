@@ -6,13 +6,18 @@ namespace Netherlands3D.Credentials.StoredAuthorization
     [Serializable]
     public abstract class StoredAuthorization
     {
-        public Uri BaseUri { get; }
+        public Uri Domain { get; }
 
         protected StoredAuthorization(Uri uri)
         {
-            BaseUri = new Uri(uri.GetLeftPart(UriPartial.Path));
+            Domain = new Uri(uri.GetLeftPart(UriPartial.Path));
         }
 
-        public abstract Config GetConfig();
+        public virtual Uri SanitizeUrl(Uri uri)
+        {
+            return uri;
+        }
+
+        public abstract Config AddToConfig(Config config);
     }
 }
