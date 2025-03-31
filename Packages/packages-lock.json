@@ -44,7 +44,7 @@
       "url": "https://package.openupm.com"
     },
     "com.kind-men.uxios": {
-      "version": "0.3.3",
+      "version": "0.3.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -338,14 +338,14 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
-    "eu.netherlands3d.functionalities.google-reality-mesh": {
-      "version": "file:eu.netherlands3d.functionalities.google-reality-mesh",
+    "eu.netherlands3d.floating-origin": {
+      "version": "file:eu.netherlands3d.floating-origin",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
-    "eu.netherlands3d.floating-origin": {
-      "version": "file:eu.netherlands3d.floating-origin",
+    "eu.netherlands3d.functionalities.google-reality-mesh": {
+      "version": "file:eu.netherlands3d.functionalities.google-reality-mesh",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
