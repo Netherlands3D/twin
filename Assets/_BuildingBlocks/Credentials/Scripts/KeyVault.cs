@@ -93,7 +93,7 @@ namespace Netherlands3D.Credentials
         private IEnumerator TryFindAuthorization(Uri inputUri, string username, string passwordOrKey)
         {
             bool authorizationSuccessful = false;
-            Uri baseUri = new Uri(inputUri.GetLeftPart(UriPartial.Path));
+            Uri domain = new Uri(inputUri.GetLeftPart(UriPartial.Path));
 
             //1. Try to find credentials in the url, and if found, we verify that this is a valid Auth method
             if (TryToFindAuthorizationInUriQuery(inputUri, out var potentialAuthorisation))
