@@ -260,6 +260,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             // Keep the original material color if fill color is not set (null)
             if (!fillColor.HasValue) return;
 
+            LayerData.Color = fillColor.Value;
             meshRenderer.SetUrpLitColorOptimized(fillColor.Value);
         }
 
