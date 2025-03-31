@@ -58,11 +58,11 @@ namespace Netherlands3D.Coordinates
             // Nothing to do if the coordinate system didn't change.
             if (coordinate.CoordinateSystem == targetCrs) return coordinate;
 
-            if (targetCrs == -1)
-            {
-                Vector3 result = coordinate.ToUnity();
-                return new Coordinate(CoordinateSystem.Unity, result.x, result.y, result.z);
-            }
+            //if (targetCrs == -1)
+            //{
+            //    Vector3 result = coordinate.ToUnity();
+            //    return new Coordinate(CoordinateSystem.Unity, result.x, result.y, result.z);
+            //}
             return coordinate.Convert((CoordinateSystem)targetCrs);
             // In this iteration of the package, this is a hardcoded switch. Martijn is working on a new conversion
             // backend and as soon as we integrate that the hardcoded conversions can be removed
@@ -94,17 +94,17 @@ namespace Netherlands3D.Coordinates
             }
 
 
-            if (targetCrs == CoordinateSystem.Unity)
-            {
-                Vector3 unityPos = coordinate.ToUnity();
-                return new Coordinate(CoordinateSystem.Unity, unityPos.x, unityPos.y, unityPos.z);
-            }
+            //if (targetCrs == CoordinateSystem.Unity)
+            //{
+            //    Vector3 unityPos = coordinate.ToUnity();
+            //    return new Coordinate(CoordinateSystem.Unity, unityPos.x, unityPos.y, unityPos.z);
+            //}
 
-            if (coordinate.CoordinateSystem==-1)
-            {
-                coordinate.ToVector3();
-                return new Coordinate(coordinate.ToVector3()).Convert(_targetCoordinateSystem);
-            }
+            //if (coordinate.CoordinateSystem==-1)
+            //{
+            //    coordinate.ToVector3();
+            //    return new Coordinate(coordinate.ToVector3()).Convert(_targetCoordinateSystem);
+            //}
             
             return coordinate.Convert(_targetCoordinateSystem);
            //return ConvertTo(coordinate, (int)targetCrs);
@@ -254,9 +254,9 @@ namespace Netherlands3D.Coordinates
         {
             return new Coordinate(coordinate).Convert(CoordinateSystem.RDNAP).ToVector3RD();
             
-            var source = new Coordinate(CoordinateSystem.Unity, coordinate.x, coordinate.y, coordinate.z);
+            //var source = new Coordinate(CoordinateSystem.Unity, coordinate.x, coordinate.y, coordinate.z);
 
-            return ConvertTo(source, CoordinateSystem.RDNAP).ToVector3RD();
+            //return ConvertTo(source, CoordinateSystem.RDNAP).ToVector3RD();
         }
 
         /// <summary>
@@ -307,9 +307,7 @@ namespace Netherlands3D.Coordinates
         [Obsolete("UnityToECEF() is deprecated, please use ConvertTo")]
         public static Vector3ECEF UnityToECEF(Vector3 coordinate)
         {
-            var source = new Coordinate(CoordinateSystem.Unity, coordinate.x, coordinate.y, coordinate.z);
-
-            return ConvertTo(source, CoordinateSystem.ETRS89_ECEF).ToVector3ECEF();
+            return ConvertTo(new Coordinate(coordinate), CoordinateSystem.ETRS89_ECEF).ToVector3ECEF();
         }
 
         [Obsolete("WGS84toECEF() is deprecated, please use ConvertTo()")]

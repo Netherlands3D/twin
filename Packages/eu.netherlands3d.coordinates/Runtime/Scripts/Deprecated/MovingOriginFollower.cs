@@ -32,7 +32,7 @@ namespace Netherlands3D.Coordinates
 
         private void SaveOrigin()
         {
-            ecefPosition = CoordinateConverter.UnityToECEF(transform.position);
+            ecefPosition = new Coordinate(transform.position).Convert(CoordinateSystem.ETRS89_ECEF).ToVector3ECEF();            
         }
 
         /// <summary>
@@ -54,7 +54,8 @@ namespace Netherlands3D.Coordinates
 
         private void MoveToNewOrigin(Vector3 offset)
         {
-            transform.position = CoordinateConverter.ECEFToUnity(ecefPosition);
+            Coordinate coord = new Coordinate(CoordinateSystem.ETRS89_ECEF, ecefPosition.X, ecefPosition.Y, ecefPosition.Z);
+            transform.position = coord.ToUnity();
         }
     }
 }

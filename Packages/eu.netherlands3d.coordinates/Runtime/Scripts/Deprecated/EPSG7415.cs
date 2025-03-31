@@ -251,11 +251,11 @@ namespace Netherlands3D.Coordinates
 
             switch (targetCrs)
             {
-                case (int)CoordinateSystem.Unity:
-                    {
-                        var result = ToUnity(vector3);
-                        return new Coordinate(targetCrs, result.x, result.y, result.z);
-                    }
+                //case (int)CoordinateSystem.Unity:
+                //    {
+                //        var result = ToUnity(vector3);
+                //        return new Coordinate(targetCrs, result.x, result.y, result.z);
+                //    }
                 case (int)CoordinateSystem.WGS84_LatLonHeight:
                     {
                         var result = ToWGS84(vector3.x, vector3.y, vector3.z);

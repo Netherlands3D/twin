@@ -35,22 +35,13 @@ namespace Netherlands3D.Coordinates
                 );
             }
 
-            switch (targetCrs)
+            if(targetCrs == 4326)
             {
-                case (int)CoordinateSystem.Unity: return ToUnity(coordinate);
-                case 4326: return ToEPSG4326(coordinate);
+                return ToEPSG4326(coordinate);
             }
 
             throw new ArgumentOutOfRangeException(
                 $"Conversion between CRS {coordinate.CoordinateSystem} and {targetCrs} is not yet supported"
-            );
-        }
-
-        private static Coordinate ToUnity(Coordinate coordinate)
-        {
-            return CoordinateConverter.ConvertTo(
-                CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.WGS84_LatLon),
-                CoordinateSystem.Unity
             );
         }
 

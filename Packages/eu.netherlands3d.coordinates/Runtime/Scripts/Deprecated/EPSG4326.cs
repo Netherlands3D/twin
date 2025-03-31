@@ -212,11 +212,11 @@ namespace Netherlands3D.Coordinates
 
             switch (targetCrs)
             {
-                case (int)CoordinateSystem.Unity:
-                    {
-                        var result = ToUnity(vector3);
-                        return new Coordinate(targetCrs, result.x, result.y, result.z);
-                    }
+                //case (int)CoordinateSystem.Unity:
+                //    {
+                //        var result = ToUnity(vector3);
+                //        return new Coordinate(targetCrs, result.x, result.y, result.z);
+                //    }
                 case (int)CoordinateSystem.RDNAP:
                     {
                         var result = ToEPSG7415(vector3.lon, vector3.lat);

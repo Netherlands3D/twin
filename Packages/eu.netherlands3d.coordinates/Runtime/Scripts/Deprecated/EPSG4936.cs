@@ -102,21 +102,21 @@ namespace Netherlands3D.Coordinates
 
             var vector3Ecef = new Vector3ECEF(coordinate.value1, coordinate.value2, coordinate.value3);
 
-            if (targetCrs == (int)CoordinateSystem.Unity)
-            {
-                var result = coordinate.ToUnity();
-                var result2 = ToUnity(vector3Ecef);
-                return new Coordinate(targetCrs, result.x, result.y, result.z);
-            }
+            //if (targetCrs == (int)CoordinateSystem.Unity)
+            //{
+            //    var result = coordinate.ToUnity();
+            //    var result2 = ToUnity(vector3Ecef);
+            //    return new Coordinate(targetCrs, result.x, result.y, result.z);
+            //}
 
             switch (targetCrs)
             {
-                case (int)CoordinateSystem.Unity:
-                    {
-                        var result = coordinate.ToUnity();
-                        var result2 = ToUnity(vector3Ecef);
-                        return new Coordinate(targetCrs, result.x, result.y, result.z);
-                    }
+                //case (int)CoordinateSystem.Unity:
+                //    {
+                //        var result = coordinate.ToUnity();
+                //        var result2 = ToUnity(vector3Ecef);
+                //        return new Coordinate(targetCrs, result.x, result.y, result.z);
+                //    }
                 case (int)CoordinateSystem.WGS84_LatLonHeight:
                     {
                         return coordinate.Convert(CoordinateSystem.WGS84_LatLonHeight);

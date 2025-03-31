@@ -13,7 +13,8 @@ namespace Netherlands3D.Coordinates
         {
             prepareForOriginShift.Invoke();
 
-            var flatCameraPosition = new Coordinate(CoordinateSystem.Unity, cameraPosition.x, 0d, cameraPosition.z);
+            Vector3 pos = new Vector3(cameraPosition.x, 0, cameraPosition.z);
+            var flatCameraPosition = new Coordinate(pos);
             var wgsCoordinate = CoordinateConverter.ConvertTo(flatCameraPosition, CoordinateSystem.WGS84_LatLonHeight);
             EPSG4936.relativeCenter = CoordinateConverter.ConvertTo(wgsCoordinate, CoordinateSystem.ETRS89_ECEF).ToVector3ECEF();
 
