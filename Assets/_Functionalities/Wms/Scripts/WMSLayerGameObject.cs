@@ -134,6 +134,7 @@ namespace Netherlands3D.Functionalities.Wms
             LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
             LayerData.LayerSelected.RemoveListener(OnSelectLayer);
             LayerData.LayerDeselected.RemoveListener(OnDeselectLayer);
+            credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
         }
 
         private void OnSelectLayer(LayerData layer)
