@@ -1,0 +1,11 @@
+﻿{
+  "name": "eu.netherlands3d.floating-origin",
+  "version": "1.0.0",
+  "displayName": "Netherlands 3D - Floating Origin",
+  "description": "Shift the world around a fixed origin, that can move when it is too far away from the camera. This will fix issues with floating points distorting when you get too far from unity's origin",
+  "unity": "2022.3",
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://netherlands3d.eu/"
+  }
+}
