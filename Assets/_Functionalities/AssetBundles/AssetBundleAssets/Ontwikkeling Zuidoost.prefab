@@ -110,7 +110,7 @@ MonoBehaviour:
       m_Calls: []
   Rotation: {x: 0, y: 180, z: 0}
   Scale: {x: 1, y: 1, z: 1}
-  TargetHeight: 39
+  TargetHeight: -3
   Coordinates: {x: 4.9418635, y: 52.31434, z: 0}
   coordinateSystem: 4979
 --- !u!114 &8824428390786610554
