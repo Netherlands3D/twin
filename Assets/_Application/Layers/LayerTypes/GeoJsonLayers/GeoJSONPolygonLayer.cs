@@ -139,8 +139,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 feature = feature,
                 geoJsonPolygonLayer = this
             };
-            Material featureRenderMaterial = GetMaterialInstance();
 
+            var defaultMaterial = GetMaterialInstance(Color.white);
+            
             // Add visualisation to the layer, and store it in the SpawnedVisualisations list where we tie our Feature
             // to the visualisations
             switch (feature.Geometry)
@@ -149,17 +150,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     newFeatureVisualisation.AppendVisualisations(GeometryVisualizationFactory.CreatePolygonVisualization(
                         multiPolygon, 
                         originalCoordinateSystem, 
-                        featureRenderMaterial
+                        defaultMaterial
                     ));
                     break;
                 case Polygon polygon:
                     newFeatureVisualisation.AppendVisualisations(GeometryVisualizationFactory.CreatePolygonVisualisation(
                         polygon, 
                         originalCoordinateSystem, 
-                        featureRenderMaterial
+                        defaultMaterial
                     ));
                     break;
             }
+
+            // After setting up the entire visualisation - apply styling so that we use the styling system to tweak
+            // this visualisation consistent with what would happen if you re-apply the styling using the ApplyStyling()
+            // method
+            ApplyStyling(newFeatureVisualisation);
 
             // bounds are calculated in the AppendVisualisations method, and is therefore not explicitly called here
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
@@ -168,21 +174,49 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
+            // The color in the Layer Panel represents the default fill color for this layer
+            LayerData.Color = LayerData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
+
             foreach (var visualisations in spawnedVisualisations)
             {
-                visualisations.Value.SetMaterial(GetMaterialInstance());
+                ApplyStyling(visualisations.Value);
             }
         }
 
-        private Material GetMaterialInstance()
+        public void ApplyStyling(FeaturePolygonVisualisations visualisations)
+        {
+            var style = GetStyling(CreateFeature(visualisations));
+            var color = style.GetFillColor() ?? Color.white;
+                
+            visualisations.SetMaterial(GetMaterialInstance(color));
+        }
+
+        /// <summary>
+        /// Copy the feature attributes onto the layer feature so that the styling system can
+        /// use that as input to pick the correct style.
+        /// </summary>
+        protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
+        {
+            // it should be a FeaturePolygonVisualisations, just do a sanity check here
+            if (feature.Geometry is not FeaturePolygonVisualisations visualisations) return feature;
+
+            foreach (var property in visualisations.feature.Properties)
+            {
+                feature.Attributes.Add(property.Key, property.Value.ToString());
+            }
+            
+            return feature;
+        }
+
+        private Material GetMaterialInstance(Color color)
         {
             if (
                 !polygonVisualizationMaterialInstance 
-                || polygonVisualizationMaterialInstance.color != LayerData.DefaultSymbolizer.GetFillColor()
+                || polygonVisualizationMaterialInstance.color != color
             ) {
                 polygonVisualizationMaterialInstance = new Material(PolygonVisualizationMaterial)
                 {
-                    color = LayerData.DefaultSymbolizer.GetFillColor() ?? Color.white
+                    color = color
                 };
             }
 

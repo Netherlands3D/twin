@@ -104,7 +104,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             var newFeatureVisualisation = new FeatureLineVisualisations { feature = feature };
 
-            ApplyStyling(feature);
+            ApplyStyling(newFeatureVisualisation);
 
             if (feature.Geometry is MultiLineString multiLineString)
             {
@@ -125,17 +125,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
-            lineRenderer3D.LineMaterial = GetMaterialInstance();
+            // The color in the Layer Panel represents the default fill color for this layer
+            LayerData.Color = LayerData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
+
+            // TODO: We implement per-feature styling in a separate story; this means that for styling purposes
+            //   we consider this whole layer to be a single feature at the moment
+            var features = GetFeatures<BatchedMeshInstanceRenderer>();
+            var style = GetStyling(features.FirstOrDefault());
+            var color = style.GetFillColor() ?? Color.white;
+            
+            lineRenderer3D.LineMaterial = GetMaterialInstance(color);
         }
 
-        public void ApplyStyling(Feature feature)
+        public void ApplyStyling(FeatureLineVisualisations newFeatureVisualisation)
         {
             // Currently we don't apply individual styling per feature
         }
         
-        private Material GetMaterialInstance()
+        private Material GetMaterialInstance(Color strokeColor)
         {
-            var strokeColor = LayerData.DefaultSymbolizer.GetStrokeColor() ?? Color.white;
             return new Material(lineRenderer3D.LineMaterial)
             {
                 color = strokeColor
