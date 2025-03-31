@@ -23,6 +23,11 @@ namespace Netherlands3D.LayerStyles.Expressions
             return value;
         }
 
+        public static implicit operator TextExpression(string value)
+        {
+            return new TextExpression(value);
+        }
+        
         public override string ToString()
         {
             return this.value;
