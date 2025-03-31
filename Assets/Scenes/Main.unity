@@ -6331,11 +6331,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3244982695212770853, guid: 9963fec33e379324db2affcb3f83332f,
-        type: 3}
-      propertyPath: tooltipText
-      value: Object informatie
-      objectReference: {fileID: 0}
     - target: {fileID: 3254679465650981600, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -7200,11 +7195,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5181506848495100096, guid: 9963fec33e379324db2affcb3f83332f,
-        type: 3}
-      propertyPath: tooltipText
-      value: Laag toevoegen
       objectReference: {fileID: 0}
     - target: {fileID: 5228416547692586518, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
@@ -9510,11 +9500,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9128005108751899818, guid: 9963fec33e379324db2affcb3f83332f,
-        type: 3}
-      propertyPath: tooltipText
-      value: Ondergrond doorzicht
       objectReference: {fileID: 0}
     - target: {fileID: 9139313303826141759, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
