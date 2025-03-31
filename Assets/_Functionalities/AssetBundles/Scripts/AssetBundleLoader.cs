@@ -58,9 +58,7 @@ namespace Netherlands3D.Functionalities.AssetBundles
                 GameObject asset = bundle.LoadAsset<GameObject>(name);
                 if (asset != null)
                 {
-#if UNITY_EDITOR
-                    FixShadersForEditor(asset);
-#endif
+                    FixShaders(asset);
                     onAssetLoaded(asset);
                 }
 
@@ -74,7 +72,7 @@ namespace Netherlands3D.Functionalities.AssetBundles
                 .OnComplete(() => GameObject.Destroy(loadingScreen.gameObject));
         }
 
-        private void FixShadersForEditor(GameObject asset)
+        private void FixShaders(GameObject asset)
         {
             //the following fixes the pink bug in editor shaders                     
             MeshRenderer[] renderers = asset.GetComponentsInChildren<MeshRenderer>();

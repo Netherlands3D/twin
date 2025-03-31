@@ -397,6 +397,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ColorPicker
       objectReference: {fileID: 0}
+    - target: {fileID: 7076064914102079046, guid: eacd2d5be98dec243bc44bf8b2083c85,
+        type: 3}
+      propertyPath: m_text
+      value: Lijnkleur
+      objectReference: {fileID: 0}
     - target: {fileID: 7275114998268791187, guid: eacd2d5be98dec243bc44bf8b2083c85,
         type: 3}
       propertyPath: colorChanged.m_PersistentCalls.m_Calls.Array.size
