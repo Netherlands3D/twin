@@ -47,9 +47,7 @@ namespace Netherlands3D.Credentials
 
             if (supportedAuthorizationTypes.TryGetValue(storedAuthorizationType, out var factory))
             {
-                // var auth = Activator.CreateInstance(storedAuthorizationType, args);
-                var auth = factory(uri, args);
-                return auth;
+                return factory(uri, args);
             }
 
             throw new InvalidOperationException($"Unsupported authorization type: {storedAuthorizationType.Name}");
@@ -59,8 +57,7 @@ namespace Netherlands3D.Credentials
         {
             if (supportedAuthorizationTypes.TryGetValue(typeof(T), out var factory))
             {
-                var auth = factory(uri, args);
-                return auth;
+                return factory(uri, args);
             }
 
             throw new InvalidOperationException($"Unsupported authorization type: {typeof(T).Name}");
