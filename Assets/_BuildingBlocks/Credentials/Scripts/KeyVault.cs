@@ -101,7 +101,7 @@ namespace Netherlands3D.Credentials
                 if (log) Debug.Log("found potential query key type in url: " + potentialAuthorisation.GetType() + " with key " + potentialAuthorisation.QueryKeyValue);
 
                 //try this one
-                yield return TrySupportedAuthorization(potentialAuthorisation, inputUri, username, potentialAuthorisation.QueryKeyValue);
+                yield return TrySupportedAuthorization(potentialAuthorisation, inputUri);
                 if (storedAuthorizations.ContainsKey(domain)) yield break; // if the Auth test was succesful, stop looking.
             }
 
@@ -114,8 +114,8 @@ namespace Netherlands3D.Credentials
                     yield break;
                 }
 
-                var potentialAuth = CreateStoredAuthorization(expectedType, inputUri, username, passwordOrKey);
-                yield return TrySupportedAuthorization(potentialAuth, inputUri, username, passwordOrKey);
+                var potentialAuth = CreateStoredAuthorization(expectedType, inputUri, passwordOrKey, username); // pass usernameOrKey before username for constructor order
+                yield return TrySupportedAuthorization(potentialAuth, inputUri);
                 if (storedAuthorizations.ContainsKey(domain)) yield break; // if the Auth test was succesful, stop looking.
             }
 
@@ -156,13 +156,13 @@ namespace Netherlands3D.Credentials
         {
             foreach (var supportedAuthorization in supportedAuthorizationTypes.Keys)
             {
-                var potentialAuth = CreateStoredAuthorization(supportedAuthorization, uri, username, passwordOrKey);
-                yield return TrySupportedAuthorization(potentialAuth, uri, username, passwordOrKey);
+                var potentialAuth = CreateStoredAuthorization(supportedAuthorization, uri, passwordOrKey, username); // pass usernameOrKey before username for constructor order
+                yield return TrySupportedAuthorization(potentialAuth, uri);
                 if (storedAuthorizations.ContainsKey(uri)) yield break; // if the Auth test was succesful, stop looking.
             }
         }
 
-        private IEnumerator TrySupportedAuthorization(StoredAuthorization.StoredAuthorization potentialAuth, Uri uri, string username, string passwordOrKey)
+        private IEnumerator TrySupportedAuthorization(StoredAuthorization.StoredAuthorization potentialAuth, Uri uri)
         {
             var config = Config.Default();
             config = potentialAuth.AddToConfig(config);
