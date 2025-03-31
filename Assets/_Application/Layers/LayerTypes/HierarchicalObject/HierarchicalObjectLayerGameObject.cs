@@ -252,7 +252,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         /// </summary>
         private void ApplyStyling(LayerFeature feature)
         {
-            if (feature.Component is not MeshRenderer meshRenderer) return;
+            if (feature.Geometry is not MeshRenderer meshRenderer) return;
 
             var symbolizer = GetStyling(feature);
             var fillColor = symbolizer.GetFillColor();
@@ -272,7 +272,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         /// </summary>
         protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
         {
-            if (feature.Component is not MeshRenderer meshRenderer) return feature;
+            if (feature.Geometry is not MeshRenderer meshRenderer) return feature;
 
             feature.Attributes.Add("materials", meshRenderer.materials.Select(material => material.name));
 

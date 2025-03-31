@@ -211,11 +211,20 @@ namespace Netherlands3D.Twin.Layers
         ///
         /// For example: to be able to match on material names you need to include the material names in the attributes.
         /// </summary>
-        protected LayerFeature CreateFeature(Component component)
+        protected LayerFeature CreateFeature(object geometry)
         {
-            return AddAttributesToLayerFeature(LayerFeature.Create(this, component));
+            return AddAttributesToLayerFeature(LayerFeature.Create(this, geometry));
         }
 
+        /// <summary>
+        /// Construct attributes onto the layer feature so that the styling system can
+        /// use that as input to pick the correct style.
+        ///
+        /// This could result in, what seems, duplication if a layer has a native type that also produces a series of
+        /// properties; however, this mechanism will ensure that all layers are treated equally for the styling system
+        /// and that the properties are encoded as Expression types so that the expression system does not need to do
+        /// ad hoc implicit conversions from a primitive to an Expression type. 
+        /// </summary>
         protected virtual LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
         {
             return feature;
