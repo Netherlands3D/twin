@@ -186,10 +186,8 @@ namespace Netherlands3D.Twin.Projects
             OnLoadStarted.Invoke();
 
             var files = filePaths.Split(',');
-            print("processing " + files.Length + " files");
             foreach (var filePath in files)
             {
-                print("attempting to load file: " + filePath);
                 if (filePath.ToLower().EndsWith(".nl3d"))
                 {
                     Debug.Log("loading nl3d file: " + filePath);
