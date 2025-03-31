@@ -24,7 +24,7 @@ namespace Netherlands3D.Twin.Cameras
         [SerializeField] private float zoomDistanceMultiplier = 4f;
         [SerializeField] double decayRate = 0.007d; // Decay rate
 
-        private Camera camera;
+        private new Camera camera;
         private FreeCamera cameraMover; //move through the FreeCamera script to make sure we only move the camera through a single point of entry
         private WorldTransform cameraWorldTransform;
         
