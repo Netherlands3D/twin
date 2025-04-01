@@ -60,6 +60,7 @@ namespace Netherlands3D.Functionalities.Wms
             UpdateURL(urlPropertyData.Data);  
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
+            Legend.Instance.RegisterUrl(wmsProjectionLayer.WmsUrl);
             Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, ShowLegendOnSelect);
         }
 
@@ -130,7 +131,7 @@ namespace Netherlands3D.Functionalities.Wms
             LayerData.LayerSelected.RemoveListener(OnSelectLayer);
             LayerData.LayerDeselected.RemoveListener(OnDeselectLayer);
             credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
-            Legend.Instance.RemoveLegendUrl(urlPropertyData.Data.ToString());
+            Legend.Instance.UnregisterUrl(urlPropertyData.Data.ToString());
         }
 
         private void OnSelectLayer(LayerData layer)

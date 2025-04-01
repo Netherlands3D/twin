@@ -41,13 +41,14 @@ namespace Netherlands3D.Functionalities.Wms
         [SerializeField] private GameObject mainPanel;
         [SerializeField] private RectTransform inactive;
         [SerializeField] private LegendImage graphicPrefab;
+        [SerializeField] private bool log = false;
 
         private LegendClampHeight legendClampHeight;
         private ContentFitterRefresh mainPanelContentFitterRefresh;
         private ICredentialHandler credentialHandler;
 
         private static readonly Dictionary<string, LegendUrlContainer> legendUrlDictionary = new(); //key: getCapabilities url, Value: legend urls for that GetCapabilities
-        private List<string> pendingUrlRequests = new();
+        private Dictionary<string, Coroutine> pendingUrlRequests = new();
         private string requestedLegendUrl; //the url requested to show the legend of
         private string activeLegendUrl; //the currently visible legend url in the panel
         private bool legendActive = false;
@@ -77,14 +78,45 @@ namespace Netherlands3D.Functionalities.Wms
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
         }
 
+
         private void OnDestroy()
         {
             credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
         }
 
+        public void RegisterUrl(string wmsUrl)
+        {
+            var getCapabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsUrl, ServiceType.Wms);
+            if (log) Debug.Log("registering Url: " + getCapabilitiesUrl);
+            if (legendUrlDictionary.TryGetValue(getCapabilitiesUrl, out var container)) //if we don't have the legend url info yet, we need to request it
+            {
+                container.IncrementLayerCount();
+                return;
+            }
+
+            if (pendingUrlRequests.ContainsKey(getCapabilitiesUrl))
+            {
+                if (log) Debug.Log("urls are already requested, waiting for completion: " + getCapabilitiesUrl);
+                StartCoroutine(WaitForExistingRequestToComplete(getCapabilitiesUrl)); //we need to increment tha amount of active layers once we receive our container
+                return;
+            }
+
+            if (log) Debug.Log("No urls found, requesting urls: " + wmsUrl);
+            if (!OgcWebServicesUtility.IsValidUrl(new Uri(getCapabilitiesUrl), RequestType.GetCapabilities))
+            {
+                Debug.LogError("Bounding boxes not in dictionary, and invalid getCapabilities url provided");
+                return;
+            }
+
+            if (log) Debug.Log("Requesting credentials: " + getCapabilitiesUrl);
+            pendingUrlRequests.Add(getCapabilitiesUrl, null); //we cannot create the coroutine until we have the credentials
+            credentialHandler.Uri = new Uri(getCapabilitiesUrl);
+            credentialHandler.ApplyCredentials(); //we assume the credentials are already filled in elsewhere in the application
+        }
+
         public void ShowLegend(string wmsUrl, bool show)
         {
-            Debug.Log("I want so show a legend: " + wmsUrl + "\t" + show);
+            if (log) Debug.Log("Setting legend active: " + wmsUrl + "\t" + show);
             legendActive = show;
             mainPanel.SetActive(show);
             if (!show) //no further action needed if we dont want to show anything
@@ -95,51 +127,17 @@ namespace Netherlands3D.Functionalities.Wms
 
             if (activeLegendUrl == requestedLegendUrl)
             {
-                Debug.Log("My requested legend is already active" + wmsUrl);
+                if (log) Debug.Log("Requested legend is already active" + wmsUrl);
                 return; //legend that should be set active is already loaded, so no further action is needed.
             }
 
-            if (!legendUrlDictionary.ContainsKey(getCapabilitiesUrl)) //if we don't have the legend url info yet, we need to request it
-            {
-                Debug.Log("I dont have urls, and will request them: " + wmsUrl);
-                AddLegendUrls(getCapabilitiesUrl);
-                return; // at the end of the request this function is called again to download the graphics, since we set the requestedLegendUrl, it will request to set those legends active again
-            }
 
-            Debug.Log("I need to download my graphics, so I will request credentials: " + wmsUrl);
+            if (log) Debug.Log("Should download graphics, requesting credentials: " + wmsUrl);
             credentialHandler.Uri = new Uri(getCapabilitiesUrl);
             credentialHandler.ApplyCredentials();
         }
 
-        private void AddLegendUrls(string layerUrl)
-        {
-            var getCapabilitiesURL = OgcWebServicesUtility.CreateGetCapabilitiesURL(layerUrl, ServiceType.Wms);
-
-            if (pendingUrlRequests.Contains(getCapabilitiesURL))
-            {
-                Debug.Log("My urls are already requested, I will wait for completion: " + layerUrl);
-                StartCoroutine(WaitForExistingRequestToComplete(getCapabilitiesURL)); //we need to increment tha amount of active layers once we receive our container
-                return;
-            }
-
-            if (legendUrlDictionary.ContainsKey(getCapabilitiesURL))
-            {
-                legendUrlDictionary[getCapabilitiesURL].IncrementLayerCount();
-                return;
-            }
-
-            if (!OgcWebServicesUtility.IsValidUrl(new Uri(getCapabilitiesURL), RequestType.GetCapabilities))
-            {
-                Debug.LogError("Bounding boxes not in dictionary, and invalid getCapabilities url provided");
-                return;
-            }
-
-            Debug.Log("I need to download my urls, so I will request credentials: " + layerUrl);
-            credentialHandler.Uri = new Uri(getCapabilitiesURL);
-            credentialHandler.ApplyCredentials(); //we assume the credentials are already filled in elsewhere in the application
-        }
-
-        public void RemoveLegendUrl(string layerUrl)
+        public void UnregisterUrl(string layerUrl)
         {
             var getCapabilitiesURL = OgcWebServicesUtility.CreateGetCapabilitiesURL(layerUrl, ServiceType.Wms);
             if (legendUrlDictionary.TryGetValue(getCapabilitiesURL, out var container))
@@ -147,44 +145,44 @@ namespace Netherlands3D.Functionalities.Wms
                 container.DecrementLayerCount();
                 if (container.ActiveLayerCount == 0)
                 {
-                    Debug.Log("Removing legend urls");
+                    if (log) Debug.Log("Removing legend urls");
                     legendUrlDictionary.Remove(getCapabilitiesURL); //even though this layer was removed, we might still need this container for other layers
                 }
             }
         }
 
-        private void HandleCredentials(Uri uri, StoredAuthorization auth)
+        private void HandleCredentials(Uri getCapabilitiesUri, StoredAuthorization auth)
         {
             if (auth is FailedOrUnsupported)
                 return;
 
-            Debug.Log("I Received credentials: " + uri);
+            if(log) Debug.Log("Received credentials: " + getCapabilitiesUri);
 
-            if (!legendUrlDictionary.ContainsKey(uri.ToString()))
+            if (pendingUrlRequests.TryGetValue(getCapabilitiesUri.ToString(), out var activeUrlCoroutine))
             {
-                RequestLegendUrls(uri, auth); // successfully requesting the urls will re call the credentialHandler and therefore re-enter this function but the next time with the dictionary key 
+                if (activeUrlCoroutine != null) //coroutine is still running, no need to start a new one, and we cannot request the graphics yet 
+                    return;
+                
+                // we still need to actually request the urls now that we have the credentials, not just block external objects from performing the same request multiple times
+                if(log) Debug.Log("requesting legend urls with credentials");
+                RequestLegendUrls(getCapabilitiesUri, auth); // successfully requesting the urls will re call the credentialHandler and therefore re-enter this function but the next time with the dictionary key 
             }
             else
             {
-                RequestGraphics(uri, auth);
+                RequestGraphics(getCapabilitiesUri, auth);
             }
         }
 
-        private IEnumerator WaitForExistingRequestToComplete(string url)
+        private IEnumerator WaitForExistingRequestToComplete(string getCapabilitiesUrl)
         {
-            while (pendingUrlRequests.Contains(url))
-            {
-                yield return null;
-            }
-
-            legendUrlDictionary[url].IncrementLayerCount();
+            yield return new WaitUntil(() => !pendingUrlRequests.ContainsKey(getCapabilitiesUrl));
+            legendUrlDictionary[getCapabilitiesUrl].IncrementLayerCount();
         }
 
-        private void RequestLegendUrls(Uri uri, StoredAuthorization auth)
+        private void RequestLegendUrls(Uri getCapabilitiesUri, StoredAuthorization auth)
         {
-            Debug.Log("Requesting urls with credentials: " + uri);
-            pendingUrlRequests.Add(uri.ToString());
-            StartCoroutine(DownloadLegendUrls(uri, auth));
+            if(log) Debug.Log("Requesting urls with credentials: " + getCapabilitiesUri);
+            pendingUrlRequests[getCapabilitiesUri.ToString()] = StartCoroutine(DownloadLegendUrls(getCapabilitiesUri, auth));
         }
 
         private IEnumerator DownloadLegendUrls(Uri getCapabilitiesUri, StoredAuthorization auth)
@@ -199,7 +197,8 @@ namespace Netherlands3D.Functionalities.Wms
                 var newContainer = new LegendUrlContainer(getCapabilitiesUri.ToString(), urls); //already add an empty container to keep track of the amount of layers
                 legendUrlDictionary.Add(newContainer.GetCapabilitiesUrl, newContainer);
                 legendUrlDictionary[getCapabilitiesUri.ToString()].LayerNameLegendUrlDictionary = urls;
-                Debug.Log("Successfully downloaded " + urls.Count + " legend urls");
+                var a = pendingUrlRequests.Remove(newContainer.GetCapabilitiesUrl);
+                if(log) Debug.Log("Successfully downloaded " + urls.Count + " legend urls");
                 ShowLegend(requestedLegendUrl, legendActive); //update the legend graphics if we were waiting for the legend urls
             });
             promise.Catch(_ => Debug.LogWarning($"Could not download legends at {getCapabilitiesUri}"));
@@ -207,7 +206,7 @@ namespace Netherlands3D.Functionalities.Wms
             yield return Uxios.WaitForRequest(promise);
         }
 
-        private void RequestGraphics(Uri uri, StoredAuthorization auth)
+        private void RequestGraphics(Uri getCapabilitiesUri, StoredAuthorization auth)
         {
             if (activeLegendUrl != requestedLegendUrl)
             {
@@ -216,7 +215,7 @@ namespace Netherlands3D.Functionalities.Wms
 
                 ClearGraphics();
 
-                var urlContainer = legendUrlDictionary[uri.ToString()];
+                var urlContainer = legendUrlDictionary[getCapabilitiesUri.ToString()];
                 runningCoroutine = StartCoroutine(DownloadLegendGraphics(urlContainer, auth));
             }
         }
@@ -224,7 +223,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         private IEnumerator DownloadLegendGraphics(LegendUrlContainer urlContainer, StoredAuthorization auth)
         {
-            Debug.Log("Downloading " + urlContainer.LayerNameLegendUrlDictionary.Count + "legend graphics " + urlContainer.GetCapabilitiesUrl);
+            if(log) Debug.Log("Downloading " + urlContainer.LayerNameLegendUrlDictionary.Count + "legend graphics " + urlContainer.GetCapabilitiesUrl);
             activeLegendUrl = requestedLegendUrl;
             ShowInactive(urlContainer.LayerNameLegendUrlDictionary.Count == 0);
             if (urlContainer.LayerNameLegendUrlDictionary.Count == 0)
