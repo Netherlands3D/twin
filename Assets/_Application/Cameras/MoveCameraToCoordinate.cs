@@ -73,14 +73,15 @@ namespace Netherlands3D.Twin.Cameras
 
         private void ShiftOriginIfNeeded(Coordinate targetCoordinate)
         {
-            var currentCameraPosition = cameraWorldTransform.Coordinate;
-            var difference = (currentCameraPosition - targetCoordinate).Convert(CoordinateSystem.RD); //use RD since this expresses the difference in meters, so we can use the SqrDistanceBeforeShifting to check if we need to shift.
-            ulong sqDist = (ulong)(difference.easting * difference.easting + difference.northing * difference.northing);
+            Vector3 currentCameraPosition = cameraWorldTransform.Coordinate.ToUnity();
+            Vector3 target = targetCoordinate.ToUnity();
+            Vector3 difference = currentCameraPosition - target;
+            ulong sqDist = (ulong)(difference.x * difference.x + difference.z * difference.z);
             if (sqDist > Origin.current.SqrDistanceBeforeShifting)
             {
                 // move the origin to the bounds center with height 0, to assure large jumps do not result in errors when centering.
-                var newOrigin = targetCoordinate.Convert(CoordinateSystem.WGS84_LatLon); //2D coord system to get rid of height.
-                Origin.current.MoveOriginTo(newOrigin);
+                var origin = new Coordinate(new Vector3(target.x, 0, target.z));
+                Origin.current.MoveOriginTo(origin);
             }
         }
     }
