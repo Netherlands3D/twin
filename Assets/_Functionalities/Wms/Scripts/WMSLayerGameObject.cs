@@ -4,7 +4,6 @@ using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
 using System.Linq;
-using KindMen.Uxios;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
@@ -63,11 +62,6 @@ namespace Netherlands3D.Functionalities.Wms
             SetRenderOrder(LayerData.RootIndex);
         }
 
-        private void OnLegendUrlsReceived(LegendUrlContainer urlContainer)
-        {
-            SetLegendActive(ShowLegendOnSelect);
-        }
-
         public void SetLegendActive(bool active)
         {
             Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, active);
@@ -93,7 +87,7 @@ namespace Netherlands3D.Functionalities.Wms
             
             var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
             var getCapabilitiesUrl = new Uri(getCapabilitiesString);
-            Legend.Instance.GetLegendUrl(wmsProjectionLayer.WmsUrl, OnLegendUrlsReceived);
+            // Legend.Instance.AddLegendUrls(wmsProjectionLayer.WmsUrl);
             BoundingBoxCache.Instance.GetBoundingBoxContainer(
                 getCapabilitiesUrl,
                 auth,
@@ -136,6 +130,7 @@ namespace Netherlands3D.Functionalities.Wms
             LayerData.LayerSelected.RemoveListener(OnSelectLayer);
             LayerData.LayerDeselected.RemoveListener(OnDeselectLayer);
             credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
+            Legend.Instance.RemoveLegendUrl(urlPropertyData.Data.ToString());
         }
 
         private void OnSelectLayer(LayerData layer)
