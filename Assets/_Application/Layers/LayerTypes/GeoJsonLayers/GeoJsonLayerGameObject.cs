@@ -16,6 +16,7 @@ using Netherlands3D.Twin.Utility;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
+    [RequireComponent(typeof(ICredentialHandler))]
     public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
         public override BoundingBox Bounds
@@ -50,18 +51,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private GeoJSONLineLayer lineFeaturesLayer;
         private GeoJSONPointLayer pointFeaturesLayer;
 
-        [Header("Visualizer settings")] [SerializeField]
-        private int maxFeatureVisualsPerFrame = 20;
-
+        [Header("Visualizer settings")]
         [SerializeField] private GeoJSONPolygonLayer polygonLayerPrefab;
         [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
         [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
-
-        public int MaxFeatureVisualsPerFrame
-        {
-            get => maxFeatureVisualsPerFrame;
-            set => maxFeatureVisualsPerFrame = value;
-        }
 
         [Space] protected LayerURLPropertyData urlPropertyData = new();
 
@@ -94,30 +87,28 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private void RequestCredentials()
         {
             var credentialHandler = GetComponent<ICredentialHandler>();
-            if (credentialHandler != null)
-            {
-                credentialHandler.Uri = urlPropertyData.Data;
-                credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
-                credentialHandler.ApplyCredentials();
-            }
+            credentialHandler.Uri = urlPropertyData.Data;
+            credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+            credentialHandler.ApplyCredentials();
         }
 
-        private void HandleCredentials(StoredAuthorization auth)
+        private void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
-            switch (auth)
+            if(auth is FailedOrUnsupported)
             {
-                case FailedOrUnsupported:
                     LayerData.HasValidCredentials = false;
                     return;
             }
-
+            
             LayerData.HasValidCredentials = true;
-            StartCoroutine(parser.ParseGeoJSONStreamRemote(auth));
+            StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
         }
 
         private void OnDestroy()
         {
             parser.OnFeatureParsed.RemoveListener(AddFeatureVisualisation);
+            var credentialHandler = GetComponent<ICredentialHandler>();
+            credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
         }
 
         public void AddFeatureVisualisation(Feature feature)

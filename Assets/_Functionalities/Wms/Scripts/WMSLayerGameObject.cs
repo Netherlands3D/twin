@@ -4,6 +4,7 @@ using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
 using System.Linq;
+using KindMen.Uxios;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
@@ -60,15 +61,6 @@ namespace Netherlands3D.Functionalities.Wms
             UpdateURL(urlPropertyData.Data);  
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
-
-            var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
-            var getCapabilitiesUrl = new Uri(getCapabilitiesString);
-            Legend.Instance.GetLegendUrl(wmsProjectionLayer.WmsUrl, OnLegendUrlsReceived);
-            BoundingBoxCache.Instance.GetBoundingBoxContainer(
-                getCapabilitiesUrl,
-                (responseText) => new WmsGetCapabilities(getCapabilitiesUrl, responseText),
-                SetBoundingBox
-            );
         }
 
         private void OnLegendUrlsReceived(LegendUrlContainer urlContainer)
@@ -88,36 +80,35 @@ namespace Netherlands3D.Functionalities.Wms
             WMSProjectionLayer.RenderIndex = -order;
         }
 
-        private void HandleCredentials(StoredAuthorization auth)
+        private void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
             ClearCredentials();
 
-            switch (auth)
+            if(auth is FailedOrUnsupported)
             {
-                case FailedOrUnsupported:
-                    LayerData.HasValidCredentials = false;
-                    WMSProjectionLayer.isEnabled = false;
-                    return;
-                case HeaderBasedAuthorization headerBasedAuthorization:
-                    LayerData.HasValidCredentials = true;
-                    var (headerName, headerValue) = headerBasedAuthorization.GetHeaderKeyAndValue();
-                    WMSProjectionLayer.SetCustomHeader(headerName, headerValue);
-                    WMSProjectionLayer.RefreshTiles();
-                    WMSProjectionLayer.isEnabled = true;
-                    return;
-                case QueryStringAuthorization queryStringAuthorization:
-                    LayerData.HasValidCredentials = true;
-                    WMSProjectionLayer.SetCustomQueryParameter(queryStringAuthorization.QueryKeyName, queryStringAuthorization.QueryKeyValue);
-                    WMSProjectionLayer.RefreshTiles();
-                    WMSProjectionLayer.isEnabled = true;
-                    return;
+                LayerData.HasValidCredentials = false;
+                WMSProjectionLayer.isEnabled = false;
+                return;
             }
+            
+            var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
+            var getCapabilitiesUrl = new Uri(getCapabilitiesString);
+            Legend.Instance.GetLegendUrl(wmsProjectionLayer.WmsUrl, OnLegendUrlsReceived); //todo: make this work with credentials
+            BoundingBoxCache.Instance.GetBoundingBoxContainer(
+                getCapabilitiesUrl,
+                (responseText) => new WmsGetCapabilities(getCapabilitiesUrl, responseText),
+                SetBoundingBox
+            );
+            
+            WMSProjectionLayer.SetAuthorization(auth);
+            LayerData.HasValidCredentials = true;
+            WMSProjectionLayer.RefreshTiles();
+            WMSProjectionLayer.isEnabled = true;
         }
 
         public void ClearCredentials()
         {
-            WMSProjectionLayer.ClearCustomHeaders();
-            WMSProjectionLayer.ClearCustomQueryParameters();
+            WMSProjectionLayer.ClearConfig();
         }
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
@@ -143,6 +134,7 @@ namespace Netherlands3D.Functionalities.Wms
             LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
             LayerData.LayerSelected.RemoveListener(OnSelectLayer);
             LayerData.LayerDeselected.RemoveListener(OnDeselectLayer);
+            credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
         }
 
         private void OnSelectLayer(LayerData layer)

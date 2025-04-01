@@ -1,4 +1,6 @@
 using System;
+using KindMen.Uxios;
+using KindMen.Uxios.Http;
 
 namespace Netherlands3D.Credentials.StoredAuthorization
 {
@@ -15,5 +17,13 @@ namespace Netherlands3D.Credentials.StoredAuthorization
         }
 
         public abstract (string, string) GetHeaderKeyAndValue();
+        
+        public override Config AddToConfig(Config config)
+        {
+            var newConfig = Config.BasedOn(config);
+            var (headerKey, headerValue) = GetHeaderKeyAndValue();
+            newConfig.AddHeader(headerKey, headerValue);
+            return newConfig;
+        }
     }
 }

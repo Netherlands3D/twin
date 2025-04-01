@@ -6,7 +6,6 @@ using GeoJSON.Net;
 using GeoJSON.Net.CoordinateReferenceSystem;
 using GeoJSON.Net.Feature;
 using KindMen.Uxios;
-using KindMen.Uxios.Http;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Newtonsoft.Json;
@@ -69,43 +68,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             yield return ParseFeatures(jsonReader, serializer);
         }
 
-        public IEnumerator ParseGeoJSONStreamRemote(StoredAuthorization auth)
+        public IEnumerator ParseGeoJSONStreamRemote(Uri uri, StoredAuthorization auth)
         {
-            var headers = new Headers();
-            var customQueryParams = new KindMen.Uxios.Http.QueryParameters();
-
-            switch (auth)
-            {
-                case HeaderBasedAuthorization headerBasedAuthorization:
-                    var (headerName, headerValue) = headerBasedAuthorization.GetHeaderKeyAndValue();
-                    headers.Add(headerName, headerValue);
-                    break;
-                case QueryStringAuthorization queryStringAuthorization:
-                    customQueryParams.Add(queryStringAuthorization.QueryKeyName, queryStringAuthorization.QueryKeyValue);
-                    break;
-                case Public:
-                    break; //nothing specific needed, but it needs to be excluded from default
-                default:
-                    throw new NotImplementedException("Credential type " + auth.GetType() + " is not supported by " + GetType());
-            }
-
-            var config = new Config
-            {
-                TypeOfResponseType = ExpectedTypeOfResponse.Texture(true),
-                Headers = headers,
-                Params = customQueryParams
-            };
-
             string jsonString = string.Empty;
 
-            var promise = Uxios.DefaultInstance.Get<string>(auth.InputUri, config);
-            promise.Then(response => jsonString = response.Data as string);
+            var config = new Config();
+            config = auth.AddToConfig(config);
+            var promise = Uxios.DefaultInstance.Get<string>(uri, config);
+            promise.Then(response => jsonString = response.Data as string
+            );
             promise.Catch(response =>
                 OnParseError.Invoke("Dit GeoJSON bestand kon niet worden ingeladen vanaf de URL: " + response.InnerException)
             );
-
-            yield return Uxios.WaitForRequest(promise);
             
+            yield return Uxios.WaitForRequest(promise);
+
             if(!string.IsNullOrEmpty(jsonString))
                 yield return ParseJSONString(jsonString);
         }

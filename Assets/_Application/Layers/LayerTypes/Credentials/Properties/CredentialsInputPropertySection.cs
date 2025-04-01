@@ -35,7 +35,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             }
         }
 
-        private void OnCredentialsHandled(StoredAuthorization auth)
+        private void OnCredentialsHandled(Uri uri, StoredAuthorization auth)
         {
             var accepted = auth is not FailedOrUnsupported;
 
@@ -99,15 +99,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             {
                 inputFieldToUseForPasswordOrKey = keyTokenOrCodeInputField;
             }
-        }
-
-        public void SetAuthorizationInputType(AuthorizationType type) //todo make property panel match StoredAuthorization type 
-        {
-            credentialTypeDropdown.value = (int)type;
-
-            //Similar values are not reapplied, so make sure to the dropdown items appear
-            if (credentialTypeDropdown.TryGetComponent(out DropdownSelection dropdownSelection))
-                dropdownSelection.DropdownSelectItem(credentialTypeDropdown.value);
         }
 
         /// <summary>
