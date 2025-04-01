@@ -37,14 +37,14 @@ namespace Netherlands3D.Twin.FloatingOrigin
 
         private void OnValidate()
         {
-            if (referenceCoordinateSystem == CoordinateSystem.Unity)
-            {
-                Debug.LogError(
-                    "Reference coordinate system for a World Transform cannot be in Unity coordinates; "+
-                    "otherwise the Origin's location won't be taken into account."
-                );
-                referenceCoordinateSystem = CoordinateSystem.WGS84_LatLonHeight;
-            }
+            //if (referenceCoordinateSystem == CoordinateSystem.Unity)
+            //{
+            //    Debug.LogError(
+            //        "Reference coordinate system for a World Transform cannot be in Unity coordinates; "+
+            //        "otherwise the Origin's location won't be taken into account."
+            //    );
+            //    referenceCoordinateSystem = CoordinateSystem.WGS84_LatLonHeight;
+            //}
         }
 
         private void OnEnable()
