@@ -25,6 +25,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
+        private ManagedMaterial managedMaterial;
+        public ManagedMaterial ManagedMaterial
+        {
+            get
+            {
+                if (managedMaterial == null)
+                {
+                    managedMaterial = new ManagedMaterial(
+                        () =>
+                        {
+                            // TODO: We implement per-feature styling in a separate story; this means that for styling purposes
+                            //   we consider this whole layer to be a single feature at the moment
+                            var features = GetFeatures<BatchedMeshInstanceRenderer>();
+                            var style = GetStyling(features.FirstOrDefault());
+                            var color = style.GetFillColor() ?? Color.white;
+
+                            return GetMaterialInstance(color);
+                        }, 
+                        () => PointRenderer3D.Material,
+                        mat => PointRenderer3D.Material = mat
+                    );
+                }
+
+                return managedMaterial;
+            }
+        }
+        
         public List<Mesh> GetMeshData(Feature feature)
         {
             FeaturePointVisualisations data = spawnedVisualisations[feature];
@@ -128,13 +155,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // The color in the Layer Panel represents the default fill color for this layer
             LayerData.Color = LayerData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
 
-            // TODO: We implement per-feature styling in a separate story; this means that for styling purposes
-            //   we consider this whole layer to be a single feature at the moment
-            var features = GetFeatures<BatchedMeshInstanceRenderer>();
-            var style = GetStyling(features.FirstOrDefault());
-            var color = style.GetFillColor() ?? Color.white;
-            
-            pointRenderer3D.Material = GetMaterialInstance(color);
+            ManagedMaterial.UpdateMaterial();
         }
 
         public void ApplyStyling(FeaturePointVisualisations newFeatureVisualisation)

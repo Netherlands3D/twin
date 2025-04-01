@@ -27,6 +27,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
 
+        private ManagedMaterial managedMaterial;
+        public ManagedMaterial ManagedMaterial
+        {
+            get
+            {
+                if (managedMaterial == null)
+                {
+                    managedMaterial = new ManagedMaterial(
+                        () =>
+                        {
+                            // TODO: We implement per-feature styling in a separate story; this means that for styling purposes
+                            //   we consider this whole layer to be a single feature at the moment
+                            var features = GetFeatures<BatchedMeshInstanceRenderer>();
+                            var style = GetStyling(features.FirstOrDefault());
+                            var color = style.GetFillColor() ?? Color.white;
+
+                            return GetMaterialInstance(color);
+                        }, 
+                        () => LineRenderer3D.LineMaterial,
+                        mat => LineRenderer3D.LineMaterial = mat
+                    );
+                }
+
+                return managedMaterial;
+            }
+        }
+
         public LineRenderer3D LineRenderer3D
         {
             get => lineRenderer3D;
@@ -125,16 +152,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
+            
             // The color in the Layer Panel represents the default fill color for this layer
             LayerData.Color = LayerData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
 
-            // TODO: We implement per-feature styling in a separate story; this means that for styling purposes
-            //   we consider this whole layer to be a single feature at the moment
-            var features = GetFeatures<BatchedMeshInstanceRenderer>();
-            var style = GetStyling(features.FirstOrDefault());
-            var color = style.GetFillColor() ?? Color.white;
-            
-            lineRenderer3D.LineMaterial = GetMaterialInstance(color);
+            ManagedMaterial.UpdateMaterial();
         }
 
         public void ApplyStyling(FeatureLineVisualisations newFeatureVisualisation)
