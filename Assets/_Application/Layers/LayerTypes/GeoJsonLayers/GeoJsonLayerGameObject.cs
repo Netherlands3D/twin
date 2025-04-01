@@ -84,7 +84,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        private void RequestCredentials()
+        protected void RequestCredentials()
         {
             var credentialHandler = GetComponent<ICredentialHandler>();
             credentialHandler.Uri = urlPropertyData.Data;
@@ -92,7 +92,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             credentialHandler.ApplyCredentials();
         }
 
-        private void HandleCredentials(Uri uri, StoredAuthorization auth)
+        protected virtual void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
             if(auth is FailedOrUnsupported)
             {
