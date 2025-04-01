@@ -220,7 +220,12 @@ namespace Netherlands3D.Functionalities.Indicators.Dossiers
                 yield return dossier.LoadMapDataAsync(frame);
 
             // Convert world position to normalised visualisation position
-            var targetRDCoordinate = new Coordinate(worldPosition);
+            var targetRDCoordinate = new Coordinate(
+                CoordinateSystem.Unity,
+                worldPosition.x, 
+                worldPosition.y, 
+                worldPosition.z
+            );
             var rd = CoordinateConverter.ConvertTo(targetRDCoordinate, CoordinateSystem.RD);
 
             // Get the bounds from our dossier
@@ -231,11 +236,11 @@ namespace Netherlands3D.Functionalities.Indicators.Dossiers
             var bboxMax = new Coordinate(CoordinateSystem.EPSG_3857, bbox[2], bbox[3], 0);
 
             //We currently need to do an extra step to unity, because CoordinateConversion does not support EPSG_3857 to RD directly yet.
-            var unityBboxMin = bboxMin.ToUnity();
-            var unityBboxMax = bboxMax.ToUnity();
+            var unityBboxMin = CoordinateConverter.ConvertTo(bboxMin, CoordinateSystem.Unity);
+            var unityBboxMax = CoordinateConverter.ConvertTo(bboxMax, CoordinateSystem.Unity);
 
-            var rdBboxMin = new Coordinate(CoordinateSystem.RD, unityBboxMin.x, unityBboxMin.y);// CoordinateConverter.ConvertTo(unityBboxMin, CoordinateSystem.RD);
-            var rdBboxMax = new Coordinate(CoordinateSystem.RD, unityBboxMax.x, unityBboxMax.y); // CoordinateConverter.ConvertTo(unityBboxMax, CoordinateSystem.RD);
+            var rdBboxMin = CoordinateConverter.ConvertTo(unityBboxMin, CoordinateSystem.RD);
+            var rdBboxMax = CoordinateConverter.ConvertTo(unityBboxMax, CoordinateSystem.RD);
 
             // Check the normalised position of the rd coordinate in the bbox
             var bboxWidth = rdBboxMax.Points[0] - rdBboxMin.Points[0];
@@ -289,7 +294,7 @@ namespace Netherlands3D.Functionalities.Indicators.Dossiers
                     position.Altitude.GetValueOrDefault(0)
                 );
 
-                contour.Add(coordinate.ToUnity());
+                contour.Add(CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.Unity).ToVector3());
             }
 
             // Close polygon
