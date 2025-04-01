@@ -211,12 +211,7 @@ namespace Netherlands3D.Coordinates
             var vector3 = new Vector3WGS(coordinate.value1, coordinate.value2, coordinate.value3);
 
             switch (targetCrs)
-            {
-                //case (int)CoordinateSystem.Unity:
-                //    {
-                //        var result = ToUnity(vector3);
-                //        return new Coordinate(targetCrs, result.x, result.y, result.z);
-                //    }
+            {                
                 case (int)CoordinateSystem.RDNAP:
                     {
                         var result = ToEPSG7415(vector3.lon, vector3.lat);

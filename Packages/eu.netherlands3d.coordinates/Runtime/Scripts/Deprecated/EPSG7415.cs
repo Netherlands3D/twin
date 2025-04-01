@@ -249,18 +249,10 @@ namespace Netherlands3D.Coordinates
 
             var vector3 = new Vector3RD(coordinate.value1, coordinate.value2, coordinate.value3);
 
-            switch (targetCrs)
+            if(targetCrs == (int)CoordinateSystem.WGS84_LatLonHeight)
             {
-                //case (int)CoordinateSystem.Unity:
-                //    {
-                //        var result = ToUnity(vector3);
-                //        return new Coordinate(targetCrs, result.x, result.y, result.z);
-                //    }
-                case (int)CoordinateSystem.WGS84_LatLonHeight:
-                    {
-                        var result = ToWGS84(vector3.x, vector3.y, vector3.z);
-                        return new Coordinate(targetCrs, result.lon, result.lat, result.h);
-                    }
+                var result = ToWGS84(vector3.x, vector3.y, vector3.z);
+                return new Coordinate(targetCrs, result.lon, result.lat, result.h);
             }
 
             throw new ArgumentOutOfRangeException(

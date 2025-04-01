@@ -57,12 +57,7 @@ namespace Netherlands3D.Coordinates
         {
             // Nothing to do if the coordinate system didn't change.
             if (coordinate.CoordinateSystem == targetCrs) return coordinate;
-
-            //if (targetCrs == -1)
-            //{
-            //    Vector3 result = coordinate.ToUnity();
-            //    return new Coordinate(CoordinateSystem.Unity, result.x, result.y, result.z);
-            //}
+           
             return coordinate.Convert((CoordinateSystem)targetCrs);
             // In this iteration of the package, this is a hardcoded switch. Martijn is working on a new conversion
             // backend and as soon as we integrate that the hardcoded conversions can be removed
@@ -92,19 +87,6 @@ namespace Netherlands3D.Coordinates
             {
                 _targetCoordinateSystem = CoordinateSystem.RDNAP;
             }
-
-
-            //if (targetCrs == CoordinateSystem.Unity)
-            //{
-            //    Vector3 unityPos = coordinate.ToUnity();
-            //    return new Coordinate(CoordinateSystem.Unity, unityPos.x, unityPos.y, unityPos.z);
-            //}
-
-            //if (coordinate.CoordinateSystem==-1)
-            //{
-            //    coordinate.ToVector3();
-            //    return new Coordinate(coordinate.ToVector3()).Convert(_targetCoordinateSystem);
-            //}
             
             return coordinate.Convert(_targetCoordinateSystem);
            //return ConvertTo(coordinate, (int)targetCrs);
