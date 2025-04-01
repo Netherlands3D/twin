@@ -35,16 +35,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 if (managedMaterial == null)
                 {
                     managedMaterial = new ManagedMaterial(
-                        () =>
-                        {
-                            // TODO: We implement per-feature styling in a separate story; this means that for styling purposes
-                            //   we consider this whole layer to be a single feature at the moment
-                            var features = GetFeatures<BatchedMeshInstanceRenderer>();
-                            var style = GetStyling(features.FirstOrDefault());
-                            var color = style.GetFillColor() ?? Color.white;
-
-                            return GetMaterialInstance(color);
-                        }, 
+                        GetMaterialForAllFeatures, 
                         () => LineRenderer3D.LineMaterial,
                         mat => LineRenderer3D.LineMaterial = mat
                     );
@@ -52,6 +43,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
                 return managedMaterial;
             }
+        }
+
+        private Material GetMaterialForAllFeatures()
+        {
+            // TODO: We implement per-feature styling in a separate story; this means that for styling purposes
+            //   we consider this whole layer to be a single feature at the moment
+            var features = GetFeatures<BatchedMeshInstanceRenderer>();
+            var style = GetStyling(features.FirstOrDefault());
+            var color = style.GetFillColor() ?? Color.white;
+
+            return GetMaterialInstance(color);
         }
 
         public LineRenderer3D LineRenderer3D
