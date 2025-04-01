@@ -187,37 +187,6 @@ namespace Netherlands3D.Twin.Layers
         {
             //initialize the layer's style        
         }
-        
-        /// <summary>
-        /// Replaces the material in a way as to prevent mem leaks.
-        /// </summary>
-        protected static void ReplaceMaterial(
-            Func<Material> materialCreator, 
-            Func<Material> materialGetter, 
-            Action<Material> materialSetter
-        ) {
-            // Get a cached version of the old and new material to prevent issues with creators and setters
-            // overwriting the retrieved materials
-            var newMaterial = materialCreator();
-            var oldMaterial = materialGetter();
-
-            // only replace when needed
-            if (oldMaterial != newMaterial)
-            {
-                // Clean up after ourselves - prevents memleaks by releasing C++ materials
-                Destroy(oldMaterial);
-
-                // Set explicitly to null to prevent possible C# Managed Shell leaks
-                materialSetter(null);
-
-                // Apply a newly created material
-                materialSetter(newMaterial);
-            }
-
-            // Set explicitly to null to prevent possible C# Managed Shell leaks
-            newMaterial = null;
-            oldMaterial = null;
-        }
 #endregion
 
 #region Features
