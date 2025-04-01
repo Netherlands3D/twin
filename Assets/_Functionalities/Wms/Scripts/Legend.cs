@@ -86,6 +86,12 @@ namespace Netherlands3D.Functionalities.Wms
 
         public void RegisterUrl(string wmsUrl)
         {
+            if (string.IsNullOrEmpty(wmsUrl))
+            {
+                Debug.LogError("Url you are trying to register is empty");
+                return;
+            }
+            
             var getCapabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsUrl, ServiceType.Wms);
             if (log) Debug.Log("registering Url: " + getCapabilitiesUrl);
             if (legendUrlDictionary.TryGetValue(getCapabilitiesUrl, out var container)) //if we don't have the legend url info yet, we need to request it
@@ -121,6 +127,12 @@ namespace Netherlands3D.Functionalities.Wms
             mainPanel.SetActive(show);
             if (!show) //no further action needed if we dont want to show anything
                 return;
+            
+            if (string.IsNullOrEmpty(wmsUrl))
+            {
+                Debug.LogError("Url you are trying to show is empty");
+                return;
+            }
 
             var getCapabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsUrl, ServiceType.Wms);
             requestedLegendUrl = getCapabilitiesUrl; //se this so we can keep track of the most recent requested url, regardless if we already have the legend urls to download the images from

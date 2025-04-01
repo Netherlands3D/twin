@@ -57,16 +57,17 @@ namespace Netherlands3D.Functionalities.Wms
         protected override void Start()
         {
             base.Start();
-            UpdateURL(urlPropertyData.Data);  
+            UpdateURL(urlPropertyData.Data);
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
-            Legend.Instance.RegisterUrl(wmsProjectionLayer.WmsUrl);
-            Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, ShowLegendOnSelect);
+            Legend.Instance.RegisterUrl(urlPropertyData.Data.ToString());
+            Legend.Instance.ShowLegend(urlPropertyData.Data.ToString(), ShowLegendOnSelect);
         }
 
         public void SetLegendActive(bool active)
         {
-            Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, active);
+            print("setting act: " + urlPropertyData.Data + active);
+            Legend.Instance.ShowLegend(urlPropertyData.Data.ToString(), active);
         }
 
         //a higher order means rendering over lower indices
@@ -80,13 +81,13 @@ namespace Netherlands3D.Functionalities.Wms
         {
             ClearCredentials();
 
-            if(auth is FailedOrUnsupported)
+            if (auth is FailedOrUnsupported)
             {
                 LayerData.HasValidCredentials = false;
                 WMSProjectionLayer.isEnabled = false;
                 return;
             }
-            
+
             var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
             var getCapabilitiesUrl = new Uri(getCapabilitiesString);
             BoundingBoxCache.Instance.GetBoundingBoxContainer(
@@ -95,7 +96,7 @@ namespace Netherlands3D.Functionalities.Wms
                 (responseText) => new WmsGetCapabilities(getCapabilitiesUrl, responseText),
                 SetBoundingBox
             );
-            
+
             WMSProjectionLayer.SetAuthorization(auth);
             LayerData.HasValidCredentials = true;
             WMSProjectionLayer.RefreshTiles();
@@ -141,8 +142,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         private void OnDeselectLayer(LayerData layer)
         {
-            if (!string.IsNullOrEmpty(wmsProjectionLayer.WmsUrl))
-                SetLegendActive(false);
+            SetLegendActive(false);
         }
 
         public void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)
