@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8363319932289052987}
   - component: {fileID: -2311983791405174025}
+  - component: {fileID: 44681409752656876}
   m_Layer: 0
   m_Name: GeoJsonLayer
   m_TagString: Untagged
@@ -58,3 +59,16 @@ MonoBehaviour:
     type: 3}
   pointLayerPrefab: {fileID: 3618778040791522139, guid: 267c8f33152cac142b8e40a7bdc54523,
     type: 3}
+--- !u!114 &44681409752656876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418701555395206593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}

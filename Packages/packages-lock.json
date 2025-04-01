@@ -44,7 +44,7 @@
       "url": "https://package.openupm.com"
     },
     "com.kind-men.uxios": {
-      "version": "0.3.3",
+      "version": "0.3.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
