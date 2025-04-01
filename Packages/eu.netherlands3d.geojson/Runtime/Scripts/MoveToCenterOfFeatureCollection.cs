@@ -64,21 +64,21 @@ namespace Netherlands.GeoJSON
             return position;
         }
 
-        private Bounds CalculateCenterAndExtents(FeatureCollection featureCollection) 
+        private Bounds CalculateCenterAndExtents(FeatureCollection featureCollection)
         {
             double[] boundingBox = featureCollection.BoundingBoxes ?? featureCollection.DerivedBoundingBoxes();
             int epsgId = featureCollection.EPSGId();
 
             var realWorldTopLeft = new Coordinate(epsgId, boundingBox[0], boundingBox[1], elevation);
             var realWorldBottomRight = new Coordinate(epsgId, boundingBox[2], boundingBox[3], elevation);
-            var topLeft = CoordinateConverter.ConvertTo(realWorldTopLeft, CoordinateSystem.Unity);
-            var bottomRight = CoordinateConverter.ConvertTo(realWorldBottomRight, CoordinateSystem.Unity);
-            var width = bottomRight.Points[0] - topLeft.Points[0];
-            var depth = bottomRight.Points[2] - topLeft.Points[2];
+            Coordinate topLeft = new Coordinate(realWorldTopLeft.ToUnity());
+            Coordinate bottomRight = new Coordinate(realWorldBottomRight.ToUnity());
+            var width = bottomRight.value1 - topLeft.value1;
+            var depth = bottomRight.value3 - topLeft.value3;
             var center = new Vector3(
-               Convert.ToSingle(topLeft.Points[0] + width * .5d),
+               Convert.ToSingle(topLeft.value1 + width * .5d),
                0,
-               Convert.ToSingle(topLeft.Points[2] + depth * .5d)
+               Convert.ToSingle(topLeft.value3 + depth * .5d)
             );
 
             return new Bounds(
