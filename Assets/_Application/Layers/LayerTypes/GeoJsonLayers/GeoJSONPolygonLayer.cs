@@ -40,6 +40,51 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 }
             }
         }
+        
+        private List<IPropertySectionInstantiator> propertySections;
+
+        protected List<IPropertySectionInstantiator> PropertySections
+        {
+            get
+            {
+                if (propertySections == null)
+                {
+                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
+                }
+
+                return propertySections;
+            }
+            set => propertySections = value;
+        }
+
+        private ManagedMaterial managedMaterial;
+        public ManagedMaterial ManagedMaterial
+        {
+            get
+            {
+                if (managedMaterial == null)
+                {
+                    managedMaterial = new ManagedMaterial(
+                        GetMaterialInstance,
+                        () => polygonVisualizationMaterialInstance,
+                        mat =>
+                        {
+                            foreach (var visualisations in spawnedVisualisations)
+                            {
+                                visualisations.Value.SetMaterial(mat);
+                            }
+                        }
+                    );
+                }
+
+                return managedMaterial;
+            }
+        }
+
+        public List<IPropertySectionInstantiator> GetPropertySections()
+        {
+            return PropertySections;
+        }
 
         public List<Mesh> GetMeshData(Feature feature)
         {
@@ -168,10 +213,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
-            foreach (var visualisations in spawnedVisualisations)
-            {
-                visualisations.Value.SetMaterial(GetMaterialInstance());
-            }
+            this.ManagedMaterial.UpdateMaterial();
         }
 
         private Material GetMaterialInstance()
@@ -241,27 +283,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             return bbox;
-        }
-
-        private List<IPropertySectionInstantiator> propertySections;
-
-        protected List<IPropertySectionInstantiator> PropertySections
-        {
-            get
-            {
-                if (propertySections == null)
-                {
-                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
-                }
-
-                return propertySections;
-            }
-            set => propertySections = value;
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return PropertySections;
         }
     }
 }

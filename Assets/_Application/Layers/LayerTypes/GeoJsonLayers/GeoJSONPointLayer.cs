@@ -25,6 +25,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
+        private ManagedMaterial managedMaterial;
+        public ManagedMaterial ManagedMaterial
+        {
+            get
+            {
+                if (managedMaterial == null)
+                {
+                    managedMaterial = new ManagedMaterial(
+                        GetMaterialInstance, 
+                        () => PointRenderer3D.Material,
+                        mat => PointRenderer3D.Material = mat
+                    );
+                }
+
+                return managedMaterial;
+            }
+        }
+        
         public List<Mesh> GetMeshData(Feature feature)
         {
             FeaturePointVisualisations data = spawnedVisualisations[feature];
@@ -125,7 +143,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
-            pointRenderer3D.Material = GetMaterialInstance();
+            ManagedMaterial.UpdateMaterial();
         }
 
         public void ApplyStyling(Feature feature)

@@ -27,6 +27,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
 
+        private ManagedMaterial managedMaterial;
+        public ManagedMaterial ManagedMaterial
+        {
+            get
+            {
+                if (managedMaterial == null)
+                {
+                    managedMaterial = new ManagedMaterial(
+                        GetMaterialInstance, 
+                        () => LineRenderer3D.LineMaterial,
+                        mat => LineRenderer3D.LineMaterial = mat
+                    );
+                }
+
+                return managedMaterial;
+            }
+        }
+
         public LineRenderer3D LineRenderer3D
         {
             get => lineRenderer3D;
@@ -125,9 +143,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
-            lineRenderer3D.LineMaterial = GetMaterialInstance();
+            ManagedMaterial.UpdateMaterial();
         }
-
+        
         public void ApplyStyling(Feature feature)
         {
             // Currently we don't apply individual styling per feature

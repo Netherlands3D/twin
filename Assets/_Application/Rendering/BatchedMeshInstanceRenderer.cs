@@ -44,7 +44,8 @@ namespace Netherlands3D.Twin.Rendering
             set
             {
                 material = value;
-                SetDefaultColors();
+                if (material != null)
+                    SetDefaultColors();
             }
         }
 
