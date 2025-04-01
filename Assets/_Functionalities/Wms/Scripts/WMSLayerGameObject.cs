@@ -66,7 +66,6 @@ namespace Netherlands3D.Functionalities.Wms
 
         public void SetLegendActive(bool active)
         {
-            print("setting act: " + urlPropertyData.Data + active);
             Legend.Instance.ShowLegend(urlPropertyData.Data.ToString(), active);
         }
 
