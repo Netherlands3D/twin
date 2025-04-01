@@ -18,7 +18,6 @@
 
 using System;
 using UnityEngine;
-using Unity.Mathematics;
 #if NEWTONSOFT
 using Newtonsoft.Json;
 #endif
@@ -286,54 +285,7 @@ namespace Netherlands3D.Coordinates
             value1 = newCoordinate.value1;
             value2 = newCoordinate.value2;
             value3 = newCoordinate.value3;
-        }
-
-        //public Coordinate(double3 position)
-        //{           
-        //    converter = CoordinateSystems.operators[CoordinateSystems.connectedCoordinateSystem];
-        //    extraLattitudeRotation = 0;
-        //    extraLongitudeRotation = 0;
-
-        //    // Convert the Quaternion to a double-precision quaternion
-        //    quaternion unityToCRS = CoordinateSystems.connectedCRSToUnityUp;
-        //    quaternion inverseRotation = math.inverse(new quaternion((float)unityToCRS.value.x, (float)unityToCRS.value.y, (float)unityToCRS.value.z, (float)unityToCRS.value.w));
-
-        //    // Extract the components of the quaternion
-        //    double x = inverseRotation.value.x;
-        //    double y = inverseRotation.value.y;
-        //    double z = inverseRotation.value.z;
-        //    double w = inverseRotation.value.w;
-
-        //    // Construct the double4x4 rotation matrix from the quaternion
-        //    double4x4 rotationMatrix = new double4x4(
-        //        1 - 2 * (y * y + z * z), 2 * (x * y - w * z), 2 * (x * z + w * y), 0,
-        //        2 * (x * y + w * z), 1 - 2 * (x * x + z * z), 2 * (y * z - w * x), 0,
-        //        2 * (x * z - w * y), 2 * (y * z + w * x), 1 - 2 * (x * x + y * y), 0,
-        //        0, 0, 0, 1
-        //    );
-
-        //    // Apply the inverse rotation to the unityPosition
-        //    double3 unrotatedRelativePosition = math.mul(rotationMatrix, new double4(position, 1.0)).xyz;
-
-        //    if (CoordinateSystems.operators[CoordinateSystems.connectedCoordinateSystem].GetCoordinateSystemType() == CoordinateSystemType.Geocentric)
-        //    {
-        //        value1 = -unrotatedRelativePosition.x;
-        //        value2 = -unrotatedRelativePosition.z;
-        //        value3 = unrotatedRelativePosition.y;
-        //    }
-        //    else
-        //    {
-        //        value1 = unrotatedRelativePosition.x;
-        //        value2 = unrotatedRelativePosition.z;
-        //        value3 = unrotatedRelativePosition.y;
-        //    }
-
-        //    coordinateSystem = (int)CoordinateSystems.connectedCoordinateSystem;
-        //    Coordinate newCoordinate = CoordinateSystems.CoordinateAtOrigin + new Coordinate(CoordinateSystem, value1, value2, value3);
-        //    value1 = newCoordinate.value1;
-        //    value2 = newCoordinate.value2;
-        //    value3 = newCoordinate.value3;
-        //}
+        }        
 
         public Coordinate(CoordinateSystem coordinateSystem)
         {
@@ -455,13 +407,6 @@ namespace Netherlands3D.Coordinates
             {
                 return this;
             }
-
-            //if ((CoordinateSystem)this.CoordinateSystem == Coordinates.CoordinateSystem.Unity)
-            //{
-            //    Vector3 vector3 = new Vector3((float)value1, (float)value2, (float)value3);
-            //    Coordinate coord = new Coordinate(vector3);
-            //    return coord.Convert(targetCoordinateSystem);
-            //}
 
             CoordinateSystemOperation converter = CoordinateSystems.operators[(CoordinateSystem)this.CoordinateSystem];
             //if (converter.CoordinateIsValid(this)==false)

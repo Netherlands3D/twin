@@ -1,6 +1,5 @@
 
 using System;
-using Unity.Mathematics;
 
 
 namespace Netherlands3D.Coordinates
@@ -18,7 +17,7 @@ namespace Netherlands3D.Coordinates
             double X = (primeVerticalRadius + ellipisoidalHeight) * Math.Cos(lattitude) * Math.Cos(longitude);
             double Y = (primeVerticalRadius + ellipisoidalHeight) * Math.Cos(lattitude) * Math.Sin(longitude);
             double Z = ((1d - Math.Pow(settings.eccentricity, 2)) * primeVerticalRadius + ellipisoidalHeight) * Math.Sin(lattitude);
-            return new Coordinate(CoordinateSystem.Undefined, X, Y, Z);
+            return new Coordinate(CoordinateSystem.Undefined, X, Y, Z); //temporary unity coordinate container
 
         }
         internal static Coordinate Reverse(Coordinate coordinate, GeographicToGeocentricSettings settings)
@@ -50,7 +49,7 @@ namespace Netherlands3D.Coordinates
             lattitude = iteratedLattitude;
             double longitude = Math.Atan2(Y, X);
             double height = (p / Math.Cos(lattitude)) - primeVerticalRadius;
-            return new Coordinate(CoordinateSystem.Undefined, lattitude * 180 / Math.PI, (longitude * 180 / Math.PI) - settings.primeMeridian, height);
+            return new Coordinate(CoordinateSystem.Undefined, lattitude * 180 / Math.PI, (longitude * 180 / Math.PI) - settings.primeMeridian, height);//temporary unity coordinate container
 
         }
     }

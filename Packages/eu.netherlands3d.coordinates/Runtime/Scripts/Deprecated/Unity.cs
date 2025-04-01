@@ -73,13 +73,6 @@ namespace Netherlands3D.Coordinates
 
         public static Coordinate ConvertTo(Coordinate coordinate, int targetCrs)
         {
-            //if (coordinate.CoordinateSystem != (int)CoordinateSystem.Unity)
-            //{
-            //    throw new ArgumentOutOfRangeException(
-            //        $"Invalid coordinate received, this class cannot convert CRS ${coordinate.CoordinateSystem}"
-            //    );
-            //}
-
             var vector3 = coordinate.ToVector3();
 
             switch (targetCrs)
