@@ -281,7 +281,7 @@ namespace Netherlands3D.Coordinates
                 value3 = unrotatedRelativePosition.y;
             }
             coordinateSystem = (int)CoordinateSystems.connectedCoordinateSystem;   
-            Coordinate newCoordinate = CoordinateSystems.CoordinateAtOrigin + new Coordinate(CoordinateSystem, value1, value2, value3);            
+            Coordinate newCoordinate = CoordinateSystems.CoordinateAtUnityOrigin + new Coordinate(CoordinateSystem, value1, value2, value3);            
             value1 = newCoordinate.value1;
             value2 = newCoordinate.value2;
             value3 = newCoordinate.value3;
@@ -444,7 +444,7 @@ namespace Netherlands3D.Coordinates
             orientationDifference += extraRotation;
 
             //calculate the exrtaRotation in the connected coordainteSystem at the UnityOrigin
-            Coordinate pointAtOrigin = CoordinateSystems.CoordinateAtOrigin.Convert(Coordinates.CoordinateSystem.WGS84_LatLon);
+            Coordinate pointAtOrigin = CoordinateSystems.CoordinateAtUnityOrigin.Convert(Coordinates.CoordinateSystem.WGS84_LatLon);
             Vector3WGS ExtraRotationAtOrigin = new Vector3WGS(-pointAtOrigin.extraLongitudeRotation, -pointAtOrigin.extraLattitudeRotation, 0);
             // ExtraRotationAtOrigin = new Vector3WGS(0, -pointAtOrigin.extraLattitudeRotation, 0);
             // orientationDifference += ExtraRotationAtOrigin;
@@ -469,7 +469,7 @@ namespace Netherlands3D.Coordinates
         public Vector3 ToUnity()
         {
 
-            Coordinate connectionCoordinate = CoordinateSystems.CoordinateAtOrigin;
+            Coordinate connectionCoordinate = CoordinateSystems.CoordinateAtUnityOrigin;
             //transform current coordinate to connectioncoordinate;
 
             Coordinate inConnecedCRS = this.Convert(CoordinateSystems.connectedCoordinateSystem);

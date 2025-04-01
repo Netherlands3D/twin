@@ -138,7 +138,7 @@ namespace Netherlands3D.Coordinates
 
         static Coordinate? _coordinateAtOrigin;
 
-        public static Coordinate CoordinateAtOrigin
+        public static Coordinate CoordinateAtUnityOrigin
         {
             get
             {
