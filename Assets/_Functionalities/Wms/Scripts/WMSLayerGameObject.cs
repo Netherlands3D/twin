@@ -60,6 +60,7 @@ namespace Netherlands3D.Functionalities.Wms
             UpdateURL(urlPropertyData.Data);  
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
+            Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, ShowLegendOnSelect);
         }
 
         public void SetLegendActive(bool active)
@@ -87,7 +88,6 @@ namespace Netherlands3D.Functionalities.Wms
             
             var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
             var getCapabilitiesUrl = new Uri(getCapabilitiesString);
-            // Legend.Instance.AddLegendUrls(wmsProjectionLayer.WmsUrl);
             BoundingBoxCache.Instance.GetBoundingBoxContainer(
                 getCapabilitiesUrl,
                 auth,

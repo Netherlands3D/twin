@@ -25,15 +25,15 @@ namespace Netherlands3D.Functionalities.Wms
             ActiveLayerCount = 1; // when creating a new object, we assume it has been created by one layer
         }
 
-        // public void IncrementLayerCount()
-        // {
-        //     ActiveLayerCount++;
-        // }
-        //
-        // public void DecrementLayerCount()
-        // {
-        //     ActiveLayerCount--;
-        // }
+        public void IncrementLayerCount()
+        {
+            ActiveLayerCount++;
+        }
+
+        public void DecrementLayerCount()
+        {
+            ActiveLayerCount--;
+        }
     }
 
     public class Legend : MonoBehaviour
@@ -47,7 +47,7 @@ namespace Netherlands3D.Functionalities.Wms
         private ICredentialHandler credentialHandler;
 
         private static readonly Dictionary<string, LegendUrlContainer> legendUrlDictionary = new(); //key: getCapabilities url, Value: legend urls for that GetCapabilities
-        private List<string> pendingRequests = new();
+        private List<string> pendingUrlRequests = new();
         private string requestedLegendUrl; //the url requested to show the legend of
         private string activeLegendUrl; //the currently visible legend url in the panel
         private bool legendActive = false;
@@ -82,30 +82,6 @@ namespace Netherlands3D.Functionalities.Wms
             credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
         }
 
-        private void AddGraphic(Sprite sprite)
-        {
-            LegendImage image = Instantiate(graphicPrefab, graphicPrefab.transform.parent);
-            image.gameObject.SetActive(true);
-            image.SetSprite(sprite);
-            graphics.Add(image);
-
-            legendClampHeight.AdjustRectHeight();
-            mainPanelContentFitterRefresh.RefreshContentFitters();
-        }
-
-        private void ClearGraphics()
-        {
-            if (graphics.Count == 0)
-                return;
-
-            for (int i = graphics.Count - 1; i >= 0; i--)
-            {
-                Destroy(graphics[i].gameObject);
-            }
-
-            graphics.Clear();
-        }
-
         public void ShowLegend(string wmsUrl, bool show)
         {
             Debug.Log("I want so show a legend: " + wmsUrl + "\t" + show);
@@ -116,17 +92,18 @@ namespace Netherlands3D.Functionalities.Wms
 
             var getCapabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsUrl, ServiceType.Wms);
             requestedLegendUrl = getCapabilitiesUrl; //se this so we can keep track of the most recent requested url, regardless if we already have the legend urls to download the images from
-            if (!legendUrlDictionary.ContainsKey(getCapabilitiesUrl)) //if we don't have the legend url info yet, we need to request it
-            {
-                Debug.Log("I dont have urls, and will request them: " + wmsUrl);
-                AddLegendUrls(getCapabilitiesUrl);
-                return; // at the end of the request this function is called again to download the graphics, since we set the requestedLegendUrl, it will request to set those legends active again
-            }
 
             if (activeLegendUrl == requestedLegendUrl)
             {
                 Debug.Log("My requested legend is already active" + wmsUrl);
                 return; //legend that should be set active is already loaded, so no further action is needed.
+            }
+
+            if (!legendUrlDictionary.ContainsKey(getCapabilitiesUrl)) //if we don't have the legend url info yet, we need to request it
+            {
+                Debug.Log("I dont have urls, and will request them: " + wmsUrl);
+                AddLegendUrls(getCapabilitiesUrl);
+                return; // at the end of the request this function is called again to download the graphics, since we set the requestedLegendUrl, it will request to set those legends active again
             }
 
             Debug.Log("I need to download my graphics, so I will request credentials: " + wmsUrl);
@@ -138,16 +115,16 @@ namespace Netherlands3D.Functionalities.Wms
         {
             var getCapabilitiesURL = OgcWebServicesUtility.CreateGetCapabilitiesURL(layerUrl, ServiceType.Wms);
 
-            // if (legendUrlDictionary.ContainsKey(getCapabilitiesURL))
-            // {
-            //     legendUrlDictionary[getCapabilitiesURL].IncrementLayerCount();
-            //     return;
-            // }
-
-            if (pendingRequests.Contains(getCapabilitiesURL))
+            if (pendingUrlRequests.Contains(getCapabilitiesURL))
             {
                 Debug.Log("My urls are already requested, I will wait for completion: " + layerUrl);
                 StartCoroutine(WaitForExistingRequestToComplete(getCapabilitiesURL)); //we need to increment tha amount of active layers once we receive our container
+                return;
+            }
+
+            if (legendUrlDictionary.ContainsKey(getCapabilitiesURL))
+            {
+                legendUrlDictionary[getCapabilitiesURL].IncrementLayerCount();
                 return;
             }
 
@@ -162,13 +139,27 @@ namespace Netherlands3D.Functionalities.Wms
             credentialHandler.ApplyCredentials(); //we assume the credentials are already filled in elsewhere in the application
         }
 
+        public void RemoveLegendUrl(string layerUrl)
+        {
+            var getCapabilitiesURL = OgcWebServicesUtility.CreateGetCapabilitiesURL(layerUrl, ServiceType.Wms);
+            if (legendUrlDictionary.TryGetValue(getCapabilitiesURL, out var container))
+            {
+                container.DecrementLayerCount();
+                if (container.ActiveLayerCount == 0)
+                {
+                    Debug.Log("Removing legend urls");
+                    legendUrlDictionary.Remove(getCapabilitiesURL); //even though this layer was removed, we might still need this container for other layers
+                }
+            }
+        }
+
         private void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
             if (auth is FailedOrUnsupported)
                 return;
 
             Debug.Log("I Received credentials: " + uri);
-            
+
             if (!legendUrlDictionary.ContainsKey(uri.ToString()))
             {
                 RequestLegendUrls(uri, auth); // successfully requesting the urls will re call the credentialHandler and therefore re-enter this function but the next time with the dictionary key 
@@ -181,30 +172,18 @@ namespace Netherlands3D.Functionalities.Wms
 
         private IEnumerator WaitForExistingRequestToComplete(string url)
         {
-            while (pendingRequests.Contains(url))
+            while (pendingUrlRequests.Contains(url))
             {
                 yield return null;
             }
 
-            // legendUrlDictionary[url].IncrementLayerCount();
-        }
-
-        public void RemoveLegendUrl(string layerUrl)
-        {
-            var getCapabilitiesURL = OgcWebServicesUtility.CreateGetCapabilitiesURL(layerUrl, ServiceType.Wms);
-            if (legendUrlDictionary.TryGetValue(getCapabilitiesURL, out var container))
-            {
-                // container.DecrementLayerCount();
-                if (container.ActiveLayerCount == 0)
-                    legendUrlDictionary.Remove(getCapabilitiesURL); //even though this layer was removed, we might still need this container for other layers
-            }
+            legendUrlDictionary[url].IncrementLayerCount();
         }
 
         private void RequestLegendUrls(Uri uri, StoredAuthorization auth)
         {
             Debug.Log("Requesting urls with credentials: " + uri);
-            var newContainer = new LegendUrlContainer(uri.ToString(), new()); //already add an empty container to keep track of the amount of layers
-            legendUrlDictionary.Add(uri.ToString(), newContainer);
+            pendingUrlRequests.Add(uri.ToString());
             StartCoroutine(DownloadLegendUrls(uri, auth));
         }
 
@@ -215,10 +194,12 @@ namespace Netherlands3D.Functionalities.Wms
             var promise = Uxios.DefaultInstance.Get<string>(getCapabilitiesUri, config);
             promise.Then(response =>
             {
-                Debug.Log("Successfully downloaded legend urls");
-
                 var getCapabilities = new WmsGetCapabilities(getCapabilitiesUri, response.Data as string);
-                legendUrlDictionary[getCapabilitiesUri.ToString()].LayerNameLegendUrlDictionary = getCapabilities.GetLegendUrls();
+                var urls = getCapabilities.GetLegendUrls();
+                var newContainer = new LegendUrlContainer(getCapabilitiesUri.ToString(), urls); //already add an empty container to keep track of the amount of layers
+                legendUrlDictionary.Add(newContainer.GetCapabilitiesUrl, newContainer);
+                legendUrlDictionary[getCapabilitiesUri.ToString()].LayerNameLegendUrlDictionary = urls;
+                Debug.Log("Successfully downloaded " + urls.Count + " legend urls");
                 ShowLegend(requestedLegendUrl, legendActive); //update the legend graphics if we were waiting for the legend urls
             });
             promise.Catch(_ => Debug.LogWarning($"Could not download legends at {getCapabilitiesUri}"));
@@ -271,6 +252,30 @@ namespace Netherlands3D.Functionalities.Wms
 
                 yield return Uxios.WaitForRequest(promise);
             }
+        }
+
+        private void AddGraphic(Sprite sprite)
+        {
+            LegendImage image = Instantiate(graphicPrefab, graphicPrefab.transform.parent);
+            image.gameObject.SetActive(true);
+            image.SetSprite(sprite);
+            graphics.Add(image);
+
+            legendClampHeight.AdjustRectHeight();
+            mainPanelContentFitterRefresh.RefreshContentFitters();
+        }
+
+        private void ClearGraphics()
+        {
+            if (graphics.Count == 0)
+                return;
+
+            for (int i = graphics.Count - 1; i >= 0; i--)
+            {
+                Destroy(graphics[i].gameObject);
+            }
+
+            graphics.Clear();
         }
 
         private void ShowInactive(bool show)
