@@ -47,6 +47,7 @@ namespace Netherlands3D.Functionalities.Wfs
             var getCapabilitiesUrl = new Uri(getCapabilitiesString);
             BoundingBoxCache.Instance.GetBoundingBoxContainer(
                 getCapabilitiesUrl,
+                auth,
                 (responseText) => new WfsGetCapabilities(getCapabilitiesUrl, responseText), 
                 SetBoundingBox
             );

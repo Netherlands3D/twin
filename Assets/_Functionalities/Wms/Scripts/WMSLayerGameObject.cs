@@ -93,9 +93,10 @@ namespace Netherlands3D.Functionalities.Wms
             
             var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
             var getCapabilitiesUrl = new Uri(getCapabilitiesString);
-            Legend.Instance.GetLegendUrl(wmsProjectionLayer.WmsUrl, OnLegendUrlsReceived); //todo: make this work with credentials
+            Legend.Instance.GetLegendUrl(wmsProjectionLayer.WmsUrl, OnLegendUrlsReceived);
             BoundingBoxCache.Instance.GetBoundingBoxContainer(
                 getCapabilitiesUrl,
+                auth,
                 (responseText) => new WmsGetCapabilities(getCapabilitiesUrl, responseText),
                 SetBoundingBox
             );

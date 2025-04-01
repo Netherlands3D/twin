@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using KindMen.Uxios;
+using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -11,8 +13,9 @@ namespace Netherlands3D.OgcWebServices.Shared
     {
         public static Dictionary<string, BoundingBoxContainer> BoundingBoxContainers = new();
         private List<string> pendingRequests = new();
-        
+
         private static BoundingBoxCache instance;
+
         public static BoundingBoxCache Instance
         {
             get
@@ -35,12 +38,13 @@ namespace Netherlands3D.OgcWebServices.Shared
                 Destroy(this);
                 return;
             }
+
             instance = this;
         }
-        
+
         private IEnumerator WaitForExistingRequestToComplete(string url, Action<BoundingBoxContainer> callback)
         {
-            while(pendingRequests.Contains(url))
+            while (pendingRequests.Contains(url))
             {
                 yield return null;
             }
@@ -50,55 +54,57 @@ namespace Netherlands3D.OgcWebServices.Shared
             else
                 callback.Invoke(null); // in case the request fails we don't have this url in the cache
         }
-        
-        public void GetBoundingBoxContainer(Uri uri, Func<string, IGetCapabilities> stringToIGetCapabilitiesFactory, Action<BoundingBoxContainer> callback)
+
+        public void GetBoundingBoxContainer(Uri uri, StoredAuthorization auth, Func<string, IGetCapabilities> stringToIGetCapabilitiesFactory, Action<BoundingBoxContainer> callback)
         {
             string urlString = uri.ToString();
             if (BoundingBoxContainers.ContainsKey(urlString))
             {
                 callback.Invoke(BoundingBoxContainers[urlString]);
                 return;
-            } 
-    
+            }
+
             if (pendingRequests.Contains(urlString))
             {
                 StartCoroutine(WaitForExistingRequestToComplete(urlString, callback));
                 return;
             }
-    
+
             if (!OgcWebServicesUtility.IsValidUrl(uri, RequestType.GetCapabilities))
             {
                 Debug.LogError("Bounding boxes not in dictionary, and invalid getCapabilities url provided");
                 callback.Invoke(null);
                 return;
             }
-    
-            StartCoroutine(RequestBoundingBoxes(uri, stringToIGetCapabilitiesFactory, callback));
+
+            StartCoroutine(RequestBoundingBoxes(uri, auth, stringToIGetCapabilitiesFactory, callback));
         }
 
-        private IEnumerator RequestBoundingBoxes(Uri uri, Func<string, IGetCapabilities> factory, Action<BoundingBoxContainer> callback)
+        private IEnumerator RequestBoundingBoxes(Uri uri, StoredAuthorization auth, Func<string, IGetCapabilities> factory, Action<BoundingBoxContainer> callback)
         {
             string url = uri.ToString();
             pendingRequests.Add(url);
-    
-            UnityWebRequest webRequest = UnityWebRequest.Get(url);
-            yield return webRequest.SendWebRequest();
 
-            if (webRequest.result != UnityWebRequest.Result.Success)
+            var config = Config.Default();
+            config = auth.AddToConfig(config);
+
+            var promise = Uxios.DefaultInstance.Get<string>(uri, config);
+            promise.Then(response =>
+            {
+                var getCapabilitiesRequest = factory(response.Data as string);
+                var bboxContainer = AddBoundingBoxContainer(getCapabilitiesRequest);
+                callback.Invoke(bboxContainer);
+            });
+            promise.Catch(exception =>
             {
                 Debug.LogError($"Could not download bounding boxes of {url}");
                 callback.Invoke(null);
-            }
-            else
-            {
-                var getCapabilitiesRequest = factory(webRequest.downloadHandler.text);
-                var bboxContainer = AddBoundingBoxContainer(getCapabilitiesRequest);
-                callback.Invoke(bboxContainer);
-            }
-
+            });
+            yield return Uxios.WaitForRequest(promise);
+            
             pendingRequests.Remove(url);
         }
-        
+
         public static BoundingBoxContainer AddBoundingBoxContainer(IGetCapabilities getCapabilities)
         {
             var bounds = getCapabilities.GetBounds();
