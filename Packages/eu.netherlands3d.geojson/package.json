@@ -1,6 +1,6 @@
 {
   "name": "eu.netherlands3d.geojson",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "displayName": "Netherlands3D - GeoJSON",
   "description": "GeoJSON parsing with extended features for Netherlands3D",
   "unity": "2021.1",
@@ -19,6 +19,6 @@
     "com.unity.modules.unitywebrequest": "1.0.0",
     "com.unity.nuget.newtonsoft-json": "3.2.0",
     "com.virgis.geojson.net":  "1.2.17",
-    "eu.netherlands3d.coordinates": "1.1.0"
+    "eu.netherlands3d.coordinates": "2.0.0"
   }
 }
