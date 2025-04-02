@@ -27,33 +27,38 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
 
-        private ManagedMaterial managedMaterial;
-        public ManagedMaterial ManagedMaterial
+        internal class GeoJsonLineLayerMaterialApplicator : IMaterialApplicatorAdapter
+        {
+            private readonly GeoJSONLineLayer layer;
+
+            public GeoJsonLineLayerMaterialApplicator(GeoJSONLineLayer layer)
+            {
+                this.layer = layer;
+            }
+
+            public Material CreateMaterial()
+            {
+                var features = layer.GetFeatures<BatchedMeshInstanceRenderer>();
+                var style = layer.GetStyling(features.FirstOrDefault());
+                var color = style.GetFillColor() ?? Color.white;
+
+                return layer.GetMaterialInstance(color);
+            }
+
+            public void SetMaterial(Material material) => layer.LineRenderer3D.LineMaterial = material;
+            public Material GetMaterial() => layer.LineRenderer3D.LineMaterial;
+        }
+
+        private GeoJsonLineLayerMaterialApplicator applicator;
+        internal GeoJsonLineLayerMaterialApplicator Applicator
         {
             get
             {
-                if (managedMaterial == null)
-                {
-                    managedMaterial = new ManagedMaterial(
-                        GetMaterialForAllFeatures, 
-                        () => LineRenderer3D.LineMaterial,
-                        mat => LineRenderer3D.LineMaterial = mat
-                    );
-                }
+                if (applicator == null) applicator = new GeoJsonLineLayerMaterialApplicator(this);
 
-                return managedMaterial;
+                return applicator;
             }
-        }
-
-        private Material GetMaterialForAllFeatures()
-        {
-            // TODO: We implement per-feature styling in a separate story; this means that for styling purposes
-            //   we consider this whole layer to be a single feature at the moment
-            var features = GetFeatures<BatchedMeshInstanceRenderer>();
-            var style = GetStyling(features.FirstOrDefault());
-            var color = style.GetFillColor() ?? Color.white;
-
-            return GetMaterialInstance(color);
+            set => applicator = value;
         }
 
         public LineRenderer3D LineRenderer3D
@@ -140,7 +145,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 var newLines = GeometryVisualizationFactory.CreateLineVisualisation(multiLineString, originalCoordinateSystem, lineRenderer3D);
                 newFeatureVisualisation.Data.AddRange(newLines);
             }
-            else if(feature.Geometry is LineString lineString)
+            
+            if(feature.Geometry is LineString lineString)
             {
                 var newLine = GeometryVisualizationFactory.CreateLineVisualization(lineString, originalCoordinateSystem, lineRenderer3D);
                 newFeatureVisualisation.Data.Add(newLine);
@@ -154,11 +160,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
-            
             // The color in the Layer Panel represents the default fill color for this layer
             LayerData.Color = LayerData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
 
-            ManagedMaterial.UpdateMaterial();
+            MaterialApplicator.Apply(this.Applicator);
         }
 
         public void ApplyStyling(FeatureLineVisualisations newFeatureVisualisation)

@@ -25,33 +25,38 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
-        private ManagedMaterial managedMaterial;
-        public ManagedMaterial ManagedMaterial
+        internal class GeoJsonPointLayerMaterialApplicator : IMaterialApplicatorAdapter
+        {
+            private readonly GeoJSONPointLayer layer;
+
+            public GeoJsonPointLayerMaterialApplicator(GeoJSONPointLayer layer)
+            {
+                this.layer = layer;
+            }
+
+            public Material CreateMaterial()
+            {
+                var features = layer.GetFeatures<BatchedMeshInstanceRenderer>();
+                var style = layer.GetStyling(features.FirstOrDefault());
+                var color = style.GetFillColor() ?? Color.white;
+
+                return layer.GetMaterialInstance(color);
+            }
+
+            public void SetMaterial(Material material) => layer.PointRenderer3D.Material = material;
+            public Material GetMaterial() => layer.PointRenderer3D.Material;
+        }
+
+        private GeoJsonPointLayerMaterialApplicator applicator;
+        internal GeoJsonPointLayerMaterialApplicator Applicator
         {
             get
             {
-                if (managedMaterial == null)
-                {
-                    managedMaterial = new ManagedMaterial(
-                        GetMaterialForAllFeatures, 
-                        () => PointRenderer3D.Material,
-                        mat => PointRenderer3D.Material = mat
-                    );
-                }
+                if (applicator == null) applicator = new GeoJsonPointLayerMaterialApplicator(this);
 
-                return managedMaterial;
+                return applicator;
             }
-        }
-
-        private Material GetMaterialForAllFeatures()
-        {
-            // TODO: We implement per-feature styling in a separate story; this means that for styling purposes
-            //   we consider this whole layer to be a single feature at the moment
-            var features = GetFeatures<BatchedMeshInstanceRenderer>();
-            var style = GetStyling(features.FirstOrDefault());
-            var color = style.GetFillColor() ?? Color.white;
-
-            return GetMaterialInstance(color);
+            set => applicator = value;
         }
 
         public List<Mesh> GetMeshData(Feature feature)
@@ -157,7 +162,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // The color in the Layer Panel represents the default fill color for this layer
             LayerData.Color = LayerData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
 
-            ManagedMaterial.UpdateMaterial();
+            MaterialApplicator.Apply(Applicator);
         }
 
         public void ApplyStyling(FeaturePointVisualisations newFeatureVisualisation)
