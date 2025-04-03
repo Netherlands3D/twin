@@ -63,21 +63,26 @@ namespace Netherlands.GeoJSON
 
             return position;
         }
-
+                
         private Bounds CalculateCenterAndExtents(FeatureCollection featureCollection)
         {
             double[] boundingBox = featureCollection.BoundingBoxes ?? featureCollection.DerivedBoundingBoxes();
             int epsgId = featureCollection.EPSGId();
-                      
-            var realWorldTopRight = new Coordinate(epsgId, boundingBox[2], boundingBox[1], elevation);
-            var realWorldBottomLeft = new Coordinate(epsgId, boundingBox[0], boundingBox[3], elevation);
-            var center = (realWorldTopRight + realWorldBottomLeft) * 0.5d;
-            var size = realWorldTopRight - realWorldBottomLeft;
-            Vector3 unityCenter = center.ToUnity();
-            Vector3 unitySize = size.ToUnity();
+
+            var realWorldTopLeft = new Coordinate(epsgId, boundingBox[0], boundingBox[1], elevation);
+            var realWorldBottomRight = new Coordinate(epsgId, boundingBox[2], boundingBox[3], elevation);
+
+            //todo, this is causing a loss of precision because were casting to floats from doubles.
+            //todo, check if its correct to use the depth as size y in the returned Bounds object
+            Vector3 topLeft = realWorldTopLeft.ToUnity();
+            Vector3 bottomRight = realWorldBottomRight.ToUnity();
+            var width = bottomRight.x - topLeft.x;
+            var depth = bottomRight.z - topLeft.z;
+            var center = new Vector3(topLeft.x + 0.5f * width, 0, topLeft.z + 0.5f * depth);
+
             return new Bounds(
-                new Vector3(unityCenter.x, targetGameObject.transform.position.y, unityCenter.z),
-                new Vector3(unitySize.x, unitySize.z, 0f)
+                new Vector3(center.x, targetGameObject.transform.position.y, center.z),
+                new Vector3(Convert.ToSingle(width), Convert.ToSingle(depth), 0f)
             );
         }
 
