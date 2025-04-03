@@ -71,9 +71,16 @@ namespace Netherlands3D.Coordinates
         public double value1;
         public double value2;
         public double value3;
-        public int PointsLength;
+        public int PointsLength 
+        { 
+            get 
+            { 
+                return CoordinateSystems.operators[(CoordinateSystem)this.coordinateSystem].AxisCount();
+            } 
+        }
 
         private CoordinateSystemOperation converter;
+        
 
 #if NEWTONSOFT
         [JsonIgnore]
@@ -81,16 +88,8 @@ namespace Netherlands3D.Coordinates
         public double easting
         {
             get
-            {
-                if (converter == null)
-                {
-                    if (!CoordinateSystems.operators.ContainsKey((CoordinateSystem)CoordinateSystem)) 
-                    {
-                        return 0;
-                    }
-                    converter = CoordinateSystems.operators[(CoordinateSystem)CoordinateSystem];
-                }
-                switch (converter.EastingIndex())
+            {                
+                switch (CoordinateSystems.operators[(CoordinateSystem)this.coordinateSystem].EastingIndex())
                 {
                     case 0: return value1;
                     case 1: return value2;
@@ -100,15 +99,7 @@ namespace Netherlands3D.Coordinates
             }
             set
             {
-                if (converter == null)
-                {
-                    if (!CoordinateSystems.operators.ContainsKey((CoordinateSystem)CoordinateSystem))
-                    {
-                        return;
-                    }
-                    converter = CoordinateSystems.operators[(CoordinateSystem)CoordinateSystem];
-                }
-                switch (converter.EastingIndex())
+                switch (CoordinateSystems.operators[(CoordinateSystem)this.coordinateSystem].EastingIndex())
                 {
                     case 0: value1 = value; break;
                     case 1: value2 = value; break;
@@ -123,15 +114,7 @@ namespace Netherlands3D.Coordinates
         {
             get
             {
-                if (converter == null)
-                {
-                    if (!CoordinateSystems.operators.ContainsKey((CoordinateSystem)CoordinateSystem))
-                    {
-                        return 0;
-                    }
-                    converter = CoordinateSystems.operators[(CoordinateSystem)CoordinateSystem];
-                }
-                switch (converter.NorthingIndex())
+                switch (CoordinateSystems.operators[(CoordinateSystem)this.coordinateSystem].NorthingIndex())
                 {
                     case 0: return value1;
                     case 1: return value2;
@@ -141,15 +124,7 @@ namespace Netherlands3D.Coordinates
             }
             set
             {
-                if (converter == null)
-                {
-                    if (!CoordinateSystems.operators.ContainsKey((CoordinateSystem)CoordinateSystem))
-                    {
-                        return;
-                    }
-                    converter = CoordinateSystems.operators[(CoordinateSystem)CoordinateSystem];
-                }
-                switch (converter.NorthingIndex())
+                switch (CoordinateSystems.operators[(CoordinateSystem)this.coordinateSystem].NorthingIndex())
                 {
                     case 0: value1 = value; break;
                     case 1: value2 = value; break;
@@ -181,7 +156,6 @@ namespace Netherlands3D.Coordinates
             value1 = points[0];
             value2 = points.Length > 1 ? points[1] : 0;
             value3 = points.Length > 2 ? points[2] : 0;
-            PointsLength = points.Length;
             extraLongitudeRotation = 0;
             extraLattitudeRotation = 0;
         }
@@ -193,7 +167,6 @@ namespace Netherlands3D.Coordinates
             this.value1 = x;
             this.value2 = y;
             this.value3 = 0;
-            PointsLength = 2;
             extraLongitudeRotation = 0;
             extraLattitudeRotation = 0;
         }
@@ -205,7 +178,6 @@ namespace Netherlands3D.Coordinates
             this.value1 = x;
             this.value2 = y;
             this.value3 = z;
-            PointsLength = 3;
             extraLongitudeRotation = 0;
             extraLattitudeRotation = 0;
         }
@@ -221,7 +193,6 @@ namespace Netherlands3D.Coordinates
             value1 = Points[0];
             value2 = Points.Length > 1 ? Points[1] : 0;
             value3 = Points.Length > 2 ? Points[2] : 0;
-            PointsLength = Points.Length;
             this.extraLongitudeRotation = extraLongitudeRotation;
             this.extraLattitudeRotation = extraLatitudeRotation;
         }
@@ -233,7 +204,6 @@ namespace Netherlands3D.Coordinates
             this.value1 = x;
             this.value2 = y;
             this.value3 = 0;
-            PointsLength = 2;
             this.extraLongitudeRotation = extraLongitudeRotation;
             this.extraLattitudeRotation = extraLatitudeRotation;
         }
@@ -245,7 +215,6 @@ namespace Netherlands3D.Coordinates
             this.value1 = x;
             this.value2 = y;
             this.value3 = z;
-            PointsLength = 3;
             this.extraLongitudeRotation = extraLongitudeRotation;
             this.extraLattitudeRotation = extraLatitudeRotation;
         }
@@ -258,7 +227,6 @@ namespace Netherlands3D.Coordinates
             value1 = points[0];
             value2 = points.Length > 1 ? points[1] : 0;
             value3 = points.Length > 2 ? points[2] : 0;
-            PointsLength = points.Length;
             extraLongitudeRotation = 0;
             extraLattitudeRotation = 0;
         }
@@ -270,7 +238,6 @@ namespace Netherlands3D.Coordinates
             this.value1 = x;
             this.value2 = y;
             this.value3 = 0;
-            PointsLength = 2;
             extraLongitudeRotation = 0;
             extraLattitudeRotation = 0;
         }
@@ -282,26 +249,12 @@ namespace Netherlands3D.Coordinates
             this.value1 = x;
             this.value2 = y;
             this.value3 = z;
-            PointsLength = 3;
             extraLongitudeRotation = 0;
             extraLattitudeRotation = 0;
         }
 
         public Coordinate(Vector3 unityPosition)
         {
-            if (!CoordinateSystems.operators.ContainsKey(CoordinateSystems.connectedCoordinateSystem))
-            {
-                PointsLength = 3;
-                value1 = 0;
-                value2 = 0;
-                value3 = 0;
-                coordinateSystem = (int)CoordinateSystems.connectedCoordinateSystem;
-                extraLattitudeRotation = 0;
-                extraLongitudeRotation = 0;
-                converter = null;
-                return;
-            }
-
             converter = CoordinateSystems.operators[CoordinateSystems.connectedCoordinateSystem];
             extraLattitudeRotation = 0;
             extraLongitudeRotation = 0;
@@ -327,18 +280,16 @@ namespace Netherlands3D.Coordinates
                 value2 = unrotatedRelativePosition.z;
                 value3 = unrotatedRelativePosition.y;
             }
-            coordinateSystem = (int)CoordinateSystems.connectedCoordinateSystem;          
-            PointsLength = 3;
+            coordinateSystem = (int)CoordinateSystems.connectedCoordinateSystem;   
             Coordinate newCoordinate = CoordinateSystems.CoordinateAtUnityOrigin + new Coordinate(CoordinateSystem, value1, value2, value3);            
             value1 = newCoordinate.value1;
             value2 = newCoordinate.value2;
             value3 = newCoordinate.value3;
-        }
+        }        
 
         public Coordinate(CoordinateSystem coordinateSystem)
         {
             converter = CoordinateSystems.operators[coordinateSystem];
-            PointsLength = converter.AxisCount();
             value1 = 0;
             value2 = 0;
             value3 = 0;
@@ -457,17 +408,11 @@ namespace Netherlands3D.Coordinates
                 return this;
             }
 
-            if ((CoordinateSystem)this.CoordinateSystem == Coordinates.CoordinateSystem.Unity)
-            {
-                Vector3 vector3 = new Vector3((float)value1, (float)value2, (float)value3);
-                Coordinate coord = new Coordinate(vector3);
-                return coord.Convert(targetCoordinateSystem);
-            }
-
-            if (!CoordinateSystems.operators.ContainsKey(CoordinateSystems.connectedCoordinateSystem)) 
+            CoordinateSystemOperation converter = CoordinateSystems.operators[(CoordinateSystem)this.CoordinateSystem];
+            if (converter is Undefined_Operations)
                 return this;
 
-            CoordinateSystemOperation converter = CoordinateSystems.operators[(CoordinateSystem)this.CoordinateSystem];
+
             //if (converter.CoordinateIsValid(this)==false)
             //{
             //    Debug.LogWarning($"coordinate is not valid: epsg{this.CoordinateSystem} {Points.ToString()}");
