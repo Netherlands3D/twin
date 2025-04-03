@@ -76,29 +76,21 @@ namespace Netherlands3D.DataTypeAdapters
         private IEnumerator DownloadDataToLocalCache(StoredAuthorization auth, LocalFile urlAndData)
         {
             var url = new Uri(urlAndData.SourceUrl);
-            if (auth is QueryStringAuthorization queryStringAuthorization)
-                url = queryStringAuthorization.GetFullUri(url);
-            
-            var request = Resource<FileInfo>.At(url);
-            
-            if (auth is HeaderBasedAuthorization headerBasedAuthorization)
-            {
-                var header = (Header)headerBasedAuthorization.GetHeaderKeyAndValue();
-                request = request.With(header);
-            }
+            var config = Config.Default();
+            config = auth.AddToConfig(config);
+            var promise = Uxios.DefaultInstance.Get<FileInfo>(url, config);
 
-            var futureFileInfo = request.Value;
             // We want to use and manipulate urlAndData, so we 'curry' it by wrapping a method call in a lambda 
-            futureFileInfo.Then(info =>
+            promise.Then(response =>
             {                
-                DownloadSucceeded(urlAndData, info);
+                DownloadSucceeded(urlAndData, response.Data as FileInfo);
             });        
-            futureFileInfo.Catch(error =>
+            promise.Catch(error =>
             {
                 DownloadFailed(urlAndData, error);
             });
             
-            yield return Uxios.WaitForRequest(futureFileInfo);
+            yield return Uxios.WaitForRequest(promise);
         }
 
         private string DownloadSucceeded(LocalFile urlAndData, FileSystemInfo info)
