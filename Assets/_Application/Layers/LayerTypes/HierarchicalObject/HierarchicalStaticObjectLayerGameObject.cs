@@ -20,15 +20,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             transformPropertyData.LocalScale = Scale;
         }
 
-        private void OnValidate()
-        {
-            if (transformPropertyData == null) return;
-
-            transformPropertyData.Position = new Coordinate(coordinateSystem, Coordinates.y, Coordinates.x, Coordinates.z );
-            transformPropertyData.EulerRotation = Rotation;
-            transformPropertyData.LocalScale = Scale;
-        }
-
         protected override void UpdatePosition(Coordinate newPosition)
         {
             base.UpdatePosition(newPosition);
