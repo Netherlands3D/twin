@@ -68,9 +68,7 @@ namespace Netherlands.GeoJSON
         {
             double[] boundingBox = featureCollection.BoundingBoxes ?? featureCollection.DerivedBoundingBoxes();
             int epsgId = featureCollection.EPSGId();
-
-            var realWorldTopLeft = new Coordinate(epsgId, boundingBox[0], boundingBox[1], elevation);
-            var realWorldBottomRight = new Coordinate(epsgId, boundingBox[2], boundingBox[3], elevation);
+                      
             var realWorldTopRight = new Coordinate(epsgId, boundingBox[2], boundingBox[1], elevation);
             var realWorldBottomLeft = new Coordinate(epsgId, boundingBox[0], boundingBox[3], elevation);
             var center = (realWorldTopRight + realWorldBottomLeft) * 0.5d;
