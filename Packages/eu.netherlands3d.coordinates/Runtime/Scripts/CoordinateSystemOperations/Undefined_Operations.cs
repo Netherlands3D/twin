@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,11 +17,11 @@ namespace Netherlands3D.Coordinates
 
         public override int NorthingIndex()
         {
-            return 1;
+            return -1;
         }
         public override int EastingIndex()
         {
-            return 0;
+            return -1;
         }
         public override int AxisCount()
         {
@@ -28,12 +29,12 @@ namespace Netherlands3D.Coordinates
         }
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
         {
-            return new Coordinate(CoordinateSystem.Undefined);
+            throw new InvalidOperationException("This method should not be called and is not defined.");
         }
 
         public override Coordinate ConvertToWGS84LatLonH(Coordinate coordinate)
         {
-            return new Coordinate(CoordinateSystem.Undefined);
+            throw new InvalidOperationException("This method should not be called and is not defined.");
         }
 
         public override bool CoordinateIsValid(Coordinate coordinate)
@@ -53,17 +54,17 @@ namespace Netherlands3D.Coordinates
 
         public override Vector3WGS GlobalUpDirection(Coordinate coordinate)
         {
-            return new Vector3WGS();
+            throw new InvalidOperationException("This method should not be called and is not defined.");
         }
 
         public override Vector3WGS LocalUpDirection(Coordinate coordinate)
         {
-            return new Vector3WGS();
+            throw new InvalidOperationException("This method should not be called and is not defined.");
         }
 
         public override Vector3WGS Orientation()
         {
-            return new Vector3WGS();
+            throw new InvalidOperationException("This method should not be called and is not defined.");
         }
     }
 }

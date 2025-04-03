@@ -409,6 +409,10 @@ namespace Netherlands3D.Coordinates
             }
 
             CoordinateSystemOperation converter = CoordinateSystems.operators[(CoordinateSystem)this.CoordinateSystem];
+            if (converter is Undefined_Operations)
+                return this;
+
+
             //if (converter.CoordinateIsValid(this)==false)
             //{
             //    Debug.LogWarning($"coordinate is not valid: epsg{this.CoordinateSystem} {Points.ToString()}");
