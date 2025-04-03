@@ -71,19 +71,15 @@ namespace Netherlands.GeoJSON
 
             var realWorldTopLeft = new Coordinate(epsgId, boundingBox[0], boundingBox[1], elevation);
             var realWorldBottomRight = new Coordinate(epsgId, boundingBox[2], boundingBox[3], elevation);
-            Coordinate topLeft = new Coordinate(realWorldTopLeft.ToUnity());
-            Coordinate bottomRight = new Coordinate(realWorldBottomRight.ToUnity());
-            var width = bottomRight.value1 - topLeft.value1;
-            var depth = bottomRight.value3 - topLeft.value3;
-            var center = new Vector3(
-               Convert.ToSingle(topLeft.value1 + width * .5d),
-               0,
-               Convert.ToSingle(topLeft.value3 + depth * .5d)
-            );
-
+            var realWorldTopRight = new Coordinate(epsgId, boundingBox[2], boundingBox[1], elevation);
+            var realWorldBottomLeft = new Coordinate(epsgId, boundingBox[0], boundingBox[3], elevation);
+            var center = (realWorldTopRight + realWorldBottomLeft) * 0.5d;
+            var size = realWorldTopRight - realWorldBottomLeft;
+            Vector3 unityCenter = center.ToUnity();
+            Vector3 unitySize = size.ToUnity();
             return new Bounds(
-                new Vector3(center.x, targetGameObject.transform.position.y, center.z),
-                new Vector3(Convert.ToSingle(width), Convert.ToSingle(depth), 0f)
+                new Vector3(unityCenter.x, targetGameObject.transform.position.y, unityCenter.z),
+                new Vector3(unitySize.x, unitySize.z, 0f)
             );
         }
 
