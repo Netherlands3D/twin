@@ -115,7 +115,7 @@ namespace Netherlands3D.Coordinates
             CoordinateSystemOperation myConverter = CoordinateSystems.operators[_connectedCoordinateSystem];
 
             // Up-direction in the coordinateSystem at the coordinate
-            wgsAtUp = myConverter.LocalUpDirection(_coordinateAtOrigin.Value);
+            wgsAtUp = myConverter.LocalUpDirection(_coordinateAtOrigin);
             EPSG4936.relativeCenter = CoordinateConverter.ConvertTo(coordinateAtUnityOrigin, CoordinateSystem.ETRS89_ECEF).ToVector3ECEF();
 
             /// we want to find out how much we have to rotate to make the localUpDirection align with the orientation of the coordinateSystem
@@ -136,17 +136,10 @@ namespace Netherlands3D.Coordinates
             
         }
 
-        static Coordinate? _coordinateAtOrigin;
+        static Coordinate _coordinateAtOrigin = new Coordinate(Vector3.zero);
 
-        public static Coordinate CoordinateAtUnityOrigin
-        {
-            get
-            {
-                _coordinateAtOrigin ??= new Coordinate(); //lazily init
-                return _coordinateAtOrigin.Value;
-            }
-        }
-
+        public static Coordinate CoordinateAtUnityOrigin => _coordinateAtOrigin;
+        
     }
 
 }
