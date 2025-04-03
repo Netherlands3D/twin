@@ -284,11 +284,11 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.address-search": {
-      "version": "2.0.0",
+      "version": "2.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "eu.netherlands3d.coordinates": "1.6.2"
+        "eu.netherlands3d.coordinates": "2.0.0"
       },
       "url": "https://package.openupm.com"
     },
@@ -312,7 +312,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.coordinates": {
-      "version": "1.9.2",
+      "version": "2.0.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -338,27 +338,27 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
-    "eu.netherlands3d.functionalities.google-reality-mesh": {
-      "version": "file:eu.netherlands3d.functionalities.google-reality-mesh",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "eu.netherlands3d.floating-origin": {
       "version": "file:eu.netherlands3d.floating-origin",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
+    "eu.netherlands3d.functionalities.google-reality-mesh": {
+      "version": "file:eu.netherlands3d.functionalities.google-reality-mesh",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "eu.netherlands3d.geojson": {
-      "version": "1.1.0",
+      "version": "1.1.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.modules.unitywebrequest": "1.0.0",
         "com.unity.nuget.newtonsoft-json": "3.2.0",
         "com.virgis.geojson.net": "1.2.17",
-        "eu.netherlands3d.coordinates": "1.1.0"
+        "eu.netherlands3d.coordinates": "2.0.0"
       },
       "url": "https://package.openupm.com"
     },
@@ -408,10 +408,12 @@
       "hash": "0b4407a447e08aa3b5260ba6fce5934b4cfde21d"
     },
     "eu.netherlands3d.minimap": {
-      "version": "1.1.6",
+      "version": "1.1.7",
       "depth": 0,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": {
+        "eu.netherlands3d.coordinates": "2.0.0"
+      },
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.obj-importer": {
@@ -442,12 +444,13 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.selection-tools": {
-      "version": "2.7.0",
+      "version": "2.7.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "eu.netherlands3d.poly2tri": "2.0.0",
-        "com.unity.inputsystem": "1.5.1"
+        "com.unity.inputsystem": "1.5.1",
+        "eu.netherlands3d.coordinates": "2.0.0"
       },
       "url": "https://package.openupm.com"
     },
