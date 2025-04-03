@@ -1,6 +1,6 @@
 {
   "name": "eu.netherlands3d.minimap",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "displayName": "Netherlands3D - Minimap",
   "description": "A unity canvas minimap for WMTS services",
   "unity": "2022.2",
@@ -15,5 +15,6 @@
     "url": "https://www.netherlands3d.eu"
   },
   "dependencies": {
+    "eu.netherlands3d.coordinates": "2.0.0"
   }
 }
