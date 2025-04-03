@@ -5,6 +5,19 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.1] - 2025-04-01
+
+### Fixed
+
+- Removed the to unity coordinate conversion
+
+## [2.0.0] - 2024-06-03
+
+### Added
+
+- update coordinate conversion package dependency to specific 1.6.2 version
+- changed code so new coordinate conversion methods are used, and lat lon order is used,- fixing potential bugs with applications using latest coordinate conversion package
+
 ## [1.1.3] - 2024-02-20
 
 ### Fixed
