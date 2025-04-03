@@ -29,10 +29,10 @@ namespace Netherlands3D.SelectionTools
         public void ConvertToRD(Bounds bounds)
         {
             //Convert bounds to RD coordinates on a 2D map
-            Coordinate min = new Coordinate(CoordinateSystem.Unity, bounds.min.x, bounds.min.y, bounds.min.z);
-            var bottomLeft = CoordinateConverter.ConvertTo(min, CoordinateSystem.RD).ToVector3(); 
-            Coordinate max = new Coordinate(CoordinateSystem.Unity, bounds.max.x, bounds.max.y, bounds.max.z);
-            var topRight = CoordinateConverter.ConvertTo(max, CoordinateSystem.RD).ToVector3();
+            Coordinate min = new Coordinate(bounds.min);
+            var bottomLeft = min.Convert(CoordinateSystem.RD).ToVector3();
+            Coordinate max = new Coordinate(bounds.max);
+            var topRight = max.Convert(CoordinateSystem.RD).ToVector3();
 
             boundingBoxRDEvent.Invoke(new double[] { bottomLeft.x, bottomLeft.y, topRight.x, topRight.y });
         }
