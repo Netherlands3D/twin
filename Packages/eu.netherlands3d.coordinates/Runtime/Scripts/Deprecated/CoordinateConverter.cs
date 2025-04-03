@@ -235,10 +235,6 @@ namespace Netherlands3D.Coordinates
         public static Vector3RD UnitytoRD(Vector3 coordinate)
         {
             return new Coordinate(coordinate).Convert(CoordinateSystem.RDNAP).ToVector3RD();
-            
-            //var source = new Coordinate(CoordinateSystem.Unity, coordinate.x, coordinate.y, coordinate.z);
-
-            //return ConvertTo(source, CoordinateSystem.RDNAP).ToVector3RD();
         }
 
         /// <summary>
@@ -287,9 +283,9 @@ namespace Netherlands3D.Coordinates
         }
 
         [Obsolete("UnityToECEF() is deprecated, please use ConvertTo")]
-        public static Vector3ECEF UnityToECEF(Vector3 coordinate)
+        public static Vector3ECEF UnityToECEF(Vector3 unityPosition)
         {
-            return ConvertTo(new Coordinate(coordinate), CoordinateSystem.ETRS89_ECEF).ToVector3ECEF();
+            return ConvertTo(new Coordinate(unityPosition), CoordinateSystem.ETRS89_ECEF).ToVector3ECEF();
         }
 
         [Obsolete("WGS84toECEF() is deprecated, please use ConvertTo()")]

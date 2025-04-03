@@ -54,6 +54,7 @@ namespace Netherlands3D.Coordinates
 
         private void MoveToNewOrigin(Vector3 offset)
         {
+            //todo check if the offset is still needed?
             Coordinate coord = new Coordinate(CoordinateSystem.ETRS89_ECEF, ecefPosition.X, ecefPosition.Y, ecefPosition.Z);
             transform.position = coord.ToUnity();
         }

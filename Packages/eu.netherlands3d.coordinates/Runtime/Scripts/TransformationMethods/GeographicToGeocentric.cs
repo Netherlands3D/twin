@@ -7,7 +7,7 @@ namespace Netherlands3D.Coordinates
     internal static class GeographicToGeocentric
     {
 
-        internal static Coordinate Forward(Coordinate coordinate, GeographicToGeocentricSettings settings)
+        internal static (double x, double y, double z) Forward(Coordinate coordinate, GeographicToGeocentricSettings settings)
         {
             double lattitude = coordinate.value1 * Math.PI / 180.0d;
             double longitude = (coordinate.value2 + settings.primeMeridian) * Math.PI / 180.0d;
@@ -17,10 +17,10 @@ namespace Netherlands3D.Coordinates
             double X = (primeVerticalRadius + ellipisoidalHeight) * Math.Cos(lattitude) * Math.Cos(longitude);
             double Y = (primeVerticalRadius + ellipisoidalHeight) * Math.Cos(lattitude) * Math.Sin(longitude);
             double Z = ((1d - Math.Pow(settings.eccentricity, 2)) * primeVerticalRadius + ellipisoidalHeight) * Math.Sin(lattitude);
-            return new Coordinate(CoordinateSystem.Undefined, X, Y, Z); //temporary unity coordinate container
+            return (X, Y, Z); //temporary unity coordinate container
 
         }
-        internal static Coordinate Reverse(Coordinate coordinate, GeographicToGeocentricSettings settings)
+        internal static (double x, double y, double z) Reverse(Coordinate coordinate, GeographicToGeocentricSettings settings)
         {
             double X = coordinate.value1;
             double Y = coordinate.value2;
@@ -49,7 +49,7 @@ namespace Netherlands3D.Coordinates
             lattitude = iteratedLattitude;
             double longitude = Math.Atan2(Y, X);
             double height = (p / Math.Cos(lattitude)) - primeVerticalRadius;
-            return new Coordinate(CoordinateSystem.Undefined, lattitude * 180 / Math.PI, (longitude * 180 / Math.PI) - settings.primeMeridian, height);//temporary unity coordinate container
+            return (lattitude * 180 / Math.PI, (longitude * 180 / Math.PI) - settings.primeMeridian, height);//temporary unity coordinate container
 
         }
     }

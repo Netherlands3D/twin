@@ -17,8 +17,8 @@ namespace Netherlands3D.Coordinates
 
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
         {
-            Coordinate result = GeographicToGeocentric.Forward(coordinate, conversionSettings);
-            Coordinate output = new Coordinate(CoordinateSystem.ETRS89_ECEF, result.value1, result.value2, result.value3);
+            (double x, double y, double z) = GeographicToGeocentric.Forward(coordinate, conversionSettings);
+            Coordinate output = new Coordinate(CoordinateSystem.ETRS89_ECEF, x, y, z);
             output.extraLattitudeRotation = coordinate.extraLattitudeRotation;
             output.extraLongitudeRotation = coordinate.extraLongitudeRotation;
             return output;
@@ -27,8 +27,8 @@ namespace Netherlands3D.Coordinates
 
         public override Coordinate ConvertToWGS84LatLonH(Coordinate coordinate)
         {
-            Coordinate result = GeographicToGeocentric.Reverse(coordinate, conversionSettings);
-            Coordinate output = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, result.value1, result.value2, result.value3);
+            (double x, double y, double z) = GeographicToGeocentric.Reverse(coordinate, conversionSettings);
+            Coordinate output = new Coordinate(CoordinateSystem.WGS84_LatLonHeight, x, y, z);
             output.extraLattitudeRotation = coordinate.extraLattitudeRotation;
             output.extraLongitudeRotation = coordinate.extraLongitudeRotation;
 
