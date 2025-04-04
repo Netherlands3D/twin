@@ -4,7 +4,6 @@ using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
 using System.Linq;
-using KindMen.Uxios;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
@@ -58,19 +57,16 @@ namespace Netherlands3D.Functionalities.Wms
         protected override void Start()
         {
             base.Start();
-            UpdateURL(urlPropertyData.Data);  
+            UpdateURL(urlPropertyData.Data);
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
-        }
-
-        private void OnLegendUrlsReceived(LegendUrlContainer urlContainer)
-        {
-            SetLegendActive(ShowLegendOnSelect);
+            Legend.Instance.RegisterUrl(urlPropertyData.Data.ToString());
+            Legend.Instance.ShowLegend(urlPropertyData.Data.ToString(), ShowLegendOnSelect);
         }
 
         public void SetLegendActive(bool active)
         {
-            Legend.Instance.ShowLegend(wmsProjectionLayer.WmsUrl, active);
+            Legend.Instance.ShowLegend(urlPropertyData.Data.ToString(), active);
         }
 
         //a higher order means rendering over lower indices
@@ -84,23 +80,22 @@ namespace Netherlands3D.Functionalities.Wms
         {
             ClearCredentials();
 
-            if(auth is FailedOrUnsupported)
+            if (auth is FailedOrUnsupported)
             {
                 LayerData.HasValidCredentials = false;
                 WMSProjectionLayer.isEnabled = false;
                 return;
             }
-            
+
             var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsProjectionLayer.WmsUrl, ServiceType.Wms);
             var getCapabilitiesUrl = new Uri(getCapabilitiesString);
-            Legend.Instance.GetLegendUrl(wmsProjectionLayer.WmsUrl, OnLegendUrlsReceived);
             BoundingBoxCache.Instance.GetBoundingBoxContainer(
                 getCapabilitiesUrl,
                 auth,
                 (responseText) => new WmsGetCapabilities(getCapabilitiesUrl, responseText),
                 SetBoundingBox
             );
-            
+
             WMSProjectionLayer.SetAuthorization(auth);
             LayerData.HasValidCredentials = true;
             WMSProjectionLayer.RefreshTiles();
@@ -136,6 +131,7 @@ namespace Netherlands3D.Functionalities.Wms
             LayerData.LayerSelected.RemoveListener(OnSelectLayer);
             LayerData.LayerDeselected.RemoveListener(OnDeselectLayer);
             credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
+            Legend.Instance.UnregisterUrl(urlPropertyData.Data.ToString());
         }
 
         private void OnSelectLayer(LayerData layer)
@@ -145,8 +141,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         private void OnDeselectLayer(LayerData layer)
         {
-            if (!string.IsNullOrEmpty(wmsProjectionLayer.WmsUrl))
-                SetLegendActive(false);
+            SetLegendActive(false);
         }
 
         public void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)

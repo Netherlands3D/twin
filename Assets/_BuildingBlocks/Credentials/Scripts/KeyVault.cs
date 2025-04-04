@@ -155,7 +155,7 @@ namespace Netherlands3D.Credentials
             {
                 var potentialAuth = CreateStoredAuthorization(supportedAuthorization, uri, passwordOrKey, username); // pass usernameOrKey before username for constructor order
                 yield return TrySupportedAuthorization(potentialAuth, uri);
-                if (storedAuthorizations.ContainsKey(uri)) yield break; // if the Auth test was succesful, stop looking.
+                if (storedAuthorizations.ContainsKey(potentialAuth.Domain)) yield break; // if the Auth test was succesful, stop looking.
             }
         }
 
