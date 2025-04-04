@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8363319932289052987}
   - component: {fileID: 5593278776292583182}
   - component: {fileID: -2609350098801323660}
+  - component: {fileID: 3380251589959099885}
   m_Layer: 0
   m_Name: WFSGeoJsonLayer
   m_TagString: Untagged
@@ -52,7 +53,6 @@ MonoBehaviour:
   onHide:
     m_PersistentCalls:
       m_Calls: []
-  maxFeatureVisualsPerFrame: 20
   polygonLayerPrefab: {fileID: 5640076176564817079, guid: 509ce6cf579d6ed4b946913dff7eaed4,
     type: 3}
   lineLayerPrefab: {fileID: -8140904490283006168, guid: 1efd25daf167bd74bafd6eea4aeda576,
@@ -83,3 +83,16 @@ MonoBehaviour:
   onLayerDisabled:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3380251589959099885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418701555395206593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}

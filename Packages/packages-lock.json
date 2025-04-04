@@ -44,7 +44,7 @@
       "url": "https://package.openupm.com"
     },
     "com.kind-men.uxios": {
-      "version": "0.3.3",
+      "version": "0.3.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -478,7 +478,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.sun": {
-      "version": "1.4.0",
+      "version": "1.4.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -488,7 +488,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "1.10.5",
+      "version": "1.10.6",
       "depth": 0,
       "source": "registry",
       "dependencies": {

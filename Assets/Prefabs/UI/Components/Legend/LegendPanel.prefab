@@ -1798,6 +1798,7 @@ GameObject:
   m_Component:
   - component: {fileID: 100490387325816324}
   - component: {fileID: 4842460990595919896}
+  - component: {fileID: 3082309024575696313}
   m_Layer: 5
   m_Name: LegendPanel
   m_TagString: Untagged
@@ -1840,6 +1841,19 @@ MonoBehaviour:
   mainPanel: {fileID: 8334070143125967649}
   inactive: {fileID: 8430861414763146394}
   graphicPrefab: {fileID: 177061350935732628}
+--- !u!114 &3082309024575696313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8914564851768690803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
 --- !u!1 &9145774060980445307
 GameObject:
   m_ObjectHideFlags: 0
