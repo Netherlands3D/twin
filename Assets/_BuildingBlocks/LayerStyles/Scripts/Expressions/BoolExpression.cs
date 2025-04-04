@@ -19,6 +19,11 @@ namespace Netherlands3D.LayerStyles.Expressions
         {
             return value;
         }
+        
+        public static implicit operator BoolExpression(bool value)
+        {
+            return new BoolExpression(value);
+        }
 
         public override string ToString()
         {

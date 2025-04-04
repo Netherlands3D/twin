@@ -39,9 +39,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             if (Keyboard.current.kKey.wasPressedThisFrame)
             {
-                print(startIndex);
-
-                // angle = GetAngle();
                 grid = CompoundPolygon.GenerateGridPoints(poly.Bounds, cellSize, angle, out var gridBounds); // we need the gridBounds out variable. 
             }
         }
@@ -54,9 +51,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             var dir = p1 - p0;
 
-            var angle = Vector2.Angle(Vector2.up, dir);
-            print(p0 + "\t" + p1 + "\t" + angle);
-            return angle;
+            return Vector2.Angle(Vector2.up, dir);
         }
 
         private void OnDrawGizmos()

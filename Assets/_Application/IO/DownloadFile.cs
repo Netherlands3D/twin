@@ -63,7 +63,6 @@ namespace Netherlands3D.Twin.IO
             }
 
             var extension = Path.GetExtension(filename);
-            print(extension);
             if (!validFileExtensions.Contains(extension))
             {
                 Debug.LogError("The provided URL does not contain a file with a valid file extension. File found: " + filename);

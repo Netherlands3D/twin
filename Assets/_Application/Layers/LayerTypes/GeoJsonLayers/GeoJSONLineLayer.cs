@@ -27,6 +27,40 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
 
+        internal class GeoJsonLineLayerMaterialApplicator : IMaterialApplicatorAdapter
+        {
+            private readonly GeoJSONLineLayer layer;
+
+            public GeoJsonLineLayerMaterialApplicator(GeoJSONLineLayer layer)
+            {
+                this.layer = layer;
+            }
+
+            public Material CreateMaterial()
+            {
+                var features = layer.GetFeatures<BatchedMeshInstanceRenderer>();
+                var style = layer.GetStyling(features.FirstOrDefault());
+                var color = style.GetFillColor() ?? Color.white;
+
+                return layer.GetMaterialInstance(color);
+            }
+
+            public void SetMaterial(Material material) => layer.LineRenderer3D.LineMaterial = material;
+            public Material GetMaterial() => layer.LineRenderer3D.LineMaterial;
+        }
+
+        private GeoJsonLineLayerMaterialApplicator applicator;
+        internal GeoJsonLineLayerMaterialApplicator Applicator
+        {
+            get
+            {
+                if (applicator == null) applicator = new GeoJsonLineLayerMaterialApplicator(this);
+
+                return applicator;
+            }
+            set => applicator = value;
+        }
+
         public LineRenderer3D LineRenderer3D
         {
             get => lineRenderer3D;
@@ -104,14 +138,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             var newFeatureVisualisation = new FeatureLineVisualisations { feature = feature };
 
-            ApplyStyling(feature);
+            ApplyStyling(newFeatureVisualisation);
 
             if (feature.Geometry is MultiLineString multiLineString)
             {
                 var newLines = GeometryVisualizationFactory.CreateLineVisualisation(multiLineString, originalCoordinateSystem, lineRenderer3D);
                 newFeatureVisualisation.Data.AddRange(newLines);
             }
-            else if(feature.Geometry is LineString lineString)
+            
+            if(feature.Geometry is LineString lineString)
             {
                 var newLine = GeometryVisualizationFactory.CreateLineVisualization(lineString, originalCoordinateSystem, lineRenderer3D);
                 newFeatureVisualisation.Data.Add(newLine);
@@ -125,17 +160,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
-            lineRenderer3D.LineMaterial = GetMaterialInstance();
+            // The color in the Layer Panel represents the default fill color for this layer
+            LayerData.Color = LayerData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
+
+            MaterialApplicator.Apply(this.Applicator);
         }
 
-        public void ApplyStyling(Feature feature)
+        public void ApplyStyling(FeatureLineVisualisations newFeatureVisualisation)
         {
             // Currently we don't apply individual styling per feature
         }
         
-        private Material GetMaterialInstance()
+        private Material GetMaterialInstance(Color strokeColor)
         {
-            var strokeColor = LayerData.DefaultSymbolizer.GetStrokeColor() ?? Color.white;
             return new Material(lineRenderer3D.LineMaterial)
             {
                 color = strokeColor
