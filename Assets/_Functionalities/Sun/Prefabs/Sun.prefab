@@ -238,9 +238,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f782b82bd5f34347959da3fe50fbf23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 6.5
+  range: 10
   minShadowDistance: 100
-  maxShadowDistance: 4000
+  maxShadowDistance: 10000
   referenceTransform: {fileID: 0}
 --- !u!114 &8404321259263708701
 MonoBehaviour:
