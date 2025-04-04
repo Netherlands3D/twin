@@ -92,7 +92,7 @@ namespace Netherlands3D.Credentials
             // 2. In case we know the type for this base Uri, try that first
             if (expectedAuthorizationTypes.TryGetValue(domain.Host, out var expectedType))
             {
-                //it's not public, so we need some kind of authorization. if the passwordOrKey is empty, we already know it will fail. Maybe expand this in the future with a more robust check
+                // if it's not public, so we need some kind of authorization. if the passwordOrKey is empty, we already know it will fail. Maybe expand this in the future with a more robust check
                 if (expectedType != typeof(Public) && string.IsNullOrEmpty(passwordOrKey))
                 {
                     OnAuthorizationTypeDetermined.Invoke(new FailedOrUnsupported(inputUri));
