@@ -23,24 +23,9 @@ namespace Netherlands3D.Twin.Projects
             OnProjectDataChanged(ProjectData.Current); //set initial position based on the current project
         }
 
-        //private void OnProjectDataChanged(ProjectData project)
-        //{
-        //    var cameraCoordinate = new Coordinate(CoordinateSystem.RDNAP, project.CameraPosition[0], project.CameraPosition[1], project.CameraPosition[2]);
-        //    var cameraUnityCoordinate = cameraCoordinate.ToUnity();
-        //    transform.position = cameraUnityCoordinate;
-
-        //    if(project.CameraRotation.Length == 3)
-        //    {
-        //        var cameraRotation = new Vector3((float)project.CameraRotation[0], (float)project.CameraRotation[1], (float)project.CameraRotation[2]);
-        //        transform.rotation = Quaternion.Euler(cameraRotation);
-        //    }
-        //}
-
         private void OnProjectDataChanged(ProjectData project)
         {
             var cameraCoordinate = new Coordinate(CoordinateSystem.RDNAP, project.CameraPosition[0], project.CameraPosition[1], project.CameraPosition[2]);
-            // var cameraUnityCoordinate = cameraCoordinate.ToUnity();
-            // transform.position = cameraUnityCoordinate;
             GetComponent<MoveCameraToCoordinate>().MoveToCoordinate(cameraCoordinate);
 
             if (project.CameraRotation.Length == 3)
