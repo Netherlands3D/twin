@@ -1215,6 +1215,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: QualitySettings
       objectReference: {fileID: 0}
+    - target: {fileID: 7341131401099384423, guid: 0f87291afaf773943b253acaaf83be5d,
+        type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341131401099384423, guid: 0f87291afaf773943b253acaaf83be5d,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341131401099384423, guid: 0f87291afaf773943b253acaaf83be5d,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341131401099384423, guid: 0f87291afaf773943b253acaaf83be5d,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1755,6 +1775,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5315891981602308678, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
+        type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5315891981602308678, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5315891981602308678, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5315891981602308678, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5315891981602308679, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

@@ -98,7 +98,8 @@ PrefabInstance:
       propertyPath: scrollScaleValue
       value: 0.1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 262063079913678507, guid: 8a8c1bdd94f08d144a7410a838c895ad, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
