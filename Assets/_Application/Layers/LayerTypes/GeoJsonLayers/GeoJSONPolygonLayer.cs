@@ -225,7 +225,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 geoJsonPolygonLayer = this
             };
 
-            var defaultMaterial = GetMaterialInstance(Color.white);
+            var defaultMaterial = polygonVisualizationMaterialInstance ?? GetMaterialInstance(Color.white);
             
             // Add visualisation to the layer, and store it in the SpawnedVisualisations list where we tie our Feature
             // to the visualisations
@@ -297,6 +297,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 !polygonVisualizationMaterialInstance 
                 || polygonVisualizationMaterialInstance.color != color
             ) {
+                Debug.Log($"Created material instance with color {color}");
                 polygonVisualizationMaterialInstance = new Material(PolygonVisualizationMaterial)
                 {
                     color = color
