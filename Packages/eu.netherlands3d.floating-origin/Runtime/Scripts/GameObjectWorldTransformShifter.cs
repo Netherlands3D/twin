@@ -15,6 +15,8 @@ namespace Netherlands3D.Twin.FloatingOrigin
         
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
+            // Always update the coordinate based on the Unity transform before shifting to make sure the coordinate is up to date.
+            UpdateCoordinateBasedOnUnityTransform();
         }
 
         public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
