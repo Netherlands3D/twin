@@ -15,6 +15,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
         
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
+            
         }
 
         public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
