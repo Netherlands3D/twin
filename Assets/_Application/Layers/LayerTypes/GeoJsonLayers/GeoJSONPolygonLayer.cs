@@ -208,16 +208,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // The color in the Layer Panel represents the default fill color for this layer
             LayerData.Color = LayerData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
 
-            foreach (var visualisations in spawnedVisualisations)
+            MaterialApplicator.Apply(Applicator);
+            foreach (var visualisation in spawnedVisualisations)
             {
-                ApplyStyling(visualisations.Value);
+                ApplyStyling(visualisation.Value);
             }
         }
 
         public void ApplyStyling(FeaturePolygonVisualisations visualisation)
         {
-            Applicator.ApplyTo(visualisation);
-            MaterialApplicator.Apply(Applicator);
+            visualisation.SetMaterial(polygonVisualizationMaterialInstance);
         }
 
         /// <summary>
@@ -243,7 +243,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 !polygonVisualizationMaterialInstance 
                 || polygonVisualizationMaterialInstance.color != color
             ) {
-                Debug.Log($"Created material instance with color {color}");
                 polygonVisualizationMaterialInstance = new Material(PolygonVisualizationMaterial)
                 {
                     color = color
@@ -256,7 +255,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public override void DestroyLayerGameObject()
         {
             // Remove all SpawnedVisualisations
-            Debug.Log("Destroying all visualisations " + spawnedVisualisations.Count);
             foreach (var kvp in spawnedVisualisations.Reverse())
             {
                 RemoveFeature(kvp.Value);
