@@ -27,6 +27,7 @@ namespace Netherlands3D.Twin.Projects
         private void OnProjectDataChanged(ProjectData project)
         {
             var cameraCoordinate = new Coordinate(CoordinateSystem.RDNAP, project.CameraPosition[0], project.CameraPosition[1], project.CameraPosition[2]);
+            print("read camera coord from project: " + cameraCoordinate);
             GetComponent<WorldTransform>().MoveToCoordinate(cameraCoordinate);
 
             if (project.CameraRotation.Length == 3)
