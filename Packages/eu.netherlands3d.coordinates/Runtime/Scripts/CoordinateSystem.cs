@@ -50,6 +50,7 @@ namespace Netherlands3D.Coordinates
         WGS84_ECEF = 4978,
         WGS84_LatLonHeight = 4979,
         RDNAP = 2,
+        EPSG_7415 = 7415,
         CRS84,
 
         RD = 28992,
@@ -63,6 +64,7 @@ namespace Netherlands3D.Coordinates
     {
          internal static Dictionary<CoordinateSystem, CoordinateSystemOperation> operators = new Dictionary<CoordinateSystem, CoordinateSystemOperation> {
             { CoordinateSystem.RDNAP, new RDNAP_Operations() } ,
+            { CoordinateSystem.EPSG_7415, new RDNAP_Operations() },
             { CoordinateSystem.RD, new RD_Operations() },
             { CoordinateSystem.WGS84_ECEF, new WGS84_ECEF_Operations() },
             { CoordinateSystem.WGS84_LatLonHeight, new WGS84_LatLonHeight_Operations() },
