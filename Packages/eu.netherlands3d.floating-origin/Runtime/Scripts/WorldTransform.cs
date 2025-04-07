@@ -71,5 +71,13 @@ namespace Netherlands3D.Twin.FloatingOrigin
             onPostShift.Invoke(this, Coordinate);
             shiftPrepared = false;
         }
+        
+        
+        // Set the coordinate and position directly
+        public void MoveToCoordinate(Coordinate coordinate)
+        {
+            Coordinate = coordinate;
+            transform.position = coordinate.ToUnity();
+        }
     }
 }
