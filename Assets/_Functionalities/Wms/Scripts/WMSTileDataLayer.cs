@@ -1,16 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using KindMen.Uxios;
-using KindMen.Uxios.Http;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Twin.Utility;
-using Netherlands3D.Web;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using QueryParameters = KindMen.Uxios.Http.QueryParameters;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -18,17 +15,19 @@ namespace Netherlands3D.Functionalities.Wms
     {
         private const string DefaultEpsgCoordinateSystem = "28992";
 
-        private Headers customHeaders = new();
-        private QueryParameters customQueryParams = new();
+        private Config requestConfig { get; set; } = new Config()
+        {
+            TypeOfResponseType = ExpectedTypeOfResponse.Texture(true)
+        };
 
-        public int RenderIndex 
-        { 
+        public int RenderIndex
+        {
             get => renderIndex;
             set
             {
                 int oldIndex = renderIndex;
                 renderIndex = value;
-                if (oldIndex != renderIndex) 
+                if (oldIndex != renderIndex)
                     UpdateDrawOrderForChildren();
             }
         }
@@ -36,6 +35,7 @@ namespace Netherlands3D.Functionalities.Wms
         private int renderIndex = -1;
 
         private string wmsUrl = "";
+
         public string WmsUrl
         {
             get => wmsUrl;
@@ -45,7 +45,7 @@ namespace Netherlands3D.Functionalities.Wms
                 if (!wmsUrl.Contains("{0}"))
                     Debug.LogError("WMS URL does not contain a '{0}' placeholder for the bounding box.", gameObject);
             }
-        }       
+        }
 
         private void Awake()
         {
@@ -61,29 +61,20 @@ namespace Netherlands3D.Functionalities.Wms
             }
         }
 
-        /// <summary>
-        /// Set custom header for all internal WebRequests
-        /// </summary>
-        public void SetCustomHeader(string key, string value)
+        public void SetAuthorization(StoredAuthorization auth)
         {
-            customHeaders[key] = value;
+            ClearConfig();
+            requestConfig = auth.AddToConfig(requestConfig);
         }
 
-        public void ClearCustomHeaders()
+        public void ClearConfig()
         {
-            customHeaders.Clear();
+            requestConfig = new Config()
+            {
+                TypeOfResponseType = ExpectedTypeOfResponse.Texture(true)
+            };
         }
-
-        public void SetCustomQueryParameter(string key, string value)
-        {
-            customQueryParams.Set(key, value);
-        }
-
-        public void ClearCustomQueryParameters()
-        {
-            customQueryParams.Clear();
-        }
-
+        
         protected override IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
         {
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
@@ -103,14 +94,7 @@ namespace Netherlands3D.Functionalities.Wms
 
             var boundingBox = DetermineBoundingBox(tileChange, mapData);
             string url = wmsUrl.Replace("{0}", boundingBox.ToString());
-            
-            var config = new Config
-            {
-                TypeOfResponseType = ExpectedTypeOfResponse.Texture(true), 
-                Headers = customHeaders, 
-                Params = customQueryParams
-            };
-            var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(url), config);
+            var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(url), requestConfig);
 
             promise.Then(response =>
                 {
@@ -128,7 +112,7 @@ namespace Netherlands3D.Functionalities.Wms
                     }
 
                     projector.SetSize(tileSize, tileSize, tileSize);
-                    projector.gameObject.SetActive(isEnabled);                    
+                    projector.gameObject.SetActive(isEnabled);
                     projector.SetTexture(tex);
 
                     //force the depth to be at least larger than its height to prevent z-fighting
@@ -141,16 +125,16 @@ namespace Netherlands3D.Functionalities.Wms
                     textureDecalProjector.SetPriority(renderIndex);
                 }
             );
-            
+
             promise.Catch(exception =>
             {
                 Debug.LogError($"Could not download {url}: " + exception.Message);
                 RemoveGameObjectFromTile(tileKey);
             });
-            
+
             // Always issue the callback
             promise.Finally(() => { callback(tileChange); });
-            
+
             yield return Uxios.WaitForRequest(promise);
         }
 
@@ -171,10 +155,10 @@ namespace Netherlands3D.Functionalities.Wms
             }
 
             CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString, out var foundCoordinateSystem);
-            
+
             var boundingBox = new BoundingBox(bottomLeft, topRight);
             boundingBox.Convert(foundCoordinateSystem);
-            
+
             return boundingBox;
         }
 
@@ -186,7 +170,7 @@ namespace Netherlands3D.Functionalities.Wms
                     continue;
 
                 TextureDecalProjector projector = tile.Value.gameObject.GetComponent<TextureDecalProjector>();
-                projector.SetPriority(renderIndex);                    
+                projector.SetPriority(renderIndex);
             }
         }
     }

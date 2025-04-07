@@ -1,5 +1,4 @@
 using System;
-using UnityEngine.Networking;
 
 namespace Netherlands3D.Credentials.StoredAuthorization
 {
