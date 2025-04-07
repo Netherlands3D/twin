@@ -1115,7 +1115,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sun
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4406432131298064742, guid: 00b6e5ce09fbf1a4784c2207f271bcdc, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5593048648800678674, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
