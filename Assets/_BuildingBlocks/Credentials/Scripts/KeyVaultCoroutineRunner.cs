@@ -8,7 +8,7 @@ namespace Netherlands3D.Credentials
 
         public static KeyVaultCoroutineRunner Instance()
         {
-            if (!instance == false) return instance;
+            if (instance) return instance;
 
             var gameObject = new GameObject
             {
