@@ -38,6 +38,8 @@ namespace Netherlands3D.Twin.Projects
         }
 
         private void Update() {
+            print("updating camera in project data with uuid: " + ProjectData.Current?.UUID);
+            
             var currentCameraMatrix = transform.localToWorldMatrix;        
             if(Matrix4x4.Equals(currentCameraMatrix, lastSavedCameraTransformMatrix)) return;
 

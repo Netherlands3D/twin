@@ -121,6 +121,8 @@ namespace Netherlands3D.Twin.Projects
 
         public static void SetCurrentProject(ProjectData initialProjectTemplate)
         {
+            Debug.Log("current project data should be null: " + (current == null));
+            Debug.Log("setting current project data to: " + initialProjectTemplate);
             Assert.IsNull(current);
             current = initialProjectTemplate;
             current.RootLayer = new RootLayer("RootLayer");
