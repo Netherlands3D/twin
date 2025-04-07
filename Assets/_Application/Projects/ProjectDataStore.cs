@@ -44,7 +44,7 @@ namespace Netherlands3D.Twin.Projects
             ProjectData.Current.RootLayer.DestroyLayer();
             ProjectData.Current.ClearFunctionalityData();
             
-            Resources.UnloadUnusedAssets();
+            // Resources.UnloadUnusedAssets();
 
             // Open the zip file
             using FileStream fs = File.OpenRead(Path.Combine(Application.persistentDataPath, fileName));
