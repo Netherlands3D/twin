@@ -35,13 +35,13 @@ namespace Netherlands3D.Coordinates
     {
         Projected,
         Geographic,
-        Geocentric
+        Geocentric,
+        None
     }
     [Serializable]
    public enum CoordinateSystem
     {
-        Undefined = -2,
-        Unity = -1, 
+        Undefined = 0,
         WGS84_PseudoMercator = 3857,
         ETRS89_LatLon = 4258,
         WGS84_LatLon = 4326, 
@@ -73,12 +73,12 @@ namespace Netherlands3D.Coordinates
             { CoordinateSystem.ETRS89_ECEF, new ETRS89_ECEF_Operations() },
             { CoordinateSystem.ETRS89_LatLon, new ETRS89_LatLon_Operations() },
             { CoordinateSystem.ETRS89_LatLonHeight, new ETRS89_LatLonHeight_Operations() },
-            { CoordinateSystem.CRS84, new CRS84_LonLat_Operations() }
+            { CoordinateSystem.CRS84, new CRS84_LonLat_Operations() },
+            { CoordinateSystem.Undefined, new Undefined_Operations() }
 
         };
 
         static CoordinateSystem _connectedCoordinateSystem;
-        static Coordinate _coordinateAtOrigin;
         
         public static Quaternion connectedCRSToUnityUp;
         public static Vector3WGS wgsAtUp;
@@ -137,8 +137,10 @@ namespace Netherlands3D.Coordinates
             
             
         }
-        
-        public static Coordinate CoordinateAtUnityOrigin { get { return _coordinateAtOrigin; } }
+
+        static Coordinate _coordinateAtOrigin = new Coordinate(Vector3.zero);
+
+        public static Coordinate CoordinateAtUnityOrigin => _coordinateAtOrigin;
         
     }
 

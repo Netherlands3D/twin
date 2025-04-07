@@ -31,7 +31,7 @@ namespace Netherlands3D.Coordinates
         public static Vector3ECEF ToECEF(Vector3 point)
         {
             var temppoint = Quaternion.Inverse(EPSG4936.RotationToUp()) * point;
-            
+
 
             Vector3ECEF ecef = new Vector3ECEF();
             ecef.X = -temppoint.x + EPSG4936.relativeCenter.X;
@@ -64,7 +64,7 @@ namespace Netherlands3D.Coordinates
         public static Vector3WGS ToWGS84(Vector3 coordinates)
         {
             Vector3RD vectorRD = ToEPSG7415(coordinates);
-            Vector3WGS output = EPSG7415.ToWGS84(vectorRD.x,vectorRD.y);
+            Vector3WGS output = EPSG7415.ToWGS84(vectorRD.x, vectorRD.y);
             double hoogteCorrectie = EPSG7415.RDCorrection(output.lon, output.lat, "Z", EPSG7415.RDCorrectionZ);
             output.h = vectorRD.z + hoogteCorrectie;
 
@@ -73,32 +73,25 @@ namespace Netherlands3D.Coordinates
 
         public static Coordinate ConvertTo(Coordinate coordinate, int targetCrs)
         {
-            if (coordinate.CoordinateSystem != (int)CoordinateSystem.Unity)
-            {
-                throw new ArgumentOutOfRangeException(
-                    $"Invalid coordinate received, this class cannot convert CRS ${coordinate.CoordinateSystem}"
-                );
-            }
-
             var vector3 = coordinate.ToVector3();
 
             switch (targetCrs)
             {
                 case (int)CoordinateSystem.WGS84_LatLonHeight:
-                {
-                    var result = ToWGS84(vector3);
-                    return new Coordinate(targetCrs, result.lon, result.lat, result.h);
-                }
+                    {
+                        var result = ToWGS84(vector3);
+                        return new Coordinate(targetCrs, result.lon, result.lat, result.h);
+                    }
                 case 7415:
-                {
-                    var result = ToEPSG7415(vector3);
-                    return new Coordinate(targetCrs, result.x, result.y, result.z);
-                }
+                    {
+                        var result = ToEPSG7415(vector3);
+                        return new Coordinate(targetCrs, result.x, result.y, result.z);
+                    }
                 case 4936:
-                {
-                    var result = ToECEF(vector3);
-                    return new Coordinate(targetCrs, result.X, result.Y, result.Z);
-                }
+                    {
+                        var result = ToECEF(vector3);
+                        return new Coordinate(targetCrs, result.X, result.Y, result.Z);
+                    }
             }
 
             throw new ArgumentOutOfRangeException(

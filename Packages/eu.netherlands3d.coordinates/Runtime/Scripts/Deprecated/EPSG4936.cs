@@ -102,29 +102,13 @@ namespace Netherlands3D.Coordinates
 
             var vector3Ecef = new Vector3ECEF(coordinate.value1, coordinate.value2, coordinate.value3);
 
-            if (targetCrs == (int)CoordinateSystem.Unity)
+            if(targetCrs == (int)CoordinateSystem.WGS84_LatLonHeight)
             {
-                var result = coordinate.ToUnity();
-                var result2 = ToUnity(vector3Ecef);
-                return new Coordinate(targetCrs, result.x, result.y, result.z);
+                return coordinate.Convert(CoordinateSystem.WGS84_LatLonHeight);
+                //var result = ToWGS84(vector3Ecef);
+                //return new Coordinate(targetCrs, result.lon, result.lat, result.h);
             }
-
-            switch (targetCrs)
-            {
-                case (int)CoordinateSystem.Unity:
-                    {
-                        var result = coordinate.ToUnity();
-                        var result2 = ToUnity(vector3Ecef);
-                        return new Coordinate(targetCrs, result.x, result.y, result.z);
-                    }
-                case (int)CoordinateSystem.WGS84_LatLonHeight:
-                    {
-                        return coordinate.Convert(CoordinateSystem.WGS84_LatLonHeight);
-                        //var result = ToWGS84(vector3Ecef);
-                        //return new Coordinate(targetCrs, result.lon, result.lat, result.h);
-                    }
-
-            }
+                        
             return coordinate.Convert((CoordinateSystem)targetCrs);
 
             throw new ArgumentOutOfRangeException(
