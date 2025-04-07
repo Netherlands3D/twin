@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
                 handler = value;
 
-                OnCredentialsHandled(handler.Authorization);
+                OnCredentialsHandled(handler.Uri, handler.Authorization);
                 handler.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
             }
         }
@@ -35,7 +36,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
         }
 
-        private void OnCredentialsHandled(StoredAuthorization auth)
+        private void OnCredentialsHandled(Uri uri, StoredAuthorization auth)
         {
             var accepted = auth is not FailedOrUnsupported;
 

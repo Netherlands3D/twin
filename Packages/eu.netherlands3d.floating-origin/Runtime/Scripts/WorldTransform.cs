@@ -35,18 +35,6 @@ namespace Netherlands3D.Twin.FloatingOrigin
             Coordinate = new Coordinate(referenceCoordinateSystem, 0, 0, 0);
         }
 
-        private void OnValidate()
-        {
-            if (referenceCoordinateSystem == CoordinateSystem.Unity)
-            {
-                Debug.LogError(
-                    "Reference coordinate system for a World Transform cannot be in Unity coordinates; "+
-                    "otherwise the Origin's location won't be taken into account."
-                );
-                referenceCoordinateSystem = CoordinateSystem.WGS84_LatLonHeight;
-            }
-        }
-
         private void OnEnable()
         {
             Origin.onPreShift.AddListener(PrepareToShift);

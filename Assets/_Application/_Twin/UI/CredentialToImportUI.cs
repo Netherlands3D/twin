@@ -38,7 +38,7 @@ namespace Netherlands3D
             handler.OnAuthorizationHandled.RemoveListener(ProcessAuthorization);
         }
 
-        private void ProcessAuthorization(StoredAuthorization auth)
+        private void ProcessAuthorization(Uri uri, StoredAuthorization auth)
         {
             if (auth is FailedOrUnsupported)
             {
@@ -49,7 +49,7 @@ namespace Netherlands3D
 
             //3a. if yes: pass this to the DataTypeChain
             SetCredentialsUIActive(false);
-            chain.DetermineAdapter(auth);
+            chain.DetermineAdapter(uri, auth);
         }
 
         private void SetCredentialsUIActive(bool enabled)
