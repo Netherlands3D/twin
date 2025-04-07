@@ -1,5 +1,6 @@
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Projects
@@ -26,7 +27,7 @@ namespace Netherlands3D.Twin.Projects
         private void OnProjectDataChanged(ProjectData project)
         {
             var cameraCoordinate = new Coordinate(CoordinateSystem.RDNAP, project.CameraPosition[0], project.CameraPosition[1], project.CameraPosition[2]);
-            GetComponent<MoveCameraToCoordinate>().MoveToCoordinate(cameraCoordinate);
+            GetComponent<WorldTransform>().MoveToCoordinate(cameraCoordinate);
 
             if (project.CameraRotation.Length == 3)
             {
