@@ -16,68 +16,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     [Serializable]
     public partial class GeoJSONPolygonLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
-        internal class GeoJsonPolygonLayerMaterialApplicator : IMaterialApplicatorAdapter
-        {
-            private readonly GeoJSONPolygonLayer layer;
-            private FeaturePolygonVisualisations visualisation;
-
-            public GeoJsonPolygonLayerMaterialApplicator(GeoJSONPolygonLayer layer)
-            {
-                this.layer = layer;
-            }
-
-            public void ApplyTo(FeaturePolygonVisualisations visualisation)
-            {
-                this.visualisation = visualisation;
-            }
-
-            public Material CreateMaterial()
-            {
-                if (visualisation == null)
-                {
-                    throw new System.ArgumentNullException("visualisation");
-                }
-
-                var style = layer.GetStyling(layer.CreateFeature(visualisation));
-                var color = style.GetFillColor() ?? Color.white;
-
-                return layer.GetMaterialInstance(color);
-            }
-
-            public void SetMaterial(Material material)
-            {
-                if (visualisation == null)
-                {
-                    throw new ArgumentNullException("visualisation");
-                }
-
-                visualisation.SetMaterial(material);
-            }
-
-            public Material GetMaterial()
-            {
-                if (visualisation == null)
-                {
-                    throw new ArgumentNullException("visualisation");
-                }
-
-                return layer.polygonVisualizationMaterialInstance;
-            }
-        }
-
         private GeoJsonPolygonLayerMaterialApplicator applicator;
         internal GeoJsonPolygonLayerMaterialApplicator Applicator
         {
             get
             {
-                if (applicator == null)
-                {
-                    applicator = new GeoJsonPolygonLayerMaterialApplicator(this);
-                }
+                if (applicator == null) applicator = new GeoJsonPolygonLayerMaterialApplicator(this);
 
                 return applicator;
             }
-            set => applicator = value;
         }
 
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
@@ -96,12 +43,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             get => polygonVisualizationMaterial;
             set
             {
+                // This counts as a shared material - as such we create a copy of the material and assign that
                 polygonVisualizationMaterial = value;
+                polygonVisualizationMaterialInstance = new Material(value);
                 
-                foreach (var featureVisualisation in spawnedVisualisations)
-                {
-                    featureVisualisation.Value.SetMaterial(value);
-                }
+                ApplyStyling();
             }
         }
         

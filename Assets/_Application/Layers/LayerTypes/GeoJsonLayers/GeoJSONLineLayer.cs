@@ -27,28 +27,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
 
-        internal class GeoJsonLineLayerMaterialApplicator : IMaterialApplicatorAdapter
-        {
-            private readonly GeoJSONLineLayer layer;
-
-            public GeoJsonLineLayerMaterialApplicator(GeoJSONLineLayer layer)
-            {
-                this.layer = layer;
-            }
-
-            public Material CreateMaterial()
-            {
-                var features = layer.GetFeatures<BatchedMeshInstanceRenderer>();
-                var style = layer.GetStyling(features.FirstOrDefault());
-                var color = style.GetFillColor() ?? Color.white;
-
-                return layer.GetMaterialInstance(color);
-            }
-
-            public void SetMaterial(Material material) => layer.LineRenderer3D.LineMaterial = material;
-            public Material GetMaterial() => layer.LineRenderer3D.LineMaterial;
-        }
-
         private GeoJsonLineLayerMaterialApplicator applicator;
         internal GeoJsonLineLayerMaterialApplicator Applicator
         {
@@ -58,7 +36,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
                 return applicator;
             }
-            set => applicator = value;
         }
 
         public LineRenderer3D LineRenderer3D
@@ -66,6 +43,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             get => lineRenderer3D;
             //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
             set => lineRenderer3D = value;
+        }
+
+        protected override void Start()
+        {
+            // Ensure that LineRenderer3D.Material has a Material Instance to prevent accidental destruction
+            // of a material asset when replacing the material - no destroy of the old material must be done because
+            // that is an asset and not an instance
+            lineRenderer3D.LineMaterial = new Material(lineRenderer3D.LineMaterial);
+
+            base.Start();
         }
 
         public List<Mesh> GetMeshData(Feature feature)

@@ -9,6 +9,7 @@ using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
+using RSG;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
@@ -25,28 +26,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
-        internal class GeoJsonPointLayerMaterialApplicator : IMaterialApplicatorAdapter
-        {
-            private readonly GeoJSONPointLayer layer;
-
-            public GeoJsonPointLayerMaterialApplicator(GeoJSONPointLayer layer)
-            {
-                this.layer = layer;
-            }
-
-            public Material CreateMaterial()
-            {
-                var features = layer.GetFeatures<BatchedMeshInstanceRenderer>();
-                var style = layer.GetStyling(features.FirstOrDefault());
-                var color = style.GetFillColor() ?? Color.white;
-
-                return layer.GetMaterialInstance(color);
-            }
-
-            public void SetMaterial(Material material) => layer.PointRenderer3D.Material = material;
-            public Material GetMaterial() => layer.PointRenderer3D.Material;
-        }
-
         private GeoJsonPointLayerMaterialApplicator applicator;
         internal GeoJsonPointLayerMaterialApplicator Applicator
         {
@@ -56,7 +35,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
                 return applicator;
             }
-            set => applicator = value;
+        }
+
+        protected override void Start()
+        {
+            // Ensure that PointRenderer3D.Material has a Material Instance to prevent accidental destruction
+            // of a material asset when replacing the material - no destroy of the old material must be done because
+            // that is an asset and not an instance
+            PointRenderer3D.Material = new Material(PointRenderer3D.Material);
+
+            base.Start();
         }
 
         public List<Mesh> GetMeshData(Feature feature)
