@@ -7,320 +7,208 @@ using System.Collections;
 using Netherlands3D.Web;
 using Netherlands3D.Credentials.StoredAuthorization;
 using System.Collections.Specialized;
+using KindMen.Uxios;
+using KindMen.Uxios.Errors;
+using KindMen.Uxios.Errors.Http;
 
 namespace Netherlands3D.Credentials
 {
-    [Obsolete("this enum will be removed in the future, use a type check instead")]
-    public enum AuthorizationType //todo: remove this enum
-    {
-        //Specific order in items used in dropdown index
-        Public = -1,
-        UsernamePassword = 0,
-        // InferableSingleKey = 1, //Single field key, token or code (we dont know specifically yet but can infer it)
-        Key,
-        BearerToken,
-        Code,
-        Token,
-        FailedOrUnsupported
-    }
-
     [CreateAssetMenu(fileName = "KeyVault", menuName = "ScriptableObjects/KeyVault", order = 1)]
     public class KeyVault : ScriptableObject
     {
         [TextArea(3, 10)] public string Description = "";
+        [SerializeField] private bool log = false;
+        [SerializeField] private Dictionary<Uri, StoredAuthorization.StoredAuthorization> storedAuthorizations = new();
 
-        public List<KnownUrlAuthorizationType> knownUrlAuthorizationTypes = new()
-        {
-            // new KnownUrlAuthorizationType() { baseUrl = "https://tile.googleapis.com/v1/3dtiles/root.json", authorizationType = AuthorizationType.InferableSingleKey },
-            // new KnownUrlAuthorizationType() { baseUrl = "https://engine.tygron.com/web/3dtiles/tileset.json", authorizationType = AuthorizationType.InferableSingleKey },
-            // new KnownUrlAuthorizationType() { baseUrl = "https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json", authorizationType = AuthorizationType.Public }
-        };
-
-        public Dictionary<Uri, StoredAuthorization.StoredAuthorization> storedAuthorizations = new();
-
-        public bool log = false;
         private MonoBehaviour coroutineMonoBehaviour;
         public UnityEvent<StoredAuthorization.StoredAuthorization> OnAuthorizationTypeDetermined = new();
+
+        public Dictionary<string, Type> expectedAuthorizationTypes = new()
+        {
+            { "tile.googleapis.com", typeof(Key) },
+            { "engine.tygron.com", typeof(Token) },
+            { "geo.tygron.com", typeof(Token) }
+        };
+
+        private static readonly Dictionary<Type, Func<Uri, string[], StoredAuthorization.StoredAuthorization>> supportedAuthorizationTypes = new()
+        {
+            { typeof(Public), (uri, args) => new Public(uri) }, //start with public, to not add query parameters if not needed
+            { typeof(Key), (uri, args) => new Key(uri, args[0]) },
+            { typeof(Code), (uri, args) => new Code(uri, args[0]) },
+            { typeof(Token), (uri, args) => new Token(uri, args[0]) },
+            { typeof(UsernamePassword), (uri, args) => new UsernamePassword(uri, args[1], args[0]) }, //order is Password before Username, because we need a consistent order to use passwordOrKey
+            { typeof(BearerToken), (uri, args) => new BearerToken(uri, args[0]) }
+        };
+
+        private StoredAuthorization.StoredAuthorization CreateStoredAuthorization(Type storedAuthorizationType, Uri uri, params string[] args)
+        {
+            if (!storedAuthorizationType.IsSubclassOf(typeof(StoredAuthorization.StoredAuthorization)))
+                throw new InvalidOperationException($"Unsupported authorization type: {storedAuthorizationType.Name}");
+
+            if (supportedAuthorizationTypes.TryGetValue(storedAuthorizationType, out var factory))
+            {
+                return factory(uri, args);
+            }
+
+            throw new InvalidOperationException($"Unsupported authorization type: {storedAuthorizationType.Name}");
+        }
+
+        private StoredAuthorization.StoredAuthorization CreateStoredAuthorization<T>(Uri uri, params string[] args) where T : StoredAuthorization.StoredAuthorization
+        {
+            if (supportedAuthorizationTypes.TryGetValue(typeof(T), out var factory))
+            {
+                return factory(uri, args);
+            }
+
+            throw new InvalidOperationException($"Unsupported authorization type: {typeof(T).Name}");
+        }
 
         /// <summary>
         /// Get the stored authorization for a specific URL
         /// </summary>
         public void Authorize(Uri inputUri, string username, string passwordOrKey)
         {
-            Uri baseUri = new Uri(inputUri.GetLeftPart(UriPartial.Path));
-            if (storedAuthorizations.TryGetValue(baseUri, out var authorization))
+            var domain = new Uri(inputUri.GetLeftPart(UriPartial.Path));
+
+            //check if we already have an authorization for this url 
+            if (storedAuthorizations.TryGetValue(domain, out var authorization))
             {
-                // authorization.SetInputUri(inputUri); //we need this later on to determine the specific endpoint
                 OnAuthorizationTypeDetermined.Invoke(authorization);
                 return;
             }
 
-            //todo: is a queryKey present in the inputUri? parse it and try this authorization type immediately.
-            
             //Only allow one simultaneous coroutine for now
             if (coroutineMonoBehaviour != null)
                 Destroy(coroutineMonoBehaviour.gameObject);
 
-            //lets try to to find any credentials in the given input url
+            //lets try to to find a valid authorization type for the given input url
             var coroutineGameObject = new GameObject("KeyVaultCoroutine_TryParseAuthorizationInput");
             coroutineMonoBehaviour = coroutineGameObject.AddComponent<KeyVaultCoroutines>();
-            coroutineMonoBehaviour.StartCoroutine(AuthorizeInput(inputUri, authorized => 
-            {
-                if (!authorized)
-                {
-                    TryBasicAuthentication(inputUri, username, passwordOrKey);
-                    TryToFindSpecificCredentialType(inputUri, passwordOrKey);
-                }
-            }));
+            coroutineMonoBehaviour.StartCoroutine(TryFindAuthorization(inputUri, username, passwordOrKey));
         }
 
-        public IEnumerator AuthorizeInput(Uri uri, Action<bool> authorizationCallback)
+        private IEnumerator TryFindAuthorization(Uri inputUri, string username, string passwordOrKey)
         {
-            AuthorizationType foundType = AuthorizationType.FailedOrUnsupported;            
-            //parse key token or code van query + make new request with callback
+            bool authorizationSuccessful = false;
+            Uri domain = new Uri(inputUri.GetLeftPart(UriPartial.Path));
+
+            //1. Try to find credentials in the url, and if found, we verify that this is a valid Auth method
+            if (TryToFindAuthorizationInUriQuery(inputUri, out var potentialAuthorisation))
+            {
+                if (log) Debug.Log("found potential query key type in url: " + potentialAuthorisation.GetType() + " with key " + potentialAuthorisation.QueryKeyValue);
+
+                //try this one
+                yield return TrySupportedAuthorization(potentialAuthorisation, inputUri);
+                if (storedAuthorizations.ContainsKey(domain)) yield break; // if the Auth test was succesful, stop looking.
+            }
+
+            //2. In case we know the type for this base Uri, try that first
+            if (expectedAuthorizationTypes.TryGetValue(domain.Host, out var expectedType))
+            {
+                if (expectedType != typeof(Public) && string.IsNullOrEmpty(passwordOrKey)) //it's not public, so we need some kind of authorization. if the passwordOrKey is empty, we already know it will fail. Maybe expand this in the future with a more robust check
+                {
+                    OnAuthorizationTypeDetermined.Invoke(new FailedOrUnsupported(inputUri));
+                    yield break;
+                }
+
+                var potentialAuth = CreateStoredAuthorization(expectedType, inputUri, passwordOrKey, username); // pass usernameOrKey before username for constructor order
+                yield return TrySupportedAuthorization(potentialAuth, inputUri);
+                if (storedAuthorizations.ContainsKey(domain)) yield break; // if the Auth test was succesful, stop looking.
+            }
+
+            //3. Try all supported authorization types
+            yield return TryAllSupportedAuthorizations(inputUri, username, passwordOrKey);
+            if (storedAuthorizations.ContainsKey(domain)) yield break; // if the Auth test was succesful, stop looking.
+
+            //4. nothing worked, this url either has invalid credentials, or we don't support the credential type. We will not store this in the storedAuthorizations, so the user can retry
+            if (log) Debug.Log("This url either has invalid credentials, or we don't support the credential type: " + inputUri);
+            OnAuthorizationTypeDetermined.Invoke(new FailedOrUnsupported(inputUri));
+        }
+
+        private bool TryToFindAuthorizationInUriQuery(Uri uri, out QueryStringAuthorization potentialAuthorisation)
+        {
             var queryParameters = new NameValueCollection();
             uri.TryParseQueryString(queryParameters);
-            string key = queryParameters.Get("key");
-            if(!string.IsNullOrEmpty(key))
-            {
-                foundType = AuthorizationType.Key;
-                var tokenRequestUrl = UnityWebRequest.Get(uri);
-                yield return tokenRequestUrl.SendWebRequest();
-                if (IsAuthorized(tokenRequestUrl))
-                {
-                    if (log) Debug.Log("Found key needed for this layer: " + uri);
 
-                    NewURLAuthorizationDetermined(uri, foundType, key: key);
-                    authorizationCallback?.Invoke(true);
-                    yield break;
-                }               
-            }
-            
-            string token = queryParameters.Get("token");
-            if (!string.IsNullOrEmpty(token))
+            foreach (var supportedAuthTypes in supportedAuthorizationTypes)
             {
-                foundType = AuthorizationType.Token;
-                var tokenRequestUrl = UnityWebRequest.Get(uri);
-                yield return tokenRequestUrl.SendWebRequest();
-                if (IsAuthorized(tokenRequestUrl))
-                {
-                    if (log) Debug.Log("Found token needed for this layer: " + uri);
+                if (!supportedAuthTypes.Key.IsSubclassOf(typeof(QueryStringAuthorization))) //only check our supported auth types that could have the auth in the url.
+                    continue;
 
-                    NewURLAuthorizationDetermined(uri, foundType, key: token);
-                    authorizationCallback?.Invoke(true);
-                    yield break;
-                }
-            }
-            string code = queryParameters.Get("code");
-            if (!string.IsNullOrEmpty(code))
-            {
-                foundType = AuthorizationType.Code;
-                var tokenRequestUrl = UnityWebRequest.Get(uri);
-                yield return tokenRequestUrl.SendWebRequest();
-                if (IsAuthorized(tokenRequestUrl))
-                {
-                    if (log) Debug.Log("Found code needed for this layer: " + uri);
+                potentialAuthorisation = supportedAuthTypes.Value(uri, new[] { "" }) as QueryStringAuthorization; //unfortunately we have to create a temp instance to access QueryKeyName
+                var authString = queryParameters.Get(potentialAuthorisation.QueryKeyName);
 
-                    NewURLAuthorizationDetermined(uri, foundType, key: code);
-                    authorizationCallback?.Invoke(true);
-                    yield break;
+                if (!string.IsNullOrEmpty(authString))
+                {
+                    potentialAuthorisation = supportedAuthTypes.Value(uri, new[] { authString }) as QueryStringAuthorization; //set the out variable to have the parsed auth string
+                    return true;
                 }
             }
 
-            //no key token or code is found in the input url, maybe its just public
-            foundType = AuthorizationType.Public;
-            var noCredentialsRequest = UnityWebRequest.Get(uri);
-            yield return noCredentialsRequest.SendWebRequest();
-            if (IsAuthorized(noCredentialsRequest))
+            potentialAuthorisation = null;
+            return false;
+        }
+
+        private IEnumerator TryAllSupportedAuthorizations(Uri uri, string username, string passwordOrKey)
+        {
+            foreach (var supportedAuthorization in supportedAuthorizationTypes.Keys)
             {
-                if (log) Debug.Log("Found no credentials needed for this layer: " + uri);
-               
-                NewURLAuthorizationDetermined(uri, foundType);
-                authorizationCallback?.Invoke(true);
-                yield break;
+                var potentialAuth = CreateStoredAuthorization(supportedAuthorization, uri, passwordOrKey, username); // pass usernameOrKey before username for constructor order
+                yield return TrySupportedAuthorization(potentialAuth, uri);
+                if (storedAuthorizations.ContainsKey(potentialAuth.Domain)) yield break; // if the Auth test was succesful, stop looking.
             }
-            
-            authorizationCallback?.Invoke(false);
+        }
+
+        private IEnumerator TrySupportedAuthorization(StoredAuthorization.StoredAuthorization potentialAuth, Uri uri)
+        {
+            var config = Config.Default();
+            config = potentialAuth.AddToConfig(config);
+            var request = Uxios.DefaultInstance.Get<byte[]>(uri, config); //get as byte[] so Uxios doesn't try to interpret the response
+
+            bool isAuthorized = false;
+
+            request.Then(response => { isAuthorized = true; });
+            request.Catch(exception => { isAuthorized = CheckErrorAuthentication(exception); });
+
+            yield return Uxios.WaitForRequest(request);
+
+            if (isAuthorized)
+            {
+                if (log) Debug.Log("Access granted with authorization type: " + potentialAuth.GetType() + " for: " + uri);
+                NewAuthorizationDetermined(potentialAuth);
+            }
+            else
+            {
+                if (log) Debug.Log("Access denied with authorization type: " + potentialAuth.GetType() + " for: " + uri);
+                //todo: send an event here so UI can update
+            }
+        }
+
+        private static bool CheckErrorAuthentication(Exception exception)
+        {
+            switch (exception)
+            {
+                case AuthenticationError:
+                    return false;
+                case HttpClientError:
+                    return true;
+                case HttpServerError error:
+                    throw new Exception("the request returned a response that is not implemented: " + error.Status + " from Uri: " + error.Config.Url);
+                default:
+                    throw new Exception("the request returned an connection or data processing error: " + exception.Message + "from Uri: " + ((Error)exception).Config.Url);
+            }
         }
 
         /// <summary>
         /// Add a new known URL with a specific authorization type
         /// </summary>
-        private void NewURLAuthorizationDetermined(Uri uri, AuthorizationType authorizationType, string username = "", string password = "", string key = "")
+        private void NewAuthorizationDetermined(StoredAuthorization.StoredAuthorization auth) //called when a authorization attempt was successful and stores it for future easy access via its baseUri
         {
-            Uri baseUri = new Uri(uri.GetLeftPart(UriPartial.Path)); //we use only the root of the url as a authorization identifier
-
-            ClearURLFromStoredAuthorizations(baseUri);
-
-            StoredAuthorization.StoredAuthorization auth = new FailedOrUnsupported(uri);
-            switch (authorizationType)
-            {
-                case AuthorizationType.Public:
-                    auth = new Public(uri);
-                    storedAuthorizations.Add(baseUri, auth);
-                    break;
-                case AuthorizationType.UsernamePassword:
-                    auth = new UsernamePassword(uri, username, password);
-                    storedAuthorizations.Add(baseUri, auth);
-                    break;
-                // case AuthorizationType.InferableSingleKey:
-                    // auth = new QueryStringAuthorization(uri, key);
-                    // storedAuthorizations.Add(baseUri, auth);
-                    // break;
-                case AuthorizationType.Key:
-                    auth = new Key(uri, key);
-                    storedAuthorizations.Add(baseUri, auth);
-                    break;
-                case AuthorizationType.BearerToken:
-                    auth = new BearerToken(uri, key);
-                    storedAuthorizations.Add(baseUri, auth);
-                    break;
-                case AuthorizationType.Code:
-                    auth = new Code(uri, key);
-                    storedAuthorizations.Add(baseUri, auth);
-                    break;
-                case AuthorizationType.Token:
-                    auth = new Token(uri, key);
-                    storedAuthorizations.Add(baseUri, auth);
-                    break;
-                case AuthorizationType.FailedOrUnsupported:
-                    // we don't want to save a failed auth, since this could be a typo and it should not automatically fail if the user retries.
-                    // If possible we want to make a distinction between Failed and Unsupported, and only save if it's unsupported, since then retrying is futile.
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(authorizationType), authorizationType, "authorisation type not defined");
-            }
-
+            storedAuthorizations.Remove(auth.Domain);
+            storedAuthorizations.Add(auth.Domain, auth);
             OnAuthorizationTypeDetermined.Invoke(auth);
         }
 
-        public void ClearURLFromStoredAuthorizations(Uri url)
-        { 
-            storedAuthorizations.Remove(url);
-        }
-
-        /// <summary>
-        /// Try to find the specific type of credential (key, token or code) that is needed for the layer
-        /// </summary>
-        public void TryToFindSpecificCredentialType(Uri uri, string key)
-        {
-            //Only allow one simultaneous coroutine for now
-            if (coroutineMonoBehaviour != null)
-                Destroy(coroutineMonoBehaviour.gameObject);
-
-            var coroutineGameObject = new GameObject("KeyVaultCoroutine_FindSpecificAuthorizationType");
-            coroutineMonoBehaviour = coroutineGameObject.AddComponent<KeyVaultCoroutines>();
-            coroutineMonoBehaviour.StartCoroutine(FindSpecificAuthorizationType(uri, key));
-        }
-
-        /// <summary>
-        /// Try to access a URL with a username and password.
-        /// OnAuthorizationTypeDetermined will be called with the result.
-        /// </summary>
-        public void TryBasicAuthentication(Uri uri, string username, string password)
-        {
-            //Only allow one simultaneous coroutine for now
-            if (coroutineMonoBehaviour != null)
-                Destroy(coroutineMonoBehaviour.gameObject);
-
-            var coroutineGameObject = new GameObject("KeyVaultCoroutine_AccessWithUsernameAndPassword");
-            coroutineMonoBehaviour = coroutineGameObject.AddComponent<KeyVaultCoroutines>();
-            coroutineMonoBehaviour.StartCoroutine(AccessWithUsernameAndPassword(uri, username, password));
-        }
-
-        private IEnumerator AccessWithUsernameAndPassword(Uri uri, string username, string password)
-        {
-            var request = UnityWebRequest.Get(uri);
-            request.SetRequestHeader("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password)));
-            yield return request.SendWebRequest();
-
-            if (IsAuthorized(request))
-            {
-                if (log) Debug.Log("Access granted with username and password for: " + uri);
-                NewURLAuthorizationDetermined(uri, AuthorizationType.UsernamePassword, username: username, password: password);
-            }
-            else
-            {
-                Debug.LogError("Access denied with username and password for: " + uri);
-                //todo: send an event here so UI can update
-            }
-        }
-
-        private IEnumerator FindSpecificAuthorizationType(Uri uri, string key)
-        {
-            AuthorizationType foundType = AuthorizationType.FailedOrUnsupported;
-
-            //Start with resetting this url history to unkown
-            ClearURLFromStoredAuthorizations(uri);
-
-            // Try a request without credentials
-            var noCredentialsRequest = UnityWebRequest.Get(uri);
-            yield return noCredentialsRequest.SendWebRequest();
-            if (IsAuthorized(noCredentialsRequest))
-            {
-                if (log) Debug.Log("Found no credentials needed for this layer: " + uri);
-                foundType = AuthorizationType.Public;
-                NewURLAuthorizationDetermined(uri, foundType);
-                yield break;
-            }
-            
-            // Try input key as bearer token
-            var bearerTokenRequest = UnityWebRequest.Get(uri);
-            bearerTokenRequest.SetRequestHeader("Authorization", "Bearer " + key);
-            yield return bearerTokenRequest.SendWebRequest();
-            if (IsAuthorized(bearerTokenRequest))
-            {
-                if (log) Debug.Log("Found bearer token needed for this layer: " + uri);
-                foundType = AuthorizationType.BearerToken;
-                NewURLAuthorizationDetermined(uri, foundType, key: key);
-                yield break;
-            }
-
-            // Try input key as 'key' query parameter (remove a possible existing key query parameter and add the new one)
-            var uriBuilder = new UriBuilder(uri);
-            uriBuilder.AddQueryParameter("key", key);
-            var keyRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
-            yield return keyRequestUrl.SendWebRequest();
-            if (IsAuthorized(keyRequestUrl))
-            {
-                if (log) Debug.Log("Found key needed for this layer: " + uri);
-                foundType = AuthorizationType.Key;
-                NewURLAuthorizationDetermined(uri, foundType, key: key);
-                yield break;
-            }
-
-            // Try input key as 'code' query parameter (remove a possible existing code query parameter and add the new one)
-            uriBuilder.RemoveQueryParameter("key");
-            uriBuilder.RemoveQueryParameter("code");
-            uriBuilder.AddQueryParameter("code", key);
-            var codeRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
-            yield return codeRequestUrl.SendWebRequest();
-            if (IsAuthorized(codeRequestUrl))
-            {
-                if (log) Debug.Log("Found code needed for this layer: " + uri);
-                foundType = AuthorizationType.Code;
-                NewURLAuthorizationDetermined(uri, foundType, key: key);
-                yield break;
-            }
-
-            // Try input key as 'token' query parameter (remove a possible existing code query parameter and add the new one)
-            uriBuilder.RemoveQueryParameter("code");
-            uriBuilder.AddQueryParameter("token", key);
-            var tokenRequestUrl = UnityWebRequest.Get(uriBuilder.Uri);
-            yield return tokenRequestUrl.SendWebRequest();
-            if (IsAuthorized(tokenRequestUrl))
-            {
-                if (log) Debug.Log("Found token needed for this layer: " + uri);
-                foundType = AuthorizationType.Token;
-                NewURLAuthorizationDetermined(uri, foundType, key: key);
-                yield break;
-            }
-            
-            // Nothing worked, return unsupported
-            Debug.Log("Invalid credentials provided or no supported credential type worked to get access for this layer: " + uri);
-            NewURLAuthorizationDetermined(uri, AuthorizationType.FailedOrUnsupported);
-        }
-        
         private static bool IsAuthorized(UnityWebRequest uwr)
         {
             if (uwr.result == UnityWebRequest.Result.Success)
@@ -334,7 +222,7 @@ namespace Netherlands3D.Credentials
 
             if (uwr.responseCode >= 500)
                 throw new Exception("the request returned a response that is not implemented: " + uwr.responseCode + " from Uri: " + uwr.uri);
-            
+
             // We kinda assume that anything below error code 500 -except for 401 and 403- would probably be OK since the server
             // has processed the request and deemed it to contain a client side error
             return true;

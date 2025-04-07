@@ -35,10 +35,10 @@ namespace Netherlands3D.DataTypeAdapters
         /// Determine the type of data using chain of responsibility
         /// </summary>
         /// <param name="url">Url to file or service</param>
-        public void DetermineAdapter(StoredAuthorization auth)
+        public void DetermineAdapter(Uri sourceUri, StoredAuthorization auth)
         {
             AbortChain();
-            chain = StartCoroutine(DownloadAndCheckSupport(auth));
+            chain = StartCoroutine(DownloadAndCheckSupport(sourceUri, auth));
         }
 
         private void AbortChain()
@@ -48,10 +48,10 @@ namespace Netherlands3D.DataTypeAdapters
             StopCoroutine(chain);
         }
 
-        private IEnumerator DownloadAndCheckSupport(StoredAuthorization auth)
+        private IEnumerator DownloadAndCheckSupport(Uri sourceUri, StoredAuthorization auth)
         {
             // Start by download the file, so we can do a detailed check of the content to determine the type
-            var urlAndData = new LocalFile { SourceUrl = auth.InputUri.ToString(), LocalFilePath = "" };
+            var urlAndData = new LocalFile { SourceUrl = sourceUri.ToString(), LocalFilePath = "" };
 
             yield return DownloadDataToLocalCache(auth, urlAndData);
 
@@ -75,30 +75,22 @@ namespace Netherlands3D.DataTypeAdapters
         /// <returns></returns>
         private IEnumerator DownloadDataToLocalCache(StoredAuthorization auth, LocalFile urlAndData)
         {
-            var url = auth.InputUri;
-            if (auth is QueryStringAuthorization queryStringAuthorization)
-                url = queryStringAuthorization.GetFullUri();
-            
-            var request = Resource<FileInfo>.At(url);
-            
-            if (auth is HeaderBasedAuthorization headerBasedAuthorization)
-            {
-                var header = (Header)headerBasedAuthorization.GetHeaderKeyAndValue();
-                request = request.With(header);
-            }
+            var url = new Uri(urlAndData.SourceUrl);
+            var config = Config.Default();
+            config = auth.AddToConfig(config);
+            var promise = Uxios.DefaultInstance.Get<FileInfo>(url, config);
 
-            var futureFileInfo = request.Value;
             // We want to use and manipulate urlAndData, so we 'curry' it by wrapping a method call in a lambda 
-            futureFileInfo.Then(info =>
+            promise.Then(response =>
             {                
-                DownloadSucceeded(urlAndData, info);
+                DownloadSucceeded(urlAndData, response.Data as FileInfo);
             });        
-            futureFileInfo.Catch(error =>
+            promise.Catch(error =>
             {
                 DownloadFailed(urlAndData, error);
             });
             
-            yield return Uxios.WaitForRequest(futureFileInfo);
+            yield return Uxios.WaitForRequest(promise);
         }
 
         private string DownloadSucceeded(LocalFile urlAndData, FileSystemInfo info)
