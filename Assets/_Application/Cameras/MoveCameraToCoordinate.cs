@@ -62,9 +62,7 @@ namespace Netherlands3D.Twin.Cameras
                 var t = Mathf.Lerp(1, zoomDistanceMultiplier, (float)distanceFactor);
                 distance *= t; //increase distance so that objects don't take up too much screen space
             }
-
-            // ShiftOriginIfNeeded(targetLookAt); //this distance is not exact since there is still an offset we will apply to the camera, but close enough to fix the issue of floating point errors.
-
+            
             //to avoid floating point issues, we need to calculate the relative offset and add it to the targetLookAt
             // todo: to make this more compatible with different coordinate systems, we need to know the axis indices and add it to the correct one, but these are currently not publicly exposed.
             var offset = cameraDirection * (float)distance;
