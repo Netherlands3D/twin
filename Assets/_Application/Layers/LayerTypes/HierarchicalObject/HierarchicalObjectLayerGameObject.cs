@@ -149,7 +149,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                worldTransform.Coordinate.value2 != previousCoordinate.value2 &&
                worldTransform.Coordinate.value3 != previousCoordinate.value3)
             {
-                Debug.Log("not the same, updating" );
                 transformPropertyData.Position = worldTransform.Coordinate;
                 previousCoordinate = worldTransform.Coordinate;
             }
