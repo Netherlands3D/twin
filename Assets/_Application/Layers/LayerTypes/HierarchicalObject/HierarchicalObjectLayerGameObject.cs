@@ -108,6 +108,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected void UpdateRotation(Vector3 newAngles)
         {
             worldTransform.Rotation = Quaternion.Euler(newAngles);
+            transform.rotation = worldTransform.Rotation;
         }
 
         protected void UpdateScale(Vector3 newScale)
