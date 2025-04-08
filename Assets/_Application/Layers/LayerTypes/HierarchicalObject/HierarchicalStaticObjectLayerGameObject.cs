@@ -26,6 +26,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             transform.position = new Vector3(transform.position.x, TargetHeight, transform.position.z);
         }
 
+        protected override void UpdateRotation(Vector3 newAngles)
+        {
+            base.UpdateRotation(newAngles);
+            transform.rotation = Quaternion.Euler(Rotation);
+        }
+
         public override void OnSelect()
         {
             //this is to prevent executing base class functionality

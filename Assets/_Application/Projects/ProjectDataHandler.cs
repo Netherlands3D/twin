@@ -99,6 +99,13 @@ namespace Netherlands3D.Twin.Projects
             LoadDefaultProject();
         }
 
+        private void OnDestroy()
+        {
+            AssetBundleLoader loader = FindObjectOfType<AssetBundleLoader>();
+            if(loader)
+                loader.OnAssetsLoaded.RemoveListener(OnPreloadedAssets);
+        }
+
         private void OnEnable()
         {
             openProjectAction.Enable();
