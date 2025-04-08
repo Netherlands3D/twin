@@ -47,6 +47,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
         protected TransformLayerPropertyData transformPropertyData;
+        private Coordinate previousCoordinate;
+        private Quaternion previousRotation;
         private Vector3 previousScale;
         private WorldTransform worldTransform;
 
@@ -78,6 +80,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void Start()
         {
             base.Start();
+            previousCoordinate = worldTransform.Coordinate;
+            transform.rotation = worldTransform.Rotation;
+            previousRotation = worldTransform.Rotation;
             previousScale = transform.localScale;
 
             objectCreated.Invoke(gameObject);
@@ -102,6 +107,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected virtual void UpdateRotation(Vector3 newAngles)
         {
+            print("updating rotation: " + newAngles);
             worldTransform.Rotation = Quaternion.Euler(newAngles);
         }
 
@@ -135,11 +141,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
             }
         }
-
+        
         private void Update()
         {
-            //Position and rotation changes are handled by the WorldTransform
-
+            //Position and rotation changes are handled by the WorldTransform, but should be updated in the project data
+            if (worldTransform.Coordinate.ToUnity() != previousCoordinate.ToUnity()) //todo: add a == and != operator to Coordinate.cs to avoid having to convert to Unity
+            {
+                transformPropertyData.Position = worldTransform.Coordinate;
+                previousCoordinate = worldTransform.Coordinate;
+            }
+            
+            if (worldTransform.Rotation != previousRotation)
+            {
+                transformPropertyData.EulerRotation = worldTransform.Rotation.eulerAngles;
+                previousRotation = worldTransform.Rotation;
+            }
+            
             // Check for scale change
             if (transform.localScale != previousScale)
             {
