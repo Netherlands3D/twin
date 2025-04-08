@@ -100,14 +100,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             transformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);
         }
 
-        protected virtual void UpdatePosition(Coordinate newPosition)
+        protected void UpdatePosition(Coordinate newPosition)
         {
             worldTransform.MoveToCoordinate(newPosition);
         }
 
-        protected virtual void UpdateRotation(Vector3 newAngles)
+        protected void UpdateRotation(Vector3 newAngles)
         {
-            print("updating rotation: " + newAngles);
             worldTransform.Rotation = Quaternion.Euler(newAngles);
         }
 
@@ -145,8 +144,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private void Update()
         {
             //Position and rotation changes are handled by the WorldTransform, but should be updated in the project data
-            if (worldTransform.Coordinate.ToUnity() != previousCoordinate.ToUnity()) //todo: add a == and != operator to Coordinate.cs to avoid having to convert to Unity
+            //todo: add a == and != operator to Coordinate.cs to avoid having to do this
+            if(worldTransform.Coordinate.value1 != previousCoordinate.value1 &&
+               worldTransform.Coordinate.value2 != previousCoordinate.value2 &&
+               worldTransform.Coordinate.value3 != previousCoordinate.value3)
             {
+                Debug.Log("not the same, updating" );
                 transformPropertyData.Position = worldTransform.Coordinate;
                 previousCoordinate = worldTransform.Coordinate;
             }
