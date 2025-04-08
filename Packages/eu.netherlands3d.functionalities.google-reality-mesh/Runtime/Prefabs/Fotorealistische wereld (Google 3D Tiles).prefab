@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 379969814246679949}
   - component: {fileID: 837440091551581272}
   m_Layer: 6
-  m_Name: RealityMesh (3D Tiles)
+  m_Name: Fotorealistische wereld (Google 3D Tiles)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

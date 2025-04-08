@@ -1585,6 +1585,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8214079210432134355, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: https://netherlands3d.eu/docs/voorbeelden/wms-wfs/
+      objectReference: {fileID: 0}
     - target: {fileID: 8380135332799741093, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
       propertyPath: m_AnchorMax.y
