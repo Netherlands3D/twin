@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using JetBrains.Annotations;
 using Netherlands3D.Credentials;
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Functionalities.AssetBundles;
 using Netherlands3D.Twin.DataTypeAdapters;
 using UnityEngine;
 using UnityEngine.Events;
@@ -87,6 +88,12 @@ namespace Netherlands3D.Twin.Projects
             //Prevent default browser shortcuts for saving and undo/redo
             PreventDefaultShortcuts();
 #endif
+            //LoadDefaultProject();
+            FindObjectOfType<AssetBundleLoader>().OnAssetsLoaded.AddListener(OnPreloadedAssets);
+        }
+
+        private void OnPreloadedAssets()
+        {
             LoadDefaultProject();
         }
 
