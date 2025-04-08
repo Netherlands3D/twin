@@ -8,8 +8,6 @@ namespace Netherlands3D.Twin.FloatingOrigin
     public class WorldTransform : MonoBehaviour, IHasCoordinate
     {
         [SerializeField] private WorldTransformShifter worldTransformShifter;
-        [Obsolete("this should not be used anymore, because it causes problems with the Rotaion (up axis) on shifts")]
-        [SerializeField] private CoordinateSystem referenceCoordinateSystem = CoordinateSystem.RDNAP;
         public Coordinate Coordinate {
             get;
             set;
