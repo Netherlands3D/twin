@@ -2282,11 +2282,6 @@ PrefabInstance:
       propertyPath: fileOpener
       value: 
       objectReference: {fileID: 1235137767}
-    - target: {fileID: 4759327881244281210, guid: 782b1efec9cddc249a806396adc4599c,
-        type: 3}
-      propertyPath: defaultProjectFileName
-      value: ProjectTemplateZuidOost.nl3d
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
