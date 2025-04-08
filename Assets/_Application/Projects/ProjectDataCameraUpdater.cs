@@ -27,7 +27,6 @@ namespace Netherlands3D.Twin.Projects
         private void OnProjectDataChanged(ProjectData project)
         {
             var cameraCoordinate = new Coordinate(CoordinateSystem.RDNAP, project.CameraPosition[0], project.CameraPosition[1], project.CameraPosition[2]);
-            print("read camera coord from project: " + cameraCoordinate);
             GetComponent<WorldTransform>().MoveToCoordinate(cameraCoordinate);
 
             if (project.CameraRotation.Length == 3)
@@ -37,9 +36,8 @@ namespace Netherlands3D.Twin.Projects
             }
         }
 
-        private void Update() {
-            print("updating camera in project data with uuid: " + ProjectData.Current?.UUID);
-            
+        private void Update() 
+        {
             var currentCameraMatrix = transform.localToWorldMatrix;        
             if(Matrix4x4.Equals(currentCameraMatrix, lastSavedCameraTransformMatrix)) return;
 

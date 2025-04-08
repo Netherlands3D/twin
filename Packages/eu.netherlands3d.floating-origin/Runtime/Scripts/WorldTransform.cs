@@ -78,7 +78,6 @@ namespace Netherlands3D.Twin.FloatingOrigin
         {
             Coordinate = coordinate;
             transform.position = coordinate.ToUnity();
-            print(coordinate + "\t" + transform.position);
         }
     }
 }
