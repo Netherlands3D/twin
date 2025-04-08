@@ -154,7 +154,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 previousCoordinate = worldTransform.Coordinate;
             }
             
-            if (worldTransform.Rotation != previousRotation)
+            //if (worldTransform.Rotation != previousRotation)
             {
                 transformPropertyData.EulerRotation = worldTransform.Rotation.eulerAngles;
                 previousRotation = worldTransform.Rotation;
