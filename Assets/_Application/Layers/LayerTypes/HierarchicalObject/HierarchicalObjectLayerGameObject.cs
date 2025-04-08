@@ -100,16 +100,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected virtual void UpdatePosition(Coordinate newPosition)
         {
-            Debug.Log("setting new position: " + newPosition);
             worldTransform.MoveToCoordinate(newPosition);
-            // if (newPosition.ToUnity() != transform.position)
-            //     transform.position = newPosition.ToUnity();
         }
 
         protected virtual void UpdateRotation(Vector3 newAngles)
         {
-            // if (newAngles != transform.eulerAngles)
-            //     transform.eulerAngles = newAngles;
             worldTransform.Rotation = Quaternion.Euler(newAngles);
         }
 
@@ -148,20 +143,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             // We cannot use transform.hasChanged, because this flag is not correctly set when adjusting this transform using runtimeTransformHandles, instead we have to compare the values directly
             // Check for position change
-            if (transform.position != previousPosition)
-            {
-                // var positionCoordinate = new Coordinate(transform.position);
-                transformPropertyData.Position = worldTransform.Coordinate;
-                previousPosition = transform.position;
-            }
+            // if (transform.position != previousPosition)
+            // {
+            //     // var positionCoordinate = new Coordinate(transform.position);
+            //     transformPropertyData.Position = worldTransform.Coordinate;
+            //     previousPosition = transform.position;
+            // }
 
             // Check for rotation change
-            if (transform.rotation != previousRotation)
-            {
-                transformPropertyData.EulerRotation = worldTransform.Rotation.eulerAngles;
-                // transformPropertyData.EulerRotation = transform.eulerAngles;
-                previousRotation = transform.rotation;
-            }
+            // if (transform.rotation != previousRotation)
+            // {
+            //     transformPropertyData.EulerRotation = worldTransform.Rotation.eulerAngles;
+            //     // transformPropertyData.EulerRotation = transform.eulerAngles;
+            //     previousRotation = transform.rotation;
+            // }
 
             // Check for scale change
             if (transform.localScale != previousScale)
