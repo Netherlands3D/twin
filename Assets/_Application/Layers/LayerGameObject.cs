@@ -166,6 +166,9 @@ namespace Netherlands3D.Twin.Layers
             else
                 Bounds.Convert(CoordinateSystem.RD);
             
+            // !IMPORTANT: we deselect the layer, because if we don't do this, the TransformHandles might be connected to this LayerGameObject
+            // This causes conflicts between the transformHandles and the Origin Shifter system, because the Transform handles will try to move the gameObject to the old (pre-shift) position.
+            LayerData.DeselectLayer(); 
             //move the camera to the center of the bounds, and move it back by the size of the bounds (2x the extents)
             Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(Bounds.Center, Bounds.GetSizeMagnitude());//sizeMagnitude returns 2x the extents
         }
