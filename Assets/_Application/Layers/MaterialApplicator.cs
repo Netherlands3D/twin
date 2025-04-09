@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin.Layers
                 if (oldMaterial) Object.Destroy(oldMaterial);
 
                 // Set explicitly to null to prevent possible C# Managed Shell leaks
-                adapter.SetMaterial(null);
+                //adapter.SetMaterial(null);
 
                 // Apply a newly created material
                 adapter.SetMaterial(newMaterial);
