@@ -148,9 +148,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public override void ApplyStyling()
         {
             // The color in the Layer Panel represents the default fill color for this layer
-            LayerData.Color = LayerData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
+            //LayerData.Color = LayerData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
 
-            MaterialApplicator.Apply(this.Applicator);
+            LayerData.Color = LayerData.DefaultSymbolizer?.GetStrokeColor() ?? LayerData.Color; //why is the ui only mapped to stroke color? 
+
+            //MaterialApplicator.Apply(this.Applicator);
+            lineRenderer3D.LineMaterial.SetColor("_Color", LayerData.Color);
+            lineRenderer3D.SetDefaultColors();
         }
 
         public void ApplyStyling(FeatureLineVisualisations newFeatureVisualisation)
@@ -160,10 +164,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         
         private Material GetMaterialInstance(Color strokeColor)
         {
-            return new Material(lineRenderer3D.LineMaterial)
+            Material mat = new Material(lineRenderer3D.LineMaterial)
             {
                 color = strokeColor                
             };
+            mat.SetColor("_Color", strokeColor);
+            return mat;
         }
 
         /// <summary>

@@ -23,10 +23,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 //    return layer.GetMaterialInstance(Color.white);
                 //var style = layer.GetStyling(features.FirstOrDefault());
                 var style = layer.GetStyling(layer.CreateFeature(layer.spawnedVisualisations.Keys.FirstOrDefault()));
-                var color = style.GetFillColor() ?? Color.white;
-                Material mat = layer.GetMaterialInstance(color);
-                mat.SetColor("_Color", color);
-                return mat;
+                var color = style.GetFillColor() ?? Color.white;            
+                return layer.GetMaterialInstance(color);
             }
 
             public void SetMaterial(Material material) => layer.LineRenderer3D.LineMaterial = material;
