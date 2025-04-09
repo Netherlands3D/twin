@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.Coordinates;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,7 +8,6 @@ namespace Netherlands3D.Twin.FloatingOrigin
     public class WorldTransform : MonoBehaviour, IHasCoordinate
     {
         [SerializeField] private WorldTransformShifter worldTransformShifter;
-        [SerializeField] private CoordinateSystem referenceCoordinateSystem = CoordinateSystem.RDNAP;
         public Coordinate Coordinate {
             get;
             set;
@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
             get;
             set;
         }
-        public CoordinateSystem ReferenceCoordinateSystem => referenceCoordinateSystem;
+        public CoordinateSystem ReferenceCoordinateSystem => CoordinateSystems.connectedCoordinateSystem;
         public Origin Origin => Origin.current;
 
         public UnityEvent<WorldTransform, Coordinate> onPreShift = new();
@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
             {
                 worldTransformShifter = gameObject.AddComponent<GameObjectWorldTransformShifter>();
             }
-            Coordinate = new Coordinate(referenceCoordinateSystem, 0, 0, 0);
+            UpdateCoordinateBasedOnUnityTransform();
         }
 
         private void OnEnable()
@@ -70,6 +70,41 @@ namespace Netherlands3D.Twin.FloatingOrigin
             worldTransformShifter.ShiftTo(this, fromOrigin, toOrigin);
             onPostShift.Invoke(this, Coordinate);
             shiftPrepared = false;
+        }
+        
+        private void Update()
+        {
+            if (transform.hasChanged)
+            {
+                UpdateCoordinateBasedOnUnityTransform();
+                transform.hasChanged = false;
+            }
+        }
+
+        private void UpdateCoordinateBasedOnUnityTransform()
+        {
+            Coordinate = new Coordinate(transform.position).Convert(ReferenceCoordinateSystem);
+            Rotation = Quaternion.Inverse(Coordinate.RotationToLocalGravityUp()) * transform.rotation;
+        }
+
+        public void RecalculatePositionAndRotation()
+        {
+            transform.position = Coordinate.ToUnity();
+            transform.rotation = Coordinate.RotationToLocalGravityUp() * Rotation;
+
+        }
+        
+        // Set the coordinate and position directly
+        public void MoveToCoordinate(Coordinate coordinate)
+        {
+            Coordinate = coordinate.Convert(ReferenceCoordinateSystem);
+            transform.position = coordinate.ToUnity();
+        }
+        
+        public void SetRotation(Quaternion rotation)
+        {
+            Rotation = rotation;
+            transform.rotation = Coordinate.RotationToLocalGravityUp() * rotation;
         }
     }
 }
