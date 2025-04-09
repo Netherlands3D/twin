@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Minimap;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Projects;
 using TMPro;
@@ -158,7 +159,7 @@ namespace Netherlands3D.Twin.Configuration
             var cameraPosition = mainCam.transform.position;
             var cameraRD = new Coordinate(cameraPosition).Convert(CoordinateSystem.RDNAP);
             var targetCoordinate = new Coordinate(CoordinateSystem.RDNAP, cameraRD.easting, y, cameraRD.height);
-            mainCam.GetComponent<MoveCameraToCoordinate>().MoveToCoordinate(targetCoordinate);
+            mainCam.GetComponent<WorldTransform>().MoveToCoordinate(targetCoordinate);
 
             OnSettingsChanged.Invoke();
         }
@@ -173,7 +174,7 @@ namespace Netherlands3D.Twin.Configuration
             var cameraPosition = mainCam.transform.position;
             var cameraRD = new Coordinate(cameraPosition).Convert(CoordinateSystem.RDNAP);
             var targetCoordinate = new Coordinate(CoordinateSystem.RDNAP, x, cameraRD.northing, cameraRD.height);
-            mainCam.GetComponent<MoveCameraToCoordinate>().MoveToCoordinate(targetCoordinate);
+            mainCam.GetComponent<WorldTransform>().MoveToCoordinate(targetCoordinate);
 
             OnSettingsChanged.Invoke();
         }

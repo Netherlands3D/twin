@@ -31,14 +31,6 @@ namespace Netherlands3D.Twin.Cameras
             cameraWorldTransform = GetComponent<WorldTransform>();
         }
 
-        public void MoveToCoordinate(Coordinate coordinate)
-        {
-            // Set the coordinate of the worldTransform, and thereby the Camera's unity position.
-            // The Camera's Unity position will cause floating point issues, however it is only needed to trigger the Origin shift,
-            // and then the correct position will be recalculated from the world transform's coordinate.
-            cameraWorldTransform.MoveToCoordinate(coordinate); //update the coordinate 
-        }
-
         public void LookAtTarget(Coordinate targetLookAt, double targetDistance)
         {
             if (targetDistance > moveSizeLimit) // if the size of the bounds is larger than 20km, we don't move the camera
@@ -70,8 +62,11 @@ namespace Netherlands3D.Twin.Cameras
                                                 targetLookAt.value1 - (double)offset.x,
                                                 targetLookAt.value2 - (double)offset.z,
                                                 targetLookAt.value3 - (double)offset.y);
-            
-            MoveToCoordinate(targetCoordinate);
+
+            // Set the coordinate of the worldTransform, and thereby the Camera's unity position.
+            // The Camera's Unity position will cause floating point issues, however it is only needed to trigger the Origin shift,
+            // and then the correct position will be recalculated from the world transform's coordinate.
+            cameraWorldTransform.MoveToCoordinate(targetCoordinate); //update the coordinate 
         }
     }
 }

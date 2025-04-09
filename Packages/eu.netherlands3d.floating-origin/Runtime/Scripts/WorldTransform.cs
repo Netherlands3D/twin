@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.Coordinates;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,7 +8,6 @@ namespace Netherlands3D.Twin.FloatingOrigin
     public class WorldTransform : MonoBehaviour, IHasCoordinate
     {
         [SerializeField] private WorldTransformShifter worldTransformShifter;
-        [SerializeField] private CoordinateSystem referenceCoordinateSystem = CoordinateSystem.RDNAP;
         public Coordinate Coordinate {
             get;
             set;
@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
             get;
             set;
         }
-        public CoordinateSystem ReferenceCoordinateSystem => referenceCoordinateSystem;
+        public CoordinateSystem ReferenceCoordinateSystem => CoordinateSystems.connectedCoordinateSystem;
         public Origin Origin => Origin.current;
 
         public UnityEvent<WorldTransform, Coordinate> onPreShift = new();
@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
             {
                 worldTransformShifter = gameObject.AddComponent<GameObjectWorldTransformShifter>();
             }
-            Coordinate = new Coordinate(referenceCoordinateSystem, 0, 0, 0);
+            Coordinate = new Coordinate(ReferenceCoordinateSystem, 0, 0, 0);
         }
 
         private void OnEnable()
@@ -76,7 +76,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
         // Set the coordinate and position directly
         public void MoveToCoordinate(Coordinate coordinate)
         {
-            Coordinate = coordinate;
+            Coordinate = coordinate.Convert(ReferenceCoordinateSystem);
             transform.position = coordinate.ToUnity();
         }
     }

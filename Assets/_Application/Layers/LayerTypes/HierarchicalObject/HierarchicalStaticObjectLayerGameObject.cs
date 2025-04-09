@@ -5,9 +5,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
     public class HierarchicalStaticObjectLayerGameObject : HierarchicalObjectLayerGameObject
     {
-        public Vector3 Rotation = Vector3.zero; //TODO get this value from original template
-        public Vector3 Scale = Vector3.one; //TODO get this value from original template
-        public float TargetHeight;
         public Vector3 Coordinates = Vector3.zero;
         [SerializeField] private CoordinateSystem coordinateSystem;
 
@@ -15,15 +12,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void Start()
         {
             base.Start();
-            transformPropertyData.Position = new Coordinate(coordinateSystem, new double[3] { Coordinates.y, Coordinates.x, Coordinates.z });
-            transformPropertyData.EulerRotation = Rotation;
-            transformPropertyData.LocalScale = Scale;
-        }
-
-        protected override void UpdatePosition(Coordinate newPosition)
-        {
-            base.UpdatePosition(newPosition);
-            transform.position = new Vector3(transform.position.x, TargetHeight, transform.position.z);
+            transformPropertyData.Position = new Coordinate(coordinateSystem, Coordinates.y, Coordinates.x, Coordinates.z);
+            transformPropertyData.EulerRotation = transform.rotation.eulerAngles;
+            transformPropertyData.LocalScale = transform.localScale;
         }
 
         public override void OnSelect()

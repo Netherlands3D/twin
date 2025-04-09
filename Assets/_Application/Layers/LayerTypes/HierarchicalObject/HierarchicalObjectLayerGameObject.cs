@@ -3,6 +3,7 @@ using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.LayerStyles.ExtensionMethods;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
@@ -16,6 +17,7 @@ using UnityEngine.EventSystems;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
+    [RequireComponent(typeof(WorldTransform))]
     public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, ILayerWithPropertyPanels, ILayerWithPropertyData
     {
         public override BoundingBox Bounds => CalculateWorldBoundsFromRenderers();
@@ -29,13 +31,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
 
             var combinedBounds = renderers[0].bounds;
-            
+
             for (var i = 1; i < renderers.Length; i++)
             {
                 var renderer = renderers[i];
                 combinedBounds.Encapsulate(renderer.bounds);
             }
-            
+
             var bl = new Coordinate(combinedBounds.min);
             var tr = new Coordinate(combinedBounds.max);
             return new BoundingBox(bl, tr);
@@ -45,9 +47,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
         private List<IPropertySectionInstantiator> propertySections = new();
         protected TransformLayerPropertyData transformPropertyData;
-        private Vector3 previousPosition;
+        private Coordinate previousCoordinate;
         private Quaternion previousRotation;
         private Vector3 previousScale;
+        private WorldTransform worldTransform;
 
         LayerPropertyData ILayerWithPropertyData.PropertyData => transformPropertyData;
         public bool TransformIsSetFromProperty { get; private set; } = false;
@@ -55,9 +58,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected void Awake()
         {
             transformPropertyData = new TransformLayerPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale);
-         
+
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
+
+            worldTransform = GetComponent<WorldTransform>();
         }
 
         protected override void OnEnable()
@@ -75,8 +80,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void Start()
         {
             base.Start();
-            previousPosition = transform.position;
-            previousRotation = transform.rotation;
+            previousCoordinate = worldTransform.Coordinate;
+            transform.rotation = worldTransform.Rotation;
+            previousRotation = worldTransform.Rotation;
             previousScale = transform.localScale;
 
             objectCreated.Invoke(gameObject);
@@ -94,16 +100,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             transformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);
         }
 
-        protected virtual void UpdatePosition(Coordinate newPosition)
+        protected void UpdatePosition(Coordinate newPosition)
         {
-            if (newPosition.ToUnity() != transform.position)
-                transform.position = newPosition.ToUnity();
+            worldTransform.MoveToCoordinate(newPosition);
         }
 
         protected void UpdateRotation(Vector3 newAngles)
         {
-            if (newAngles != transform.eulerAngles)
-                transform.eulerAngles = newAngles;
+            worldTransform.Rotation = Quaternion.Euler(newAngles);
         }
 
         protected void UpdateScale(Vector3 newScale)
@@ -130,31 +134,31 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 UpdateRotation(this.transformPropertyData.EulerRotation);
                 UpdateScale(this.transformPropertyData.LocalScale);
                 TransformIsSetFromProperty = true;
-                
+
                 transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
                 transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
                 transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
             }
         }
-
+        
         private void Update()
         {
-            // We cannot use transform.hasChanged, because this flag is not correctly set when adjusting this transform using runtimeTransformHandles, instead we have to compare the values directly
-            // Check for position change
-            if (transform.position != previousPosition)
+            //Position and rotation changes are handled by the WorldTransform, but should be updated in the project data
+            //todo: add a == and != operator to Coordinate.cs to avoid having to do this
+            if(worldTransform.Coordinate.value1 != previousCoordinate.value1 &&
+               worldTransform.Coordinate.value2 != previousCoordinate.value2 &&
+               worldTransform.Coordinate.value3 != previousCoordinate.value3)
             {
-                var positionCoordinate = new Coordinate(transform.position);
-                transformPropertyData.Position = positionCoordinate;
-                previousPosition = transform.position;
+                transformPropertyData.Position = worldTransform.Coordinate;
+                previousCoordinate = worldTransform.Coordinate;
             }
-
-            // Check for rotation change
-            if (transform.rotation != previousRotation)
+            
+            if (worldTransform.Rotation != previousRotation)
             {
-                transformPropertyData.EulerRotation = transform.eulerAngles;
-                previousRotation = transform.rotation;
+                transformPropertyData.EulerRotation = worldTransform.Rotation.eulerAngles;
+                previousRotation = worldTransform.Rotation;
             }
-
+            
             // Check for scale change
             if (transform.localScale != previousScale)
             {
@@ -189,7 +193,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void OnSelect()
         {
             var transformInterfaceToggle = FindAnyObjectByType<TransformHandleInterfaceToggle>(FindObjectsInactive.Include); //todo remove FindObjectOfType
-            
+
             if (!transformInterfaceToggle)
             {
                 Debug.LogError("Transform handles interface toggles not found, cannot set transform target");
