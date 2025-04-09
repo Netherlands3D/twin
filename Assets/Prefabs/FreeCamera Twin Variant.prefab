@@ -93,6 +93,11 @@ PrefabInstance:
       propertyPath: m_RenderPostProcessing
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1107191816428015819, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      propertyPath: zoomSpeed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6567033620470696027, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
       propertyPath: scrollScaleValue
