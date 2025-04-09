@@ -80,11 +80,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void Start()
         {
             base.Start();
+            worldTransform.RecalculatePositionAndRotation();
             previousCoordinate = worldTransform.Coordinate;
-            transform.rotation = worldTransform.Rotation;
             previousRotation = worldTransform.Rotation;
             previousScale = transform.localScale;
-
+            
             objectCreated.Invoke(gameObject);
 
             //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
@@ -107,7 +107,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected void UpdateRotation(Vector3 newAngles)
         {
-            worldTransform.Rotation = Quaternion.Euler(newAngles);
+            worldTransform.SetRotation(Quaternion.Euler(newAngles));
         }
 
         protected void UpdateScale(Vector3 newScale)

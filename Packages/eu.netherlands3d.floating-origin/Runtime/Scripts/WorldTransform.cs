@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
             {
                 worldTransformShifter = gameObject.AddComponent<GameObjectWorldTransformShifter>();
             }
-            Coordinate = new Coordinate(ReferenceCoordinateSystem, 0, 0, 0);
+            UpdateCoordinateBasedOnUnityTransform();
         }
 
         private void OnEnable()
@@ -72,12 +72,39 @@ namespace Netherlands3D.Twin.FloatingOrigin
             shiftPrepared = false;
         }
         
+        private void Update()
+        {
+            if (transform.hasChanged)
+            {
+                UpdateCoordinateBasedOnUnityTransform();
+                transform.hasChanged = false;
+            }
+        }
+
+        private void UpdateCoordinateBasedOnUnityTransform()
+        {
+            Coordinate = new Coordinate(transform.position).Convert(ReferenceCoordinateSystem);
+            Rotation = Quaternion.Inverse(Coordinate.RotationToLocalGravityUp()) * transform.rotation;
+        }
+
+        public void RecalculatePositionAndRotation()
+        {
+            transform.position = Coordinate.ToUnity();
+            transform.rotation = Coordinate.RotationToLocalGravityUp() * Rotation;
+
+        }
         
         // Set the coordinate and position directly
         public void MoveToCoordinate(Coordinate coordinate)
         {
             Coordinate = coordinate.Convert(ReferenceCoordinateSystem);
             transform.position = coordinate.ToUnity();
+        }
+        
+        public void SetRotation(Quaternion rotation)
+        {
+            Rotation = rotation;
+            transform.rotation = Coordinate.RotationToLocalGravityUp() * rotation;
         }
     }
 }
