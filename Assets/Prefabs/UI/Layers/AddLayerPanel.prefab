@@ -1541,7 +1541,7 @@ MonoBehaviour:
   m_Elasticity: 0.01
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 3
+  m_ScrollSensitivity: 1
   m_Viewport: {fileID: 7815927442135817875}
   m_HorizontalScrollbar: {fileID: 6951452337475559857}
   m_VerticalScrollbar: {fileID: 4778416693274480372}
@@ -8094,7 +8094,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Bestand via URL
+  m_text: Laag via URL
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 32ddfb0cac272234c9b6f41500eb9afb, type: 2}
   m_sharedMaterial: {fileID: -6169979864846303504, guid: 32ddfb0cac272234c9b6f41500eb9afb,

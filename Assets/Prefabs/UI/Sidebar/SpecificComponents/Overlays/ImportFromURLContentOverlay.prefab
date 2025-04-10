@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Elasticity: 0.01
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 3
+  m_ScrollSensitivity: 1
   m_Viewport: {fileID: 1908807033174169996}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
@@ -976,7 +976,7 @@ PrefabInstance:
     - target: {fileID: 1629620604472758691, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1870
+      value: 3790
       objectReference: {fileID: 0}
     - target: {fileID: 1629620604472758691, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
@@ -1584,6 +1584,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8214079210432134355, guid: 13d604e32abf3494fb16b5a7b8170c14,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: https://netherlands3d.eu/docs/voorbeelden/wms-wfs/
       objectReference: {fileID: 0}
     - target: {fileID: 8380135332799741093, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}

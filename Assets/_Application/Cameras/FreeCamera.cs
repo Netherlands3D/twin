@@ -416,7 +416,7 @@ namespace Netherlands3D.Twin.Cameras
             var targetIsBehind = Vector3.Dot(this.transform.forward, direction) < 0;
             if (targetIsBehind) direction = -direction;
 
-            this.transform.Translate(direction.normalized * dynamicZoomSpeed * amount, Space.World);
+            this.transform.Translate(direction.normalized * dynamicZoomSpeed * amount * Time.deltaTime, Space.World);
         }
 
         /// <summary>

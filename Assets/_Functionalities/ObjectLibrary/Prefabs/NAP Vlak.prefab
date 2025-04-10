@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -1071879601358292985}
   - component: {fileID: 5954464799649402090}
   m_Layer: 0
-  m_Name: NAP Vlak
+  m_Name: NAP vlak
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

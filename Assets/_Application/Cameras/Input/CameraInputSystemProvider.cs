@@ -128,10 +128,7 @@ namespace Netherlands3D.Twin.Cameras.Input
             pointerAction = cameraActionMap.FindAction("Point");
 
             SetOriginalProcessors(zoomAction);
-#if !UNITY_EDITOR
-        UseZoomScaleValue = SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX;
-        return;
-#endif
+            
             if (UseZoomScaleValue)
                 ApplyInputActionScaling(zoomAction, scrollScaleValue);
         }
