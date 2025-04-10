@@ -1,20 +1,25 @@
 ﻿using Netherlands3D.LayerStyles;
-using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
 {
     public class LayerFeature
     {
-        public Component Component;
-        public readonly ExpressionContext Attributes = new();
+        // Geometry is used loosely here - this means _anything_ that represents the physical aspect of a feature
+        // individual layer types are expected to know what type they are using, and thus how to retrieve it.
+        public readonly object Geometry;
+        public readonly ExpressionContext Attributes;
 
-        public LayerFeature(Component component, ExpressionContext attributes = null)
+        private LayerFeature(object geometry, ExpressionContext attributes = null)
         {
-            Component = component;
-            Attributes = attributes ?? Attributes;
+            this.Geometry = geometry;
+            Attributes = attributes ?? new ExpressionContext();
         }
 
-        public static LayerFeature Create(LayerGameObject layer, Component component)
+        /// <param name="geometry">
+        /// Geometry is used loosely here - this means _anything_ that represents the physical aspect of a feature
+        /// individual layer types are expected to know what type they are using, and thus how to retrieve it.
+        /// </param>
+        public static LayerFeature Create(LayerGameObject layer, object geometry)
         {
             var expressionContext = new ExpressionContext
             {
@@ -22,7 +27,7 @@ namespace Netherlands3D.Twin.Layers
                 { "nl3d_layer_name", layer.LayerData.Name }
             };
             
-            return new LayerFeature(component, expressionContext);
+            return new LayerFeature(geometry, expressionContext);
         }
     }
 }

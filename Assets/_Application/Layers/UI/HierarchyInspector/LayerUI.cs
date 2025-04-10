@@ -629,7 +629,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
                 if (relativeYValue > 0.25f * hoverTransform.rect.height)
                 {
-                    // print("higher than " + referenceLayerUnderMouse.Layer.name);
                     draggingLayerShouldBePlacedBeforeOtherLayer = true;
                     layerUIManager.DragLine.gameObject.SetActive(true);
                     layerUIManager.DragLine.position = new Vector2(layerUIManager.DragLine.position.x, referenceLayerUnderMouse.parentRowRectTransform.position.y + correctedSize.y / 2 - spacingOffset);
@@ -643,7 +642,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 }
                 else if (relativeYValue < -0.25f * hoverTransform.rect.height)
                 {
-                    // print("lower than" + referenceLayerUnderMouse.Layer.name);
                     draggingLayerShouldBePlacedBeforeOtherLayer = false;
                     layerUIManager.DragLine.gameObject.SetActive(true);
                     layerUIManager.DragLine.position = new Vector2(layerUIManager.DragLine.position.x, referenceLayerUnderMouse.parentRowRectTransform.position.y - correctedSize.y / 2 - spacingOffset);
@@ -651,7 +649,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                     //edge case: if the reorder is between layerUnderMouse, and between layerUnderMouse and child 0 of layerUnderMouse, the new parent should be the layerUnderMouse instead of the layerUnderMouse's parent 
                     if (referenceLayerUnderMouse.ChildrenUI.Length > 0 && referenceLayerUnderMouse.foldoutToggle.isOn)
                     {
-                        // print("edge case for: " + referenceLayerUnderMouse.Layer.name);
                         leftOffset += indentWidth;
                         layerUIManager.DragLine.SetLeft(leftOffset);
                         newParent = referenceLayerUnderMouse;
@@ -677,7 +674,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 }
                 else
                 {
-                    // print("reparent to " + referenceLayerUnderMouse.Layer.name);
                     referenceLayerUnderMouse.SetHighlight(InteractionState.DragHover);
                     draggingLayerShouldBePlacedBeforeOtherLayer = false;
                     layerUIManager.DragLine.gameObject.SetActive(false);
