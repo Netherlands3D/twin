@@ -77,6 +77,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             featureSelector = gameObject.AddComponent<FeatureSelector>();
             featureSelector.SetMappingTree(MappingTree);
 
+            layerTool.onClose.AddListener(() => Deselect());
+
             Interaction.ObjectMappingCheckIn += OnAddObjectMapping;
             Interaction.ObjectMappingCheckOut += OnRemoveObjectMapping;
 
@@ -94,7 +96,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void Update()
         {            
-            if (IsClicked())
+            if (layerTool.Open && IsClicked())
             {
                 Deselect();
                 //the following method calls need to run in order!
