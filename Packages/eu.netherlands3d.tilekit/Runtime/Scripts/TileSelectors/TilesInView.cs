@@ -1,6 +1,7 @@
 using System;
 using Netherlands3D.Tilekit.TileSets;
 using Netherlands3D.Tilekit.TileSets.ImplicitTiling;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit.TileSelectors
@@ -143,12 +144,12 @@ namespace Netherlands3D.Tilekit.TileSelectors
         
         private float CalculateTileScreenSpaceError(Tile child)
         {
-            Bounds boundsDouble = child.BoundingVolume.ToBounds();
+            BoundsDouble boundsDouble = child.BoundingVolume.ToBounds();
             var cameraPosition = MainCameraTransform.position;
             
             var distanceToCamera = Vector3.Distance(
                 cameraPosition, 
-                projector.ToUnityUnits(boundsDouble.ClosestPoint(cameraPosition))
+                projector.ToUnityUnits(boundsDouble.ClosestPoint(new double3(cameraPosition)))
             );
 
             var sse = distanceToCamera < 0.1f

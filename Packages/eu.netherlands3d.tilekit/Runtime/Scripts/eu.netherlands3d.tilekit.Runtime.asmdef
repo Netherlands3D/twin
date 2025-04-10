@@ -3,7 +3,8 @@
     "rootNamespace": "Netherlands3D.Tilekit",
     "references": [
         "GUID:89a9652a8b22fb74b912223ceba2da14",
-        "GUID:3335e59e1b397a84d95a9da063907f50"
+        "GUID:3335e59e1b397a84d95a9da063907f50",
+        "GUID:d8b63aba1907145bea998dd612889d6b"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

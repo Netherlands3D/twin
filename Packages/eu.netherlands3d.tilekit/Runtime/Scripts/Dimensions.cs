@@ -1,4 +1,5 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit
@@ -49,7 +50,7 @@ namespace Netherlands3D.Tilekit
             return new Dimensions(vector.x, vector.z, vector.y);
         }
 
-        public static implicit operator Dimensions(Vector3Double vector)
+        public static implicit operator Dimensions(double3 vector)
         {
             return new Dimensions(vector.x, vector.z, vector.y);
         }

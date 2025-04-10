@@ -488,7 +488,9 @@
       "version": "file:eu.netherlands3d.tilekit",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {}
+      "dependencies": {
+        "com.unity.mathematics": "1.2.6"
+      }
     },
     "eu.netherlands3d.tiles3d": {
       "version": "1.10.4",

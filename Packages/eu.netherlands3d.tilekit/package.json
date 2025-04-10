@@ -12,5 +12,8 @@
   "author": {
     "name": "Netherlands3D",
     "url": "https://netherlands3d.eu/"
+  },
+  "dependencies": {
+    "com.unity.mathematics": "1.2.6"
   }
 }

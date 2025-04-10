@@ -1,35 +1,36 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit
 {
     [Serializable]
-    public class BoundsDouble
+    public struct BoundsDouble
     {
-        public Vector3Double Center { get; private set; }
-        public Vector3Double Size { get; private set; }
+        public double3 Center { get; private set; }
+        public double3 Size { get; private set; }
 
-        public Vector3Double Extents => Size * 0.5;
+        public double3 Extents => Size * 0.5;
 
-        public Vector3Double Min => Center - Extents;
-        public Vector3Double Max => Center + Extents;
+        public double3 Min => Center - Extents;
+        public double3 Max => Center + Extents;
 
-        public BoundsDouble(Vector3Double center, Vector3Double size)
+        public BoundsDouble(double3 center, double3 size)
         {
             Center = center;
             Size = size;
         }
 
-        public void SetMinMax(Vector3Double min, Vector3Double max)
+        public void SetMinMax(double3 min, double3 max)
         {
             Size = max - min;
             Center = min + Extents;
         }
 
-        public bool Contains(Vector3Double point)
+        public bool Contains(double3 point)
         {
-            Vector3Double min = Min;
-            Vector3Double max = Max;
+            double3 min = Min;
+            double3 max = Max;
 
             return (point.x >= min.x && point.x <= max.x) &&
                    (point.y >= min.y && point.y <= max.y) &&
@@ -43,13 +44,10 @@ namespace Netherlands3D.Tilekit
                    (Min.z <= other.Max.z && Max.z >= other.Min.z);
         }
 
-        public void Encapsulate(Vector3Double point)
+        public void Encapsulate(double3 point)
         {
-            Vector3Double min = Min;
-            Vector3Double max = Max;
-
-            min = Vector3Double.Min(min, point);
-            max = Vector3Double.Max(max, point);
+            double3 min = math.min(Min, point);
+            double3 max = math.max(Max, point);
 
             SetMinMax(min, max);
         }
@@ -62,10 +60,10 @@ namespace Netherlands3D.Tilekit
 
         public void Expand(double amount)
         {
-            Size += new Vector3Double(amount, amount, amount);
+            Size += new double3(amount, amount, amount);
         }
 
-        public void Expand(Vector3Double amount)
+        public void Expand(double3 amount)
         {
             Size += amount;
         }
@@ -75,14 +73,42 @@ namespace Netherlands3D.Tilekit
             return $"Center: {Center}, Size: {Size}";
         }
         
+        public double3 ClosestPoint(double3 point)
+        {
+            double3 min = Min;
+            double3 max = Max;
+
+            double3 closestPoint = new double3(
+                math.clamp(point.x, min.x, max.x),
+                math.clamp(point.y, min.y, max.y),
+                math.clamp(point.z, min.z, max.z)
+            );
+
+            return closestPoint;
+        }
+
         public static implicit operator Bounds(BoundsDouble boundsDouble)
         {
-            return new Bounds(boundsDouble.Center, boundsDouble.Size);
+            return new Bounds(
+                new Vector3(
+                    (float)boundsDouble.Center.x,
+                    (float)boundsDouble.Center.y,
+                    (float)boundsDouble.Center.z
+                ), 
+                new Vector3(
+                    (float)boundsDouble.Size.x,
+                    (float)boundsDouble.Size.y,
+                    (float)boundsDouble.Size.z
+                ) 
+            );
         }
 
         public static implicit operator BoundsDouble(Bounds unityBounds)
         {
-            return new BoundsDouble(unityBounds.center, unityBounds.size);
+            return new BoundsDouble(
+                new double3(unityBounds.center.x, unityBounds.center.y, unityBounds.center.z), 
+                new double3(unityBounds.size.x, unityBounds.size.y, unityBounds.size.z)
+            );
         }
     }
 }
