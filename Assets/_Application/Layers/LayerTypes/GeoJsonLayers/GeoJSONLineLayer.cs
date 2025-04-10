@@ -26,6 +26,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
+               
 
         private GeoJsonLineLayerMaterialApplicator applicator;
         internal GeoJsonLineLayerMaterialApplicator Applicator
