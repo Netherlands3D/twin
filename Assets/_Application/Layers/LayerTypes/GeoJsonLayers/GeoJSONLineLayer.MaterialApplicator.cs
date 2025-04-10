@@ -20,7 +20,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 var features = layer.GetFeatures<BatchedMeshInstanceRenderer>();
                 var style = layer.GetStyling(features.FirstOrDefault());
-                var color = style.GetFillColor() ?? Color.white;
+                var color = style.GetStrokeColor() ?? Color.white;
 
                 return layer.GetMaterialInstance(color);
             }
