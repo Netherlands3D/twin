@@ -30,12 +30,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 return layer.GetMaterialInstance(color);
             }
 
-            public void SetMaterial(Material material)
-            {
-                if (material == null) return;
-
-                layer.LineRenderer3D.LineMaterial = material;
-            } 
+            public void SetMaterial(Material material) => layer.lineRenderer3D.LineMaterial = material;
 
             public Material GetMaterial() => layer.LineRenderer3D.LineMaterial;
         }
