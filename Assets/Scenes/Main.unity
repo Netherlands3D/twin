@@ -4302,6 +4302,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1894488453890193722, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: tooltipText
+      value: Lagenpaneel
+      objectReference: {fileID: 0}
     - target: {fileID: 1959453458440521006, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_AnchorMax.y
