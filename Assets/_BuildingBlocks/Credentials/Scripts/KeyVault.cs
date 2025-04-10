@@ -160,7 +160,7 @@ namespace Netherlands3D.Credentials
                 }
 
                 // if the Auth test was successful, stop looking.
-                if (promisedAuthorization.CurState == PromiseState.Resolved) yield break;
+                if (storedAuthorizations.ContainsKey(potentialAuth.Domain)) yield break; // if the Auth test was succesful, stop looking.
             }
         }
 
