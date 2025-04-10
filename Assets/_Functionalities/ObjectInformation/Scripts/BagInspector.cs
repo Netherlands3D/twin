@@ -22,9 +22,7 @@ using UnityEngine.Networking;
 using KeyValuePair = Netherlands3D.Twin.UI.KeyValuePair;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
-{
-	[RequireComponent(typeof(FeatureSelector))]
-	[RequireComponent(typeof(SubObjectSelector))]
+{	
 	public class BagInspector : MonoBehaviour
 	{
 		[Header("GeoJSON Data Sources")]
@@ -49,7 +47,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
 		private List<GameObject> dynamicInterfaceItems = new List<GameObject>();
 		private List<GameObject> keyValueItems = new List<GameObject>();
-		private Vector3 lastWorldClickedPosition;
+		
 
 		[Header("Practical information fields")]
 		[SerializeField] private TMP_Text badIdText;
@@ -66,90 +64,39 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 		private bool draggedBeforeRelease = false;
 		private bool waitingForRelease = false;
 
-		private FeatureSelector featureSelector;
-		private SubObjectSelector subObjectSelector;
-
-		private List<IMapping> orderedMappings = new List<IMapping>();
-		private float minClickDistance = 10;
-		private float minClickTime = 0.5f;
-		private float lastTimeClicked = 0;
-		private int currentSelectedMappingIndex = -1;
-		private bool filterDuplicateFeatures = true;
-
-        public static MappingTree MappingTree
-        {
-            get
-            {
-                if (mappingTreeInstance == null)
-                {                   
-                    BoundingBox bbox = StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds;
-                    MappingTree tree = new MappingTree(bbox, 4, 12);
-                    mappingTreeInstance = tree;
-                }
-                return mappingTreeInstance;
-            }
-        }
-        public bool debugMappingTree = false;
-        private static MappingTree mappingTreeInstance;
-        private PointerToWorldPosition pointerToWorldPosition;
+		private ObjectSelector objectSelector;      
 
         private void Awake()
 		{
 			mainCamera = Camera.main;
-            pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
-            cameraInputSystemProvider = mainCamera.GetComponent<CameraInputSystemProvider>();
-			subObjectSelector = GetComponent<SubObjectSelector>();
-			featureSelector = GetComponent<FeatureSelector>();
+           
+            cameraInputSystemProvider = mainCamera.GetComponent<CameraInputSystemProvider>();		
 
 			keyValuePairTemplate.gameObject.SetActive(false);
 
-			Interaction.ObjectMappingCheckIn += OnAddObjectMapping;
-			Interaction.ObjectMappingCheckOut += OnRemoveObjectMapping;
-
-
 			HideObjectInformation();
+
+			objectSelector = ObjectSelector.ObjectSelection;
 		}
 
-        private void Start()
-        {
-			//baginspector could be enabled later on, so it would be missing the already instantiated mappings
-			ObjectMapping[] alreadyActiveMappings = FindObjectsOfType<ObjectMapping>();
-			foreach (ObjectMapping mapping in alreadyActiveMappings)
-			{
-				OnAddObjectMapping(mapping);
-			}
-        }
-
-        private void OnAddObjectMapping(ObjectMapping mapping)
-		{
-			MeshMapping objectMapping = new MeshMapping();
-			objectMapping.SetMeshObject(mapping);
-            objectMapping.UpdateBoundingBox();
-            MappingTree.RootInsert(objectMapping);			
-        }
-
-		private void OnRemoveObjectMapping(ObjectMapping mapping)
-		{
-            //the getcomponent is unfortunate, if its performanc heavy maybe use cellcaching
-            BoundingBox queryBoundingBox = new BoundingBox(mapping.GetComponent<MeshRenderer>().bounds);
-			queryBoundingBox.Convert(CoordinateSystem.WGS84_LatLon);
-            List<IMapping> mappings = MappingTree.Query<MeshMapping>(queryBoundingBox);
-            foreach (MeshMapping map in mappings)
-            {
-                if (map.ObjectMapping == mapping)
-                {
-                    //destroy featuremapping object, there should be no references anywhere else to this object!
-                    MappingTree.Remove(map);					
-                }
-            }
-        }
 
 		private void Update()
 		{
 			if (IsClicked())
 			{
-				FindObjectMapping();
-			}
+                Deselect();
+                //the following method calls need to run in order!
+                string bagId = objectSelector.FindBagId();
+                IMapping mapping = objectSelector.FindObjectMapping();
+                if (mapping is MeshMapping)
+                {
+                    SelectBuildingOnHit(bagId);
+                }
+                else
+                {
+                    SelectFeatureOnHit(mapping as FeatureMapping);
+                }
+            }
 		}
 
 		private bool IsClicked()
@@ -178,102 +125,19 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 			return cameraInputSystemProvider.OverLockingObject == false;
 		}
 
-        /// <summary>
-        /// Find objectmapping by raycast and get the BAG ID
-        /// </summary>
-        private void FindObjectMapping()
-		{
-			Deselect();	
-
-			//the following method calls need to run in order!
-			string bagId = subObjectSelector.FindSubObject();	
-
-			bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.WorldPoint) < minClickDistance;
-			lastWorldClickedPosition = pointerToWorldPosition.WorldPoint;
-			
-			bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
-			lastTimeClicked = Time.time;
-
-			if (!clickedSamePosition || refreshSelection)
-			{
-				if(subObjectSelector.Object != null)
-					featureSelector.SetBlockingObjectMapping(subObjectSelector.Object.ObjectMapping, lastWorldClickedPosition);
-
-                //no features are imported yet if mappingTreeInstance is null
-                if (mappingTreeInstance != null)
-					featureSelector.FindFeature(mappingTreeInstance);
-
-				orderedMappings.Clear();
-                Dictionary<IMapping, int> mappings = new Dictionary<IMapping, int>();		
-                //lets order all mappings by layerorder (rootindex) from layerdata
-                if (featureSelector.HasFeatureMapping)
-				{
-					List<Feature> filterDuplicates = new List<Feature>();
-					foreach (FeatureMapping feature in featureSelector.FeatureMappings)
-					{
-						if (feature.VisualisationParent.LayerData.ActiveInHierarchy)
-						{
-							if(filterDuplicateFeatures)
-							{
-								if (!filterDuplicates.Contains(feature.Feature))
-									filterDuplicates.Add(feature.Feature);
-								else
-									continue;
-							}
-
-							mappings.TryAdd(feature, feature.VisualisationParent.LayerData.RootIndex);
-						}
-                    }
-                }
-				if (subObjectSelector.HasObjectMapping)
-				{
-					LayerGameObject subObjectParent = subObjectSelector.Object.ObjectMapping.transform.GetComponentInParent<LayerGameObject>();
-					if (subObjectParent != null)
-					{
-						if(subObjectParent.LayerData.ActiveInHierarchy)
-							mappings.TryAdd(subObjectSelector.Object, subObjectParent.LayerData.RootIndex);
-					}
-				}
-
-                orderedMappings = mappings.OrderBy(entry => entry.Value).Select(entry => entry.Key).ToList();
-				
-                currentSelectedMappingIndex = 0;
-			}
-			else
-			{
-				//clicking at same position so lets toggle through the list
-				currentSelectedMappingIndex++;
-				if (currentSelectedMappingIndex >= orderedMappings.Count)
-					currentSelectedMappingIndex = 0;
-			}
-
-			if (orderedMappings.Count == 0) return;
-
-			//Debug.Log(orderedMappings[currentSelectedMappingIndex]);
-
-			IMapping selection = orderedMappings[currentSelectedMappingIndex];
-			if (selection is MeshMapping)
-			{				
-				SelectBuildingOnHit(bagId);
-			}
-			else
-			{
-                SelectFeatureOnHit(selection as FeatureMapping);				
-			}
-        }
+        
 
         private void SelectBuildingOnHit(string bagId)
 		{
             ShowObjectInformation();
-
-            subObjectSelector.Select(bagId);
+            objectSelector.SelectBagId(bagId);
 			LoadBuildingContent(bagId);
 		}
 		
 		private void SelectFeatureOnHit(FeatureMapping mapping)
 		{
 		    ShowFeatureInformation();
-            featureSelector.Select(mapping);
+            objectSelector.SelectFeatureMapping(mapping);
 			LoadFeatureContent(mapping);
 			RenderThumbnailForFeature(mapping);            
         }
@@ -319,8 +183,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             HideObjectInformation();
 			HideFeatureInformation();
 
-            subObjectSelector.Deselect();
-			featureSelector.Deselect();
+            objectSelector.Deselect();
 		}
 
 		private void OnDestroy()
@@ -385,8 +248,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 				buildYearText.text = properties["bouwjaar"].ToString();
 				statusText.text = properties["status"].ToString();
 
-				//TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
-				Bounds currentObjectBounds = new Bounds(lastWorldClickedPosition, Vector3.one * 50.0f);
+				PointerToWorldPosition pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
+
+                //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
+                Bounds currentObjectBounds = new Bounds(pointerToWorldPosition.WorldPoint, Vector3.one * 50.0f);
 				buildingThumbnail.RenderThumbnail(currentObjectBounds);
 			}
 		}
@@ -516,12 +381,5 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 		}
 		#endregion
 
-#if UNITY_EDITOR
-		public void OnDrawGizmos()
-        {
-            if (debugMappingTree)
-                MappingTree.DebugTree();
-        }
-#endif
     }
 }

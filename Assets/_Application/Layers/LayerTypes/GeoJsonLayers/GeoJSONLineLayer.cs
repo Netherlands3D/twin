@@ -216,5 +216,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             return PropertySections;
         }
+
+        public override void OnSelect()
+        {
+            base.OnSelect();
+        }
     }
 }

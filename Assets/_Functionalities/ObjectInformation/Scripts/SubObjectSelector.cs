@@ -39,13 +39,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             ColorSetLayer = null;
         }
 
-        public string FindSubObject()
+        public string FindSubObjectAtPointerPosition()
         {
             foundObject = null;
             string bagId = null;
             Vector3 groundPosition = pointerToWorldPosition.WorldPoint;
             Coordinate coord = new Coordinate(groundPosition);
-            List<IMapping> mappings = BagInspector.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
+            List<IMapping> mappings = ObjectSelector.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
             if (mappings.Count == 0)
                 return bagId;
 
