@@ -59,85 +59,29 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 		[SerializeField] private GameObject buildingContentPanel;
         [SerializeField] private GameObject featureContentPanel;
 
-        private Camera mainCamera;
-		private CameraInputSystemProvider cameraInputSystemProvider;
-		private bool draggedBeforeRelease = false;
-		private bool waitingForRelease = false;
-
 		private ObjectSelector objectSelector;      
 
         private void Awake()
 		{
-			mainCamera = Camera.main;
-           
-            cameraInputSystemProvider = mainCamera.GetComponent<CameraInputSystemProvider>();		
-
 			keyValuePairTemplate.gameObject.SetActive(false);
 
 			HideObjectInformation();
 
-			objectSelector = ObjectSelector.ObjectSelection;
-		}
+			objectSelector = FindAnyObjectByType<ObjectSelector>();
+			objectSelector.SelectSubObjectWithBagId.AddListener(SelectBuildingOnHit);
+			objectSelector.SelectFeature.AddListener(SelectFeatureOnHit);
+            //todo, update when the object information mode is opened so this will update with the current selected object
+        }
 
-
-		private void Update()
-		{
-			if (IsClicked())
-			{
-                Deselect();
-                //the following method calls need to run in order!
-                string bagId = objectSelector.FindBagId();
-                IMapping mapping = objectSelector.FindObjectMapping();
-                if (mapping is MeshMapping)
-                {
-                    SelectBuildingOnHit(bagId);
-                }
-                else
-                {
-                    SelectFeatureOnHit(mapping as FeatureMapping);
-                }
-            }
-		}
-
-		private bool IsClicked()
-		{
-			var click = Pointer.current.press.wasPressedThisFrame;
-
-			if (click)
-			{
-				waitingForRelease = true;
-				draggedBeforeRelease = false;
-				return false;
-			}
-
-			if (waitingForRelease && !draggedBeforeRelease)
-			{
-				//Check if next release should be ignored ( if we dragged too much )
-				draggedBeforeRelease = Pointer.current.delta.ReadValue().sqrMagnitude > 0.5f;
-			}
-
-			if (Pointer.current.press.wasReleasedThisFrame == false) return false;
-			
-			waitingForRelease = false;
-
-			if (draggedBeforeRelease) return false;
-
-			return cameraInputSystemProvider.OverLockingObject == false;
-		}
-
-        
-
-        private void SelectBuildingOnHit(string bagId)
+        private void SelectBuildingOnHit(MeshMapping mapping, string bagId)
 		{
             ShowObjectInformation();
-            objectSelector.SelectBagId(bagId);
 			LoadBuildingContent(bagId);
 		}
 		
 		private void SelectFeatureOnHit(FeatureMapping mapping)
 		{
 		    ShowFeatureInformation();
-            objectSelector.SelectFeatureMapping(mapping);
 			LoadFeatureContent(mapping);
 			RenderThumbnailForFeature(mapping);            
         }
@@ -188,7 +132,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
 		private void OnDestroy()
 		{
-			Deselect();
+            objectSelector.SelectSubObjectWithBagId.RemoveListener(SelectBuildingOnHit);
+            objectSelector.SelectFeature.RemoveListener(SelectFeatureOnHit);
+
+            Deselect();
 		}
 
 		public void LoadBuildingContent(string bagID)

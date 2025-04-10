@@ -2,30 +2,39 @@ using GeoJSON.Net.Feature;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
+using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Samplers;
+using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class ObjectSelector : MonoBehaviour
     {
-        public static ObjectSelector ObjectSelection
-        {
-            get
-            {
-                if(objectSelector == null)
-                {
-                    GameObject objectSelectorGameObject = new GameObject("objectselector");
-                    objectSelector = objectSelectorGameObject.AddComponent<ObjectSelector>();
-                }
-                return objectSelector;
-            }
-        }
-        private static ObjectSelector objectSelector;
+
+        public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
+        public UnityEvent<FeatureMapping> SelectFeature;
+
+        //todo, decide whether this object should be a singleton or just an object in the scene
+        //public static ObjectSelector ObjectSelection
+        //{
+        //    get
+        //    {
+        //        if(objectSelector == null)
+        //        {
+        //            GameObject objectSelectorGameObject = new GameObject("objectselector");
+        //            objectSelector = objectSelectorGameObject.AddComponent<ObjectSelector>();
+        //        }
+        //        return objectSelector;
+        //    }
+        //}
+        //private static ObjectSelector objectSelector;
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
@@ -35,8 +44,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private float minClickDistance = 10;
         private float minClickTime = 0.5f;
         private float lastTimeClicked = 0;
+        private bool draggedBeforeRelease = false;
+        private bool waitingForRelease = false;
         private int currentSelectedMappingIndex = -1;
         private bool filterDuplicateFeatures = true;
+        private CameraInputSystemProvider cameraInputSystemProvider;
+
+
+        [SerializeField] private Tool layerTool;
 
         public static MappingTree MappingTree
         {
@@ -56,6 +71,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void Awake()
         {
+            cameraInputSystemProvider = Camera.main.GetComponent<CameraInputSystemProvider>();
             pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
             subObjectSelector = gameObject.AddComponent<SubObjectSelector>();
             featureSelector = gameObject.AddComponent<FeatureSelector>();
@@ -68,12 +84,59 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void Start()
         {
-            //baginspector could be enabled later on, so it would be missing the already instantiated mappings
+            //objectselector could be enabled later on, so it would be missing the already instantiated mappings
             ObjectMapping[] alreadyActiveMappings = FindObjectsByType<ObjectMapping>(FindObjectsSortMode.None);
             foreach (ObjectMapping mapping in alreadyActiveMappings)
             {
                 OnAddObjectMapping(mapping);
             }
+        }
+
+        private void Update()
+        {            
+            if (IsClicked())
+            {
+                Deselect();
+                //the following method calls need to run in order!
+                string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
+                IMapping mapping = FindObjectMapping();
+                if (mapping is MeshMapping map)
+                {
+                    SelectBagId(bagId);
+                    SelectSubObjectWithBagId?.Invoke(map, bagId);
+                }
+                else if(mapping is FeatureMapping feature) 
+                {
+                    SelectFeatureMapping(feature);
+                    SelectFeature?.Invoke(feature);
+                }
+            }
+        }
+
+        private bool IsClicked()
+        {
+            var click = Pointer.current.press.wasPressedThisFrame;
+
+            if (click)
+            {
+                waitingForRelease = true;
+                draggedBeforeRelease = false;
+                return false;
+            }
+
+            if (waitingForRelease && !draggedBeforeRelease)
+            {
+                //Check if next release should be ignored ( if we dragged too much )
+                draggedBeforeRelease = Pointer.current.delta.ReadValue().sqrMagnitude > 0.5f;
+            }
+
+            if (Pointer.current.press.wasReleasedThisFrame == false) return false;
+
+            waitingForRelease = false;
+
+            if (draggedBeforeRelease) return false;
+
+            return cameraInputSystemProvider.OverLockingObject == false;
         }
 
         private void OnAddObjectMapping(ObjectMapping mapping)
