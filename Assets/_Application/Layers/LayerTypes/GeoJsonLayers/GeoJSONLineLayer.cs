@@ -166,7 +166,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             Material mat = new Material(lineRenderer3D.LineMaterial)
             {
-                color = strokeColor                
+                color = strokeColor
             };
             mat.SetColor("_Color", strokeColor);
             return mat;
