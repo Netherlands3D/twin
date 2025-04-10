@@ -1,12 +1,20 @@
 using System.Runtime.Serialization;
+using KindMen.Uxios;
 
 namespace Netherlands3D.Tilekit.TileSets.ImplicitTiling
 {
     [DataContract(Namespace = "eu.netherlands3d.tilekit.tilesets.implicit_tiling", Name = "UniformGrid")]
-    public class UniformGrid : ImplicitTilingScheme
+    public struct UniformGrid : IImplicitTilingScheme
     {
-        protected override SubdivisionScheme SubdivisionScheme => SubdivisionScheme.UniformGrid;
+        SubdivisionScheme IImplicitTilingScheme.SubdivisionScheme => SubdivisionScheme.UniformGrid;
+        
+        public TemplatedUri Subtrees { get; }
+        public Dimensions TileSize { get; }
 
-        public Dimensions TileSize;
+        public UniformGrid(TemplatedUri subtrees, Dimensions tileSize)
+        {
+            Subtrees = subtrees;
+            TileSize = tileSize;
+        }
     }
 }

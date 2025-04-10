@@ -12,7 +12,7 @@ namespace Netherlands3D.Tilekit.TileRenderers
         public override Promise Add(Change change)
         {
             Debug.Log(change.Type);
-            Debug.Log(change.Tile.TileContents.FirstOrDefault()?.Uri.ToString());
+            Debug.Log(change.Tile.TileContents.FirstOrDefault().Uri.ToString());
             
             return base.Add(change);
         }
@@ -20,7 +20,7 @@ namespace Netherlands3D.Tilekit.TileRenderers
         public override Promise Replace(Change change)
         {
             Debug.Log(change.Type);
-            Debug.Log(change.Tile.TileContents.FirstOrDefault()?.Uri.ToString());
+            Debug.Log(change.Tile.TileContents.FirstOrDefault().Uri.ToString());
 
             return base.Replace(change);
         }
@@ -28,7 +28,7 @@ namespace Netherlands3D.Tilekit.TileRenderers
         public override Promise Remove(Change change)
         {
             Debug.Log(change.Type);
-            Debug.Log(change.Tile.TileContents.FirstOrDefault()?.Uri.ToString());
+            Debug.Log(change.Tile.TileContents.FirstOrDefault().Uri.ToString());
 
             return base.Remove(change);
         }

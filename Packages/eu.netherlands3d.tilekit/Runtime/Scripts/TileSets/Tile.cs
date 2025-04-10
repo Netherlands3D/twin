@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Serialization;
+using Netherlands3D.Tilekit.TileSets.BoundingVolumes;
 using Netherlands3D.Tilekit.TileSets.ImplicitTiling;
 using UnityEngine;
 
@@ -13,16 +14,16 @@ namespace Netherlands3D.Tilekit.TileSets
         /// </summary>
         public Guid Id { get; } = Guid.NewGuid();
     
-        public BoundingVolume BoundingVolume;
+        public IBoundingVolume BoundingVolume;
         public double GeometricError;
         public TileContents TileContents = new();
         public Matrix4x4 Transform;
         public Metadata Metadata = new();
         public Tiles Children = new();
-        public ImplicitTilingScheme ImplicitTiling = new None();
+        public IImplicitTilingScheme ImplicitTiling = new None();
         public MethodOfRefinement Refine = MethodOfRefinement.Replace;
 
-        public Tile(BoundingVolume boundingVolume, double geometricError)
+        public Tile(IBoundingVolume boundingVolume, double geometricError)
         {
             BoundingVolume = boundingVolume;
             GeometricError = geometricError;

@@ -32,16 +32,8 @@ namespace Netherlands3D.Tilekit.PredefinedTilesets
             );
 
             var root = new Tile(totalBoundingVolume, baseGeometricError);
-            root.TileContents.Add(new TileContent()
-            {
-                Uri = new TemplatedUri(url)
-            });
-
-            root.ImplicitTiling = new QuadTree()
-            {
-                SubtreeLevels = 0,
-                AvailableLevels = 20
-            };
+            root.TileContents.Add(new TileContent(new TemplatedUri(url), totalBoundingVolume));
+            root.ImplicitTiling = new QuadTree(null, 0, 20);
 
             // subdivisionScheme	Constant for all descendant tiles
             // refine	Constant for all descendant tiles

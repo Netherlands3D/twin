@@ -1,6 +1,6 @@
 ﻿using Netherlands3D.Tilekit.TileSets;
 
-namespace Netherlands3D.Tilekit.TileSetRenderers
+namespace Netherlands3D.Tilekit.TileMappers
 {
     public class Legacy3DTilesTileMapper : TileMapper
     {

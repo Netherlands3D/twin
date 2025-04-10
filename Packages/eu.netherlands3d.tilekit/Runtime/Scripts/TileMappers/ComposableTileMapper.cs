@@ -3,7 +3,7 @@ using Netherlands3D.Tilekit.Changes;
 using Netherlands3D.Tilekit.TileSets;
 using UnityEngine;
 
-namespace Netherlands3D.Tilekit.TileSetRenderers
+namespace Netherlands3D.Tilekit.TileMappers
 {
     public class ComposableTileMapper : TileMapper
     {

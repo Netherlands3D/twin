@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit
@@ -7,14 +8,14 @@ namespace Netherlands3D.Tilekit
         public abstract float ToUnityUnits(double original);
         public abstract double FromUnityUnits(float original);
 
-        public virtual Vector3 ToUnityUnits(Vector3Double original)
+        public virtual Vector3 ToUnityUnits(double3 original)
         {
             return new Vector3(ToUnityUnits(original.x), ToUnityUnits(original.y), ToUnityUnits(original.z));
         }
 
-        public virtual Vector3Double FromUnityUnits(Vector3 original)
+        public virtual double3 FromUnityUnits(float3 original)
         {
-            return new Vector3Double(
+            return new double3(
                 FromUnityUnits(original.x), 
                 FromUnityUnits(original.y),
                 FromUnityUnits(original.z)
@@ -32,8 +33,8 @@ namespace Netherlands3D.Tilekit
         public virtual BoundsDouble FromUnityUnits(Bounds original)
         {
             return new BoundsDouble(
-                ToUnityUnits(original.center), 
-                ToUnityUnits(original.size)
+                FromUnityUnits(original.center), 
+                FromUnityUnits(original.size)
             );
         }
     }
