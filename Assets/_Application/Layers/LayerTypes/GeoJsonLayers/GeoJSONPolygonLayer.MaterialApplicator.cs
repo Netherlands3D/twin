@@ -31,8 +31,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             public void SetMaterial(Material material)
             {
-                if (material == null) return;
-
                 layer.polygonVisualizationMaterialInstance = material;
             }
 

@@ -45,6 +45,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 // This counts as a shared material - as such we create a copy of the material and assign that
                 polygonVisualizationMaterial = value;
+                if (polygonVisualizationMaterial == null)
+                {
+                    polygonVisualizationMaterialInstance = null;
+                    return;
+                }
                 polygonVisualizationMaterialInstance = new Material(value);
                 
                 ApplyStyling();
