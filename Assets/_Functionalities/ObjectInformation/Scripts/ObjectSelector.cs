@@ -179,10 +179,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         }
 
         public string FindBagId()
-        {
-            //the following method calls need to run in order!
-            string bagId = subObjectSelector.FindSubObjectAtPointerPosition();
-            return bagId;
+        {            
+            return subObjectSelector.FindSubObjectAtPointerPosition();            
         }
 
         public void SelectBagId(string bagId)
@@ -196,8 +194,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         }
 
         /// <summary>
-        /// Find objectmapping by raycast and get the BAG ID
+        /// Finds a Mapping in the world by the current optical raycaster worldposition
         /// </summary>
+        /// <returns></returns>
         public IMapping FindObjectMapping()
         {
             bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.WorldPoint) < minClickDistance;
