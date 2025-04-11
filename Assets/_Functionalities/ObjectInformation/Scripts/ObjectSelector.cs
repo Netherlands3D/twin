@@ -105,6 +105,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 IMapping mapping = FindObjectMapping();
                 if(mapping == null && lastSelectedLayerData != null)
                 {
+                    //when nothing is selected but there was something selected, deselect the current active layer
                     lastSelectedLayerData.DeselectLayer();
                     lastSelectedLayerData = null;
                 }
