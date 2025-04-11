@@ -93,8 +93,10 @@ namespace Netherlands3D.Twin.Cameras.Input
                 if (!inputSystemUIInputModule)
                     return false;
 
+                var uiElementSelected = EventSystem.current.currentSelectedGameObject != null;
+                
                 GameObject gameObjectUnderPoint = inputSystemUIInputModule.GetLastRaycastResult(0).gameObject;
-                if (gameObjectUnderPoint && gameObjectUnderPoint.IsInLayerMask(lockInputLayers))
+                if (uiElementSelected || (gameObjectUnderPoint && gameObjectUnderPoint.IsInLayerMask(lockInputLayers)))
                 {
                     return true;
                 }
