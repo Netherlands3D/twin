@@ -1,6 +1,4 @@
-using System;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Events;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,6 +14,8 @@ namespace Netherlands3D.Twin.UI
         private RectTransform rectTransform;
         private Camera mainCamera;
         private Coordinate? stuckToWorldPosition = null;
+
+        public UnityEvent<string> OnEndEdit;
 
         public bool ReadOnly
         {
@@ -33,6 +33,13 @@ namespace Netherlands3D.Twin.UI
         private void OnEnable()
         {
             textField.onSubmit.AddListener(OnSubmitText);
+            textField.onEndEdit.AddListener(OnEndEdit.Invoke);
+        }
+        
+        private void OnDisable()
+        {
+            textField.onSubmit.RemoveListener(OnSubmitText);
+            textField.onEndEdit.RemoveListener(OnEndEdit.Invoke);
         }
 
         private void OnSubmitText(string text)
@@ -91,6 +98,11 @@ namespace Netherlands3D.Twin.UI
         public void Hide()
         {
             gameObject.SetActive(false);
+        }
+
+        public void SetTextWithoutNotify(string newText)
+        {
+            textField.SetTextWithoutNotify(newText);
         }
 
         public static bool NewLineModifierKeyIsPressed()

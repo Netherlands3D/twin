@@ -23,7 +23,7 @@ namespace Netherlands3D
         private void Awake()
         {
             worldTransform = GetComponent<WorldTransform>();
-            annotationPropertyData = new AnnotationPropertyData();
+            annotationPropertyData = new AnnotationPropertyData("");
             CreateTextPopup();
             annotationPropertyData.OnDataChanged.AddListener(UpdateAnnotation);
         }
