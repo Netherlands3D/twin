@@ -1,11 +1,12 @@
-using System;
 using GG.Extensions;
 using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
 
 namespace Netherlands3D
 {
+    [RequireComponent(typeof(LayerGameObject))]
     public class Annotation : MonoBehaviour
     {
         [SerializeField] private TextPopout popoutPrefab;

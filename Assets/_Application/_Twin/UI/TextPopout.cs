@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin.UI
     public class TextPopout : MonoBehaviour
     {
         [SerializeField] private TMP_InputField textField;
-            
+
         private RectTransform rectTransform;
         private Camera mainCamera;
         private Coordinate? stuckToWorldPosition = null;
@@ -28,8 +28,26 @@ namespace Netherlands3D.Twin.UI
             mainCamera = Camera.main;
             rectTransform = GetComponent<RectTransform>();
             gameObject.SetActive(false);
-        }        
-        
+        }
+
+        private void OnEnable()
+        {
+            textField.onSubmit.AddListener(OnSubmitText);
+        }
+
+        private void OnSubmitText(string text)
+        {
+            if (NewLineModifierKeyIsPressed())
+            {
+                textField.Select();
+                textField.text += "\n";
+                // Ensure the input field remains focused
+                EventSystem.current.SetSelectedGameObject(textField.gameObject, null);
+                textField.ActivateInputField();
+                textField.caretPosition = textField.text.Length;
+            }
+        }
+
         public void Show(string text, Vector3 atScreenPosition)
         {
             textField.text = text;
@@ -63,12 +81,6 @@ namespace Netherlands3D.Twin.UI
             stuckToWorldPosition = atWorldPosition;
         }
 
-        private void Update()
-        {
-            // textField.lineType = NewLineModifierKeyIsPressed() ? TMP_InputField.LineType.MultiLineNewline : TMP_InputField.LineType.MultiLineSubmit;
-        print(textField.lineType);
-        }
-
         private void LateUpdate()
         {
             if (stuckToWorldPosition == null) return;
@@ -80,10 +92,10 @@ namespace Netherlands3D.Twin.UI
         {
             gameObject.SetActive(false);
         }
-        
+
         public static bool NewLineModifierKeyIsPressed()
         {
             return Keyboard.current.shiftKey.isPressed;
-        } 
+        }
     }
 }
