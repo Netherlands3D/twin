@@ -1,15 +1,16 @@
 ManifestFileVersion: 0
-CRC: 1078169640
+UnityVersion: 6000.0.44f1
+CRC: 552196020
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 23577c0625a144195201d8f0583cff0a
+    Hash: 06eb871707568d80a5381504e06e9859
   TypeTreeHash:
     serializedVersion: 2
-    Hash: ae97663c9372931262e631d813c7c404
+    Hash: 8a0044677cdae00a964646b87d6e2a95
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 23577c0625a144195201d8f0583cff0a
+    Hash: d25ca8b3e65038a4225b35f75f3224d4
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -29,13 +30,13 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: c12702bc992978b43b2e53562d173b5c, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 725deca56fed1b24da6faceaf7e8828a, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1d5e400e5b4826d40b5e6a971c8ea425, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 725deca56fed1b24da6faceaf7e8828a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c12702bc992978b43b2e53562d173b5c, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
@@ -44,9 +45,11 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.UnityEvent
 - AssemblyName: UnityEngine.CoreModule
-  ClassName: UnityEngine.Events.UnityEvent`1[UnityEngine.GameObject]
+  ClassName: UnityEngine.Events.UnityEvent`1
 - AssemblyName: UnityEngine.CoreModule
-  ClassName: UnityEngine.Events.UnityEvent`2[Netherlands3D.Twin.FloatingOrigin.WorldTransform,Netherlands3D.Coordinates.Coordinate]
+  ClassName: UnityEngine.Events.UnityEvent`2
+- AssemblyName: eu.netherlands3d.coordinates.Runtime
+  ClassName: Netherlands3D.Coordinates.Coordinate
 - AssemblyName: eu.netherlands3d.coordinates.Runtime
   ClassName: Netherlands3D.Coordinates.CoordinateSystem
 Assets:

@@ -108,7 +108,7 @@ MonoBehaviour:
   objectCreated:
     m_PersistentCalls:
       m_Calls: []
-  Coordinates: {x: 4.9418635, y: 52.31434, z: 43.20403}
+  Coordinates: {x: 4.9418635, y: 52.31434, z: 40.20403}
   coordinateSystem: 4979
 --- !u!114 &8824428390786610554
 MonoBehaviour:
