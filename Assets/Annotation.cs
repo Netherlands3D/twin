@@ -1,7 +1,6 @@
 using System;
 using GG.Extensions;
 using Netherlands3D.Twin.FloatingOrigin;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
 
@@ -23,7 +22,7 @@ namespace Netherlands3D
         {
             var canvasTransform = FindAnyObjectByType<Canvas>();
             annotation = CreateTextPopout(canvasTransform.transform, PivotPresets.BottomCenter);
-            annotation.Show(annotationText, worldTransform.Coordinate, true);
+            annotation.Show("", worldTransform.Coordinate, true);
             annotation.ReadOnly = false;
         }
 
