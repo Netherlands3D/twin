@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 
@@ -31,6 +32,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     { bagId, new Color(1, 0, 0, 0) }
                 }
             );
+        }
+
+        public LayerData GetLayerDataForSubObject(ObjectMapping subObject)
+        {
+            Transform parent = subObject.gameObject.transform.parent;
+            LayerGameObject layerGameObject = parent.GetComponent<LayerGameObject>();
+            if (layerGameObject)
+            {
+                return layerGameObject.LayerData;   
+            }
+            return null;
         }
 
         public void Deselect()
