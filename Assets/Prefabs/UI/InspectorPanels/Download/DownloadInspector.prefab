@@ -1148,7 +1148,7 @@ MonoBehaviour:
   westExtentTextField: {fileID: 8598277423336867337}
   copyNorthEastExtentButton: {fileID: 197758433612143890}
   copySouthWestExtentButton: {fileID: 2551304673583623924}
-  popoutPrefab: {fileID: 3977518503646692406, guid: 0c75754029f6c6940848c9f8bfe7edb9,
+  popoutPrefab: {fileID: 1268885788563908924, guid: 0c75754029f6c6940848c9f8bfe7edb9,
     type: 3}
 --- !u!1 &3758227681740954705
 GameObject:

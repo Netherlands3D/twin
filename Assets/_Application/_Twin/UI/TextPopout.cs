@@ -1,29 +1,52 @@
+using System;
 using Netherlands3D.Coordinates;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Netherlands3D.Twin.UI
 {
     public class TextPopout : MonoBehaviour
     {
-        [SerializeField] private TMP_Text textField;
+        [SerializeField] private TMP_InputField textField;
         private RectTransform rectTransform;
         private Camera mainCamera;
         private Coordinate? stuckToWorldPosition = null;
 
-        private void Start()
+        public bool ReadOnly
+        {
+            get => textField.readOnly;
+            set => textField.readOnly = value;
+        }
+
+        private void Awake()
         {
             mainCamera = Camera.main;
             rectTransform = GetComponent<RectTransform>();
             gameObject.SetActive(false);
         }
 
+        // private void OnEnable()
+        // {
+        //     textField.onSelect.AddListener(OnTextFieldSelect);
+        // }
+        //
+        // private void OnDisable()
+        // {
+        //     textField.onSelect.RemoveListener(OnTextFieldSelect);
+        // }
+        //
+        // private void OnTextFieldSelect(string text)
+        // {
+        //     print(text);
+        // }
+
         public void Show(string text, Vector3 atScreenPosition)
         {
             textField.text = text;
             MoveTo(atScreenPosition);
             StickTo(null);
-    
+
             gameObject.SetActive(true);
         }
 
@@ -51,7 +74,7 @@ namespace Netherlands3D.Twin.UI
             stuckToWorldPosition = atWorldPosition;
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             if (stuckToWorldPosition == null) return;
 
