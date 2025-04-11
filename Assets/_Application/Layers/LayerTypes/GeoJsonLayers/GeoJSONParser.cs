@@ -5,12 +5,13 @@ using System.IO;
 using GeoJSON.Net;
 using GeoJSON.Net.CoordinateReferenceSystem;
 using GeoJSON.Net.Feature;
+using KindMen.Uxios;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Credentials.StoredAuthorization;
 using Newtonsoft.Json;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Networking;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
@@ -27,7 +28,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             maxParseDuration = maxParsePerFrameDuration;
         }
-        
+
         public IEnumerator ParseJSONString(string jsonText)
         {
             // Get the downloaded text
@@ -66,22 +67,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             yield return ParseFeatures(jsonReader, serializer);
         }
-        
-        public IEnumerator ParseGeoJSONStreamRemote(Uri uri)
-        {
-            //create LocalFile so we can use it in the ParseGeoJSONStream function
-            string url = uri.ToString();
-            var uwr = UnityWebRequest.Get(url);
 
-            yield return uwr.SendWebRequest();
-            if (uwr.result == UnityWebRequest.Result.Success)
-            {
-                yield return ParseJSONString(uwr.downloadHandler.text);
-            }
-            else
-            {
-                OnParseError.Invoke("Dit GeoJSON bestand kon niet worden ingeladen vanaf de URL.");
-            }
+        public IEnumerator ParseGeoJSONStreamRemote(Uri uri, StoredAuthorization auth)
+        {
+            string jsonString = string.Empty;
+
+            var config = new Config();
+            config = auth.AddToConfig(config);
+            var promise = Uxios.DefaultInstance.Get<string>(uri, config);
+            promise.Then(response => jsonString = response.Data as string
+            );
+            promise.Catch(response =>
+                OnParseError.Invoke("Dit GeoJSON bestand kon niet worden ingeladen vanaf de URL: " + response.InnerException)
+            );
+            
+            yield return Uxios.WaitForRequest(promise);
+
+            if(!string.IsNullOrEmpty(jsonString))
+                yield return ParseJSONString(jsonString);
         }
 
         private IEnumerator ParseFeatures(JsonTextReader jsonReader, JsonSerializer serializer)
@@ -127,10 +130,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 {
                     feature.CRS = CRS;
                 }
-                
+
                 features.Add(feature);
                 OnFeatureParsed.Invoke(feature);
-                
+
                 var parseDuration = Time.realtimeSinceStartup - startTime;
                 if (parseDuration > maxParseDuration)
                 {

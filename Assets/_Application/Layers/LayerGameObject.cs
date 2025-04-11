@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
@@ -13,7 +15,7 @@ using UnityEditor;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public abstract class LayerGameObject : MonoBehaviour
+    public abstract class LayerGameObject : MonoBehaviour, IStylable
     {
         [SerializeField] private string prefabIdentifier;
         public string PrefabIdentifier => prefabIdentifier;
@@ -24,6 +26,8 @@ namespace Netherlands3D.Twin.Layers
             set => LayerData.Name = value;
         }
 
+        public bool HasLayerData => layerData != null;
+        
         private ReferencedLayerData layerData;
 
         public ReferencedLayerData LayerData
@@ -47,6 +51,9 @@ namespace Netherlands3D.Twin.Layers
                 }
             }
         }
+
+        Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;
+        private readonly List<LayerFeature> cachedFeatures = new();
 
         [Space] public UnityEvent onShow = new();
         public UnityEvent onHide = new();
@@ -85,7 +92,7 @@ namespace Netherlands3D.Twin.Layers
             layerData.LayerDoubleClicked.AddListener(CenterInView); //only subscribe to this event once the layerData component has been initialized
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 
-            InitializeStyling();
+            ApplyStyling();
         }
 
         private void CreateProxy()
@@ -147,11 +154,6 @@ namespace Netherlands3D.Twin.Layers
             //called when the Proxy's active state changes.          
         }
 
-        public virtual void InitializeStyling()
-        {
-            //initialize the layer's style        
-        }
-
         public void CenterInView(LayerData layer)
         {
             if (Bounds == null)
@@ -165,8 +167,72 @@ namespace Netherlands3D.Twin.Layers
             else
                 Bounds.Convert(CoordinateSystem.RD);
             
+            // !IMPORTANT: we deselect the layer, because if we don't do this, the TransformHandles might be connected to this LayerGameObject
+            // This causes conflicts between the transformHandles and the Origin Shifter system, because the Transform handles will try to move the gameObject to the old (pre-shift) position.
+            LayerData.DeselectLayer(); 
             //move the camera to the center of the bounds, and move it back by the size of the bounds (2x the extents)
             Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(Bounds.Center, Bounds.GetSizeMagnitude());//sizeMagnitude returns 2x the extents
         }
+
+#region Styling
+        protected Symbolizer GetStyling(LayerFeature feature)
+        {
+            var symbolizer = new Symbolizer();
+            foreach (var style in LayerData.Styles)
+            {
+                symbolizer = style.Value.ResolveSymbologyForFeature(symbolizer, feature);
+            }
+
+            return symbolizer;
+        }
+
+        public virtual void ApplyStyling()
+        {
+            //initialize the layer's style        
+        }
+#endregion
+
+#region Features
+        public List<LayerFeature> GetFeatures<T>() where T : Component
+        {
+            cachedFeatures.Clear();
+
+            // By default, consider each Unity.Component of type T as a "Feature" and create an ExpressionContext to
+            // select the correct styling Rule to apply to the given "Feature". 
+            var components = GetComponentsInChildren<T>();
+
+            foreach (var component in components)
+            {
+                cachedFeatures.Add(CreateFeature(component));
+            }
+
+            return cachedFeatures;
+        }
+
+        /// <summary>
+        /// Create a Feature object from the given Component, this method is meant as an extension point
+        /// for LayerGameObjects to add more information to the Attribute (ExpressionContext) of the given Feature.
+        ///
+        /// For example: to be able to match on material names you need to include the material names in the attributes.
+        /// </summary>
+        protected LayerFeature CreateFeature(object geometry)
+        {
+            return AddAttributesToLayerFeature(LayerFeature.Create(this, geometry));
+        }
+
+        /// <summary>
+        /// Construct attributes onto the layer feature so that the styling system can
+        /// use that as input to pick the correct style.
+        ///
+        /// This could result in, what seems, duplication if a layer has a native type that also produces a series of
+        /// properties; however, this mechanism will ensure that all layers are treated equally for the styling system
+        /// and that the properties are encoded as Expression types so that the expression system does not need to do
+        /// ad hoc implicit conversions from a primitive to an Expression type. 
+        /// </summary>
+        protected virtual LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
+        {
+            return feature;
+        }
+        #endregion
     }
 }

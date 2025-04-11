@@ -37,16 +37,18 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void Insert(Node node, IMapping obj, int depth)
         {
-            if (!node.Bounds.Contains(obj.BoundingBox)) return;
+            //we should check for an intersect because a node that exactly lands on the edges of the center of the quadtree will not be added
+            if (!node.Bounds.Intersects(obj.BoundingBox)) return; 
 
             if (node.IsLeaf)
             {
                 node.Mappings.Add(obj);
-                if ((node.Mappings.Count > maxMappings && depth < maxDepth) || CouldFitInChild(node, obj))
+                //does the cell contain more than the preferred amount of objects and is still a cell less than max subdivision depth and also fits in a child then subdivide
+                if (node.Mappings.Count > maxMappings && depth < maxDepth && CouldFitInChild(node, obj))
                 {
-                    Subdivide(node);
-                    ReinsertObjects(node);
-                }
+                    Subdivide(node);                   
+                    ReinsertObjects(node); 
+                }                
             }
             else
             {
@@ -259,10 +261,16 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             node.Bounds.Debug(Color.green);
             foreach (IMapping mapping in node.Mappings)
-                if(mapping is FeatureMapping)
-                    Debug.DrawLine(mapping.BoundingBox.BottomLeft.ToUnity(), node.Bounds.BottomLeft.ToUnity(), Color.red);
-                else if(mapping is MeshMapping)
-                    Debug.DrawLine(mapping.BoundingBox.BottomLeft.ToUnity(), node.Bounds.BottomLeft.ToUnity(), Color.yellow);
+            {
+                Vector3 bl = mapping.BoundingBox.BottomLeft.ToUnity();
+                Vector3 nbl = node.Bounds.BottomLeft.ToUnity();
+                bl.y = 100;
+                nbl.y = 100;
+                if (mapping is FeatureMapping)
+                    Debug.DrawLine(bl, nbl, Color.red);
+                else if (mapping is MeshMapping)
+                    Debug.DrawLine(bl, nbl, Color.yellow);
+            }
 
 
             foreach (IMapping mapping in node.Mappings)

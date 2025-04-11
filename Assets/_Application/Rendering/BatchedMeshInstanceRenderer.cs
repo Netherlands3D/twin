@@ -44,7 +44,8 @@ namespace Netherlands3D.Twin.Rendering
             set
             {
                 material = value;
-                SetDefaultColors();
+                if (material != null)
+                    SetDefaultColors();
             }
         }
 
@@ -136,7 +137,7 @@ namespace Netherlands3D.Twin.Rendering
             {
                 MaterialPropertyBlock props = new MaterialPropertyBlock();
                 Vector4[] colorCache = new Vector4[1023];
-                Color defaultColor = Material.GetColor("_Color");
+                Color defaultColor = Material.color;
                 for (int j = 0; j < colorCache.Length; j++)
                     colorCache[j] = defaultColor;
                 segmentColorCache.Add(colorCache);
@@ -147,7 +148,7 @@ namespace Netherlands3D.Twin.Rendering
 
         public void SetDefaultColors()
         {
-            Color defaultColor = Material.GetColor("_Color");
+            Color defaultColor = Material.color;
             for (int batchIndex = 0; batchIndex < transformMatrixCache.Count; batchIndex++)
             {
                 Vector4[] colors = segmentColorCache[batchIndex];

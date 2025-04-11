@@ -1740,7 +1740,7 @@ MonoBehaviour:
   m_LayoutPriority: 1
 --- !u!95 &3170960236026756016
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2365,6 +2365,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8487502261294263493}
     m_Modifications:
+    - target: {fileID: 287118870518407241, guid: 8a8677c6eb3f72e4fbac53a581f6192b,
+        type: 3}
+      propertyPath: tooltipText
+      value: Lagen
+      objectReference: {fileID: 0}
     - target: {fileID: 4036689451780318589, guid: 8a8677c6eb3f72e4fbac53a581f6192b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size

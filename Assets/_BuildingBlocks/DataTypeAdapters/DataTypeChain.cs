@@ -3,6 +3,8 @@ using System.Collections;
 using System.IO;
 using KindMen.Uxios;
 using KindMen.Uxios.Api;
+using KindMen.Uxios.Http;
+using Netherlands3D.Credentials.StoredAuthorization;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,23 +23,8 @@ namespace Netherlands3D.DataTypeAdapters
         [Header("Events invoked on failures")] [Space(5)]
         public UnityEvent<string> CouldNotFindAdapter = new();
         public UnityEvent<string> OnDownloadFailed = new();
-
-        private string targetUrl = "";
-
-        /// <summary>
-        /// The target url can be set directly from an input field.
-        /// Using <ref> DetermineAdapter </ref> without an url will start the chain of responsibility using the set url.
-        /// </summary>
-        public string TargetUrl 
-        { 
-            get => targetUrl; 
-            set
-            {
-                AbortChain();
-                targetUrl = value;   
-            }
-        }
-
+        public UnityEvent<string> OnLocalCacheFailed = new();
+        
         private Coroutine chain;
 
         private void OnDisable() {
@@ -48,15 +35,10 @@ namespace Netherlands3D.DataTypeAdapters
         /// Determine the type of data using chain of responsibility
         /// </summary>
         /// <param name="url">Url to file or service</param>
-        public void DetermineAdapter(string url)
-        {
-            TargetUrl = url;
-            DetermineAdapter();
-        }
-        public void DetermineAdapter()
+        public void DetermineAdapter(Uri sourceUri, StoredAuthorization auth)
         {
             AbortChain();
-            chain = StartCoroutine(DownloadAndCheckSupport(TargetUrl));
+            chain = StartCoroutine(DownloadAndCheckSupport(sourceUri, auth));
         }
 
         private void AbortChain()
@@ -66,17 +48,18 @@ namespace Netherlands3D.DataTypeAdapters
             StopCoroutine(chain);
         }
 
-        private IEnumerator DownloadAndCheckSupport(string url)
+        private IEnumerator DownloadAndCheckSupport(Uri sourceUri, StoredAuthorization auth)
         {
             // Start by download the file, so we can do a detailed check of the content to determine the type
-            var urlAndData = new LocalFile { SourceUrl = url, LocalFilePath = "" };
+            var urlAndData = new LocalFile { SourceUrl = sourceUri.ToString(), LocalFilePath = "" };
 
-            yield return DownloadDataToLocalCache(urlAndData);
+            yield return DownloadDataToLocalCache(auth, urlAndData);
 
             // No local cache? Download failed.
             if (string.IsNullOrEmpty(urlAndData.LocalFilePath))
             {
-                OnDownloadFailed.Invoke(url);
+                Debug.LogError("No local cache found, download failed");
+                OnLocalCacheFailed?.Invoke(urlAndData.SourceUrl);
                 yield break;
             }
 
@@ -90,15 +73,24 @@ namespace Netherlands3D.DataTypeAdapters
         /// </summary>
         /// <param name="urlAndData">The local file object where the path will set</param>
         /// <returns></returns>
-        private IEnumerator DownloadDataToLocalCache(LocalFile urlAndData)
+        private IEnumerator DownloadDataToLocalCache(StoredAuthorization auth, LocalFile urlAndData)
         {
-            var futureFileInfo = Resource<FileInfo>.At(urlAndData.SourceUrl).Value;
-            
+            var url = new Uri(urlAndData.SourceUrl);
+            var config = Config.Default();
+            config = auth.AddToConfig(config);
+            var promise = Uxios.DefaultInstance.Get<FileInfo>(url, config);
+
             // We want to use and manipulate urlAndData, so we 'curry' it by wrapping a method call in a lambda 
-            futureFileInfo.Then(info => DownloadSucceeded(urlAndData, info));
-            futureFileInfo.Catch(error => DownloadFailed(urlAndData, error));
+            promise.Then(response =>
+            {                
+                DownloadSucceeded(urlAndData, response.Data as FileInfo);
+            });        
+            promise.Catch(error =>
+            {
+                DownloadFailed(urlAndData, error);
+            });
             
-            yield return Uxios.WaitForRequest(futureFileInfo);
+            yield return Uxios.WaitForRequest(promise);
         }
 
         private string DownloadSucceeded(LocalFile urlAndData, FileSystemInfo info)
@@ -111,6 +103,7 @@ namespace Netherlands3D.DataTypeAdapters
         private void DownloadFailed(LocalFile urlAndData, Exception error)
         {
             urlAndData.LocalFilePath = "";
+            OnDownloadFailed.Invoke(urlAndData.SourceUrl);
             if (debugLog)
             {
                 Debug.LogError("Download failed: " + error.Message);

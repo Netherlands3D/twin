@@ -6,6 +6,7 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -25,12 +26,34 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
+               
+
+        private GeoJsonLineLayerMaterialApplicator applicator;
+        internal GeoJsonLineLayerMaterialApplicator Applicator
+        {
+            get
+            {
+                if (applicator == null) applicator = new GeoJsonLineLayerMaterialApplicator(this);
+
+                return applicator;
+            }
+        }
 
         public LineRenderer3D LineRenderer3D
         {
             get => lineRenderer3D;
             //todo: move old lines to new renderer, remove old lines from old renderer without clearing entire list?
             set => lineRenderer3D = value;
+        }
+
+        protected override void Start()
+        {
+            // Ensure that LineRenderer3D.Material has a Material Instance to prevent accidental destruction
+            // of a material asset when replacing the material - no destroy of the old material must be done because
+            // that is an asset and not an instance
+            lineRenderer3D.LineMaterial = new Material(lineRenderer3D.LineMaterial);
+
+            base.Start();
         }
 
         public List<Mesh> GetMeshData(Feature feature)
@@ -103,14 +126,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             var newFeatureVisualisation = new FeatureLineVisualisations { feature = feature };
 
-            ApplyStyling();
+            ApplyStyling(newFeatureVisualisation);
 
             if (feature.Geometry is MultiLineString multiLineString)
             {
                 var newLines = GeometryVisualizationFactory.CreateLineVisualisation(multiLineString, originalCoordinateSystem, lineRenderer3D);
                 newFeatureVisualisation.Data.AddRange(newLines);
             }
-            else if(feature.Geometry is LineString lineString)
+            
+            if(feature.Geometry is LineString lineString)
             {
                 var newLine = GeometryVisualizationFactory.CreateLineVisualization(lineString, originalCoordinateSystem, lineRenderer3D);
                 newFeatureVisualisation.Data.Add(newLine);
@@ -122,19 +146,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
         }
 
-        public override void InitializeStyling()
+        public override void ApplyStyling()
         {
-            lineRenderer3D.LineMaterial = GetMaterialInstance();
+            // The color in the Layer Panel represents the default stroke color for this layer
+            LayerData.Color = LayerData.DefaultSymbolizer?.GetStrokeColor() ?? LayerData.Color;
+
+            MaterialApplicator.Apply(this.Applicator);
         }
 
-        public void ApplyStyling()
+        public void ApplyStyling(FeatureLineVisualisations newFeatureVisualisation)
         {
             // Currently we don't apply individual styling per feature
         }
         
-        private Material GetMaterialInstance()
+        private Material GetMaterialInstance(Color strokeColor)
         {
-            var strokeColor = LayerData.DefaultSymbolizer.GetStrokeColor() ?? Color.white;
             return new Material(lineRenderer3D.LineMaterial)
             {
                 color = strokeColor
@@ -193,6 +219,27 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             return bbox;
+        }
+        
+        private List<IPropertySectionInstantiator> propertySections;
+
+        protected List<IPropertySectionInstantiator> PropertySections
+        {
+            get
+            {
+                if (propertySections == null)
+                {
+                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
+                }
+
+                return propertySections;
+            }
+            set => propertySections = value;
+        }
+
+        public List<IPropertySectionInstantiator> GetPropertySections()
+        {
+            return PropertySections;
         }
     }
 }

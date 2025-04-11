@@ -34,10 +34,7 @@ namespace Netherlands3D.Twin.Configuration.Settings
             scrollAction = uiActionMap.FindAction("ScrollWheel");
 
             SetOriginalProcessors(scrollAction);
-#if !UNITY_EDITOR
-        UseZoomScaleValue = SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX;
-            return;
-#endif
+            
             if (UseZoomScaleValue)
                 ApplyInputActionScaling(scrollAction, scrollScaleValue);
         }

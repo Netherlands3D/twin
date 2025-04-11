@@ -93,6 +93,21 @@ PrefabInstance:
       propertyPath: m_RenderPostProcessing
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1107191816428015819, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      propertyPath: zoomSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1107191816428015819, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      propertyPath: maximumSpeed
+      value: 6000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1107191816428015819, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      propertyPath: minimumSpeed
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6567033620470696027, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
       propertyPath: m_Enabled
@@ -103,7 +118,8 @@ PrefabInstance:
       propertyPath: scrollScaleValue
       value: 0.1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 262063079913678507, guid: 8a8c1bdd94f08d144a7410a838c895ad, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

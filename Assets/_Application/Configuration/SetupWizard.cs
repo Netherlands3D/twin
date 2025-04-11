@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Minimap;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Projects;
 using TMPro;
@@ -60,8 +61,11 @@ namespace Netherlands3D.Twin.Configuration
                 return;
 
             //If we are not setting the origin from the coordinate input fields; use the origin of the camera position
-            var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z);
-            ProjectData.Current.CameraPosition = cameraCoordinate.Convert(CoordinateSystem.RDNAP).Points;
+            var cameraCoordinate = new Coordinate(Camera.main.transform.position).Convert(CoordinateSystem.RDNAP);
+            ProjectData.Current.CameraPosition = new double[]
+            {
+                cameraCoordinate.value1, cameraCoordinate.value2, cameraCoordinate.value3
+            };
             
             //Update url with some cooldown (browsers do not like setting url too often)
             if(urlNeedsUpdate && Time.frameCount - lastUrlUpdate > urlUpdateFrameCooldown)
@@ -155,7 +159,7 @@ namespace Netherlands3D.Twin.Configuration
             var cameraPosition = mainCam.transform.position;
             var cameraRD = new Coordinate(cameraPosition).Convert(CoordinateSystem.RDNAP);
             var targetCoordinate = new Coordinate(CoordinateSystem.RDNAP, cameraRD.easting, y, cameraRD.height);
-            mainCam.GetComponent<MoveCameraToCoordinate>().MoveToCoordinate(targetCoordinate);
+            mainCam.GetComponent<WorldTransform>().MoveToCoordinate(targetCoordinate);
 
             OnSettingsChanged.Invoke();
         }
@@ -170,7 +174,7 @@ namespace Netherlands3D.Twin.Configuration
             var cameraPosition = mainCam.transform.position;
             var cameraRD = new Coordinate(cameraPosition).Convert(CoordinateSystem.RDNAP);
             var targetCoordinate = new Coordinate(CoordinateSystem.RDNAP, x, cameraRD.northing, cameraRD.height);
-            mainCam.GetComponent<MoveCameraToCoordinate>().MoveToCoordinate(targetCoordinate);
+            mainCam.GetComponent<WorldTransform>().MoveToCoordinate(targetCoordinate);
 
             OnSettingsChanged.Invoke();
         }

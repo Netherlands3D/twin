@@ -13,22 +13,21 @@ MonoBehaviour:
   m_Name: Tool_Download
   m_EditorClassIdentifier: 
   code: Download
-  title: Downloaden brondata
+  title: Download 3D data
   functionGroups:
   - {fileID: 11400000, guid: 913e0e2de7aa97c4cbea1a486e6e6903, type: 2}
   onAvailabilityChange:
     m_PersistentCalls:
       m_Calls: []
-  onActivate:
+  onOpen:
     m_PersistentCalls:
       m_Calls: []
-  onDeactivate:
+  onClose:
     m_PersistentCalls:
       m_Calls: []
   onToggleInspector:
     m_PersistentCalls:
       m_Calls: []
-  activateToolOnInspectorToggle: 1
   inspectorPrefab: {fileID: 3537603041487147064, guid: 6b9505a13a1cf954b99d6247e15687df,
     type: 3}
   functionalityPrefabs:

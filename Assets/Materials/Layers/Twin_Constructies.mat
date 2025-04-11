@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 7
+  version: 9
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -33,7 +33,8 @@ Material:
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - MOTIONVECTORS
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -142,7 +143,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.33962262, g: 0.29895663, b: 0.28675684, a: 1}
+    - _BaseColor: {r: 0.4811321, g: 0.4294201, b: 0.41531685, a: 1}
     - _ClippingMask: {r: 3.4028235e+38, g: 3.4028235e+38, b: 3.4028235e+38, a: 3.4028235e+38}
     - _ClippingMaskDome: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.34117648, g: 0.29803923, b: 0.28627452, a: 1}
@@ -158,3 +159,4 @@ Material:
     - _TilingMainTexture: {r: 0.1, g: 0.1, b: 0, a: 0}
     - _TilingSecondaryTexture: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1

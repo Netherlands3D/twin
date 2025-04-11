@@ -19,7 +19,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4
   m_IsActive: 1
 --- !u!4 &4114483817524287800
 Transform:
@@ -54,9 +54,30 @@ MonoBehaviour:
   Datasets:
   - Description: 
     geoLOD: 
-    path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked/Terrain{x}_{y}.1.bin
+    path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked-24m/Terrain{x}_{y}.24.bin
     pathQuery: 
     maximumDistance: 7000
+    maximumDistanceSquared: 0
+    enabled: 1
+  - Description: 
+    geoLOD: 
+    path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked-12m/Terrain{x}_{y}.12.bin
+    pathQuery: 
+    maximumDistance: 8000
+    maximumDistanceSquared: 0
+    enabled: 1
+  - Description: 
+    geoLOD: 
+    path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked-6m/Terrain{x}_{y}.6.bin
+    pathQuery: 
+    maximumDistance: 4000
+    maximumDistanceSquared: 0
+    enabled: 1
+  - Description: 
+    geoLOD: 
+    path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked/Terrain{x}_{y}.1.bin
+    pathQuery: 
+    maximumDistance: 2000
     maximumDistanceSquared: 0
     enabled: 1
   pauseLoading: 0

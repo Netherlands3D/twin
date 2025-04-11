@@ -1,4 +1,6 @@
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Projects
@@ -25,17 +27,17 @@ namespace Netherlands3D.Twin.Projects
         private void OnProjectDataChanged(ProjectData project)
         {
             var cameraCoordinate = new Coordinate(CoordinateSystem.RDNAP, project.CameraPosition[0], project.CameraPosition[1], project.CameraPosition[2]);
-            var cameraUnityCoordinate = cameraCoordinate.ToUnity();
-            transform.position = cameraUnityCoordinate;
+            GetComponent<WorldTransform>().MoveToCoordinate(cameraCoordinate);
 
-            if(project.CameraRotation.Length == 3)
+            if (project.CameraRotation.Length == 3)
             {
                 var cameraRotation = new Vector3((float)project.CameraRotation[0], (float)project.CameraRotation[1], (float)project.CameraRotation[2]);
                 transform.rotation = Quaternion.Euler(cameraRotation);
             }
         }
 
-        private void Update() {
+        private void Update() 
+        {
             var currentCameraMatrix = transform.localToWorldMatrix;        
             if(Matrix4x4.Equals(currentCameraMatrix, lastSavedCameraTransformMatrix)) return;
 
@@ -45,8 +47,8 @@ namespace Netherlands3D.Twin.Projects
 
         private void SaveCurrentCameraTransform()
         {
-            var cameraCoordinate = new Coordinate(CoordinateSystem.Unity, transform.position.x, transform.position.y, transform.position.z);
-            var cameraCoordinateRD = cameraCoordinate.Convert(CoordinateSystem.RDNAP).ToVector3RD();
+            var cameraCoordinate = new Coordinate(transform.position).Convert(CoordinateSystem.RDNAP);
+            var cameraCoordinateRD = cameraCoordinate.ToVector3RD();
             var cameraRotation = transform.eulerAngles;
 
             ProjectData.Current.CameraPosition = new double[] { cameraCoordinateRD.x, cameraCoordinateRD.y, cameraCoordinateRD.z };

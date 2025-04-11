@@ -84,3 +84,7 @@ crashlytics-build.properties
 
 # Docker build artefacts
 /.docker/app-config.json
+/.docker/dev-proxy/localFiles
+
+#Original versions file of the package switcher
+manifest_original_versions.json

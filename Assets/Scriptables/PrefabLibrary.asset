@@ -42,7 +42,7 @@ MonoBehaviour:
   - groupName: 3DTiles
     autoPopulateUI: 0
     prefabs:
-    - {fileID: 79256942545472044, guid: 7b9af9585f5754178a3fd114c7ecd82c, type: 3}
+    - {fileID: 4142489338678956943, guid: 395dd4e52bd3b42cfb24f183f3839bba, type: 3}
     - {fileID: 4142489338678956943, guid: 416bb3a0b4137324d860b58a6e8f484e, type: 3}
     - {fileID: 4142489338678956943, guid: 2823e5ec82fe248febd620a0b025bcca, type: 3}
     - {fileID: 4142489338678956943, guid: 71fff5c85650fcd4d9f59e4e182b5e95, type: 3}

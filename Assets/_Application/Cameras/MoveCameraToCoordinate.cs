@@ -1,13 +1,11 @@
 using System;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.FloatingOrigin;
-using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Cameras
 {
     [RequireComponent(typeof(Camera))]
-    [RequireComponent(typeof(FreeCamera))]
     [RequireComponent(typeof(WorldTransform))]
     public class MoveCameraToCoordinate : MonoBehaviour
     {
@@ -24,21 +22,13 @@ namespace Netherlands3D.Twin.Cameras
         [SerializeField] private float zoomDistanceMultiplier = 4f;
         [SerializeField] double decayRate = 0.007d; // Decay rate
 
-        private Camera camera;
-        private FreeCamera cameraMover; //move through the FreeCamera script to make sure we only move the camera through a single point of entry
+        private new Camera camera;
         private WorldTransform cameraWorldTransform;
         
         private void Awake()
         {
             camera = GetComponent<Camera>();
-            cameraMover = GetComponent<FreeCamera>();
             cameraWorldTransform = GetComponent<WorldTransform>();
-        }
-
-        public void MoveToCoordinate(Coordinate coordinate)
-        {
-            ShiftOriginIfNeeded(coordinate);
-            cameraMover.MoveToTarget(coordinate.ToUnity()); //we can now use unity coordinates, as the origin has been shifted if needed.
         }
 
         public void LookAtTarget(Coordinate targetLookAt, double targetDistance)
@@ -64,24 +54,19 @@ namespace Netherlands3D.Twin.Cameras
                 var t = Mathf.Lerp(1, zoomDistanceMultiplier, (float)distanceFactor);
                 distance *= t; //increase distance so that objects don't take up too much screen space
             }
+            
+            //to avoid floating point issues, we need to calculate the relative offset and add it to the targetLookAt
+            // todo: to make this more compatible with different coordinate systems, we need to know the axis indices and add it to the correct one, but these are currently not publicly exposed.
+            var offset = cameraDirection * (float)distance;
+            var targetCoordinate = new Coordinate(targetLookAt.CoordinateSystem,  
+                                                targetLookAt.value1 - (double)offset.x,
+                                                targetLookAt.value2 - (double)offset.z,
+                                                targetLookAt.value3 - (double)offset.y);
 
-            ShiftOriginIfNeeded(targetLookAt); //this distance is not exact since there is still an offset we will apply to the camera, but close enough to fix the issue of floating point errors.
-
-            var unityTargetPosition = targetLookAt.ToUnity() - cameraDirection * (float)distance;
-            cameraMover.MoveToTarget(unityTargetPosition); //we can now use unity coordinates, as the origin has been shifted if needed.
-        }
-
-        private void ShiftOriginIfNeeded(Coordinate targetCoordinate)
-        {
-            var currentCameraPosition = cameraWorldTransform.Coordinate;
-            var difference = (currentCameraPosition - targetCoordinate).Convert(CoordinateSystem.RD); //use RD since this expresses the difference in meters, so we can use the SqrDistanceBeforeShifting to check if we need to shift.
-            ulong sqDist = (ulong)(difference.easting * difference.easting + difference.northing * difference.northing);
-            if (sqDist > Origin.current.SqrDistanceBeforeShifting)
-            {
-                // move the origin to the bounds center with height 0, to assure large jumps do not result in errors when centering.
-                var newOrigin = targetCoordinate.Convert(CoordinateSystem.WGS84_LatLon); //2D coord system to get rid of height.
-                Origin.current.MoveOriginTo(newOrigin);
-            }
+            // Set the coordinate of the worldTransform, and thereby the Camera's unity position.
+            // The Camera's Unity position will cause floating point issues, however it is only needed to trigger the Origin shift,
+            // and then the correct position will be recalculated from the world transform's coordinate.
+            cameraWorldTransform.MoveToCoordinate(targetCoordinate); //update the coordinate 
         }
     }
 }

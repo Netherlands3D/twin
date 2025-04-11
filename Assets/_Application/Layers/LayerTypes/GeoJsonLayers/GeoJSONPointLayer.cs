@@ -6,8 +6,10 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
+using RSG;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
@@ -23,6 +25,27 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
+
+        private GeoJsonPointLayerMaterialApplicator applicator;
+        internal GeoJsonPointLayerMaterialApplicator Applicator
+        {
+            get
+            {
+                if (applicator == null) applicator = new GeoJsonPointLayerMaterialApplicator(this);
+
+                return applicator;
+            }
+        }
+
+        protected override void Start()
+        {
+            // Ensure that PointRenderer3D.Material has a Material Instance to prevent accidental destruction
+            // of a material asset when replacing the material - no destroy of the old material must be done because
+            // that is an asset and not an instance
+            PointRenderer3D.Material = new Material(PointRenderer3D.Material);
+
+            base.Start();
+        }
 
         public List<Mesh> GetMeshData(Feature feature)
         {
@@ -104,7 +127,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 return;
 
             var newFeatureVisualisation = new FeaturePointVisualisations { feature = feature };
-            ApplyStyling();
+            ApplyStyling(newFeatureVisualisation);
 
             if (feature.Geometry is MultiPoint multiPoint)
             {
@@ -122,21 +145,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
         }
 
-        public override void InitializeStyling()
+        public override void ApplyStyling()
         {
-            pointRenderer3D.Material = GetMaterialInstance();
+            // The color in the Layer Panel represents the default fill color for this layer
+            LayerData.Color = LayerData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
+
+            MaterialApplicator.Apply(Applicator);
         }
 
-        public void ApplyStyling()
+        public void ApplyStyling(FeaturePointVisualisations newFeatureVisualisation)
         {
             // Currently we don't apply individual styling per feature
         }
 
-        private Material GetMaterialInstance()
+        private Material GetMaterialInstance(Color color)
         {
             return new Material(pointRenderer3D.Material)
             {
-                color = LayerData.DefaultSymbolizer?.GetFillColor() ?? Color.white
+                color = color
             };
         }
 
@@ -189,6 +215,27 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             return bbox;
+        }
+        
+        private List<IPropertySectionInstantiator> propertySections;
+
+        protected List<IPropertySectionInstantiator> PropertySections
+        {
+            get
+            {
+                if (propertySections == null)
+                {
+                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
+                }
+
+                return propertySections;
+            }
+            set => propertySections = value;
+        }
+
+        public List<IPropertySectionInstantiator> GetPropertySections()
+        {
+            return PropertySections;
         }
     }
 }

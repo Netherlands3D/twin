@@ -14,13 +14,10 @@ GameObject:
   - component: {fileID: 7109194962515795805}
   - component: {fileID: 4142489338678956943}
   - component: {fileID: -2324982978833452817}
-  - component: {fileID: -5633582009899978217}
   - component: {fileID: 7164105335501555170}
-  - component: {fileID: 1194273570138351517}
   - component: {fileID: 2740582493697960923}
   - component: {fileID: 1859171214202950123}
-  - component: {fileID: -3598923106467742640}
-  - component: {fileID: -4157900931785716764}
+  - component: {fileID: -2689954650890677593}
   m_Layer: 7
   m_Name: Nieuwe laag (3D Tiles)
   m_TagString: Untagged
@@ -278,7 +275,7 @@ MonoBehaviour:
   OnMobileModeEnabled:
     m_PersistentCalls:
       m_Calls: []
-  maxSimultaneousDownloads: 600
+  maxSimultaneousDownloads: 6
   maxTilesInDisposeList: 4
   screenSpaceErrorScoreMultiplier: 1
   screenCenterScore: 1000
@@ -375,20 +372,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &-5633582009899978217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7974831043381414785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9f2663cee3c34c06bbfbeb3531fba18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 5850609957860244483, guid: b70ba99e2cae844148e2ee6cddc2f301,
-    type: 3}
 --- !u!114 &7164105335501555170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -403,22 +386,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputPropertySectionPrefab: {fileID: 7185160580400989932, guid: f241bd5b609aa4447ae89fb4325470ef,
     type: 3}
---- !u!114 &1194273570138351517
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7974831043381414785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62b1e01edbedb4752ad91f429fe11682, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  overlayPrefab: {fileID: -5551926652888725166, guid: 3242028f86f3dad4a8d336a5e171cab1,
-    type: 3}
-  layerGameObject: {fileID: 4142489338678956943}
-  instantiateOnStart: 1
 --- !u!114 &2740582493697960923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -451,7 +418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89676a9f69324d308c537c8970b47571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-3598923106467742640
+--- !u!114 &-2689954650890677593
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -460,23 +427,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7974831043381414785}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3b2880c796b146d191c4b41da5c526b, type: 3}
+  m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  findKeyInVaultOnURLChange: 1
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
-  autoApplyCredentials: 1
---- !u!114 &-4157900931785716764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7974831043381414785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10a33788563cd483995f364508f26b63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 2338255900015697950, guid: 6019647e66e404497b4d1db349c70215,
-    type: 3}
+  CredentialsSucceeded:
+    m_PersistentCalls:
+      m_Calls: []

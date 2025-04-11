@@ -214,4 +214,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipText: Informatie (opent in nieuw tabblad)
+  tooltipText: Informatie over Netherlands 3D (opent in nieuw tabblad)

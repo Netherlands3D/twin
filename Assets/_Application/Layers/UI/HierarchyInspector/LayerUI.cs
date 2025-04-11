@@ -7,8 +7,10 @@ using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Collections;
+using GG.Extensions;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 {
@@ -37,24 +39,36 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         public Transform LayerBaseTransform => layerUIManager.LayerUIContainer;
 
         private VerticalLayoutGroup childVerticalLayoutGroup;
-        [SerializeField] private RectTransform parentRowRectTransform;
-        [SerializeField] private Toggle enabledToggle;
-        [SerializeField] private Button colorButton;
-        [SerializeField] private RectTransform spacer;
         private float spacerStartWidth;
+        
+        [Header("Settings")]
+        [SerializeField] private float doubleClickThreshold = 0.5f;
         [SerializeField] private float indentWidth = 40f;
-        [SerializeField] private Toggle foldoutToggle;
+        [Tooltip("Buttons ignore the layout group, this is an added right margin for the button group")]
+        [SerializeField] private float buttonGroupWidth = 23 + 23;
+
+        [Header("Identification")]
         [SerializeField] private Image layerTypeImage;
         [SerializeField] private TMP_Text layerNameText;
         [SerializeField] private TMP_InputField layerNameField;
-        [SerializeField] private RectTransform childrenPanel;
+        
+        [Header("Buttons")]
+        [SerializeField] private Toggle foldoutToggle;
+        [SerializeField] private Toggle enabledToggle;
+        [SerializeField] private Button colorButton;
+        [SerializeField] private Toggle propertyToggle;
+        [SerializeField] private Toggle legendToggle;
 
-        [SerializeField] private TMP_Text debugIndexText;
+        [Header("Sprites")]
         [SerializeField] private Sprite[] visibilitySprites;
         [SerializeField] private Sprite[] foldoutSprites;
         [SerializeField] private Sprite[] backgroundSprites;
-        [SerializeField] private Toggle propertyToggle;
-        [SerializeField] private float doubleClickThreshold = 0.5f;
+
+        [Header("Layout elements")]
+        [SerializeField] private TMP_Text debugIndexText;
+        [SerializeField] private RectTransform parentRowRectTransform;
+        [SerializeField] private RectTransform spacer;
+        [SerializeField] private RectTransform childrenPanel;
 
         private LayerUI ParentUI;
         private LayerUI[] ChildrenUI = Array.Empty<LayerUI>();
@@ -365,8 +379,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             UpdateName();
             RecalculateIndent(Depth);
             SetLayerTypeImage();
-            RecalculateNameWidth();
             UpdateFoldout();
+            RecalculateNameWidth();
         }
 
         private void SetLayerTypeImage()
@@ -397,20 +411,28 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void RecalculateNameWidth()
         {
-            var maxWidth = 0f;
-            if (ParentUI)
-                maxWidth = ParentUI.rectTransform.rect.width;
-            else
-                maxWidth = LayerBaseTransform.GetComponent<RectTransform>().rect.width;
+            var layerPanelRectTransform = LayerBaseTransform.GetComponent<RectTransform>();
+            var layerPanelRight = layerPanelRectTransform.offsetMax.x;
+            var maxWidth = layerPanelRectTransform.rect.width;
+
+            var layoutGroup = parentRowRectTransform.GetComponent<HorizontalLayoutGroup>();
 
             var layerNameFieldRectTransform = layerNameField.GetComponent<RectTransform>();
+            
             var width = maxWidth;
             width -= layerNameFieldRectTransform.anchoredPosition.x;
             width -= spacer.rect.width;
-            width += parentRowRectTransform.GetComponent<HorizontalLayoutGroup>().padding.left;
+            width -= layoutGroup.padding.left; // Subtract horizontal padding
+            width -= layoutGroup.padding.right; // Subtract horizontal padding
+            width -= layoutGroup.spacing; // Subtract spacing to create spacing between name field and buttons
+            width += layerPanelRight; // Negative number, so we invert it by adding
+            width -= buttonGroupWidth; // Subtract ButtonGroupWidth because they partly influence the layout
+            
             layerNameFieldRectTransform.sizeDelta = new Vector2(width, layerNameFieldRectTransform.rect.height);
-            layerNameText.GetComponent<RectTransform>().sizeDelta = layerNameFieldRectTransform.sizeDelta;
-            layerNameField.GetComponent<RectTransform>().sizeDelta = layerNameFieldRectTransform.sizeDelta;
+
+            // The text holder component - which is the parent of the layerNameText - needs to be re-scaled
+            var textHolder = layerNameText.transform.parent;
+            textHolder.GetComponent<RectTransform>().sizeDelta = layerNameFieldRectTransform.sizeDelta;
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -608,7 +630,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
                 if (relativeYValue > 0.25f * hoverTransform.rect.height)
                 {
-                    // print("higher than " + referenceLayerUnderMouse.Layer.name);
                     draggingLayerShouldBePlacedBeforeOtherLayer = true;
                     layerUIManager.DragLine.gameObject.SetActive(true);
                     layerUIManager.DragLine.position = new Vector2(layerUIManager.DragLine.position.x, referenceLayerUnderMouse.parentRowRectTransform.position.y + correctedSize.y / 2 - spacingOffset);
@@ -622,7 +643,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 }
                 else if (relativeYValue < -0.25f * hoverTransform.rect.height)
                 {
-                    // print("lower than" + referenceLayerUnderMouse.Layer.name);
                     draggingLayerShouldBePlacedBeforeOtherLayer = false;
                     layerUIManager.DragLine.gameObject.SetActive(true);
                     layerUIManager.DragLine.position = new Vector2(layerUIManager.DragLine.position.x, referenceLayerUnderMouse.parentRowRectTransform.position.y - correctedSize.y / 2 - spacingOffset);
@@ -630,7 +650,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                     //edge case: if the reorder is between layerUnderMouse, and between layerUnderMouse and child 0 of layerUnderMouse, the new parent should be the layerUnderMouse instead of the layerUnderMouse's parent 
                     if (referenceLayerUnderMouse.ChildrenUI.Length > 0 && referenceLayerUnderMouse.foldoutToggle.isOn)
                     {
-                        // print("edge case for: " + referenceLayerUnderMouse.Layer.name);
                         leftOffset += indentWidth;
                         layerUIManager.DragLine.SetLeft(leftOffset);
                         newParent = referenceLayerUnderMouse;
@@ -656,7 +675,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 }
                 else
                 {
-                    // print("reparent to " + referenceLayerUnderMouse.Layer.name);
                     referenceLayerUnderMouse.SetHighlight(InteractionState.DragHover);
                     draggingLayerShouldBePlacedBeforeOtherLayer = false;
                     layerUIManager.DragLine.gameObject.SetActive(false);

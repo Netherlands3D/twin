@@ -24,6 +24,7 @@ using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Utility;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -43,6 +44,12 @@ namespace Netherlands3D.Functionalities.Wms
 
         public static readonly float ProjectorHeight = 1000f;
         public static readonly float ProjectorMinDepth = ProjectorHeight * 1.1f;
+        private Coroutine updateTilesRoutine = null;
+        private bool visibleTilesDirty = false;
+        private List<TileChange> queuedChanges = new List<TileChange>();
+        private float lastUpdatedTimeStamp = 0;
+        private float lastUpdatedInterval = 1f;
+        private WaitForSeconds wfs = new WaitForSeconds(0.5f);
 
         public BoundingBox BoundingBox { get; set; }
 
@@ -142,7 +149,7 @@ namespace Netherlands3D.Functionalities.Wms
                 origin.y,
                 0.0d
             );
-            var originCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
+            var originCoordinate = rdCoordinate.ToUnity();
 
             originCoordinate.y = ProjectorHeight;
             tile.gameObject.transform.position = originCoordinate; //projector is now at same position as the layer !?          
@@ -153,6 +160,83 @@ namespace Netherlands3D.Functionalities.Wms
             }
 
             return tile;
+        }
+
+        public void RefreshTiles()
+        {
+            //is the update already running cancel it
+            if (visibleTilesDirty && updateTilesRoutine != null)
+            {
+                queuedChanges.Clear();
+                StopCoroutine(updateTilesRoutine);
+            }
+
+            lastUpdatedTimeStamp = Time.time;
+            visibleTilesDirty = true;
+            updateTilesRoutine = StartCoroutine(UpdateVisibleTiles());
+        }
+
+        private IEnumerator UpdateVisibleTiles()
+        {
+            //get current tiles
+            foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
+            {
+                if (tile.Value == null || tile.Value.gameObject == null)
+                    continue;
+
+                if (tile.Value.runningCoroutine != null)
+                {
+                    StopCoroutine(tile.Value.runningCoroutine);
+                    tile.Value.runningCoroutine = null;
+                }
+
+                OnPreUpdateTile(tile.Value);
+
+                TileChange tileChange = new TileChange();
+                tileChange.X = tile.Key.x;
+                tileChange.Y = tile.Key.y;
+                queuedChanges.Add(tileChange);
+            }
+
+            if (!isEnabled)
+            {
+                queuedChanges.Clear();
+                yield break;
+            }
+
+            bool ready = true;
+            while (queuedChanges.Count > 0)
+            {
+                //lets wait half a second in case a slider is moving
+                if (Time.time - lastUpdatedTimeStamp > lastUpdatedInterval && ready)
+                {
+                    ready = false;
+                    TileChange next = queuedChanges[0];
+                    queuedChanges.RemoveAt(0);
+                    Vector2Int key = new Vector2Int(next.X, next.Y);
+                    if (tiles.ContainsKey(key))
+                    {
+                        tiles[key].runningCoroutine = StartCoroutine(DownloadDataAndGenerateTexture(next, key =>
+                        {
+                            ready = true;
+                        }));
+                    }
+                    else
+                    {
+                        ready = true;
+                    }
+                }
+                yield return wfs;
+            }
+
+            updateTilesRoutine = null;
+            visibleTilesDirty = false;
+        }
+
+        protected virtual void OnPreUpdateTile(Tile tile)
+        {
+            TextureDecalProjector projector = tile.gameObject.GetComponent<TextureDecalProjector>();
+            projector.gameObject.SetActive(false);
         }
 
         protected virtual IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
