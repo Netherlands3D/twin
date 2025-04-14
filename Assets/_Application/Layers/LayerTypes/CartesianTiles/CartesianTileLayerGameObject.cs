@@ -1,11 +1,14 @@
 using UnityEngine;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.Twin.Layers.Properties;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
     [RequireComponent(typeof(Layer))]
-    public class CartesianTileLayerGameObject : LayerGameObject
+    public class CartesianTileLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
     {
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
         
@@ -31,6 +34,27 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             if(Application.isPlaying && tileHandler && layer)
                 tileHandler.RemoveLayer(layer);
+        }
+
+        private List<IPropertySectionInstantiator> propertySections;
+
+        protected List<IPropertySectionInstantiator> PropertySections
+        {
+            get
+            {
+                if (propertySections == null)
+                {
+                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
+                }
+
+                return propertySections;
+            }
+            set => propertySections = value;
+        }
+
+        public List<IPropertySectionInstantiator> GetPropertySections()
+        {
+            return PropertySections;
         }
     }
 }
