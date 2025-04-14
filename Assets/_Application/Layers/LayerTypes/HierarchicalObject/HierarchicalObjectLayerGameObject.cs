@@ -50,12 +50,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private Coordinate previousCoordinate;
         private Quaternion previousRotation;
         private Vector3 previousScale;
-        private WorldTransform worldTransform;
+        protected WorldTransform worldTransform;
 
         LayerPropertyData ILayerWithPropertyData.PropertyData => transformPropertyData;
         public bool TransformIsSetFromProperty { get; private set; } = false;
 
-        protected void Awake()
+        protected virtual void Awake()
         {
             transformPropertyData = new TransformLayerPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale);
 
@@ -93,24 +93,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
         }
 
-        protected void OnDestroy()
+        protected virtual void OnDestroy()
         {
             transformPropertyData.OnPositionChanged.RemoveListener(UpdatePosition);
             transformPropertyData.OnRotationChanged.RemoveListener(UpdateRotation);
             transformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);
         }
 
-        protected void UpdatePosition(Coordinate newPosition)
+        private void UpdatePosition(Coordinate newPosition)
         {
             worldTransform.MoveToCoordinate(newPosition);
         }
 
-        protected void UpdateRotation(Vector3 newAngles)
+        private void UpdateRotation(Vector3 newAngles)
         {
             worldTransform.SetRotation(Quaternion.Euler(newAngles));
         }
 
-        protected void UpdateScale(Vector3 newScale)
+        private void UpdateScale(Vector3 newScale)
         {
             if (newScale != transform.localScale)
                 transform.localScale = newScale;
@@ -141,7 +141,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
         }
         
-        private void Update()
+        protected virtual void Update()
         {
             //Position and rotation changes are handled by the WorldTransform, but should be updated in the project data
             //todo: add a == and != operator to Coordinate.cs to avoid having to do this

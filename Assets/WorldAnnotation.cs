@@ -3,26 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using GG.Extensions;
 using Netherlands3D.Twin.FloatingOrigin;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
 
-namespace Netherlands3D
+namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
-    [RequireComponent(typeof(LayerGameObject))]
-    public class WorldAnnotation : MonoBehaviour, ILayerWithPropertyData
+    public class WorldAnnotation : HierarchicalObjectLayerGameObject, ILayerWithPropertyData
     {
         [SerializeField] private TextPopout popoutPrefab;
         private TextPopout annotation;
-        private WorldTransform worldTransform;
         private AnnotationPropertyData annotationPropertyData;
 
         LayerPropertyData ILayerWithPropertyData.PropertyData => annotationPropertyData;
 
-        private void Awake()
+        protected override void Awake()
         {
-            worldTransform = GetComponent<WorldTransform>();
+            base.Awake();
             annotationPropertyData = new AnnotationPropertyData("");
             CreateTextPopup();
             annotationPropertyData.OnDataChanged.AddListener(UpdateAnnotation);
@@ -40,8 +37,9 @@ namespace Netherlands3D
             annotation.OnEndEdit.AddListener(UpdateProjectData);
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
+            base.OnDestroy();
             annotation.OnEndEdit.AddListener(UpdateProjectData);
             annotationPropertyData.OnDataChanged.RemoveListener(UpdateAnnotation);
         }
@@ -51,13 +49,16 @@ namespace Netherlands3D
             annotationPropertyData.Data = annotationText;
         }
 
-        private void Update()
+        protected virtual void Update()
         {
+            base.Update();
             annotation.StickTo(worldTransform.Coordinate);
         }
 
-        public void LoadProperties(List<LayerPropertyData> properties)
+        public override void LoadProperties(List<LayerPropertyData> properties)
         {
+            base.LoadProperties(properties);
+    
             var annotationProperty = (AnnotationPropertyData)properties.FirstOrDefault(p => p is AnnotationPropertyData);
             if (annotationProperty != null)
             {
