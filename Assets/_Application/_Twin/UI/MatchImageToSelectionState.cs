@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D
+namespace Netherlands3D.Twin.UI
 {
     [RequireComponent(typeof(Image))]
     public class MatchImageToSelectionState : MonoBehaviour
