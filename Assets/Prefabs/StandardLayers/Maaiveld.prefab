@@ -200,5 +200,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6303d72dc2aa4f61bcacd10f6b5e3e43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: -5430023407242011547, guid: 545959421547eaf49ade65fc5c467b88,
+  propertySectionPrefab: {fileID: 7022181786967302496, guid: ca4dfb99b441c8b45bdab6fe8cb84efa,
     type: 3}
