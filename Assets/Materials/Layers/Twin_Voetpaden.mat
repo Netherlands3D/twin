@@ -144,7 +144,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.6226415, g: 0.5968864, b: 0.56683874, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _ClippingMask: {r: 3.4028235e+38, g: 3.4028235e+38, b: 3.4028235e+38, a: 3.4028235e+38}
     - _ClippingMaskDome: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.4509804, g: 0.42745098, b: 0.4, a: 1}
