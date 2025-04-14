@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using GG.Extensions;
-using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
@@ -14,7 +14,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         [SerializeField] private TextPopout popoutPrefab;
         private TextPopout annotation;
         private AnnotationPropertyData annotationPropertyData;
-
+        
+        //set the Bbox to 10x10 meters to make the jump to object functionality work.
+        public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one ), new Coordinate(transform.position + 5 * Vector3.one));
+        
         LayerPropertyData ILayerWithPropertyData.PropertyData => annotationPropertyData;
 
         protected override void Awake()
