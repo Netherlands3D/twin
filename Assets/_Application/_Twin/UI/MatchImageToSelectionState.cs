@@ -18,7 +18,7 @@ namespace Netherlands3D.Twin.UI
 
         private void Update()
         {
-            if (!targetSelectable?.targetGraphic)
+            if (!targetSelectable.targetGraphic)
             {
                 return;
             }
