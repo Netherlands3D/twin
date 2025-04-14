@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: -18391829949753534}
   - component: {fileID: 8026439383914201504}
   - component: {fileID: 4985722426523753970}
+  - component: {fileID: 5901895080740193470}
   m_Layer: 0
   m_Name: Annotatie
   m_TagString: Untagged
@@ -92,3 +93,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propertySectionPrefab: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672,
     type: 3}
+--- !u!114 &5901895080740193470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3937650689336427930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4d878bc3b3f47745960e6be7203cfc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PositionLocked: 0
+  RotationLocked: 0
+  ScaleLocked: 0
+  positionAxes: 7
+  rotationAxes: 7
+  scaleAxes: 7
