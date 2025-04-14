@@ -175,6 +175,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 case CartesianTileLayerGameObject _:
                 case Tile3DLayerGameObject _:
                     return layerTypeSprites[1];
+                case WorldAnnotationLayerGameObject _:
+                    return layerTypeSprites[10];
                 case HierarchicalObjectLayerGameObject _:
                     return layerTypeSprites[3];
                 case ObjectScatterLayerGameObject _:
@@ -185,7 +187,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                     return layerTypeSprites[6];
                 case GeoJSONLineLayer _:
                     return layerTypeSprites[7];                
-                
                 case GeoJSONPointLayer _:
                     return layerTypeSprites[9];
                 default:

@@ -274,8 +274,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 3937650689336427930, guid: e0272ce89eb284961a0185f7a4f2ce3f, type: 3}
-  initialRotation: {x: 0, y: 0, z: 0}
-  initialScale: {x: 1, y: 1, z: 1}
 --- !u!1 &8718194903163244413
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,8 +284,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6643085354318524512}
   - component: {fileID: 4264233811279277176}
-  - component: {fileID: 7979610223133830646}
-  - component: {fileID: 4746347987582019646}
+  - component: {fileID: 3885517597221536681}
+  - component: {fileID: 2807273323863594509}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -322,7 +320,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8718194903163244413}
   m_CullTransparentMesh: 1
---- !u!114 &7979610223133830646
+--- !u!114 &3885517597221536681
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -352,7 +350,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4746347987582019646
+--- !u!114 &2807273323863594509
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -361,11 +359,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 8718194903163244413}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2c44016542214b15befb9bf03acaf54, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b62fae4448da4d7a8562c7fa989fb10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   targetSelectable: {fileID: 1506549185826985276}
-  highlightedSprite: {fileID: 0}
-  pressedSprite: {fileID: 21300000, guid: 1922596620fa144e6ae6068957587ee9, type: 3}
-  selectedSprite: {fileID: 0}
-  disabledSprite: {fileID: 0}
+  SpriteState: {fileID: 11400000, guid: 9836b375d0275442e92afb8e88c8493d, type: 2}
