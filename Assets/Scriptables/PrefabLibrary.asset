@@ -28,6 +28,7 @@ MonoBehaviour:
   - groupName: ObjectenBibliotheek
     autoPopulateUI: 1
     prefabs:
+    - {fileID: 8026439383914201504, guid: 292690ace10994ff5bd502be1f5a5bf2, type: 3}
     - {fileID: 4705758047892485819, guid: e0272ce89eb284961a0185f7a4f2ce3f, type: 3}
     - {fileID: -2556228473040769515, guid: f7b3d6632f1e47b4f902509046b93e7a, type: 3}
     - {fileID: -2556228473040769515, guid: 09d06b63f4d4f4eeebece0556bcee0c9, type: 3}

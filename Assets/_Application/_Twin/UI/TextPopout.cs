@@ -1,21 +1,58 @@
 using Netherlands3D.Coordinates;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.UI
 {
     public class TextPopout : MonoBehaviour
     {
-        [SerializeField] private TMP_Text textField;
+        [SerializeField] private TMP_InputField textField;
+
         private RectTransform rectTransform;
         private Camera mainCamera;
         private Coordinate? stuckToWorldPosition = null;
 
-        private void Start()
+        public UnityEvent<string> OnEndEdit;
+
+        public bool ReadOnly
+        {
+            get => textField.readOnly;
+            set => textField.readOnly = value;
+        }
+
+        private void Awake()
         {
             mainCamera = Camera.main;
             rectTransform = GetComponent<RectTransform>();
             gameObject.SetActive(false);
+        }
+
+        private void OnEnable()
+        {
+            textField.onSubmit.AddListener(OnSubmitText);
+            textField.onEndEdit.AddListener(OnEndEdit.Invoke);
+        }
+        
+        private void OnDisable()
+        {
+            textField.onSubmit.RemoveListener(OnSubmitText);
+            textField.onEndEdit.RemoveListener(OnEndEdit.Invoke);
+        }
+
+        private void OnSubmitText(string text)
+        {
+            if (NewLineModifierKeyIsPressed())
+            {
+                textField.Select();
+                textField.text += "\n";
+                // Ensure the input field remains focused
+                EventSystem.current.SetSelectedGameObject(textField.gameObject, null);
+                textField.ActivateInputField();
+                textField.caretPosition = textField.text.Length;
+            }
         }
 
         public void Show(string text, Vector3 atScreenPosition)
@@ -23,7 +60,7 @@ namespace Netherlands3D.Twin.UI
             textField.text = text;
             MoveTo(atScreenPosition);
             StickTo(null);
-    
+
             gameObject.SetActive(true);
         }
 
@@ -51,7 +88,7 @@ namespace Netherlands3D.Twin.UI
             stuckToWorldPosition = atWorldPosition;
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             if (stuckToWorldPosition == null) return;
 
@@ -61,6 +98,16 @@ namespace Netherlands3D.Twin.UI
         public void Hide()
         {
             gameObject.SetActive(false);
+        }
+
+        public void SetTextWithoutNotify(string newText)
+        {
+            textField.SetTextWithoutNotify(newText);
+        }
+
+        public static bool NewLineModifierKeyIsPressed()
+        {
+            return Keyboard.current.shiftKey.isPressed;
         }
     }
 }

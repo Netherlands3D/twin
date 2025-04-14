@@ -521,7 +521,6 @@ GameObject:
   - component: {fileID: 657934456240729181}
   - component: {fileID: 5339888596064528429}
   - component: {fileID: 6495561248741214533}
-  - component: {fileID: 7369093777782428168}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -586,23 +585,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7369093777782428168
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6836371474998437034}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2c44016542214b15befb9bf03acaf54, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetSelectable: {fileID: 129773393836702995}
-  highlightedSprite: {fileID: 0}
-  pressedSprite: {fileID: 21300000, guid: 978afce99686245529324221803f8466, type: 3}
-  selectedSprite: {fileID: 21300000, guid: 978afce99686245529324221803f8466, type: 3}
-  disabledSprite: {fileID: 0}
 --- !u!1 &7378626051268009493
 GameObject:
   m_ObjectHideFlags: 0
@@ -976,7 +958,7 @@ PrefabInstance:
     - target: {fileID: 1629620604472758691, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 3790
+      value: 2510
       objectReference: {fileID: 0}
     - target: {fileID: 1629620604472758691, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}

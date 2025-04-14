@@ -3,35 +3,34 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.UI
 {
-    public class MatchSpriteToSelectionState : MonoBehaviour
+    [RequireComponent(typeof(Image))]
+    public class MatchImageToSelectionState : MonoBehaviour
     {
         [SerializeField] private Selectable targetSelectable;
         private Image image;
-        [SerializeField] private Sprite highlightedSprite;
-        [SerializeField] private Sprite pressedSprite;
-        [SerializeField] private Sprite selectedSprite;
-        [SerializeField] private Sprite disabledSprite;
-
+        public SpriteState SpriteState; 
+        
         private void Awake()
         {
             image = GetComponent<Image>();
+            image.sprite = SpriteState?.defaultSprite;
         }
 
         private void Update()
         {
-            if (!targetSelectable.targetGraphic)
+            if (!targetSelectable?.targetGraphic)
             {
                 return;
             }
 
             if (targetSelectable.image.overrideSprite == targetSelectable.spriteState.highlightedSprite)
-                image.overrideSprite = highlightedSprite;
+                image.overrideSprite = SpriteState.highlightedSprite;
             else if (targetSelectable.image.overrideSprite == targetSelectable.spriteState.pressedSprite)
-                image.overrideSprite = pressedSprite;
+                image.overrideSprite = SpriteState.pressedSprite;
             else if (targetSelectable.image.overrideSprite == targetSelectable.spriteState.selectedSprite)
-                image.overrideSprite = selectedSprite;
+                image.overrideSprite = SpriteState.selectedSprite;
             else if (targetSelectable.image.overrideSprite == targetSelectable.spriteState.disabledSprite)
-                image.overrideSprite = disabledSprite;
+                image.overrideSprite = SpriteState.disabledSprite;
             else
                 image.overrideSprite = null;
         }

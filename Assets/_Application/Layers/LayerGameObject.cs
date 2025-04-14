@@ -18,8 +18,10 @@ namespace Netherlands3D.Twin.Layers
     public abstract class LayerGameObject : MonoBehaviour, IStylable
     {
         [SerializeField] private string prefabIdentifier;
+        [SerializeField] private SpriteState thumbnail;
         public string PrefabIdentifier => prefabIdentifier;
-
+        public SpriteState Thumbnail => thumbnail;
+        
         public string Name
         {
             get => LayerData.Name;
