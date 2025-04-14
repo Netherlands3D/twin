@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
-    public class WorldAnnotation : HierarchicalObjectLayerGameObject, ILayerWithPropertyData
+    public class WorldAnnotationLayerGameObject : HierarchicalObjectLayerGameObject, ILayerWithPropertyData
     {
         [SerializeField] private TextPopout popoutPrefab;
         private TextPopout annotation;
