@@ -31,6 +31,58 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3919916255551741050}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1613198580249714570
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1398861296978840396}
+  - component: {fileID: 6418105218589983493}
+  m_Layer: 0
+  m_Name: ObjectSelector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1398861296978840396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1613198580249714570}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3919916255551741050}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6418105218589983493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1613198580249714570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5af3f82add29347b263bf35c7ea9bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SelectSubObjectWithBagId:
+    m_PersistentCalls:
+      m_Calls: []
+  SelectFeature:
+    m_PersistentCalls:
+      m_Calls: []
+  layerTool: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
+  debugMappingTree: 0
 --- !u!1 &2921212951514727232
 GameObject:
   m_ObjectHideFlags: 0
@@ -74,6 +126,7 @@ Transform:
   - {fileID: 4930656928155257700}
   - {fileID: 9043962494800117598}
   - {fileID: 5356120492737783712}
+  - {fileID: 1398861296978840396}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4605819198051858926
@@ -134,6 +187,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -207,6 +263,9 @@ MonoBehaviour:
   loadingScreenCanvas: {fileID: 0}
   bundleName: zuidoostbundle
   prefabName: Ontwikkeling Zuidoost.prefab
+  OnAssetsLoaded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &1688929104974317282
 PrefabInstance:
   m_ObjectHideFlags: 0
