@@ -1,10 +1,8 @@
 using GeoJSON.Net.Feature;
-using GG.Extensions;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Utility;
@@ -18,24 +16,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class ObjectSelector : MonoBehaviour
     {
-
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
-
-        //todo, decide whether this object should be a singleton or just an object in the scene
-        //public static ObjectSelector ObjectSelection
-        //{
-        //    get
-        //    {
-        //        if(objectSelector == null)
-        //        {
-        //            GameObject objectSelectorGameObject = new GameObject("objectselector");
-        //            objectSelector = objectSelectorGameObject.AddComponent<ObjectSelector>();
-        //        }
-        //        return objectSelector;
-        //    }
-        //}
-        //private static ObjectSelector objectSelector;
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
@@ -50,7 +32,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private int currentSelectedMappingIndex = -1;
         private bool filterDuplicateFeatures = true;
         private CameraInputSystemProvider cameraInputSystemProvider;
-
 
         [SerializeField] private Tool layerTool;
 
