@@ -16,7 +16,9 @@ namespace Netherlands3D.Twin.UI
         private Coordinate? stuckToWorldPosition = null;
 
         public UnityEvent<string> OnEndEdit;
-
+        public UnityEvent TextFieldSelected;
+        public UnityEvent TextFieldDeselected;
+        
         public bool ReadOnly
         {
             get => textField.readOnly;
@@ -34,12 +36,26 @@ namespace Netherlands3D.Twin.UI
         {
             textField.onSubmit.AddListener(OnSubmitText);
             textField.onEndEdit.AddListener(OnEndEdit.Invoke);
+            textField.onSelect.AddListener(OnTextFieldSelect); 
+            textField.onDeselect.AddListener(OnTextFieldDeselect);
+        }
+
+        private void OnTextFieldSelect(string text)
+        {
+            TextFieldSelected.Invoke();
         }
         
+        private void OnTextFieldDeselect(string text)
+        {
+            TextFieldDeselected.Invoke();
+        }
+
         private void OnDisable()
         {
             textField.onSubmit.RemoveListener(OnSubmitText);
             textField.onEndEdit.RemoveListener(OnEndEdit.Invoke);
+            textField.onSelect.RemoveListener(OnTextFieldSelect); 
+            textField.onDeselect.RemoveListener(OnTextFieldDeselect);
         }
 
         private void OnSubmitText(string text)

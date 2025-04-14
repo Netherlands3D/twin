@@ -17,7 +17,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
         public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one ), new Coordinate(transform.position + 5 * Vector3.one));
-        
         LayerPropertyData ILayerWithPropertyData.PropertyData => annotationPropertyData;
 
         protected override void Awake()
@@ -38,13 +37,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.Show(annotationPropertyData.Data, worldTransform.Coordinate, true);
             annotation.ReadOnly = false;
             annotation.OnEndEdit.AddListener(UpdateProjectData);
+            annotation.TextFieldSelected.AddListener(OnDeselect); // avoid transform handles from being able to move the annotation when trying to select text
         }
-
+        
         protected virtual void OnDestroy()
         {
             base.OnDestroy();
             annotation.OnEndEdit.RemoveListener(UpdateProjectData);
             annotationPropertyData.OnDataChanged.RemoveListener(UpdateAnnotation);
+            annotation.TextFieldSelected.RemoveListener(OnDeselect);
+
             Destroy(annotation.gameObject);
         }
 
@@ -52,7 +54,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             annotationPropertyData.Data = annotationText;
         }
-
+        
         protected virtual void Update()
         {
             base.Update();
