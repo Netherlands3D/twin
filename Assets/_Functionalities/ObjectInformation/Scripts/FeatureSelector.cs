@@ -34,11 +34,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private ObjectMapping blockingObjectMapping;
         private Vector3 blockingObjectMappingHitPoint;
         private PointerToWorldPosition pointerToWorldPosition;
+        private MappingTree mappingTreeInstance;
 
         private void Awake()
         {
             mainCamera = Camera.main;
             pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
+        }
+
+        public void SetMappingTree(MappingTree mappingTree)
+        {
+            mappingTreeInstance = mappingTree;
         }
 
         public void Select(FeatureMapping mapping)
@@ -64,22 +70,21 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             this.blockingObjectMappingHitPoint = blockingObjectMappingHitPoint;
         }
 
-        public void FindFeature(MappingTree tree)
-        {            
-            Vector3 groundPosition = pointerToWorldPosition.WorldPoint;
+        public void FindFeatureByPosition(Vector3 position)
+        {
             featureMappings.Clear();
 
-            
+
             if (blockingObjectMapping != null)
             {
                 Coordinate blockingCoordinate = new Coordinate(blockingObjectMappingHitPoint);
-                List<IMapping> potentialMappingsUnderBlockingObject = tree.QueryMappingsContainingNode<FeatureMapping>(blockingCoordinate);
+                List<IMapping> potentialMappingsUnderBlockingObject = mappingTreeInstance.QueryMappingsContainingNode<FeatureMapping>(blockingCoordinate);
                 foreach (FeatureMapping map in potentialMappingsUnderBlockingObject)
                 {
                     Vector3 hitPoint;
                     if (map.IsPositionHit(blockingCoordinate, map.VisualisationLayer.GetSelectionRange(), out hitPoint))
                     {
-                        groundPosition = hitPoint;
+                        position = hitPoint;
 
                     }
                 }
@@ -87,9 +92,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             //please dont remove as this can be very useful to check where the user clicked
             //ShowFeatureDebuggingIndicator(groundPosition);
 
-            Coordinate targetCoordinate = new Coordinate(groundPosition);
-            List<IMapping> foundMappings = tree.QueryMappingsContainingNode<FeatureMapping>(targetCoordinate);
-            foreach(FeatureMapping map in foundMappings)
+            Coordinate targetCoordinate = new Coordinate(position);
+            List<IMapping> foundMappings = mappingTreeInstance.QueryMappingsContainingNode<FeatureMapping>(targetCoordinate);
+            foreach (FeatureMapping map in foundMappings)
             {
                 Vector3 hitPoint;
                 if (map.IsPositionHit(targetCoordinate, map.VisualisationLayer.GetSelectionRange(), out hitPoint))
@@ -98,6 +103,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     featureMappings[map.VisualisationParent].Add(map);
                 }
             }
+        }
+
+        public void FindFeatureAtPointerPosition()
+        {            
+            Vector3 groundPosition = pointerToWorldPosition.WorldPoint;
+            FindFeatureByPosition(groundPosition);            
         }
 
         private void ShowFeatureDebuggingIndicator(Vector3 groundPosition)
