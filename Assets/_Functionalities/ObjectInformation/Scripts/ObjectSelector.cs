@@ -33,7 +33,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private bool filterDuplicateFeatures = true;
         private CameraInputSystemProvider cameraInputSystemProvider;
 
-        [SerializeField] private Tool layerTool;
+        [SerializeField] private Tool[] activeForTools;
 
         public static MappingTree MappingTree
         {
@@ -60,7 +60,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             featureSelector = gameObject.AddComponent<FeatureSelector>();
             featureSelector.SetMappingTree(MappingTree);
 
-            layerTool.onClose.AddListener(() => Deselect());
+            foreach(Tool tool  in activeForTools) 
+                tool.onClose.AddListener(() => Deselect());
 
             Interaction.ObjectMappingCheckIn += OnAddObjectMapping;
             Interaction.ObjectMappingCheckOut += OnRemoveObjectMapping;
@@ -76,9 +77,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
+        private bool IsAnyToolActive()
+        {
+            foreach (Tool tool in activeForTools)
+                if (tool.Open)
+                    return true;
+            return false;
+        }
+
         private void Update()
         {            
-            if (layerTool.Open && IsClicked())
+            if (IsAnyToolActive() && IsClicked())
             {
                 Deselect();
                 //the following method calls need to run in order!

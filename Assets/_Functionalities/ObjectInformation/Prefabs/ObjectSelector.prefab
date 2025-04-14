@@ -50,5 +50,7 @@ MonoBehaviour:
   SelectFeature:
     m_PersistentCalls:
       m_Calls: []
-  layerTool: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
+  activeForTools:
+  - {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
+  - {fileID: 11400000, guid: ca2d8a328016a5640ac4872c78c151ad, type: 2}
   debugMappingTree: 0
