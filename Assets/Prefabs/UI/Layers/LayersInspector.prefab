@@ -553,6 +553,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 1c8435c321d2348d6b890dae0769264b, type: 3}
   - {fileID: 21300000, guid: 302449484203745dbac0d82605206394, type: 3}
   - {fileID: 21300000, guid: 675193f4a560b4698b5f5ec01af3ba36, type: 3}
+  - {fileID: 21300000, guid: e4bf1be4a2ec6ab4da3735fdfcc314da, type: 3}
   layerUIContainer: {fileID: 4503089938938308058}
   dragGhostPrefab: {fileID: -5549004017849562441, guid: f37464b169eec47cf8d80ee264145f3f,
     type: 3}
