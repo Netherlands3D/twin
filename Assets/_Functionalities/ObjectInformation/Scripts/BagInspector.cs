@@ -1,23 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using GeoJSON.Net.Feature;
-using GG.Extensions;
-using Netherlands3D.Coordinates;
 using Netherlands3D.GeoJSON;
 using Netherlands3D.SelectionTools;
-using Netherlands3D.SubObjects;
-using Netherlands3D.Twin.Cameras.Input;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.UI;
-using Netherlands3D.Twin.Utility;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Networking;
 using KeyValuePair = Netherlands3D.Twin.UI.KeyValuePair;
 
@@ -142,8 +133,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 		{
 			DownloadGeoJSONProperties(new List<string>() { bagID });
 		}
-
-		#region Supporting methods to load building content
+		
 		private void DownloadGeoJSONProperties(List<string> bagIDs)
 		{
 			if (bagIDs.Count <= 0) return;
@@ -235,7 +225,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 				);
 			}
 		}
-		#endregion
 
 		private void LoadFeatureContent(FeatureMapping mapping)
 		{
@@ -249,11 +238,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 			}
 		}
 
-		#region Supporting methods to load feature content
-		// TODO Add this
-		#endregion
-
-		#region UGUI methods
 		private void ShowObjectInformation()
 		{
 			buildingContentPanel.SetActive(true);
@@ -326,7 +310,5 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 			}
 			keyValueItems.Clear();
 		}
-		#endregion
-
     }
 }
