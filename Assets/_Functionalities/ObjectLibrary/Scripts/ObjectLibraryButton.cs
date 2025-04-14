@@ -14,8 +14,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
     public class ObjectLibraryButton : MonoBehaviour
     {
         protected Button button;
-        [SerializeField] protected GameObject prefab;
-        private Action<Vector3> instantiationCallback;
+        [SerializeField] protected LayerGameObject prefab;
 
         private void Awake()
         {
@@ -35,28 +34,26 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         //for when this component is created at runtime
         public void Initialize(LayerGameObject layerGameObject)
         {
-            this.prefab = layerGameObject.gameObject;
+            this.prefab = layerGameObject;
             
             var image = GetComponentInChildren<MatchImageToSelectionState>();
             if(layerGameObject.Thumbnail != null)
                 image.SpriteState = layerGameObject.Thumbnail;
-            
-            instantiationCallback = w =>
+        }
+        
+        private void SpawnObject(Vector3 opticalSpawnPoint)
+        {
+            var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
+            if (opticalSpawnPoint != Vector3.zero)
             {
-                var opticalSpawnPoint = w;
-                var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
-                if (opticalSpawnPoint != Vector3.zero)
-                {
-                    spawnPoint = opticalSpawnPoint;
-                }
+                spawnPoint = opticalSpawnPoint;
+            }
 
-                var newObject = Instantiate(layerGameObject, spawnPoint, layerGameObject.transform.rotation);
-                var layerComponent = newObject.GetComponent<HierarchicalObjectLayerGameObject>();
-                if (!layerComponent)
-                    layerComponent = newObject.gameObject.AddComponent<HierarchicalObjectLayerGameObject>();
+            var newObject = Instantiate(prefab, spawnPoint, prefab.transform.rotation);
+            var layerComponent = newObject.GetComponent<HierarchicalObjectLayerGameObject>();
+            if (!layerComponent) layerComponent = newObject.gameObject.AddComponent<HierarchicalObjectLayerGameObject>();
 
-                layerComponent.Name = layerGameObject.name;
-            };
+            layerComponent.Name = prefab.name;
         }
 
         protected virtual void CreateObject()
@@ -65,7 +62,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             if (opticalRaycaster)
             {
                 var centerOfViewport = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);
-                opticalRaycaster.GetWorldPointAsync(centerOfViewport, instantiationCallback);
+                opticalRaycaster.GetWorldPointAsync(centerOfViewport, SpawnObject);
             }
         }
     }

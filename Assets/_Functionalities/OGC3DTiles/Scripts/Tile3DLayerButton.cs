@@ -12,7 +12,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             
             var layerComponent = newObject.GetComponent<Tile3DLayerGameObject>();
             if (!layerComponent)
-                layerComponent = newObject.AddComponent<Tile3DLayerGameObject>();            
+                layerComponent = newObject.gameObject.AddComponent<Tile3DLayerGameObject>();            
             
             layerComponent.Name = prefab.name;
         }
