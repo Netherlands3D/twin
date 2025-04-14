@@ -43,8 +43,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected virtual void OnDestroy()
         {
             base.OnDestroy();
-            annotation.OnEndEdit.AddListener(UpdateProjectData);
+            annotation.OnEndEdit.RemoveListener(UpdateProjectData);
             annotationPropertyData.OnDataChanged.RemoveListener(UpdateAnnotation);
+            Destroy(annotation.gameObject);
         }
 
         private void UpdateProjectData(string annotationText)
