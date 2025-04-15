@@ -21,6 +21,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private GameObject colorSwatchPrefab;
         [SerializeField] private RectTransform layerContent;
 
+        private List<ColorSwatch> selectedSwatches = new List<ColorSwatch>();
+
         public override LayerGameObject LayerGameObject
         {
             get => layer;
@@ -29,7 +31,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 layer = value;
                 layer.OnStylingApplied.AddListener(UpdateSwatchFromStyleChange);
                 LoadLayerFeatures();
-                StartCoroutine(WaitFrame());
+                StartCoroutine(WaitFrame()); //workaround to have a minimum height for the content loaded (because of scrollrects)
             }
         }
 
@@ -50,6 +52,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 ColorSwatch swatch = swatchObject.GetComponent<ColorSwatch>();
                 swatch.SetInputText(layerFeatures[i].Attributes.Values.FirstOrDefault().ToString());
                 int cachedIndex = i;
+                //because all ui elements will be destroyed on close an anonymous listener is fine here
                 swatch.Button.onClick.AddListener(() => OnClickedSwatch(cachedIndex));
                 Material mat = layerFeatures[i].Geometry as Material;
                 swatch.SetColor(mat.color);
@@ -58,9 +61,15 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void OnClickedSwatch(int buttonIndex)
         {
-            //Debug.Log(buttonIndex);
             CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
-            cartesianTileLayerGameObject.Applicator.SetIndex(buttonIndex);            
+            cartesianTileLayerGameObject.Applicator.SetIndex(buttonIndex);
+
+
+            //working on this, now being able to select multiple layers
+            ColorSwatch swatch = layerContent.GetChild(buttonIndex).GetComponent<ColorSwatch>();
+            swatch.SetSelected(true);
+
+
         }
 
         private void UpdateSwatchFromStyleChange()
