@@ -7,6 +7,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
     public class CredentialsPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
         [SerializeField] private GameObject inputPropertySectionPrefab;
+        public uint SectionIndex => 0;
 
         public void AddToProperties(RectTransform properties)
         {

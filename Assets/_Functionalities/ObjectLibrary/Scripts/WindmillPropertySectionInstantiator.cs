@@ -7,6 +7,8 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
     {
         [SerializeField] private WindmillPropertySection propertySectionPrefab;
 
+        public uint SectionIndex => 0;
+
         public void AddToProperties(RectTransform properties)
         {
             if (!propertySectionPrefab) return;

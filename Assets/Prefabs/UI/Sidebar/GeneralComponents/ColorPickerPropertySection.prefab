@@ -5677,7 +5677,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 162.5, y: -44}
+  m_AnchoredPosition: {x: 162.5, y: -171.5}
   m_SizeDelta: {x: 325, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3291269154772184193
@@ -6960,8 +6960,9 @@ GameObject:
   - component: {fileID: 6778223411237904173}
   - component: {fileID: 4349820417869818976}
   - component: {fileID: 9055248403649816541}
+  - component: {fileID: 9033098801367265546}
   m_Layer: 5
-  m_Name: ColorPicker
+  m_Name: ColorPickerPropertySection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7107,6 +7108,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &9033098801367265546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5078733024073835164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa5e1729741ca2a4893996bc682a532a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  colorPicker: {fileID: 2700826638051772042}
 --- !u!1 &5089033489713329911
 GameObject:
   m_ObjectHideFlags: 0

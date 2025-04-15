@@ -7,6 +7,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
     public class ToggleScatterPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
         public ToggleScatterPropertySection PropertySection { get; private set; }
+        public uint SectionIndex => 0;
 
         public void AddToProperties(RectTransform properties)
         {

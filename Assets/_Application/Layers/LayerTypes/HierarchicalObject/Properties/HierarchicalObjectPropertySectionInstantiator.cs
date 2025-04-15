@@ -6,6 +6,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
     public class HierarchicalObjectPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
         [SerializeField] private AbstractHierarchicalObjectPropertySection propertySectionPrefab;
+        public uint SectionIndex => 0;
 
         public AbstractHierarchicalObjectPropertySection PropertySectionPrefab
         {

@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 8284198237993072344}
   - component: {fileID: -4083834515804018632}
   - component: {fileID: 8494173785329764173}
-  - component: {fileID: -7876154159096247085}
+  - component: {fileID: 1856859954977094558}
+  - component: {fileID: -8144036181122986689}
   m_Layer: 6
   m_Name: Maaiveld
   m_TagString: Untagged
@@ -188,7 +189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-7876154159096247085
+--- !u!114 &1856859954977094558
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -197,8 +198,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 3354824856556962616}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6303d72dc2aa4f61bcacd10f6b5e3e43, type: 3}
+  m_Script: {fileID: 11500000, guid: de5cd78f3fd5c1842b127eafceb944e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   propertySectionPrefab: {fileID: 7022181786967302496, guid: ca4dfb99b441c8b45bdab6fe8cb84efa,
+    type: 3}
+--- !u!114 &-8144036181122986689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3354824856556962616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5beca8176fee81942a4715f3bcefeac3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propertySectionPrefab: {fileID: 9033098801367265546, guid: eacd2d5be98dec243bc44bf8b2083c85,
     type: 3}
