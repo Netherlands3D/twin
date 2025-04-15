@@ -1,14 +1,27 @@
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.UI.ColorPicker;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
     public class LayerColorPropertySection : PropertySectionWithLayerGameObject
     {
         private LayerGameObject layer;
+        [SerializeField] private RectTransform content;
 
-        
+        private void Start()
+        {
+            StartCoroutine(WaitFrame());
+        }
+
+        private IEnumerator WaitFrame()
+        {
+            yield return new WaitForEndOfFrame(); 
+            LayoutElement layout = GetComponent<LayoutElement>();
+            layout.minHeight = content.rect.height;
+        }
 
         public override LayerGameObject LayerGameObject
         {

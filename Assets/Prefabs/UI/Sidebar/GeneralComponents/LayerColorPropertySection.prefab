@@ -4047,6 +4047,7 @@ GameObject:
   - component: {fileID: 8611322625765875509}
   - component: {fileID: 6860502739396848324}
   - component: {fileID: 7022181786967302496}
+  - component: {fileID: 8780069398125340196}
   m_Layer: 5
   m_Name: LayerColorPropertySection
   m_TagString: Untagged
@@ -4126,6 +4127,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51446dcf801bae5439c39648ddb9b884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  content: {fileID: 4996155142956460685}
+--- !u!114 &8780069398125340196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5529894738576217112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: 600
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &5533124037289316910
 GameObject:
   m_ObjectHideFlags: 0
