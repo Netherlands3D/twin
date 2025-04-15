@@ -52,6 +52,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
+        public UnityEvent OnStylingApplied = new();
         Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;
         private readonly List<LayerFeature> cachedFeatures = new();
 
@@ -188,7 +189,8 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void ApplyStyling()
         {
-            //initialize the layer's style        
+            //initialize the layer's style
+            OnStylingApplied.Invoke();
         }
 #endregion
 

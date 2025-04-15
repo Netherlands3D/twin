@@ -21,12 +21,16 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private GameObject colorSwatchPrefab;
         [SerializeField] private RectTransform layerContent;
 
-        private void Start()
+        public override LayerGameObject LayerGameObject
         {
-            LoadLayerFeatures();
-            StartCoroutine(WaitFrame());
-
-
+            get => layer;
+            set
+            {
+                layer = value;
+                layer.OnStylingApplied.AddListener(UpdateSwatchFromStyleChange);
+                LoadLayerFeatures();
+                StartCoroutine(WaitFrame());
+            }
         }
 
         private IEnumerator WaitFrame()
@@ -38,14 +42,17 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void LoadLayerFeatures()
         {
-            layerContent.ClearAllChildren();
+            layerContent.ClearAllChildren();            
             List<LayerFeature> layerFeatures = layer.GetLayerFeatures().Values.ToList();
             for(int i = 0; i < layerFeatures.Count; i++) 
             {
-                GameObject swatch = Instantiate(colorSwatchPrefab, layerContent);
-                swatch.GetComponentInChildren<TMP_InputField>().text = layerFeatures[i].Attributes.Values.FirstOrDefault().ToString();
+                GameObject swatchObject = Instantiate(colorSwatchPrefab, layerContent);
+                ColorSwatch swatch = swatchObject.GetComponent<ColorSwatch>();
+                swatch.SetInputText(layerFeatures[i].Attributes.Values.FirstOrDefault().ToString());
                 int cachedIndex = i;
-                swatch.GetComponent<Button>().onClick.AddListener(() => OnClickedSwatch(cachedIndex));
+                swatch.Button.onClick.AddListener(() => OnClickedSwatch(cachedIndex));
+                Material mat = layerFeatures[i].Geometry as Material;
+                swatch.SetColor(mat.color);
             }
         }
 
@@ -56,41 +63,16 @@ namespace Netherlands3D.Twin.Layers.Properties
             cartesianTileLayerGameObject.Applicator.SetIndex(buttonIndex);            
         }
 
-       
-        //koppeling met de colorwheel
-        //apply op layer om te kleuren
-
-
-        public override LayerGameObject LayerGameObject
+        private void UpdateSwatchFromStyleChange()
         {
-            get => layer;
-            set
-            {
-                layer = value;
-                
-
-
-
-                //colorPicker.SetColorWithoutNotify(layer.LayerData.DefaultStyle.AnyFeature.Symbolizer.GetFillColor() ?? defaultColor);
-            }
+            CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
+            ColorSwatch swatch = layerContent.GetChild(cartesianTileLayerGameObject.Applicator.materialIndex).GetComponent<ColorSwatch>();
+            swatch.SetColor(cartesianTileLayerGameObject.Applicator.GetMaterial().color);
         }
 
-        //private void OnEnable()
-        //{
-        //    colorPicker.colorChanged.AddListener(OnPickedColor);
-        //}
-
-        //private void OnDisable()
-        //{
-        //    colorPicker.colorChanged.RemoveListener(OnPickedColor);
-        //}
-
-        //public void OnPickedColor(Color color)
-        //{
-        //    layer.LayerData.DefaultStyle.AnyFeature.Symbolizer.SetFillColor(color);
-        //    layer.ApplyStyling();
-        //}
-
-
+        private void OnDestroy()
+        {
+            layer.OnStylingApplied.RemoveListener(UpdateSwatchFromStyleChange);
+        }
     }
 }

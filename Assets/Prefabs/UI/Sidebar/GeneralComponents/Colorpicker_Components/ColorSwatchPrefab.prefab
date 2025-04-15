@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5869364615698582753}
   - component: {fileID: 2144059512382340797}
   - component: {fileID: 2160310025634731892}
+  - component: {fileID: 1945648509046641297}
   m_Layer: 5
   m_Name: ColorSwatchPrefab
   m_TagString: Untagged
@@ -40,7 +41,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 64.78162, y: -12.799988}
+  m_AnchoredPosition: {x: 64.78162, y: -12.800049}
   m_SizeDelta: {x: 126.3335, y: 24}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5397055181843006938
@@ -218,6 +219,21 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1945648509046641297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564940261321804659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dbd831524e6e8c46a66aad2689083eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileColor: {fileID: 2616814380971791483}
+  button: {fileID: 7170341889522157509}
+  inputField: {fileID: 8367693085950956018}
 --- !u!1 &1359927950645039896
 GameObject:
   m_ObjectHideFlags: 0
