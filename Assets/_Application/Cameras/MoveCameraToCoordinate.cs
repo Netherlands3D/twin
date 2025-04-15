@@ -1,6 +1,7 @@
 using System;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Cameras
@@ -67,6 +68,13 @@ namespace Netherlands3D.Twin.Cameras
             // The Camera's Unity position will cause floating point issues, however it is only needed to trigger the Origin shift,
             // and then the correct position will be recalculated from the world transform's coordinate.
             cameraWorldTransform.MoveToCoordinate(targetCoordinate); //update the coordinate 
+        }
+
+        public void LoadCameraData(CameraPropertyData cameraPropertyData)
+        {    
+            camera.orthographic = cameraPropertyData.Orthographic;
+            cameraWorldTransform.MoveToCoordinate(cameraPropertyData.Position);
+            cameraWorldTransform.SetRotation(Quaternion.Euler(cameraPropertyData.EulerRotation));
         }
     }
 }

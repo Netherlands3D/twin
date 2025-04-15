@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
@@ -40,8 +38,13 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             if(layerGameObject.Thumbnail != null)
                 image.SpriteState = layerGameObject.Thumbnail;
         }
-        
+
         private void SpawnObject(Vector3 opticalSpawnPoint)
+        {
+            SpawnObject(opticalSpawnPoint, prefab.transform.rotation);
+        }
+        
+        private void SpawnObject(Vector3 opticalSpawnPoint, Quaternion rotation)
         {
             var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
             if (opticalSpawnPoint != Vector3.zero)
@@ -49,14 +52,29 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
                 spawnPoint = opticalSpawnPoint;
             }
 
-            var newObject = Instantiate(prefab, spawnPoint, prefab.transform.rotation);
-            var layerComponent = newObject.GetComponent<HierarchicalObjectLayerGameObject>();
-            if (!layerComponent) layerComponent = newObject.gameObject.AddComponent<HierarchicalObjectLayerGameObject>();
-
+            var layerComponent = Instantiate(prefab, spawnPoint, rotation);
             layerComponent.Name = prefab.name;
         }
 
         protected virtual void CreateObject()
+        {
+            switch (prefab.SpawnLocation)
+            {
+                case SpawnLocation.OpticalCenter:
+                    SpawnAtOpticalPosition();
+                    break;
+                case SpawnLocation.CameraPosition:
+                    SpawnObject(Camera.main.transform.position, Camera.main.transform.rotation);
+                    break;
+                case SpawnLocation.PrefabPosition:
+                    SpawnObject(prefab.transform.position);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void SpawnAtOpticalPosition()
         {
             var opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
             if (opticalRaycaster)

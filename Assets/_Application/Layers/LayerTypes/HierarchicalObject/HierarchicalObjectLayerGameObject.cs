@@ -93,8 +93,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
         }
 
-        protected virtual void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             transformPropertyData.OnPositionChanged.RemoveListener(UpdatePosition);
             transformPropertyData.OnRotationChanged.RemoveListener(UpdateRotation);
             transformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);

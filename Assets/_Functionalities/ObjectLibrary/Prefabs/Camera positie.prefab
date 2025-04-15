@@ -156,6 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabIdentifier: b2025624c5bfd4f7a876ee2d9bb84b87
   thumbnail: {fileID: 11400000, guid: 51ff4bc8b8829424f918f58463b8261a, type: 2}
+  spawnLocation: 1
   onShow:
     m_PersistentCalls:
       m_Calls: []
