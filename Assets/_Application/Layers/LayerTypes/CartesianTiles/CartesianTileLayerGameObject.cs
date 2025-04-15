@@ -83,6 +83,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             applicator.materialIndex = Mathf.FloorToInt(UnityEngine.Random.Range(0, (layer as BinaryMeshLayer).DefaultMaterialList.Count));
         }
 
+        protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
+        {
+            // it should be a FeaturePolygonVisualisations, just do a sanity check here
+            if (feature.Geometry is not Material mat) return feature;
+
+            feature.Attributes.Clear();
+            feature.Attributes.Add(mat.name, mat.name);
+
+            return feature;
+        }
+
         private Material UpdateMaterial(Color color, int index)
         {
             if(layer is BinaryMeshLayer meshLayer)

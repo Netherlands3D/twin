@@ -209,6 +209,8 @@ namespace Netherlands3D.Twin.Layers
             return cachedFeatures;
         }
 
+        
+
         /// <summary>
         /// Create a Feature object from the given Component, this method is meant as an extension point
         /// for LayerGameObjects to add more information to the Attribute (ExpressionContext) of the given Feature.
@@ -217,8 +219,24 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         protected LayerFeature CreateFeature(object geometry)
         {
-            return AddAttributesToLayerFeature(LayerFeature.Create(this, geometry));
+            LayerFeature feature = LayerFeature.Create(this, geometry);
+            AddAttributesToLayerFeature(feature);
+            layerFeatures.TryAdd(geometry, feature);
+            return feature;
         }
+
+        protected LayerFeature GetFeature(object geometry)
+        {
+            layerFeatures.TryGetValue(geometry, out var feature);
+            return feature;
+        }
+
+        public Dictionary<object, LayerFeature> GetLayerFeatures()
+        {
+            return layerFeatures;
+        }
+
+        private Dictionary<object, LayerFeature> layerFeatures = new Dictionary<object, LayerFeature>();
 
         /// <summary>
         /// Construct attributes onto the layer feature so that the styling system can

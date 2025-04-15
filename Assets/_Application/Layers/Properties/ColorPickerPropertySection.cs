@@ -1,25 +1,17 @@
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.UI.ColorPicker;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class ColorPickerPropertySection : PropertySectionWithLayerGameObject
+    public class ColorPickerPropertySection : MonoBehaviour
     {
-        private LayerGameObject layer;
+        public UnityEvent<StylingRule> ColorChanged = new();
+        public StylingRule selectedStylingRule;
 
         [SerializeField] private Color defaultColor = Color.white;
         [SerializeField] private ColorWheel colorPicker;
-
-        public override LayerGameObject LayerGameObject
-        {
-            get => layer;
-            set
-            {
-                layer = value;
-                colorPicker.SetColorWithoutNotify(layer.LayerData.DefaultStyle.AnyFeature.Symbolizer.GetFillColor() ?? defaultColor);
-            }
-        }
 
         private void OnEnable()
         {
@@ -32,9 +24,9 @@ namespace Netherlands3D.Twin.Layers.Properties
         }
 
         public void OnPickedColor(Color color)
-        {
-            layer.LayerData.DefaultStyle.AnyFeature.Symbolizer.SetFillColor(color);
-            layer.ApplyStyling();
+        {            
+            selectedStylingRule.Symbolizer.SetFillColor(color);
+            ColorChanged.Invoke(selectedStylingRule);
         }
     }
 }

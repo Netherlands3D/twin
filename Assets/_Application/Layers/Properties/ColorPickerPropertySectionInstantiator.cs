@@ -1,10 +1,11 @@
+using Netherlands3D.Twin.UI.ColorPicker;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
     public class ColorPickerPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
-        [SerializeField] private ColorPickerPropertySection propertySectionPrefab;
+        [SerializeField] private ColorWheel propertySectionPrefab;
 
         public uint SectionIndex => 1;
 
@@ -13,7 +14,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             if (!propertySectionPrefab) return;
 
             var settings = Instantiate(propertySectionPrefab, properties);
-            settings.LayerGameObject = GetComponent<LayerGameObject>();
+            //settings.LayerGameObject = GetComponent<LayerGameObject>();
         }
     }
 }
