@@ -3,6 +3,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Cameras
 {
@@ -25,6 +26,8 @@ namespace Netherlands3D.Twin.Cameras
 
         private new Camera camera;
         private WorldTransform cameraWorldTransform;
+
+        public UnityEvent<bool> orthographicLoaded;
         
         private void Awake()
         {
@@ -73,6 +76,8 @@ namespace Netherlands3D.Twin.Cameras
         public void LoadCameraData(CameraPropertyData cameraPropertyData)
         {    
             camera.orthographic = cameraPropertyData.Orthographic;
+            orthographicLoaded.Invoke(cameraPropertyData.Orthographic);
+            
             cameraWorldTransform.MoveToCoordinate(cameraPropertyData.Position);
             cameraWorldTransform.SetRotation(Quaternion.Euler(cameraPropertyData.EulerRotation));
         }

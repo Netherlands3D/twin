@@ -60,11 +60,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void MoveCameraToView()
         {
-            print("otho cam: " + cameraPropertyData.Orthographic);
-            print("transform cam: " + cameraPropertyData.Position + "\t" + cameraPropertyData.EulerRotation);
-            print("base transform: " + transformPropertyData.Position + "\t" + transformPropertyData.EulerRotation);
-            // var cameraWorldTransform = Camera.main.GetComponent<WorldTransform>();
-            // Camera.main.orthographic = cameraPropertyData.Orthographic;
             Camera.main.GetComponent<MoveCameraToCoordinate>().LoadCameraData(cameraPropertyData);
         }
         
