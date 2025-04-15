@@ -1,5 +1,7 @@
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.UI.ColorPicker;
 using NUnit.Framework;
 using System.Collections;
@@ -23,6 +25,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             LoadLayerFeatures();
             StartCoroutine(WaitFrame());
+
+
         }
 
         private IEnumerator WaitFrame()
@@ -35,16 +39,24 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void LoadLayerFeatures()
         {
             layerContent.ClearAllChildren();
-            Dictionary<object, LayerFeature> layerFeatures = layer.GetLayerFeatures();
-            foreach(KeyValuePair<object, LayerFeature> kv in layerFeatures)
+            List<LayerFeature> layerFeatures = layer.GetLayerFeatures().Values.ToList();
+            for(int i = 0; i < layerFeatures.Count; i++) 
             {
                 GameObject swatch = Instantiate(colorSwatchPrefab, layerContent);
-                swatch.GetComponentInChildren<TMP_InputField>().text = kv.Value.Attributes.Values.FirstOrDefault().ToString();
+                swatch.GetComponentInChildren<TMP_InputField>().text = layerFeatures[i].Attributes.Values.FirstOrDefault().ToString();
+                int cachedIndex = i;
+                swatch.GetComponent<Button>().onClick.AddListener(() => OnClickedSwatch(cachedIndex));
             }
         }
 
-        //features ophalen op basis van de feature materials en ui swatches aanmaken met juiste namen
-        //selectie styling rule -> colorwheel styling rule zetten
+        private void OnClickedSwatch(int buttonIndex)
+        {
+            //Debug.Log(buttonIndex);
+            CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
+            cartesianTileLayerGameObject.Applicator.SetIndex(buttonIndex);            
+        }
+
+       
         //koppeling met de colorwheel
         //apply op layer om te kleuren
 
@@ -55,6 +67,10 @@ namespace Netherlands3D.Twin.Layers.Properties
             set
             {
                 layer = value;
+                
+
+
+
                 //colorPicker.SetColorWithoutNotify(layer.LayerData.DefaultStyle.AnyFeature.Symbolizer.GetFillColor() ?? defaultColor);
             }
         }

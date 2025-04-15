@@ -5,7 +5,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 {
     public class ColorPickerPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
-        [SerializeField] private ColorWheel propertySectionPrefab;
+        [SerializeField] private ColorPickerPropertySection propertySectionPrefab;
 
         public uint SectionIndex => 1;
 
@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             if (!propertySectionPrefab) return;
 
             var settings = Instantiate(propertySectionPrefab, properties);
-            //settings.LayerGameObject = GetComponent<LayerGameObject>();
+            settings.LayerGameObject = GetComponent<LayerGameObject>();
         }
     }
 }
