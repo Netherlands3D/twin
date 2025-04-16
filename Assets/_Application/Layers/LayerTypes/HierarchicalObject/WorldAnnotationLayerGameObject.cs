@@ -9,22 +9,21 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
-    public class WorldAnnotationLayerGameObject : HierarchicalObjectLayerGameObject, ILayerWithPropertyData
+    public class WorldAnnotationLayerGameObject : HierarchicalObjectLayerGameObject
     {
         [SerializeField] private TextPopout popoutPrefab;
         private TextPopout annotation;
-        private AnnotationPropertyData annotationPropertyData;
+        private AnnotationPropertyData annotationPropertyData => (AnnotationPropertyData)transformPropertyData;
         
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
         public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one ), new Coordinate(transform.position + 5 * Vector3.one));
-        LayerPropertyData ILayerWithPropertyData.PropertyData => annotationPropertyData;
 
         protected override void Awake()
         {
             base.Awake();
-            annotationPropertyData = new AnnotationPropertyData("");
+            transformPropertyData = new AnnotationPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale, "");
             CreateTextPopup();
-            annotationPropertyData.OnDataChanged.AddListener(UpdateAnnotation);
+            annotationPropertyData.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
         }
 
         private void CreateTextPopup()
@@ -34,17 +33,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation = Instantiate(popoutPrefab, canvasTransform.transform);
             annotation.RectTransform().SetPivot(PivotPresets.BottomCenter);
             annotation.transform.SetSiblingIndex(0);
-            annotation.Show(annotationPropertyData.Data, worldTransform.Coordinate, true);
+            annotation.Show(annotationPropertyData.AnnotationText, worldTransform.Coordinate, true);
             annotation.ReadOnly = false;
             annotation.OnEndEdit.AddListener(UpdateProjectData);
             annotation.TextFieldSelected.AddListener(OnDeselect); // avoid transform handles from being able to move the annotation when trying to select text
         }
         
-        protected virtual void OnDestroy()
+        protected override void OnDestroy()
         {
             base.OnDestroy();
             annotation.OnEndEdit.RemoveListener(UpdateProjectData);
-            annotationPropertyData.OnDataChanged.RemoveListener(UpdateAnnotation);
+            annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
             annotation.TextFieldSelected.RemoveListener(OnDeselect);
 
             Destroy(annotation.gameObject);
@@ -52,10 +51,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void UpdateProjectData(string annotationText)
         {
-            annotationPropertyData.Data = annotationText;
+            annotationPropertyData.AnnotationText = annotationText;
         }
         
-        protected virtual void Update()
+        protected override void Update()
         {
             base.Update();
             annotation.StickTo(worldTransform.Coordinate);
@@ -70,14 +69,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             {
                 if (annotationPropertyData != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
                 {
-                    annotationPropertyData.OnDataChanged.RemoveListener(UpdateAnnotation);
+                    annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
                 }
 
-                this.annotationPropertyData = annotationProperty; //take existing TransformProperty to overwrite the unlinked one of this class
+                transformPropertyData = annotationProperty; //take existing TransformProperty to overwrite the unlinked one of this class
 
-                UpdateAnnotation(this.annotationPropertyData.Data);
+                UpdateAnnotation(this.annotationPropertyData.AnnotationText);
 
-                annotationPropertyData.OnDataChanged.AddListener(UpdateAnnotation);
+                annotationPropertyData.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
             }
         }
 
