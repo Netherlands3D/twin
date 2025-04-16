@@ -57,12 +57,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected virtual void Awake()
         {
-            transformPropertyData = new TransformLayerPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale);
+            transformPropertyData = InitializePropertyData();
 
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
 
             worldTransform = GetComponent<WorldTransform>();
+        }
+
+        protected virtual TransformLayerPropertyData InitializePropertyData()
+        {
+            return new TransformLayerPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale);
         }
 
         protected override void OnEnable()

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
@@ -21,9 +22,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void Awake()
         {
             base.Awake();
-            transformPropertyData = new AnnotationPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale, "");
             CreateTextPopup();
             annotationPropertyData.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
+        }
+
+        protected override TransformLayerPropertyData InitializePropertyData()
+        {
+            return new AnnotationPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale, "");
         }
 
         private void CreateTextPopup()

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
@@ -19,15 +20,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void Awake()
         {
             base.Awake();
-            var cam = Camera.main;
-            var cameraPropertyData = new CameraPropertyData(new Coordinate(cam.transform.position), cam.transform.eulerAngles, cam.transform.localScale, cam.orthographic);
             cameraPropertyData.OnOrthographicChanged.AddListener(SetOrthographic);
 
-            transformPropertyData = cameraPropertyData;
             defaultColor = GetComponentInChildren<MeshRenderer>().material.color;
             
             layerTool.onOpen.AddListener(EnableGhost);
             layerTool.onClose.AddListener(DisableGhost);
+        }
+
+        protected override TransformLayerPropertyData InitializePropertyData()
+        {
+            var cam = Camera.main;
+            return new CameraPropertyData(new Coordinate(cam.transform.position), cam.transform.eulerAngles, cam.transform.localScale, cam.orthographic);
         }
 
         protected virtual void OnDestroy()
