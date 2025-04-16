@@ -11,6 +11,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
     public class CameraPositionLayerGameObject : HierarchicalObjectLayerGameObject
     {
+        [SerializeField] private Material ghostMaterial;
         [SerializeField] private Color selectedColor;
         [SerializeField] private Tool layerTool;
         [SerializeField] private GameObject ghostGameObject;
@@ -22,7 +23,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.Awake();
             cameraPropertyData.OnOrthographicChanged.AddListener(SetOrthographic);
 
-            defaultColor = GetComponentInChildren<MeshRenderer>().material.color;
+            defaultColor = ghostMaterial.color;
             
             layerTool.onOpen.AddListener(EnableGhost);
             layerTool.onClose.AddListener(DisableGhost);
@@ -34,7 +35,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             return new CameraPropertyData(new Coordinate(cam.transform.position), cam.transform.eulerAngles, cam.transform.localScale, cam.orthographic);
         }
 
-        protected virtual void OnDestroy()
+        protected override void OnDestroy()
         {
             base.OnDestroy();
             cameraPropertyData.OnOrthographicChanged.RemoveListener(SetOrthographic);
@@ -69,10 +70,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected override void OnDoubleClick(LayerData layer)
         {
-            MoveCameraToView();
+            MoveCameraToSavedLocation();
         }
 
-        private void MoveCameraToView()
+        private void MoveCameraToSavedLocation()
         {
             Camera.main.GetComponent<MoveCameraToCoordinate>().LoadCameraData(cameraPropertyData);
         }

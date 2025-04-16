@@ -58,6 +58,7 @@ MonoBehaviour:
   objectCreated:
     m_PersistentCalls:
       m_Calls: []
+  ghostMaterial: {fileID: 2100000, guid: f8a22a8306ab44a7096a488ecc081e54, type: 2}
   selectedColor: {r: 1, g: 0.4254949, b: 0, a: 0.78039217}
   layerTool: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
   ghostGameObject: {fileID: 1989733483306684382}
