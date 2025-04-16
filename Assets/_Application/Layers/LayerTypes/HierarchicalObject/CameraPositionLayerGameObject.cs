@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Cameras;
-using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
@@ -10,6 +10,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
     public class CameraPositionLayerGameObject : HierarchicalObjectLayerGameObject
     {
+        [SerializeField] private Color selectedColor;
+        [SerializeField] private Tool layerTool;
+        [SerializeField] private GameObject ghostGameObject;
+        private Color defaultColor;
         CameraPropertyData cameraPropertyData => (CameraPropertyData)transformPropertyData;
 
         protected override void Awake()
@@ -20,12 +24,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             cameraPropertyData.OnOrthographicChanged.AddListener(SetOrthographic);
 
             transformPropertyData = cameraPropertyData;
+            defaultColor = GetComponentInChildren<MeshRenderer>().material.color;
+            
+            layerTool.onOpen.AddListener(EnableGhost);
+            layerTool.onClose.AddListener(DisableGhost);
         }
 
         protected virtual void OnDestroy()
         {
             base.OnDestroy();
             cameraPropertyData.OnOrthographicChanged.RemoveListener(SetOrthographic);
+            layerTool.onOpen.RemoveListener(EnableGhost);
+            layerTool.onClose.RemoveListener(DisableGhost);
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
@@ -65,7 +75,30 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         
         public override void OnSelect()
         {
-            //do not set transform handles
+            //do not call base to not set transform handles
+            foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
+            {
+                renderer.material.color = selectedColor;
+            }
+        }
+
+        public override void OnDeselect()
+        {
+            base.OnDeselect();
+            foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
+            {
+                renderer.material.color = defaultColor;
+            }
+        }
+
+        private void EnableGhost()
+        {
+            ghostGameObject.SetActive(true);
+        }
+
+        private void DisableGhost()
+        {
+            ghostGameObject.SetActive(false);
         }
     }
 }
