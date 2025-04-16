@@ -1,12 +1,15 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Netherlands3D
 {
-    public class ColorSwatch : MonoBehaviour
+    public class ColorSwatch : MonoBehaviour, IPointerUpHandler
     {
         public Button Button => button;
+        public bool IsSelected => isSelected;
 
         [SerializeField] private Image tileColor;
         [SerializeField] private Button button;
@@ -15,6 +18,8 @@ namespace Netherlands3D
 
         public Color selectedColor = Color.green;
         public Color normalColor = Color.white;
+
+        public UnityEvent onClickUp = new();
 
         private bool isSelected = false;
 
@@ -42,6 +47,11 @@ namespace Netherlands3D
         public void SetColor(Color color)
         {
             tileColor.color = color;
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            onClickUp.Invoke();
         }
     }
 }
