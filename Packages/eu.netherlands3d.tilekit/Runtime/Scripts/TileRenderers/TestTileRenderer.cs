@@ -17,14 +17,6 @@ namespace Netherlands3D.Tilekit.TileRenderers
             return base.Add(change);
         }
 
-        public override Promise Replace(Change change)
-        {
-            Debug.Log(change.Type);
-            Debug.Log(change.Tile.TileContents.FirstOrDefault().Uri.ToString());
-
-            return base.Replace(change);
-        }
-
         public override Promise Remove(Change change)
         {
             Debug.Log(change.Type);

@@ -20,7 +20,7 @@ namespace Netherlands3D.Tilekit.TileMappers
             tileHandler.AddLayer(layer);
         }
 
-        public override void Render()
+        public override void Map()
         {
             // The rendering is deferred to the legacy system entirely, meaning that this method does not need to do
             // anything

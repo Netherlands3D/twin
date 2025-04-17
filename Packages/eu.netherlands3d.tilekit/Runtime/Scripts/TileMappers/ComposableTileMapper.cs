@@ -1,6 +1,4 @@
-﻿using System;
-using Netherlands3D.Tilekit.Changes;
-using Netherlands3D.Tilekit.TileSets;
+﻿using Netherlands3D.Tilekit.TileSets;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit.TileMappers
@@ -13,10 +11,12 @@ namespace Netherlands3D.Tilekit.TileMappers
         public TileSelector TileSelector;
         public ChangeScheduler ChangeScheduler;
         public TileRenderer TileRenderer;
+        public TilesTransitionPlanner TilesTransitionPlanner;
 
         private Camera mainCamera;
         private Plane[] frustumPlanes = new Plane[6];
         private Plane[] previousFrustumPlanes = new Plane[6];
+        
 
         private void Start()
         {
@@ -41,28 +41,18 @@ namespace Netherlands3D.Tilekit.TileMappers
 
             // Move this so that you can 'force' invoke a computation because outside forces influence the selection
             // or make this another adapter
+            // TODO: Should this be part of the TileSelector?
             if (FrustumChanged() == false) return;
 
-            var stagedTiles = TileSelector.Select(tileSet, frustumPlanes);
-            
-            // Crude diff - if a staged tile is not in the active tiles array, add it
-            foreach (var tile in stagedTiles)
+            var stagedTiles = TileSelector.Select(tileSet.Value, frustumPlanes);
+            var transition = TilesTransitionPlanner.CreateTransition(TilesInView, stagedTiles);
+            foreach (var change in transition)
             {
-                if (TilesInView.Contains(tile)) continue;
-
-                this.ChangeScheduler.Schedule(this, Change.Add(tile));
-            }
-
-            // Crude diff - if an active tile is not in the staged array, remove it
-            foreach (var tile in TilesInView)
-            {
-                if (stagedTiles.Contains(tile)) continue;
-
-                this.ChangeScheduler.Schedule(this, Change.Remove(tile));
+                this.ChangeScheduler.Schedule(this, change);
             }
         }
 
-        public override void Render()
+        public override void Map()
         {
             if (tileSet == null)
             {
@@ -70,9 +60,12 @@ namespace Netherlands3D.Tilekit.TileMappers
                 return;
             }
 
+            // TODO: Won't this potentially start the change scheduler multiple times?
             StartCoroutine(ChangeScheduler.Apply());
         }
         
+        // TODO: Move this to another location - this is reusable and not the responsibility of this class
+        // Move this to the TileSelector? Since this may be specific to TilesInView?
         private bool FrustumChanged()
         {
             // Every time we repopulate the frustumPlanes array - saving allocations

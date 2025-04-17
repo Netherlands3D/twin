@@ -2,23 +2,22 @@ using System;
 using System.Runtime.Serialization;
 using Netherlands3D.Tilekit.TileSets.BoundingVolumes;
 using Netherlands3D.Tilekit.TileSets.ImplicitTiling;
+using Unity.Collections;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit.TileSets
 {
-    [DataContract(Namespace = "eu.netherlands3d.tilekit.tilesets", Name = "Tile")]
     public class Tile
     {
         /// <summary>
         /// A generated ID for internal use - we use this in hashtables to build quick access indices. 
         /// </summary>
-        public Guid Id { get; } = Guid.NewGuid();
+        public string Id { get; } = Guid.NewGuid().ToString();
     
         public IBoundingVolume BoundingVolume;
         public double GeometricError;
         public TileContents TileContents = new();
         public Matrix4x4 Transform;
-        public Metadata Metadata = new();
         public Tiles Children = new();
         public IImplicitTilingScheme ImplicitTiling = new None();
         public MethodOfRefinement Refine = MethodOfRefinement.Replace;

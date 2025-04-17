@@ -20,10 +20,6 @@ namespace Netherlands3D.Tilekit
                     case TypeOfChange.Remove:
                         change.UsingAction(changeToBePerformed => RemoveChange(tileMapper, changeToBePerformed as Change));
                         break;
-                    case TypeOfChange.Replace:
-                        // TODO: I am not 100% sure how to do replaces - so revisit this later
-                        change.UsingAction(tileMapper.TileRenderer.Replace);
-                        break;
                 }
 
             changePlan.Plan(change);
