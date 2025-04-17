@@ -2458,6 +2458,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: AmsterdamTimeMachine - 1985
       objectReference: {fileID: 0}
+    - target: {fileID: 3033963501392074573, guid: 335ee3277cf4c434f98656f870766088,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5368650744153997827, guid: 335ee3277cf4c434f98656f870766088,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2551,7 +2556,7 @@ PrefabInstance:
     - target: {fileID: 8775512218966625150, guid: 335ee3277cf4c434f98656f870766088,
         type: 3}
       propertyPath: tick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: Render
+      value: Map
       objectReference: {fileID: 0}
     - target: {fileID: 8775512218966625150, guid: 335ee3277cf4c434f98656f870766088,
         type: 3}
