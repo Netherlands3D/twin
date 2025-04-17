@@ -1,16 +1,16 @@
-using Netherlands3D.Functionalities.ObjectLibrary;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class PropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
+    public class LayerColorPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
-        [SerializeField] private PropertySectionWithLayerGameObject propertySectionPrefab;
+        [SerializeField] private LayerColorPropertySection propertySectionPrefab;
+
         public uint SectionIndex => 0;
 
         public void AddToProperties(RectTransform properties)
         {
-            if (propertySectionPrefab == null) return;
+            if (!propertySectionPrefab) return;
 
             var settings = Instantiate(propertySectionPrefab, properties);
             settings.LayerGameObject = GetComponent<LayerGameObject>();

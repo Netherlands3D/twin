@@ -6,6 +6,7 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
     public class SensorPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
         [SerializeField] private SensorPropertySection propertySectionPrefab;
+        public uint SectionIndex => 0;
 
         public void AddToProperties(RectTransform properties)
         {

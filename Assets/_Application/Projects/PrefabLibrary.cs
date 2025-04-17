@@ -33,6 +33,7 @@ namespace Netherlands3D.Twin.Projects
             prefabById = FindPrefabInGroups(id, prefabRuntimeGroups);
             if (prefabById) return prefabById;
 
+            Debug.LogError($"Can't find the id of { id } returning the default prefab");
             return fallbackPrefab;
         }
 
