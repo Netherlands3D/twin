@@ -83,7 +83,8 @@ namespace Netherlands3D.Twin.Layers.Properties
             float timeSinceLastClick = Time.time - lastClickTime;
             if (lastButtonIndex == buttonIndex && 
                 timeSinceLastClick > LayerUI.DoubleClickLayerThreshold && 
-                eventData.pointerEnter == items[currentButtonIndex].TextField.gameObject
+                eventData.pointerEnter == items[currentButtonIndex].TextField.gameObject &&
+                NoModifierKeyPressed()
                 )
             {
                 OnSelectInputField(items[currentButtonIndex]);
@@ -95,6 +96,11 @@ namespace Netherlands3D.Twin.Layers.Properties
             }
             
             lastClickTime = Time.time;
+        }
+
+        private bool NoModifierKeyPressed()
+        {
+            return !LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed();
         }
 
         private void OnClickedSwatchUp(PointerEventData eventData, int buttonIndex)
@@ -156,7 +162,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                     items[i].SetSelected(addSelection);
                 items[currentButtonIndex].SetSelected(!addSelection);
             }
-            if (!LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed())
+            if (NoModifierKeyPressed())
             {
                 foreach (var layer in selectedSwatches)
                     layer.SetSelected(false);
