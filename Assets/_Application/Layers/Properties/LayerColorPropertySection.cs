@@ -1,3 +1,4 @@
+using GG.Extensions;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
@@ -65,17 +66,15 @@ namespace Netherlands3D.Twin.Layers.Properties
         int currentButtonIndex = -1;
         private void OnClickedSwatch(int buttonIndex)
         {
-            CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
-            cartesianTileLayerGameObject.Applicator.SetIndex(buttonIndex);
-
-            
-            
+         
 
             currentButtonIndex = buttonIndex;
             SelectSwatch(buttonIndex, !GetSwatch(buttonIndex).IsSelected);
 
 
             //ProcessLayerSelection();
+
+           
 
         }
 
@@ -96,20 +95,37 @@ namespace Netherlands3D.Twin.Layers.Properties
             UpdateSelection();
         }
 
+        private List<int> selectedIndices = new List<int>();
         private void UpdateSelection()
         {
+            selectedIndices.Clear();
             selectedSwatches.Clear();
             ColorSwatch[] swatches = layerContent.GetComponentsInChildren<ColorSwatch>();
             foreach (ColorSwatch swatch in swatches)
                 if (swatch.IsSelected)
+                {
                     selectedSwatches.Add(swatch);
+                    selectedIndices.Add(swatches.IndexOf(swatch));
+                }
+
+            CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
+            cartesianTileLayerGameObject.Applicator.SetIndices(selectedIndices);
+        }
+
+        private void ColorSelection()
+        {
+           
         }
 
         private void UpdateSwatchFromStyleChange()
         {
             CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
-            ColorSwatch swatch = layerContent.GetChild(cartesianTileLayerGameObject.Applicator.materialIndex).GetComponent<ColorSwatch>();
-            swatch.SetColor(cartesianTileLayerGameObject.Applicator.GetMaterial().color);
+            foreach (int i in cartesianTileLayerGameObject.Applicator.MaterialIndices)
+            {
+                ColorSwatch swatch = layerContent.GetChild(i).GetComponent<ColorSwatch>();
+                //swatch.SetColor(cartesianTileLayerGameObject.Applicator.GetMaterialByIndex(i).color);
+                swatch.SetColor(cartesianTileLayerGameObject.Applicator.GetMaterial().color);
+            }
         }
 
         private void OnDestroy()

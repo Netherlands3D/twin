@@ -10,9 +10,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
     {
         internal class CartesianTileBinaryMeshLayerMaterialApplicator : IMaterialApplicatorAdapter
         {
-            private readonly CartesianTileLayerGameObject layer;
+            public List<int> MaterialIndices => materialIndices;
+            private List<int> materialIndices = new List<int>();
 
-            public int materialIndex = 0;
+            private readonly CartesianTileLayerGameObject layer;            
 
             public CartesianTileBinaryMeshLayerMaterialApplicator(CartesianTileLayerGameObject layer)
             {
@@ -25,18 +26,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 }
             }
 
-            public void SetIndex(int materialIndex)
+            public void SetIndices(List<int> materialIndices)
             {
-                this.materialIndex = materialIndex;
+                this.materialIndices = materialIndices;
             }
 
             public Material CreateMaterial()
             {
-                //todo explain why materials are used here and not submeshes
-                var style = layer.GetStyling(layer.GetFeature(GetMaterial())); //one feature per default shared material
-                var color = style.GetFillColor() ?? Color.white;
+                foreach (int i in materialIndices)
+                {
+                    //todo explain why materials are used here and not submeshes
+                    var style = layer.GetStyling(layer.GetFeature(GetMaterialByIndex(i))); //one feature per default shared material
+                    var color = style.GetFillColor() ?? Color.white;
 
-                return layer.UpdateMaterial(color, materialIndex);
+                    layer.UpdateMaterial(color, i);
+                }
+                return null;
             }
 
             public void SetMaterial(Material material)
@@ -44,7 +49,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                  //materials are shared so nothing should be set
             }
 
-            public Material GetMaterial() => layer.GetMaterialInstance(materialIndex); //this is a sharedmaterial
+            public Material GetMaterialByIndex(int index)
+            {
+                return layer.GetMaterialInstance(index);
+            }
+
+            public Material GetMaterial() => materialIndices.Count > 0 ? layer.GetMaterialInstance(materialIndices[0]) : null; //this is a sharedmaterial
         }
     }
 }
