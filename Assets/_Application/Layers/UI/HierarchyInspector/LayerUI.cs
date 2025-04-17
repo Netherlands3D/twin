@@ -418,7 +418,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             var layoutGroup = parentRowRectTransform.GetComponent<HorizontalLayoutGroup>();
 
             var layerNameFieldRectTransform = layerNameField.GetComponent<RectTransform>();
-            
+
             var width = maxWidth;
             width -= layerNameFieldRectTransform.anchoredPosition.x;
             width -= spacer.rect.width;
@@ -427,7 +427,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             width -= layoutGroup.spacing; // Subtract spacing to create spacing between name field and buttons
             width += layerPanelRight; // Negative number, so we invert it by adding
             width -= buttonGroupWidth; // Subtract ButtonGroupWidth because they partly influence the layout
-            
+
             layerNameFieldRectTransform.sizeDelta = new Vector2(width, layerNameFieldRectTransform.rect.height);
 
             // The text holder component - which is the parent of the layerNameText - needs to be re-scaled
@@ -466,11 +466,11 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             {
                 //only one extra click on a selected layer should initiate the layer name editing
                 float timeSinceLastClick = Time.time - lastClickTime;
-                
+
                 if (timeSinceLastClick <= doubleClickThreshold)
                 {
                     // Detected double-click
-                    JumpCameraToLayer();
+                    Layer.DoubleClickLayer();
                 }
                 else if (eventData.pointerEnter == layerNameText.gameObject)
                 {
@@ -483,15 +483,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             {
                 ProcessLayerSelection();
             }
-            lastClickTime = Time.time;
-        }
 
-        private void JumpCameraToLayer()
-        {
-            if (Layer is ReferencedLayerData referencedLayerData)
-            {
-                Layer.DoubleClickLayer();
-            }
+            lastClickTime = Time.time;
         }
 
         private void OnRightButtonDown(PointerEventData eventData)
