@@ -6,6 +6,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using Netherlands3D.Twin.UI.ColorPicker;
 using NUnit.Framework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,9 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private RectTransform layerContent;
 
         private List<ColorSwatch> selectedSwatches = new List<ColorSwatch>();
+        private List<int> selectedIndices = new List<int>();
+        private int currentButtonIndex = -1;
+        private ColorSwatch[] items; 
 
         public override LayerGameObject LayerGameObject
         {
@@ -49,6 +53,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             layerContent.ClearAllChildren();            
             List<LayerFeature> layerFeatures = layer.GetLayerFeatures().Values.ToList();
+            items = new ColorSwatch[layerFeatures.Count];
             for(int i = 0; i < layerFeatures.Count; i++) 
             {
                 GameObject swatchObject = Instantiate(colorSwatchPrefab, layerContent);
@@ -60,61 +65,42 @@ namespace Netherlands3D.Twin.Layers.Properties
                 swatch.onClickUp.AddListener(() => OnClickedSwatchUp(cachedIndex));
                 Material mat = layerFeatures[i].Geometry as Material;
                 swatch.SetColor(mat.color);
+
+                items[cachedIndex] = swatch; 
             }
         }
 
-        int currentButtonIndex = -1;
         private void OnClickedSwatch(int buttonIndex)
-        {
-         
-
+        {    
             currentButtonIndex = buttonIndex;
-            SelectSwatch(buttonIndex, !GetSwatch(buttonIndex).IsSelected);
-
-
-            //ProcessLayerSelection();
-
-           
-
+            ProcessLayerSelection();
+            SelectSwatch(buttonIndex, !items[buttonIndex].IsSelected);           
         }
 
         private void OnClickedSwatchUp(int buttonIndex)
         {
-
-        }
-
-        private ColorSwatch GetSwatch(int buttonIndex)
-        {
-            return layerContent.GetChild(buttonIndex).GetComponent<ColorSwatch>();
-        }
+            //ProcessLayerSelection();
+        }        
 
         private void SelectSwatch(int buttonIndex, bool select)
         {
-            ColorSwatch swatch = GetSwatch(buttonIndex);
-            swatch.SetSelected(select);
+            items[buttonIndex].SetSelected(select);
             UpdateSelection();
         }
 
-        private List<int> selectedIndices = new List<int>();
         private void UpdateSelection()
         {
             selectedIndices.Clear();
-            selectedSwatches.Clear();
-            ColorSwatch[] swatches = layerContent.GetComponentsInChildren<ColorSwatch>();
-            foreach (ColorSwatch swatch in swatches)
+            selectedSwatches.Clear();            
+            foreach (ColorSwatch swatch in items)
                 if (swatch.IsSelected)
                 {
                     selectedSwatches.Add(swatch);
-                    selectedIndices.Add(swatches.IndexOf(swatch));
+                    selectedIndices.Add(items.IndexOf(swatch));
                 }
 
             CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
             cartesianTileLayerGameObject.Applicator.SetIndices(selectedIndices);
-        }
-
-        private void ColorSelection()
-        {
-           
         }
 
         private void UpdateSwatchFromStyleChange()
@@ -133,29 +119,30 @@ namespace Netherlands3D.Twin.Layers.Properties
             layer.OnStylingApplied.RemoveListener(UpdateSwatchFromStyleChange);
         }
 
-     
-
         private void ProcessLayerSelection()
         {
             if (LayerUI.SequentialSelectionModifierKeyIsPressed() && selectedSwatches.Count > 0) //if no layers are selected, there will be no reference layer to add to
-            {
-                // add all layers between the currently selected layer and the reference layer
-                var lastIndex = selectedSwatches.Count - 1; //last element is always the last selected layer                               
-
-                var startIndex = lastIndex > currentButtonIndex ? currentButtonIndex + 1 : lastIndex + 1;
-                var endIndex = lastIndex > currentButtonIndex ? lastIndex - 1 : currentButtonIndex - 1;
-
-                var addLayers = !selectedSwatches[currentButtonIndex].IsSelected; //add or subtract layers?
-
-                for (int i = startIndex; i <= endIndex; i++)
+            {                
+                int lastIndex = items.IndexOf(selectedSwatches[selectedSwatches.Count - 1]); //last element is always the last selected layer                               
+                int targetIndex = currentButtonIndex;
+                if(lastIndex > targetIndex)
                 {
-                    selectedSwatches[i].SetSelected(addLayers);
+                    int temp = lastIndex;
+                    lastIndex = targetIndex;
+                    targetIndex = temp;
                 }
+                bool addSelection = !items[currentButtonIndex].IsSelected; 
+                for (int i = lastIndex; i <= targetIndex; i++)
+                    items[i].SetSelected(addSelection);
+                items[currentButtonIndex].SetSelected(!addSelection);
             }
-
             if (!LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed())
-                foreach(var layer in selectedSwatches)
-                    layer.SetSelected(false);            
+            {
+                foreach (var layer in selectedSwatches)
+                    layer.SetSelected(false);
+
+            }
+            UpdateSelection();
         }
     }
 }
