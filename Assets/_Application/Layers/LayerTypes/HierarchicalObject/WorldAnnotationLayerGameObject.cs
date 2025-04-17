@@ -3,6 +3,7 @@ using System.Linq;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -12,11 +13,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
     public class WorldAnnotationLayerGameObject : HierarchicalObjectLayerGameObject
     {
         [SerializeField] private TextPopout popoutPrefab;
+        [SerializeField] private Tool layerTool;
+
         private TextPopout annotation;
         private AnnotationPropertyData annotationPropertyData => (AnnotationPropertyData)transformPropertyData;
-        
+
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
-        public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one ), new Coordinate(transform.position + 5 * Vector3.one));
+        public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one), new Coordinate(transform.position + 5 * Vector3.one));
 
         protected override void Awake()
         {
@@ -34,17 +37,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.RectTransform().SetPivot(PivotPresets.BottomCenter);
             annotation.transform.SetSiblingIndex(0);
             annotation.Show(annotationPropertyData.AnnotationText, worldTransform.Coordinate, true);
-            annotation.ReadOnly = false;
+            annotation.ReadOnly = !layerTool.Open;
             annotation.OnEndEdit.AddListener(UpdateProjectData);
             annotation.TextFieldSelected.AddListener(OnDeselect); // avoid transform handles from being able to move the annotation when trying to select text
+            layerTool.onOpen.AddListener(DisableReadOnly);
+            layerTool.onClose.AddListener(EnableReadOnly);
         }
-        
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
             annotation.OnEndEdit.RemoveListener(UpdateProjectData);
             annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
             annotation.TextFieldSelected.RemoveListener(OnDeselect);
+            layerTool.onOpen.RemoveListener(DisableReadOnly);
+            layerTool.onClose.RemoveListener(EnableReadOnly);
 
             Destroy(annotation.gameObject);
         }
@@ -53,7 +60,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             annotationPropertyData.AnnotationText = annotationText;
         }
-        
+
+        private void DisableReadOnly()
+        {
+            annotation.ReadOnly = false;
+        }
+
+        private void EnableReadOnly()
+        {
+            annotation.ReadOnly = true;
+        }
+
         protected override void Update()
         {
             base.Update();
@@ -63,7 +80,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void LoadProperties(List<LayerPropertyData> properties)
         {
             base.LoadProperties(properties);
-    
+
             var annotationProperty = (AnnotationPropertyData)properties.FirstOrDefault(p => p is AnnotationPropertyData);
             if (annotationProperty != null)
             {
