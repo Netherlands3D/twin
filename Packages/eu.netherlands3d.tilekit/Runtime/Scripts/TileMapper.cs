@@ -5,7 +5,7 @@ namespace Netherlands3D.Tilekit.TileSets
 {
     public abstract class TileMapper : MonoBehaviour
     {
-        protected TileSet tileSet;
+        protected TileSet? tileSet;
         
         // This is the result of the adding and removing of tiles, but may
         // be viewed separetely from tiles entering and exiting view
@@ -32,6 +32,6 @@ namespace Netherlands3D.Tilekit.TileSets
         {
         }
 
-        public abstract void Render();
+        public abstract void Map();
     }
 }

@@ -3,10 +3,9 @@ using Netherlands3D.Tilekit.TileSets;
 
 namespace Netherlands3D.Tilekit
 {
-    [DataContract(Namespace = "eu.netherlands3d.tilekit", Name = "TileSet")]
-    public class TileSet
+    public struct TileSet
     {
-        public Tile Root { get; } // Root tile of the tileSet
+        public Tile Root { get; }
 
         public TileSet(Tile root)
         {

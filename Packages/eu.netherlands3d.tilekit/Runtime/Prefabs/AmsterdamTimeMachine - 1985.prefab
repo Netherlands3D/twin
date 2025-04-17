@@ -45,9 +45,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 418f6a306d0d46de8bd3826619948d43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnTileAdded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTileRemoved:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTileEntersView:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTileReplacedWith:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTileExitsView:
+    m_PersistentCalls:
+      m_Calls: []
+  TileSetFactory: {fileID: 0}
   TileSelector: {fileID: 11400000, guid: 2f7fdf7586cef574194a730eb752daac, type: 2}
   ChangeScheduler: {fileID: 11400000, guid: c1e7fc4d6f346c347911cda65d0199fb, type: 2}
   TileRenderer: {fileID: 11400000, guid: ce7e3b257883bb844a768f880465543b, type: 2}
+  TilesTransitionPlanner: {fileID: 11400000, guid: 12b5e49cbb8a183469cdcfa5f852ae63,
+    type: 2}
 --- !u!114 &8775512218966625150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,6 +80,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoStart: 1
   updateInterval: 200
-  tileSetFactory: {fileID: 11400000, guid: 7d399785f46d14d4aa5364055371970f, type: 2}
-  tileSetRenderers:
-  - {fileID: 3234959650951678855}
+  tick:
+    m_PersistentCalls:
+      m_Calls: []
