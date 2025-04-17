@@ -9,6 +9,7 @@ using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -19,15 +20,16 @@ namespace Netherlands3D.Twin.Layers.Properties
 {
     //todo this should probably become a BinaryMeshLayerColorPropertySection
     public class LayerColorPropertySection : PropertySectionWithLayerGameObject
-    {
-        private LayerGameObject layer;
+    {  
         [SerializeField] private RectTransform content;
         [SerializeField] private GameObject colorSwatchPrefab;
         [SerializeField] private RectTransform layerContent;
 
+        private LayerGameObject layer;
         private List<ColorSwatch> selectedSwatches = new List<ColorSwatch>();
         private List<int> selectedIndices = new List<int>();
         private int currentButtonIndex = -1;
+        private float lastClickTime;
         private ColorSwatch[] items; 
 
         public override LayerGameObject LayerGameObject
@@ -58,11 +60,14 @@ namespace Netherlands3D.Twin.Layers.Properties
             {
                 GameObject swatchObject = Instantiate(colorSwatchPrefab, layerContent);
                 ColorSwatch swatch = swatchObject.GetComponent<ColorSwatch>();
-                swatch.SetInputText(layerFeatures[i].Attributes.Values.FirstOrDefault().ToString());
+                string layerName = layerFeatures[i].Attributes.Values.FirstOrDefault().ToString();
+                swatch.SetLayerName(layerName);
+                swatch.SetInputText(layerName);
                 int cachedIndex = i;
                 //because all ui elements will be destroyed on close an anonymous listener is fine here
-                swatch.Button.onClick.AddListener(() => OnClickedSwatch(cachedIndex));
-                swatch.onClickUp.AddListener(() => OnClickedSwatchUp(cachedIndex));
+                //swatch.Button.onClick.AddListener(() => OnClickedSwatch(cachedIndex));
+                swatch.onClickUp.AddListener(pointer => OnClickedSwatchUp(pointer, cachedIndex));
+                swatch.onClickDown.AddListener(pointer => OnClickedSwatch(pointer, cachedIndex));
                 Material mat = layerFeatures[i].Geometry as Material;
                 swatch.SetColor(mat.color);
 
@@ -70,14 +75,29 @@ namespace Netherlands3D.Twin.Layers.Properties
             }
         }
 
-        private void OnClickedSwatch(int buttonIndex)
-        {    
+        private void OnClickedSwatch(PointerEventData eventData, int buttonIndex)
+        {
+            int lastButtonIndex = currentButtonIndex;
             currentButtonIndex = buttonIndex;
-            ProcessLayerSelection();
-            SelectSwatch(buttonIndex, !items[buttonIndex].IsSelected);           
+            //only one extra click on a selected layer should initiate the layer name editing
+            float timeSinceLastClick = Time.time - lastClickTime;
+            if (lastButtonIndex == buttonIndex && 
+                timeSinceLastClick > LayerUI.DoubleClickLayerThreshold && 
+                eventData.pointerEnter == items[currentButtonIndex].TextField.gameObject
+                )
+            {
+                OnSelectInputField(items[currentButtonIndex]);
+            }
+            else
+            {                
+                ProcessLayerSelection();
+                SelectSwatch(buttonIndex, !items[buttonIndex].IsSelected);
+            }
+            
+            lastClickTime = Time.time;
         }
 
-        private void OnClickedSwatchUp(int buttonIndex)
+        private void OnClickedSwatchUp(PointerEventData eventData, int buttonIndex)
         {
             //ProcessLayerSelection();
         }        
@@ -143,6 +163,28 @@ namespace Netherlands3D.Twin.Layers.Properties
 
             }
             UpdateSelection();
+        }
+
+        private void OnSelectInputField(ColorSwatch swatch)
+        {            
+            swatch.InputField.text = swatch.LayerName;
+            swatch.TextField.text = swatch.LayerName;
+            swatch.InputField.gameObject.SetActive(true);
+            swatch.TextField.gameObject.SetActive(false);
+            swatch.InputField.interactable = true;
+            swatch.InputField.Select();
+            swatch.InputField.ActivateInputField();
+            StartCoroutine(WaitForNextFrame(() =>
+            {
+                swatch.InputField.caretPosition = swatch.InputField.text.Length;
+                swatch.InputField.selectionAnchorPosition = 0;
+            }));
+        }
+
+        private IEnumerator WaitForNextFrame(Action onNextFrame)
+        {
+            yield return new WaitForEndOfFrame();
+            onNextFrame.Invoke();
         }
     }
 }
