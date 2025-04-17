@@ -15,9 +15,11 @@ namespace Netherlands3D
         [SerializeField] private Button button;
         [SerializeField] private TMP_InputField inputField;
         [SerializeField] private Image selection;
+        [SerializeField] private Sprite selectionSprite;
+        [SerializeField] private Sprite normalSprite;
 
-        public Color selectedColor = Color.green;
-        public Color normalColor = Color.white;
+        //public Color selectedColor = Color.green;
+        //public Color normalColor = Color.white;
 
         public UnityEvent onClickUp = new();
 
@@ -36,7 +38,9 @@ namespace Netherlands3D
 
         void UpdateVisual()
         {
-            selection.color = isSelected ? selectedColor : normalColor;
+            selection.sprite = isSelected ? selectionSprite : normalSprite;
+            selection.type = Image.Type.Sliced;
+            selection.pixelsPerUnitMultiplier = 32;
         }
 
         public void SetInputText(string text)
