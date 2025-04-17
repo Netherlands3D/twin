@@ -8,18 +8,17 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Twin_Gebouwen
-  m_Shader: {fileID: -6465566751694194690, guid: 885ac3670a51697469c9f66affc50fde,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: ac49c6c201a4e144b8cde64971dfdbca, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
+  m_ValidKeywords: []
+  m_InvalidKeywords:
   - _SUBOBJECT_FILTERING
   - _TEXTURINGMODE_SKIP_TEXTURE
-  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
@@ -36,10 +35,14 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 42455ac1750b4994397fb9b8fe0ba70d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -64,6 +67,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -94,6 +101,7 @@ Material:
     m_Ints: []
     m_Floats:
     - Normal_Blend: 0.5
+    - _Alpha: 1
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -112,6 +120,7 @@ Material:
     - _IncludeInGlobalMask: 0
     - _Metallic: 0.2
     - _OcclusionStrength: 1
+    - _Opacity: 1
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
@@ -119,7 +128,7 @@ Material:
     - _SPIKE_CLAMPING: 0
     - _SUBOBJECT_FILTERING: 1
     - _Shininess: 0
-    - _Smoothness: 0.2
+    - _Smoothness: 0.094
     - _SmoothnessSource: 0
     - _SmoothnessTextureChannel: 0
     - _SpecSource: 0
@@ -133,7 +142,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 0.8980393, g: 0.9215687, b: 0.9490197, a: 1}
     - _ClippingMask: {r: 3.4028235e+38, g: 3.4028235e+38, b: 3.4028235e+38, a: 3.4028235e+38}
-    - _Color: {r: 0.9056604, g: 0.9056604, b: 0.9056604, a: 1}
+    - _Color: {r: 0.64779866, g: 0.64779866, b: 0.64779866, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _HighlightColor: {r: 0.15686275, g: 0.3921569, b: 1, a: 1}
     - _OffsetMainTexture: {r: 0, g: 0, b: 0, a: 0}
