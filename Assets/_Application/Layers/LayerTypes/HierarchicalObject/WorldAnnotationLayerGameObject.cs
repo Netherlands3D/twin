@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.transform.SetSiblingIndex(0);
             annotation.Show(annotationPropertyData.AnnotationText, worldTransform.Coordinate, true);
             annotation.ReadOnly = !layerTool.Open;
-            annotation.OnEndEdit.AddListener(UpdateProjectData);
+            annotation.OnEndEdit.AddListener(SetPropertyDataText);
             annotation.TextFieldSelected.AddListener(OnDeselect); // avoid transform handles from being able to move the annotation when trying to select text
             layerTool.onOpen.AddListener(DisableReadOnly);
             layerTool.onClose.AddListener(EnableReadOnly);
@@ -47,7 +47,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            annotation.OnEndEdit.RemoveListener(UpdateProjectData);
+            annotation.OnEndEdit.RemoveListener(SetPropertyDataText);
             annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
             annotation.TextFieldSelected.RemoveListener(OnDeselect);
             layerTool.onOpen.RemoveListener(DisableReadOnly);
@@ -56,7 +56,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             Destroy(annotation.gameObject);
         }
 
-        private void UpdateProjectData(string annotationText)
+        private void SetPropertyDataText(string annotationText)
         {
             annotationPropertyData.AnnotationText = annotationText;
         }
