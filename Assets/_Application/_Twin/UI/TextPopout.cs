@@ -10,7 +10,8 @@ namespace Netherlands3D.Twin.UI
     public class TextPopout : MonoBehaviour
     {
         [SerializeField] private TMP_InputField textField;
-
+        [SerializeField] private float disappearDistance = 2000f;
+        
         private RectTransform rectTransform;
         private Camera mainCamera;
         private Coordinate? stuckToWorldPosition = null;
@@ -18,7 +19,7 @@ namespace Netherlands3D.Twin.UI
         public UnityEvent<string> OnEndEdit;
         public UnityEvent TextFieldSelected;
         public UnityEvent TextFieldDeselected;
-        
+
         public bool ReadOnly
         {
             get => textField.readOnly;
@@ -36,7 +37,7 @@ namespace Netherlands3D.Twin.UI
         {
             textField.onSubmit.AddListener(OnSubmitText);
             textField.onEndEdit.AddListener(OnEndEdit.Invoke);
-            textField.onSelect.AddListener(OnTextFieldSelect); 
+            textField.onSelect.AddListener(OnTextFieldSelect);
             textField.onDeselect.AddListener(OnTextFieldDeselect);
         }
 
@@ -44,7 +45,7 @@ namespace Netherlands3D.Twin.UI
         {
             TextFieldSelected.Invoke();
         }
-        
+
         private void OnTextFieldDeselect(string text)
         {
             TextFieldDeselected.Invoke();
@@ -54,7 +55,7 @@ namespace Netherlands3D.Twin.UI
         {
             textField.onSubmit.RemoveListener(OnSubmitText);
             textField.onEndEdit.RemoveListener(OnEndEdit.Invoke);
-            textField.onSelect.RemoveListener(OnTextFieldSelect); 
+            textField.onSelect.RemoveListener(OnTextFieldSelect);
             textField.onDeselect.RemoveListener(OnTextFieldDeselect);
         }
 
@@ -93,6 +94,11 @@ namespace Netherlands3D.Twin.UI
 
         public void MoveTo(Vector3 atScreenPosition)
         {
+            // Canvas renders UI elements with z values between -1000 and +1000
+            // this range is affected by the canvas scale, but the atScreenPosition z is also scaled so no further correction is needed
+
+            var scaledZ = atScreenPosition.z / disappearDistance * 1000;
+            atScreenPosition.z = scaledZ;
             rectTransform.position = atScreenPosition;
         }
 
