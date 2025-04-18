@@ -659,44 +659,94 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8aa4805020d81442786d50f84f3e3c26, type: 3}
+--- !u!1 &736533346 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1750429937236319603, guid: 9963fec33e379324db2affcb3f83332f,
+    type: 3}
+  m_PrefabInstance: {fileID: 7732943800119484192}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &736533351 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5494813654866814280, guid: 9963fec33e379324db2affcb3f83332f,
+    type: 3}
+  m_PrefabInstance: {fileID: 7732943800119484192}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736533346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d313563264235d94ca31699a8784b50d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &736533352 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3316200285040120457, guid: 9963fec33e379324db2affcb3f83332f,
+    type: 3}
+  m_PrefabInstance: {fileID: 7732943800119484192}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736533346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &736533353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736533346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda199de660f4334b8a50d8e350bdf29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: a4bbccddd3db84351b0c7675433f554e, type: 2}
+  onTriggered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 736533352}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Toggle, UnityEngine.UI
+        m_MethodName: SetIsOnWithoutNotify
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 736533351}
+        m_TargetAssemblyTypeName: Netherlands3D.Functionalities.Sun.ToggleSpriteSwap,
+          eu.netherlands3d.twin
+        m_MethodName: SwapSprites
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTrue:
+    m_PersistentCalls:
+      m_Calls: []
+  onFalse:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &767208734 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5315891981602308680, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
     type: 3}
   m_PrefabInstance: {fileID: 1991327936011043875}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &767208743 stripped
+--- !u!114 &767208763 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5315891981602308677, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
+  m_CorrespondingSourceObject: {fileID: 1515747955998932631, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
     type: 3}
   m_PrefabInstance: {fileID: 1991327936011043875}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 767208734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f00732e8e617b3a4498fb736296bb47d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &767208753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 767208734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16eaffca77434cc9978ea0d1335f9e0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  repositioningDuration: 0.3
-  simulatedOrthoFov: 0.1
-  maxCameraHeightWhenSimulating: 8000
---- !u!114 &767208763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 767208734}
   m_Enabled: 1
@@ -704,10 +754,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e96d038b62419942afd968aadbba8d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrowTransform: {fileID: 7732943800119484194}
-  NorthColor: {r: 0.18431373, g: 0.20784314, b: 0.3137255, a: 1}
-  inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6,
-    type: 3}
 --- !u!1001 &859080883
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1773,6 +1819,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1515747955998932631, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
+        type: 3}
+      propertyPath: arrowTransform
+      value: 
+      objectReference: {fileID: 7732943800119484194}
     - target: {fileID: 5315891981602308678, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
         type: 3}
       propertyPath: m_BackGroundColor.a
@@ -1821,15 +1872,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5315891981602308680, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 767208753}
-    - targetCorrespondingSourceObject: {fileID: 5315891981602308680, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 767208763}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f6ad95dabe72044aa90eb8ae2e45366, type: 3}
 --- !u!1001 &2488954073963816146
 PrefabInstance:
@@ -6493,7 +6536,18 @@ PrefabInstance:
         type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 767208743}
+      objectReference: {fileID: 11400000, guid: f355096a1bcfa0c4e9e47f58709c684e,
+        type: 2}
+    - target: {fileID: 3316200285040120457, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: InvokeStarted
+      objectReference: {fileID: 0}
+    - target: {fileID: 3316200285040120457, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
+      objectReference: {fileID: 0}
     - target: {fileID: 3381341046377729172, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
       propertyPath: m_text
@@ -9613,7 +9667,11 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 392614950}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1750429937236319603, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 736533353}
   m_SourcePrefab: {fileID: 100100000, guid: 9963fec33e379324db2affcb3f83332f, type: 3}
 --- !u!224 &7732943800119484193 stripped
 RectTransform:

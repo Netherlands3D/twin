@@ -177,6 +177,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                     return layerTypeSprites[1];
                 case WorldAnnotationLayerGameObject _:
                     return layerTypeSprites[10];
+                case CameraPositionLayerGameObject _:
+                    return layerTypeSprites[11];
                 case HierarchicalObjectLayerGameObject _:
                     return layerTypeSprites[3];
                 case ObjectScatterLayerGameObject _:
