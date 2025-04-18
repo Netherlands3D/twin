@@ -25,6 +25,7 @@ using Newtonsoft.Json;
 namespace Netherlands3D.Coordinates
 {
     [Serializable]
+    [JsonConverter(typeof(CoordinateJsonConverter))]
     public struct Coordinate
     {
         /// <summary>
@@ -40,6 +41,7 @@ namespace Netherlands3D.Coordinates
 #endif
         [SerializeField]
         private int coordinateSystem;
+        [JsonIgnore]
         public int CoordinateSystem => coordinateSystem;
 
         /// <summary>
@@ -181,10 +183,7 @@ namespace Netherlands3D.Coordinates
             extraLongitudeRotation = 0;
             extraLattitudeRotation = 0;
         }
-
-#if NEWTONSOFT
-        [JsonConstructor]
-#endif
+        
         [Obsolete("deprecated convert to x y z")]
         public Coordinate(int coordinateSystem, double[] Points, double extraLongitudeRotation, double extraLatitudeRotation)
         {
