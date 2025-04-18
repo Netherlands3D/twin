@@ -61,7 +61,7 @@ MonoBehaviour:
   ghostMaterial: {fileID: 2100000, guid: f8a22a8306ab44a7096a488ecc081e54, type: 2}
   selectedColor: {r: 1, g: 0.4254949, b: 0, a: 0.78039217}
   layerTool: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
-  ghostGameObject: {fileID: 0}
+  ghostGameObject: {fileID: 2677839729247394896}
 --- !u!114 &-18391829949753534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,7 +152,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1526c80ab96b84b3cb15405a1f0ba96e,
         type: 3}
       propertyPath: m_Name
-      value: Camera (1)
+      value: CameraGhost
       objectReference: {fileID: 0}
     - target: {fileID: 7071182760956848314, guid: 1526c80ab96b84b3cb15405a1f0ba96e,
         type: 3}
