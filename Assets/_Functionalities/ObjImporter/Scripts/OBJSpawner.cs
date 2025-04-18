@@ -140,10 +140,8 @@ namespace Netherlands3D.Functionalities.OBJImporter
                 var cameraMover = Camera.main.GetComponent<MoveCameraToCoordinate>();
                 cameraMover.LookAtTarget(targetPosition, cameraDistanceFromGeoReferencedObject); //move the camera to the georeferenced position, this also shifts the origin if needed.
             }
-
-            var worldTransform = holgo.GetComponent<WorldTransform>();
             
-            worldTransform.MoveToCoordinate(targetPosition); //set this object to the georeferenced position, since this is the correct position.
+            holgo.WorldTransform.MoveToCoordinate(targetPosition); //set this object to the georeferenced position, since this is the correct position.
             returnedGameObject.transform.SetParent(transform, false); // we set the parent and reset its localPosition, since the origin might have changed.
             returnedGameObject.transform.localPosition = Vector3.zero;
 
@@ -151,7 +149,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
             if (holgo.TransformIsSetFromProperty)
             {
                 var transformPropterty = (TransformLayerPropertyData)((ILayerWithPropertyData)holgo).PropertyData;
-                worldTransform.MoveToCoordinate(transformPropterty.Position); //apply saved user changes to position.
+                holgo.WorldTransform.MoveToCoordinate(transformPropterty.Position); //apply saved user changes to position.
             }
         }
 
