@@ -101,5 +101,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             annotation.SetTextWithoutNotify(newText);
         }
+
+        public override void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            base.OnLayerActiveInHierarchyChanged(isActive);
+            annotation.gameObject.SetActive(isActive);
+        }
     }
 }
