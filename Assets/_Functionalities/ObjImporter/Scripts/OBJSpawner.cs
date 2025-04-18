@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -99,7 +100,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
         {
             bool isGeoReferenced = !importer.createdGameobjectIsMoveable;
             var holgo = GetComponent<HierarchicalObjectLayerGameObject>();
-
+            
             if (isGeoReferenced)
                 PositionGeoReferencedObj(returnedGameObject, holgo);
             else
@@ -133,14 +134,16 @@ namespace Netherlands3D.Functionalities.OBJImporter
         private void PositionGeoReferencedObj(GameObject returnedGameObject, HierarchicalObjectLayerGameObject holgo)
         {
             var targetPosition = new Coordinate(returnedGameObject.transform.position); //georeferenced position as coordinate. todo: there is already precision lost in the importer, this should be preserved while parsing, as there is nothing we can do now anymore.
-
+            
             if (!holgo.TransformIsSetFromProperty) //move the camera only if this is is a user imported object, not if this is a project import. We know this because a project import has its Transform property set.
             {
                 var cameraMover = Camera.main.GetComponent<MoveCameraToCoordinate>();
                 cameraMover.LookAtTarget(targetPosition, cameraDistanceFromGeoReferencedObject); //move the camera to the georeferenced position, this also shifts the origin if needed.
             }
 
-            transform.position = targetPosition.ToUnity(); //set this object to the georeferenced position, since this is the correct position.
+            var worldTransform = holgo.GetComponent<WorldTransform>();
+            
+            worldTransform.MoveToCoordinate(targetPosition); //set this object to the georeferenced position, since this is the correct position.
             returnedGameObject.transform.SetParent(transform, false); // we set the parent and reset its localPosition, since the origin might have changed.
             returnedGameObject.transform.localPosition = Vector3.zero;
 
@@ -148,7 +151,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
             if (holgo.TransformIsSetFromProperty)
             {
                 var transformPropterty = (TransformLayerPropertyData)((ILayerWithPropertyData)holgo).PropertyData;
-                transform.position = transformPropterty.Position.ToUnity(); //apply saved user changes to position.
+                worldTransform.MoveToCoordinate(transformPropterty.Position); //apply saved user changes to position.
             }
         }
 
