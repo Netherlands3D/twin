@@ -63,11 +63,14 @@ namespace Netherlands3D.Twin.UI
             if (NewLineModifierKeyIsPressed())
             {
                 textField.Select();
-                textField.text += "\n";
+                var caretPosition = textField.caretPosition;
+                var firstHalf = textField.text.Substring(0, caretPosition);
+                var secondHalf = textField.text.Substring(caretPosition);
+                textField.text = firstHalf + "\n" + secondHalf;
                 // Ensure the input field remains focused
                 EventSystem.current.SetSelectedGameObject(textField.gameObject, null);
                 textField.ActivateInputField();
-                textField.caretPosition = textField.text.Length;
+                textField.caretPosition = caretPosition + 1;
             }
         }
 
