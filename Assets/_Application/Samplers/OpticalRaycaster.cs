@@ -223,6 +223,8 @@ namespace Netherlands3D.Twin.Samplers
 
             public void UpdateShaders()
             {
+                if (depthMaterial == null) return;
+                
                 depthMaterial.SetTexture("_CameraDepthTexture", renderTexture);
                 depthMaterial.SetMatrix("_CameraInvProjection", depthCamera.projectionMatrix.inverse);
                 positionMaterial.SetTexture("_WorldPositionTexture", renderTexture);

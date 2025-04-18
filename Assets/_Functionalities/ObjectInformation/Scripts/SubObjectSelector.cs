@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 
@@ -33,19 +34,30 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             );
         }
 
+        public LayerData GetLayerDataForSubObject(ObjectMapping subObject)
+        {
+            Transform parent = subObject.gameObject.transform.parent;
+            LayerGameObject layerGameObject = parent.GetComponent<LayerGameObject>();
+            if (layerGameObject)
+            {
+                return layerGameObject.LayerData;   
+            }
+            return null;
+        }
+
         public void Deselect()
         {
             GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
             ColorSetLayer = null;
         }
 
-        public string FindSubObject()
+        public string FindSubObjectAtPointerPosition()
         {
             foundObject = null;
             string bagId = null;
             Vector3 groundPosition = pointerToWorldPosition.WorldPoint;
             Coordinate coord = new Coordinate(groundPosition);
-            List<IMapping> mappings = BagInspector.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
+            List<IMapping> mappings = ObjectSelector.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
             if (mappings.Count == 0)
                 return bagId;
 

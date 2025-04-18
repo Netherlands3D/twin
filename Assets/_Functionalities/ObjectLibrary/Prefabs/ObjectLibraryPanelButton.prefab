@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8030765112013323776}
   - component: {fileID: 8423382619345682098}
   - component: {fileID: 8758258943829886935}
-  - component: {fileID: 8673484025570805776}
+  - component: {fileID: 3506618524236019301}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8673484025570805776
+--- !u!114 &3506618524236019301
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -85,14 +85,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4299277774378487968}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2c44016542214b15befb9bf03acaf54, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b62fae4448da4d7a8562c7fa989fb10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   targetSelectable: {fileID: 9161906747579448382}
-  highlightedSprite: {fileID: 0}
-  pressedSprite: {fileID: 21300000, guid: 1922596620fa144e6ae6068957587ee9, type: 3}
-  selectedSprite: {fileID: 21300000, guid: 1922596620fa144e6ae6068957587ee9, type: 3}
-  disabledSprite: {fileID: 0}
+  SpriteState: {fileID: 11400000, guid: 9836b375d0275442e92afb8e88c8493d, type: 2}
 --- !u!1 &4654076157217956344
 GameObject:
   m_ObjectHideFlags: 0

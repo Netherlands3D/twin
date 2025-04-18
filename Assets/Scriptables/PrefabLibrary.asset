@@ -28,6 +28,8 @@ MonoBehaviour:
   - groupName: ObjectenBibliotheek
     autoPopulateUI: 1
     prefabs:
+    - {fileID: 8026439383914201504, guid: 292690ace10994ff5bd502be1f5a5bf2, type: 3}
+    - {fileID: 3882040503508280180, guid: b2025624c5bfd4f7a876ee2d9bb84b87, type: 3}
     - {fileID: 4705758047892485819, guid: e0272ce89eb284961a0185f7a4f2ce3f, type: 3}
     - {fileID: -2556228473040769515, guid: f7b3d6632f1e47b4f902509046b93e7a, type: 3}
     - {fileID: -2556228473040769515, guid: 09d06b63f4d4f4eeebece0556bcee0c9, type: 3}
@@ -39,7 +41,7 @@ MonoBehaviour:
   - groupName: 3DTiles
     autoPopulateUI: 0
     prefabs:
-    - {fileID: 79256942545472044, guid: 7b9af9585f5754178a3fd114c7ecd82c, type: 3}
+    - {fileID: 4142489338678956943, guid: 395dd4e52bd3b42cfb24f183f3839bba, type: 3}
     - {fileID: 4142489338678956943, guid: 416bb3a0b4137324d860b58a6e8f484e, type: 3}
     - {fileID: 4142489338678956943, guid: 2823e5ec82fe248febd620a0b025bcca, type: 3}
     - {fileID: 4142489338678956943, guid: 71fff5c85650fcd4d9f59e4e182b5e95, type: 3}

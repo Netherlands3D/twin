@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 namespace Netherlands3D.Twin.Quality
@@ -12,15 +11,12 @@ namespace Netherlands3D.Twin.Quality
         High = 2
     }
 
-
     public class QualitySettings : MonoBehaviour
     {
-        [Header("Water Reflections")] [SerializeField]
-        private GameObject waterReflectionsRenderer;
-
-        private UniversalRenderPipelineAsset activeRenderPipelineAsset;
+        [Header("Water Reflections")] 
+        [SerializeField] private GameObject waterReflectionsRenderer;
         [SerializeField] private ScriptableRendererFeature aoRenderFeature;
-
+        
         public static readonly UnityEvent<GraphicsQualityLevel> qualityLevelChanged = new();
         private static readonly string[] defaultToHighQualityVendorNames = new[] { "nvidia", "apple" };
         private static readonly string[] defaultToLowQualityVendorNames = new[] { "intel" };
@@ -29,7 +25,6 @@ namespace Netherlands3D.Twin.Quality
 
         private void Start()
         {
-            activeRenderPipelineAsset = (UniversalRenderPipelineAsset)GraphicsSettings.currentRenderPipeline;
             InitializeQualitySettings();
         }
 

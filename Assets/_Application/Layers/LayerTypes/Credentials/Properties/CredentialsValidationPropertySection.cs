@@ -1,44 +1,45 @@
+using System;
+using Netherlands3D.Credentials;
+using Netherlands3D.Credentials.StoredAuthorization;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
-    public class CredentialsValidationPropertySection : MonoBehaviour, ILayerCredentialInterface
+    public class CredentialsValidationPropertySection : MonoBehaviour, ICredentialsPropertySection
     {
-        private LayerCredentialsHandler handler;
+        private ICredentialHandler handler;
 
         [SerializeField] private GameObject validCredentialsPanel;
         [SerializeField] private GameObject invalidCredentialsPanel;
 
-        public LayerCredentialsHandler Handler
+        public ICredentialHandler Handler
         {
             get => handler;
             set
             {
-                if (handler)
-                    handler.CredentialsAccepted.RemoveListener(OnCredentialsAccepted);
+                handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
 
                 handler = value;
 
-                OnCredentialsAccepted(handler.HasValidCredentials);
-
-                handler.CredentialsAccepted.AddListener(OnCredentialsAccepted);
+                OnCredentialsHandled(handler.Uri, handler.Authorization);
+                handler.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
             }
         }
 
         private void Start()
-        {
-            if (handler)
-                handler.CredentialsAccepted.AddListener(OnCredentialsAccepted);
+        {            
+            handler?.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
         }
 
         private void OnDestroy()
         {
-            if (handler)
-                handler.CredentialsAccepted.RemoveListener(OnCredentialsAccepted);
+            handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
         }
 
-        private void OnCredentialsAccepted(bool accepted)
+        private void OnCredentialsHandled(Uri uri, StoredAuthorization auth)
         {
+            var accepted = auth is not FailedOrUnsupported;
+
             if(accepted)
                 gameObject.SetActive(true);
     

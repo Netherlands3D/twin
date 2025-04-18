@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5640076176564817079}
   - component: {fileID: 5447569626426196056}
   - component: {fileID: 5220079711769434805}
-  - component: {fileID: -2724023996048762340}
   m_Layer: 12
   m_Name: GeoJsonPolygonLayer
   m_TagString: Untagged
@@ -101,18 +100,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propertySectionPrefab: {fileID: -7451032918455945531, guid: 406f5bee41b4db1468d9ccf9d1e5be2c,
-    type: 3}
---- !u!114 &-2724023996048762340
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 764337386758102018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6303d72dc2aa4f61bcacd10f6b5e3e43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: -7451032918455945531, guid: 41c27df684583e94bad8230b4609cddb,
     type: 3}

@@ -2,7 +2,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using JetBrains.Annotations;
+using Netherlands3D.Credentials;
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Functionalities.AssetBundles;
+using Netherlands3D.Twin.DataTypeAdapters;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -19,6 +22,7 @@ namespace Netherlands3D.Twin.Projects
         private static extern void PreventDefaultShortcuts();
 
         [UsedImplicitly] private DataTypeChain fileImporter; // don't remove, this is used in LoadDefaultProject()
+        [UsedImplicitly] private CredentialHandler credentialHandler;// don't remove, this is used in LoadDefaultProject()
         [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
         [SerializeField] private ProjectDataStore projectDataStore;
 
@@ -77,13 +81,29 @@ namespace Netherlands3D.Twin.Projects
             }
 
             fileImporter = GetComponent<DataTypeChain>();
+            credentialHandler = GetComponent<CredentialHandler>();
             ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
 
 #if !UNITY_EDITOR && UNITY_WEBGL
             //Prevent default browser shortcuts for saving and undo/redo
             PreventDefaultShortcuts();
 #endif
+            //LoadDefaultProject();
+            //TODO this is a quite dirty solution to postpone the loading flow of the application, but now its needed to preload assets 
+            //for when a default project contains assetbundle assets from start, needing a solid preloader in the future
+            FindObjectOfType<AssetBundleLoader>().OnAssetsLoaded.AddListener(OnPreloadedAssets);
+        }
+
+        private void OnPreloadedAssets()
+        {
             LoadDefaultProject();
+        }
+
+        private void OnDestroy()
+        {
+            AssetBundleLoader loader = FindObjectOfType<AssetBundleLoader>();
+            if(loader)
+                loader.OnAssetsLoaded.RemoveListener(OnPreloadedAssets);
         }
 
         private void OnEnable()
@@ -99,6 +119,9 @@ namespace Netherlands3D.Twin.Projects
 
             redoAction.Enable();
             redoAction.performed += OnRedoAction;
+            
+            credentialHandler.OnAuthorizationHandled.AddListener(fileImporter.DetermineAdapter);
+
         }
 
         private void OnDisable()
@@ -114,6 +137,8 @@ namespace Netherlands3D.Twin.Projects
 
             redoAction.performed -= OnRedoAction;
             redoAction.Disable();
+            
+            credentialHandler.OnAuthorizationHandled.RemoveListener(fileImporter.DetermineAdapter);
         }
 
         private void OnProjectDataChanged(ProjectData project)
@@ -163,7 +188,8 @@ namespace Netherlands3D.Twin.Projects
 #if UNITY_WEBGL && !UNITY_EDITOR
             var url = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
             Debug.Log("loading default project file: " + url);
-            fileImporter.DetermineAdapter(url);
+            credentialHandler.SetUri(url);
+            credentialHandler.ApplyCredentials();
 #else
             var filePath = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
             Debug.Log("loading default project file: " + filePath);
@@ -176,10 +202,8 @@ namespace Netherlands3D.Twin.Projects
             OnLoadStarted.Invoke();
 
             var files = filePaths.Split(',');
-            print("processing " + files.Length + " files");
             foreach (var filePath in files)
             {
-                print("attempting to load file: " + filePath);
                 if (filePath.ToLower().EndsWith(".nl3d"))
                 {
                     Debug.Log("loading nl3d file: " + filePath);

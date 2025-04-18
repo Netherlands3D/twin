@@ -37,7 +37,7 @@ namespace Netherlands3D.Functionalities.Sun
             SwapSprites(toggle.isOn);
         }
 
-        private void SwapSprites(bool isActive)
+        public void SwapSprites(bool isActive)
         {
             imageToSwap.sprite = isActive ? startSprite : swappedSprite;
         }

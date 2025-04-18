@@ -33,6 +33,8 @@ namespace Netherlands3D.Functionalities.AssetBundles
 
         private UI_ProgressIndicator loadingScreen;
 
+        public UnityEvent OnAssetsLoaded;
+
         private void Awake()
         {
             ProjectData.Current.PrefabLibrary.AddPrefabRuntimeGroup(GroupName);
@@ -54,27 +56,29 @@ namespace Netherlands3D.Functionalities.AssetBundles
             {
                 // if the file is not a match, move on
                 if (Path.GetFileName(name) != fileName.ToLower()) continue;
-                    
+
                 GameObject asset = bundle.LoadAsset<GameObject>(name);
                 if (asset != null)
                 {
-#if UNITY_EDITOR
-                    FixShadersForEditor(asset);
-#endif
+                    FixShaders(asset);
                     onAssetLoaded(asset);
                 }
 
                 bundle.Unload(false);
                 break;
             }
-            
+
             loadingScreen.ShowProgress(0.99f);
             loadingScreen.GetComponent<CanvasGroup>()
                 .DOFade(0, .4f)
-                .OnComplete(() => GameObject.Destroy(loadingScreen.gameObject));
+                .OnComplete(() =>
+                {
+                    GameObject.Destroy(loadingScreen.gameObject);
+                    OnAssetsLoaded.Invoke();
+                });
         }
 
-        private void FixShadersForEditor(GameObject asset)
+        private void FixShaders(GameObject asset)
         {
             //the following fixes the pink bug in editor shaders                     
             MeshRenderer[] renderers = asset.GetComponentsInChildren<MeshRenderer>();

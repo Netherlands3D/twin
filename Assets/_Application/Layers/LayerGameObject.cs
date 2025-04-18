@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
@@ -14,11 +15,22 @@ using UnityEditor;
 
 namespace Netherlands3D.Twin.Layers
 {
+    public enum SpawnLocation
+    {
+        OpticalCenter, //Center of the screen calculated through the optical Raycaster, keep the prefab rotation
+        CameraPosition, //Position and rotation of the main camera
+        PrefabPosition //keep the original prefab position and rotation
+    }
+    
     public abstract class LayerGameObject : MonoBehaviour, IStylable
     {
         [SerializeField] private string prefabIdentifier;
+        [SerializeField] private SpriteState thumbnail;
+        [SerializeField] private SpawnLocation spawnLocation;
         public string PrefabIdentifier => prefabIdentifier;
-
+        public SpriteState Thumbnail => thumbnail;
+        public SpawnLocation SpawnLocation => spawnLocation;
+        
         public string Name
         {
             get => LayerData.Name;
@@ -85,10 +97,7 @@ namespace Netherlands3D.Twin.Layers
         // 2. Creating LayerData (from project), Instantiating prefab, coupling that LayerData to this LayerGameObject
         protected virtual void InitializeVisualisation()
         {
-            if (layerData == null) //if the layer data object was not initialized when creating this object, create a new LayerDataObject
-                CreateProxy();
-
-            layerData.LayerDoubleClicked.AddListener(CenterInView); //only subscribe to this event once the layerData component has been initialized
+            LayerData.LayerDoubleClicked.AddListener(OnDoubleClick);
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 
             ApplyStyling();
@@ -109,10 +118,10 @@ namespace Netherlands3D.Twin.Layers
             onHide.Invoke();
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             //don't unsubscribe in OnDisable, because we still want to be able to center to a 
-            layerData.LayerDoubleClicked.RemoveListener(CenterInView);
+            layerData.LayerDoubleClicked.RemoveListener(OnDoubleClick);
         }
 
         public virtual void OnSelect()
@@ -153,7 +162,12 @@ namespace Netherlands3D.Twin.Layers
             //called when the Proxy's active state changes.          
         }
 
-        public void CenterInView(LayerData layer)
+        protected virtual void OnDoubleClick(LayerData layer)
+        {
+            CenterInView(layer);
+        }
+        
+        private void CenterInView(LayerData layer)
         {
             if (Bounds == null)
             {
@@ -166,6 +180,9 @@ namespace Netherlands3D.Twin.Layers
             else
                 Bounds.Convert(CoordinateSystem.RD);
             
+            // !IMPORTANT: we deselect the layer, because if we don't do this, the TransformHandles might be connected to this LayerGameObject
+            // This causes conflicts between the transformHandles and the Origin Shifter system, because the Transform handles will try to move the gameObject to the old (pre-shift) position.
+            LayerData.DeselectLayer(); 
             //move the camera to the center of the bounds, and move it back by the size of the bounds (2x the extents)
             Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(Bounds.Center, Bounds.GetSizeMagnitude());//sizeMagnitude returns 2x the extents
         }
@@ -211,11 +228,20 @@ namespace Netherlands3D.Twin.Layers
         ///
         /// For example: to be able to match on material names you need to include the material names in the attributes.
         /// </summary>
-        protected LayerFeature CreateFeature(Component component)
+        protected LayerFeature CreateFeature(object geometry)
         {
-            return AddAttributesToLayerFeature(LayerFeature.Create(this, component));
+            return AddAttributesToLayerFeature(LayerFeature.Create(this, geometry));
         }
 
+        /// <summary>
+        /// Construct attributes onto the layer feature so that the styling system can
+        /// use that as input to pick the correct style.
+        ///
+        /// This could result in, what seems, duplication if a layer has a native type that also produces a series of
+        /// properties; however, this mechanism will ensure that all layers are treated equally for the styling system
+        /// and that the properties are encoded as Expression types so that the expression system does not need to do
+        /// ad hoc implicit conversions from a primitive to an Expression type. 
+        /// </summary>
         protected virtual LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
         {
             return feature;

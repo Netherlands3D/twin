@@ -5,6 +5,7 @@ using Netherlands3D.CartesianTiles;
 using System;
 using Netherlands3D.Coordinates;
 using KindMen.Uxios;
+using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Utility;
 
@@ -19,6 +20,7 @@ namespace Netherlands3D.Functionalities.Wfs
     {
         private const string DefaultEpsgCoordinateSystem = "28992";
         private Netherlands3D.CartesianTiles.TileHandler tileHandler;
+        private Config requestConfig { get; set; } = Config.Default();
         
         public BoundingBox BoundingBox { get; set; }
         
@@ -184,7 +186,7 @@ namespace Netherlands3D.Functionalities.Wfs
             string url = wfsUrl.Replace("{0}", boundingBox.ToString() + "," + ((int)system).ToString());
 
             string jsonString = null;
-            var geoJsonRequest = Uxios.DefaultInstance.Get<string>(new Uri(url));
+            var geoJsonRequest = Uxios.DefaultInstance.Get<string>(new Uri(url), requestConfig);
             geoJsonRequest.Then(response => jsonString = response.Data as string);
             geoJsonRequest.Catch(
                 exception => Debug.LogWarning($"Request to {url} failed with message {exception.Message}")
@@ -200,6 +202,17 @@ namespace Netherlands3D.Functionalities.Wfs
             }
 
             callback?.Invoke(tileChange);
+        }
+
+        public void SetAuthorization(StoredAuthorization auth)
+        {
+            ClearConfig();
+            requestConfig = auth.AddToConfig(requestConfig);
+        }
+
+        public void ClearConfig()
+        {
+            requestConfig = Config.Default();
         }
     }
 }

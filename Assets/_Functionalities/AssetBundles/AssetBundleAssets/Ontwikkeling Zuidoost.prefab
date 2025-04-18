@@ -26,7 +26,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 54bc869b18316324f99f0eca9801d007,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 54bc869b18316324f99f0eca9801d007,
         type: 3}
@@ -36,7 +36,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 54bc869b18316324f99f0eca9801d007,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 54bc869b18316324f99f0eca9801d007,
         type: 3}
@@ -51,7 +51,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 54bc869b18316324f99f0eca9801d007,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 54bc869b18316324f99f0eca9801d007,
         type: 3}
@@ -108,10 +108,7 @@ MonoBehaviour:
   objectCreated:
     m_PersistentCalls:
       m_Calls: []
-  Rotation: {x: 0, y: 180, z: 0}
-  Scale: {x: 1, y: 1, z: 1}
-  TargetHeight: -3
-  Coordinates: {x: 4.9418635, y: 52.31434, z: 0}
+  Coordinates: {x: 4.9418635, y: 52.31434, z: 40.20403}
   coordinateSystem: 4979
 --- !u!114 &8824428390786610554
 MonoBehaviour:
@@ -126,7 +123,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldTransformShifter: {fileID: 0}
-  referenceCoordinateSystem: 4979
   onPreShift:
     m_PersistentCalls:
       m_Calls: []

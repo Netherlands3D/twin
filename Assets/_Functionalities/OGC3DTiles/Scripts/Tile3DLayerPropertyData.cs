@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.Serialization;
 using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
@@ -17,11 +18,11 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             set
             {
                 url = value;
-                OnUrlChanged.Invoke(value);
+                OnUrlChanged.Invoke(new Uri(url));
             }
         }
 
-        [JsonIgnore] public readonly UnityEvent<string> OnUrlChanged = new();
+        [JsonIgnore] public readonly UnityEvent<Uri> OnUrlChanged = new();
         
         [JsonConstructor]
         public Tile3DLayerPropertyData(string url)

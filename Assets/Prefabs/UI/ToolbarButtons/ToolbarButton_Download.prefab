@@ -169,7 +169,7 @@ PrefabInstance:
     - target: {fileID: 4788262714036096619, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}
       propertyPath: tooltipText
-      value: Gebied downloaden
+      value: Download 3D data
       objectReference: {fileID: 0}
     - target: {fileID: 6259493272207176500, guid: d802d2d99eb96db41845556a85c935dc,
         type: 3}
