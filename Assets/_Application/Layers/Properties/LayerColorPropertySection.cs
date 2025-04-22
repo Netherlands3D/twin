@@ -53,19 +53,20 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void LoadLayerFeatures()
         {
-            layerContent.ClearAllChildren();            
+            layerContent.ClearAllChildren();
+            
+
             List<LayerFeature> layerFeatures = layer.GetLayerFeatures().Values.ToList();
             items = new ColorSwatch[layerFeatures.Count];
             for(int i = 0; i < layerFeatures.Count; i++) 
             {
                 GameObject swatchObject = Instantiate(colorSwatchPrefab, layerContent);
                 ColorSwatch swatch = swatchObject.GetComponent<ColorSwatch>();
-                string layerName = layerFeatures[i].Attributes.Values.FirstOrDefault().ToString();
+                string layerName = layerFeatures[i].Attributes["materialname"].ToString(); //todo make this automatic
                 swatch.SetLayerName(layerName);
                 swatch.SetInputText(layerName);
                 int cachedIndex = i;
-                //because all ui elements will be destroyed on close an anonymous listener is fine here
-                //swatch.Button.onClick.AddListener(() => OnClickedSwatch(cachedIndex));
+                //because all ui elements will be destroyed on close an anonymous listener is fine here              
                 swatch.onClickUp.AddListener(pointer => OnClickedSwatchUp(pointer, cachedIndex));
                 swatch.onClickDown.AddListener(pointer => OnClickedSwatch(pointer, cachedIndex));
                 Material mat = layerFeatures[i].Geometry as Material;
@@ -135,7 +136,6 @@ namespace Netherlands3D.Twin.Layers.Properties
             foreach (int i in cartesianTileLayerGameObject.Applicator.MaterialIndices)
             {
                 ColorSwatch swatch = layerContent.GetChild(i).GetComponent<ColorSwatch>();
-                //swatch.SetColor(cartesianTileLayerGameObject.Applicator.GetMaterialByIndex(i).color);
                 swatch.SetColor(cartesianTileLayerGameObject.Applicator.GetMaterial().color);
             }
         }

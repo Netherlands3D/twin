@@ -10,7 +10,7 @@ using System;
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
     [RequireComponent(typeof(Layer))]
-    public partial class CartesianTileLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
+    public partial class CartesianTileLayerGameObject : LayerGameObject, ILayerWithPropertyPanels//, ILayerWithPropertyData
     {
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
         
@@ -22,8 +22,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             get
             {
-                if (applicator == null) applicator = new CartesianTileBinaryMeshLayerMaterialApplicator(this);
-
+                if (applicator == null)
+                    applicator = new CartesianTileBinaryMeshLayerMaterialApplicator(this);
                 return applicator;
             }
         }
@@ -63,7 +63,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 return propertySections;
             }
             set => propertySections = value;
-        }
+        }       
 
         public List<IPropertySectionInstantiator> GetPropertySections()
         {
@@ -72,9 +72,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         public override void ApplyStyling()
         {
-            // The color in the Layer Panel represents the default fill color for this layer
-            LayerData.Color = LayerData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
-
             //MaterialApplicator.Apply(Applicator); using creatematerial directly because this is a sharedmaterial
             Applicator.CreateMaterial();
 
@@ -83,11 +80,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
         {
-            // it should be a FeaturePolygonVisualisations, just do a sanity check here
             if (feature.Geometry is not Material mat) return feature;
 
-            feature.Attributes.Clear();
-            feature.Attributes.Add(mat.name, mat.name);
+            BinaryMeshLayer meshLayer = layer as BinaryMeshLayer;
+            feature.Attributes.Add("materialindex", meshLayer.DefaultMaterialList.IndexOf(mat).ToString());
+            feature.Attributes.Add("materialname", mat.name);
 
             return feature;
         }
@@ -96,22 +93,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             if(layer is BinaryMeshLayer meshLayer)
             {
+                string matName = meshLayer.DefaultMaterialList[index].name;
                 meshLayer.DefaultMaterialList[index].color = color;
                 return meshLayer.DefaultMaterialList[index];
             }
             throw new NotImplementedException();
         }
-
-        //private void SetMaterialInstance(Material materialInstance, int index)
-        //{
-        //    BinaryMeshLayer meshLayer = layer as BinaryMeshLayer;
-        //    if (meshLayer)
-        //    {
-        //        meshLayer.DefaultMaterialList[index] = materialInstance;
-        //    }
-        //    else
-        //        throw new NotImplementedException();
-        //}
 
         private Material GetMaterialInstance(int index)
         {
