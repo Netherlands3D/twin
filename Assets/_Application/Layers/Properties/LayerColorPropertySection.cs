@@ -80,20 +80,20 @@ namespace Netherlands3D.Twin.Layers.Properties
             int lastButtonIndex = currentButtonIndex;
             currentButtonIndex = buttonIndex;
             //only one extra click on a selected layer should initiate the layer name editing
-            float timeSinceLastClick = Time.time - lastClickTime;
-            if (lastButtonIndex == buttonIndex && 
-                timeSinceLastClick > LayerUI.DoubleClickLayerThreshold && 
-                eventData.pointerEnter == items[currentButtonIndex].TextField.gameObject &&
-                NoModifierKeyPressed()
-                )
-            {
-                OnSelectInputField(items[currentButtonIndex]);
-            }
-            else
-            {                
+            //float timeSinceLastClick = Time.time - lastClickTime;
+            //if (lastButtonIndex == buttonIndex && 
+            //    timeSinceLastClick > LayerUI.DoubleClickLayerThreshold && 
+            //    eventData.pointerEnter == items[currentButtonIndex].TextField.gameObject &&
+            //    NoModifierKeyPressed()
+            //    )
+            //{
+            //    OnSelectInputField(items[currentButtonIndex]);
+            //}
+            //else
+            //{                
                 ProcessLayerSelection();
                 SelectSwatch(buttonIndex, !items[buttonIndex].IsSelected);
-            }
+            //}
             
             lastClickTime = Time.time;
         }
