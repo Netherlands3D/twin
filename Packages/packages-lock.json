@@ -345,7 +345,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "d7a934dfb9961822ab915665ae879e026d9d73c5"
+      "hash": "41c1067cc6039aa8bb0845b7067d2c9d014d62cc"
     },
     "eu.netherlands3d.e2e-testing": {
       "version": "file:eu.netherlands3d.e2e-testing",
