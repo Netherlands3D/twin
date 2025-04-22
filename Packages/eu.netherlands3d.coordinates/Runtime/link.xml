@@ -1,0 +1,5 @@
+<linker>
+  <assembly fullname="eu.netherlands3d.coordinates.runtime">
+    <type fullname="Netherlands3D.Coordinates.CoordinateJsonConverter" preserve="all" />
+  </assembly>
+</linker>
