@@ -231,7 +231,7 @@ namespace Netherlands3D.Functionalities.Wms
                 var hasCRS = CoordinateSystems.FindCoordinateSystem(crsText, out var crs);
                 if (hasCRS)
                 {
-                    supportedCrsDictionary.Add(crs, crsNode.InnerText);
+                    supportedCrsDictionary.TryAdd(crs, crsNode.InnerText);
                 }
             }
 
