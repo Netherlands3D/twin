@@ -78,10 +78,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             //MaterialApplicator.Apply(Applicator); using creatematerial directly because this is a sharedmaterial
             Applicator.CreateMaterial();
 
-            //untill UI is created this randomly changes the colors of features in the binarymeshlayer
-            //temporary showcase that independent features can be colored isntead of all at the same time
-            //applicator.materialIndex = Mathf.FloorToInt(UnityEngine.Random.Range(0, (layer as BinaryMeshLayer).DefaultMaterialList.Count));
-
             base.ApplyStyling();
         }
 
