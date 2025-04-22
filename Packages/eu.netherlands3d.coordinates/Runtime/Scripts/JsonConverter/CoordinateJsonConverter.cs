@@ -1,11 +1,14 @@
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UnityEngine.Scripting;
 
 namespace Netherlands3D.Coordinates
 {
+    [Preserve]
     public class CoordinateJsonConverter : JsonConverter<Coordinate>
     {
+        [Preserve] //needed because we do not want IL2CPP to strip the constructor
         public CoordinateJsonConverter() { }
 
         public override Coordinate ReadJson(JsonReader reader, Type objectType, Coordinate existingValue, bool hasExistingValue, JsonSerializer serializer)
