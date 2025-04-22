@@ -11,6 +11,7 @@ namespace Netherlands3D.Coordinates
         [Preserve] //needed because we do not want IL2CPP to strip the constructor
         public CoordinateJsonConverter()
         {
+            UnityEngine.Debug.Log("Constructor");
         }
 
         public override Coordinate ReadJson(JsonReader reader, Type objectType, Coordinate existingValue, bool hasExistingValue, JsonSerializer serializer)
