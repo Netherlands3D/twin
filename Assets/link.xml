@@ -2,4 +2,8 @@
 	<assembly fullname="GeoJSON.NET" preserve="all"></assembly>
 	<assembly fullname="eu.netherlands3d.json.Runtime" preserve="all"></assembly>
 	<assembly fullname="Newtonsoft.Json.UnityConverters" preserve="all"></assembly>
+	<assembly fullname="eu.netherlands3d.coordinates.runtime"></assembly>
+	  <type fullname="Netherlands3D.Coordinates.CoordinateJsonConverter" preserve="all" />
+</assembly>
+
 </linker>
