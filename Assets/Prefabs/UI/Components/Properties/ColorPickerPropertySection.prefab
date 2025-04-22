@@ -36,7 +36,7 @@ PrefabInstance:
     - target: {fileID: 6482568267866771571, guid: e3342ba09b3c3e245ac1e7d9f4102026,
         type: 3}
       propertyPath: m_Name
-      value: StrokeColorPropertySection
+      value: ColorPickerPropertySection
       objectReference: {fileID: 0}
     - target: {fileID: 8226166663201219730, guid: e3342ba09b3c3e245ac1e7d9f4102026,
         type: 3}
@@ -181,7 +181,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6482568267866771571, guid: e3342ba09b3c3e245ac1e7d9f4102026,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7588534404346000142}
+      addedObject: {fileID: 3414392683841753435}
   m_SourcePrefab: {fileID: 100100000, guid: e3342ba09b3c3e245ac1e7d9f4102026, type: 3}
 --- !u!224 &5764104647733272860 stripped
 RectTransform:
@@ -195,7 +195,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3488965140189221880}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7588534404346000142
+--- !u!114 &3414392683841753435
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -204,7 +204,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7610518432015451019}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edfd6acd1a9d45e1b219828e54d131d2, type: 3}
+  m_Script: {fileID: 11500000, guid: fa5e1729741ca2a4893996bc682a532a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
@@ -217,6 +217,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5764104647733272860}
     m_Modifications:
+    - target: {fileID: -4014348400985064082, guid: eacd2d5be98dec243bc44bf8b2083c85,
+        type: 3}
+      propertyPath: colorPicker
+      value: 
+      objectReference: {fileID: 5991820789294285947}
     - target: {fileID: 193157022321339173, guid: eacd2d5be98dec243bc44bf8b2083c85,
         type: 3}
       propertyPath: m_IsActive
@@ -305,7 +310,7 @@ PrefabInstance:
     - target: {fileID: 464194535855973160, guid: eacd2d5be98dec243bc44bf8b2083c85,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -22
+      value: -149.5
       objectReference: {fileID: 0}
     - target: {fileID: 464194535855973160, guid: eacd2d5be98dec243bc44bf8b2083c85,
         type: 3}
@@ -400,7 +405,7 @@ PrefabInstance:
     - target: {fileID: 7076064914102079046, guid: eacd2d5be98dec243bc44bf8b2083c85,
         type: 3}
       propertyPath: m_text
-      value: Lijnkleur
+      value: Vulkleur
       objectReference: {fileID: 0}
     - target: {fileID: 7275114998268791187, guid: eacd2d5be98dec243bc44bf8b2083c85,
         type: 3}
@@ -473,12 +478,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9033098801367265546, guid: eacd2d5be98dec243bc44bf8b2083c85,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -4014348400985064082, guid: eacd2d5be98dec243bc44bf8b2083c85, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
