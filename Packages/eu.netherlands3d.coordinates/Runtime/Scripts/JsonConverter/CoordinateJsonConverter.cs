@@ -6,6 +6,8 @@ namespace Netherlands3D.Coordinates
 {
     public class CoordinateJsonConverter : JsonConverter<Coordinate>
     {
+        public CoordinateJsonConverter() { }
+
         public override Coordinate ReadJson(JsonReader reader, Type objectType, Coordinate existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             JObject obj = JObject.Load(reader);
