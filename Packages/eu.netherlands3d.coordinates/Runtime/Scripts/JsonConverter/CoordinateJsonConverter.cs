@@ -5,13 +5,12 @@ using UnityEngine.Scripting;
 
 namespace Netherlands3D.Coordinates
 {
-    [Preserve]
+    [Preserve]//needed because we do not want IL2CPP to strip this class
     public class CoordinateJsonConverter : JsonConverter<Coordinate>
     {
         [Preserve] //needed because we do not want IL2CPP to strip the constructor
         public CoordinateJsonConverter()
         {
-            UnityEngine.Debug.Log("Constructor");
         }
 
         public override Coordinate ReadJson(JsonReader reader, Type objectType, Coordinate existingValue, bool hasExistingValue, JsonSerializer serializer)
