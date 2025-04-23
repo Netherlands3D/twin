@@ -26,8 +26,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 {
                     materialIndices.Add(index);
                     index++; //add all indices by default so we get an update
-                    layer.CreateFeature(material); //one feature per default shared material
+                    LayerFeature feature = layer.CreateFeature(material); //one feature per default shared material
+                    if (material.HasColor("_BaseColor"))
+                    {
+                        var style = layer.GetStyling(feature);
+                        //on creation lets keep the default colors
+                        style.SetFillColor(material.GetColor("_BaseColor"));
+                    }
                 }
+                
             }
 
             public void SetIndices(List<int> materialIndices)

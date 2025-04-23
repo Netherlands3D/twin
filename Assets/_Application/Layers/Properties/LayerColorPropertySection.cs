@@ -83,6 +83,8 @@ namespace Netherlands3D.Twin.Layers.Properties
                 swatch.onClickUp.AddListener(pointer => OnClickedSwatchUp(pointer, cachedIndex));
                 swatch.onClickDown.AddListener(pointer => OnClickedSwatch(pointer, cachedIndex));
                 Material mat = layerFeatures[i].Geometry as Material;
+                var style = layer.GetStyling(layerFeatures[i]);
+                style.SetFillColor(mat.color);
                 swatch.SetColor(mat.color);
 
                 items[cachedIndex] = swatch; 

@@ -176,7 +176,7 @@ namespace Netherlands3D.Twin.Layers
         }
 
 #region Styling
-        protected Symbolizer GetStyling(LayerFeature feature)
+        public Symbolizer GetStyling(LayerFeature feature)
         {
             var symbolizer = new Symbolizer();
             foreach (var style in LayerData.Styles)
