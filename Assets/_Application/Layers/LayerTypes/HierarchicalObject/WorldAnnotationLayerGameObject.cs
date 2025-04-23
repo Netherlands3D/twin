@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation = Instantiate(popoutPrefab, canvasTransform.transform);
             annotation.RectTransform().SetPivot(PivotPresets.BottomCenter);
             annotation.transform.SetSiblingIndex(0);
-            annotation.Show(annotationPropertyData.AnnotationText, worldTransform.Coordinate, true);
+            annotation.Show(annotationPropertyData.AnnotationText, WorldTransform.Coordinate, true);
             annotation.ReadOnly = false;
             annotation.OnEndEdit.AddListener(SetPropertyDataText);
             annotation.TextFieldSelected.AddListener(OnDeselect); // avoid transform handles from being able to move the annotation when trying to select text
@@ -62,7 +62,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void Update()
         {
             base.Update();
-            annotation.StickTo(worldTransform.Coordinate);
+            annotation.StickTo(WorldTransform.Coordinate);
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
