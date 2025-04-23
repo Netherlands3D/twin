@@ -21,6 +21,11 @@ namespace Netherlands3D.Twin.Layers.Properties
             }
         }
 
+        public void SetColorPickerColor(Color color)
+        {
+            colorPicker.SetColorWithoutNotify(color);
+        }
+
         private void OnEnable()
         {
             colorPicker.colorChanged.AddListener(OnPickedColor);

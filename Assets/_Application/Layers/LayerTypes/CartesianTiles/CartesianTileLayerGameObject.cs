@@ -10,7 +10,7 @@ using System;
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
     [RequireComponent(typeof(Layer))]
-    public partial class CartesianTileLayerGameObject : LayerGameObject, ILayerWithPropertyPanels//, ILayerWithPropertyData
+    public partial class CartesianTileLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
     {
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
         

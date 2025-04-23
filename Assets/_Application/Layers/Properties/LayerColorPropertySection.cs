@@ -30,7 +30,9 @@ namespace Netherlands3D.Twin.Layers.Properties
         private List<int> selectedIndices = new List<int>();
         private int currentButtonIndex = -1;
         private float lastClickTime;
-        private ColorSwatch[] items; 
+        private ColorSwatch[] items;
+
+        private ColorPickerPropertySection colorPicker;
 
         public override LayerGameObject LayerGameObject
         {
@@ -39,16 +41,27 @@ namespace Netherlands3D.Twin.Layers.Properties
             {
                 layer = value;
                 layer.OnStylingApplied.AddListener(UpdateSwatchFromStyleChange);
-                LoadLayerFeatures();
-                StartCoroutine(WaitFrame()); //workaround to have a minimum height for the content loaded (because of scrollrects)
+                Initialize();
             }
         }
 
-        private IEnumerator WaitFrame()
+        private void Initialize()
+        {
+            LoadLayerFeatures();
+            StartCoroutine(WaitFrame(()=>
+            {
+                //workaround to have a minimum height for the content loaded (because of scrollrects)
+                LayoutElement layout = GetComponent<LayoutElement>();
+                layout.minHeight = content.rect.height;
+                //we need to wait a frame for this so all propertysections will be available after instantiation
+                colorPicker = FindAnyObjectByType<ColorPickerPropertySection>();
+            })); 
+        }
+
+        private IEnumerator WaitFrame(Action callBack)
         {
             yield return new WaitForEndOfFrame(); 
-            LayoutElement layout = GetComponent<LayoutElement>();
-            layout.minHeight = content.rect.height;
+            callBack.Invoke();
         }
 
         private void LoadLayerFeatures()
@@ -111,6 +124,9 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void SelectSwatch(int buttonIndex, bool select)
         {
+            if(select)
+                colorPicker.SetColorPickerColor(items[buttonIndex].Color);
+
             items[buttonIndex].SetSelected(select);
             UpdateSelection();
         }

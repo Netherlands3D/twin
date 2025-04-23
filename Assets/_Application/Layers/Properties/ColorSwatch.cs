@@ -15,6 +15,7 @@ namespace Netherlands3D
         public TMP_InputField InputField => inputField;
         public TMP_Text TextField => textField;
         public string LayerName => layerName;
+        public Color Color => tileColor.color;
 
         [SerializeField] private Image tileColor;
         [SerializeField] private Button button;
