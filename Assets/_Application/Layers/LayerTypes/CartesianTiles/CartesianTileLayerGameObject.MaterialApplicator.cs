@@ -3,6 +3,7 @@ using Netherlands3D.LayerStyles;
 using Netherlands3D.LayerStyles.Expressions;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
@@ -21,20 +22,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 this.layer = layer;
                 BinaryMeshLayer binaryMeshLayer = layer.layer as BinaryMeshLayer;
                 List<Material> materials = binaryMeshLayer.DefaultMaterialList;
+
+                layer.LayerData.StyleAdded.AddListener(style =>
+                {
+                    string matName = style.Metadata.Name;
+                    foreach (var material in materials)
+                    {
+                        if(material.name == matName)
+                        {
+                            //get the color from the material before its ever changed
+                        }
+                    }
+                });
                 int index = 0;
                 foreach (Material material in materials)
                 {
                     materialIndices.Add(index);
                     index++; //add all indices by default so we get an update
-                    LayerFeature feature = layer.CreateFeature(material); //one feature per default shared material
-                    if (material.HasColor("_BaseColor"))
-                    {
-                        var style = layer.GetStyling(feature);
-                        //on creation lets keep the default colors
-                        style.SetFillColor(material.GetColor("_BaseColor"));
-                    }
-                }
-                
+                    layer.CreateFeature(material); //one feature per default shared material
+                    //layer.LayerData.AddStyle(new LayerStyle(material.name));
+                }                
             }
 
             public void SetIndices(List<int> materialIndices)
@@ -51,9 +58,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             public Material CreateMaterial()
             {
                 foreach (int i in materialIndices)
-                {                    
+                {
                     //todo explain why materials are used here and not submeshes
                     var style = layer.GetStyling(layer.GetFeature(GetMaterialByIndex(i))); //one feature per default shared material
+                    //var symbolizer = layer.LayerData.Styles[GetMaterialByIndex(i).name].AnyFeature.Symbolizer;//
                     var color = style.GetFillColor() ?? Color.white;
 
                     layer.UpdateMaterial(color, i);

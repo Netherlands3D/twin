@@ -82,9 +82,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 //because all ui elements will be destroyed on close an anonymous listener is fine here              
                 swatch.onClickUp.AddListener(pointer => OnClickedSwatchUp(pointer, cachedIndex));
                 swatch.onClickDown.AddListener(pointer => OnClickedSwatch(pointer, cachedIndex));
-                Material mat = layerFeatures[i].Geometry as Material;
-                var style = layer.GetStyling(layerFeatures[i]);
-                style.SetFillColor(mat.color);
+                Material mat = layerFeatures[i].Geometry as Material;               
                 swatch.SetColor(mat.color);
 
                 items[cachedIndex] = swatch; 
