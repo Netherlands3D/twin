@@ -79,13 +79,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void Update()
         {
             base.Update();
-            annotation.StickTo(worldTransform.Coordinate);
+            annotation.StickTo(WorldTransform.Coordinate);
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
         {
             base.LoadProperties(properties);
-
+    
             var annotationProperty = (AnnotationPropertyData)properties.FirstOrDefault(p => p is AnnotationPropertyData);
             if (annotationProperty != null)
             {
