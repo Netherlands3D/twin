@@ -528,7 +528,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8711320476285887224, guid: 7729b158e4aa9bd42b42691c6bf75dca,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7217063618786179923}
   m_SourcePrefab: {fileID: 100100000, guid: 7729b158e4aa9bd42b42691c6bf75dca, type: 3}
 --- !u!224 &8303503869588807356 stripped
 RectTransform:
@@ -536,6 +540,25 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1068876634530343909}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8516793374970087709 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8711320476285887224, guid: 7729b158e4aa9bd42b42691c6bf75dca,
+    type: 3}
+  m_PrefabInstance: {fileID: 1068876634530343909}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7217063618786179923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8516793374970087709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Ga terug
 --- !u!1001 &1483449355254958285
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -801,7 +824,7 @@ PrefabInstance:
     - target: {fileID: 2084691533449468266, guid: 1c890a1ac40df8a49a80b2cb38d67f83,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 15.74
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2084691533449468266, guid: 1c890a1ac40df8a49a80b2cb38d67f83,
         type: 3}
@@ -981,7 +1004,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6661154377055723068, guid: 1c890a1ac40df8a49a80b2cb38d67f83,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4862151924661866588}
   m_SourcePrefab: {fileID: 100100000, guid: 1c890a1ac40df8a49a80b2cb38d67f83, type: 3}
 --- !u!224 &1365295608487313767 stripped
 RectTransform:
@@ -989,6 +1016,25 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 5443144646549719290}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1727345594572969670 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6661154377055723068, guid: 1c890a1ac40df8a49a80b2cb38d67f83,
+    type: 3}
+  m_PrefabInstance: {fileID: 5443144646549719290}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4862151924661866588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1727345594572969670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Voeg attribuut toe
 --- !u!1001 &6626256667471546621
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2370,7 +2416,19 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6150639105120095678, guid: 8caeee7bb653bfe46863d598a9e6c20c,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3009735333653863496}
+    - targetCorrespondingSourceObject: {fileID: 3514260855524483358, guid: 8caeee7bb653bfe46863d598a9e6c20c,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4681142664369474999}
+    - targetCorrespondingSourceObject: {fileID: 5900315364549765156, guid: 8caeee7bb653bfe46863d598a9e6c20c,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1701638808373073501}
   m_SourcePrefab: {fileID: 100100000, guid: 8caeee7bb653bfe46863d598a9e6c20c, type: 3}
 --- !u!224 &2688462733659480497 stripped
 RectTransform:
@@ -2378,3 +2436,60 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 9031442989025769441}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2886055441091918431 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6150639105120095678, guid: 8caeee7bb653bfe46863d598a9e6c20c,
+    type: 3}
+  m_PrefabInstance: {fileID: 9031442989025769441}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3009735333653863496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2886055441091918431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: ' Maak een nieuw onderdeel (attribuut) aan'
+--- !u!1 &3221199755159150533 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5900315364549765156, guid: 8caeee7bb653bfe46863d598a9e6c20c,
+    type: 3}
+  m_PrefabInstance: {fileID: 9031442989025769441}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1701638808373073501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3221199755159150533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: kies een onderdeel  uit deze laag om te verwijderen
+--- !u!1 &5589820550647797503 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3514260855524483358, guid: 8caeee7bb653bfe46863d598a9e6c20c,
+    type: 3}
+  m_PrefabInstance: {fileID: 9031442989025769441}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4681142664369474999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5589820550647797503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: kies een onderdeel (attribuut) uit deze laag om te bewerken
