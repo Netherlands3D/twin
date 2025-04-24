@@ -54,7 +54,7 @@ namespace Netherlands3D.Twin.UI
             TextFieldDeselected.Invoke();
         }
 
-        public void OnTextFieldClick(BaseEventData data) //event called when the child input field is clicked
+        public void OnTextFieldClick(BaseEventData data) //event called through a event trigger in the inspector when the child input field is clicked
         {
             float timeSinceLastClick = Time.time - lastClickTime;
 

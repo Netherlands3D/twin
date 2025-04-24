@@ -18,7 +18,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private TextPopout annotation;
         private AnnotationPropertyData annotationPropertyData => (AnnotationPropertyData)transformPropertyData;
-
+        private enum EditMode
+        {
+            Disabled, // Neither move the annotation, nor edit the text
+            Move, // Move the annotation in the world, but don't edit the text
+            TextEdit // Edit the text of the annotation, do not move the annotation
+        }
+        private EditMode mode = EditMode.Disabled;
+        
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
         public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one), new Coordinate(transform.position + 5 * Vector3.one));
 
@@ -44,10 +51,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.Show(annotationPropertyData.AnnotationText, WorldTransform.Coordinate, true);
             annotation.ReadOnly = !layerTool.Open;
             annotation.OnEndEdit.AddListener(SetPropertyDataText);
-            annotation.TextFieldSelected.AddListener(OnDeselect); // avoid transform handles from being able to move the annotation when trying to select text
+            annotation.TextFieldSelected.AddListener(OnAnnotationSelected); // avoid transform handles from being able to move the annotation when trying to select text
             annotation.TextFieldDoubleClicked.AddListener(OnAnnotationDoubleClicked);
-            layerTool.onOpen.AddListener(DisableReadOnly);
-            layerTool.onClose.AddListener(EnableReadOnly);
+        }
+
+        private void OnAnnotationSelected()
+        {
+            if(!layerTool.Open)
+                return;
+            
+            SetEditMode(EditMode.Move);
         }
 
         private void OnAnnotationDoubleClicked()
@@ -55,8 +68,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             if (!layerTool.Open)
             {
                 layerTool.OpenInspector();
-                LayerData.SelectLayer();
-            }            
+                SetEditMode(EditMode.Move);
+            }
+            else
+            {
+                SetEditMode(EditMode.TextEdit);
+            }
+        }
+
+        private void SetEditMode(EditMode newMode)
+        {
+            mode = newMode;
+            switch (mode)
+            {
+                case EditMode.Disabled:
+                    annotation.ReadOnly = true;
+                    LayerData.DeselectLayer();
+                    break;    
+                case EditMode.Move:
+                    annotation.ReadOnly = true;
+                    LayerData.SelectLayer(true);
+                    break;
+                case EditMode.TextEdit:
+                    annotation.ReadOnly = false;
+                    LayerData.SelectLayer(true);
+                    ClearTransformHandles();
+                    break;
+            }
         }
 
         protected override void OnDestroy()
@@ -66,8 +104,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
             annotation.TextFieldSelected.RemoveListener(OnDeselect);
             annotation.TextFieldDoubleClicked.RemoveListener(OnAnnotationDoubleClicked);
-            layerTool.onOpen.RemoveListener(DisableReadOnly);
-            layerTool.onClose.RemoveListener(EnableReadOnly);
 
             Destroy(annotation.gameObject);
         }
@@ -75,16 +111,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private void SetPropertyDataText(string annotationText)
         {
             annotationPropertyData.AnnotationText = annotationText;
-        }
-
-        private void DisableReadOnly()
-        {
-            annotation.ReadOnly = false;
-        }
-
-        private void EnableReadOnly()
-        {
-            annotation.ReadOnly = true;
         }
 
         protected override void Update()
