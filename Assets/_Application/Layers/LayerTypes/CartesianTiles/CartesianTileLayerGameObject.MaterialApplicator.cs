@@ -1,9 +1,7 @@
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.LayerStyles.Expressions;
-using NUnit.Framework;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
@@ -22,25 +20,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 this.layer = layer;
                 BinaryMeshLayer binaryMeshLayer = layer.layer as BinaryMeshLayer;
                 List<Material> materials = binaryMeshLayer.DefaultMaterialList;
-
-                layer.LayerData.StyleAdded.AddListener(style =>
-                {
-                    string matName = style.Metadata.Name;
-                    foreach (var material in materials)
-                    {
-                        if(material.name == matName)
-                        {
-                            //get the color from the material before its ever changed
-                        }
-                    }
-                });
                 int index = 0;
                 foreach (Material material in materials)
                 {                    
                     layer.CreateFeature(material); //one feature per default shared material
 
                     LayerStyle style = new LayerStyle(material.name);
-                    StylingRule stylingRule = new StylingRule(material.name, new MatchNameExpression(material.name));
+                    StylingRule stylingRule = new StylingRule(material.name, new MatchMaterialNameExpression(material.name));
                     style.StylingRules.Add(material.name, stylingRule);
                     layer.LayerData.AddStyle(style);
 
@@ -48,16 +34,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                     Color? color = symbolizer.GetFillColor();
                     if(color != null)
                         layer.UpdateMaterial((Color)color, index);
-
-                    //materialIndices.Add(index);
-                    index++; //add all indices by default so we get an update
+                    index++; 
                 }                
             }
 
             public void SetIndices(List<int> materialIndices)
             {
                 this.materialIndices = materialIndices;
-                MatchIndexExpression matchIndex = new MatchIndexExpression(materialIndices);
+                MatchMaterialIndexExpression matchIndex = new MatchMaterialIndexExpression(materialIndices);
                 StylingRule matchIndexRule = new StylingRule("matchindexrule", matchIndex);
 
                 //we want to overwrite the default stylingrule!?                
@@ -68,22 +52,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             public Material CreateMaterial()
             {
                 var defaultSymbolizer = layer.LayerData.DefaultStyle.AnyFeature.Symbolizer;
-                if (defaultSymbolizer.GetFillColor() == null)
+                if (defaultSymbolizer.GetFillColor() == null) //the color picker fill color is not used yet so lets do nothing here
                 {
                     return null;
                 }   
-                Color colorPickedColor = (Color)defaultSymbolizer.GetFillColor(); //it must exist here
+                Color colorPickedColor = (Color)defaultSymbolizer.GetFillColor();
                 foreach (int i in materialIndices)
-                {
-                    //todo explain why materials are used here and not submeshes
-                    //var style = layer.GetStyling(layer.GetFeature(GetMaterialByIndex(i))); //one feature per default shared material
-                    //var symbolizer = layer.LayerData.Styles[GetMaterialByIndex(i).name].AnyFeature.Symbolizer;//
-
+                {                    
                     var symbolizer = layer.LayerData.Styles[GetMaterialByIndex(i).name].AnyFeature.Symbolizer;
                     symbolizer.SetFillColor(colorPickedColor);
-
-                    //var color = style.GetFillColor() ?? Color.white;
-
                     layer.UpdateMaterial(colorPickedColor, i);
                 }
                 return null;

@@ -9,17 +9,17 @@ namespace Netherlands3D.LayerStyles.Expressions
     /// an expression against.
     /// </summary>
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling/expressions", Name = "MatchName")]
-    public class MatchNameExpression : TextExpression
+    public class MatchMaterialNameExpression : TextExpression
     {
-        public MatchNameExpression(string value) : base(value)
+        public MatchMaterialNameExpression(string value) : base(value)
         {
         }
 
         public override object Resolve(ExpressionContext context)
         {
-            if (context.ContainsKey("materialname"))
+            if (context.ContainsKey(Constants.MaterialNameIdentifier))
             {                
-                if (context["materialname"].ToString() == value)
+                if (context[Constants.MaterialNameIdentifier].ToString() == value)
                     return value;
             }
             return null;
@@ -27,7 +27,7 @@ namespace Netherlands3D.LayerStyles.Expressions
 
         public override string ToString()
         {
-            return "materialname:" + value;
+            return Constants.MaterialNameIdentifier + ":" + value;
         }
     }
 }

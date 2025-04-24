@@ -66,16 +66,14 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void LoadLayerFeatures()
         {
-            layerContent.ClearAllChildren();
-            
-
+            layerContent.ClearAllChildren();      
             List<LayerFeature> layerFeatures = layer.GetLayerFeatures().Values.ToList();
             items = new ColorSwatch[layerFeatures.Count];
             for(int i = 0; i < layerFeatures.Count; i++) 
             {
                 GameObject swatchObject = Instantiate(colorSwatchPrefab, layerContent);
                 ColorSwatch swatch = swatchObject.GetComponent<ColorSwatch>();
-                string layerName = layerFeatures[i].Attributes["materialname"].ToString(); //todo make this automatic
+                string layerName = layerFeatures[i].Attributes[Constants.MaterialNameIdentifier].ToString(); //todo make this automatic
                 swatch.SetLayerName(layerName);
                 swatch.SetInputText(layerName);
                 int cachedIndex = i;
@@ -84,7 +82,6 @@ namespace Netherlands3D.Twin.Layers.Properties
                 swatch.onClickDown.AddListener(pointer => OnClickedSwatch(pointer, cachedIndex));
                 Material mat = layerFeatures[i].Geometry as Material;               
                 swatch.SetColor(mat.color);
-
                 items[cachedIndex] = swatch; 
             }
         }
@@ -93,7 +90,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             int lastButtonIndex = currentButtonIndex;
             currentButtonIndex = buttonIndex;
-            //only one extra click on a selected layer should initiate the layer name editing
+            //only one extra click on a selected layer should initiate the layer name editing, lets keep this here for now because if ever its needed it should work right away
             //float timeSinceLastClick = Time.time - lastClickTime;
             //if (lastButtonIndex == buttonIndex && 
             //    timeSinceLastClick > LayerUI.DoubleClickLayerThreshold && 

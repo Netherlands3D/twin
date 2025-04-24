@@ -4,8 +4,8 @@ using Netherlands3D.Twin.Utility;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.LayerStyles;
 using System;
+using Netherlands3D.LayerStyles;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
@@ -83,8 +83,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             if (feature.Geometry is not Material mat) return feature;
 
             BinaryMeshLayer meshLayer = layer as BinaryMeshLayer;
-            feature.Attributes.Add("materialindex", meshLayer.DefaultMaterialList.IndexOf(mat).ToString());
-            feature.Attributes.Add("materialname", mat.name);
+            feature.Attributes.Add(Constants.MaterialIndexIdentifier, meshLayer.DefaultMaterialList.IndexOf(mat).ToString());
+            feature.Attributes.Add(Constants.MaterialNameIdentifier, mat.name);
 
             return feature;
         }

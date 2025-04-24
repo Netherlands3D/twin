@@ -5,20 +5,20 @@ using System.Runtime.Serialization;
 namespace Netherlands3D.LayerStyles.Expressions
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling/expressions", Name = "MatchIndex")]
-    public class MatchIndexExpression : Expression
+    public class MatchMaterialIndexExpression : Expression
     {
         [DataMember(Name = "value")] private List<int> value;
 
-        public MatchIndexExpression(List<int> value)
+        public MatchMaterialIndexExpression(List<int> value)
         {
             this.value = value;
         }
       
         public override object Resolve(ExpressionContext context)
         {
-            if (context.ContainsKey("materialindex"))
+            if (context.ContainsKey(Constants.MaterialIndexIdentifier))
             {
-                int index = int.Parse(context["materialindex"].ToString());
+                int index = int.Parse(context[Constants.MaterialIndexIdentifier].ToString());
                 if (value.Contains(index))
                     return value;
             }
