@@ -585,6 +585,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textField: {fileID: 1425523206420374518}
+  disappearDistance: 2000
+  OnEndEdit:
+    m_PersistentCalls:
+      m_Calls: []
+  TextFieldSelected:
+    m_PersistentCalls:
+      m_Calls: []
+  TextFieldDeselected:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &8809455047887477227
 MonoBehaviour:
   m_ObjectHideFlags: 0
