@@ -45,8 +45,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.ReadOnly = !layerTool.Open;
             annotation.OnEndEdit.AddListener(SetPropertyDataText);
             annotation.TextFieldSelected.AddListener(OnDeselect); // avoid transform handles from being able to move the annotation when trying to select text
+            annotation.TextFieldDoubleClicked.AddListener(OnAnnotationDoubleClicked);
             layerTool.onOpen.AddListener(DisableReadOnly);
             layerTool.onClose.AddListener(EnableReadOnly);
+        }
+
+        private void OnAnnotationDoubleClicked()
+        {
+            if (!layerTool.Open)
+            {
+                layerTool.OpenInspector();
+                LayerData.SelectLayer();
+            }            
         }
 
         protected override void OnDestroy()
@@ -55,6 +65,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.OnEndEdit.RemoveListener(SetPropertyDataText);
             annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
             annotation.TextFieldSelected.RemoveListener(OnDeselect);
+            annotation.TextFieldDoubleClicked.RemoveListener(OnAnnotationDoubleClicked);
             layerTool.onOpen.RemoveListener(DisableReadOnly);
             layerTool.onClose.RemoveListener(EnableReadOnly);
 

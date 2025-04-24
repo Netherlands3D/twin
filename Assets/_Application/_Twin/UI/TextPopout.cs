@@ -11,7 +11,9 @@ namespace Netherlands3D.Twin.UI
     {
         [SerializeField] private TMP_InputField textField;
         [SerializeField] private float disappearDistance = 2000f;
-        
+        [SerializeField] private float doubleClickThreshold = 0.5f;
+        private float lastClickTime = -0.5f;
+
         private RectTransform rectTransform;
         private Camera mainCamera;
         private Coordinate? stuckToWorldPosition = null;
@@ -19,6 +21,7 @@ namespace Netherlands3D.Twin.UI
         public UnityEvent<string> OnEndEdit;
         public UnityEvent TextFieldSelected;
         public UnityEvent TextFieldDeselected;
+        public UnityEvent TextFieldDoubleClicked;
 
         public bool ReadOnly
         {
@@ -51,6 +54,19 @@ namespace Netherlands3D.Twin.UI
             TextFieldDeselected.Invoke();
         }
 
+        public void OnTextFieldClick(BaseEventData data) //event called when the child input field is clicked
+        {
+            float timeSinceLastClick = Time.time - lastClickTime;
+
+            if (timeSinceLastClick <= doubleClickThreshold)
+            {
+                // Detected double-click
+                TextFieldDoubleClicked.Invoke();
+            }
+
+            lastClickTime = Time.time;
+        }
+        
         private void OnDisable()
         {
             textField.onSubmit.RemoveListener(OnSubmitText);
