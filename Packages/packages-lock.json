@@ -341,11 +341,11 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.coordinates": {
-      "version": "https://github.com/Netherlands3D/Coordinates.git#feature/JsonConverter",
+      "version": "2.0.2",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {},
-      "hash": "41c1067cc6039aa8bb0845b7067d2c9d014d62cc"
+      "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.e2e-testing": {
       "version": "file:eu.netherlands3d.e2e-testing",
