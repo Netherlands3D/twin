@@ -36,11 +36,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 });
                 int index = 0;
                 foreach (Material material in materials)
-                {
-                    materialIndices.Add(index);
-                    index++; //add all indices by default so we get an update
+                {                    
                     layer.CreateFeature(material); //one feature per default shared material
-                    //layer.LayerData.AddStyle(new LayerStyle(material.name));
+
+                    LayerStyle style = new LayerStyle(material.name);
+                    StylingRule stylingRule = new StylingRule(material.name, new MatchNameExpression(material.name));
+                    style.StylingRules.Add(material.name, stylingRule);
+                    layer.LayerData.AddStyle(style);
+
+                    var symbolizer = layer.LayerData.Styles[material.name].AnyFeature.Symbolizer;
+                    Color? color = symbolizer.GetFillColor();
+                    if(color != null)
+                        layer.UpdateMaterial((Color)color, index);
+
+                    //materialIndices.Add(index);
+                    index++; //add all indices by default so we get an update
                 }                
             }
 
@@ -57,14 +67,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             public Material CreateMaterial()
             {
+                var defaultSymbolizer = layer.LayerData.DefaultStyle.AnyFeature.Symbolizer;
+                if (defaultSymbolizer.GetFillColor() == null)
+                {
+                    return null;
+                }   
+                Color colorPickedColor = (Color)defaultSymbolizer.GetFillColor(); //it must exist here
                 foreach (int i in materialIndices)
                 {
                     //todo explain why materials are used here and not submeshes
-                    var style = layer.GetStyling(layer.GetFeature(GetMaterialByIndex(i))); //one feature per default shared material
+                    //var style = layer.GetStyling(layer.GetFeature(GetMaterialByIndex(i))); //one feature per default shared material
                     //var symbolizer = layer.LayerData.Styles[GetMaterialByIndex(i).name].AnyFeature.Symbolizer;//
-                    var color = style.GetFillColor() ?? Color.white;
 
-                    layer.UpdateMaterial(color, i);
+                    var symbolizer = layer.LayerData.Styles[GetMaterialByIndex(i).name].AnyFeature.Symbolizer;
+                    symbolizer.SetFillColor(colorPickedColor);
+
+                    //var color = style.GetFillColor() ?? Color.white;
+
+                    layer.UpdateMaterial(colorPickedColor, i);
                 }
                 return null;
             }
