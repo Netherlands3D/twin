@@ -83,14 +83,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             {
                 case EditMode.Disabled:
                     annotation.ReadOnly = true;
+                    annotation.SelectableText = true;
                     LayerData.DeselectLayer();
                     break;    
                 case EditMode.Move:
                     annotation.ReadOnly = true;
+                    annotation.SelectableText = false;
                     LayerData.SelectLayer(true);
                     break;
                 case EditMode.TextEdit:
                     annotation.ReadOnly = false;
+                    annotation.SelectableText = true;
                     LayerData.SelectLayer(true);
                     ClearTransformHandles();
                     break;
