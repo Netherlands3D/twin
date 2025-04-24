@@ -25,11 +25,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 {                    
                     layer.CreateFeature(material); //one feature per default shared material
 
+                    //populate the layerstyles based on available materials if not present in data yet
                     LayerStyle style = new LayerStyle(material.name);
                     StylingRule stylingRule = new StylingRule(material.name, new MatchMaterialNameExpression(material.name));
                     style.StylingRules.Add(material.name, stylingRule);
                     layer.LayerData.AddStyle(style);
 
+                    //only load the symbolizer color when present in the data
                     var symbolizer = layer.LayerData.Styles[material.name].AnyFeature.Symbolizer;
                     Color? color = symbolizer.GetFillColor();
                     if(color != null)
@@ -41,10 +43,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             public void SetIndices(List<int> materialIndices)
             {
                 this.materialIndices = materialIndices;
+                //create a styling rule to match the selected feature layers when applying styles
                 MatchMaterialIndexExpression matchIndex = new MatchMaterialIndexExpression(materialIndices);
                 StylingRule matchIndexRule = new StylingRule("matchindexrule", matchIndex);
 
-                //we want to overwrite the default stylingrule!?                
+                //we want to overwrite the default stylingrule!? otherwise will always return true without filtering                
                 layer.LayerData.DefaultStyle.StylingRules.Clear(); 
                 layer.LayerData.DefaultStyle.StylingRules.Add("default", matchIndexRule);
             }
@@ -52,10 +55,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             public Material CreateMaterial()
             {
                 var defaultSymbolizer = layer.LayerData.DefaultStyle.AnyFeature.Symbolizer;
-                if (defaultSymbolizer.GetFillColor() == null) //the color picker fill color is not used yet so lets do nothing here
-                {
+                //check if the color picker fill color is used
+                if (defaultSymbolizer.GetFillColor() == null) 
                     return null;
-                }   
+                
+                //colorpicker has a selected fill color and a possible selection of feature layers
                 Color colorPickedColor = (Color)defaultSymbolizer.GetFillColor();
                 foreach (int i in materialIndices)
                 {                    

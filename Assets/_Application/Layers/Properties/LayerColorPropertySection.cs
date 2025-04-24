@@ -29,7 +29,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         private List<ColorSwatch> selectedSwatches = new List<ColorSwatch>();
         private List<int> selectedIndices = new List<int>();
         private int currentButtonIndex = -1;
-        private float lastClickTime;
+        //private float lastClickTime;
         private ColorSwatch[] items;
 
         private ColorPickerPropertySection colorPicker;
@@ -53,6 +53,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 //workaround to have a minimum height for the content loaded (because of scrollrects)
                 LayoutElement layout = GetComponent<LayoutElement>();
                 layout.minHeight = content.rect.height;
+
                 //we need to wait a frame for this so all propertysections will be available after instantiation
                 colorPicker = FindAnyObjectByType<ColorPickerPropertySection>();
             })); 
@@ -77,9 +78,12 @@ namespace Netherlands3D.Twin.Layers.Properties
                 swatch.SetLayerName(layerName);
                 swatch.SetInputText(layerName);
                 int cachedIndex = i;
+
                 //because all ui elements will be destroyed on close an anonymous listener is fine here              
                 swatch.onClickUp.AddListener(pointer => OnClickedSwatchUp(pointer, cachedIndex));
                 swatch.onClickDown.AddListener(pointer => OnClickedSwatch(pointer, cachedIndex));
+
+                //update the swatch color to match the material color
                 Material mat = layerFeatures[i].Geometry as Material;               
                 swatch.SetColor(mat.color);
                 items[cachedIndex] = swatch; 
@@ -106,7 +110,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 SelectSwatch(buttonIndex, !items[buttonIndex].IsSelected);
             //}
             
-            lastClickTime = Time.time;
+            //lastClickTime = Time.time;
         }
 
         private bool NoModifierKeyPressed()
@@ -139,12 +143,14 @@ namespace Netherlands3D.Twin.Layers.Properties
                     selectedIndices.Add(items.IndexOf(swatch));
                 }
 
+            //todo make this generic
             CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
             cartesianTileLayerGameObject.Applicator.SetIndices(selectedIndices);
         }
 
         private void UpdateSwatchFromStyleChange()
         {
+            //todo make this generic
             CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
             foreach (int i in cartesianTileLayerGameObject.Applicator.MaterialIndices)
             {
