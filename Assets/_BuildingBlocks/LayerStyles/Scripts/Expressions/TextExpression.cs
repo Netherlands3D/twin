@@ -11,7 +11,7 @@ namespace Netherlands3D.LayerStyles.Expressions
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling/expressions", Name = "Text")]
     public class TextExpression : LiteralExpression
     {
-        [DataMember(Name = "value")] private string value;
+        [DataMember(Name = "value")] protected string value;
 
         public TextExpression(string value)
         {

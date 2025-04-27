@@ -6,6 +6,7 @@ namespace Netherlands3D.Functionalities.Wms.UI
     public class WMSPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
         [SerializeField] private WMSPropertySection propertySectionPrefab;
+        public uint SectionIndex => 0;
 
         public void AddToProperties(RectTransform properties)
         {

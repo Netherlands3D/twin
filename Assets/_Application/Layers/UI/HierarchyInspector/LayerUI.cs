@@ -94,12 +94,17 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private int Depth => ParentUI ? ParentUI.Depth + 1 : 0;
 
+        public static float DoubleClickLayerThreshold => doubleClickLayerThreshold;
+        private static float doubleClickLayerThreshold;
+
         private void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
             layerUIManager = GetComponentInParent<LayerUIManager>();
             childVerticalLayoutGroup = childrenPanel.GetComponent<VerticalLayoutGroup>();
             spacerStartWidth = spacer.sizeDelta.x;
+
+            doubleClickLayerThreshold = doubleClickThreshold;
         }
 
         private void OnEnable()

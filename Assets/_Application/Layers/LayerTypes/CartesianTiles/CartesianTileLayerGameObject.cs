@@ -1,16 +1,32 @@
 using UnityEngine;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.Twin.Layers.Properties;
+using System.Collections.Generic;
+using System.Linq;
+using System;
+using Netherlands3D.LayerStyles;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
     [RequireComponent(typeof(Layer))]
-    public class CartesianTileLayerGameObject : LayerGameObject
+    public partial class CartesianTileLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
     {
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
         
         private Layer layer;
         private Netherlands3D.CartesianTiles.TileHandler tileHandler;
+
+        private CartesianTileBinaryMeshLayerMaterialApplicator applicator;
+        internal CartesianTileBinaryMeshLayerMaterialApplicator Applicator
+        {
+            get
+            {
+                if (applicator == null)
+                    applicator = new CartesianTileBinaryMeshLayerMaterialApplicator(this);
+                return applicator;
+            }
+        }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
@@ -31,6 +47,67 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             if(Application.isPlaying && tileHandler && layer)
                 tileHandler.RemoveLayer(layer);
+        }
+
+        private List<IPropertySectionInstantiator> propertySections;
+
+        protected List<IPropertySectionInstantiator> PropertySections
+        {
+            get
+            {
+                if (propertySections == null)
+                {
+                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
+                }
+
+                return propertySections;
+            }
+            set => propertySections = value;
+        }       
+
+        public List<IPropertySectionInstantiator> GetPropertySections()
+        {
+            return PropertySections;
+        }
+
+        public override void ApplyStyling()
+        {
+            //MaterialApplicator.Apply(Applicator); using creatematerial directly because this is a sharedmaterial
+            Applicator.CreateMaterial();
+
+            base.ApplyStyling();
+        }
+
+        protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
+        {
+            if (feature.Geometry is not Material mat) return feature;
+
+            BinaryMeshLayer meshLayer = layer as BinaryMeshLayer;
+            feature.Attributes.Add(Constants.MaterialIndexIdentifier, meshLayer.DefaultMaterialList.IndexOf(mat).ToString());
+            feature.Attributes.Add(Constants.MaterialNameIdentifier, mat.name);
+
+            return feature;
+        }
+
+        private Material UpdateMaterial(Color color, int index)
+        {
+            if(layer is BinaryMeshLayer meshLayer)
+            {
+                string matName = meshLayer.DefaultMaterialList[index].name;
+                meshLayer.DefaultMaterialList[index].color = color;
+                return meshLayer.DefaultMaterialList[index];
+            }
+            throw new NotImplementedException();
+        }
+
+        private Material GetMaterialInstance(int index)
+        {
+            BinaryMeshLayer meshLayer = layer as BinaryMeshLayer;
+            if (meshLayer)
+            {
+                return meshLayer.DefaultMaterialList[index];
+            }
+            throw new NotImplementedException();
         }
     }
 }
