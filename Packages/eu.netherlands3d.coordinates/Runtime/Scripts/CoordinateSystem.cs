@@ -83,19 +83,27 @@ namespace Netherlands3D.Coordinates
         public static Quaternion connectedCRSToUnityUp;
         public static Vector3WGS wgsAtUp;
 
+                
         public static bool FindCoordinateSystem(string name, out CoordinateSystem result)
         {
+            result = FindCoordinateSystem(name);            
+            return result != CoordinateSystem.Undefined;
+        }
+
+        public static CoordinateSystem FindCoordinateSystem(string name)
+        {
+            if (name.Contains("CRS:84"))
+                name = name.Replace("CRS:84", "CRS84");
+
             foreach (var kvp in operators)
             {
                 if (name.Contains(kvp.Value.Code()))
                 {
-                    result = kvp.Key;
-                    return true;
+                    return kvp.Key;
                 }
             }
-            result = CoordinateSystem.Undefined;
-            return false;
-        }
+            return CoordinateSystem.Undefined;
+        }        
 
         public static CoordinateSystem connectedCoordinateSystem
         {
