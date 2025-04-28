@@ -2,6 +2,7 @@ using KindMen.Uxios;
 using Netherlands3D.Tilekit.TileSets;
 using Netherlands3D.Tilekit.TileSets.BoundingVolumes;
 using Netherlands3D.Tilekit.TileSets.ImplicitTiling;
+using Unity.Collections;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit.PredefinedTilesets
@@ -31,9 +32,9 @@ namespace Netherlands3D.Tilekit.PredefinedTilesets
                 0 // Not important: 2D tiles, or is it?
             );
 
-            var root = new Tile(totalBoundingVolume, baseGeometricError);
-            root.TileContents.Add(new TileContent(new TemplatedUri(url), totalBoundingVolume));
-            root.ImplicitTiling = new QuadTree(null, 0, 20);
+            var root = new Tile(new BoundingVolume(totalBoundingVolume), baseGeometricError);
+            root.TileContents.Add(new TileContent(new NativeText(url, Allocator.Persistent), new BoundingVolume(totalBoundingVolume)));
+            root.ImplicitTiling = new ImplicitTilingScheme(new QuadTree(new NativeText(Allocator.Persistent), 0, 20));
 
             // subdivisionScheme	Constant for all descendant tiles
             // refine	Constant for all descendant tiles

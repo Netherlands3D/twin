@@ -1,10 +1,9 @@
-using System.Runtime.Serialization;
 using JetBrains.Annotations;
 using KindMen.Uxios;
+using Unity.Collections;
 
 namespace Netherlands3D.Tilekit.TileSets.ImplicitTiling
 {
-    [DataContract(Namespace = "eu.netherlands3d.tilekit.tilesets.implicit_tiling", Name = "Octree")]
     public struct Octree : IImplicitTilingScheme
     {
         SubdivisionScheme IImplicitTilingScheme.SubdivisionScheme => SubdivisionScheme.Octree;
@@ -12,11 +11,12 @@ namespace Netherlands3D.Tilekit.TileSets.ImplicitTiling
         public int SubtreeLevels { get; }
         public int AvailableLevels { get; }
 
-        [CanBeNull] public TemplatedUri Subtrees { get; }
+        private NativeText subtrees;
+        [CanBeNull] public TemplatedUri Subtrees => subtrees != null ? new TemplatedUri(subtrees.ConvertToString()) : null;
 
-        public Octree(TemplatedUri subtrees, int subtreeLevels = 0, int availableLevels = 0)
+        public Octree(NativeText subtrees, int subtreeLevels = 0, int availableLevels = 0)
         {
-            Subtrees = subtrees;
+            this.subtrees = subtrees;
             SubtreeLevels = subtreeLevels;
             AvailableLevels = availableLevels;
         }

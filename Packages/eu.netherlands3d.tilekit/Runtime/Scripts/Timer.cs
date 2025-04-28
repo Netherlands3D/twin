@@ -40,7 +40,7 @@ namespace Netherlands3D.Tilekit
             CancelInvoke(nameof(tick));
         }
 
-        private void Resume()
+        public void Resume()
         {
             IsPaused = false;
             if (UpdateInterval == UpdateEveryFrame) return;
