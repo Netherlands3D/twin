@@ -92,6 +92,8 @@ namespace Netherlands3D.Coordinates
 
         public static CoordinateSystem FindCoordinateSystem(string name)
         {
+            //we remove the : in case it is present for CRS84(not an EPSG standard) because 1.the code of CRS84Converter is without the :
+            //and 2.we want to avoid using simply looking for 84 in the code as this could conflict with CRS codes that have 84 as a substring of their code
             if (name.Contains("CRS:84"))
                 name = name.Replace("CRS:84", "CRS84");
 
