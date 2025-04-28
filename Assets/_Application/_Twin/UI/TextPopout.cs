@@ -75,7 +75,6 @@ namespace Netherlands3D.Twin.UI
 
             if (timeSinceLastClick <= doubleClickThreshold)
             {
-                // Detected double-click
                 TextFieldDoubleClicked.Invoke();
             }
 
