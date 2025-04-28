@@ -50,9 +50,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.transform.SetSiblingIndex(0);
             annotation.Show(annotationPropertyData.AnnotationText, WorldTransform.Coordinate, true);
             annotation.ReadOnly = !layerTool.Open;
+            
             annotation.OnEndEdit.AddListener(SetPropertyDataText);
             annotation.TextFieldSelected.AddListener(OnAnnotationSelected); // avoid transform handles from being able to move the annotation when trying to select text
             annotation.TextFieldDoubleClicked.AddListener(OnAnnotationDoubleClicked);
+        }
+        
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
+            
+            annotation.OnEndEdit.RemoveListener(SetPropertyDataText);
+            annotation.TextFieldSelected.RemoveListener(OnAnnotationSelected);
+            annotation.TextFieldDoubleClicked.RemoveListener(OnAnnotationDoubleClicked);
+
+            Destroy(annotation.gameObject);
         }
 
         private void OnAnnotationSelected()
@@ -98,17 +111,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                     ClearTransformHandles();
                     break;
             }
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            annotation.OnEndEdit.RemoveListener(SetPropertyDataText);
-            annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
-            annotation.TextFieldSelected.RemoveListener(OnDeselect);
-            annotation.TextFieldDoubleClicked.RemoveListener(OnAnnotationDoubleClicked);
-
-            Destroy(annotation.gameObject);
         }
 
         private void SetPropertyDataText(string annotationText)
