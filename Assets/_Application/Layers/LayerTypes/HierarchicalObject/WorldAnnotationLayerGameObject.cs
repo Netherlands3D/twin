@@ -18,7 +18,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private TextPopout annotation;
         private AnnotationPropertyData annotationPropertyData => (AnnotationPropertyData)transformPropertyData;
-
+        private enum EditMode
+        {
+            Disabled, // Neither move the annotation, nor edit the text
+            Move, // Move the annotation in the world, but don't edit the text
+            TextEdit // Edit the text of the annotation, do not move the annotation
+        }
+        private EditMode mode = EditMode.Disabled;
+        
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
         public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one), new Coordinate(transform.position + 5 * Vector3.one));
 
@@ -43,37 +50,72 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.transform.SetSiblingIndex(0);
             annotation.Show(annotationPropertyData.AnnotationText, WorldTransform.Coordinate, true);
             annotation.ReadOnly = !layerTool.Open;
+            
             annotation.OnEndEdit.AddListener(SetPropertyDataText);
-            annotation.TextFieldSelected.AddListener(OnDeselect); // avoid transform handles from being able to move the annotation when trying to select text
-            layerTool.onOpen.AddListener(DisableReadOnly);
-            layerTool.onClose.AddListener(EnableReadOnly);
+            annotation.TextFieldSelected.AddListener(OnAnnotationSelected); // avoid transform handles from being able to move the annotation when trying to select text
+            annotation.TextFieldDoubleClicked.AddListener(OnAnnotationDoubleClicked);
         }
-
+        
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            annotation.OnEndEdit.RemoveListener(SetPropertyDataText);
             annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
-            annotation.TextFieldSelected.RemoveListener(OnDeselect);
-            layerTool.onOpen.RemoveListener(DisableReadOnly);
-            layerTool.onClose.RemoveListener(EnableReadOnly);
+            
+            annotation.OnEndEdit.RemoveListener(SetPropertyDataText);
+            annotation.TextFieldSelected.RemoveListener(OnAnnotationSelected);
+            annotation.TextFieldDoubleClicked.RemoveListener(OnAnnotationDoubleClicked);
 
             Destroy(annotation.gameObject);
+        }
+
+        private void OnAnnotationSelected()
+        {
+            if(!layerTool.Open)
+                return;
+            
+            SetEditMode(EditMode.Move);
+        }
+
+        private void OnAnnotationDoubleClicked()
+        {
+            if (!layerTool.Open)
+            {
+                layerTool.OpenInspector();
+                SetEditMode(EditMode.Move);
+            }
+            else
+            {
+                SetEditMode(EditMode.TextEdit);
+            }
+        }
+
+        private void SetEditMode(EditMode newMode)
+        {
+            mode = newMode;
+            switch (mode)
+            {
+                case EditMode.Disabled:
+                    annotation.ReadOnly = true;
+                    annotation.SelectableText = true;
+                    LayerData.DeselectLayer();
+                    break;    
+                case EditMode.Move:
+                    annotation.ReadOnly = true;
+                    annotation.SelectableText = false;
+                    LayerData.SelectLayer(true);
+                    break;
+                case EditMode.TextEdit:
+                    annotation.ReadOnly = false;
+                    annotation.SelectableText = true;
+                    LayerData.SelectLayer(true);
+                    ClearTransformHandles();
+                    break;
+            }
         }
 
         private void SetPropertyDataText(string annotationText)
         {
             annotationPropertyData.AnnotationText = annotationText;
-        }
-
-        private void DisableReadOnly()
-        {
-            annotation.ReadOnly = false;
-        }
-
-        private void EnableReadOnly()
-        {
-            annotation.ReadOnly = true;
         }
 
         protected override void Update()

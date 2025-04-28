@@ -212,6 +212,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnDeselect()
         {
+            ClearTransformHandles();
+        }
+
+        protected void ClearTransformHandles()
+        {
             var transformInterfaceToggle = FindAnyObjectByType<TransformHandleInterfaceToggle>(FindObjectsInactive.Include);
 
             if (transformInterfaceToggle)

@@ -68,6 +68,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabIdentifier: 292690ace10994ff5bd502be1f5a5bf2
   thumbnail: {fileID: 11400000, guid: 266c50999165c4f81a1d93d2ffa9f307, type: 2}
+  spawnLocation: 0
   onShow:
     m_PersistentCalls:
       m_Calls: []
@@ -107,8 +108,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PositionLocked: 0
-  RotationLocked: 0
-  ScaleLocked: 0
+  RotationLocked: 1
+  ScaleLocked: 1
   positionAxes: 7
   rotationAxes: 7
   scaleAxes: 7
