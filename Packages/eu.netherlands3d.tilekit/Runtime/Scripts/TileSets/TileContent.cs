@@ -1,15 +1,15 @@
-using KindMen.Uxios;
+using Unity.Collections;
 
 namespace Netherlands3D.Tilekit.TileSets
 {
     public struct TileContent
     {
-        public TemplatedUri Uri { get; }
-        public IBoundingVolume BoundingVolume { get; }
+        public NativeText UriTemplate;
+        public BoundingVolume BoundingVolume;
 
-        public TileContent(TemplatedUri uri, IBoundingVolume boundingVolume)
+        public TileContent(NativeText uriTemplate, BoundingVolume boundingVolume)
         {
-            Uri = uri;
+            UriTemplate = uriTemplate;
             BoundingVolume = boundingVolume;
         }
     }

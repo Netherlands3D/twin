@@ -16,7 +16,6 @@ namespace Netherlands3D.Tilekit.TileMappers
         private Camera mainCamera;
         private Plane[] frustumPlanes = new Plane[6];
         private Plane[] previousFrustumPlanes = new Plane[6];
-        
 
         private void Start()
         {
