@@ -149,7 +149,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             if (crs is NamedCRS namedCrs)
             {
-                if (CoordinateSystems.FindCoordinateSystem(namedCrs.Properties["name"].ToString(), out var globalCoordinateSystem))
+                CoordinateSystem globalCoordinateSystem = CoordinateSystems.FindCoordinateSystem(namedCrs.Properties["name"].ToString());
+                if (globalCoordinateSystem != CoordinateSystem.Undefined)
                 {
                     coordinateSystem = globalCoordinateSystem;
                 }
