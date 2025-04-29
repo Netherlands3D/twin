@@ -68,6 +68,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabIdentifier: 292690ace10994ff5bd502be1f5a5bf2
   thumbnail: {fileID: 11400000, guid: 266c50999165c4f81a1d93d2ffa9f307, type: 2}
+  spawnLocation: 0
   onShow:
     m_PersistentCalls:
       m_Calls: []
@@ -79,6 +80,7 @@ MonoBehaviour:
       m_Calls: []
   popoutPrefab: {fileID: 1268885788563908924, guid: 0c75754029f6c6940848c9f8bfe7edb9,
     type: 3}
+  layerTool: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
 --- !u!114 &4985722426523753970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,8 +108,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PositionLocked: 0
-  RotationLocked: 0
-  ScaleLocked: 0
+  RotationLocked: 1
+  ScaleLocked: 1
   positionAxes: 7
   rotationAxes: 7
   scaleAxes: 7
