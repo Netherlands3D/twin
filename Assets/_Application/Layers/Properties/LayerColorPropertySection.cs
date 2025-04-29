@@ -18,7 +18,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    //todo this should probably become a BinaryMeshLayerColorPropertySection
+    //make the updateselection and updateswatchfromstylechange generic to prevent coupling with cartesiantilelayergameobject
     public class LayerColorPropertySection : PropertySectionWithLayerGameObject
     {  
         [SerializeField] private RectTransform content;
@@ -29,7 +29,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         private List<ColorSwatch> selectedSwatches = new List<ColorSwatch>();
         private List<int> selectedIndices = new List<int>();
         private int currentButtonIndex = -1;
-        //private float lastClickTime;
         private ColorSwatch[] items;
 
         private ColorPickerPropertySection colorPicker;
@@ -48,7 +47,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void Initialize()
         {
             LoadLayerFeatures();
-            StartCoroutine(WaitFrame(()=>
+            StartCoroutine(WaitForEndFrame(()=>
             {
                 //workaround to have a minimum height for the content loaded (because of scrollrects)
                 LayoutElement layout = GetComponent<LayoutElement>();
@@ -59,7 +58,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             })); 
         }
 
-        private IEnumerator WaitFrame(Action callBack)
+        private IEnumerator WaitForEndFrame(Action callBack)
         {
             yield return new WaitForEndOfFrame(); 
             callBack.Invoke();
@@ -74,7 +73,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             {
                 GameObject swatchObject = Instantiate(colorSwatchPrefab, layerContent);
                 ColorSwatch swatch = swatchObject.GetComponent<ColorSwatch>();
-                string layerName = layerFeatures[i].Attributes[Constants.MaterialNameIdentifier].ToString(); //todo make this automatic
+                string layerName = layerFeatures[i].GetAttribute(Constants.MaterialNameIdentifier).ToString(); //todo make this automatic
                 swatch.SetLayerName(layerName);
                 swatch.SetInputText(layerName);
                 int cachedIndex = i;
@@ -94,23 +93,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             int lastButtonIndex = currentButtonIndex;
             currentButtonIndex = buttonIndex;
-            //only one extra click on a selected layer should initiate the layer name editing, lets keep this here for now because if ever its needed it should work right away
-            //float timeSinceLastClick = Time.time - lastClickTime;
-            //if (lastButtonIndex == buttonIndex && 
-            //    timeSinceLastClick > LayerUI.DoubleClickLayerThreshold && 
-            //    eventData.pointerEnter == items[currentButtonIndex].TextField.gameObject &&
-            //    NoModifierKeyPressed()
-            //    )
-            //{
-            //    OnSelectInputField(items[currentButtonIndex]);
-            //}
-            //else
-            //{                
-                ProcessLayerSelection();
-                SelectSwatch(buttonIndex, !items[buttonIndex].IsSelected);
-            //}
-            
-            //lastClickTime = Time.time;
+            ProcessLayerSelection();
+            SelectSwatch(buttonIndex, !items[buttonIndex].IsSelected);
         }
 
         private bool NoModifierKeyPressed()
@@ -199,17 +183,11 @@ namespace Netherlands3D.Twin.Layers.Properties
             swatch.InputField.interactable = true;
             swatch.InputField.Select();
             swatch.InputField.ActivateInputField();
-            StartCoroutine(WaitForNextFrame(() =>
+            StartCoroutine(WaitForEndFrame(() =>
             {
                 swatch.InputField.caretPosition = swatch.InputField.text.Length;
                 swatch.InputField.selectionAnchorPosition = 0;
             }));
-        }
-
-        private IEnumerator WaitForNextFrame(Action onNextFrame)
-        {
-            yield return new WaitForEndOfFrame();
-            onNextFrame.Invoke();
         }
     }
 }

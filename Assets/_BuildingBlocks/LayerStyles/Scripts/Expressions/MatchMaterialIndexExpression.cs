@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 
 namespace Netherlands3D.LayerStyles.Expressions
 {
-    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling/expressions", Name = "MatchIndex")]
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling/expressions", Name = "MatchMaterialIndex")]
     public class MatchMaterialIndexExpression : Expression
     {
         [DataMember(Name = "value")] private List<int> value;

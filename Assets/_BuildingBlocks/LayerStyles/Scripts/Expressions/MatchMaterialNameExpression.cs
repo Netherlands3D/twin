@@ -8,10 +8,12 @@ namespace Netherlands3D.LayerStyles.Expressions
     /// This is used in places - such as the ExpressionContext - where you need a literal piece of text to resolve
     /// an expression against.
     /// </summary>
-    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling/expressions", Name = "MatchName")]
-    public class MatchMaterialNameExpression : TextExpression
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling/expressions", Name = "MatchMaterialName")]
+    public class MatchMaterialNameExpression : Expression
     {
-        public MatchMaterialNameExpression(string value) : base(value)
+        [DataMember(Name = "value")] protected string value;
+
+        public MatchMaterialNameExpression(string value)
         {
         }
 

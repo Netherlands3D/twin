@@ -29,5 +29,13 @@ namespace Netherlands3D.Twin.Layers
             
             return new LayerFeature(geometry, expressionContext);
         }
+
+        public Expression GetAttribute(string id)
+        {
+            if (Attributes.TryGetValue(id, out var expression))
+                return expression;
+
+            return null; //or default?
+        }
     }
 }

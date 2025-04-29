@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Netherlands3D.LayerStyles
 {
-    public class Constants : MonoBehaviour
+    public static class Constants
     {
         public const string MaterialNameIdentifier = "materialname";
         public const string MaterialIndexIdentifier = "materialindex";
