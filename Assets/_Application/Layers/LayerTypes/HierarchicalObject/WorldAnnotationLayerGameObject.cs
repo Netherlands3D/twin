@@ -74,6 +74,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.TextFieldDoubleClicked.RemoveListener(OnAnnotationDoubleClicked);
             annotation.TextFieldInputConfirmed.RemoveListener(OnAnnotationTextConfirmed);
 
+            WorldInteractionBlocker.ClickedOnBlocker.RemoveListener(OnBlockerClicked);
+            
             Destroy(annotation.gameObject);
         }
 
