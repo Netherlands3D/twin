@@ -7,6 +7,7 @@ using UnityEngine.Serialization;
 
 namespace Netherlands3D.Tilekit.TileSelectors
 {
+    [CreateAssetMenu(menuName = "Tilekit/Tile selectors/Tiles in View", fileName = "TilesInView", order = 0)]
     public class TilesInView : BaseTileSelector
     {
         [SerializeField] private BaseProjector projector;

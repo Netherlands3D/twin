@@ -11,7 +11,7 @@ namespace Netherlands3D.Tilekit
 {
     public class Debugger : MonoBehaviour
     {
-        private EventChannel EventChannel => EventBus.All;
+        private TilekitEventChannel EventChannel => EventBus.All;
 
         [SerializeField] private bool logTicks = false;
         [SerializeField] private bool logInProduction = false;
@@ -22,13 +22,13 @@ namespace Netherlands3D.Tilekit
             // This is a debugger after all
             if (!logInProduction && !Application.isEditor) return;
 
-            EventChannel.UpdateTriggered += OnUpdateTriggered;
-            EventChannel.FrustumChanged += OnFrustumChanged;
-            EventChannel.TilesSelected += OnTilesSelected;
-            EventChannel.TransitionCreated += OnTransition;
-            EventChannel.ChangeScheduleRequested += OnChangeScheduleRequested;
-            EventChannel.ChangesScheduled += OnChangesPlanned;
-            EventChannel.ChangeApply += OnChangeApply;
+            EventChannel.UpdateTriggered.AddListener(OnUpdateTriggered);
+            EventChannel.FrustumChanged.AddListener(OnFrustumChanged);
+            EventChannel.TilesSelected.AddListener(OnTilesSelected);
+            EventChannel.TransitionCreated.AddListener(OnTransition);
+            EventChannel.ChangeScheduleRequested.AddListener(OnChangeScheduleRequested);
+            EventChannel.ChangesScheduled.AddListener(OnChangesPlanned);
+            EventChannel.ChangeApply.AddListener(OnChangeApply);
         }
 
         private void OnDestroy()
@@ -37,16 +37,16 @@ namespace Netherlands3D.Tilekit
             // This is a debugger after all
             if (!logInProduction && !Application.isEditor) return;
 
-            EventChannel.UpdateTriggered -= OnUpdateTriggered;
-            EventChannel.FrustumChanged -= OnFrustumChanged;
-            EventChannel.TilesSelected -= OnTilesSelected;
-            EventChannel.TransitionCreated -= OnTransition;
-            EventChannel.ChangeScheduleRequested -= OnChangeScheduleRequested;
-            EventChannel.ChangesScheduled -= OnChangesPlanned;
-            EventChannel.ChangeApply -= OnChangeApply;
+            EventChannel.UpdateTriggered.RemoveListener(OnUpdateTriggered);
+            EventChannel.FrustumChanged.RemoveListener(OnFrustumChanged);
+            EventChannel.TilesSelected.RemoveListener(OnTilesSelected);
+            EventChannel.TransitionCreated.RemoveListener(OnTransition);
+            EventChannel.ChangeScheduleRequested.RemoveListener(OnChangeScheduleRequested);
+            EventChannel.ChangesScheduled.RemoveListener(OnChangesPlanned);
+            EventChannel.ChangeApply.RemoveListener(OnChangeApply);
         }
 
-        private void OnUpdateTriggered(EventSource source)
+        private void OnUpdateTriggered(TilekitEventSource source)
         {
             // Let's not do this always, it clutters the console
             if (logTicks)
@@ -55,39 +55,37 @@ namespace Netherlands3D.Tilekit
             }
         }
 
-        private void OnFrustumChanged(EventSource source, Plane[] frustumPlanes)
+        private void OnFrustumChanged(TilekitEventSource source, Plane[] frustumPlanes)
         {
             Log(source, $"The camera frustum was changed, let the games begin!");
         }
 
-        private void OnTilesSelected(EventSource source, Tiles tiles)
+        private void OnTilesSelected(TilekitEventSource source, Tiles tiles)
         {
             Log(source, $"The following number of tiles should be in view: ({tiles.Count}) after transitioning");
         }
 
-        private void OnTransition(EventSource source, List<Change> transition)
+        private void OnTransition(TilekitEventSource source, List<Change> transition)
         {
             Log(source, $"A transition was planned with ({transition.Count}) changes");
         }
 
-        private void OnChangeScheduleRequested(EventSource source, Change change)
+        private void OnChangeScheduleRequested(TilekitEventSource source, Change change)
         {
             Log(source, $"Change for ({change.Tile.Id}) is to be scheduled");
         }
 
-        private void OnChangesPlanned(EventSource source, List<Change> changes)
+        private void OnChangesPlanned(TilekitEventSource source, List<Change> changes)
         {
             Log(source, $"A series ({changes.Count}) of changes was planned");
         }
 
-        private Promise OnChangeApply(EventSource source, Change change)
+        private void OnChangeApply(TilekitEventSource source, Change change)
         {
             Log(source, $"Change for ({change.Tile.Id}) is being applied");
-            
-            return Promise.Resolved() as Promise;
         }
 
-        private void Log(EventSource source, object message)
+        private void Log(TilekitEventSource source, object message)
         {
             // Only log messages in the editor - or when the log in production flag is explicitly enabled
             // This is a debugger after all

@@ -9,11 +9,11 @@ namespace Netherlands3D.Twin.Tilekit
     {
         public TileSet TileSet { get; set; }
         public Tile Tile { get; set; }
-        public EventChannel EventChannel { get; set; }
+        public TilekitEventChannel EventChannel { get; set; }
 
         private void Start()
         {
-            EventChannel.RaiseTileSpawned(new EventSource(EventChannel.Id, TileSet), this);
+            EventChannel.TileSpawned.Invoke(new TilekitEventSource(EventChannel.Id, TileSet), this);
             // We should subscribe to the service bus for loaded tile content - but how do we know whether
             // a TileContent started loading? 2 events? A start load and a finish loading?
         }

@@ -11,8 +11,6 @@ namespace Netherlands3D.Twin.Tilekit.TileMappers
 {
     public class DefaultTileMapper : BaseEventBasedTileMapper
     {
-        [SerializeField] private BaseTileSetFactory tileSetFactory;
-
         [Header("Components")]
         [Tooltip("Determines which tiles are selected for visualisation")]
         [SerializeField] private BaseTileSelector tileSelector;
@@ -23,58 +21,45 @@ namespace Netherlands3D.Twin.Tilekit.TileMappers
 
         private List<Tile> TilesInView { get; } = new();
 
-        protected override IEnumerator Start()
-        {
-            yield return base.Start();
-
-            if (!tileSetFactory) yield break;
-
-            // Wait a frame to give other mono behaviours a chance to register on the event channel in their
-            // start methods before kicking off the chain when a tileSetFactory was provided.
-            yield return null;
-
-            Load(tileSetFactory.CreateTileSet());
-        }
-
-        protected override void OnFrustumChanged(EventSource eventSource, Plane[] planes)
+        protected override void OnFrustumChanged(TilekitEventSource tilekitEventSource, Plane[] planes)
         {
             var stagedTiles = tileSelector.Select(tileSet.Value, planes);
 
-            EventChannel.RaiseTilesSelected(eventSource, stagedTiles);
+            EventChannel.TilesSelected.Invoke(tilekitEventSource, stagedTiles);
         }
 
-        protected override void OnTilesSelected(EventSource eventSource, Tiles tiles)
+        protected override void OnTilesSelected(TilekitEventSource tilekitEventSource, Tiles tiles)
         {
             var transition = transitionPlanner.CreateTransition(TilesInView, tiles);
 
-            EventChannel.RaiseTransitionCreated(eventSource, transition);
+            EventChannel.TransitionCreated.Invoke(tilekitEventSource, transition);
         }
 
-        protected override void OnTransition(EventSource eventSource, List<Change> transition)
+        protected override void OnTransition(TilekitEventSource tilekitEventSource, List<Change> transition)
         {
             foreach (var change in transition)
             {
-                EventChannel.RaiseChangeScheduleRequested(eventSource, change);
+                EventChannel.ChangeScheduleRequested.Invoke(tilekitEventSource, change);
             }
 
-            EventChannel.RaiseChangesScheduled(eventSource, transition);
+            EventChannel.ChangesScheduled.Invoke(tilekitEventSource, transition);
         }
 
-        protected override void OnChangeScheduleRequested(EventSource eventSource, Change change)
+        protected override void OnChangeScheduleRequested(TilekitEventSource tilekitEventSource, Change change)
         {
             changeScheduler.Schedule(this, change);
         }
 
-        protected override void OnChangesPlanned(EventSource eventSource, List<Change> changes)
+        protected override void OnChangesPlanned(TilekitEventSource tilekitEventSource, List<Change> changes)
         {
             StartCoroutine(changeScheduler.Apply());
         }
 
-        protected override Promise OnChangeApply(EventSource eventSource, Change change)
+        protected override void OnChangeApply(TilekitEventSource tilekitEventSource, Change change)
         {
             Debug.Log(change.Tile + " is " + change.Type);
 
-            return base.OnChangeApply(eventSource, change);
+            base.OnChangeApply(tilekitEventSource, change);
         }
     }
 }

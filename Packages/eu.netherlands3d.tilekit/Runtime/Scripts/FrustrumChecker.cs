@@ -11,7 +11,7 @@ namespace Netherlands3D.Twin.Tilekit
         [SerializeField] private Camera mainCamera;
         private Plane[] frustumPlanes = new Plane[6];
         private Plane[] previousFrustumPlanes = new Plane[6];
-        private EventChannel EventChannel { get; set; }
+        private TilekitEventChannel EventChannel { get; set; }
 
         private void Awake()
         {
@@ -23,19 +23,19 @@ namespace Netherlands3D.Twin.Tilekit
         {
             mainCamera ??= Camera.main;
             GeometryUtility.CalculateFrustumPlanes(mainCamera, frustumPlanes);
-            EventChannel.UpdateTriggered += OnTick;
+            EventChannel.UpdateTriggered.AddListener(OnTick);
         }
 
         private void OnDestroy()
         {
-            EventChannel.UpdateTriggered -= OnTick;
+            EventChannel.UpdateTriggered.RemoveListener(OnTick);
         }
 
-        private void OnTick(EventSource eventSource)
+        private void OnTick(TilekitEventSource tilekitEventSource)
         {
             if (!IsFrustumChanged()) return;
 
-            EventChannel.RaiseFrustumChanged(eventSource, frustumPlanes);
+            EventChannel.FrustumChanged.Invoke(tilekitEventSource, frustumPlanes);
         }
 
         private bool IsFrustumChanged()

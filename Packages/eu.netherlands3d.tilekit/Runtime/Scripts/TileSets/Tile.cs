@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Tilekit.TileSets
 {
-    public struct Tile : IDisposable
+    public struct Tile : IDisposable, IEquatable<Tile>
     {
         public NativeText Id;
         public BoundingVolume BoundingVolume;
@@ -33,6 +33,21 @@ namespace Netherlands3D.Tilekit.TileSets
             Id.Dispose();
             TileContents.Dispose();
             Children.Dispose();
+        }
+
+        public bool Equals(Tile other)
+        {
+            return Id.Equals(other.Id);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Tile other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
         }
     }
 }

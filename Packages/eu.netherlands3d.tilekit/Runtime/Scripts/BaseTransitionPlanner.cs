@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Tilekit
 {
-    public abstract class BaseTransitionPlanner : MonoBehaviour
+    public abstract class BaseTransitionPlanner : ScriptableObject
     {
         public abstract List<Change> CreateTransition(List<Tile> tilesInView, List<Tile> stagedTiles);
     }
