@@ -34,8 +34,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.Awake();
             CreateTextPopup();
             annotationPropertyData.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
+            WorldInteractionBlocker.ClickedOnBlocker.AddListener(OnBlockerClicked);
         }
-        
+
+        private void OnBlockerClicked()
+        {
+            if(mode == EditMode.TextEdit)
+                SetEditMode(EditMode.Move);
+        }
+
         protected override TransformLayerPropertyData InitializePropertyData()
         {
             return new AnnotationPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale, "");
@@ -98,21 +105,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                     annotation.ReadOnly = true;
                     annotation.SelectableText = true;
                     LayerData.DeselectLayer();
+                    WorldInteractionBlocker.ReleaseBlocker(this);
                     break;    
                 case EditMode.Move:
                     annotation.ReadOnly = true;
                     annotation.SelectableText = false;
                     LayerData.SelectLayer(true);
+                    WorldInteractionBlocker.ReleaseBlocker(this);
                     break;
                 case EditMode.TextEdit:
                     annotation.ReadOnly = false;
                     annotation.SelectableText = true;
                     LayerData.SelectLayer(true);
+                    WorldInteractionBlocker.AddBlocker(this);
                     ClearTransformHandles();
                     break;
             }
         }
-
+        
         private void SetPropertyDataText(string annotationText)
         {
             annotationPropertyData.AnnotationText = annotationText;
