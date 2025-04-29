@@ -5,10 +5,10 @@ using Netherlands3D.Tilekit.TileSets.ImplicitTiling;
 using Unity.Collections;
 using UnityEngine;
 
-namespace Netherlands3D.Tilekit.PredefinedTilesets
+namespace Netherlands3D.Tilekit.TileSetFactories
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Tilekit/WebMapper or XYZ Tiles")]
-    public class ImplicitQuadTreeTileSet : TileSetFactory
+    public class ImplicitQuadTreeTileSet : BaseTileSetFactory
     {
         [SerializeField] private string url = "https://images.huygens.knaw.nl/webmapper/maps/pw-1985/{level}/{x}/{y}.png";
         

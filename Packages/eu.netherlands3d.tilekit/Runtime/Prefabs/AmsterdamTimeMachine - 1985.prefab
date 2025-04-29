@@ -9,8 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5368650744153997827}
-  - component: {fileID: 3234959650951678855}
   - component: {fileID: 8775512218966625150}
+  - component: {fileID: 4172756482750852553}
+  - component: {fileID: 8065384459494597970}
+  - component: {fileID: 8713130252218550269}
+  - component: {fileID: 4774036934513393507}
+  - component: {fileID: 7495171508642680212}
+  - component: {fileID: 7136018041441450364}
   m_Layer: 0
   m_Name: AmsterdamTimeMachine - 1985
   m_TagString: Untagged
@@ -33,39 +38,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3234959650951678855
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3033963501392074573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 418f6a306d0d46de8bd3826619948d43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnTileAdded:
-    m_PersistentCalls:
-      m_Calls: []
-  OnTileRemoved:
-    m_PersistentCalls:
-      m_Calls: []
-  OnTileEntersView:
-    m_PersistentCalls:
-      m_Calls: []
-  OnTileReplacedWith:
-    m_PersistentCalls:
-      m_Calls: []
-  OnTileExitsView:
-    m_PersistentCalls:
-      m_Calls: []
-  TileSetFactory: {fileID: 0}
-  TileSelector: {fileID: 11400000, guid: 2f7fdf7586cef574194a730eb752daac, type: 2}
-  ChangeScheduler: {fileID: 11400000, guid: c1e7fc4d6f346c347911cda65d0199fb, type: 2}
-  TileRenderer: {fileID: 11400000, guid: ce7e3b257883bb844a768f880465543b, type: 2}
-  TilesTransitionPlanner: {fileID: 11400000, guid: 12b5e49cbb8a183469cdcfa5f852ae63,
-    type: 2}
 --- !u!114 &8775512218966625150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,8 +50,117 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4841547077d9411594fe49e00f350545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoStart: 1
-  updateInterval: 200
+  startsPaused: 1
+  updateInterval: 1
   tick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4172756482750852553}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Tilekit.TileMappers.BaseEventBasedTileMapper,
+          eu.netherlands3d.tilekit.Runtime
+        m_MethodName: TriggerUpdate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4172756482750852553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3033963501392074573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83f73cb2df9ee91438585d735d7729c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: 10b54a2b-c2df-4ca4-9f19-ef3d9236c470
+  Loaded:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8775512218966625150}
+        m_TargetAssemblyTypeName: Netherlands3D.Tilekit.Timer, eu.netherlands3d.tilekit.Runtime
+        m_MethodName: Resume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  tileSetFactory: {fileID: 11400000, guid: 26cb693d328a18c4eadeacc05d960a4d, type: 2}
+  tileSelector: {fileID: 8713130252218550269}
+  transitionPlanner: {fileID: 4774036934513393507}
+  changeScheduler: {fileID: 7495171508642680212}
+--- !u!114 &8065384459494597970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3033963501392074573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a5085fde6a944c693621897bded79ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 0}
+--- !u!114 &8713130252218550269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3033963501392074573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d9ae11914404403a1b6b11a1f123308, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projector: {fileID: 7136018041441450364}
+  maximumScreenSpaceError: 5
+  featherAmount: 1
+--- !u!114 &4774036934513393507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3033963501392074573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d587cc0098a48fb96047131bf8e1903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7495171508642680212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3033963501392074573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901606a71e5d486b9201b5ff7df88275, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7136018041441450364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3033963501392074573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e68a52d7f9bb406da80c3b7a5a1e9f32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

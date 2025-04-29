@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Tilekit.TileSets
 {
-    public struct Tile
+    public struct Tile : IDisposable
     {
         public NativeText Id;
         public BoundingVolume BoundingVolume;
@@ -21,11 +21,18 @@ namespace Netherlands3D.Tilekit.TileSets
             Id = new NativeText(Guid.NewGuid().ToString(), Allocator.Persistent);
             BoundingVolume = boundingVolume;
             GeometricError = geometricError;
-            TileContents = new();
-            Children = new();
+            TileContents = new NativeList<TileContent>(Allocator.Persistent);
+            Children = new NativeList<Tile>(Allocator.Persistent);
             ImplicitTiling = new ImplicitTilingScheme(new None());
             Refine = MethodOfRefinement.Replace;
             Transform = Matrix4x4.identity;
+        }
+
+        public void Dispose()
+        {
+            Id.Dispose();
+            TileContents.Dispose();
+            Children.Dispose();
         }
     }
 }

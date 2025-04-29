@@ -36,9 +36,9 @@ namespace Netherlands3D.Twin.Tilekit
 
         private static void TryRemoveChannel(string id)
         {
-            if (!EventChannels.ContainsKey(id)) return;
+            if (!EventChannels.TryGetValue(id, out var eventChannel)) return;
 
-            All.Unsubscribe(EventChannels[id]);
+            All.Unsubscribe(eventChannel);
             EventChannels.Remove(id);
         }
     }

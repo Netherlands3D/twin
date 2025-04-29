@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using Netherlands3D.Tilekit.Changes;
 using Netherlands3D.Tilekit.TileSets;
-using UnityEngine;
 
 namespace Netherlands3D.Tilekit.TilesTransitionPlanners
 {
-    [CreateAssetMenu(menuName = "Netherlands3D/Tilekit/SimpleTilesTransitionPlanner", fileName = "SimpleTilesTransitionPlanner", order = 0)]
-    public class SimpleTilesTransitionPlanner : TilesTransitionPlanner
+    public class CrudeTransitionPlanner : BaseTransitionPlanner
     {
         public override List<Change> CreateTransition(List<Tile> tilesInView, List<Tile> stagedTiles)
         {

@@ -754,6 +754,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e96d038b62419942afd968aadbba8d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!20 &767208772 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5315891981602308678, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
+    type: 3}
+  m_PrefabInstance: {fileID: 1991327936011043875}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &859080883
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1085,7 +1091,7 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 3935638648574772870, guid: fa341848ec16ef84e8f7d63ae9682064,
         type: 3}
-      propertyPath: m_ActiveFontFeatures.Array.data[0]
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 4004765115448188035, guid: fa341848ec16ef84e8f7d63ae9682064,
@@ -1445,18 +1451,6 @@ Transform:
   - {fileID: 12449453}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1990057144 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3234959650951678855, guid: 335ee3277cf4c434f98656f870766088,
-    type: 3}
-  m_PrefabInstance: {fileID: 6984644016733171859}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 418f6a306d0d46de8bd3826619948d43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &596812713273688386
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2034,22 +2028,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.7512772
+      value: 0.20579392
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.6012348
+      value: 0.08769552
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.21253234
+      value: 0.89664197
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.17008613
+      value: -0.38208845
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -2305,7 +2299,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 840209856476251670, guid: 782b1efec9cddc249a806396adc4599c,
         type: 3}
-      propertyPath: dataTypeAdapters.Array.data[1]
+      propertyPath: 'dataTypeAdapters.Array.data[1]'
       value: 
       objectReference: {fileID: 11400000, guid: 4ba05b8b9d9de4889b11a1d074708458,
         type: 2}
@@ -2521,12 +2515,7 @@ PrefabInstance:
     - target: {fileID: 3033963501392074573, guid: 335ee3277cf4c434f98656f870766088,
         type: 3}
       propertyPath: m_Name
-      value: AmsterdamTimeMachine - 1985
-      objectReference: {fileID: 0}
-    - target: {fileID: 3033963501392074573, guid: 335ee3277cf4c434f98656f870766088,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
+      value: Tiles
       objectReference: {fileID: 0}
     - target: {fileID: 5368650744153997827, guid: 335ee3277cf4c434f98656f870766088,
         type: 3}
@@ -2578,76 +2567,84 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8775512218966625150, guid: 335ee3277cf4c434f98656f870766088,
+    - target: {fileID: 8065384459494597970, guid: 335ee3277cf4c434f98656f870766088,
         type: 3}
-      propertyPath: tick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8775512218966625150, guid: 335ee3277cf4c434f98656f870766088,
-        type: 3}
-      propertyPath: tick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8775512218966625150, guid: 335ee3277cf4c434f98656f870766088,
-        type: 3}
-      propertyPath: tick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8775512218966625150, guid: 335ee3277cf4c434f98656f870766088,
-        type: 3}
-      propertyPath: tick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      propertyPath: mainCamera
       value: 
-      objectReference: {fileID: 1990057144}
-    - target: {fileID: 8775512218966625150, guid: 335ee3277cf4c434f98656f870766088,
-        type: 3}
-      propertyPath: tick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 1990057144}
-    - target: {fileID: 8775512218966625150, guid: 335ee3277cf4c434f98656f870766088,
-        type: 3}
-      propertyPath: tick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8775512218966625150, guid: 335ee3277cf4c434f98656f870766088,
-        type: 3}
-      propertyPath: tick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8775512218966625150, guid: 335ee3277cf4c434f98656f870766088,
-        type: 3}
-      propertyPath: tick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Stage
-      objectReference: {fileID: 0}
-    - target: {fileID: 8775512218966625150, guid: 335ee3277cf4c434f98656f870766088,
-        type: 3}
-      propertyPath: tick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: Map
-      objectReference: {fileID: 0}
-    - target: {fileID: 8775512218966625150, guid: 335ee3277cf4c434f98656f870766088,
-        type: 3}
-      propertyPath: tick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.Tilekit.TileSetRenderers.ComposableTileMapper, eu.netherlands3d.tilekit.Runtime
-      objectReference: {fileID: 0}
-    - target: {fileID: 8775512218966625150, guid: 335ee3277cf4c434f98656f870766088,
-        type: 3}
-      propertyPath: tick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: Netherlands3D.Tilekit.TileSetRenderers.ComposableTileMapper, eu.netherlands3d.tilekit.Runtime
-      objectReference: {fileID: 0}
-    - target: {fileID: 8775512218966625150, guid: 335ee3277cf4c434f98656f870766088,
-        type: 3}
-      propertyPath: tick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 8775512218966625150, guid: 335ee3277cf4c434f98656f870766088,
-        type: 3}
-      propertyPath: tick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 767208772}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 335ee3277cf4c434f98656f870766088, type: 3}
+--- !u!1001 &7478696319425990319
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4847158196351382339, guid: 8128403a929db594c8242f4888162069,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4847158196351382339, guid: 8128403a929db594c8242f4888162069,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4847158196351382339, guid: 8128403a929db594c8242f4888162069,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4847158196351382339, guid: 8128403a929db594c8242f4888162069,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4847158196351382339, guid: 8128403a929db594c8242f4888162069,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4847158196351382339, guid: 8128403a929db594c8242f4888162069,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4847158196351382339, guid: 8128403a929db594c8242f4888162069,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4847158196351382339, guid: 8128403a929db594c8242f4888162069,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4847158196351382339, guid: 8128403a929db594c8242f4888162069,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4847158196351382339, guid: 8128403a929db594c8242f4888162069,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7732858472402961379, guid: 8128403a929db594c8242f4888162069,
+        type: 3}
+      propertyPath: m_Name
+      value: TileKitDebugger
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8128403a929db594c8242f4888162069, type: 3}
 --- !u!1001 &7732943800119484192
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6411,7 +6408,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3068879607462487157, guid: 9963fec33e379324db2affcb3f83332f,
         type: 3}
-      propertyPath: tools.Array.data[5]
+      propertyPath: 'tools.Array.data[5]'
       value: 
       objectReference: {fileID: 11400000, guid: f0477d7f987d93b46938af639648a21d,
         type: 2}
@@ -9817,9 +9814,11 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 392614950}
-    m_AddedComponents: [{targetCorrespondingSourceObject: {fileID: 1750429937236319603,
-          guid: 9963fec33e379324db2affcb3f83332f, type: 3}, insertIndex: -1, addedObject: {
-          fileID: 736533353}}]
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1750429937236319603, guid: 9963fec33e379324db2affcb3f83332f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 736533353}
   m_SourcePrefab: {fileID: 100100000, guid: 9963fec33e379324db2affcb3f83332f, type: 3}
 --- !u!224 &7732943800119484193 stripped
 RectTransform:
@@ -10103,3 +10102,4 @@ SceneRoots:
   - {fileID: 311190676}
   - {fileID: 2997518761711757160}
   - {fileID: 6984644016733171859}
+  - {fileID: 7478696319425990319}
