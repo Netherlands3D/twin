@@ -3,13 +3,13 @@ using Netherlands3D.Tilekit.TileSets;
 using Netherlands3D.Tilekit.TileSets.ImplicitTiling;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.Tilekit.TileSelectors
 {
-    [CreateAssetMenu(menuName = "Netherlands3D/Tilekit/TilesInView", fileName = "TilesInView", order = 0)]
-    public class TilesInView : TileSelector
+    public class TilesInView : BaseTileSelector
     {
-        [SerializeField] private Projector projector;
+        [SerializeField] private BaseProjector projector;
         
         [Tooltip("Influences how quickly we switch to more detailed tiles, default: 5; higher is faster and thus higher quality")]
         [Range(1, 100)]
@@ -40,7 +40,7 @@ namespace Netherlands3D.Tilekit.TileSelectors
             
             return Traverse(tileSet.Root);
         }
-        
+
         /// <summary>
         /// Increase or decrease the viewport that in which tiles are selected by a factor. 1 means no increase or
         /// decrease happens, higher than 1 will load more tiles and lower than 1 will start to omit tiles in view. 

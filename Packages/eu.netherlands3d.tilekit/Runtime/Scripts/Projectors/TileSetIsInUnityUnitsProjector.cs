@@ -1,9 +1,6 @@
-using UnityEngine;
-
 namespace Netherlands3D.Tilekit.Projectors
 {
-    [CreateAssetMenu(menuName = "Netherlands3D/Tilekit/Create Default Projector", fileName = "TileSet is in Unity Units", order = 0)]
-    public class TileSetIsInUnityUnitsProjector : Projector
+    public class TileSetIsInUnityUnitsProjector : BaseProjector
     {
         public override float ToUnityUnits(double original)
         {

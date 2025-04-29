@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace Netherlands3D.Tilekit.Changes.ChangeSchedulers
 {
-    [CreateAssetMenu(menuName = "Netherlands3D/Tilekit/Schedulers/Immediate", fileName = "ImmediateChangeScheduler", order = 0)]
-    public class ImmediateChangeScheduler : ChangeScheduler
+    public class ImmediateChangeScheduler : BaseChangeScheduler
     {
         public override IEnumerator Apply()
         {
             foreach (var change in changePlan)
             {
                 change.Value.Trigger();
+                yield return new WaitForEndOfFrame();
             }
 
             yield break;

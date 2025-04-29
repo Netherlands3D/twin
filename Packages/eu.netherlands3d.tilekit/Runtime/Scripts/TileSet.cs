@@ -1,4 +1,3 @@
-using System.Runtime.Serialization;
 using Netherlands3D.Tilekit.TileSets;
 
 namespace Netherlands3D.Tilekit

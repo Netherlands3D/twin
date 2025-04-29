@@ -1,10 +1,11 @@
 ﻿using System;
 using Netherlands3D.Twin.Tilekit.Events;
+using Netherlands3D.Twin.Tilekit.TileMappers;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Tilekit
 {
-    [RequireComponent(typeof(TileMapper2))]
+    [RequireComponent(typeof(BaseEventBasedTileMapper))]
     public class FrustrumChecker : MonoBehaviour
     {
         [SerializeField] private Camera mainCamera;
@@ -15,29 +16,29 @@ namespace Netherlands3D.Twin.Tilekit
         private void Awake()
         {
             // TODO: I do not like this reliance - refactor this
-            EventChannel = GetComponent<TileMapper2>().EventChannel;
+            EventChannel = GetComponent<BaseEventBasedTileMapper>().EventChannel;
         }
 
         private void Start()
         {
             mainCamera ??= Camera.main;
             GeometryUtility.CalculateFrustumPlanes(mainCamera, frustumPlanes);
-            EventChannel.Tick += OnTick;
+            EventChannel.UpdateTriggered += OnTick;
         }
 
         private void OnDestroy()
         {
-            EventChannel.Tick -= OnTick;
+            EventChannel.UpdateTriggered -= OnTick;
         }
 
         private void OnTick(EventSource eventSource)
         {
             if (!IsFrustumChanged()) return;
 
-            EventChannel.FrustumChanged(eventSource, frustumPlanes);
+            EventChannel.RaiseFrustumChanged(eventSource, frustumPlanes);
         }
 
-        public bool IsFrustumChanged()
+        private bool IsFrustumChanged()
         {
             // Every time we repopulate the frustumPlanes array - saving allocations
             GeometryUtility.CalculateFrustumPlanes(mainCamera, frustumPlanes);

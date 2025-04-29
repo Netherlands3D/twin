@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Tilekit
 {
-    public abstract class Projector : ScriptableObject
+    public abstract class BaseProjector : MonoBehaviour
     {
         public abstract float ToUnityUnits(double original);
         public abstract double FromUnityUnits(float original);

@@ -9,6 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8f2d16c01fb4a519baa018a600ca85f, type: 3}
-  m_Name: TestTileRenderer
+  m_Script: {fileID: 11500000, guid: a2af4c2636164c6bbb0cf53f8d2b0014, type: 3}
+  m_Name: Explicit Uniform Grid Tile Set Test
   m_EditorClassIdentifier: 
+  center: {x: 0, y: 0, z: 0}
+  width: 10
+  height: 10
+  tileWidth: 10
+  tileHeight: 10
+  baseGeometricError: 10000

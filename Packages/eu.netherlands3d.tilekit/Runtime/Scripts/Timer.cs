@@ -1,24 +1,25 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.Tilekit
 {
     public class Timer : MonoBehaviour
     {
         // Constant used to signal the UpdateInterval that it needs to trigger each frame.
-        public const int UpdateEveryFrame = 0;
+        private const int UpdateEveryFrame = 0;
 
         [Tooltip("Whether to immediately start the tile system, or wait until 'Resume' is called")]
-        [SerializeField] private bool autoStart = true;
+        [SerializeField] private bool startsPaused = false;
         [Tooltip("Update interval in ms; or 'UpdateEveryFrame' (0) for every frame")]
         [SerializeField] private int updateInterval = 200;
 
         public UnityEvent tick = new();
         
-        public bool AutoStart
+        public bool StartsPaused
         {
-            get => autoStart;
-            set => autoStart = value;
+            get => startsPaused;
+            set => startsPaused = value;
         }
 
         public int UpdateInterval
@@ -31,13 +32,13 @@ namespace Netherlands3D.Tilekit
         
         private void Start()
         {
-            if (AutoStart) Resume();
+            if (!StartsPaused) Resume();
         }
 
         public void Pause()
         {
             IsPaused = true;
-            CancelInvoke(nameof(tick));
+            CancelInvoke(nameof(OnTick));
         }
 
         public void Resume()
