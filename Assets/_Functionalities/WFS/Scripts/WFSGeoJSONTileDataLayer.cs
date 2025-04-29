@@ -18,7 +18,7 @@ namespace Netherlands3D.Functionalities.Wfs
     /// </summary>
     public class WFSGeoJSONTileDataLayer : Layer
     {
-        private const string DefaultEpsgCoordinateSystem = "28992";
+        private const CoordinateSystem DefaultEpsgCoordinateSystem = CoordinateSystem.RD;
         private Netherlands3D.CartesianTiles.TileHandler tileHandler;
         private Config requestConfig { get; set; } = Config.Default();
         
@@ -149,21 +149,6 @@ namespace Netherlands3D.Functionalities.Wfs
             return tile;
         }
 
-        private CoordinateSystem GetCoordinateSystem(string spatialReference)
-        {
-            string coordinateSystemAsString = DefaultEpsgCoordinateSystem;
-            var splitReferenceCode = spatialReference.Split(':');
-            for (int i = 0; i < splitReferenceCode.Length - 1; i++)
-                if (splitReferenceCode[i].ToLower() == "epsg")
-                {
-                    coordinateSystemAsString = splitReferenceCode[^1];
-                    break;
-                }
-
-            CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString, out var foundCoordinateSystem);
-            return foundCoordinateSystem;
-        }
-
         private BoundingBox DetermineBoundingBox(TileChange tileChange, CoordinateSystem system)
         {
             var bottomLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
@@ -179,11 +164,15 @@ namespace Netherlands3D.Functionalities.Wfs
         {
             var queryParameters = QueryString.Decode(new Uri(wfsUrl).Query);
             string spatialReference = queryParameters["srsname"];
-            CoordinateSystem system = GetCoordinateSystem(spatialReference);
+
+            CoordinateSystem system = CoordinateSystems.FindCoordinateSystem(spatialReference);
+            if (system == CoordinateSystem.Undefined)
+                system = DefaultEpsgCoordinateSystem;
+            
             var boundingBox = DetermineBoundingBox(tileChange, system);
             
             //we need to add the coordinate system value to the bbox as 5th value according to the ogc standards
-            string url = wfsUrl.Replace("{0}", boundingBox.ToString() + "," + ((int)system).ToString());
+            string url = wfsUrl.Replace("{0}", boundingBox.ToString() + "," + spatialReference);
 
             string jsonString = null;
             var geoJsonRequest = Uxios.DefaultInstance.Get<string>(new Uri(url), requestConfig);
@@ -196,11 +185,17 @@ namespace Netherlands3D.Functionalities.Wfs
 
             if (string.IsNullOrEmpty(jsonString) == false)
             {
-                var parser = new GeoJSONParser(0.01f);
-                parser.OnFeatureParsed.AddListener(wfsGeoJSONLayer.AddFeatureVisualisation);
-                yield return parser.ParseJSONString(jsonString);
+                //the 250 comes from a standard empty featurecollection json response approximate text length
+                int minLength = Math.Min(250, jsonString.Length);
+                string emptyCheckString = jsonString.Substring(0, minLength).Replace(" ", "");
+                bool emptyCollection = emptyCheckString.Contains("\"totalFeatures\":0");
+                if (!emptyCollection)
+                {                    
+                    var parser = new GeoJSONParser(0.01f);
+                    parser.OnFeatureParsed.AddListener(wfsGeoJSONLayer.AddFeatureVisualisation);
+                    yield return parser.ParseJSONString(jsonString);
+                }
             }
-
             callback?.Invoke(tileChange);
         }
 
