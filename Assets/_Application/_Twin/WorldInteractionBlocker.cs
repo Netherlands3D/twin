@@ -38,7 +38,6 @@ namespace Netherlands3D.Twin
 
         private void UpdateBlock()
         {
-            print(blockingObjects.Count);
             gameObject.SetActive(blockingObjects.Count > 0);
         }
 

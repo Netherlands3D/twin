@@ -23,7 +23,8 @@ namespace Netherlands3D.Twin.UI
         public UnityEvent TextFieldSelected;
         public UnityEvent TextFieldDeselected;
         public UnityEvent TextFieldDoubleClicked;
-
+        public UnityEvent TextFieldInputConfirmed;
+        
         public bool ReadOnly
         {
             get => textField.readOnly;
@@ -102,7 +103,10 @@ namespace Netherlands3D.Twin.UI
                 EventSystem.current.SetSelectedGameObject(textField.gameObject, null);
                 textField.ActivateInputField();
                 textField.caretPosition = caretPosition + 1;
+                return;
             }
+            
+            TextFieldInputConfirmed.Invoke();
         }
 
         public void Show(string text, Vector3 atScreenPosition)
