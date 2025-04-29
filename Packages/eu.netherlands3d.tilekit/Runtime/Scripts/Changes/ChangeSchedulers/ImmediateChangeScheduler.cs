@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Tilekit.Changes.ChangeSchedulers
 {
+    [CreateAssetMenu(menuName = "Tilekit/Changes/ImmediateScheduler", fileName = "ImmediateChangeScheduler", order = 0)]
     public class ImmediateChangeScheduler : BaseChangeScheduler
     {
         public override IEnumerator Apply()
@@ -10,7 +11,6 @@ namespace Netherlands3D.Tilekit.Changes.ChangeSchedulers
             foreach (var change in changePlan)
             {
                 change.Value.Trigger();
-                yield return new WaitForEndOfFrame();
             }
 
             yield break;

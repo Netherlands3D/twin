@@ -8,25 +8,23 @@ using UnityEngine;
 
 namespace Netherlands3D.Tilekit
 {
-    public abstract class BaseChangeScheduler : MonoBehaviour
+    public abstract class BaseChangeScheduler : ScriptableObject
     {
         protected readonly ChangePlan changePlan = new();
         
         public virtual void Schedule(BaseTileMapper tileMapper, Change change)
         {
-            change.UsingAction(changeToBePerformed => ApplyChange(tileMapper, changeToBePerformed));
+            // change.UsingAction(changeToBePerformed => ApplyChange(tileMapper, changeToBePerformed));
         
             changePlan.Plan(change);
         }
 
-        private Promise ApplyChange(BaseTileMapper tileMapper, Change changeToBePerformed)
+        private void ApplyChange(BaseTileMapper tileMapper, Change changeToBePerformed)
         {
             if (tileMapper is BaseEventBasedTileMapper eventBasedTileMapper)
             {
-                return eventBasedTileMapper.EventChannel.RaiseChangeApply(eventBasedTileMapper.EventSource, changeToBePerformed);
+                eventBasedTileMapper.EventChannel.ChangeApply.Invoke(eventBasedTileMapper.TilekitEventSource, changeToBePerformed);
             }
-
-            return Promise.Rejected(new Exception("Unsupported tile mapper")) as Promise;
         }
 
         public abstract IEnumerator Apply();

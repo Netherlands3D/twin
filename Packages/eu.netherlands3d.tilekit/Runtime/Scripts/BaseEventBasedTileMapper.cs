@@ -18,75 +18,73 @@ namespace Netherlands3D.Twin.Tilekit.TileMappers
         [Header("Events")]
         public UnityEvent<TileSet> Loaded = new();
         
-        public EventChannel EventChannel => EventBus.Channel(Id);
-        public EventSource EventSource { get; private set; }
+        public TilekitEventChannel EventChannel => EventBus.Channel(Id);
+        public TilekitEventSource TilekitEventSource { get; private set; }
 
-        protected virtual IEnumerator Start()
+        protected virtual void Start()
         {
-            EventChannel.TileSetLoaded += OnTileSetLoaded;
-            EventChannel.FrustumChanged += OnFrustumChanged;
-            EventChannel.TilesSelected += OnTilesSelected;
-            EventChannel.TransitionCreated += OnTransition;
-            EventChannel.ChangeScheduleRequested += OnChangeScheduleRequested;
-            EventChannel.ChangesScheduled += OnChangesPlanned;
-            EventChannel.ChangeApply += OnChangeApply;
-            
-            yield break;
+            EventChannel.TileSetLoaded.AddListener(OnTileSetLoaded);
+            EventChannel.FrustumChanged.AddListener(OnFrustumChanged);
+            EventChannel.TilesSelected.AddListener(OnTilesSelected);
+            EventChannel.TransitionCreated.AddListener(OnTransition);
+            EventChannel.ChangeScheduleRequested.AddListener(OnChangeScheduleRequested);
+            EventChannel.ChangesScheduled.AddListener(OnChangesPlanned);
+            EventChannel.ChangeApply.AddListener(OnChangeApply);
         }
 
         private void OnDestroy()
         {
-            EventChannel.TileSetLoaded -= OnTileSetLoaded;
-            EventChannel.FrustumChanged -= OnFrustumChanged;
-            EventChannel.TilesSelected -= OnTilesSelected;
-            EventChannel.TransitionCreated -= OnTransition;
-            EventChannel.ChangeScheduleRequested -= OnChangeScheduleRequested;
-            EventChannel.ChangesScheduled -= OnChangesPlanned;
-            EventChannel.ChangeApply -= OnChangeApply;
+            EventChannel.TileSetLoaded.RemoveListener(OnTileSetLoaded);
+            EventChannel.FrustumChanged.RemoveListener(OnFrustumChanged);
+            EventChannel.TilesSelected.RemoveListener(OnTilesSelected);
+            EventChannel.TransitionCreated.RemoveListener(OnTransition);
+            EventChannel.ChangeScheduleRequested.RemoveListener(OnChangeScheduleRequested);
+            EventChannel.ChangesScheduled.RemoveListener(OnChangesPlanned);
+            EventChannel.ChangeApply.RemoveListener(OnChangeApply);
         }
 
         public override void Load(TileSet tileSet)
         {
-            EventSource = new EventSource(EventChannel.Id, tileSet);
+            TilekitEventSource = new TilekitEventSource(EventChannel.Id, tileSet);
 
             base.Load(tileSet);
             
-            EventChannel.RaiseTileSetLoaded(EventSource, tileSet);
+            EventChannel.TileSetLoaded.Invoke(TilekitEventSource, tileSet);
         }
 
         public void TriggerUpdate()
         {
-            EventChannel.RaiseTriggerUpdated(EventSource);
+            EventChannel.UpdateTriggered.Invoke(TilekitEventSource);
         }
 
-        private void OnTileSetLoaded(EventSource source, TileSet tileSet)
+        private void OnTileSetLoaded(TilekitEventSource source, TileSet tileSet)
         {
             Loaded.Invoke(tileSet);
         }
 
-        protected virtual void OnFrustumChanged(EventSource eventSource, Plane[] planes)
+        protected virtual void OnFrustumChanged(TilekitEventSource tilekitEventSource, Plane[] planes)
         {
         }
 
-        protected virtual void OnTilesSelected(EventSource eventSource, Tiles tiles)
+        protected virtual void OnTilesSelected(TilekitEventSource tilekitEventSource, Tiles tiles)
         {
         }
 
-        protected virtual void OnTransition(EventSource eventSource, List<Change> transition)
+        protected virtual void OnTransition(TilekitEventSource tilekitEventSource, List<Change> transition)
         {
         }
 
-        protected virtual void OnChangeScheduleRequested(EventSource eventSource, Change change)
+        protected virtual void OnChangeScheduleRequested(TilekitEventSource tilekitEventSource, Change change)
         {
         }
 
-        protected virtual void OnChangesPlanned(EventSource eventSource, List<Change> changes)
+        protected virtual void OnChangesPlanned(TilekitEventSource tilekitEventSource, List<Change> changes)
         {
         }
 
-        protected virtual Promise OnChangeApply(EventSource eventSource, Change change)
+        protected virtual void OnChangeApply(TilekitEventSource tilekitEventSource, Change change)
         {
-            return Promise.Resolved() as Promise;
+            
         }
     }
 }

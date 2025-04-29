@@ -11,11 +11,7 @@ GameObject:
   - component: {fileID: 5368650744153997827}
   - component: {fileID: 8775512218966625150}
   - component: {fileID: 4172756482750852553}
-  - component: {fileID: 8065384459494597970}
-  - component: {fileID: 8713130252218550269}
-  - component: {fileID: 4774036934513393507}
-  - component: {fileID: 7495171508642680212}
-  - component: {fileID: 7136018041441450364}
+  - component: {fileID: 8248537487248850355}
   m_Layer: 0
   m_Name: AmsterdamTimeMachine - 1985
   m_TagString: Untagged
@@ -96,71 +92,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  tileSelector: {fileID: 11400000, guid: 773c0ea665931dc42b0b478b067d040a, type: 2}
+  transitionPlanner: {fileID: 11400000, guid: 766eae94647cff447bd5f1bbaa41c62f, type: 2}
+  changeScheduler: {fileID: 11400000, guid: 6873600379d6732468cd9c3d9ff0288e, type: 2}
+--- !u!114 &8248537487248850355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3033963501392074573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49834124c34fee44b99aa97b8807c188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   tileSetFactory: {fileID: 11400000, guid: 26cb693d328a18c4eadeacc05d960a4d, type: 2}
-  tileSelector: {fileID: 8713130252218550269}
-  transitionPlanner: {fileID: 4774036934513393507}
-  changeScheduler: {fileID: 7495171508642680212}
---- !u!114 &8065384459494597970
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3033963501392074573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a5085fde6a944c693621897bded79ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
---- !u!114 &8713130252218550269
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3033963501392074573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d9ae11914404403a1b6b11a1f123308, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projector: {fileID: 7136018041441450364}
-  maximumScreenSpaceError: 5
-  featherAmount: 1
---- !u!114 &4774036934513393507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3033963501392074573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d587cc0098a48fb96047131bf8e1903, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7495171508642680212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3033963501392074573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 901606a71e5d486b9201b5ff7df88275, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7136018041441450364
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3033963501392074573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e68a52d7f9bb406da80c3b7a5a1e9f32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
