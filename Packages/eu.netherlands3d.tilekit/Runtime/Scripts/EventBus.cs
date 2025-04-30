@@ -5,12 +5,12 @@ namespace Netherlands3D.Twin.Tilekit
 {
     public static class EventBus
     {
-        private static readonly Dictionary<string, TilekitEventChannel> EventChannels = new();
+        private static readonly Dictionary<string, TileSetEventStream> EventStreams = new();
 
         /// <summary>
         /// Exposes events for all channels, if you want to listen to anything: register on this.
         /// </summary>
-        public static TilekitEventChannel All { get; } = new("all");
+        public static TileSetEventStream All { get; } = new("all");
 
         /// <summary>
         /// Events for a single channel - such as a single tilemapper - to separate concerns and to
@@ -18,28 +18,28 @@ namespace Netherlands3D.Twin.Tilekit
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static TilekitEventChannel Channel(string id)
+        public static TileSetEventStream Stream(string id)
         {
-            return TryAddChannel(id);
+            return TryAddStream(id);
         }
 
-        private static TilekitEventChannel TryAddChannel(string id)
+        private static TileSetEventStream TryAddStream(string id)
         {
-            if (!EventChannels.ContainsKey(id))
+            if (!EventStreams.ContainsKey(id))
             {
-                EventChannels[id] = new TilekitEventChannel(id);
-                All.AddListener(EventChannels[id]);
+                EventStreams[id] = new TileSetEventStream(id);
+                All.AddListener(EventStreams[id]);
             }
 
-            return EventChannels[id];
+            return EventStreams[id];
         }
 
-        private static void TryRemoveChannel(string id)
+        private static void TryRemoveStream(string id)
         {
-            if (!EventChannels.TryGetValue(id, out var eventChannel)) return;
+            if (!EventStreams.TryGetValue(id, out var eventStream)) return;
 
-            All.RemoveListener(eventChannel);
-            EventChannels.Remove(id);
+            All.RemoveListener(eventStream);
+            EventStreams.Remove(id);
         }
     }
 }

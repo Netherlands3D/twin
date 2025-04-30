@@ -19,47 +19,45 @@ namespace Netherlands3D.Twin.Tilekit.TileMappers
         [Tooltip("How will changes be scheduled and executed")]
         [SerializeField] private BaseChangeScheduler changeScheduler;
 
-        private List<Tile> TilesInView { get; } = new();
-
-        protected override void OnFrustumChanged(TilekitEventSource tilekitEventSource, Plane[] planes)
+        protected override void OnFrustumChanged(TileSetEventStreamContext tileSetEventStreamContext, Plane[] planes)
         {
-            var stagedTiles = tileSelector.Select(tileSet.Value, planes);
+            var stagedTiles = tileSelector.Select(TileSetProvider.TileSet.Value, planes);
 
-            EventChannel.TilesSelected.Invoke(tilekitEventSource, stagedTiles);
+            EventStream.TilesSelected.Invoke(tileSetEventStreamContext, stagedTiles);
         }
 
-        protected override void OnTilesSelected(TilekitEventSource tilekitEventSource, Tiles tiles)
+        protected override void OnTilesSelected(TileSetEventStreamContext tileSetEventStreamContext, Tiles tiles)
         {
             var transition = transitionPlanner.CreateTransition(TilesInView, tiles);
 
-            EventChannel.TransitionCreated.Invoke(tilekitEventSource, transition);
+            EventStream.TransitionCreated.Invoke(tileSetEventStreamContext, transition);
         }
 
-        protected override void OnTransition(TilekitEventSource tilekitEventSource, List<Change> transition)
+        protected override void OnTransition(TileSetEventStreamContext tileSetEventStreamContext, List<Change> transition)
         {
             foreach (var change in transition)
             {
-                EventChannel.ChangeScheduleRequested.Invoke(tilekitEventSource, change);
+                EventStream.ChangeScheduleRequested.Invoke(tileSetEventStreamContext, change);
             }
 
-            EventChannel.ChangesScheduled.Invoke(tilekitEventSource, transition);
+            EventStream.ChangesScheduled.Invoke(tileSetEventStreamContext, transition);
         }
 
-        protected override void OnChangeScheduleRequested(TilekitEventSource tilekitEventSource, Change change)
+        protected override void OnChangeScheduleRequested(TileSetEventStreamContext tileSetEventStreamContext, Change change)
         {
             changeScheduler.Schedule(this, change);
         }
 
-        protected override void OnChangesPlanned(TilekitEventSource tilekitEventSource, List<Change> changes)
+        protected override void OnChangesPlanned(TileSetEventStreamContext tileSetEventStreamContext, List<Change> changes)
         {
             StartCoroutine(changeScheduler.Apply());
         }
 
-        protected override void OnChangeApply(TilekitEventSource tilekitEventSource, Change change)
+        protected override void OnChangeApply(TileSetEventStreamContext tileSetEventStreamContext, Change change)
         {
             Debug.Log(change.Tile + " is " + change.Type);
 
-            base.OnChangeApply(tilekitEventSource, change);
+            base.OnChangeApply(tileSetEventStreamContext, change);
         }
     }
 }

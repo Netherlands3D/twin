@@ -10,10 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 5368650744153997827}
   - component: {fileID: 8775512218966625150}
-  - component: {fileID: 4172756482750852553}
   - component: {fileID: 8248537487248850355}
+  - component: {fileID: 4172756482750852553}
+  - component: {fileID: 8129797830824315838}
   m_Layer: 0
-  m_Name: AmsterdamTimeMachine - 1985
+  m_Name: Uniform Grid Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,6 +65,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8248537487248850355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3033963501392074573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49834124c34fee44b99aa97b8807c188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileSetFactory: {fileID: 11400000, guid: 26cb693d328a18c4eadeacc05d960a4d, type: 2}
 --- !u!114 &4172756482750852553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,7 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83f73cb2df9ee91438585d735d7729c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Id>k__BackingField: 10b54a2b-c2df-4ca4-9f19-ef3d9236c470
+  TileSetProvider: {fileID: 8248537487248850355}
   Loaded:
     m_PersistentCalls:
       m_Calls:
@@ -95,7 +109,7 @@ MonoBehaviour:
   tileSelector: {fileID: 11400000, guid: 773c0ea665931dc42b0b478b067d040a, type: 2}
   transitionPlanner: {fileID: 11400000, guid: 766eae94647cff447bd5f1bbaa41c62f, type: 2}
   changeScheduler: {fileID: 11400000, guid: 6873600379d6732468cd9c3d9ff0288e, type: 2}
---- !u!114 &8248537487248850355
+--- !u!114 &8129797830824315838
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,7 +118,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 3033963501392074573}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49834124c34fee44b99aa97b8807c188, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a5085fde6a944c693621897bded79ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileSetFactory: {fileID: 11400000, guid: 26cb693d328a18c4eadeacc05d960a4d, type: 2}
+  tileSetProvider: {fileID: 8248537487248850355}
+  mainCamera: {fileID: 0}
