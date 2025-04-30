@@ -34,8 +34,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.Awake();
             CreateTextPopup();
             annotationPropertyData.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
+            WorldInteractionBlocker.ClickedOnBlocker.AddListener(OnBlockerClicked);
         }
-        
+
+        private void OnBlockerClicked()
+        {
+            if(mode == EditMode.TextEdit)
+                SetEditMode(EditMode.Move);
+        }
+
         protected override TransformLayerPropertyData InitializePropertyData()
         {
             return new AnnotationPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale, "");
@@ -47,15 +54,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
             annotation = Instantiate(popoutPrefab, canvasTransform.transform);
             annotation.RectTransform().SetPivot(PivotPresets.BottomCenter);
-            annotation.transform.SetSiblingIndex(0);
+            annotation.transform.SetSiblingIndex(1); //0 is for the blocker plane, and we want this to be in front of that, but behind the rest
             annotation.Show(annotationPropertyData.AnnotationText, WorldTransform.Coordinate, true);
             annotation.ReadOnly = !layerTool.Open;
             
             annotation.OnEndEdit.AddListener(SetPropertyDataText);
             annotation.TextFieldSelected.AddListener(OnAnnotationSelected); // avoid transform handles from being able to move the annotation when trying to select text
             annotation.TextFieldDoubleClicked.AddListener(OnAnnotationDoubleClicked);
+            annotation.TextFieldInputConfirmed.AddListener(OnAnnotationTextConfirmed);
         }
-        
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -64,7 +72,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.OnEndEdit.RemoveListener(SetPropertyDataText);
             annotation.TextFieldSelected.RemoveListener(OnAnnotationSelected);
             annotation.TextFieldDoubleClicked.RemoveListener(OnAnnotationDoubleClicked);
+            annotation.TextFieldInputConfirmed.RemoveListener(OnAnnotationTextConfirmed);
 
+            WorldInteractionBlocker.ClickedOnBlocker.RemoveListener(OnBlockerClicked);
+            
             Destroy(annotation.gameObject);
         }
 
@@ -88,6 +99,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 SetEditMode(EditMode.TextEdit);
             }
         }
+        
+        private void OnAnnotationTextConfirmed()
+        {
+            SetEditMode(EditMode.Move);
+        }
 
         private void SetEditMode(EditMode newMode)
         {
@@ -98,21 +114,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                     annotation.ReadOnly = true;
                     annotation.SelectableText = true;
                     LayerData.DeselectLayer();
+                    WorldInteractionBlocker.ReleaseBlocker(this);
                     break;    
                 case EditMode.Move:
                     annotation.ReadOnly = true;
                     annotation.SelectableText = false;
                     LayerData.SelectLayer(true);
+                    WorldInteractionBlocker.ReleaseBlocker(this);
                     break;
                 case EditMode.TextEdit:
                     annotation.ReadOnly = false;
                     annotation.SelectableText = true;
                     LayerData.SelectLayer(true);
+                    WorldInteractionBlocker.AddBlocker(this);
                     ClearTransformHandles();
                     break;
             }
         }
-
+        
         private void SetPropertyDataText(string annotationText)
         {
             annotationPropertyData.AnnotationText = annotationText;
