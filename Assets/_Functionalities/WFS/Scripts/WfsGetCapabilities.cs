@@ -105,13 +105,9 @@ namespace Netherlands3D.Functionalities.Wfs
                 var upperCornerNode = bboxNode.SelectSingleNode("*[local-name()='upperCorner']", namespaceManager);
                 var crsString = bboxNode.Attributes["srsName"]?.Value; // Use srsName instead of crs
 
-                var hasCRS = CoordinateSystems.FindCoordinateSystem(crsString, out var crs);
-
-                if (!hasCRS)
-                {
-                    crs = CoordinateSystem.CRS84; //default
-                    Debug.LogWarning("Custom CRS BBox found, but not able to be parsed, defaulting to WGS84 CRS. Founds CRS string: " + crsString);
-                }
+                CoordinateSystem crs = CoordinateSystems.FindCoordinateSystem(crsString);
+                if(crs == CoordinateSystem.Undefined)
+                    crs = CoordinateSystem.CRS84;
 
                 if (lowerCornerNode != null && upperCornerNode != null)
                 {
@@ -126,6 +122,7 @@ namespace Netherlands3D.Functionalities.Wfs
                     return globalBounds;
                 }
             }
+
 
             Debug.LogWarning("Global bounding box information not found in WFS GetCapabilities response.");
             return null;
@@ -185,12 +182,10 @@ namespace Netherlands3D.Functionalities.Wfs
                 return CoordinateSystem.Undefined;
             }
 
-            var hasCRS = CoordinateSystems.FindCoordinateSystem(crsNode.InnerText, out var crs);
-            if (hasCRS)
-                return crs;
-
-            Debug.LogWarning("Could not parse Coordinate Reference System (CRS) in the WFS GetCapabilities response. Founds CRS string: " + crsNode.InnerText);
-            return CoordinateSystem.Undefined;
+            CoordinateSystem crs = CoordinateSystems.FindCoordinateSystem(crsNode.InnerText);
+            if(crs == CoordinateSystem.Undefined)
+                Debug.LogWarning("Could not parse Coordinate Reference System (CRS) in the WFS GetCapabilities response. Founds CRS string: " + crsNode.InnerText);
+            return crs;
         }
 
         public bool WFSBboxFilterCapability()

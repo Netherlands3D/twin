@@ -97,31 +97,20 @@ namespace Netherlands3D.Functionalities.Wms
                 string layerName = layerNode.SelectSingleNode("*[local-name()='Name']", namespaceManager)?.InnerText;
                 if (string.IsNullOrEmpty(layerName)) continue;
 
-                // We prefer EPSG:28992 because it matches our application better ..
+                //Trying to resolve crs in the following order EPSG:28992, WGS84, default to first found
                 var boundingBoxNode = layerNode.SelectSingleNode("*[local-name()='BoundingBox' and @CRS='EPSG:28992']", namespaceManager);
-                // .. Ok, WGS84 is Okay too ..  
                 boundingBoxNode ??= layerNode.SelectSingleNode("*[local-name()='BoundingBox' and @CRS='EPSG:3857']", namespaceManager);
-                // .. Seriously? That one isn't there either? Ok, let's pick the first and see what gives
                 boundingBoxNode ??= layerNode.SelectSingleNode("*[local-name()='BoundingBox']", namespaceManager);
                 
-                // Wait what? Nothing?
                 if (boundingBoxNode == null) continue;
                 
                 string crsString = boundingBoxNode.Attributes["CRS"].Value;
-                // A hack used to aid identifying the correct CRS, the crsString that our coordinate converter
-                // looks for is CRS84 and not CRS:84. The latter is the actual designation. Please see Annex B of
-                // the WMS specification https://portal.ogc.org/files/?artifact_id=14416 to see more information
-                // on the use of the CRS namespace -hence the colon between CRS and 84.
-                if (crsString == "CRS:84") crsString = "CRS84";
-
-                var hasCRS = CoordinateSystems.FindCoordinateSystem(crsString, out var crs);
-                if (!hasCRS)
-                {
-                    crs = CoordinateSystem.CRS84; //default
-                    Debug.LogWarning("CRS for BBox could not be recognized, defaulting to CRS:84. Found string: " + crsString);
-                }
-
+                
+                CoordinateSystem crs = CoordinateSystems.FindCoordinateSystem(crsString);
+                if (crs == CoordinateSystem.Undefined)
+                    crs = CoordinateSystem.CRS84; 
                 container.LayerBoundingBoxes[layerName] = ParseBoundingBox(boundingBoxNode, crs);
+
             }
 
             return container;
@@ -228,10 +217,10 @@ namespace Netherlands3D.Functionalities.Wms
             {
                 var crsText = crsNode.InnerText;
                 crsText = crsText == "CRS:84" ? "CRS84" : crsText;
-                var hasCRS = CoordinateSystems.FindCoordinateSystem(crsText, out var crs);
-                if (hasCRS)
+                CoordinateSystem crs = CoordinateSystems.FindCoordinateSystem(crsText);
+                if (crs != CoordinateSystem.Undefined)
                 {
-                    supportedCrsDictionary.Add(crs, crsNode.InnerText);
+                    supportedCrsDictionary.TryAdd(crs, crsNode.InnerText);
                 }
             }
 
