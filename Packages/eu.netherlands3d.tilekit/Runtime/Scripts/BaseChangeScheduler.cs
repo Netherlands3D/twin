@@ -23,7 +23,7 @@ namespace Netherlands3D.Tilekit
         {
             if (tileMapper is BaseEventBasedTileMapper eventBasedTileMapper)
             {
-                eventBasedTileMapper.EventChannel.ChangeApply.Invoke(eventBasedTileMapper.TilekitEventSource, changeToBePerformed);
+                eventBasedTileMapper.EventStream.ChangeApply.Invoke(eventBasedTileMapper.EventStreamContext, changeToBePerformed);
             }
         }
 

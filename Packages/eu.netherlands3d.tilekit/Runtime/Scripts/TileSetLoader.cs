@@ -1,5 +1,6 @@
 using System.Collections;
-using Netherlands3D.Tilekit.TileSets;
+using Netherlands3D.Twin.Tilekit;
+using Netherlands3D.Twin.Tilekit.Events;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit
@@ -11,19 +12,24 @@ namespace Netherlands3D.Tilekit
     /// By separating this class out, instead of this being a part of the BaseTileMapper, we can ensure the TileMapper's
     /// Start method does not need to be IENumerator and will simplify that class by separating this responsibility. 
     /// </summary>
-    [RequireComponent(typeof(BaseTileMapper))]
-    public class TileSetLoader : MonoBehaviour
+    public class TileSetLoader : BaseTileSetProvider
     {
         [SerializeField] private BaseTileSetFactory tileSetFactory;
-        
-        private IEnumerator Start()
+
+        protected override IEnumerator Start()
         {
             // Wait 1 frame for all eventbus subscribers to finish subscribing in their start methods, before we begin
             // emitting events as a result of loading a tileset
             yield return null;
          
             // Do it.
-            GetComponent<BaseTileMapper>().Load(tileSetFactory.CreateTileSet());
+            TileSet = tileSetFactory.CreateTileSet();
+
+            // Inform the rest of the system that this TileSet is now in business
+            EventBus.Stream(TileSetId).TileSetLoaded.Invoke(
+                new TileSetEventStreamContext(TileSetId, TileSet.Value), 
+                TileSet.Value
+            );
         }
     }
 }

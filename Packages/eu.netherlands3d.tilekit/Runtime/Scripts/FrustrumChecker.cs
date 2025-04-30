@@ -1,41 +1,37 @@
 ﻿using System;
+using Netherlands3D.Tilekit;
 using Netherlands3D.Twin.Tilekit.Events;
-using Netherlands3D.Twin.Tilekit.TileMappers;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Tilekit
 {
-    [RequireComponent(typeof(BaseEventBasedTileMapper))]
     public class FrustrumChecker : MonoBehaviour
     {
+        [SerializeField] private BaseTileSetProvider tileSetProvider;
         [SerializeField] private Camera mainCamera;
         private Plane[] frustumPlanes = new Plane[6];
         private Plane[] previousFrustumPlanes = new Plane[6];
-        private TilekitEventChannel EventChannel { get; set; }
-
-        private void Awake()
-        {
-            // TODO: I do not like this reliance - refactor this
-            EventChannel = GetComponent<BaseEventBasedTileMapper>().EventChannel;
-        }
+        private TileSetEventStream EventStream { get; set; }
 
         private void Start()
         {
+            EventStream = EventBus.Stream(tileSetProvider.TileSetId);
+
             mainCamera ??= Camera.main;
             GeometryUtility.CalculateFrustumPlanes(mainCamera, frustumPlanes);
-            EventChannel.UpdateTriggered.AddListener(OnTick);
+            EventStream.UpdateTriggered.AddListener(OnTick);
         }
 
         private void OnDestroy()
         {
-            EventChannel.UpdateTriggered.RemoveListener(OnTick);
+            EventStream.UpdateTriggered.RemoveListener(OnTick);
         }
 
-        private void OnTick(TilekitEventSource tilekitEventSource)
+        private void OnTick(TileSetEventStreamContext tileSetEventStreamContext)
         {
             if (!IsFrustumChanged()) return;
 
-            EventChannel.FrustumChanged.Invoke(tilekitEventSource, frustumPlanes);
+            EventStream.FrustumChanged.Invoke(tileSetEventStreamContext, frustumPlanes);
         }
 
         private bool IsFrustumChanged()
