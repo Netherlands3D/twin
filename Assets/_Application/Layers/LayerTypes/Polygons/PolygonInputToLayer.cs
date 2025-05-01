@@ -173,5 +173,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             lineInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
         }
+        
+        public void SetGridInputModeToCreate(bool isCreateMode)
+        {
+            ActiveLayer?.DeselectLayer();
+
+            // gridinput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
+        }
     }
 }
