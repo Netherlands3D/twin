@@ -136,6 +136,8 @@ MonoBehaviour:
   rotationToggle: {fileID: 8450423594282470260}
   scaleToggle: {fileID: 1359934848958149307}
   visibilityToggle: {fileID: 8830527100689326737}
+  visibilityDialog: {fileID: 9003188680568348102, guid: 7b20863b969f0e34c8a56e230c699e64,
+    type: 3}
 --- !u!114 &3539559494106016469
 MonoBehaviour:
   m_ObjectHideFlags: 0

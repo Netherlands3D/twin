@@ -1,3 +1,4 @@
+using GG.Extensions;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.UI
@@ -12,6 +13,8 @@ namespace Netherlands3D.Twin.UI
         [SerializeField] private ToggleGroupItem scaleToggle;
         [SerializeField] private ToggleGroupItem visibilityToggle;
 
+        [SerializeField] private Dialog visibilityDialog;
+
         public TransformHandleInterfaceToggle TransformHandleInterfaceToggle { get; set; }
         private TransformAxes transformLocks;
 
@@ -20,6 +23,7 @@ namespace Netherlands3D.Twin.UI
             positionToggle.Toggle.onValueChanged.AddListener(UpdateGizmoHandles);
             rotationToggle.Toggle.onValueChanged.AddListener(UpdateGizmoHandles);
             scaleToggle.Toggle.onValueChanged.AddListener(UpdateGizmoHandles);
+            visibilityToggle.Toggle.onValueChanged.AddListener(UpdateVisibility);
         }
         
         private void OnDisable()
@@ -27,12 +31,14 @@ namespace Netherlands3D.Twin.UI
             positionToggle.Toggle.onValueChanged.RemoveListener(UpdateGizmoHandles);
             rotationToggle.Toggle.onValueChanged.RemoveListener(UpdateGizmoHandles);
             scaleToggle.Toggle.onValueChanged.RemoveListener(UpdateGizmoHandles);
+            visibilityToggle.Toggle.onValueChanged.RemoveListener(UpdateVisibility);
         }
 
         private void Start()
         {
             buttonsPanel.gameObject.SetActive(false);
             visibilityPanel.gameObject.SetActive(false);
+
         }
 
         public void ShowPanel(bool show)
@@ -103,6 +109,20 @@ namespace Netherlands3D.Twin.UI
                     positionToggle.Toggle.isOn = true;
                 else if (rotationToggle.IsInteractable)
                     rotationToggle.Toggle.isOn = true;
+            }
+        }
+
+        private void UpdateVisibility(bool invisible)
+        {
+            if(invisible)
+            {
+                ServiceLocator.GetService<DialogService>().ShowDialog(visibilityDialog, new Vector2(20, 0), visibilityToggle.GetComponent<RectTransform>());
+                ServiceLocator.GetService<DialogService>().ActiveDialog.Confirm.AddListener(() => visibilityToggle.Toggle.isOn = false);
+                ServiceLocator.GetService<DialogService>().ActiveDialog.Cancel.AddListener(() => visibilityToggle.Toggle.isOn = false);
+            }
+            else
+            {
+                ServiceLocator.GetService<DialogService>().CloseDialog();
             }
         }
     }
