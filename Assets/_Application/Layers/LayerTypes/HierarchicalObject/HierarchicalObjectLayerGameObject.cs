@@ -198,7 +198,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnSelect()
         {
-            var transformInterfaceToggle = FindAnyObjectByType<TransformHandleInterfaceToggle>(FindObjectsInactive.Include); //todo remove FindObjectOfType
+            var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
 
             if (!transformInterfaceToggle)
             {
@@ -217,7 +217,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected void ClearTransformHandles()
         {
-            var transformInterfaceToggle = FindAnyObjectByType<TransformHandleInterfaceToggle>(FindObjectsInactive.Include);
+            var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
 
             if (transformInterfaceToggle)
                 transformInterfaceToggle.ClearTransformTarget();
