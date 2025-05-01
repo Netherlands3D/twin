@@ -114,15 +114,16 @@ namespace Netherlands3D.Twin.UI
 
         private void UpdateVisibility(bool invisible)
         {
-            if(invisible)
-            {
-                ServiceLocator.GetService<DialogService>().ShowDialog(visibilityDialog, new Vector2(20, 0), visibilityToggle.GetComponent<RectTransform>());
-                ServiceLocator.GetService<DialogService>().ActiveDialog.Confirm.AddListener(() => visibilityToggle.Toggle.isOn = false);
-                ServiceLocator.GetService<DialogService>().ActiveDialog.Cancel.AddListener(() => visibilityToggle.Toggle.isOn = false);
+            DialogService service = ServiceLocator.GetService<DialogService>();
+            if (invisible)
+            {               
+                service.ShowDialog(visibilityDialog, new Vector2(20, 0), visibilityToggle.GetComponent<RectTransform>());
+                service.ActiveDialog.Confirm.AddListener(() => visibilityToggle.Toggle.isOn = false);
+                service.ActiveDialog.Cancel.AddListener(() => visibilityToggle.Toggle.isOn = false);
             }
             else
             {
-                ServiceLocator.GetService<DialogService>().CloseDialog();
+                service.CloseDialog();
             }
         }
     }
