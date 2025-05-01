@@ -35,8 +35,8 @@ RectTransform:
   - {fileID: 6372656947723328469}
   m_Father: {fileID: 2112993315409404632}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 48, y: 144}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -131,9 +131,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonsPanel: {fileID: 2635942000174436192}
+  visibilityPanel: {fileID: 5303830597683277324}
   positionToggle: {fileID: 8959399477768747457}
   rotationToggle: {fileID: 8450423594282470260}
   scaleToggle: {fileID: 1359934848958149307}
+  visibilityToggle: {fileID: 8830527100689326737}
 --- !u!114 &3539559494106016469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -878,16 +880,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5303830597683277324}
     m_Modifications:
+    - target: {fileID: 1502359589252963781, guid: 317b76632deb4184f8c6322f3f7ea442,
+        type: 3}
+      propertyPath: m_SpriteState.m_HighlightedSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f882e9e7c83786247ba8e967ba43b74e,
+        type: 3}
     - target: {fileID: 3268689214870082055, guid: 317b76632deb4184f8c6322f3f7ea442,
         type: 3}
       propertyPath: m_Type
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3268689214870082055, guid: 317b76632deb4184f8c6322f3f7ea442,
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1536639797, guid: 273f161db5cda784ba2a95d15b93e9f1,
+      objectReference: {fileID: 21300000, guid: 21b6ae271bed1f545bad0a54a178afa5,
         type: 3}
     - target: {fileID: 3268689214870082055, guid: 317b76632deb4184f8c6322f3f7ea442,
         type: 3}
@@ -1075,5 +1083,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9ba6965f8a7c4029816282a298c9cde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8830527100689326737 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 389471132520581330, guid: 317b76632deb4184f8c6322f3f7ea442,
+    type: 3}
+  m_PrefabInstance: {fileID: 9217734234345876035}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5728838514869461426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd24766a62ed1a14a9182e9be7824adf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
