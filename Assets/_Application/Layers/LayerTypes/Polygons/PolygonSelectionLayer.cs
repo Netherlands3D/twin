@@ -16,7 +16,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     {
         Undefined = 0,
         Polygon = 1,
-        Line = 2
+        Line = 2,
+        Grid = 3
     }
 
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "PolygonSelection")]

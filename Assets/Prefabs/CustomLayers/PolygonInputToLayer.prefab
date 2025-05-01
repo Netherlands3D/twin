@@ -366,6 +366,7 @@ MonoBehaviour:
   defaultLineWidth: 10
   polygonPropertySectionPrefab: {fileID: 3186418061294983386, guid: 599137b5f8b96463dbf2bd16d71cd26d,
     type: 3}
+  gridInput: {fileID: 831591527348556828}
 --- !u!114 &1166426914008804660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1829,6 +1830,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8252544850299417775}
     m_Modifications:
+    - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6970481386311860828}
+    - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CreateOrEditGridLayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.Twin.Layers.LayerTypes.Polygons.PolygonInputToLayer, eu.netherlands3d.twin
+      objectReference: {fileID: 0}
     - target: {fileID: 6295639419868117823, guid: dc5ce5f60fb3b074394ab446caa210d5,
         type: 3}
       propertyPath: m_Name
@@ -1894,6 +1915,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc5ce5f60fb3b074394ab446caa210d5, type: 3}
+--- !u!114 &831591527348556828 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 3469043276263805114}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7456305980478204805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6bafcfbd446e9c41acd7452b6146804, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7456305980478204805 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6295639419868117823, guid: dc5ce5f60fb3b074394ab446caa210d5,
