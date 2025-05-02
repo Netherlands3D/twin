@@ -32,12 +32,12 @@ namespace Netherlands3D.SelectionTools
         private MeshRenderer boundsMeshRenderer;
 
         [Header("Invoke")]
-        [SerializeField] private UnityEvent<bool> blockCameraDragging = new();
+        public UnityEvent<bool> blockCameraDragging = new();
         [Tooltip("Fires while a new area is being drawn")]
-        [SerializeField] private UnityEvent<Bounds> whenDrawingArea = new();
+        public UnityEvent<Bounds> whenDrawingArea = new();
         [FormerlySerializedAs("selectedAreaBounds")]
         [Tooltip("Fires when an area is selected")]
-        [SerializeField] private UnityEvent<Bounds> whenAreaIsSelected = new();
+        public UnityEvent<Bounds> whenAreaIsSelected = new();
 
         [Header("Settings")]
         [SerializeField] private float gridSize = 100;
