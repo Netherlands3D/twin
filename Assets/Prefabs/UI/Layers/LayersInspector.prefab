@@ -554,6 +554,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 302449484203745dbac0d82605206394, type: 3}
   - {fileID: 21300000, guid: 675193f4a560b4698b5f5ec01af3ba36, type: 3}
   - {fileID: 21300000, guid: e4bf1be4a2ec6ab4da3735fdfcc314da, type: 3}
+  - {fileID: 21300000, guid: bccdb40b4781c44469f75d211547d352, type: 3}
   layerUIContainer: {fileID: 4503089938938308058}
   dragGhostPrefab: {fileID: -5549004017849562441, guid: f37464b169eec47cf8d80ee264145f3f,
     type: 3}
@@ -1432,7 +1433,7 @@ PrefabInstance:
     - target: {fileID: 6642786459307162966, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.77000046
+      value: 957.23
       objectReference: {fileID: 0}
     - target: {fileID: 6642786459307162966, guid: a1d12948b2baf466d9b8bf9980e98e47,
         type: 3}
