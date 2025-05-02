@@ -14,10 +14,11 @@ using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
-    public class ObjectSelector : MonoBehaviour
+    public class ObjectSelectorService : MonoBehaviour
     {
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
+        public UnityEvent OnDeselect = new();
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
@@ -260,6 +261,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             subObjectSelector.Deselect();
             featureSelector.Deselect();
+            OnDeselect.Invoke();
         }
 
 #if UNITY_EDITOR

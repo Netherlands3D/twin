@@ -31,6 +31,7 @@ namespace Netherlands3D
         {
             if (currentDialog != null)
             {
+                currentDialog.Show(false);
                 Destroy(currentDialog.gameObject);
                 currentDialog = null;
             }

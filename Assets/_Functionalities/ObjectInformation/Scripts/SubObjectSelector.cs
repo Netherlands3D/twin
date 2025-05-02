@@ -57,7 +57,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             string bagId = null;
             Vector3 groundPosition = pointerToWorldPosition.WorldPoint;
             Coordinate coord = new Coordinate(groundPosition);
-            List<IMapping> mappings = ObjectSelector.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
+            List<IMapping> mappings = ObjectSelectorService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
             if (mappings.Count == 0)
                 return bagId;
 

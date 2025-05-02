@@ -9,8 +9,9 @@ namespace Netherlands3D
         [SerializeField] private Button confirm;
         [SerializeField] private Button cancel;
 
-        public UnityEvent Cancel;
-        public UnityEvent Confirm;
+        public UnityEvent Cancel = new();
+        public UnityEvent Confirm = new();
+        public UnityEvent Close = new();
 
         private void Start()
         {
@@ -29,6 +30,8 @@ namespace Netherlands3D
         public void Show(bool show)
         {
             gameObject.SetActive(show);
+            if(!show)
+                Close.Invoke();
         }
     }
 }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.Twin.UI;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
@@ -25,6 +26,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             layer = GetComponent<Layer>();
 
             tileHandler.AddLayer(layer);
+        }
+
+        public override void OnSelect()
+        {
+            var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
+
+            if (!transformInterfaceToggle)
+            {
+                Debug.LogError("Transform handles interface toggles not found, cannot set transform target");
+            }
+            else
+            {
+                transformInterfaceToggle.SetTransformTarget(gameObject);
+            }
+        }
+
+        public override void OnDeselect()
+        {
+            ClearTransformHandles();
+        }
+
+        protected void ClearTransformHandles()
+        {
+            var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
+
+            if (transformInterfaceToggle)
+                transformInterfaceToggle.ClearTransformTarget();
         }
 
         protected virtual void OnDestroy()
