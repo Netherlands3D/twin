@@ -21,6 +21,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
         public UnityEvent OnDeselect = new();
+        public UnityEvent OnSelectDifferentLayer = new();
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
@@ -63,7 +64,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             featureSelector = gameObject.AddComponent<FeatureSelector>();
             featureSelector.SetMappingTree(MappingTree);
 
-            //ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged); work in progress
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged); 
 
             foreach(Tool tool  in activeForTools) 
                 tool.onClose.AddListener(() => Deselect());
@@ -73,16 +74,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         }
 
         private void OnProjectChanged(ProjectData data)
-        {
-            ProjectData.Current.RootLayer.RemovedSelectedLayer.AddListener(OnChangeSelectedLayer);
+        {            
+            ProjectData.Current.RootLayer.AddedSelectedLayer.AddListener(OnChangeSelectedLayer);
         }
 
         private void OnChangeSelectedLayer(LayerData data)
         {
-            if(data == lastSelectedLayerData)
+            if(data != lastSelectedLayerData)
             {
                 Deselect();
                 lastSelectedLayerData = null;
+                OnSelectDifferentLayer.Invoke();
             }
         }
 

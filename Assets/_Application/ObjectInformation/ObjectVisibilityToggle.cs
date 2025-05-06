@@ -8,36 +8,44 @@ namespace Netherlands3D
     public class ObjectVisibilityToggle : MonoBehaviour
     {
         private ObjectSelectorService selector;
+        private TransformHandleInterfaceToggle transformInterfaceToggle;
 
         [SerializeField] private ToggleGroupItem visibilityToggle;
         [SerializeField] private Dialog visibilityDialog;
 
-        private IMapping currentSelectedMapping;
-        private string currentSelectedBagId;
+        private object currentSelectedFeatureObject;
+        private object currentSelectedTransformObject;
+        private string currentSelectedBagId;        
 
         private void Awake()
         {
-            visibilityToggle = GetComponent<ToggleGroupItem>();
-           
+            visibilityToggle = GetComponent<ToggleGroupItem>();           
         }
 
         private void Start()
         {
+            selector = ServiceLocator.GetService<ObjectSelectorService>();
+            transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
+            transformInterfaceToggle.SetTarget.AddListener(OnTransformObjectFound);
+            selector.OnSelectDifferentLayer.AddListener(ClearSelection);
             UpdateButton();
         }
 
         private void OnToggle(bool toggle)
         {
-            if (currentSelectedMapping == null) return;
+            if (currentSelectedFeatureObject == null) return;
 
             DialogService service = ServiceLocator.GetService<DialogService>();
             if (toggle)
             {
                 service.ShowDialog(visibilityDialog, new Vector2(20, 0), visibilityToggle.GetComponent<RectTransform>());
                 service.ActiveDialog.Close.AddListener(() => visibilityToggle.Toggle.isOn = false);
-                
-                HideObjectDialog dialog = service.ActiveDialog as HideObjectDialog;
-                dialog.SetBagId(currentSelectedBagId);
+
+                if (currentSelectedBagId != null)
+                {
+                    HideObjectDialog dialog = service.ActiveDialog as HideObjectDialog;
+                    dialog.SetBagId(currentSelectedBagId);
+                }
             }
             else
             {
@@ -47,7 +55,7 @@ namespace Netherlands3D
 
         private void OnBagIdFound(IMapping mapping, string bagId)
         {
-            currentSelectedMapping = mapping;
+            currentSelectedFeatureObject = mapping.MappingObject;
             currentSelectedBagId = bagId;
 
             //when selecting a new bag id we should close any dialog if active
@@ -57,7 +65,16 @@ namespace Netherlands3D
 
         private void OnFeatureFound(IMapping mapping)
         {
-            currentSelectedMapping = mapping;
+            currentSelectedFeatureObject = mapping.MappingObject;
+
+            //when selecting a new bag id we should close any dialog if active
+            CloseDialog();
+            UpdateButton();
+        }
+
+        private void OnTransformObjectFound(GameObject target)
+        {
+            currentSelectedTransformObject = target;
 
             //when selecting a new bag id we should close any dialog if active
             CloseDialog();
@@ -66,7 +83,7 @@ namespace Netherlands3D
 
         private void ClearSelection()
         {
-            currentSelectedMapping = null;
+            currentSelectedFeatureObject = null;
             currentSelectedBagId = null;
 
             //when there is no selection it makes no sense to have a dialog active
@@ -83,7 +100,7 @@ namespace Netherlands3D
 
         private void UpdateButton()
         {
-            SetVisibile(currentSelectedMapping != null);
+            SetVisibile(currentSelectedFeatureObject != null || currentSelectedTransformObject != null);
         }
 
         private void SetVisibile(bool visible)
@@ -93,8 +110,7 @@ namespace Netherlands3D
         }
 
         private void OnEnable()
-        {
-            selector = ServiceLocator.GetService<ObjectSelectorService>();
+        {          
             selector.SelectSubObjectWithBagId.AddListener(OnBagIdFound);
             selector.SelectFeature.AddListener(OnFeatureFound);
             selector.OnDeselect.AddListener(ClearSelection);
