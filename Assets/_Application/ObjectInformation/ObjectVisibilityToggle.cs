@@ -29,6 +29,15 @@ namespace Netherlands3D
             transformInterfaceToggle.SetTarget.AddListener(OnTransformObjectFound);
             selector.OnSelectDifferentLayer.AddListener(ClearSelection);
             UpdateButton();
+
+            selector = ServiceLocator.GetService<ObjectSelectorService>();
+            selector.SelectSubObjectWithBagId.AddListener(OnBagIdFound);
+            selector.SelectFeature.AddListener(OnFeatureFound);
+            selector.OnDeselect.AddListener(ClearSelection);
+
+            visibilityToggle.Toggle.onValueChanged.AddListener(OnToggle);
+
+            UpdateButton();
         }
 
         private void OnToggle(bool toggle)
@@ -109,19 +118,8 @@ namespace Netherlands3D
                 image.enabled = visible;
         }
 
-        private void OnEnable()
-        {          
-            selector.SelectSubObjectWithBagId.AddListener(OnBagIdFound);
-            selector.SelectFeature.AddListener(OnFeatureFound);
-            selector.OnDeselect.AddListener(ClearSelection);
-
-            visibilityToggle.Toggle.onValueChanged.AddListener(OnToggle);
-
-            UpdateButton();
-        }
-
-        private void OnDisable()
-        {           
+        private void OnDestroy()
+        {            
             selector.SelectSubObjectWithBagId.RemoveListener(OnBagIdFound);
             selector.SelectFeature.RemoveListener(OnFeatureFound);
             selector.OnDeselect.RemoveListener(ClearSelection);
