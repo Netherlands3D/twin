@@ -1,8 +1,5 @@
-using KindMen.Uxios;
 using Netherlands3D.Tilekit.TileSets;
 using Netherlands3D.Tilekit.TileSets.BoundingVolumes;
-using Netherlands3D.Tilekit.TileSets.ImplicitTiling;
-using Unity.Collections;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit.TileSetFactories
@@ -47,7 +44,10 @@ namespace Netherlands3D.Tilekit.TileSetFactories
                         totalBoundingVolume.MinHeight,
                         totalBoundingVolume.MaxHeight
                     );
-                    var child = new Tile(new BoundingVolume(childBoundingVolume), baseGeometricError * .5f);
+                    // Geometric error is set to 0, meaning: this is a leaf that is always visible. We should
+                    // TODO: review the specification of 3D Tiles whether the TileSelector should always treat the leaf
+                    // as present independent of GeoMetric error
+                    var child = new Tile(new BoundingVolume(childBoundingVolume), 0);
                     // It is missing Tile Contents, but we make do without for now
                     root.Children.Add(child);
                 }

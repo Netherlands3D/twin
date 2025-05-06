@@ -2,7 +2,7 @@
 
 namespace Netherlands3D.Tilekit.TileSets
 {
-    public class Tiles : List<Tile>
+    public class Tiles : HashSet<Tile>
     {
         
     }

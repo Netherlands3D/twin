@@ -8,19 +8,28 @@ namespace Netherlands3D.Tilekit.TileSets
     {
         public BaseTileSetProvider TileSetProvider;
 
-        public List<Tile> TilesInView { get; } = new();
+        public HashSet<Tile> TilesInView { get; } = new();
 
-        private void OnDrawGizmosSelected()
+        protected virtual void OnDrawGizmosSelected()
         {
             foreach (var tile in TilesInView)
             {
-                Gizmos.color = Color.blue;
-                Gizmos.DrawCube(tile.BoundingVolume.Center.ToVector3(), tile.BoundingVolume.Size.ToVector3());
-                foreach (var tileContent in tile.TileContents)
-                {
-                    Gizmos.color = Color.green;
-                    Gizmos.DrawCube(tileContent.BoundingVolume.Center.ToVector3(), tileContent.BoundingVolume.Size.ToVector3());
-                }
+                DrawTileGizmo(tile, Color.blue, Color.green);
+            }
+        }
+
+        protected void DrawTileGizmo(Tile tile, Color tileColor, Color tileContentColor, float sizeFactor = 1f)
+        {
+            Gizmos.color = tileColor;
+            Gizmos.DrawWireCube(tile.BoundingVolume.Center.ToVector3(), tile.BoundingVolume.Size.ToVector3() * sizeFactor);
+            Gizmos.color = tileContentColor;
+            foreach (var tileContent in tile.TileContents)
+            {
+                // Draw content boxes at 99% the size to see them inside the main tile gizmo
+                Gizmos.DrawWireCube(
+                    tileContent.BoundingVolume.Center.ToVector3(), 
+                    tileContent.BoundingVolume.Size.ToVector3() * 0.99f * sizeFactor
+                );
             }
         }
     }

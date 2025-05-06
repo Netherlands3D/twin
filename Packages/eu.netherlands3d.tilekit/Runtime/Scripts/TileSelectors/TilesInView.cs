@@ -84,12 +84,12 @@ namespace Netherlands3D.Tilekit.TileSelectors
                 return traversedTiles;
             }
 
-            if (tile.ImplicitTiling.SubdivisionScheme is not SubdivisionScheme.None)
-            {
-                TraverseImplicit(tile, tile, 1, traversedTiles);
+            // if (tile.ImplicitTiling.SubdivisionScheme is not SubdivisionScheme.None)
+            // {
+                // TraverseImplicit(tile, tile, 1, traversedTiles);
                 
-                return traversedTiles;
-            }
+                // return traversedTiles;
+            // }
             
             // Explicit tilesets: loop through all children
             foreach (var child in tile.Children)

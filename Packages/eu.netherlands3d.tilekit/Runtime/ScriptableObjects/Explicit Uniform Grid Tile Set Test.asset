@@ -15,6 +15,6 @@ MonoBehaviour:
   center: {x: 0, y: 0, z: 0}
   width: 10
   height: 10
-  tileWidth: 10
-  tileHeight: 10
+  tileWidth: 500
+  tileHeight: 500
   baseGeometricError: 10000

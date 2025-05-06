@@ -1,30 +1,44 @@
 using System;
 using System.Collections;
 using Netherlands3D.Tilekit.Changes;
-using Netherlands3D.Tilekit.TileSets;
-using Netherlands3D.Twin.Tilekit.TileMappers;
+using Netherlands3D.Twin.Tilekit;
+using Netherlands3D.Twin.Tilekit.Events;
 using RSG;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit
 {
-    public abstract class BaseChangeScheduler : ScriptableObject
+    public abstract class BaseChangeScheduler : ScriptableObject, IChangeScheduler
     {
         protected readonly ChangePlan changePlan = new();
         
-        public virtual void Schedule(BaseTileMapper tileMapper, Change change)
+        public virtual void Schedule(ITileSetProvider tileSetProvider, Change change)
         {
-            // change.UsingAction(changeToBePerformed => ApplyChange(tileMapper, changeToBePerformed));
+            change.UsingAction(changeToBePerformed => ApplyChange(tileSetProvider, changeToBePerformed));
         
             changePlan.Plan(change);
         }
 
-        private void ApplyChange(BaseTileMapper tileMapper, Change changeToBePerformed)
+        private Promise ApplyChange(ITileSetProvider tileSetProvider, Change changeToBePerformed)
         {
-            if (tileMapper is BaseEventBasedTileMapper eventBasedTileMapper)
+            Promise promise = new Promise();
+            if (tileSetProvider.TileSet.HasValue == false)
             {
-                eventBasedTileMapper.EventStream.ChangeApply.Invoke(eventBasedTileMapper.EventStreamContext, changeToBePerformed);
+                promise.Reject(
+                    new Exception("TileSet is not loaded (yet), unable to apply a change where there is no tileset")
+                );
+                return promise;
             }
+            
+            var tileSetId = tileSetProvider.TileSetId;
+            var eventStreamContext = new TileSetEventStreamContext(
+                tileSetId,
+                tileSetProvider.TileSet.Value
+            );
+            EventBus.Stream(tileSetId).ChangeApply.Invoke(eventStreamContext, changeToBePerformed);
+            
+            promise.Resolve();
+            return promise;
         }
 
         public abstract IEnumerator Apply();
