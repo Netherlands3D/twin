@@ -8,7 +8,7 @@ namespace Netherlands3D.Tilekit.TilesTransitionPlanners
     [CreateAssetMenu(menuName = "Tilekit/Transitions/Planner", fileName = "TransitionPlanner", order = 0)]
     public class TransitionPlanner : BaseTransitionPlanner
     {
-        public override List<Change> CreateTransition(List<Tile> tilesInView, List<Tile> stagedTiles)
+        public override List<Change> CreateTransition(HashSet<Tile> tilesInView, HashSet<Tile> stagedTiles)
         {
             var transitions = new List<Change>();
             
