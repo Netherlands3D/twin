@@ -40,6 +40,10 @@ namespace Netherlands3D.Twin.UI
         public void ShowPanel(bool show)
         {
             buttonsPanel.gameObject.SetActive(show);
+        }
+
+        public void ShowVisibilityPanel(bool show)
+        {
             visibilityPanel.gameObject.SetActive(show);
         }
 

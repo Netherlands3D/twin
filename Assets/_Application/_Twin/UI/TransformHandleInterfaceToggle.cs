@@ -18,6 +18,9 @@ namespace Netherlands3D.Twin.UI
 
         public void SetTransformTarget(GameObject targetGameObject)
         {
+            handleButtonsPanel.ShowPanel(true);
+            handleButtonsPanel.ShowVisibilityPanel(true);
+
             //Set the target of the transform handle
             RuntimeTransformHandle.SetTarget(targetGameObject);
 
@@ -38,14 +41,13 @@ namespace Netherlands3D.Twin.UI
         public void ClearTransformTarget()
         {
             gameObject.SetActive(false);
-        }
-
-        private void OnDisable() {
             handleButtonsPanel.ShowPanel(false);
+            handleButtonsPanel.ShowVisibilityPanel(false);
         }
 
-        private void OnEnable() {
-            handleButtonsPanel.ShowPanel(true);
+        public void ShowVisibilityPanel(bool show)
+        {
+            handleButtonsPanel.ShowVisibilityPanel(show);
         }
     }
 }

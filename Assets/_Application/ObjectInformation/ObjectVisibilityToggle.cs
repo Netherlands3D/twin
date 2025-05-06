@@ -23,7 +23,7 @@ namespace Netherlands3D
 
         private void Start()
         {
-            
+            UpdateButton();
         }
 
         private void OnToggle(bool toggle)
@@ -52,6 +52,7 @@ namespace Netherlands3D
 
             //when selecting a new bag id we should close any dialog if active
             CloseDialog();
+            UpdateButton();
         }
 
         private void OnFeatureFound(IMapping mapping)
@@ -60,7 +61,7 @@ namespace Netherlands3D
 
             //when selecting a new bag id we should close any dialog if active
             CloseDialog();
-
+            UpdateButton();
         }
 
         private void ClearSelection()
@@ -70,6 +71,7 @@ namespace Netherlands3D
 
             //when there is no selection it makes no sense to have a dialog active
             CloseDialog();
+            UpdateButton();
         }
 
         private void CloseDialog()
@@ -77,6 +79,17 @@ namespace Netherlands3D
             DialogService service = ServiceLocator.GetService<DialogService>();
             if (service.ActiveDialog != null)
                 service.CloseDialog();
+        }
+
+        private void UpdateButton()
+        {
+            SetVisibile(currentSelectedMapping != null);
+        }
+
+        private void SetVisibile(bool visible)
+        {
+            foreach(Image image in transform.GetComponentsInChildren<Image>())
+                image.enabled = visible;
         }
 
         private void OnEnable()
@@ -87,6 +100,8 @@ namespace Netherlands3D
             selector.OnDeselect.AddListener(ClearSelection);
 
             visibilityToggle.Toggle.onValueChanged.AddListener(OnToggle);
+
+            UpdateButton();
         }
 
         private void OnDisable()
@@ -96,6 +111,8 @@ namespace Netherlands3D
             selector.OnDeselect.RemoveListener(ClearSelection);
 
             visibilityToggle.Toggle.onValueChanged.RemoveListener(OnToggle);
+
+            UpdateButton();
         }
     }
 }

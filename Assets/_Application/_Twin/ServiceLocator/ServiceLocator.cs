@@ -30,7 +30,9 @@ namespace Netherlands3D
             //        RegisterService(service);
             //    }
             //}
-            return registeredServices[typeof(T)] as T;
+            MonoBehaviour v;
+            registeredServices.TryGetValue(typeof(T), out v);
+            return v as T;
         }
 
     }

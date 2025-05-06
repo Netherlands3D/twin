@@ -31,28 +31,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         public override void OnSelect()
         {
             var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
-
-            if (!transformInterfaceToggle)
-            {
-                Debug.LogError("Transform handles interface toggles not found, cannot set transform target");
-            }
-            else
-            {
-                transformInterfaceToggle.SetTransformTarget(gameObject);
-            }
+            if (transformInterfaceToggle)
+                transformInterfaceToggle.ShowVisibilityPanel(true);
         }
 
         public override void OnDeselect()
         {
-            ClearTransformHandles();
-        }
-
-        protected void ClearTransformHandles()
-        {
             var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
-
             if (transformInterfaceToggle)
-                transformInterfaceToggle.ClearTransformTarget();
+                transformInterfaceToggle.ShowVisibilityPanel(false);
         }
 
         protected virtual void OnDestroy()

@@ -3,6 +3,8 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Utility;
@@ -61,11 +63,27 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             featureSelector = gameObject.AddComponent<FeatureSelector>();
             featureSelector.SetMappingTree(MappingTree);
 
+            //ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged); work in progress
+
             foreach(Tool tool  in activeForTools) 
                 tool.onClose.AddListener(() => Deselect());
 
             Interaction.ObjectMappingCheckIn += OnAddObjectMapping;
             Interaction.ObjectMappingCheckOut += OnRemoveObjectMapping;
+        }
+
+        private void OnProjectChanged(ProjectData data)
+        {
+            ProjectData.Current.RootLayer.RemovedSelectedLayer.AddListener(OnChangeSelectedLayer);
+        }
+
+        private void OnChangeSelectedLayer(LayerData data)
+        {
+            if(data == lastSelectedLayerData)
+            {
+                Deselect();
+                lastSelectedLayerData = null;
+            }
         }
 
         private void Start()

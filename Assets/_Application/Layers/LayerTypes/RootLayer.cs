@@ -14,6 +14,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
         [JsonIgnore] private UnityAction<ProjectData> projectDataListener;
 
+        public UnityEvent<LayerData> AddedSelectedLayer = new();
+        public UnityEvent<LayerData> RemovedSelectedLayer = new();
+
         public RootLayer(string name) : base(name)
         {
            
@@ -22,12 +25,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         public void AddLayerToSelection(LayerData layer)
         {
             if (!SelectedLayers.Contains(layer))
+            {
                 SelectedLayers.Add(layer);
+                AddedSelectedLayer.Invoke(layer);
+            }
         }
 
         public void RemoveLayerFromSelection(LayerData layer)
         {
-            SelectedLayers.Remove(layer);
+            if (SelectedLayers.Remove(layer))
+                RemovedSelectedLayer.Invoke(layer);
         }
 
         public void DeselectAllLayers()
