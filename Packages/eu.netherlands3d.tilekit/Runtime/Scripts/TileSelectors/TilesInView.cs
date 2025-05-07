@@ -7,35 +7,25 @@ using UnityEngine.Serialization;
 
 namespace Netherlands3D.Tilekit.TileSelectors
 {
-    [CreateAssetMenu(menuName = "Tilekit/Tile selectors/Tiles in View", fileName = "TilesInView", order = 0)]
-    public class TilesInView : BaseTileSelector
+    public class TilesInView : ITileSelector
     {
-        [SerializeField] private BaseProjector projector;
-        
-        [Tooltip("Influences how quickly we switch to more detailed tiles, default: 5; higher is faster and thus higher quality")]
-        [Range(1, 100)]
-        [SerializeField] private float maximumScreenSpaceError = 5f;
-        
-        [Tooltip("By what factor to increase or decrease the camera frustum for the purpose of preloading tiles. A number above 1 will load more tiles just outside the frustrum, below 1 it decrease the area it will render tiles in")]
-        [Range(0f, 2f)]
-        [SerializeField] private float featherAmount = 1f;
+        private readonly BaseProjector projector;
+        private readonly float maximumScreenSpaceError;
+        private readonly float featherAmount;
 
         // Cached property to reduce number of allocations
         private Plane[] frustumPlanes = new Plane[6];
-        private Transform mainCameraTransform;
-        private Transform MainCameraTransform {
-            get {
-                // Cache extern call to transform
-                if (!mainCameraTransform)
-                {
-                    mainCameraTransform = Camera.main!.transform;
-                }
+        private readonly Transform mainCameraTransform;
 
-                return mainCameraTransform;
-            }
+        public TilesInView(BaseProjector projector, float maximumScreenSpaceError = 5f, float featherAmount = 1f)
+        {
+            this.projector = projector;
+            this.maximumScreenSpaceError = maximumScreenSpaceError;
+            this.featherAmount = featherAmount;
+            mainCameraTransform = Camera.main!.transform;
         }
 
-        public override Tiles Select(TileSet tileSet, Plane[] frustum)
+        public Tiles Select(TileSet tileSet, Plane[] frustum)
         {
             frustumPlanes = FeatherFrustumPlanes(frustum, this.featherAmount);
             
@@ -146,7 +136,7 @@ namespace Netherlands3D.Tilekit.TileSelectors
         private float CalculateTileScreenSpaceError(Tile child)
         {
             BoundsDouble boundsDouble = child.BoundingVolume.ToBounds();
-            var cameraPosition = MainCameraTransform.position;
+            var cameraPosition = mainCameraTransform.position;
             
             var distanceToCamera = Vector3.Distance(
                 cameraPosition, 

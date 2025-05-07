@@ -1,14 +1,11 @@
 using System;
 using System.Collections;
 using Netherlands3D.Tilekit.Changes;
-using Netherlands3D.Twin.Tilekit;
-using Netherlands3D.Twin.Tilekit.Events;
 using RSG;
-using UnityEngine;
 
 namespace Netherlands3D.Tilekit
 {
-    public abstract class BaseChangeScheduler : ScriptableObject, IChangeScheduler
+    public abstract class BaseChangeScheduler : IChangeScheduler
     {
         protected readonly ChangePlan changePlan = new();
         
@@ -29,13 +26,6 @@ namespace Netherlands3D.Tilekit
                 );
                 return promise;
             }
-            
-            var tileSetId = tileSetProvider.TileSetId;
-            var eventStreamContext = new TileSetEventStreamContext(
-                tileSetId,
-                tileSetProvider.TileSet.Value
-            );
-            EventBus.Stream(tileSetId).ChangeApply.Invoke(eventStreamContext, changeToBePerformed);
             
             promise.Resolve();
             return promise;

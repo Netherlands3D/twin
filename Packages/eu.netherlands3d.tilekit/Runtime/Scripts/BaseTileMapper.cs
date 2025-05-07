@@ -1,36 +1,84 @@
+using System;
 using System.Collections.Generic;
-using Netherlands3D.Tilekit.ExtensionMethods;
+using Netherlands3D.Tilekit.Changes;
+using Netherlands3D.Tilekit.TileSets;
+using Netherlands3D.Twin.Tilekit;
 using UnityEngine;
+using UnityEngine.Events;
 
-namespace Netherlands3D.Tilekit.TileSets
+namespace Netherlands3D.Tilekit
 {
-    public abstract class BaseTileMapper : MonoBehaviour
+    public abstract class BaseTileMapper : MonoBehaviour, ITilekitEvents, ITileMapper, ITileSetProvider
     {
-        public BaseTileSetProvider TileSetProvider;
+        public string TileSetId { get; protected set; } = Guid.NewGuid().ToString();
+        public TileSet? TileSet { get; protected set; }
 
-        public HashSet<Tile> TilesInView { get; } = new();
+        #region ITilekitEvents implementation
+        public UnityEvent<ITileMapper> UpdateTriggered { get; } = new();
+        public UnityEvent<ITileMapper, TileSet> TileSetLoaded { get; } = new();
+        public UnityEvent<ITileMapper, Plane[]> FrustumChanged { get; } = new();
+        public UnityEvent<ITileMapper, Tiles> TilesSelected { get; } = new();
+        public UnityEvent<ITileMapper, List<Change>> TransitionCreated { get; } = new();
+        public UnityEvent<ITileMapper, Change> ChangeScheduleRequested { get; } = new();
+        public UnityEvent<ITileMapper, List<Change>> ChangesScheduled { get; } = new();
+        public UnityEvent<ITileMapper, Change> ChangeApply { get; } = new();
+        public UnityEvent<ITileMapper, TileBehaviour> TileSpawned { get; } = new();
+        #endregion
 
-        protected virtual void OnDrawGizmosSelected()
+        public void FromTileSet(TileSet tileSet)
         {
-            foreach (var tile in TilesInView)
-            {
-                DrawTileGizmo(tile, Color.blue, Color.green);
-            }
+            // TODO: Initialize builder from existing TileSet
+            throw new NotImplementedException();
         }
 
-        protected void DrawTileGizmo(Tile tile, Color tileColor, Color tileContentColor, float sizeFactor = 1f)
+        protected virtual void OnEnable()
         {
-            Gizmos.color = tileColor;
-            Gizmos.DrawWireCube(tile.BoundingVolume.Center.ToVector3(), tile.BoundingVolume.Size.ToVector3() * sizeFactor);
-            Gizmos.color = tileContentColor;
-            foreach (var tileContent in tile.TileContents)
-            {
-                // Draw content boxes at 99% the size to see them inside the main tile gizmo
-                Gizmos.DrawWireCube(
-                    tileContent.BoundingVolume.Center.ToVector3(), 
-                    tileContent.BoundingVolume.Size.ToVector3() * 0.99f * sizeFactor
-                );
-            }
+            var eventSystem = TilekitEventSystem.current;
+            if (!eventSystem) return;
+            
+            AddListeners(eventSystem);
         }
+
+        protected virtual void OnDisable()
+        {
+            var eventSystem = TilekitEventSystem.current;
+            if (!eventSystem) return;
+
+            RemoveListeners(eventSystem);
+        }
+
+        private void AddListeners(ITilekitEvents events)
+        {
+            var eventSystem = TilekitEventSystem.current;
+            if (!eventSystem) return;
+            
+            UpdateTriggered.AddListener(events.UpdateTriggered.Invoke);
+            TileSetLoaded.AddListener(events.TileSetLoaded.Invoke);
+            FrustumChanged.AddListener(events.FrustumChanged.Invoke);
+            TilesSelected.AddListener(events.TilesSelected.Invoke);
+            TransitionCreated.AddListener(events.TransitionCreated.Invoke);
+            ChangeScheduleRequested.AddListener(events.ChangeScheduleRequested.Invoke);
+            ChangesScheduled.AddListener(events.ChangesScheduled.Invoke);
+            ChangeApply.AddListener(events.ChangeApply.Invoke);
+            TileSpawned.AddListener(events.TileSpawned.Invoke);
+        }
+
+        private void RemoveListeners(ITilekitEvents events)
+        {
+            var eventSystem = TilekitEventSystem.current;
+            if (!eventSystem) return;
+
+            UpdateTriggered.RemoveListener(events.UpdateTriggered.Invoke);
+            TileSetLoaded.RemoveListener(events.TileSetLoaded.Invoke);
+            FrustumChanged.RemoveListener(events.FrustumChanged.Invoke);
+            TilesSelected.RemoveListener(events.TilesSelected.Invoke);
+            TransitionCreated.RemoveListener(events.TransitionCreated.Invoke);
+            ChangeScheduleRequested.RemoveListener(events.ChangeScheduleRequested.Invoke);
+            ChangesScheduled.RemoveListener(events.ChangesScheduled.Invoke);
+            ChangeApply.RemoveListener(events.ChangeApply.Invoke);
+            TileSpawned.RemoveListener(events.TileSpawned.Invoke);
+        }
+        
+        public abstract void Map();
     }
 }
