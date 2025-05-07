@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using Netherlands3D.Tilekit.Changes;
 using Netherlands3D.Tilekit.TileSets;
-using Netherlands3D.Twin.Tilekit;
-using Netherlands3D.Twin.Tilekit.Events;
-using Netherlands3D.Twin.Tilekit.TileMappers;
-using RSG;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit
 {
     public class Debugger : MonoBehaviour
     {
-        private TileSetEventStream EventStream => EventBus.All;
+        private TilekitEventSystem EventSystem => TilekitEventSystem.current;
 
         [SerializeField] private bool logTicks = false;
         [SerializeField] private bool logInProduction = false;
@@ -22,13 +18,13 @@ namespace Netherlands3D.Tilekit
             // This is a debugger after all
             if (!logInProduction && !Application.isEditor) return;
 
-            EventStream.UpdateTriggered.AddListener(OnUpdateTriggered);
-            EventStream.FrustumChanged.AddListener(OnFrustumChanged);
-            EventStream.TilesSelected.AddListener(OnTilesSelected);
-            EventStream.TransitionCreated.AddListener(OnTransition);
-            EventStream.ChangeScheduleRequested.AddListener(OnChangeScheduleRequested);
-            EventStream.ChangesScheduled.AddListener(OnChangesPlanned);
-            EventStream.ChangeApply.AddListener(OnChangeApply);
+            EventSystem.UpdateTriggered.AddListener(OnUpdateTriggered);
+            EventSystem.FrustumChanged.AddListener(OnFrustumChanged);
+            EventSystem.TilesSelected.AddListener(OnTilesSelected);
+            EventSystem.TransitionCreated.AddListener(OnTransition);
+            EventSystem.ChangeScheduleRequested.AddListener(OnChangeScheduleRequested);
+            EventSystem.ChangesScheduled.AddListener(OnChangesPlanned);
+            EventSystem.ChangeApply.AddListener(OnChangeApply);
         }
 
         private void OnDestroy()
@@ -37,61 +33,62 @@ namespace Netherlands3D.Tilekit
             // This is a debugger after all
             if (!logInProduction && !Application.isEditor) return;
 
-            EventStream.UpdateTriggered.RemoveListener(OnUpdateTriggered);
-            EventStream.FrustumChanged.RemoveListener(OnFrustumChanged);
-            EventStream.TilesSelected.RemoveListener(OnTilesSelected);
-            EventStream.TransitionCreated.RemoveListener(OnTransition);
-            EventStream.ChangeScheduleRequested.RemoveListener(OnChangeScheduleRequested);
-            EventStream.ChangesScheduled.RemoveListener(OnChangesPlanned);
-            EventStream.ChangeApply.RemoveListener(OnChangeApply);
+            EventSystem.UpdateTriggered.RemoveListener(OnUpdateTriggered);
+            EventSystem.FrustumChanged.RemoveListener(OnFrustumChanged);
+            EventSystem.TilesSelected.RemoveListener(OnTilesSelected);
+            EventSystem.TransitionCreated.RemoveListener(OnTransition);
+            EventSystem.ChangeScheduleRequested.RemoveListener(OnChangeScheduleRequested);
+            EventSystem.ChangesScheduled.RemoveListener(OnChangesPlanned);
+            EventSystem.ChangeApply.RemoveListener(OnChangeApply);
         }
 
-        private void OnUpdateTriggered(TileSetEventStreamContext streamContext)
+        private void OnUpdateTriggered(ITileMapper tileMapper)
         {
             // Let's not do this always, it clutters the console
             if (logTicks)
             {
-                Log(streamContext, $"A tick of the timer has happened for: {streamContext.EventStreamId}");
+                Log(tileMapper, $"A tick of the timer has happened");
             }
         }
 
-        private void OnFrustumChanged(TileSetEventStreamContext streamContext, Plane[] frustumPlanes)
+        private void OnFrustumChanged(ITileMapper tileMapper, Plane[] frustumPlanes)
         {
-            Log(streamContext, $"The camera frustum was changed, let the games begin!");
+            Log(tileMapper, $"The camera frustum was changed, let the games begin!");
         }
 
-        private void OnTilesSelected(TileSetEventStreamContext streamContext, Tiles tiles)
+        private void OnTilesSelected(ITileMapper tileMapper, Tiles tiles)
         {
-            Log(streamContext, $"The following number of tiles should be in view: ({tiles.Count}) after transitioning");
+            Log(tileMapper, $"The following number of tiles should be in view: ({tiles.Count}) after transitioning");
         }
 
-        private void OnTransition(TileSetEventStreamContext streamContext, List<Change> transition)
+        private void OnTransition(ITileMapper tileMapper, List<Change> transition)
         {
-            Log(streamContext, $"A transition was planned with ({transition.Count}) changes");
+            Log(tileMapper, $"A transition was planned with ({transition.Count}) changes");
         }
 
-        private void OnChangeScheduleRequested(TileSetEventStreamContext streamContext, Change change)
+        private void OnChangeScheduleRequested(ITileMapper tileMapper, Change change)
         {
-            Log(streamContext, $"Change for ({change.Tile.Id}) is to be scheduled");
+            Log(tileMapper, $"Change for ({change.Tile.Id}) is to be scheduled");
         }
 
-        private void OnChangesPlanned(TileSetEventStreamContext streamContext, List<Change> changes)
+        private void OnChangesPlanned(ITileMapper tileMapper, List<Change> changes)
         {
-            Log(streamContext, $"A series ({changes.Count}) of changes was planned");
+            Log(tileMapper, $"A series ({changes.Count}) of changes was planned");
         }
 
-        private void OnChangeApply(TileSetEventStreamContext streamContext, Change change)
+        private void OnChangeApply(ITileMapper tileMapper, Change change)
         {
-            Log(streamContext, $"Change for ({change.Tile.Id}) is being applied");
+            Log(tileMapper, $"Change for ({change.Tile.Id}) is being applied");
         }
 
-        private void Log(TileSetEventStreamContext streamContext, object message)
+        private void Log(ITileMapper tileMapper, object message)
         {
             // Only log messages in the editor - or when the log in production flag is explicitly enabled
             // This is a debugger after all
             if (!logInProduction && !Application.isEditor) return;
-            
-            Debug.Log($"[Tilekit][{streamContext.EventStreamId}] {message}");
+
+            var tileSetId = tileMapper is ITileSetProvider provider ? provider.TileSetId : "Unknown";
+            Debug.Log($"[Tilekit][{tileSetId}] {message}");
         }
     }
 }
