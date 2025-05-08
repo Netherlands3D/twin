@@ -279,7 +279,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             if (feature.Geometry is not MeshRenderer meshRenderer) return feature;
 
-            feature.Attributes.Add("materials", meshRenderer.materials.Select(material => material.name));
+            feature.Attributes.Add("materials", string.Join(",", meshRenderer.materials.Select(m => m.name)));
 
             return feature;
         }

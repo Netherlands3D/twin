@@ -48,7 +48,7 @@ namespace Netherlands3D.LayerStyles
         /// An expression whether a feature should match this styling rule, matching is done using an expression as
         /// described in https://docs.ogc.org/DRAFTS/18-067r4.html#_expressions.
         /// </summary>
-        [DataMember(Name = "selector")] public Expression Selector { get; private set; }
+        [DataMember(Name = "selector")] public string Selector { get; private set; }
 
         [JsonConstructor]
         private StylingRule()
@@ -60,21 +60,13 @@ namespace Netherlands3D.LayerStyles
             Name = name;
             
             // Applies always - the selector will always return true
-            Selector = BoolExpression.True();
+            Selector = "true";
         }
 
-        public StylingRule(string name, Expression selector)
+        public StylingRule(string name, string selector)
         {
             Name = name;
             Selector = selector;
-        }
-        
-        public Symbolizer ResolveSymbologyForFeature(Symbolizer symbolizer, LayerFeature feature)
-        {
-            // if the rule's selector does not match the given attributes - then this symbology does not apply
-            if (Selector.Resolve(feature.Attributes) is false or null) return symbolizer;
-                
-            return Symbolizer.Merge(symbolizer, Symbolizer);
         }
     }
 }

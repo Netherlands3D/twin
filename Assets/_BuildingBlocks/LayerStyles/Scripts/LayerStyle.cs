@@ -53,23 +53,5 @@ namespace Netherlands3D.LayerStyles
         {
             Metadata.Name = name;
         }
-
-        /// <summary>
-        /// Attempts to combine the symbology of all matching rules into one Symbolizer so that a calling method
-        /// does not care about cascading rules or how the values are determined; that is handled in this function.
-        ///
-        /// The provided Symbolizer is a new instance where all matching symbology rules are merged into one, by
-        /// pre-creating it in the caller we can achieve immutability with just one instantiation.
-        /// </summary>
-        /// <returns></returns>
-        public Symbolizer ResolveSymbologyForFeature(Symbolizer symbolizer, LayerFeature feature)
-        {
-            foreach (var rule in StylingRules)
-            {
-                symbolizer = rule.Value.ResolveSymbologyForFeature(symbolizer, feature);
-            }
-            
-            return symbolizer;
-        }
     }
 }
