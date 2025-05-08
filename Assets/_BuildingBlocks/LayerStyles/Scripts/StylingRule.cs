@@ -1,8 +1,5 @@
 using System.Runtime.Serialization;
-using Netherlands3D.LayerStyles.Expressions;
-using Netherlands3D.Twin.Layers;
 using Newtonsoft.Json;
-using UnityEngine;
 
 namespace Netherlands3D.LayerStyles
 {
