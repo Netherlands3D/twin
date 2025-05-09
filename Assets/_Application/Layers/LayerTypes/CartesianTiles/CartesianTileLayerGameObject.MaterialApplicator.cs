@@ -62,8 +62,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 //colorpicker has a selected fill color and a possible selection of feature layers
                 Color colorPickedColor = (Color)defaultSymbolizer.GetFillColor();
                 foreach (int i in materialIndices)
-                {                    
-                    var symbolizer = layer.LayerData.Styles[GetMaterialByIndex(i).name].AnyFeature.Symbolizer;
+                {
+                    var symbolizer = layer.GetStyling(layer.GetFeature(GetMaterialByIndex(i)));
+                    //var symbolizer = layer.LayerData.Styles[GetMaterialByIndex(i).name].AnyFeature.Symbolizer;
                     symbolizer.SetFillColor(colorPickedColor);
                     layer.UpdateMaterial(colorPickedColor, i);
                 }

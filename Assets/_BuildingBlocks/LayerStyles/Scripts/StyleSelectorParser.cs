@@ -24,6 +24,41 @@ namespace Netherlands3D
 
         public bool Resolve(string selector, Dictionary<string, string> expressions)
         {
+            // Comma-separated selectors = OR logic
+            var individualSelectors = selector.Split(',');
+            foreach (var raw in individualSelectors)
+            {
+                var trimmed = raw.Trim();
+                if (MatchesAllAttributes(trimmed, expressions))
+                    return true; // any one match is enough
+            }
+            return false;
+        }
+
+        // Handles multiple [key=value] pairs in one selector = AND logic
+        private bool MatchesAllAttributes(string selector, Dictionary<string, string> expressions)
+        {
+            int pos = 0;
+            while (pos < selector.Length)
+            {
+                if (selector[pos] != '[') return false;
+
+                int end = selector.IndexOf(']', pos);
+                if (end == -1) return false;
+
+                var content = selector.Substring(pos + 1, end - pos - 1);
+                var pair = content.Split('=');
+                if (pair.Length != 2) return false;
+
+                var key = pair[0].Trim();
+                var value = pair[1].Trim().Trim('"'); // remove quotes if present
+
+                if (!expressions.TryGetValue(key, out var exprValue) || exprValue != value)
+                    return false;
+
+                pos = end + 1;
+            }
+
             return true;
         }
 
