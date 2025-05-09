@@ -83,7 +83,12 @@ namespace Netherlands3D.Twin.Layers.Properties
                 swatch.onClickDown.AddListener(pointer => OnClickedSwatch(pointer, cachedIndex));
 
                 //update the swatch color to match the material color
-                Material mat = layerFeatures[i].Geometry as Material;               
+                //Material mat = layerFeatures[i].Geometry as Material;
+                //Color? col = layer.GetStyling(layerFeatures[i]).GetFillColor();
+                //if(col != null)
+                //    swatch.SetColor((Color)col);
+
+                Material mat = layerFeatures[i].Geometry as Material;
                 swatch.SetColor(mat.color);
                 items[cachedIndex] = swatch; 
             }

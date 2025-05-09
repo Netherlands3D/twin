@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 int index = 0;
                 foreach (Material material in materials)
                 {                    
-                    layer.CreateFeature(material); //one feature per default shared material
+                    LayerFeature feature = layer.CreateFeature(material); //one feature per default shared material
 
                     //populate the layerstyles based on available materials if not present in data yet
                     LayerStyle style = new LayerStyle(material.name);                   
@@ -33,6 +33,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
                     //only load the symbolizer color when present in the data
                     var symbolizer = layer.LayerData.Styles[material.name].AnyFeature.Symbolizer;
+                    //var symbolizer = layer.GetStyling(feature);
                     Color? color = symbolizer.GetFillColor();
                     if(color != null)
                         layer.UpdateMaterial((Color)color, index);
@@ -63,8 +64,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 Color colorPickedColor = (Color)defaultSymbolizer.GetFillColor();
                 foreach (int i in materialIndices)
                 {
-                    var symbolizer = layer.GetStyling(layer.GetFeature(GetMaterialByIndex(i)));
-                    //var symbolizer = layer.LayerData.Styles[GetMaterialByIndex(i).name].AnyFeature.Symbolizer;
+                    //var symbolizer = layer.GetStyling(layer.GetFeature(GetMaterialByIndex(i)));
+                    var symbolizer = layer.LayerData.Styles[GetMaterialByIndex(i).name].AnyFeature.Symbolizer;
                     symbolizer.SetFillColor(colorPickedColor);
                     layer.UpdateMaterial(colorPickedColor, i);
                 }
