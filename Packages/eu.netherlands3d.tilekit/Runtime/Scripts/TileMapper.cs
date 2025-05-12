@@ -4,13 +4,17 @@ using Netherlands3D.Tilekit.Changes;
 using Netherlands3D.Tilekit.ExtensionMethods;
 using Netherlands3D.Tilekit.TileSelectors;
 using Netherlands3D.Tilekit.TileSets;
+using Netherlands3D.Tilekit.TileSets.BoundingVolumes;
 using Netherlands3D.Twin.Tilekit;
+using RSG;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace Netherlands3D.Tilekit
 {
     public class TileMapper : BaseTileMapper
     {
+        
         private TileSet tileSetConfiguration;
         public Tile[] TilesInView => tilesInView.ToArray();
 
@@ -24,7 +28,8 @@ namespace Netherlands3D.Tilekit
         [SerializeField] private TileBehaviour tilePrefab;
 
         private Tiles tilesInView = new();
-        private Tiles lastStagedTiles = new Tiles();
+        private ObjectPool<TileBehaviour> tilePool;
+        private readonly Dictionary<Tile, TileBehaviour> tileBehaviours = new ();
 
         private void Awake()
         {
@@ -32,12 +37,46 @@ namespace Netherlands3D.Tilekit
             TileSelector ??= new TilesInView(projector);
             TransitionPlanner ??= new TransitionPlanner();
             ChangeScheduler ??= new ImmediateChangeScheduler();
+            
+            tilePool = new ObjectPool<TileBehaviour>(
+                CreateTile,
+                OnGetTileFromPool, 
+                OnReleaseTileToPool,
+                OnDestroyTile
+            );
+            
+            var tileBuilder = TileBuilder.Explicit(
+                BoundingVolume.RegionBoundingVolume(-5d, -5d, 5d, 5d, 0d, 0d),
+                0
+            );
+            tileSetConfiguration = new TileSet(tileBuilder.Build());
+        }
+
+        private TileBehaviour CreateTile()
+        {
+            return Instantiate(tilePrefab, transform);
+        }
+
+        private void OnGetTileFromPool(TileBehaviour tile)
+        {
+            tile.gameObject.SetActive(true);
+        }
+
+        private void OnReleaseTileToPool(TileBehaviour tile)
+        {
+            tile.gameObject.SetActive(false);
+        }
+
+        private void OnDestroyTile(TileBehaviour tile)
+        {
+            Destroy(tile.gameObject);
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
             
+            UpdateTriggered.AddListener(OnUpdateTriggered);
             FrustumChanged.AddListener(OnFrustumChanged);
             TilesSelected.AddListener(OnTilesSelected);
             TransitionCreated.AddListener(OnTransition);
@@ -50,6 +89,7 @@ namespace Netherlands3D.Tilekit
         {
             base.OnDisable();
 
+            UpdateTriggered.RemoveListener(OnUpdateTriggered);
             FrustumChanged.RemoveListener(OnFrustumChanged);
             TilesSelected.RemoveListener(OnTilesSelected);
             TransitionCreated.RemoveListener(OnTransition);
@@ -62,6 +102,13 @@ namespace Netherlands3D.Tilekit
         {
             this.UpdateTriggered.Invoke(this);
         }
+        
+        protected virtual void OnUpdateTriggered(ITileMapper tileMapper)
+        {
+            if (!FrustumChecker.IsFrustumChanged()) return;
+
+            FrustumChanged.Invoke(this, FrustumChecker.Planes);
+        }
 
         protected virtual void OnFrustumChanged(ITileMapper tileMapper, Plane[] planes)
         {
@@ -72,7 +119,6 @@ namespace Netherlands3D.Tilekit
 
         protected virtual void OnTilesSelected(ITileMapper tileMapper, Tiles tiles)
         {
-            lastStagedTiles = tiles;
             var transition = TransitionPlanner.CreateTransition(tilesInView, tiles);
 
             TransitionCreated.Invoke(this, transition);
@@ -88,9 +134,44 @@ namespace Netherlands3D.Tilekit
             ChangesScheduled.Invoke(this, transition);
         }
 
+        private Promise OnChange(Change change)
+        {
+            // TODO: This logic does not belong here, but the Change system needs to be revised. First I need the general
+            // flow to work 
+            switch (change.Type)
+            {
+                case TypeOfChange.Add: 
+                    tilesInView.Add(change.Tile);
+                    var tileBehaviour = tilePool.Get();
+                    if (tileBehaviour)
+                    {
+                        tileBehaviours[change.Tile] = tileBehaviour;
+                        tileBehaviour.Tile = change.Tile;
+                    }
+
+                    break;
+                case TypeOfChange.Remove: 
+                    tilesInView.Remove(change.Tile);
+                    if (tileBehaviours.TryGetValue(change.Tile, out tileBehaviour))
+                    {
+                        tilePool.Release(tileBehaviour);
+                        tileBehaviours.Remove(change.Tile);
+                    }
+                    break;
+            }
+
+            ChangeApply.Invoke(this, change);
+            
+            return Promise.Resolved() as Promise;
+        }
+
         protected virtual void OnChangeScheduleRequested(ITileMapper tileMapper, Change change)
         {
-            ChangeScheduler.Schedule(this, change);
+            // Schedule the change
+            ChangeScheduler.Schedule(change);
+
+            // Assign an action to perform on this change when it executes
+            change.UsingAction(OnChange);
         }
 
         protected virtual void OnChangesPlanned(ITileMapper tileMapper, List<Change> changes)
@@ -100,15 +181,6 @@ namespace Netherlands3D.Tilekit
 
         protected virtual void OnChangeApply(ITileMapper tileMapper, Change change)
         {
-            // TODO: This logic does not belong here, but the Change system needs to be revised. First I need the general
-            // flow to work 
-            switch (change.Type)
-            {
-                case TypeOfChange.Add: tilesInView.Add(change.Tile); break;
-                case TypeOfChange.Remove: tilesInView.Remove(change.Tile); break;
-            }
-            
-            ChangeApply.Invoke(this, change);
         }
         
         protected virtual void OnDrawGizmosSelected()

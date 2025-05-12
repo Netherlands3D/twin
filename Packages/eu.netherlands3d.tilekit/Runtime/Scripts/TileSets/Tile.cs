@@ -16,7 +16,8 @@ namespace Netherlands3D.Tilekit.TileSets
         public ImplicitTilingScheme ImplicitTiling;
         public MethodOfRefinement Refine;
 
-        public Tile(BoundingVolume boundingVolume, double geometricError)
+
+        public Tile(BoundingVolume boundingVolume, double geometricError = 10000) : this()
         {
             Id = new NativeText(Guid.NewGuid().ToString(), Allocator.Persistent);
             BoundingVolume = boundingVolume;

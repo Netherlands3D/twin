@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8775512218966625150}
   - component: {fileID: 1009333747495628546}
   m_Layer: 0
-  m_Name: Uniform Grid Test
+  m_Name: TileMapper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,5 +74,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 905dc10f9dbd486aab2b76fd54ec024d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  viewPortCamera: {fileID: 0}
   projector: {fileID: 11400000, guid: 2e6bf522c009c9d43ba72251f4b1ddc1, type: 2}
-  tilePrefab: {fileID: 0}
+  tilePrefab: {fileID: -4702859358117225594, guid: f965f178b2103f540993b325b85d43e6,
+    type: 3}
