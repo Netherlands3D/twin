@@ -5,7 +5,7 @@ namespace Netherlands3D.Tilekit
 {
     public interface IChangeScheduler
     {
-        void Schedule(ITileSetProvider tileSetProvider, Change change);
+        void Schedule(Change change);
         IEnumerator Apply();
     }
 }

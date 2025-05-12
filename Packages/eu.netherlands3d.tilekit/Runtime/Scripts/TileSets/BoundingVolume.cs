@@ -29,6 +29,11 @@ namespace Netherlands3D.Tilekit.TileSets
             Box = region;
         }
 
+        public static BoundingVolume RegionBoundingVolume(double west, double south, double east, double north, double minHeight, double maxHeight)
+        {
+            return new BoundingVolume(new RegionBoundingVolume(west, south, east, north, minHeight, maxHeight));
+        }
+
         public double3 Center
         {
             get

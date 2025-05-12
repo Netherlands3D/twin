@@ -18,6 +18,8 @@ namespace Netherlands3D.Tilekit
             // This is a debugger after all
             if (!logInProduction && !Application.isEditor) return;
 
+            if (!TilekitEventSystem.current) return;
+
             EventSystem.UpdateTriggered.AddListener(OnUpdateTriggered);
             EventSystem.FrustumChanged.AddListener(OnFrustumChanged);
             EventSystem.TilesSelected.AddListener(OnTilesSelected);
@@ -32,6 +34,8 @@ namespace Netherlands3D.Tilekit
             // Only log messages in the editor - or when the log in production flag is explicitly enabled
             // This is a debugger after all
             if (!logInProduction && !Application.isEditor) return;
+
+            if (!TilekitEventSystem.current) return;
 
             EventSystem.UpdateTriggered.RemoveListener(OnUpdateTriggered);
             EventSystem.FrustumChanged.RemoveListener(OnFrustumChanged);
