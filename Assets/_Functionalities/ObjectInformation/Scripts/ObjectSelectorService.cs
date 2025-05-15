@@ -63,8 +63,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             subObjectSelector = gameObject.AddComponent<SubObjectSelector>();
             featureSelector = gameObject.AddComponent<FeatureSelector>();
             featureSelector.SetMappingTree(MappingTree);
-
-            ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
             
             Interaction.ObjectMappingCheckIn += OnAddObjectMapping;
             Interaction.ObjectMappingCheckOut += OnRemoveObjectMapping;
@@ -72,12 +70,16 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void OnEnable()
         {
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
+
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.AddListener(Deselect);
         }
 
         private void OnDisable()
         {
+            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
+
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.RemoveListener(Deselect);
         }

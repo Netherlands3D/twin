@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Netherlands3D
+namespace Netherlands3D.Services
 {
     public class UniqueMonobehaviourService : MonoBehaviour
     {

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Netherlands3D
+namespace Netherlands3D.Twin.UI
 {
     public class Dialog : MonoBehaviour
     {

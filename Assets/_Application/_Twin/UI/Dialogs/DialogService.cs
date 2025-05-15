@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Netherlands3D
+namespace Netherlands3D.Twin.UI
 {
     public class DialogService : MonoBehaviour
     {

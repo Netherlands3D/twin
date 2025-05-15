@@ -1,9 +1,9 @@
 using Netherlands3D.Functionalities.ObjectInformation;
-using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.UI;
+using Netherlands3D.Services;
 
-namespace Netherlands3D
+namespace Netherlands3D.Twin.UI
 {
     public class ObjectVisibilityToggle : MonoBehaviour
     {
@@ -23,11 +23,14 @@ namespace Netherlands3D
         }
 
         private void Start()
-        {
-            selector = ServiceLocator.GetService<ObjectSelectorService>();
-            transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
-            transformInterfaceToggle.SetTarget.AddListener(OnTransformObjectFound);         
+        {  
+            UpdateButton();
+        }
 
+        private void OnEnable()
+        {            
+            transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
+            transformInterfaceToggle.SetTarget.AddListener(OnTransformObjectFound);
             selector = ServiceLocator.GetService<ObjectSelectorService>();
             selector.SelectSubObjectWithBagId.AddListener(OnBagIdFound);
             selector.SelectFeature.AddListener(OnFeatureFound);
@@ -35,15 +38,30 @@ namespace Netherlands3D
             selector.OnDeselect.AddListener(ClearSelection);
 
             visibilityToggle.Toggle.onValueChanged.AddListener(OnToggle);
-
-            UpdateButton();
         }
+
+        private void OnDisable()
+        {
+          
+            transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
+            transformInterfaceToggle.SetTarget.RemoveListener(OnTransformObjectFound);
+            selector = ServiceLocator.GetService<ObjectSelectorService>();
+            selector.SelectSubObjectWithBagId.RemoveListener(OnBagIdFound);
+            selector.SelectFeature.RemoveListener(OnFeatureFound);
+            selector.OnSelectDifferentLayer.RemoveListener(ClearSelection);
+            selector.OnDeselect.RemoveListener(ClearSelection);
+            
+            visibilityToggle.Toggle.onValueChanged.RemoveListener(OnToggle);
+        }
+
 
         private void OnToggle(bool toggle)
         {
-            if (currentSelectedFeatureObject == null) return;
-
             DialogService service = ServiceLocator.GetService<DialogService>();
+            service.CloseDialog();
+
+            if (currentSelectedFeatureObject == null) return;
+            
             if (toggle)
             {
                 service.ShowDialog(visibilityDialog, new Vector2(20, 0), visibilityToggle.GetComponent<RectTransform>());
@@ -54,10 +72,6 @@ namespace Netherlands3D
                     HideObjectDialog dialog = service.ActiveDialog as HideObjectDialog;
                     dialog.SetBagId(currentSelectedBagId);
                 }
-            }
-            else
-            {
-                service.CloseDialog();
             }
         }
 
@@ -122,17 +136,6 @@ namespace Netherlands3D
 
             if (!visible)
                 visibilityToggle.Toggle.isOn = false;
-        }
-
-        private void OnDestroy()
-        {            
-            selector.SelectSubObjectWithBagId.RemoveListener(OnBagIdFound);
-            selector.SelectFeature.RemoveListener(OnFeatureFound);
-            selector.OnDeselect.RemoveListener(ClearSelection);
-
-            visibilityToggle.Toggle.onValueChanged.RemoveListener(OnToggle);
-
-            UpdateButton();
         }
     }
 }
