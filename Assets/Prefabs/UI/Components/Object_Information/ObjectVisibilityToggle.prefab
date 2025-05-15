@@ -33,7 +33,12 @@ PrefabInstance:
     - target: {fileID: 3488904550410767345, guid: 317b76632deb4184f8c6322f3f7ea442,
         type: 3}
       propertyPath: m_Name
-      value: ObjectVisibilityToggle Variant
+      value: ObjectVisibilityToggle
+      objectReference: {fileID: 0}
+    - target: {fileID: 3488904550410767345, guid: 317b76632deb4184f8c6322f3f7ea442,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3942374512207170210, guid: 317b76632deb4184f8c6322f3f7ea442,
         type: 3}

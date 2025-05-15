@@ -65,12 +65,21 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             featureSelector.SetMappingTree(MappingTree);
 
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
-
-            foreach (Tool tool  in activeForTools) 
-                tool.onClose.AddListener(() => Deselect());
-
+            
             Interaction.ObjectMappingCheckIn += OnAddObjectMapping;
             Interaction.ObjectMappingCheckOut += OnRemoveObjectMapping;
+        }
+
+        private void OnEnable()
+        {
+            foreach (Tool tool  in activeForTools) 
+                tool.onClose.AddListener(Deselect);
+        }
+
+        private void OnDisable()
+        {
+            foreach (Tool tool  in activeForTools) 
+                tool.onClose.RemoveListener(Deselect);
         }
 
         private void OnProjectChanged(ProjectData data)
@@ -310,6 +319,5 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 MappingTree.DebugTree();
         }
 #endif
-
     }
 }
