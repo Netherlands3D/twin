@@ -31,6 +31,15 @@ namespace Netherlands3D.Twin.Layers
             return new LayerFeature(geometry, expressionContext);
         }
 
+        /// <param name="geometry">
+        /// Geometry is used loosely here - this means _anything_ that represents the physical aspect of a feature
+        /// individual layer types are expected to know what type they are using, and thus how to retrieve it.
+        /// </param>
+        public static LayerFeature Create(object geometry)
+        {
+            return new LayerFeature(geometry, new Dictionary<string, string>());
+        }
+
         public string GetAttribute(string id)
         {
             if (Attributes.TryGetValue(id, out var expression))

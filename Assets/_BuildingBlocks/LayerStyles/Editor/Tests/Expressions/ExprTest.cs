@@ -2,10 +2,10 @@
 using NUnit.Framework;
 using UnityEngine;
 
-namespace Netherlands3D.LayerStyles
+namespace Netherlands3D.LayerStyles.Expressions
 {
     [TestFixture]
-    public class ExprTests
+    public class ExprTest
     {
         [Test]
         public void ExpressALiteralInteger()
@@ -14,7 +14,7 @@ namespace Netherlands3D.LayerStyles
 
             Assert.IsTrue(e.IsLiteral);
             Assert.IsFalse(e.IsExpression);
-            Assert.AreEqual(TypeOfExpression.Literal, e.Operator);
+            Assert.AreEqual(Operators.Literal, e.Operator);
             Assert.AreEqual(42, e.Value);
             Assert.IsNull(e.Arguments);
         }
@@ -25,7 +25,7 @@ namespace Netherlands3D.LayerStyles
             Expr<string> e = "hello";
 
             Assert.IsTrue(e.IsLiteral);
-            Assert.AreEqual(TypeOfExpression.Literal, e.Operator);
+            Assert.AreEqual(Operators.Literal, e.Operator);
             Assert.IsFalse(e.IsExpression);
             Assert.AreEqual("hello", e.Value);
             Assert.IsNull(e.Arguments);
@@ -38,7 +38,7 @@ namespace Netherlands3D.LayerStyles
 
             Assert.IsTrue(e.IsLiteral);
             Assert.IsFalse(e.IsExpression);
-            Assert.AreEqual(TypeOfExpression.Literal, e.Operator);
+            Assert.AreEqual(Operators.Literal, e.Operator);
             Assert.AreEqual(true, e.Value);
             Assert.IsNull(e.Arguments);
         }
@@ -50,7 +50,7 @@ namespace Netherlands3D.LayerStyles
 
             Assert.IsTrue(e.IsLiteral);
             Assert.IsFalse(e.IsExpression);
-            Assert.AreEqual(TypeOfExpression.Literal, e.Operator);
+            Assert.AreEqual(Operators.Literal, e.Operator);
             Assert.AreEqual(3.14f, (float)e.Value, 1e-6f);
             Assert.IsNull(e.Arguments);
         }
@@ -62,7 +62,7 @@ namespace Netherlands3D.LayerStyles
 
             Assert.IsTrue(e.IsLiteral);
             Assert.IsFalse(e.IsExpression);
-            Assert.AreEqual(TypeOfExpression.Literal, e.Operator);
+            Assert.AreEqual(Operators.Literal, e.Operator);
             Assert.AreEqual(2.71828d, e.Value);
             Assert.IsNull(e.Arguments);
         }
@@ -73,11 +73,11 @@ namespace Netherlands3D.LayerStyles
             Expr<int> left = 5;
             Expr<int> right = 10;
 
-            Expr<bool> cmp = Expr.Greater(left, right);
+            Expr<bool> cmp = Expr.GreaterThan(left, right);
 
             Assert.IsFalse(cmp.IsLiteral);
             Assert.IsTrue(cmp.IsExpression);
-            Assert.AreEqual(TypeOfExpression.Greater, cmp.Operator);
+            Assert.AreEqual(Operators.GreaterThan, cmp.Operator);
 
             Assert.IsNotNull(cmp.Arguments);
             Assert.AreEqual(2, cmp.Arguments.Length);
@@ -91,9 +91,9 @@ namespace Netherlands3D.LayerStyles
             Expr<int> a = 7;
             Expr<int> b = 8;
 
-            Expr<bool> eq = Expr.Equals(a, b);
+            Expr<bool> eq = Expr.EqualsTo(a, b);
 
-            Assert.AreEqual(TypeOfExpression.EqualTo, eq.Operator);
+            Assert.AreEqual(Operators.EqualTo, eq.Operator);
 
             Assert.IsNotNull(eq.Arguments);
             Assert.AreEqual(2, eq.Arguments.Length);
@@ -107,9 +107,9 @@ namespace Netherlands3D.LayerStyles
             Expr<string> a = "hello";
             Expr<string> b = "world";
 
-            Expr<bool> eq = Expr.Equals(a, b);
+            Expr<bool> eq = Expr.EqualsTo(a, b);
 
-            Assert.AreEqual(TypeOfExpression.EqualTo, eq.Operator);
+            Assert.AreEqual(Operators.EqualTo, eq.Operator);
 
             Assert.IsNotNull(eq.Arguments);
             Assert.AreEqual(2, eq.Arguments.Length);
@@ -124,17 +124,17 @@ namespace Netherlands3D.LayerStyles
             Expr<float> f = 4.0f;
             Expr<double> d = 5.0d;
 
-            Expr<bool> eq = Expr.Equals(i, f);
-            Expr<bool> gt = Expr.Greater(i, f);
-            Expr<bool> gte = Expr.GreaterThan(f, d);
-            Expr<bool> lt = Expr.Less(d, i);
-            Expr<bool> lte = Expr.LessThan(i, d);
+            Expr<bool> eq = Expr.EqualsTo(i, f);
+            Expr<bool> gt = Expr.GreaterThan(i, f);
+            Expr<bool> gte = Expr.GreaterThanOrEqual(f, d);
+            Expr<bool> lt = Expr.LessThan(d, i);
+            Expr<bool> lte = Expr.LessThanOrEqual(i, d);
 
-            Assert.AreEqual(TypeOfExpression.EqualTo, eq.Operator);
-            Assert.AreEqual(TypeOfExpression.Greater, gt.Operator);
-            Assert.AreEqual(TypeOfExpression.GreaterThan, gte.Operator);
-            Assert.AreEqual(TypeOfExpression.Less, lt.Operator);
-            Assert.AreEqual(TypeOfExpression.LessThan, lte.Operator);
+            Assert.AreEqual(Operators.EqualTo, eq.Operator);
+            Assert.AreEqual(Operators.GreaterThan, gt.Operator);
+            Assert.AreEqual(Operators.GreaterThanOrEqual, gte.Operator);
+            Assert.AreEqual(Operators.LessThan, lt.Operator);
+            Assert.AreEqual(Operators.LessThanOrEqual, lte.Operator);
         }
 
         [Test]
@@ -144,9 +144,9 @@ namespace Netherlands3D.LayerStyles
             Expr<int> g = 128;
             Expr<int> b = 0;
 
-            Expr<Color> rgb = Expr.Rgb(r, g, b);
+            Expr<string> rgb = Expr.Rgb(r, g, b);
 
-            Assert.AreEqual(TypeOfExpression.Rgb, rgb.Operator);
+            Assert.AreEqual(Operators.Rgb, rgb.Operator);
             Assert.AreEqual(3, rgb.Arguments.Length);
 
             Assert.AreEqual(255, rgb.Arguments[0].Value);
@@ -160,7 +160,7 @@ namespace Netherlands3D.LayerStyles
             Expr<string> nameExpr = "foo";
             Expr<IConvertible> getVariable = Expr.GetVariable(nameExpr);
 
-            Assert.AreEqual(TypeOfExpression.GetVariable, getVariable.Operator);
+            Assert.AreEqual(Operators.GetVariable, getVariable.Operator);
             Assert.AreEqual(1, getVariable.Arguments.Length);
             Assert.AreEqual("foo", getVariable.Arguments[0].Value);
         }
@@ -171,7 +171,7 @@ namespace Netherlands3D.LayerStyles
             Expr<string> nameExpr = 5;
             Expr<IConvertible> getVariable = Expr.GetVariable(nameExpr);
 
-            Assert.AreEqual(TypeOfExpression.GetVariable, getVariable.Operator);
+            Assert.AreEqual(Operators.GetVariable, getVariable.Operator);
             Assert.AreEqual(1, getVariable.Arguments.Length);
             Assert.AreEqual(5, getVariable.Arguments[0].Value);
         }
@@ -206,7 +206,7 @@ namespace Netherlands3D.LayerStyles
             Expr<IConvertible> b = Expr.Min((Expr<int>)100, temperatureVariable);
             
             // Act: Make the final expression that will grab the color using the previous expressions as input
-            Expr<Color> rgbExpr = Expr.Rgb(r, g, b);
+            Expr<string> rgbExpr = Expr.Rgb(r, g, b);
 
             // HINT: Can also be written in a single expression for increased readability
             // var rgbExpr = Expr.Rgb(
@@ -216,13 +216,13 @@ namespace Netherlands3D.LayerStyles
             // );
 
             // Assert: Top-level rgb expression
-            Assert.AreEqual(TypeOfExpression.Rgb, rgbExpr.Operator);
+            Assert.AreEqual(Operators.Rgb, rgbExpr.Operator);
             Assert.AreEqual(3, rgbExpr.Arguments.Length);
 
             // Assert: Red channel == temperature variable
             Expr<int> redArg = rgbExpr.Arguments[0] as Expr<int>;
             Assert.IsNotNull(redArg);
-            Assert.AreEqual(TypeOfExpression.GetVariable, redArg.Operator);
+            Assert.AreEqual(Operators.GetVariable, redArg.Operator);
             Assert.AreEqual("temperature", redArg.Arguments[0].Value);
 
             // Assert: Green channel == literal 0
@@ -234,7 +234,7 @@ namespace Netherlands3D.LayerStyles
             // Assert: Blue channel == min expression
             Expr<int> blueArg = rgbExpr.Arguments[2] as Expr<int>;
             Assert.IsNotNull(blueArg);
-            Assert.AreEqual(TypeOfExpression.Min, blueArg.Operator);
+            Assert.AreEqual(Operators.Min, blueArg.Operator);
             Assert.AreEqual(2, blueArg.Arguments.Length);
 
             // Assert: first operand of min expression == 100
@@ -243,7 +243,7 @@ namespace Netherlands3D.LayerStyles
             // Assert: second operand == temperature variable
             Expr<IConvertible> nestedGet = (Expr<IConvertible>)blueArg.Arguments[1];
             Assert.IsNotNull(nestedGet);
-            Assert.AreEqual(TypeOfExpression.GetVariable, nestedGet.Operator);
+            Assert.AreEqual(Operators.GetVariable, nestedGet.Operator);
             Assert.AreEqual("temperature", nestedGet.Arguments[0].Value);
         }
     }
