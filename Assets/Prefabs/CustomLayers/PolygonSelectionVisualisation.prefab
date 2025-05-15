@@ -46,13 +46,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabIdentifier: 0dd48855510674827b667fa4abd5cf60
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
     m_PersistentCalls:
       m_Calls: []
-  PolygonMeshMaterial: {fileID: 2100000, guid: c7fb2e346bb0d4f6da1f26f4c0bcf533, type: 2}
+  PolygonMeshMaterial: {fileID: 2100000, guid: 73e95359a3aa14905aa9beded2564556, type: 2}
 --- !u!114 &5962417615404079703
 MonoBehaviour:
   m_ObjectHideFlags: 0
