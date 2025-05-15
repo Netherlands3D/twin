@@ -22,17 +22,8 @@ namespace Netherlands3D
      
         public static T GetService<T>() where T : MonoBehaviour
         {
-            //if (!registeredServices.ContainsKey(typeof(T)))
-            //{
-            //    T service = GameObject.FindAnyObjectByType<T>();
-            //    if (service != null)
-            //    {
-            //        RegisterService(service);
-            //    }
-            //}
-            MonoBehaviour v;
-            registeredServices.TryGetValue(typeof(T), out v);
-            return v as T;
+            registeredServices.TryGetValue(typeof(T), out var monoBehaviour);
+            return monoBehaviour as T;
         }
 
     }
