@@ -3,6 +3,7 @@ using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.LayerStyles.ExtensionMethods;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
@@ -198,7 +199,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnSelect()
         {
-            var transformInterfaceToggle = FindAnyObjectByType<TransformHandleInterfaceToggle>(FindObjectsInactive.Include); //todo remove FindObjectOfType
+            var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
 
             if (!transformInterfaceToggle)
             {
@@ -217,7 +218,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected void ClearTransformHandles()
         {
-            var transformInterfaceToggle = FindAnyObjectByType<TransformHandleInterfaceToggle>(FindObjectsInactive.Include);
+            var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
 
             if (transformInterfaceToggle)
                 transformInterfaceToggle.ClearTransformTarget();

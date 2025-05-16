@@ -3,6 +3,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Utility;
@@ -14,10 +15,12 @@ using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
-    public class ObjectSelector : MonoBehaviour
+    public class ObjectSelectorService : MonoBehaviour
     {
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
+        public UnityEvent OnDeselect = new();
+        public UnityEvent OnSelectDifferentLayer = new();
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
@@ -50,6 +53,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         }
         public bool debugMappingTree = false;
         private static MappingTree mappingTreeInstance;
+        private LayerData lastSelectedMappingLayerData = null;
         private LayerData lastSelectedLayerData = null;
 
         private void Awake()
@@ -59,12 +63,56 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             subObjectSelector = gameObject.AddComponent<SubObjectSelector>();
             featureSelector = gameObject.AddComponent<FeatureSelector>();
             featureSelector.SetMappingTree(MappingTree);
-
-            foreach(Tool tool  in activeForTools) 
-                tool.onClose.AddListener(() => Deselect());
-
+            
             Interaction.ObjectMappingCheckIn += OnAddObjectMapping;
             Interaction.ObjectMappingCheckOut += OnRemoveObjectMapping;
+        }
+
+        private void OnEnable()
+        {
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
+
+            foreach (Tool tool  in activeForTools) 
+                tool.onClose.AddListener(Deselect);
+        }
+
+        private void OnDisable()
+        {
+            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
+
+            foreach (Tool tool  in activeForTools) 
+                tool.onClose.RemoveListener(Deselect);
+        }
+
+        private void OnProjectChanged(ProjectData data)
+        {
+            ProjectData.Current.RootLayer.AddedSelectedLayer.AddListener(OnAddSelectedLayer);
+            ProjectData.Current.RootLayer.RemovedSelectedLayer.AddListener(OnRemoveSelectedLayer);
+        }
+
+        private void OnAddSelectedLayer(LayerData data)
+        {
+            //we need to check this before Isclicked because it checks if its over the ui
+            if (ProjectData.Current.RootLayer.SelectedLayers.Count > 0 && ProjectData.Current.RootLayer.SelectedLayers.Last() != data)
+            {
+                Deselect();
+                OnSelectDifferentLayer.Invoke();
+            }
+            lastSelectedLayerData = data;
+        }
+
+        private void OnRemoveSelectedLayer(LayerData data)
+        {
+            //we need to check this before Isclicked because it checks if its over the ui
+            if(ProjectData.Current.RootLayer.SelectedLayers.Count == 0)
+            {
+                if (lastSelectedLayerData != null || lastSelectedMappingLayerData != null)
+                {
+                    Deselect();
+                    lastSelectedLayerData = null;
+                    lastSelectedMappingLayerData = null;
+                }
+            }
         }
 
         private void Start()
@@ -87,33 +135,36 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void Update()
         {            
-            if (IsAnyToolActive() && IsClicked())
-            {
-                Deselect();
-                //the following method calls need to run in order!
-                string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
-                IMapping mapping = FindObjectMapping();
-                if(mapping == null && lastSelectedLayerData != null)
+            if (IsAnyToolActive())
+            {    
+                if (IsClicked())
                 {
-                    //when nothing is selected but there was something selected, deselect the current active layer
-                    lastSelectedLayerData.DeselectLayer();
-                    lastSelectedLayerData = null;
-                }
-                if (mapping is MeshMapping map)
-                {
-                    SelectBagId(bagId);
-                    LayerData layerData = subObjectSelector.GetLayerDataForSubObject(map.ObjectMapping);
-                    layerData.SelectLayer(true);
-                    lastSelectedLayerData = layerData;
-                    SelectSubObjectWithBagId?.Invoke(map, bagId);
-                }
-                else if(mapping is FeatureMapping feature) 
-                {
-                    LayerData layerData = feature.VisualisationParent.LayerData;
-                    layerData.SelectLayer(true);    
-                    lastSelectedLayerData = layerData;
-                    SelectFeatureMapping(feature);
-                    SelectFeature?.Invoke(feature);
+                    Deselect();
+                    //the following method calls need to run in order!
+                    string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
+                    IMapping mapping = FindObjectMapping();
+                    if (mapping == null && lastSelectedMappingLayerData != null)
+                    {
+                        //when nothing is selected but there was something selected, deselect the current active layer
+                        lastSelectedMappingLayerData.DeselectLayer();
+                        lastSelectedMappingLayerData = null;
+                    }
+                    if (mapping is MeshMapping map)
+                    {                      
+                        LayerData layerData = subObjectSelector.GetLayerDataForSubObject(map.ObjectMapping);
+                        layerData.SelectLayer(true);
+                        lastSelectedMappingLayerData = layerData;
+                        SelectBagId(bagId);
+                        SelectSubObjectWithBagId?.Invoke(map, bagId);
+                    }
+                    else if (mapping is FeatureMapping feature)
+                    {
+                        LayerData layerData = feature.VisualisationParent.LayerData;
+                        layerData.SelectLayer(true);
+                        lastSelectedMappingLayerData = layerData;
+                        SelectFeatureMapping(feature);
+                        SelectFeature?.Invoke(feature);
+                    }
                 }
             }
         }
@@ -260,6 +311,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             subObjectSelector.Deselect();
             featureSelector.Deselect();
+            OnDeselect.Invoke();
         }
 
 #if UNITY_EDITOR
@@ -269,6 +321,5 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 MappingTree.DebugTree();
         }
 #endif
-
     }
 }
