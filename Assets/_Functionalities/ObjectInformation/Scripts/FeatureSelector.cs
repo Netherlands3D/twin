@@ -73,8 +73,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public void FindFeatureByPosition(Vector3 position)
         {
             featureMappings.Clear();
-
-
             if (blockingObjectMapping != null)
             {
                 Coordinate blockingCoordinate = new Coordinate(blockingObjectMappingHitPoint);
