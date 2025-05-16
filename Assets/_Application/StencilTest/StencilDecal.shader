@@ -19,7 +19,7 @@ Shader "Netherlands3D/StencilDecal"
         
         ZWrite Off
         ZTest Off
-//        ColorMask Off
+        ColorMask Off
 
         Pass
         {
