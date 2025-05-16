@@ -11,6 +11,7 @@ using GG.Extensions;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using UnityEngine.Serialization;
+using Netherlands3D.Services;
 
 namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 {
@@ -175,7 +176,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 SetHighlight(InteractionState.Selected); // needed because eventListener is not assigned yet when calling layer.SelectLayer when the UI is instantiated
             enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
             UpdateColor(Layer.Color);
-            RegisterWithPropertiesPanel(Properties.Properties.Instance);
+            RegisterWithPropertiesPanel(ServiceLocator.GetService<Properties.Properties>());
         }
 
         private void OnNameChanged(string newName)

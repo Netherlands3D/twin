@@ -50,7 +50,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 		[SerializeField] private GameObject buildingContentPanel;
         [SerializeField] private GameObject featureContentPanel;
 
-		private ObjectSelector objectSelector;      
+		private ObjectSelectorService objectSelector;      
 
         private void Awake()
 		{
@@ -58,7 +58,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
 			HideObjectInformation();
 
-			objectSelector = FindAnyObjectByType<ObjectSelector>();
+			objectSelector = FindAnyObjectByType<ObjectSelectorService>();
 			objectSelector.SelectSubObjectWithBagId.AddListener(SelectBuildingOnHit);
 			objectSelector.SelectFeature.AddListener(SelectFeatureOnHit);
             //todo, update when the object information mode is opened so this will update with the current selected object

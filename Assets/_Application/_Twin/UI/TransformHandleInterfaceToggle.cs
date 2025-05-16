@@ -1,5 +1,6 @@
 using RuntimeHandle;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.UI
 {
@@ -7,6 +8,8 @@ namespace Netherlands3D.Twin.UI
     {
         [SerializeField] private RuntimeTransformHandle runtimeTransformHandle;
         [SerializeField] private TransformHandleButtonsPanel handleButtonsPanel;
+
+        public UnityEvent<GameObject> SetTarget = new();
 
         public RuntimeTransformHandle RuntimeTransformHandle { get => runtimeTransformHandle; private set => runtimeTransformHandle = value; }
 
@@ -18,8 +21,12 @@ namespace Netherlands3D.Twin.UI
 
         public void SetTransformTarget(GameObject targetGameObject)
         {
+            handleButtonsPanel.ShowPanel(true);
+            handleButtonsPanel.ShowVisibilityPanel(true);
+
             //Set the target of the transform handle
             RuntimeTransformHandle.SetTarget(targetGameObject);
+            SetTarget.Invoke(targetGameObject);
 
             //Check if specific Transform axes locks are set
             if(targetGameObject.TryGetComponent(out TransformAxes transformLocks))
@@ -37,15 +44,15 @@ namespace Netherlands3D.Twin.UI
 
         public void ClearTransformTarget()
         {
+            SetTarget.Invoke(null);
             gameObject.SetActive(false);
-        }
-
-        private void OnDisable() {
             handleButtonsPanel.ShowPanel(false);
+            handleButtonsPanel.ShowVisibilityPanel(false);
         }
 
-        private void OnEnable() {
-            handleButtonsPanel.ShowPanel(true);
+        public void ShowVisibilityPanel(bool show)
+        {
+            handleButtonsPanel.ShowVisibilityPanel(show);
         }
     }
 }
