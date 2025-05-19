@@ -4051,12 +4051,12 @@ PrefabInstance:
     - target: {fileID: 6805947869052826583, guid: 33e64405ad298e54dbb77a40d519a6dc,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 271.46002
+      value: 78.11
       objectReference: {fileID: 0}
     - target: {fileID: 6805947869052826583, guid: 33e64405ad298e54dbb77a40d519a6dc,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 267.73
+      value: 171.055
       objectReference: {fileID: 0}
     - target: {fileID: 6805947869052826583, guid: 33e64405ad298e54dbb77a40d519a6dc,
         type: 3}
@@ -4066,7 +4066,7 @@ PrefabInstance:
     - target: {fileID: 6900117431812857800, guid: 33e64405ad298e54dbb77a40d519a6dc,
         type: 3}
       propertyPath: m_text
-      value: bag id 222222222222222222222222
+      value: bag id
       objectReference: {fileID: 0}
     - target: {fileID: 6900117431812857800, guid: 33e64405ad298e54dbb77a40d519a6dc,
         type: 3}
@@ -4251,7 +4251,7 @@ PrefabInstance:
     - target: {fileID: 8920216056679834912, guid: 33e64405ad298e54dbb77a40d519a6dc,
         type: 3}
       propertyPath: m_Name
-      value: KeyValuePair_ BAG ID Variant
+      value: KeyValuePair_ BAG ID
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3412161744270794462, guid: 33e64405ad298e54dbb77a40d519a6dc, type: 3}
