@@ -12,11 +12,12 @@ namespace Netherlands3D.Twin
 
         private void Awake()
         {
-            allSelectionServices.Add(this);
-            if (isDefaultActivatedService && allSelectionServices.FirstOrDefault(s => s.isDefaultActivatedService))
+            var foundDefaultService = allSelectionServices.FirstOrDefault(s => s.isDefaultActivatedService);
+            if (isDefaultActivatedService && foundDefaultService)
             {
-                throw new Exception("Only 1 selection service can be enabled when others are disabled.");
+                throw new Exception("Only 1 selection service can be enabled when others are disabled. Already found: " + foundDefaultService.gameObject.name + ", while trying to add: " + gameObject.name);
             }
+            allSelectionServices.Add(this);
         }
 
         private void OnEnable()
