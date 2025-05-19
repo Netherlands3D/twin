@@ -27,42 +27,65 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
         public bool Supports(LocalFile localFile)
         {
-            //TODO, check if reading the geojson check is potentially very large, maybe a timeout or a schema https://github.com/CesiumGS/3d-tiles/blob/main/specification/schema/tileset.schema.json
+            // TODO: check if reading the geojson is potentially very large, maybe a timeout or a schema
+            // https://github.com/CesiumGS/3d-tiles/blob/main/specification/schema/tileset.schema.json
 
+            // TODO: Overweeg om efficiënter en explicieter te parsen/valideren:
+            // 1. JObject.Parse (Newtonsoft): volledige JSON inlezen en gericht properties controleren
+            //    var json = File.ReadAllText(path);
+            //    var root = JObject.Parse(json);
+            //    if (root["asset"]?["version"]?.ToString() != null) ...
+            //
+            // 2. System.Text.Json (sneller, lichter alternatief voor Newtonsoft):
+            //    var json = File.ReadAllText(path);
+            //    using var doc = JsonDocument.Parse(json);
+            //    if (doc.RootElement.TryGetProperty("asset", out var asset)) ...
+            //
+            // 3. JSON Schema validatie (bijv. met Newtonsoft.Json.Schema):
+            //    JSchema schema = JSchema.Parse(File.ReadAllText("tileset.schema.json"));
+            //    JObject obj = JObject.Parse(File.ReadAllText(path));
+            //    bool isValid = obj.IsValid(schema, out IList<string> errors);
+            //
+            // Let op: bij grote bestanden of veel validaties kan performance relevant zijn,
+            // dus alleen schema-validatie gebruiken als strikte structuurcontrole gewenst is.
 
-            // Check if the file has JSON content
-            if (!LooksLikeAJSONFile(localFile.LocalFilePath))
-                return false;
-
-            // Streamread the JSON until we find some GeoJSON properties
             using var reader = new StreamReader(localFile.LocalFilePath);
             using var jsonReader = new JsonTextReader(reader);
 
+            if (!jsonReader.Read())
+                return false; // Bestand is leeg of ongeldig
+
+            bool isStartOfValidJson = jsonReader.TokenType == JsonToken.StartObject || jsonReader.TokenType == JsonToken.StartArray;
+            if (!isStartOfValidJson)
+                return false;
+
+            // Nu verder lezen naar inhoud
             while (jsonReader.Read())
             {
                 if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "type")
                 {
-                    jsonReader.Read(); //reads value
+                    jsonReader.Read(); // naar value
                     if ((string)jsonReader.Value == "FeatureCollection" || (string)jsonReader.Value == "Feature")
-                        return false; //this is a GeoJson, not a 3D Tileset
+                        return false; // GeoJSON, geen 3D Tileset
                 }
 
                 if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "asset")
                 {
-                    jsonReader.Read(); //reads StartObject {
-                    jsonReader.Read(); //reads new object key which should be the version
-                    if ((string)jsonReader.Value == "version")
-                        return true;
+                    jsonReader.Read(); // StartObject
+                    if (jsonReader.TokenType == JsonToken.StartObject)
+                    {
+                        while (jsonReader.Read() && jsonReader.TokenType != JsonToken.EndObject)
+                        {
+                            if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "version")
+                            {
+                                return true;
+                            }
+                        }
+                    }
                 }
             }
-            return false;
-        }
 
-        private bool LooksLikeAJSONFile(string filePath)
-        {
-            using var reader = new StreamReader(filePath);
-            var firstChar = reader.Read();
-            return firstChar == '{' || firstChar == '[';
+            return false;
         }
     }
 }
