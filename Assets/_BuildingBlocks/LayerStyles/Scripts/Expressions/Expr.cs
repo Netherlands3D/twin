@@ -1,8 +1,9 @@
 ﻿using System;
-using UnityEngine;
+using Newtonsoft.Json;
 
 namespace Netherlands3D.LayerStyles.Expressions
 {
+    [JsonConverter(typeof(ExprJsonConverter))]
     public abstract class Expr : IExpression
     {
         public string Operator { get; protected set; }
@@ -13,6 +14,8 @@ namespace Netherlands3D.LayerStyles.Expressions
         public bool IsLiteral => Operator == Operators.Literal;
         public bool IsExpression => Operator != Operators.Literal;
 
+        #region Operators - when you change this, change ExpressionEvaluator and ExprJsonConverter too!
+        
         public static Expr<bool> EqualsTo<TLeft, TRight>(Expr<TLeft> lhs, Expr<TRight> rhs) where TLeft : IConvertible where TRight : IConvertible
             => new(Operators.EqualTo, new IExpression[] { lhs, rhs });
 
@@ -36,6 +39,8 @@ namespace Netherlands3D.LayerStyles.Expressions
         
         public static Expr<IConvertible> Min<TLeft, TRight>(Expr<TLeft> lhs, Expr<TRight> rhs) where TLeft : IConvertible where TRight : IConvertible 
             => new(Operators.Min, new IExpression[] { lhs, rhs });
+
+        #endregion
     }
 
     /// <summary>

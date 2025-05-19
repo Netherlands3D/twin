@@ -5,6 +5,9 @@ namespace Netherlands3D.LayerStyles.Expressions
 {
     public class ExpressionEvaluator
     {
+        /// <summary>
+        /// When changing this, do not forget to change Expr and ExprJsonConverter 
+        /// </summary>
         public IConvertible Evaluate(IExpression expr, ExpressionContext context)
         {
             return expr.Operator switch
