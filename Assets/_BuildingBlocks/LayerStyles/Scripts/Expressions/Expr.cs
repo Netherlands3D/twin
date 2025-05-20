@@ -1,12 +1,11 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Netherlands3D.LayerStyles.Expressions
 {
     [JsonConverter(typeof(ExprJsonConverter))]
     public abstract class Expr : IExpression
     {
-        public string Operator { get; protected set; }
+        public Operators Operator { get; protected set; }
         public IExpression[] Arguments { get; protected set; }
         
         public ExpressionValue Value { get; protected set; }
@@ -54,7 +53,7 @@ namespace Netherlands3D.LayerStyles.Expressions
     public class Expr<T> : Expr
     {
         // Disallow direct instantiation: Always use the factory methods in the Expr class
-        internal Expr(string op, IExpression[] arguments)
+        internal Expr(Operators op, IExpression[] arguments)
         {
             Operator = op;
             Arguments = arguments;

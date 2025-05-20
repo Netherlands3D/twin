@@ -31,7 +31,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             {
                 // non‐literal → [ operator, arg1, arg2, … ]
                 writer.WriteStartArray();
-                writer.WriteValue(expr.Operator);
+                serializer.Serialize(writer, expr.Operator);
                 foreach (var arg in expr.Arguments)
                     serializer.Serialize(writer, arg);
                 writer.WriteEndArray();
@@ -62,10 +62,10 @@ namespace Netherlands3D.LayerStyles.Expressions
                 throw new JsonSerializationException("Expression array must have at least one element");
 
             // first element is the operator name
-            var op = arr[0].ToObject<string>(serializer);
+            var op = arr[0].ToObject<Operators>(serializer);
 
             // remaining elements ⇒ recursive call, always producing Expr<IConvertible>
-            var argType = ExprOpenGeneric.MakeGenericType(typeof(IConvertible));
+            var argType = ExprOpenGeneric.MakeGenericType(typeof(ExpressionValue));
             IExpression[] args = arr
                 .Skip(1)
                 .Select(t => (IExpression)ReadExpression(t, argType, serializer))
@@ -77,7 +77,7 @@ namespace Netherlands3D.LayerStyles.Expressions
         /// <summary>
         /// When changing this location - do not forget to change Expr and/or ExpressionEvaluator
         /// </summary>
-        private object CastExpressionTo(Type targetType, string op, IExpression[] args)
+        private object CastExpressionTo(Type targetType, Operators op, IExpression[] args)
         {
             switch (op)
             {

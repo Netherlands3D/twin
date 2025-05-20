@@ -1,16 +1,30 @@
-﻿namespace Netherlands3D.LayerStyles.Expressions
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace Netherlands3D.LayerStyles.Expressions
 {
-    public struct Operators
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum Operators
     {
-        public const string Literal = "literal";
-        public const string EqualTo = "==";
-        public const string GreaterThan = ">";
-        public const string GreaterThanOrEqual = ">=";
-        public const string LessThan = "<";
-        public const string LessThanOrEqual = "<=";
-        public const string Rgb = "rgb";
-        public const string GetVariable = "get";
-        public const string Min = "-";
-        public const string In = "in";
+        [EnumMember(Value = "literal")] Literal,
+
+        [EnumMember(Value = "==")] EqualTo,
+
+        [EnumMember(Value = ">")] GreaterThan,
+
+        [EnumMember(Value = ">=")] GreaterThanOrEqual,
+
+        [EnumMember(Value = "<")] LessThan,
+
+        [EnumMember(Value = "<=")] LessThanOrEqual,
+
+        [EnumMember(Value = "min")] Min,
+
+        [EnumMember(Value = "rgb")] Rgb,
+
+        [EnumMember(Value = "get")] GetVariable,
+
+        [EnumMember(Value = "in")] In
     }
 }

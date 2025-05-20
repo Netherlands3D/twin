@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Netherlands3D.LayerStyles.Expressions
+﻿namespace Netherlands3D.LayerStyles.Expressions
 {
     public interface IExpression
     {
-        public string Operator { get; }
+        public Operators Operator { get; }
         public IExpression[] Arguments { get; }
         
         public ExpressionValue Value { get; }

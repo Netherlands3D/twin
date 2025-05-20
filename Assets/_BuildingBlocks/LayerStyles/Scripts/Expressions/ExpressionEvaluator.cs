@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Netherlands3D.LayerStyles.Expressions
 {
@@ -25,8 +24,7 @@ namespace Netherlands3D.LayerStyles.Expressions
                     expr.Arguments[0] as Expr<int>, 
                     expr.Arguments[1] as Expr<int>, 
                     expr.Arguments[2] as Expr<int>
-                ),
-                _ => throw new ArgumentOutOfRangeException()
+                )
             };
         }
         
