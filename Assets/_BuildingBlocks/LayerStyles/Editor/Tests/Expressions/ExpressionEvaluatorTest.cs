@@ -23,7 +23,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             const int value = 42;
             Expr<int> e = value;
 
-            Assert.AreEqual(evaluator.Evaluate(e, context), value);
+            Assert.AreEqual(value, (int)evaluator.Evaluate(e, context));
         }
 
         [Test]
@@ -32,7 +32,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             const string value = "hello";
             Expr<string> e = value;
 
-            Assert.AreEqual(evaluator.Evaluate(e, context), value);
+            Assert.AreEqual(value, (string)evaluator.Evaluate(e, context));
         }
 
         [Test]
@@ -59,23 +59,23 @@ namespace Netherlands3D.LayerStyles.Expressions
             const bool value = true;
             Expr<bool> e = value;
 
-            Assert.AreEqual(evaluator.Evaluate(e, context), value);
+            Assert.AreEqual(value, (bool)evaluator.Evaluate(e, context));
         }
 
         [Test]
         public void EvaluateLiteralArrayExpression()
         {
-            Array value = new Array();
-            Expr<Array> e = value;
+            ExpressionValue[] value = {};
+            Expr<ExpressionValue[]> e = value;
 
-            Assert.AreEqual(evaluator.Evaluate(e, context), value);
+            Assert.AreEqual(value, (ExpressionValue[])evaluator.Evaluate(e, context));
         }
 
         [Test]
         public void EvaluateEqualsToExpression()
         {
-            var match = Expr.EqualsTo((Expr<int>)42, (Expr<int>)42);
-            var noMatch = Expr.EqualsTo((Expr<int>)41, (Expr<int>)42);
+            var match = Expr.EqualsTo(42, 42);
+            var noMatch = Expr.EqualsTo(41, 42);
 
             Assert.IsTrue((bool)evaluator.Evaluate(match, context));
             Assert.IsFalse((bool)evaluator.Evaluate(noMatch, context));
@@ -84,9 +84,9 @@ namespace Netherlands3D.LayerStyles.Expressions
         [Test]
         public void EvaluateGreaterThanExpression()
         {
-            var greater = Expr.GreaterThan((Expr<int>)43, (Expr<int>)42);
-            var equals = Expr.GreaterThan((Expr<int>)42, (Expr<int>)42);
-            var less = Expr.GreaterThan((Expr<int>)42, (Expr<int>)43);
+            var greater = Expr.GreaterThan(43, 42);
+            var equals = Expr.GreaterThan(42, 42);
+            var less = Expr.GreaterThan(42, 43);
 
             Assert.IsTrue((bool)evaluator.Evaluate(greater, context));
             Assert.IsFalse((bool)evaluator.Evaluate(equals, context));
@@ -96,9 +96,9 @@ namespace Netherlands3D.LayerStyles.Expressions
         [Test]
         public void EvaluateGreaterThanOrEqualExpression()
         {
-            var greater = Expr.GreaterThanOrEqual((Expr<int>)43, (Expr<int>)42);
-            var equals = Expr.GreaterThanOrEqual((Expr<int>)42, (Expr<int>)42);
-            var less = Expr.GreaterThanOrEqual((Expr<int>)42, (Expr<int>)43);
+            var greater = Expr.GreaterThanOrEqual(43, 42);
+            var equals = Expr.GreaterThanOrEqual(42, 42);
+            var less = Expr.GreaterThanOrEqual(42, 43);
 
             Assert.IsTrue((bool)evaluator.Evaluate(greater, context));
             Assert.IsTrue((bool)evaluator.Evaluate(equals, context));
@@ -108,9 +108,9 @@ namespace Netherlands3D.LayerStyles.Expressions
         [Test]
         public void EvaluateLessThanExpression()
         {
-            var greater = Expr.LessThan((Expr<int>)43, (Expr<int>)42);
-            var equals = Expr.LessThan((Expr<int>)42, (Expr<int>)42);
-            var less = Expr.LessThan((Expr<int>)42, (Expr<int>)43);
+            var greater = Expr.LessThan(43, 42);
+            var equals = Expr.LessThan(42, 42);
+            var less = Expr.LessThan(42, 43);
 
             Assert.IsFalse((bool)evaluator.Evaluate(greater, context));
             Assert.IsFalse((bool)evaluator.Evaluate(equals, context));
@@ -120,9 +120,9 @@ namespace Netherlands3D.LayerStyles.Expressions
         [Test]
         public void EvaluateLessThanOrEqualExpression()
         {
-            var greater = Expr.LessThanOrEqual((Expr<int>)43, (Expr<int>)42);
-            var equals = Expr.LessThanOrEqual((Expr<int>)42, (Expr<int>)42);
-            var less = Expr.LessThanOrEqual((Expr<int>)42, (Expr<int>)43);
+            var greater = Expr.LessThanOrEqual(43, 42);
+            var equals = Expr.LessThanOrEqual(42, 42);
+            var less = Expr.LessThanOrEqual(42, 43);
 
             Assert.IsFalse((bool)evaluator.Evaluate(greater, context));
             Assert.IsTrue((bool)evaluator.Evaluate(equals, context));
@@ -132,18 +132,19 @@ namespace Netherlands3D.LayerStyles.Expressions
         [Test]
         public void EvaluateGetVariableExpression()
         {
+            // TODO: Add another test that will check what happens if you pass an invalid type of attribute
             context.Feature.Attributes.Add("temperature", "100");
-            Expr<IConvertible> getVariableExpression = Expr.GetVariable("temperature");
+            Expr<ExpressionValue> getVariableExpression = Expr.GetVariable("temperature");
             
-            Assert.AreEqual(evaluator.Evaluate(getVariableExpression, context), "100");
+            Assert.AreEqual("100", (string)evaluator.Evaluate(getVariableExpression, context));
         }
 
         [Test]
         public void EvaluateMinExpression()
         {
-            Expr<int> minExpression = Expr.Min((Expr<int>)100, (Expr<int>)60);
+            Expr<int> minExpression = Expr.Min(100, 60);
 
-            Assert.AreEqual(60, evaluator.Evaluate(minExpression, context));
+            Assert.AreEqual(60, (int)evaluator.Evaluate(minExpression, context));
         }
 
         [Test]
@@ -151,7 +152,7 @@ namespace Netherlands3D.LayerStyles.Expressions
         {
             Expr<string> rgbExpression = Expr.Rgb(100, 60, 10);
 
-            Assert.AreEqual("643C0A", evaluator.Evaluate(rgbExpression, context));
+            Assert.AreEqual("643C0A", (string)evaluator.Evaluate(rgbExpression, context));
         }
 
         [Test]
@@ -160,7 +161,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             var rgbExpr = Expr.Rgb(
             Expr.GetVariable("temperature"), 
             0, 
-            Expr.Min((Expr<int>)100, Expr.GetVariable("temperature"))
+            Expr.Min(100, Expr.GetVariable("temperature"))
             );
 
             var layerFeature = LayerFeature.Create("string");

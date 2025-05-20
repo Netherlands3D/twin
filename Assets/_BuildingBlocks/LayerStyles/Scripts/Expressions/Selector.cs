@@ -8,7 +8,7 @@ namespace Netherlands3D.LayerStyles.Expressions
         {
         }
 
-        internal Selector(IConvertible value) : base(value)
+        internal Selector(ExpressionValue value) : base(value)
         {
         }
     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using UnityEngine;
 
 namespace Netherlands3D.LayerStyles.Expressions
 {
@@ -15,7 +14,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             Assert.IsTrue(e.IsLiteral);
             Assert.IsFalse(e.IsExpression);
             Assert.AreEqual(Operators.Literal, e.Operator);
-            Assert.AreEqual(42, e.Value);
+            Assert.AreEqual(42, (int)e.Value);
             Assert.IsNull(e.Arguments);
         }
 
@@ -27,7 +26,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             Assert.IsTrue(e.IsLiteral);
             Assert.AreEqual(Operators.Literal, e.Operator);
             Assert.IsFalse(e.IsExpression);
-            Assert.AreEqual("hello", e.Value);
+            Assert.AreEqual("hello", (string)e.Value);
             Assert.IsNull(e.Arguments);
         }
 
@@ -39,7 +38,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             Assert.IsTrue(e.IsLiteral);
             Assert.IsFalse(e.IsExpression);
             Assert.AreEqual(Operators.Literal, e.Operator);
-            Assert.AreEqual(true, e.Value);
+            Assert.AreEqual(true, (bool)e.Value);
             Assert.IsNull(e.Arguments);
         }
 
@@ -63,17 +62,14 @@ namespace Netherlands3D.LayerStyles.Expressions
             Assert.IsTrue(e.IsLiteral);
             Assert.IsFalse(e.IsExpression);
             Assert.AreEqual(Operators.Literal, e.Operator);
-            Assert.AreEqual(2.71828d, e.Value);
+            Assert.AreEqual(2.71828d, (double)e.Value);
             Assert.IsNull(e.Arguments);
         }
 
         [Test]
         public void ExpressAGreaterComparison()
         {
-            Expr<int> left = 5;
-            Expr<int> right = 10;
-
-            Expr<bool> cmp = Expr.GreaterThan(left, right);
+            Expr<bool> cmp = Expr.GreaterThan(5, 10);
 
             Assert.IsFalse(cmp.IsLiteral);
             Assert.IsTrue(cmp.IsExpression);
@@ -81,48 +77,42 @@ namespace Netherlands3D.LayerStyles.Expressions
 
             Assert.IsNotNull(cmp.Arguments);
             Assert.AreEqual(2, cmp.Arguments.Length);
-            Assert.AreEqual(5, cmp.Arguments[0].Value);
-            Assert.AreEqual(10, cmp.Arguments[1].Value);
+            Assert.AreEqual(5, (int)cmp.Arguments[0].Value);
+            Assert.AreEqual(10, (int)cmp.Arguments[1].Value);
         }
 
         [Test]
         public void ExpressAnEqualityComparison()
         {
-            Expr<int> a = 7;
-            Expr<int> b = 8;
-
-            Expr<bool> eq = Expr.EqualsTo(a, b);
+            Expr<bool> eq = Expr.EqualsTo(7, 8);
 
             Assert.AreEqual(Operators.EqualTo, eq.Operator);
 
             Assert.IsNotNull(eq.Arguments);
             Assert.AreEqual(2, eq.Arguments.Length);
-            Assert.AreEqual(7, eq.Arguments[0].Value);
-            Assert.AreEqual(8, eq.Arguments[1].Value);
+            Assert.AreEqual(7, (int)eq.Arguments[0].Value);
+            Assert.AreEqual(8, (int)eq.Arguments[1].Value);
         }
 
         [Test]
         public void ExpressAnEqualityComparisonOnStrings()
         {
-            Expr<string> a = "hello";
-            Expr<string> b = "world";
-
-            Expr<bool> eq = Expr.EqualsTo(a, b);
+            Expr<bool> eq = Expr.EqualsTo("hello", "world");
 
             Assert.AreEqual(Operators.EqualTo, eq.Operator);
 
             Assert.IsNotNull(eq.Arguments);
             Assert.AreEqual(2, eq.Arguments.Length);
-            Assert.AreEqual("hello", eq.Arguments[0].Value);
-            Assert.AreEqual("world", eq.Arguments[1].Value);
+            Assert.AreEqual("hello", (string)eq.Arguments[0].Value);
+            Assert.AreEqual("world", (string)eq.Arguments[1].Value);
         }
 
         [Test]
         public void ExpressComparisonsWithAllNumericTypes()
         {
-            Expr<int> i = 3;
-            Expr<float> f = 4.0f;
-            Expr<double> d = 5.0d;
+            int i = 3;
+            float f = 4.0f;
+            double d = 5.0d;
 
             Expr<bool> eq = Expr.EqualsTo(i, f);
             Expr<bool> gt = Expr.GreaterThan(i, f);
@@ -149,9 +139,9 @@ namespace Netherlands3D.LayerStyles.Expressions
             Assert.AreEqual(Operators.Rgb, rgb.Operator);
             Assert.AreEqual(3, rgb.Arguments.Length);
 
-            Assert.AreEqual(255, rgb.Arguments[0].Value);
-            Assert.AreEqual(128, rgb.Arguments[1].Value);
-            Assert.AreEqual(0, rgb.Arguments[2].Value);
+            Assert.AreEqual(255, (int)rgb.Arguments[0].Value);
+            Assert.AreEqual(128, (int)rgb.Arguments[1].Value);
+            Assert.AreEqual(0, (int)rgb.Arguments[2].Value);
         }
 
         [Test]
@@ -162,7 +152,7 @@ namespace Netherlands3D.LayerStyles.Expressions
 
             Assert.AreEqual(Operators.GetVariable, getVariable.Operator);
             Assert.AreEqual(1, getVariable.Arguments.Length);
-            Assert.AreEqual("foo", getVariable.Arguments[0].Value);
+            Assert.AreEqual("foo", (string)getVariable.Arguments[0].Value);
         }
 
         [Test]
@@ -173,7 +163,24 @@ namespace Netherlands3D.LayerStyles.Expressions
 
             Assert.AreEqual(Operators.GetVariable, getVariable.Operator);
             Assert.AreEqual(1, getVariable.Arguments.Length);
-            Assert.AreEqual(5, getVariable.Arguments[0].Value);
+            Assert.AreEqual(5, (int)getVariable.Arguments[0].Value);
+        }
+
+        [Test]
+        public void ExpressCheckingIfAValueOccursInAList()
+        {
+            string nameExpr = "keyword";
+            ExpressionValue[] listExpr = { "value", "keyword" };
+
+            Expr<bool> inList = Expr.In(nameExpr, listExpr);
+            
+            Assert.AreEqual(Operators.In, inList.Operator);
+            Assert.AreEqual(2, inList.Arguments.Length);
+            Assert.AreEqual("keyword", (string)inList.Arguments[0].Value);
+            
+            ExpressionValue[] list = inList.Arguments[1].Value;
+            Assert.AreEqual("value", (string)list[0].Value);
+            Assert.AreEqual("keyword", (string)list[1].Value);
         }
 
         [Test]
@@ -198,12 +205,12 @@ namespace Netherlands3D.LayerStyles.Expressions
              */
             
             // Act: Get expression that will grab the variable with name "temperature"
-            Expr<IConvertible> temperatureVariable = Expr.GetVariable("temperature");
+            Expr<int> temperatureVariable = Expr.GetVariable("temperature");
 
             // Act: Make expressions for the R, G and B components of the color
-            Expr<IConvertible> r = temperatureVariable;
+            Expr<int> r = temperatureVariable;
             Expr<int> g = 0;
-            Expr<IConvertible> b = Expr.Min((Expr<int>)100, temperatureVariable);
+            Expr<int> b = Expr.Min(100, temperatureVariable);
             
             // Act: Make the final expression that will grab the color using the previous expressions as input
             Expr<string> rgbExpr = Expr.Rgb(r, g, b);
@@ -223,13 +230,13 @@ namespace Netherlands3D.LayerStyles.Expressions
             Expr<int> redArg = rgbExpr.Arguments[0] as Expr<int>;
             Assert.IsNotNull(redArg);
             Assert.AreEqual(Operators.GetVariable, redArg.Operator);
-            Assert.AreEqual("temperature", redArg.Arguments[0].Value);
+            Assert.AreEqual("temperature", (string)redArg.Arguments[0].Value);
 
             // Assert: Green channel == literal 0
             Expr<int> greenArg = rgbExpr.Arguments[1] as Expr<int>;
             Assert.IsNotNull(greenArg);
             Assert.IsTrue(greenArg.IsLiteral);
-            Assert.AreEqual(0, greenArg.Value);
+            Assert.AreEqual(0, (int)greenArg.Value);
 
             // Assert: Blue channel == min expression
             Expr<int> blueArg = rgbExpr.Arguments[2] as Expr<int>;
@@ -238,13 +245,13 @@ namespace Netherlands3D.LayerStyles.Expressions
             Assert.AreEqual(2, blueArg.Arguments.Length);
 
             // Assert: first operand of min expression == 100
-            Assert.AreEqual(100, blueArg.Arguments[0].Value);
+            Assert.AreEqual(100, (int)blueArg.Arguments[0].Value);
 
             // Assert: second operand == temperature variable
-            Expr<IConvertible> nestedGet = (Expr<IConvertible>)blueArg.Arguments[1];
+            IExpression nestedGet = blueArg.Arguments[1];
             Assert.IsNotNull(nestedGet);
             Assert.AreEqual(Operators.GetVariable, nestedGet.Operator);
-            Assert.AreEqual("temperature", nestedGet.Arguments[0].Value);
+            Assert.AreEqual("temperature", (string)nestedGet.Arguments[0].Value);
         }
     }
 }

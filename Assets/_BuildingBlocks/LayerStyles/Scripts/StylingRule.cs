@@ -1,4 +1,5 @@
 using System.Runtime.Serialization;
+using Netherlands3D.LayerStyles.Expressions;
 using Newtonsoft.Json;
 
 namespace Netherlands3D.LayerStyles
@@ -45,7 +46,7 @@ namespace Netherlands3D.LayerStyles
         /// An expression whether a feature should match this styling rule, matching is done using an expression as
         /// described in https://docs.ogc.org/DRAFTS/18-067r4.html#_expressions.
         /// </summary>
-        [DataMember(Name = "selector")] public string Selector { get; private set; }
+        [DataMember(Name = "selector")] public IExpression Selector { get; private set; }
 
         [JsonConstructor]
         private StylingRule()
@@ -57,10 +58,10 @@ namespace Netherlands3D.LayerStyles
             Name = name;
             
             // Applies always - the selector will always return true
-            Selector = "true";
+            Selector = (Expr<bool>)true;
         }
 
-        public StylingRule(string name, string selector)
+        public StylingRule(string name, IExpression selector)
         {
             Name = name;
             Selector = selector;

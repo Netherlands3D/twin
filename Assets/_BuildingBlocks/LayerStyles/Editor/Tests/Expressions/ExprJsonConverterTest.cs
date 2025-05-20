@@ -109,7 +109,7 @@ namespace Netherlands3D.LayerStyles.Expressions
         public void SerializingAnExpressionProducesArray()
         {
             // ["==", 5, 10]
-            var expr = Expr.EqualsTo((Expr<int>)5, (Expr<int>)10);
+            var expr = Expr.EqualsTo(5, 10);
             
             string json = JsonConvert.SerializeObject(expr, jsonSerializerSettings);
             
@@ -147,7 +147,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             var getTemp = Expr.GetVariable(tempName);
 
             // build: Min(100, getTemp)
-            var minExpr = Expr.Min((Expr<int>)100, getTemp);
+            var minExpr = Expr.Min(100, getTemp);
 
             // build final: ["rgb", getTemp, 0, minExpr]
             // var rgb = Expr.Rgb(getTemp as Expr<int>, (Expr<int>)0, minExpr as Expr<int>);

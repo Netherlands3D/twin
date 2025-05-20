@@ -7,6 +7,6 @@ namespace Netherlands3D.LayerStyles.Expressions
         public string Operator { get; }
         public IExpression[] Arguments { get; }
         
-        public IConvertible Value { get; }
+        public ExpressionValue Value { get; }
     }
 }

@@ -11,5 +11,6 @@
         public const string Rgb = "rgb";
         public const string GetVariable = "get";
         public const string Min = "-";
+        public const string In = "in";
     }
 }

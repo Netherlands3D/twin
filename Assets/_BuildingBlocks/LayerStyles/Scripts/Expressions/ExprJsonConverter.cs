@@ -81,12 +81,12 @@ namespace Netherlands3D.LayerStyles.Expressions
         {
             switch (op)
             {
-                case Operators.EqualTo: return Expr.EqualsTo(args[0] as Expr<IConvertible>, args[1] as Expr<IConvertible>);
-                case Operators.GreaterThan: return Expr.GreaterThan(args[0] as Expr<IConvertible>, args[1] as Expr<IConvertible>);
-                case Operators.GreaterThanOrEqual: return Expr.GreaterThanOrEqual(args[0] as Expr<IConvertible>, args[1] as Expr<IConvertible>);
-                case Operators.LessThan: return Expr.LessThan(args[0] as Expr<IConvertible>, args[1] as Expr<IConvertible>);
-                case Operators.LessThanOrEqual: return Expr.LessThanOrEqual(args[0] as Expr<IConvertible>, args[1] as Expr<IConvertible>);
-                case Operators.Min: return Expr.Min(args[0] as Expr<IConvertible>, args[1] as Expr<IConvertible>);
+                case Operators.EqualTo: return Expr.EqualsTo(args[0] as Expr<ExpressionValue>, args[1] as Expr<ExpressionValue>);
+                case Operators.GreaterThan: return Expr.GreaterThan(args[0] as Expr<ExpressionValue>, args[1] as Expr<ExpressionValue>);
+                case Operators.GreaterThanOrEqual: return Expr.GreaterThanOrEqual(args[0] as Expr<ExpressionValue>, args[1] as Expr<ExpressionValue>);
+                case Operators.LessThan: return Expr.LessThan(args[0] as Expr<ExpressionValue>, args[1] as Expr<ExpressionValue>);
+                case Operators.LessThanOrEqual: return Expr.LessThanOrEqual(args[0] as Expr<ExpressionValue>, args[1] as Expr<ExpressionValue>);
+                case Operators.Min: return Expr.Min(args[0] as Expr<ExpressionValue>, args[1] as Expr<ExpressionValue>);
                 case Operators.GetVariable: return Expr.GetVariable(args[0] as Expr<string>);
                 case Operators.Rgb: return Expr.Rgb(
                     args[0] as Expr<int>, 
@@ -116,12 +116,12 @@ namespace Netherlands3D.LayerStyles.Expressions
                 case JTokenType.String: return new Expr<string>(token.Value<string>());
                 default:
                 {
-                    if (token.ToObject<object>(serializer) is not IConvertible c)
+                    if (token.ToObject<object>(serializer) is not ExpressionValue c)
                     {
                         throw new JsonSerializationException($"Unhandled literal type: {token.Type}");
                     }
 
-                    return new Expr<IConvertible>(c);
+                    return new Expr<ExpressionValue>(c);
                 }
             }
         }

@@ -178,9 +178,7 @@ namespace Netherlands3D.Twin.Layers
 #region Styling
         public Symbolizer GetStyling(LayerFeature feature)
         {
-            var symbolizer = new Symbolizer();
-            StyleSelectorParser.Instance.ResolveSymbologyForFeature(symbolizer, LayerData.Styles, feature);
-            return symbolizer;
+            return StyleResolver.Instance.GetStyling(feature, LayerData.Styles);
         }
 
         public virtual void ApplyStyling()

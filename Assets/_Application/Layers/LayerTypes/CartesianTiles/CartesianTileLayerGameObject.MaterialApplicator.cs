@@ -1,7 +1,8 @@
+using System;
+using System.Collections.Generic;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.LayerStyles;
-using System.Collections.Generic;
-using System.Linq;
+using Netherlands3D.LayerStyles.Expressions;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
@@ -27,7 +28,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
                     //populate the layerstyles based on available materials if not present in data yet
                     LayerStyle style = new LayerStyle(material.name);                   
-                    StylingRule stylingRule = new StylingRule(material.name, $"[{Constants.MaterialNameIdentifier}=\"{material.name}\"]");
+                    StylingRule stylingRule = new StylingRule(
+                        material.name, 
+                        Expr.EqualsTo(
+                            Expr.GetVariable(Constants.MaterialNameIdentifier),
+                            material.name
+                        )
+                    );
                     style.StylingRules.Add(material.name, stylingRule);
                     layer.LayerData.AddStyle(style);
 
@@ -44,13 +51,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             public void SetIndices(List<int> materialIndices)
             {
                 this.materialIndices = materialIndices;
-                //create a styling rule to match the selected feature layers when applying styles
-                string expression = string.Join(",\n", materialIndices.Select(index => $"[{Constants.MaterialIndexIdentifier}={index}]"));
-                StylingRule matchIndexRule = new StylingRule("matchindexrule", expression);
 
-                //we want to overwrite the default stylingrule!? otherwise will always return true without filtering                
-                layer.LayerData.DefaultStyle.StylingRules.Clear(); 
-                layer.LayerData.DefaultStyle.StylingRules.Add("default", matchIndexRule);
+                //create a styling rule to match the selected feature layers when applying styles
+                StylingRule matchIndexRule = new StylingRule(
+                    "matchindexrule", 
+                    Expr.In(
+                        Expr.GetVariable(Constants.MaterialNameIdentifier),
+                        // TODO: Can we simplify this?
+                        materialIndices.ConvertAll(input => (ExpressionValue)input).ToArray()
+                    )
+                );
+
+                layer.LayerData.DefaultStyle.StylingRules[matchIndexRule.Name] = matchIndexRule;
             }
 
             public Material CreateMaterial()
