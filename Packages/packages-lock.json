@@ -399,7 +399,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.gltfast": {
-      "version": "5.0.6",
+      "version": "5.0.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {
