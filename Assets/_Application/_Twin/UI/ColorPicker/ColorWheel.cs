@@ -250,5 +250,11 @@ namespace Netherlands3D.Twin.UI.ColorPicker
         {
             
         }
+
+        public void ResetColor()
+        {
+            color = Color.white;
+            Color = color;
+        }
     }
 }

@@ -1,4 +1,5 @@
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.UI.ColorPicker;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.OBJImporter
@@ -35,6 +36,11 @@ namespace Netherlands3D.Functionalities.OBJImporter
             {
                 defaultImportPanel.SetActive(false);
                 hasMtlPanel.SetActive(true);
+
+                //reset colorwheel color to white whenever a new mtl is loaded
+                ColorWheel colorWheel = FindAnyObjectByType<ColorWheel>();
+                if (colorWheel != null)
+                    colorWheel.ResetColor();
             }
         }
 
