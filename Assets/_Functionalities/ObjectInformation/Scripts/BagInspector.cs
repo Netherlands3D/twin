@@ -226,6 +226,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 			}
 		}
 
+		public void LoadBagIdUrl()
+		{
+            Application.OpenURL("https://bagviewer.kadaster.nl/lvbag/bag-viewer/?objectId=" + badIdText.text);
+        }
+
 		private void LoadFeatureContent(FeatureMapping mapping)
 		{
 			ClearKeyVaueItems();
