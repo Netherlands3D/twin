@@ -189,7 +189,8 @@ namespace Netherlands3D.Twin.Layers
 #endregion
 
 #region Features
-        public List<LayerFeature> GetFeatures<T>() where T : Component
+
+        protected List<LayerFeature> GetFeatures<T>()
         {
             cachedFeatures.Clear();
 

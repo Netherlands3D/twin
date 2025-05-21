@@ -1,24 +1,17 @@
-using GG.Extensions;
-using Netherlands3D.LayerStyles;
-using Netherlands3D.Twin.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
-using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
-using Netherlands3D.Twin.UI.ColorPicker;
-using NUnit.Framework;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
 using System.Linq;
-using TMPro;
+using Netherlands3D.LayerStyles;
+using Netherlands3D.LayerStyles.Expressions;
+using Netherlands3D.Twin.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
+using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    //make the updateselection and updateswatchfromstylechange generic to prevent coupling with cartesiantilelayergameobject
     public class LayerColorPropertySection : PropertySectionWithLayerGameObject
     {  
         [SerializeField] private RectTransform content;
@@ -26,11 +19,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private RectTransform layerContent;
 
         private LayerGameObject layer;
-        private List<ColorSwatch> selectedSwatches = new List<ColorSwatch>();
-        private List<int> selectedIndices = new List<int>();
-        private int currentButtonIndex = -1;
-        private ColorSwatch[] items;
-
+        private readonly Dictionary<LayerFeature, ColorSwatch> swatches = new();
         private ColorPickerPropertySection colorPicker;
 
         public override LayerGameObject LayerGameObject
@@ -46,106 +35,130 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void Initialize()
         {
-            LoadLayerFeatures();
-            StartCoroutine(WaitForEndFrame(()=>
-            {
-                //workaround to have a minimum height for the content loaded (because of scrollrects)
-                LayoutElement layout = GetComponent<LayoutElement>();
-                layout.minHeight = content.rect.height;
-
-                //we need to wait a frame for this so all propertysections will be available after instantiation
-                colorPicker = FindAnyObjectByType<ColorPickerPropertySection>();
-            })); 
+            CreateSwatches();
+            StartCoroutine(OnPropertySectionsLoaded()); 
         }
 
-        private IEnumerator WaitForEndFrame(Action callBack)
+        private IEnumerator OnPropertySectionsLoaded()
         {
-            yield return new WaitForEndOfFrame(); 
-            callBack.Invoke();
+            yield return new WaitForEndOfFrame();
+
+            // workaround to have a minimum height for the content loaded (because of scrollrects)
+            LayoutElement layout = GetComponent<LayoutElement>();
+            layout.minHeight = content.rect.height;
+
+            // we need to wait a frame for this so all propertysections will be available after instantiation
+            // TODO: Why FindAny? Shouldn't this be a direct link? And the colorpicker should only be shown when a layer is selected
+            colorPicker = FindAnyObjectByType<ColorPickerPropertySection>();
         }
 
-        private void LoadLayerFeatures()
+        private void CreateSwatches()
         {
-            layerContent.ClearAllChildren();      
-            List<LayerFeature> layerFeatures = layer.GetLayerFeatures().Values.ToList();
-            items = new ColorSwatch[layerFeatures.Count];
-            for(int i = 0; i < layerFeatures.Count; i++) 
+            swatches.Clear();
+            layerContent.ClearAllChildren();
+            foreach (var layerFeature in layer.GetLayerFeatures().Values)
             {
-                GameObject swatchObject = Instantiate(colorSwatchPrefab, layerContent);
-                ColorSwatch swatch = swatchObject.GetComponent<ColorSwatch>();
-                string layerName = layerFeatures[i].GetAttribute(Constants.MaterialNameIdentifier).ToString(); //todo make this automatic
-                swatch.SetLayerName(layerName);
-                swatch.SetInputText(layerName);
-                int cachedIndex = i;
-
-                //because all ui elements will be destroyed on close an anonymous listener is fine here              
-                swatch.onClickUp.AddListener(pointer => OnClickedSwatchUp(pointer, cachedIndex));
-                swatch.onClickDown.AddListener(pointer => OnClickedSwatch(pointer, cachedIndex));
-
-                //update the swatch color to match the material color
-                //Material mat = layerFeatures[i].Geometry as Material;
-                //Color? col = layer.GetStyling(layerFeatures[i]).GetFillColor();
-                //if(col != null)
-                //    swatch.SetColor((Color)col);
-
-                Material mat = layerFeatures[i].Geometry as Material;
-                swatch.SetColor(mat.color);
-                items[cachedIndex] = swatch; 
+                swatches[layerFeature] = CreateSwatch(layerFeature);
             }
         }
 
-        private void OnClickedSwatch(PointerEventData eventData, int buttonIndex)
+        private ColorSwatch CreateSwatch(LayerFeature layerFeature)
         {
-            int lastButtonIndex = currentButtonIndex;
-            currentButtonIndex = buttonIndex;
+            GameObject swatchObject = Instantiate(colorSwatchPrefab, layerContent);
+            ColorSwatch swatch = swatchObject.GetComponent<ColorSwatch>();
+                
+            string layerName = layerFeature.GetAttribute(Constants.MaterialNameIdentifier);
+                
+            swatch.SetLayerName(layerName);
+            swatch.SetInputText(layerName);
+
+            //because all ui elements will be destroyed on close an anonymous listener is fine here              
+            swatch.onClickDown.AddListener(pointer => OnSelectedSwatch(pointer, swatch));
+
+            SetSwatchColorFromFeature(layerFeature, swatch);
+
+            return swatch;
+        }
+
+        private void OnSelectedSwatch(PointerEventData _, ColorSwatch swatch)
+        {
             ProcessLayerSelection();
-            SelectSwatch(buttonIndex, !items[buttonIndex].IsSelected);
+            SelectSwatch(swatch, !swatch.IsSelected);
         }
 
-        private bool NoModifierKeyPressed()
+        private void SelectSwatch(ColorSwatch swatch, bool select)
         {
-            return !LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed();
-        }
+            if (select)
+            {
+                colorPicker.SetColorPickerColor(swatch.Color);
+            }
 
-        private void OnClickedSwatchUp(PointerEventData eventData, int buttonIndex)
-        {
-            //ProcessLayerSelection();
-        }        
-
-        private void SelectSwatch(int buttonIndex, bool select)
-        {
-            if(select)
-                colorPicker.SetColorPickerColor(items[buttonIndex].Color);
-
-            items[buttonIndex].SetSelected(select);
+            swatch.SetSelected(select);
             UpdateSelection();
         }
 
         private void UpdateSelection()
         {
-            selectedIndices.Clear();
-            selectedSwatches.Clear();            
-            foreach (ColorSwatch swatch in items)
-                if (swatch.IsSelected)
-                {
-                    selectedSwatches.Add(swatch);
-                    selectedIndices.Add(items.IndexOf(swatch));
-                }
+            foreach ((LayerFeature layerFeature, ColorSwatch swatch) in swatches)
+            {
+                if (!swatch.IsSelected) continue;
+                
+                // TODO: Why is this here? And not in response to the color picked event?
+                SetColorizationStylingRule(layerFeature, swatch.Color);
+            }
+        }
 
-            //todo make this generic
-            CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
-            cartesianTileLayerGameObject.Applicator.SetIndices(selectedIndices);
+        private void SetColorizationStylingRule(LayerFeature layerFeature, Color color)
+        {
+            int.TryParse(layerFeature.Attributes[Constants.MaterialIndexIdentifier], out int materialIndexIdentifier);
+
+            var stylingRuleName = ColorizationStyleRuleName(materialIndexIdentifier);
+
+            // Add or set the colorization of this feature by its material index
+            var stylingRule = new StylingRule(
+                stylingRuleName, 
+                Expr.EqualsTo(
+                    Expr.GetVariable(Constants.MaterialIndexIdentifier),
+                    materialIndexIdentifier
+                )
+            );
+            stylingRule.Symbolizer.SetFillColor(color);
+                
+            layer.LayerData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
+        }
+
+        private static string ColorizationStyleRuleName(int materialIndexIdentifier)
+        {
+            return $"feature.{materialIndexIdentifier}.colorize";
         }
 
         private void UpdateSwatchFromStyleChange()
         {
-            //todo make this generic
             CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
-            foreach (int i in cartesianTileLayerGameObject.Applicator.MaterialIndices)
+            foreach (var kv in cartesianTileLayerGameObject.GetLayerFeatures())
             {
-                ColorSwatch swatch = layerContent.GetChild(i).GetComponent<ColorSwatch>();
-                swatch.SetColor(cartesianTileLayerGameObject.Applicator.GetMaterial().color);
+                var layerFeature = kv.Value;
+                if (!int.TryParse(layerFeature.Attributes[Constants.MaterialIndexIdentifier], out int materialIndexIdentifier))
+                    continue;
+
+                SetSwatchColorFromFeature(
+                    layerFeature, 
+                    layerContent.GetChild(materialIndexIdentifier).GetComponent<ColorSwatch>()
+                );
             }
+        }
+
+        private void SetSwatchColorFromFeature(LayerFeature layerFeature, ColorSwatch swatch)
+        {
+            int.TryParse(layerFeature.GetAttribute(Constants.MaterialIndexIdentifier), out int materialIndexIdentifier);
+            var stylingRuleName = ColorizationStyleRuleName(materialIndexIdentifier);
+            swatch.SetColor(((Material)layerFeature.Geometry).color); // TODO: This can be done better
+
+            if (!layer.LayerData.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule)) return;
+
+            Color? color = stylingRule.Symbolizer.GetFillColor();
+
+            swatch.SetColor(color.GetValueOrDefault(Color.white));
         }
 
         private void OnDestroy()
@@ -155,44 +168,44 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void ProcessLayerSelection()
         {
-            if (LayerUI.SequentialSelectionModifierKeyIsPressed() && selectedSwatches.Count > 0) //if no layers are selected, there will be no reference layer to add to
-            {                
-                int lastIndex = items.IndexOf(selectedSwatches[selectedSwatches.Count - 1]); //last element is always the last selected layer                               
-                int targetIndex = currentButtonIndex;
-                if(lastIndex > targetIndex)
-                {
-                    int temp = lastIndex;
-                    lastIndex = targetIndex;
-                    targetIndex = temp;
-                }
-                bool addSelection = !items[currentButtonIndex].IsSelected; 
-                for (int i = lastIndex; i <= targetIndex; i++)
-                    items[i].SetSelected(addSelection);
-                items[currentButtonIndex].SetSelected(!addSelection);
-            }
+            // if (LayerUI.SequentialSelectionModifierKeyIsPressed() && selectedSwatches.Count > 0) //if no layers are selected, there will be no reference layer to add to
+            // {                
+            //     int lastIndex = items.IndexOf(selectedSwatches[selectedSwatches.Count - 1]); //last element is always the last selected layer                               
+            //     int targetIndex = currentButtonIndex;
+            //     if(lastIndex > targetIndex)
+            //     {
+            //         int temp = lastIndex;
+            //         lastIndex = targetIndex;
+            //         targetIndex = temp;
+            //     }
+            //     bool addSelection = !items[currentButtonIndex].IsSelected; 
+            //     for (int i = lastIndex; i <= targetIndex; i++)
+            //     {
+            //         items[i].SetSelected(addSelection);
+            //     }
+            //
+            //     items[currentButtonIndex].SetSelected(!addSelection);
+            // }
+            
             if (NoModifierKeyPressed())
             {
-                foreach (var layer in selectedSwatches)
-                    layer.SetSelected(false);
-
+                DeselectAllSwatches();
             }
+
             UpdateSelection();
         }
 
-        private void OnSelectInputField(ColorSwatch swatch)
-        {            
-            swatch.InputField.text = swatch.LayerName;
-            swatch.TextField.text = swatch.LayerName;
-            swatch.InputField.gameObject.SetActive(true);
-            swatch.TextField.gameObject.SetActive(false);
-            swatch.InputField.interactable = true;
-            swatch.InputField.Select();
-            swatch.InputField.ActivateInputField();
-            StartCoroutine(WaitForEndFrame(() =>
-            {
-                swatch.InputField.caretPosition = swatch.InputField.text.Length;
-                swatch.InputField.selectionAnchorPosition = 0;
-            }));
+        private void DeselectAllSwatches()
+        {
+            swatches.Values
+                .Where(swatch => swatch.IsSelected)
+                .ToList()
+                .ForEach(swatch => swatch.SetSelected(false));
+        }
+
+        private bool NoModifierKeyPressed()
+        {
+            return !LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed();
         }
     }
 }

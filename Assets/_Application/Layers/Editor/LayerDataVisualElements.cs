@@ -1,5 +1,5 @@
 using Netherlands3D.LayerStyles;
-using Netherlands3D.Twin.Layers;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -64,7 +64,7 @@ namespace Netherlands3D.Twin.Layers.Editor
         {
             var ruleFoldout = new Foldout { text = stylingRule.Name };
             ruleFoldout.Add(FieldWithCaption("Name", stylingRule.Name));
-            ruleFoldout.Add(FieldWithCaption("Selector", "If " + stylingRule.Selector));
+            ruleFoldout.Add(FieldWithCaption("Selector", "If " + JsonConvert.SerializeObject(stylingRule.Selector)));
             var styles = stylingRule.Symbolizer.ToString();
             ruleFoldout.Add(FieldWithCaption("Styles", string.IsNullOrEmpty(styles) ? "[None]" : styles ));
 

@@ -1,11 +1,11 @@
-using UnityEngine;
-using Netherlands3D.CartesianTiles;
-using Netherlands3D.Twin.Utility;
-using Netherlands3D.Twin.Layers.Properties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
+using Netherlands3D.CartesianTiles;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Utility;
+using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
@@ -15,18 +15,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
         
         private Layer layer;
-        private Netherlands3D.CartesianTiles.TileHandler tileHandler;
-
-        private CartesianTileBinaryMeshLayerMaterialApplicator applicator;
-        internal CartesianTileBinaryMeshLayerMaterialApplicator Applicator
-        {
-            get
-            {
-                if (applicator == null)
-                    applicator = new CartesianTileBinaryMeshLayerMaterialApplicator(this);
-                return applicator;
-            }
-        }
+        private TileHandler tileHandler;
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
@@ -36,17 +25,47 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         
         protected virtual void Awake()
         {
-            tileHandler = FindAnyObjectByType<Netherlands3D.CartesianTiles.TileHandler>();
+            tileHandler = FindAnyObjectByType<TileHandler>();
             transform.SetParent(tileHandler.transform);
             layer = GetComponent<Layer>();
 
             tileHandler.AddLayer(layer);
+
+            SetupFeatures();
+        }
+
+        /// <summary>
+        /// Cartesian Tiles have 'virtual' features, each type of terrain (grass, cycling path, etc) can be styled
+        /// independently and thus is a feature. At the moment, the most concrete list of criteria for which features
+        /// exist is the list of materials per terrain type.
+        ///
+        /// As such we create a LayerFeature per material with the material name and index as attribute, this allows
+        /// for the styling system to apply styles per material - and thus: per feature type. 
+        /// </summary>
+        private void SetupFeatures()
+        {
+            if (layer is not BinaryMeshLayer binaryMeshLayer) return;
+
+            for (var materialIndex = 0; materialIndex < binaryMeshLayer.DefaultMaterialList.Count; materialIndex++)
+            {
+                // Create a copy once on instantiation to prevent changes on the assets itself
+                var material = binaryMeshLayer.DefaultMaterialList[materialIndex];
+                if (material.parent == null)
+                {
+                    material = new Material(material);
+                    binaryMeshLayer.DefaultMaterialList[materialIndex] = material;
+                }
+
+                CreateFeature(material);
+            }
         }
 
         protected virtual void OnDestroy()
         {
-            if(Application.isPlaying && tileHandler && layer)
+            if (Application.isPlaying && tileHandler && layer)
+            {
                 tileHandler.RemoveLayer(layer);
+            }
         }
 
         private List<IPropertySectionInstantiator> propertySections;
@@ -72,42 +91,47 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         public override void ApplyStyling()
         {
-            //MaterialApplicator.Apply(Applicator); using creatematerial directly because this is a sharedmaterial
-            Applicator.CreateMaterial();
+            foreach (var feature in GetLayerFeatures())
+            {
+                ApplyStyling(feature.Value);
+            }
 
             base.ApplyStyling();
+        }
+
+        private void ApplyStyling(LayerFeature feature)
+        {
+            var styling = GetStyling(feature);
+            var meshLayer = GetTileLayerAsBinaryMeshLayer();
+
+            Color? color = styling.GetFillColor();
+            if (color == null) return;
+
+            if (!int.TryParse(feature.Attributes[Constants.MaterialIndexIdentifier], out var materialIndex)) return;
+
+            meshLayer.DefaultMaterialList[materialIndex].color = color.Value;
         }
 
         protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
         {
             if (feature.Geometry is not Material mat) return feature;
 
-            BinaryMeshLayer meshLayer = layer as BinaryMeshLayer;
+            var meshLayer = GetTileLayerAsBinaryMeshLayer();
+            
             feature.Attributes.Add(Constants.MaterialIndexIdentifier, meshLayer.DefaultMaterialList.IndexOf(mat).ToString());
             feature.Attributes.Add(Constants.MaterialNameIdentifier, mat.name);
 
             return feature;
         }
 
-        private Material UpdateMaterial(Color color, int index)
+        private BinaryMeshLayer GetTileLayerAsBinaryMeshLayer()
         {
-            if(layer is BinaryMeshLayer meshLayer)
+            if (layer is not BinaryMeshLayer meshLayer)
             {
-                string matName = meshLayer.DefaultMaterialList[index].name;
-                meshLayer.DefaultMaterialList[index].color = color;
-                return meshLayer.DefaultMaterialList[index];
+                throw new FormatException("Tile layer is not of type BinaryMeshLayer, but " + layer.GetType());
             }
-            throw new NotImplementedException();
-        }
-
-        private Material GetMaterialInstance(int index)
-        {
-            BinaryMeshLayer meshLayer = layer as BinaryMeshLayer;
-            if (meshLayer)
-            {
-                return meshLayer.DefaultMaterialList[index];
-            }
-            throw new NotImplementedException();
+            
+            return meshLayer;
         }
     }
 }

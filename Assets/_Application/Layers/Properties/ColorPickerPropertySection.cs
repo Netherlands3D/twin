@@ -1,8 +1,5 @@
-using Netherlands3D.LayerStyles;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.UI.ColorPicker;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
