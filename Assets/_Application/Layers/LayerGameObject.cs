@@ -206,8 +206,6 @@ namespace Netherlands3D.Twin.Layers
             return cachedFeatures;
         }
 
-        
-
         /// <summary>
         /// Create a Feature object from the given Component, this method is meant as an extension point
         /// for LayerGameObjects to add more information to the Attribute (ExpressionContext) of the given Feature.

@@ -10,7 +10,6 @@ namespace Netherlands3D
 {
     public class ColorSwatch : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
     {
-        public Button Button => button;
         public bool IsSelected => isSelected;
         public TMP_InputField InputField => inputField;
         public TMP_Text TextField => textField;
@@ -18,7 +17,6 @@ namespace Netherlands3D
         public Color Color => tileColor.color;
 
         [SerializeField] private Image tileColor;
-        [SerializeField] private Button button;
         [SerializeField] private TMP_InputField inputField;
         [SerializeField] private TMP_Text textField;
         [SerializeField] private Image selection;

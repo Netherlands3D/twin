@@ -49,6 +49,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             for (var materialIndex = 0; materialIndex < binaryMeshLayer.DefaultMaterialList.Count; materialIndex++)
             {
                 // Create a copy once on instantiation to prevent changes on the assets itself
+                // TODO: This should be part of the BinaryMeshLayer itself
                 var material = binaryMeshLayer.DefaultMaterialList[materialIndex];
                 if (material.parent == null)
                 {
@@ -105,7 +106,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             var meshLayer = GetTileLayerAsBinaryMeshLayer();
 
             Color? color = styling.GetFillColor();
-            if (color == null) return;
+            if (!color.HasValue) return;
 
             if (!int.TryParse(feature.Attributes[Constants.MaterialIndexIdentifier], out var materialIndex)) return;
 

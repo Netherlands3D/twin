@@ -10,9 +10,6 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         [SerializeField] private GameObject card;
         [SerializeField] private RectTransform sections;
-        [SerializeField] private GameObject secondary_card;
-        [SerializeField] private RectTransform secondary_sections;
-        [SerializeField] private GameObject secondary_emptySpace;
 
         private void Awake()
         {
@@ -34,30 +31,16 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             card.SetActive(true);
             sections.ClearAllChildren();
-            bool hasSecondary = false;
             foreach (var propertySection in layer.GetPropertySections())
             {
-                if (propertySection.SectionIndex == 0)
-                    propertySection.AddToProperties(sections);
-                else if (propertySection.SectionIndex == 1)
-                {
-                    if (!hasSecondary)
-                    {
-                        secondary_card.SetActive(true);
-                        GameObject emptySpace = Instantiate(secondary_emptySpace, secondary_sections);
-                        emptySpace.SetActive(true);
-                    }
-                    propertySection.AddToProperties(secondary_sections);
-                }
+                propertySection.AddToProperties(sections);
             }
         }
 
         public void Hide()
         {
             card.gameObject.SetActive(false);
-            secondary_card.gameObject.SetActive(false);
             sections.ClearAllChildren();
-            secondary_sections.ClearAllChildren();
         }
         
         public static ILayerWithPropertyPanels TryFindProperties(LayerData layer)

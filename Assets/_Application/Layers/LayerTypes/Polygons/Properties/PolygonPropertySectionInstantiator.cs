@@ -5,8 +5,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 {
     public class PolygonPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
-        public uint SectionIndex => 0;
-
         public void AddToProperties(RectTransform properties)
         {
             if (!PolygonInputToLayer.PolygonPropertySectionPrefab) return;

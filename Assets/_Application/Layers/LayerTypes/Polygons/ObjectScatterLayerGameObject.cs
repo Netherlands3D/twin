@@ -45,7 +45,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private bool completedInitialization;
         public LayerPropertyData PropertyData => settings;
-        public uint SectionIndex => 0;
 
         private void Awake()
         {

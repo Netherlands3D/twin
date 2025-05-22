@@ -15,6 +15,11 @@ namespace Netherlands3D.LayerStyles.Expressions
 
         #region Operators - when you change this, change ExpressionEvaluator and ExprJsonConverter too!
         
+        /// <summary>
+        /// Compares the values from both expressions and returns true if they are equal. Do note that
+        /// this is a strict-type comparison, comparing expressions of different types will always result in false.
+        /// </summary>
+        /// <see href="https://docs.mapbox.com/style-spec/reference/expressions/#%3D%3D"/>
         public static Expr<bool> EqualsTo(Expr<ExpressionValue> lhs, Expr<ExpressionValue> rhs)
             => new(Operators.EqualTo, new IExpression[] { lhs, rhs });
 

@@ -6,7 +6,6 @@ namespace Netherlands3D.Twin.Layers.Properties
     public class PropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
     {
         [SerializeField] private PropertySectionWithLayerGameObject propertySectionPrefab;
-        public uint SectionIndex => 0;
 
         public void AddToProperties(RectTransform properties)
         {
