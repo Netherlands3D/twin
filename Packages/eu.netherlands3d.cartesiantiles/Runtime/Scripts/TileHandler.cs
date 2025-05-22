@@ -226,17 +226,19 @@ namespace Netherlands3D.CartesianTiles
         }
 
         private void InstantlyStartRemoveChanges()
-        {
-            var removeChanges = pendingTileChanges.Where(change => change.action == TileAction.Remove).ToArray();
-            for (int i = removeChanges.Length - 1; i >= 0; i--)
+        {            
+            for (int i = 0; i < pendingTileChanges.Count; i++)
             {
-                var removeChange = removeChanges[i];
-                layers[removeChange.layerIndex].HandleTile(removeChange);
-                pendingTileChanges.Remove(removeChange);
+                if (pendingTileChanges[i].action == TileAction.Remove)
+                {
+                    var removeChange = pendingTileChanges[i];
+                    layers[removeChange.layerIndex].HandleTile(removeChange);
+                    pendingTileChanges.RemoveAt(i);
 
-                //Abort all tilechanges with the same key
-                AbortSimilarTileChanges(removeChange);
-                AbortPendingSimilarTileChanges(removeChange);
+                    //Abort all tilechanges with the same key
+                    AbortSimilarTileChanges(removeChange);
+                    AbortPendingSimilarTileChanges(removeChange);
+                }
             }
         }
 
