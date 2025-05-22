@@ -60,8 +60,8 @@ namespace Netherlands3D.CartesianTiles
         /// X,Y is bottom-left coordinate of tile in RD (for example 121000,480000)
         /// Z is distance-squared to camera in m
         /// </summary>
-        private List<List<Vector3Int>> tileDistances = new List<List<Vector3Int>>();
-        private List<Vector3Int> tileList = new List<Vector3Int>();
+        private Vector3Int[][] tileDistances = new Vector3Int[8][];
+        private Vector3Int[] tileList = new Vector3Int[16];
         /// <summary>
         /// list of tilechanges, ready to be processed
         /// </summary>
@@ -353,6 +353,7 @@ namespace Netherlands3D.CartesianTiles
             return IntersectionPos;
         }
 
+        private int maxTileDistances = 0;
         private void GetTileDistancesInView(List<int> tileSizes, Vector4 viewRange, Vector3Int cameraPosition)
         {
             //Godview only frustum check
@@ -360,16 +361,17 @@ namespace Netherlands3D.CartesianTiles
             {
                 GeometryUtility.CalculateFrustumPlanes(Camera.main, cameraFrustumPlanes);
             }
-            tileDistances.Clear();
 
+            maxTileDistances = 0;
             foreach (int tileSize in tileSizes)
             {
                 startX = (int)Math.Floor(viewRange.x / tileSize) * tileSize;
                 startY = (int)Math.Floor(viewRange.y / tileSize) * tileSize;
                 endX = (int)Math.Ceiling((viewRange.x + viewRange.z) / tileSize) * tileSize;
                 endY = (int)Math.Ceiling((viewRange.y + viewRange.w) / tileSize) * tileSize;
-                tileList = new List<Vector3Int>();
-
+                for (int i = 0; i < tileList.Length; i++)
+                    tileList[i] = Vector3Int.zero;
+                int tileListIndex = 0;
                 for (int x = startX; x <= endX; x += tileSize)
                 {
                     for (int y = startY; y <= endY; y += tileSize)
@@ -380,17 +382,33 @@ namespace Netherlands3D.CartesianTiles
                             tileBounds.SetMinMax(CoordinateConverter.RDtoUnity(new Vector2(x, y)), CoordinateConverter.RDtoUnity(new Vector2(x + tileSize, y + tileSize)));
                             if (GeometryUtility.TestPlanesAABB(cameraFrustumPlanes, tileBounds))
                             {
-                                tileList.Add(new Vector3Int(x, y, (int)GetTileDistanceSquared(tileID, cameraPosition)));
+                                //tileList.Add(new Vector3Int(x, y, (int)GetTileDistanceSquared(tileID, cameraPosition)));
+                                EnsureArraySize(ref tileList, tileListIndex + 1);
+                                tileList[tileListIndex] = new Vector3Int(x, y, (int)GetTileDistanceSquared(tileID, cameraPosition));
+                                tileListIndex++;
                             }
                         }
                         else
                         {
-                            tileList.Add(new Vector3Int(x, y, (int)GetTileDistanceSquared(tileID, cameraPosition)));
+                            //tileList.Add(new Vector3Int(x, y, (int)GetTileDistanceSquared(tileID, cameraPosition)));
+                            EnsureArraySize(ref tileList, tileListIndex + 1);
+                            tileList[tileListIndex] = new Vector3Int(x, y, (int)GetTileDistanceSquared(tileID, cameraPosition));
+                            tileListIndex++;
                         }
                     }
                 }
 
-                tileDistances.Add(tileList);
+                tileDistances[maxTileDistances] = tileList;
+                maxTileDistances++;
+            }
+        }
+
+        void EnsureArraySize<T>(ref T[] array, int requiredSize)
+        {
+            if (array == null || array.Length < requiredSize)
+            {
+                int newSize = Math.Max(requiredSize, array?.Length * 2 ?? 4);
+                Array.Resize(ref array, newSize);
             }
         }
 
@@ -601,12 +619,12 @@ namespace Netherlands3D.CartesianTiles
                 foreach (var kvp in layer.tiles)
                 {
                     bool isneeded = false;
-                    for (int i = 0; i < neededTiles.Count; i++)
+                    for (int i = 0; i < neededTiles.Length; i++)
                     {
                         if (neededTiles[i].x == kvp.Key.x && neededTiles[i].y == kvp.Key.y)
                         {
                             isneeded = true;
-                            i = neededTiles.Count;
+                            break;
                         }
                     }
                     if (isneeded) continue;
