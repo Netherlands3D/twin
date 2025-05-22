@@ -46,9 +46,7 @@ namespace Netherlands3D.Minimap
         {
             //Make sure our graphic width/height is set to the max distance of our verts, so culling works properly
             //Now based from centered origin
-            //size.x = Mathf.Abs(2 * Mathf.Max(QuadVertices[0].x, QuadVertices[1].x, QuadVertices[2].x, QuadVertices[3].x));
-            //size.y = Mathf.Abs(2 * Mathf.Min(QuadVertices[0].y, QuadVertices[1].y, QuadVertices[2].y, QuadVertices[3].y));
-
+          
             float maxX = Mathf.Max(QuadVertices[0].x, QuadVertices[1].x);
             maxX = Mathf.Max(maxX, QuadVertices[2].x);
             maxX = Mathf.Max(maxX, QuadVertices[3].x);
