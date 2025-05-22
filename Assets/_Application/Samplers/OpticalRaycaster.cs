@@ -15,7 +15,8 @@ namespace Netherlands3D.Twin.Samplers
 
         private Stack<OpticalRequest> requestPool = new Stack<OpticalRequest>();
         private List<OpticalRequest> activeRequests = new List<OpticalRequest>();
-        private Stack<MultiPointCallback> requestMultipointPool = new Stack<MultiPointCallback>();        
+        private Stack<MultiPointCallback> requestMultipointPool = new Stack<MultiPointCallback>();
+
 
         public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3> callback)
         {
@@ -114,10 +115,15 @@ namespace Netherlands3D.Twin.Samplers
             {
                 request = new OpticalRequest(depthToWorldMaterial, visualizationMaterial, GetRenderTexture(), depthCameraPrefab);
                 request.depthCamera.transform.SetParent(gameObject.transform, false);
-                request.SetCallback(w => RequestCallback(request));
+                request.SetCallback(RequestCallBackMapped(request));       //(w => RequestCallback(request));                
             }
             request.depthCamera.enabled = true;
             return request;
+        }
+
+        private Action<AsyncGPUReadbackRequest> RequestCallBackMapped(OpticalRequest requester)
+        {
+            return w => RequestCallback(requester);
         }
 
         private void PoolRequest(OpticalRequest request)

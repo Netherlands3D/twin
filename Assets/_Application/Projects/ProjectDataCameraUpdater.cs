@@ -7,7 +7,8 @@ namespace Netherlands3D.Twin.Projects
 {
     public class ProjectDataCameraUpdater : MonoBehaviour
     {
-        private Matrix4x4 lastSavedCameraTransformMatrix = Matrix4x4.identity;
+        private Vector3 lastPosition;
+        private Vector3 lastRotation;
 
         private void OnEnable()
         {
@@ -38,10 +39,10 @@ namespace Netherlands3D.Twin.Projects
 
         private void Update() 
         {
-            var currentCameraMatrix = transform.localToWorldMatrix;        
-            if(Matrix4x4.Equals(currentCameraMatrix, lastSavedCameraTransformMatrix)) return;
+            if (transform.position == lastPosition && transform.eulerAngles == lastRotation) return;
 
-            lastSavedCameraTransformMatrix = currentCameraMatrix;
+            lastPosition = transform.position;
+            lastRotation = transform.eulerAngles;
             SaveCurrentCameraTransform();
         }
 
