@@ -45,14 +45,23 @@ namespace Netherlands3D.Twin.Projects
             SaveCurrentCameraTransform();
         }
 
+        private double[] camRDPosition = new double[3];
+        private double[] camRotation = new double[3];
         private void SaveCurrentCameraTransform()
         {
             var cameraCoordinate = new Coordinate(transform.position).Convert(CoordinateSystem.RDNAP);
             var cameraCoordinateRD = cameraCoordinate.ToVector3RD();
             var cameraRotation = transform.eulerAngles;
 
-            ProjectData.Current.CameraPosition = new double[] { cameraCoordinateRD.x, cameraCoordinateRD.y, cameraCoordinateRD.z };
-            ProjectData.Current.CameraRotation = new double[] { cameraRotation.x, cameraRotation.y, cameraRotation.z };
+            camRDPosition[0] = cameraCoordinateRD.x;
+            camRDPosition[1] = cameraCoordinateRD.y;
+            camRDPosition[2] = cameraCoordinateRD.z;
+            ProjectData.Current.CameraPosition = camRDPosition;
+
+            camRotation[0] = cameraRotation.x;
+            camRotation[1] = cameraRotation.y;
+            camRotation[2] = cameraRotation.z;
+            ProjectData.Current.CameraRotation = camRotation;
         }
     }
 }
