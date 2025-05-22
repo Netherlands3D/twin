@@ -216,9 +216,9 @@ namespace Netherlands3D.Minimap
 
             if (!rdCoordinate.IsValid()) return;
 
-            var unityCoordinate = CoordinateConverter.ConvertTo(rdCoordinate, CoordinateSystem.Unity).ToVector3();
+            Vector3 unityCoordinate = rdCoordinate.ToUnity();
             unityCoordinate.y = Camera.main.transform.position.y;
-            
+
             if (moveCameraToClickedLocation && cameraMoveTarget){
 				cameraMoveTarget.transform.position = unityCoordinate;	
 			}
