@@ -294,46 +294,29 @@ namespace Netherlands3D.Tiles3D
             Destroy(this.gameObject);            
         }
 
+        //todo we need to come up with a way to get all used texture slot property names from the gltf package
         private void ClearRenderers(Renderer[] renderers)
         {
-            foreach(Renderer r in renderers)
+            foreach (Renderer r in renderers)
             {
-                //the order of destroying sharedmaterial before material matters for cleaning up native shells
-                UnityEngine.Material sharedMat = r.sharedMaterial;
-                if (sharedMat != null)
+                Material mat = r.sharedMaterial;
+                if (mat == null) continue;
+
+                const string baseTexName = "baseColorTexture";
+
+                if (mat.HasProperty(baseTexName))
                 {
-                    if (sharedMat.HasTexture("_MainTex"))
+                    Texture tex = mat.GetTexture(baseTexName);
+
+                    if (tex != null)
                     {
-                        UnityEngine.Texture tex = sharedMat.mainTexture;
-                        if (tex)
-                        {
-                            Destroy(tex);
-                        }
+                        mat.SetTexture(baseTexName, null);
+                        UnityEngine.Object.Destroy(tex);
+                        tex = null;
                     }
-
-                    sharedMat.SetTexture("_MainTex", null);
-                    sharedMat.shader = null;
-                    sharedMat.mainTexture = null;
-                    Destroy(sharedMat);
-                    r.sharedMaterial = null;
                 }
-
-                UnityEngine.Material mat = r.material;
-                if (mat != null)
-                {
-                    if (mat.HasTexture("_MainTex"))
-                    {
-                        UnityEngine.Texture tex = sharedMat.mainTexture;
-                        Destroy(tex);
-                    }
-
-                    mat.SetTexture("_MainTex", null);
-                    mat.shader = null;
-                    mat.mainTexture = null;
-                    Destroy(mat);
-                    r.material = null;
-                }
-                
+                UnityEngine.Object.Destroy(mat);
+                r.sharedMaterial = null;
             }
         }
     }
