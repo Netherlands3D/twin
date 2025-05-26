@@ -75,7 +75,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             var lhsValue = Evaluate(lhs, context);
             var rhsValue = Evaluate(rhs, context);
 
-            return rhsValue.CompareTo(lhsValue) is 0 or -1 ? rhs.Value : lhs.Value;
+            return rhsValue.CompareTo(lhsValue) is 0 or -1 ? rhsValue : lhsValue;
         }
         
         private ExpressionValue Rgb(
