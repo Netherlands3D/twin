@@ -1,5 +1,6 @@
 using Netherlands3D.Events;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /*
 *  Copyright (C) X Gemeente
@@ -36,6 +37,8 @@ namespace Netherlands3D.Twin.Cameras
         [SerializeField] private float dragSpeed = 1.0f;
         [SerializeField] private float easing = 1.0f;
         [SerializeField] private float zoomSpeed = 1.0f;
+        [SerializeField] private float zoomSpeedMultiplier = 3.0f;
+
         private float dynamicMoveSpeed = 1.0f;
         private float dynamicDragSpeed = 1.0f;
         private float dynamicZoomSpeed = 1.0f;
@@ -415,8 +418,8 @@ namespace Netherlands3D.Twin.Cameras
 
             var targetIsBehind = Vector3.Dot(this.transform.forward, direction) < 0;
             if (targetIsBehind) direction = -direction;
-
-            this.transform.Translate(direction.normalized * dynamicZoomSpeed * amount * Time.deltaTime, Space.World);
+                        
+            this.transform.Translate(direction.normalized * dynamicZoomSpeed * Mathf.Clamp(amount, -1f, 1f) * Time.deltaTime, Space.World);
         }
 
         /// <summary>
@@ -492,9 +495,12 @@ namespace Netherlands3D.Twin.Cameras
         /// </summary>
         private void CalculateSpeed()
         {
+            bool modifierKeysPressed = AddToSelectionModifierKeyIsPressed() && SequentialSelectionModifierKeyIsPressed();
+            float newZoomSpeed = modifierKeysPressed ? zoomSpeed * zoomSpeedMultiplier : zoomSpeed;
+
             dynamicMoveSpeed = (multiplySpeedBasedOnHeight) ? moveSpeed * Mathf.Abs(this.transform.position.y) : moveSpeed;
             dynamicDragSpeed = (multiplySpeedBasedOnHeight) ? dragSpeed * Mathf.Abs(this.transform.position.y) : dragSpeed;
-            dynamicZoomSpeed = (multiplySpeedBasedOnHeight) ? zoomSpeed * Mathf.Abs(this.transform.position.y) : zoomSpeed;
+            dynamicZoomSpeed = (multiplySpeedBasedOnHeight) ? newZoomSpeed * Mathf.Abs(this.transform.position.y) : newZoomSpeed;
 
             //Clamp speeds
             dynamicMoveSpeed = Mathf.Clamp(dynamicMoveSpeed, minimumSpeed, maximumSpeed);
@@ -512,6 +518,21 @@ namespace Netherlands3D.Twin.Cameras
             {
                 Gizmos.DrawSphere(zoomTarget, 1.0f);
             }
+        }
+
+        public static bool AddToSelectionModifierKeyIsPressed()
+        {
+            if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX)
+            {
+                return Keyboard.current.leftCommandKey.isPressed || Keyboard.current.rightCommandKey.isPressed;
+            }
+
+            return Keyboard.current.ctrlKey.isPressed;
+        }
+
+        public static bool SequentialSelectionModifierKeyIsPressed()
+        {
+            return Keyboard.current.shiftKey.isPressed;
         }
     }
 }
