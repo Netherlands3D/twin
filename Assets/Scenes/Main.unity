@@ -284,7 +284,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6058030180492920833, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1467574353}
   m_SourcePrefab: {fileID: 100100000, guid: 7b1c5664f8541466bbb7ed473f916549, type: 3}
 --- !u!224 &331594354 stripped
 RectTransform:
@@ -304,11 +308,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GroundPlane
-      objectReference: {fileID: 0}
-    - target: {fileID: 3947371150140413365, guid: 73a3583486de62c4a82ee0734c80f1bf,
-        type: 3}
-      propertyPath: m_Layer
-      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 6542206558638295347, guid: 73a3583486de62c4a82ee0734c80f1bf,
         type: 3}
@@ -1415,6 +1414,30 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 7732943800119484192}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1467574347 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6058030180492920833, guid: 7b1c5664f8541466bbb7ed473f916549,
+    type: 3}
+  m_PrefabInstance: {fileID: 311190676}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1467574353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467574347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c68a1176b4ff04c03a19fd17ae6eb635, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  centerProperty: _MaskBBoxCenter
+  extentsProperty: _MaskBboxExtents
+  invertProperty: _MaskInvert
+  renderTextureProperty: _MaskTexture
+  invertMask: 0
+  tex: {fileID: 8400000, guid: 0cacd35f3b4ca4ab293eb35869092719, type: 2}
 --- !u!1 &1553045703 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8080223312308812224, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
@@ -1975,11 +1998,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_BackGroundColor.r
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5315891981602308678, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
-        type: 3}
-      propertyPath: m_ClearFlags
-      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5315891981602308678, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
         type: 3}

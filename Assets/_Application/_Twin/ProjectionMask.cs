@@ -45,9 +45,6 @@ namespace Netherlands3D
             Shader.SetGlobalVector(centerProperty, worldCenterXZ);
             Shader.SetGlobalVector(extentsProperty, worldExtentsXZ);
             Shader.SetGlobalInt(invertProperty, invertMask ? 1 : 0);
-
-var a =            Shader.GetGlobalInt(invertProperty);
-        print(a);
         }
     }
 }
