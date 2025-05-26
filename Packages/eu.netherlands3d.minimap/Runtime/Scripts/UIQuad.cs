@@ -28,6 +28,7 @@ namespace Netherlands3D.Minimap
 		public Vector2[] QuadVertices { get => quadVertices; set => quadVertices = value; }
 
         private UIVertex[] uiVertexList = new UIVertex[4];
+        private Vector2 size = Vector2.one;
 
         protected override void OnPopulateMesh(VertexHelper vertexHelper)
         {
@@ -45,10 +46,18 @@ namespace Netherlands3D.Minimap
         {
             //Make sure our graphic width/height is set to the max distance of our verts, so culling works properly
             //Now based from centered origin
-            rectTransform.sizeDelta = new Vector2(
-                Mathf.Abs(2 * Mathf.Max(QuadVertices[0].x, QuadVertices[1].x, QuadVertices[2].x, QuadVertices[3].x)),
-                Mathf.Abs(2 * Mathf.Min(QuadVertices[0].y, QuadVertices[1].y, QuadVertices[2].y, QuadVertices[3].y))
-            );
+          
+            float maxX = Mathf.Max(QuadVertices[0].x, QuadVertices[1].x);
+            maxX = Mathf.Max(maxX, QuadVertices[2].x);
+            maxX = Mathf.Max(maxX, QuadVertices[3].x);
+
+            float minY = Mathf.Min(QuadVertices[0].y, QuadVertices[1].y);
+            minY = Mathf.Min(minY, QuadVertices[2].y);
+            minY = Mathf.Min(minY, QuadVertices[3].y);
+
+            size.x = Mathf.Abs(2 * maxX);
+            size.y = Mathf.Abs(2 * minY);
+            rectTransform.sizeDelta = size;
         }
 
         private void UpdateQuadVertexList()
