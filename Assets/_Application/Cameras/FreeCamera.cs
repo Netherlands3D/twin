@@ -495,7 +495,7 @@ namespace Netherlands3D.Twin.Cameras
         /// </summary>
         private void CalculateSpeed()
         {
-            bool modifierKeysPressed = AddToSelectionModifierKeyIsPressed() && SequentialSelectionModifierKeyIsPressed();
+            bool modifierKeysPressed = SequentialSelectionModifierKeyIsPressed();
             float newZoomSpeed = modifierKeysPressed ? zoomSpeed * zoomSpeedMultiplier : zoomSpeed;
 
             dynamicMoveSpeed = (multiplySpeedBasedOnHeight) ? moveSpeed * Mathf.Abs(this.transform.position.y) : moveSpeed;
@@ -518,16 +518,6 @@ namespace Netherlands3D.Twin.Cameras
             {
                 Gizmos.DrawSphere(zoomTarget, 1.0f);
             }
-        }
-
-        public static bool AddToSelectionModifierKeyIsPressed()
-        {
-            if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX)
-            {
-                return Keyboard.current.leftCommandKey.isPressed || Keyboard.current.rightCommandKey.isPressed;
-            }
-
-            return Keyboard.current.ctrlKey.isPressed;
         }
 
         public static bool SequentialSelectionModifierKeyIsPressed()
