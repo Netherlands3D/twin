@@ -442,30 +442,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 7239524049806933421}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 7456305980478204805}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   onTrue:
     m_PersistentCalls:
       m_Calls: []
@@ -513,30 +489,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 5035265957184785282}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 7456305980478204805}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   onTrue:
     m_PersistentCalls:
       m_Calls: []
@@ -583,30 +535,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 5035265957184785282}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 7239524049806933421}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
         m_CallState: 2
   onTrue:
     m_PersistentCalls:
@@ -671,6 +599,7 @@ GameObject:
   - component: {fileID: 5035265957184785311}
   - component: {fileID: 5035265957184785308}
   - component: {fileID: 2971444630074657358}
+  - component: {fileID: 2247364823442731689}
   m_Layer: 0
   m_Name: PolygonSelection_Polygon
   m_TagString: Untagged
@@ -908,6 +837,18 @@ MonoBehaviour:
   previewLineHasChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2247364823442731689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5035265957184785282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207c9e4ebe1ab4cb493f293cc0c4cf32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6169829145916154088
 GameObject:
   m_ObjectHideFlags: 0
@@ -1282,6 +1223,7 @@ GameObject:
   - component: {fileID: 1272771895099388988}
   - component: {fileID: 5614695549320686730}
   - component: {fileID: 6819746166564945398}
+  - component: {fileID: 4442034151604228432}
   m_Layer: 0
   m_Name: PolygonSelection_Line
   m_TagString: Untagged
@@ -1519,6 +1461,18 @@ MonoBehaviour:
   previewLineHasChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4442034151604228432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7239524049806933421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207c9e4ebe1ab4cb493f293cc0c4cf32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7298217538574612641
 GameObject:
   m_ObjectHideFlags: 0
@@ -1913,7 +1867,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6295639419868117823, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4061060392049849136}
   m_SourcePrefab: {fileID: 100100000, guid: dc5ce5f60fb3b074394ab446caa210d5, type: 3}
 --- !u!114 &831591527348556828 stripped
 MonoBehaviour:
@@ -1933,6 +1891,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3469043276263805114}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4061060392049849136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7456305980478204805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207c9e4ebe1ab4cb493f293cc0c4cf32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7523499849824955878 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6362551884031212892, guid: dc5ce5f60fb3b074394ab446caa210d5,
