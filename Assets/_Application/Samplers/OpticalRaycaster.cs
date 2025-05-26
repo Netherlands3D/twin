@@ -115,7 +115,7 @@ namespace Netherlands3D.Twin.Samplers
             {
                 request = new OpticalRequest(depthToWorldMaterial, visualizationMaterial, GetRenderTexture(), depthCameraPrefab);
                 request.depthCamera.transform.SetParent(gameObject.transform, false);
-                request.SetCallback(RequestCallBackMapped(request));       //(w => RequestCallback(request));                
+                request.SetCallback(RequestCallBackMapped(request));                  
             }
             request.depthCamera.enabled = true;
             return request;
