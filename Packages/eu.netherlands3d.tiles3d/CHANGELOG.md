@@ -5,6 +5,9 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.10.8] - 22-05-2025
+- properly clearing the used texture by looking up the right texture property in the shader
+
 ## [1.10.7] - 23-04-2025
 - Added console logging to ImportGlb to improve troubleshooting during the GLB import process.
 
