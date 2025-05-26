@@ -176,7 +176,7 @@ namespace Netherlands3D.Twin.Layers
         }
 
 #region Styling
-        public Symbolizer GetStyling(LayerFeature feature)
+        protected Symbolizer GetStyling(LayerFeature feature)
         {
             return StyleResolver.Instance.GetStyling(feature, LayerData.Styles);
         }
@@ -225,7 +225,7 @@ namespace Netherlands3D.Twin.Layers
             return layerFeatures;
         }
 
-        private Dictionary<object, LayerFeature> layerFeatures = new Dictionary<object, LayerFeature>();
+        private Dictionary<object, LayerFeature> layerFeatures = new();
 
         /// <summary>
         /// Construct attributes onto the layer feature so that the styling system can
