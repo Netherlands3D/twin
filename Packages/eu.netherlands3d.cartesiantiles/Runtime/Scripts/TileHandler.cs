@@ -384,7 +384,6 @@ namespace Netherlands3D.CartesianTiles
                             tileBounds.SetMinMax(CoordinateConverter.RDtoUnity(new Vector2(x, y)), CoordinateConverter.RDtoUnity(new Vector2(x + tileSize, y + tileSize)));
                             if (GeometryUtility.TestPlanesAABB(cameraFrustumPlanes, tileBounds))
                             {
-                                //tileList.Add(new Vector3Int(x, y, (int)GetTileDistanceSquared(tileID, cameraPosition)));
                                 EnsureArraySize(ref tileList, tileListIndex + 1);
                                 tileList[tileListIndex] = new Vector3Int(x, y, (int)GetTileDistanceSquared(tileID, cameraPosition));
                                 tileListIndex++;
@@ -392,7 +391,6 @@ namespace Netherlands3D.CartesianTiles
                         }
                         else
                         {
-                            //tileList.Add(new Vector3Int(x, y, (int)GetTileDistanceSquared(tileID, cameraPosition)));
                             EnsureArraySize(ref tileList, tileListIndex + 1);
                             tileList[tileListIndex] = new Vector3Int(x, y, (int)GetTileDistanceSquared(tileID, cameraPosition));
                             tileListIndex++;
