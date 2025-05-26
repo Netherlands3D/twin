@@ -1,6 +1,4 @@
-﻿using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -36,7 +34,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             var expr = JsonConvert.DeserializeObject<Expr<int>>(json, jsonSerializerSettings);
             
             Assert.IsInstanceOf<Expr>(expr);
-            Assert.IsTrue(expr.IsLiteral);
+            Assert.IsTrue(expr.IsValue);
             Assert.AreEqual(42, (int)expr); // implicit → int
         }
 
@@ -58,7 +56,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             var expr = JsonConvert.DeserializeObject<Expr<double>>(json, jsonSerializerSettings);
             
             Assert.IsInstanceOf<Expr>(expr);
-            Assert.IsTrue(expr.IsLiteral);
+            Assert.IsTrue(expr.IsValue);
             Assert.AreEqual(4.2d, (double)expr); // implicit → double
         }
 
@@ -80,7 +78,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             var expr = JsonConvert.DeserializeObject<Expr<bool>>(json, jsonSerializerSettings);
             
             Assert.IsInstanceOf<Expr>(expr);
-            Assert.IsTrue(expr.IsLiteral);
+            Assert.IsTrue(expr.IsValue);
             Assert.AreEqual(true, (bool)expr); // implicit → bool
         }
 
@@ -102,7 +100,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             var expr = JsonConvert.DeserializeObject<Expr<string>>(json, jsonSerializerSettings);
 
             Assert.IsInstanceOf<Expr>(expr);
-            Assert.IsTrue(expr.IsLiteral);
+            Assert.IsTrue(expr.IsValue);
             Assert.AreEqual("hello", (string)expr); // implicit → string
         }
 
@@ -193,7 +191,7 @@ namespace Netherlands3D.LayerStyles.Expressions
 
             // second arg: 0
             Expr<int> a1 = (Expr<int>)expr.Arguments[1];
-            Assert.IsTrue(a1.IsLiteral);
+            Assert.IsTrue(a1.IsValue);
             Assert.AreEqual(0, (int)a1);
 
             // third arg: min(100, get temperature)

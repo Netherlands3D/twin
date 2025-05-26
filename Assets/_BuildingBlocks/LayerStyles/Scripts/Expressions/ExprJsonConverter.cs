@@ -23,7 +23,7 @@ namespace Netherlands3D.LayerStyles.Expressions
         {
             var expr = (Expr)value;
 
-            if (expr.IsLiteral)
+            if (expr.IsValue)
             {
                 // literal → just emit the raw value
                 serializer.Serialize(writer, expr.Value);
@@ -49,12 +49,24 @@ namespace Netherlands3D.LayerStyles.Expressions
 
         private IExpression ReadExpression(JToken token, Type targetType, JsonSerializer serializer)
         {
+            // This should not occur - but if an expression was serialized as an object (as is the case with the
+            // old project file (see the <see cref="BoolExpression"/> class); we can pick up on that and immediately
+            // return it as an expression
+            if (token.Type == JTokenType.Object && token.ToObject<object>(serializer) is IExpression c)
+            {
+                return c;
+            }
+
+            // This is the normal behaviour - if we encounter an array, assume it is an expression
+            // (<see href="https://docs.mapbox.com/style-spec/reference/expressions/"/>) and recursively deserialize it.
             if (token.Type == JTokenType.Array)
             {
                 return DeserializeExpression(token, targetType, serializer);
             }
 
-            return DeserializeLiteralValue(token, targetType, serializer);
+            // if it is not an array - let's assume it is a value and attempt to deserialize it as such
+            // (<see href="https://docs.mapbox.com/style-spec/reference/expressions/#type-system" />).
+            return DeserializeValue(token, targetType, serializer);
         }
 
         private IExpression DeserializeExpression(JToken token, Type targetType, JsonSerializer serializer)
@@ -78,27 +90,11 @@ namespace Netherlands3D.LayerStyles.Expressions
             return CastExpressionTo(targetType, op, args);
         }
 
-        /// <summary>
-        /// When changing this location - do not forget to change Expr and/or ExpressionEvaluator
-        /// </summary>
         private IExpression CastExpressionTo(Type targetType, Operators op, IExpression[] args)
         {
-            switch (op)
-            {
-                case Operators.EqualTo: return Expr.EqualsTo(Expr<ExpressionValue>.TryParse(args[0]), Expr<ExpressionValue>.TryParse(args[1]));
-                case Operators.GreaterThan: return Expr.GreaterThan(Expr<ExpressionValue>.TryParse(args[0]), Expr<ExpressionValue>.TryParse(args[1]));
-                case Operators.GreaterThanOrEqual: return Expr.GreaterThanOrEqual(Expr<ExpressionValue>.TryParse(args[0]), Expr<ExpressionValue>.TryParse(args[1]));
-                case Operators.LessThan: return Expr.LessThan(Expr<ExpressionValue>.TryParse(args[0]), Expr<ExpressionValue>.TryParse(args[1]));
-                case Operators.LessThanOrEqual: return Expr.LessThanOrEqual(Expr<ExpressionValue>.TryParse(args[0]), Expr<ExpressionValue>.TryParse(args[1]));
-                case Operators.Min: return Expr.Min(Expr<ExpressionValue>.TryParse(args[0]), Expr<ExpressionValue>.TryParse(args[1]));
-                case Operators.GetVariable: return Expr.GetVariable(Expr<string>.TryParse(args[0]));
-                case Operators.Rgb: return Expr.Rgb(
-                    Expr<int>.TryParse(args[0]), 
-                    Expr<int>.TryParse(args[1]), 
-                    Expr<int>.TryParse(args[2])
-                );
-            }
-
+            var e = Expr.Cast(op, args);
+            if (e != null) return e;
+            
             // Fallback: invoke the internal Expr(string, IExpression[]) ctor; it is preferable to use the factory
             // methods as shown above
             var ctor = targetType.GetConstructor(
@@ -110,7 +106,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             return ctor.Invoke(new object[] { op, args }) as IExpression;
         }
 
-        private static IExpression DeserializeLiteralValue(JToken token, Type _, JsonSerializer serializer)
+        private static IExpression DeserializeValue(JToken token, Type _, JsonSerializer serializer)
         {
             switch (token.Type)
             {
@@ -122,7 +118,7 @@ namespace Netherlands3D.LayerStyles.Expressions
                 {
                     if (token.ToObject<object>(serializer) is not ExpressionValue c)
                     {
-                        throw new JsonSerializationException($"Unhandled literal type: {token.Type}");
+                        throw new JsonSerializationException($"Unhandled value type: {token.Type}");
                     }
 
                     return new Expr<ExpressionValue>(c);

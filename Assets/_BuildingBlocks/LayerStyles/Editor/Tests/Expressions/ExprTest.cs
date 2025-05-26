@@ -11,9 +11,9 @@ namespace Netherlands3D.LayerStyles.Expressions
         {
             Expr<int> e = 42;
 
-            Assert.IsTrue(e.IsLiteral);
+            Assert.IsTrue(e.IsValue);
             Assert.IsFalse(e.IsExpression);
-            Assert.AreEqual(Operators.Literal, e.Operator);
+            Assert.AreEqual(Operators.Value, e.Operator);
             Assert.AreEqual(42, (int)e.Value);
             Assert.IsNull(e.Arguments);
         }
@@ -23,8 +23,8 @@ namespace Netherlands3D.LayerStyles.Expressions
         {
             Expr<string> e = "hello";
 
-            Assert.IsTrue(e.IsLiteral);
-            Assert.AreEqual(Operators.Literal, e.Operator);
+            Assert.IsTrue(e.IsValue);
+            Assert.AreEqual(Operators.Value, e.Operator);
             Assert.IsFalse(e.IsExpression);
             Assert.AreEqual("hello", (string)e.Value);
             Assert.IsNull(e.Arguments);
@@ -35,9 +35,9 @@ namespace Netherlands3D.LayerStyles.Expressions
         {
             Expr<bool> e = true;
 
-            Assert.IsTrue(e.IsLiteral);
+            Assert.IsTrue(e.IsValue);
             Assert.IsFalse(e.IsExpression);
-            Assert.AreEqual(Operators.Literal, e.Operator);
+            Assert.AreEqual(Operators.Value, e.Operator);
             Assert.AreEqual(true, (bool)e.Value);
             Assert.IsNull(e.Arguments);
         }
@@ -47,9 +47,9 @@ namespace Netherlands3D.LayerStyles.Expressions
         {
             Expr<float> e = 3.14f;
 
-            Assert.IsTrue(e.IsLiteral);
+            Assert.IsTrue(e.IsValue);
             Assert.IsFalse(e.IsExpression);
-            Assert.AreEqual(Operators.Literal, e.Operator);
+            Assert.AreEqual(Operators.Value, e.Operator);
             Assert.AreEqual(3.14f, (float)e.Value, 1e-6f);
             Assert.IsNull(e.Arguments);
         }
@@ -59,9 +59,9 @@ namespace Netherlands3D.LayerStyles.Expressions
         {
             Expr<double> e = 2.71828d;
 
-            Assert.IsTrue(e.IsLiteral);
+            Assert.IsTrue(e.IsValue);
             Assert.IsFalse(e.IsExpression);
-            Assert.AreEqual(Operators.Literal, e.Operator);
+            Assert.AreEqual(Operators.Value, e.Operator);
             Assert.AreEqual(2.71828d, (double)e.Value);
             Assert.IsNull(e.Arguments);
         }
@@ -71,7 +71,7 @@ namespace Netherlands3D.LayerStyles.Expressions
         {
             Expr<bool> cmp = Expr.GreaterThan(5, 10);
 
-            Assert.IsFalse(cmp.IsLiteral);
+            Assert.IsFalse(cmp.IsValue);
             Assert.IsTrue(cmp.IsExpression);
             Assert.AreEqual(Operators.GreaterThan, cmp.Operator);
 
@@ -167,23 +167,6 @@ namespace Netherlands3D.LayerStyles.Expressions
         }
 
         [Test]
-        public void ExpressCheckingIfAValueOccursInAList()
-        {
-            string nameExpr = "keyword";
-            ExpressionValue[] listExpr = { "value", "keyword" };
-
-            Expr<bool> inList = Expr.In(nameExpr, listExpr);
-            
-            Assert.AreEqual(Operators.In, inList.Operator);
-            Assert.AreEqual(2, inList.Arguments.Length);
-            Assert.AreEqual("keyword", (string)inList.Arguments[0].Value);
-            
-            ExpressionValue[] list = inList.Arguments[1].Value;
-            Assert.AreEqual("value", (string)list[0].Value);
-            Assert.AreEqual("keyword", (string)list[1].Value);
-        }
-
-        [Test]
         public void ExampleOfNestedExpression()
         {
             /*
@@ -235,7 +218,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             // Assert: Green channel == literal 0
             Expr<int> greenArg = rgbExpr.Arguments[1] as Expr<int>;
             Assert.IsNotNull(greenArg);
-            Assert.IsTrue(greenArg.IsLiteral);
+            Assert.IsTrue(greenArg.IsValue);
             Assert.AreEqual(0, (int)greenArg.Value);
 
             // Assert: Blue channel == min expression

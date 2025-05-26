@@ -10,7 +10,7 @@ namespace Netherlands3D.LayerStyles.Expressions
         
         public ExpressionValue Value { get; }
         
-        public bool IsLiteral { get; }
+        public bool IsValue { get; }
         public bool IsExpression { get; }
     }
 }

@@ -7,7 +7,7 @@ namespace Netherlands3D.LayerStyles.Expressions
     [JsonConverter(typeof(StringEnumConverter))]
     public enum Operators
     {
-        [EnumMember(Value = "literal")] Literal,
+        [EnumMember(Value = "type:value")] Value,
 
         [EnumMember(Value = "==")] EqualTo,
 
@@ -24,7 +24,5 @@ namespace Netherlands3D.LayerStyles.Expressions
         [EnumMember(Value = "rgb")] Rgb,
 
         [EnumMember(Value = "get")] GetVariable,
-
-        [EnumMember(Value = "in")] In
     }
 }

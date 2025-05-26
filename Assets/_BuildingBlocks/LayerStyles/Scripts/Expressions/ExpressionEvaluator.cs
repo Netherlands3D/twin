@@ -6,13 +6,17 @@ namespace Netherlands3D.LayerStyles.Expressions
     public class ExpressionEvaluator
     {
         /// <summary>
-        /// When changing this, do not forget to change Expr and ExprJsonConverter 
+        /// When changing this, do not forget to change Expr 
         /// </summary>
         public ExpressionValue Evaluate(IExpression expr, ExpressionContext context)
         {
+            if (expr.IsValue)
+            {
+                return expr.Value;
+            }
+            
             return expr.Operator switch
             {
-                Operators.Literal => expr.Value,
                 Operators.EqualTo => EqualTo(context, expr.Arguments[0], expr.Arguments[1]),
                 Operators.GreaterThan => GreaterThan(context, expr.Arguments[0], expr.Arguments[1]),
                 Operators.GreaterThanOrEqual => GreaterThanOrEqual(context, expr.Arguments[0], expr.Arguments[1]),
@@ -25,8 +29,7 @@ namespace Netherlands3D.LayerStyles.Expressions
                     expr.Arguments[0] as Expr<int>, 
                     expr.Arguments[1] as Expr<int>, 
                     expr.Arguments[2] as Expr<int>
-                ),
-                Operators.In => throw new NotImplementedException() // ensure exceptions rise
+                )
             };
         }
         
