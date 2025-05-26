@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.CartesianTiles;
-using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
 using Netherlands3D.Twin.UI;
@@ -56,8 +55,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 var material = binaryMeshLayer.DefaultMaterialList[materialIndex];
                 material = new Material(material);
                 binaryMeshLayer.DefaultMaterialList[materialIndex] = material;
-                
-                CreateFeature(material);
+
+                var layerFeature = CreateFeature(material);
+                LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             }
         }
 
@@ -107,7 +107,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         public override void ApplyStyling()
         {
             var binaryMeshLayer = GetTileLayerAsBinaryMeshLayer();
-            foreach (var (_, feature) in GetLayerFeatures())
+            foreach (var (_, feature) in LayerFeatures)
             {
                 CartesianTileLayerStyler.Apply(binaryMeshLayer, GetStyling(feature), feature);
             }

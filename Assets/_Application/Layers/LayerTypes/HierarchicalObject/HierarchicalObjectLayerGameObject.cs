@@ -251,7 +251,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void ApplyStyling()
         {
-            var features = GetFeatures<MeshRenderer>();
+            var features = CreateFeaturesByType<MeshRenderer>();
             foreach (var feature in features)
             {
                 ApplyStyling(feature);

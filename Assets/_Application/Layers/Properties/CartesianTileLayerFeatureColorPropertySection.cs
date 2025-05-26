@@ -62,7 +62,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             swatches.Clear();
             layerContent.ClearAllChildren();
-            foreach (var layerFeature in layer.GetLayerFeatures().Values)
+            foreach (var layerFeature in layer.LayerFeatures.Values)
             {
                 swatches[layerFeature] = CreateSwatch(layerFeature);
                 SetSwatchColorFromFeature(layerFeature);

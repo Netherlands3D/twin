@@ -18,7 +18,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             public Material CreateMaterial()
             {
-                var features = layer.GetFeatures<BatchedMeshInstanceRenderer>();
+                var features = layer.CreateFeaturesByType<BatchedMeshInstanceRenderer>();
                 var style = layer.GetStyling(features.FirstOrDefault());
                 var color = style.GetFillColor() ?? Color.white;
 
