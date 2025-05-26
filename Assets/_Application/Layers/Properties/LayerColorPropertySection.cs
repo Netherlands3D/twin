@@ -4,6 +4,7 @@ using System.Linq;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.LayerStyles.Expressions;
 using Netherlands3D.Twin.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -73,7 +74,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             GameObject swatchObject = Instantiate(colorSwatchPrefab, layerContent);
             ColorSwatch swatch = swatchObject.GetComponent<ColorSwatch>();
                 
-            string layerName = layerFeature.GetAttribute(Constants.MaterialNameIdentifier);
+            string layerName = layerFeature.GetAttribute(CartesianTileLayerGameObject.MaterialNameIdentifier);
                 
             swatch.SetLayerName(layerName);
             swatch.SetInputText(layerName);
@@ -133,7 +134,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void SetColorizationStylingRule(LayerFeature layerFeature, Color color)
         {
-            int.TryParse(layerFeature.Attributes[Constants.MaterialIndexIdentifier], out int materialIndexIdentifier);
+            int.TryParse(layerFeature.Attributes[CartesianTileLayerGameObject.MaterialIndexIdentifier], out int materialIndexIdentifier);
 
             var stylingRuleName = ColorizationStyleRuleName(materialIndexIdentifier);
 
@@ -141,7 +142,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             var stylingRule = new StylingRule(
                 stylingRuleName, 
                 Expr.EqualsTo(
-                    Expr.GetVariable(Constants.MaterialIndexIdentifier),
+                    Expr.GetVariable(CartesianTileLayerGameObject.MaterialIndexIdentifier),
                     materialIndexIdentifier.ToString()
                 )
             );
@@ -169,7 +170,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             // if there is no swatch matching this layer feature, we can skip this update
             if (!swatches.TryGetValue(layerFeature, out var swatch)) return;
             
-            int.TryParse(layerFeature.GetAttribute(Constants.MaterialIndexIdentifier), out int materialIndexIdentifier);
+            int.TryParse(layerFeature.GetAttribute(CartesianTileLayerGameObject.MaterialIndexIdentifier), out int materialIndexIdentifier);
             var stylingRuleName = ColorizationStyleRuleName(materialIndexIdentifier);
             
             // TODO: This can be done better

@@ -12,6 +12,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
     [RequireComponent(typeof(Layer))]
     public class CartesianTileLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
     {
+        public const string MaterialNameIdentifier = "data-materialname";
+        public const string MaterialIndexIdentifier = "data-materialindex";
+
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
         
         private Layer layer;
@@ -106,7 +109,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             Color? color = styling.GetFillColor();
             if (!color.HasValue) return;
 
-            if (!int.TryParse(feature.Attributes[Constants.MaterialIndexIdentifier], out var materialIndex)) return;
+            if (!int.TryParse(feature.Attributes[MaterialIndexIdentifier], out var materialIndex)) return;
 
             meshLayer.DefaultMaterialList[materialIndex].color = color.Value;
         }
@@ -117,8 +120,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             var meshLayer = GetTileLayerAsBinaryMeshLayer();
             
-            feature.Attributes.Add(Constants.MaterialIndexIdentifier, meshLayer.DefaultMaterialList.IndexOf(mat).ToString());
-            feature.Attributes.Add(Constants.MaterialNameIdentifier, mat.name);
+            feature.Attributes.Add(MaterialIndexIdentifier, meshLayer.DefaultMaterialList.IndexOf(mat).ToString());
+            feature.Attributes.Add(MaterialNameIdentifier, mat.name);
 
             return feature;
         }
