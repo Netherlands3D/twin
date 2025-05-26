@@ -495,7 +495,7 @@ namespace Netherlands3D.Twin.Cameras
         /// </summary>
         private void CalculateSpeed()
         {
-            bool modifierKeysPressed = SequentialSelectionModifierKeyIsPressed();
+            bool modifierKeysPressed = IsModifierKeyIsPressed();
             float newZoomSpeed = modifierKeysPressed ? zoomSpeed * zoomSpeedMultiplier : zoomSpeed;
 
             dynamicMoveSpeed = (multiplySpeedBasedOnHeight) ? moveSpeed * Mathf.Abs(this.transform.position.y) : moveSpeed;
@@ -520,7 +520,7 @@ namespace Netherlands3D.Twin.Cameras
             }
         }
 
-        public static bool SequentialSelectionModifierKeyIsPressed()
+        public static bool IsModifierKeyIsPressed()
         {
             return Keyboard.current.shiftKey.isPressed;
         }
