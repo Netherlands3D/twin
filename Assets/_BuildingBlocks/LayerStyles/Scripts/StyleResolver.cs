@@ -1,6 +1,8 @@
 using Netherlands3D.Twin.Layers;
 using System.Collections.Generic;
 using Netherlands3D.LayerStyles.Expressions;
+using UnityEngine;
+using ExpressionEvaluator = Netherlands3D.LayerStyles.Expressions.ExpressionEvaluator;
 
 namespace Netherlands3D.LayerStyles
 {

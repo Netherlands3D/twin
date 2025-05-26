@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -119,7 +120,7 @@ namespace Netherlands3D.LayerStyles.Expressions
         [Test]
         public void DeserializingAJsonArrayReturnsAnExpression()
         {
-            const string json = "[\"==\",5,10]";
+            const string json = @"[""=="",5,10]";
             
             var expr = JsonConvert.DeserializeObject<Expr<bool>>(json, jsonSerializerSettings);
 
@@ -130,45 +131,47 @@ namespace Netherlands3D.LayerStyles.Expressions
             Assert.AreEqual(2, expr.Arguments.Length);
 
             Debug.Log(expr.Arguments[0]);
-            var left = expr.Arguments[0] as Expr<IConvertible>;
-            var right = expr.Arguments[1] as Expr<IConvertible>;
-            Assert.IsNotNull(left);
-            Assert.IsNotNull(right);
+            Assert.IsInstanceOf<Expr<ExpressionValue>>(expr.Arguments[0]);
+            Assert.IsInstanceOf<Expr<ExpressionValue>>(expr.Arguments[1]);
 
+            var left = (Expr<ExpressionValue>)expr.Arguments[0];
+            var right = (Expr<ExpressionValue>)expr.Arguments[1];
+            
+            Assert.IsTrue(left.Value.IsFloat);
+            Assert.IsTrue(right.Value.IsFloat);
             Assert.AreEqual(5, (int)left);
             Assert.AreEqual(10, (int)right);
         }
 
         [Test]
-        public void Serialize_RgbAndMinNestedExpression_ProducesCorrectArray()
+        public void SerializingAnExpressionWithAVariableStatementReturnsAJsonArray()
         {
-            // build: ["get","temperature"]
-            Expr<string> tempName = "temperature";
-            var getTemp = Expr.GetVariable(tempName);
-
-            // build: Min(100, getTemp)
-            var minExpr = Expr.Min(100, getTemp);
-
-            // build final: ["rgb", getTemp, 0, minExpr]
-            // var rgb = Expr.Rgb(getTemp as Expr<int>, (Expr<int>)0, minExpr as Expr<int>);
-            // Note: Rgb signature returns Expr<string> but testing serialization shape only
-
-            // string json = JsonConvert.SerializeObject(rgb, _settings);
-            // parse to JArray for easy structural assertions
-            // var arr = JArray.Parse(json);
-
-            // Assert.AreEqual("rgb", arr[0].Value<string>());
-            // Assert.AreEqual("get", arr[1][0].Value<string>());
-            // Assert.AreEqual("temperature", arr[1][1].Value<string>());
-            // Assert.AreEqual(0, arr[2].Value<int>());
-            // Assert.AreEqual("min", arr[3][0].Value<string>());
-            // Assert.AreEqual(100, arr[3][1].Value<int>());
-            // Assert.AreEqual("get", arr[3][2][0].Value<string>());
-            // Assert.AreEqual("temperature", arr[3][2][1].Value<string>());
+            // ["==", 5, ["get", "temperature"]]]]
+            var expr = Expr.EqualsTo(5, Expr.GetVariable("temperature"));
+            
+            string json = JsonConvert.SerializeObject(expr, jsonSerializerSettings);
+            
+            Assert.AreEqual(@"[""=="",5,[""get"",""temperature""]]", json);
         }
 
         [Test]
-        public void Deserialize_RgbAndMinNestedExpression_RestoresFullTree()
+        public void SerializingAComplexExpressionReturnsAJsonArray()
+        {
+            Expr<string> rgb = Expr.Rgb(
+                Expr.GetVariable("temperature"), 
+                0, 
+                Expr.Min(100, Expr.GetVariable("temperature"))
+            );
+            
+            string json = JsonConvert.SerializeObject(rgb, jsonSerializerSettings);
+
+            const string expected = @"[""rgb"",[""get"",""temperature""],0,[""min"",100,[""get"",""temperature""]]]";
+            
+            Assert.AreEqual(expected, json);
+        }
+
+        [Test]
+        public void DeserializingAComplexExpressionReturnsCorrectComponents()
         {
             const string json = @"
             [
@@ -178,35 +181,31 @@ namespace Netherlands3D.LayerStyles.Expressions
               [""min"", 100, [""get"", ""temperature""]]
             ]";
 
-            // We choose Expr<IConvertible> as the target because rgb returns Expr<string>
             var expr = JsonConvert.DeserializeObject<Expr<string>>(json, jsonSerializerSettings);
 
             Assert.AreEqual(Operators.Rgb, expr.Operator);
             Assert.AreEqual(3, expr.Arguments.Length);
 
             // first arg: get temperature
-            var a0 = expr.Arguments[0] as Expr<IConvertible>;
-            Assert.IsNotNull(a0);
+            Expr<int> a0 = (Expr<int>)expr.Arguments[0];
             Assert.AreEqual(Operators.GetVariable, a0.Operator);
-            Assert.AreEqual("temperature", (string)a0);
+            Assert.AreEqual("temperature", (string)(Expr<string>)a0.Arguments[0]);
 
             // second arg: 0
-            var a1 = expr.Arguments[1] as Expr<IConvertible>;
-            Assert.IsNotNull(a1);
+            Expr<int> a1 = (Expr<int>)expr.Arguments[1];
             Assert.IsTrue(a1.IsLiteral);
             Assert.AreEqual(0, (int)a1);
 
             // third arg: min(100, get temperature)
-            var a2 = expr.Arguments[2] as Expr<IConvertible>;
-            Assert.IsNotNull(a2);
+            Expr<int> a2 = (Expr<int>)expr.Arguments[2];
             Assert.AreEqual(Operators.Min, a2.Operator);
             Assert.AreEqual(2, a2.Arguments.Length);
 
-            var m0 = a2.Arguments[0] as Expr<IConvertible>;
-            var m1 = a2.Arguments[1] as Expr<IConvertible>;
+            Expr<int> m0 = (Expr<ExpressionValue>)a2.Arguments[0];
+            Expr<ExpressionValue> m1 = (Expr<ExpressionValue>)a2.Arguments[1];
             Assert.AreEqual(100, (int)m0);
             Assert.AreEqual(Operators.GetVariable, m1.Operator);
-            Assert.AreEqual("temperature", (string)m1);
+            Assert.AreEqual("temperature", (string)(Expr<string>)m1.Arguments[0]);
         }
     }
 }

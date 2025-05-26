@@ -158,6 +158,7 @@ namespace Netherlands3D.LayerStyles.Expressions
         [Test]
         public void EvaluateExampleOfNestedExpression()
         {
+            // TODO: Test fails because Expr.Min evaluates to null instead of a correct value
             var rgbExpr = Expr.Rgb(
             Expr.GetVariable("temperature"), 
             0, 

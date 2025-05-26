@@ -10,7 +10,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
     [RequireComponent(typeof(Layer))]
-    public partial class CartesianTileLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
+    public class CartesianTileLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
     {
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
         
@@ -19,8 +19,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
-            if (layer && layer.isEnabled != isActive)
-                layer.isEnabled = isActive;
+            if (!layer || layer.isEnabled == isActive) return;
+
+            layer.isEnabled = isActive;
         }
         
         protected virtual void Awake()
@@ -48,15 +49,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             for (var materialIndex = 0; materialIndex < binaryMeshLayer.DefaultMaterialList.Count; materialIndex++)
             {
-                // Create a copy once on instantiation to prevent changes on the assets itself
-                // TODO: This should be part of the BinaryMeshLayer itself
+                // Make a copy of the default material, so we can change the color without affecting the original
+                // TODO: This should be part of the BinaryMeshLayer itself?
                 var material = binaryMeshLayer.DefaultMaterialList[materialIndex];
-                if (material.parent == null)
-                {
-                    material = new Material(material);
-                    binaryMeshLayer.DefaultMaterialList[materialIndex] = material;
-                }
-
+                material = new Material(material);
+                binaryMeshLayer.DefaultMaterialList[materialIndex] = material;
+                
                 CreateFeature(material);
             }
         }

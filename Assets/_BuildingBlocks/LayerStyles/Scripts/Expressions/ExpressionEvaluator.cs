@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Netherlands3D.LayerStyles.Expressions
 {
@@ -24,7 +25,8 @@ namespace Netherlands3D.LayerStyles.Expressions
                     expr.Arguments[0] as Expr<int>, 
                     expr.Arguments[1] as Expr<int>, 
                     expr.Arguments[2] as Expr<int>
-                )
+                ),
+                Operators.In => throw new NotImplementedException() // ensure exceptions rise
             };
         }
         
@@ -35,41 +37,41 @@ namespace Netherlands3D.LayerStyles.Expressions
 
         private ExpressionValue LessThan(ExpressionContext context, IExpression lhs, IExpression rhs)
         {
-            var rhsValue = Evaluate(rhs, context);
             var lhsValue = Evaluate(lhs, context);
-            
+            var rhsValue = Evaluate(rhs, context);
+
             return rhsValue.CompareTo(lhsValue) is 1;
         }
 
         private ExpressionValue LessThanOrEqual(ExpressionContext context, IExpression lhs, IExpression rhs)
         {
-            var rhsValue = Evaluate(rhs, context);
             var lhsValue = Evaluate(lhs, context);
-            
+            var rhsValue = Evaluate(rhs, context);
+
             return rhsValue.CompareTo(lhsValue) is 0 or 1;
         }
 
         private ExpressionValue GreaterThan(ExpressionContext context, IExpression lhs, IExpression rhs)
         {
-            var rhsValue = Evaluate(rhs, context);
             var lhsValue = Evaluate(lhs, context);
-            
+            var rhsValue = Evaluate(rhs, context);
+
             return rhsValue.CompareTo(lhsValue) is -1;
         }
 
         private ExpressionValue GreaterThanOrEqual(ExpressionContext context, IExpression lhs, IExpression rhs)
         {
-            var rhsValue = Evaluate(rhs, context);
             var lhsValue = Evaluate(lhs, context);
-            
+            var rhsValue = Evaluate(rhs, context);
+
             return rhsValue.CompareTo(lhsValue) is 0 or -1;
         }
         
         private ExpressionValue Min(ExpressionContext context, IExpression lhs, IExpression rhs)
         {
-            var rhsValue = Evaluate(rhs, context);
             var lhsValue = Evaluate(lhs, context);
-            
+            var rhsValue = Evaluate(rhs, context);
+
             return rhsValue.CompareTo(lhsValue) is 0 or -1 ? rhs.Value : lhs.Value;
         }
         

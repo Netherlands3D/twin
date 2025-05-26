@@ -11,6 +11,7 @@ namespace Netherlands3D.LayerStyles.Expressions
         public ExpressionValue Value { get; protected set; }
 
         public bool IsLiteral => Operator == Operators.Literal;
+
         public bool IsExpression => Operator != Operators.Literal;
 
         #region Operators - when you change this, change ExpressionEvaluator and ExprJsonConverter too!
@@ -96,6 +97,11 @@ namespace Netherlands3D.LayerStyles.Expressions
             => v.IsLiteral
                 ? new Expr<ExpressionValue>(v.Value)
                 : new Expr<ExpressionValue>(v.Operator, v.Arguments);
+        
+        public static Expr<T> TryParse(IExpression v)
+            => v.IsLiteral
+                ? new Expr<T>(v.Value)
+                : new Expr<T>(v.Operator, v.Arguments);
     }
 }
 

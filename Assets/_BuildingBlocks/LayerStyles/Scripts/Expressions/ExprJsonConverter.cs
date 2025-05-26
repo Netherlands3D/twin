@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 namespace Netherlands3D.LayerStyles.Expressions
 {
@@ -41,11 +42,12 @@ namespace Netherlands3D.LayerStyles.Expressions
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var token = JToken.Load(reader);
+            
             // Delegate everything to one recursive method
-            return ReadExpression(token, objectType, serializer);
+            return ReadExpression(token, objectType, serializer) as Expr;
         }
 
-        private object ReadExpression(JToken token, Type targetType, JsonSerializer serializer)
+        private IExpression ReadExpression(JToken token, Type targetType, JsonSerializer serializer)
         {
             if (token.Type == JTokenType.Array)
             {
@@ -55,20 +57,22 @@ namespace Netherlands3D.LayerStyles.Expressions
             return DeserializeLiteralValue(token, targetType, serializer);
         }
 
-        private object DeserializeExpression(JToken token, Type targetType, JsonSerializer serializer)
+        private IExpression DeserializeExpression(JToken token, Type targetType, JsonSerializer serializer)
         {
             var arr = (JArray)token;
             if (arr.Count < 1)
+            {
                 throw new JsonSerializationException("Expression array must have at least one element");
+            }
 
             // first element is the operator name
             var op = arr[0].ToObject<Operators>(serializer);
 
-            // remaining elements ⇒ recursive call, always producing Expr<IConvertible>
+            // remaining elements ⇒ recursive call, always producing Expr<ExpressionValue>
             var argType = ExprOpenGeneric.MakeGenericType(typeof(ExpressionValue));
             IExpression[] args = arr
                 .Skip(1)
-                .Select(t => (IExpression)ReadExpression(t, argType, serializer))
+                .Select(t => ReadExpression(t, argType, serializer))
                 .ToArray();
 
             return CastExpressionTo(targetType, op, args);
@@ -77,21 +81,21 @@ namespace Netherlands3D.LayerStyles.Expressions
         /// <summary>
         /// When changing this location - do not forget to change Expr and/or ExpressionEvaluator
         /// </summary>
-        private object CastExpressionTo(Type targetType, Operators op, IExpression[] args)
+        private IExpression CastExpressionTo(Type targetType, Operators op, IExpression[] args)
         {
             switch (op)
             {
-                case Operators.EqualTo: return Expr.EqualsTo(args[0] as Expr<ExpressionValue>, args[1] as Expr<ExpressionValue>);
-                case Operators.GreaterThan: return Expr.GreaterThan(args[0] as Expr<ExpressionValue>, args[1] as Expr<ExpressionValue>);
-                case Operators.GreaterThanOrEqual: return Expr.GreaterThanOrEqual(args[0] as Expr<ExpressionValue>, args[1] as Expr<ExpressionValue>);
-                case Operators.LessThan: return Expr.LessThan(args[0] as Expr<ExpressionValue>, args[1] as Expr<ExpressionValue>);
-                case Operators.LessThanOrEqual: return Expr.LessThanOrEqual(args[0] as Expr<ExpressionValue>, args[1] as Expr<ExpressionValue>);
-                case Operators.Min: return Expr.Min(args[0] as Expr<ExpressionValue>, args[1] as Expr<ExpressionValue>);
-                case Operators.GetVariable: return Expr.GetVariable(args[0] as Expr<string>);
+                case Operators.EqualTo: return Expr.EqualsTo(Expr<ExpressionValue>.TryParse(args[0]), Expr<ExpressionValue>.TryParse(args[1]));
+                case Operators.GreaterThan: return Expr.GreaterThan(Expr<ExpressionValue>.TryParse(args[0]), Expr<ExpressionValue>.TryParse(args[1]));
+                case Operators.GreaterThanOrEqual: return Expr.GreaterThanOrEqual(Expr<ExpressionValue>.TryParse(args[0]), Expr<ExpressionValue>.TryParse(args[1]));
+                case Operators.LessThan: return Expr.LessThan(Expr<ExpressionValue>.TryParse(args[0]), Expr<ExpressionValue>.TryParse(args[1]));
+                case Operators.LessThanOrEqual: return Expr.LessThanOrEqual(Expr<ExpressionValue>.TryParse(args[0]), Expr<ExpressionValue>.TryParse(args[1]));
+                case Operators.Min: return Expr.Min(Expr<ExpressionValue>.TryParse(args[0]), Expr<ExpressionValue>.TryParse(args[1]));
+                case Operators.GetVariable: return Expr.GetVariable(Expr<string>.TryParse(args[0]));
                 case Operators.Rgb: return Expr.Rgb(
-                    args[0] as Expr<int>, 
-                    args[1] as Expr<int>, 
-                    args[2] as Expr<int>
+                    Expr<int>.TryParse(args[0]), 
+                    Expr<int>.TryParse(args[1]), 
+                    Expr<int>.TryParse(args[2])
                 );
             }
 
@@ -103,10 +107,10 @@ namespace Netherlands3D.LayerStyles.Expressions
                 new[] { typeof(string), typeof(IExpression[]) },
                 null
             )!;
-            return ctor.Invoke(new object[] { op, args });
+            return ctor.Invoke(new object[] { op, args }) as IExpression;
         }
 
-        private static object DeserializeLiteralValue(JToken token, Type targetType, JsonSerializer serializer)
+        private static IExpression DeserializeLiteralValue(JToken token, Type _, JsonSerializer serializer)
         {
             switch (token.Type)
             {

@@ -220,12 +220,6 @@ namespace Netherlands3D.Twin.Layers
             return feature;
         }
 
-        protected LayerFeature GetFeature(object geometry)
-        {
-            layerFeatures.TryGetValue(geometry, out var feature);
-            return feature;
-        }
-
         public Dictionary<object, LayerFeature> GetLayerFeatures()
         {
             return layerFeatures;
