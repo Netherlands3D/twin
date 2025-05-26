@@ -177,7 +177,6 @@ namespace Netherlands3D.LayerStyles.Expressions
         [Test]
         public void EvaluateGetVariableExpression()
         {
-            // TODO: Add another test that will check what happens if you pass an invalid type of attribute
             context.Feature.Attributes.Add("temperature", "100");
             Expr<ExpressionValue> getVariableExpression = Expr.GetVariable("temperature");
 
@@ -185,6 +184,16 @@ namespace Netherlands3D.LayerStyles.Expressions
             
             Assert.IsInstanceOf<ExpressionValue>(expressionValue);
             Assert.AreEqual("100", (string)expressionValue);
+        }
+
+        [Test]
+        public void EvaluateGetVariableExpressionWithUnknownVariableReturnsNull()
+        {
+            Expr<ExpressionValue> getVariableExpression = Expr.GetVariable("unknownVariable");
+
+            string expressionValue = evaluator.Evaluate(getVariableExpression, context);
+            
+            Assert.IsNull(expressionValue);
         }
 
         [Test]
@@ -212,11 +221,10 @@ namespace Netherlands3D.LayerStyles.Expressions
         [Test]
         public void EvaluateExampleOfNestedExpression()
         {
-            // TODO: Test fails because Expr.Min evaluates to null instead of a correct value
             var rgbExpr = Expr.Rgb(
-            Expr.GetVariable("temperature"), 
-            0, 
-            Expr.Min(100, Expr.GetVariable("temperature"))
+                Expr.GetVariable("temperature"), 
+                0, 
+                Expr.Min(100, Expr.GetVariable("temperature"))
             );
 
             var layerFeature = LayerFeature.Create("string");

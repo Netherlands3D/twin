@@ -99,7 +99,7 @@ namespace Netherlands3D.LayerStyles.Expressions
         
         private ExpressionValue GetVariable(ExpressionContext context, Expr<string> id)
         {
-            return context.Feature.GetAttribute(Evaluate(id, context));
+            return (string)context.Feature.GetAttribute(Evaluate(id, context));
         }
     }
 }
