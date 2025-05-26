@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
-using Netherlands3D.LayerStyles;
-using Netherlands3D.LayerStyles.ExtensionMethods;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
