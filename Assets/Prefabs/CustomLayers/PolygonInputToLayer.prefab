@@ -849,6 +849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 207c9e4ebe1ab4cb493f293cc0c4cf32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDefaultActivatedService: 0
 --- !u!1 &6169829145916154088
 GameObject:
   m_ObjectHideFlags: 0
@@ -1473,6 +1474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 207c9e4ebe1ab4cb493f293cc0c4cf32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDefaultActivatedService: 0
 --- !u!1 &7298217538574612641
 GameObject:
   m_ObjectHideFlags: 0
@@ -1786,6 +1788,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
         type: 3}
+      propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
       propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 0
       objectReference: {fileID: 0}
@@ -1793,16 +1800,17 @@ PrefabInstance:
         type: 3}
       propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6970481386311860828}
+      objectReference: {fileID: 11400000, guid: e64696f66bdcc5343ad26d8c620d845a,
+        type: 2}
     - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
         type: 3}
       propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: CreateOrEditGridLayer
+      value: SetSelectionAreaBounds
       objectReference: {fileID: 0}
     - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
         type: 3}
       propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.Twin.Layers.LayerTypes.Polygons.PolygonInputToLayer, eu.netherlands3d.twin
+      value: Netherlands3D.Twin.AreaSelection, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6295639419868117823, guid: dc5ce5f60fb3b074394ab446caa210d5,
         type: 3}
@@ -1903,6 +1911,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 207c9e4ebe1ab4cb493f293cc0c4cf32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDefaultActivatedService: 0
 --- !u!4 &7523499849824955878 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6362551884031212892, guid: dc5ce5f60fb3b074394ab446caa210d5,
