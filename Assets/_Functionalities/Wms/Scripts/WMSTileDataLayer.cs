@@ -154,7 +154,7 @@ namespace Netherlands3D.Functionalities.Wms
                     : DefaultEpsgCoordinateSystem;
             }
 
-            CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString, out var foundCoordinateSystem);
+            CoordinateSystem foundCoordinateSystem = CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString);
 
             var boundingBox = new BoundingBox(bottomLeft, topRight);
             boundingBox.Convert(foundCoordinateSystem);

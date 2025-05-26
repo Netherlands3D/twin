@@ -58,6 +58,5 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             this.eulerRotation = eulerRotation;
             this.localScale = localScale;
         }
-
     }
 }

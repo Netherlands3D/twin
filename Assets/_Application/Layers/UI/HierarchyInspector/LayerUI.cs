@@ -11,6 +11,7 @@ using GG.Extensions;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using UnityEngine.Serialization;
+using Netherlands3D.Services;
 
 namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 {
@@ -180,7 +181,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 SetHighlight(InteractionState.Selected); // needed because eventListener is not assigned yet when calling layer.SelectLayer when the UI is instantiated
             enabledToggle.SetIsOnWithoutNotify(Layer.ActiveInHierarchy); //initial update of if the toggle should be on or off. This should not be in UpdateLayerUI, because if a parent toggle is off, the child toggle could be on but then the layer would still not be active in the scene
             UpdateColor(Layer.Color);
-            RegisterWithPropertiesPanel(Properties.Properties.Instance);
+            RegisterWithPropertiesPanel(ServiceLocator.GetService<Properties.Properties>());
         }
 
         private void OnNameChanged(string newName)
@@ -423,7 +424,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             var layoutGroup = parentRowRectTransform.GetComponent<HorizontalLayoutGroup>();
 
             var layerNameFieldRectTransform = layerNameField.GetComponent<RectTransform>();
-            
+
             var width = maxWidth;
             width -= layerNameFieldRectTransform.anchoredPosition.x;
             width -= spacer.rect.width;
@@ -432,7 +433,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             width -= layoutGroup.spacing; // Subtract spacing to create spacing between name field and buttons
             width += layerPanelRight; // Negative number, so we invert it by adding
             width -= buttonGroupWidth; // Subtract ButtonGroupWidth because they partly influence the layout
-            
+
             layerNameFieldRectTransform.sizeDelta = new Vector2(width, layerNameFieldRectTransform.rect.height);
 
             // The text holder component - which is the parent of the layerNameText - needs to be re-scaled
@@ -471,11 +472,11 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             {
                 //only one extra click on a selected layer should initiate the layer name editing
                 float timeSinceLastClick = Time.time - lastClickTime;
-                
+
                 if (timeSinceLastClick <= doubleClickThreshold)
                 {
                     // Detected double-click
-                    JumpCameraToLayer();
+                    Layer.DoubleClickLayer();
                 }
                 else if (eventData.pointerEnter == layerNameText.gameObject)
                 {
@@ -488,15 +489,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             {
                 ProcessLayerSelection();
             }
-            lastClickTime = Time.time;
-        }
 
-        private void JumpCameraToLayer()
-        {
-            if (Layer is ReferencedLayerData referencedLayerData)
-            {
-                Layer.DoubleClickLayer();
-            }
+            lastClickTime = Time.time;
         }
 
         private void OnRightButtonDown(PointerEventData eventData)

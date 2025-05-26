@@ -1,9 +1,9 @@
 mergeInto(LibraryManager.library, {
-    DownloadFileImmediate: function(gameObjectNamePtr, methodNamePtr, filenamePtr, byteArray, byteArraySize) {
-        gameObjectName = Pointer_stringify(gameObjectNamePtr);
-        methodName = Pointer_stringify(methodNamePtr);
-        filename = Pointer_stringify(filenamePtr);
-
+    DownloadFileImmediate: function(gameObjectNamePtr, callbackMethodNamePtr, filenamePtr, byteArray, byteArraySize) {
+        gameObjectName = UTF8ToString(gameObjectNamePtr);
+        callbackMethodName = UTF8ToString(callbackMethodNamePtr);
+        filename = UTF8ToString(filenamePtr);
+        
         var bytes = new Uint8Array(byteArraySize);
         for (var i = 0; i < byteArraySize; i++) {
             bytes[i] = HEAPU8[byteArray + i];
@@ -18,6 +18,8 @@ mergeInto(LibraryManager.library, {
         downloader.click();
         document.body.removeChild(downloader);
 
-        SendMessage(gameObjectName, methodName);
+        if (callbackMethodName && callbackMethodName.length > 0) {
+            SendMessage(gameObjectName, callbackMethodName);
+        }
     }
 });

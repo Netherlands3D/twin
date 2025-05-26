@@ -10,7 +10,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         [SerializeField] private GameObject card;
         [SerializeField] private RectTransform sections;
-
+        
         private void Awake()
         {
             if (Instance == null)

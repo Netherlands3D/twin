@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.CartesianTiles;
-using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.Twin.UI;
+using Netherlands3D.Services;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
@@ -62,6 +63,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             }
         }
 
+        public override void OnSelect()
+        {
+            var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
+            if (transformInterfaceToggle)
+                transformInterfaceToggle.ShowVisibilityPanel(true);
+        }
+
+        public override void OnDeselect()
+        {
+            var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
+            if (transformInterfaceToggle)
+                transformInterfaceToggle.ShowVisibilityPanel(false);
+        }
+        
         protected virtual void OnDestroy()
         {
             if (Application.isPlaying && tileHandler && layer)

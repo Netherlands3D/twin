@@ -168,6 +168,7 @@ namespace Netherlands3D.Twin.Cameras
             return () =>
             {
                 LockBeforePerspectiveSwitch(activeTileHandlers);
+                cameraComponent.fieldOfView = previousFovWhenSwitchingToAndFromOrtho; //set the FOV back to what it was
                 cameraComponent.orthographic = !shouldSwitchToOrthogonal;
             };
         }
@@ -188,6 +189,7 @@ namespace Netherlands3D.Twin.Cameras
                 );
                 
                 // Perform the actual switch
+                cameraComponent.fieldOfView = previousFovWhenSwitchingToAndFromOrtho; //set the FOV back to what it was
                 cameraComponent.orthographic = shouldSwitchToOrthogonal;
                 UnlockAfterPerspectiveSwitch(activeTileHandlers);
             };

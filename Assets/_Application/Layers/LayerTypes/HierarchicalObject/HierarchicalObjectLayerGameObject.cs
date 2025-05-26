@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
+using Netherlands3D.LayerStyles.ExtensionMethods;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
@@ -48,19 +51,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private Coordinate previousCoordinate;
         private Quaternion previousRotation;
         private Vector3 previousScale;
-        private WorldTransform worldTransform;
+        public WorldTransform WorldTransform { get; private set; }
 
         LayerPropertyData ILayerWithPropertyData.PropertyData => transformPropertyData;
         public bool TransformIsSetFromProperty { get; private set; } = false;
 
-        protected void Awake()
+        protected virtual void Awake()
         {
-            transformPropertyData = new TransformLayerPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale);
+            transformPropertyData = InitializePropertyData();
 
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
 
-            worldTransform = GetComponent<WorldTransform>();
+            WorldTransform = GetComponent<WorldTransform>();
+        }
+
+        protected virtual TransformLayerPropertyData InitializePropertyData()
+        {
+            return new TransformLayerPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale);
         }
 
         protected override void OnEnable()
@@ -78,9 +86,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void Start()
         {
             base.Start();
-            worldTransform.RecalculatePositionAndRotation();
-            previousCoordinate = worldTransform.Coordinate;
-            previousRotation = worldTransform.Rotation;
+            WorldTransform.RecalculatePositionAndRotation();
+            previousCoordinate = WorldTransform.Coordinate;
+            previousRotation = WorldTransform.Rotation;
             previousScale = transform.localScale;
             
             objectCreated.Invoke(gameObject);
@@ -91,24 +99,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
         }
 
-        protected void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             transformPropertyData.OnPositionChanged.RemoveListener(UpdatePosition);
             transformPropertyData.OnRotationChanged.RemoveListener(UpdateRotation);
             transformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);
         }
 
-        protected void UpdatePosition(Coordinate newPosition)
+        private void UpdatePosition(Coordinate newPosition)
         {
-            worldTransform.MoveToCoordinate(newPosition);
+            WorldTransform.MoveToCoordinate(newPosition);
         }
 
-        protected void UpdateRotation(Vector3 newAngles)
+        private void UpdateRotation(Vector3 newAngles)
         {
-            worldTransform.SetRotation(Quaternion.Euler(newAngles));
+            WorldTransform.SetRotation(Quaternion.Euler(newAngles));
         }
 
-        protected void UpdateScale(Vector3 newScale)
+        private void UpdateScale(Vector3 newScale)
         {
             if (newScale != transform.localScale)
                 transform.localScale = newScale;
@@ -139,22 +148,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
         }
         
-        private void Update()
+        protected virtual void Update()
         {
             //Position and rotation changes are handled by the WorldTransform, but should be updated in the project data
             //todo: add a == and != operator to Coordinate.cs to avoid having to do this
-            if(worldTransform.Coordinate.value1 != previousCoordinate.value1 ||
-               worldTransform.Coordinate.value2 != previousCoordinate.value2 ||
-               worldTransform.Coordinate.value3 != previousCoordinate.value3)
+            if(WorldTransform.Coordinate.value1 != previousCoordinate.value1 ||
+               WorldTransform.Coordinate.value2 != previousCoordinate.value2 ||
+               WorldTransform.Coordinate.value3 != previousCoordinate.value3)
             {
-                transformPropertyData.Position = worldTransform.Coordinate;
-                previousCoordinate = worldTransform.Coordinate;
+                transformPropertyData.Position = WorldTransform.Coordinate;
+                previousCoordinate = WorldTransform.Coordinate;
             }
             
-            if (worldTransform.Rotation != previousRotation)
+            if (WorldTransform.Rotation != previousRotation)
             {
-                transformPropertyData.EulerRotation = worldTransform.Rotation.eulerAngles;
-                previousRotation = worldTransform.Rotation;
+                transformPropertyData.EulerRotation = WorldTransform.Rotation.eulerAngles;
+                previousRotation = WorldTransform.Rotation;
             }
             
             // Check for scale change
@@ -190,7 +199,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnSelect()
         {
-            var transformInterfaceToggle = FindAnyObjectByType<TransformHandleInterfaceToggle>(FindObjectsInactive.Include); //todo remove FindObjectOfType
+            var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
 
             if (!transformInterfaceToggle)
             {
@@ -204,7 +213,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnDeselect()
         {
-            var transformInterfaceToggle = FindAnyObjectByType<TransformHandleInterfaceToggle>(FindObjectsInactive.Include);
+            ClearTransformHandles();
+        }
+
+        protected void ClearTransformHandles()
+        {
+            var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
 
             if (transformInterfaceToggle)
                 transformInterfaceToggle.ClearTransformTarget();

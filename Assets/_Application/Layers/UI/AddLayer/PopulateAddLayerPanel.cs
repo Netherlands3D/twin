@@ -97,7 +97,7 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
         private ObjectLibraryButton CreateButton(LayerGameObject prefab, GameObject groupPanel)
         {
             var button = Instantiate(buttonPrefab, groupPanel.transform);
-            button.Initialize(prefab.gameObject);
+            button.Initialize(prefab);
             button.GetComponentInChildren<TMP_Text>().text = prefab.name;
 
             return button;

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fccee172854014a7a9587c4912e3e53d, type: 3}
+  m_Name: SpriteStatePolygon
+  m_EditorClassIdentifier: 
+  defaultSprite: {fileID: 21300000, guid: dc4aeda70a7a447c4b457e41e216a80a, type: 3}
+  highlightedSprite: {fileID: 0}
+  pressedSprite: {fileID: 21300000, guid: 60568f85042a643e3b319a4b356e7704, type: 3}
+  selectedSprite: {fileID: 21300000, guid: 60568f85042a643e3b319a4b356e7704, type: 3}
+  disabledSprite: {fileID: 0}

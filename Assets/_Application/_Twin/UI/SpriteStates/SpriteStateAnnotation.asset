@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fccee172854014a7a9587c4912e3e53d, type: 3}
+  m_Name: SpriteStateAnnotation
+  m_EditorClassIdentifier: 
+  defaultSprite: {fileID: 21300000, guid: 675193f4a560b4698b5f5ec01af3ba36, type: 3}
+  highlightedSprite: {fileID: 0}
+  pressedSprite: {fileID: 21300000, guid: 5be4182e6eb4b4c0fb87dc7e2a6ce6cb, type: 3}
+  selectedSprite: {fileID: 21300000, guid: 5be4182e6eb4b4c0fb87dc7e2a6ce6cb, type: 3}
+  disabledSprite: {fileID: 0}

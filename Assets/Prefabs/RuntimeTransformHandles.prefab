@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2899205090272600502}
   - component: {fileID: 8174524102010226138}
   - component: {fileID: 8401870430251024848}
+  - component: {fileID: 236354543467945580}
   m_Layer: 0
   m_Name: RuntimeTransformHandles
   m_TagString: Untagged
@@ -138,3 +139,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runtimeTransformHandle: {fileID: 2899205090272600502}
   handleButtonsPanel: {fileID: 0}
+--- !u!114 &236354543467945580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6288187827652368402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  service: {fileID: 8401870430251024848}

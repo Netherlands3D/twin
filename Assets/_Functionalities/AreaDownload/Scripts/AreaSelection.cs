@@ -160,7 +160,7 @@ namespace Netherlands3D.Functionalities.AreaDownload
                 }
             #elif UNITY_WEBGL
                 byte[] byteArray = Encoding.UTF8.GetBytes(colladaFile.GetColladaXML());
-                DownloadFileImmediate("", "", "Collada.dae", byteArray, byteArray.Length);
+                DownloadFileImmediate(exportRunner.name, "", "Collada.dae", byteArray, byteArray.Length);
             #endif
 
             Destroy(exportRunner); 

@@ -134,6 +134,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 4643924372783499398}
+    - targetCorrespondingSourceObject: {fileID: 1107191816428015814, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9087109619177710104}
+    - targetCorrespondingSourceObject: {fileID: 1107191816428015814, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1515747955998932631}
   m_SourcePrefab: {fileID: 100100000, guid: 8a8c1bdd94f08d144a7410a838c895ad, type: 3}
 --- !u!1 &5315891981602308680 stripped
 GameObject:
@@ -154,7 +162,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldTransformShifter: {fileID: 0}
-  referenceCoordinateSystem: 2
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
@@ -202,3 +209,49 @@ MonoBehaviour:
   defaultCameraDistance: 300
   zoomDistanceMultiplier: 4
   decayRate: 0.007
+  orthographicLoaded:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: a4bbccddd3db84351b0c7675433f554e, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &9087109619177710104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5315891981602308680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16eaffca77434cc9978ea0d1335f9e0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  repositioningDuration: 0.3
+  simulatedOrthoFov: 0.1
+  maxCameraHeightWhenSimulating: 8000
+--- !u!114 &1515747955998932631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5315891981602308680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e96d038b62419942afd968aadbba8d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowTransform: {fileID: 0}
+  NorthColor: {r: 0.18431373, g: 0.20784314, b: 0.3137255, a: 1}
+  inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6,
+    type: 3}
