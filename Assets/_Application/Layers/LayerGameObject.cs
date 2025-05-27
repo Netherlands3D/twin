@@ -63,6 +63,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
+        public UnityEvent OnStylingApplied = new();
         Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;
         private readonly List<LayerFeature> cachedFeatures = new();
 
@@ -190,23 +191,19 @@ namespace Netherlands3D.Twin.Layers
 #region Styling
         protected Symbolizer GetStyling(LayerFeature feature)
         {
-            var symbolizer = new Symbolizer();
-            foreach (var style in LayerData.Styles)
-            {
-                symbolizer = style.Value.ResolveSymbologyForFeature(symbolizer, feature);
-            }
-
-            return symbolizer;
+            return StyleResolver.Instance.GetStyling(feature, LayerData.Styles);
         }
 
         public virtual void ApplyStyling()
         {
-            //initialize the layer's style        
+            //initialize the layer's style
+            OnStylingApplied.Invoke();
         }
 #endregion
 
 #region Features
-        public List<LayerFeature> GetFeatures<T>() where T : Component
+
+        protected List<LayerFeature> GetFeatures<T>()
         {
             cachedFeatures.Clear();
 
@@ -230,8 +227,18 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         protected LayerFeature CreateFeature(object geometry)
         {
-            return AddAttributesToLayerFeature(LayerFeature.Create(this, geometry));
+            LayerFeature feature = LayerFeature.Create(this, geometry);
+            AddAttributesToLayerFeature(feature);
+            layerFeatures.TryAdd(geometry, feature);
+            return feature;
         }
+
+        public Dictionary<object, LayerFeature> GetLayerFeatures()
+        {
+            return layerFeatures;
+        }
+
+        private Dictionary<object, LayerFeature> layerFeatures = new();
 
         /// <summary>
         /// Construct attributes onto the layer feature so that the styling system can

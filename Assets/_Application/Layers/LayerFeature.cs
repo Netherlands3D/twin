@@ -1,4 +1,5 @@
 ﻿using Netherlands3D.LayerStyles;
+using System.Collections.Generic;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -7,12 +8,12 @@ namespace Netherlands3D.Twin.Layers
         // Geometry is used loosely here - this means _anything_ that represents the physical aspect of a feature
         // individual layer types are expected to know what type they are using, and thus how to retrieve it.
         public readonly object Geometry;
-        public readonly ExpressionContext Attributes;
+        public readonly Dictionary<string, string> Attributes;
 
-        private LayerFeature(object geometry, ExpressionContext attributes = null)
+        private LayerFeature(object geometry, Dictionary<string, string> attributes = null)
         {
             this.Geometry = geometry;
-            Attributes = attributes ?? new ExpressionContext();
+            Attributes = attributes ?? new Dictionary<string, string>();
         }
 
         /// <param name="geometry">
@@ -21,13 +22,30 @@ namespace Netherlands3D.Twin.Layers
         /// </param>
         public static LayerFeature Create(LayerGameObject layer, object geometry)
         {
-            var expressionContext = new ExpressionContext
+            var expressionContext = new Dictionary<string, string>
             {
                 { "nl3d_layer_id", layer.LayerData.Id.ToString() },
                 { "nl3d_layer_name", layer.LayerData.Name }
             };
             
             return new LayerFeature(geometry, expressionContext);
+        }
+
+        /// <param name="geometry">
+        /// Geometry is used loosely here - this means _anything_ that represents the physical aspect of a feature
+        /// individual layer types are expected to know what type they are using, and thus how to retrieve it.
+        /// </param>
+        public static LayerFeature Create(object geometry)
+        {
+            return new LayerFeature(geometry, new Dictionary<string, string>());
+        }
+
+        public string GetAttribute(string id)
+        {
+            if (Attributes.TryGetValue(id, out var expression))
+                return expression;
+
+            return null; //or default?
         }
     }
 }

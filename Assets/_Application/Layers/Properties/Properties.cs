@@ -6,8 +6,21 @@ namespace Netherlands3D.Twin.Layers.Properties
 {
     public class Properties : MonoBehaviour
     {
+        public static Properties Instance { get; private set; }
+
         [SerializeField] private GameObject card;
         [SerializeField] private RectTransform sections;
+        
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+                return;
+            }
+
+            Destroy(gameObject);
+        }
 
         private void Start()
         {

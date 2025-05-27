@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using UnityEngine;
 
 namespace Netherlands3D.LayerStyles
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling", Name = "Symbolizer")]
     public class Symbolizer
     {
+        /// <link href="https://docs.ogc.org/DRAFTS/18-067r4.html#rc-vector" />
         /// <summary>
         /// Store each property as a string, and trust that the SymbologyExtensions (such as
         /// Netherlands3D.LayerStyles.VectorSymbologyExtension.SetFillColor) will convert from and to string. During
@@ -39,6 +41,46 @@ namespace Netherlands3D.LayerStyles
             }
 
             return result;
+        }
+
+        /// <link href="https://docs.ogc.org/DRAFTS/18-067r4.html#_fills"/>
+        public void SetFillColor(Color color)
+        {
+            SetProperty("fill-color", $"#{ColorUtility.ToHtmlStringRGBA(color)}");
+        }
+
+        /// <link href="https://docs.ogc.org/DRAFTS/18-067r4.html#_fills"/>
+        public Color? GetFillColor()
+        {
+            var property = GetProperty("fill-color") as string;
+            if (property == null) return null;
+
+            // Previous versions of project files were missing a '#', this auto-corrects this 
+            if (property.StartsWith('#') == false) property = "#" + property;
+
+            if (!ColorUtility.TryParseHtmlString(property, out var color)) return null;
+
+            return color;
+        }
+
+        /// <link href="https://docs.ogc.org/DRAFTS/18-067r4.html#_strokes"/>
+        public void SetStrokeColor(Color color)
+        {
+            SetProperty("stroke-color", $"#{ColorUtility.ToHtmlStringRGBA(color)}");
+        }
+
+        /// <link href="https://docs.ogc.org/DRAFTS/18-067r4.html#_strokes"/>
+        public Color? GetStrokeColor()
+        {
+            var property = GetProperty("stroke-color") as string;
+            if (property == null) return null;
+
+            // Previous versions of project files were missing a '#', this auto-corrects this 
+            if (property.StartsWith('#') == false) property = "#" + property;
+
+            if (!ColorUtility.TryParseHtmlString(property, out var color)) return null;
+
+            return color;
         }
 
         /// <summary>
