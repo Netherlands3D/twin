@@ -1,4 +1,5 @@
-using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.OBJImporter
@@ -8,20 +9,24 @@ namespace Netherlands3D.Functionalities.OBJImporter
         [SerializeField] private GameObject defaultImportPanel;
         [SerializeField] private GameObject hasMtlPanel;
         [SerializeField] private GameObject importErrorPanel;
+        private HierarchicalObjectLayerGameObject layer;
         public OBJSpawner ObjSpawner { get; set; }
         
         private void Start()
         {
+            layer = ObjSpawner.GetComponent<HierarchicalObjectLayerGameObject>();
             SetNormalUIPanels();
             ObjSpawner.MtlImportSuccess.AddListener(OnMTLImportError);
         }
 
         //called in the inspector by FileOpen.cs
-        public void ImportMTL(string path)
+        public void ImportMtl(string path)
         {
-            if (path.EndsWith(','))
-                path = path.Remove(path.Length - 1);
-            
+            path = path.TrimEnd(',');
+
+            // When importing an MTL - we want to reset the coloring of the object
+            HierarchicalObjectTileLayerStyler.ResetColoring(layer);
+
             ObjSpawner.SetMtlPathInPropertyData(path);
             ObjSpawner.StartImport();
             

@@ -1,4 +1,5 @@
-using System;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.UI.ColorPicker;
 using UnityEngine;
 using UnityEngine.Events;
@@ -61,7 +62,10 @@ namespace Netherlands3D.Twin.Layers.Properties
         /// <param name="color"></param>
         private void OnPickDefaultFillColor(Color color)
         {
-            if (layer != null) layer.LayerData.DefaultStyle.AnyFeature.Symbolizer.SetFillColor(color);
+            if (layer is HierarchicalObjectLayerGameObject hierarchicalObjectLayerGameObject)
+            {
+                HierarchicalObjectTileLayerStyler.SetColor(hierarchicalObjectLayerGameObject, color);
+            }
         }
     }
 }
