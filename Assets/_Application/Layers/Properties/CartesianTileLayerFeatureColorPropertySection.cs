@@ -108,10 +108,12 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void DeselectAllSwatches()
         {
-            swatches.Values
-                .Where(swatch => swatch.IsSelected)
-                .ToList()
-                .ForEach(DeselectSwatch);
+            foreach (var (_, swatch) in swatches)
+            {
+                if (swatch.IsSelected) continue;
+                
+                DeselectSwatch(swatch);
+            }
         }
 
         private void DeselectSwatch(ColorSwatch swatch)
