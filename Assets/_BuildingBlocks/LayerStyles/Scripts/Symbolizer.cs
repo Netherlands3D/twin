@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using UnityEngine;
@@ -8,12 +7,11 @@ namespace Netherlands3D.LayerStyles
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling", Name = "Symbolizer")]
     public class Symbolizer
     {
-        /// <link href="https://docs.ogc.org/DRAFTS/18-067r4.html#rc-vector" />
         /// <summary>
-        /// Store each property as a string, and trust that the SymbologyExtensions (such as
-        /// Netherlands3D.LayerStyles.VectorSymbologyExtension.SetFillColor) will convert from and to string. During
-        /// testing it became clear that trying to use serialization with JsonConverters can backfire because some
-        /// classes do not, or should not, store type information and deserializing will then fail and return null
+        /// Store each property as a string, and use specific getters and setting to convert from and to string.
+        ///
+        /// During testing it became clear that trying to use serialization with JsonConverters can backfire because
+        /// some classes do not, or should not, store type information and deserializing will then fail and return null
         /// values.
         ///
         /// As such: we simply use `dictionary with string,string` and use getters and setters to transform properties.
@@ -21,68 +19,30 @@ namespace Netherlands3D.LayerStyles
         [DataMember(Name = "properties")] 
         private Dictionary<string, string> properties = new();
 
-        internal object GetProperty(string key)
-        {
-            // explicitly return null when value is not present, so that caller knows it should ignore using this field 
-            return properties.ContainsKey(key) ? properties[key] : null;
-        }
+        #region Styles
+        /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-fill-color"/>
+        public void SetFillColor(Color color) => SetAndNormalizeColor("fill-color", color);
 
-        internal void SetProperty(string key, string value)
-        {
-            properties[key] = value;
-        }
+        /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-fill-color"/>
+        public Color? GetFillColor() => GetAndNormalizeColor("fill-color");
 
-        public override string ToString()
-        {
-            var result = "";
-            foreach (var (name, value) in properties)
-            {
-                result += $"{name}: {value}\n";
-            }
+        /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-color"/>
+        /// <remarks>
+        /// Originally, the implementation was based on OGC CartoSym, which uses the term "stroke-color"; because the
+        /// mapbox implementation is easier to read, we refer to that now but for backwards-compatibility we still use
+        /// the term Stroke Color instead of Mapbox' Line Color.
+        /// </remarks>
+        public void SetStrokeColor(Color color) => SetAndNormalizeColor("stroke-color", color);
 
-            return result;
-        }
-
-        /// <link href="https://docs.ogc.org/DRAFTS/18-067r4.html#_fills"/>
-        public void SetFillColor(Color color)
-        {
-            SetProperty("fill-color", $"#{ColorUtility.ToHtmlStringRGBA(color)}");
-        }
-
-        /// <link href="https://docs.ogc.org/DRAFTS/18-067r4.html#_fills"/>
-        public Color? GetFillColor()
-        {
-            var property = GetProperty("fill-color") as string;
-            if (property == null) return null;
-
-            // Previous versions of project files were missing a '#', this auto-corrects this 
-            if (property.StartsWith('#') == false) property = "#" + property;
-
-            if (!ColorUtility.TryParseHtmlString(property, out var color)) return null;
-
-            return color;
-        }
-
-        /// <link href="https://docs.ogc.org/DRAFTS/18-067r4.html#_strokes"/>
-        public void SetStrokeColor(Color color)
-        {
-            SetProperty("stroke-color", $"#{ColorUtility.ToHtmlStringRGBA(color)}");
-        }
-
-        /// <link href="https://docs.ogc.org/DRAFTS/18-067r4.html#_strokes"/>
-        public Color? GetStrokeColor()
-        {
-            var property = GetProperty("stroke-color") as string;
-            if (property == null) return null;
-
-            // Previous versions of project files were missing a '#', this auto-corrects this 
-            if (property.StartsWith('#') == false) property = "#" + property;
-
-            if (!ColorUtility.TryParseHtmlString(property, out var color)) return null;
-
-            return color;
-        }
-
+        /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-color"/>
+        /// <remarks>
+        /// Originally, the implementation was based on OGC CartoSym, which uses the term "stroke-color"; because the
+        /// mapbox implementation is easier to read, we refer to that now but for backwards-compatibility we still use
+        /// the term Stroke Color instead of Mapbox' Line Color.
+        /// </remarks>
+        public Color? GetStrokeColor() => GetAndNormalizeColor("stroke-color");
+        #endregion
+        
         /// <summary>
         /// Populates the given Symbolizer where the values of otherSymbolizer are merged on top of the values of it.
         ///
@@ -104,5 +64,46 @@ namespace Netherlands3D.LayerStyles
 
             return symbolizer;
         }
+        
+        public override string ToString()
+        {
+            var result = "";
+            foreach (var (name, value) in properties)
+            {
+                result += $"{name}: {value}\n";
+            }
+
+            return result;
+        }
+
+        #region Getting and setting properties, and normalisation of object types from/to string
+        private void SetAndNormalizeColor(string propertyName, Color color)
+        {
+            SetProperty(propertyName, $"#{ColorUtility.ToHtmlStringRGBA(color)}");
+        }
+
+        private Color? GetAndNormalizeColor(string propertyName)
+        {
+            if (GetProperty(propertyName) is not string property) return null;
+
+            // Previous versions of project files were missing a '#', this auto-corrects this 
+            if (property.StartsWith('#') == false) property = "#" + property;
+
+            if (!ColorUtility.TryParseHtmlString(property, out var color)) return null;
+
+            return color;
+        }
+
+        private object GetProperty(string key)
+        {
+            // explicitly return null when value is not present, so that caller knows it should ignore using this field 
+            return properties.ContainsKey(key) ? properties[key] : null;
+        }
+
+        private void SetProperty(string key, string value)
+        {
+            properties[key] = value;
+        }
+        #endregion
     }
 }

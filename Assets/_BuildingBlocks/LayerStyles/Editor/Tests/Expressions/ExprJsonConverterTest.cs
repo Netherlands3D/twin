@@ -128,7 +128,6 @@ namespace Netherlands3D.LayerStyles.Expressions
             // arguments should be two literals 5 and 10
             Assert.AreEqual(2, expr.Arguments.Length);
 
-            Debug.Log(expr.Arguments[0]);
             Assert.IsInstanceOf<Expr<ExpressionValue>>(expr.Arguments[0]);
             Assert.IsInstanceOf<Expr<ExpressionValue>>(expr.Arguments[1]);
 

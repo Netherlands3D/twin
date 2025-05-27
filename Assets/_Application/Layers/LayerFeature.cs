@@ -42,10 +42,7 @@ namespace Netherlands3D.Twin.Layers
 
         public string GetAttribute(string id)
         {
-            if (Attributes.TryGetValue(id, out var expression))
-                return expression;
-
-            return null; //or default?
+            return Attributes.GetValueOrDefault(id);
         }
     }
 }
