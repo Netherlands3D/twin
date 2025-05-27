@@ -33,6 +33,7 @@ namespace Netherlands3D
             if (transform.hasChanged)
             {
                 SetShaderMaskVectors();
+                projectionCamera.Render(); //force a render so the texture is ready to be sampled by the regular pipeline
                 transform.hasChanged = false;
             }
         }
