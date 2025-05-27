@@ -2796,8 +2796,8 @@
     "m_ObjectId": "6a4885ff20ed48ab95666d9dc9d3a68b",
     "m_Title": "Coloring mode",
     "m_Position": {
-        "x": -1962.9998779296875,
-        "y": -586.9999389648438
+        "x": -1963.0,
+        "y": -587.0
     }
 }
 
@@ -3323,7 +3323,7 @@
     "m_Title": "Special vertex color ID's",
     "m_Position": {
         "x": -2940.0,
-        "y": -265.99993896484377
+        "y": -266.0
     }
 }
 
