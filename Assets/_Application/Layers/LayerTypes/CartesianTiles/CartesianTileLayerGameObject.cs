@@ -106,10 +106,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         public override void ApplyStyling()
         {
-            var binaryMeshLayer = GetTileLayerAsBinaryMeshLayer();
-            foreach (var (_, feature) in LayerFeatures)
+            // WMS and other projection layers also use this class as base - but they should not apply this styling
+            if (layer is BinaryMeshLayer binaryMeshLayer)
             {
-                CartesianTileLayerStyler.Apply(binaryMeshLayer, GetStyling(feature), feature);
+                foreach (var (_, feature) in LayerFeatures)
+                {
+                    CartesianTileLayerStyler.Apply(binaryMeshLayer, GetStyling(feature), feature);
+                }
             }
 
             base.ApplyStyling();
@@ -117,24 +120,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
         {
+            // WMS and other projection layers also use this class as base - but they should not add their materials
+            if (layer is not BinaryMeshLayer meshLayer) return feature;
             if (feature.Geometry is not Material mat) return feature;
 
-            var meshLayer = GetTileLayerAsBinaryMeshLayer();
-            
-            feature.Attributes.Add(CartesianTileLayerStyler.MaterialIndexIdentifier, meshLayer.DefaultMaterialList.IndexOf(mat).ToString());
+            feature.Attributes.Add(
+                CartesianTileLayerStyler.MaterialIndexIdentifier, 
+                meshLayer.DefaultMaterialList.IndexOf(mat).ToString()
+            );
             feature.Attributes.Add(CartesianTileLayerStyler.MaterialNameIdentifier, mat.name);
 
             return feature;
-        }
-
-        private BinaryMeshLayer GetTileLayerAsBinaryMeshLayer()
-        {
-            if (layer is not BinaryMeshLayer meshLayer)
-            {
-                throw new FormatException("Tile layer is not of type BinaryMeshLayer, but " + layer.GetType());
-            }
-            
-            return meshLayer;
         }
     }
 }
