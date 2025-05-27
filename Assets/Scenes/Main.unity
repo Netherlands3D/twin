@@ -289,11 +289,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6058030180492920833, guid: 7b1c5664f8541466bbb7ed473f916549,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1467574353}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b1c5664f8541466bbb7ed473f916549, type: 3}
 --- !u!224 &331594354 stripped
 RectTransform:
@@ -1311,43 +1307,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 7732943800119484192}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1467574347 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6058030180492920833, guid: 7b1c5664f8541466bbb7ed473f916549,
-    type: 3}
-  m_PrefabInstance: {fileID: 311190676}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1467574351 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 51725507429344324, guid: 7b1c5664f8541466bbb7ed473f916549,
-    type: 3}
-  m_PrefabInstance: {fileID: 311190676}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1467574347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0777d029ed3dffa4692f417d4aba19ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1467574353
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1467574347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3a9372e44aa84626a9ab7a811025d14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  centerProperty: _MaskBBoxCenter
-  extentsProperty: _MaskBBoxExtents
-  invertProperty: _MaskInvert
-  textureProperty: _MaskTexture
-  polygonTexture: {fileID: 8400000, guid: 0cacd35f3b4ca4ab293eb35869092719, type: 2}
-  invertMask: 0
-  projector: {fileID: 1467574351}
 --- !u!1 &1553045703 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8080223312308812224, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
