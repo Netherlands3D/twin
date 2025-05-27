@@ -36,6 +36,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             return layer.LayerData.DefaultStyle.AnyFeature.Symbolizer.GetFillColor();
         }
 
+        public static void ResetColoring(HierarchicalObjectLayerGameObject layer)
+        {
+            SetColor(layer, null);
+        }
+
         /// <summary>
         /// The other methods deal with manipulating the styles for a layerfeature, this method takes the outcome of
         /// those actions and applies them to the materials for the binary mesh layer.
@@ -52,7 +57,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             layer.LayerData.Color = fillColor.Value;
             SetUrpLitColorOptimized(meshRenderer, fillColor.Value);
         }
-        
+
         private static void SetUrpLitColorOptimized(MeshRenderer renderer, Color color, int? materialIndex = null)
         {
             int BaseColor = Shader.PropertyToID("_BaseColor");
