@@ -15,6 +15,8 @@ namespace Netherlands3D
         
         private DecalProjector decalProjector;
         private Camera projectionCamera;
+
+        private static bool forceUpdate;
         
         private void Awake()
         {
@@ -28,13 +30,14 @@ namespace Netherlands3D
         }
 
         // Update is called once per frame
-        void LateUpdate() //use LateUpdate to ensure the transform changes have applied before setting the Shader vectors
+        private void LateUpdate() //use LateUpdate to ensure the transform changes have applied before setting the Shader vectors
         {
-            if (transform.hasChanged)
+            if (forceUpdate || transform.hasChanged)
             {
                 SetShaderMaskVectors();
                 projectionCamera.Render(); //force a render so the texture is ready to be sampled by the regular pipeline
                 transform.hasChanged = false;
+                forceUpdate = false;
             }
         }
         
@@ -46,6 +49,11 @@ namespace Netherlands3D
             Shader.SetGlobalVector(centerProperty, worldCenterXZ);
             Shader.SetGlobalVector(extentsProperty, worldExtentsXZ);
             Shader.SetGlobalInt(invertProperty, invertMask ? 1 : 0); 
+        }
+
+        public static void ForceUpdateVectorsAtEndOfFrame() // call this when updating the polygons that should be used as masks to update the texture at the end of this frame
+        {
+            forceUpdate = true;
         }
     }
 }

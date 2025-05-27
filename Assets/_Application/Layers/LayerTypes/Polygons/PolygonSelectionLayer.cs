@@ -51,6 +51,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 CreatePolygonFromLine(OriginalPolygon, value);
             }
         }
+        
+        [JsonIgnore]
+        public bool IsMask
+        {
+            get => polygonPropertyData.IsMask;
+            set => polygonPropertyData.IsMask = value;
+        }
 
         [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
 
