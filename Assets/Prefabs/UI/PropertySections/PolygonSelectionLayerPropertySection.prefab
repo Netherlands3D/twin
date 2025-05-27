@@ -444,6 +444,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7b4ed3ca1dcba245a37420ca328777d, type: 3}
+--- !u!1 &2403691546661400319 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4136261530444499954, guid: c7b4ed3ca1dcba245a37420ca328777d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1746643814226765069}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &5110653047736981750 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6832519826993315323, guid: c7b4ed3ca1dcba245a37420ca328777d,
@@ -917,6 +923,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2176e5b5a375c48faade1e74f1f98bc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  strokeWidthTitle: {fileID: 2403691546661400319}
   strokeWidthSlider: {fileID: 6316801295823245576}
   maskToggle: {fileID: 1004087981463270568}
 --- !u!1001 &7256004424186552951
