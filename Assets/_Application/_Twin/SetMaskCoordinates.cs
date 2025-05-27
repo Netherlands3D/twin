@@ -9,9 +9,7 @@ public class SetMaskCoordinates : MonoBehaviour
     [SerializeField] private string extentsProperty = "_MaskBBoxExtents";
     [SerializeField] private string invertProperty = "_MaskInvert";
     [SerializeField] private string textureProperty = "_MaskTexture";
-    [SerializeField] private Texture2D testTexture;
     [SerializeField] private RenderTexture polygonTexture;
-    [SerializeField] private bool useRenderTex;
     [SerializeField] private bool invertMask;
 
     [SerializeField] private DecalProjector projector;
@@ -35,30 +33,12 @@ public class SetMaskCoordinates : MonoBehaviour
 
     private void SetBBoxVector()
     {
-        MeshFilter meshFilter = GetComponent<MeshFilter>();
-        Renderer renderer = GetComponent<Renderer>();
-
-        if (meshFilter.sharedMesh == null || renderer.sharedMaterial == null)
-        {
-            Debug.LogWarning("Mesh or material missing.");
-            return;
-        }
-
-        Bounds bounds = meshFilter.sharedMesh.bounds;
-
-        // Convert bounds from local space to world space
-        Vector3 worldCenter = transform.position; //transform.TransformPoint(bounds.center);
-        Vector3 worldExtents = Vector3.Scale(bounds.extents, transform.lossyScale);
-
-        Vector2 worldCenterXZ = new Vector2(worldCenter.x, worldCenter.z);
-        Vector2 worldExtentsXZ = new Vector2(worldExtents.x, worldExtents.z);
+        Vector2 worldCenterXZ = new Vector2(transform.position.x, transform.position.z);
+        Vector2 worldExtentsXZ = new Vector2(projector.size.x / 2, projector.size.y /2); //projector uses xy plane instead of xz plane
 
         Shader.SetGlobalVector(centerProperty, worldCenterXZ);
         Shader.SetGlobalVector(extentsProperty, worldExtentsXZ);
-        Shader.SetGlobalInt(invertProperty, invertMask ? 1 : 0);
-        if (useRenderTex)
-            Shader.SetGlobalTexture(textureProperty, polygonTexture);
-        else
-            Shader.SetGlobalTexture(textureProperty, testTexture);
+        Shader.SetGlobalInt(invertProperty, invertMask ? 1 : 0); 
+        Shader.SetGlobalTexture(textureProperty, polygonTexture);
     }
 }
