@@ -152,9 +152,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             //Position and rotation changes are handled by the WorldTransform, but should be updated in the project data
             //todo: add a == and != operator to Coordinate.cs to avoid having to do this
-            if(WorldTransform.Coordinate.value1 != previousCoordinate.value1 ||
-               WorldTransform.Coordinate.value2 != previousCoordinate.value2 ||
-               WorldTransform.Coordinate.value3 != previousCoordinate.value3)
+            if(Math.Abs(WorldTransform.Coordinate.value1 - previousCoordinate.value1) > 0.0001d ||
+               Math.Abs(WorldTransform.Coordinate.value2 - previousCoordinate.value2) > 0.0001d ||
+               Math.Abs(WorldTransform.Coordinate.value3 - previousCoordinate.value3) > 0.0001d)
             {
                 transformPropertyData.Position = WorldTransform.Coordinate;
                 previousCoordinate = WorldTransform.Coordinate;
@@ -231,8 +231,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnProxyTransformParentChanged()
         {
-            if (toggleScatterPropertySectionInstantiator.PropertySection != null)
-                toggleScatterPropertySectionInstantiator.PropertySection?.TogglePropertyToggle();
+            if (toggleScatterPropertySectionInstantiator.PropertySection)
+            {
+                toggleScatterPropertySectionInstantiator.PropertySection.TogglePropertyToggle();
+            }
         }
 
         public static ObjectScatterLayerGameObject ConvertToScatterLayer(HierarchicalObjectLayerGameObject objectLayerGameObject)
