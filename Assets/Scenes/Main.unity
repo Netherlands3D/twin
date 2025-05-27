@@ -279,12 +279,7 @@ PrefabInstance:
     - target: {fileID: 6058030180492920833, guid: 7b1c5664f8541466bbb7ed473f916549,
         type: 3}
       propertyPath: m_Name
-      value: Projector
-      objectReference: {fileID: 0}
-    - target: {fileID: 6592016002428932495, guid: 7b1c5664f8541466bbb7ed473f916549,
-        type: 3}
-      propertyPath: m_Depth
-      value: -10
+      value: PolygonProjector
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -566,6 +561,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b01f12fd6280446099334d0dde362a46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &410049997 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6058030180492920833, guid: 7b1c5664f8541466bbb7ed473f916549,
+    type: 3}
+  m_PrefabInstance: {fileID: 918889585}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &410050003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410049997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42f7598ba6ae547ef9bd8779cfe0a2fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  centerProperty: _MaskBBoxCenter
+  extentsProperty: _MaskBBoxExtents
+  invertProperty: _MaskInvert
+  textureProperty: _MaskTexture
+  invertMask: 0
 --- !u!114 &460259861 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9065098773059963892, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
@@ -948,6 +966,88 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollScaleValue: 0.1
   useZoomScaleValue: 0
+--- !u!1001 &918889585
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3154732954185428485, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3154732954185428485, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3154732954185428485, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3154732954185428485, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3154732954185428485, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3154732954185428485, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3154732954185428485, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3154732954185428485, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3154732954185428485, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3154732954185428485, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058030180492920833, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      propertyPath: m_Name
+      value: MaskProjector
+      objectReference: {fileID: 0}
+    - target: {fileID: 6592016002428932495, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      propertyPath: m_TargetTexture
+      value: 
+      objectReference: {fileID: 8400000, guid: d9fe39c41cbfd4e578ad41c5c0820079, type: 2}
+    - target: {fileID: 6592016002428932495, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 8192
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6058030180492920833, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 410050003}
+  m_SourcePrefab: {fileID: 100100000, guid: 7b1c5664f8541466bbb7ed473f916549, type: 3}
 --- !u!4 &1114164023 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6129593076402616864, guid: bd3bbf33ef31d3e4a8147797007911a1,
@@ -10253,4 +10353,5 @@ SceneRoots:
   - {fileID: 3528890258559586318}
   - {fileID: 887635104}
   - {fileID: 311190676}
+  - {fileID: 918889585}
   - {fileID: 2997518761711757160}

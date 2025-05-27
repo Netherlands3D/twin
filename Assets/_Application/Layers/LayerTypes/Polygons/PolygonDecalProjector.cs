@@ -21,24 +21,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private DecalProjector decalProjector;
         private Camera projectionCamera;
         [FormerlySerializedAs("terrainLayer")] [SerializeField] private CartesianTileLayerGameObject terrainLayerGameObject;
-
-        // Match Shader Graph property names exactly
-        [Header("Mask settings")]
-        [SerializeField] private string centerProperty = "_MaskBBoxCenter";
-        [SerializeField] private string extentsProperty = "_MaskBBoxExtents";
-        [SerializeField] private string invertProperty = "_MaskInvert";
-        [SerializeField] private string textureProperty = "_MaskTexture";
-        [SerializeField] private bool invertMask;
         
         private void Awake()
         {
             decalProjector = GetComponent<DecalProjector>();
             projectionCamera = GetComponent<Camera>();
-        }
-
-        private void Start()
-        {
-            Shader.SetGlobalTexture(textureProperty, projectionCamera.targetTexture);
         }
 
         private void Update()
@@ -66,12 +53,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             decalProjector.size = size;
             
             projectionCamera.orthographicSize = maxDimension / 2;
-
-            if (transform.hasChanged)
-            {
-                SetShaderMaskVectors();
-                transform.hasChanged = false;
-            }
         }
 
         private float EstimateCameraHeight()
@@ -96,16 +77,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
             
             return Camera.main.transform.position.y - estimatedTerrainHeight; 
-        }
-        
-        private void SetShaderMaskVectors()
-        {
-            Vector2 worldCenterXZ = new Vector2(transform.position.x, transform.position.z);
-            Vector2 worldExtentsXZ = new Vector2(decalProjector.size.x / 2, decalProjector.size.y /2); //projector uses xy plane instead of xz plane
-
-            Shader.SetGlobalVector(centerProperty, worldCenterXZ);
-            Shader.SetGlobalVector(extentsProperty, worldExtentsXZ);
-            Shader.SetGlobalInt(invertProperty, invertMask ? 1 : 0); 
         }
     }
 }
