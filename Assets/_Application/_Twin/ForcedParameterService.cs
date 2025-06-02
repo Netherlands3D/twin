@@ -1,6 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 using Netherlands3D.DataTypeAdapters;
+using System.Collections.Specialized;
+using Netherlands3D.Web;
+using SimpleJSON;
+using Newtonsoft.Json;
 
 namespace Netherlands3D.Twin
 {
@@ -46,26 +50,23 @@ namespace Netherlands3D.Twin
 
         public static NL3DOptions ExtractOptionsFromUrl(string url)
         {
-            int start = url.IndexOf(marker, StringComparison.OrdinalIgnoreCase);
-            if (start < 0) return null;
-
-            int jsonStart = start + marker.Length;
-            string jsonRaw = url.Substring(jsonStart);
-                        
-            int nextParam = jsonRaw.IndexOf('&');
-            if (nextParam >= 0)
-                jsonRaw = jsonRaw.Substring(0, nextParam);
-
-            try
+            UriBuilder uriBuilder = new UriBuilder(url);
+            var parameters = new NameValueCollection();
+            uriBuilder.TryParseQueryString(parameters);
+            NL3DOptions extraOptions = null;
+            string nl3dRaw = parameters["nl3d"];
+            if (!string.IsNullOrEmpty(nl3dRaw))
             {
-                string decoded = UnityEngine.Networking.UnityWebRequest.UnEscapeURL(jsonRaw);
-                return JsonUtility.FromJson<NL3DOptions>(decoded);
+                try
+                {
+                    extraOptions = JsonConvert.DeserializeObject<NL3DOptions>(nl3dRaw);                    
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogWarning($"Failed to parse nl3d: {ex.Message}");
+                }
             }
-            catch
-            {
-                Debug.LogWarning("unable to parse nl3d parameter");
-                return null;
-            }
+            return extraOptions;
         }
 
         public static string RemoveMarkerFromUrl(string url)
