@@ -417,9 +417,13 @@ namespace Netherlands3D.CartesianTiles
             Gizmos.color = Color.white;
             foreach (var tileList in tileDistances)
             {
-                foreach (var tile in tileList)
+                if (tileList != null)
                 {
-                    Gizmos.DrawWireCube(CoordinateConverter.RDtoUnity(new Vector3(tile.x + 500, tile.y + 500, 0)), new Vector3(1000, 100, 1000));
+                    foreach (var tile in tileList)
+                    {
+                        if(tile != null)
+                            Gizmos.DrawWireCube(CoordinateConverter.RDtoUnity(new Vector3(tile.x + 500, tile.y + 500, 0)), new Vector3(1000, 100, 1000));
+                    }
                 }
             }
         }
