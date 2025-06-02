@@ -17,6 +17,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -32,12 +33,12 @@ namespace Netherlands3D.SelectionTools
         private MeshRenderer boundsMeshRenderer;
 
         [Header("Invoke")]
-        [SerializeField] private UnityEvent<bool> blockCameraDragging = new();
+        public UnityEvent<bool> blockCameraDragging = new();
         [Tooltip("Fires while a new area is being drawn")]
-        [SerializeField] private UnityEvent<Bounds> whenDrawingArea = new();
+        public UnityEvent<Bounds> whenDrawingArea = new();
         [FormerlySerializedAs("selectedAreaBounds")]
         [Tooltip("Fires when an area is selected")]
-        [SerializeField] private UnityEvent<Bounds> whenAreaIsSelected = new();
+        public UnityEvent<Bounds> whenAreaIsSelected = new();
 
         [Header("Settings")]
         [SerializeField] private float gridSize = 100;
@@ -237,6 +238,26 @@ namespace Netherlands3D.SelectionTools
             
             var bounds = boundsMeshRenderer.bounds;
             whenDrawingArea.Invoke(bounds);
+        }
+
+        public void ClearSelection()
+        {
+            selectionBlock.SetActive(false);
+        }
+
+        public void ReselectAreaFromPolygon(List<Vector3> points)
+        {
+            Bounds bounds = new Bounds(points[0],Vector3.zero);
+            for (var i = 1; i < points.Count; i++)
+            {
+                bounds.Encapsulate(points[i]);
+            }
+
+            bounds.Expand(-0.01f * Vector3.one); // inset the bounds slightly to avoid issues with reselecting the exact edge 
+            selectionStartPosition = GetGridPosition(bounds.min);
+            var selectionEndPosition = GetGridPosition(bounds.max);
+            
+            DrawSelectionArea(selectionStartPosition, selectionEndPosition);
         }
     }
 }
