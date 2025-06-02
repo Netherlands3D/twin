@@ -109,9 +109,6 @@ namespace Netherlands3D.Functionalities.Wfs
                 var upperCornerNode = bboxNode.SelectSingleNode("*[local-name()='upperCorner']", namespaceManager);
                 var crsString = bboxNode.Attributes["srsName"]?.Value; // Use srsName instead of crs
 
-                if (forcedCRS != null)
-                    crsString = forcedCRS;
-
                 CoordinateSystem crs = CoordinateSystems.FindCoordinateSystem(crsString);
                 if(crs == CoordinateSystem.Undefined)
                     crs = CoordinateSystem.CRS84;
