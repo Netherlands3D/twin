@@ -24,6 +24,7 @@ namespace Netherlands3D.DataTypeAdapters
         public UnityEvent<string> CouldNotFindAdapter = new();
         public UnityEvent<string> OnDownloadFailed = new();
         public UnityEvent<string> OnLocalCacheFailed = new();
+        public UnityEvent<LocalFile> OnPreDownloadLocalCache = new();
         
         private Coroutine chain;
 
@@ -52,8 +53,8 @@ namespace Netherlands3D.DataTypeAdapters
         {
             // Start by download the file, so we can do a detailed check of the content to determine the type
             var urlAndData = new LocalFile { SourceUrl = sourceUri.ToString(), LocalFilePath = "" };
-
-            ForcedParameterService.Instance.ProcessUrl(urlAndData);
+            
+            OnPreDownloadLocalCache.Invoke(urlAndData);
 
             yield return DownloadDataToLocalCache(auth, urlAndData);
 

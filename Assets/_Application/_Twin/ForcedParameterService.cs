@@ -8,11 +8,13 @@ using Newtonsoft.Json;
 
 namespace Netherlands3D.Twin
 {
+    [RequireComponent(typeof(DataTypeChain))]
     public class ForcedParameterService : MonoBehaviour
     {
         public static ForcedParameterService Instance { get; private set; }
 
         public string ForcedCrs { get; private set; }
+        private DataTypeChain chain;
 
         private const string marker = "&nl3d=";
 
@@ -24,11 +26,21 @@ namespace Netherlands3D.Twin
                 return;
             }
 
-            Instance = this;            
+            Instance = this;
+            chain = GetComponent<DataTypeChain>();
+            chain.OnPreDownloadLocalCache.AddListener(ProcessUrl);
+        }
+
+        private void OnDestroy()
+        {
+            chain.OnPreDownloadLocalCache.RemoveListener(ProcessUrl);
         }
 
         public void ProcessUrl(LocalFile file)
         {
+            Clear(); //reset whenever a new file is loaded
+
+
             string rawUrl = file.SourceUrl;
 
             var nl3dOptions = ExtractOptionsFromUrl(rawUrl);
