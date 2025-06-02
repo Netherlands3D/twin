@@ -195,6 +195,7 @@ namespace Netherlands3D.Functionalities.Wms
                 TileChange tileChange = new TileChange();
                 tileChange.X = tile.Key.x;
                 tileChange.Y = tile.Key.y;
+                tileChange.sourceUrl = tile.Value.layer.Datasets[0].host;
                 queuedChanges.Add(tileChange);
             }
 

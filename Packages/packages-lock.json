@@ -73,7 +73,7 @@
       "dependencies": {}
     },
     "com.unity.burst": {
-      "version": "1.8.21",
+      "version": "1.8.19",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -143,7 +143,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.14.0",
+      "version": "1.13.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -272,11 +272,11 @@
       }
     },
     "com.unity.test-framework.performance": {
-      "version": "3.1.0",
+      "version": "3.0.3",
       "depth": 2,
       "source": "registry",
       "dependencies": {
-        "com.unity.test-framework": "1.1.33",
+        "com.unity.test-framework": "1.1.31",
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -329,14 +329,14 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.cartesiantiles": {
-      "version": "1.1.4",
+      "version": "https://github.com/Netherlands3D/CartesianTiles.git#poc/max-concurrent-downloads-per-endpoint",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {
         "eu.netherlands3d.coordinates": "1.2.0",
         "com.unity.textmeshpro": "3.0.6"
       },
-      "url": "https://package.openupm.com"
+      "hash": "894b9378d9619df9983719d090e7e9654f13963c"
     },
     "eu.netherlands3d.collada": {
       "version": "0.1.1",

@@ -17,7 +17,7 @@
     "com.unity.timeline": "1.7.6",
     "com.unity.ugui": "1.0.0",
     "eu.netherlands3d.address-search": "2.0.1",
-    "eu.netherlands3d.cartesiantiles": "1.1.4",
+    "eu.netherlands3d.cartesiantiles": "https://github.com/Netherlands3D/CartesianTiles.git#poc/max-concurrent-downloads-per-endpoint",
     "eu.netherlands3d.collada": "0.1.1",
     "eu.netherlands3d.coordinates": "2.1.0",
     "eu.netherlands3d.event-containers": "0.1.1",
