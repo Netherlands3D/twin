@@ -231,10 +231,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             lineInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
         }
 
-        public void SetGridInputModeToCreate(bool isCreateMode)
+        public void SetGridInputModeToCreate(bool active)
         {
             ActiveLayer?.DeselectLayer();
-            EnablePolygonInputByType(ShapeType.Grid);
+            if (active)
+                EnablePolygonInputByType(ShapeType.Grid);
+            else
+                gridInput.gameObject.SetActive(false);
         }
     }
 }
