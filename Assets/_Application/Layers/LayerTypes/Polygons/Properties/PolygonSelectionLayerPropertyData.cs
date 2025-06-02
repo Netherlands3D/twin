@@ -11,10 +11,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [DataMember] private float lineWidth = 10f;
         [DataMember] private float extrusionHeight = 10f;
         [DataMember] private bool isMask;
+        [DataMember] private bool invertMask;
         
         [JsonIgnore] public readonly UnityEvent<float> OnLineWidthChanged = new();
         [JsonIgnore] public readonly UnityEvent<float> OnExtrusionHeightChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> OnIsMaskChanged = new();
+        [JsonIgnore] public readonly UnityEvent<bool> OnInvertMaskChanged = new();
 
         [JsonIgnore]
         public float LineWidth
@@ -46,6 +48,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             {
                 isMask = value;
                 OnIsMaskChanged.Invoke(isMask);
+            }
+        }
+        
+        [JsonIgnore]
+        public bool InvertMask
+        {
+            get => invertMask;
+            set
+            {
+                invertMask = value;
+                OnInvertMaskChanged.Invoke(invertMask);
             }
         }
     }

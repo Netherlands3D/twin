@@ -8,6 +8,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [SerializeField] private GameObject strokeWidthTitle;
         [SerializeField] private Slider strokeWidthSlider;
         [SerializeField] private Toggle maskToggle;
+        [SerializeField] private Toggle maskInvertToggle;
 
         private PolygonSelectionLayer polygonLayer;
 
@@ -19,6 +20,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
                 polygonLayer = value;
                 strokeWidthSlider.value = polygonLayer.LineWidth;
                 maskToggle.isOn = polygonLayer.IsMask;
+                maskInvertToggle.isOn = polygonLayer.InvertMask;
 
                 SetLinePropertiesActive(polygonLayer.ShapeType == ShapeType.Line);
             }
@@ -35,6 +37,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         private void OnEnable()
         {
             maskToggle.onValueChanged.AddListener(OnIsMaskChanged);
+            maskInvertToggle.onValueChanged.AddListener(OnInvertMaskChanged);
         }
 
         private void OnDisable()
@@ -42,16 +45,43 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             if (polygonLayer.ShapeType == ShapeType.Line)
                 strokeWidthSlider.onValueChanged.RemoveListener(HandleStrokeWidthChange);
             maskToggle.onValueChanged.RemoveListener(OnIsMaskChanged);
+            maskInvertToggle.onValueChanged.RemoveListener(OnInvertMaskChanged);
         }
 
         private void OnIsMaskChanged(bool isMask)
         {
-            var layer = isMask ? LayerMask.NameToLayer("PolygonMask") : LayerMask.NameToLayer("Projected");
+            var layer = GetLayer(isMask, maskInvertToggle.isOn);
+            SetPolygonLayer(layer);
+            polygonLayer.IsMask = isMask;
+        }
+        
+        private void OnInvertMaskChanged(bool invert)
+        {
+            var layer = GetLayer(maskToggle.isOn, invert);
+            SetPolygonLayer(layer);
+            polygonLayer.InvertMask = invert;
+        }
+
+        private void SetPolygonLayer(LayerMask layer)
+        {
+            Debug.Log( LayerMask.LayerToName(layer));
             foreach (Transform t in polygonLayer.PolygonVisualisation.gameObject.transform)
             {
                 t.gameObject.gameObject.layer = layer;
             }
+
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
+        }
+
+        private LayerMask GetLayer(bool isMask, bool invert)
+        {
+            var layer = LayerMask.NameToLayer("Projected");
+            if (isMask && !invert)
+                layer = LayerMask.NameToLayer("PolygonMask");
+            if (isMask && invert)
+                layer = LayerMask.NameToLayer("PolygonMaskInverted");
+
+            return layer;
         }
 
         private void HandleStrokeWidthChange(float newValue)

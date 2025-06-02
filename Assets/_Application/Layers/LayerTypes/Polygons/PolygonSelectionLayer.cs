@@ -58,6 +58,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             get => polygonPropertyData.IsMask;
             set => polygonPropertyData.IsMask = value;
         }
+        
+        [JsonIgnore]
+        public bool InvertMask
+        {
+            get => polygonPropertyData.InvertMask;
+            set => polygonPropertyData.InvertMask = value;
+        }
 
         [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
 
