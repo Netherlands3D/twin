@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.IO;
 using KindMen.Uxios;
-using KindMen.Uxios.Api;
 using KindMen.Uxios.Http;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -52,6 +52,8 @@ namespace Netherlands3D.DataTypeAdapters
         {
             // Start by download the file, so we can do a detailed check of the content to determine the type
             var urlAndData = new LocalFile { SourceUrl = sourceUri.ToString(), LocalFilePath = "" };
+
+            ForcedParameterService.Instance.ProcessUrl(urlAndData);
 
             yield return DownloadDataToLocalCache(auth, urlAndData);
 

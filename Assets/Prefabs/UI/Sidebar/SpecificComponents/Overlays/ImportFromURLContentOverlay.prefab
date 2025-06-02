@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 7423577321212389381}
   - component: {fileID: 3325231446690083424}
   - component: {fileID: 7159380806126479655}
+  - component: {fileID: 8457354139088014172}
   m_Layer: 5
   m_Name: ImportFromURLContentOverlay
   m_TagString: Untagged
@@ -304,6 +305,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   credentialsUI: {fileID: 8780880466737671282}
+--- !u!114 &8457354139088014172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 848705903424236284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1beeaa6ba6bb1141beb9696b1bfee20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4552448576029480976
 GameObject:
   m_ObjectHideFlags: 0
@@ -958,7 +971,7 @@ PrefabInstance:
     - target: {fileID: 1629620604472758691, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 2510
+      value: 1870
       objectReference: {fileID: 0}
     - target: {fileID: 1629620604472758691, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
