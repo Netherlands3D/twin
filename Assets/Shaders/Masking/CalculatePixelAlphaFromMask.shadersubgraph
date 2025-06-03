@@ -14,9 +14,6 @@
         },
         {
             "m_Id": "7ded7369499d47d09998fc28cba9412b"
-        },
-        {
-            "m_Id": "35cad9c0e5ed492fb29f3a72f11534a0"
         }
     ],
     "m_Keywords": [],
@@ -522,29 +519,6 @@
         "z": 0.0,
         "w": 0.0
     }
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Internal.BooleanShaderProperty",
-    "m_ObjectId": "35cad9c0e5ed492fb29f3a72f11534a0",
-    "m_Guid": {
-        "m_GuidSerialized": "7794993b-b827-4fec-bccb-a23ae384e540"
-    },
-    "m_Name": "MaskInvert",
-    "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "MaskInvert",
-    "m_DefaultReferenceName": "_MaskInvert",
-    "m_OverrideReferenceName": "",
-    "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
-    "m_DismissedVersion": 0,
-    "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
-    "m_Hidden": false,
-    "m_Value": false
 }
 
 {
@@ -1215,9 +1189,6 @@
         },
         {
             "m_Id": "c54e5ba835154d59a986964a5d7efb47"
-        },
-        {
-            "m_Id": "35cad9c0e5ed492fb29f3a72f11534a0"
         }
     ]
 }
