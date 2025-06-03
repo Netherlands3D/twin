@@ -80,6 +80,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void ProcessPolygonSelection(PolygonSelectionLayer layer)
         {
+            //we don't reselect immediately in case of a grid, but we already register the active layer
+            if (layer?.ShapeType == ShapeType.Grid) 
+            {
+                ClearSelection();
+
+                ActiveLayer = layer;
+                return;
+            }
+            
             //Do not allow selecting a new polygon if we are still creating one
             if (polygonInput.Mode == PolygonInput.DrawMode.Create || lineInput.Mode == PolygonInput.DrawMode.Create)
                 return;
@@ -234,10 +243,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public void SetGridInputModeToCreate(bool active)
         {
             ActiveLayer?.DeselectLayer();
+            ActiveLayer = null;
+            
             if (active)
                 EnablePolygonInputByType(ShapeType.Grid);
             else
                 gridInput.gameObject.SetActive(false);
+        }
+        
+        public void SetGridInputModeToEdit()
+        {
+            EnablePolygonInputByType(ShapeType.Grid);
         }
     }
 }

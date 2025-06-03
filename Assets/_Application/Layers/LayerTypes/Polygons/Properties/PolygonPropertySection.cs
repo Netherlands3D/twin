@@ -9,7 +9,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [SerializeField] private Slider strokeWidthSlider;
         [SerializeField] private Toggle maskToggle;
         [SerializeField] private Toggle maskInvertToggle;
-
+        [SerializeField] private Button editGridSelectionButton;
+        
         private PolygonSelectionLayer polygonLayer;
 
         public PolygonSelectionLayer PolygonLayer
@@ -23,6 +24,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
                 maskInvertToggle.isOn = polygonLayer.InvertMask;
 
                 SetLinePropertiesActive(polygonLayer.ShapeType == ShapeType.Line);
+                SetGridPropertiesActive(polygonLayer.ShapeType == ShapeType.Grid);
             }
         }
 
@@ -32,6 +34,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             strokeWidthSlider.gameObject.SetActive(isLine);
             if (isLine)
                 strokeWidthSlider.onValueChanged.AddListener(HandleStrokeWidthChange);
+        }
+
+        private void SetGridPropertiesActive(bool isGrid)
+        {
+            editGridSelectionButton.gameObject.SetActive(isGrid);
         }
 
         private void OnEnable()
