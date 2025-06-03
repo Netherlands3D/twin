@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -25,10 +26,12 @@ namespace Netherlands3D
             decalProjector = maskCamera.GetComponent<DecalProjector>();
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
             Shader.SetGlobalTexture(maskTextureProperty, maskCamera.targetTexture);
             Shader.SetGlobalTexture(maskInvertTextureProperty, maskInvertCamera.targetTexture);
+
+            yield return null;
             ForceUpdateVectorsAtEndOfFrame();
         }
 
