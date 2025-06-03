@@ -5,6 +5,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using Netherlands3D.Coordinates;
 using Netherlands3D.OgcWebServices.Shared;
+using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace Netherlands3D.Functionalities.Wfs
 
         public WfsGetCapabilities(Uri sourceUrl, string xml) : base(sourceUrl, xml)
         {
-            forcedCRS = ForcedParameterService.Instance.ForcedCrs;
+            forcedCRS = ServiceLocator.GetService<ForcedParameterService>().ForcedCrs;            
             SetForcedCRS(forcedCRS);
         }
 

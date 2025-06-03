@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml;
 using Netherlands3D.Coordinates;
 using Netherlands3D.OgcWebServices.Shared;
+using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
@@ -45,7 +46,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         public WmsGetCapabilities(Uri url, string xml) : base(url, xml)
         {
-            forcedCRS = ForcedParameterService.Instance.ForcedCrs;
+            forcedCRS = ServiceLocator.GetService<ForcedParameterService>().ForcedCrs;
             SetForcedCRS(forcedCRS);            
         }
 

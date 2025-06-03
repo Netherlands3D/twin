@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 3325231446690083424}
   - component: {fileID: 7159380806126479655}
   - component: {fileID: 8457354139088014172}
+  - component: {fileID: 4833013995798831571}
   m_Layer: 5
   m_Name: ImportFromURLContentOverlay
   m_TagString: Untagged
@@ -292,6 +293,9 @@ MonoBehaviour:
   OnLocalCacheFailed:
     m_PersistentCalls:
       m_Calls: []
+  OnPreDownloadLocalCache:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7159380806126479655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,6 +321,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1beeaa6ba6bb1141beb9696b1bfee20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4833013995798831571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 848705903424236284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  service: {fileID: 8457354139088014172}
 --- !u!1 &4552448576029480976
 GameObject:
   m_ObjectHideFlags: 0
