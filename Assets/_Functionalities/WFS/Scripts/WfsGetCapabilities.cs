@@ -174,25 +174,6 @@ namespace Netherlands3D.Functionalities.Wfs
             return new BoundingBox(wgs84BottomLeft, wgs84TopRight);
         }
 
-
-        //public CoordinateSystem GetCoordinateReferenceSystem()
-        //{
-        //    // Try to find the CRS in the FeatureType's DefaultCRS or DefaultSRS elements
-        //    var crsNode = xmlDocument?.DocumentElement?
-        //        .SelectSingleNode("//*[local-name()='FeatureTypeList']/*[local-name()='FeatureType']/*[local-name()='DefaultCRS' or local-name()='DefaultSRS']", namespaceManager);
-
-        //    if (crsNode == null)
-        //    {
-        //        Debug.LogWarning("Coordinate Reference System (CRS) not found in the WFS GetCapabilities response.");
-        //        return CoordinateSystem.Undefined;
-        //    }
-
-        //    CoordinateSystem crs = CoordinateSystems.FindCoordinateSystem(crsNode.InnerText);
-        //    if(crs == CoordinateSystem.Undefined)
-        //        Debug.LogWarning("Could not parse Coordinate Reference System (CRS) in the WFS GetCapabilities response. Founds CRS string: " + crsNode.InnerText);
-        //    return crs;
-        //}
-
         public void SetForcedCRS(string crs)
         {
             forcedCRS = crs;
