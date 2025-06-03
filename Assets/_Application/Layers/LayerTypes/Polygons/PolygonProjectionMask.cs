@@ -30,9 +30,9 @@ namespace Netherlands3D
         {
             Shader.SetGlobalTexture(maskTextureProperty, maskCamera.targetTexture);
             Shader.SetGlobalTexture(maskInvertTextureProperty, maskInvertCamera.targetTexture);
+            ForceUpdateVectorsAtEndOfFrame();
         }
 
-        // Update is called once per frame
         private void LateUpdate() //use LateUpdate to ensure the transform changes have applied before setting the Shader vectors
         {
             if (forceUpdate || transform.hasChanged)
@@ -46,6 +46,7 @@ namespace Netherlands3D
             }
         }
         
+        // when there are 0 inverted masks, all geometry should be visible, so we should change the output texture to alpha=1 on all pixels, otherwise we need to set alpha=0 so the environment is masked away
         private void UpdateCameraBackgroundColor()
         {
             if(invertedMasks.Count > 0)
