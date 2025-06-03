@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -9,24 +10,26 @@ namespace Netherlands3D
         [Header("Mask settings")]
         [SerializeField] private string centerProperty = "_MaskBBoxCenter";
         [SerializeField] private string extentsProperty = "_MaskBBoxExtents";
-        [SerializeField] private string invertProperty = "_MaskInvert";
-        [SerializeField] private string textureProperty = "_MaskTexture";
+        [SerializeField] private string maskInvertTextureProperty = "_MaskInvertTexture";
+        [SerializeField] private string maskTextureProperty = "_MaskTexture";
         [SerializeField] private bool invertMask;
         
         private DecalProjector decalProjector;
-        private Camera projectionCamera;
+        [SerializeField] private Camera maskCamera;
+        [SerializeField] private Camera maskInvertCamera;
 
         private static bool forceUpdate;
+        private static HashSet<GameObject> invertedMasks = new(); // when there are 0 inverted masks, all geometry should be visible, so we should change the output texture to alpha=1 on all pixels.
         
         private void Awake()
         {
-            decalProjector = GetComponent<DecalProjector>();
-            projectionCamera = GetComponent<Camera>();
+            decalProjector = maskCamera.GetComponent<DecalProjector>();
         }
 
         private void Start()
         {
-            Shader.SetGlobalTexture(textureProperty, projectionCamera.targetTexture);
+            Shader.SetGlobalTexture(maskTextureProperty, maskCamera.targetTexture);
+            Shader.SetGlobalTexture(maskInvertTextureProperty, maskInvertCamera.targetTexture);
         }
 
         // Update is called once per frame
@@ -35,25 +38,45 @@ namespace Netherlands3D
             if (forceUpdate || transform.hasChanged)
             {
                 SetShaderMaskVectors();
-                projectionCamera.Render(); //force a render so the texture is ready to be sampled by the regular pipeline
+                UpdateCameraBackgroundColor();
+                maskCamera.Render(); //force a render so the texture is ready to be sampled by the regular pipeline
+                maskInvertCamera.Render(); //force a render so the texture is ready to be sampled by the regular pipeline
                 transform.hasChanged = false;
                 forceUpdate = false;
             }
         }
         
+        private void UpdateCameraBackgroundColor()
+        {
+            if(invertedMasks.Count > 0)
+                maskInvertCamera.backgroundColor = Color.clear;
+            else
+                maskInvertCamera.backgroundColor = Color.black;
+        }
+        
         private void SetShaderMaskVectors()
         {
-            Vector2 worldCenterXZ = new Vector2(transform.position.x, transform.position.z);
+            Vector2 worldCenterXZ = new Vector2(maskCamera.transform.position.x, maskCamera.transform.position.z);
             Vector2 worldExtentsXZ = new Vector2(decalProjector.size.x / 2, decalProjector.size.y /2); //projector uses xy plane instead of xz plane
 
             Shader.SetGlobalVector(centerProperty, worldCenterXZ);
             Shader.SetGlobalVector(extentsProperty, worldExtentsXZ);
-            Shader.SetGlobalInt(invertProperty, invertMask ? 1 : 0); 
+            // Shader.SetGlobalInt(invertProperty, invertMask ? 1 : 0); 
         }
 
         public static void ForceUpdateVectorsAtEndOfFrame() // call this when updating the polygons that should be used as masks to update the texture at the end of this frame
         {
             forceUpdate = true;
+        }
+
+        public static void AddInvertedMask(GameObject invertedMask)
+        { 
+            invertedMasks.Add(invertedMask);
+        }
+
+        public static void RemoveInvertedMask(GameObject invertedMask)
+        {
+            invertedMasks.Remove(invertedMask);
         }
     }
 }

@@ -64,7 +64,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 
         private void SetPolygonLayer(LayerMask layer)
         {
-            Debug.Log( LayerMask.LayerToName(layer));
+            if (layer == LayerMask.NameToLayer("PolygonMaskInverted"))
+                PolygonProjectionMask.AddInvertedMask(polygonLayer.PolygonVisualisation.gameObject);
+            else
+                PolygonProjectionMask.RemoveInvertedMask(polygonLayer.PolygonVisualisation.gameObject);
+            
             foreach (Transform t in polygonLayer.PolygonVisualisation.gameObject.transform)
             {
                 t.gameObject.gameObject.layer = layer;
