@@ -49,7 +49,6 @@ namespace Netherlands3D.Functionalities.Wfs
         }
         private void Awake()
         {
-            layerPriority = -1;
             //Make sure Datasets at least has one item
             if (Datasets.Count == 0)
             {
