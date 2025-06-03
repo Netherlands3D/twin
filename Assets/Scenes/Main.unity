@@ -1591,7 +1591,6 @@ MonoBehaviour:
   extentsProperty: _MaskBBoxExtents
   maskInvertTextureProperty: _MaskInvertTexture
   maskTextureProperty: _MaskTexture
-  invertMask: 0
   maskCamera: {fileID: 410050005}
   maskInvertCamera: {fileID: 1730772224}
 --- !u!1 &1908448997

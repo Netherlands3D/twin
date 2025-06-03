@@ -12778,6 +12778,7 @@ GameObject:
   - component: {fileID: 8108600632555627254}
   - component: {fileID: 3156472285351505361}
   - component: {fileID: 1386038306774194492}
+  - component: {fileID: 7309876407345664161}
   m_Layer: 5
   m_Name: GridToolToggle
   m_TagString: Untagged
@@ -12929,6 +12930,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 7309876407345664161}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Tools.UI.OverlayInstantiator,
+          eu.netherlands3d.twin
+        m_MethodName: InstantiateOverlay
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &1386038306774194492
 MonoBehaviour:
@@ -12988,6 +13002,22 @@ MonoBehaviour:
   onFalse:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7309876407345664161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6586217171607649908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62b1e01edbedb4752ad91f429fe11682, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overlayPrefab: {fileID: 2605067482200781903, guid: 0ee8a393c825643898749725405ccb9b,
+    type: 3}
+  layerGameObject: {fileID: 0}
+  instantiateOnStart: 0
 --- !u!1 &6600794019970760343
 GameObject:
   m_ObjectHideFlags: 0
