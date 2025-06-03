@@ -11,22 +11,13 @@ namespace Netherlands3D.Twin
     [RequireComponent(typeof(DataTypeChain))]
     public class ForcedParameterService : MonoBehaviour
     {
-        public static ForcedParameterService Instance { get; private set; }
-
         public string ForcedCrs { get; private set; }
         private DataTypeChain chain;
 
         private const string marker = "&nl3d=";
 
         private void Awake()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            Instance = this;
+        {            
             chain = GetComponent<DataTypeChain>();
             chain.OnPreDownloadLocalCache.AddListener(ProcessUrl);
         }
