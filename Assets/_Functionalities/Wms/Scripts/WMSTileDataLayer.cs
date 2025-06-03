@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using KindMen.Uxios;
@@ -110,8 +110,10 @@ namespace Netherlands3D.Functionalities.Wms
                         Destroy(tex);
                         return;
                     }
-
-                    projector.SetSize(tileSize, tileSize, tileSize);
+                    //if (foundCRS == CoordinateSystem.CRS84)
+                    //    projector.SetSize((float)widthMeters, (float)heightMeters, ProjectorMinDepth);
+                    //else
+                        projector.SetSize(tileSize, tileSize, tileSize);
                     projector.gameObject.SetActive(isEnabled);
                     projector.SetTexture(tex);
 
@@ -138,6 +140,8 @@ namespace Netherlands3D.Functionalities.Wms
             yield return Uxios.WaitForRequest(promise);
         }
 
+        private double widthMeters, heightMeters;
+        private CoordinateSystem foundCRS = CoordinateSystem.Undefined;
         private BoundingBox DetermineBoundingBox(TileChange tileChange, MapFilters mapFilters)
         {
             var bottomLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
@@ -155,12 +159,62 @@ namespace Netherlands3D.Functionalities.Wms
             }
 
             CoordinateSystem foundCoordinateSystem = CoordinateSystems.FindCoordinateSystem(coordinateSystemAsString);
+            foundCRS = foundCoordinateSystem;
+            if(foundCoordinateSystem == CoordinateSystem.CRS84)
+            {
+                Coordinate bl = bottomLeft.Convert(CoordinateSystem.CRS84);
+                Coordinate tr = topRight.Convert(CoordinateSystem.CRS84);
+
+                // double minLon = Math.Min(bl.value1, tr.value1);
+                // double minLat = Math.Min(bl.value2, tr.value2);
+                // double maxLon = Math.Max(bl.value1, tr.value1);
+                // double maxLat = Math.Max(bl.value2, tr.value2);
+
+                // bottomLeft = new Coordinate(CoordinateSystem.CRS84, minLon, minLat).Convert(CoordinateSystem.RD);
+                // topRight = new Coordinate(CoordinateSystem.CRS84, maxLon, maxLat).Convert(CoordinateSystem.RD);
+
+                // // Bereken breedte en hoogte in meters
+                // widthMeters = Math.Abs(topRight.value1 - bottomLeft.value1);
+                // heightMeters = Math.Abs(topRight.value2 - bottomLeft.value2);
+                // Debug.Log("WIDTH:" + widthMeters + "HEIGHT:" + heightMeters);
+                const double earthRadius = 6378137; // meters
+
+                double meanLat = (bl.value2 + tr.value2) / 2.0;
+                double latRad = Math.PI * meanLat / 180.0;
+
+                double metersPerDegreeLon = Math.Cos(latRad) * (Math.PI * earthRadius / 180.0);
+                double metersPerDegreeLat = Math.PI * earthRadius / 180.0;
+
+                widthMeters = Math.Abs(tr.value1 - bl.value1) * metersPerDegreeLon;
+                heightMeters = Math.Abs(tr.value2 - bl.value2) * metersPerDegreeLat;
+
+                // Verhoudingsfactoren tov 1000 meter
+                double scaleX = 1000.0 / widthMeters;
+                double scaleY = 1000.0 / heightMeters;
+
+                // Originele center in graden
+                double centerLon = (bl.value1 + tr.value1) / 2.0;
+                double centerLat = (bl.value2 + tr.value2) / 2.0;
+
+                double halfWidthDeg = Math.Abs(tr.value1 - bl.value1) / 2.0 * scaleX;
+                double halfHeightDeg = Math.Abs(tr.value2 - bl.value2) / 2.0 * scaleY;
+
+                double minLon = centerLon - halfWidthDeg;
+                double maxLon = centerLon + halfWidthDeg;
+                double minLat = centerLat - halfHeightDeg;
+                double maxLat = centerLat + halfHeightDeg;
+
+                // Update bottomLeft en topRight met geschaalde coördinaten
+                bottomLeft = new Coordinate(CoordinateSystem.CRS84, minLon, minLat);
+                topRight = new Coordinate(CoordinateSystem.CRS84, maxLon, maxLat);
+            }
 
             var boundingBox = new BoundingBox(bottomLeft, topRight);
             boundingBox.Convert(foundCoordinateSystem);
 
             return boundingBox;
         }
+
 
         private void UpdateDrawOrderForChildren()
         {
