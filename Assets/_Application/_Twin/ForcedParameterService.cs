@@ -3,7 +3,6 @@ using System;
 using Netherlands3D.DataTypeAdapters;
 using System.Collections.Specialized;
 using Netherlands3D.Web;
-using SimpleJSON;
 using Newtonsoft.Json;
 
 namespace Netherlands3D.Twin
@@ -42,7 +41,11 @@ namespace Netherlands3D.Twin
                 Debug.Log($"[ForcedParameterService] Forced CRS detected: {ForcedCrs}");
             }
 
-            file.SourceUrl = RemoveMarkerFromUrl(rawUrl);
+            UriBuilder uriBuilder = new UriBuilder(rawUrl);
+            var parameters = new NameValueCollection();
+            uriBuilder.TryParseQueryString(parameters);
+            uriBuilder.RemoveQueryParameter("nl3d");
+            file.SourceUrl = uriBuilder.ToString();
         }
 
         [Serializable]
@@ -72,17 +75,7 @@ namespace Netherlands3D.Twin
             return extraOptions;
         }
 
-        public static string RemoveMarkerFromUrl(string url)
-        {
-            int start = url.IndexOf(marker, StringComparison.OrdinalIgnoreCase);
-            if (start < 0) return url;
-
-            int end = url.IndexOf('&', start + 1);
-            if (end > 0)
-                return url.Remove(start, end - start);
-            else
-                return url.Substring(0, start);
-        }
+        
 
         public void Clear()
         {
