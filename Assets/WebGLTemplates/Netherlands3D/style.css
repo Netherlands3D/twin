@@ -52,8 +52,21 @@ p:last-of-type {
 #unity-canvas { background: transparent; }
 #unity-canvas { width: 100%; height: 100% }
 #unity-loading-bar { width: 200px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none }
-#unity-progress-bar-empty { width: 100%; height: 100%; margin-top: 10px; background-color:grey; }
-#unity-progress-bar-full { width: 0%; height: 10px; margin-top: 10px; background-color: white; }
+#unity-progress-bar-empty {
+  width: 100%;
+  height: 10px;
+  margin-top: 10px;
+  background-color: rgba(255, 255, 255, 0.3); 
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#unity-progress-bar-full {
+  width: 0%;
+  height: 100%;
+  background-color: #004699; 
+  transition: width 0.2s ease-in-out;
+}
 
 #nl3d-debug {
 	display: none;
