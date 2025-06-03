@@ -12,14 +12,13 @@ namespace Netherlands3D
         [SerializeField] private string extentsProperty = "_MaskBBoxExtents";
         [SerializeField] private string maskInvertTextureProperty = "_MaskInvertTexture";
         [SerializeField] private string maskTextureProperty = "_MaskTexture";
-        [SerializeField] private bool invertMask;
         
         private DecalProjector decalProjector;
         [SerializeField] private Camera maskCamera;
         [SerializeField] private Camera maskInvertCamera;
 
         private static bool forceUpdate;
-        private static HashSet<GameObject> invertedMasks = new(); // when there are 0 inverted masks, all geometry should be visible, so we should change the output texture to alpha=1 on all pixels.
+        private static readonly HashSet<GameObject> invertedMasks = new(); // when there are 0 inverted masks, all geometry should be visible, so we should change the output texture to alpha=1 on all pixels.
         
         private void Awake()
         {
@@ -62,7 +61,6 @@ namespace Netherlands3D
 
             Shader.SetGlobalVector(centerProperty, worldCenterXZ);
             Shader.SetGlobalVector(extentsProperty, worldExtentsXZ);
-            // Shader.SetGlobalInt(invertProperty, invertMask ? 1 : 0); 
         }
 
         public static void ForceUpdateVectorsAtEndOfFrame() // call this when updating the polygons that should be used as masks to update the texture at the end of this frame
