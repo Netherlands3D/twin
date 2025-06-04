@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Netherlands3D</title>
+    <!-- Hard‐code TemplateData path so Unity copies it verbatim -->
+    <link rel="stylesheet" href="TemplateData/style.css" />
+</head>
+<body>
+    <!-- ─── Parallax Layers (110% oversize) ─── -->
+    <div id="parallaxContainer">
+        <div class="parallax-layer" id="layer-back"></div>
+        <div class="parallax-layer" id="layer-mid"></div>
+        <div class="parallax-layer" id="layer-front"></div>
+    </div>
+
+    <!-- ─── Loading Overlay (flipbook + progress) ─── -->
+    <div id="loadingOverlay">
+        <div id="overlayContent">
+            <!-- Flipbook Logo (will be scaled via CSS) -->
+            <div id="flipbookLogo"></div>
+
+            <!-- Progress bar -->
+            <div id="progressContainer">
+                <div id="progressBar"></div>
+            </div>
+            <p id="progressPercent">0%</p>
+        </div>
+    </div>
+
+    <!-- ─── Unity Canvas Container ─── -->
+    <div id="unityContainer"></div>
+
+    <!-- ─── Unity Loader Script ─── -->
+    <script src="{{{ UNITY_LOADER_URL }}}"></script>
+    <script>
+    // Parallax mouse‐move logic (back stays still)
+    (function() {
+      const layers = {
+        back:  document.getElementById('layer-back'),
+        mid:   document.getElementById('layer-mid'),
+        front: document.getElementById('layer-front')
+      };
+      // back: 0→no movement; mid & front have some movement
+      const maxTranslate = { back: 0, mid: 20, front: 40 };
+
+      window.addEventListener('mousemove', e => {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        const nx = (e.clientX / w) - 0.5;  // –0.5 .. +0.5
+        const ny = (e.clientY / h) - 0.5;
+        // back: nx * 0 = 0, so no transform
+        layers.back.style.transform  = `translate(0px, 0px)`;
+        layers.mid.style.transform   = `translate(${-nx * maxTranslate.mid}px,   ${-ny * maxTranslate.mid}px)`;
+        layers.front.style.transform = `translate(${-nx * maxTranslate.front}px, ${-ny * maxTranslate.front}px)`;
+      });
+    })();
+
+    // Instantiate Unity & update progress
+    createUnityInstance(
+      document.querySelector("#unityContainer"),
+      {
+        dataUrl:            "{{{ DATA_URL }}}",
+        frameworkUrl:       "{{{ FRAMEWORK_URL }}}",
+        codeUrl:            "{{{ CODE_URL }}}",
+        streamingAssetsUrl: "{{{ STREAMING_ASSETS_URL }}}",
+        companyName:        "{{{ COMPANY_NAME }}}",
+        productName:        "{{{ PRODUCT_NAME }}}",
+        productVersion:     "{{{ VERSION }}}"
+      },
+      progress => {
+        const pct = Math.round(progress * 100);
+        document.getElementById("progressBar").style.width = pct + "%";
+        document.getElementById("progressPercent").innerText = pct + "%";
+        if (pct === 100) {
+          const overlay = document.getElementById("loadingOverlay");
+          overlay.classList.add("fadeOut");
+          setTimeout(() => {
+            overlay.style.display = "none";
+            // Stop flipbook animation
+            document.getElementById("flipbookLogo").style.animation = "none";
+          }, 800);
+        }
+      }
+    );
+    </script>
+</body>
+</html>
