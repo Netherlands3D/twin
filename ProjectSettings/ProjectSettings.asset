@@ -546,7 +546,14 @@ PlayerSettings:
   openGLRequireES31: 0
   openGLRequireES31AEP: 0
   openGLRequireES32: 0
-  m_TemplateCustomTags: {}
+  m_TemplateCustomTags:
+    CODE_URL: 
+    DATA_URL: 
+    FRAMEWORK_URL: 
+    STREAMING_ASSETS_URL: 
+    TEMPLATEDATA_PATH: 
+    UNITY_LOADER_URL: 
+    VERSION: 
   mobileMTRendering:
     Android: 1
     iPhone: 1
@@ -813,7 +820,7 @@ PlayerSettings:
   webGLDebugSymbols: 0
   webGLEmscriptenArgs: 
   webGLModulesDirectory: 
-  webGLTemplate: PROJECT:Netherlands3D
+  webGLTemplate: PROJECT:NL3D_New
   webGLAnalyzeBuildSize: 0
   webGLUseEmbeddedResources: 0
   webGLCompressionFormat: 1
