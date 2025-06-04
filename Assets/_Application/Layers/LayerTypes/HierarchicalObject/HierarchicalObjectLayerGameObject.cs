@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
-using Netherlands3D.LayerStyles;
-using Netherlands3D.LayerStyles.ExtensionMethods;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
@@ -253,7 +251,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void ApplyStyling()
         {
-            var features = GetFeatures<MeshRenderer>();
+            var features = CreateFeaturesByType<MeshRenderer>();
             foreach (var feature in features)
             {
                 ApplyStyling(feature);
@@ -277,7 +275,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             if (!fillColor.HasValue) return;
 
             LayerData.Color = fillColor.Value;
-            meshRenderer.SetUrpLitColorOptimized(fillColor.Value);
+            SetUrpLitColorOptimized(meshRenderer, fillColor.Value);
+        }
+
+        public void SetUrpLitColorOptimized(MeshRenderer renderer, Color color, int? materialIndex = null)
+        {
+            int BaseColor = Shader.PropertyToID("_BaseColor");
+            // If a material index was provided: manipulate the start and end to do a single iteration in the loop with
+            // this material index, otherwise we manipulate all
+            int startIndex = materialIndex.HasValue ? materialIndex.Value : 0;
+            int endIndex = materialIndex.HasValue ? materialIndex.Value : renderer.materials.Length - 1;
+
+            // Make sure to assign the color to each material in the meshrenderer
+            for (var index = startIndex; index <= endIndex; index++)
+            {
+                MaterialPropertyBlock block = new MaterialPropertyBlock();
+                renderer.GetPropertyBlock(block, index);
+                block.SetColor(BaseColor, color);
+                renderer.SetPropertyBlock(block, index);
+            }
         }
 
         /// <summary>
@@ -291,7 +307,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             if (feature.Geometry is not MeshRenderer meshRenderer) return feature;
 
-            feature.Attributes.Add("materials", meshRenderer.materials.Select(material => material.name));
+            feature.Attributes.Add("materials", string.Join(",", meshRenderer.materials.Select(m => m.name)));
 
             return feature;
         }

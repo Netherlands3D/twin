@@ -27,6 +27,13 @@
       },
       "url": "https://package.openupm.com"
     },
+    "com.johanhelsing.oneof": {
+      "version": "0.1.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "com.joshclose.csvhelper": {
       "version": "13.0.0",
       "depth": 0,
@@ -322,7 +329,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.cartesiantiles": {
-      "version": "1.1.4",
+      "version": "1.1.6",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -399,7 +406,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.gltfast": {
-      "version": "5.0.10",
+      "version": "5.0.11",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -437,7 +444,7 @@
       "hash": "0b4407a447e08aa3b5260ba6fce5934b4cfde21d"
     },
     "eu.netherlands3d.minimap": {
-      "version": "1.1.7",
+      "version": "1.1.8",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -517,7 +524,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "1.10.7",
+      "version": "1.10.8",
       "depth": 0,
       "source": "registry",
       "dependencies": {

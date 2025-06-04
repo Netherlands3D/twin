@@ -49,9 +49,6 @@ namespace Netherlands3D.Functionalities.Wms
 
             credentialHandler = GetComponent<ICredentialHandler>();
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
-
-            LayerData.LayerSelected.AddListener(OnSelectLayer);
-            LayerData.LayerDeselected.AddListener(OnDeselectLayer);
         }
 
         protected override void Start()
@@ -61,12 +58,13 @@ namespace Netherlands3D.Functionalities.Wms
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
             Legend.Instance.RegisterUrl(urlPropertyData.Data.ToString());
-            Legend.Instance.ShowLegend(urlPropertyData.Data.ToString(), ShowLegendOnSelect);
+            Legend.Instance.ShowLegend(urlPropertyData.Data.ToString(), ShowLegendOnSelect && LayerData.IsSelected);
         }
 
         public void SetLegendActive(bool active)
         {
-            Legend.Instance.ShowLegend(urlPropertyData.Data.ToString(), active);
+            if(urlPropertyData.Data != null)
+                Legend.Instance.ShowLegend(urlPropertyData.Data.ToString(), active);
         }
 
         //a higher order means rendering over lower indices
@@ -128,18 +126,16 @@ namespace Netherlands3D.Functionalities.Wms
         {
             base.OnDestroy();
             LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
-            LayerData.LayerSelected.RemoveListener(OnSelectLayer);
-            LayerData.LayerDeselected.RemoveListener(OnDeselectLayer);
             credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
             Legend.Instance.UnregisterUrl(urlPropertyData.Data.ToString());
         }
 
-        private void OnSelectLayer(LayerData layer)
+        public override void OnSelect()
         {
             SetLegendActive(ShowLegendOnSelect);
         }
 
-        private void OnDeselectLayer(LayerData layer)
+        public override void OnDeselect()
         {
             SetLegendActive(false);
         }

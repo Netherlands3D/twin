@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8284198237993072344}
   - component: {fileID: -4083834515804018632}
   - component: {fileID: 8494173785329764173}
+  - component: {fileID: 1856859954977094558}
   m_Layer: 6
   m_Name: Maaiveld
   m_TagString: Untagged
@@ -118,6 +119,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabIdentifier: 2e71ce721dd3e41c194c6fb05ad10520
+  OnStylingApplied:
+    m_PersistentCalls:
+      m_Calls: []
   onShow:
     m_PersistentCalls:
       m_Calls: []
@@ -169,7 +173,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldTransformShifter: {fileID: 8494173785329764173}
-  referenceCoordinateSystem: 2
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
@@ -188,3 +191,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1856859954977094558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3354824856556962616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de5cd78f3fd5c1842b127eafceb944e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propertySectionPrefab: {fileID: 7022181786967302496, guid: ca4dfb99b441c8b45bdab6fe8cb84efa,
+    type: 3}

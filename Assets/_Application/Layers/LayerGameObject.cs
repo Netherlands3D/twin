@@ -63,8 +63,9 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
+        public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
+        public UnityEvent OnStylingApplied = new();
         Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;
-        private readonly List<LayerFeature> cachedFeatures = new();
 
         [Space] public UnityEvent onShow = new();
         public UnityEvent onHide = new();
@@ -190,25 +191,26 @@ namespace Netherlands3D.Twin.Layers
 #region Styling
         protected Symbolizer GetStyling(LayerFeature feature)
         {
-            var symbolizer = new Symbolizer();
-            foreach (var style in LayerData.Styles)
-            {
-                symbolizer = style.Value.ResolveSymbologyForFeature(symbolizer, feature);
-            }
-
-            return symbolizer;
+            return StyleResolver.Instance.GetStyling(feature, LayerData.Styles);
         }
 
         public virtual void ApplyStyling()
         {
-            //initialize the layer's style        
+            //initialize the layer's style
+            OnStylingApplied.Invoke();
         }
 #endregion
 
 #region Features
-        public List<LayerFeature> GetFeatures<T>() where T : Component
+
+        /// <summary>
+        /// Creates a list of features for each component of type T on this game object. This list is not automatically
+        /// recorded in the local list of features to allow streaming services to request a list per tile, or to perform
+        /// actions or filtering before registering these features.
+        /// </summary>
+        protected List<LayerFeature> CreateFeaturesByType<T>() where T : Component
         {
-            cachedFeatures.Clear();
+            var cachedFeatures = new List<LayerFeature>();
 
             // By default, consider each Unity.Component of type T as a "Feature" and create an ExpressionContext to
             // select the correct styling Rule to apply to the given "Feature". 
@@ -230,7 +232,10 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         protected LayerFeature CreateFeature(object geometry)
         {
-            return AddAttributesToLayerFeature(LayerFeature.Create(this, geometry));
+            LayerFeature feature = LayerFeature.Create(this, geometry);
+            AddAttributesToLayerFeature(feature);
+
+            return feature;
         }
 
         /// <summary>
