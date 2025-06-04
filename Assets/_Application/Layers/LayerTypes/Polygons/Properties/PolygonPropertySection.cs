@@ -1,3 +1,4 @@
+using Netherlands3D.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [SerializeField] private Toggle maskToggle;
         [SerializeField] private Toggle maskInvertToggle;
         [SerializeField] private Button editGridSelectionButton;
+        [SerializeField] private BoolEvent EnableGridInputInEditModeEvent;
         
         private PolygonSelectionLayer polygonLayer;
 
@@ -39,6 +41,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         private void SetGridPropertiesActive(bool isGrid)
         {
             editGridSelectionButton.gameObject.SetActive(isGrid);
+            editGridSelectionButton.onClick.AddListener(ReselectLayer);
+        }
+
+        private void ReselectLayer()
+        {
+            polygonLayer.SelectLayer(true);
+            EnableGridInputInEditModeEvent.InvokeStarted(true);
         }
 
         private void OnEnable()
@@ -51,8 +60,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         {
             if (polygonLayer.ShapeType == ShapeType.Line)
                 strokeWidthSlider.onValueChanged.RemoveListener(HandleStrokeWidthChange);
+            if(polygonLayer.ShapeType == ShapeType.Grid)
+                editGridSelectionButton.onClick.RemoveListener(ReselectLayer);
+            
             maskToggle.onValueChanged.RemoveListener(OnIsMaskChanged);
             maskInvertToggle.onValueChanged.RemoveListener(OnInvertMaskChanged);
+            
+            EnableGridInputInEditModeEvent.InvokeStarted(false);
         }
 
         private void OnIsMaskChanged(bool isMask)

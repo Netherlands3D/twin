@@ -1625,7 +1625,8 @@ MonoBehaviour:
   maskToggle: {fileID: 5028525463275959807}
   maskInvertToggle: {fileID: 791734184592625264}
   editGridSelectionButton: {fileID: 5608356183103437961}
-  test: {fileID: 11400000, guid: a190728eac2c7460392df89e1ad25744, type: 2}
+  EnableGridInputInEditModeEvent: {fileID: 11400000, guid: a190728eac2c7460392df89e1ad25744,
+    type: 2}
 --- !u!1001 &4207979860404524919
 PrefabInstance:
   m_ObjectHideFlags: 0

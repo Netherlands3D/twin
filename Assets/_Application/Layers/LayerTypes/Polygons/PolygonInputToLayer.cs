@@ -28,7 +28,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         [SerializeField] private float defaultLineWidth = 10.0f;
         [SerializeField] private PolygonPropertySection polygonPropertySectionPrefab;
 
-        [Header("Grid Settings")]
+        [Header("Grid Settings")] 
         [SerializeField] private AreaSelection gridInput;
 
         public static PolygonPropertySection PolygonPropertySectionPrefab { get; private set; }
@@ -74,21 +74,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             lineInput.createdNewPolygonArea.RemoveListener(CreateLineLayer);
             lineInput.editedPolygonArea.RemoveListener(UpdateLayer);
-            
+
             gridInput.whenAreaIsSelected.RemoveListener(CreateOrEditGridLayer);
         }
 
         private void ProcessPolygonSelection(PolygonSelectionLayer layer)
         {
             //we don't reselect immediately in case of a grid, but we already register the active layer
-            if (layer?.ShapeType == ShapeType.Grid) 
+            if (layer?.ShapeType == ShapeType.Grid)
             {
                 ClearSelection();
-
-                ActiveLayer = layer;
+                ActiveLayer = layer; 
+                // do not call the ReselectLayerPolygon function yet, because we need to wait until the user selects edit mode in the UI
                 return;
             }
-            
+
             //Do not allow selecting a new polygon if we are still creating one
             if (polygonInput.Mode == PolygonInput.DrawMode.Create || lineInput.Mode == PolygonInput.DrawMode.Create)
                 return;
@@ -110,7 +110,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
                 return;
             }
-        
+
             //Align the input sytem by reselecting using layer polygon
             ReselectInputByType(layer);
         }
@@ -212,17 +212,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             if (ActiveLayer?.ShapeType == ShapeType.Grid)
             {
-                // editing with the grid selection tool redraws the entire polygon
                 ActiveLayer.SetShape(new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(topLeft), new Coordinate(topRight), new Coordinate(bottomRight) });
                 return;
             }
-
+            
             var layer = new PolygonSelectionLayer("Grid", prefabId, new List<Vector3>() { bottomLeft, topLeft, topRight, bottomRight }, ShapeType.Grid);
             layers.Add(layer.PolygonVisualisation, layer);
             layer.polygonSelected.AddListener(ProcessPolygonSelection);
             ProcessPolygonSelection(layer);
         }
-
 
         public void SetPolygonInputModeToCreate(bool isCreateMode)
         {
@@ -244,16 +242,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             ActiveLayer?.DeselectLayer();
             ActiveLayer = null;
-            
+
             if (active)
                 EnablePolygonInputByType(ShapeType.Grid);
             else
                 gridInput.gameObject.SetActive(false);
         }
-        
-        public void SetGridInputModeToEdit()
+
+        public void SetGridInputModeToEdit(bool active)
         {
-            EnablePolygonInputByType(ShapeType.Grid);
+            if (active)
+                EnablePolygonInputByType(ShapeType.Grid);
+            else
+                gridInput.gameObject.SetActive(false);
         }
     }
 }
