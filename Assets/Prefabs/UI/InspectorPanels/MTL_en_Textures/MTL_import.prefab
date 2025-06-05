@@ -416,7 +416,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 603709164805375050}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.MTLImportPropertySection, Assembly-CSharp
-        m_MethodName: ImportMTL
+        m_MethodName: ImportMtl
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2195,7 +2195,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 603709164805375050}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.MTLImportPropertySection, Assembly-CSharp
-        m_MethodName: ImportMTL
+        m_MethodName: ImportMtl
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2697,7 +2697,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 603709164805375050}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.MTLImportPropertySection, Assembly-CSharp
-        m_MethodName: ImportMTL
+        m_MethodName: ImportMtl
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

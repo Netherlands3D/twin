@@ -101,7 +101,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void SelectSwatch(ColorSwatch swatch)
         {
             ShowColorPicker();
-            colorPicker.SetColorPickerColor(swatch.Color);
+            colorPicker.PickColorWithoutNotify(swatch.Color);
 
             swatch.SetSelected(true);
         }
@@ -137,11 +137,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void SetColorizationStylingRule(LayerFeature layerFeature, Color color)
         {
             CartesianTileLayerStyler.SetColor(layer, layerFeature, color);
-        }
-
-        private static string ColorizationStyleRuleName(int materialIndexIdentifier)
-        {
-            return $"feature.{materialIndexIdentifier}.colorize";
         }
 
         private void UpdateSwatches()

@@ -52,6 +52,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabIdentifier: 34882a73ff6122243a0e3e9811473e20
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
+  OnStylingApplied:
+    m_PersistentCalls:
+      m_Calls: []
   onShow:
     m_PersistentCalls:
       m_Calls: []
@@ -94,7 +99,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldTransformShifter: {fileID: 8128677453936289607}
-  referenceCoordinateSystem: 2
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
@@ -165,5 +169,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6303d72dc2aa4f61bcacd10f6b5e3e43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 470222656515864098, guid: 0abb37c7616acf44dbafc477afb67932,
+  propertySectionPrefab: {fileID: 3414392683841753435, guid: c78b9cbfeb6b857479e94e59739d2347,
     type: 3}
