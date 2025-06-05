@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-namespace Netherlands3D
+namespace Netherlands3D.Twin.UI
 {
     public class UIHoverEvent : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
