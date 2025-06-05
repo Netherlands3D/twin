@@ -40,7 +40,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 
         private void SetGridPropertiesActive(bool isGrid)
         {
-            editGridSelectionButton.gameObject.SetActive(isGrid);
+            editGridSelectionButton.transform.parent.gameObject.SetActive(isGrid);
             editGridSelectionButton.onClick.AddListener(ReselectLayer);
         }
 
