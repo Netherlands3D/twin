@@ -63,6 +63,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MaskTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -110,6 +114,7 @@ Material:
     - _GlossinessSource: 0
     - _GlossyReflections: 0
     - _IncludeInGlobalMask: 0
+    - _MaskInvert: 0
     - _Metallic: 0.2
     - _OcclusionStrength: 1
     - _QueueControl: 0
@@ -136,6 +141,8 @@ Material:
     - _Color: {r: 0.9056604, g: 0.9056604, b: 0.9056604, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _HighlightColor: {r: 0.15686275, g: 0.3921569, b: 1, a: 1}
+    - _MaskBBoxCenter: {r: 0, g: 0, b: 0, a: 0}
+    - _MaskBBoxExtents: {r: 0, g: 0, b: 0, a: 0}
     - _OffsetMainTexture: {r: 0, g: 0, b: 0, a: 0}
     - _OffsetSecondaryTexture: {r: 0, g: 0, b: 0, a: 0}
     - _SecondaryHighlightColor: {r: 1, g: 1, b: 0, a: 1}

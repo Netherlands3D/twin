@@ -34,12 +34,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 PolygonVisualisation.UpdateVisualisation(polygon3D);
                 polygonBounds = new(PolygonVisualisation.GetComponent<Renderer>().bounds);
             }
+            PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
         }
 
         private PolygonVisualisation CreatePolygonMesh(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial)
         {
             var contours = new List<List<Vector3>> { polygon };
-            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, polygonExtrusionHeight, false, false, false, polygonMeshMaterial);
+            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, polygonExtrusionHeight, false, false, true, polygonMeshMaterial);
 
             //Add the polygon shifter to the polygon visualisation, so it can move with our origin shifts
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
@@ -50,11 +51,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public List<IPropertySectionInstantiator> GetPropertySections()
         {
-            var polygon = LayerData as PolygonSelectionLayer;
-            if (polygon.ShapeType == ShapeType.Line)
-                return GetComponents<IPropertySectionInstantiator>().ToList(); //LineWidth
-
-            return new List<IPropertySectionInstantiator>(); //no properties for a polygon
+            return GetComponents<IPropertySectionInstantiator>().ToList();
         }
 
         protected virtual void OnDestroy()
