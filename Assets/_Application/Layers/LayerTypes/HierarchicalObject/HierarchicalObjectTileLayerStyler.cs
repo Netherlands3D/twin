@@ -39,6 +39,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         public static void ResetColoring(HierarchicalObjectLayerGameObject layer)
         {
             SetColor(layer, null);
+            layer.ApplyStyling();
         }
 
         /// <summary>

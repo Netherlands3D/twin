@@ -264,6 +264,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             {
                 HierarchicalObjectTileLayerStyler.Apply(this, GetStyling(feature), feature);
             }
+            
+            base.ApplyStyling();
         }
     }
 }
