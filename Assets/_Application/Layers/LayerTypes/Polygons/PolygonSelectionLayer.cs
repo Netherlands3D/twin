@@ -16,7 +16,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     {
         Undefined = 0,
         Polygon = 1,
-        Line = 2
+        Line = 2,
+        Grid = 3
     }
 
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "PolygonSelection")]
@@ -49,6 +50,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 polygonPropertyData.LineWidth = value;
                 CreatePolygonFromLine(OriginalPolygon, value);
             }
+        }
+        
+        [JsonIgnore]
+        public bool IsMask
+        {
+            get => polygonPropertyData.IsMask;
+            set => polygonPropertyData.IsMask = value;
+        }
+        
+        [JsonIgnore]
+        public bool InvertMask
+        {
+            get => polygonPropertyData.InvertMask;
+            set => polygonPropertyData.InvertMask = value;
         }
 
         [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
@@ -115,16 +130,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             if (shapeType == ShapeType.Line)
                 SetLine(shape);
-            else
+            else if (shapeType == ShapeType.Polygon)
                 SetPolygon(shape);
+            else
+                SetPolygon(shape, ShapeType.Grid);
         }
-
+        
         /// <summary>
         /// Set the polygon of the layer as a solid filled polygon with Coordinates
         /// </summary>
-        private void SetPolygon(List<Coordinate> solidPolygon)
+        private void SetPolygon(List<Coordinate> solidPolygon, ShapeType polygonType = ShapeType.Polygon)
         {
-            ShapeType = ShapeType.Polygon;
+            ShapeType = polygonType;
             OriginalPolygon = solidPolygon;
 
             var unityPolygon = ConvertToUnityPoints(solidPolygon);
@@ -213,6 +230,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             PolygonSelectionCalculator.UnregisterPolygon(this);
             base.DestroyLayer();
+            PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject);
+            PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
         }
 
         public List<Vector3> GetPolygonAsUnityPoints()

@@ -22,9 +22,9 @@ namespace Netherlands3D.Services
      
         public static T GetService<T>() where T : MonoBehaviour
         {
-            MonoBehaviour v;
-            registeredServices.TryGetValue(typeof(T), out v);
-            return v as T;
+            MonoBehaviour service;
+            registeredServices.TryGetValue(typeof(T), out service);
+            return service as T;
         }
 
     }

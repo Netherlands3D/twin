@@ -15,13 +15,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         [SerializeField] private float minCamHeightMultiplier = 0.1f;
         [SerializeField] private float maxCamHeightMultiplier = 100f;
         
-        [Header("Mask texture settings")]
+        [Header("Projection settings")]
         [SerializeField] private AnimationCurve lookDirectionResolution;
         
         private DecalProjector decalProjector;
         private Camera projectionCamera;
         [FormerlySerializedAs("terrainLayer")] [SerializeField] private CartesianTileLayerGameObject terrainLayerGameObject;
-
+        
         private void Awake()
         {
             decalProjector = GetComponent<DecalProjector>();
