@@ -230,6 +230,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             PolygonSelectionCalculator.UnregisterPolygon(this);
             base.DestroyLayer();
+            PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject);
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
         }
 
