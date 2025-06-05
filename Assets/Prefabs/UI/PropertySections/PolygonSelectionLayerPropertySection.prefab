@@ -15,7 +15,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2166976333481539474
 RectTransform:
   m_ObjectHideFlags: 0
@@ -32,10 +32,10 @@ RectTransform:
   - {fileID: 1136179895950075606}
   m_Father: {fileID: 5031956645437580411}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 40}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 150, y: -253}
+  m_SizeDelta: {x: 300, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &494392403481098440
 GameObject:
@@ -376,7 +376,31 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 141143265759753708}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 25298893464050412}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &5676645310705723419
 GameObject:
@@ -1015,6 +1039,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: InvertExplanation
       objectReference: {fileID: 0}
+    - target: {fileID: 4136261530444499954, guid: c7b4ed3ca1dcba245a37420ca328777d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6832519826993315323, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
       propertyPath: m_Pivot.x
@@ -1033,7 +1062,7 @@ PrefabInstance:
     - target: {fileID: 6832519826993315323, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6832519826993315323, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
@@ -1043,12 +1072,12 @@ PrefabInstance:
     - target: {fileID: 6832519826993315323, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6832519826993315323, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 6832519826993315323, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
@@ -1093,12 +1122,12 @@ PrefabInstance:
     - target: {fileID: 6832519826993315323, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 6832519826993315323, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -195
       objectReference: {fileID: 0}
     - target: {fileID: 6832519826993315323, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
@@ -1120,6 +1149,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7b4ed3ca1dcba245a37420ca328777d, type: 3}
+--- !u!1 &141143265759753708 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4136261530444499954, guid: c7b4ed3ca1dcba245a37420ca328777d,
+    type: 3}
+  m_PrefabInstance: {fileID: 4076746119937162782}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &7368590934179677157 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6832519826993315323, guid: c7b4ed3ca1dcba245a37420ca328777d,
