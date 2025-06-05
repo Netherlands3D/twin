@@ -1,0 +1,160 @@
+/*────────────────────────────────────────────────────────────────────*/
+/* 1) Reset & Full-Viewport Setup                                      */
+/*────────────────────────────────────────────────────────────────────*/
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000; /* fallback while images load */
+}
+
+/*────────────────────────────────────────────────────────────────────*/
+/* 2) Unity Canvas Container                                           */
+/*────────────────────────────────────────────────────────────────────*/
+#unityContainer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* sits above parallax layers */
+}
+
+/*────────────────────────────────────────────────────────────────────*/
+/* 3) Parallax Layers Container                                        */
+/*────────────────────────────────────────────────────────────────────*/
+#parallaxContainer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0; /* behind everything */
+}
+
+/* Oversize each layer by 110% and shift by –5% so the extra 10% splits evenly */
+.parallax-layer {
+  position: absolute;
+  top: -5%;
+  left: -5%;
+  width: 110%;
+  height: 110%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  will-change: transform; /* hint for GPU-accelerated transforms */
+}
+
+/* Filenames must match exactly (case-sensitive) */
+#layer-back {
+  background-image: url('parallax-back.jpg');
+  z-index: 0;
+}
+#layer-mid {
+  background-image: url('parallax-mid.png');
+  z-index: 1;
+}
+#layer-front {
+  background-image: url('parallax-front.png');
+  z-index: 2;
+}
+
+/*────────────────────────────────────────────────────────────────────*/
+/* 4) Loading Overlay (no dark shade, only content)                    */
+/*────────────────────────────────────────────────────────────────────*/
+#loadingOverlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10; /* above canvas + parallax */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Removed #overlayShade */
+
+/* Content container is centered by flex above and now also centers its children */
+#overlayContent {
+  position: relative;
+  z-index: 11;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center children horizontally */
+  text-align: center;
+  color: #fff;
+  pointer-events: none; /* allow mouse events to reach parallax */
+}
+
+/*────────────────────────────────────────────────────────────────────*/
+/* 5) Flipbook Logo (20-frame sprite, jumping frames, scaled 120%)    */
+/*────────────────────────────────────────────────────────────────────*/
+/* Each frame is 100×100 px, so sprite width is 2000×100 px. We animate
+   background-position from 0 → −1900 px in 20 discrete steps (each −100 px). */
+#flipbookLogo {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 20px;
+  background-image: url('logo-spritesheet.png');
+  background-repeat: no-repeat;
+  animation: flipbookAnim 2s steps(20) infinite;
+  transform: scale(1.2) translateY(-20px);
+  transform-origin: center center;
+}
+
+@keyframes flipbookAnim {
+  from { background-position: 1px   0px; }
+  to   { background-position: -1999px 0px; }
+}
+
+/*────────────────────────────────────────────────────────────────────*/
+/* 6) Progress Bar                                                     */
+/*────────────────────────────────────────────────────────────────────*/
+#progressContainer {
+  width: 300px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 0 auto 8px;
+}
+
+#progressBar {
+  height: 100%;
+  width: 0%;
+  background: #313D77;  /* Updated color */
+  transition: width 0.2s ease-out;
+}
+
+/* Hide the percentage text */
+#progressPercent {
+  display: none;
+}
+
+/*────────────────────────────────────────────────────────────────────*/
+/* 7) Fade-Out Animation                                               */
+/*────────────────────────────────────────────────────────────────────*/
+.fadeOut {
+  animation: fadeOutOverlay 0.8s forwards;
+}
+
+@keyframes fadeOutOverlay {
+  to { opacity: 0; }
+}
+
+/*────────────────────────────────────────────────────────────────────*/
+/* 8) Reduced-Motion Fallback                                          */
+/*────────────────────────────────────────────────────────────────────*/
+@media (prefers-reduced-motion: reduce) {
+  /* Stop the flipbook from animating */
+  #flipbookLogo {
+    animation: none !important;
+  }
+  /* Freeze parallax layers in place */
+  .parallax-layer {
+    transform: none !important;
+  }
+}
