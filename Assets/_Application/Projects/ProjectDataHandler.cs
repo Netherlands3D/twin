@@ -25,6 +25,7 @@ namespace Netherlands3D.Twin.Projects
         [UsedImplicitly] private CredentialHandler credentialHandler;// don't remove, this is used in LoadDefaultProject()
         [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
         [SerializeField] private ProjectDataStore projectDataStore;
+        [SerializeField] private Configuration.Configuration configuration;
 
         public List<ProjectData> undoStack = new();
         public List<ProjectData> redoStack = new();
@@ -185,13 +186,13 @@ namespace Netherlands3D.Twin.Projects
 
         private void LoadDefaultProject()
         {
+            // var filePath = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
+            var filePath = configuration.ProjectUrl;
 #if UNITY_WEBGL && !UNITY_EDITOR
-            var url = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
-            Debug.Log("loading default project file: " + url);
-            credentialHandler.SetUri(url);
+            Debug.Log("loading default project file: " + filePath);
+            credentialHandler.SetUri(filePath);
             credentialHandler.ApplyCredentials();
 #else
-            var filePath = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
             Debug.Log("loading default project file: " + filePath);
             projectDataStore.LoadFromFile(filePath);
 #endif
