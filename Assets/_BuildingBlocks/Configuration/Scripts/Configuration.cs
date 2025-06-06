@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Functionalities;
@@ -18,6 +19,7 @@ namespace Netherlands3D.Twin.Configuration
     public class Configuration : ScriptableObject, IConfiguration
     {
         [SerializeField] private string title = "Amersfoort";
+        [SerializeField] private string projectUrl = Path.Combine(Application.streamingAssetsPath, "ProjectTemplate.nl3d");
         [SerializeField] private Coordinate origin = new(CoordinateSystem.RDNAP, 155207, 462945, 0);
         [SerializeField] public List<Functionality> Functionalities = new();
         [SerializeField] private string corsProxyUrl = null;
@@ -33,6 +35,7 @@ namespace Netherlands3D.Twin.Configuration
         }
 
         public string CorsProxyUrl => corsProxyUrl;
+        public string ProjectUrl => projectUrl;
 
         public Coordinate Origin
         {
@@ -131,6 +134,11 @@ namespace Netherlands3D.Twin.Configuration
                 corsProxyUrl = jsonNode["corsProxyUrl"];
             }
 
+            if (jsonNode["projectUrl"] != null)
+            {
+                projectUrl = jsonNode["projectUrl"];
+            }
+
             Origin = new Coordinate(
                 jsonNode["origin"]["epsg"],
                 jsonNode["origin"]["x"],
@@ -160,6 +168,12 @@ namespace Netherlands3D.Twin.Configuration
             if (string.IsNullOrEmpty(originFromQueryString) == false)
             {
                 LoadOriginFromString(originFromQueryString);
+            }
+
+            var projectUrlFromQueryString = queryParameters.Get("project");
+            if (string.IsNullOrEmpty(projectUrlFromQueryString) == false)
+            {
+                projectUrl = projectUrlFromQueryString;
             }
 
             var functionalitiesFromQueryString = queryParameters.Get("features") ?? queryParameters.Get("functionalities");
