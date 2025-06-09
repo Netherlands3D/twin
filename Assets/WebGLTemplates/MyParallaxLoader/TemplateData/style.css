@@ -1,5 +1,17 @@
 /*────────────────────────────────────────────────────────────────────*/
-/* 1) Reset & Full-Viewport Setup                                      */
+/* 0) Variables & Font Import (from oldstyle.css)                 */
+/*────────────────────────────────────────────────────────────────────*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+:root {
+  --color-blue-100: #DFE8F2;
+  --color-blue-200: #CCD7E4;
+  --color-blue-900: #2F3550;
+  --border-radius-default: .25rem;
+  --border-radius-md: .5rem;
+}
+
+/*────────────────────────────────────────────────────────────────────*/
+/* 1) Base Reset & Full-Viewport Setup                              */
 /*────────────────────────────────────────────────────────────────────*/
 html, body {
   margin: 0;
@@ -7,93 +19,89 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #000; /* fallback while images load */
+  box-sizing: border-box;
+  font-family: 'Inter', 'Roboto', 'Helvetica', sans-serif;
+  color: var(--color-blue-900);
+  background: #000; /* fallback */
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* Optional background from old style */
+body {
+  background: url('twin-background.png') no-repeat center center;
+  background-size: cover;
 }
 
 /*────────────────────────────────────────────────────────────────────*/
-/* 2) Unity Canvas Container                                           */
-/*────────────────────────────────────────────────────────────────────*/
-#unityContainer {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1; /* sits above parallax layers */
-}
-
-/*────────────────────────────────────────────────────────────────────*/
-/* 3) Parallax Layers Container                                        */
+/* 2) Parallax Layers Container                                    */
 /*────────────────────────────────────────────────────────────────────*/
 #parallaxContainer {
   position: absolute;
   top: 0; left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   overflow: hidden;
-  z-index: 0; /* behind everything */
+  z-index: 0;
 }
-
-/* Oversize each layer by 110% and shift by –5% so the extra 10% splits evenly */
 .parallax-layer {
   position: absolute;
-  top: -5%;
-  left: -5%;
-  width: 110%;
-  height: 110%;
+  top: -5%; left: -5%;
+  width: 110%; height: 110%;
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  will-change: transform; /* hint for GPU-accelerated transforms */
+  will-change: transform;
 }
+#layer-back   { background-image: url('parallax-back.jpg');   z-index: 0; }
+#layer-mid    { background-image: url('parallax-mid.png');    z-index: 1; }
+#layer-front  { background-image: url('parallax-front.png');  z-index: 2; }
 
-/* Filenames must match exactly (case-sensitive) */
-#layer-back {
-  background-image: url('parallax-back.jpg');
-  z-index: 0;
-}
-#layer-mid {
-  background-image: url('parallax-mid.png');
+/*────────────────────────────────────────────────────────────────────*/
+/* 3) Unity Container & Canvas (oldstyle classes)                   */
+/*────────────────────────────────────────────────────────────────────*/
+#unityContainer, #unity-container {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   z-index: 1;
 }
-#layer-front {
-  background-image: url('parallax-front.png');
-  z-index: 2;
+#unity-canvas, #unity-canvas {
+  width: 100%; height: 100%;
+  background: transparent;
+}
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 /*────────────────────────────────────────────────────────────────────*/
-/* 4) Loading Overlay (no dark shade, only content)                    */
+/* 4) Loading Overlay & Flipbook Animation                         */
 /*────────────────────────────────────────────────────────────────────*/
 #loadingOverlay {
   position: absolute;
   top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10; /* above canvas + parallax */
+  width: 100%; height: 100%;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
-
-/* Removed #overlayShade */
-
-/* Content container is centered by flex above and now also centers its children */
 #overlayContent {
   position: relative;
   z-index: 11;
   display: flex;
   flex-direction: column;
-  align-items: center; /* center children horizontally */
+  align-items: center;
   text-align: center;
   color: #fff;
-  pointer-events: none; /* allow mouse events to reach parallax */
+  pointer-events: none;
 }
-
-/*────────────────────────────────────────────────────────────────────*/
-/* 5) Flipbook Logo (20-frame sprite, jumping frames, scaled 120%)    */
-/*────────────────────────────────────────────────────────────────────*/
-/* Each frame is 100×100 px, so sprite width is 2000×100 px. We animate
-   background-position from 0 → −1900 px in 20 discrete steps (each −100 px). */
 #flipbookLogo {
   width: 100px;
   height: 100px;
@@ -104,57 +112,110 @@ html, body {
   transform: scale(1.2) translateY(-20px);
   transform-origin: center center;
 }
-
 @keyframes flipbookAnim {
   from { background-position: 1px   0px; }
   to   { background-position: -1999px 0px; }
 }
 
-/*────────────────────────────────────────────────────────────────────*/
-/* 6) Progress Bar                                                     */
-/*────────────────────────────────────────────────────────────────────*/
 #progressContainer {
-  width: 300px;
-  height: 12px;
-  background: rgba(255, 255, 255, 0.2);
+  width: 300px; height: 12px;
+  background: rgba(255,255,255,0.2);
   border-radius: 6px;
   overflow: hidden;
   margin: 0 auto 8px;
 }
-
 #progressBar {
-  height: 100%;
-  width: 0%;
-  background: #313D77;  /* Updated color */
+  height: 100%; width: 0%;
+  background: #313D77;
   transition: width 0.2s ease-out;
 }
-
-/* Hide the percentage text */
 #progressPercent {
+  margin-top: .5rem;
+  color: var(--color-blue-900);
+  font-size: .7rem;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/*────────────────────────────────────────────────────────────────────*/
+/* 5) Debug Panel, Dialogs & Buttons (from oldstyle.css)            */
+/*────────────────────────────────────────────────────────────────────*/
+#nl3d-debug {
   display: none;
+  height: auto;
+  background: rgba(255,255,255,.5);
+  align-items: center;
+  padding: .25rem .5rem;
+  font-size: .7rem;
+  border-bottom: 1px solid var(--color-blue-100);
+}
+#nl3d-debug.--visible { display: flex; }
+.debug-badge {
+  display: inline-block;
+  background: var(--color-blue-100);
+  border-radius: 9999px;
+  padding: .2rem .5rem;
+  font-size: 80%;
+}
+#unity-mobile-warning, #unity-load-error {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  width: 350px;
+}
+#unity-mobile-warning.--visible, #unity-load-error.--visible {
+  display: block;
+}
+@media (max-width: 600px) {
+  #unity-mobile-warning, #unity-load-error {
+    top: 10%; transform: translate(-50%);
+  }
 }
 
 /*────────────────────────────────────────────────────────────────────*/
-/* 7) Fade-Out Animation                                               */
+/* 6) Dialog Headings & Buttons                                      */
 /*────────────────────────────────────────────────────────────────────*/
-.fadeOut {
-  animation: fadeOutOverlay 0.8s forwards;
+.dialog {
+  background: white;
+  border: 2px solid var(--color-blue-100);
+  border-radius: var(--border-radius-default);
+  padding: 1rem;
+  font-size: .875rem;
 }
-
-@keyframes fadeOutOverlay {
-  to { opacity: 0; }
+.paragraph-heading {
+  border-left: 2px solid var(--color-blue-900);
+  margin-bottom: .75rem;
+  padding-left: var(--border-radius-default);
 }
+.dialog--header {
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--color-blue-100);
+  display: flex;
+  align-items: center;
+  gap: .375rem;
+  font-weight: bold;
+}
+.dialog--header-icon { height: .8rem; }
+.dialog--footer { text-align: right; margin-top: .75rem; }
+.button {
+  display: inline-block;
+  border: 1px solid var(--color-blue-200);
+  color: var(--color-blue-900);
+  text-decoration: none;
+  padding: .75rem;
+  border-radius: var(--border-radius-md);
+}
+#nl3d-back-button { display: none; }
+#nl3d-back-button.--visible { display: inline-block; }
 
 /*────────────────────────────────────────────────────────────────────*/
-/* 8) Reduced-Motion Fallback                                          */
+/* 7) Accessibility & Reduced-Motion                                  */
 /*────────────────────────────────────────────────────────────────────*/
+canvas + * { z-index: 2; }
 @media (prefers-reduced-motion: reduce) {
-  /* Stop the flipbook from animating */
-  #flipbookLogo {
-    animation: none !important;
-  }
-  /* Freeze parallax layers in place */
-  .parallax-layer {
-    transform: none !important;
-  }
+  #flipbookLogo { animation: none !important; }
+  .parallax-layer { transform: none !important; }
 }
