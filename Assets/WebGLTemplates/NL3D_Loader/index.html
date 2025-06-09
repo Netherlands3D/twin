@@ -10,14 +10,6 @@
     <!-- Visual style CSS -->
     <link rel="stylesheet" href="TemplateData/style.css" />
     <script src="js/mobile-detect.min.js"></script>
-    <!-- Polyfill for Safari WebGL2 context on non-canvas elements -->
-    <script>
-        if (!Element.prototype.getContextSafariWebGL2Fixed) {
-            Element.prototype.getContextSafariWebGL2Fixed = function (contextType, attributes) {
-                return HTMLCanvasElement.prototype.getContext.call(this, contextType, attributes);
-            };
-        }
-    </script>
 </head>
 <body>
     <!-- Parallax Layers -->
@@ -76,9 +68,9 @@
       function ShowDebugPanel() {
           const params = new URLSearchParams(window.location.search);
           if (params.has('debug')) {
-              document.getElementById('nl3d-debug').style.display = 'block';
-              document.getElementById('nl3d-on-mobile').textContent = isMobileDevice ? 'Yes' : 'No';
-              document.getElementById('nl3d-user-agent').textContent = navigator.userAgent;
+              const dbg = document.getElementById('nl3d-debug');
+              dbg.style.display = 'flex';
+              dbg.innerHTML = `<p>{{{ PRODUCT_NAME }}} v{{{ PRODUCT_VERSION }}} · Mobile: ${isMobileDevice?'Yes':'No'} · User Agent: ${navigator.userAgent}</p>`;
           }
       }
 
@@ -96,25 +88,32 @@
           };
           if (isMobileDevice) config.devicePixelRatio = 2;
 
+          // Ensure overlay is visible
           document.getElementById('unity-mobile-warning').classList.remove('--visible');
           const overlay = document.getElementById('loadingOverlay');
           overlay.style.display = 'flex';
 
-          // Load unity loader script
+          // Create and append canvas for Unity
+          const container = document.getElementById('unityContainer');
+          container.innerHTML = '';
+          const canvas = document.createElement('canvas');
+          canvas.id = 'unity-canvas';
+          canvas.className = 'unity-canvas noselect';
+          container.appendChild(canvas);
+
+          // Load Unity loader script
           const script = document.createElement('script');
           script.src = loaderUrl;
           script.onerror = () => { document.getElementById('unity-load-error').classList.add('--visible'); };
           script.onload = () => {
               createUnityInstance(
-                  document.getElementById('unityContainer'),
+                  canvas,
                   config,
                   progress => {
                       const pct = Math.round(progress * 100);
                       document.getElementById('progressBar').style.width = `${pct}%`;
                       document.getElementById('progressPercent').textContent = `${pct}%`;
-                      if (pct === 100) {
-                          setTimeout(() => overlay.style.display = 'none', 500);
-                      }
+                      if (pct === 100) setTimeout(() => overlay.style.display = 'none', 500);
                   }
               ).then(instance => { unityInstance = instance; })
                .catch(err => alert(err));
@@ -124,9 +123,7 @@
 
       ShowDebugPanel();
       if (isMobileDevice) {
-          document.getElementById('unityContainer').classList.add('unity-mobile');
           document.getElementById('unity-mobile-warning').classList.add('--visible');
-          document.getElementById('nl3d-back-button').classList.toggle('--visible', history.length > 2);
       } else {
           LoadUnity();
       }
