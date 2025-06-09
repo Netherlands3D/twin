@@ -7,68 +7,40 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes">
     <title>NL3D | {{{ PRODUCT_VERSION }}}</title>
-    <!-- Visual style CSS: ensure both original and merged styles load -->
+    <!-- Visual style CSS -->
     <link rel="stylesheet" href="TemplateData/style.css" />
     <script src="js/mobile-detect.min.js"></script>
+    <!-- Polyfill for Safari WebGL2 context on non-canvas elements -->
+    <script>
+        if (!Element.prototype.getContextSafariWebGL2Fixed) {
+            Element.prototype.getContextSafariWebGL2Fixed = function (contextType, attributes) {
+                return HTMLCanvasElement.prototype.getContext.call(this, contextType, attributes);
+            };
+        }
+    </script>
 </head>
 <body>
-    <!-- Parallax Layers (Visual Style) -->
+    <!-- Parallax Layers -->
     <div id="parallaxContainer">
         <div class="parallax-layer" id="layer-back"></div>
         <div class="parallax-layer" id="layer-mid"></div>
         <div class="parallax-layer" id="layer-front"></div>
     </div>
 
-    <!-- Debug Panel (Functional) -->
-    <div id="nl3d-debug" class="debug-panel">
-        <p>{{{ PRODUCT_NAME }}} v{{{ PRODUCT_VERSION }}} &middot; Mobile: <span id="nl3d-on-mobile" class="debug-badge">Unknown</span> &middot; User Agent: <span id="nl3d-user-agent" class="debug-badge">Unknown</span></p>
-    </div>
+    <!-- Debug Panel -->
+    <div id="nl3d-debug" class="debug-panel"></div>
 
-    <!-- Mobile Warning Dialog (Functional) -->
-    <div id="unity-mobile-warning" class="dialog" style="z-index:20;">
-        <div class="dialog--header">
-            <svg viewBox="0 0 22 17" class="dialog--header-icon" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1.07699 14.4335L10.176 1.19861C10.5733 0.620645 11.4267 0.620645 11.824 1.19861L20.923 14.4335C21.3792 15.097 20.9041 16 20.099 16H1.90103C1.09585 16 0.620831 15.097 1.07699 14.4335Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                <rect x="10" y="12.0008" width="2" height="1.81818" fill="currentColor" />
-                <rect x="10" y="4.72772" width="2" height="6.36364" fill="currentColor" />
-            </svg>
-            Waarschuwing mobiele weergave
-        </div>
-        <div class="paragraph-heading">Let op!</div>
-        <p>
-            Netherlands 3D is nog niet geoptimaliseerd voor weergave op mobiele apparaten. Hierdoor kan het
-            voorkomen dat de applicatie niet optimaal functioneert en kan daardoor voor onverwachte resultaten
-            zorgen.
-        </p>
-        <footer class="dialog--footer">
-            <a href="#" onclick="history.back()" class="button" id="nl3d-back-button">Terug</a>
-            <a href="#" onclick="LoadUnity()" class="button">Ok, begrepen</a>
-        </footer>
-    </div>
+    <!-- Mobile Warning Dialog -->
+    <div id="unity-mobile-warning" class="dialog" style="z-index:20;"></div>
 
-    <!-- Load Error Dialog (Functional) -->
-    <div id="unity-load-error" class="dialog" style="z-index:20;">
-        <div class="dialog--header">
-            <svg viewBox="0 0 22 17" class="dialog--header-icon" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1.07699 14.4335L10.176 1.19861C10.5733 0.620645 11.4267 0.620645 11.824 1.19861L20.923 14.4335C21.3792 15.097 20.9041 16 20.099 16H1.90103C1.09585 16 0.620831 15.097 1.07699 14.4335Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                <rect x="10" y="12.0008" width="2" height="1.81818" fill="currentColor" />
-                <rect x="10" y="4.72772" width="2" height="6.36364" fill="currentColor" />
-            </svg>
-            Er is iets misgegaan
-        </div>
-        <div class="paragraph-heading">Let op!</div>
-        <p>
-            Tijdens het laden van Netherlands 3D is een fout opgetreden. Probeer het nogmaals of neem contact met ons op.
-        </p>
-    </div>
+    <!-- Load Error Dialog -->
+    <div id="unity-load-error" class="dialog" style="z-index:20;"></div>
 
-    <!-- Loading Overlay (Visual Style with Persistent Flipbook Animation) -->
+    <!-- Loading Overlay with Flipbook -->
     <div id="loadingOverlay">
         <div id="overlayContent">
             <div id="flipbookLogo"></div>
-            <div id="progressContainer">
-                <div id="progressBar"></div>
-            </div>
+            <div id="progressContainer"><div id="progressBar"></div></div>
             <p id="progressPercent">0%</p>
         </div>
     </div>
@@ -86,10 +58,8 @@
             };
             const maxTranslate = { back: 0, mid: 20, front: 40 };
             window.addEventListener('mousemove', e => {
-                const w = window.innerWidth;
-                const h = window.innerHeight;
-                const nx = (e.clientX / w) - 0.5;
-                const ny = (e.clientY / h) - 0.5;
+                const w = window.innerWidth, h = window.innerHeight;
+                const nx = (e.clientX / w) - 0.5, ny = (e.clientY / h) - 0.5;
                 layers.back.style.transform = 'translate(0px, 0px)';
                 layers.mid.style.transform = `translate(${-nx * maxTranslate.mid}px, ${-ny * maxTranslate.mid}px)`;
                 layers.front.style.transform = `translate(${-nx * maxTranslate.front}px, ${-ny * maxTranslate.front}px)`;
@@ -104,25 +74,25 @@
       let unityInstance;
 
       function ShowDebugPanel() {
-          const urlParams = new URLSearchParams(window.location.search);
-          if (urlParams.get('debug') !== null) {
+          const params = new URLSearchParams(window.location.search);
+          if (params.has('debug')) {
               document.getElementById('nl3d-debug').style.display = 'block';
               document.getElementById('nl3d-on-mobile').textContent = isMobileDevice ? 'Yes' : 'No';
-              document.getElementById('nl3d-user-agent').textContent = window.navigator.userAgent;
+              document.getElementById('nl3d-user-agent').textContent = navigator.userAgent;
           }
       }
 
       function LoadUnity() {
           const buildUrl = 'Build';
-          const loaderUrl = buildUrl + '/{{{ LOADER_FILENAME }}}';
+          const loaderUrl = `${buildUrl}/{{{ LOADER_FILENAME }}}`;
           const config = {
-              dataUrl:            buildUrl + '/{{{ DATA_FILENAME }}}',
-              frameworkUrl:       buildUrl + '/{{{ FRAMEWORK_FILENAME }}}',
-              codeUrl:            buildUrl + '/{{{ CODE_FILENAME }}}',
+              dataUrl:    `${buildUrl}/{{{ DATA_FILENAME }}}`,
+              frameworkUrl:`${buildUrl}/{{{ FRAMEWORK_FILENAME }}}`,
+              codeUrl:    `${buildUrl}/{{{ CODE_FILENAME }}}`,
               streamingAssetsUrl: 'StreamingAssets',
-              companyName:        '{{{ COMPANY_NAME }}}',
-              productName:        '{{{ PRODUCT_NAME }}}',
-              productVersion:     '{{{ PRODUCT_VERSION }}}'
+              companyName:   '{{{ COMPANY_NAME }}}',
+              productName:   '{{{ PRODUCT_NAME }}}',
+              productVersion:'{{{ PRODUCT_VERSION }}}'
           };
           if (isMobileDevice) config.devicePixelRatio = 2;
 
@@ -130,28 +100,24 @@
           const overlay = document.getElementById('loadingOverlay');
           overlay.style.display = 'flex';
 
+          // Load unity loader script
           const script = document.createElement('script');
           script.src = loaderUrl;
-          script.onerror = () => {
-              document.getElementById('unity-load-error').classList.add('--visible');
-          };
+          script.onerror = () => { document.getElementById('unity-load-error').classList.add('--visible'); };
           script.onload = () => {
               createUnityInstance(
                   document.getElementById('unityContainer'),
                   config,
                   progress => {
                       const pct = Math.round(progress * 100);
-                      document.getElementById('progressBar').style.width = pct + '%';
-                      document.getElementById('progressPercent').textContent = pct + '%';
+                      document.getElementById('progressBar').style.width = `${pct}%`;
+                      document.getElementById('progressPercent').textContent = `${pct}%`;
                       if (pct === 100) {
-                          setTimeout(() => {
-                              overlay.style.display = 'none';
-                          }, 500);
+                          setTimeout(() => overlay.style.display = 'none', 500);
                       }
                   }
-              ).then(instance => {
-                  unityInstance = instance;
-              }).catch(message => { alert(message); });
+              ).then(instance => { unityInstance = instance; })
+               .catch(err => alert(err));
           };
           document.body.appendChild(script);
       }

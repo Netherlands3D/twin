@@ -30,7 +30,6 @@ html, body {
 
 /* Optional background from old style */
 body {
-  background: url('twin-background.png') no-repeat center center;
   background-size: cover;
 }
 
