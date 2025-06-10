@@ -93,7 +93,7 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
 
         private void CopySouthWestToClipboard()
         {
-            var text = $"{southExtentTextField.text},{westExtentTextField.text}";
+            var text = $"{westExtentTextField.text},{southExtentTextField.text}";
 #if UNITY_WEBGL && !UNITY_EDITOR
             CopyToClipboard(text);
 #else
@@ -103,7 +103,7 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
 
         private void CopyNorthEastToClipboard()
         {
-            var text = $"{northExtentTextField.text},{eastExtentTextField.text}";
+            var text = $"{eastExtentTextField.text},{northExtentTextField.text}";
 #if UNITY_WEBGL && !UNITY_EDITOR
             CopyToClipboard(text);
 #else
