@@ -47,6 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabIdentifier: b1bd3a7a50cb3bd4bb3236aadf5c32b6
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
+  OnStylingApplied:
+    m_PersistentCalls:
+      m_Calls: []
   onShow:
     m_PersistentCalls:
       m_Calls: []
@@ -74,7 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isenabled: 1
   tileSize: 1000
-  layerPriority: 0
+  layerPriority: -1
   Datasets: []
   pauseLoading: 0
   onLayerEnabled:
