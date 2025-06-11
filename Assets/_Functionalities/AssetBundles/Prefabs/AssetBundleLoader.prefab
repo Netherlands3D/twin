@@ -140,7 +140,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Onze datasets worden ingeladen.
+  m_text: De data wordt ingeladen.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 32ddfb0cac272234c9b6f41500eb9afb, type: 2}
   m_sharedMaterial: {fileID: -6169979864846303504, guid: 32ddfb0cac272234c9b6f41500eb9afb,
@@ -279,7 +279,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1536639797, guid: 273f161db5cda784ba2a95d15b93e9f1, type: 3}
+  m_Sprite: {fileID: -9220748665759891878, guid: 685ecaf306afba84585012e9385c6599,
+    type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -397,6 +398,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fillBar: {fileID: 3367348477220932366}
   logInConsole: 0
+  StartCanvas: {fileID: 0}
 --- !u!223 &2454038262805176610
 Canvas:
   m_ObjectHideFlags: 0
@@ -484,8 +486,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 380, y: 20}
+  m_AnchoredPosition: {x: 0.2, y: -5}
+  m_SizeDelta: {x: 216.4911, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7698831539478530963
 CanvasRenderer:
@@ -515,7 +517,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -9220748665759891878, guid: a9adbf9a01219e043ae932d061fb0d31,
+  m_Sprite: {fileID: -9220748665759891878, guid: 685ecaf306afba84585012e9385c6599,
     type: 3}
   m_Type: 1
   m_PreserveAspect: 0
