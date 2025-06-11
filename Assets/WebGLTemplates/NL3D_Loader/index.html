@@ -86,34 +86,51 @@
         })();
    
 
-    <!-- Functional Loading & Mobile Logic -->
+        // Mobile detection - isMobileDevice can be used in jslib files.
+        const md = new MobileDetect(window.navigator.userAgent);
+        const isMobileDevice = md.mobile() !== null;
 
-      const md = new MobileDetect(window.navigator.userAgent);
-      const isMobileDevice = md.mobile() !== null;
-      let unityInstance;
+        // Global Unity instance, populated in LoadUnity and can be used by jslib files
+        let unityInstance;
 
-      function ShowDebugPanel() {
-          const params = new URLSearchParams(window.location.search);
-          if (params.has('debug')) {
-              const dbg = document.getElementById('nl3d-debug');
-              dbg.style.display = 'flex';
-              dbg.innerHTML = `<p>{{{ PRODUCT_NAME }}} v{{{ PRODUCT_VERSION }}} · Mobile: ${isMobileDevice?'Yes':'No'} · User Agent: ${navigator.userAgent}</p>`;
-          }
-      }
+        // Dom element references
+        const container = document.querySelector("#unity-container");
+        const canvas = document.querySelector("#unity-canvas");
+        const loadingBar = document.querySelector("#unity-loading-bar");
+        const progressBarFull = document.querySelector("#unity-progress-bar-full");
+        const mobileWarning = document.querySelector("#unity-mobile-warning");
+        const loadError = document.querySelector("#unity-load-error");
+
+        function ShowDebugPanel() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const debugMode = urlParams.get('debug') !== null;
+            if (debugMode) {
+                document.querySelector("#nl3d-debug").classList.add('--visible');
+                document.querySelector("#nl3d-on-mobile").innerHTML = isMobileDevice ? 'Yes' : 'No';
+                document.querySelector("#nl3d-user-agent").innerHTML = window.navigator.userAgent;
+            }
+        }
 
       function LoadUnity() {
-          const buildUrl = 'Build';
-          const loaderUrl = `${buildUrl}/{{{ LOADER_FILENAME }}}`;
-          const config = {
-              dataUrl:    `${buildUrl}/{{{ DATA_FILENAME }}}`,
-              frameworkUrl:`${buildUrl}/{{{ FRAMEWORK_FILENAME }}}`,
-              codeUrl:    `${buildUrl}/{{{ CODE_FILENAME }}}`,
-              streamingAssetsUrl: 'StreamingAssets',
-              companyName:   '{{{ COMPANY_NAME }}}',
-              productName:   '{{{ PRODUCT_NAME }}}',
-              productVersion:'{{{ PRODUCT_VERSION }}}'
+          var buildUrl = "Build";
+          var loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
+          var config = {
+              dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
+              frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
+              codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+              // #if MEMORY_FILENAME
+              memoryUrl: buildUrl + "/{{{ MEMORY_FILENAME }}}",
+              // #endif
+              // #if SYMBOLS_FILENAME
+              symbolsUrl: buildUrl + "/{{{ SYMBOLS_FILENAME }}}",
+              // #endif
+              streamingAssetsUrl: "StreamingAssets",
+              companyName: "{{{ COMPANY_NAME }}}",
+              productName: "{{{ PRODUCT_NAME }}}",
+              productVersion: "{{{ PRODUCT_VERSION }}}",
           };
-          if (isMobileDevice) config.devicePixelRatio = 2;
+
+          mobileWarning.classList.remove('--visible');
 
           // Ensure overlay is visible
           document.getElementById('unity-mobile-warning').classList.remove('--visible');
@@ -129,31 +146,38 @@
           container.appendChild(canvas);
 
           // Load Unity loader script
-          const script = document.createElement('script');
+          var script = document.createElement("script");
           script.src = loaderUrl;
-          script.onerror = () => { document.getElementById('unity-load-error').classList.add('--visible'); };
+          script.onerror = () => {
+              loadError.classList.add('--visible');
+              loadingBar.remove();
+          }
           script.onload = () => {
-              createUnityInstance(
-                  canvas,
-                  config,
-                  progress => {
+              createUnityInstance(canvas, config, (progress) => {
                       const pct = Math.round(progress * 100);
                       document.getElementById('progressBar').style.width = `${pct}%`;
                       document.getElementById('progressPercent').textContent = `${pct}%`;
                       if (pct === 100) setTimeout(() => overlay.style.display = 'none', 500);
                   }
               ).then(instance => { unityInstance = instance; })
-               .catch(err => alert(err));
+                  .catch((message) => {
+                      alert(message);
+                  });
           };
           document.body.appendChild(script);
       }
 
-      ShowDebugPanel();
-      if (isMobileDevice) {
-          document.getElementById('unity-mobile-warning').classList.add('--visible');
-      } else {
-          LoadUnity();
-      }
+        ShowDebugPanel();
+
+        // Avoid draining fillrate performance on mobile devices,
+        // and default/override low DPI mode on mobile browsers by setting devicePixelRatio to 1.
+        if (isMobileDevice) {
+            container.className = "unity-mobile";
+            mobileWarning.classList.add('--visible');
+            document.querySelector('#nl3d-back-button').classList.toggle('--visible', history.length > 2);
+        } else {
+            LoadUnity();
+        }
     </script>
 </body>
 </html>
