@@ -1,4 +1,3 @@
-using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.UI.ColorPicker;
 using UnityEngine;
 
