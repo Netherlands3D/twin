@@ -13,27 +13,31 @@ namespace Netherlands3D.Twin.UI
 
         private void Start()
         {
-            if (GetComponent<Canvas>() != null) return;
-
-            CanvasID[] canvasses = FindObjectsByType<CanvasID>(FindObjectsSortMode.None);
-            foreach (CanvasID canvasID in canvasses)
+            Canvas canvas = GetComponent<Canvas>();
+            if (canvas != null) 
             {
-                if (canvasID.type == type)
-                {
-                    originalParent = transform.parent.gameObject;
-                    wasActiveInOriginalHierarchy = gameObject.activeInHierarchy;
-                    ActivationTracker tracker = originalParent.GetComponent<ActivationTracker>();
-                    if (!tracker)
-                        tracker = originalParent.AddComponent<ActivationTracker>();
-
-                    tracker.OnActivated += OnOriginalParentBecameActive;
-                    tracker.OnDeactivated += OnOriginalParentBecameInactive;
-                  
-                    transform.SetParent(canvasID.transform, true);
-                    gameObject.SetActive(wasActiveInOriginalHierarchy);
-                    break;
-                }
+                canvas.sortingOrder = (int)type;
+                return;
             }
+            //if this object is not a canvas it means it this object needs to be moved to its corresponding canvas 
+            canvas = GetCanvasByType(type);
+            if(canvas == null)
+            {
+                Debug.LogError($"expected a canvas with type {type} but none was found!");
+                return;
+            }
+
+            originalParent = transform.parent.gameObject;
+            wasActiveInOriginalHierarchy = gameObject.activeInHierarchy;
+            ActivationTracker tracker = originalParent.GetComponent<ActivationTracker>();
+            if (!tracker)
+                tracker = originalParent.AddComponent<ActivationTracker>();
+
+            tracker.OnActivated += OnOriginalParentBecameActive;
+            tracker.OnDeactivated += OnOriginalParentBecameInactive;
+
+            transform.SetParent(canvas.transform, true);
+            gameObject.SetActive(wasActiveInOriginalHierarchy);
         }
 
         private void OnOriginalParentBecameActive()
@@ -60,7 +64,21 @@ namespace Netherlands3D.Twin.UI
             {
                 OnDeactivated?.Invoke();
             }
+        }
 
+        public static Canvas GetCanvasByType(CanvasType type)
+        {
+            CanvasID[] canvasses = FindObjectsByType<CanvasID>(FindObjectsSortMode.None);
+            foreach (CanvasID canvasID in canvasses)
+            {
+                if (canvasID.type == type)
+                {
+                    Canvas canvas = canvasID.GetComponent<Canvas>();
+                    if (canvas != null) //this check is required because it should check all iterations until the canvas is found
+                        return canvas;
+                }
+            }
+            return null;
         }
     }
 }
