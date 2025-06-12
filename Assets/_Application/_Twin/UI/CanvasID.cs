@@ -61,6 +61,9 @@ namespace Netherlands3D.Twin.UI
 
         private void SortSiblingsByOrder()
         {
+            if (transform.parent == null)
+                return;
+
             var siblings = transform.parent
                 .GetComponentsInChildren<CanvasID>(includeInactive: true)
                 .OrderBy(c => c.renderOrder)
