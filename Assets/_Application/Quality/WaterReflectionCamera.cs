@@ -63,6 +63,12 @@ namespace Netherlands3D.Twin.Quality
             waterMaterial.SetTexture("_ReflectionCameraTexture", renderTexture);
         }
 
+        public void SetMaterial(Material material)
+        {
+            waterMaterial = material;
+            CreateNewRenderTexture();
+        }
+
         void LateUpdate()
         {
             followCamera = Camera.main;
