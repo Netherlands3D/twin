@@ -57,6 +57,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 material = new Material(material);
                 binaryMeshLayer.DefaultMaterialList[materialIndex] = material;
 
+                //todo this is a dirty hack to restore the waterreflection texture to the waterreflection camera
                 if(material.name.Contains("Twin_Water"))
                 {
                     WaterReflectionCamera waterCamera = FindAnyObjectByType<WaterReflectionCamera>();
