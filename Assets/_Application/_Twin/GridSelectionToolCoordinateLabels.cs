@@ -45,9 +45,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void Start()
         {
-            var canvasTransform = FindAnyObjectByType<Canvas>().transform; //todo: replace this with the correct canvas once we split them
-            northEastTooltip = CreateCornerPopout(canvasTransform, PivotPresets.MiddleLeft);
-            southWestTooltip = CreateCornerPopout(canvasTransform, PivotPresets.MiddleRight);
+            Canvas canvas = CanvasID.GetCanvasByType(CanvasType.World);
+            northEastTooltip = CreateCornerPopout(canvas.transform, PivotPresets.MiddleLeft);
+            southWestTooltip = CreateCornerPopout(canvas.transform, PivotPresets.MiddleRight);
         }
         
         private TextPopout CreateCornerPopout(Transform canvasTransform, PivotPresets pivotPoint)
