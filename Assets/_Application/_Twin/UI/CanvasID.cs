@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,8 +9,10 @@ namespace Netherlands3D.Twin.UI
     public class CanvasID : MonoBehaviour
     {        
         public CanvasType type;
+        public int renderOrder = 0;
         private GameObject originalParent;
         private bool wasActiveInOriginalHierarchy;
+
 
         private void Start()
         {
@@ -38,6 +41,7 @@ namespace Netherlands3D.Twin.UI
 
             transform.SetParent(canvas.transform, true);
             gameObject.SetActive(wasActiveInOriginalHierarchy);
+            SortSiblingsByOrder();
         }
 
         private void OnOriginalParentBecameActive()
@@ -48,6 +52,24 @@ namespace Netherlands3D.Twin.UI
         private void OnOriginalParentBecameInactive()
         {
             gameObject.SetActive(false);
+        }
+
+        private void OnEnable()
+        {
+            SortSiblingsByOrder();
+        }
+
+        private void SortSiblingsByOrder()
+        {
+            var siblings = transform.parent
+                .GetComponentsInChildren<CanvasID>(includeInactive: true)
+                .OrderBy(c => c.renderOrder)
+                .ToArray();
+
+            for (int i = 0; i < siblings.Length; i++)
+            {
+                siblings[i].transform.SetSiblingIndex(i);
+            }
         }
 
         private class ActivationTracker : MonoBehaviour
