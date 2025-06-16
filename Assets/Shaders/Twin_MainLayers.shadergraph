@@ -2593,8 +2593,8 @@
     "m_ObjectId": "6a4885ff20ed48ab95666d9dc9d3a68b",
     "m_Title": "Coloring mode",
     "m_Position": {
-        "x": -1963.0,
-        "y": -587.0
+        "x": -1963.0001220703125,
+        "y": -586.9999389648438
     }
 }
 
@@ -3078,7 +3078,7 @@
     "m_Title": "Special vertex color ID's",
     "m_Position": {
         "x": -2940.0,
-        "y": -266.0
+        "y": -265.9999694824219
     }
 }
 
@@ -4304,7 +4304,7 @@
             "referenceName": "USE_MESH_UV"
         }
     ],
-    "m_Value": 0,
+    "m_Value": 3,
     "m_IsEditable": true
 }
 
