@@ -82,7 +82,7 @@ namespace Netherlands3D.Tiles3D
         /// <summary>
         /// Load the content from an url
         /// </summary>
-        public void Load(UnityEngine.Material overrideMaterial = null, Dictionary<string, string> headers = null)
+        public void Load(UnityEngine.Material overrideMaterial = null, Dictionary<string, string> headers = null, bool verbose = false)
         {
             this.headers = headers;
             if (overrideMaterial != null)
@@ -95,6 +95,7 @@ namespace Netherlands3D.Tiles3D
 
             State = ContentLoadState.DOWNLOADING;
             parentTile.isLoading = true;
+            TIleContentLoader.debugLog = verbose;
             runningContentRequest = StartCoroutine(
            TIleContentLoader.DownloadContent(
                uri,

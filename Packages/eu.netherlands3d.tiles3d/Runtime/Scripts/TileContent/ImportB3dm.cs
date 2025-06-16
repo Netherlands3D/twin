@@ -15,7 +15,7 @@ namespace Netherlands3D.Tiles3D
 
         private static ImportSettings importSettings = new ImportSettings() { AnimationMethod = AnimationMethod.None };
 
-        public static async Task LoadB3dm(byte[] data,Tile tile,Transform containerTransform,  Action<bool> succesCallback, string sourcePath,bool parseAssetMetaData=false,bool parseSubObjects=false,UnityEngine.Material overrideMaterial=null)
+        public static async Task LoadB3dm(byte[] data,Tile tile,Transform containerTransform,  Action<bool> succesCallback, string sourcePath,bool parseAssetMetaData=false,bool parseSubObjects=false,UnityEngine.Material overrideMaterial=null, bool verbose = false)
         { 
             var memoryStream = new System.IO.MemoryStream(data);
             var b3dm = B3dmReader.ReadB3dm(memoryStream);
@@ -38,9 +38,13 @@ namespace Netherlands3D.Tiles3D
                 uri = new Uri(sourcePath);
             }
 
-            Debug.Log("starting gltfLoad");
+            if(verbose)
+                Debug.Log("starting gltfLoad");
+    
             success = await gltf.LoadGltfBinary(b3dm.GlbData, null, importSettings);
-            Debug.Log("gltfLoad has finished");
+    
+            if(verbose)
+                Debug.Log("gltfLoad has finished");
 
             if (success == false)
             {

@@ -18,8 +18,9 @@ namespace Netherlands3D.Tiles3D
         private Tile appendTilesTo;
         private Read3DTileset tilesetReader;
         public bool isbusy = false;
+        public bool debugLog;
 
-        public void DownloadSubtree(string url, ImplicitTilingSettings tilingSettings,Tile appendTilesTo, System.Action<Tile> callback)
+        public void DownloadSubtree(string url, ImplicitTilingSettings tilingSettings, Tile appendTilesTo, System.Action<Tile> callback)
         {
             isbusy = true;
             this.appendTilesTo = appendTilesTo;
@@ -30,9 +31,10 @@ namespace Netherlands3D.Tiles3D
             {
                 tilesetReader = GetComponent<Read3DTileset>();
                 subtreeUrl = tilesetReader.tilesetUrl.Replace(tilesetReader.tilesetFilename, appendTilesTo.contentUri);
-                                
             }
-            Debug.Log($"loading subtree: {subtreeUrl}");
+
+            if (debugLog)
+                Debug.Log($"loading subtree: {subtreeUrl}");
             //currentSubtreeLevels
             currentSubtreeLevels = settings.subtreeLevels;
             if (this.appendTilesTo.level + settings.subtreeLevels > settings.availableLevels)
@@ -55,7 +57,6 @@ namespace Netherlands3D.Tiles3D
             {
                 Debug.Log(www.error);
                 Debug.Log(subtreeUrl);
-                
             }
             else
             {
@@ -65,35 +66,36 @@ namespace Netherlands3D.Tiles3D
                 {
                     File.Delete(tempFilePath);
                 }
+
                 File.WriteAllBytes(tempFilePath, subtreeData);
                 using FileStream fileStream = File.Open(tempFilePath, FileMode.Open);
                 using BinaryReader binaryReader = new(fileStream);
 
                 subtree = SubtreeReader.ReadSubtree(binaryReader);
-                
+
                 // setup rootTile
-                
+
                 appendTilesTo.hascontent = (subtree.ContentAvailabiltyConstant == 1) || (subtree.ContentAvailability != null && subtree.ContentAvailability[0]);
 
                 AddChildren(appendTilesTo, 0, 0);
-                Read3DTileset tilesetreader = GetComponent<Read3DTileset>();
-                //tilesetreader.root = tile;
+
                 appendTilesTo.children.Add(tile);
-                if (sendResult!=null)
+                if (sendResult != null)
                 {
                     sendResult(appendTilesTo);
                 }
-                
             }
+
             isbusy = false;
-            Debug.Log("subtree loaded");
+            if (debugLog)
+                Debug.Log("subtree loaded");
         }
 
         public void AddChildren(Tile tile, int parentNortonIndex, int LevelStartIndex)
         {
             int localIndex = parentNortonIndex * 4;
-            int levelstart = LevelStartIndex + (int)Mathf.Pow(4, (tile.level-appendTilesTo.level));
-            
+            int levelstart = LevelStartIndex + (int)Mathf.Pow(4, (tile.level - appendTilesTo.level));
+
             AddChild(tile, localIndex, levelstart, 0);
             AddChild(tile, localIndex, levelstart, 1);
             AddChild(tile, localIndex, levelstart, 2);
@@ -112,26 +114,26 @@ namespace Netherlands3D.Tiles3D
             {
                 childTile.Y += 1;
             }
+
             childTile.geometricError = parentTile.geometricError / 2f;
-            childTile.boundingVolume = parentTile.boundingVolume.GetChildBoundingVolume(childNumber,settings.subdivisionScheme);
-           
+            childTile.boundingVolume = parentTile.boundingVolume.GetChildBoundingVolume(childNumber, settings.subdivisionScheme);
+
             // check geometric content
             if (childTile.level < appendTilesTo.level + currentSubtreeLevels)
             {
                 childTile.hascontent = (subtree.ContentAvailabiltyConstant == 1) || (subtree.ContentAvailability != null && subtree.ContentAvailability[localIndex + LevelStartIndex + childNumber]);
                 if (childTile.hascontent)
                 {
-                    childTile.contentUri = (settings.contentUri.Replace("{level}", childTile.level.ToString()).Replace("{x}", childTile.X.ToString()).Replace("{y}", childTile.Y.ToString())); ;
+                    childTile.contentUri = (settings.contentUri.Replace("{level}", childTile.level.ToString()).Replace("{x}", childTile.X.ToString()).Replace("{y}", childTile.Y.ToString()));
+                    ;
                 }
-
             }
 
             // check childTileAvailability
-            if (childTile.level<appendTilesTo.level+currentSubtreeLevels)
+            if (childTile.level < appendTilesTo.level + currentSubtreeLevels)
             {
                 if (subtree.TileAvailabiltyConstant == 1 || subtree.TileAvailability[localIndex + LevelStartIndex + childNumber])
                 {
-
                     AddChildren(childTile, localIndex + childNumber, LevelStartIndex);
                 }
             }
@@ -139,33 +141,30 @@ namespace Netherlands3D.Tiles3D
             //check subtree-availability
             if (childTile.level == appendTilesTo.level + currentSubtreeLevels)
             {
+                int indexnumber = localIndex + childNumber;
+                bool hasSubtree = true;
+                if (subtree.ChildSubtreeAvailability == null)
+                {
+                    hasSubtree = false;
+                }
+                else
+                {
+                    hasSubtree = subtree.ChildSubtreeAvailability[indexnumber];
+                }
 
-            int indexnumber = localIndex + childNumber;
-            bool hasSubtree = true;
-            if (subtree.ChildSubtreeAvailability == null)
-            {
-                hasSubtree = false;
+                if (hasSubtree)
+                {
+                    childTile.hascontent = true;
+                    childTile.contentUri = (settings.subtreeUri.Replace("{level}", childTile.level.ToString()).Replace("{x}", childTile.X.ToString()).Replace("{y}", childTile.Y.ToString()));
+                    if(debugLog)
+                        Debug.Log("child has subtree");
+                }
             }
-            else
-            {
-                hasSubtree = subtree.ChildSubtreeAvailability[indexnumber];
-            }
-            if (hasSubtree)
-            {
 
-                childTile.hascontent = true;
-                childTile.contentUri = (settings.subtreeUri.Replace("{level}", childTile.level.ToString()).Replace("{x}", childTile.X.ToString()).Replace("{y}", childTile.Y.ToString())); ;
-                Debug.Log("child has subtree");
-
-            }
-
-        }
-
-            if (childTile.hascontent || childTile.children.Count>0)
+            if (childTile.hascontent || childTile.children.Count > 0)
             {
                 parentTile.children.Add(childTile);
             }
-            
         }
     }
 }

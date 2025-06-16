@@ -12,7 +12,7 @@ namespace Netherlands3D.Tiles3D
     {
         private static ImportSettings importSettings = new ImportSettings() { AnimationMethod = AnimationMethod.None };
 
-        public async Task Load(byte[] data, Tile tile, Transform containerTransform, Action<bool> succesCallback, string sourcePath, bool parseAssetMetaData = false, bool parseSubObjects = false, UnityEngine.Material overrideMaterial = null)
+        public async Task Load(byte[] data, Tile tile, Transform containerTransform, Action<bool> succesCallback, string sourcePath, bool parseAssetMetaData = false, bool parseSubObjects = false, UnityEngine.Material overrideMaterial = null, bool verbose = false)
         {
             var consoleLogger = new GLTFast.Logging.ConsoleLogger();
             
@@ -27,10 +27,13 @@ namespace Netherlands3D.Tiles3D
             }
             RemoveCesiumRtcFromRequieredExtentions(ref data);
 
-            Debug.Log("starting gltfLoad");
+            if(verbose)
+                Debug.Log("starting gltfLoad");
+    
             success = await gltf.LoadGltfBinary(data, uri, importSettings);
             
-            Debug.Log("gltfLoad has finished");
+            if(verbose)
+                Debug.Log("gltfLoad has finished");
 
             if (success == false)
             {

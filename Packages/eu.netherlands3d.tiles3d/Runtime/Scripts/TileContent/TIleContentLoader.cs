@@ -4,19 +4,17 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System;
 using System.Text;
-
 using System.Threading.Tasks;
-
-
 #if UNITY_EDITOR
 using System.IO.Compression;
 #endif
+
 namespace Netherlands3D.Tiles3D
 {
     public class TIleContentLoader
     {
-
-
+        public static bool debugLog = false;
+        
         enum ContentType
         {
             undefined,
@@ -44,7 +42,9 @@ namespace Netherlands3D.Tiles3D
         }
         public static IEnumerator DownloadContent(string url, Transform containerTransform, Tile tile, Action<byte[],string> Callback, bool parseAssetMetaData = false, bool parseSubObjects = false, UnityEngine.Material overrideMaterial = null, bool bypassCertificateValidation = false, Dictionary<string, string> customHeaders = null)
         {
-            Debug.Log("starting download");
+            if(debugLog)
+                Debug.Log("starting download");
+            
             #region download data
             var webRequest = UnityWebRequest.Get(url);
             if (customHeaders != null)
@@ -66,10 +66,11 @@ namespace Netherlands3D.Tiles3D
             }
             #endregion
             byte[] contentBytes = webRequest.downloadHandler.data;
-            Debug.Log("downloaded data");
+            
+            if(debugLog)
+                Debug.Log("downloaded data");
+    
             Callback.Invoke(contentBytes, url);
-            
-            
         }
 
         public static async Task LoadContent(byte[] contentBytes,string sourceUri, Transform containerTransform, Tile tile, Action<bool> succesCallback, bool parseAssetMetaData = false, bool parseSubObjects = false, UnityEngine.Material overrideMaterial = null, bool bypassCertificateValidation = false, Dictionary<string, string> customHeaders = null)
@@ -91,7 +92,7 @@ namespace Netherlands3D.Tiles3D
             switch (contentType)
             {
                 case ContentType.b3dm:
-                     await ImportB3dm.LoadB3dm(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial);
+                     await ImportB3dm.LoadB3dm(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial, debugLog);
                     break;
                 case ContentType.pnts:
                     Debug.LogError(".pnts is not supported");
@@ -113,12 +114,12 @@ namespace Netherlands3D.Tiles3D
                     break;
                 case ContentType.glb:
                     importGlb = new ImportGlb();
-                    await importGlb.Load(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial);
+                    await importGlb.Load(contentBytes, tile, containerTransform, succesCallback, "", parseAssetMetaData, parseSubObjects, overrideMaterial, debugLog);
 
                     break;
                 case ContentType.gltf:
                     ImportGltf importGltf = new ImportGltf();
-                    await importGltf.Load(contentBytes, tile, containerTransform, succesCallback,sourceUri, parseAssetMetaData, parseSubObjects, overrideMaterial);
+                    await importGltf.Load(contentBytes, tile, containerTransform, succesCallback,sourceUri, parseAssetMetaData, parseSubObjects, overrideMaterial, debugLog);
 
                     break;
                 case ContentType.subtree:
@@ -134,7 +135,10 @@ namespace Netherlands3D.Tiles3D
         {
             //readMagic bytes
             string magic = Encoding.UTF8.GetString(content, 0, 4);
-            Debug.Log("magic: " + magic);
+    
+            if(debugLog)
+                Debug.Log("magic: " + magic);
+            
             switch (magic)
             {
                 case "b3dm":
