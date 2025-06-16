@@ -126,15 +126,15 @@ namespace Netherlands3D.Functionalities.Wms
                     if (foundCRS == CoordinateSystem.CRS84)
                     {
                         //this works for crs84 without the vx vy calculations
-                        //projector.Material.SetVector("_UV00", projectorUVCorners[0]); // LL
-                        //projector.Material.SetVector("_UV01", projectorUVCorners[3]); // UL
-                        //projector.Material.SetVector("_UV10", projectorUVCorners[1]); // LR
-                        //projector.Material.SetVector("_UV11", projectorUVCorners[2]); // UR
-
                         projector.Material.SetVector("_UV00", projectorUVCorners[0]); // LL
-                        projector.Material.SetVector("_UV01", projectorUVCorners[1]); // LR
+                        projector.Material.SetVector("_UV01", projectorUVCorners[3]); // UL
+                        projector.Material.SetVector("_UV10", projectorUVCorners[1]); // LR
                         projector.Material.SetVector("_UV11", projectorUVCorners[2]); // UR
-                        projector.Material.SetVector("_UV10", projectorUVCorners[3]); // UL
+
+                        //projector.Material.SetVector("_UV00", projectorUVCorners[0]); // LL
+                        //projector.Material.SetVector("_UV01", projectorUVCorners[1]); // LR
+                        //projector.Material.SetVector("_UV11", projectorUVCorners[2]); // UR
+                        //projector.Material.SetVector("_UV10", projectorUVCorners[3]); // UL
                     }
 
                     //force the depth to be at least larger than its height to prevent z-fighting
@@ -202,7 +202,6 @@ namespace Netherlands3D.Functionalities.Wms
                 double maxLat = double.MinValue;
 
                 Coordinate[] wgs84Corners = new Coordinate[4];
-
                 for (int i = 0; i < 4; i++)
                 {
                     Coordinate rdCorner = new Coordinate(CoordinateSystem.RDNAP, cornersRD[i].Item1, cornersRD[i].Item2, 0);
@@ -211,51 +210,14 @@ namespace Netherlands3D.Functionalities.Wms
                     if (wgs84Corners[i].value1 > maxLon) maxLon = wgs84Corners[i].value1;
                     if (wgs84Corners[i].value2 < minLat) minLat = wgs84Corners[i].value2;
                     if (wgs84Corners[i].value2 > maxLat) maxLat = wgs84Corners[i].value2;
-                }
-
-                var ll = wgs84Corners[0]; // LL
-                var lr = wgs84Corners[1]; // LR
-                var ul = wgs84Corners[3]; // UL
-
-                // Basisvectoren (in graden)
-                (double x, double y) vx = new(lr.value1 - ll.value1, lr.value2 - ll.value2); // X-as
-                (double x, double y) vy = new(ul.value1 - ll.value1, ul.value2 - ll.value2); // Y-as
-
+                }  
                 for (int i = 0; i < 4; i++)
                 {
-                    //double u = (wgs84Corners[i].value1 - minLon) / (maxLon - minLon);
-                    //double v = (wgs84Corners[i].value2 - minLat) / (maxLat - minLat);
-                    //projectorUVCorners[i] = new Vector2((float)u, (float)v);
-
-                    double dx = wgs84Corners[i].value1 - ll.value1;
-                    double dy = wgs84Corners[i].value2 - ll.value2;
-
-                    // Los op: u*vx + v*vy = (dx, dy)
-                    // Gebruik 2x2 matrixinversie
-                    double det = vx.x * vy.y - vx.y * vy.x;
-
-                    double u = (dx * vy.y - dy * vy.x) / det;
-                    double v = (-dx * vx.y + dy * vx.x) / det;
-
+                    double u = (wgs84Corners[i].value1 - minLon) / (maxLon - minLon);
+                    double v = (wgs84Corners[i].value2 - minLat) / (maxLat - minLat);
                     projectorUVCorners[i] = new Vector2((float)u, (float)v);
                 }
-
-                //double minX = tileChange.X;
-                //double minY = tileChange.Y;
-                //double maxX = tileChange.X + tileSize;
-                //double maxY = tileChange.Y + tileSize;
-
-                //for (int i = 0; i < 4; i++)
-                //{
-                //    double u = (cornersRD[i].Item1 - minX) / (maxX - minX);
-                //    double v = 1 - (cornersRD[i].Item2 - minY) / (maxY - minY);
-                //    projectorUVCorners[i] = new Vector2((float)u, (float)v);
-                //}
-
-                //for (int i = 0; i < 4; i++)
-                //{
-                //    wgs84Corners[i] = new Coordinate(CoordinateSystem.WGS84, cornersRD[i].Item1, cornersRD[i].Item2);
-                //}                
+              
                 double drx = wgs84Corners[3].value1 - wgs84Corners[0].value1;
                 double dry = wgs84Corners[3].value2 - wgs84Corners[0].value2;
                 double angleRadians = Math.Atan2(dry, drx);
