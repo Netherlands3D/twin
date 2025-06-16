@@ -21,6 +21,8 @@ namespace Netherlands3D.Functionalities.Wms
 {
     public class TextureProjectorBase : MonoBehaviour
     {
+        public Material Material => materialInstance;
+
         protected Texture2D texture;
         protected private Material materialInstance;
 
