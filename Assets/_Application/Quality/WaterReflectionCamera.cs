@@ -5,8 +5,6 @@ namespace Netherlands3D.Twin.Quality
 {
     public class WaterReflectionCamera : MonoBehaviour
     {
-        [SerializeField] private Material waterMaterial;
-
         private RenderTexture renderTexture;
 
         [SerializeField] private float scaleMultiplier = 0.1f;
@@ -33,7 +31,7 @@ namespace Netherlands3D.Twin.Quality
         private void OnEnable()
         {
             exampleFeatureKeyword = GlobalKeyword.Create(waterReflectionsFeatureKeyword);
-            waterMaterial.EnableKeyword(waterReflectionsFeatureKeyword);
+            Shader.EnableKeyword(waterReflectionsFeatureKeyword);
 
             if (!camera)
                 camera = GetComponent<Camera>();
@@ -47,7 +45,7 @@ namespace Netherlands3D.Twin.Quality
 
         private void OnDisable()
         {
-            waterMaterial.DisableKeyword(waterReflectionsFeatureKeyword);
+            Shader.DisableKeyword(waterReflectionsFeatureKeyword);
 
             camera.targetTexture = null;
             Destroy(renderTexture);
@@ -60,7 +58,7 @@ namespace Netherlands3D.Twin.Quality
             screenWidthOnInit = followCamera.pixelWidth;
             screenHeightOnInit = followCamera.pixelHeight;
             camera.targetTexture = renderTexture;
-            waterMaterial.SetTexture("_ReflectionCameraTexture", renderTexture);
+            Shader.SetGlobalTexture("_ReflectionCameraTexture", renderTexture);
         }
 
         void LateUpdate()

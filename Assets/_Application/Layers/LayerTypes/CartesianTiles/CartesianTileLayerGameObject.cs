@@ -1,11 +1,10 @@
-using System;
+using Netherlands3D.CartesianTiles;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.UI;
+using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.CartesianTiles;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Utility;
-using Netherlands3D.Twin.UI;
-using Netherlands3D.Services;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
