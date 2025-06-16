@@ -10362,11 +10362,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3825768464969730733, guid: 6ef3d66327e26d8479b217ee6b62a2f4,
         type: 3}
-      propertyPath: LogShifts
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3825768464969730733, guid: 6ef3d66327e26d8479b217ee6b62a2f4,
-        type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
