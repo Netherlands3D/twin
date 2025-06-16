@@ -134,10 +134,10 @@ namespace Netherlands3D.Tiles3D
                 ParentTile,
                 FinishedLoading,
                 parseAssetMetaData,
-               parseSubObjects,
-               overrideMaterial,
-               false,
-               headers
+                parseSubObjects,
+                overrideMaterial, 
+                false,
+                headers
                 );
         }
 
