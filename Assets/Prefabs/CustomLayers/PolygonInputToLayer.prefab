@@ -50,6 +50,9 @@ LineRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -228,6 +231,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -312,12 +318,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8252544850299417775}
-  - component: {fileID: 6055517019102079451}
-  - component: {fileID: 5075749786647668795}
   - component: {fileID: 6970481386311860828}
   - component: {fileID: 1166426914008804660}
-  - component: {fileID: 4087757287518604590}
-  - component: {fileID: 3350417391216088740}
+  - component: {fileID: 6055517019102079451}
+  - component: {fileID: 5075749786647668795}
+  - component: {fileID: 2199620996234264513}
+  - component: {fileID: 803599948804182999}
   m_Layer: 0
   m_Name: PolygonInputToLayer
   m_TagString: Untagged
@@ -340,9 +346,63 @@ Transform:
   m_Children:
   - {fileID: 5035265957184785311}
   - {fileID: 1272771895099388988}
+  - {fileID: 7523499849824955878}
   - {fileID: 4682479123126883472}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6970481386311860828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4543035819173704079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f01518e17ca84bcba8478a2b11f92a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  polygonInput: {fileID: 2971444630074657358}
+  lineInput: {fileID: 6819746166564945398}
+  defaultLineWidth: 10
+  polygonPropertySectionPrefab: {fileID: 3186418061294983386, guid: 599137b5f8b96463dbf2bd16d71cd26d,
+    type: 3}
+  gridInput: {fileID: 831591527348556828}
+--- !u!114 &1166426914008804660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4543035819173704079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda199de660f4334b8a50d8e350bdf29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 271a09cff13d5466d9d355af09c8c900, type: 2}
+  onTriggered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6970481386311860828}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.PolygonInputToLayer,
+          Assembly-CSharp
+        m_MethodName: ShowPolygonVisualisations
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTrue:
+    m_PersistentCalls:
+      m_Calls: []
+  onFalse:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6055517019102079451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -382,18 +442,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 7239524049806933421}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
         m_CallState: 2
   onTrue:
     m_PersistentCalls:
@@ -442,42 +490,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 5035265957184785282}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   onTrue:
     m_PersistentCalls:
       m_Calls: []
   onFalse:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6970481386311860828
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4543035819173704079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f01518e17ca84bcba8478a2b11f92a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  polygonInput: {fileID: 2971444630074657358}
-  lineInput: {fileID: 6819746166564945398}
-  defaultLineWidth: 10
-  polygonPropertySectionPrefab: {fileID: 3186418061294983386, guid: 599137b5f8b96463dbf2bd16d71cd26d,
-    type: 3}
---- !u!114 &1166426914008804660
+--- !u!114 &2199620996234264513
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -489,14 +508,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bda199de660f4334b8a50d8e350bdf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onEvent: {fileID: 11400000, guid: 271a09cff13d5466d9d355af09c8c900, type: 2}
+  onEvent: {fileID: 11400000, guid: d31eb758bf959466ebd75a3f79d86722, type: 2}
   onTriggered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6970481386311860828}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.PolygonInputToLayer,
-          Assembly-CSharp
-        m_MethodName: ShowPolygonVisualisations
+      - m_Target: {fileID: 7456305980478204805}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -506,13 +524,26 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 6970481386311860828}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerTypes.Polygons.PolygonInputToLayer,
+          eu.netherlands3d.twin
+        m_MethodName: SetGridInputModeToCreate
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   onTrue:
     m_PersistentCalls:
       m_Calls: []
   onFalse:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4087757287518604590
+--- !u!114 &803599948804182999
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -521,27 +552,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 4543035819173704079}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50fab43e07a540b89d245bd4ec8e4887, type: 3}
+  m_Script: {fileID: 11500000, guid: bda199de660f4334b8a50d8e350bdf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3350417391216088740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4543035819173704079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  worldTransformShifter: {fileID: 0}
-  referenceCoordinateSystem: 2
-  onPreShift:
+  onEvent: {fileID: 11400000, guid: a190728eac2c7460392df89e1ad25744, type: 2}
+  onTriggered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7456305980478204805}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6970481386311860828}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerTypes.Polygons.PolygonInputToLayer,
+          eu.netherlands3d.twin
+        m_MethodName: SetGridInputModeToEdit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  onTrue:
     m_PersistentCalls:
       m_Calls: []
-  onPostShift:
+  onFalse:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &4868054342503346395
@@ -601,6 +647,7 @@ GameObject:
   - component: {fileID: 5035265957184785311}
   - component: {fileID: 5035265957184785308}
   - component: {fileID: 2971444630074657358}
+  - component: {fileID: 2247364823442731689}
   m_Layer: 0
   m_Name: PolygonSelection_Polygon
   m_TagString: Untagged
@@ -644,6 +691,9 @@ LineRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -835,6 +885,19 @@ MonoBehaviour:
   previewLineHasChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2247364823442731689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5035265957184785282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207c9e4ebe1ab4cb493f293cc0c4cf32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDefaultActivatedService: 0
 --- !u!1 &6169829145916154088
 GameObject:
   m_ObjectHideFlags: 0
@@ -893,6 +956,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -978,6 +1044,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1103,6 +1172,9 @@ LineRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1200,6 +1272,7 @@ GameObject:
   - component: {fileID: 1272771895099388988}
   - component: {fileID: 5614695549320686730}
   - component: {fileID: 6819746166564945398}
+  - component: {fileID: 4442034151604228432}
   m_Layer: 0
   m_Name: PolygonSelection_Line
   m_TagString: Untagged
@@ -1243,6 +1316,9 @@ LineRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1434,6 +1510,19 @@ MonoBehaviour:
   previewLineHasChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4442034151604228432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7239524049806933421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207c9e4ebe1ab4cb493f293cc0c4cf32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDefaultActivatedService: 0
 --- !u!1 &7298217538574612641
 GameObject:
   m_ObjectHideFlags: 0
@@ -1492,6 +1581,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1734,3 +1826,137 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d602daece20d4d718251faaf0cb627c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &3469043276263805114
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8252544850299417775}
+    m_Modifications:
+    - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6970481386311860828}
+    - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CreateOrEditGridLayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.Twin.Layers.LayerTypes.Polygons.PolygonInputToLayer, eu.netherlands3d.twin
+      objectReference: {fileID: 0}
+    - target: {fileID: 6295639419868117823, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: m_Name
+      value: PolygonSelection_Grid
+      objectReference: {fileID: 0}
+    - target: {fileID: 6295639419868117823, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6362551884031212892, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6362551884031212892, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6362551884031212892, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6362551884031212892, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6362551884031212892, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6362551884031212892, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6362551884031212892, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6362551884031212892, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6362551884031212892, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6362551884031212892, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6295639419868117823, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4061060392049849136}
+  m_SourcePrefab: {fileID: 100100000, guid: dc5ce5f60fb3b074394ab446caa210d5, type: 3}
+--- !u!114 &831591527348556828 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 3469043276263805114}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7456305980478204805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6bafcfbd446e9c41acd7452b6146804, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &7456305980478204805 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6295639419868117823, guid: dc5ce5f60fb3b074394ab446caa210d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 3469043276263805114}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4061060392049849136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7456305980478204805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207c9e4ebe1ab4cb493f293cc0c4cf32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDefaultActivatedService: 0
+--- !u!4 &7523499849824955878 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6362551884031212892, guid: dc5ce5f60fb3b074394ab446caa210d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 3469043276263805114}
+  m_PrefabAsset: {fileID: 0}

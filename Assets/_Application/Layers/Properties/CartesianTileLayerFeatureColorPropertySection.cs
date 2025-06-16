@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class LayerColorPropertySection : PropertySectionWithLayerGameObject
+    public class CartesianTileLayerFeatureColorPropertySection : PropertySectionWithLayerGameObject
     {  
         [SerializeField] private RectTransform content;
         [SerializeField] private GameObject colorSwatchPrefab;
@@ -62,7 +62,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             swatches.Clear();
             layerContent.ClearAllChildren();
-            foreach (var layerFeature in layer.GetLayerFeatures().Values)
+            foreach (var layerFeature in layer.LayerFeatures.Values)
             {
                 swatches[layerFeature] = CreateSwatch(layerFeature);
                 SetSwatchColorFromFeature(layerFeature);
@@ -74,7 +74,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             GameObject swatchObject = Instantiate(colorSwatchPrefab, layerContent);
             ColorSwatch swatch = swatchObject.GetComponent<ColorSwatch>();
                 
-            string layerName = layerFeature.GetAttribute(CartesianTileLayerGameObject.MaterialNameIdentifier);
+            string layerName = layerFeature.GetAttribute(CartesianTileLayerStyler.MaterialNameIdentifier);
                 
             swatch.SetLayerName(layerName);
             swatch.SetInputText(layerName);
@@ -101,17 +101,19 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void SelectSwatch(ColorSwatch swatch)
         {
             ShowColorPicker();
-            colorPicker.SetColorPickerColor(swatch.Color);
+            colorPicker.PickColorWithoutNotify(swatch.Color);
 
             swatch.SetSelected(true);
         }
 
         private void DeselectAllSwatches()
         {
-            swatches.Values
-                .Where(swatch => swatch.IsSelected)
-                .ToList()
-                .ForEach(DeselectSwatch);
+            foreach (var (_, swatch) in swatches)
+            {
+                if (swatch.IsSelected) continue;
+                
+                DeselectSwatch(swatch);
+            }
         }
 
         private void DeselectSwatch(ColorSwatch swatch)
@@ -134,27 +136,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void SetColorizationStylingRule(LayerFeature layerFeature, Color color)
         {
-            int.TryParse(layerFeature.Attributes[CartesianTileLayerGameObject.MaterialIndexIdentifier], out int materialIndexIdentifier);
-
-            var stylingRuleName = ColorizationStyleRuleName(materialIndexIdentifier);
-
-            // Add or set the colorization of this feature by its material index
-            var stylingRule = new StylingRule(
-                stylingRuleName, 
-                Expr.EqualsTo(
-                    Expr.GetVariable(CartesianTileLayerGameObject.MaterialIndexIdentifier),
-                    materialIndexIdentifier.ToString()
-                )
-            );
-            stylingRule.Symbolizer.SetFillColor(color);
-                
-            layer.LayerData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
-            layer.ApplyStyling();
-        }
-
-        private static string ColorizationStyleRuleName(int materialIndexIdentifier)
-        {
-            return $"feature.{materialIndexIdentifier}.colorize";
+            CartesianTileLayerStyler.SetColor(layer, layerFeature, color);
         }
 
         private void UpdateSwatches()
@@ -169,17 +151,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             // if there is no swatch matching this layer feature, we can skip this update
             if (!swatches.TryGetValue(layerFeature, out var swatch)) return;
-            
-            int.TryParse(layerFeature.GetAttribute(CartesianTileLayerGameObject.MaterialIndexIdentifier), out int materialIndexIdentifier);
-            var stylingRuleName = ColorizationStyleRuleName(materialIndexIdentifier);
-            
-            // TODO: This can be done better
-            var defaultColor = ((Material)layerFeature.Geometry).color;
-            swatch.SetColor(defaultColor); 
 
-            if (!layer.LayerData.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule)) return;
-
-            Color? color = stylingRule.Symbolizer.GetFillColor();
+            var color = CartesianTileLayerStyler.GetColor(layer, layerFeature);
 
             swatch.SetColor(color.GetValueOrDefault(Color.white));
         }

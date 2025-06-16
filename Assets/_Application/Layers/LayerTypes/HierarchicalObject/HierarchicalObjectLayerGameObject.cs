@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
@@ -150,9 +152,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             //Position and rotation changes are handled by the WorldTransform, but should be updated in the project data
             //todo: add a == and != operator to Coordinate.cs to avoid having to do this
-            if(WorldTransform.Coordinate.value1 != previousCoordinate.value1 ||
-               WorldTransform.Coordinate.value2 != previousCoordinate.value2 ||
-               WorldTransform.Coordinate.value3 != previousCoordinate.value3)
+            if(Math.Abs(WorldTransform.Coordinate.value1 - previousCoordinate.value1) > 0.0001d ||
+               Math.Abs(WorldTransform.Coordinate.value2 - previousCoordinate.value2) > 0.0001d ||
+               Math.Abs(WorldTransform.Coordinate.value3 - previousCoordinate.value3) > 0.0001d)
             {
                 transformPropertyData.Position = WorldTransform.Coordinate;
                 previousCoordinate = WorldTransform.Coordinate;
@@ -229,8 +231,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnProxyTransformParentChanged()
         {
-            if (toggleScatterPropertySectionInstantiator.PropertySection != null)
-                toggleScatterPropertySectionInstantiator.PropertySection?.TogglePropertyToggle();
+            if (toggleScatterPropertySectionInstantiator.PropertySection)
+            {
+                toggleScatterPropertySectionInstantiator.PropertySection.TogglePropertyToggle();
+            }
         }
 
         public static ObjectScatterLayerGameObject ConvertToScatterLayer(HierarchicalObjectLayerGameObject objectLayerGameObject)
@@ -251,65 +255,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void ApplyStyling()
         {
-            var features = GetFeatures<MeshRenderer>();
+            // Dynamically create a list of Layer features because a different set of renderers could be present after
+            // an import or replacement.
+            var features = CreateFeaturesByType<MeshRenderer>();
+            
+            // Apply style to the features that was discovered
             foreach (var feature in features)
             {
-                ApplyStyling(feature);
+                HierarchicalObjectTileLayerStyler.Apply(this, GetStyling(feature), feature);
             }
-        }
-
-        /// <summary>
-        /// Finds the styling for this feature and applies it.
-        ///
-        /// It is expected that the features for a HierarchicalObjectLayerGameObject are meshRenderers, if they are not
-        /// we do not know how to style that and we ignore that feature.
-        /// </summary>
-        private void ApplyStyling(LayerFeature feature)
-        {
-            if (feature.Geometry is not MeshRenderer meshRenderer) return;
-
-            var symbolizer = GetStyling(feature);
-            var fillColor = symbolizer.GetFillColor();
-
-            // Keep the original material color if fill color is not set (null)
-            if (!fillColor.HasValue) return;
-
-            LayerData.Color = fillColor.Value;
-            SetUrpLitColorOptimized(meshRenderer, fillColor.Value);
-        }
-
-        public void SetUrpLitColorOptimized(MeshRenderer renderer, Color color, int? materialIndex = null)
-        {
-            int BaseColor = Shader.PropertyToID("_BaseColor");
-            // If a material index was provided: manipulate the start and end to do a single iteration in the loop with
-            // this material index, otherwise we manipulate all
-            int startIndex = materialIndex.HasValue ? materialIndex.Value : 0;
-            int endIndex = materialIndex.HasValue ? materialIndex.Value : renderer.materials.Length - 1;
-
-            // Make sure to assign the color to each material in the meshrenderer
-            for (var index = startIndex; index <= endIndex; index++)
-            {
-                MaterialPropertyBlock block = new MaterialPropertyBlock();
-                renderer.GetPropertyBlock(block, index);
-                block.SetColor(BaseColor, color);
-                renderer.SetPropertyBlock(block, index);
-            }
-        }
-
-        /// <summary>
-        /// Will add additional attributes to a newly created feature.
-        ///
-        /// For this class, we only have a few:
-        ///
-        /// * "materials" (array of strings) - only provided when the feature contains a meshrenderer
-        /// </summary>
-        protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
-        {
-            if (feature.Geometry is not MeshRenderer meshRenderer) return feature;
-
-            feature.Attributes.Add("materials", string.Join(",", meshRenderer.materials.Select(m => m.name)));
-
-            return feature;
+            
+            base.ApplyStyling();
         }
     }
 }

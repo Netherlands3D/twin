@@ -151,9 +151,11 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             switch (layer)
             {
                 case PolygonSelectionLayer selectionLayer:
-                    if (selectionLayer.ShapeType == ShapeType.Polygon)
-                        return layerTypeSprites[6];
-                    return layerTypeSprites[7];
+                    if (selectionLayer.ShapeType == ShapeType.Line)
+                        return layerTypeSprites[7];
+                    else if (selectionLayer.ShapeType == ShapeType.Grid)
+                        return layerTypeSprites[12];
+                    return layerTypeSprites[6];
                 case ReferencedLayerData data:
                     var reference = data.Reference;
                     return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);

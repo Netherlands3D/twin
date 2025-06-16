@@ -13,9 +13,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
     [RequireComponent(typeof(Layer))]
     public class CartesianTileLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
     {
-        public const string MaterialNameIdentifier = "data-materialname";
-        public const string MaterialIndexIdentifier = "data-materialindex";
-
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
         
         private Layer layer;
@@ -58,8 +55,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 var material = binaryMeshLayer.DefaultMaterialList[materialIndex];
                 material = new Material(material);
                 binaryMeshLayer.DefaultMaterialList[materialIndex] = material;
-                
-                CreateFeature(material);
+
+                var layerFeature = CreateFeature(material);
+                LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             }
         }
 
@@ -108,47 +106,31 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         public override void ApplyStyling()
         {
-            foreach (var feature in GetLayerFeatures())
+            // WMS and other projection layers also use this class as base - but they should not apply this styling
+            if (layer is BinaryMeshLayer binaryMeshLayer)
             {
-                ApplyStyling(feature.Value);
+                foreach (var (_, feature) in LayerFeatures)
+                {
+                    CartesianTileLayerStyler.Apply(binaryMeshLayer, GetStyling(feature), feature);
+                }
             }
 
             base.ApplyStyling();
         }
 
-        private void ApplyStyling(LayerFeature feature)
-        {
-            var styling = GetStyling(feature);
-            var meshLayer = GetTileLayerAsBinaryMeshLayer();
-
-            Color? color = styling.GetFillColor();
-            if (!color.HasValue) return;
-
-            if (!int.TryParse(feature.Attributes[MaterialIndexIdentifier], out var materialIndex)) return;
-
-            meshLayer.DefaultMaterialList[materialIndex].color = color.Value;
-        }
-
         protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
         {
+            // WMS and other projection layers also use this class as base - but they should not add their materials
+            if (layer is not BinaryMeshLayer meshLayer) return feature;
             if (feature.Geometry is not Material mat) return feature;
 
-            var meshLayer = GetTileLayerAsBinaryMeshLayer();
-            
-            feature.Attributes.Add(MaterialIndexIdentifier, meshLayer.DefaultMaterialList.IndexOf(mat).ToString());
-            feature.Attributes.Add(MaterialNameIdentifier, mat.name);
+            feature.Attributes.Add(
+                CartesianTileLayerStyler.MaterialIndexIdentifier, 
+                meshLayer.DefaultMaterialList.IndexOf(mat).ToString()
+            );
+            feature.Attributes.Add(CartesianTileLayerStyler.MaterialNameIdentifier, mat.name);
 
             return feature;
-        }
-
-        private BinaryMeshLayer GetTileLayerAsBinaryMeshLayer()
-        {
-            if (layer is not BinaryMeshLayer meshLayer)
-            {
-                throw new FormatException("Tile layer is not of type BinaryMeshLayer, but " + layer.GetType());
-            }
-            
-            return meshLayer;
         }
     }
 }

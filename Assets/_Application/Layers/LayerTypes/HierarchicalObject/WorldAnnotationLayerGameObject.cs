@@ -50,9 +50,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void CreateTextPopup()
         {
-            var canvasTransform = FindAnyObjectByType<Canvas>();
+            Canvas canvas = CanvasID.GetCanvasByType(CanvasType.World);
 
-            annotation = Instantiate(popoutPrefab, canvasTransform.transform);
+            annotation = Instantiate(popoutPrefab, canvas.transform);
             annotation.RectTransform().SetPivot(PivotPresets.BottomCenter);
             annotation.transform.SetSiblingIndex(1); //0 is for the blocker plane, and we want this to be in front of that, but behind the rest
             annotation.Show(annotationPropertyData.AnnotationText, WorldTransform.Coordinate, true);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using OneOf;
+using UnityEngine;
 
 namespace Netherlands3D.LayerStyles.Expressions
 {
@@ -152,6 +153,7 @@ namespace Netherlands3D.LayerStyles.Expressions
 
         public string ToString(IFormatProvider provider)
         {
+            if (Value == null) return null!;
             if (Value is IConvertible convertible) return convertible.ToString(provider);
 
             throw new FormatException("Type is not compatible with string");

@@ -63,9 +63,9 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
+        public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
         public UnityEvent OnStylingApplied = new();
         Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;
-        private readonly List<LayerFeature> cachedFeatures = new();
 
         [Space] public UnityEvent onShow = new();
         public UnityEvent onHide = new();
@@ -196,16 +196,21 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void ApplyStyling()
         {
-            //initialize the layer's style
+            //initialize the layer's style and emit an event for other services and/or UI to update
             OnStylingApplied.Invoke();
         }
 #endregion
 
 #region Features
 
-        protected List<LayerFeature> GetFeatures<T>()
+        /// <summary>
+        /// Creates a list of features for each component of type T on this game object. This list is not automatically
+        /// recorded in the local list of features to allow streaming services to request a list per tile, or to perform
+        /// actions or filtering before registering these features.
+        /// </summary>
+        protected List<LayerFeature> CreateFeaturesByType<T>() where T : Component
         {
-            cachedFeatures.Clear();
+            var cachedFeatures = new List<LayerFeature>();
 
             // By default, consider each Unity.Component of type T as a "Feature" and create an ExpressionContext to
             // select the correct styling Rule to apply to the given "Feature". 
@@ -229,16 +234,9 @@ namespace Netherlands3D.Twin.Layers
         {
             LayerFeature feature = LayerFeature.Create(this, geometry);
             AddAttributesToLayerFeature(feature);
-            layerFeatures.TryAdd(geometry, feature);
+
             return feature;
         }
-
-        public Dictionary<object, LayerFeature> GetLayerFeatures()
-        {
-            return layerFeatures;
-        }
-
-        private Dictionary<object, LayerFeature> layerFeatures = new();
 
         /// <summary>
         /// Construct attributes onto the layer feature so that the styling system can
