@@ -302,15 +302,15 @@ namespace Netherlands3D.Tiles3D
                 Material mat = r.sharedMaterial;
                 if (mat == null) continue;
 
-                const string baseTexName = "baseColorTexture";
+                int mainTexNameID = NL3DShaders.MainTextureShaderProperty;
 
-                if (mat.HasProperty(baseTexName))
+                if (mat.HasProperty(mainTexNameID))
                 {
-                    Texture tex = mat.GetTexture(baseTexName);
+                    Texture tex = mat.GetTexture(mainTexNameID);
 
                     if (tex != null)
                     {
-                        mat.SetTexture(baseTexName, null);
+                        mat.SetTexture(mainTexNameID, null);
                         UnityEngine.Object.Destroy(tex);
                         tex = null;
                     }

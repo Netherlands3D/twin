@@ -2,17 +2,13 @@ using GLTFast;
 using Netherlands3D.Coordinates;
 using SimpleJSON;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static Netherlands3D.Tiles3D.FeatureTable;
 
 namespace Netherlands3D.Tiles3D
 {
-    public  class ImportGlb
+    public class ImportGlb
     {
         private static ImportSettings importSettings = new ImportSettings() { AnimationMethod = AnimationMethod.None };
 
