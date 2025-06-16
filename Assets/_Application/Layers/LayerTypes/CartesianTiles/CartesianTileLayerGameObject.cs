@@ -1,10 +1,8 @@
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Quality;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -56,13 +54,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 var material = binaryMeshLayer.DefaultMaterialList[materialIndex];
                 material = new Material(material);
                 binaryMeshLayer.DefaultMaterialList[materialIndex] = material;
-
-                //todo this is a dirty hack to restore the waterreflection texture to the waterreflection camera
-                if(material.name.Contains("Twin_Water"))
-                {
-                    WaterReflectionCamera waterCamera = FindAnyObjectByType<WaterReflectionCamera>();
-                    waterCamera.SetMaterial(material);
-                }
 
                 var layerFeature = CreateFeature(material);
                 LayerFeatures.Add(layerFeature.Geometry, layerFeature);
