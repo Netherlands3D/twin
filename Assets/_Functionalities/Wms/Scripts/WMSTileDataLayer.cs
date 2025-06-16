@@ -115,7 +115,8 @@ namespace Netherlands3D.Functionalities.Wms
                     if (foundCRS == CoordinateSystem.CRS84)
                     {
                         projector.SetSize((float)widthMeters, (float)heightMeters, ProjectorMinDepth);
-                        projector.transform.position = centerProjectorPosition.ToUnity();
+                        //projector.transform.position = centerProjectorPosition.ToUnity();
+                        projector.transform.rotation = Quaternion.Euler(new Vector3(90, (float)rotationProjector, 0));
                     }
                     else
                         projector.SetSize(tileSize, tileSize, tileSize);
@@ -147,6 +148,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         private double widthMeters, heightMeters;
         private Coordinate centerProjectorPosition;
+        private double rotationProjector;
         private CoordinateSystem foundCRS = CoordinateSystem.Undefined;
         private BoundingBox DetermineBoundingBox(TileChange tileChange, MapFilters mapFilters)
         {
@@ -168,19 +170,50 @@ namespace Netherlands3D.Functionalities.Wms
             foundCRS = foundCoordinateSystem;
             if(foundCoordinateSystem == CoordinateSystem.CRS84)
             {
+                var bottomRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y, 0);
+                var topLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y + tileSize, 0);
+
+                (double, double)[] cornersRD = new (double, double)[4]
+                {
+                    (bottomLeft.value1,  bottomLeft.value2),   // LL
+                    (bottomRight.value1, bottomRight.value2),  // LR
+                    (topRight.value1,    topRight.value2),     // UR
+                    (topLeft.value1,     topLeft.value2)       // UL
+                };
+
+                double minLon = double.MaxValue;
+                double maxLon = double.MinValue;
+                double minLat = double.MaxValue;
+                double maxLat = double.MinValue;
+
+                Vector2[] uvCorners = new Vector2[4];
+                Coordinate[] wgs84Corners = new Coordinate[4];
+
+                for (int i = 0; i < 4; i++)
+                {
+                    Coordinate rdCorner = new Coordinate(CoordinateSystem.RD, cornersRD[i].Item1, cornersRD[i].Item2);
+                    wgs84Corners[i] = rdCorner.Convert(CoordinateSystem.WGS84);   
+                    if (wgs84Corners[i].value1 < minLon) minLon = wgs84Corners[i].value1;
+                    if (wgs84Corners[i].value1 > maxLon) maxLon = wgs84Corners[i].value1;
+                    if (wgs84Corners[i].value2 < minLat) minLat = wgs84Corners[i].value2;
+                    if (wgs84Corners[i].value2 > maxLat) maxLat = wgs84Corners[i].value2;
+                }
+
+                for (int i = 0; i < 4; i++)
+                {
+                    double u = (wgs84Corners[i].value1 - minLon) / (maxLon - minLon);
+                    double v = (wgs84Corners[i].value2 - minLat) / (maxLat - minLat);
+                    uvCorners[i] = new Vector2((float)u, (float)v);
+                }
+
+                double dx = wgs84Corners[3].value1 - wgs84Corners[0].value1;
+                double dy = wgs84Corners[3].value2 - wgs84Corners[0].value2;
+                double angleRadians = Math.Atan2(dy, dx);
+                double angleDegrees = angleRadians * (180.0 / Math.PI);
+                rotationProjector = angleDegrees;
+
                 Coordinate center = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize * 0.5f, tileChange.Y + tileSize * 0.5f, 0);
-                // (double rdx, double rdy) = RdOffsetCalculator.ComputeRdOffset(centerCRS84.value1, centerCRS84.value2);
-                //(double lat, double lon) = RDProjection.RDToWGS84(center.value1, center.value2);
-
-                //(double rdx, double rdy) = RDProjection.WGS84ToRD(lat, lon);
-
-
-                //(var lat, var lon) = RDProjection.RDToWGS84(center.value1, center.value2);
-                //(var newX, var newY) = RDProjection.WGS84ToRD(lat, lon);
-
-
-
-                centerProjectorPosition = new Coordinate(CoordinateSystem.RDNAP, center.value1, center.value2, 43);
+                //centerProjectorPosition = center;
                 widthMeters = 1000;
                 heightMeters = 1000;
 
