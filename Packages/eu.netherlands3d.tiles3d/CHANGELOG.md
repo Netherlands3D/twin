@@ -5,6 +5,10 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.11.0] - 16-06-2025
+- Added NL3D material generator to work with custom shaders (mostly catered to NL3D)
+- Made debug logs optional
+
 ## [1.10.8] - 22-05-2025
 - properly clearing the used texture by looking up the right texture property in the shader
 
