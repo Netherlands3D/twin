@@ -17,26 +17,20 @@ namespace Netherlands3D.Tiles3D
 
         public static async Task LoadB3dm(byte[] data,Tile tile,Transform containerTransform,  Action<bool> succesCallback, string sourcePath,bool parseAssetMetaData=false,bool parseSubObjects=false,UnityEngine.Material overrideMaterial=null)
         { 
-            
-
             var memoryStream = new System.IO.MemoryStream(data);
             var b3dm = B3dmReader.ReadB3dm(memoryStream);
-
             
             double[] rtcCenter = GetRTCCenterFromB3dm(b3dm);
 
             RemoveCesiumRtcFromRequieredExtentions(ref b3dm);
             if (rtcCenter==null)
             {
-
-               
                 rtcCenter = GetRTCCenterFromGlb(b3dm);
-
-
             }
             
-
-            var gltf = new GltfImport();
+            var materialGenerator = new NL3DMaterialGenerator();
+            GltfImport gltf = new GltfImport(null, null, materialGenerator);
+            
             var success = true;
             Uri uri = null;
             if (sourcePath != "")

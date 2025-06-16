@@ -19,7 +19,10 @@ namespace Netherlands3D.Tiles3D
         public async Task Load(byte[] data, Tile tile, Transform containerTransform, Action<bool> succesCallback, string sourcePath, bool parseAssetMetaData = false, bool parseSubObjects = false, UnityEngine.Material overrideMaterial = null)
         {
             var binaryData = data;
-            var gltf = new GltfImport();
+            
+            var materialGenerator = new NL3DMaterialGenerator();
+            GltfImport gltf = new GltfImport(null, null, materialGenerator);
+            
             var success = true;
             Uri uri = null;
             if (sourcePath != "")

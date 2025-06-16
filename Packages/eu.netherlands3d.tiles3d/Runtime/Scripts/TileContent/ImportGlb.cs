@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using static Netherlands3D.Tiles3D.FeatureTable;
+
 namespace Netherlands3D.Tiles3D
 {
     public  class ImportGlb
@@ -18,7 +19,10 @@ namespace Netherlands3D.Tiles3D
         public async Task Load(byte[] data, Tile tile, Transform containerTransform, Action<bool> succesCallback, string sourcePath, bool parseAssetMetaData = false, bool parseSubObjects = false, UnityEngine.Material overrideMaterial = null)
         {
             var consoleLogger = new GLTFast.Logging.ConsoleLogger();
-            var gltf = new GltfImport(logger: consoleLogger);
+            
+            var materialGenerator = new NL3DMaterialGenerator();
+            GltfImport gltf = new GltfImport(null, null, materialGenerator, consoleLogger);
+            
             var success = true;
             Uri uri = null;
             if (sourcePath != "")
