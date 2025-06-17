@@ -129,7 +129,7 @@ namespace Netherlands3D.Functionalities.Wms
 
                         projector.transform.rotation = Quaternion.Euler(new Vector3(90, (float)rotationProjector, 0));
                         Vector3 position = centerProjectorPosition.ToUnity();
-                        position.y = ProjectorMinDepth;
+                        position.y = ProjectorHeight;
                         projector.transform.position = position;
 
                         projector.SetSize((float)widthMeters, (float)heightMeters, ProjectorMinDepth);
