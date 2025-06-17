@@ -73,6 +73,9 @@ namespace Netherlands3D.Twin.Configuration
                 UpdateShareUrl();
                 lastUrlUpdate = Time.frameCount;
             }
+
+            OnOriginXChanged("132876");
+            OnOriginYChanged("453221");
         }
 
         /// <summary>
