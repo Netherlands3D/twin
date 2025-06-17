@@ -3,6 +3,7 @@ using netDxf.Entities;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Functionalities.Sun;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Utility;
 using System;
@@ -127,7 +128,10 @@ namespace Netherlands3D.Functionalities.Wms
                         projector.Material.SetVector("_UV11", projectorUVCorners[2]); // UR
 
                         projector.transform.rotation = Quaternion.Euler(new Vector3(90, (float)rotationProjector, 0));
-                        projector.transform.position = centerProjectorPosition.ToUnity();
+                        Vector3 position = centerProjectorPosition.ToUnity();
+                        position.y = ProjectorMinDepth;
+                        projector.transform.position = position;
+
                         projector.SetSize((float)widthMeters, (float)heightMeters, ProjectorMinDepth);
                     }
                     else
@@ -203,16 +207,18 @@ namespace Netherlands3D.Functionalities.Wms
                 double minLat = double.MaxValue;
                 double maxLat = double.MinValue;
 
+                //lets calculate the width and height of the tile when projected with wgs84/crs84
                 Coordinate bl = bottomLeft.Convert(CoordinateSystem.CRS84);
                 Coordinate tr = topRight.Convert(CoordinateSystem.CRS84);
                 const double earthRadius = 6378137; // meters
-
                 double meanLat = (bl.value2 + tr.value2) / 2.0;
                 double latRad = Math.PI * meanLat / 180.0;
-
                 double metersPerDegreeLon = Math.Cos(latRad) * (Math.PI * earthRadius / 180.0);
                 double metersPerDegreeLat = Math.PI * earthRadius / 180.0;
+                widthMeters = Math.Abs(tr.value1 - bl.value1) * metersPerDegreeLon;
+                heightMeters = Math.Abs(tr.value2 - bl.value2) * metersPerDegreeLat;
 
+                //lets calculate the corners and minmax bounds in wgs84
                 Coordinate[] wgs84Corners = new Coordinate[4];
                 for (int i = 0; i < 4; i++)
                 {
@@ -224,27 +230,25 @@ namespace Netherlands3D.Functionalities.Wms
                     if (wgs84Corners[i].value2 > maxLat) maxLat = wgs84Corners[i].value2;
                 }
 
+                //the projector rotation
                 double drx = wgs84Corners[3].value1 - wgs84Corners[0].value1;
                 double dry = wgs84Corners[3].value2 - wgs84Corners[0].value2;
                 double angleRadians = Math.Atan2(dry, drx);
                 double angleDegrees = angleRadians * (180.0 / Math.PI);
-                rotationProjector = -angleDegrees;
-
-
-                widthMeters = Math.Abs(tr.value1 - bl.value1) * metersPerDegreeLon;
-                heightMeters = Math.Abs(tr.value2 - bl.value2) * metersPerDegreeLat;
+                rotationProjector = -angleDegrees;               
                 
+                //lets calculate a compensated extra area because of the rotation its not a north oriented rectangle and should encapsulate the rotated rectangle
                 double rotationRadians = -angleDegrees * Mathf.Deg2Rad;
                 double compensation = Mathf.Sin((float)rotationRadians);
                 double scaleX = widthMeters / (1000 * (1 + compensation));
                 double scaleY = heightMeters / (1000 * (1 + compensation));
+                double scaleCompensation = 1 + compensation;
 
                 //we have to add about 5 to the projectorsizes because of the texture sampling overlap
-                widthMeters = 1000 * (1 + compensation) + 5; 
-                heightMeters = 1000 * (1 + compensation) + 5;
+                widthMeters = 1000 * scaleCompensation + 5; 
+                heightMeters = 1000 * scaleCompensation + 5;
 
-
-
+                //calculate the centroid in wgs84
                 double centerLon = 0;
                 double centerLat = 0;
                 for (int i = 0; i < 4; i++)
@@ -254,11 +258,9 @@ namespace Netherlands3D.Functionalities.Wms
                 }
                 centerLon /= 4.0;
                 centerLat /= 4.0;
+                Coordinate centerCoordinate = new Coordinate(CoordinateSystem.WGS84, centerLon, centerLat, 0);                
 
-                //Coordinate centerCoordinate = new Coordinate(CoordinateSystem.WGS84, centerLon, centerLat, 0);
-                Coordinate centerCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize * 0.5f, tileChange.Y + tileSize * 0.5f, 0);
-                centerCoordinate = centerCoordinate.Convert(CoordinateSystem.WGS84);
-
+                //now we can calculate the 4 corners in uv space in uv coordinates
                 double centerU = 0;
                 double centerV = 0;
                 for (int i = 0; i < 4; i++)
@@ -278,19 +280,20 @@ namespace Netherlands3D.Functionalities.Wms
                     double deltaU = u - centerU;
                     double deltaV = v - centerV;
 
+                    //adjust for the extra scale because of compensation and the new width and height of the projector mapped uv space
                     double scaledU = centerU + deltaU / scaleX;
                     double scaledV = centerV + deltaV / scaleY;
 
                     projectorUVCorners[i] = new Vector2((float)scaledU, (float)scaledV);
                 }
+
                 //scale the boundingbox with compensation to compensate for the uv space 0-1 edge
                 for (int i = 0; i < 4; i++)
                 {
-                    wgs84Corners[i] = CalculateScaledBboxCorner(centerCoordinate, wgs84Corners[i], 1 + compensation, 1 + compensation);
+                    wgs84Corners[i] = CalculateScaledBboxCorner(centerCoordinate, wgs84Corners[i], scaleCompensation, scaleCompensation);
                 }
 
                 centerProjectorPosition = centerCoordinate;
-
                 
                 boundingBox = new BoundingBox(wgs84Corners[0], wgs84Corners[2]);
                 boundingBox.Convert(foundCoordinateSystem);
