@@ -198,7 +198,7 @@ namespace Netherlands3D.Tiles3D
 
         Material GetMetallicMaterial(MetallicShaderFeatures metallicShaderFeatures)
         {
-            Shader shader = NL3DShaders.MainLayersShader;
+            Shader shader = NL3DShaders.MetallicShader;
             if (shader == null)
             {
                 Debug.LogError("Main layers shader is missing, register in the class NL3DShaders, or use RegisterShaders.cs to do this for you");
@@ -214,7 +214,7 @@ namespace Netherlands3D.Tiles3D
 
         Material GetSpecularMaterial(SpecularShaderFeatures features)
         {
-            Shader shader = NL3DShaders.MainLayersShader;
+            Shader shader = NL3DShaders.SpecularShader;
             if (shader == null)
             {
                 Debug.LogError("Main layers shader is missing, register in the class NL3DShaders, or use RegisterShaders.cs to do this for you");

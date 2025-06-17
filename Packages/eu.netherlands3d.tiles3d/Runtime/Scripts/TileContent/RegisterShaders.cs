@@ -5,8 +5,8 @@ namespace Netherlands3D.Tiles3D
     public static class NL3DShaders
     {
         public static Shader UnlitShader;
-        public static Shader MainLayersShader;
-        public static Shader WaterShader;
+        public static Shader MetallicShader;
+        public static Shader SpecularShader;
         
         /// <summary>Shader property ID for property MainTexture</summary>
         public static int MainTextureShaderProperty = Shader.PropertyToID("_MainTexture");
@@ -24,14 +24,14 @@ namespace Netherlands3D.Tiles3D
     public class RegisterShaders : MonoBehaviour
     {
         [SerializeField] private Shader unlitShader;
-        [SerializeField] private Shader mainLayersShader;
-        [SerializeField] private Shader waterShader;
+        [SerializeField] private Shader metallicShader;
+        [SerializeField] private Shader specularShader;
 
         private void Awake()
         {
             NL3DShaders.UnlitShader = unlitShader;
-            NL3DShaders.MainLayersShader = mainLayersShader;
-            NL3DShaders.WaterShader = waterShader;
+            NL3DShaders.MetallicShader = metallicShader;
+            NL3DShaders.SpecularShader = specularShader;
         }
     }
 }
