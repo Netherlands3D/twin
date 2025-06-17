@@ -26,6 +26,8 @@ namespace Netherlands3D.LayerStyles
         /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-fill-color"/>
         public Color? GetFillColor() => GetAndNormalizeColor("fill-color");
 
+        public void ClearFillColor() => ClearProperty("fill-color");
+
         /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-color"/>
         /// <remarks>
         /// Originally, the implementation was based on OGC CartoSym, which uses the term "stroke-color"; because the
@@ -41,8 +43,11 @@ namespace Netherlands3D.LayerStyles
         /// the term Stroke Color instead of Mapbox' Line Color.
         /// </remarks>
         public Color? GetStrokeColor() => GetAndNormalizeColor("stroke-color");
-        #endregion
+
+        public void ClearStrokeColor() => ClearProperty("stroke-color");
         
+        #endregion
+
         /// <summary>
         /// Populates the given Symbolizer where the values of otherSymbolizer are merged on top of the values of it.
         ///
@@ -64,7 +69,7 @@ namespace Netherlands3D.LayerStyles
 
             return symbolizer;
         }
-        
+
         public override string ToString()
         {
             var result = "";
@@ -77,6 +82,7 @@ namespace Netherlands3D.LayerStyles
         }
 
         #region Getting and setting properties, and normalisation of object types from/to string
+
         private void SetAndNormalizeColor(string propertyName, Color color)
         {
             SetProperty(propertyName, $"#{ColorUtility.ToHtmlStringRGBA(color)}");
@@ -104,6 +110,16 @@ namespace Netherlands3D.LayerStyles
         {
             properties[key] = value;
         }
+
+        /// <summary>
+        /// When an override is no longer necessary, we should be able to clear it so that the it is no longer applied
+        /// next time styling is applied.
+        /// </summary>
+        private void ClearProperty(string propertyName)
+        {
+            properties.Remove(propertyName);
+        }
+
         #endregion
     }
 }

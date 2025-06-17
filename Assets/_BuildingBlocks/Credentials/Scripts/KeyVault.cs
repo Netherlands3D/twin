@@ -121,7 +121,7 @@ namespace Netherlands3D.Credentials
 
         private bool TryToFindAuthorizationInUriQuery(Uri uri, out QueryStringAuthorization potentialAuthorisation)
         {
-            var queryParameters = QueryString.Decode(uri.Query);
+            var queryParameters = QueryString.Decode(uri.Query.TrimStart('?'));
 
             foreach (var supportedAuthTypes in supportedAuthorizationTypes)
             {
