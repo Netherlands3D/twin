@@ -15,28 +15,22 @@ namespace Netherlands3D.Tiles3D
 
         private static ImportSettings importSettings = new ImportSettings() { AnimationMethod = AnimationMethod.None };
 
-        public static async Task LoadB3dm(byte[] data,Tile tile,Transform containerTransform,  Action<bool> succesCallback, string sourcePath,bool parseAssetMetaData=false,bool parseSubObjects=false,UnityEngine.Material overrideMaterial=null)
+        public static async Task LoadB3dm(byte[] data,Tile tile,Transform containerTransform,  Action<bool> succesCallback, string sourcePath,bool parseAssetMetaData=false,bool parseSubObjects=false,UnityEngine.Material overrideMaterial=null, bool verbose = false)
         { 
-            
-
             var memoryStream = new System.IO.MemoryStream(data);
             var b3dm = B3dmReader.ReadB3dm(memoryStream);
-
             
             double[] rtcCenter = GetRTCCenterFromB3dm(b3dm);
 
             RemoveCesiumRtcFromRequieredExtentions(ref b3dm);
             if (rtcCenter==null)
             {
-
-               
                 rtcCenter = GetRTCCenterFromGlb(b3dm);
-
-
             }
             
-
-            var gltf = new GltfImport();
+            var materialGenerator = new NL3DMaterialGenerator();
+            GltfImport gltf = new GltfImport(null, null, materialGenerator);
+            
             var success = true;
             Uri uri = null;
             if (sourcePath != "")
@@ -44,9 +38,13 @@ namespace Netherlands3D.Tiles3D
                 uri = new Uri(sourcePath);
             }
 
-            Debug.Log("starting gltfLoad");
+            if(verbose)
+                Debug.Log("starting gltfLoad");
+    
             success = await gltf.LoadGltfBinary(b3dm.GlbData, null, importSettings);
-            Debug.Log("gltfLoad has finished");
+    
+            if(verbose)
+                Debug.Log("gltfLoad has finished");
 
             if (success == false)
             {

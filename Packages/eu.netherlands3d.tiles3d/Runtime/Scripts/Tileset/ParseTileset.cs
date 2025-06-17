@@ -8,6 +8,8 @@ namespace Netherlands3D.Tiles3D
 {
     public static class ParseTileset
     {
+        public static bool DebugLog = false;
+        
         private static readonly Dictionary<string, BoundingVolumeType> boundingVolumeTypes = new()
         {
             { "region", BoundingVolumeType.Region },
@@ -43,7 +45,8 @@ namespace Netherlands3D.Tiles3D
             switch (tilingMethod)
             {
                 case TilingMethod.ExplicitTiling:
-                    Debug.Log("Explicit tiling");
+                    if(DebugLog)
+                        Debug.Log("Explicit tiling");
                     Tile rootTile = new Tile();
                     rootTile.tileTransform = root.tileTransform;
                     root = ReadExplicitNode(rootnode, rootTile);
@@ -62,7 +65,8 @@ namespace Netherlands3D.Tiles3D
                     }
                     break;
                 case TilingMethod.ImplicitTiling:
-                    Debug.Log("Implicit tiling"); 
+                    if(DebugLog)
+                        Debug.Log("Implicit tiling"); 
                     rootTile = new Tile();
                     rootTile = ReadExplicitNode(rootnode, rootTile);
                     rootTile.level = 0;
@@ -225,8 +229,8 @@ namespace Netherlands3D.Tiles3D
             implicitTilingSettings.subtreeUri = implicitTilingNode["subtrees"]["uri"].Value;
             subtreeReader.settings = implicitTilingSettings;
             
-
-            Debug.Log("Load subtree: " + "");
+            if(DebugLog)
+                Debug.Log("Load subtree: " + "");
             if (parentTile.level==0)
             {
                 parentTile.contentUri = implicitTilingSettings.subtreeUri.Replace("{level}", parentTile.level.ToString()).Replace("{x}", parentTile.X.ToString()).Replace("{y}", parentTile.Y.ToString());

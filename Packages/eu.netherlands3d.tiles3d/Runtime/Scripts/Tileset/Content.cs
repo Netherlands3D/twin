@@ -82,7 +82,7 @@ namespace Netherlands3D.Tiles3D
         /// <summary>
         /// Load the content from an url
         /// </summary>
-        public void Load(UnityEngine.Material overrideMaterial = null, Dictionary<string, string> headers = null)
+        public void Load(UnityEngine.Material overrideMaterial = null, Dictionary<string, string> headers = null, bool verbose = false)
         {
             this.headers = headers;
             if (overrideMaterial != null)
@@ -95,6 +95,7 @@ namespace Netherlands3D.Tiles3D
 
             State = ContentLoadState.DOWNLOADING;
             parentTile.isLoading = true;
+            TIleContentLoader.debugLog = verbose;
             runningContentRequest = StartCoroutine(
            TIleContentLoader.DownloadContent(
                uri,
@@ -134,10 +135,10 @@ namespace Netherlands3D.Tiles3D
                 ParentTile,
                 FinishedLoading,
                 parseAssetMetaData,
-               parseSubObjects,
-               overrideMaterial,
-               false,
-               headers
+                parseSubObjects,
+                overrideMaterial, 
+                false,
+                headers
                 );
         }
 
@@ -302,15 +303,15 @@ namespace Netherlands3D.Tiles3D
                 Material mat = r.sharedMaterial;
                 if (mat == null) continue;
 
-                const string baseTexName = "baseColorTexture";
+                int mainTexNameID = NL3DShaders.MainTextureShaderProperty;
 
-                if (mat.HasProperty(baseTexName))
+                if (mat.HasProperty(mainTexNameID))
                 {
-                    Texture tex = mat.GetTexture(baseTexName);
+                    Texture tex = mat.GetTexture(mainTexNameID);
 
                     if (tex != null)
                     {
-                        mat.SetTexture(baseTexName, null);
+                        mat.SetTexture(mainTexNameID, null);
                         UnityEngine.Object.Destroy(tex);
                         tex = null;
                     }

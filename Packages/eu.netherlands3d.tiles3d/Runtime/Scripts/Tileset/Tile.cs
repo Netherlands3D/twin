@@ -344,9 +344,6 @@ namespace Netherlands3D.Tiles3D
                     TopRight = new Coordinate(CoordinateSystem.WGS84_ECEF, boundingVolume.values[0] + sphereRadius, boundingVolume.values[1] + sphereRadius, boundingVolume.values[2] + sphereRadius);
                     break;
                 case BoundingVolumeType.Region:
-
-                    Debug.Log("region");
-
                     //Array order: west, south, east, north, minimum height, maximum height
                     double West = (boundingVolume.values[0] * 180.0f) / Mathf.PI;
                     double South = (boundingVolume.values[1] * 180.0f) / Mathf.PI;

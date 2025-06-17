@@ -74,6 +74,8 @@ namespace Netherlands3D.Tiles3D
 
         [Header("Optional material override")] public Material materialOverride;
 
+        [Header("Debugging")] public bool debugLog;
+        
         public string[] usedExtensions { get; private set; }
 
         //Custom WebRequestHeader dictionary
@@ -195,7 +197,8 @@ namespace Netherlands3D.Tiles3D
 
             ExtractDatasetPaths();
 
-            print("loading tilset from : " + tilesetUrl);
+            if(debugLog)
+                print("loading tilset from : " + tilesetUrl);
             StartCoroutine(LoadTileset());
         }
 
@@ -213,15 +216,21 @@ namespace Netherlands3D.Tiles3D
             }
 
             queryParameters = ParseQueryString(uri.Query);
-            Debug.Log($"Query url {ToQueryString(queryParameters)}");
+            
+            if(debugLog)
+                Debug.Log($"Query url {ToQueryString(queryParameters)}");
+    
             foreach (string segment in uri.Segments)
             {
                 if (segment.EndsWith(".json"))
                 {
                     tilesetFilename = segment;
-                    Debug.Log($"Dataset filename: {tilesetFilename}");
-                    Debug.Log($"Absolute path: {absolutePath}");
-                    Debug.Log($"Root path: {rootPath}");
+                    if (debugLog)
+                    {
+                        Debug.Log($"Dataset filename: {tilesetFilename}");
+                        Debug.Log($"Absolute path: {absolutePath}");
+                        Debug.Log($"Root path: {rootPath}");
+                    }
                     break;
                 }
             }
@@ -358,6 +367,7 @@ namespace Netherlands3D.Tiles3D
             else
             {
                 string jsonstring = www.downloadHandler.text;
+                ParseTileset.DebugLog = debugLog;
                 ParseTileset.subtreeReader = GetComponent<ReadSubtree>();
                 JSONNode rootnode = JSON.Parse(jsonstring)["root"];
                 root = ParseTileset.ReadTileset(rootnode);
@@ -399,7 +409,7 @@ namespace Netherlands3D.Tiles3D
                 }
                 else
                 {
-                    tile.content.Load(materialOverride);
+                    tile.content.Load(materialOverride, verbose:debugLog);
                 }
             }
         }
