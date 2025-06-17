@@ -678,9 +678,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unlitShader: {fileID: 4800000, guid: d3cb4acefe10b4f76a1261c55e56f5f3, type: 3}
-  mainLayersShader: {fileID: -6465566751694194690, guid: 885ac3670a51697469c9f66affc50fde,
+  metallicShader: {fileID: -6465566751694194690, guid: 885ac3670a51697469c9f66affc50fde,
     type: 3}
-  waterShader: {fileID: -6465566751694194690, guid: c43d943999b82fb4a9b29c6e62a2c801,
+  specularShader: {fileID: -6465566751694194690, guid: 885ac3670a51697469c9f66affc50fde,
     type: 3}
 --- !u!1001 &675407186
 PrefabInstance:
