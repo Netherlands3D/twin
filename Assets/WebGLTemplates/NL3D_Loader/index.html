@@ -183,13 +183,16 @@
     <script>
         window.addEventListener('DOMContentLoaded', function () {
             var md = new MobileDetect(window.navigator.userAgent);
-            if (md.mobile()) {
-                var warn = document.getElementById('unity-mobile-warning');
-                if (warn) {
-                    warn.style.display = 'block';
-                } else {
-                    console.warn("Mobile warning element not found.");
-                }
+            var warn = document.getElementById('unity-mobile-warning');
+            if (md.mobile() && warn) {
+                warn.style.display = 'block';
+            }
+
+            var dismissBtn = document.querySelector('#unity-mobile-warning .button[onclick*="LoadUnity"]');
+            if (dismissBtn && warn) {
+                dismissBtn.addEventListener('click', function (e) {
+                    warn.style.display = 'none';
+                });
             }
         });
     </script>
