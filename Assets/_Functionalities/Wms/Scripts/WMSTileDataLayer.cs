@@ -196,10 +196,10 @@ namespace Netherlands3D.Functionalities.Wms
 
                 (double, double)[] cornersRD = new (double, double)[4]
                 {
-                    (bottomLeft.value1,  bottomLeft.value2),   // LL
-                    (bottomRight.value1, bottomRight.value2),  // LR
-                    (topRight.value1,    topRight.value2),     // UR
-                    (topLeft.value1,     topLeft.value2)       // UL
+                    (bottomLeft.easting,  bottomLeft.northing),   // LL
+                    (bottomRight.easting, bottomRight.northing),  // LR
+                    (topRight.easting,    topRight.northing),     // UR
+                    (topLeft.easting,     topLeft.northing)       // UL
                 };
 
                 double minLon = double.MaxValue;
@@ -211,28 +211,28 @@ namespace Netherlands3D.Functionalities.Wms
                 Coordinate bl = bottomLeft.Convert(CoordinateSystem.CRS84);
                 Coordinate tr = topRight.Convert(CoordinateSystem.CRS84);
                 const double earthRadius = 6378137; // meters
-                double meanLat = (bl.value2 + tr.value2) / 2.0;
+                double meanLat = (bl.northing + tr.northing) / 2.0;
                 double latRad = Math.PI * meanLat / 180.0;
                 double metersPerDegreeLon = Math.Cos(latRad) * (Math.PI * earthRadius / 180.0);
                 double metersPerDegreeLat = Math.PI * earthRadius / 180.0;
-                widthMeters = Math.Abs(tr.value1 - bl.value1) * metersPerDegreeLon;
-                heightMeters = Math.Abs(tr.value2 - bl.value2) * metersPerDegreeLat;
+                widthMeters = Math.Abs(tr.easting - bl.easting) * metersPerDegreeLon;
+                heightMeters = Math.Abs(tr.northing - bl.northing) * metersPerDegreeLat;
 
                 //lets calculate the corners and minmax bounds in wgs84
-                Coordinate[] wgs84Corners = new Coordinate[4];
+                Coordinate[] crs84Corners = new Coordinate[4];
                 for (int i = 0; i < 4; i++)
                 {
                     Coordinate rdCorner = new Coordinate(CoordinateSystem.RD, cornersRD[i].Item1, cornersRD[i].Item2, 0);
-                    wgs84Corners[i] = rdCorner.Convert(CoordinateSystem.WGS84);
-                    if (wgs84Corners[i].value1 < minLon) minLon = wgs84Corners[i].value1;
-                    if (wgs84Corners[i].value1 > maxLon) maxLon = wgs84Corners[i].value1;
-                    if (wgs84Corners[i].value2 < minLat) minLat = wgs84Corners[i].value2;
-                    if (wgs84Corners[i].value2 > maxLat) maxLat = wgs84Corners[i].value2;
+                    crs84Corners[i] = rdCorner.Convert(CoordinateSystem.CRS84);
+                    if (crs84Corners[i].northing < minLon) minLon = crs84Corners[i].northing;
+                    if (crs84Corners[i].northing > maxLon) maxLon = crs84Corners[i].northing;
+                    if (crs84Corners[i].easting < minLat) minLat = crs84Corners[i].easting;
+                    if (crs84Corners[i].easting > maxLat) maxLat = crs84Corners[i].easting;
                 }
 
                 //the projector rotation
-                double drx = wgs84Corners[3].value1 - wgs84Corners[0].value1;
-                double dry = wgs84Corners[3].value2 - wgs84Corners[0].value2;
+                double drx = crs84Corners[3].easting - crs84Corners[0].easting;
+                double dry = crs84Corners[3].northing - crs84Corners[0].northing;
                 double angleRadians = Math.Atan2(dry, drx);
                 double angleDegrees = angleRadians * (180.0 / Math.PI);
                 rotationProjector = -angleDegrees;               
@@ -253,20 +253,20 @@ namespace Netherlands3D.Functionalities.Wms
                 double centerLat = 0;
                 for (int i = 0; i < 4; i++)
                 {
-                    centerLon += wgs84Corners[i].value1;
-                    centerLat += wgs84Corners[i].value2;
+                    centerLon += crs84Corners[i].northing;
+                    centerLat += crs84Corners[i].easting;
                 }
                 centerLon /= 4.0;
                 centerLat /= 4.0;
-                Coordinate centerCoordinate = new Coordinate(CoordinateSystem.WGS84, centerLon, centerLat, 0);                
+                Coordinate centerCoordinate = new Coordinate(CoordinateSystem.CRS84, centerLat, centerLon, 0);                
 
                 //now we can calculate the 4 corners in uv space in uv coordinates
                 double centerU = 0;
                 double centerV = 0;
                 for (int i = 0; i < 4; i++)
                 {
-                    double u = (wgs84Corners[i].value1 - minLon) / (maxLon - minLon);
-                    double v = (wgs84Corners[i].value2 - minLat) / (maxLat - minLat);
+                    double u = (crs84Corners[i].easting - minLat) / (maxLat - minLat);
+                    double v = (crs84Corners[i].northing - minLon) / (maxLon - minLon);
                     centerU += u;
                     centerV += v;
                 }
@@ -274,8 +274,8 @@ namespace Netherlands3D.Functionalities.Wms
                 centerV /= 4.0;
                 for (int i = 0; i < 4; i++)
                 {
-                    double u = (wgs84Corners[i].value1 - minLon) / (maxLon - minLon);
-                    double v = (wgs84Corners[i].value2 - minLat) / (maxLat - minLat);
+                    double u = (crs84Corners[i].easting - minLat) / (maxLat - minLat);
+                    double v = (crs84Corners[i].northing - minLon) / (maxLon - minLon);
 
                     double deltaU = u - centerU;
                     double deltaV = v - centerV;
@@ -290,12 +290,12 @@ namespace Netherlands3D.Functionalities.Wms
                 //scale the boundingbox with compensation to compensate for the uv space 0-1 edge
                 for (int i = 0; i < 4; i++)
                 {
-                    wgs84Corners[i] = CalculateScaledBboxCorner(centerCoordinate, wgs84Corners[i], scaleCompensation, scaleCompensation);
+                    crs84Corners[i] = CalculateScaledBboxCorner(centerCoordinate, crs84Corners[i], scaleCompensation, scaleCompensation, CoordinateSystem.CRS84);
                 }
 
                 centerProjectorPosition = centerCoordinate;
                 
-                boundingBox = new BoundingBox(wgs84Corners[0], wgs84Corners[2]);
+                boundingBox = new BoundingBox(crs84Corners[0], crs84Corners[2]);
                 boundingBox.Convert(foundCoordinateSystem);
             }
             else
@@ -306,16 +306,20 @@ namespace Netherlands3D.Functionalities.Wms
             return boundingBox;
         }
 
-        private Coordinate CalculateScaledBboxCorner(Coordinate centerBbox, Coordinate wgs84Corner, double scaleX, double scaleY)
-        {
-            double deltaLon = wgs84Corner.value1 - centerBbox.value1;
-            double deltaLat = wgs84Corner.value2 - centerBbox.value2;
-            double scaledDeltaLon = deltaLon * scaleX;
-            double scaledDeltaLat = deltaLat * scaleY;
-            double scaledLon = centerBbox.value1 + scaledDeltaLon;
-            double scaledLat = centerBbox.value2 + scaledDeltaLat;
-            return new Coordinate(CoordinateSystem.WGS84, scaledLon, scaledLat);
+        private Coordinate CalculateScaledBboxCorner(Coordinate centerBbox, Coordinate corner, double scaleX, double scaleY, CoordinateSystem crs)
+        {            
+            centerBbox = centerBbox.Convert(CoordinateSystem.WGS84);
+            corner = corner.Convert(CoordinateSystem.WGS84);
 
+            double deltaLat = corner.easting - centerBbox.easting;
+            double deltaLon = corner.northing - centerBbox.northing;
+            double scaledDeltaLat = deltaLat * scaleX;
+            double scaledDeltaLon = deltaLon * scaleY;
+            double scaledLon = centerBbox.northing + scaledDeltaLon;
+            double scaledLat = centerBbox.easting + scaledDeltaLat;
+            Coordinate result = new Coordinate(CoordinateSystem.WGS84, scaledLat, scaledLon);
+            result = result.Convert(crs);
+            return result;
         }
       
         private void UpdateDrawOrderForChildren()
