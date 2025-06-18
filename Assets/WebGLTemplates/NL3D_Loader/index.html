@@ -181,10 +181,17 @@
     </script>
 
     <script>
-        var md = new MobileDetect(window.navigator.userAgent);
-        if (md.mobile()) {
-            document.getElementById('unity-mobile-warning').style.display = 'block';
-        }
+        window.addEventListener('DOMContentLoaded', function () {
+            var md = new MobileDetect(window.navigator.userAgent);
+            if (md.mobile()) {
+                var warn = document.getElementById('unity-mobile-warning');
+                if (warn) {
+                    warn.style.display = 'block';
+                } else {
+                    console.warn("Mobile warning element not found.");
+                }
+            }
+        });
     </script>
 </body>
 
