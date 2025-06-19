@@ -7,6 +7,10 @@ using Netherlands3D.Twin.Utility;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+#if UNITY_WEBGL
+// ReSharper disable once RedundantUsingDirective
+using System.IO;
+#endif
 
 public class DXFCreation : ModelFormatCreation
 {
