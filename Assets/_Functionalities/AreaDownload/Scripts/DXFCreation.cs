@@ -43,7 +43,7 @@ public class DXFCreation : ModelFormatCreation
             foreach (var v in obj.Vertices)
             {
                 var coord = new Coordinate(v);
-                coord = coord.Convert(CoordinateSystem.RD);
+                coord = coord.Convert(CoordinateSystem.RDNAP);
                 vertsRD.Add(coord.ToVector3RD());
             }
 
