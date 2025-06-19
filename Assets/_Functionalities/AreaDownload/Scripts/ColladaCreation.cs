@@ -39,7 +39,7 @@ namespace Netherlands3D.Collada
             }
 #elif UNITY_WEBGL
                 byte[] byteArray = Encoding.UTF8.GetBytes(colladaFile.GetColladaXML());
-                DownloadFileImmediate(exportRunner.name, "", "Collada.dae", byteArray, byteArray.Length);
+                DownloadFileImmediate(gameObject.name, "", "Collada.dae", byteArray, byteArray.Length);
 #endif
 
             if (destroyOnCompletion)
