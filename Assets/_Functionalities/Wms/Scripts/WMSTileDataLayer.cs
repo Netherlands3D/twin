@@ -126,19 +126,6 @@ namespace Netherlands3D.Functionalities.Wms
                     projector.Material.SetVector("_UV10", projectorUVCorners[1]); // BR
                     projector.Material.SetVector("_UV01", projectorUVCorners[2]); // TL                   
                     projector.Material.SetVector("_UV11", projectorUVCorners[3]); // TR
-
-
-                    //projector.Material.SetVector("_UV00", projectorUVCorners[3]); // UL
-                    //projector.Material.SetVector("_UV01", projectorUVCorners[2]); // UR
-                    //projector.Material.SetVector("_UV10", projectorUVCorners[0]); // LL
-                    //projector.Material.SetVector("_UV11", projectorUVCorners[1]); // LR
-
-                    //projector.transform.rotation = Quaternion.Euler(new Vector3(90, (float)rotationProjector, 0));
-                    // Vector3 position = centerProjectorPosition.ToUnity();
-                    //position.y = ProjectorHeight;
-                    //projector.transform.position = position;
-
-                    //projector.SetSize((float)widthMeters, (float)heightMeters, ProjectorMinDepth);
                 }
                 else
                 {
@@ -242,21 +229,16 @@ namespace Netherlands3D.Functionalities.Wms
                 double dry = corners[2].easting - corners[0].easting;
                 double angleRadians = Math.Atan2(dry, drx);
                 double angleDegrees = angleRadians * (180.0 / Math.PI);
-                //rotationProjector = -angleDegrees;
-
+                
                 //lets calculate a compensated extra area because of the rotation its not a north oriented rectangle and should encapsulate the rotated rectangle
                 double rotationRadians = -angleDegrees * Mathf.Deg2Rad;
-                double compensation = Mathf.Sin((float)rotationRadians);
+                double compensation = 1 + Mathf.Sin((float)rotationRadians);
                 double scaleX = widthMeters / 1000;
                 double scaleY = heightMeters / 1000;
-                double aspect = scaleY * scaleX;
+                double aspect = (1000 / scaleY * scaleX) / 1000;
 
-
-               // double scaleCompensation = 1 + compensation;
-
-                //we have to add about 5 to the projectorsizes because of the texture sampling overlap
-                widthMeters = 1000;// * scaleCompensation + 5;
-                heightMeters = 1000;// * scaleCompensation + 5;
+                widthMeters = 1000;
+                heightMeters = 1000;
 
                 //calculate the centroid in wgs84
                 double centerLon = 0;
@@ -269,9 +251,7 @@ namespace Netherlands3D.Functionalities.Wms
                 centerLon /= 4.0;
                 centerLat /= 4.0;
                 Coordinate centerCoordinate = new Coordinate(CoordinateSystem.CRS84, centerLat, centerLon, 0);
-                //Coordinate centerCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize * 0.5f, tileChange.Y + tileSize * 0.5f, 0);
-                //centerCoordinate = centerCoordinate.Convert(CoordinateSystem.CRS84);
-
+               
                 //now we can calculate the 4 corners in uv space in uv coordinates
                 double centerU = 0;
                 double centerV = 0;
@@ -286,19 +266,27 @@ namespace Netherlands3D.Functionalities.Wms
                 centerU /= 4.0;
                 centerV /= 4.0;
 
-                double cosTheta = Math.Cos(rotationRadians);
-                double sinTheta = Math.Sin(rotationRadians);
-
                 for (int i = 0; i < 4; i++)
                 {
                     double deltaU = (uvCorners[i].u - centerU) / aspect;
                     double finalU = centerU + deltaU;
-                    double finalV = uvCorners[i].v;
+                    double deltaV = (uvCorners[i].v - centerV) / 1;
+                    double finalV = centerV + deltaV;
                     projectorUVCorners[i] = new Vector2((float)finalU, (float)finalV);
                 }
                 centerProjectorPosition = centerCoordinate;
 
+                //Coordinate newBL = CalculateScaledBboxCorner(centerCoordinate, bottomLeft, compensation, compensation, CoordinateSystem.RD);
+                //Coordinate newTR = CalculateScaledBboxCorner(centerCoordinate, bottomLeft, compensation, compensation, CoordinateSystem.RD);
+
+                double offset = compensation - 1;
+                Coordinate newBL = new Coordinate(CoordinateSystem.RD, tileChange.X - tileSize * offset, tileChange.Y, 0);
+                Coordinate newTR = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize + tileSize * offset, tileChange.Y, 0);
+                //boundingBox = new BoundingBox(newBL, newTR);
                 boundingBox = new BoundingBox(bottomLeft, topRight);
+                //boundingBox.Encapsulate(newBL);
+                //boundingBox.Encapsulate(newTR);
+                testBB = boundingBox;
                 boundingBox.Convert(foundCoordinateSystem);
             }
             else
@@ -308,6 +296,15 @@ namespace Netherlands3D.Functionalities.Wms
             }
             return boundingBox;
         }
+
+
+        BoundingBox testBB;
+#if UNITY_EDITOR
+        public void OnDrawGizmos()
+        {
+            testBB?.Debug(Color.green);
+        }
+#endif
 
         private Coordinate CalculateScaledBboxCorner(Coordinate centerBbox, Coordinate corner, double scaleX, double scaleY, CoordinateSystem crs)
         {
