@@ -5,7 +5,6 @@ using System.Runtime.InteropServices;
 // ReSharper disable once RedundantUsingDirective
 using System.Text; //used in the pragma block
 using UnityEngine;
-using Netherlands3D.MeshClipping;
 using Netherlands3D.Twin.Utility;
 using UnityEditor;
 

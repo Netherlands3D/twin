@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using netDxf;
@@ -7,9 +5,7 @@ using netDxf.Entities;
 using netDxf.Blocks;
 using netDxf.Tables;
 using Netherlands3D.Coordinates;
-using System.IO;
 using System.Runtime.InteropServices;
-using Netherlands3D.JavascriptConnection;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -18,7 +14,6 @@ public class DxfFile
 {
     [DllImport("__Internal")]
     private static extern void DownloadFile(string callbackGameObjectName, string callbackMethodName, string fileName, byte[] array, int byteLength);
-
     
     private DxfDocument dxfDocument;
     private Layer dxfLayer;
@@ -37,79 +32,12 @@ public class DxfFile
         dxfLayer.Color = layerColor;
         dxfDocument.Layers.Add(dxfLayer);
 
-        //AddTriangles(triangleVertices, layerName);
-
-
         AddMesh(triangleVertices, layerName);
     }
 
     public void Save(string path)
     {
         dxfDocument.Save(path, true);
-return;
-        
-#if UNITY_EDITOR
-        var localFile = EditorUtility.SaveFilePanel("Save Collada", "", "export", "dae");
-        if (localFile.Length > 0)
-        {
-            // File.WriteAllText(localFile, colladaFile.GetColladaXML());
-            dxfDocument.Save(localFile, true);
-        }
-
-#elif UNITY_WEBGL
-        using (var stream = new MemoryStream())
-        {
-            if (dxfDocument.Save(stream))
-            {
-                var bytes = stream.ToArray();
-                DownloadFile("", "", "export.dxf", bytes, bytes.Length);
-            }
-            else
-            {
-                Debug.Log("cant write file");
-            }
-        }
-#endif
-
-
-// #if UNITY_EDITOR
-//
-//         var mydocs = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
-//         dxfDocument.Save(Path.Combine(mydocs, "testDXFBinary.dxf"), true);        
-//         return;
-// #endif
-//         using (var stream = new MemoryStream())
-//         {
-//             if (dxfDocument.Save(stream))
-//             {
-//                 throw new NotImplementedException();
-//                 //JavascriptMethodCaller.DownloadByteArrayAsFile(stream.ToArray(), stream.ToArray().Length, "testfile.dxf");
-//             }
-//             else
-//             {
-//                 Debug.Log("cant write file");
-//             }
-//         }
-    }
-
-    public void AddTriangles(List<Vector3RD> triangleVertices, string layerName)
-    {
-        Block block = new Block(layerName);
-
-        for (int i = 0; i < triangleVertices.Count; i += 3)
-        {
-            netDxf.Vector3 vertex1 = new netDxf.Vector3(triangleVertices[i].x, triangleVertices[i].y, triangleVertices[i].z);
-            netDxf.Vector3 vertex2 = new netDxf.Vector3(triangleVertices[i + 1].x, triangleVertices[i + 1].y, triangleVertices[i + 1].z);
-            netDxf.Vector3 vertex3 = new netDxf.Vector3(triangleVertices[i + 2].x, triangleVertices[i + 2].y, triangleVertices[i + 2].z);
-            Face3d face = new Face3d(vertex1, vertex3, vertex2);
-            block.Entities.Add(face);
-            //doc.AddEntity(face);
-            //face.Layer = Laag;
-        }
-
-        Insert blokInsert = new Insert(block);
-        blokInsert.Layer = dxfLayer;
-        dxfDocument.AddEntity(blokInsert);
     }
 
     private void AddMesh(List<Vector3RD> triangleVertices, string layerName)
@@ -121,7 +49,7 @@ return;
         List<PolyfaceMeshFace> pfmFaces = new List<PolyfaceMeshFace>();
         pfmFaces.Capacity = triangleVertices.Count / 3;
         int facecounter = 0;
-        Debug.Log(triangleVertices.Count);
+        // Debug.Log(triangleVertices.Count);
         int vertexIndex = 0;
 
         for (int i = 0; i < triangleVertices.Count; i += 3)

@@ -1,11 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
 // ReSharper disable once RedundantUsingDirective
 using System.Text;
 using Netherlands3D.Collada;
-using Netherlands3D.MeshClipping;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,9 +14,6 @@ namespace Netherlands3D.Functionalities.AreaDownload
     [CreateAssetMenu(fileName = "AreaSelection", menuName = "Netherlands3D/Data/AreaSelection", order = 1)]
     public class AreaSelection : ScriptableObject
     {
-        [DllImport("__Internal")]
-        private static extern void DownloadFileImmediate(string callbackGameObjectName, string callbackMethodName, string fileName, byte[] array, int byteLength);
-
         private Bounds selectedAreaBounds;
         private List<Vector3> selectedArea;
 

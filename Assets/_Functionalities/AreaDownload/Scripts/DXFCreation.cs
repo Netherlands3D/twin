@@ -1,12 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
-using Netherlands3D.CartesianTiles;
 using UnityEngine;
 using Netherlands3D.Coordinates;
-using Netherlands3D.MeshClipping;
 using Netherlands3D.Twin.Utility;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -95,7 +91,6 @@ public class DXFCreation : ModelFormatCreation
         if (localFile.Length > 0)
         {
             dxfFile.Save(localFile);
-            // File.WriteAllText(localFile, colladaFile.GetColladaXML());
         }
         //todo:
 #elif UNITY_WEBGL
@@ -117,8 +112,8 @@ public class DXFCreation : ModelFormatCreation
             byte b = (byte)(material.GetColor("_BaseColor").b * 255);
             return new netDxf.AciColor(r, g, b);
         }
-        else if (material.GetColor("_FresnelColorHigh") != null)
-
+        
+        if (material.GetColor("_FresnelColorHigh") != null)
         {
             byte r = (byte)(material.GetColor("_FresnelColorHigh").r * 255);
             byte g = (byte)(material.GetColor("_FresnelColorHigh").g * 255);

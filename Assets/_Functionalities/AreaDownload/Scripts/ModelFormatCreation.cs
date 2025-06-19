@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Netherlands3D.Coordinates;
-using Netherlands3D.CartesianTiles;
 using Netherlands3D.MeshClipping;
 
 public struct ObjectData
@@ -27,104 +25,58 @@ public abstract class ModelFormatCreation : MonoBehaviour
     }
 
     protected abstract IEnumerator CreateFile(LayerMask includedLayers, Bounds selectedAreaBounds, float minClipBoundsHeight, bool destroyOnCompletion = true);
-    
+
     protected List<ObjectData> GetExportData(LayerMask includedLayers, Bounds selectedAreaBounds, float minClipBoundsHeight)
+    {
+        var meshClipper = new MeshClipper();
+        List<ObjectData> objects = new();
+
+        //Find all gameobjects inside the includedLayers
+        var meshFilters = FindObjectsOfType<MeshFilter>();
+
+        //check if the meshfilter is inside the included layers
+        var meshFiltersInLayers = new List<MeshFilter>();
+        foreach (var meshFilter in meshFilters)
         {
-            var meshClipper = new MeshClipper();
-            List<ObjectData> objects = new();
-
-            //Find all gameobjects inside the includedLayers
-            var meshFilters = FindObjectsOfType<MeshFilter>();
-
-            //check if the meshfilter is inside the included layers
-            var meshFiltersInLayers = new List<MeshFilter>();
-            foreach (var meshFilter in meshFilters)
+            if (includedLayers == (includedLayers | (1 << meshFilter.gameObject.layer)))
             {
-                if (includedLayers == (includedLayers | (1 << meshFilter.gameObject.layer)))
-                {
-                    meshFiltersInLayers.Add(meshFilter);
-                }
+                meshFiltersInLayers.Add(meshFilter);
             }
-
-            //Clip all the submeshes found whose object bounds overlap with the selected area bounds
-            for (int i = 0; i < meshFiltersInLayers.Count; i++)
-            {
-                var mesh = meshFiltersInLayers[i].sharedMesh;
-                for (int j = 0; j < mesh.subMeshCount; j++)
-                {
-                    var meshFilterGameObject = meshFiltersInLayers[i].gameObject;
-
-                    //Set the object name
-                    var subobjectName = meshFilterGameObject.name;
-                    Material material = null;
-                    if (meshFilterGameObject.TryGetComponent<MeshRenderer>(out var meshRenderer))
-                    {
-                        //Make sure renderer overlaps bounds
-                        if (!meshRenderer.bounds.Intersects(selectedAreaBounds))
-                        {
-                            continue;
-                        }
-
-                        material = meshRenderer.sharedMaterials[j];
-                        subobjectName = material.name.Replace(" (Instance)", "").Split(' ')[0];
-                    }
-
-                    //Fresh start for meshclipper
-                    var clipBounds = selectedAreaBounds;
-                    clipBounds.size = new Vector3(clipBounds.size.x, Mathf.Max(clipBounds.size.y, minClipBoundsHeight), clipBounds.size.z);
-                    meshClipper.SetGameObject(meshFiltersInLayers[i].gameObject);
-                    meshClipper.ClipSubMesh(clipBounds, j);
-                    var objectData = new ObjectData(subobjectName, meshClipper.clippedVertices, material);
-                    objects.Add(objectData);
-                }
-            }
-
-            return objects;
         }
 
-    
-    // public void FreezeLayers(List<Layer> layerList, bool freeze)
-    // {
-    //     foreach (var layer in layerList)
-    //     {
-    //         layer.pauseLoading = freeze;
-    //     }
-    // }
+        //Clip all the submeshes found whose object bounds overlap with the selected area bounds
+        for (int i = 0; i < meshFiltersInLayers.Count; i++)
+        {
+            var mesh = meshFiltersInLayers[i].sharedMesh;
+            for (int j = 0; j < mesh.subMeshCount; j++)
+            {
+                var meshFilterGameObject = meshFiltersInLayers[i].gameObject;
 
-    // public List<GameObject> GetTilesInLayer(Layer layer, Coordinate bottomLeft, Coordinate topRight)
-    // {
-    //     var bottomLeftRD = bottomLeft.Convert(CoordinateSystem.RD).ToVector3RD();
-    //     var topRightRD = topRight.Convert(CoordinateSystem.RD).ToVector3RD();
-    //     
-    //     if (layer == null)
-    //     {
-    //         return new List<GameObject>();
-    //     }
-    //     
-    //     List<GameObject> output = new List<GameObject>();
-    //     double tilesize = layer.tileSize;
-    //     Debug.Log(tilesize);
-    //     int tileX;
-    //     int tileY;
-    //     foreach (var tile in layer.tiles)
-    //     {
-    //         tileX = tile.Key.x;
-    //         tileY = tile.Key.y;
-    //
-    //         if (tileX + tilesize < bottomLeftRD.x || tileX > topRightRD.x)
-    //         {
-    //             continue;
-    //         }
-    //         if (tileY + tilesize < bottomLeftRD.y || tileY > topRightRD.y)
-    //         {
-    //             continue;
-    //         }
-    //         MeshFilter[] meshFilters = tile.Value.gameObject.GetComponentsInChildren<MeshFilter>();
-    //         foreach (var meshFilter in meshFilters)
-    //         {
-    //             output.Add(meshFilter.gameObject);
-    //         }
-    //     }
-    //     return output;
-    // }
+                //Set the object name
+                var subobjectName = meshFilterGameObject.name;
+                Material material = null;
+                if (meshFilterGameObject.TryGetComponent<MeshRenderer>(out var meshRenderer))
+                {
+                    //Make sure renderer overlaps bounds
+                    if (!meshRenderer.bounds.Intersects(selectedAreaBounds))
+                    {
+                        continue;
+                    }
+
+                    material = meshRenderer.sharedMaterials[j];
+                    subobjectName = material.name.Replace(" (Instance)", "").Split(' ')[0];
+                }
+
+                //Fresh start for meshclipper
+                var clipBounds = selectedAreaBounds;
+                clipBounds.size = new Vector3(clipBounds.size.x, Mathf.Max(clipBounds.size.y, minClipBoundsHeight), clipBounds.size.z);
+                meshClipper.SetGameObject(meshFiltersInLayers[i].gameObject);
+                meshClipper.ClipSubMesh(clipBounds, j);
+                var objectData = new ObjectData(subobjectName, meshClipper.clippedVertices, material);
+                objects.Add(objectData);
+            }
+        }
+
+        return objects;
+    }
 }
