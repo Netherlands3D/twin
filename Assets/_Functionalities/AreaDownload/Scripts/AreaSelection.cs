@@ -2,6 +2,7 @@ using System.Collections.Generic;
 // ReSharper disable once RedundantUsingDirective
 using System.Text;
 using Netherlands3D.Collada;
+using Netherlands3D.Dxf;
 using UnityEngine;
 using UnityEngine.Events;
 
