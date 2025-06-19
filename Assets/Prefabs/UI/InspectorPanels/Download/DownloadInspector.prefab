@@ -709,6 +709,9 @@ MonoBehaviour:
     - m_Text: Collada (.dae)
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: DXF (.dxf)
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -2124,8 +2127,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1921, y: -519.7088}
-  m_SizeDelta: {x: 3838, y: 0}
+  m_AnchoredPosition: {x: 1916.5, y: -519.7088}
+  m_SizeDelta: {x: 3829, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5195422349626505141
 CanvasRenderer:
@@ -4744,7 +4747,7 @@ PrefabInstance:
     - target: {fileID: 1781802643554129927, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3286731148600885667, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
@@ -4849,12 +4852,12 @@ PrefabInstance:
     - target: {fileID: 3690174632879616221, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3690174632879616221, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}

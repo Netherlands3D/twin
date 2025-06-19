@@ -111,6 +111,7 @@ namespace Netherlands3D.Functionalities.AreaDownload
             OnExportFormatChanged.Invoke(selectedExportFormat);
         }
 
+        //used by the dropdown in the inspector
         public void SetExportFormat(int format)
         {
             //int to enum

@@ -1,15 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
 using Netherlands3D.CartesianTiles;
 using UnityEngine;
 using Netherlands3D.Coordinates;
 using Netherlands3D.MeshClipping;
 using Netherlands3D.Twin.Utility;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class DXFCreation : ModelFormatCreation
 {
-    private BoundingBox boundingBox;
+    [DllImport("__Internal")]
+    private static extern void DownloadFileImmediate(string callbackGameObjectName, string callbackMethodName, string fileName, byte[] array, int byteLength);
 
+    private BoundingBox boundingBox;
 
     protected override IEnumerator CreateFile(LayerMask includedLayers, Bounds selectedAreaBounds, float minClipBoundsHeight, bool destroyOnCompletion = true)
     {
@@ -25,7 +33,7 @@ public class DXFCreation : ModelFormatCreation
         // loadingScreen.ShowMessage("DXF-bestand genereren...");
         // loadingScreen.ProgressBar.SetMessage("");
         // loadingScreen.ProgressBar.Percentage(0.1f);
-        yield return new WaitForEndOfFrame();
+        // yield return new WaitForEndOfFrame();
 
         // int layercounter = 0;
         // foreach (var layer in layerList)
@@ -80,20 +88,20 @@ public class DXFCreation : ModelFormatCreation
             dxfFile.AddLayer(vertsRD, obj.Name, GetColor(obj.Material));
         }
 
-        yield return new WaitForEndOfFrame();
-        //     }
-        //     yield return new WaitForEndOfFrame();
-        // }
-        // yield return new WaitForEndOfFrame();
-        // }
+        yield return null;
 
-        // loadingScreen.ProgressBar.Percentage((float)layerList.Count / ((float)layerList.Count + 1));
-        // loadingScreen.ProgressBar.SetMessage("Het AutoCAD DXF (.dxf) bestand wordt afgerond...");
-        yield return new WaitForEndOfFrame();
-        dxfFile.Save();
-
-        // loadingScreen.Hide();
-        // FreezeLayers(layerList, false);
+#if UNITY_EDITOR
+        var localFile = EditorUtility.SaveFilePanel("Save Dxf", "", "export", "dxf");
+        if (localFile.Length > 0)
+        {
+            dxfFile.Save(localFile);
+            // File.WriteAllText(localFile, colladaFile.GetColladaXML());
+        }
+        //todo:
+#elif UNITY_WEBGL
+                // byte[] byteArray = Encoding.UTF8.GetBytes(colladaFile.GetColladaXML());
+                // DownloadFileImmediate(gameObject.name, "", "Collada.dae", byteArray, byteArray.Length);
+#endif
         Debug.Log("file saved");
 
         if (destroyOnCompletion)
