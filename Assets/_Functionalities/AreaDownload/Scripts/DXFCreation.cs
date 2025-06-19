@@ -54,12 +54,20 @@ public class DXFCreation : ModelFormatCreation
         {
             dxfFile.Save(localFile);
         }
-        //todo:
 #elif UNITY_WEBGL
-                // byte[] byteArray = Encoding.UTF8.GetBytes(colladaFile.GetColladaXML());
-                // DownloadFileImmediate(gameObject.name, "", "Collada.dae", byteArray, byteArray.Length);
+        using (var stream = new MemoryStream())
+        {
+            if (dxfFile.Save(stream))
+            {
+                DownloadFileImmediate(gameObject.name, "","export.dxf", stream.ToArray(), stream.ToArray().Length);
+                Debug.Log("file saved");
+            }
+            else
+            {
+                Debug.Log("cant write file");
+            }
+        }
 #endif
-        Debug.Log("file saved");
 
         if (destroyOnCompletion)
             Destroy(gameObject);

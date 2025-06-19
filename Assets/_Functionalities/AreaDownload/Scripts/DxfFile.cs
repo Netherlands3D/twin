@@ -1,14 +1,10 @@
 using System.Collections.Generic;
-using UnityEngine;
+using System.IO;
 using netDxf;
 using netDxf.Entities;
-using netDxf.Blocks;
 using netDxf.Tables;
 using Netherlands3D.Coordinates;
 using System.Runtime.InteropServices;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 public class DxfFile
 {
@@ -35,11 +31,17 @@ public class DxfFile
         AddMesh(triangleVertices, layerName);
     }
 
-    public void Save(string path)
+    public bool Save(string path)
     {
-        dxfDocument.Save(path, true);
+        return dxfDocument.Save(path, true);
     }
 
+    //used in if WEBGL pragma in DXFCreation
+    public bool Save(MemoryStream stream)
+    {
+        return dxfDocument.Save(stream);
+    }
+    
     private void AddMesh(List<Vector3RD> triangleVertices, string layerName)
     {
         PolyfaceMesh pfm;
