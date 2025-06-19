@@ -77,7 +77,7 @@ namespace Netherlands3D.Functionalities.Wms
                 TypeOfResponseType = ExpectedTypeOfResponse.Texture(true)
             };
         }
-        
+
         protected override IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
         {
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
@@ -100,57 +100,62 @@ namespace Netherlands3D.Functionalities.Wms
             var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(url), requestConfig);
 
             promise.Then(response =>
+            {
+                ClearPreviousTexture(tile);
+                Texture2D tex = response.Data as Texture2D;
+                tex.name = tile.tileKey.ToString();
+                tex.Compress(true);
+                tex.filterMode = FilterMode.Bilinear;
+                tex.Apply(false, true);
+                tex.wrapMode = TextureWrapMode.Clamp; //this is important we dont want artefacts at the edges of projections
+
+                if (!tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
                 {
-                    ClearPreviousTexture(tile);
-                    Texture2D tex = response.Data as Texture2D;
-                    tex.name = tile.tileKey.ToString();
-                    tex.Compress(true);
-                    tex.filterMode = FilterMode.Bilinear;
-                    tex.Apply(false, true);
-                    tex.wrapMode = TextureWrapMode.Clamp; //this is important we dont want artefacts at the edges of projections
-
-                    if (!tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
-                    {
-                        Destroy(tex);
-                        return;
-                    }
-                    
-                    projector.SetSize(tileSize, tileSize, tileSize);
-                    projector.gameObject.SetActive(isEnabled);
-                    projector.SetTexture(tex);
-
-                    if (foundCRS == CoordinateSystem.CRS84)
-                    {
-                        //this works for crs84 without the vx vy calculations
-                        projector.Material.SetVector("_UV00", projectorUVCorners[0]); // LL
-                        projector.Material.SetVector("_UV01", projectorUVCorners[3]); // UL
-                        projector.Material.SetVector("_UV10", projectorUVCorners[1]); // LR
-                        projector.Material.SetVector("_UV11", projectorUVCorners[2]); // UR
-
-                        projector.transform.rotation = Quaternion.Euler(new Vector3(90, (float)rotationProjector, 0));
-                        Vector3 position = centerProjectorPosition.ToUnity();
-                        position.y = ProjectorHeight;
-                        projector.transform.position = position;
-
-                        projector.SetSize((float)widthMeters, (float)heightMeters, ProjectorMinDepth);
-                    }
-                    else
-                    {
-                        projector.Material.SetVector("_UV00", Vector2.zero);         // LL
-                        projector.Material.SetVector("_UV01", new Vector2(1, 0));    // LR
-                        projector.Material.SetVector("_UV10", new Vector2(0, 1));    // UL
-                        projector.Material.SetVector("_UV11", Vector2.one);          // UR
-                    }
-
-                    //force the depth to be at least larger than its height to prevent z-fighting
-                    DecalProjector decalProjector = tile.gameObject.GetComponent<DecalProjector>();
-                    TextureDecalProjector textureDecalProjector = tile.gameObject.GetComponent<TextureDecalProjector>();
-                    if (ProjectorHeight >= decalProjector.size.z)
-                        textureDecalProjector.SetSize(decalProjector.size.x, decalProjector.size.y, ProjectorMinDepth);
-
-                    //set the render index, to make sure the render order is maintained
-                    textureDecalProjector.SetPriority(renderIndex);
+                    Destroy(tex);
+                    return;
                 }
+
+                projector.SetSize(tileSize, tileSize, tileSize);
+                projector.gameObject.SetActive(isEnabled);
+                projector.SetTexture(tex);
+
+                if (foundCRS == CoordinateSystem.CRS84)
+                {
+                    //this works for crs84
+                    //projector.Material.SetVector("_UV00", projectorUVCorners[0]); // LL
+                    //projector.Material.SetVector("_UV01", projectorUVCorners[3]); // UL
+                    //projector.Material.SetVector("_UV10", projectorUVCorners[1]); // LR
+                    //projector.Material.SetVector("_UV11", projectorUVCorners[2]); // UR
+
+                    projector.Material.SetVector("_UV00", projectorUVCorners[3]); // UL
+                    projector.Material.SetVector("_UV01", projectorUVCorners[2]); // UR
+                    projector.Material.SetVector("_UV10", projectorUVCorners[0]); // LL
+                    projector.Material.SetVector("_UV11", projectorUVCorners[1]); // LR
+
+                    //projector.transform.rotation = Quaternion.Euler(new Vector3(90, (float)rotationProjector, 0));
+                   // Vector3 position = centerProjectorPosition.ToUnity();
+                    //position.y = ProjectorHeight;
+                    //projector.transform.position = position;
+
+                    //projector.SetSize((float)widthMeters, (float)heightMeters, ProjectorMinDepth);
+                }
+                else
+                {
+                    projector.Material.SetVector("_UV00", Vector2.zero);         // LL
+                    projector.Material.SetVector("_UV01", new Vector2(1, 0));    // LR
+                    projector.Material.SetVector("_UV10", new Vector2(0, 1));    // UL
+                    projector.Material.SetVector("_UV11", Vector2.one);          // UR
+                }
+
+                //force the depth to be at least larger than its height to prevent z-fighting
+                DecalProjector decalProjector = tile.gameObject.GetComponent<DecalProjector>();
+                TextureDecalProjector textureDecalProjector = tile.gameObject.GetComponent<TextureDecalProjector>();
+                if (ProjectorHeight >= decalProjector.size.z)
+                    textureDecalProjector.SetSize(decalProjector.size.x, decalProjector.size.y, ProjectorMinDepth);
+
+                //set the render index, to make sure the render order is maintained
+                textureDecalProjector.SetPriority(renderIndex);
+            }
             );
 
             promise.Catch(exception =>
@@ -219,83 +224,89 @@ namespace Netherlands3D.Functionalities.Wms
                 heightMeters = Math.Abs(tr.northing - bl.northing) * metersPerDegreeLat;
 
                 //lets calculate the corners and minmax bounds in wgs84
-                Coordinate[] crs84Corners = new Coordinate[4];
+                Coordinate[] corners = new Coordinate[4];
                 for (int i = 0; i < 4; i++)
                 {
                     Coordinate rdCorner = new Coordinate(CoordinateSystem.RD, cornersRD[i].Item1, cornersRD[i].Item2, 0);
-                    crs84Corners[i] = rdCorner.Convert(CoordinateSystem.CRS84);
-                    if (crs84Corners[i].northing < minLon) minLon = crs84Corners[i].northing;
-                    if (crs84Corners[i].northing > maxLon) maxLon = crs84Corners[i].northing;
-                    if (crs84Corners[i].easting < minLat) minLat = crs84Corners[i].easting;
-                    if (crs84Corners[i].easting > maxLat) maxLat = crs84Corners[i].easting;
+                    corners[i] = rdCorner.Convert(CoordinateSystem.CRS84);
+                    if (corners[i].easting < minLon) minLon = corners[i].easting;
+                    if (corners[i].easting > maxLon) maxLon = corners[i].easting;
+                    if (corners[i].northing < minLat) minLat = corners[i].northing;
+                    if (corners[i].northing > maxLat) maxLat = corners[i].northing;
                 }
 
                 //the projector rotation
-                double drx = crs84Corners[3].easting - crs84Corners[0].easting;
-                double dry = crs84Corners[3].northing - crs84Corners[0].northing;
+                double drx = corners[3].northing - corners[0].northing;
+                double dry = corners[3].easting - corners[0].easting;
                 double angleRadians = Math.Atan2(dry, drx);
                 double angleDegrees = angleRadians * (180.0 / Math.PI);
-                rotationProjector = -angleDegrees;               
-                
+                //rotationProjector = -angleDegrees;
+
                 //lets calculate a compensated extra area because of the rotation its not a north oriented rectangle and should encapsulate the rotated rectangle
                 double rotationRadians = -angleDegrees * Mathf.Deg2Rad;
-                double compensation = Mathf.Sin((float)rotationRadians);
-                double scaleX = widthMeters / (1000 * (1 + compensation));
-                double scaleY = heightMeters / (1000 * (1 + compensation));
-                double scaleCompensation = 1 + compensation;
+                //double compensation = Mathf.Sin((float)rotationRadians);
+                double scaleX = widthMeters / 1000;
+                double scaleY = heightMeters / 1000;
+               // double scaleCompensation = 1 + compensation;
 
                 //we have to add about 5 to the projectorsizes because of the texture sampling overlap
-                widthMeters = 1000 * scaleCompensation + 5; 
-                heightMeters = 1000 * scaleCompensation + 5;
+                widthMeters = 1000;// * scaleCompensation + 5;
+                heightMeters = 1000;// * scaleCompensation + 5;
 
                 //calculate the centroid in wgs84
                 double centerLon = 0;
                 double centerLat = 0;
                 for (int i = 0; i < 4; i++)
                 {
-                    centerLon += crs84Corners[i].northing;
-                    centerLat += crs84Corners[i].easting;
+                    centerLon += corners[i].easting;
+                    centerLat += corners[i].northing;
                 }
                 centerLon /= 4.0;
                 centerLat /= 4.0;
-                Coordinate centerCoordinate = new Coordinate(CoordinateSystem.CRS84, centerLat, centerLon, 0);                
+                Coordinate centerCoordinate = new Coordinate(CoordinateSystem.CRS84, centerLat, centerLon, 0);
+                //Coordinate centerCoordinate = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize * 0.5f, tileChange.Y + tileSize * 0.5f, 0);
+                //centerCoordinate = centerCoordinate.Convert(CoordinateSystem.CRS84);
 
                 //now we can calculate the 4 corners in uv space in uv coordinates
                 double centerU = 0;
                 double centerV = 0;
+                (double u, double v)[] uvCorners = new (double u, double v)[4];
                 for (int i = 0; i < 4; i++)
                 {
-                    double u = (crs84Corners[i].easting - minLat) / (maxLat - minLat);
-                    double v = (crs84Corners[i].northing - minLon) / (maxLon - minLon);
-                    centerU += u;
-                    centerV += v;
+                    uvCorners[i].u = (corners[i].easting - minLon) / (maxLon - minLon);
+                    uvCorners[i].v = 1.0 - (corners[i].northing - minLat) / (maxLat - minLat);
+                    centerU += uvCorners[i].u;
+                    centerV += uvCorners[i].v;
                 }
                 centerU /= 4.0;
                 centerV /= 4.0;
+
+                double cosTheta = Math.Cos(rotationRadians);
+                double sinTheta = Math.Sin(rotationRadians);
+
                 for (int i = 0; i < 4; i++)
                 {
-                    double u = (crs84Corners[i].easting - minLat) / (maxLat - minLat);
-                    double v = (crs84Corners[i].northing - minLon) / (maxLon - minLon);
+                    double deltaU = (uvCorners[i].u - centerU) / scaleX;
+                    double deltaV = (uvCorners[i].v - centerV) / scaleY;
 
-                    double deltaU = u - centerU;
-                    double deltaV = v - centerV;
+                    double rotatedU = deltaU * cosTheta - deltaV * sinTheta;
+                    double rotatedV = deltaU * sinTheta + deltaV * cosTheta;
 
-                    //adjust for the extra scale because of compensation and the new width and height of the projector mapped uv space
-                    double scaledU = centerU + deltaU / scaleX;
-                    double scaledV = centerV + deltaV / scaleY;
+                    double finalU = centerU + rotatedU;
+                    double finalV = centerV + rotatedV;
 
-                    projectorUVCorners[i] = new Vector2((float)scaledU, (float)scaledV);
+                    projectorUVCorners[i] = new Vector2((float)finalU, (float)finalV);
                 }
 
-                //scale the boundingbox with compensation to compensate for the uv space 0-1 edge
-                for (int i = 0; i < 4; i++)
-                {
-                    crs84Corners[i] = CalculateScaledBboxCorner(centerCoordinate, crs84Corners[i], scaleCompensation, scaleCompensation, CoordinateSystem.CRS84);
-                }
+                ////scale the boundingbox with compensation to compensate for the uv space 0-1 edge
+                //for (int i = 0; i < 4; i++)
+                //{
+                //    wgs84Corners[i] = CalculateScaledBboxCorner(centerCoordinate, wgs84Corners[i], 1, 1, CoordinateSystem.WGS84);
+                //}
 
                 centerProjectorPosition = centerCoordinate;
-                
-                boundingBox = new BoundingBox(crs84Corners[0], crs84Corners[2]);
+
+                boundingBox = new BoundingBox(corners[0], corners[2]);
                 boundingBox.Convert(foundCoordinateSystem);
             }
             else
@@ -307,21 +318,21 @@ namespace Netherlands3D.Functionalities.Wms
         }
 
         private Coordinate CalculateScaledBboxCorner(Coordinate centerBbox, Coordinate corner, double scaleX, double scaleY, CoordinateSystem crs)
-        {            
+        {
             centerBbox = centerBbox.Convert(CoordinateSystem.WGS84);
             corner = corner.Convert(CoordinateSystem.WGS84);
 
-            double deltaLat = corner.easting - centerBbox.easting;
-            double deltaLon = corner.northing - centerBbox.northing;
+            double deltaLat = corner.northing - centerBbox.northing;
+            double deltaLon = corner.easting - centerBbox.easting;
             double scaledDeltaLat = deltaLat * scaleX;
             double scaledDeltaLon = deltaLon * scaleY;
-            double scaledLon = centerBbox.northing + scaledDeltaLon;
-            double scaledLat = centerBbox.easting + scaledDeltaLat;
+            double scaledLon = centerBbox.easting + scaledDeltaLon;
+            double scaledLat = centerBbox.northing + scaledDeltaLat;
             Coordinate result = new Coordinate(CoordinateSystem.WGS84, scaledLat, scaledLon);
             result = result.Convert(crs);
             return result;
         }
-      
+
         private void UpdateDrawOrderForChildren()
         {
             foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
@@ -332,18 +343,6 @@ namespace Netherlands3D.Functionalities.Wms
                 TextureDecalProjector projector = tile.Value.gameObject.GetComponent<TextureDecalProjector>();
                 projector.SetPriority(renderIndex);
             }
-        }
-
-        double Haversine(double lat1, double lon1, double lat2, double lon2)
-        {
-            double R = 6371000.0; // aarde straal in meters
-            double dLat = (lat2 - lat1) * Math.PI / 180.0;
-            double dLon = (lon2 - lon1) * Math.PI / 180.0;
-            double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-                       Math.Cos(lat1 * Math.PI / 180.0) * Math.Cos(lat2 * Math.PI / 180.0) *
-                       Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
-            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-            return R * c;
         }
     }
 }
