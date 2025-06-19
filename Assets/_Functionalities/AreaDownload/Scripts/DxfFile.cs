@@ -49,7 +49,6 @@ public class DxfFile
         List<PolyfaceMeshFace> pfmFaces = new List<PolyfaceMeshFace>();
         pfmFaces.Capacity = triangleVertices.Count / 3;
         int facecounter = 0;
-        // Debug.Log(triangleVertices.Count);
         int vertexIndex = 0;
 
         for (int i = 0; i < triangleVertices.Count; i += 3)

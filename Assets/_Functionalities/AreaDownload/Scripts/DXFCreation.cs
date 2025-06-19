@@ -24,53 +24,15 @@ public class DXFCreation : ModelFormatCreation
         DxfFile dxfFile = new DxfFile();
         dxfFile.SetupDXF();
         yield return null;
-        // MeshClipper meshClipper = new MeshClipper();
-
-        // loadingScreen.ShowMessage("DXF-bestand genereren...");
-        // loadingScreen.ProgressBar.SetMessage("");
-        // loadingScreen.ProgressBar.Percentage(0.1f);
-        // yield return new WaitForEndOfFrame();
-
-        // int layercounter = 0;
-        // foreach (var layer in layerList)
-        // {
-        //     layercounter++;
-        // loadingScreen.ProgressBar.Percentage((float)layercounter / ((float)layerList.Count+1));
-        // loadingScreen.ProgressBar.SetMessage("Laag '" + layer.name + "' wordt omgezet...");
-        // yield return new WaitForEndOfFrame();
 
         // List<GameObject> gameObjectsToClip = GetTilesInLayer(layer, bottomLeftRD, topRightRD);
         // if (gameObjectsToClip.Count==0)
         // {
         //     continue;
         // }
-        // foreach (var gameObject in gameObjectsToClip)
-        // {
-        //     meshClipper.SetGameObject(gameObject);
-        //     for (int submeshID = 0; submeshID < gameObject.GetComponent<MeshFilter>().sharedMesh.subMeshCount; submeshID++)
-        //     {
-        //         string layerName = gameObject.GetComponent<MeshRenderer>().sharedMaterials[submeshID].name.Replace(" (Instance)","");
-        //         layerName = layerName.Replace("=", "");
-        //         layerName = layerName.Replace("\\", "");
-        //         layerName = layerName.Replace("<", "");
-        //         layerName = layerName.Replace(">", "");
-        //         layerName = layerName.Replace("/", "");
-        //         layerName = layerName.Replace("?", "");
-        //         layerName = layerName.Replace("\"" ,"");
-        //         layerName = layerName.Replace(":", "");
-        //         layerName = layerName.Replace(";", "");
-        //         layerName = layerName.Replace("*", "");
-        //         layerName = layerName.Replace("|", "");
-        //         layerName = layerName.Replace(",", "");
-        //         layerName = layerName.Replace("'", "");
-        //
-        //         // loadingScreen.ProgressBar.SetMessage("Laag '" + layer.name + "' object " + layerName + " wordt uitgesneden...");
-        //         yield return new WaitForEndOfFrame();
-        //         
-        //         meshClipper.ClipSubMesh(boundingBox.ToUnityBounds(), submeshID);
+
         var objects = GetExportData(includedLayers, selectedAreaBounds, minClipBoundsHeight);
 
-        // var verts = meshClipper.clippedVertices;
         var vertsRD = new List<Vector3RD>();
         foreach (var obj in objects)
         {

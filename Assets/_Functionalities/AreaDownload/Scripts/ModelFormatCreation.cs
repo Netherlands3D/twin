@@ -65,6 +65,21 @@ public abstract class ModelFormatCreation : MonoBehaviour
 
                     material = meshRenderer.sharedMaterials[j];
                     subobjectName = material.name.Replace(" (Instance)", "").Split(' ')[0];
+                    
+                    //needed for dxf
+                    subobjectName = subobjectName.Replace("=", "");
+                    subobjectName = subobjectName.Replace("\\", "");
+                    subobjectName = subobjectName.Replace("<", "");
+                    subobjectName = subobjectName.Replace(">", "");
+                    subobjectName = subobjectName.Replace("/", "");
+                    subobjectName = subobjectName.Replace("?", "");
+                    subobjectName = subobjectName.Replace("\"" ,"");
+                    subobjectName = subobjectName.Replace(":", "");
+                    subobjectName = subobjectName.Replace(";", "");
+                    subobjectName = subobjectName.Replace("*", "");
+                    subobjectName = subobjectName.Replace("|", "");
+                    subobjectName = subobjectName.Replace(",", "");
+                    subobjectName = subobjectName.Replace("'", "");
                 }
 
                 //Fresh start for meshclipper
