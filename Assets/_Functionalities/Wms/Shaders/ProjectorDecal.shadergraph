@@ -1533,7 +1533,7 @@
     "m_FunctionName": "BilinearUV",
     "m_FunctionSource": "",
     "m_FunctionSourceUsePragmas": true,
-    "m_FunctionBody": "float2 u0 = lerp(uv00.xy, uv01.xy, uv.x); // Interpolate between bottomLeft and bottomRight\r\nfloat2 u1 = lerp(uv10.xy, uv11.xy, uv.x); // Interpolate between topLeft and topRight\r\nOut = lerp(u0, u1, uv.y);"
+    "m_FunctionBody": "float2 u0 = lerp(uv00.xy, uv10.xy, uv.x); // Interpolate between bottomLeft and bottomRight\r\nfloat2 u1 = lerp(uv01.xy, uv11.xy, uv.x); // Interpolate between topLeft and topRight\r\nOut = lerp(u0, u1, uv.y);"
 }
 
 {

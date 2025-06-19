@@ -122,18 +122,19 @@ namespace Netherlands3D.Functionalities.Wms
                 if (foundCRS == CoordinateSystem.CRS84)
                 {
                     //this works for crs84
-                    //projector.Material.SetVector("_UV00", projectorUVCorners[0]); // LL
-                    //projector.Material.SetVector("_UV01", projectorUVCorners[3]); // UL
-                    //projector.Material.SetVector("_UV10", projectorUVCorners[1]); // LR
-                    //projector.Material.SetVector("_UV11", projectorUVCorners[2]); // UR
+                    projector.Material.SetVector("_UV00", projectorUVCorners[0]); // BL
+                    projector.Material.SetVector("_UV10", projectorUVCorners[1]); // BR
+                    projector.Material.SetVector("_UV01", projectorUVCorners[2]); // TL                   
+                    projector.Material.SetVector("_UV11", projectorUVCorners[3]); // TR
 
-                    projector.Material.SetVector("_UV00", projectorUVCorners[3]); // UL
-                    projector.Material.SetVector("_UV01", projectorUVCorners[2]); // UR
-                    projector.Material.SetVector("_UV10", projectorUVCorners[0]); // LL
-                    projector.Material.SetVector("_UV11", projectorUVCorners[1]); // LR
+
+                    //projector.Material.SetVector("_UV00", projectorUVCorners[3]); // UL
+                    //projector.Material.SetVector("_UV01", projectorUVCorners[2]); // UR
+                    //projector.Material.SetVector("_UV10", projectorUVCorners[0]); // LL
+                    //projector.Material.SetVector("_UV11", projectorUVCorners[1]); // LR
 
                     //projector.transform.rotation = Quaternion.Euler(new Vector3(90, (float)rotationProjector, 0));
-                   // Vector3 position = centerProjectorPosition.ToUnity();
+                    // Vector3 position = centerProjectorPosition.ToUnity();
                     //position.y = ProjectorHeight;
                     //projector.transform.position = position;
 
@@ -201,10 +202,11 @@ namespace Netherlands3D.Functionalities.Wms
 
                 (double, double)[] cornersRD = new (double, double)[4]
                 {
-                    (bottomLeft.easting,  bottomLeft.northing),   // LL
-                    (bottomRight.easting, bottomRight.northing),  // LR
-                    (topRight.easting,    topRight.northing),     // UR
-                    (topLeft.easting,     topLeft.northing)       // UL
+                    (bottomLeft.easting,  bottomLeft.northing),   // BL
+                    (bottomRight.easting, bottomRight.northing),  // BR
+                    (topLeft.easting,     topLeft.northing),        //TL
+                    (topRight.easting,    topRight.northing)     // TR
+                          
                 };
 
                 double minLon = double.MaxValue;
@@ -236,17 +238,20 @@ namespace Netherlands3D.Functionalities.Wms
                 }
 
                 //the projector rotation
-                double drx = corners[3].northing - corners[0].northing;
-                double dry = corners[3].easting - corners[0].easting;
+                double drx = corners[2].northing - corners[0].northing;
+                double dry = corners[2].easting - corners[0].easting;
                 double angleRadians = Math.Atan2(dry, drx);
                 double angleDegrees = angleRadians * (180.0 / Math.PI);
                 //rotationProjector = -angleDegrees;
 
                 //lets calculate a compensated extra area because of the rotation its not a north oriented rectangle and should encapsulate the rotated rectangle
                 double rotationRadians = -angleDegrees * Mathf.Deg2Rad;
-                //double compensation = Mathf.Sin((float)rotationRadians);
+                double compensation = Mathf.Sin((float)rotationRadians);
                 double scaleX = widthMeters / 1000;
                 double scaleY = heightMeters / 1000;
+                double aspect = scaleY * scaleX;
+
+
                // double scaleCompensation = 1 + compensation;
 
                 //we have to add about 5 to the projectorsizes because of the texture sampling overlap
@@ -274,7 +279,7 @@ namespace Netherlands3D.Functionalities.Wms
                 for (int i = 0; i < 4; i++)
                 {
                     uvCorners[i].u = (corners[i].easting - minLon) / (maxLon - minLon);
-                    uvCorners[i].v = 1.0 - (corners[i].northing - minLat) / (maxLat - minLat);
+                    uvCorners[i].v = (corners[i].northing - minLat) / (maxLat - minLat);
                     centerU += uvCorners[i].u;
                     centerV += uvCorners[i].v;
                 }
@@ -286,27 +291,14 @@ namespace Netherlands3D.Functionalities.Wms
 
                 for (int i = 0; i < 4; i++)
                 {
-                    double deltaU = (uvCorners[i].u - centerU) / scaleX;
-                    double deltaV = (uvCorners[i].v - centerV) / scaleY;
-
-                    double rotatedU = deltaU * cosTheta - deltaV * sinTheta;
-                    double rotatedV = deltaU * sinTheta + deltaV * cosTheta;
-
-                    double finalU = centerU + rotatedU;
-                    double finalV = centerV + rotatedV;
-
+                    double deltaU = (uvCorners[i].u - centerU) / aspect;
+                    double finalU = centerU + deltaU;
+                    double finalV = uvCorners[i].v;
                     projectorUVCorners[i] = new Vector2((float)finalU, (float)finalV);
                 }
-
-                ////scale the boundingbox with compensation to compensate for the uv space 0-1 edge
-                //for (int i = 0; i < 4; i++)
-                //{
-                //    wgs84Corners[i] = CalculateScaledBboxCorner(centerCoordinate, wgs84Corners[i], 1, 1, CoordinateSystem.WGS84);
-                //}
-
                 centerProjectorPosition = centerCoordinate;
 
-                boundingBox = new BoundingBox(corners[0], corners[2]);
+                boundingBox = new BoundingBox(bottomLeft, topRight);
                 boundingBox.Convert(foundCoordinateSystem);
             }
             else
