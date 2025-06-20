@@ -44,6 +44,7 @@ namespace Netherlands3D.Dxf
                 }
 
                 dxfFile.AddLayer(vertsRD, obj.Name, GetColor(obj.Material));
+                vertsRD.Clear();
             }
 
             yield return null;
