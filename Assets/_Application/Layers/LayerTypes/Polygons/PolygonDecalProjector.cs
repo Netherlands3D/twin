@@ -19,13 +19,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         [SerializeField] private AnimationCurve lookDirectionResolution;
         
         private DecalProjector decalProjector;
-        private Camera projectionCamera;
+        public Camera ProjectionCamera { get; private set; }
         [FormerlySerializedAs("terrainLayer")] [SerializeField] private CartesianTileLayerGameObject terrainLayerGameObject;
         
         private void Awake()
         {
             decalProjector = GetComponent<DecalProjector>();
-            projectionCamera = GetComponent<Camera>();
+            ProjectionCamera = GetComponent<Camera>();
         }
 
         private void Update()
@@ -52,7 +52,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             decalProjector.transform.position = pos;
             decalProjector.size = size;
             
-            projectionCamera.orthographicSize = maxDimension / 2;
+            ProjectionCamera.orthographicSize = maxDimension / 2;
         }
 
         private float EstimateCameraHeight()
