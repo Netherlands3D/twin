@@ -184,8 +184,18 @@ namespace Netherlands3D.Functionalities.Wms
             foundCRS = foundCoordinateSystem;
             if (foundCoordinateSystem == CoordinateSystem.CRS84)
             {
-                var bottomRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y, 0);
-                var topLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y + tileSize, 0);
+                //make the bbox wider to compensate for gaps on edges (trapezium)
+                float overlapHorizontalFactor = 0.05f;
+                float offset = overlapHorizontalFactor * tileSize;
+                var bottomRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize + offset, tileChange.Y, 0);
+                var topLeft = new Coordinate(CoordinateSystem.RD, tileChange.X - offset, tileChange.Y + tileSize, 0);
+                bottomLeft = new Coordinate(CoordinateSystem.RD, tileChange.X - offset, tileChange.Y, 0);
+                topRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize + offset, tileChange.Y + tileSize, 0);
+                Coordinate originalBottomLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
+                Coordinate originalTopRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);
+                Coordinate blOrig = originalBottomLeft.Convert(CoordinateSystem.CRS84);
+                Coordinate trOrig = originalTopRight.Convert(CoordinateSystem.CRS84);              
+
 
                 (double, double)[] cornersRD = new (double, double)[4]
                 {
@@ -195,11 +205,22 @@ namespace Netherlands3D.Functionalities.Wms
                     (topRight.easting,    topRight.northing)     // TR
                           
                 };
+                (double, double)[] originalCornersRD = new (double, double)[4]
+                {
+                    (originalBottomLeft.easting, originalBottomLeft.northing),  // BL
+                    (originalTopRight.easting, originalBottomLeft.northing),    // BR
+                    (originalBottomLeft.easting, originalTopRight.northing),    // TL
+                    (originalTopRight.easting, originalTopRight.northing),      // TR
+                };
 
                 double minLon = double.MaxValue;
                 double maxLon = double.MinValue;
                 double minLat = double.MaxValue;
                 double maxLat = double.MinValue;
+                double minLonOrig = double.MaxValue;
+                double maxLonOrig = double.MinValue;
+                double minLatOrig = double.MaxValue;
+                double maxLatOrig = double.MinValue;
 
                 //lets calculate the width and height of the tile when projected with wgs84/crs84
                 Coordinate bl = bottomLeft.Convert(CoordinateSystem.CRS84);
@@ -222,6 +243,15 @@ namespace Netherlands3D.Functionalities.Wms
                     if (corners[i].easting > maxLon) maxLon = corners[i].easting;
                     if (corners[i].northing < minLat) minLat = corners[i].northing;
                     if (corners[i].northing > maxLat) maxLat = corners[i].northing;
+                }               
+                for (int i = 0; i < 4; i++)
+                {
+                    Coordinate rdCorner = new Coordinate(CoordinateSystem.RD, originalCornersRD[i].Item1, originalCornersRD[i].Item2, 0);
+                    Coordinate wgsCorner = rdCorner.Convert(CoordinateSystem.CRS84);
+                    if (wgsCorner.easting < minLonOrig) minLonOrig = wgsCorner.easting;
+                    if (wgsCorner.easting > maxLonOrig) maxLonOrig = wgsCorner.easting;
+                    if (wgsCorner.northing < minLatOrig) minLatOrig = wgsCorner.northing;
+                    if (wgsCorner.northing > maxLatOrig) maxLatOrig = wgsCorner.northing;
                 }
 
                 //the projector rotation
@@ -232,11 +262,8 @@ namespace Netherlands3D.Functionalities.Wms
                 
                 //lets calculate a compensated extra area because of the rotation its not a north oriented rectangle and should encapsulate the rotated rectangle
                 double rotationRadians = -angleDegrees * Mathf.Deg2Rad;
-                double compensation = 1 + Mathf.Sin((float)rotationRadians);
-                double scaleX = widthMeters / 1000;
-                double scaleY = heightMeters / 1000;
-                double aspect = (1000 / scaleY * scaleX) / 1000;
-
+                double compensation = 0.5 * Mathf.Sin((float)rotationRadians);
+              
                 widthMeters = 1000;
                 heightMeters = 1000;
 
@@ -252,48 +279,30 @@ namespace Netherlands3D.Functionalities.Wms
                 centerLat /= 4.0;
                 Coordinate centerCoordinate = new Coordinate(CoordinateSystem.CRS84, centerLat, centerLon, 0);
                
-                //now we can calculate the 4 corners in uv space in uv coordinates
-                double centerU = 0;
-                double centerV = 0;
-                (double u, double v)[] uvCorners = new (double u, double v)[4];
-                for (int i = 0; i < 4; i++)
-                {
-                    uvCorners[i].u = (corners[i].easting - minLon) / (maxLon - minLon);
-                    uvCorners[i].v = (corners[i].northing - minLat) / (maxLat - minLat);
-                    centerU += uvCorners[i].u;
-                    centerV += uvCorners[i].v;
-                }
-                centerU /= 4.0;
-                centerV /= 4.0;
+                //now we can calculate the 4 corners in uv space in uv coordinates                
+                double scaleU = (maxLonOrig - minLonOrig) / (maxLon - minLon);
+                double offsetU = (minLonOrig - minLon) / (maxLon - minLon);
 
+                double scaleV = (maxLatOrig - minLatOrig) / (maxLat - minLat);
+                double offsetV = (minLatOrig - minLat) / (maxLat - minLat);         
+                
                 for (int i = 0; i < 4; i++)
                 {
-                    double deltaU = (uvCorners[i].u - centerU) / aspect;
-                    double finalU = centerU + deltaU;
-                    double deltaV = (uvCorners[i].v - centerV) / 1;
-                    double finalV = centerV + deltaV;
+                    double u = (corners[i].easting - minLon) / (maxLon - minLon);
+                    double v = (corners[i].northing - minLat) / (maxLat - minLat);
+
+                    double finalU = u * scaleU + offsetU;
+                    double finalV = v * scaleV + offsetV;
+
+                    finalU = finalU * (1.0 + 2 * compensation) - compensation;
+
                     projectorUVCorners[i] = new Vector2((float)finalU, (float)finalV);
                 }
                 centerProjectorPosition = centerCoordinate;
-
-                //Coordinate newBL = CalculateScaledBboxCorner(centerCoordinate, bottomLeft, compensation, compensation, CoordinateSystem.RD);
-                //Coordinate newTR = CalculateScaledBboxCorner(centerCoordinate, bottomLeft, compensation, compensation, CoordinateSystem.RD);
-
-                double offset = compensation - 1;
-                Coordinate newBL = new Coordinate(CoordinateSystem.RD, tileChange.X - tileSize * offset, tileChange.Y, 0);
-                Coordinate newTR = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize + tileSize * offset, tileChange.Y, 0);
-                //boundingBox = new BoundingBox(newBL, newTR);
-                boundingBox = new BoundingBox(bottomLeft, topRight);
-                //boundingBox.Encapsulate(newBL);
-                //boundingBox.Encapsulate(newTR);
-                testBB = boundingBox;
-                boundingBox.Convert(foundCoordinateSystem);
             }
-            else
-            {
-                boundingBox = new BoundingBox(bottomLeft, topRight);
-                boundingBox.Convert(foundCoordinateSystem);
-            }
+            boundingBox = new BoundingBox(bottomLeft, topRight);
+            testBB = boundingBox;
+            boundingBox.Convert(foundCoordinateSystem);
             return boundingBox;
         }
 
