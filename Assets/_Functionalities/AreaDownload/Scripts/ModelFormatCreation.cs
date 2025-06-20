@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using Netherlands3D.MeshClipping;
 
@@ -64,22 +65,10 @@ public abstract class ModelFormatCreation : MonoBehaviour
                     }
 
                     material = meshRenderer.sharedMaterials[j];
-                    subobjectName = material.name.Replace(" (Instance)", "").Split(' ')[0];
+                    subobjectName = SanitizeName(material.name).Replace(" (Instance)", "").Split(' ')[0];
                     
                     //needed for dxf
-                    subobjectName = subobjectName.Replace("=", "");
-                    subobjectName = subobjectName.Replace("\\", "");
-                    subobjectName = subobjectName.Replace("<", "");
-                    subobjectName = subobjectName.Replace(">", "");
-                    subobjectName = subobjectName.Replace("/", "");
-                    subobjectName = subobjectName.Replace("?", "");
-                    subobjectName = subobjectName.Replace("\"" ,"");
-                    subobjectName = subobjectName.Replace(":", "");
-                    subobjectName = subobjectName.Replace(";", "");
-                    subobjectName = subobjectName.Replace("*", "");
-                    subobjectName = subobjectName.Replace("|", "");
-                    subobjectName = subobjectName.Replace(",", "");
-                    subobjectName = subobjectName.Replace("'", "");
+                    subobjectName = SanitizeName(subobjectName);
                 }
 
                 //Fresh start for meshclipper
@@ -87,11 +76,26 @@ public abstract class ModelFormatCreation : MonoBehaviour
                 clipBounds.size = new Vector3(clipBounds.size.x, Mathf.Max(clipBounds.size.y, minClipBoundsHeight), clipBounds.size.z);
                 meshClipper.SetGameObject(meshFiltersInLayers[i].gameObject);
                 meshClipper.ClipSubMesh(clipBounds, j);
-                var objectData = new ObjectData(subobjectName, meshClipper.clippedVertices, material);
+                var verticesToAdd = meshClipper.clippedVertices;
+                if(verticesToAdd.Count == 0)
+                    continue;
+                
+                var objectData = new ObjectData(subobjectName, verticesToAdd, material);
                 objects.Add(objectData);
             }
         }
 
         return objects;
+    }
+    
+    string SanitizeName(string name)
+    {
+        var sb = new StringBuilder(name.Length);
+        foreach (char c in name)
+        {
+            if (":;*?\"<>=\\|/,\'".IndexOf(c) == -1)
+                sb.Append(c);
+        }
+        return sb.ToString();
     }
 }

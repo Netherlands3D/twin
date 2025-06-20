@@ -31,12 +31,6 @@ namespace Netherlands3D.Dxf
             dxfFile.SetupDXF();
             yield return null;
 
-            // List<GameObject> gameObjectsToClip = GetTilesInLayer(layer, bottomLeftRD, topRightRD);
-            // if (gameObjectsToClip.Count==0)
-            // {
-            //     continue;
-            // }
-
             var objects = GetExportData(includedLayers, selectedAreaBounds, minClipBoundsHeight);
 
             var vertsRD = new List<Vector3RD>();
