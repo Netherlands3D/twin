@@ -151,6 +151,11 @@ namespace Netherlands3D.Twin.Utility
             TopRight = new Coordinate(CoordinateSystem, trv1, trv2, trv3);
         }
 
+        public Bounds ToUnityBounds()
+        {
+            return new Bounds(Center.ToUnity(), Size.ToUnity());
+        }
+
         private static double Min(double lhs, double rhs)
         {
             return lhs < rhs ? lhs : rhs;
