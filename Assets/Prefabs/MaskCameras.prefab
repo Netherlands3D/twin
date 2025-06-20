@@ -120,6 +120,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MaskInvertProjector
       objectReference: {fileID: 0}
+    - target: {fileID: 6058030180492920833, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 6592016002428932495, guid: 7b1c5664f8541466bbb7ed473f916549,
         type: 3}
       propertyPath: m_Enabled
@@ -155,7 +160,8 @@ PrefabInstance:
       propertyPath: m_CullingMask.m_Bits
       value: 16384
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7665800559663655083, guid: 7b1c5664f8541466bbb7ed473f916549, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -240,6 +246,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MaskProjector
       objectReference: {fileID: 0}
+    - target: {fileID: 6058030180492920833, guid: 7b1c5664f8541466bbb7ed473f916549,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 6592016002428932495, guid: 7b1c5664f8541466bbb7ed473f916549,
         type: 3}
       propertyPath: m_Enabled
@@ -255,7 +266,8 @@ PrefabInstance:
       propertyPath: m_CullingMask.m_Bits
       value: 8192
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7665800559663655083, guid: 7b1c5664f8541466bbb7ed473f916549, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
