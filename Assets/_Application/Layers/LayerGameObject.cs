@@ -36,8 +36,6 @@ namespace Netherlands3D.Twin.Layers
             get => LayerData.Name;
             set => LayerData.Name = value;
         }
-
-        public bool HasLayerData => layerData != null;
         
         private ReferencedLayerData layerData;
 
