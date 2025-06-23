@@ -4,7 +4,7 @@ namespace Netherlands3D.Functionalities.AreaDownload
 {
     [Serializable]
     public enum ExportFormat{
-        Collada, //.dae
-        AutodeskDXF //.dxf
+        Collada = 0, //.dae
+        AutodeskDXF = 1 //.dxf
     }
 }
