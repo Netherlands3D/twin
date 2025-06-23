@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -269,6 +270,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 polygonPropertyData = polygonProperty; //take existing property to overwrite the unlinked one of this class
                 SetShape(OriginalPolygon); //initialize the shape again with properties (use shape instead of setLine to ensure polygon is also 
             }
+        }
+
+        public override void SetReference(LayerGameObject layerGameObject)
+        {
+            throw new NotSupportedException("Replacing polygon references is currently not supported");
         }
     }
 }
