@@ -196,7 +196,7 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void ApplyStyling()
         {
-            //initialize the layer's style
+            //initialize the layer's style and emit an event for other services and/or UI to update
             OnStylingApplied.Invoke();
         }
 #endregion

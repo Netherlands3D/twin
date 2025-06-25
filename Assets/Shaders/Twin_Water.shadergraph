@@ -1560,13 +1560,13 @@
     "m_RefNameGeneratedByDisplayName": "ReflectionCameraTexture",
     "m_DefaultReferenceName": "_ReflectionCameraTexture",
     "m_OverrideReferenceName": "",
-    "m_GeneratePropertyBlock": true,
+    "m_GeneratePropertyBlock": false,
     "m_UseCustomSlotLabel": false,
     "m_CustomSlotLabel": "",
     "m_DismissedVersion": 0,
     "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
+    "overrideHLSLDeclaration": true,
+    "hlslDeclarationOverride": 1,
     "m_Hidden": false,
     "m_Value": {
         "m_SerializedTexture": "",
@@ -5392,8 +5392,8 @@
     "m_ObjectId": "a5d5c666109c4d95a759a2fb175b6a1b",
     "m_Title": "Reflections",
     "m_Position": {
-        "x": -345.0,
-        "y": 1038.0
+        "x": -344.99951171875,
+        "y": 1037.9998779296875
     }
 }
 
@@ -5955,7 +5955,7 @@
     "m_ObjectId": "be42663a4542416abbb8ad99840212d9",
     "m_Title": "Spherical masking",
     "m_Position": {
-        "x": -415.0000305175781,
+        "x": -415.0,
         "y": 348.0
     }
 }
@@ -6117,7 +6117,7 @@
     "m_Title": "World space water waves",
     "m_Position": {
         "x": -3046.0,
-        "y": -605.0000610351563
+        "y": -605.0
     }
 }
 
