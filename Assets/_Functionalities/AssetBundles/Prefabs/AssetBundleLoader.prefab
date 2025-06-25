@@ -344,7 +344,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &841832743482891806
 CanvasRenderer:
@@ -398,7 +398,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fillBar: {fileID: 3367348477220932366}
   logInConsole: 0
-  StartCanvas: {fileID: 0}
 --- !u!223 &2454038262805176610
 Canvas:
   m_ObjectHideFlags: 0
