@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GLTFast;
-using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -16,12 +14,6 @@ namespace Netherlands3D.Functionalities.GLBImporter
 {
     public class GLBSpawner : MonoBehaviour, ILayerWithPropertyData
     {
-        [Header("Required input")] [SerializeField]
-        private Material baseMaterial;
-
-        [Header("Settings")] 
-        [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
-
         private GLBPropertyData propertyData = new();
         public LayerPropertyData PropertyData => propertyData;
         private GameObject importedObject;
@@ -67,13 +59,6 @@ namespace Netherlands3D.Functionalities.GLBImporter
             File.Copy(glbPath, copiedObjFilename);
 
             StartCoroutine(LoadGlb(copiedObjFilename));
-            // importer.objFilePath = copiedObjFilename;
-            //
-            // importer.imgFilePath = "";
-            //
-            // importer.BaseMaterial = baseMaterial;
-            // importer.createSubMeshes = createSubMeshes;
-            // importer.StartImporting(OnObjImported);
         }
 
         private IEnumerator LoadGlb(string file)
@@ -85,8 +70,6 @@ namespace Netherlands3D.Functionalities.GLBImporter
             }
 
             var gltf = new GltfImport();
-
-            // Start loading the file
             var loadTask = gltf.Load(file);
             while (!loadTask.IsCompleted)
             {
@@ -99,7 +82,8 @@ namespace Netherlands3D.Functionalities.GLBImporter
                 yield break;
             }
 
-            var instantiateTask = gltf.InstantiateMainSceneAsync(transform);
+            var root = new GameObject("GLBRoot");
+            var instantiateTask = gltf.InstantiateMainSceneAsync(root.transform);
             while (!instantiateTask.IsCompleted)
             {
                 yield return null;
@@ -111,18 +95,14 @@ namespace Netherlands3D.Functionalities.GLBImporter
                 yield break;
             }
 
-            Debug.Log("GLB loaded and instantiated successfully.");
+            OnObjImported(root);
         }
 
         private void OnObjImported(GameObject returnedGameObject)
         {
-            // bool isGeoReferenced = !importer.createdGameobjectIsMoveable;
             var holgo = GetComponent<HierarchicalObjectLayerGameObject>();
 
-            // if (isGeoReferenced)
-            //     PositionGeoReferencedObj(returnedGameObject, holgo);
-            // else
-                PositionNonGeoReferencedGlb(returnedGameObject, holgo);
+            PositionNonGeoReferencedGlb(returnedGameObject, holgo);
 
             importedObject = returnedGameObject;
             returnedGameObject.AddComponent<MeshCollider>();
@@ -148,48 +128,11 @@ namespace Netherlands3D.Functionalities.GLBImporter
             }
         }
 
-        private void PositionGeoReferencedGlb(GameObject returnedGameObject, HierarchicalObjectLayerGameObject holgo)
-        {
-            var targetPosition = new Coordinate(returnedGameObject.transform.position); //georeferenced position as coordinate. todo: there is already precision lost in the importer, this should be preserved while parsing, as there is nothing we can do now anymore.
-
-            if (!holgo.TransformIsSetFromProperty) //move the camera only if this is is a user imported object, not if this is a project import. We know this because a project import has its Transform property set.
-            {
-                var cameraMover = Camera.main.GetComponent<MoveCameraToCoordinate>();
-                cameraMover.LookAtTarget(targetPosition, cameraDistanceFromGeoReferencedObject); //move the camera to the georeferenced position, this also shifts the origin if needed.
-            }
-
-            holgo.WorldTransform.MoveToCoordinate(targetPosition); //set this object to the georeferenced position, since this is the correct position.
-            returnedGameObject.transform.SetParent(transform, false); // we set the parent and reset its localPosition, since the origin might have changed.
-            returnedGameObject.transform.localPosition = Vector3.zero;
-
-            // imported object should stay where it is initially, and only then apply any user transformations if present.
-            if (holgo.TransformIsSetFromProperty)
-            {
-                var transformPropterty = (TransformLayerPropertyData)((ILayerWithPropertyData)holgo).PropertyData;
-                holgo.WorldTransform.MoveToCoordinate(transformPropterty.Position); //apply saved user changes to position.
-            }
-        }
-
-        // private void DisposeImporter()
-        // {
-        //     if (importer != null)
-        //     {
-        //         // importer.MtlImportSucceeded.RemoveListener(MtlImportSuccess.Invoke);
-        //         Destroy(importer.gameObject);
-        //     }
-        // }
-
         public void SetGlbPathInPropertyData(string fullPath)
         {
             var propertyData = PropertyData as GLBPropertyData;
             propertyData.GlbFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
         }
-
-        // public void SetMtlPathInPropertyData(string fullPath)
-        // {
-        //     var propertyData = PropertyData as OBJPropertyData;
-        //     propertyData.MtlFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
-        // }
 
         private string GetGlbPathFromPropertyData()
         {
