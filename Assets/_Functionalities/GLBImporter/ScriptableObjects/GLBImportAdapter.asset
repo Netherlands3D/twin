@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f2b8500eb3484559abb2c6f21c3c96a, type: 3}
   m_Name: GLBImportAdapter
   m_EditorClassIdentifier: 
-  layerPrefab: {fileID: 0}
-  displayErrorMessageEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  layerPrefab: {fileID: -47069250887761774, guid: 9c30c9cc071ed4343b05fb7ded7859d2,
+    type: 3}
