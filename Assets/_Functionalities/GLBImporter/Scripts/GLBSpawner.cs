@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GLTFast;
+using Netherlands3D.Tiles3D;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -69,7 +70,11 @@ namespace Netherlands3D.Functionalities.GLBImporter
                 yield break;
             }
 
-            var gltf = new GltfImport();
+            var consoleLogger = new GLTFast.Logging.ConsoleLogger();
+            
+            var materialGenerator = new NL3DMaterialGenerator();
+            GltfImport gltf = new GltfImport(null, null, materialGenerator, consoleLogger);
+            
             var loadTask = gltf.Load(file);
             while (!loadTask.IsCompleted)
             {
