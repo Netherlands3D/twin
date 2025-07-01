@@ -108,8 +108,11 @@ namespace Netherlands3D.Functionalities.GLBImporter
             PositionNonGeoReferencedGlb(returnedGameObject, holgo);
 
             importedObject = returnedGameObject;
-            returnedGameObject.AddComponent<MeshCollider>();
-
+            foreach (var meshFilter in returnedGameObject.GetComponentsInChildren<MeshFilter>())
+            {
+                meshFilter.gameObject.AddComponent<MeshCollider>();
+            }
+            
             // Object is loaded / replaced - trigger the application of styling
             holgo.ApplyStyling();
         }
