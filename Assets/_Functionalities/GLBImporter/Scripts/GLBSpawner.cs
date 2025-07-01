@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +10,6 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace Netherlands3D.Functionalities.GLBImporter
 {
@@ -58,67 +56,65 @@ namespace Netherlands3D.Functionalities.GLBImporter
             // because we want to keep the file, we let the importer read a copy of the file
             // the copying can be removed after the code for the importer is changed
 
-            string copiedObjFilename = glbPath + ".temp";
-            File.Copy(glbPath, copiedObjFilename);
+            // string copiedObjFilename = glbPath + ".temp";
+            // File.Copy(glbPath, copiedObjFilename);
 
-            StartCoroutine(LoadGlb(copiedObjFilename));
+            StartCoroutine(LoadGlb(glbPath));
         }
 
         private IEnumerator LoadGlb(string file)
         {
-            var uri = new Uri(file);
-            print("glb uri: " + uri);
-
-            using (UnityWebRequest uwr = UnityWebRequest.Get(uri))
+            if (string.IsNullOrWhiteSpace(file) || !File.Exists(file))
             {
-                yield return uwr.SendWebRequest();
-
-                if (uwr.result != UnityWebRequest.Result.Success)
-                {
-                    Debug.LogError("Failed to load GLB from url: " + uri + " : " + uwr.error);
-                    yield break;
-                }
-
-                byte[] glbData = uwr.downloadHandler.data;
-
-                // if (string.IsNullOrWhiteSpace(file) || !File.Exists(file))
-                // {
-                //     Debug.LogError("Invalid file path.");
-                //     yield break;
-                // }
-
-                var consoleLogger = new GLTFast.Logging.ConsoleLogger();
-                var materialGenerator = new NL3DMaterialGenerator();
-                GltfImport gltf = new GltfImport(null, null, materialGenerator, consoleLogger);
-
-                // var loadTask = gltf.Load(file);
-                gltf.Load(glbData, uri);
-                // while (!loadTask.IsCompleted)
-                // {
-                //     yield return null;
-                // }
-
-                // if (!loadTask.Result)
-                // {
-                //     Debug.LogError("Failed to load GLB file.");
-                //     yield break;
-                // }
-
-                var root = new GameObject("GLBRoot");
-                var instantiateTask = gltf.InstantiateMainSceneAsync(root.transform);
-                while (!instantiateTask.IsCompleted)
-                {
-                    yield return null;
-                }
-
-                if (!instantiateTask.Result)
-                {
-                    Debug.LogError("Failed to instantiate GLB.");
-                    yield break;
-                }
-
-                OnObjImported(root);
+                Debug.LogError("Invalid file path.");
+                yield break;
             }
+
+            var consoleLogger = new GLTFast.Logging.ConsoleLogger();
+            var materialGenerator = new NL3DMaterialGenerator();
+            GltfImport gltf = new GltfImport(null, null, materialGenerator, consoleLogger);
+            
+            FileStream fileStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.None);
+            byte[] data = new byte[fileStream.Length];
+            int totalRead = 0;
+
+            while (totalRead < data.Length)
+            {
+                var readTask = fileStream.ReadAsync(data, totalRead, data.Length - totalRead);
+                while (!readTask.IsCompleted)
+                    yield return null;
+
+                int bytesRead = readTask.Result;
+                if (bytesRead == 0) break;
+                totalRead += bytesRead;
+            }
+            
+            var loadTask = gltf.Load(data);
+            while (!loadTask.IsCompleted)
+            {
+                yield return null;
+            }
+
+            if (!loadTask.Result)
+            {
+                Debug.LogError("Failed to load GLB file.");
+                yield break;
+            }
+
+            var root = new GameObject("GLBRoot");
+            var instantiateTask = gltf.InstantiateMainSceneAsync(root.transform);
+            while (!instantiateTask.IsCompleted)
+            {
+                yield return null;
+            }
+
+            if (!instantiateTask.Result)
+            {
+                Debug.LogError("Failed to instantiate GLB.");
+                yield break;
+            }
+
+            OnObjImported(root);
         }
 
         private void OnObjImported(GameObject returnedGameObject)
