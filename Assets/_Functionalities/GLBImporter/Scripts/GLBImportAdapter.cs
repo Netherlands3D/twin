@@ -22,7 +22,9 @@ namespace Netherlands3D.Functionalities.GLBImporter
                     byte[] header = new byte[4];
                     int bytesRead = fs.Read(header, 0, 4);
 
-                    // Check for "glTF" ASCII signature
+                    // Check for "glTF" ASCII signature to determine this is a valid glTF file
+                    // https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#glb-file-format-specification-structure
+                    // magic MUST be equal to equal 0x46546C67 (little endian). It is ASCII string glTF and can be used to identify data as Binary glTF.
                     return bytesRead == 4 &&
                            header[0] == 0x67 && // 'g'
                            header[1] == 0x6C && // 'l'
