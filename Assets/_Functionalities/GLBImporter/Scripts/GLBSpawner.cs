@@ -56,10 +56,10 @@ namespace Netherlands3D.Functionalities.GLBImporter
             // because we want to keep the file, we let the importer read a copy of the file
             // the copying can be removed after the code for the importer is changed
 
-            // string copiedObjFilename = glbPath + ".temp";
-            // File.Copy(glbPath, copiedObjFilename);
+            string copiedObjFilename = glbPath + ".temp";
+            File.Copy(glbPath, copiedObjFilename);
 
-            StartCoroutine(LoadGlb(glbPath));
+            StartCoroutine(LoadGlb(copiedObjFilename));
         }
 
         private IEnumerator LoadGlb(string file)
@@ -74,6 +74,8 @@ namespace Netherlands3D.Functionalities.GLBImporter
             var materialGenerator = new NL3DMaterialGenerator();
             GltfImport gltf = new GltfImport(null, null, materialGenerator, consoleLogger);
             
+            Debug.Log("StreamReadFile: " + file);
+
             FileStream fileStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.None);
             byte[] data = new byte[fileStream.Length];
             int totalRead = 0;
@@ -81,17 +83,22 @@ namespace Netherlands3D.Functionalities.GLBImporter
             while (totalRead < data.Length)
             {
                 var readTask = fileStream.ReadAsync(data, totalRead, data.Length - totalRead);
-                while (!readTask.IsCompleted)
-                    yield return null;
-
                 int bytesRead = readTask.Result;
-                if (bytesRead == 0) break;
                 totalRead += bytesRead;
+                
+                print("read this frame: " + bytesRead + "\ttotal: " + totalRead);
+                
+                if (readTask.IsCompleted)
+                    break;
+                
+                yield return null;
             }
+            print("finished reading data, loading byte[]");
             
             var loadTask = gltf.Load(data);
             while (!loadTask.IsCompleted)
             {
+                print("waiting for load task to complete");
                 yield return null;
             }
 
@@ -114,6 +121,7 @@ namespace Netherlands3D.Functionalities.GLBImporter
                 yield break;
             }
 
+            print("finsihed loading glb");
             OnObjImported(root);
         }
 
