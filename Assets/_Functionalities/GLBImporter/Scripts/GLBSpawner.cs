@@ -71,6 +71,7 @@ namespace Netherlands3D.Functionalities.GLBImporter
             byte[] data = new byte[fileStream.Length];
             int totalRead = 0;
             fileStream.Read(data, 0, data.Length);            
+            fileStream.Close();
             
             var loadTask = gltf.Load(data);
             while (!loadTask.IsCompleted)
