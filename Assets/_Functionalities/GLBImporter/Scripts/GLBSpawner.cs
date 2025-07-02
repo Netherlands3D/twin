@@ -150,6 +150,7 @@ namespace Netherlands3D.Functionalities.GLBImporter
             }
         }
         
+        //todo: this function should move to the Coordinates package
         private bool IsValidRD(double x, double y, double z, out Coordinate rdOrigin)
         {
             if (EPSG7415.IsValid(new Vector3RD(x, z, y)))
