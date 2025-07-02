@@ -130,8 +130,8 @@ namespace Netherlands3D.Functionalities.Wms
                 else
                 {
                     projector.Material.SetVector("_UV00", Vector2.zero);         // LL
-                    projector.Material.SetVector("_UV01", new Vector2(1, 0));    // LR
-                    projector.Material.SetVector("_UV10", new Vector2(0, 1));    // UL
+                    projector.Material.SetVector("_UV01", new Vector2(0,1));    // LR
+                    projector.Material.SetVector("_UV10", new Vector2(1,0));    // UL
                     projector.Material.SetVector("_UV11", Vector2.one);          // UR
                 }
 
