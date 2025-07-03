@@ -102,11 +102,7 @@ namespace Netherlands3D.Functionalities.Wms
                     ClearPreviousTexture(tile);
                     Texture2D tex = response.Data as Texture2D;
                     
-                    byte[] rawBytes = tex.GetRawTextureData();
-                    var hash = MD5.Create().ComputeHash(rawBytes);
-                    var hashString = Convert.ToBase64String(hash);
-                    
-                    if (hashString == emptyTextureHash || !tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
+                    if (!tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
                     {
                         Destroy(tex);
                         return;
