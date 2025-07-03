@@ -100,7 +100,7 @@ namespace Netherlands3D.Functionalities.GLBImporter
                 Debug.LogError("Failed to instantiate GLB.");
                 yield break;
             }
-
+            root.transform.Rotate(Vector3.up, 180); // compensate for 180 degree rotation
             OnObjImported(root);
         }
 
