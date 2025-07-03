@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 namespace Netherlands3D.Twin.UI.Loader
 {
@@ -17,7 +18,9 @@ namespace Netherlands3D.Twin.UI.Loader
         private void LateUpdate()
         {
             if (currentProgress >= 1f || currentProgress <= 0f)
+           
                 this.gameObject.SetActive(false);
+
         }
 
         public void ShowProgress(float progress)

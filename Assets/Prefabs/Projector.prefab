@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2707400273878469701}
   - component: {fileID: 6592016002428932495}
   - component: {fileID: 7144352551610261134}
+  - component: {fileID: 7665800559663655083}
   m_Layer: 0
   m_Name: Projector
   m_TagString: ProjectorCamera
@@ -204,3 +205,16 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &7665800559663655083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6058030180492920833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  service: {fileID: 2707400273878469701}

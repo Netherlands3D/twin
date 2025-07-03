@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -81,7 +83,7 @@ namespace Netherlands3D.Twin.Rendering
         
         private void Start()
         {
-            projectionCamera = GameObject.FindWithTag("ProjectorCamera").GetComponent<Camera>();
+            projectionCamera = ServiceLocator.GetService<PolygonDecalProjector>().ProjectionCamera;
             layerMask = LayerMask.NameToLayer("Projected");
         }
         private void Update()
