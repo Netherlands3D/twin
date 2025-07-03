@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using KindMen.Uxios;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
@@ -14,6 +15,7 @@ namespace Netherlands3D.Functionalities.Wms
     public class WMSTileDataLayer : ImageProjectionLayer
     {
         private const string DefaultEpsgCoordinateSystem = "28992";
+        private const string emptyTextureHash = "Y4odUVJg31z7zQBWRvZ9jQ==";
 
         private Config requestConfig { get; set; } = new Config()
         {
@@ -95,22 +97,26 @@ namespace Netherlands3D.Functionalities.Wms
             var boundingBox = DetermineBoundingBox(tileChange, mapData);
             string url = wmsUrl.Replace("{0}", boundingBox.ToString());
             var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(url), requestConfig);
-
             promise.Then(response =>
                 {
                     ClearPreviousTexture(tile);
                     Texture2D tex = response.Data as Texture2D;
-                    tex.name = tile.tileKey.ToString();
-                    tex.Compress(true);
-                    tex.filterMode = FilterMode.Bilinear;
-                    tex.Apply(false, true);
-
-                    if (!tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
+                    
+                    byte[] rawBytes = tex.GetRawTextureData();
+                    var hash = MD5.Create().ComputeHash(rawBytes);
+                    var hashString = Convert.ToBase64String(hash);
+                    
+                    if (hashString == emptyTextureHash || !tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
                     {
                         Destroy(tex);
                         return;
                     }
-
+                    
+                    tex.name = tile.tileKey.ToString();
+                    tex.Compress(true);
+                    tex.filterMode = FilterMode.Bilinear;
+                    tex.Apply(false, true);
+                    
                     projector.SetSize(tileSize, tileSize, tileSize);
                     projector.gameObject.SetActive(isEnabled);
                     projector.SetTexture(tex);
