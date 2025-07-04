@@ -91,8 +91,11 @@ namespace Netherlands3D.Functionalities.Wms
             for (int i = 0; i < maps.Count; i++)
             {
                 CreateLayer(maps[i], url, wmsFolder, i < layerPrefab.DefaultEnabledLayersMax);
-                yield return null;
+                
+                if (i % 10 == 0)
+                    yield return null;
             }
+
             Destroy(coroutineRunner);
         }
 
