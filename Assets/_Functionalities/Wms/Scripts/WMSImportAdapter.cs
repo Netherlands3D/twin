@@ -84,6 +84,7 @@ namespace Netherlands3D.Functionalities.Wms
         private void CreateLayer(MapFilters mapFilters, Uri url, FolderLayer folderLayer, bool defaultEnabled = true)
         {
             WMSLayerGameObject newLayer = Instantiate(layerPrefab);
+            newLayer.gameObject.name = mapFilters.name;
             newLayer.LayerData.SetParent(folderLayer);
             newLayer.Name = mapFilters.name;
             newLayer.LayerData.ActiveSelf = defaultEnabled;

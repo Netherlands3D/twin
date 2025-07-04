@@ -79,6 +79,8 @@ namespace Netherlands3D.Functionalities.Wms
         
         protected override IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
         {
+            Debug.Log("downloading textrue for " + gameObject.name );
+
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
 
             if (!tiles.ContainsKey(tileKey))
