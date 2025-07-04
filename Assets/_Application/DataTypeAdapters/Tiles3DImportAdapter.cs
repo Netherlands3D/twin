@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using Netherlands3D.DataTypeAdapters;
@@ -50,42 +51,50 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             // dus alleen schema-validatie gebruiken als strikte structuurcontrole gewenst is.
 
             using var reader = new StreamReader(localFile.LocalFilePath);
-            using var jsonReader = new JsonTextReader(reader);
-
-            if (!jsonReader.Read())
-                return false; // Bestand is leeg of ongeldig
-
-            bool isStartOfValidJson = jsonReader.TokenType == JsonToken.StartObject || jsonReader.TokenType == JsonToken.StartArray;
-            if (!isStartOfValidJson)
-                return false;
-
-            // Nu verder lezen naar inhoud
-            while (jsonReader.Read())
+            try
             {
-                if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "type")
-                {
-                    jsonReader.Read(); // naar value
-                    if ((string)jsonReader.Value == "FeatureCollection" || (string)jsonReader.Value == "Feature")
-                        return false; // GeoJSON, geen 3D Tileset
-                }
+                using var jsonReader = new JsonTextReader(reader);
 
-                if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "asset")
+                if (!jsonReader.Read())
+                    return false; // Bestand is leeg of ongeldig
+
+                bool isStartOfValidJson = jsonReader.TokenType == JsonToken.StartObject || jsonReader.TokenType == JsonToken.StartArray;
+                if (!isStartOfValidJson)
+                    return false;
+
+                // Nu verder lezen naar inhoud
+                while (jsonReader.Read())
                 {
-                    jsonReader.Read(); // StartObject
-                    if (jsonReader.TokenType == JsonToken.StartObject)
+                    if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "type")
                     {
-                        while (jsonReader.Read() && jsonReader.TokenType != JsonToken.EndObject)
+                        jsonReader.Read(); // naar value
+                        if ((string)jsonReader.Value == "FeatureCollection" || (string)jsonReader.Value == "Feature")
+                            return false; // GeoJSON, geen 3D Tileset
+                    }
+
+                    if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "asset")
+                    {
+                        jsonReader.Read(); // StartObject
+                        if (jsonReader.TokenType == JsonToken.StartObject)
                         {
-                            if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "version")
+                            while (jsonReader.Read() && jsonReader.TokenType != JsonToken.EndObject)
                             {
-                                return true;
+                                if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "version")
+                                {
+                                    return true;
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            return false;
+                return false;
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+                return false;
+            }
         }
     }
 }

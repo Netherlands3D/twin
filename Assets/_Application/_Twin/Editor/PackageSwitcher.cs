@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System;
 using UnityEngine;
 using UnityEditor;
 using System.IO;
@@ -28,6 +29,7 @@ namespace Netherlands3D.Twin.Editor
             localPackagesFolderFullPath = Path.GetFullPath(Path.Combine(Application.dataPath, localPackagesFolderPrefix));
 
             window.LoadOriginalVersions();
+            window.UpdateOriginalVersions();
             window.LoadPackages(); // Load packages when the window is opened
             window.AutoPopulateLocalPackagePaths();
         }
@@ -212,6 +214,35 @@ namespace Netherlands3D.Twin.Editor
                 remoteVersions = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
             }
         }
+        
+        private void UpdateOriginalVersions()
+        {
+            string manifestPath = Path.Combine(Application.dataPath, "../Packages/manifest.json");
+            if (File.Exists(manifestPath))
+            {
+                string json = File.ReadAllText(manifestPath);
+                JObject manifest = JObject.Parse(json);
+
+                var dependencies = manifest["dependencies"] as JObject;
+                if (dependencies != null)
+                {
+                    foreach (var dependency in dependencies)
+                    {
+                        string packageName = dependency.Key;
+                        string version = dependency.Value.ToString();
+
+                        // Only update if it's a remote version (not a file path)
+                        if (!version.StartsWith("file:") && (packageNamePrefix == "" || packageName.StartsWith(packageNamePrefix)))
+                        {
+                            remoteVersions[packageName] = version;
+                        }
+                    }
+
+                    SaveOriginalVersions();
+                }
+            }
+        }
+
     }
 }
 #endif

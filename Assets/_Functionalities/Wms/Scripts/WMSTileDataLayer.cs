@@ -54,7 +54,7 @@ namespace Netherlands3D.Functionalities.Wms
             {
                 var baseDataset = new DataSet()
                 {
-                    maximumDistance = 3000,
+                    maximumDistance = 6000,
                     maximumDistanceSquared = 1000 * 1000
                 };
                 Datasets.Add(baseDataset);
@@ -95,22 +95,22 @@ namespace Netherlands3D.Functionalities.Wms
             var boundingBox = DetermineBoundingBox(tileChange, mapData);
             string url = wmsUrl.Replace("{0}", boundingBox.ToString());
             var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(url), requestConfig);
-
             promise.Then(response =>
                 {
                     ClearPreviousTexture(tile);
                     Texture2D tex = response.Data as Texture2D;
-                    tex.name = tile.tileKey.ToString();
-                    tex.Compress(true);
-                    tex.filterMode = FilterMode.Bilinear;
-                    tex.Apply(false, true);
-
+                    
                     if (!tile.gameObject.TryGetComponent<TextureProjectorBase>(out var projector))
                     {
                         Destroy(tex);
                         return;
                     }
-
+                    
+                    tex.name = tile.tileKey.ToString();
+                    tex.Compress(true);
+                    tex.filterMode = FilterMode.Bilinear;
+                    tex.Apply(false, true);
+                    
                     projector.SetSize(tileSize, tileSize, tileSize);
                     projector.gameObject.SetActive(isEnabled);
                     projector.SetTexture(tex);

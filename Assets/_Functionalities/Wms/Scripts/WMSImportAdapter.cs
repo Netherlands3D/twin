@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.OgcWebServices.Shared;
@@ -8,6 +10,10 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wms
 {
+    public class CoroutineRunner : MonoBehaviour
+    {
+    }
+
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WMSImportAdapter", fileName = "WMSImportAdapter", order = 0)]
     public class WMSImportAdapter : ScriptableObject, IDataTypeAdapter
     {
@@ -56,10 +62,9 @@ namespace Netherlands3D.Functionalities.Wms
                     layerPrefab.PreferredImageSize.y,
                     layerPrefab.TransparencyEnabled
                 );
-                for (int i = 0; i < maps.Count; i++)
-                {
-                    CreateLayer(maps[i], url, wmsFolder, i < layerPrefab.DefaultEnabledLayersMax);
-                }
+                
+                var coroutineRunner = new GameObject("WMSImportAdapter coroutine runner").AddComponent<CoroutineRunner>();
+                coroutineRunner.StartCoroutine(CreateMapLayers(maps, url, wmsFolder, coroutineRunner.gameObject));
 
                 return;
             }
@@ -81,9 +86,23 @@ namespace Netherlands3D.Functionalities.Wms
             Debug.LogError("Unrecognized WMS request type at " + url);
         }
 
+        private IEnumerator CreateMapLayers(List<MapFilters> maps, Uri url, FolderLayer wmsFolder, GameObject coroutineRunner)
+        {
+            for (int i = 0; i < maps.Count; i++)
+            {
+                CreateLayer(maps[i], url, wmsFolder, i < layerPrefab.DefaultEnabledLayersMax);
+                
+                if (i % 10 == 0)
+                    yield return null;
+            }
+
+            Destroy(coroutineRunner);
+        }
+
         private void CreateLayer(MapFilters mapFilters, Uri url, FolderLayer folderLayer, bool defaultEnabled = true)
         {
             WMSLayerGameObject newLayer = Instantiate(layerPrefab);
+            newLayer.gameObject.name = mapFilters.name;
             newLayer.LayerData.SetParent(folderLayer);
             newLayer.Name = mapFilters.name;
             newLayer.LayerData.ActiveSelf = defaultEnabled;
