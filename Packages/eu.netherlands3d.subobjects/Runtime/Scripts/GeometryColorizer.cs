@@ -119,8 +119,8 @@ namespace Netherlands3D.SubObjects
         
         public static void RemoveCustomColorSet(ColorSetLayer colorSetLayer)
         {
-            customColors.Remove(colorSetLayer);
-            RecalculatePrioritizedColors();
+            if(customColors.Remove(colorSetLayer));
+                RecalculatePrioritizedColors();
         }
 
         private static void ReorderColorMaps()
