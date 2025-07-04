@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using KindMen.Uxios;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
@@ -15,7 +14,6 @@ namespace Netherlands3D.Functionalities.Wms
     public class WMSTileDataLayer : ImageProjectionLayer
     {
         private const string DefaultEpsgCoordinateSystem = "28992";
-        private const string emptyTextureHash = "Y4odUVJg31z7zQBWRvZ9jQ==";
 
         private Config requestConfig { get; set; } = new Config()
         {
