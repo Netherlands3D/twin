@@ -760,6 +760,7 @@ namespace Netherlands3D.Tiles3D
                 scenepos.contentposition = newCoord;
                 scenepos.gameObject.transform.position = newCoord.ToUnity();
             }
+            InvalidateBounds();
         }
     }
 
