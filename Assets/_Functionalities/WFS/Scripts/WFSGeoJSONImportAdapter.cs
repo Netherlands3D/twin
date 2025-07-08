@@ -2,10 +2,9 @@ using System.IO;
 using UnityEngine;
 using System;
 using Netherlands3D.Web;
-using System.Collections.Specialized;
+using KindMen.Uxios;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.OgcWebServices.Shared;
-using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -102,13 +101,12 @@ namespace Netherlands3D.Functionalities.Wfs
             var isWfsGetFeature = OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wfs, RequestType.GetFeature);
             if (isWfsGetFeature)
             {
-                NameValueCollection queryParameters = new();
-                new Uri(sourceUrl).TryParseQueryString(queryParameters);
-                var featureType = queryParameters.Get(WfsGetCapabilities.ParameterNameOfTypeNameBasedOnVersion(wfsVersion));
+                var queryParameters = QueryString.Decode(sourceUrl);
+                var featureType = queryParameters.Single(WfsGetCapabilities.ParameterNameOfTypeNameBasedOnVersion(wfsVersion));
 
                 if (string.IsNullOrEmpty(featureType) == false)
                 {
-                    string crs = queryParameters["srsname"];
+                    string crs = queryParameters.Single("srsname");
                     // Can't deduct a human-readable title at the moment, we should add that we always query for the
                     // capabilities; this also helps with things like outputFormat and CRS
                     AddWFSLayer(featureType, sourceUrl, crs, wfsFolder, featureType, geoJsonOutputFormatString);
@@ -157,15 +155,14 @@ namespace Netherlands3D.Functionalities.Wfs
                 wfsVersion = WfsGetCapabilities.DefaultFallbackVersion;
             }
 
-            var parameters = new NameValueCollection();
-            uriBuilder.TryParseQueryString(parameters);
+            var parameters = QueryString.Decode(uriBuilder.Query);
 
             // Set the required query parameters for the GetFeature request
             uriBuilder.SetQueryParameter("service", "WFS");
             uriBuilder.SetQueryParameter("request", "GetFeature");
             uriBuilder.SetQueryParameter("version", wfsVersion);
             uriBuilder.SetQueryParameter(WfsGetCapabilities.ParameterNameOfTypeNameBasedOnVersion(wfsVersion), featureType);
-            if (parameters.Get("outputFormat")?.ToLower() is not ("json" or "geojson"))
+            if (parameters.Single("outputFormat")?.ToLower() is not ("json" or "geojson"))
             {
                 uriBuilder.SetQueryParameter(
                     "outputFormat",

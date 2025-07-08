@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using Netherlands3D.Twin.Functionalities;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
+using QueryParameters = KindMen.Uxios.Http.QueryParameters;
 
 namespace Netherlands3D.Functionalities.GoogleRealityMesh
 {
@@ -34,7 +34,7 @@ namespace Netherlands3D.Functionalities.GoogleRealityMesh
             }
         }
 
-        public void Populate(NameValueCollection queryParameters) {}
+        public void Populate(QueryParameters queryParameters) {}
         public void AddQueryParameters(UriBuilder urlBuilder) {}
 
         public void Populate(JSONNode jsonNode)

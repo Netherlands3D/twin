@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
+using KindMen.Uxios;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Projects;
@@ -11,6 +11,7 @@ using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+using QueryParameters = KindMen.Uxios.Http.QueryParameters;
 
 namespace Netherlands3D.Twin.Configuration
 {
@@ -109,9 +110,7 @@ namespace Netherlands3D.Twin.Configuration
 
         public void Populate(Uri url)
         {
-            var queryParameters = new NameValueCollection();
-            url.TryParseQueryString(queryParameters);
-            Populate(queryParameters);
+            Populate(QueryString.Decode(url.Query));
         }
 
         public void Populate(JSONNode jsonNode)
@@ -149,20 +148,20 @@ namespace Netherlands3D.Twin.Configuration
             }
         }
 
-        public void Populate(NameValueCollection queryParameters)
+        public void Populate(QueryParameters queryParameters)
         {
             if (UrlContainsConfiguration(queryParameters))
             {
                 ShouldStartSetup = false;
             }
 
-            var originFromQueryString = queryParameters.Get("origin");
+            var originFromQueryString = queryParameters.Single("origin");
             if (string.IsNullOrEmpty(originFromQueryString) == false)
             {
                 LoadOriginFromString(originFromQueryString);
             }
 
-            var functionalitiesFromQueryString = queryParameters.Get("features") ?? queryParameters.Get("functionalities");
+            var functionalitiesFromQueryString = queryParameters.Single("features") ?? queryParameters.Single("functionalities");
             if (functionalitiesFromQueryString != null)
             {
                 LoadFunctionalitiesFromString(functionalitiesFromQueryString);
@@ -171,7 +170,7 @@ namespace Netherlands3D.Twin.Configuration
             PopulateFunctionalitySpecificConfigurations(queryParameters);
         }
 
-        private void PopulateFunctionalitySpecificConfigurations(NameValueCollection queryParameters)
+        private void PopulateFunctionalitySpecificConfigurations(QueryParameters queryParameters)
         {
             foreach (var functionality in Functionalities)
             {
@@ -238,10 +237,10 @@ namespace Netherlands3D.Twin.Configuration
             return result;
         }
 
-        private bool UrlContainsConfiguration(NameValueCollection queryParameters)
+        private bool UrlContainsConfiguration(QueryParameters queryParameters)
         {
-            string origin = queryParameters.Get("origin");
-            string functionalities = queryParameters.Get("features") ?? queryParameters.Get("functionalities");
+            string origin = queryParameters.Single("origin");
+            string functionalities = queryParameters.Single("features") ?? queryParameters.Single("functionalities");
 
             return origin != null && functionalities != null;
         }

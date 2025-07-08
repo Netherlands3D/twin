@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Web;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
+using QueryParameters = KindMen.Uxios.Http.QueryParameters;
 
 namespace Netherlands3D.Functionalities.Indicators.Configuration
 {
@@ -73,9 +73,9 @@ namespace Netherlands3D.Functionalities.Indicators.Configuration
             }
         }
 
-        public void Populate(NameValueCollection queryParameters)
+        public void Populate(QueryParameters queryParameters)
         {
-            var id = queryParameters.Get("indicators.dossier");
+            var id = queryParameters.Single("indicators.dossier");
             if (string.IsNullOrEmpty(id)) return;
 
             Debug.Log($"Set dossier id '{id}' from URL");
