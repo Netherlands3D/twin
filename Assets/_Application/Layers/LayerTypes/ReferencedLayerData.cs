@@ -5,7 +5,6 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes
 {
@@ -13,13 +12,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
     public class ReferencedLayerData : LayerData
     {
         [DataMember] private string prefabId;
-        [JsonIgnore] public LayerGameObject Reference { get; private set; }
+        [JsonIgnore] public LayerGameObject Reference { get; }
         [JsonIgnore] public bool KeepReferenceOnDestroy { get; set; } = false;
-        [JsonIgnore] public UnityEvent OnReferenceChanged = new();
-        
+
         public ReferencedLayerData(string name, LayerGameObject reference) : base(name)
         {
-            SetReference(reference);
+            Reference = reference;
+            prefabId = reference.PrefabIdentifier;
 
             ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
             ParentChanged.AddListener(OnParentChanged);
@@ -33,7 +32,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         {
             this.prefabId = prefabId;
             var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
-            SetReference(GameObject.Instantiate(prefab));
+            Reference = GameObject.Instantiate(prefab);
+            Reference.LayerData = this;
+            Reference.gameObject.name = Name;
             this.layerProperties = layerProperties;
 
             ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
@@ -88,33 +89,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             Reference.OnLayerActiveInHierarchyChanged(activeInHierarchy);
-        }
-
-        public virtual void SetReference(LayerGameObject layerGameObject)
-        {
-            bool reselect = false;
-            if (IsSelected)
-            {
-                DeselectLayer();
-                reselect = true;
-            }
-    
-            if (Reference)
-            {
-                Reference.DestroyLayerGameObject();
-            }
-            
-            Reference = layerGameObject;
-            Reference.LayerData = this;
-            Reference.gameObject.name = Name;
-            prefabId = layerGameObject.PrefabIdentifier;
-            
-            OnReferenceChanged.Invoke();
-
-            if (reselect)
-            {
-                SelectLayer();
-            }
         }
     }
 }

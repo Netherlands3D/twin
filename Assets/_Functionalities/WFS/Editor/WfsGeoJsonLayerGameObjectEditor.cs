@@ -15,7 +15,7 @@ namespace Netherlands3D.Functionalities.Wfs.Editor
             InspectorElement.FillDefaultInspector(root, serializedObject, this);
 
             var layerGameObject = (WFSGeoJsonLayerGameObject)target;
-            if (layerGameObject.LayerData == null) return root;
+            if (!layerGameObject.HasLayerData) return root;
             
             LayerDataVisualElements.LayerData(layerGameObject.LayerData, root);
 
