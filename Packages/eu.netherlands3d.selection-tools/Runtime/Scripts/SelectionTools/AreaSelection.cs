@@ -65,6 +65,23 @@ namespace Netherlands3D.SelectionTools
         [SerializeField] private Material triplanarGridMaterial;
 
         private bool drawingArea = false;
+        
+        public float GridSize => gridSize;
+
+        private Vector3 gridOffset;
+        public Vector3 GridOffset
+        {
+            get
+            {
+                return gridOffset;
+            }
+            set
+            {
+                gridOffset = value;
+                if(triplanarGridMaterial)
+                    triplanarGridMaterial.SetVector("_TriplanarGridOffset", value);
+            }
+        }
 
         void Awake()
         {
@@ -202,17 +219,23 @@ namespace Netherlands3D.SelectionTools
         /// <returns></returns>
         private Vector3Int GetGridPosition(Vector3 samplePosition)
         {
-            samplePosition.x += (gridSize * 0.5f);
-            samplePosition.z += (gridSize * 0.5f);
+            // Shift the sample position relative to the aligned grid origin
+            float x = samplePosition.x - GridOffset.x;
+            float z = samplePosition.z - GridOffset.z;
 
-            samplePosition.x = (Mathf.Round(samplePosition.x / gridSize) * gridSize) - (gridSize * 0.5f);
-            samplePosition.z = (Mathf.Round(samplePosition.z / gridSize) * gridSize) - (gridSize * 0.5f);
+            // Floor to get the cell that contains the samplePosition
+            x = Mathf.Floor(x / gridSize) * gridSize;
+            z = Mathf.Floor(z / gridSize) * gridSize;
+
+            // Apply the offset back to re-align with world
+            x += GridOffset.x + (gridSize * 0.5f);
+            z += GridOffset.z + (gridSize * 0.5f);
 
             Vector3Int roundedPosition = new Vector3Int
             {
-                x = Mathf.RoundToInt(samplePosition.x),
+                x = Mathf.RoundToInt(x),
                 y = Mathf.RoundToInt(samplePosition.y),
-                z = Mathf.RoundToInt(samplePosition.z)
+                z = Mathf.RoundToInt(z)
             };
 
             return roundedPosition;
