@@ -7,9 +7,5 @@ namespace Netherlands3D.Tiles3D
     {
         public Coordinate contentposition;
 
-        public void ChangeCoordinateSystem(CoordinateSystem newCoordinateSystem)
-        {
-
-        }
     }
 }
