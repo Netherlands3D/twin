@@ -10,19 +10,7 @@ using Meshoptimizer;
 using Unity.Collections;
 using Netherlands3D.Coordinates;
 using SimpleJSON;
-#if UNITY_EDITOR
-using System.Linq;
-using UnityEngine.Events;
-using GLTFast.Schema;
-using ICSharpCode.SharpZipLib.Core;
-using Newtonsoft.Json.Serialization;
 
-
-
-
-
-
-#endif
 
 #if SUBOBJECT
 using Netherlands3D.SubObjects;
