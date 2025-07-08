@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Functionalities.OGC3DTiles;
@@ -34,6 +35,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         public RectTransform DragLine => dragLine;
         public Vector2 DragStartOffset { get; set; }
         public bool MouseIsOverButton { get; set; }
+        
+        private LayerData layerToSelectAtEndOfFrame; //only select a layer once at the end of the frame in case multiple layers are made in this frame to avoid an unnecessary performance hit.
 
         private void ReconstructHierarchyUIs()
         {
@@ -104,7 +107,18 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         {
             var layerUI = InstantiateLayerItem(layer, layer.ParentLayer);
             RecalculateLayersVisibleInInspector();
-            layer.SelectLayer(true);
+            
+            if(layerToSelectAtEndOfFrame == null)
+                StartCoroutine(SelectLayerAtEndOfFrame());
+    
+            layerToSelectAtEndOfFrame = layer;
+        }
+
+        private IEnumerator SelectLayerAtEndOfFrame()
+        {
+            yield return new WaitForEndOfFrame();
+            layerToSelectAtEndOfFrame.SelectLayer(true);
+            layerToSelectAtEndOfFrame = null;
         }
 
         private void OnRectTransformDimensionsChange()
