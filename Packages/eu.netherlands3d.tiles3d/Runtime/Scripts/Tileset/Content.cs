@@ -113,14 +113,7 @@ namespace Netherlands3D.Tiles3D
                )
            );
             return;
-            //runningContentRequest = StartCoroutine(
-            //    ImportB3DMGltf.ImportBinFromURL(
-            //        uri, 
-            //        GotGltfContent,
-            //        false,
-            //        headers
-                //)
-            //);
+           
         }
 
         private void DownloadedData(byte[] data,string uri)
@@ -154,86 +147,7 @@ namespace Netherlands3D.Tiles3D
             onDoneDownloading.Invoke();
 
         }
-//        private async void GotGltfContent(ParsedGltf parsedGltf)
-//        {
-//            if (State != ContentLoadState.DOWNLOADING)
-//            {
-//                State = ContentLoadState.DOWNLOADED;
-//                return;
-//            }
-//            State = ContentLoadState.PARSING;
-//            parentTile.isLoading = false;
-//            if (parsedGltf == null)
-//            {
-//                Debug.Log("failed to parse: "+ uri +" , trying again");
-//                State = ContentLoadState.DOWNLOADED;
-//                return;
-//            }
-
-//            var gltf = parsedGltf.gltfImport;
-//            var scene = transform;
-//            if (gltf != null)
-//            {
-//                this.gltf = gltf;
-//                var scenes = gltf.SceneCount;
-
-//                for (int i = 0; i < scenes; i++)
-//                {
-//                    await gltf.InstantiateSceneAsync(transform, i);
-//                    scene = transform.GetChild(i).transform;
-//                    foreach (var child in scene.GetComponentsInChildren<Transform>(true)) //getting the Transform components ensures the layer of each recursive child is set 
-//                    {
-//                        child.gameObject.layer = gameObject.layer;
-//                    }
-                    
-//                    if(scene == null) continue;
-
-//                    if (parsedGltf.rtcCenter != null)
-//                    {
-                        
-//                        //Debug.Log("Has RTC-Center "+ parsedGltf.rtcCenter[0] +";"+ parsedGltf.rtcCenter[1]+";"+ parsedGltf.rtcCenter[2]);
-//                        scene.rotation = CoordinateConverter.ecefRotionToUp() * (scene.rotation);
-//                        Coordinate sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF_TELAAG, parsedGltf.rtcCenter[0], parsedGltf.rtcCenter[1], parsedGltf.rtcCenter[2]);
-//                        Coordinate transformedCoordinate = parentTile.tileTransform.MultiplyPoint3x4(sceneCoordinate);
-//                        Vector3 unityPosition = transformedCoordinate.ToUnity();
-
-//                        //Vector3 unityPosition = CoordinateConverter.ECEFToUnity(new Vector3ECEF(parsedGltf.rtcCenter[0] + parentTile.transform[12], parsedGltf.rtcCenter[1] + parentTile.transform[13], parsedGltf.rtcCenter[2] + parentTile.transform[14]));
-//                        scene.position = unityPosition;
-//                    }
-//                    else
-//                    {
-//                        Coordinate sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF_TELAAG, -scene.localPosition.x, -scene.localPosition.z, scene.localPosition.y);
-//                        Coordinate transformedCoordinate = parentTile.tileTransform.MultiplyPoint3x4(sceneCoordinate);
-//                        Vector3 unityPosition = transformedCoordinate.ToUnity();
-//                        scene.rotation = CoordinateConverter.ecefRotionToUp() * (scene.rotation);
-//                        scene.position = unityPosition;
-//                    }
-//                }
-
-//                this.gameObject.name = uri;
-                
-//                if(parseAssetMetaData)
-//                {
-//                    parsedGltf.ParseAssetMetaData(this);
-//                }
-
-//                //Check if mesh features addon is used to define subobjects
-//#if SUBOBJECT
-//                if(parseSubObjects)
-//                {
-//                    parsedGltf.ParseSubObjects(transform);
-//                }
-//#endif
-
-//                if(overrideMaterial != null)
-//                {
-//                    OverrideAllMaterials(transform);
-//                }
-//            }
-
-//            State = ContentLoadState.DOWNLOADED;
-//            onDoneDownloading.Invoke();
-//        }
+//       
 
         private void OverrideAllMaterials(Transform parent)
         {
