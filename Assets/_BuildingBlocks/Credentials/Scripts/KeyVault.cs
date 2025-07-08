@@ -121,7 +121,7 @@ namespace Netherlands3D.Credentials
 
         private bool TryToFindAuthorizationInUriQuery(Uri uri, out QueryStringAuthorization potentialAuthorisation)
         {
-            var queryParameters = QueryString.Decode(uri.Query.TrimStart('?'));
+            KindMen.Uxios.Http.QueryParameters queryParameters = QueryString.Decode(uri.Query.TrimStart('?'));
 
             foreach (var supportedAuthTypes in supportedAuthorizationTypes)
             {
@@ -129,7 +129,7 @@ namespace Netherlands3D.Credentials
                     continue;
 
                 potentialAuthorisation = supportedAuthTypes.Value(uri, new[] { "" }) as QueryStringAuthorization; //unfortunately we have to create a temp instance to access QueryKeyName
-                var authString = queryParameters.Get(potentialAuthorisation.QueryKeyName);
+                var authString = queryParameters.Single(potentialAuthorisation.QueryKeyName);
 
                 if (!string.IsNullOrEmpty(authString))
                 {

@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Specialized;
-using Netherlands3D.Web;
+using KindMen.Uxios;
 
 namespace Netherlands3D.OgcWebServices.Shared
 {
@@ -42,11 +41,15 @@ namespace Netherlands3D.OgcWebServices.Shared
 
         public static string GetParameterFromURL(string url, string parameter)
         {
-            var uri = new Uri(url);
-            var nvc = new NameValueCollection();
-            uri.TryParseQueryString(nvc);
-            var featureLayerName = nvc.Get(parameter);
-            return featureLayerName;
+            int queryParametersStart = url.IndexOf('?');
+            string query = string.Empty;
+            if (queryParametersStart >= 0 && queryParametersStart != url.Length - 1)
+            {
+                query = url.Substring(queryParametersStart + 1);
+            }
+
+            var queryParameters = QueryString.Decode(query);
+            return queryParameters.Single(parameter);
         }
     }
 }

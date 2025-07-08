@@ -2,7 +2,8 @@
     "name": "eu.netherlands3d.twin.functionalities",
     "rootNamespace": "Netherlands3D.Twin.Functionalities",
     "references": [
-        "GUID:f6250a3d1035ddd46a8464b727c9a2ff"
+        "GUID:f6250a3d1035ddd46a8464b727c9a2ff",
+        "GUID:89a9652a8b22fb74b912223ceba2da14"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

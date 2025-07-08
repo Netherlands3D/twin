@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Specialized;
+using KindMen.Uxios.Http;
 
 namespace Netherlands3D.Twin.Functionalities
 {
     public interface IQueryStringMapper
     {
-        void Populate(NameValueCollection queryParameters);
+        void Populate(QueryParameters queryParameters);
 
         void AddQueryParameters(UriBuilder urlBuilder);
     }
