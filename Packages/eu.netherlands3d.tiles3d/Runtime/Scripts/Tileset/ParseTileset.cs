@@ -77,9 +77,9 @@ namespace Netherlands3D.Tiles3D
                     rootTile.X = 0;
                     rootTile.Y = 0;
                     rootTile.transform = root.transform;
-                    
-                    ReadImplicitTiling(rootnode,rootTile);
                     rootTile.tileTransform = root.tileTransform;
+                    ReadImplicitTiling(rootnode,rootTile);
+
                     rootTile.transform = root.transform;
                     root = rootTile;
                     break;

@@ -11,7 +11,7 @@ namespace Netherlands3D.Tiles3D
     {
         int currentSubtreeLevels;
         public Subtree subtree;
-        public Tile tile;
+        
         public ImplicitTilingSettings settings;
         public string subtreeUrl;
         System.Action<Tile> sendResult;
@@ -78,8 +78,8 @@ namespace Netherlands3D.Tiles3D
                 appendTilesTo.hascontent = (subtree.ContentAvailabiltyConstant == 1) || (subtree.ContentAvailability != null && subtree.ContentAvailability[0]);
 
                 AddChildren(appendTilesTo, 0, 0);
-
-                appendTilesTo.children.Add(tile);
+                
+                
                 if (sendResult != null)
                 {
                     sendResult(appendTilesTo);
@@ -107,7 +107,7 @@ namespace Netherlands3D.Tiles3D
             Tile childTile = new Tile();
             childTile.parent = parentTile;
             childTile.tileSet = parentTile.tileSet;
-            childTile.transform = parentTile.transform;
+            childTile.tileTransform = parentTile.tileTransform;
             childTile.level = parentTile.level + 1;
             childTile.X = parentTile.X * 2 + childNumber % 2;
             childTile.Y = parentTile.Y * 2;
