@@ -75,18 +75,19 @@ namespace Netherlands3D.Tiles3D
             }
             succesCallback.Invoke(true);
         }
-        static void PositionGameObject(Transform scene, double[] rtcCenter, TileTransform tileTransform)
-        {
-            Coordinate sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, -scene.localPosition.x, -scene.localPosition.z, scene.localPosition.y);
-            if (rtcCenter != null)
-            {
-                sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, rtcCenter[0], rtcCenter[1], rtcCenter[2]);
-            }
-            Coordinate transformedCoordinate = tileTransform.MultiplyPoint3x4(sceneCoordinate);
-            scene.position = transformedCoordinate.ToUnity();
-            scene.rotation = transformedCoordinate.RotationToLocalGravityUp();
+        //static void PositionGameObject(Transform scene, double[] rtcCenter, TileTransform tileTransform)
+        //{
+        //    Coordinate sceneCoordinate = new Coordinate(, -scene.localPosition.x, -scene.localPosition.z, scene.localPosition.y);
+        //    if (rtcCenter != null)
+        //    {
+        //        sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF_TELAAG, rtcCenter[0], rtcCenter[1], rtcCenter[2]);
+        //    }
+        //    Coordinate transformedCoordinate = tileTransform.MultiplyPoint3x4(sceneCoordinate);
+        //    scene.GetComponent<Content>().contentCoordinate = transformedCoordinate;
+        //    scene.position = transformedCoordinate.ToUnity();
+        //    scene.rotation = transformedCoordinate.RotationToLocalGravityUp();
 
-        }
+        //}
         private static double[] GetRTCCenterFromGlb(byte[] GlbData)
         {
 

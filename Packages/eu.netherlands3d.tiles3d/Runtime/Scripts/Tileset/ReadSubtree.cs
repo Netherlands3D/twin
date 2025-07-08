@@ -106,6 +106,7 @@ namespace Netherlands3D.Tiles3D
         {
             Tile childTile = new Tile();
             childTile.parent = parentTile;
+            childTile.tileSet = parentTile.tileSet;
             childTile.transform = parentTile.transform;
             childTile.level = parentTile.level + 1;
             childTile.X = parentTile.X * 2 + childNumber % 2;

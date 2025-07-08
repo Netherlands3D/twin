@@ -14,6 +14,10 @@ using SimpleJSON;
 using System.Linq;
 using UnityEngine.Events;
 using GLTFast.Schema;
+using ICSharpCode.SharpZipLib.Core;
+using Newtonsoft.Json.Serialization;
+
+
 
 
 
@@ -32,6 +36,7 @@ namespace Netherlands3D.Tiles3D
         public GltfImport gltfImport;
         public byte[] glbBuffer;
         public double[] rtcCenter = null;
+        public CoordinateSystem coordinatesystem;
 
         private NativeArray<byte> glbBufferNative;
         private NativeArray<byte> destination;
@@ -226,10 +231,10 @@ namespace Netherlands3D.Tiles3D
             final.Decompose(out translation, out rotation, out scale);
 
             // get the coordinate of the origin of the created gameobject in the 3d-tiles CoordinateSystem
-            Coordinate sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, geometryInCRS.m03, geometryInCRS.m13, geometryInCRS.m23);
+            Coordinate sceneCoordinate = new Coordinate(tile.content.contentcoordinateSystem, geometryInCRS.m03, geometryInCRS.m13, geometryInCRS.m23);
             if (rtcCenter != null)
             {
-                sceneCoordinate = new Coordinate(CoordinateSystem.WGS84_ECEF, rtcCenter[0], rtcCenter[1], rtcCenter[2])+sceneCoordinate;
+                sceneCoordinate = new Coordinate(tile.content.contentcoordinateSystem, rtcCenter[0], rtcCenter[1], rtcCenter[2])+sceneCoordinate;
             }
 
             /// TEMPORARY FIX
@@ -237,9 +242,12 @@ namespace Netherlands3D.Tiles3D
             /// dis should not be done and has to be removed
             /// until that time, we rotate by 90 degrees around the up-axis to counter the applied rotation
             rotation = Quaternion.AngleAxis(90, Vector3.up) * rotation;
-
+            tile.content.contentCoordinate = sceneCoordinate;
+            
             //apply scale, position and rotation to the gameobject
             scene.localScale = scale;
+            ScenePosition scenepos = scene.gameObject.AddComponent<ScenePosition>();
+            scenepos.contentposition = sceneCoordinate;
             scene.position = sceneCoordinate.ToUnity();
             scene.rotation = sceneCoordinate.RotationToLocalGravityUp() * rotation;
             
