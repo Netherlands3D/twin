@@ -427,6 +427,12 @@
       },
       "url": "https://package.openupm.com"
     },
+    "eu.netherlands3d.layer-styles": {
+      "version": "file:eu.netherlands3d.layer-styles",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "eu.netherlands3d.masking": {
       "version": "2.0.1",
       "depth": 0,
