@@ -54,7 +54,7 @@ MonoBehaviour:
   Datasets:
   - Description: 
     geoLOD: 
-    path: https://assets.netherlands3d.eu/publicassets/Buildings_2023_6m/buildings-{x}_{y}.6.bin
+    path: https://assets.netherlands3d.eu/publicassets/3dbag/2024.12.16/lod2.2simplified100/buildings-{x}_{y}.2.2.bin
     pathQuery: 
     maximumDistance: 8000
     maximumDistanceSquared: 0
@@ -93,6 +93,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabIdentifier: cc9d0f9a5a1724c9695a1bef5ecccaec
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
+  OnStylingApplied:
+    m_PersistentCalls:
+      m_Calls: []
   onShow:
     m_PersistentCalls:
       m_Calls: []
@@ -144,7 +149,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldTransformShifter: {fileID: -1431062917293908258}
-  referenceCoordinateSystem: 2
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
