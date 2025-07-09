@@ -4,6 +4,8 @@ using System.Linq;
 using System.Xml;
 using Netherlands3D.Coordinates;
 using Netherlands3D.OgcWebServices.Shared;
+using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -15,6 +17,7 @@ namespace Netherlands3D.Functionalities.Wms
         public Uri GetCapabilitiesUri => Url;
         public const string DefaultFallbackVersion = "1.3.0";
         private CoordinateSystem[] preferredCRS = { CoordinateSystem.RD, CoordinateSystem.WGS84_LatLon, CoordinateSystem.CRS84 };
+        private string forcedCRS = null;
 
         public ServiceType ServiceType => ServiceType.Wms;
         protected override Dictionary<string, string> defaultNameSpaces => new()
@@ -43,6 +46,8 @@ namespace Netherlands3D.Functionalities.Wms
 
         public WmsGetCapabilities(Uri url, string xml) : base(url, xml)
         {
+            forcedCRS = ServiceLocator.GetService<ForcedParameterService>().ForcedCrs;
+            SetForcedCRS(forcedCRS);            
         }
 
         public string GetVersion()
@@ -208,6 +213,11 @@ namespace Netherlands3D.Functionalities.Wms
             return maps;
         }
 
+        public void SetForcedCRS(string crs)
+        {
+            forcedCRS = crs;
+        }
+
         private bool HasSupportedCRS(XmlNodeList crsNodes, out string crsToUse)
         {
             supportedCrsDictionary.Clear();
@@ -221,6 +231,16 @@ namespace Netherlands3D.Functionalities.Wms
                 if (crs != CoordinateSystem.Undefined)
                 {
                     supportedCrsDictionary.TryAdd(crs, crsNode.InnerText);
+                }
+            }
+
+            if (forcedCRS != null)
+            {
+                var match = supportedCrsDictionary.FirstOrDefault(pair => pair.Value.Contains(forcedCRS));
+                if (!string.IsNullOrEmpty(match.Value))
+                {
+                    crsToUse = match.Value;
+                    return true;
                 }
             }
 
