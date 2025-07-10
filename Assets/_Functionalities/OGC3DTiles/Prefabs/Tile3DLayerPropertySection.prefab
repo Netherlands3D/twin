@@ -2449,7 +2449,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: https://netherlands3d.eu/docs/handleiding/homepage/
+          m_StringArgument: https://3dtilesnederland.nl/over-terrein-en-3d-tilesets/
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1950535550639386801
