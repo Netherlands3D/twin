@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Networking;
 using Netherlands3D.CartesianTiles;
 using System;
 using Netherlands3D.Coordinates;
@@ -163,7 +162,7 @@ namespace Netherlands3D.Functionalities.Wfs
         private IEnumerator DownloadGeoJSON(TileChange tileChange, Tile tile, Action<TileChange> callback = null)
         {
             var queryParameters = QueryString.Decode(new Uri(wfsUrl).Query);
-            string spatialReference = queryParameters["srsname"];
+            string spatialReference = queryParameters.Single("srsname");
 
             CoordinateSystem system = CoordinateSystems.FindCoordinateSystem(spatialReference);
             if (system == CoordinateSystem.Undefined)

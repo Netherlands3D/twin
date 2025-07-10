@@ -18,24 +18,24 @@ namespace Netherlands3D.Functionalities.Wms
         public static MapFilters FromUrl(Uri url)
         {
             var queryParameters = QueryString.Decode(url.Query);
-            if (queryParameters["request"].ToLower() != "getmap")
+            if (queryParameters.Single("request")?.ToLower() != "getmap")
             {
                 throw new NotSupportedException("Creating a Map from URL is reserved for requests of type GetMap");
             }
 
-            var version = queryParameters["version"];
+            var version = queryParameters.Single("version");
             var spatialReferenceType = SpatialReferenceTypeFromVersion(new Version(version));
-            int.TryParse(queryParameters["width"], out var parsedWidth);
-            int.TryParse(queryParameters["height"], out var parsedHeight);
-            bool.TryParse(queryParameters["transparent"], out var parsedTransparent);
+            int.TryParse(queryParameters.Single("width"), out var parsedWidth);
+            int.TryParse(queryParameters.Single("height"), out var parsedHeight);
+            bool.TryParse(queryParameters.Single("transparent"), out var parsedTransparent);
 
             return new MapFilters
             {
-                name = queryParameters["layers"],
+                name = queryParameters.Single("layers"),
                 version = version,
                 spatialReferenceType = spatialReferenceType,
-                spatialReference = queryParameters[spatialReferenceType],
-                style = queryParameters["style"],
+                spatialReference = queryParameters.Single(spatialReferenceType),
+                style = queryParameters.Single("style"),
                 width = parsedWidth,
                 height = parsedHeight,
                 transparent = parsedTransparent,
@@ -67,14 +67,14 @@ namespace Netherlands3D.Functionalities.Wms
             uriBuilder.SetQueryParameter("width", width.ToString());
             uriBuilder.SetQueryParameter("height", height.ToString());
             
-            string format = queryParameters.Get("format");
+            string format = queryParameters.Single("format");
             if (format is not "image/png" and not "image/jpeg")
             {
                 format = "image/png";
             }
             uriBuilder.SetQueryParameter("format", format);
             
-            string transparentField = queryParameters.Get("transparent");
+            string transparentField = queryParameters.Single("transparent");
             if (string.IsNullOrEmpty(transparentField))
             {
                 uriBuilder.SetQueryParameter("transparent", transparent ? "true" : "false");

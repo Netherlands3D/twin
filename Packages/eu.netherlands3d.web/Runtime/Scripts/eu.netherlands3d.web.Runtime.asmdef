@@ -2,7 +2,8 @@
     "name": "eu.netherlands3d.web.Runtime",
     "rootNamespace": "Netherlands3D.Web",
     "references": [
-        "GUID:6fc4e9e40fe9cfd41bc3559197fc47b1"
+        "GUID:6fc4e9e40fe9cfd41bc3559197fc47b1",
+        "GUID:89a9652a8b22fb74b912223ceba2da14"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
