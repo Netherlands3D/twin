@@ -11,13 +11,13 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         [SerializeField] private Toggle ellipsoidToggle;
         [SerializeField] private Toggle geoidToggle;
 
-        private void OnEnable()
+        private void Start()
         {
             ellipsoidToggle.onValueChanged.AddListener(SetEllipsoidHeight);
             geoidToggle.onValueChanged.AddListener(SetGeoidHeight);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             ellipsoidToggle.onValueChanged.RemoveListener(SetEllipsoidHeight);
             geoidToggle.onValueChanged.RemoveListener(SetGeoidHeight);
