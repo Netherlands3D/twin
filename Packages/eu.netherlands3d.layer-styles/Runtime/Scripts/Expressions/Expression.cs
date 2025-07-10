@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.Serialization;
-using Netherlands3D.LayerStyles.Expressions.OperatorHandlers;
+using Netherlands3D.LayerStyles.Expressions.Operations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using UnityEngine;
@@ -13,43 +13,43 @@ namespace Netherlands3D.LayerStyles.Expressions
         [JsonConverter(typeof(StringEnumConverter))]
         public enum Operators
         {
-            [EnumMember(Value = ArrayOperator.Code)]
+            [EnumMember(Value = ArrayOperation.Code)]
             Array,
 
-            [EnumMember(Value = BooleanOperator.Code)]
+            [EnumMember(Value = BooleanOperation.Code)]
             Boolean,
             [EnumMember(Value = "collator")] Collator,
             [EnumMember(Value = "format")] Format,
             [EnumMember(Value = "image")] Image,
 
-            [EnumMember(Value = LiteralOperator.Code)]
+            [EnumMember(Value = LiteralOperation.Code)]
             Literal,
 
-            [EnumMember(Value = NumberOperator.Code)]
+            [EnumMember(Value = NumberOperation.Code)]
             Number,
 
-            [EnumMember(Value = NumberFormatOperator.Code)]
+            [EnumMember(Value = NumberFormatOperation.Code)]
             NumberFormat,
 
-            [EnumMember(Value = ObjectOperator.Code)]
+            [EnumMember(Value = ObjectOperation.Code)]
             Object,
 
-            [EnumMember(Value = StringOperator.Code)]
+            [EnumMember(Value = StringOperation.Code)]
             String,
 
-            [EnumMember(Value = ToBooleanOperator.Code)]
+            [EnumMember(Value = ToBooleanOperation.Code)]
             ToBoolean,
 
-            [EnumMember(Value = ToColorOperator.Code)]
+            [EnumMember(Value = ToColorOperation.Code)]
             ToColor,
 
-            [EnumMember(Value = ToNumberOperator.Code)]
+            [EnumMember(Value = ToNumberOperation.Code)]
             ToNumber,
 
-            [EnumMember(Value = ToStringOperator.Code)]
+            [EnumMember(Value = ToStringOperation.Code)]
             ToString,
 
-            [EnumMember(Value = TypeOfOperator.Code)]
+            [EnumMember(Value = TypeOfOperation.Code)]
             TypeOf,
 
             [EnumMember(Value = "accumulated")] Accumulated,
@@ -65,7 +65,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             AtInterpolated,
             [EnumMember(Value = "config")] Config,
 
-            [EnumMember(Value = GetOperator.Code)]
+            [EnumMember(Value = GetOperation.Code)]
             Get,
             [EnumMember(Value = "has")] Has,
             [EnumMember(Value = "in")] In,
@@ -74,31 +74,31 @@ namespace Netherlands3D.LayerStyles.Expressions
             [EnumMember(Value = "measure-light")] MeasureLight,
             [EnumMember(Value = "slice")] Slice,
 
-            [EnumMember(Value = NotOperator.Code)]
+            [EnumMember(Value = NotOperation.Code)]
             Not,
 
-            [EnumMember(Value = NotEqualOperator.Code)]
+            [EnumMember(Value = NotEqualOperation.Code)]
             NotEqual,
 
-            [EnumMember(Value = LessThanOperator.Code)]
+            [EnumMember(Value = LessThanOperation.Code)]
             LessThan,
 
-            [EnumMember(Value = LessThanOrEqualOperator.Code)]
+            [EnumMember(Value = LessThanOrEqualOperation.Code)]
             LessThanOrEqual,
 
-            [EnumMember(Value = EqualOperator.Code)]
+            [EnumMember(Value = EqualOperation.Code)]
             EqualTo,
 
-            [EnumMember(Value = GreaterThanOperator.Code)]
+            [EnumMember(Value = GreaterThanOperation.Code)]
             GreaterThan,
 
-            [EnumMember(Value = GreaterThanOrEqualOperator.Code)]
+            [EnumMember(Value = GreaterThanOrEqualOperation.Code)]
             GreaterThanOrEqual,
 
-            [EnumMember(Value = AllOperator.Code)]
+            [EnumMember(Value = AllOperation.Code)]
             All,
 
-            [EnumMember(Value = AnyOperator.Code)]
+            [EnumMember(Value = AnyOperation.Code)]
             Any,
             [EnumMember(Value = "case")] Case,
             [EnumMember(Value = "coalesce")] Coalesce,
@@ -125,103 +125,103 @@ namespace Netherlands3D.LayerStyles.Expressions
             ResolvedLocale,
             [EnumMember(Value = "upcase")] Upcase,
 
-            [EnumMember(Value = HslOperator.Code)]
+            [EnumMember(Value = HslOperation.Code)]
             Hsl,
 
-            [EnumMember(Value = HslaOperator.Code)]
+            [EnumMember(Value = HslaOperation.Code)]
             Hsla,
 
-            [EnumMember(Value = RgbOperator.Code)]
+            [EnumMember(Value = RgbOperation.Code)]
             Rgb,
 
-            [EnumMember(Value = RgbaOperator.Code)]
+            [EnumMember(Value = RgbaOperation.Code)]
             Rgba,
 
-            [EnumMember(Value = ToHslaOperator.Code)]
+            [EnumMember(Value = ToHslaOperation.Code)]
             ToHsla,
 
-            [EnumMember(Value = ToRgbaOperator.Code)]
+            [EnumMember(Value = ToRgbaOperation.Code)]
             ToRgba,
 
-            [EnumMember(Value = SubtractOperator.Code)]
+            [EnumMember(Value = SubtractOperation.Code)]
             Subtract,
 
-            [EnumMember(Value = MultiplyOperator.Code)]
+            [EnumMember(Value = MultiplyOperation.Code)]
             Multiply,
 
-            [EnumMember(Value = DivideOperator.Code)]
+            [EnumMember(Value = DivideOperation.Code)]
             Divide,
 
-            [EnumMember(Value = ModuloOperator.Code)]
+            [EnumMember(Value = ModuloOperation.Code)]
             Modulo,
 
-            [EnumMember(Value = PowerOperator.Code)]
+            [EnumMember(Value = PowerOperation.Code)]
             Power,
 
-            [EnumMember(Value = AddOperator.Code)]
+            [EnumMember(Value = AddOperation.Code)]
             Add,
 
-            [EnumMember(Value = AbsOperator.Code)]
+            [EnumMember(Value = AbsOperation.Code)]
             Abs,
 
-            [EnumMember(Value = AcosOperator.Code)]
+            [EnumMember(Value = AcosOperation.Code)]
             Acos,
 
-            [EnumMember(Value = AsinOperator.Code)]
+            [EnumMember(Value = AsinOperation.Code)]
             Asin,
 
-            [EnumMember(Value = AtanOperator.Code)]
+            [EnumMember(Value = AtanOperation.Code)]
             Atan,
 
-            [EnumMember(Value = CeilOperator.Code)]
+            [EnumMember(Value = CeilOperation.Code)]
             Ceil,
 
-            [EnumMember(Value = CosOperator.Code)]
+            [EnumMember(Value = CosOperation.Code)]
             Cos,
 
-            [EnumMember(Value = DistanceOperator.Code)]
+            [EnumMember(Value = DistanceOperation.Code)]
             Distance,
 
-            [EnumMember(Value = EOperator.Code)]
+            [EnumMember(Value = EOperation.Code)]
             E,
 
-            [EnumMember(Value = FloorOperator.Code)]
+            [EnumMember(Value = FloorOperation.Code)]
             Floor,
 
-            [EnumMember(Value = LnOperator.Code)]
+            [EnumMember(Value = LnOperation.Code)]
             Ln,
 
-            [EnumMember(Value = Ln2Operator.Code)]
+            [EnumMember(Value = Ln2Operation.Code)]
             Ln2,
 
-            [EnumMember(Value = Log10Operator.Code)]
+            [EnumMember(Value = Log10Operation.Code)]
             Log10,
 
-            [EnumMember(Value = Log2Operator.Code)]
+            [EnumMember(Value = Log2Operation.Code)]
             Log2,
 
-            [EnumMember(Value = MaxOperator.Code)]
+            [EnumMember(Value = MaxOperation.Code)]
             Max,
 
-            [EnumMember(Value = MinOperator.Code)]
+            [EnumMember(Value = MinOperation.Code)]
             Min,
 
-            [EnumMember(Value = PiOperator.Code)]
+            [EnumMember(Value = PiOperation.Code)]
             Pi,
 
-            [EnumMember(Value = RandomOperator.Code)]
+            [EnumMember(Value = RandomOperation.Code)]
             Random,
 
-            [EnumMember(Value = RoundOperator.Code)]
+            [EnumMember(Value = RoundOperation.Code)]
             Round,
 
-            [EnumMember(Value = SinOperator.Code)]
+            [EnumMember(Value = SinOperation.Code)]
             Sin,
 
-            [EnumMember(Value = SqrtOperator.Code)]
+            [EnumMember(Value = SqrtOperation.Code)]
             Sqrt,
 
-            [EnumMember(Value = TanOperator.Code)]
+            [EnumMember(Value = TanOperation.Code)]
             Tan,
 
             [EnumMember(Value = "distance-from-center")]
@@ -277,8 +277,8 @@ namespace Netherlands3D.LayerStyles.Expressions
             public static implicit operator Expression(OperandView o) => o.AsExpression;
         }
 
-        public Operators Operator;
-        public object[] Operands;
+        public readonly Operators Operator;
+        public readonly object[] Operands;
         public OperandView Operand(int index) => new OperandView(Operands[index]);
 
         public Expression(Operators @operator, params object[] operands)

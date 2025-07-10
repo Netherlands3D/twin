@@ -1,5 +1,5 @@
 ﻿using System;
-using Netherlands3D.LayerStyles.Expressions.OperatorHandlers;
+using Netherlands3D.LayerStyles.Expressions.Operations;
 
 namespace Netherlands3D.LayerStyles.Expressions
 {
@@ -40,81 +40,81 @@ namespace Netherlands3D.LayerStyles.Expressions
             var result = expression.Operator switch
             {
                 // https://docs.mapbox.com/style-spec/reference/expressions/#types
-                Expression.Operators.Array => ArrayOperator.Evaluate(expression, context),
-                Expression.Operators.Boolean => BooleanOperator.Evaluate(expression, context),
-                Expression.Operators.Literal => LiteralOperator.Evaluate(expression, context),
-                Expression.Operators.Number => NumberOperator.Evaluate(expression, context),
-                Expression.Operators.NumberFormat => NumberFormatOperator.Evaluate(expression, context),
-                Expression.Operators.Object => ObjectOperator.Evaluate(expression, context),
-                Expression.Operators.String => StringOperator.Evaluate(expression, context),
-                Expression.Operators.ToBoolean => ToBooleanOperator.Evaluate(expression, context),
-                Expression.Operators.ToColor => ToColorOperator.Evaluate(expression, context),
-                Expression.Operators.ToNumber => ToNumberOperator.Evaluate(expression, context),
-                Expression.Operators.ToString => ToStringOperator.Evaluate(expression, context),
-                Expression.Operators.TypeOf => TypeOfOperator.Evaluate(expression, context),
+                Expression.Operators.Array => ArrayOperation.Evaluate(expression, context),
+                Expression.Operators.Boolean => BooleanOperation.Evaluate(expression, context),
+                Expression.Operators.Literal => LiteralOperation.Evaluate(expression, context),
+                Expression.Operators.Number => NumberOperation.Evaluate(expression, context),
+                Expression.Operators.NumberFormat => NumberFormatOperation.Evaluate(expression, context),
+                Expression.Operators.Object => ObjectOperation.Evaluate(expression, context),
+                Expression.Operators.String => StringOperation.Evaluate(expression, context),
+                Expression.Operators.ToBoolean => ToBooleanOperation.Evaluate(expression, context),
+                Expression.Operators.ToColor => ToColorOperation.Evaluate(expression, context),
+                Expression.Operators.ToNumber => ToNumberOperation.Evaluate(expression, context),
+                Expression.Operators.ToString => ToStringOperation.Evaluate(expression, context),
+                Expression.Operators.TypeOf => TypeOfOperation.Evaluate(expression, context),
                 
                 // https://docs.mapbox.com/style-spec/reference/expressions/#lookup
-                Expression.Operators.Get => GetOperator.Evaluate(expression, context),
+                Expression.Operators.Get => GetOperation.Evaluate(expression, context),
 
                 // https://docs.mapbox.com/style-spec/reference/expressions/#decision
-                Expression.Operators.Not => NotOperator.Evaluate(expression, context),
-                Expression.Operators.NotEqual => NotEqualOperator.Evaluate(expression, context),
-                Expression.Operators.LessThan => LessThanOperator.Evaluate(expression, context),
-                Expression.Operators.LessThanOrEqual => LessThanOrEqualOperator.Evaluate(expression, context),
-                Expression.Operators.EqualTo => EqualOperator.Evaluate(expression, context),
-                Expression.Operators.GreaterThan => GreaterThanOperator.Evaluate(expression, context),
-                Expression.Operators.GreaterThanOrEqual => GreaterThanOrEqualOperator.Evaluate(expression,
+                Expression.Operators.Not => NotOperation.Evaluate(expression, context),
+                Expression.Operators.NotEqual => NotEqualOperation.Evaluate(expression, context),
+                Expression.Operators.LessThan => LessThanOperation.Evaluate(expression, context),
+                Expression.Operators.LessThanOrEqual => LessThanOrEqualOperation.Evaluate(expression, context),
+                Expression.Operators.EqualTo => EqualOperation.Evaluate(expression, context),
+                Expression.Operators.GreaterThan => GreaterThanOperation.Evaluate(expression, context),
+                Expression.Operators.GreaterThanOrEqual => GreaterThanOrEqualOperation.Evaluate(expression,
                     context),
-                Expression.Operators.All => AllOperator.Evaluate(expression, context),
-                Expression.Operators.Any => AnyOperator.Evaluate(expression, context),
+                Expression.Operators.All => AllOperation.Evaluate(expression, context),
+                Expression.Operators.Any => AnyOperation.Evaluate(expression, context),
                 
                 // https://docs.mapbox.com/style-spec/reference/expressions/#color
-                Expression.Operators.Hsl => HslOperator.Evaluate(expression, context),
-                Expression.Operators.Hsla => HslaOperator.Evaluate(expression, context),
-                Expression.Operators.Rgb => RgbOperator.Evaluate(expression, context),
-                Expression.Operators.Rgba => RgbaOperator.Evaluate(expression, context),
-                Expression.Operators.ToHsla => ToHslaOperator.Evaluate(expression, context),
-                Expression.Operators.ToRgba => ToRgbaOperator.Evaluate(expression, context),
+                Expression.Operators.Hsl => HslOperation.Evaluate(expression, context),
+                Expression.Operators.Hsla => HslaOperation.Evaluate(expression, context),
+                Expression.Operators.Rgb => RgbOperation.Evaluate(expression, context),
+                Expression.Operators.Rgba => RgbaOperation.Evaluate(expression, context),
+                Expression.Operators.ToHsla => ToHslaOperation.Evaluate(expression, context),
+                Expression.Operators.ToRgba => ToRgbaOperation.Evaluate(expression, context),
                 
                 // https://docs.mapbox.com/style-spec/reference/expressions/#math
                 // arithmetic
-                Expression.Operators.Add => AddOperator.Evaluate(expression, context),
-                Expression.Operators.Subtract => SubtractOperator.Evaluate(expression, context),
-                Expression.Operators.Multiply => MultiplyOperator.Evaluate(expression, context),
-                Expression.Operators.Divide => DivideOperator.Evaluate(expression, context),
-                Expression.Operators.Modulo => ModuloOperator.Evaluate(expression, context),
-                Expression.Operators.Power => PowerOperator.Evaluate(expression, context),
+                Expression.Operators.Add => AddOperation.Evaluate(expression, context),
+                Expression.Operators.Subtract => SubtractOperation.Evaluate(expression, context),
+                Expression.Operators.Multiply => MultiplyOperation.Evaluate(expression, context),
+                Expression.Operators.Divide => DivideOperation.Evaluate(expression, context),
+                Expression.Operators.Modulo => ModuloOperation.Evaluate(expression, context),
+                Expression.Operators.Power => PowerOperation.Evaluate(expression, context),
 
                 // unary math
-                Expression.Operators.Abs => AbsOperator.Evaluate(expression, context),
-                Expression.Operators.Ceil => CeilOperator.Evaluate(expression, context),
-                Expression.Operators.Floor => FloorOperator.Evaluate(expression, context),
-                Expression.Operators.Round => RoundOperator.Evaluate(expression, context),
-                Expression.Operators.Sqrt => SqrtOperator.Evaluate(expression, context),
+                Expression.Operators.Abs => AbsOperation.Evaluate(expression, context),
+                Expression.Operators.Ceil => CeilOperation.Evaluate(expression, context),
+                Expression.Operators.Floor => FloorOperation.Evaluate(expression, context),
+                Expression.Operators.Round => RoundOperation.Evaluate(expression, context),
+                Expression.Operators.Sqrt => SqrtOperation.Evaluate(expression, context),
 
                 // trigonometry
-                Expression.Operators.Acos => AcosOperator.Evaluate(expression, context),
-                Expression.Operators.Asin => AsinOperator.Evaluate(expression, context),
-                Expression.Operators.Atan => AtanOperator.Evaluate(expression, context),
-                Expression.Operators.Cos => CosOperator.Evaluate(expression, context),
-                Expression.Operators.Sin => SinOperator.Evaluate(expression, context),
-                Expression.Operators.Tan => TanOperator.Evaluate(expression, context),
+                Expression.Operators.Acos => AcosOperation.Evaluate(expression, context),
+                Expression.Operators.Asin => AsinOperation.Evaluate(expression, context),
+                Expression.Operators.Atan => AtanOperation.Evaluate(expression, context),
+                Expression.Operators.Cos => CosOperation.Evaluate(expression, context),
+                Expression.Operators.Sin => SinOperation.Evaluate(expression, context),
+                Expression.Operators.Tan => TanOperation.Evaluate(expression, context),
 
                 // logarithms & constants
-                Expression.Operators.Ln => LnOperator.Evaluate(expression, context),
-                Expression.Operators.Ln2 => Ln2Operator.Evaluate(expression, context),
-                Expression.Operators.Log10 => Log10Operator.Evaluate(expression, context),
-                Expression.Operators.Log2 => Log2Operator.Evaluate(expression, context),
-                Expression.Operators.Pi => PiOperator.Evaluate(expression, context),
-                Expression.Operators.E => EOperator.Evaluate(expression, context),
+                Expression.Operators.Ln => LnOperation.Evaluate(expression, context),
+                Expression.Operators.Ln2 => Ln2Operation.Evaluate(expression),
+                Expression.Operators.Log10 => Log10Operation.Evaluate(expression, context),
+                Expression.Operators.Log2 => Log2Operation.Evaluate(expression, context),
+                Expression.Operators.Pi => PiOperation.Evaluate(expression),
+                Expression.Operators.E => EOperation.Evaluate(),
 
                 // min/max & randomness
-                Expression.Operators.Max => MaxOperator.Evaluate(expression, context),
-                Expression.Operators.Min => MinOperator.Evaluate(expression, context),
-                Expression.Operators.Random => RandomOperator.Evaluate(expression, context),
+                Expression.Operators.Max => MaxOperation.Evaluate(expression, context),
+                Expression.Operators.Min => MinOperation.Evaluate(expression, context),
+                Expression.Operators.Random => RandomOperation.Evaluate(expression, context),
 
                 // geographic
-                Expression.Operators.Distance => DistanceOperator.Evaluate(expression, context),
+                Expression.Operators.Distance => DistanceOperation.Evaluate(expression, context),
 
                 _ => throw new NotImplementedException($"Operator {expression.Operator} not supported yet.")
             };
