@@ -27,13 +27,6 @@
       },
       "url": "https://package.openupm.com"
     },
-    "com.johanhelsing.oneof": {
-      "version": "0.1.1",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
-    },
     "com.joshclose.csvhelper": {
       "version": "13.0.0",
       "depth": 0,
@@ -426,6 +419,12 @@
         "com.unity.nuget.newtonsoft-json": "3.2.0"
       },
       "url": "https://package.openupm.com"
+    },
+    "eu.netherlands3d.layer-styles": {
+      "version": "file:eu.netherlands3d.layer-styles",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.masking": {
       "version": "2.0.1",

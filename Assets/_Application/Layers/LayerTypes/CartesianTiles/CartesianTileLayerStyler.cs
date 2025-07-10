@@ -28,8 +28,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             // Add or set the colorization of this feature by its material index
             var stylingRule = new StylingRule(
                 stylingRuleName, 
-                Expr.EqualsTo(
-                    Expr.GetVariable(MaterialIndexIdentifier),
+                Expression.EqualTo(
+                    Expression.Get(MaterialIndexIdentifier),
                     materialIndexIdentifier.ToString()
                 )
             );
