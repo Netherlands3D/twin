@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using SimpleJSON;
+using static Netherlands3D.Tiles3D.TileSetsConfigLoader.Config;
 
 namespace Netherlands3D.Tiles3D
 {
@@ -19,10 +20,10 @@ namespace Netherlands3D.Tiles3D
         public static readonly string[] SupportedExtensions = Array.Empty<string>(); //currently no extensions are supported
         
         internal static ReadSubtree subtreeReader;
-        internal static Tile ReadTileset(JSONNode rootnode)
+        internal static Tile ReadTileset(JSONNode rootnode, Read3DTileset tileset)
         {
             Tile root = new Tile();
-            
+            root.tileSet = tileset;
             TilingMethod tilingMethod = TilingMethod.ExplicitTiling;
             double[] transformValues = new double[16] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
             JSONNode transformNode = rootnode["transform"];
@@ -48,6 +49,7 @@ namespace Netherlands3D.Tiles3D
                     if(DebugLog)
                         Debug.Log("Explicit tiling");
                     Tile rootTile = new Tile();
+                    rootTile.tileSet = tileset;
                     rootTile.tileTransform = root.tileTransform;
                     root = ReadExplicitNode(rootnode, rootTile);
                     
@@ -56,6 +58,7 @@ namespace Netherlands3D.Tiles3D
                     if (rootTile.children.Count==0 )
                     {
                         Tile childTile = new Tile();
+                        childTile.tileSet = tileset;
                         childTile = ReadExplicitNode(rootnode, childTile);
                         childTile.parent = rootTile;
                         rootTile.geometricError += 10;
@@ -68,14 +71,15 @@ namespace Netherlands3D.Tiles3D
                     if(DebugLog)
                         Debug.Log("Implicit tiling"); 
                     rootTile = new Tile();
+                    rootTile.tileSet = tileset;
                     rootTile = ReadExplicitNode(rootnode, rootTile);
                     rootTile.level = 0;
                     rootTile.X = 0;
                     rootTile.Y = 0;
                     rootTile.transform = root.transform;
-                    
-                    ReadImplicitTiling(rootnode,rootTile);
                     rootTile.tileTransform = root.tileTransform;
+                    ReadImplicitTiling(rootnode,rootTile);
+
                     rootTile.transform = root.transform;
                     root = rootTile;
                     break;
@@ -133,6 +137,7 @@ namespace Netherlands3D.Tiles3D
                 for (int i = 0; i < childrenNode.Count; i++)
                 {
                     var childTile = new Tile();
+                    childTile.tileSet = tile.tileSet;
                     childTile.transform = tile.transform;
                     childTile.parent = tile;
                     tile.children.Add(ReadExplicitNode(childrenNode[i], childTile));

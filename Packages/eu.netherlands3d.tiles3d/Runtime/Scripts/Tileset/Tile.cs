@@ -15,7 +15,7 @@ namespace Netherlands3D.Tiles3D
         public int X;
         public int Y;
         public bool hascontent;
-
+        public Read3DTileset tileSet;
         //webtileprioritizer properties
         public int priority = 0;
         public int childrenCountDelayingDispose = 0;
@@ -39,6 +39,7 @@ namespace Netherlands3D.Tiles3D
         // tiletree properties
         public Tile parent;
         [SerializeField] public List<Tile> children = new List<Tile>();
+        
 
         //tileproperties
 
@@ -242,7 +243,7 @@ namespace Netherlands3D.Tiles3D
             if (boundsAvailable)
             {
                 inView = false;
-                if (IsPointInbounds(new Coordinate(ofCamera.transform.position).Convert(CoordinateSystem.WGS84_ECEF),8000d))
+                if (IsPointInbounds(new Coordinate(ofCamera.transform.position).Convert(tileSet.contentCoordinateSystem),8000d))
                 {
                     inView= ofCamera.InView(unityBounds);
                 }
@@ -299,11 +300,11 @@ namespace Netherlands3D.Tiles3D
             {
                 case BoundingVolumeType.Box:
 
-                    Coordinate boxCenterEcef = new Coordinate(CoordinateSystem.WGS84_ECEF, boundingVolume.values[0], boundingVolume.values[1], boundingVolume.values[2]);
+                    Coordinate boxCenterEcef = new Coordinate(tileSet.contentCoordinateSystem, boundingVolume.values[0], boundingVolume.values[1], boundingVolume.values[2]);
 
-                    Coordinate Xaxis = new Coordinate(CoordinateSystem.WGS84_ECEF, boundingVolume.values[3], boundingVolume.values[4], boundingVolume.values[5]);
-                    Coordinate Yaxis = new Coordinate(CoordinateSystem.WGS84_ECEF, boundingVolume.values[6], boundingVolume.values[7], boundingVolume.values[8]);
-                    Coordinate Zaxis = new Coordinate(CoordinateSystem.WGS84_ECEF, boundingVolume.values[9], boundingVolume.values[10], boundingVolume.values[11]);
+                    Coordinate Xaxis = new Coordinate(tileSet.contentCoordinateSystem, boundingVolume.values[3], boundingVolume.values[4], boundingVolume.values[5]);
+                    Coordinate Yaxis = new Coordinate(tileSet.contentCoordinateSystem, boundingVolume.values[6], boundingVolume.values[7], boundingVolume.values[8]);
+                    Coordinate Zaxis = new Coordinate(tileSet.contentCoordinateSystem, boundingVolume.values[9], boundingVolume.values[10], boundingVolume.values[11]);
 
                     
 
@@ -326,8 +327,8 @@ namespace Netherlands3D.Tiles3D
                     double deltaX =  Math.Abs(Xaxis.value1) + Math.Abs(Yaxis.value1) + Math.Abs(Zaxis.value1);
                     double deltaY = Math.Abs(Xaxis.value2) + Math.Abs(Yaxis.value2) + Math.Abs(Zaxis.value2);
                     double deltaZ = Math.Abs(Xaxis.value3) + Math.Abs(Yaxis.value3) + Math.Abs(Zaxis.value3);
-                    BottomLeft = new Coordinate(CoordinateSystem.WGS84_ECEF , boxCenterEcef.value1-deltaX, boxCenterEcef.value2 - deltaY, boxCenterEcef.value3 - deltaZ);
-                    TopRight = new Coordinate(CoordinateSystem.WGS84_ECEF, boxCenterEcef.value1 + deltaX, boxCenterEcef.value2 + deltaY, boxCenterEcef.value3 + deltaZ);
+                    BottomLeft = new Coordinate(tileSet.contentCoordinateSystem, boxCenterEcef.value1-deltaX, boxCenterEcef.value2 - deltaY, boxCenterEcef.value3 - deltaZ);
+                    TopRight = new Coordinate(tileSet.contentCoordinateSystem, boxCenterEcef.value1 + deltaX, boxCenterEcef.value2 + deltaY, boxCenterEcef.value3 + deltaZ);
 
 
                     break;

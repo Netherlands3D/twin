@@ -1,3 +1,4 @@
+using Netherlands3D.Coordinates;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace Netherlands3D.Tiles3D
             {
                 public string url = "";
                 public int maximumScreenSpaceError = 5;
+                public int contentCoordinateSystem = (int)CoordinateSystem.WGS84_ECEF;
             }
         }
 
@@ -61,7 +63,7 @@ namespace Netherlands3D.Tiles3D
                 newTileSet.transform.SetParent(this.transform);
 
                 var tileSetReader = newTileSet.AddComponent<Read3DTileset>();
-                tileSetReader.Initialize(tileset.url, tileset.maximumScreenSpaceError, tilePrioritiser);
+                tileSetReader.Initialize(tileset.url, (CoordinateSystem)tileset.contentCoordinateSystem, tileset.maximumScreenSpaceError, tilePrioritiser);
             }
         }
 
