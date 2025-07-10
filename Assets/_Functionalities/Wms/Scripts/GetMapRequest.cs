@@ -16,7 +16,7 @@ namespace Netherlands3D.Functionalities.Wms
         internal MapFilters CreateMapFromCapabilitiesUrl(Uri url, int width, int height, bool transparent)
         {
             var parameters = QueryString.Decode(url.Query);
-            var version = parameters.Get("version");
+            var version = parameters.Single("version");
             if (string.IsNullOrEmpty(version))
             {
                 version = defaultFallbackVersion;
@@ -25,17 +25,17 @@ namespace Netherlands3D.Functionalities.Wms
 
             var wmsParam = new MapFilters
             {
-                name = parameters.Get("layers"),
+                name = parameters.Single("layers"),
                 spatialReferenceType = MapFilters.SpatialReferenceTypeFromVersion(new Version(version)),
                 spatialReference = defaultCoordinateSystemReference,
-                style = parameters.Get("styles"),
+                style = parameters.Single("styles"),
                 version = version,
                 width = width,
                 height = height,
                 transparent = transparent
             };
 
-            var crs = parameters.Get(wmsParam.spatialReferenceType);
+            var crs = parameters.Single(wmsParam.spatialReferenceType);
             wmsParam.spatialReference = !string.IsNullOrEmpty(crs) ? crs : defaultCoordinateSystemReference;
 
             return wmsParam;

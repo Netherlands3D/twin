@@ -7,8 +7,10 @@ using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Collections;
+using GG.Extensions;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
+using UnityEngine.Serialization;
 using Netherlands3D.Services;
 
 namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
@@ -170,11 +172,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             Layer.ChildrenChanged.AddListener(OnLayerChildrenChanged);
             Layer.ParentOrSiblingIndexChanged.AddListener(OnParentOrSiblingIndexChanged);
             Layer.LayerDestroyed.AddListener(DestroyUI);
-
-            if (Layer is ReferencedLayerData referencedLayerData)
-            {
-                referencedLayerData.OnReferenceChanged.AddListener(UpdateReference);
-            }
 
             MarkLayerUIAsDirty();
 
@@ -759,11 +756,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             Layer.ChildrenChanged.RemoveListener(OnLayerChildrenChanged);
             Layer.ParentOrSiblingIndexChanged.RemoveListener(OnParentOrSiblingIndexChanged);
             Layer.LayerDestroyed.RemoveListener(DestroyUI);
-
-            if (Layer is ReferencedLayerData referencedLayerData)
-            {
-                referencedLayerData.OnReferenceChanged.RemoveListener(UpdateReference);
-            }
         }
 
         private void RegisterWithPropertiesPanel(Properties.Properties propertiesPanel)
@@ -780,13 +772,11 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             ToggleProperties(propertyToggle.isOn, propertiesPanel);
         }
 
-        private void UpdateReference()
+        public void ToggleProperties(bool onOrOff)
         {
-            MarkLayerUIAsDirty();
-            RegisterWithPropertiesPanel(ServiceLocator.GetService<Properties.Properties>());
-            propertyToggle.isOn = false;
+            propertyToggle.isOn = onOrOff;
         }
-        
+
         private void ToggleProperties(bool onOrOff, Properties.Properties properties)
         {
             var layerWithProperties = Properties.Properties.TryFindProperties(Layer);
