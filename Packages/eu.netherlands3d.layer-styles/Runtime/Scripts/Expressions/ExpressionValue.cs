@@ -1,190 +1,64 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using OneOf;
+﻿using System;
+using System.Globalization;
 using UnityEngine;
 
 namespace Netherlands3D.LayerStyles.Expressions
 {
-    // Must be List<ExpressionValue> and not ExpressionValue[] - the latter would make this recursive and Unity cannot
-    // properly handle that in some situations, causing crashes
-    public class ExpressionValue : OneOfBase<string, int, bool, float, double, List<ExpressionValue>>, IComparable, IConvertible
+    /// <summary>
+    /// A discriminated wrapper around the possible expression result types,
+    /// with implicit conversions to and from the CLR types for convenience.
+    /// </summary>
+    public readonly struct ExpressionValue
     {
-        private ExpressionValue(OneOf<string, int, bool, float, double, List<ExpressionValue>> value) : base(value)
+        private readonly object value;
+
+        public ExpressionValue(object value)
         {
+            this.value = value;
         }
 
-        public string AsString() => AsT0;
-        public int AsInt() => AsT1;
-        public bool AsBool() => AsT2;
-        public float AsFloat() => AsT3;
-        public double AsDouble() => AsT4;
-        public List<ExpressionValue> AsCollection() => AsT5;
-        
-        public bool IsString => IsT0;
-        public bool IsInt => IsT1;
-        public bool IsBool => IsT2;
-        public bool IsFloat => IsT3;
-        public bool IsDouble => IsT4;
-        public bool IsCollection => IsT5;
+        // Implicit “up‐cast” from CLR → ExpressionValue
+        public static implicit operator ExpressionValue(bool b) => new(b);
+        public static implicit operator ExpressionValue(int d) => new(d);
+        public static implicit operator ExpressionValue(float d) => new(d);
+        public static implicit operator ExpressionValue(double d) => new(d);
+        public static implicit operator ExpressionValue(string s) => new(s);
+        public static implicit operator ExpressionValue(Color c) => new(c);
+        public static implicit operator ExpressionValue(object[] a) => new(a);
 
-        public static implicit operator ExpressionValue(string v) => new(v);
-        public static implicit operator ExpressionValue(int v) => new(v);
-        public static implicit operator ExpressionValue(bool v) => new(v);
-        public static implicit operator ExpressionValue(float v) => new(v);
-        public static implicit operator ExpressionValue(double v) => new(v);
-        public static implicit operator ExpressionValue(List<ExpressionValue> v) => new(v);
-        public static implicit operator ExpressionValue(ExpressionValue[] v) => new(v.ToList());
-        
-        public static implicit operator ExpressionValue(string[] v) => new(v.Select(i => (ExpressionValue)i).ToList());
-        public static implicit operator ExpressionValue(int[] v) => new(v.Select(i => (ExpressionValue)i).ToList());
-        public static implicit operator ExpressionValue(bool[] v) => new(v.Select(i => (ExpressionValue)i).ToList());
-        public static implicit operator ExpressionValue(float[] v) => new(v.Select(i => (ExpressionValue)i).ToList());
-        public static implicit operator ExpressionValue(double[] v) => new(v.Select(i => (ExpressionValue)i).ToList());
+        // Implicit “down‐cast” from ExpressionValue → CLR
+        public static implicit operator bool(ExpressionValue ev)
+            => ev.value is bool b
+                ? b
+                : throw new InvalidCastException($"Cannot cast {ev.value?.GetType().Name} to bool");
 
-        public static implicit operator double(ExpressionValue v) => v.ToDouble(null);
-        public static implicit operator int(ExpressionValue v) => v.ToInt32(null);
-        public static implicit operator float(ExpressionValue v) => v.ToSingle(null);
-        public static implicit operator string(ExpressionValue v) => v.ToString(null);
-        public static implicit operator bool(ExpressionValue v) => v.ToBoolean(null);
-        public static implicit operator ExpressionValue[](ExpressionValue v) => v.AsCollection().ToArray();
-        public static implicit operator List<ExpressionValue>(ExpressionValue v) => v.AsCollection();
+        public static implicit operator int(ExpressionValue ev)
+            => ev.value is int i ? i
+                : ev.value is IConvertible conv ? conv.ToInt32(CultureInfo.InvariantCulture)
+                : throw new InvalidCastException($"Cannot cast {ev.value?.GetType().Name} to int32");
 
-        public int CompareTo(object other)
-        {
-            if (other is not ExpressionValue otherValue) return 0;
-            
-            if ((IsInt || IsFloat || IsDouble) && (otherValue.IsInt || otherValue.IsFloat || otherValue.IsDouble))
-            {
-                return ((IComparable)Value).CompareTo(otherValue.Value);
-            }
+        public static implicit operator float(ExpressionValue ev)
+            => ev.value is float f ? f
+                : ev.value is IConvertible conv ? conv.ToSingle(CultureInfo.InvariantCulture)
+                : throw new InvalidCastException($"Cannot cast {ev.value?.GetType().Name} to float");
 
-            return 0;
-        }
+        public static implicit operator double(ExpressionValue ev)
+            => ev.value is double d ? d
+                : ev.value is IConvertible conv ? conv.ToDouble(CultureInfo.InvariantCulture)
+                : throw new InvalidCastException($"Cannot cast {ev.value?.GetType().Name} to double");
 
-        public TypeCode GetTypeCode()
-        {
-            if (IsInt) return TypeCode.Int32;
-            if (IsFloat) return TypeCode.Single;
-            if (IsDouble) return TypeCode.Double;
-            if (IsBool) return TypeCode.Boolean;
-            if (IsString) return TypeCode.String;
-            if (IsCollection) return TypeCode.Object;
-            
-            return TypeCode.Object;
-        }
+        public static implicit operator string(ExpressionValue ev)
+            => ev.value?.ToString();
 
-        public bool ToBoolean(IFormatProvider provider)
-        {
-            if (Value is IConvertible convertible) return convertible.ToBoolean(provider);
+        public static implicit operator Color(ExpressionValue ev)
+            => ev.value is Color c
+                ? c
+                : throw new InvalidCastException($"Cannot cast {ev.value?.GetType().Name} to Color");
 
-            throw new FormatException("Type is not compatible with Boolean");
-        }
+        public static implicit operator object[](ExpressionValue ev)
+            => ev.value as object[]
+               ?? throw new InvalidCastException($"Cannot cast {ev.value?.GetType().Name} to object[]");
 
-        public byte ToByte(IFormatProvider provider)
-        {
-            if (Value is IConvertible convertible) return convertible.ToByte(provider);
-
-            throw new FormatException("Type is not compatible with Byte");
-        }
-
-        public char ToChar(IFormatProvider provider)
-        {
-            if (Value is IConvertible convertible) return convertible.ToChar(provider);
-
-            throw new FormatException("Type is not compatible with Boolean");
-        }
-
-        public DateTime ToDateTime(IFormatProvider provider)
-        {
-            if (Value is IConvertible convertible) return convertible.ToDateTime(provider);
-
-            throw new FormatException("Type is not compatible with DateTime");
-        }
-
-        public decimal ToDecimal(IFormatProvider provider)
-        {
-            if (Value is IConvertible convertible) return convertible.ToDecimal(provider);
-
-            throw new FormatException("Type is not compatible with Decimal");
-        }
-
-        public double ToDouble(IFormatProvider provider)
-        {
-            if (Value is IConvertible convertible) return convertible.ToDouble(provider);
-
-            throw new FormatException("Type is not compatible with Double");
-        }
-
-        public short ToInt16(IFormatProvider provider)
-        {
-            if (Value is IConvertible convertible) return convertible.ToInt16(provider);
-
-            throw new FormatException("Type is not compatible with Int16");
-        }
-
-        public int ToInt32(IFormatProvider provider)
-        {
-            if (Value is IConvertible convertible) return convertible.ToInt32(provider);
-
-            throw new FormatException("Type is not compatible with Int32");
-        }
-
-        public long ToInt64(IFormatProvider provider)
-        {
-            if (Value is IConvertible convertible) return convertible.ToChar(provider);
-
-            throw new FormatException("Type is not compatible with Int64");
-        }
-
-        public sbyte ToSByte(IFormatProvider provider)
-        {
-            if (Value is IConvertible convertible) return convertible.ToSByte(provider);
-
-            throw new FormatException("Type is not compatible with SByte");
-        }
-
-        public float ToSingle(IFormatProvider provider)
-        {
-            if (Value is IConvertible convertible) return convertible.ToSingle(provider);
-
-            throw new FormatException("Type is not compatible with Float");
-        }
-
-        public string ToString(IFormatProvider provider)
-        {
-            if (Value == null) return null!;
-            if (Value is IConvertible convertible) return convertible.ToString(provider);
-
-            throw new FormatException("Type is not compatible with string");
-        }
-
-        public object ToType(Type conversionType, IFormatProvider provider)
-        {
-            if (Value is IConvertible convertible) return convertible.ToType(conversionType, provider);
-
-            throw new FormatException("Type is not compatible with " + conversionType.FullName);
-        }
-
-        public ushort ToUInt16(IFormatProvider provider)
-        {
-            if (Value is IConvertible convertible) return convertible.ToUInt16(provider);
-
-            throw new FormatException("Type is not compatible with UInt16");
-        }
-
-        public uint ToUInt32(IFormatProvider provider)
-        {
-            if (Value is IConvertible convertible) return convertible.ToUInt32(provider);
-
-            throw new FormatException("Type is not compatible with UInt32");
-        }
-
-        public ulong ToUInt64(IFormatProvider provider)
-        {
-            if (Value is IConvertible convertible) return convertible.ToUInt64(provider);
-
-            throw new FormatException("Type is not compatible with UInt64");
-        }
+        public override string ToString() => value?.ToString() ?? "null";
     }
 }

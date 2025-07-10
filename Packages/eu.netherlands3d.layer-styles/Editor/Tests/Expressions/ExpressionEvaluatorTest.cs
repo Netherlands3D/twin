@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Netherlands3D.LayerStyles.Expressions;
 using Netherlands3D.Twin.Layers;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace Netherlands3D.LayerStyles.ExpressionEngine
+namespace Netherlands3D.LayerStyles.Expressions
 {
     [TestFixture]
     public class ExpressionEvaluatorTest
@@ -231,7 +230,7 @@ namespace Netherlands3D.LayerStyles.ExpressionEngine
         [Test]
         public void EvaluateArrayExpression()
         {
-            object[] arr = { 1, 2, 3 };
+            int[] arr = { 1, 2, 3 };
             var expr = Expression.Array(arr);
 
             var val = ExpressionEvaluator.Evaluate(expr, context);

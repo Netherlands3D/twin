@@ -1,8 +1,6 @@
-using Netherlands3D.Twin.Layers;
 using System.Collections.Generic;
 using Netherlands3D.LayerStyles.Expressions;
-using UnityEngine;
-using ExpressionEvaluator = Netherlands3D.LayerStyles.Expressions.ExpressionEvaluator;
+using Netherlands3D.Twin.Layers;
 
 namespace Netherlands3D.LayerStyles
 {
@@ -26,7 +24,6 @@ namespace Netherlands3D.LayerStyles
         }
 
         private static StyleResolver instance;
-        private readonly ExpressionEvaluator expressionEvaluator = new();
 
         /// <summary>
         /// Evaluates all style rules in <paramref name="styles"/> against the given <paramref name="feature"/>,
@@ -82,12 +79,14 @@ namespace Netherlands3D.LayerStyles
         /// <summary>
         /// Evaluates a selector expression against the given context.
         /// </summary>
-        /// <param name="selector">An <see cref="IExpression"/> representing the rule’s selector.</param>
+        /// <param name="selector">An <see cref="Expressions.Expression"/> representing the rule’s selector.</param>
         /// <param name="context">The <see cref="ExpressionContext"/> containing feature attributes.</param>
         /// <returns><c>true</c> if the selector matches; otherwise, <c>false</c>.</returns>
-        private bool Resolve(IExpression selector, ExpressionContext context)
+        private bool Resolve(Expression selector, ExpressionContext context)
         {
-            return expressionEvaluator.Evaluate(selector, context).AsBool();
+            if (selector == null) return true;
+
+            return ExpressionEvaluator.Evaluate(selector, context);
         }
     }
 }

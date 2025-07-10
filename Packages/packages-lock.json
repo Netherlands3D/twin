@@ -27,13 +27,6 @@
       },
       "url": "https://package.openupm.com"
     },
-    "com.johanhelsing.oneof": {
-      "version": "0.1.1",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
-    },
     "com.joshclose.csvhelper": {
       "version": "13.0.0",
       "depth": 0,

@@ -46,7 +46,8 @@ namespace Netherlands3D.LayerStyles
         /// An expression whether a feature should match this styling rule, matching is done using an expression as
         /// described in https://docs.ogc.org/DRAFTS/18-067r4.html#_expressions.
         /// </summary>
-        [DataMember(Name = "selector")] public IExpression Selector { get; private set; }
+        [DataMember(Name = "selector")] 
+        public Expression Selector { get; private set; }
 
         [JsonConstructor]
         private StylingRule()
@@ -58,10 +59,10 @@ namespace Netherlands3D.LayerStyles
             Name = name;
             
             // Applies always - the selector will always return true
-            Selector = (Expr<bool>)true;
+            Selector = null;
         }
 
-        public StylingRule(string name, IExpression selector)
+        public StylingRule(string name, Expression selector)
         {
             Name = name;
             Selector = selector;

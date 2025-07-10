@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
-using UnityEngine;
 
 namespace Netherlands3D.LayerStyles.Expressions
 {
     [TestFixture]
-    public class ExprJsonConverterTests
+    public class ExpressionConverterTests
     {
         private JsonSerializerSettings jsonSerializerSettings;
 
@@ -13,102 +12,14 @@ namespace Netherlands3D.LayerStyles.Expressions
         public void SetUp()
         {
             jsonSerializerSettings = new JsonSerializerSettings();
-            jsonSerializerSettings.Converters.Add(new ExprJsonConverter());
+            jsonSerializerSettings.Converters.Add(new ExpressionConverter());
         }
-
-        [Test]
-        public void SerializingALiteralIntegerProducesJsonNumber()
-        {
-            Expr<int> lit = 42;
-            
-            string json = JsonConvert.SerializeObject(lit, jsonSerializerSettings);
-            
-            Assert.AreEqual("42", json);
-        }
-
-        [Test]
-        public void DeserializingJsonNumberReturnsLiteralIntegerExpression()
-        {
-            const string json = "42";
-            
-            var expr = JsonConvert.DeserializeObject<Expr<int>>(json, jsonSerializerSettings);
-            
-            Assert.IsInstanceOf<Expr>(expr);
-            Assert.IsTrue(expr.IsValue);
-            Assert.AreEqual(42, (int)expr); // implicit → int
-        }
-
-        [Test]
-        public void SerializingALiteralDoubleProducesJsonFloat()
-        {
-            Expr<double> lit = 4.2d;
-            
-            string json = JsonConvert.SerializeObject(lit, jsonSerializerSettings);
-            
-            Assert.AreEqual("4.2", json);
-        }
-
-        [Test]
-        public void DeserializingJsonFloatReturnsLiteralDoubleExpression()
-        {
-            const string json = "4.2";
-            
-            var expr = JsonConvert.DeserializeObject<Expr<double>>(json, jsonSerializerSettings);
-            
-            Assert.IsInstanceOf<Expr>(expr);
-            Assert.IsTrue(expr.IsValue);
-            Assert.AreEqual(4.2d, (double)expr); // implicit → double
-        }
-
-        [Test]
-        public void SerializingALiteralBooleanProducesJsonBoolean()
-        {
-            Expr<bool> lit = true;
-            
-            string json = JsonConvert.SerializeObject(lit, jsonSerializerSettings);
-            
-            Assert.AreEqual("true", json);
-        }
-
-        [Test]
-        public void DeserializingJsonBooleanReturnsLiteralBooleanExpression()
-        {
-            const string json = "true";
-            
-            var expr = JsonConvert.DeserializeObject<Expr<bool>>(json, jsonSerializerSettings);
-            
-            Assert.IsInstanceOf<Expr>(expr);
-            Assert.IsTrue(expr.IsValue);
-            Assert.AreEqual(true, (bool)expr); // implicit → bool
-        }
-
-        [Test]
-        public void SerializingALiteralStringProducesJsonString()
-        {
-            Expr<string> lit = "hello";
-            
-            string json = JsonConvert.SerializeObject(lit, jsonSerializerSettings);
-            
-            Assert.AreEqual("\"hello\"", json);
-        }
-
-        [Test]
-        public void DeserializingAJsonStringReturnsALiteralStringExpression()
-        {
-            const string json = "\"hello\"";
-            
-            var expr = JsonConvert.DeserializeObject<Expr<string>>(json, jsonSerializerSettings);
-
-            Assert.IsInstanceOf<Expr>(expr);
-            Assert.IsTrue(expr.IsValue);
-            Assert.AreEqual("hello", (string)expr); // implicit → string
-        }
-
+        
         [Test]
         public void SerializingAnExpressionProducesArray()
         {
             // ["==", 5, 10]
-            var expr = Expr.EqualsTo(5, 10);
+            var expr = Expression.EqualTo(5, 10);
             
             string json = JsonConvert.SerializeObject(expr, jsonSerializerSettings);
             
@@ -120,22 +31,19 @@ namespace Netherlands3D.LayerStyles.Expressions
         {
             const string json = @"[""=="",5,10]";
             
-            var expr = JsonConvert.DeserializeObject<Expr<bool>>(json, jsonSerializerSettings);
+            var expr = JsonConvert.DeserializeObject<Expression>(json, jsonSerializerSettings);
 
-            Assert.IsTrue(expr.IsExpression);
-            Assert.AreEqual(Operators.EqualTo, expr.Operator);
+            Assert.AreEqual(Expression.Operators.EqualTo, expr.Operator);
 
             // arguments should be two literals 5 and 10
-            Assert.AreEqual(2, expr.Arguments.Length);
+            Assert.AreEqual(2, expr.Operands.Length);
 
-            Assert.IsInstanceOf<Expr<ExpressionValue>>(expr.Arguments[0]);
-            Assert.IsInstanceOf<Expr<ExpressionValue>>(expr.Arguments[1]);
+            Assert.IsTrue(expr.Operand(0).IsNumber);
+            Assert.IsTrue(expr.Operand(1).IsNumber);
 
-            var left = (Expr<ExpressionValue>)expr.Arguments[0];
-            var right = (Expr<ExpressionValue>)expr.Arguments[1];
+            var left = expr.Operand(0);
+            var right = expr.Operand(1);
             
-            Assert.IsTrue(left.Value.IsFloat);
-            Assert.IsTrue(right.Value.IsFloat);
             Assert.AreEqual(5, (int)left);
             Assert.AreEqual(10, (int)right);
         }
@@ -144,7 +52,7 @@ namespace Netherlands3D.LayerStyles.Expressions
         public void SerializingAnExpressionWithAVariableStatementReturnsAJsonArray()
         {
             // ["==", 5, ["get", "temperature"]]]]
-            var expr = Expr.EqualsTo(5, Expr.GetVariable("temperature"));
+            var expr = Expression.EqualTo(5, Expression.Get("temperature"));
             
             string json = JsonConvert.SerializeObject(expr, jsonSerializerSettings);
             
@@ -154,10 +62,10 @@ namespace Netherlands3D.LayerStyles.Expressions
         [Test]
         public void SerializingAComplexExpressionReturnsAJsonArray()
         {
-            Expr<string> rgb = Expr.Rgb(
-                Expr.GetVariable("temperature"), 
+            Expression rgb = Expression.Rgb(
+                Expression.Get("temperature"), 
                 0, 
-                Expr.Min(100, Expr.GetVariable("temperature"))
+                Expression.Min(100, Expression.Get("temperature"))
             );
             
             string json = JsonConvert.SerializeObject(rgb, jsonSerializerSettings);
@@ -178,31 +86,31 @@ namespace Netherlands3D.LayerStyles.Expressions
               [""min"", 100, [""get"", ""temperature""]]
             ]";
 
-            var expr = JsonConvert.DeserializeObject<Expr<string>>(json, jsonSerializerSettings);
+            var expr = JsonConvert.DeserializeObject<Expression>(json, jsonSerializerSettings);
 
-            Assert.AreEqual(Operators.Rgb, expr.Operator);
-            Assert.AreEqual(3, expr.Arguments.Length);
+            Assert.AreEqual(Expression.Operators.Rgb, expr.Operator);
+            Assert.AreEqual(3, expr.Operands.Length);
 
-            // first arg: get temperature
-            Expr<int> a0 = (Expr<int>)expr.Arguments[0];
-            Assert.AreEqual(Operators.GetVariable, a0.Operator);
-            Assert.AreEqual("temperature", (string)(Expr<string>)a0.Arguments[0]);
+            // red/first arg: get temperature
+            Expression red = expr.Operand(0);
+            Assert.AreEqual(Expression.Operators.Get, red.Operator);
+            Assert.AreEqual("temperature", (string)red.Operand(0));
 
-            // second arg: 0
-            Expr<int> a1 = (Expr<int>)expr.Arguments[1];
-            Assert.IsTrue(a1.IsValue);
-            Assert.AreEqual(0, (int)a1);
+            // green/second arg: primitive: 0
+            var green = expr.Operand(1);
+            Assert.IsTrue(green.IsInteger);
+            Assert.AreEqual(0, (int)green);
 
-            // third arg: min(100, get temperature)
-            Expr<int> a2 = (Expr<int>)expr.Arguments[2];
-            Assert.AreEqual(Operators.Min, a2.Operator);
-            Assert.AreEqual(2, a2.Arguments.Length);
+            // blue/third arg: min(100, get temperature)
+            Expression blue = expr.Operand(2);
+            Assert.AreEqual(Expression.Operators.Min, blue?.Operator);
+            Assert.AreEqual(2, blue.Operands.Length);
 
-            Expr<int> m0 = (Expr<ExpressionValue>)a2.Arguments[0];
-            Expr<ExpressionValue> m1 = (Expr<ExpressionValue>)a2.Arguments[1];
-            Assert.AreEqual(100, (int)m0);
-            Assert.AreEqual(Operators.GetVariable, m1.Operator);
-            Assert.AreEqual("temperature", (string)(Expr<string>)m1.Arguments[0]);
+            var blueMinFirstOperand = blue.Operand(0);
+            Expression blueMinSecondOperand = blue.Operand(1);
+            Assert.AreEqual(100, (int)blueMinFirstOperand);
+            Assert.AreEqual(Expression.Operators.Get, blueMinSecondOperand.Operator);
+            Assert.AreEqual("temperature", (string)blueMinSecondOperand.Operand(0));
         }
     }
 }

@@ -1,11 +1,10 @@
 {
     "name": "eu.netherlands3d.layer-styles.editor.tests",
-    "rootNamespace": "",
+    "rootNamespace": "Netherlands3D.LayerStyles",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "eu.netherlands3d.twin",
-        "OneOf"
+        "eu.netherlands3d.twin"
     ],
     "includePlatforms": [
         "Editor"
