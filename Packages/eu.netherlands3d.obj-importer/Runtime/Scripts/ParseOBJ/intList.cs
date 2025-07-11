@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
@@ -51,6 +49,36 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
 
             return output;
         }
+        
+        public int[] ReadAllItems()
+        {
+            if (fs == null)
+            {
+                throw new System.InvalidOperationException("Reader not initialized. Call SetupReading() first.");
+            }
+
+            long numInts = fs.Length / 4;
+            int[] allInts = new int[numInts];
+
+            // Reset stream position
+            fs.Position = 0;
+
+            byte[] allBytes = new byte[numInts * 4];
+            int bytesRead = fs.Read(allBytes, 0, allBytes.Length);
+
+            if (bytesRead != allBytes.Length)
+            {
+                throw new IOException("Could not read the entire file.");
+            }
+
+            for (int i = 0; i < numInts; i++)
+            {
+                allInts[i] = System.BitConverter.ToInt32(allBytes, i * 4);
+            }
+
+            return allInts;
+        }
+        
         public void EndReading()
         {
             bReader.Close();
