@@ -183,25 +183,27 @@ namespace Netherlands3D.ObjImporter.General
                 yield break;
             }
 
-            Vector3[] meshvector3 = new Vector3[vertexcount];
-            Vector2[] meshuv = new Vector2[vertexcount];
+            // Vector3[] meshvector3 = new Vector3[vertexcount];
+            // Vector2[] meshuv = new Vector2[vertexcount];
 
-            for (int i = 0; i < vertexcount; i++)
-            {
-                if ((System.DateTime.UtcNow - time).TotalMilliseconds > 400)
-                {
-                    yield return null;
-                    time = System.DateTime.UtcNow;
-                }
+            // for (int i = 0; i < vertexcount; i++)
+            // {
+            //     if ((System.DateTime.UtcNow - time).TotalMilliseconds > 400)
+            //     {
+            //         yield return null;
+            //         time = System.DateTime.UtcNow;
+            //     }
 
-                meshvector3[i] = vertices.ReadItem(i);
-                meshuv[i] = uvs.ReadItem(i);
-            }
+                // meshvector3[i] = vertices.ReadItem(i);
+                // meshuv[i] = uvs.ReadItem(i);
+            // }
 
 
-            createdMesh.vertices = meshvector3;
-            createdMesh.uv = meshuv;
-
+            createdMesh.vertices = vertices.ReadAllItems();
+            yield return null;
+            createdMesh.uv = uvs.ReadAllItems();
+            yield return null;
+            
             //createdMesh.SetVertices(meshvector3);
 
             uvs.EndReading();
