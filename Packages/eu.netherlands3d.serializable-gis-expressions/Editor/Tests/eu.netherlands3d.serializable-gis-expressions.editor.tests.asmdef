@@ -1,0 +1,31 @@
+{
+    "name": "eu.netherlands3d.serializable-gis-expressions.editor.tests",
+    "rootNamespace": "Netherlands3D.Expressions",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "eu.netherlands3d.serializable-gis-expressions"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll",
+        "Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.nuget.newtonsoft-json",
+            "expression": "",
+            "define": "NEWTONSOFT"
+        }
+    ],
+    "noEngineReferences": false
+}

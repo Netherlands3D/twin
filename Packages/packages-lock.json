@@ -490,6 +490,12 @@
       },
       "url": "https://package.openupm.com"
     },
+    "eu.netherlands3d.serializable-gis-expressions": {
+      "version": "file:eu.netherlands3d.serializable-gis-expressions",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "eu.netherlands3d.simplejson": {
       "version": "1.0.0",
       "depth": 0,

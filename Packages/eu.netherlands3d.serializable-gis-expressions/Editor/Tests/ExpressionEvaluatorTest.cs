@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Netherlands3D.Twin.Layers;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UnityEngine;
@@ -12,10 +11,22 @@ namespace Netherlands3D.LayerStyles.Expressions
     {
         private ExpressionContext context;
 
+        private class StubFeature : IFeatureForExpression
+        {
+            public object Geometry { get; } = new();
+            public Dictionary<string, string> Attributes { get; } = new();
+
+            public string GetAttribute(string attributeKey)
+            {
+                return Attributes.GetValueOrDefault(attributeKey);
+            }
+        }
+        
+        
         [SetUp]
         public void Setup()
         {
-            context = new ExpressionContext(LayerFeature.Create("string"));
+            context = new ExpressionContext(new StubFeature());
         }
 
         [Test]
@@ -599,7 +610,7 @@ namespace Netherlands3D.LayerStyles.Expressions
                 Expression.Min(100, Expression.Get("temperature"))
             );
 
-            var layerFeature = LayerFeature.Create("string");
+            var layerFeature = new StubFeature();
             layerFeature.Attributes.Add("temperature", "100");
 
             ExpressionEvaluator.Evaluate(rgbExpr, new ExpressionContext(layerFeature));
