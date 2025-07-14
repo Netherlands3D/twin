@@ -4,7 +4,6 @@ using System.Linq;
 using System.Xml;
 using Netherlands3D.Coordinates;
 using Netherlands3D.OgcWebServices.Shared;
-using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
@@ -30,6 +29,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         public bool CapableOfBoundingBoxes => xmlDocument.SelectSingleNode("//*[local-name()='EX_GeographicBoundingBox' or local-name()='BoundingBox']", namespaceManager) != null;
 
+        private BoundingBoxContainer boundingBoxContainer;
         public bool HasBounds //todo: this is suboptimal because it uses the GetBounds function, maybe cache the bounds
         {
             get
@@ -81,6 +81,9 @@ namespace Netherlands3D.Functionalities.Wms
 
         public BoundingBoxContainer GetBounds()
         {
+            if (boundingBoxContainer != null)
+                return boundingBoxContainer;
+            
             var container = new BoundingBoxContainer(Url.ToString());
 
             // Select EX_GeographicBoundingBox node first
@@ -113,6 +116,7 @@ namespace Netherlands3D.Functionalities.Wms
 
             }
 
+            boundingBoxContainer = container;
             return container;
         }
 
