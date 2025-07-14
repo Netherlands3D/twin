@@ -32,7 +32,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             geoidToggle.onValueChanged.RemoveListener(SetGeoidHeight);
         }
 
-        public void SetEllipsoidHeight(bool isOn)
+        private void SetEllipsoidHeight(bool isOn)
         {
             if (!isOn)
                 return;
@@ -40,7 +40,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             tile3dLayerGameObject.PropertyData.ContentCRS = (int)CoordinateSystem.WGS84_ECEF;
         }
         
-        public void SetGeoidHeight(bool isOn)
+        private void SetGeoidHeight(bool isOn)
         {
             if (!isOn)
                 return;
