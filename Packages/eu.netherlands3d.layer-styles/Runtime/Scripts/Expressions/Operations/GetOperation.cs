@@ -4,7 +4,7 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
 {
     /// <summary>
     /// Implements the Mapbox <c>get</c> expression operator, which retrieves
-    /// the value of a named property from the current <c>LayerFeature</c>.
+    /// the value of a named property from the current <c>IFeatureForExpression</c>.
     /// </summary>
     /// <seealso href="https://docs.mapbox.com/style-spec/reference/expressions/#get">
     ///   Mapbox “get” expression reference
@@ -22,7 +22,7 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
         ///   to a string key naming the attribute to retrieve.
         /// </param>
         /// <param name="context">
-        ///   The <see cref="ExpressionContext"/> containing the <c>LayerFeature</c>
+        ///   The <see cref="ExpressionContext"/> containing the <c>IFeatureForExpression</c>
         ///   whose attributes are accessed.
         /// </param>
         /// <returns>

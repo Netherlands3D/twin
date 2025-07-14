@@ -324,11 +324,14 @@ namespace Netherlands3D.LayerStyles.Expressions
         public void EvaluateObjectAssertionExpression()
         {
             var dict = new Dictionary<string, string> { { "k", "v" } };
+            // The first correct match is returned, which is the second operand in this case
             var expr = Expression.Object("nope", dict, 1);
+
             var val = ExpressionEvaluator.Evaluate(expr, context);
 
             Assert.IsInstanceOf<ExpressionValue>(val);
-            Assert.AreSame(dict, val);
+            Assert.IsTrue(val.IsObject());
+            Assert.AreEqual(new Dictionary<string, object> { { "k", "v" } }, (Dictionary<string, object>)val);
         }
 
         [Test]
@@ -365,14 +368,73 @@ namespace Netherlands3D.LayerStyles.Expressions
         }
 
         [Test]
-        public void EvaluateAddSubtractMultiplyDivideModuloPowerExpressions()
+        public void EvaluateAddExpression()
         {
-            Assert.AreEqual(6.0, ExpressionEvaluator.Evaluate(Expression.Add(1, 2, 3), context), 1e-6);
-            Assert.AreEqual(5.0, ExpressionEvaluator.Evaluate(Expression.Subtract(10, 3, 2), context), 1e-6);
-            Assert.AreEqual(24.0, ExpressionEvaluator.Evaluate(Expression.Multiply(2, 3, 4), context), 1e-6);
-            Assert.AreEqual(2.0, ExpressionEvaluator.Evaluate(Expression.Divide(8, 2, 2), context), 1e-6);
-            Assert.AreEqual(1.0, ExpressionEvaluator.Evaluate(Expression.Modulo(10, 3), context), 1e-6);
-            Assert.AreEqual(8.0, ExpressionEvaluator.Evaluate(Expression.Power(2, 3), context), 1e-6);
+            var expr = Expression.Add(1, 2, 3);
+            var result = ExpressionEvaluator.Evaluate(expr, context);
+
+            Assert.IsInstanceOf<ExpressionValue>(result);
+            Assert.AreEqual(6.0, (double)result, 1e-6);
+        }
+
+        [Test]
+        public void EvaluateSubtractExpression()
+        {
+            var expr = Expression.Subtract(10, 3, 2);
+            var result = ExpressionEvaluator.Evaluate(expr, context);
+
+            Assert.IsInstanceOf<ExpressionValue>(result);
+            Assert.AreEqual(5.0, (double)result, 1e-6);
+        }
+
+        [Test]
+        public void EvaluateUnarySubtractExpression()
+        {
+            var expr = Expression.Subtract(7);
+            var result = ExpressionEvaluator.Evaluate(expr, context);
+
+            Assert.IsInstanceOf<ExpressionValue>(result);
+            Assert.AreEqual(-7.0, (double)result, 1e-6);
+        }
+
+        [Test]
+        public void EvaluateMultiplyExpression()
+        {
+            var expr = Expression.Multiply(2, 3, 4);
+            var result = ExpressionEvaluator.Evaluate(expr, context);
+
+            Assert.IsInstanceOf<ExpressionValue>(result);
+            Assert.AreEqual(24.0, (double)result, 1e-6);
+        }
+
+        [Test]
+        public void EvaluateDivideExpression()
+        {
+            var expr = Expression.Divide(8, 2, 2);
+            var result = ExpressionEvaluator.Evaluate(expr, context);
+
+            Assert.IsInstanceOf<ExpressionValue>(result);
+            Assert.AreEqual(2.0, (double)result, 1e-6);
+        }
+
+        [Test]
+        public void EvaluateModuloExpression()
+        {
+            var expr = Expression.Modulo(10, 3);
+            var result = ExpressionEvaluator.Evaluate(expr, context);
+
+            Assert.IsInstanceOf<ExpressionValue>(result);
+            Assert.AreEqual(1.0, (double)result, 1e-6);
+        }
+
+        [Test]
+        public void EvaluatePowerExpression()
+        {
+            var expr = Expression.Power(2, 3);
+            var result = ExpressionEvaluator.Evaluate(expr, context);
+
+            Assert.IsInstanceOf<ExpressionValue>(result);
+            Assert.AreEqual(8.0, (double)result, 1e-6);
         }
 
         [Test]
@@ -407,14 +469,35 @@ namespace Netherlands3D.LayerStyles.Expressions
         }
 
         [Test]
-        public void EvaluateMaxMinRandomExpressions()
+        public void EvaluateMaxExpression()
         {
             Assert.AreEqual(8.0, ExpressionEvaluator.Evaluate(Expression.Max(5, 8, 3), context), 1e-6);
-            Assert.AreEqual(3.0, ExpressionEvaluator.Evaluate(Expression.Min(5, 3, 8), context), 1e-6);
+        }
 
-            double randVal = ExpressionEvaluator.Evaluate(Expression.Random(), context);
-            Assert.GreaterOrEqual(randVal, 0.0);
-            Assert.LessOrEqual(randVal, 1.0);
+        [Test]
+        public void EvaluateMinExpression()
+        {
+            Assert.AreEqual(3.0, ExpressionEvaluator.Evaluate(Expression.Min(5, 3, 8), context), 1e-6);
+        }
+
+        [Test]
+        public void EvaluateRandomExpression()
+        {
+            double randVal = ExpressionEvaluator.Evaluate(Expression.Random(1, 10, 42), context);
+
+            // There is a seed - so this is a consistent value
+            Assert.AreEqual(randVal, 7.0129581932038807d, 1e-6);
+
+            randVal = ExpressionEvaluator.Evaluate(Expression.Random(1, 10, 42), context);
+
+            // Same seed, same outcome
+            Assert.AreEqual(randVal, 7.0129581932038807d, 1e-6);
+
+            // Different seed, different outcome
+            randVal = ExpressionEvaluator.Evaluate(Expression.Random(1, 10, 43), context);
+
+            // There is a seed - so this is a consistent value
+            Assert.AreEqual(randVal, 2.714786020906077d, 1e-6);
         }
 
         [Test]
@@ -429,37 +512,84 @@ namespace Netherlands3D.LayerStyles.Expressions
         }
 
         [Test]
-        public void EvaluateHslHslaRgbRgbaAndConversions()
+        public void EvaluateHslExpression_ReturnsPureRed()
         {
-            var red = (Color) ExpressionEvaluator.Evaluate(Expression.Hsl(0,100,50), context);
-            Assert.AreEqual("FF0000", ColorUtility.ToHtmlStringRGB(red));
+            var expr = Expression.Hsl(0, 100, 50);
+            var result = ExpressionEvaluator.Evaluate(expr, context);
+            Assert.IsInstanceOf<ExpressionValue>(result);
 
-            var semiBlue = (Color) ExpressionEvaluator.Evaluate(Expression.Hsla(240,100,50,0.5), context);
-            Assert.AreEqual("0000FF", ColorUtility.ToHtmlStringRGB(semiBlue));
-            Assert.AreEqual(0.5f, semiBlue.a, 1e-6);
-
-            var rgb = (Color) ExpressionEvaluator.Evaluate(Expression.Rgb(10, 20, 30), context);
-            Assert.AreEqual("0A141E", ColorUtility.ToHtmlStringRGB(rgb));
-
-            var rgba = (Color) ExpressionEvaluator.Evaluate(Expression.Rgba(10, 20, 30, 0.25), context);
-            Assert.AreEqual("0A141E", ColorUtility.ToHtmlStringRGB(rgba));
-            Assert.AreEqual(0.25f, rgba.a, 1e-6);
-
-            var toHsla = (object[])ExpressionEvaluator.Evaluate(Expression.ToHsla(rgba), context);
-            Assert.AreEqual(4, toHsla.Length);
-            Assert.AreEqual(210.0, (double)toHsla[0], 1e-6);   // hue ≈ 210°
-            Assert.AreEqual(50.0,  (double)toHsla[1], 1e-6);   // sat 50%
-            Assert.AreEqual(11.76, (double)toHsla[2], 1e-2);   // light ≈ 11.76%
-            Assert.AreEqual(0.25,  (double)toHsla[3], 1e-6);   // alpha
-
-            var toRgba = (object[])ExpressionEvaluator.Evaluate(Expression.ToRgba(rgba), context);
-            Assert.AreEqual(4, toRgba.Length);
-            Assert.AreEqual(10.0,  (double)toRgba[0], 1e-6);
-            Assert.AreEqual(20.0,  (double)toRgba[1], 1e-6);
-            Assert.AreEqual(30.0,  (double)toRgba[2], 1e-6);
-            Assert.AreEqual(0.25,  (double)toRgba[3], 1e-6);
+            var color = (Color)result;
+            Assert.AreEqual("FF0000", ColorUtility.ToHtmlStringRGB(color));
         }
-    
+
+        [Test]
+        public void EvaluateHslaExpression_ReturnsSemiTransparentBlue()
+        {
+            var expr = Expression.Hsla(240, 100, 50, 0.5);
+            var result = ExpressionEvaluator.Evaluate(expr, context);
+            Assert.IsInstanceOf<ExpressionValue>(result);
+
+            var color = (Color)result;
+            Assert.AreEqual("0000FF", ColorUtility.ToHtmlStringRGB(color));
+            Assert.AreEqual(0.5f, color.a, 1e-6);
+        }
+
+        [Test]
+        public void EvaluateRgbExpression_ReturnsExpectedColor()
+        {
+            var expr = Expression.Rgb(10, 20, 30);
+            var result = ExpressionEvaluator.Evaluate(expr, context);
+            Assert.IsInstanceOf<ExpressionValue>(result);
+
+            var color = (Color)result;
+            Assert.AreEqual("0A141E", ColorUtility.ToHtmlStringRGB(color));
+            Assert.AreEqual(1f, color.a, 1e-6);
+        }
+
+        [Test]
+        public void EvaluateRgbaExpression_ReturnsExpectedColorAndAlpha()
+        {
+            var expr = Expression.Rgba(10, 20, 30, 0.25);
+            var result = ExpressionEvaluator.Evaluate(expr, context);
+            Assert.IsInstanceOf<ExpressionValue>(result);
+
+            var color = (Color)result;
+            Assert.AreEqual("0A141E", ColorUtility.ToHtmlStringRGB(color));
+            Assert.AreEqual(0.25f, color.a, 1e-6);
+        }
+
+        [Test]
+        public void EvaluateToHslaConversion_ReturnsExpectedComponents()
+        {
+            var rgba = Expression.Rgba(10, 20, 30, 0.25);
+            var expr = Expression.ToHsla(rgba);
+            var result = ExpressionEvaluator.Evaluate(expr, context);
+            Assert.IsInstanceOf<ExpressionValue>(result);
+
+            var hsla = (object[])result;
+            Assert.AreEqual(4, hsla.Length);
+            Assert.AreEqual(210.0, (double)hsla[0], 1e-6); // hue ≈ 210°
+            Assert.AreEqual(50.0, (double)hsla[1], 1e-6); // sat 50%
+            Assert.AreEqual(8, (double)hsla[2], 1e-2); // light ≈ 8%
+            Assert.AreEqual(0.25, (double)hsla[3], 1e-6); // alpha
+        }
+
+        [Test]
+        public void EvaluateToRgbaConversion_ReturnsOriginalComponents()
+        {
+            var rgbaExpr = Expression.Rgba(10, 20, 30, 0.25);
+            var expr = Expression.ToRgba(rgbaExpr);
+            var result = ExpressionEvaluator.Evaluate(expr, context);
+            Assert.IsInstanceOf<ExpressionValue>(result);
+
+            var rgba = (object[])result;
+            Assert.AreEqual(4, rgba.Length);
+            Assert.AreEqual(10.0, (double)rgba[0], 1e-6);
+            Assert.AreEqual(20.0, (double)rgba[1], 1e-6);
+            Assert.AreEqual(30.0, (double)rgba[2], 1e-6);
+            Assert.AreEqual(0.25, (double)rgba[3], 1e-6);
+        }
+
         [Test]
         public void EvaluateExampleOfNestedExpression()
         {

@@ -29,7 +29,7 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
             double sum = 0.0;
             for (int i = 0; i < expression.Operands.Length; i++)
             {
-                sum += Operations.GetNumericOperand(Code, $"operand {i}", expression, 0, context);
+                sum += Operations.GetNumericOperand(Code, $"operand {i}", expression, i, context);
             }
 
             return sum;

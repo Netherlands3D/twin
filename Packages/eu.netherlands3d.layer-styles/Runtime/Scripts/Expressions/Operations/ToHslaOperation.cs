@@ -41,15 +41,14 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
             Color color = Operations.GetColorOperand(Code, expression, index: 0, context);
 
             // Convert RGB → HSLA (h:0–360, s/l:0–100, a:0–1)
-            (double hue, double saturation, double lightness) = 
-                Operations.ConvertRgbToHsla(color);
+            (double hue, double saturation, double lightness) = Operations.ConvertRgbToHsla(color);
 
             return new object[]
             {
                 hue,
                 saturation * 100.0,
-                lightness * 100.0,
-                color.a
+                Math.Round(lightness * 100.0, 0),
+                (double)color.a
             };
         }
     }

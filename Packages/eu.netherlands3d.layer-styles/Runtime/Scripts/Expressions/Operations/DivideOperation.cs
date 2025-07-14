@@ -38,7 +38,7 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
             // Sequentially divide by each subsequent operand
             for (int i = 1; i < expression.Operands.Length; i++)
             {
-                result /= Operations.GetNumericOperand(Code, $"operand {i}", expression, 0, context);
+                result /= Operations.GetNumericOperand(Code, $"operand {i}", expression, i, context);
             }
 
             return result;

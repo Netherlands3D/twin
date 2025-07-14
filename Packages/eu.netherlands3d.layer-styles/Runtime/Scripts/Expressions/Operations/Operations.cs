@@ -34,6 +34,9 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
             ExpressionContext context
         ) {
             var raw = ExpressionEvaluator.Evaluate(expression, index, context);
+            
+            if (raw is ExpressionValue ev) return ev; 
+            
             if (!IsNumber(raw))
             {
                 throw new InvalidOperationException(
@@ -80,13 +83,22 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
             );
         }
 
-        internal static bool IsNumber(object o) =>
-            o is short or ushort or int or uint or long or ulong or float or double;
+        internal static bool IsNumber(object o)
+        {
+            return o is short or ushort or int or uint or long or ulong or float or double;
+        }
 
-        internal static double ToDouble(object o) => Convert.ToDouble(o);
+        internal static double ToDouble(object o)
+        {
+            if (o is ExpressionValue ev) return ev; 
+            
+            return Convert.ToDouble(o);
+        }
 
         internal static bool AsBool(object o)
         {
+            if (o is ExpressionValue ev) return ev; 
+            
             if (o is not bool b)
             {
                 throw new InvalidOperationException($"Cannot convert {o?.GetType().Name} to bool");
@@ -97,6 +109,8 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
 
         internal static double ToNumber(object value)
         {
+            if (value is ExpressionValue ev) return ev; 
+            
             return ToDouble(IsNumber(value) ? value : value.ToString());
         }
         
@@ -112,8 +126,8 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
         {
             object raw = ExpressionEvaluator.Evaluate(expression, index, context);
 
+            if (raw is ExpressionValue ev) return ev; 
             if (raw is Color direct) return direct;
-
             if (raw is string css && ColorUtility.TryParseHtmlString(css, out Color parsed))
             {
                 return parsed;

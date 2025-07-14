@@ -30,37 +30,15 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
         {
             Operations.GuardNumberOfOperands(Code, expression, 1);
 
-            object rawValue = ExpressionEvaluator.Evaluate(expression, 0, context);
+            var value = Operations.GetColorOperand(Code, expression, 0, context);
 
-            var value = ConvertToColor(rawValue);
-            if (value == null)
-            {
-                throw new InvalidOperationException(
-                    $"\"{Code}\" requires a color input, got {rawValue?.GetType().Name}."
-                );
-            }
-
-            Color colorValue = value.Value;
             return new[]
             {
-                colorValue.r * 255.0, 
-                colorValue.g * 255.0,
-                colorValue.b * 255.0,
-                colorValue.a
+                value.r * 255.0, 
+                value.g * 255.0,
+                value.b * 255.0,
+                value.a
             };
-        }
-
-        private static Color? ConvertToColor(object rawValue)
-        {
-            // performant check
-            if (rawValue is Color c) return c;
-
-            // guards
-            if (rawValue is not string s) return null;
-            if (!ColorUtility.TryParseHtmlString(s, out c)) return null;
-            
-            // it is a converted color
-            return c;
         }
     }
 }

@@ -61,7 +61,7 @@
         public static Expression Max(params object[] vals) => new(Operators.Max, vals);
         public static Expression Min(params object[] vals) => new(Operators.Min, vals);
         public static Expression Pi() => new(Operators.Pi);
-        public static Expression Random() => new(Operators.Random);
+        public static Expression Random(object min, object max, object seed) => new(Operators.Random, min, max, seed);
         public static Expression Round(object v) => new(Operators.Round, v);
         public static Expression Sin(object v) => new(Operators.Sin, v);
         public static Expression Sqrt(object v) => new(Operators.Sqrt, v);

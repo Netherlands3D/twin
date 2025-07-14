@@ -1,6 +1,4 @@
-﻿using Netherlands3D.Twin.Layers;
-
-namespace Netherlands3D.LayerStyles.Expressions
+﻿namespace Netherlands3D.LayerStyles.Expressions
 {
     /// <summary>
     /// Serves as the evaluation context (or “blackboard”) for expression evaluation,
@@ -16,10 +14,10 @@ namespace Netherlands3D.LayerStyles.Expressions
     {
         /// <summary>
         /// Gets the feature whose attributes are used as variables in expression evaluation.
-        /// Expressions can read any property of this <see cref="LayerFeature"/> to decide
+        /// Expressions can read any property of this <see cref="Feature"/> to decide
         /// whether a selector matches or to compute style values.
         /// </summary>
-        public LayerFeature Feature { get; }
+        public IFeatureForExpression Feature { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExpressionContext"/> class
@@ -31,9 +29,9 @@ namespace Netherlands3D.LayerStyles.Expressions
         /// access without breaking existing APIs.
         /// </para>
         /// </summary>
-        /// <param name="feature">The <see cref="LayerFeature"/> whose properties
+        /// <param name="feature">The <see cref="Feature"/> whose properties
         /// will be available to selector expressions.</param>
-        public ExpressionContext(LayerFeature feature)
+        public ExpressionContext(IFeatureForExpression feature)
         {
             this.Feature = feature;
         }
