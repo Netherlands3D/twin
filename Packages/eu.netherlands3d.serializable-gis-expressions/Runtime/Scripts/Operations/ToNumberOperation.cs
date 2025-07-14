@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Netherlands3D.LayerStyles.Expressions.Operations
+namespace Netherlands3D.SerializableGisExpressions.Operations
 {
     /// <summary>
     /// Implements the Mapbox <c>to-number</c> expression operator, which attempts

@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace Netherlands3D.LayerStyles.Expressions
+namespace Netherlands3D.SerializableGisExpressions
 {
     [TestFixture]
     public class ExpressionEvaluatorTest

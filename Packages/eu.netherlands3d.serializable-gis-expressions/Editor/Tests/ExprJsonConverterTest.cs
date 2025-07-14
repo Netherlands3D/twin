@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
 
-namespace Netherlands3D.LayerStyles.Expressions
+namespace Netherlands3D.SerializableGisExpressions
 {
     [TestFixture]
     public class ExpressionConverterTests

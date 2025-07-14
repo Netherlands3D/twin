@@ -2,7 +2,7 @@
 using System.Globalization;
 using UnityEngine;
 
-namespace Netherlands3D.LayerStyles.Expressions.Operations
+namespace Netherlands3D.SerializableGisExpressions.Operations
 {
     internal static class Operations
     {

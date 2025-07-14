@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Netherlands3D.LayerStyles.Expressions
+namespace Netherlands3D.SerializableGisExpressions
 {
     public interface IFeatureForExpression
     {

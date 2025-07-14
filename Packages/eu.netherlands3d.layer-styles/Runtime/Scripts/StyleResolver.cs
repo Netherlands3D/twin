@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Netherlands3D.LayerStyles.Expressions;
+using Netherlands3D.SerializableGisExpressions;
 using Netherlands3D.Twin.Layers;
 
 namespace Netherlands3D.LayerStyles
@@ -79,7 +79,7 @@ namespace Netherlands3D.LayerStyles
         /// <summary>
         /// Evaluates a selector expression against the given context.
         /// </summary>
-        /// <param name="selector">An <see cref="Expressions.Expression"/> representing the rule’s selector.</param>
+        /// <param name="selector">An <see cref="SerializableGisExpressions.Expression"/> representing the rule’s selector.</param>
         /// <param name="context">The <see cref="ExpressionContext"/> containing feature attributes.</param>
         /// <returns><c>true</c> if the selector matches; otherwise, <c>false</c>.</returns>
         private bool Resolve(Expression selector, ExpressionContext context)

@@ -1,5 +1,5 @@
 using System.Runtime.Serialization;
-using Netherlands3D.LayerStyles.Expressions;
+using Netherlands3D.SerializableGisExpressions;
 using Newtonsoft.Json;
 
 namespace Netherlands3D.LayerStyles

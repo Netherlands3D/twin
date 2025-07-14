@@ -1,6 +1,6 @@
 {
     "name": "eu.netherlands3d.serializable-gis-expressions.editor.tests",
-    "rootNamespace": "Netherlands3D.Expressions",
+    "rootNamespace": "Netherlands3D.SerializableGisExpressions",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",

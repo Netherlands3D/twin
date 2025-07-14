@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Netherlands3D.LayerStyles.Expressions.Operations
+namespace Netherlands3D.SerializableGisExpressions.Operations
 {
 /// <summary>
     /// Implements the Mapbox <c>to-hsla</c> expression operator, which converts

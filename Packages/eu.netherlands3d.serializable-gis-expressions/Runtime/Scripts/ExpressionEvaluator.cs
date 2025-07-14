@@ -1,7 +1,7 @@
 ﻿using System;
-using Netherlands3D.LayerStyles.Expressions.Operations;
+using Netherlands3D.SerializableGisExpressions.Operations;
 
-namespace Netherlands3D.LayerStyles.Expressions
+namespace Netherlands3D.SerializableGisExpressions
 {
     public static class ExpressionEvaluator
     {

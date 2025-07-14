@@ -1,4 +1,4 @@
-﻿namespace Netherlands3D.LayerStyles.Expressions
+﻿namespace Netherlands3D.SerializableGisExpressions
 {
     /// <summary>
     /// Serves as the evaluation context (or “blackboard”) for expression evaluation,

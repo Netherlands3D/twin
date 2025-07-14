@@ -3,7 +3,7 @@ using System.Globalization;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace Netherlands3D.LayerStyles.Expressions.Operations
+namespace Netherlands3D.SerializableGisExpressions.Operations
 {
     /// <summary>
     /// Implements the Mapbox <c>to-string</c> expression operator, which coerces

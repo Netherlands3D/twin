@@ -2,7 +2,7 @@
 using System.Collections;
 using Newtonsoft.Json.Linq;
 
-namespace Netherlands3D.LayerStyles.Expressions.Operations
+namespace Netherlands3D.SerializableGisExpressions.Operations
 {
     /// <summary>
     /// Implements the Mapbox <c>object</c> expression operator, which returns

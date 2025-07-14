@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.Serialization;
-using Netherlands3D.LayerStyles.Expressions.Operations;
+using Netherlands3D.SerializableGisExpressions.Operations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using UnityEngine;
 
-namespace Netherlands3D.LayerStyles.Expressions
+namespace Netherlands3D.SerializableGisExpressions
 {
     public partial class Expression
     {

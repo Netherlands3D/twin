@@ -1,4 +1,4 @@
-﻿namespace Netherlands3D.LayerStyles.Expressions
+﻿namespace Netherlands3D.SerializableGisExpressions
 {
     public partial class Expression
     {
