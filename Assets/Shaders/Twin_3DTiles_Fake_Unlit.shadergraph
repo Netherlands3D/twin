@@ -1351,7 +1351,7 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
-    "m_Value": 1.0,
+    "m_Value": 2.0,
     "m_FloatType": 0,
     "m_RangeValues": {
         "x": 0.0,
@@ -1840,8 +1840,8 @@
     "m_ObjectId": "37ccc1d943aa40c2ba5805a819a6f5f8",
     "m_Title": "Masking",
     "m_Position": {
-        "x": -2581.0,
-        "y": 1055.0
+        "x": -2581.000244140625,
+        "y": 1055.0001220703125
     }
 }
 
@@ -2864,7 +2864,7 @@
     "m_ObjectId": "6a4885ff20ed48ab95666d9dc9d3a68b",
     "m_Title": "Coloring mode",
     "m_Position": {
-        "x": -1963.0,
+        "x": -1963.0003662109375,
         "y": -587.0
     }
 }
@@ -3348,8 +3348,8 @@
     "m_ObjectId": "7edafca82e2e41458cafaf9391535f23",
     "m_Title": "Special vertex color ID's",
     "m_Position": {
-        "x": -2940.0,
-        "y": -266.0
+        "x": -2940.000244140625,
+        "y": -266.0000305175781
     }
 }
 
