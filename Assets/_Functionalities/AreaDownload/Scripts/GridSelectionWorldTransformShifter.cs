@@ -16,9 +16,15 @@ namespace Netherlands3D.Functionalities.AreaDownload
         
         private void Start()
         {
-            var offsetX = Origin.current.Coordinate.easting % areaSelection.GridSize;
-            var offsetY = Origin.current.Coordinate.northing % areaSelection.GridSize;
-            areaSelection.GridOffset = new Vector3((float)-offsetX, 0, (float)-offsetY);
+
+            areaSelection.GridOffset = CalculateOffset(Origin.current.Coordinate.easting, Origin.current.Coordinate.northing);
+        }
+
+        private Vector3 CalculateOffset(double easting, double northing)
+        {
+            var offsetX = easting % areaSelection.GridSize;
+            var offsetY = northing % areaSelection.GridSize;
+            return new Vector3((float)-offsetX, 0, (float)-offsetY);
         }
 
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
@@ -33,11 +39,8 @@ namespace Netherlands3D.Functionalities.AreaDownload
 
             var diffX = to.easting - from.easting;
             var diffY = to.northing - from.northing;
-            
-            var offsetX = diffX % areaSelection.GridSize;
-            var offsetY = diffY % areaSelection.GridSize;
-            
-            areaSelection.GridOffset += new Vector3((float)-offsetX, 0, (float)-offsetY);
+
+            areaSelection.GridOffset += CalculateOffset(diffX, diffY);
         }
     }
 }
