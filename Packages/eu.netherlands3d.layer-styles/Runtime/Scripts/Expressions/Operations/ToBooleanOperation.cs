@@ -34,9 +34,9 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
 
             object value = ExpressionEvaluator.Evaluate(expression, 0, context);
 
-            if (ExpressionEvaluator.IsNumber(value))
+            if (Operations.IsNumber(value))
             {
-                double d = Convert.ToDouble(value);
+                double d = Operations.ToDouble(value);
 
                 return d is not (0 or double.NaN);
             }

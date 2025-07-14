@@ -34,7 +34,7 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
             ExpressionContext context
         ) {
             var raw = ExpressionEvaluator.Evaluate(expression, index, context);
-            if (!ExpressionEvaluator.IsNumber(raw))
+            if (!IsNumber(raw))
             {
                 throw new InvalidOperationException(
                     $"\"{operation}\" requires numeric operand for {name}, got {raw?.GetType().Name}."

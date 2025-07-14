@@ -128,54 +128,5 @@ namespace Netherlands3D.LayerStyles.Expressions
 
             return Evaluate(expr, ctx);
         }
-
-        // Try numeric, string, or bool equality
-        internal static bool IsEqual(object a, object b)
-        {
-            if (IsNumber(a) && IsNumber(b)) return ToDouble(a) == ToDouble(b);
-
-            if (a is string sa && b is string sb) return sa == sb;
-
-            if (a is bool ba && b is bool bb) return ba == bb;
-
-            // Fallback: reference or value-type equality
-            return Equals(a, b);
-        }
-
-        // -1 if a<b, 0 if a==b, +1 if a>b
-        internal static int Compare(object a, object b)
-        {
-            if (IsNumber(a) && IsNumber(b))
-            {
-                double da = ToDouble(a), db = ToDouble(b);
-                return da.CompareTo(db);
-            }
-
-            if (a is string sa && b is string sb) return string.Compare(sa, sb, StringComparison.Ordinal);
-
-            throw new InvalidOperationException(
-                $"Cannot compare types {a?.GetType().Name} and {b?.GetType().Name}"
-            );
-        }
-
-        internal static bool IsNumber(object o) =>
-            o is short or ushort or int or uint or long or ulong or float or double;
-
-        private static double ToDouble(object o) => Convert.ToDouble(o);
-
-        internal static bool AsBool(object o)
-        {
-            if (o is not bool b)
-            {
-                throw new InvalidOperationException($"Cannot convert {o?.GetType().Name} to bool");
-            }
-
-            return b;
-        }
-
-        public static double ToNumber(object value)
-        {
-            return ToDouble(IsNumber(value) ? value : value.ToString());
-        }
     }
 }

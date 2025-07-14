@@ -34,7 +34,7 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
             {
                 object raw = ExpressionEvaluator.Evaluate(expression, i, context);
 
-                if (ExpressionEvaluator.IsNumber(raw)) return Operations.ToDouble(raw);
+                if (Operations.IsNumber(raw)) return Operations.ToDouble(raw);
 
                 switch (raw)
                 {

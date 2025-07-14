@@ -112,7 +112,7 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
                 bool ok = typeName switch
                 {
                     "string" => element is string,
-                    "number" => ExpressionEvaluator.IsNumber(element),
+                    "number" => Operations.IsNumber(element),
                     "boolean" => element is bool,
                     _ => throw new InvalidOperationException($"\"array\": unknown element type \"{typeName}\"")
                 };

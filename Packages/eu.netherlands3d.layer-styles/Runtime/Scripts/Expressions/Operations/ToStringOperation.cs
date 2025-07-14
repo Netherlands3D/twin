@@ -56,7 +56,7 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
             }
 
             // If it's a number, format it with invariant culture.
-            if (ExpressionEvaluator.IsNumber(rawValue))
+            if (Operations.IsNumber(rawValue))
             {
                 return Operations.ToDouble(rawValue).ToString(CultureInfo.InvariantCulture);
             }

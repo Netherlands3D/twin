@@ -311,7 +311,7 @@ namespace Netherlands3D.LayerStyles.Expressions
             public bool IsInteger => value is short or ushort or int or uint or long or ulong;
             public bool IsFloat => value is float;
             public bool IsDouble => value is double;
-            public bool IsNumber => ExpressionEvaluator.IsNumber(value);
+            public bool IsNumber => Operations.Operations.IsNumber(value);
             public bool IsString => value is string;
             public bool IsBoolean => value is bool;
             public bool IsColor => value is Color;

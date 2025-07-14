@@ -41,7 +41,7 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
                 _ => null
             };
 
-            if (result == null && ExpressionEvaluator.IsNumber(rawValue))
+            if (result == null && Operations.IsNumber(rawValue))
             {
                 result = "number";
             }
