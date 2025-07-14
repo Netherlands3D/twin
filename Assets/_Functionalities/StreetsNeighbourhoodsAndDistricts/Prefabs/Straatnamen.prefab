@@ -64,9 +64,10 @@ MonoBehaviour:
   onLayerDisabled:
     m_PersistentCalls:
       m_Calls: []
-  textPrefab: {fileID: 6092693534695716574, guid: 55429db90e1648a4cb179ef06e74860e,
+  textPrefab: {fileID: 6092693534695716574, guid: 243e47f95a812a641bfb4a23fb211229,
     type: 3}
   geoJsonUrl: https://service.pdok.nl/kadaster/kadastralekaart/wfs/v5_0?SERVICE=WFS&version=2.0.0&request=GetFeature&TypeNames=kadastralekaartv5:openbareruimtenaam&&propertyName=tekst,hoek,relatieveHoogteligging,openbareRuimteType&outputformat=geojson&srs=EPSG:28992&bbox=
+  geoJsonUrlGeometry: https://service.pdok.nl/rws/nwbwegen/wfs/v1_0?request=GetCapabilities&service=WFS
   maxSpawnsPerFrame: 100
   textsAndSizes:
   - textPropertyName: tekst
@@ -95,6 +96,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabIdentifier: 9462ac35a03ed4ade9a4e14ea76906a3
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
+  OnStylingApplied:
+    m_PersistentCalls:
+      m_Calls: []
   onShow:
     m_PersistentCalls:
       m_Calls: []
