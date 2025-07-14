@@ -15,12 +15,21 @@ namespace Netherlands3D.SerializableGisExpressions
             bool hasExistingValue, JsonSerializer serializer)
         {
             var token = JToken.Load(reader);
+            if (token.Type == JTokenType.Boolean)
+            {
+                return Expression.Boolean(((JValue)token).Value);
+            }
+            
             if (token.Type != JTokenType.Array)
+            {
                 throw new JsonSerializationException($"Expected JSON array for Expression, got {token.Type}");
+            }
 
             var arr = (JArray)token;
             if (arr.Count < 1)
+            {
                 throw new JsonSerializationException("Expression array must have at least one element (the operator)");
+            }
 
             // Parse operator via EnumMember
             var opCode = arr[0].ToObject<Expression.Operators>(serializer);
@@ -30,9 +39,14 @@ namespace Netherlands3D.SerializableGisExpressions
             for (int i = 1; i < arr.Count; i++)
             {
                 var element = arr[i];
-                operands[i - 1] = element.Type == JTokenType.Array
-                    ? element.ToObject<Expression>(serializer)
-                    : ((JValue)element).Value;
+                if (element.Type == JTokenType.Array)
+                {
+                    operands[i - 1] = element.ToObject<Expression>(serializer);
+                }
+                else
+                {
+                    operands[i - 1] = ((JValue)element).Value;
+                }
             }
 
             return new Expression(opCode, operands);

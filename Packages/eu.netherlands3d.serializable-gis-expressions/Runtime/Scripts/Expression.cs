@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace Netherlands3D.SerializableGisExpressions
 {
+    [JsonConverter(typeof(ExpressionConverter))]
     public partial class Expression
     {
         /// <summary>

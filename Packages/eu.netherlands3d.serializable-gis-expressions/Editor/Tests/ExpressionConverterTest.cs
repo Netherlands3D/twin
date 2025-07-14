@@ -27,6 +27,20 @@ namespace Netherlands3D.SerializableGisExpressions
         }
 
         [Test]
+        public void DeserializingABooleanReturnsAnExpression()
+        {
+            const string json = "true";
+            
+            var expr = JsonConvert.DeserializeObject<Expression>(json, jsonSerializerSettings);
+
+            Assert.AreEqual(Expression.Operators.Boolean, expr.Operator);
+
+            Assert.AreEqual(1, expr.Operands.Length);
+            Assert.IsTrue(expr.Operand(0).IsBoolean);
+            Assert.IsTrue(expr.Operand(0));
+        }
+
+        [Test]
         public void DeserializingAJsonArrayReturnsAnExpression()
         {
             const string json = @"[""=="",5,10]";
