@@ -30,39 +30,15 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
         /// </exception>
         public static double Evaluate(Expression expression, ExpressionContext context)
         {
-            var operands = expression.Operands;
-            var operandCount = operands.Length;
-
-            if (operandCount < 2)
-            {
-                throw new InvalidOperationException(
-                    $"\"{Code}\" requires at least two operands, got {operandCount}."
-                );
-            }
+            Operations.GuardAtLeastNumberOfOperands(Code, expression, 2);
 
             // Evaluate first operand
-            var firstValue = ExpressionEvaluator.Evaluate(expression, 0, context);
-            if (!ExpressionEvaluator.IsNumber(firstValue))
-            {
-                throw new InvalidOperationException(
-                    $"\"{Code}\" requires numeric operands, got {firstValue?.GetType().Name}"
-                );
-            }
-
-            double result = Convert.ToDouble(firstValue, CultureInfo.InvariantCulture);
+            double result = Operations.GetNumericOperand(Code, "operand 0", expression, 0, context);
 
             // Sequentially divide by each subsequent operand
-            for (int i = 1; i < operandCount; i++)
+            for (int i = 1; i < expression.Operands.Length; i++)
             {
-                var operandValue = ExpressionEvaluator.Evaluate(expression, i, context);
-                if (!ExpressionEvaluator.IsNumber(operandValue))
-                {
-                    throw new InvalidOperationException(
-                        $"\"{Code}\" requires numeric operands, got {operandValue?.GetType().Name}"
-                    );
-                }
-
-                result /= Convert.ToDouble(operandValue, CultureInfo.InvariantCulture);
+                result /= Operations.GetNumericOperand(Code, $"operand {i}", expression, 0, context);
             }
 
             return result;

@@ -429,18 +429,6 @@ namespace Netherlands3D.LayerStyles.Expressions
         }
 
         [Test]
-        public void EvaluateDistanceExpression()
-        {
-            object[] a = { 0.0, 0.0 };
-            object[] b = { 0.0, 1.0 };
-            var expr = Expression.Distance(a, b);
-
-            var val = (double)ExpressionEvaluator.Evaluate(expr, context);
-            // ≈ 111319 meters per degree of latitude
-            Assert.AreEqual(111319.5, val, 1.0);
-        }
-
-        [Test]
         public void EvaluateHslHslaRgbRgbaAndConversions()
         {
             var red = (Color) ExpressionEvaluator.Evaluate(Expression.Hsl(0,100,50), context);

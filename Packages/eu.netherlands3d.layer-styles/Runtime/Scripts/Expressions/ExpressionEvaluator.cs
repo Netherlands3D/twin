@@ -42,7 +42,7 @@ namespace Netherlands3D.LayerStyles.Expressions
                 // https://docs.mapbox.com/style-spec/reference/expressions/#types
                 Expression.Operators.Array => ArrayOperation.Evaluate(expression, context),
                 Expression.Operators.Boolean => BooleanOperation.Evaluate(expression, context),
-                Expression.Operators.Literal => LiteralOperation.Evaluate(expression, context),
+                Expression.Operators.Literal => LiteralOperation.Evaluate(expression),
                 Expression.Operators.Number => NumberOperation.Evaluate(expression, context),
                 Expression.Operators.NumberFormat => NumberFormatOperation.Evaluate(expression, context),
                 Expression.Operators.Object => ObjectOperation.Evaluate(expression, context),
@@ -112,9 +112,6 @@ namespace Netherlands3D.LayerStyles.Expressions
                 Expression.Operators.Max => MaxOperation.Evaluate(expression, context),
                 Expression.Operators.Min => MinOperation.Evaluate(expression, context),
                 Expression.Operators.Random => RandomOperation.Evaluate(expression, context),
-
-                // geographic
-                Expression.Operators.Distance => DistanceOperation.Evaluate(expression, context),
 
                 _ => throw new NotImplementedException($"Operator {expression.Operator} not supported yet.")
             };

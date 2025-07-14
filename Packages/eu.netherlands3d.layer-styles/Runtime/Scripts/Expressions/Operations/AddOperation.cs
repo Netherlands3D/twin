@@ -24,18 +24,12 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
         /// <exception cref="InvalidOperationException">Thrown if any operand is not a numeric type.</exception>
         public static double Evaluate(Expression expression, ExpressionContext context)
         {
+            Operations.GuardAtLeastNumberOfOperands(Code, expression, 1);
+
             double sum = 0.0;
             for (int i = 0; i < expression.Operands.Length; i++)
             {
-                var operandValue = ExpressionEvaluator.Evaluate(expression, i, context);
-                if (!ExpressionEvaluator.IsNumber(operandValue))
-                {
-                    throw new InvalidOperationException(
-                        $"\"{Code}\" requires numeric operands, got {operandValue?.GetType().Name}"
-                    );
-                }
-
-                sum += Convert.ToDouble(operandValue, CultureInfo.InvariantCulture);
+                sum += Operations.GetNumericOperand(Code, $"operand {i}", expression, 0, context);
             }
 
             return sum;

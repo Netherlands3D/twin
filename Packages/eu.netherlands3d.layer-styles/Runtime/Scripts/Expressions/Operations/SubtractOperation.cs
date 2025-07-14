@@ -1,38 +1,48 @@
 ﻿using System;
-using System.Globalization;
 
 namespace Netherlands3D.LayerStyles.Expressions.Operations
 {
+    /// <summary>
+    /// Implements the Mapbox <c>-</c> expression operator, which subtracts its operands.
+    /// If a single operand is provided, returns its negation; otherwise folds subtraction
+    /// across all operands.
+    /// </summary>
+    /// <seealso href="https://docs.mapbox.com/style-spec/reference/expressions/#-">
+    ///   Mapbox “-” expression reference
+    /// </seealso>
     public static class SubtractOperation
     {
+        /// <summary>The Mapbox operator string for “-”.</summary>
         public const string Code = "-";
 
-        public static double Evaluate(Expression expr, ExpressionContext ctx)
+        /// <summary>
+        /// Evaluates the <c>-</c> expression by parsing at least one numeric operand,
+        /// negating it if alone, or subtracting each subsequent operand from the first.
+        /// </summary>
+        /// <param name="expression">The <see cref="Expression"/> whose operands supply the values to subtract.</param>
+        /// <param name="context">The <see cref="ExpressionContext"/> providing any runtime data.</param>
+        /// <returns>The subtraction result as a <see cref="double"/>.</returns>
+        /// <exception cref="InvalidOperationException">
+        ///   Thrown if fewer than one operand is provided or any operand is non-numeric.
+        /// </exception>
+        public static double Evaluate(Expression expression, ExpressionContext context)
         {
-            var ops = expr.Operands;
-            if (ops.Length < 1)
-                throw new InvalidOperationException("\"-\" requires at least one operand.");
+            Operations.GuardAtLeastNumberOfOperands(Code, expression, 1);
 
-            // Evaluate the first operand
-            var first = ExpressionEvaluator.Evaluate(expr, 0, ctx);
-            if (!ExpressionEvaluator.IsNumber(first))
-                throw new InvalidOperationException(
-                    $"\"-\" requires numeric operands, got {first?.GetType().Name}");
+            // Get the minuend (or the value to negate if only one operand)
+            double result = Operations.GetNumericOperand(Code, "operand 0", expression, 0, context);
 
-            double result = Convert.ToDouble(first, CultureInfo.InvariantCulture);
-
-            // Unary negate
-            if (ops.Length == 1)
-                return -result;
-
-            // Fold subtraction
-            for (int i = 1; i < ops.Length; i++)
+            // Single operand → unary negation
+            if (expression.Operands.Length == 1)
             {
-                var o = ExpressionEvaluator.Evaluate(expr, i, ctx);
-                if (!ExpressionEvaluator.IsNumber(o))
-                    throw new InvalidOperationException(
-                        $"\"-\" requires numeric operands, got {o?.GetType().Name}");
-                result -= Convert.ToDouble(o, CultureInfo.InvariantCulture);
+                return -result;
+            }
+
+            // Fold subtraction: result minus each subtrahend
+            for (int i = 1; i < expression.Operands.Length; i++)
+            {
+                double value = Operations.GetNumericOperand(Code, $"operand {i}", expression, i, context);
+                result -= value;
             }
 
             return result;

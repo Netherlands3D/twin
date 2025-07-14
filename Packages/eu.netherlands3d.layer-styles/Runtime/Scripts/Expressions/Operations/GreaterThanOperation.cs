@@ -25,10 +25,12 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
         /// </exception>
         public static bool Evaluate(Expression expression, ExpressionContext context)
         {
-            var leftValue  = ExpressionEvaluator.Evaluate(expression, 0, context);
+            Operations.GuardNumberOfOperands(Code, expression, expected: 2);
+
+            var leftValue = ExpressionEvaluator.Evaluate(expression, 0, context);
             var rightValue = ExpressionEvaluator.Evaluate(expression, 1, context);
 
-            return ExpressionEvaluator.Compare(leftValue, rightValue) > 0;
+            return Operations.Compare(leftValue, rightValue) > 0;
         }
     }
 }

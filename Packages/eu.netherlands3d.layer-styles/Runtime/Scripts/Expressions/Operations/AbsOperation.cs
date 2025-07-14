@@ -27,16 +27,11 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
         /// <exception cref="InvalidOperationException">Thrown if the operand is not a numeric type.</exception>
         public static double Evaluate(Expression expression, ExpressionContext context)
         {
-            var number = ExpressionEvaluator.Evaluate(expression, 0, context);
-            
-            if (!ExpressionEvaluator.IsNumber(number))
-            {
-                throw new InvalidOperationException(
-                    $"\"abs\" requires a numeric operand, got {number?.GetType().Name}"
-                );
-            }
+            Operations.GuardNumberOfOperands(Code, expression, 1);
 
-            return Math.Abs(Convert.ToDouble(number, CultureInfo.InvariantCulture));
+            double number = Operations.GetNumericOperand(Code, "number", expression, 0, context);
+
+            return Math.Abs(number);
         }
     }
 }

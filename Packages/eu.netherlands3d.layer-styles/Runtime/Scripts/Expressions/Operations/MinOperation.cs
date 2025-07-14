@@ -33,10 +33,7 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
             {
                 double candidate = Operations.GetNumericOperand(Code, $"operand {i}", expression, i, context);
 
-                if (candidate < minValue)
-                {
-                    minValue = candidate;
-                }
+                if (candidate < minValue) minValue = candidate;
             }
 
             return minValue;

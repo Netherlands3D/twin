@@ -23,6 +23,8 @@
         /// </exception>
         public static double Evaluate(Expression expression, ExpressionContext context)
         {
+            Operations.GuardAtLeastNumberOfOperands(Code, expression, 2);
+
             double product = 1.0;
             int operandCount = expression.Operands.Length;
 

@@ -20,10 +20,10 @@
         /// <returns><c>true</c> if both operand values are equal; otherwise <c>false</c>.</returns>
         public static bool Evaluate(Expression expression, ExpressionContext context)
         {
-            var leftValue  = ExpressionEvaluator.Evaluate(expression, 0, context);
+            var leftValue = ExpressionEvaluator.Evaluate(expression, 0, context);
             var rightValue = ExpressionEvaluator.Evaluate(expression, 1, context);
 
-            return ExpressionEvaluator.IsEqual(leftValue, rightValue);
+            return Operations.IsEqual(leftValue, rightValue);
         }
     }
 }

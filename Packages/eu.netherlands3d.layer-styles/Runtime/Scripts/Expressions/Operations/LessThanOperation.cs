@@ -28,7 +28,7 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
         {
             Operations.GuardNumberOfOperands(Code, expression, expected: 2);
 
-            object left  = ExpressionEvaluator.Evaluate(expression, 0, context);
+            object left = ExpressionEvaluator.Evaluate(expression, 0, context);
             object right = ExpressionEvaluator.Evaluate(expression, 1, context);
 
             return Operations.Compare(left, right) < 0;

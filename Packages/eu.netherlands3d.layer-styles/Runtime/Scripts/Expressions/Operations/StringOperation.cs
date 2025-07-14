@@ -1,26 +1,41 @@
 ﻿using System;
-using System.Linq;
 
 namespace Netherlands3D.LayerStyles.Expressions.Operations
 {
     /// <summary>
-    /// ["string", v₀, fallback₁, …] → first operand that is a string; error otherwise.
+    /// Implements the Mapbox <c>string</c> expression operator, which returns the
+    /// first operand that evaluates to a string.
     /// </summary>
+    /// <seealso href="https://docs.mapbox.com/style-spec/reference/expressions/#string">
+    ///   Mapbox “string” expression reference
+    /// </seealso>
     internal static class StringOperation
     {
+        /// <summary>The Mapbox operator string for “string”.</summary>
         public const string Code = "string";
 
-        public static string Evaluate(Expression expr, ExpressionContext ctx)
+        /// <summary>
+        /// Evaluates the <c>string</c> expression by scanning its operands in order
+        /// and returning the first one that is a string.
+        /// </summary>
+        /// <param name="expression">The <see cref="Expression"/> whose operands will be tested.</param>
+        /// <param name="context">The <see cref="ExpressionContext"/> providing any runtime data.</param>
+        /// <returns>The first operand value of type <see cref="string"/>.</returns>
+        /// <exception cref="InvalidOperationException">
+        ///   Thrown if there are no operands or none evaluate to a string.
+        /// </exception>
+        public static string Evaluate(Expression expression, ExpressionContext context)
         {
-            foreach (var (_, idx) in expr.Operands.Select((o, i) => (o, i)))
+            Operations.GuardAtLeastNumberOfOperands(Code, expression, 1);
+
+            for (int i = 0; i < expression.Operands.Length; i++)
             {
-                var val = ExpressionEvaluator.Evaluate(expr, idx, ctx);
-                if (val is string s) return s;
+                object raw = ExpressionEvaluator.Evaluate(expression, i, context);
+                
+                if (raw is string s) return s;
             }
 
-            throw new InvalidOperationException(
-                $"\"string\" assertion failed: no operand evaluated to a string."
-            );
+            throw new InvalidOperationException($"\"{Code}\" assertion failed: no operand evaluated to a string.");
         }
     }
 }

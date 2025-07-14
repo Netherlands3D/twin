@@ -34,22 +34,17 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
         /// </exception>
         public static string Evaluate(Expression expression, ExpressionContext context)
         {
+            Operations.GuardNumberOfOperands(Code, expression, 1);
+
             if (context?.Feature == null)
             {
-                throw new InvalidOperationException(
-                    $"{Code} requires a non-null ExpressionContext with a Feature."
-                );
+                throw new InvalidOperationException($"{Code} requires a non-null ExpressionContext with a Feature.");
             }
 
             var rawKey = ExpressionEvaluator.Evaluate(expression, 0, context);
             var attributeKey = rawKey?.ToString();
 
-            if (attributeKey == null)
-            {
-                throw new InvalidOperationException(
-                    $"{Code}: attribute key must be a string."
-                );
-            }
+            if (attributeKey == null) throw new InvalidOperationException($"{Code}: attribute key must be a string.");
 
             return context.Feature.GetAttribute(attributeKey);
         }

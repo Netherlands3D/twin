@@ -10,6 +10,12 @@ namespace Netherlands3D.LayerStyles.Expressions
 {
     public partial class Expression
     {
+        /// <summary>
+        /// List of all supported expression operators.
+        ///
+        /// Any commented operators are not yet supported but mentioned in the MApbox expression spec
+        /// (https://docs.mapbox.com/style-spec/reference/expressions/) and can be added later.
+        /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public enum Operators
         {
@@ -18,9 +24,15 @@ namespace Netherlands3D.LayerStyles.Expressions
 
             [EnumMember(Value = BooleanOperation.Code)]
             Boolean,
-            [EnumMember(Value = "collator")] Collator,
-            [EnumMember(Value = "format")] Format,
-            [EnumMember(Value = "image")] Image,
+            
+            // [EnumMember(Value = "collator")] 
+            // Collator,
+            
+            // [EnumMember(Value = "format")] 
+            // Format,
+            
+            // [EnumMember(Value = "image")] 
+            // Image,
 
             [EnumMember(Value = LiteralOperation.Code)]
             Literal,
@@ -52,27 +64,53 @@ namespace Netherlands3D.LayerStyles.Expressions
             [EnumMember(Value = TypeOfOperation.Code)]
             TypeOf,
 
-            [EnumMember(Value = "accumulated")] Accumulated,
-            [EnumMember(Value = "feature-state")] FeatureState,
-            [EnumMember(Value = "geometry-type")] GeometryType,
-            [EnumMember(Value = "id")] Id,
-            [EnumMember(Value = "line-progress")] LineProgress,
-            [EnumMember(Value = "properties")] Properties,
+            // [EnumMember(Value = "accumulated")] 
+            // Accumulated,
+            
+            // [EnumMember(Value = "feature-state")] 
+            // FeatureState,
+            
+            // [EnumMember(Value = "geometry-type")] 
+            // GeometryType,
+           
+            // [EnumMember(Value = "id")] 
+            // Id,
+            
+            // [EnumMember(Value = "line-progress")] 
+            // LineProgress,
+            
+            // [EnumMember(Value = "properties")] 
+            // Properties,
 
-            [EnumMember(Value = "at")] At,
+            // [EnumMember(Value = "at")] 
+            // At,
 
-            [EnumMember(Value = "at-interpolated")]
-            AtInterpolated,
-            [EnumMember(Value = "config")] Config,
+            // [EnumMember(Value = "at-interpolated")]
+            // AtInterpolated,
+
+            // [EnumMember(Value = "config")] 
+            // Config,
 
             [EnumMember(Value = GetOperation.Code)]
             Get,
-            [EnumMember(Value = "has")] Has,
-            [EnumMember(Value = "in")] In,
-            [EnumMember(Value = "index-of")] IndexOf,
-            [EnumMember(Value = "length")] Length,
-            [EnumMember(Value = "measure-light")] MeasureLight,
-            [EnumMember(Value = "slice")] Slice,
+            
+            // [EnumMember(Value = "has")] 
+            // Has,
+            
+            // [EnumMember(Value = "in")] 
+            // In,
+            
+            // [EnumMember(Value = "index-of")] 
+            // IndexOf,
+            
+            // [EnumMember(Value = "length")] 
+            // Length,
+            
+            // [EnumMember(Value = "measure-light")] 
+            // MeasureLight,
+            
+            // [EnumMember(Value = "slice")] 
+            // Slice,
 
             [EnumMember(Value = NotOperation.Code)]
             Not,
@@ -100,30 +138,51 @@ namespace Netherlands3D.LayerStyles.Expressions
 
             [EnumMember(Value = AnyOperation.Code)]
             Any,
-            [EnumMember(Value = "case")] Case,
-            [EnumMember(Value = "coalesce")] Coalesce,
-            [EnumMember(Value = "match")] Match,
-            [EnumMember(Value = "within")] Within,
+            
+            // [EnumMember(Value = "case")] 
+            // Case,
+            
+            // [EnumMember(Value = "coalesce")] 
+            // Coalesce,
+            
+            // [EnumMember(Value = "match")] 
+            // Match,
+            
+            // [EnumMember(Value = "within")] 
+            // Within,
 
-            [EnumMember(Value = "interpolate")] Interpolate,
+            // [EnumMember(Value = "interpolate")] 
+            // Interpolate,
 
-            [EnumMember(Value = "interpolate-hcl")]
-            InterpolateHcl,
+            // [EnumMember(Value = "interpolate-hcl")]
+            // InterpolateHcl,
 
-            [EnumMember(Value = "interpolate-lab")]
-            InterpolateLab,
-            [EnumMember(Value = "step")] Step,
-            [EnumMember(Value = "let")] Let,
-            [EnumMember(Value = "var")] Var,
-            [EnumMember(Value = "concat")] Concat,
-            [EnumMember(Value = "downcase")] Downcase,
+            // [EnumMember(Value = "interpolate-lab")]
+            // InterpolateLab,
+            
+            // [EnumMember(Value = "step")] 
+            // Step,
+            
+            // [EnumMember(Value = "let")] 
+            // Let,
+            
+            // [EnumMember(Value = "var")] 
+            // Var,
+            
+            // [EnumMember(Value = "concat")] 
+            // Concat,
+            
+            // [EnumMember(Value = "downcase")] 
+            // Downcase,
 
-            [EnumMember(Value = "is-supported-script")]
-            IsSupportedScript,
+            // [EnumMember(Value = "is-supported-script")]
+            // IsSupportedScript,
 
-            [EnumMember(Value = "resolved-locale")]
-            ResolvedLocale,
-            [EnumMember(Value = "upcase")] Upcase,
+            // [EnumMember(Value = "resolved-locale")]
+            // ResolvedLocale,
+            
+            // [EnumMember(Value = "upcase")] 
+            // Upcase,
 
             [EnumMember(Value = HslOperation.Code)]
             Hsl,
@@ -179,8 +238,8 @@ namespace Netherlands3D.LayerStyles.Expressions
             [EnumMember(Value = CosOperation.Code)]
             Cos,
 
-            [EnumMember(Value = DistanceOperation.Code)]
-            Distance,
+            // [EnumMember(Value = "distance")]
+            // Distance,
 
             [EnumMember(Value = EOperation.Code)]
             E,
@@ -224,13 +283,17 @@ namespace Netherlands3D.LayerStyles.Expressions
             [EnumMember(Value = TanOperation.Code)]
             Tan,
 
-            [EnumMember(Value = "distance-from-center")]
-            DistanceFromCenter,
-            [EnumMember(Value = "pitch")] Pitch,
-            [EnumMember(Value = "zoom")] Zoom,
+            // [EnumMember(Value = "distance-from-center")]
+            // DistanceFromCenter,
+            
+            // [EnumMember(Value = "pitch")] 
+            // Pitch,
+            
+            // [EnumMember(Value = "zoom")] 
+            // Zoom,
 
-            [EnumMember(Value = "heatmap-density")]
-            HeatmapDensity,
+            // [EnumMember(Value = "heatmap-density")]
+            // HeatmapDensity,
         }
 
         /// <summary>

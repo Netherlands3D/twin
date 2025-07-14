@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using UnityEngine;
 
 namespace Netherlands3D.LayerStyles.Expressions.Operations
 {
@@ -40,7 +41,7 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
                 );
             }
 
-            return Convert.ToDouble(raw, CultureInfo.InvariantCulture);
+            return ToDouble(raw);
         }
         
         internal static void GuardInRange(string code, string name, double value, double min, double max)
@@ -98,5 +99,76 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
         {
             return ToDouble(IsNumber(value) ? value : value.ToString());
         }
+        
+        /// <summary>
+        /// Parses the specified operand as a <see cref="Color"/>, accepting either a
+        /// <see cref="Color"/> or a CSS string literal.
+        /// </summary>
+        internal static Color GetColorOperand(
+            string code,
+            Expression expression,
+            int index,
+            ExpressionContext context)
+        {
+            object raw = ExpressionEvaluator.Evaluate(expression, index, context);
+
+            if (raw is Color direct) return direct;
+
+            if (raw is string css && ColorUtility.TryParseHtmlString(css, out Color parsed))
+            {
+                return parsed;
+            }
+
+            throw new InvalidOperationException(
+                $"\"{code}\" requires a color input at operand {index}, got {raw?.GetType().Name}."
+            );
+        }
+
+        /// <summary>
+        /// Converts an RGB <see cref="Color"/> (components 0–1) into HSLA components
+        /// (hue 0–360, saturation 0–1, lightness 0–1).
+        /// </summary>
+        internal static (double h, double s, double l) ConvertRgbToHsla(Color color)
+        {
+            // Using the same algorithm as Mapbox spec, normalized to [0,1]
+            float r = color.r, g = color.g, b = color.b;
+            float max = Mathf.Max(r, Mathf.Max(g, b));
+            float min = Mathf.Min(r, Mathf.Min(g, b));
+            float delta = max - min;
+            float lightness = (max + min) / 2f;
+
+            float hue;
+            float saturation;
+
+            if (delta == 0f)
+            {
+                hue = 0f;
+                saturation = 0f;
+            }
+            else
+            {
+                saturation = delta / (1f - Math.Abs(2f * lightness - 1f));
+
+                if (Mathf.Approximately(max, r))
+                {
+                    hue = 60f * (((g - b) / delta) % 6f);
+                }
+                else if (Mathf.Approximately(max, g))
+                {
+                    hue = 60f * (((b - r) / delta) + 2f);
+                }
+                else
+                {
+                    hue = 60f * (((r - g) / delta) + 4f);
+                }
+
+                if (hue < 0f)
+                {
+                    hue += 360f;
+                }
+            }
+
+            return (hue, saturation, lightness);
+        }        
     }
 }

@@ -22,8 +22,10 @@
         ///   An <c>object[]</c> containing the literal operand values, nested arrays
         ///   unpacked into <c>object[]</c> as needed.
         /// </returns>
-        public static object Evaluate(Expression expression, ExpressionContext context)
+        public static object Evaluate(Expression expression)
         {
+            Operations.GuardAtLeastNumberOfOperands(Code, expression, 1);
+
             int count = expression.Operands.Length;
             var result = new object[count];
 

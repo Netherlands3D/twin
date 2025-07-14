@@ -1,19 +1,36 @@
 ﻿using System;
-using System.Globalization;
 
 namespace Netherlands3D.LayerStyles.Expressions.Operations
 {
+    /// <summary>
+    /// Implements the Mapbox <c>sqrt</c> expression operator, which returns the
+    /// square root of its single numeric operand.
+    /// </summary>
+    /// <seealso href="https://docs.mapbox.com/style-spec/reference/expressions/#sqrt">
+    ///   Mapbox “sqrt” expression reference
+    /// </seealso>
     public static class SqrtOperation
     {
+        /// <summary>The Mapbox operator string for “sqrt”.</summary>
         public const string Code = "sqrt";
 
-        public static double Evaluate(Expression expr, ExpressionContext ctx)
+        /// <summary>
+        /// Evaluates the <c>sqrt</c> expression by parsing and validating its
+        /// single numeric operand, then computing its square root.
+        /// </summary>
+        /// <param name="expression">The <see cref="Expression"/> whose operand is the value to root.</param>
+        /// <param name="context">The <see cref="ExpressionContext"/> providing any feature or runtime data.</param>
+        /// <returns>The square root of the input value.</returns>
+        /// <exception cref="InvalidOperationException">
+        ///   Thrown if operand count is not 1 or the operand is not numeric.
+        /// </exception>
+        public static double Evaluate(Expression expression, ExpressionContext context)
         {
-            var o = ExpressionEvaluator.Evaluate(expr, 0, ctx);
-            if (!ExpressionEvaluator.IsNumber(o))
-                throw new InvalidOperationException(
-                    $"\"sqrt\" requires a numeric operand, got {o?.GetType().Name}");
-            return Math.Sqrt(Convert.ToDouble(o, CultureInfo.InvariantCulture));
+            Operations.GuardNumberOfOperands(Code, expression, 1);
+            
+            double value = Operations.GetNumericOperand(Code, "value", expression, 0, context);
+            
+            return Math.Sqrt(value);
         }
     }
 }

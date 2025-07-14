@@ -26,21 +26,19 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
         /// <exception cref="InvalidOperationException">Thrown if no operand evaluates to a boolean.</exception>
         public static bool Evaluate(Expression expression, ExpressionContext context)
         {
+            Operations.GuardAtLeastNumberOfOperands(Code, expression, 1);
+
             var operands = expression.Operands;
             var operandCount = operands.Length;
 
             for (int i = 0; i < operandCount; i++)
             {
                 var operandValue = ExpressionEvaluator.Evaluate(expression, i, context);
-                if (operandValue is bool b)
-                {
-                    return b;
-                }
+                
+                if (operandValue is bool b) return b;
             }
 
-            throw new InvalidOperationException(
-                $"\"{Code}\" assertion failed: no operand evaluated to boolean."
-            );
+            throw new InvalidOperationException($"\"{Code}\" assertion failed: no operand evaluated to boolean.");
         }
     }
 }

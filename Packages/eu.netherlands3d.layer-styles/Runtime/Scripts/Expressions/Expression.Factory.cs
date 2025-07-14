@@ -52,7 +52,6 @@
         public static Expression Asin(object v) => new(Operators.Asin, v);
         public static Expression Atan(object v) => new(Operators.Atan, v);
         public static Expression Ceil(object v) => new(Operators.Ceil, v);
-        public static Expression Distance(object a, object b) => new(Operators.Distance, a, b);
         public static Expression E() => new(Operators.E);
         public static Expression Floor(object v) => new(Operators.Floor, v);
         public static Expression Ln(object v) => new(Operators.Ln, v);

@@ -1,18 +1,36 @@
 ﻿using System;
-using System.Globalization;
 
 namespace Netherlands3D.LayerStyles.Expressions.Operations
 {
+    /// <summary>
+    /// Implements the Mapbox <c>sin</c> expression operator, which returns the sine
+    /// of its numeric operand (in radians).
+    /// </summary>
+    /// <seealso href="https://docs.mapbox.com/style-spec/reference/expressions/#sin">
+    ///   Mapbox “sin” expression reference
+    /// </seealso>
     public static class SinOperation
     {
+        /// <summary>The Mapbox operator string for “sin”.</summary>
         public const string Code = "sin";
 
-        public static double Evaluate(Expression expr, ExpressionContext ctx)
+        /// <summary>
+        /// Evaluates the <c>sin</c> expression by parsing and validating its
+        /// single numeric operand, then computing its sine.
+        /// </summary>
+        /// <param name="expression">The <see cref="Expression"/> whose operand is the angle in radians.</param>
+        /// <param name="context">The <see cref="ExpressionContext"/> providing any feature or runtime data.</param>
+        /// <returns>The sine of the input value.</returns>
+        /// <exception cref="InvalidOperationException">
+        ///   Thrown if operand count is not 1 or the operand is not numeric.
+        /// </exception>
+        public static double Evaluate(Expression expression, ExpressionContext context)
         {
-            var o = ExpressionEvaluator.Evaluate(expr, 0, ctx);
-            if (!ExpressionEvaluator.IsNumber(o))
-                throw new InvalidOperationException($"\"sin\" requires a numeric operand, got {o?.GetType().Name}");
-            return Math.Sin(Convert.ToDouble(o, CultureInfo.InvariantCulture));
+            Operations.GuardNumberOfOperands(Code, expression, 1);
+            
+            double value = Operations.GetNumericOperand(Code, "value", expression, 0, context);
+            
+            return Math.Sin(value);
         }
     }
 }

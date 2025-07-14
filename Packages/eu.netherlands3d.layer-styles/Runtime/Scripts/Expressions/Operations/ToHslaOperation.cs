@@ -3,57 +3,53 @@ using UnityEngine;
 
 namespace Netherlands3D.LayerStyles.Expressions.Operations
 {
-    /// <summary>
-    /// ["to-hsla", color]: array<number,4>
+/// <summary>
+    /// Implements the Mapbox <c>to-hsla</c> expression operator, which converts
+    /// a <see cref="Color"/> (or parseable string) into an HSLA component array
+    /// [h°, s%, l%, a].
     /// </summary>
+    /// <seealso href="https://docs.mapbox.com/style-spec/reference/expressions/#to-hsla">
+    ///   Mapbox “to-hsla” expression reference
+    /// </seealso>
     public static class ToHslaOperation
     {
+        /// <summary>The Mapbox operator string for “to-hsla”.</summary>
         public const string Code = "to-hsla";
 
+        /// <summary>
+        /// Evaluates the <c>to-hsla</c> expression by parsing its single operand
+        /// as a <see cref="Color"/> (or CSS string) and converting to HSLA array.
+        /// </summary>
+        /// <param name="expression">
+        ///   The <see cref="Expression"/> whose sole operand is the color input.
+        /// </param>
+        /// <param name="context">
+        ///   The <see cref="ExpressionContext"/> providing any runtime data.
+        /// </param>
+        /// <returns>
+        ///   An <see cref="object"/>[] of four <see cref="double"/>s: 
+        ///   hue (0–360), saturation (0–100), lightness (0–100), alpha (0–1).
+        /// </returns>
+        /// <exception cref="InvalidOperationException">
+        ///   Thrown if operand count ≠ 1 or input cannot be interpreted as a color.
+        /// </exception>
         public static object[] Evaluate(Expression expression, ExpressionContext context)
         {
-            if (expression.Operands.Length != 1)
-                throw new InvalidOperationException("\"to-hsla\" requires exactly 1 operand.");
+            Operations.GuardNumberOfOperands(Code, expression, expected: 1);
 
-            // get color or parse string
-            var val = ExpressionEvaluator.Evaluate(expression, 0, context);
-            Color c;
-            if (val is Color col) c = col;
-            else if (val is string str && ColorUtility.TryParseHtmlString(str, out col)) c = col;
-            else throw new InvalidOperationException("\"to-hsla\" requires a color input.");
+            // Parse the single operand into a UnityEngine.Color
+            Color color = Operations.GetColorOperand(Code, expression, index: 0, context);
 
-            // RGB → HSL
-            float r = c.r, g = c.g, b = c.b;
-            float max = Mathf.Max(r, Mathf.Max(g, b));
-            float min = Mathf.Min(r, Mathf.Min(g, b));
-            float d = max - min;
-            float l = (max + min) / 2f;
+            // Convert RGB → HSLA (h:0–360, s/l:0–100, a:0–1)
+            (double hue, double saturation, double lightness) = 
+                Operations.ConvertRgbToHsla(color);
 
-            float h, s;
-            if (d == 0f)
-            {
-                h = 0f;
-                s = 0f;
-            }
-            else
-            {
-                s = d / (1f - Mathf.Abs(2f * l - 1f));
-                if (max == r)
-                    h = 60f * (((g - b) / d) % 6f);
-                else if (max == g)
-                    h = 60f * (((b - r) / d) + 2f);
-                else
-                    h = 60f * (((r - g) / d) + 4f);
-                if (h < 0) h += 360f;
-            }
-
-            // map back to spec units: H° 0–360, S%/L% 0–100, A 0–1
             return new object[]
             {
-                (double)h,
-                (double)(s * 100.0),
-                (double)(l * 100.0),
-                (double)c.a
+                hue,
+                saturation * 100.0,
+                lightness * 100.0,
+                color.a
             };
         }
     }

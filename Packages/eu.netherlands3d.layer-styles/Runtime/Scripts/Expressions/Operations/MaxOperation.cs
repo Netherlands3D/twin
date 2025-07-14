@@ -33,10 +33,7 @@ namespace Netherlands3D.LayerStyles.Expressions.Operations
             {
                 double candidate = Operations.GetNumericOperand(Code, $"operand{i}", expression, i, context);
 
-                if (candidate > maxValue)
-                {
-                    maxValue = candidate;
-                }
+                if (candidate > maxValue) maxValue = candidate;
             }
 
             return maxValue;

@@ -21,6 +21,8 @@
         /// <exception cref="InvalidOperationException">Thrown if any operand does not evaluate to a boolean.</exception>
         public static bool Evaluate(Expression expression, ExpressionContext context)
         {
+            Operations.GuardAtLeastNumberOfOperands(Code, expression, 1);
+            
             var operands = expression.Operands;
             var operandCount = operands.Length;
 
@@ -28,7 +30,7 @@
             {
                 var rawValue = ExpressionEvaluator.Evaluate(expression, i, context);
 
-                if (!ExpressionEvaluator.AsBool(rawValue)) return false;
+                if (!Operations.AsBool(rawValue)) return false;
             }
 
             return true;
