@@ -28,7 +28,7 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
         {
             Operations.GuardNumberOfOperands(Code, expression, 1);
 
-            double angle = Operations.GetNumericOperand(Code, "angle", expression, 0, context);
+            double angle = Operations.GetOperandAsNumber(Code, "angle", expression, 0, context);
 
             return Math.Tan(angle);
         }

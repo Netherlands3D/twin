@@ -30,10 +30,10 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
         {
             Operations.GuardNumberOfOperands(Code, expression, expected: 4);
 
-            double hue = Operations.GetNumericOperand(Code, "hue", expression, 0, context);
-            double saturation = Operations.GetNumericOperand(Code, "saturation", expression, 1, context);
-            double lightness = Operations.GetNumericOperand(Code,"lightness", expression, 2, context);
-            double alpha = Operations.GetNumericOperand(Code, "alpha", expression, 3, context);
+            double hue = Operations.GetOperandAsNumber(Code, "hue", expression, 0, context);
+            double saturation = Operations.GetOperandAsNumber(Code, "saturation", expression, 1, context);
+            double lightness = Operations.GetOperandAsNumber(Code,"lightness", expression, 2, context);
+            double alpha = Operations.GetOperandAsNumber(Code, "alpha", expression, 3, context);
 
             Operations.GuardInRange(Code, "hue", hue, 0, 360);
             Operations.GuardInRange(Code, "saturation", saturation, 0, 100);

@@ -30,7 +30,7 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
         {
             Operations.GuardNumberOfOperands(Code, expression, 1);
 
-            var value = Operations.GetColorOperand(Code, expression, 0, context);
+            var value = Operations.GetOperandAsColor(Code, expression, 0, context);
 
             return new[]
             {

@@ -29,7 +29,7 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
             double sum = 0.0;
             for (int i = 0; i < expression.Operands.Length; i++)
             {
-                sum += Operations.GetNumericOperand(Code, $"operand {i}", expression, i, context);
+                sum += Operations.GetOperandAsNumber(Code, $"operand {i}", expression, i, context);
             }
 
             return sum;

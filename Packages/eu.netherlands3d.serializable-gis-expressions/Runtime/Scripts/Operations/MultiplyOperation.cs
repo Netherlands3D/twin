@@ -30,7 +30,7 @@
 
             for (int i = 0; i < operandCount; i++)
             {
-                double value = Operations.GetNumericOperand(Code, $"operand {i}", expression, i, context);
+                double value = Operations.GetOperandAsNumber(Code, $"operand {i}", expression, i, context);
 
                 product *= value;
             }

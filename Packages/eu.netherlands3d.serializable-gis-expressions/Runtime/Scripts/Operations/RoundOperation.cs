@@ -28,7 +28,7 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
         {
             Operations.GuardNumberOfOperands(Code, expression, expected: 1);
 
-            double input = Operations.GetNumericOperand(Code, "value", expression, 0, context);
+            double input = Operations.GetOperandAsNumber(Code, "value", expression, 0, context);
 
             return Math.Round(input);
         }

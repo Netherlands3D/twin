@@ -33,8 +33,8 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
             // exactly three operands: min, max, seed
             Operations.GuardNumberOfOperands(Code, expression, expected: 3);
 
-            double min = Operations.GetNumericOperand(Code, "min", expression, 0, context);
-            double max = Operations.GetNumericOperand(Code, "max", expression, 1, context);
+            double min = Operations.GetOperandAsNumber(Code, "min", expression, 0, context);
+            double max = Operations.GetOperandAsNumber(Code, "max", expression, 1, context);
             int seed = ComputeSeed(ExpressionEvaluator.Evaluate(expression, 2, context));
 
             var rng = new Random(seed);

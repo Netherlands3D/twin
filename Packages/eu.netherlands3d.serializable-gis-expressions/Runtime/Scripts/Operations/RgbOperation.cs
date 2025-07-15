@@ -29,9 +29,9 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
         {
             Operations.GuardNumberOfOperands(Code, expression, expected: 3);
 
-            double red = Operations.GetNumericOperand(Code, "red", expression, 0, context);
-            double green = Operations.GetNumericOperand(Code, "green", expression, 1, context);
-            double blue = Operations.GetNumericOperand(Code, "blue", expression, 2, context);
+            double red = Operations.GetOperandAsNumber(Code, "red", expression, 0, context);
+            double green = Operations.GetOperandAsNumber(Code, "green", expression, 1, context);
+            double blue = Operations.GetOperandAsNumber(Code, "blue", expression, 2, context);
 
             Operations.GuardInRange(Code, "red", red, min: 0, max: 255);
             Operations.GuardInRange(Code, "green", green, min: 0, max: 255);

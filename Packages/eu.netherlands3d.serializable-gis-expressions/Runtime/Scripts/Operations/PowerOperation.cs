@@ -28,8 +28,8 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
         {
             Operations.GuardNumberOfOperands(Code, expression, expected: 2);
 
-            double baseValue = Operations.GetNumericOperand(Code, "base", expression, 0, context);
-            double exponentValue = Operations.GetNumericOperand(Code, "exponent", expression, 1, context);
+            double baseValue = Operations.GetOperandAsNumber(Code, "base", expression, 0, context);
+            double exponentValue = Operations.GetOperandAsNumber(Code, "exponent", expression, 1, context);
 
             return Math.Pow(baseValue, exponentValue);
         }

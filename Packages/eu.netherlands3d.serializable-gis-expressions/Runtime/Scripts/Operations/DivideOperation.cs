@@ -33,12 +33,12 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
             Operations.GuardAtLeastNumberOfOperands(Code, expression, 2);
 
             // Evaluate first operand
-            double result = Operations.GetNumericOperand(Code, "operand 0", expression, 0, context);
+            double result = Operations.GetOperandAsNumber(Code, "operand 0", expression, 0, context);
 
             // Sequentially divide by each subsequent operand
             for (int i = 1; i < expression.Operands.Length; i++)
             {
-                result /= Operations.GetNumericOperand(Code, $"operand {i}", expression, i, context);
+                result /= Operations.GetOperandAsNumber(Code, $"operand {i}", expression, i, context);
             }
 
             return result;

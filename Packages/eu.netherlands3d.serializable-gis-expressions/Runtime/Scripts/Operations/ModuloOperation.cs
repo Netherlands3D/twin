@@ -28,11 +28,11 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
         {
             Operations.GuardAtLeastNumberOfOperands(Code, expression, 2);
 
-            double result = Operations.GetNumericOperand(Code, "operand0", expression, 0, context);
+            double result = Operations.GetOperandAsNumber(Code, "operand0", expression, 0, context);
             
             for (int i = 1; i < expression.Operands.Length; i++)
             {
-                double divisor = Operations.GetNumericOperand(Code, $"operand{i}", expression, i, context);
+                double divisor = Operations.GetOperandAsNumber(Code, $"operand{i}", expression, i, context);
 
                 result %= divisor;
             }

@@ -1,4 +1,6 @@
-﻿namespace Netherlands3D.SerializableGisExpressions.Operations
+﻿using UnityEngine;
+
+namespace Netherlands3D.SerializableGisExpressions.Operations
 {
     /// <summary>
     /// Implements the Mapbox <c>==</c> expression operator, which performs

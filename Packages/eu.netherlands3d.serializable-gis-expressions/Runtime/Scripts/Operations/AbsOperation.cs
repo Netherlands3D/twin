@@ -29,7 +29,7 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
         {
             Operations.GuardNumberOfOperands(Code, expression, 1);
 
-            double number = Operations.GetNumericOperand(Code, "number", expression, 0, context);
+            double number = Operations.GetOperandAsNumber(Code, "number", expression, 0, context);
 
             return Math.Abs(number);
         }

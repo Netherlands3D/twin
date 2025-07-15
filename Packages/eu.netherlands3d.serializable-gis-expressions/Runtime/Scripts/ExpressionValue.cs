@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using UnityEngine;
 
 namespace Netherlands3D.SerializableGisExpressions
@@ -10,7 +11,7 @@ namespace Netherlands3D.SerializableGisExpressions
     /// A discriminated wrapper around the possible results of evaluating an expression.
     /// Provides implicit conversions to/from common CLR types and type-query helpers.
     /// </summary>
-    public readonly struct ExpressionValue
+    public readonly struct ExpressionValue : IEquatable<ExpressionValue>
     {
         private readonly object value;
 
@@ -161,11 +162,8 @@ namespace Netherlands3D.SerializableGisExpressions
         /// <summary>Unwraps an <see cref="int"/>, or converts if possible, else throws.</summary>
         public static implicit operator int(ExpressionValue ev)
         {
-            if (ev.IsInteger())
-            {
-                return (int)ev.Value;
-            }
-
+            if (ev.IsInteger()) return (int)ev.Value;
+            
             if (ev.Value is IConvertible convInt)
             {
                 return convInt.ToInt32(CultureInfo.InvariantCulture);
@@ -228,7 +226,9 @@ namespace Netherlands3D.SerializableGisExpressions
             throw new InvalidCastException($"Cannot cast {ev.Value?.GetType().Name} to Color");
         }
 
-        /// <summary>Unwraps an <see cref="object"/> array, or throws if not an array.</summary>
+        /// <summary>
+        /// Unwraps an <see cref="object"/> array, or throws if not an array.
+        /// </summary>
         public static implicit operator object[](ExpressionValue ev)
         {
             if (ev.IsArray())
@@ -239,7 +239,9 @@ namespace Netherlands3D.SerializableGisExpressions
             throw new InvalidCastException($"Cannot cast {ev.Value?.GetType().Name} to object[]");
         }
 
-        /// <summary>Unwraps an <see cref="object"/> array, or throws if not an array.</summary>
+        /// <summary>
+        /// Unwraps an <see cref="object"/> array, or throws if not an array.
+        /// </summary>
         public static implicit operator Dictionary<string, object>(ExpressionValue ev)
         {
             if (ev.IsObject())
@@ -250,7 +252,9 @@ namespace Netherlands3D.SerializableGisExpressions
             throw new InvalidCastException($"Cannot cast {ev.Value?.GetType().Name} to an object (Dictionary<string, object>");
         }
 
-        /// <summary>Returns a string representation of the underlying value (or "null").</summary>
+        /// <summary>
+        /// Returns a string representation of the underlying value (or "null").
+        /// </summary>
         public override string ToString()
         {
             if (Value == null)
@@ -259,6 +263,84 @@ namespace Netherlands3D.SerializableGisExpressions
             }
 
             return Value.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ExpressionValue other && Equals(other);
+        }
+
+        /// <summary>Checks equality between two ExpressionValue instances.</summary>
+        public bool Equals(ExpressionValue other)
+        {
+            // Null comparison
+            if (Value == null && other.Value == null) return true;
+            if (Value == null || other.Value == null) return false;
+
+            // Array comparison
+            if (Value is object[] arr1 && other.Value is object[] arr2)
+            {
+                return StructuralComparisons.StructuralEqualityComparer.Equals(arr1, arr2);
+            }
+
+            // Dictionary comparison
+            if (Value is IDictionary<string, object> dict1 && other.Value is IDictionary<string, object> dict2)
+            {
+                if (dict1.Count != dict2.Count) return false;
+                foreach (var kvp in dict1)
+                {
+                    if (!dict2.TryGetValue(kvp.Key, out var otherVal)) return false;
+                    var ev1 = new ExpressionValue(kvp.Value);
+                    var ev2 = new ExpressionValue(otherVal);
+                    if (!ev1.Equals(ev2)) return false;
+                }
+                return true;
+            }
+
+            // Default comparison
+            return Value.Equals(other.Value);
+        }
+
+        public override int GetHashCode()
+        {
+            return ComputeHash(Value);
+        }
+
+        private static int ComputeHash(object value)
+        {
+            return value switch
+            {
+                null => 0,
+                object[] arr => StructuralComparisons.StructuralEqualityComparer.GetHashCode(arr),
+                IDictionary<string, object> dict => ComputeDictionaryDeepHash(dict),
+                _ => value.GetHashCode()
+            };
+        }
+
+        private static int ComputeDictionaryDeepHash(IDictionary<string, object> dictionary)
+        {
+            // allow intentional integer overflow to wrap around (instead of throwing) for proper hash mixing
+            unchecked
+            {
+                int hash = 17;
+                foreach (var kvp in dictionary.OrderBy(k => k.Key))
+                {
+                    hash = hash * 23 + ComputeHash(kvp.Key);
+                    hash = hash * 23 + ComputeHash(kvp.Value);
+                }
+
+                return hash;
+            }
+        }
+
+        public static bool operator ==(ExpressionValue left, ExpressionValue right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ExpressionValue left, ExpressionValue right)
+        {
+            return !left.Equals(right);
         }
     }
 }

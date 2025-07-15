@@ -30,7 +30,7 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
             Operations.GuardAtLeastNumberOfOperands(Code, expression, 1);
 
             // Get the minuend (or the value to negate if only one operand)
-            double result = Operations.GetNumericOperand(Code, "operand 0", expression, 0, context);
+            double result = Operations.GetOperandAsNumber(Code, "operand 0", expression, 0, context);
 
             // Single operand → unary negation
             if (expression.Operands.Length == 1)
@@ -41,7 +41,7 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
             // Fold subtraction: result minus each subtrahend
             for (int i = 1; i < expression.Operands.Length; i++)
             {
-                double value = Operations.GetNumericOperand(Code, $"operand {i}", expression, i, context);
+                double value = Operations.GetOperandAsNumber(Code, $"operand {i}", expression, i, context);
                 result -= value;
             }
 

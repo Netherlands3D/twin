@@ -38,7 +38,7 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
             Operations.GuardNumberOfOperands(Code, expression, expected: 1);
 
             // Parse the single operand into a UnityEngine.Color
-            Color color = Operations.GetColorOperand(Code, expression, index: 0, context);
+            Color color = Operations.GetOperandAsColor(Code, expression, index: 0, context);
 
             // Convert RGB → HSLA (h:0–360, s/l:0–100, a:0–1)
             (double hue, double saturation, double lightness) = Operations.ConvertRgbToHsla(color);

@@ -27,11 +27,11 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
         {
             Operations.GuardAtLeastNumberOfOperands(Code, expression, 1);
 
-            double maxValue = Operations.GetNumericOperand(Code, "operand0", expression, 0, context);
+            double maxValue = Operations.GetOperandAsNumber(Code, "operand0", expression, 0, context);
 
             for (int i = 1; i < expression.Operands.Length; i++)
             {
-                double candidate = Operations.GetNumericOperand(Code, $"operand{i}", expression, i, context);
+                double candidate = Operations.GetOperandAsNumber(Code, $"operand{i}", expression, i, context);
 
                 if (candidate > maxValue) maxValue = candidate;
             }
