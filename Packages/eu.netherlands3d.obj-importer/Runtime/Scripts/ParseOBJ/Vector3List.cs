@@ -104,38 +104,6 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
             return ReturnItem;
         }
 
-        public Vector3[] ReadAllItems()
-        {
-            if (reader == null)
-            {
-                throw new System.InvalidOperationException("Reader not initialized. Call SetupReading() first.");
-            }
-
-            long numVectors = Count();
-            Vector3[] allVectors = new Vector3[numVectors];
-
-            // Reset reader position to start of file
-            reader.Position = 0;
-
-            byte[] allBytes = new byte[numVectors * 12];
-            int bytesRead = reader.Read(allBytes, 0, allBytes.Length);
-
-            if (bytesRead != allBytes.Length)
-            {
-                throw new IOException("Could not read the entire file.");
-            }
-
-            float[] floatArray = new float[3];
-
-            for (int i = 0; i < numVectors; i++)
-            {
-                System.Buffer.BlockCopy(allBytes, i * 12, floatArray, 0, 12);
-                allVectors[i] = new Vector3(floatArray[0], floatArray[1], floatArray[2]);
-            }
-
-            return allVectors;
-        }
-
         public void EndReading()
         {
             reader.Close();
