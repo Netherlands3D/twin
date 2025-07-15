@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.ObjImporter.General.GameObjectDataSet;
 using UnityEngine;
 using Netherlands3D.ObjImporter.ParseOBJ;
 
@@ -34,6 +36,8 @@ namespace Netherlands3D.ObjImporter.General
 
         System.Action<GameObject> callback;
 
+        public int maxParseMillisecondsPerFrame = 400;
+
         void BroadCastProgress()
         {
             float progress = 100 * gameobjectindex / totalgameobjects;
@@ -57,9 +61,14 @@ namespace Netherlands3D.ObjImporter.General
 
         IEnumerator createGameObjects()
         {
+            (int longestVertexCount, int longestIndexCount) = GetLongestFiles(gameObjectData.gameObjects);
+            List<Vector3> vertices = new List<Vector3>(longestVertexCount);
+            List<Vector2> uvs = new List<Vector2>(longestVertexCount);
+            List<int> indices = new List<int>(longestIndexCount);
+            
             if (gameObjectData.gameObjects.Count == 1)
             {
-                yield return StartCoroutine(AddGameObject(gameObjectData.gameObjects[0], parentobject));
+                yield return StartCoroutine(AddGameObject(gameObjectData.gameObjects[0], vertices, uvs, indices, parentobject));
                 parentobject.name = gameObjectData.name;
             }
             else
@@ -69,7 +78,7 @@ namespace Netherlands3D.ObjImporter.General
                     gameobjectindex++;
                     BroadCastProgress();
                     gameObjectCreated = false;
-                    StartCoroutine(AddGameObject(gameobjectdata));
+                    StartCoroutine(AddGameObject(gameobjectdata, vertices, uvs, indices));
                     while (gameObjectCreated == false)
                     {
                         yield return null;
@@ -85,8 +94,34 @@ namespace Netherlands3D.ObjImporter.General
             parentobject = null;
         }
 
+        private (int, int) GetLongestFiles(List<GameObjectData> gameObjects)
+        {
+            var largestVerts = 0;
+            var largestIndices = 0;
+            
+            foreach (var gameObjectData in gameObjects)
+            {
+                vertices.SetupReading(gameObjectData.meshdata.vertexFileName);
+                indices.SetupReading(gameObjectData.meshdata.indicesFileName);
+                
+                int vertSize = vertices.Count();
+                int indicesSize = indices.numberOfVertices();
+                
+                if (vertSize > largestVerts)
+                    largestVerts = vertSize;
 
-        IEnumerator AddGameObject(GameObjectDataSet.GameObjectData gameobjectdata, GameObject GameObject = null)
+                if (indicesSize > largestIndices)
+                    largestIndices = indicesSize;
+                    
+                vertices.EndReading();
+                indices.EndReading();
+            }
+
+            return (largestVerts, largestIndices);
+        }
+
+
+        IEnumerator AddGameObject(GameObjectDataSet.GameObjectData gameobjectdata, List<Vector3> allocatedVertexList, List<Vector2> allocatedUvList, List<int> allocatedIndicesList, GameObject GameObject = null)
         {
             GameObject gameobject;
             if (GameObject != null)
@@ -101,7 +136,7 @@ namespace Netherlands3D.ObjImporter.General
             gameobject.name = gameobjectdata.name;
             gameobject.transform.SetParent(parentobject.transform, false);
 
-            yield return StartCoroutine(CreateMesh(gameobjectdata.meshdata));
+            yield return StartCoroutine(CreateMesh(gameobjectdata.meshdata, allocatedVertexList, allocatedUvList, allocatedIndicesList));
 
             if (createdMesh is null)
             {
@@ -159,12 +194,15 @@ namespace Netherlands3D.ObjImporter.General
         }
 
 
-        IEnumerator CreateMesh(GameObjectDataSet.MeshData meshdata)
+        IEnumerator CreateMesh(GameObjectDataSet.MeshData meshdata, List<Vector3> allocatedVertexList, List<Vector2> allocatedUvList, List<int> allocatedIndicesList)
         {
             bool hasnormals = false;
             createdMesh = new Mesh();
             createdMesh.Clear();
-            // add vertices
+
+            allocatedVertexList.Clear();
+            allocatedUvList.Clear();
+            allocatedIndicesList.Clear();
 
             vertices.SetupReading(meshdata.vertexFileName);
             uvs.SetupReading(meshdata.uvFileName);
@@ -183,15 +221,14 @@ namespace Netherlands3D.ObjImporter.General
                 yield break;
             }
 
-            createdMesh.vertices = vertices.ReadAllItems();
-            
-            if ((System.DateTime.UtcNow - time).TotalMilliseconds > 400)
+            for (int i = 0; i < vertexcount; i++)
             {
-                yield return null;
-                time = System.DateTime.UtcNow;
+                allocatedVertexList.Add(vertices.ReadItem(i));
+                allocatedUvList.Add(uvs.ReadItem(i));
             }
-            
-            createdMesh.uv = uvs.ReadAllItems();
+
+            createdMesh.SetVertices(allocatedVertexList);
+            createdMesh.SetUVs(0, allocatedUvList);
             
             uvs.EndReading();
             uvs.RemoveData();
@@ -199,26 +236,31 @@ namespace Netherlands3D.ObjImporter.General
             vertices.EndReading();
             vertices.RemoveData();
 
-            if ((System.DateTime.UtcNow - time).TotalMilliseconds > 400)
+            if ((DateTime.UtcNow - time).TotalMilliseconds > maxParseMillisecondsPerFrame)
             {
                 yield return null;
-                time = System.DateTime.UtcNow;
+                time = DateTime.UtcNow;
             }     
             
             // add indices
             indices.SetupReading(meshdata.indicesFileName);
             int indexcount = indices.numberOfVertices();
 
+            for (int i = 0; i < indexcount; i++)
+            {
+                allocatedIndicesList.Add(indices.ReadNext());
+            }
+            
             createdMesh.SetIndexBufferParams(indexcount, UnityEngine.Rendering.IndexFormat.UInt32);
-            createdMesh.SetIndexBufferData(indices.ReadAllItems(), 0, 0, indexcount);
+            createdMesh.SetIndexBufferData(allocatedIndicesList, 0, 0, indexcount);
             
             indices.EndReading();
             indices.RemoveData();
 
-            if ((System.DateTime.UtcNow - time).TotalMilliseconds > 400)
+            if ((DateTime.UtcNow - time).TotalMilliseconds > maxParseMillisecondsPerFrame)
             {
                 yield return null;
-                time = System.DateTime.UtcNow;
+                time = DateTime.UtcNow;
             }
             
             // add normals
@@ -233,12 +275,17 @@ namespace Netherlands3D.ObjImporter.General
                     if (normalscount == vertexcount)
                     {
                         hasnormals = true;
-                        createdMesh.normals = normals.ReadAllItems();
+                        for (int i = 0; i < normalscount; i++)
+                        {
+                            allocatedVertexList[i] = normals.ReadItem(i); //reuse the vertex list to reduce memory allocation
+                        }
+
+                        createdMesh.SetNormals(allocatedVertexList);
                         
-                        if ((System.DateTime.UtcNow - time).TotalMilliseconds > 400)
+                        if ((DateTime.UtcNow - time).TotalMilliseconds > maxParseMillisecondsPerFrame)
                         {
                             yield return null;
-                            time = System.DateTime.UtcNow;
+                            time = DateTime.UtcNow;
                         }
                     }
                     else
@@ -272,10 +319,10 @@ namespace Netherlands3D.ObjImporter.General
                 createdMesh.RecalculateNormals();
             }
 
-            if ((System.DateTime.UtcNow - time).TotalMilliseconds > 400)
+            if ((DateTime.UtcNow - time).TotalMilliseconds > maxParseMillisecondsPerFrame)
             {
                 yield return null;
-                time = System.DateTime.UtcNow;
+                time = DateTime.UtcNow;
             }
 
             createdMesh.RecalculateBounds();
