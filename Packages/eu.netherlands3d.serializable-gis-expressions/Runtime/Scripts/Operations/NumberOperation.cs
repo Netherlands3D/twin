@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using Newtonsoft.Json.Linq;
 
 namespace Netherlands3D.SerializableGisExpressions.Operations
 {

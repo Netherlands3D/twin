@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using UnityEngine;
 
 namespace Netherlands3D.SerializableGisExpressions.Operations
