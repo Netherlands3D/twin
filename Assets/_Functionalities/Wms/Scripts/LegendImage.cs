@@ -3,25 +3,37 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Functionalities.Wms
 {
+    [RequireComponent(typeof(Image))]
     public class LegendImage : MonoBehaviour
-    {        
-        private Sprite sprite;
+    {
+        [Tooltip("De gewenste hoogte van de legenda-afbeelding in pixels.")]
+        [SerializeField] private float targetHeight = 20f;
+
         private RectTransform rectTransform;
 
         public void SetSprite(Sprite sprite)
         {
-            this.sprite = sprite;
+            if (sprite == null || sprite.texture == null)
+            {
+                Debug.LogWarning("Geen sprite of texture beschikbaar voor legend image.");
+                return;
+            }
 
-            GetComponent<Image>().sprite = sprite;
+            // Stel de sprite in
+            var image = GetComponent<Image>();
+            image.sprite = sprite;
 
-            if(rectTransform == null)
+            if (rectTransform == null)
                 rectTransform = GetComponent<RectTransform>();
 
-            float ar = rectTransform.rect.width / sprite.texture.width; 
-            float height = rectTransform.rect.height;
+            // Bereken breedte op basis van aspect ratio van de afbeelding
+            float aspectRatio = (float)sprite.texture.width / sprite.texture.height;
+            float targetWidth = targetHeight * aspectRatio;
 
-            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rectTransform.rect.width);
-            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, sprite.texture.height * ar);
+            // Pas rectTransform aan op basis van gewenste hoogte en berekende breedte
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, targetHeight);
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, targetWidth);
         }
     }
 }
+
