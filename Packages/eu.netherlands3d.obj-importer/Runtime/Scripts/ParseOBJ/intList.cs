@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Netherlands3D.ObjImporter.ParseOBJ
 {
@@ -48,6 +50,22 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
             int output = bReader.ReadInt32();
 
             return output;
+        }
+        
+        public void ReadAllItems(int[] arrayToFill)
+        {
+            if (fs == null)
+            {
+                throw new System.InvalidOperationException("Reader not initialized. Call SetupReading() first.");
+            }
+
+            long numVectors = numberOfVertices();
+            // Reset reader position to start of file
+            var vectorSpan = new Span<int>(arrayToFill, 0, (int)numVectors);
+
+            // reader.Read directly into that byteSpan
+            fs.Position = 0;
+            fs.Read(MemoryMarshal.AsBytes(vectorSpan));
         }
         
         public void EndReading()

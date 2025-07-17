@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Netherlands3D.ObjImporter.ParseOBJ
 {
@@ -101,6 +103,22 @@ namespace Netherlands3D.ObjImporter.ParseOBJ
 
 
             return ReturnItem;
+        }
+        
+        public void ReadAllItems(Vector2[] arrayToFill)
+        {
+            if (reader == null)
+            {
+                throw new System.InvalidOperationException("Reader not initialized. Call SetupReading() first.");
+            }
+
+            long numVectors = Count();
+            // Reset reader position to start of file
+            var vectorSpan = new Span<Vector2>(arrayToFill, 0, (int)numVectors);
+
+            // reader.Read directly into that byteSpan
+            reader.Position = 0;
+            reader.Read(MemoryMarshal.AsBytes(vectorSpan));
         }
         
         public void EndReading()

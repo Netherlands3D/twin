@@ -62,9 +62,9 @@ namespace Netherlands3D.ObjImporter.General
         IEnumerator createGameObjects()
         {
             (int longestVertexCount, int longestIndexCount) = GetLongestFiles(gameObjectData.gameObjects);
-            List<Vector3> vertices = new List<Vector3>(longestVertexCount);
-            List<Vector2> uvs = new List<Vector2>(longestVertexCount);
-            List<int> indices = new List<int>(longestIndexCount);
+            Vector3[] vertices = new Vector3[longestVertexCount];
+            Vector2[] uvs = new Vector2[longestVertexCount];
+            int[] indices = new int[longestIndexCount];
             
             if (gameObjectData.gameObjects.Count == 1)
             {
@@ -121,7 +121,7 @@ namespace Netherlands3D.ObjImporter.General
         }
 
 
-        IEnumerator AddGameObject(GameObjectDataSet.GameObjectData gameobjectdata, List<Vector3> allocatedVertexList, List<Vector2> allocatedUvList, List<int> allocatedIndicesList, GameObject GameObject = null)
+        IEnumerator AddGameObject(GameObjectData gameobjectdata, Vector3[] allocatedVertexArray, Vector2[] allocatedUvArray, int[] allocatedIndicesArray, GameObject GameObject = null)
         {
             GameObject gameobject;
             if (GameObject != null)
@@ -136,7 +136,7 @@ namespace Netherlands3D.ObjImporter.General
             gameobject.name = gameobjectdata.name;
             gameobject.transform.SetParent(parentobject.transform, false);
 
-            yield return StartCoroutine(CreateMesh(gameobjectdata.meshdata, allocatedVertexList, allocatedUvList, allocatedIndicesList));
+            yield return StartCoroutine(CreateMesh(gameobjectdata.meshdata, allocatedVertexArray, allocatedUvArray, allocatedIndicesArray));
 
             if (createdMesh is null)
             {
@@ -194,15 +194,11 @@ namespace Netherlands3D.ObjImporter.General
         }
 
 
-        IEnumerator CreateMesh(GameObjectDataSet.MeshData meshdata, List<Vector3> allocatedVertexList, List<Vector2> allocatedUvList, List<int> allocatedIndicesList)
+        IEnumerator CreateMesh(MeshData meshdata, Vector3[] allocatedVertexArray, Vector2[] allocatedUvArray, int[] allocatedIndicesArray)
         {
             bool hasnormals = false;
             createdMesh = new Mesh();
             createdMesh.Clear();
-
-            allocatedVertexList.Clear();
-            allocatedUvList.Clear();
-            allocatedIndicesList.Clear();
 
             vertices.SetupReading(meshdata.vertexFileName);
             uvs.SetupReading(meshdata.uvFileName);
@@ -221,14 +217,11 @@ namespace Netherlands3D.ObjImporter.General
                 yield break;
             }
 
-            for (int i = 0; i < vertexcount; i++)
-            {
-                allocatedVertexList.Add(vertices.ReadItem(i));
-                allocatedUvList.Add(uvs.ReadItem(i));
-            }
+            vertices.ReadAllItems(allocatedVertexArray);
+            createdMesh.SetVertices(allocatedVertexArray, 0, vertexcount);
 
-            createdMesh.SetVertices(allocatedVertexList);
-            createdMesh.SetUVs(0, allocatedUvList);
+            uvs.ReadAllItems(allocatedUvArray);
+            createdMesh.SetUVs(0, allocatedUvArray, 0, vertexcount);
             
             uvs.EndReading();
             uvs.RemoveData();
@@ -245,14 +238,10 @@ namespace Netherlands3D.ObjImporter.General
             // add indices
             indices.SetupReading(meshdata.indicesFileName);
             int indexcount = indices.numberOfVertices();
-
-            for (int i = 0; i < indexcount; i++)
-            {
-                allocatedIndicesList.Add(indices.ReadNext());
-            }
             
+            indices.ReadAllItems(allocatedIndicesArray);
             createdMesh.SetIndexBufferParams(indexcount, UnityEngine.Rendering.IndexFormat.UInt32);
-            createdMesh.SetIndexBufferData(allocatedIndicesList, 0, 0, indexcount);
+            createdMesh.SetIndexBufferData(allocatedIndicesArray, 0, 0, indexcount);
             
             indices.EndReading();
             indices.RemoveData();
@@ -275,12 +264,9 @@ namespace Netherlands3D.ObjImporter.General
                     if (normalscount == vertexcount)
                     {
                         hasnormals = true;
-                        for (int i = 0; i < normalscount; i++)
-                        {
-                            allocatedVertexList[i] = normals.ReadItem(i); //reuse the vertex list to reduce memory allocation
-                        }
-
-                        createdMesh.SetNormals(allocatedVertexList);
+                        
+                        normals.ReadAllItems(allocatedVertexArray);
+                        createdMesh.SetNormals(allocatedVertexArray, 0, normalscount);
                         
                         if ((DateTime.UtcNow - time).TotalMilliseconds > maxParseMillisecondsPerFrame)
                         {
