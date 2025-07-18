@@ -22,8 +22,6 @@ namespace Netherlands3D.Dxf
         protected override IEnumerator CreateFile(LayerMask includedLayers, Bounds selectedAreaBounds, float minClipBoundsHeight, bool destroyOnCompletion = true)
         {
             // FreezeLayers(layerList, true);
-            Coordinate bottomLeftRD = new Coordinate(selectedAreaBounds.min);
-            Coordinate topRightRD = new Coordinate(selectedAreaBounds.max);
             DxfFile dxfFile = new DxfFile();
             dxfFile.SetupDXF();
             yield return null;
