@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -59,7 +58,7 @@ namespace Netherlands3D.MeshClipping
             return mesh;
         }
 
-        public void ClipSubMesh(Bounds boundingBox, int subMeshNumber)
+        public void ClipSubMesh(Bounds boundingBox, int subMeshNumber, bool keepOriginOffset = false)
         {
             clippedVertices = new List<Vector3>();
             if (subMeshNumber >= sourceMesh.subMeshCount)
@@ -68,7 +67,11 @@ namespace Netherlands3D.MeshClipping
             }
 
             int[] indices = sourceMesh.GetIndices(subMeshNumber);
-            boundsOrigin = new Vector3(boundingBox.center.x - boundingBox.size.x/2.0f, boundingBox.center.y - boundingBox.size.y/2.0f, boundingBox.center.z - boundingBox.size.z/2.0f);
+
+            if (keepOriginOffset)
+                boundsOrigin = Vector3.zero;
+            else
+                boundsOrigin = boundingBox.min;
 
             Vector3 point1;
             Vector3 point2;
