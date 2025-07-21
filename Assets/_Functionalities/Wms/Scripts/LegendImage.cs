@@ -6,8 +6,8 @@ namespace Netherlands3D.Functionalities.Wms
     [RequireComponent(typeof(Image))]
     public class LegendImage : MonoBehaviour
     {
-        [Tooltip("Schaalfactor op basis van de originele grootte van de afbeelding. 1 = origineel, 0.1 = 10% van origineel.")]
-        [SerializeField] private float scaleFactor = 0.1f;
+        [Tooltip("Schaalfactor op basis van de originele grootte van de afbeelding.")]
+        [SerializeField] private float scaleFactor = 1.1f;
 
         private RectTransform rectTransform;
 
