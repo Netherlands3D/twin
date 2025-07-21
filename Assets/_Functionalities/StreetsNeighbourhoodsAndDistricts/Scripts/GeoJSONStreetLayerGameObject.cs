@@ -185,6 +185,9 @@ namespace Netherlands3D.Functionalities.Toponyms
             float startHeight = streetName.text.gameObject.transform.position.y;
             (Vector3 startPos, Vector3 startForward) = SampleSplineAtDistance(pathPoints, 0.5f * splineLength);
 
+            float dot = Vector3.Dot(startForward, Camera.main.transform.right);
+            bool reverse = dot > 0;
+
             streetName.text.gameObject.transform.position = new Vector3(startPos.x, startHeight, startPos.z);
             streetName.text.gameObject.transform.localScale = Vector3.one * streetName.textSize;
 
@@ -241,7 +244,8 @@ namespace Netherlands3D.Functionalities.Toponyms
                 Vector3 worldCenter = streetName.text.transform.TransformPoint(charCenter) - streetName.text.transform.position;  
                 Vector3 charMidXWorld = streetName.text.transform.TransformPoint(Vector3.right * charMidX);
                 float charDist = Vector3.Distance(charMidXWorld, worldLeft);
-                float dist = 0.5f * splineLength + (0.5f * textLength - charDist) * scale;
+                float offset = reverse ? -0.5f * textLength + charDist : 0.5f * textLength - charDist;
+                float dist = 0.5f * splineLength + offset * scale;
                 (Vector3 pos, Vector3 forward) = SampleSplineAtDistance(pathPoints, dist);
                 Vector3 localPos = pos - startPos;
                 pos.y = startHeight;
@@ -253,7 +257,7 @@ namespace Netherlands3D.Functionalities.Toponyms
                     offsetFromCenter *= scale;
 
                     Quaternion rot = Quaternion.LookRotation(forward, Vector3.up);
-                    rot *= Quaternion.Euler(90, 90, 0);
+                    rot *= Quaternion.Euler(90, Mathf.Sign(dot) * -90, 0);
                     Vector3 rotatedWorld = pos + rot * offsetFromCenter;
                     vertices[vertexIndex + j] = streetName.text.transform.InverseTransformPoint(rotatedWorld);                    
                 }
