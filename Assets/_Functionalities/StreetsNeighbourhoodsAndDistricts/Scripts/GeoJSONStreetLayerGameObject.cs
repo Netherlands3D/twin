@@ -34,7 +34,8 @@ namespace Netherlands3D.Functionalities.Toponyms
 
         private static Dictionary<string, bool> uniqueNames = new Dictionary<string, bool>();
         private static Dictionary<Vector2Int, List<StreetName>> streetNames = new Dictionary<Vector2Int, List<StreetName>>();
-        private float cameraScale = 1f;
+
+        public Material textMaterial;
 
         public struct StreetName
         {
@@ -51,6 +52,14 @@ namespace Netherlands3D.Functionalities.Toponyms
             public TextMeshPro text;
             public Coordinate[] positions;
             public Vector3[] pathPoints;
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            textMaterial = textPrefab.GetComponent<MeshRenderer>().sharedMaterial;
+            //this solves the problem for blurry characters at greater distances but is probably not the right way to handle this
+            textMaterial.SetFloat(ShaderUtilities.ID_GradientScale, 30f); 
         }
 
         protected override void RemoveGameObjectFromTile(Vector2Int tileKey)
@@ -151,13 +160,9 @@ namespace Netherlands3D.Functionalities.Toponyms
 
 
         private void UpdateStreetName(StreetName streetName)
-        {
-            
-
-
+        {   
             float splineLength = 0f;
-            Vector3[] pathPoints = streetName.pathPoints;
-            Color rndColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1f);
+            Vector3[] pathPoints = streetName.pathPoints;          
             for (int i = 0; i < streetName.positions.Length; i++)
             {
                 Vector3 c = streetName.positions[i].ToUnity();
@@ -169,11 +174,12 @@ namespace Netherlands3D.Functionalities.Toponyms
                     splineLength += len;
                 }
             }
-
-            for(int i = 1; i < pathPoints.Length; i++)
+            //debug spline
+            Color rndColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1f);
+            for (int i = 1; i < pathPoints.Length; i++)
             {
                 Vector3 height = Vector3.up * 10;
-                Debug.DrawLine(pathPoints[i-1] + height, pathPoints[i] + height, Color.magenta);
+                Debug.DrawLine(pathPoints[i-1] + height, pathPoints[i] + height, rndColor);
             }
 
             float startHeight = streetName.text.gameObject.transform.position.y;
@@ -181,6 +187,7 @@ namespace Netherlands3D.Functionalities.Toponyms
 
             streetName.text.gameObject.transform.position = new Vector3(startPos.x, startHeight, startPos.z);
             streetName.text.gameObject.transform.localScale = Vector3.one * streetName.textSize;
+
             streetName.text.ForceMeshUpdate();
             var textInfo = streetName.text.textInfo;
             var mesh = textInfo.meshInfo[0].mesh;
@@ -191,6 +198,7 @@ namespace Netherlands3D.Functionalities.Toponyms
             Vector3 worldLeft = streetName.text.transform.TransformPoint(leftVertex);
             Vector3 worldRight = streetName.text.transform.TransformPoint(rightVertex);
             float textLength = Vector3.Distance(worldLeft, worldRight);
+            float cameraScale = Vector3.Distance(Camera.main.transform.position, streetName.text.gameObject.transform.position) * 0.005f;
             float scale = cameraScale;
             float characterDistance = textLength / textInfo.characterCount;
 
@@ -198,8 +206,9 @@ namespace Netherlands3D.Functionalities.Toponyms
             {
                 scale = splineLength / textLength;
             }
-            if (cameraScale > 1.1f)
-                cameraScale = 1.1f;
+            if (scale > 1)
+                scale = 1;
+
 
             float minY = float.MaxValue;
             float maxY = float.MinValue;
@@ -257,7 +266,7 @@ namespace Netherlands3D.Functionalities.Toponyms
 
         private void Update()
         {
-            cameraScale = Vector3.Distance(Camera.main.transform.position, transform.position) * 0.005f;
+
             foreach (KeyValuePair<Vector2Int, List<StreetName>> kv in streetNames)
             {
                 List<StreetName> list = kv.Value;
