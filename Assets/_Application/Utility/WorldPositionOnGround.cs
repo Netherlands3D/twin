@@ -46,6 +46,11 @@ namespace Netherlands3D
             }, 1 << LayerMask.NameToLayer("Terrain"));
         }
 
+        public void SetDirty()
+        {
+            positionFound = false;
+        }
+
         private void OnDestroy()
         {
             destroyed = true;

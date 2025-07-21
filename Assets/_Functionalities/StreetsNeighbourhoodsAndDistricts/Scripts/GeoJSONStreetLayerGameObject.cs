@@ -34,6 +34,7 @@ namespace Netherlands3D.Functionalities.Toponyms
 
         private static Dictionary<string, bool> uniqueNames = new Dictionary<string, bool>();
         private static Dictionary<Vector2Int, List<StreetName>> streetNames = new Dictionary<Vector2Int, List<StreetName>>();
+        private float cameraScale = 1f;
 
         public struct StreetName
         {
@@ -44,9 +45,7 @@ namespace Netherlands3D.Functionalities.Toponyms
                 this.textSize = textSize;
                 this.positions = positions;
                 pathPoints = new Vector3[positions.Length];
-            }
-
-            
+            }            
             public string name;
             public float textSize;
             public TextMeshPro text;
@@ -108,9 +107,7 @@ namespace Netherlands3D.Functionalities.Toponyms
 
                     if (coordinatesToken != null && coordinatesToken.Count > 0)
                     {
-                        // Pak de binnenste array van coordinaten
                         var innerArray = coordinatesToken[0] as JArray;
-
                         if (innerArray != null)
                         {
                             foreach (var pointToken in innerArray)
@@ -144,7 +141,6 @@ namespace Netherlands3D.Functionalities.Toponyms
                             streetNames.Add(tileKey, new List<StreetName>());
                         }
                         streetNames[tileKey].Add(streetName);
-                        //UpdateStreetName(streetName);
 
                     }
                 }
@@ -156,6 +152,9 @@ namespace Netherlands3D.Functionalities.Toponyms
 
         private void UpdateStreetName(StreetName streetName)
         {
+            
+
+
             float splineLength = 0f;
             Vector3[] pathPoints = streetName.pathPoints;
             Color rndColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1f);
@@ -169,9 +168,6 @@ namespace Netherlands3D.Functionalities.Toponyms
                     float len = Vector3.Distance(pathPoints[i - 1], pathPoints[i]);
                     splineLength += len;
                 }
-                //GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                //go.transform.position = new Vector3(c.x, 20, c.z);
-                //go.GetComponent<MeshRenderer>().material.color = rndColor;
             }
 
             for(int i = 1; i < pathPoints.Length; i++)
@@ -180,13 +176,11 @@ namespace Netherlands3D.Functionalities.Toponyms
                 Debug.DrawLine(pathPoints[i-1] + height, pathPoints[i] + height, Color.magenta);
             }
 
-
-
+            float startHeight = streetName.text.gameObject.transform.position.y;
             (Vector3 startPos, Vector3 startForward) = SampleSplineAtDistance(pathPoints, 0.5f * splineLength);
 
-            streetName.text.gameObject.transform.position = startPos;
+            streetName.text.gameObject.transform.position = new Vector3(startPos.x, startHeight, startPos.z);
             streetName.text.gameObject.transform.localScale = Vector3.one * streetName.textSize;
-
             streetName.text.ForceMeshUpdate();
             var textInfo = streetName.text.textInfo;
             var mesh = textInfo.meshInfo[0].mesh;
@@ -197,13 +191,15 @@ namespace Netherlands3D.Functionalities.Toponyms
             Vector3 worldLeft = streetName.text.transform.TransformPoint(leftVertex);
             Vector3 worldRight = streetName.text.transform.TransformPoint(rightVertex);
             float textLength = Vector3.Distance(worldLeft, worldRight);
-            float scale = 1;
+            float scale = cameraScale;
             float characterDistance = textLength / textInfo.characterCount;
 
-            if (textLength > splineLength)
+            if (textLength * cameraScale > splineLength)
             {
                 scale = splineLength / textLength;
             }
+            if (cameraScale > 1.1f)
+                cameraScale = 1.1f;
 
             float minY = float.MaxValue;
             float maxY = float.MinValue;
@@ -226,20 +222,20 @@ namespace Netherlands3D.Functionalities.Toponyms
 
                 int vertexIndex = charInfo.vertexIndex;
                 float charMidY = (charInfo.topLeft.y + charInfo.bottomLeft.y) * 0.5f;
+                float charMidX = (charInfo.bottomLeft.x + charInfo.bottomRight.x) * 0.5f;
+
                 Vector3 charCenter = new Vector3(
-                    (charInfo.bottomLeft.x + charInfo.bottomRight.x) * 0.5f,
-                    charInfo.baseLine - baseLineY, // verticale offset t.o.v. gedeelde baseline
+                    charMidX,
+                    charInfo.baseLine - baseLineY, 
                     0f
                 );
-                Vector3 worldCenter = streetName.text.transform.TransformPoint(charCenter) - streetName.text.transform.position;
-                float dist = 0.5f * splineLength + (-0.5f * textLength + i * characterDistance) * scale;
+                Vector3 worldCenter = streetName.text.transform.TransformPoint(charCenter) - streetName.text.transform.position;  
+                Vector3 charMidXWorld = streetName.text.transform.TransformPoint(Vector3.right * charMidX);
+                float charDist = Vector3.Distance(charMidXWorld, worldLeft);
+                float dist = 0.5f * splineLength + (0.5f * textLength - charDist) * scale;
                 (Vector3 pos, Vector3 forward) = SampleSplineAtDistance(pathPoints, dist);
-
-                //GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                //go.transform.position = new Vector3(pos.x, 100, pos.z);
-                //go.GetComponent<MeshRenderer>().material.color = rndColor;
                 Vector3 localPos = pos - startPos;
-
+                pos.y = startHeight;
                 for (int j = 0; j < 4; j++)
                 {
                     Vector3 originalLocal = vertices[vertexIndex + j];
@@ -250,7 +246,7 @@ namespace Netherlands3D.Functionalities.Toponyms
                     Quaternion rot = Quaternion.LookRotation(forward, Vector3.up);
                     rot *= Quaternion.Euler(90, 90, 0);
                     Vector3 rotatedWorld = pos + rot * offsetFromCenter;
-                    vertices[vertexIndex + j] = streetName.text.transform.InverseTransformPoint(rotatedWorld);
+                    vertices[vertexIndex + j] = streetName.text.transform.InverseTransformPoint(rotatedWorld);                    
                 }
             }
 
@@ -261,7 +257,8 @@ namespace Netherlands3D.Functionalities.Toponyms
 
         private void Update()
         {
-            foreach(KeyValuePair<Vector2Int, List<StreetName>> kv in streetNames)
+            cameraScale = Vector3.Distance(Camera.main.transform.position, transform.position) * 0.005f;
+            foreach (KeyValuePair<Vector2Int, List<StreetName>> kv in streetNames)
             {
                 List<StreetName> list = kv.Value;
                 foreach(StreetName streetName in list) 
@@ -269,36 +266,6 @@ namespace Netherlands3D.Functionalities.Toponyms
             }
         }
 
-        //public static (Vector3 pos, Vector3 forward) SampleSplineAtDistance(Vector3[] points, float distance, int window = 1)
-        //{
-        //    float traveled = 0;
-        //    for (int i = 0; i < points.Length - 1; i++)
-        //    {
-        //        float segmentLength = Vector3.Distance(points[i], points[i + 1]);
-        //        if (traveled + segmentLength >= distance)
-        //        {
-        //            float t = (distance - traveled) / segmentLength;
-        //            Vector3 pos = Vector3.Lerp(points[i], points[i + 1], t);
-
-        //            // Smooth forward vector over a window
-        //            Vector3 avgDir = Vector3.zero;
-        //            int count = 0;
-        //            for (int j = -window; j <= window; j++)
-        //            {
-        //                int idx0 = Mathf.Clamp(i + j, 0, points.Length - 2);
-        //                int idx1 = idx0 + 1;
-        //                Vector3 dir = (points[idx1] - points[idx0]).normalized;
-        //                avgDir += dir;
-        //                count++;
-        //            }
-        //            avgDir = (avgDir / count).normalized;
-
-        //            return (pos, avgDir);
-        //        }
-        //        traveled += segmentLength;
-        //    }
-        //    return (points[^1], (points[^1] - points[^2]).normalized);
-        //}
         public static (Vector3 pos, Vector3 forward) SampleSplineAtDistance(Vector3[] points, float distance)
         {
             float traveled = 0;
