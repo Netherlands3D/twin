@@ -33,13 +33,59 @@ namespace Netherlands3D.Functionalities.Toponyms
         private string geoJsonUrlGeometry = "https://service.pdok.nl/rws/nwbwegen/wfs/v1_0?service=WFS&version=2.0.0&request=GetFeature&typeNames=nwbwegen:wegvakken&srsName=EPSG:4326&outputFormat=application/json&bbox=";
 
         private static Dictionary<string, bool> uniqueNames = new Dictionary<string, bool>();
-        private static Dictionary<Vector3, Vector3> forwardVectors = new Dictionary<Vector3, Vector3>();
+        private static Dictionary<Vector2Int, List<StreetName>> streetNames = new Dictionary<Vector2Int, List<StreetName>>();
 
+        public struct StreetName
+        {
+            public StreetName(string name, TextMeshPro text, Coordinate[] positions, float textSize)
+            {
+                this.name = name;
+                this.text = text;
+                this.textSize = textSize;
+                this.positions = positions;
+                pathPoints = new Vector3[positions.Length];
+            }
+
+            
+            public string name;
+            public float textSize;
+            public TextMeshPro text;
+            public Coordinate[] positions;
+            public Vector3[] pathPoints;
+        }
+
+        protected override void RemoveGameObjectFromTile(Vector2Int tileKey)
+        {
+            if (tiles.ContainsKey(tileKey))
+            {
+                Tile tile = tiles[tileKey];
+                if (tile == null)
+                {
+                    return;
+                }
+                if (tile.gameObject == null)
+                {
+                    return;
+                }
+                MeshFilter mf = tile.gameObject.GetComponent<MeshFilter>();
+                if (mf != null)
+                {
+                    Destroy(tile.gameObject.GetComponent<MeshFilter>().sharedMesh);
+                }
+                if(streetNames.ContainsKey(tileKey))
+                    foreach(StreetName streetName in streetNames[tileKey])
+                        Destroy(streetName.text);
+                streetNames.Remove(tileKey);
+
+                Destroy(tiles[tileKey].gameObject);
+            }
+        }
+       
 
         protected override IEnumerator DownloadTextNameData(TileChange tileChange, Tile tile, System.Action<TileChange> callback = null)
         {          
             string geomUrl = $"{geoJsonUrlGeometry}{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
-
+            var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
             var streetnameRequest = UnityWebRequest.Get(geomUrl);
             tile.runningWebRequest = streetnameRequest;
             yield return streetnameRequest.SendWebRequest();
@@ -81,25 +127,7 @@ namespace Netherlands3D.Functionalities.Toponyms
                             }
                         }
                     }
-
-                    float splineLength = 0f;
-                    Vector3[] pathPoints = new Vector3[positions.Count];
-                    Color rndColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1f);
-                    for (int i = 0; i < positions.Count; i++)
-                    {
-                        Vector3 c = positions[i].ToUnity();
-                        c.y = 0;
-                        pathPoints[i] = c;
-                        if (i > 0)
-                        {
-                            float len = Vector3.Distance(pathPoints[i - 1], pathPoints[i]);
-                            splineLength += len;
-                        }
-                        //GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                        //go.transform.position = new Vector3(c.x, 100, c.z);
-                        //go.GetComponent<MeshRenderer>().material.color = rndColor;
-                    }
-
+                    Coordinate[] latLonPositions = positions.ToArray();
 
                     foreach (TextsAndSize textAndSize in textsAndSizes)
                     {
@@ -107,69 +135,17 @@ namespace Netherlands3D.Functionalities.Toponyms
                         var textObject = Instantiate(textPrefab);
                         textObject.name = naam;
                         textObject.transform.SetParent(tile.gameObject.transform, true);
-                        textObject.GetComponent<TextMeshPro>().text = naam;
-
-                        //Turn the text object so it faces up
-                        //textObject.transform.Rotate(Vector3.left, -90, Space.Self);
-
-                        (Vector3 startPos, Vector3 startForward) = SampleSplineAtDistance(pathPoints, 0.5f * splineLength);
-
-                        textObject.transform.position = startPos;
-                        textObject.transform.localScale = Vector3.one * textAndSize.drawWithSize;
-
                         TextMeshPro tmp = textObject.GetComponent<TextMeshPro>();
+                        tmp.text = naam;
 
-                        tmp.ForceMeshUpdate();
-                        var textInfo = tmp.textInfo;
-                        var mesh = textInfo.meshInfo[0].mesh;
-                        var vertices = mesh.vertices;
-
-                        Vector3 leftVertex = textInfo.characterInfo[0].bottomLeft;
-                        Vector3 rightVertex = textInfo.characterInfo[textInfo.characterCount - 1].bottomRight;
-                        Vector3 worldLeft = tmp.transform.TransformPoint(leftVertex);
-                        Vector3 worldRight = tmp.transform.TransformPoint(rightVertex);
-                        float textLength = Vector3.Distance(worldLeft, worldRight);
-                        float scale = 1;
-                        float characterDistance = textLength / textInfo.characterCount;
-                        if (textLength > splineLength)
-                        {
-                            scale = splineLength / textLength;
+                        StreetName streetName = new StreetName(naam, tmp, latLonPositions, textAndSize.drawWithSize);
+                        if(!streetNames.ContainsKey(tileKey))
+                        {                            
+                            streetNames.Add(tileKey, new List<StreetName>());
                         }
+                        streetNames[tileKey].Add(streetName);
+                        //UpdateStreetName(streetName);
 
-                        for (int i = 0; i < textInfo.characterCount; i++)
-                        {
-                            var charInfo = textInfo.characterInfo[textInfo.characterCount - 1 - i];
-                            if (!charInfo.isVisible) continue; // <- very important
-
-                            int vertexIndex = charInfo.vertexIndex;
-                            Vector3 center = (vertices[vertexIndex] + vertices[vertexIndex + 2]) * 0.5f;
-                            Vector3 worldCenter = tmp.transform.TransformPoint(center) - tmp.transform.position;
-                            float dist = 0.5f * splineLength + (-0.5f * textLength + i * characterDistance) * scale;
-
-                            (Vector3 pos, Vector3 forward) = SampleSplineAtDistance(pathPoints, dist);
-
-
-                            GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                            go.transform.position = new Vector3(pos.x, 100, pos.z);
-                            go.GetComponent<MeshRenderer>().material.color = rndColor;
-                            Vector3 localPos = pos - startPos;
-                            for (int j = 0; j < 4; j++)
-                            {
-                                Vector3 originalLocal = vertices[vertexIndex + j];
-                                Vector3 vertexWorld = tmp.transform.TransformPoint(originalLocal);
-                                Vector3 offsetFromCenter = vertexWorld - tmp.transform.TransformPoint(center);
-                                offsetFromCenter *= scale;
-                                Quaternion rot = Quaternion.LookRotation(forward, Vector3.up);
-                                rot *= Quaternion.Euler(90, 90, 0);
-                                Vector3 rotatedWorld = pos + rot * offsetFromCenter;
-                                //forwardVectors.Add(rotatedWorld, Vector3.up * 10);
-                                vertices[vertexIndex + j] = tmp.transform.InverseTransformPoint(rotatedWorld);
-                            }
-                        }
-
-                        mesh.vertices = vertices;
-                        mesh.RecalculateBounds();
-                        tmp.UpdateGeometry(mesh, 0);
                     }
                 }
                 yield return null;
@@ -177,14 +153,152 @@ namespace Netherlands3D.Functionalities.Toponyms
             callback?.Invoke(tileChange);
         }
 
-        //private void OnDrawGizmos()
-        //{
-        //    foreach (KeyValuePair<Vector3, Vector3> kv in forwardVectors)
-        //    {
-        //        Debug.DrawLine(kv.Key, kv.Key + kv.Value, Color.green);
-        //    }
-        //}
 
+        private void UpdateStreetName(StreetName streetName)
+        {
+            float splineLength = 0f;
+            Vector3[] pathPoints = streetName.pathPoints;
+            Color rndColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1f);
+            for (int i = 0; i < streetName.positions.Length; i++)
+            {
+                Vector3 c = streetName.positions[i].ToUnity();
+                c.y = 0;
+                pathPoints[i] = c;
+                if (i > 0)
+                {
+                    float len = Vector3.Distance(pathPoints[i - 1], pathPoints[i]);
+                    splineLength += len;
+                }
+                //GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                //go.transform.position = new Vector3(c.x, 20, c.z);
+                //go.GetComponent<MeshRenderer>().material.color = rndColor;
+            }
+
+            for(int i = 1; i < pathPoints.Length; i++)
+            {
+                Vector3 height = Vector3.up * 10;
+                Debug.DrawLine(pathPoints[i-1] + height, pathPoints[i] + height, Color.magenta);
+            }
+
+
+
+            (Vector3 startPos, Vector3 startForward) = SampleSplineAtDistance(pathPoints, 0.5f * splineLength);
+
+            streetName.text.gameObject.transform.position = startPos;
+            streetName.text.gameObject.transform.localScale = Vector3.one * streetName.textSize;
+
+            streetName.text.ForceMeshUpdate();
+            var textInfo = streetName.text.textInfo;
+            var mesh = textInfo.meshInfo[0].mesh;
+            var vertices = mesh.vertices;
+
+            Vector3 leftVertex = textInfo.characterInfo[0].bottomLeft;
+            Vector3 rightVertex = textInfo.characterInfo[textInfo.characterCount - 1].bottomRight;
+            Vector3 worldLeft = streetName.text.transform.TransformPoint(leftVertex);
+            Vector3 worldRight = streetName.text.transform.TransformPoint(rightVertex);
+            float textLength = Vector3.Distance(worldLeft, worldRight);
+            float scale = 1;
+            float characterDistance = textLength / textInfo.characterCount;
+
+            if (textLength > splineLength)
+            {
+                scale = splineLength / textLength;
+            }
+
+            float minY = float.MaxValue;
+            float maxY = float.MinValue;
+            float baseLineY = float.MaxValue;
+            for (int i = 0; i < textInfo.characterCount; i++)
+            {
+                var ci = textInfo.characterInfo[i];
+                if (!ci.isVisible) continue;
+
+                minY = Mathf.Min(minY, ci.bottomLeft.y);
+                maxY = Mathf.Max(maxY, ci.topLeft.y);
+                baseLineY = Mathf.Min(baseLineY, ci.baseLine);
+            }
+
+            float centerY = (minY + maxY) * 0.5f;
+            for (int i = 0; i < textInfo.characterCount; i++)
+            {
+                var charInfo = textInfo.characterInfo[textInfo.characterCount - 1 - i];
+                if (!charInfo.isVisible) continue; //because of trailing or whitespaces messing up the calculations
+
+                int vertexIndex = charInfo.vertexIndex;
+                float charMidY = (charInfo.topLeft.y + charInfo.bottomLeft.y) * 0.5f;
+                Vector3 charCenter = new Vector3(
+                    (charInfo.bottomLeft.x + charInfo.bottomRight.x) * 0.5f,
+                    charInfo.baseLine - baseLineY, // verticale offset t.o.v. gedeelde baseline
+                    0f
+                );
+                Vector3 worldCenter = streetName.text.transform.TransformPoint(charCenter) - streetName.text.transform.position;
+                float dist = 0.5f * splineLength + (-0.5f * textLength + i * characterDistance) * scale;
+                (Vector3 pos, Vector3 forward) = SampleSplineAtDistance(pathPoints, dist);
+
+                //GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                //go.transform.position = new Vector3(pos.x, 100, pos.z);
+                //go.GetComponent<MeshRenderer>().material.color = rndColor;
+                Vector3 localPos = pos - startPos;
+
+                for (int j = 0; j < 4; j++)
+                {
+                    Vector3 originalLocal = vertices[vertexIndex + j];
+                    Vector3 vertexWorld = streetName.text.transform.TransformPoint(originalLocal);
+                    Vector3 offsetFromCenter = vertexWorld - streetName.text.transform.TransformPoint(charCenter);
+                    offsetFromCenter *= scale;
+
+                    Quaternion rot = Quaternion.LookRotation(forward, Vector3.up);
+                    rot *= Quaternion.Euler(90, 90, 0);
+                    Vector3 rotatedWorld = pos + rot * offsetFromCenter;
+                    vertices[vertexIndex + j] = streetName.text.transform.InverseTransformPoint(rotatedWorld);
+                }
+            }
+
+            mesh.vertices = vertices;
+            mesh.RecalculateBounds();
+            streetName.text.UpdateGeometry(mesh, 0);
+        }
+
+        private void Update()
+        {
+            foreach(KeyValuePair<Vector2Int, List<StreetName>> kv in streetNames)
+            {
+                List<StreetName> list = kv.Value;
+                foreach(StreetName streetName in list) 
+                    UpdateStreetName(streetName);
+            }
+        }
+
+        //public static (Vector3 pos, Vector3 forward) SampleSplineAtDistance(Vector3[] points, float distance, int window = 1)
+        //{
+        //    float traveled = 0;
+        //    for (int i = 0; i < points.Length - 1; i++)
+        //    {
+        //        float segmentLength = Vector3.Distance(points[i], points[i + 1]);
+        //        if (traveled + segmentLength >= distance)
+        //        {
+        //            float t = (distance - traveled) / segmentLength;
+        //            Vector3 pos = Vector3.Lerp(points[i], points[i + 1], t);
+
+        //            // Smooth forward vector over a window
+        //            Vector3 avgDir = Vector3.zero;
+        //            int count = 0;
+        //            for (int j = -window; j <= window; j++)
+        //            {
+        //                int idx0 = Mathf.Clamp(i + j, 0, points.Length - 2);
+        //                int idx1 = idx0 + 1;
+        //                Vector3 dir = (points[idx1] - points[idx0]).normalized;
+        //                avgDir += dir;
+        //                count++;
+        //            }
+        //            avgDir = (avgDir / count).normalized;
+
+        //            return (pos, avgDir);
+        //        }
+        //        traveled += segmentLength;
+        //    }
+        //    return (points[^1], (points[^1] - points[^2]).normalized);
+        //}
         public static (Vector3 pos, Vector3 forward) SampleSplineAtDistance(Vector3[] points, float distance)
         {
             float traveled = 0;
