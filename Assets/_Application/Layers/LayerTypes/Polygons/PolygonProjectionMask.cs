@@ -14,17 +14,11 @@ namespace Netherlands3D
         [SerializeField] private string maskInvertTextureProperty = "_MaskInvertTexture";
         [SerializeField] private string maskTextureProperty = "_MaskTexture";
         
-        private DecalProjector decalProjector;
         [SerializeField] private Camera maskCamera;
         [SerializeField] private Camera maskInvertCamera;
 
         private static bool forceUpdate;
         private static readonly HashSet<GameObject> invertedMasks = new(); // when there are 0 inverted masks, all geometry should be visible, so we should change the output texture to alpha=1 on all pixels.
-        
-        private void Awake()
-        {
-            decalProjector = maskCamera.GetComponent<DecalProjector>();
-        }
 
         private IEnumerator Start()
         {
@@ -60,7 +54,7 @@ namespace Netherlands3D
         private void SetShaderMaskVectors()
         {
             Vector2 worldCenterXZ = new Vector2(maskCamera.transform.position.x, maskCamera.transform.position.z);
-            Vector2 worldExtentsXZ = new Vector2(decalProjector.size.x / 2, decalProjector.size.y /2); //projector uses xy plane instead of xz plane
+            Vector2 worldExtentsXZ = new Vector2(maskCamera.orthographicSize, maskCamera.orthographicSize); //projector uses xy plane instead of xz plane
 
             Shader.SetGlobalVector(centerProperty, worldCenterXZ);
             Shader.SetGlobalVector(extentsProperty, worldExtentsXZ);
