@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.1.8] - 2025-07-21
 ### Changed
--changed the downloadtext method in the geojsontextlayer to support overriding
+-changed the RemoveGameObjectFromTile method in the geojsontextlayer to support overriding
 
 ## [1.1.7] - 2025-07-21
 ### Changed
