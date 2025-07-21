@@ -25,17 +25,19 @@ using TMPro;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Netherlands3D.CartesianTiles;
+using System;
+using Netherlands3D.Twin.FloatingOrigin;
 
 namespace Netherlands3D.Functionalities.Toponyms
 {
     public class GeoJSONStreetLayerGameObject : GeoJSONTextLayer
     {
         private string geoJsonUrlGeometry = "https://service.pdok.nl/rws/nwbwegen/wfs/v1_0?service=WFS&version=2.0.0&request=GetFeature&typeNames=nwbwegen:wegvakken&srsName=EPSG:4326&outputFormat=application/json&bbox=";
-
         private static Dictionary<string, bool> uniqueNames = new Dictionary<string, bool>();
         private static Dictionary<Vector2Int, List<StreetName>> streetNames = new Dictionary<Vector2Int, List<StreetName>>();
-
-        public Material textMaterial;
+        private Material textMaterial;
+        //private Coordinate previousCoordinate;       
+        private Vector3 previousPosition;
 
         public struct StreetName
         {
@@ -137,7 +139,6 @@ namespace Netherlands3D.Functionalities.Toponyms
 
                     foreach (TextsAndSize textAndSize in textsAndSizes)
                     {
-
                         var textObject = Instantiate(textPrefab);
                         textObject.name = naam;
                         textObject.transform.SetParent(tile.gameObject.transform, true);
@@ -155,6 +156,7 @@ namespace Netherlands3D.Functionalities.Toponyms
                 }
                 yield return null;
             }
+            previousPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
             callback?.Invoke(tileChange);
         }
 
@@ -181,10 +183,11 @@ namespace Netherlands3D.Functionalities.Toponyms
                 Vector3 height = Vector3.up * 10;
                 Debug.DrawLine(pathPoints[i-1] + height, pathPoints[i] + height, rndColor);
             }
-
+            //cache height so the optical raycaster can do its magic without overwriting the height
             float startHeight = streetName.text.gameObject.transform.position.y;
             (Vector3 startPos, Vector3 startForward) = SampleSplineAtDistance(pathPoints, 0.5f * splineLength);
 
+            //do we need to flip text upside down relative to the camera forward angle
             float dot = Vector3.Dot(startForward, Camera.main.transform.right);
             bool reverse = dot > 0;
 
@@ -205,6 +208,7 @@ namespace Netherlands3D.Functionalities.Toponyms
             float scale = cameraScale;
             float characterDistance = textLength / textInfo.characterCount;
 
+            //compare if the textlength in worldspace is longer than the spline, if so we need to bring the scale down so it keeps fitting
             if (textLength * cameraScale > splineLength)
             {
                 scale = splineLength / textLength;
@@ -270,13 +274,22 @@ namespace Netherlands3D.Functionalities.Toponyms
 
         private void Update()
         {
+            //if (Math.Abs(WorldTransform.Coordinate.value1 - previousCoordinate.value1) > 0.0001d ||
+            //   Math.Abs(WorldTransform.Coordinate.value2 - previousCoordinate.value2) > 0.0001d ||
+            //   Math.Abs(WorldTransform.Coordinate.value3 - previousCoordinate.value3) > 0.0001d)
+            //{
+            //    previousCoordinate = WorldTransform.Coordinate;
 
-            foreach (KeyValuePair<Vector2Int, List<StreetName>> kv in streetNames)
-            {
-                List<StreetName> list = kv.Value;
-                foreach(StreetName streetName in list) 
-                    UpdateStreetName(streetName);
-            }
+            if(Camera.main.transform.position != previousPosition)
+            { 
+                previousPosition = Camera.main.transform.position;
+                foreach (KeyValuePair<Vector2Int, List<StreetName>> kv in streetNames)
+                {
+                    List<StreetName> list = kv.Value;
+                    foreach (StreetName streetName in list)
+                        UpdateStreetName(streetName);
+                }
+            }            
         }
 
         public static (Vector3 pos, Vector3 forward) SampleSplineAtDistance(Vector3[] points, float distance)
