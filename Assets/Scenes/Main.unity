@@ -1818,6 +1818,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 490585158167632551, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
         type: 3}
+      propertyPath: scaleFactor
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 490585158167632551, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
+        type: 3}
       propertyPath: targetHeight
       value: 22
       objectReference: {fileID: 0}

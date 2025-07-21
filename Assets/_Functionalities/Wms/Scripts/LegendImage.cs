@@ -6,8 +6,8 @@ namespace Netherlands3D.Functionalities.Wms
     [RequireComponent(typeof(Image))]
     public class LegendImage : MonoBehaviour
     {
-        [Tooltip("De gewenste hoogte van de legenda-afbeelding in pixels.")]
-        [SerializeField] private float targetHeight = 20f;
+        [Tooltip("Schaalfactor op basis van de originele grootte van de afbeelding. 1 = origineel, 0.1 = 10% van origineel.")]
+        [SerializeField] private float scaleFactor = 0.1f;
 
         private RectTransform rectTransform;
 
@@ -19,21 +19,20 @@ namespace Netherlands3D.Functionalities.Wms
                 return;
             }
 
-            // Stel de sprite in
             var image = GetComponent<Image>();
             image.sprite = sprite;
 
             if (rectTransform == null)
                 rectTransform = GetComponent<RectTransform>();
 
-            // Bereken breedte op basis van aspect ratio van de afbeelding
-            float aspectRatio = (float)sprite.texture.width / sprite.texture.height;
-            float targetWidth = targetHeight * aspectRatio;
+            float originalHeight = sprite.texture.height;
+            float originalWidth = sprite.texture.width;
 
-            // Pas rectTransform aan op basis van gewenste hoogte en berekende breedte
-            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, targetHeight);
-            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, targetWidth);
+            float scaledHeight = originalHeight * scaleFactor;
+            float scaledWidth = originalWidth * scaleFactor;
+
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, scaledHeight);
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, scaledWidth);
         }
     }
 }
-
