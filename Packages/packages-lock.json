@@ -442,7 +442,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "0b4407a447e08aa3b5260ba6fce5934b4cfde21d"
+      "hash": "2aaa164964ae67ceaa3f4ae4708b5573bb0a37bc"
     },
     "eu.netherlands3d.minimap": {
       "version": "1.1.8",
