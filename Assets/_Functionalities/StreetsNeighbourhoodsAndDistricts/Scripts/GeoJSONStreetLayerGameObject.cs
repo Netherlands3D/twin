@@ -27,6 +27,7 @@ using Newtonsoft.Json.Linq;
 using Netherlands3D.CartesianTiles;
 using System;
 using Netherlands3D.Twin.FloatingOrigin;
+using System.Linq;
 
 namespace Netherlands3D.Functionalities.Toponyms
 {
@@ -38,6 +39,7 @@ namespace Netherlands3D.Functionalities.Toponyms
         private Material textMaterial;
         //private Coordinate previousCoordinate;       
         private Vector3 previousPosition;
+        private Camera mainCamera;
 
         public struct StreetName
         {
@@ -48,12 +50,32 @@ namespace Netherlands3D.Functionalities.Toponyms
                 this.textSize = textSize;
                 this.positions = positions;
                 pathPoints = new Vector3[positions.Length];
+                text.text = name;
+                text.ForceMeshUpdate();
+                originalVertices = text.textInfo.meshInfo[0].vertices;
+                vertices = new Vector3[originalVertices.Length];
+
+                splineLength = 0f;
+                for (int i = 0; i < positions.Length; i++)
+                {
+                    Vector3 c = positions[i].ToUnity();
+                    c.y = 0;
+                    pathPoints[i] = c;
+                    if (i > 0)
+                    {
+                        float len = Vector3.Distance(pathPoints[i - 1], pathPoints[i]);
+                        splineLength += len;
+                    }
+                }
             }            
             public string name;
             public float textSize;
+            public float splineLength;
             public TextMeshPro text;
             public Coordinate[] positions;
             public Vector3[] pathPoints;
+            public Vector3[] originalVertices;
+            public Vector3[] vertices;
         }
 
         public override void Start()
@@ -61,7 +83,9 @@ namespace Netherlands3D.Functionalities.Toponyms
             base.Start();
             textMaterial = textPrefab.GetComponent<MeshRenderer>().sharedMaterial;
             //this solves the problem for blurry characters at greater distances but is probably not the right way to handle this
-            textMaterial.SetFloat(ShaderUtilities.ID_GradientScale, 30f); 
+          
+
+            mainCamera = Camera.main;
         }
 
         protected override void RemoveGameObjectFromTile(Vector2Int tileKey)
@@ -143,7 +167,7 @@ namespace Netherlands3D.Functionalities.Toponyms
                         textObject.name = naam;
                         textObject.transform.SetParent(tile.gameObject.transform, true);
                         TextMeshPro tmp = textObject.GetComponent<TextMeshPro>();
-                        tmp.text = naam;
+                       
 
                         StreetName streetName = new StreetName(naam, tmp, latLonPositions, textAndSize.drawWithSize);
                         if(!streetNames.ContainsKey(tileKey))
@@ -162,20 +186,10 @@ namespace Netherlands3D.Functionalities.Toponyms
 
 
         private void UpdateStreetName(StreetName streetName)
-        {   
-            float splineLength = 0f;
-            Vector3[] pathPoints = streetName.pathPoints;          
-            for (int i = 0; i < streetName.positions.Length; i++)
-            {
-                Vector3 c = streetName.positions[i].ToUnity();
-                c.y = 0;
-                pathPoints[i] = c;
-                if (i > 0)
-                {
-                    float len = Vector3.Distance(pathPoints[i - 1], pathPoints[i]);
-                    splineLength += len;
-                }
-            }
+        {
+
+            Vector3[] pathPoints = streetName.pathPoints;
+            float splineLength = streetName.splineLength;
             //debug spline
             Color rndColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1f);
             for (int i = 1; i < pathPoints.Length; i++)
@@ -188,23 +202,24 @@ namespace Netherlands3D.Functionalities.Toponyms
             (Vector3 startPos, Vector3 startForward) = SampleSplineAtDistance(pathPoints, 0.5f * splineLength);
 
             //do we need to flip text upside down relative to the camera forward angle
-            float dot = Vector3.Dot(startForward, Camera.main.transform.right);
+            float dot = Vector3.Dot(startForward, mainCamera.transform.right);
             bool reverse = dot > 0;
 
             streetName.text.gameObject.transform.position = new Vector3(startPos.x, startHeight, startPos.z);
             streetName.text.gameObject.transform.localScale = Vector3.one * streetName.textSize;
 
-            streetName.text.ForceMeshUpdate();
             var textInfo = streetName.text.textInfo;
             var mesh = textInfo.meshInfo[0].mesh;
-            var vertices = mesh.vertices;
+            var vertices = streetName.vertices;
+            TextMeshPro tmp = streetName.text;
+            Transform tmpTransform = tmp.transform;
 
             Vector3 leftVertex = textInfo.characterInfo[0].bottomLeft;
             Vector3 rightVertex = textInfo.characterInfo[textInfo.characterCount - 1].bottomRight;
-            Vector3 worldLeft = streetName.text.transform.TransformPoint(leftVertex);
-            Vector3 worldRight = streetName.text.transform.TransformPoint(rightVertex);
+            Vector3 worldLeft = tmpTransform.TransformPoint(leftVertex);
+            Vector3 worldRight = tmpTransform.TransformPoint(rightVertex);
             float textLength = Vector3.Distance(worldLeft, worldRight);
-            float cameraScale = Vector3.Distance(Camera.main.transform.position, streetName.text.gameObject.transform.position) * 0.005f;
+            float cameraScale = Vector3.Distance(mainCamera.transform.position, tmpTransform.gameObject.transform.position) * 0.005f;
             float scale = cameraScale;
             float characterDistance = textLength / textInfo.characterCount;
 
@@ -245,8 +260,8 @@ namespace Netherlands3D.Functionalities.Toponyms
                     charInfo.baseLine - baseLineY, 
                     0f
                 );
-                Vector3 worldCenter = streetName.text.transform.TransformPoint(charCenter) - streetName.text.transform.position;  
-                Vector3 charMidXWorld = streetName.text.transform.TransformPoint(Vector3.right * charMidX);
+                Vector3 worldCenter = tmpTransform.TransformPoint(charCenter) - tmpTransform.position;  
+                Vector3 charMidXWorld = tmpTransform.TransformPoint(Vector3.right * charMidX);
                 float charDist = Vector3.Distance(charMidXWorld, worldLeft);
                 float offset = reverse ? -0.5f * textLength + charDist : 0.5f * textLength - charDist;
                 float dist = 0.5f * splineLength + offset * scale;
@@ -255,15 +270,15 @@ namespace Netherlands3D.Functionalities.Toponyms
                 pos.y = startHeight;
                 for (int j = 0; j < 4; j++)
                 {
-                    Vector3 originalLocal = vertices[vertexIndex + j];
-                    Vector3 vertexWorld = streetName.text.transform.TransformPoint(originalLocal);
-                    Vector3 offsetFromCenter = vertexWorld - streetName.text.transform.TransformPoint(charCenter);
+                    Vector3 originalLocal = streetName.originalVertices[vertexIndex + j];
+                    Vector3 vertexWorld = tmpTransform.TransformPoint(originalLocal);
+                    Vector3 offsetFromCenter = vertexWorld - tmpTransform.TransformPoint(charCenter);
                     offsetFromCenter *= scale;
 
                     Quaternion rot = Quaternion.LookRotation(forward, Vector3.up);
                     rot *= Quaternion.Euler(90, Mathf.Sign(dot) * -90, 0);
                     Vector3 rotatedWorld = pos + rot * offsetFromCenter;
-                    vertices[vertexIndex + j] = streetName.text.transform.InverseTransformPoint(rotatedWorld);                    
+                    vertices[vertexIndex + j] = tmpTransform.InverseTransformPoint(rotatedWorld);                    
                 }
             }
 
@@ -280,9 +295,10 @@ namespace Netherlands3D.Functionalities.Toponyms
             //{
             //    previousCoordinate = WorldTransform.Coordinate;
 
-            if(Camera.main.transform.position != previousPosition)
-            { 
-                previousPosition = Camera.main.transform.position;
+            if(mainCamera.transform.position.y != previousPosition.y)
+            {
+                textMaterial.SetFloat(ShaderUtilities.ID_GradientScale, mainCamera.transform.position.y * 0.1f);
+                previousPosition = mainCamera.transform.position;
                 foreach (KeyValuePair<Vector2Int, List<StreetName>> kv in streetNames)
                 {
                     List<StreetName> list = kv.Value;
