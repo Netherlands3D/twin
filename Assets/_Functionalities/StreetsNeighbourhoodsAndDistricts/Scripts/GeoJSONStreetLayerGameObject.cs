@@ -78,10 +78,26 @@ namespace Netherlands3D.Functionalities.Toponyms
                     }
                 }
                 text.enabled = false;
+
+                var textInfo = text.textInfo;
+                float minY = float.MaxValue;
+                float maxY = float.MinValue;
+                baseLineY = float.MaxValue;
+                for (int i = 0; i < textInfo.characterCount; i++)
+                {
+                    var ci = textInfo.characterInfo[i];
+                    if (!ci.isVisible) continue;
+
+                    minY = Mathf.Min(minY, ci.bottomLeft.y);
+                    maxY = Mathf.Max(maxY, ci.topLeft.y);
+                    baseLineY = Mathf.Min(baseLineY, ci.baseLine);
+                }
+                float centerY = (minY + maxY) * 0.5f;
             }            
             public string name;
             public float textSize;
             public float splineLength;
+            public float baseLineY;
             public TextMeshPro text;
             public Coordinate[] positions;
             public Vector3[] pathPoints; 
@@ -229,19 +245,20 @@ namespace Netherlands3D.Functionalities.Toponyms
             var uvs = streetName.uvs;
             //var normals = mesh.normals;
             //var tangents = mesh.tangents;
-
+            int vertexLength = textInfo.meshInfo[0].vertices.Length;
+            int characterCount = textInfo.characterCount;
             TextMeshPro tmp = streetName.text;
             tmp.enabled = true;
             Transform tmpTransform = tmp.transform;
 
             Vector3 leftVertex = textInfo.characterInfo[0].bottomLeft;
-            Vector3 rightVertex = textInfo.characterInfo[textInfo.characterCount - 1].bottomRight;
+            Vector3 rightVertex = textInfo.characterInfo[characterCount - 1].bottomRight;
             Vector3 worldLeft = tmpTransform.TransformPoint(leftVertex);
             Vector3 worldRight = tmpTransform.TransformPoint(rightVertex);
             float textLength = Vector3.Distance(worldLeft, worldRight);
             float cameraScale = Vector3.Distance(mainCamera.transform.position, tmpTransform.gameObject.transform.position) * 0.005f;
             float scale = cameraScale;
-            float characterDistance = textLength / textInfo.characterCount;
+            float characterDistance = textLength / characterCount;
 
             //compare if the textlength in worldspace is longer than the spline, if so we need to bring the scale down so it keeps fitting
             if (textLength * cameraScale > splineLength)
@@ -250,22 +267,7 @@ namespace Netherlands3D.Functionalities.Toponyms
             }
             if (scale > 1)
                 scale = 1;
-
-            int characterCount = textInfo.characterCount;
-            float minY = float.MaxValue;
-            float maxY = float.MinValue;
-            float baseLineY = float.MaxValue;
-            for (int i = 0; i < characterCount; i++)
-            {
-                var ci = textInfo.characterInfo[i];
-                if (!ci.isVisible) continue;
-
-                minY = Mathf.Min(minY, ci.bottomLeft.y);
-                maxY = Mathf.Max(maxY, ci.topLeft.y);
-                baseLineY = Mathf.Min(baseLineY, ci.baseLine);
-            }
-
-            float centerY = (minY + maxY) * 0.5f;
+          
             for (int i = 0; i < characterCount; i++)
             {
                 var charInfo = textInfo.characterInfo[characterCount - 1 - i];
@@ -275,32 +277,32 @@ namespace Netherlands3D.Functionalities.Toponyms
                 float charMidY = (charInfo.topLeft.y + charInfo.bottomLeft.y) * 0.5f;
                 float charMidX = (charInfo.bottomLeft.x + charInfo.bottomRight.x) * 0.5f;
 
-                Vector3 charCenter = new Vector3(charMidX, charInfo.baseLine - baseLineY, 0f);
-                Vector3 worldCenter = tmpTransform.TransformPoint(charCenter) - tmpTransform.position;  
+                Vector3 charCenter = new Vector3(charMidX, charInfo.baseLine - streetName.baseLineY, 0f);
+                Vector3 charWorldCenter = tmpTransform.TransformPoint(charCenter);
+                Vector3 worldCenter = charWorldCenter - tmpTransform.position;  
                 Vector3 charMidXWorld = tmpTransform.TransformPoint(Vector3.right * charMidX);
                 float charDist = Vector3.Distance(charMidXWorld, worldLeft);
                 float offset = reverse ? -0.5f * textLength + charDist : 0.5f * textLength - charDist;
                 float dist = 0.5f * splineLength + offset * scale;
                 (Vector3 pos, Vector3 forward) = SampleSplineAtDistance(pathPoints, dist);
+                Quaternion rot = Quaternion.LookRotation(forward, Vector3.up);
+                Quaternion localRot = rot * Quaternion.Euler(90, Mathf.Sign(dot) * -90, 0);
                 Vector3 localPos = pos - startPos;
                 pos.y = startHeight;
                 for (int j = 0; j < 4; j++)
                 {
                     Vector3 originalLocal = streetName.originalVertices[vertexIndex + j];
                     Vector3 vertexWorld = tmpTransform.TransformPoint(originalLocal);
-                    Vector3 offsetFromCenter = vertexWorld - tmpTransform.TransformPoint(charCenter);
-                    offsetFromCenter *= scale;
-
-                    Quaternion rot = Quaternion.LookRotation(forward, Vector3.up);
-                    rot *= Quaternion.Euler(90, Mathf.Sign(dot) * -90, 0);
-                    Vector3 rotatedWorld = pos + rot * offsetFromCenter;
+                    Vector3 offsetFromCenter = vertexWorld - charWorldCenter;
+                    offsetFromCenter *= scale;                    
+                    Vector3 rotatedWorld = pos + localRot * offsetFromCenter;
                     vertices[vertexIndex + j] = tmpTransform.InverseTransformPoint(rotatedWorld); 
                     uvs[vertexIndex + j] = streetName.originalUvs[vertexIndex + j];
                 }                
             }
 
             //we need to clear unused data from the buffer to prevent rendering artefacts
-            for (int i = characterCount; i < textInfo.meshInfo[0].vertices.Length / 4; i++)
+            for (int i = characterCount; i < vertexLength / 4; i++)
             {
                 int vi = i * 4;
                 for (int j = 0; j < 4; j++)
