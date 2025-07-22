@@ -39,6 +39,7 @@ namespace Netherlands3D.Functionalities.Toponyms
         private Material textMaterial;
         //private Coordinate previousCoordinate;       
         private Vector3 previousPosition;
+        private Vector3 previousRotation;
         private Camera mainCamera;
 
         public struct StreetName
@@ -67,6 +68,7 @@ namespace Netherlands3D.Functionalities.Toponyms
                         splineLength += len;
                     }
                 }
+                text.enabled = false;
             }            
             public string name;
             public float textSize;
@@ -167,15 +169,13 @@ namespace Netherlands3D.Functionalities.Toponyms
                         textObject.name = naam;
                         textObject.transform.SetParent(tile.gameObject.transform, true);
                         TextMeshPro tmp = textObject.GetComponent<TextMeshPro>();
-                       
-
                         StreetName streetName = new StreetName(naam, tmp, latLonPositions, textAndSize.drawWithSize);
                         if(!streetNames.ContainsKey(tileKey))
                         {                            
                             streetNames.Add(tileKey, new List<StreetName>());
                         }
                         streetNames[tileKey].Add(streetName);
-
+                        UpdateStreetName(streetName);
                     }
                 }
                 yield return null;
@@ -187,7 +187,6 @@ namespace Netherlands3D.Functionalities.Toponyms
 
         private void UpdateStreetName(StreetName streetName)
         {
-
             Vector3[] pathPoints = streetName.pathPoints;
             float splineLength = streetName.splineLength;
             //debug spline
@@ -211,7 +210,12 @@ namespace Netherlands3D.Functionalities.Toponyms
             var textInfo = streetName.text.textInfo;
             var mesh = textInfo.meshInfo[0].mesh;
             var vertices = streetName.vertices;
+            var uvs0 = mesh.uv;
+            var normals = mesh.normals;
+            var tangents = mesh.tangents;
+
             TextMeshPro tmp = streetName.text;
+            tmp.enabled = true;
             Transform tmpTransform = tmp.transform;
 
             Vector3 leftVertex = textInfo.characterInfo[0].bottomLeft;
@@ -231,11 +235,11 @@ namespace Netherlands3D.Functionalities.Toponyms
             if (scale > 1)
                 scale = 1;
 
-
+            int characterCount = textInfo.characterCount;
             float minY = float.MaxValue;
             float maxY = float.MinValue;
             float baseLineY = float.MaxValue;
-            for (int i = 0; i < textInfo.characterCount; i++)
+            for (int i = 0; i < characterCount; i++)
             {
                 var ci = textInfo.characterInfo[i];
                 if (!ci.isVisible) continue;
@@ -246,20 +250,16 @@ namespace Netherlands3D.Functionalities.Toponyms
             }
 
             float centerY = (minY + maxY) * 0.5f;
-            for (int i = 0; i < textInfo.characterCount; i++)
+            for (int i = 0; i < characterCount; i++)
             {
-                var charInfo = textInfo.characterInfo[textInfo.characterCount - 1 - i];
+                var charInfo = textInfo.characterInfo[characterCount - 1 - i];
                 if (!charInfo.isVisible) continue; //because of trailing or whitespaces messing up the calculations
 
                 int vertexIndex = charInfo.vertexIndex;
                 float charMidY = (charInfo.topLeft.y + charInfo.bottomLeft.y) * 0.5f;
                 float charMidX = (charInfo.bottomLeft.x + charInfo.bottomRight.x) * 0.5f;
 
-                Vector3 charCenter = new Vector3(
-                    charMidX,
-                    charInfo.baseLine - baseLineY, 
-                    0f
-                );
+                Vector3 charCenter = new Vector3(charMidX, charInfo.baseLine - baseLineY, 0f);
                 Vector3 worldCenter = tmpTransform.TransformPoint(charCenter) - tmpTransform.position;  
                 Vector3 charMidXWorld = tmpTransform.TransformPoint(Vector3.right * charMidX);
                 float charDist = Vector3.Distance(charMidXWorld, worldLeft);
@@ -282,23 +282,35 @@ namespace Netherlands3D.Functionalities.Toponyms
                 }
             }
 
+            //we need to clear unused data from the buffer to prevent rendering artefacts
+            for (int i = characterCount; i < textInfo.meshInfo[0].vertices.Length / 4; i++)
+            {
+                int vi = i * 4;
+                for (int j = 0; j < 4; j++)
+                {
+                    int idx = vi + j;
+                    vertices[idx] = Vector3.zero;
+                    uvs0[idx] = Vector2.zero;
+                    normals[idx] = Vector3.back;
+                    tangents[idx] = Vector4.zero;
+                }
+            }
+
             mesh.vertices = vertices;
+            mesh.uv = uvs0;
+            mesh.normals = normals;
+            mesh.tangents = tangents;
             mesh.RecalculateBounds();
             streetName.text.UpdateGeometry(mesh, 0);
         }
 
         private void Update()
-        {
-            //if (Math.Abs(WorldTransform.Coordinate.value1 - previousCoordinate.value1) > 0.0001d ||
-            //   Math.Abs(WorldTransform.Coordinate.value2 - previousCoordinate.value2) > 0.0001d ||
-            //   Math.Abs(WorldTransform.Coordinate.value3 - previousCoordinate.value3) > 0.0001d)
-            //{
-            //    previousCoordinate = WorldTransform.Coordinate;
-
-            if(mainCamera.transform.position.y != previousPosition.y)
+        {           
+            //we changed height from zooming or yaw
+            if(mainCamera.transform.position.y != previousPosition.y || mainCamera.transform.rotation.eulerAngles.y != previousRotation.y)
             {
-                textMaterial.SetFloat(ShaderUtilities.ID_GradientScale, mainCamera.transform.position.y * 0.1f);
                 previousPosition = mainCamera.transform.position;
+                previousRotation = mainCamera.transform.rotation.eulerAngles;
                 foreach (KeyValuePair<Vector2Int, List<StreetName>> kv in streetNames)
                 {
                     List<StreetName> list = kv.Value;
