@@ -39,6 +39,7 @@ namespace Netherlands3D.Functionalities.Toponyms
         private Camera mainCamera;
         //max updated streetnames per tile per frame, feels like 30 should be good for performance
         private int namesPerFrame = 30;
+        private float maxScale = 0.5f;
 
         public struct StreetName
         {
@@ -247,8 +248,8 @@ namespace Netherlands3D.Functionalities.Toponyms
             {
                 scale = splineLength / textLength;
             }
-            if (scale > 1)
-                scale = 1;
+            if (scale > maxScale)
+                scale = maxScale;
           
             for (int i = 0; i < characterCount; i++)
             {
