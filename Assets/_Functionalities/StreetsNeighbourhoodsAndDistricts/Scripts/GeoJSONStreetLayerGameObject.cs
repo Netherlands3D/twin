@@ -31,7 +31,7 @@ namespace Netherlands3D.Functionalities.Toponyms
     public class GeoJSONStreetLayerGameObject : GeoJSONTextLayer
     {
         private string geoJsonUrlGeometry = "https://service.pdok.nl/rws/nwbwegen/wfs/v1_0?service=WFS&version=2.0.0&request=GetFeature&typeNames=nwbwegen:wegvakken&srsName=EPSG:4326&outputFormat=application/json&bbox=";
-        private static Dictionary<string, bool> uniqueNames = new Dictionary<string, bool>();
+        private static Dictionary<Vector2Int, List<string>> uniqueNames = new Dictionary<Vector2Int, List<string>>();
         private static Dictionary<Vector2Int, List<StreetName>> streetNames = new Dictionary<Vector2Int, List<StreetName>>();
         private static Dictionary<Vector2Int, List<StreetName>> streetNamesUpdateQueue = new Dictionary<Vector2Int, List<StreetName>>();
         private Vector3 previousPosition;
@@ -133,6 +133,7 @@ namespace Netherlands3D.Functionalities.Toponyms
                         Destroy(streetName.text);
                 streetNames.Remove(tileKey);
                 streetNamesUpdateQueue.Remove(tileKey);
+                uniqueNames.Remove(tileKey);
 
                 Destroy(tiles[tileKey].gameObject);
             }
@@ -148,16 +149,17 @@ namespace Netherlands3D.Functionalities.Toponyms
 
             if (streetnameRequest.result == UnityWebRequest.Result.Success)
             {
-                uniqueNames.Clear();
+                if (!uniqueNames.ContainsKey(tileKey))
+                    uniqueNames.Add(tileKey, new List<string>());
+                uniqueNames[tileKey].Clear();
                 GeoJsonFeatureCollection featureCollection = JsonConvert.DeserializeObject<GeoJsonFeatureCollection>(streetnameRequest.downloadHandler.text);
                 foreach (var feature in featureCollection.features)
                 {
-                    string naam = feature.properties["sttNaam"].ToString();
-
-                    if (uniqueNames.ContainsKey(naam))
+                    string name = feature.properties["sttNaam"].ToString();
+                    if (IsNamePresent(name))
                         continue;
 
-                    uniqueNames.Add(naam, true);
+                    uniqueNames[tileKey].Add(name);
                     var coordinatesToken = feature.geometry.coordinates as JArray;
 
                     List<Coordinate> positions = new();
@@ -185,10 +187,10 @@ namespace Netherlands3D.Functionalities.Toponyms
                     foreach (TextsAndSize textAndSize in textsAndSizes)
                     {
                         var textObject = Instantiate(textPrefab);
-                        textObject.name = naam;
+                        textObject.name = name;
                         textObject.transform.SetParent(tile.gameObject.transform, true);
                         TextMeshPro tmp = textObject.GetComponent<TextMeshPro>();
-                        StreetName streetName = new StreetName(naam, tmp, latLonPositions, textAndSize.drawWithSize);
+                        StreetName streetName = new StreetName(name, tmp, latLonPositions, textAndSize.drawWithSize);
                         if(!streetNames.ContainsKey(tileKey))
                         {                            
                             streetNames.Add(tileKey, new List<StreetName>());
@@ -201,6 +203,14 @@ namespace Netherlands3D.Functionalities.Toponyms
             }
             previousPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
             callback?.Invoke(tileChange);
+        }
+
+        private bool IsNamePresent(string name)
+        {
+            foreach(KeyValuePair<Vector2Int, List<string>> kv in uniqueNames)
+                if(kv.Value.Contains(name))
+                    return true;
+            return false;
         }
 
         private void UpdateStreetName(StreetName streetName)
