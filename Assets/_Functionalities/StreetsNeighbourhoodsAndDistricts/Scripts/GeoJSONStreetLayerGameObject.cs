@@ -53,8 +53,17 @@ namespace Netherlands3D.Functionalities.Toponyms
                 pathPoints = new Vector3[positions.Length];
                 text.text = name;
                 text.ForceMeshUpdate();
-                originalVertices = text.textInfo.meshInfo[0].vertices;
+                var meshInfo = text.textInfo.meshInfo[0];
+                originalVertices = meshInfo.vertices;
+                originalUvs = new Vector2[meshInfo.uvs0.Length];
+                var uv0array = meshInfo.uvs0;
+                for(int i = 0; i < uv0array.Length; i++)
+                    originalUvs[i] = uv0array[i];
+
+                //originalNormals = meshInfo.normals;
+                //originalTangents = meshInfo.tangents;
                 vertices = new Vector3[originalVertices.Length];
+                uvs = new Vector2[originalUvs.Length];
 
                 splineLength = 0f;
                 for (int i = 0; i < positions.Length; i++)
@@ -75,9 +84,16 @@ namespace Netherlands3D.Functionalities.Toponyms
             public float splineLength;
             public TextMeshPro text;
             public Coordinate[] positions;
-            public Vector3[] pathPoints;
-            public Vector3[] originalVertices;
+            public Vector3[] pathPoints; 
             public Vector3[] vertices;
+            public Vector2[] uvs;
+
+            public Vector3[] originalVertices;
+            public Vector2[] originalUvs;
+            //public Vector3[] originalNormals;
+            //public Vector4[] originalTangents;
+
+
         }
 
         public override void Start()
@@ -210,9 +226,9 @@ namespace Netherlands3D.Functionalities.Toponyms
             var textInfo = streetName.text.textInfo;
             var mesh = textInfo.meshInfo[0].mesh;
             var vertices = streetName.vertices;
-            var uvs0 = mesh.uv;
-            var normals = mesh.normals;
-            var tangents = mesh.tangents;
+            var uvs = streetName.uvs;
+            //var normals = mesh.normals;
+            //var tangents = mesh.tangents;
 
             TextMeshPro tmp = streetName.text;
             tmp.enabled = true;
@@ -278,8 +294,9 @@ namespace Netherlands3D.Functionalities.Toponyms
                     Quaternion rot = Quaternion.LookRotation(forward, Vector3.up);
                     rot *= Quaternion.Euler(90, Mathf.Sign(dot) * -90, 0);
                     Vector3 rotatedWorld = pos + rot * offsetFromCenter;
-                    vertices[vertexIndex + j] = tmpTransform.InverseTransformPoint(rotatedWorld);                    
-                }
+                    vertices[vertexIndex + j] = tmpTransform.InverseTransformPoint(rotatedWorld); 
+                    uvs[vertexIndex + j] = streetName.originalUvs[vertexIndex + j];
+                }                
             }
 
             //we need to clear unused data from the buffer to prevent rendering artefacts
@@ -290,16 +307,16 @@ namespace Netherlands3D.Functionalities.Toponyms
                 {
                     int idx = vi + j;
                     vertices[idx] = Vector3.zero;
-                    uvs0[idx] = Vector2.zero;
-                    normals[idx] = Vector3.back;
-                    tangents[idx] = Vector4.zero;
+                    uvs[idx] = Vector2.zero;
+                    //normals[idx] = Vector3.back;
+                    //tangents[idx] = Vector4.zero;
                 }
             }
 
             mesh.vertices = vertices;
-            mesh.uv = uvs0;
-            mesh.normals = normals;
-            mesh.tangents = tangents;
+            mesh.uv = uvs;
+            //mesh.normals = normals;
+            //mesh.tangents = tangents;
             mesh.RecalculateBounds();
             streetName.text.UpdateGeometry(mesh, 0);
         }
