@@ -15,7 +15,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public override BoundingBox Bounds => polygonBounds;
         public PolygonVisualisation PolygonVisualisation { get; private set; }
         public Material PolygonMeshMaterial;
-
+        [SerializeField] private Material polygonMaskMaterial;
+        
         /// <summary>
         /// Create or update PolygonVisualisation
         /// </summary>
@@ -57,6 +58,30 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         protected virtual void OnDestroy()
         {
             Destroy(PolygonVisualisation.gameObject);
+        }
+
+        public void SetMaterial(bool isMask, int bitIndex)
+        {
+            if (bitIndex > 23)
+                throw new IndexOutOfRangeException("bitIndex must be 23 or smaller to avoid floating point rounding errors since we must use a float formatted masking texture");
+            
+            int maskValue = (1 << bitIndex);
+            // interpret the bitshifted mask value as a float without moving the bits around
+            // due to the way floats work, the resulting value will be between 0 and 1 for the first 23 bits 
+            // float floatMaskValue = BitConverter.Int32BitsToSingle(maskValue); 
+
+            Debug.Log("floatmaskvalue " + maskValue);
+            
+            var newMat = new Material(polygonMaskMaterial);
+            newMat.color = new Color(maskValue, 0, 0, 1);
+            
+            if (isMask)
+                PolygonVisualisation.VisualisationMaterial = newMat;
+            // else
+            //     PolygonVisualisation.VisualisationMaterial = PolygonMeshMaterial;
+
+            var r = (int)newMat.color.r;
+            Debug.Log("set r color to: " + System.Convert.ToString(r, 2).PadLeft(32, '0'));
         }
     }
 }

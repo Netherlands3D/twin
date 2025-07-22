@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -66,6 +67,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             set => polygonPropertyData.InvertMask = value;
         }
 
+        public int maskBitIndex = -1;
+        private static int nextBitMaskIndex = 0;
+        
         [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
 
         [JsonConstructor]
@@ -80,6 +84,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             //Add shifter that manipulates the polygon if the world origin is shifted
             Origin.current.onPostShift.AddListener(ShiftedPolygon);
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+            polygonPropertyData.OnIsMaskChanged.AddListener(OnIsMaskChanged);
+            polygonPropertyData.OnInvertMaskChanged.AddListener(OnInvertMaskChanged);
         }
 
         public PolygonSelectionLayer(string name, string prefabId, List<Vector3> polygonUnityInput, ShapeType shapeType, float defaultLineWidth = 10f) : base(name, prefabId, new List<LayerPropertyData>())
@@ -95,6 +101,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             //Add shifter that manipulates the polygon if the world origin is shifted
             Origin.current.onPostShift.AddListener(ShiftedPolygon);
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+            polygonPropertyData.OnIsMaskChanged.AddListener(OnIsMaskChanged);
+            polygonPropertyData.OnInvertMaskChanged.AddListener(OnInvertMaskChanged);
         }
 
         private static List<LayerPropertyData> CreateNewProperties()
@@ -108,6 +116,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
             Origin.current.onPostShift.RemoveListener(ShiftedPolygon);
+            polygonPropertyData.OnIsMaskChanged.RemoveListener(OnIsMaskChanged);
+            polygonPropertyData.OnInvertMaskChanged.RemoveListener(OnInvertMaskChanged);
         }
 
         private void ShiftedPolygon(Coordinate fromOrigin, Coordinate toOrigin)
@@ -270,5 +280,64 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 SetShape(OriginalPolygon); //initialize the shape again with properties (use shape instead of setLine to ensure polygon is also 
             }
         }
+        
+        private void OnIsMaskChanged(bool isMask)
+        {
+            var layer = GetLayer(isMask, InvertMask);
+            SetPolygonLayer(layer);
+
+            if (isMask && maskBitIndex < 0)
+            {
+                maskBitIndex = nextBitMaskIndex;
+                nextBitMaskIndex++;
+            }
+
+            Debug.Log(Name + "has bit index: " + maskBitIndex);
+            SetMaskingChannel(maskBitIndex);
+        }
+
+
+        /// <summary>
+        /// Maskes are rendered to a texture, each bit of the texture is a masking channel, where a mask pixel is written to.
+        /// </summary>
+        /// <param name="bitIndex"></param>
+        private void SetMaskingChannel(int bitIndex)
+        {
+            PolygonVisualisation.SetMaterial(IsMask, bitIndex);
+        }
+
+        private void OnInvertMaskChanged(bool invert)
+        {
+            var layer = GetLayer(IsMask, invert);
+            SetPolygonLayer(layer);
+            SetMaskingChannel(0);
+        }
+        
+        private void SetPolygonLayer(LayerMask layer)
+        {
+            if (layer == LayerMask.NameToLayer("PolygonMaskInverted"))
+                PolygonProjectionMask.AddInvertedMask(PolygonVisualisation.gameObject);
+            else
+                PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject);
+            
+            foreach (Transform t in PolygonVisualisation.gameObject.transform)
+            {
+                t.gameObject.gameObject.layer = layer;
+            }
+
+            PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
+        }
+
+        private LayerMask GetLayer(bool isMask, bool invert)
+        {
+            var layer = LayerMask.NameToLayer("Projected");
+            if (isMask && !invert)
+                layer = LayerMask.NameToLayer("PolygonMask");
+            if (isMask && invert)
+                layer = LayerMask.NameToLayer("PolygonMaskInverted");
+
+            return layer;
+        }
     }
 }
+

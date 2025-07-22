@@ -48,7 +48,7 @@ namespace Netherlands3D
             if(invertedMasks.Count > 0)
                 maskInvertCamera.backgroundColor = Color.clear;
             else
-                maskInvertCamera.backgroundColor = Color.black;
+                maskInvertCamera.backgroundColor = Color.white;
         }
         
         private void SetShaderMaskVectors()
