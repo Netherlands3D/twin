@@ -6,6 +6,8 @@
     /// </summary>
     public static class RelationTypes
     {
+        public static string[] next = { "next"};
+        public static string[] prev = { "prev"};
         public static string[] self = { "self" };
         public static string[] items = { "items" };
         public static string[] conformance = { "conformance", "http://www.opengis.net/def/rel/ogc/1.0/conformance" };

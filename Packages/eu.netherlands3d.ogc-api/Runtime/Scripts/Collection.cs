@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using GeoJSON.Net.Feature;
 using KindMen.Uxios.Api;
+using Netherlands3D.OgcApi.ExtensionMethods;
 using Netherlands3D.OgcApi.JsonConverters;
+using Netherlands3D.OgcApi.Pagination;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -40,10 +42,9 @@ namespace Netherlands3D.OgcApi
         [JsonExtensionData]
         public IDictionary<string, JToken> ExtensionData { get; set; } = new Dictionary<string, JToken>();
 
-        public async Task<Results<FeatureCollection>> Fetch()
+        public async Task<Results<FeatureCollection>> Fetch(int? limit = null, int? offset = null)
         {
-            var itemsLink = FindLinksByRelationAndFormat(RelationTypes.items, Formats.geojson)
-                .FirstOrDefault()?.Href;
+            var itemsLink = Links.FirstBy(RelationTypes.items, Formats.geojson)?.Href;
 
             Uri uri = null;
             if (itemsLink != null)
@@ -54,8 +55,7 @@ namespace Netherlands3D.OgcApi
             // Some API's don't follow the spec, so we are going to infer as a last resort
             if (uri == null)
             {
-                itemsLink = FindLinksByRelationAndFormat(RelationTypes.self, Formats.json)
-                    .FirstOrDefault()?.Href;
+                itemsLink = Links.FirstBy(RelationTypes.self, Formats.json)?.Href;
                 
                 if (itemsLink == null) throw new Exception("Unable to fetch collection items, no links found");
 
@@ -64,12 +64,11 @@ namespace Netherlands3D.OgcApi
                 uri = uriBuilder.Uri;
             }
 
-            return await new Resource<Results<FeatureCollection>>(uri).Value;
-        }
+            var resource = new Resource<Results<FeatureCollection>>(uri);
+            if (offset != null) resource.With("offset", offset.ToString());
+            if (limit != null) resource.With("limit", limit.ToString());
 
-        private IEnumerable<Link> FindLinksByRelationAndFormat(string[] typeOfRelation, string[] typeOfFormat)
-        {
-            return Links.Where(link => link.IsTypeOfRelation(typeOfRelation) && link.IsOfFormat(typeOfFormat));
+            return await resource.Value;
         }
     }
 }

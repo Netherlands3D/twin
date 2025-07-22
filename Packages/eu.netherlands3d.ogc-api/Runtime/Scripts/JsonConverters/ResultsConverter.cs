@@ -1,46 +1,16 @@
 ﻿using System;
+using Netherlands3D.OgcApi.Pagination;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Netherlands3D.OgcApi
+namespace Netherlands3D.OgcApi.JsonConverters
 {
-    public class Results<T>
-    {
-        [JsonProperty("timeStamp", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime? TimeStamp { get; set; } = null;
-
-        [JsonProperty("numberMatched")] public long NumberMatched { get; set; } = 0;
-
-        [JsonProperty("numberReturned")] public long NumberReturned { get; set; } = 0;
-
-        [JsonIgnore] public T Value { get; set; }
-
-        public Results()
-        {
-        }
-
-        public Results(T value)
-        {
-            Value = value;
-        }
-    }
-
     public class ResultsConverter<T> : JsonConverter<Results<T>>
     {
-        private readonly string numberMatchedFieldName;
-        private readonly string numberReturnedFieldName;
-        private readonly string timeStampFieldName;
-
-        public ResultsConverter(
-            string numberMatchedFieldName = "numberReturned",
-            string numberReturnedFieldName = "numberMatched",
-            string timeStampFieldName = "timeStamp"
-        )
-        {
-            this.numberMatchedFieldName = numberMatchedFieldName;
-            this.numberReturnedFieldName = numberReturnedFieldName;
-            this.timeStampFieldName = timeStampFieldName;
-        }
+        private const string numberMatchedFieldName = "numberMatched";
+        private const string numberReturnedFieldName = "numberReturned";
+        private const string timeStampFieldName = "timeStamp";
+        private const string linksFieldName = "links";
 
         public override Results<T> ReadJson(JsonReader reader,
             Type objectType,
@@ -53,18 +23,24 @@ namespace Netherlands3D.OgcApi
             var timeStamp = jo.Value<DateTime?>(timeStampFieldName);
             var matched = jo.Value<long?>(numberMatchedFieldName) ?? 0;
             var returned = jo.Value<long?>(numberReturnedFieldName) ?? 0;
+            var linksToken = jo[linksFieldName];
+            var links = linksToken != null
+                ? linksToken.ToObject<Link[]>(serializer)
+                : Array.Empty<Link>();
+            
             jo.Remove(timeStampFieldName);
             jo.Remove(numberMatchedFieldName);
             jo.Remove(numberReturnedFieldName);
+            jo.Remove(linksFieldName);
 
             var val = jo.ToObject<T>(serializer);
 
-            return new Results<T>
+            return new Results<T>(val)
             {
                 TimeStamp = timeStamp,
                 NumberMatched = matched,
                 NumberReturned = returned,
-                Value = val
+                Links = links
             };
         }
 
@@ -77,6 +53,7 @@ namespace Netherlands3D.OgcApi
             jo[timeStampFieldName] = wrapper.TimeStamp;
             jo[numberMatchedFieldName] = wrapper.NumberMatched;
             jo[numberReturnedFieldName] = wrapper.NumberReturned;
+            jo[linksFieldName] = JToken.FromObject(wrapper.Links, serializer);
 
             jo.WriteTo(writer);
         }
