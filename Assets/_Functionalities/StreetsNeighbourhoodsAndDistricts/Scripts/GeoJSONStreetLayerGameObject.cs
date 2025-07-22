@@ -25,10 +25,6 @@ using TMPro;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Netherlands3D.CartesianTiles;
-using System;
-using Netherlands3D.Twin.FloatingOrigin;
-using System.Linq;
-using Netherlands3D.Twin.ExtensionMethods;
 
 namespace Netherlands3D.Functionalities.Toponyms
 {
@@ -38,14 +34,26 @@ namespace Netherlands3D.Functionalities.Toponyms
         private static Dictionary<string, bool> uniqueNames = new Dictionary<string, bool>();
         private static Dictionary<Vector2Int, List<StreetName>> streetNames = new Dictionary<Vector2Int, List<StreetName>>();
         private static Dictionary<Vector2Int, List<StreetName>> streetNamesUpdateQueue = new Dictionary<Vector2Int, List<StreetName>>();
-        private Material textMaterial;
-        //private Coordinate previousCoordinate;       
         private Vector3 previousPosition;
         private Vector3 previousRotation;
         private Camera mainCamera;
+        //max updated streetnames per tile per frame, feels like 30 should be good for performance
+        private int namesPerFrame = 30;
 
         public struct StreetName
         {
+            public string name;
+            public float textSize;
+            public float splineLength;
+            public float baseLineY;
+            public TextMeshPro text;
+            public Coordinate[] positions;
+            public Vector3[] pathPoints;
+            public Vector3[] vertices;
+            public Vector2[] uvs;
+            public Vector3[] originalVertices;
+            public Vector2[] originalUvs;
+
             public StreetName(string name, TextMeshPro text, Coordinate[] positions, float textSize)
             {
                 this.name = name;
@@ -62,8 +70,6 @@ namespace Netherlands3D.Functionalities.Toponyms
                 for(int i = 0; i < uv0array.Length; i++)
                     originalUvs[i] = uv0array[i];
 
-                //originalNormals = meshInfo.normals;
-                //originalTangents = meshInfo.tangents;
                 vertices = new Vector3[originalVertices.Length];
                 uvs = new Vector2[originalUvs.Length];
 
@@ -93,34 +99,13 @@ namespace Netherlands3D.Functionalities.Toponyms
                     minY = Mathf.Min(minY, ci.bottomLeft.y);
                     maxY = Mathf.Max(maxY, ci.topLeft.y);
                     baseLineY = Mathf.Min(baseLineY, ci.baseLine);
-                }
-                float centerY = (minY + maxY) * 0.5f;
-            }            
-            public string name;
-            public float textSize;
-            public float splineLength;
-            public float baseLineY;
-            public TextMeshPro text;
-            public Coordinate[] positions;
-            public Vector3[] pathPoints; 
-            public Vector3[] vertices;
-            public Vector2[] uvs;
-
-            public Vector3[] originalVertices;
-            public Vector2[] originalUvs;
-            //public Vector3[] originalNormals;
-            //public Vector4[] originalTangents;
-
-
+                }             
+            }
         }
 
         public override void Start()
         {
             base.Start();
-            textMaterial = textPrefab.GetComponent<MeshRenderer>().sharedMaterial;
-            //this solves the problem for blurry characters at greater distances but is probably not the right way to handle this
-          
-
             mainCamera = Camera.main;
         }
 
@@ -150,8 +135,7 @@ namespace Netherlands3D.Functionalities.Toponyms
 
                 Destroy(tiles[tileKey].gameObject);
             }
-        }
-       
+        }       
 
         protected override IEnumerator DownloadTextNameData(TileChange tileChange, Tile tile, System.Action<TileChange> callback = null)
         {          
@@ -197,7 +181,6 @@ namespace Netherlands3D.Functionalities.Toponyms
                         }
                     }
                     Coordinate[] latLonPositions = positions.ToArray();
-
                     foreach (TextsAndSize textAndSize in textsAndSizes)
                     {
                         var textObject = Instantiate(textPrefab);
@@ -218,7 +201,6 @@ namespace Netherlands3D.Functionalities.Toponyms
             previousPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
             callback?.Invoke(tileChange);
         }
-
 
         private void UpdateStreetName(StreetName streetName)
         {
@@ -246,14 +228,11 @@ namespace Netherlands3D.Functionalities.Toponyms
             var mesh = textInfo.meshInfo[0].mesh;
             var vertices = streetName.vertices;
             var uvs = streetName.uvs;
-            //var normals = mesh.normals;
-            //var tangents = mesh.tangents;
             int vertexLength = textInfo.meshInfo[0].vertices.Length;
             int characterCount = textInfo.characterCount;
             TextMeshPro tmp = streetName.text;
             tmp.enabled = true;
             Transform tmpTransform = tmp.transform;
-
             Vector3 leftVertex = textInfo.characterInfo[0].bottomLeft;
             Vector3 rightVertex = textInfo.characterInfo[characterCount - 1].bottomRight;
             Vector3 worldLeft = tmpTransform.TransformPoint(leftVertex);
@@ -312,20 +291,15 @@ namespace Netherlands3D.Functionalities.Toponyms
                     int idx = vi + j;
                     vertices[idx] = Vector3.zero;
                     uvs[idx] = Vector2.zero;
-                    //normals[idx] = Vector3.back;
-                    //tangents[idx] = Vector4.zero;
                 }
             }
 
             mesh.vertices = vertices;
             mesh.uv = uvs;
-            //mesh.normals = normals;
-            //mesh.tangents = tangents;
             mesh.RecalculateBounds();
             streetName.text.UpdateGeometry(mesh, 0);
         }
-
-        private int namesPerFrame = 60;
+        
         private void Update()
         {           
             //we changed height from zooming or yaw
@@ -342,13 +316,16 @@ namespace Netherlands3D.Functionalities.Toponyms
                     streetNamesUpdateQueue[kv.Key].AddRange(list);
                 }
             }
+            //update in a queue to smooth out any spikes (large data will cause this)
             foreach (KeyValuePair<Vector2Int, List<StreetName>> kv in streetNamesUpdateQueue)
             {
                 int cnt = 0;
                 while (kv.Value.Count > 0)
                 {
-                    StreetName name = kv.Value[0];
-                    kv.Value.RemoveAt(0);
+                    //by randomly updating this we smooth it out a bit
+                    int rnd = Mathf.FloorToInt(UnityEngine.Random.value * kv.Value.Count);
+                    StreetName name = kv.Value[rnd];
+                    kv.Value.RemoveAt(rnd);
                     UpdateStreetName(name);
                     cnt++;
                     if (cnt > namesPerFrame)

@@ -23,7 +23,10 @@ namespace Netherlands3D.Twin.Samplers
         public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, int cullingMask = ~0)
         {
             if (activeRequests.Count > maxRequests)
+            {
+                callback.Invoke(Vector3.zero, false);
                 return;
+            }
 
             OpticalRequest opticalRequest = GetRequest();
             opticalRequest.SetCullingMask(cullingMask);
@@ -38,7 +41,10 @@ namespace Netherlands3D.Twin.Samplers
         public void GetWorldPointsAsync(Vector3[] screenPoints, Action<Vector3[], bool> callback, int cullingMask = ~0)
         {
             if (activeRequests.Count > maxRequests)
+            {
+                callback.Invoke(null, false);
                 return;
+            }
 
             MultiPointCallback multipointCallback = GetMultipointCallback();
             multipointCallback.SetCallbackCompletion(callback);

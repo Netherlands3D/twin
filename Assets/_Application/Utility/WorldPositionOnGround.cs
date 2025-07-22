@@ -40,7 +40,7 @@ namespace Netherlands3D
                 }
                 else
                 {
-                    UpdatePosition();
+                    Invoke(nameof(UpdatePosition), 1f); //lets retry in 1 sec or it will cause a stackoverflow
                 }
                 
             }, 1 << LayerMask.NameToLayer("Terrain"));
