@@ -1,19 +1,22 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KindMen.Uxios.Api;
-using Netherlands3D.OgcApi.Features;
+using Netherlands3D.OgcApi;
 
 namespace Netherlands3D.OgcApi
 {
     public class OgcApi
     {
-        private string BaseUrl { get; }
+        private readonly Resource<LandingPage> landingPageResource;
+        private readonly Resource<Collections> collectionsResource;
+        private readonly Resource<ConformanceDeclaration> conformanceResource;
 
         public OgcApi(string baseUrl)
         {
-            BaseUrl = baseUrl;
+            landingPageResource = new Resource<LandingPage>(new Uri($"{baseUrl}"));
+            collectionsResource = new Resource<Collections>(new Uri($"{baseUrl}/collections"));
+            conformanceResource = new Resource<ConformanceDeclaration>(new Uri($"{baseUrl}/conformance"));
         }
 
         public async Task<string> Title() => (await LandingPage()).Title;
@@ -22,20 +25,17 @@ namespace Netherlands3D.OgcApi
 
         public async Task<LandingPage> LandingPage()
         {
-            return await new Resource<LandingPage>(new Uri($"{BaseUrl}"))
-                .Value;
+            return await landingPageResource.Value;
         }
 
         public async Task<Collections> Collections()
         {
-            return await new Resource<Collections>(new Uri($"{BaseUrl}/collections"))
-                .Value;
+            return await collectionsResource.Value;
         }
 
         public async Task<ConformanceDeclaration> Conformance()
         {
-            return await new Resource<ConformanceDeclaration>(new Uri($"{BaseUrl}/conformance"))
-                .Value;
+            return await conformanceResource.Value;
         }
 
         public async Task<Collections> Catalogues()
@@ -44,6 +44,7 @@ namespace Netherlands3D.OgcApi
 
             return new Collections
             {
+                // using Linq instead of foreach to avoid allocating a List, or having to resize the array during loop
                 Items = collections.Items
                     .Where(collection => collection.ItemType is "catalog" or "record")
                     .ToArray(),

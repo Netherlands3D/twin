@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Netherlands3D.OgcApi.Features
+namespace Netherlands3D.OgcApi
 {
     [JsonObject]
     public class Collections
@@ -15,5 +17,11 @@ namespace Netherlands3D.OgcApi.Features
 
         [JsonExtensionData]
         public IDictionary<string, JToken> ExtensionData { get; set; } = new Dictionary<string, JToken>();
+
+        [CanBeNull]
+        public Collection FindById(string id)
+        {
+            return Items.FirstOrDefault(collection => collection.Id == id);
+        }
     }
 }

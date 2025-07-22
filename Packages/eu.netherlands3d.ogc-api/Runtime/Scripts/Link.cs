@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -27,5 +28,25 @@ namespace Netherlands3D.OgcApi
 
         [JsonExtensionData]
         public IDictionary<string, JToken> ExtensionData { get; set; } = new Dictionary<string, JToken>();
+
+        public bool IsOfFormat(string[] format)
+        {
+            return format.Contains(Type);
+        }
+
+        public bool IsOfFormat(string format)
+        {
+            return string.Compare(format, Type, System.StringComparison.OrdinalIgnoreCase) == 0;
+        }
+
+        public bool IsTypeOfRelation(string[] type)
+        {
+            return type.Contains(Rel);
+        }
+
+        public bool IsTypeOfRelation(string type)
+        {
+            return string.Compare(type, Rel, System.StringComparison.OrdinalIgnoreCase) == 0;
+        }
     }
 }

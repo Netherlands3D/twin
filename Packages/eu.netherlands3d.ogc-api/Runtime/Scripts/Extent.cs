@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Netherlands3D.OgcApi.Features
+namespace Netherlands3D.OgcApi
 {
     [JsonObject]
     public class Extent

@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Netherlands3D.OgcApi.Features;
+using Netherlands3D.OgcApi;
 using Netherlands3D.OgcApi.Tests.Fixtures;
 using NUnit.Framework;
 
@@ -9,6 +9,7 @@ namespace Netherlands3D.OgcApi.Tests
     public class OgcApiTests
     {
         static readonly OgcApiFixture[] Cases = {
+            new Pdok(),
             new PyGeoAPI(),
             new DigilabDemoAPI()
         };
@@ -70,6 +71,30 @@ namespace Netherlands3D.OgcApi.Tests
             Assert.IsNotNull(collections, "Collections was null");
             Assert.IsNotNull(collections.Items, "Collections.Items was null");
             Assert.IsTrue(collections.Items.Length > 0, "No collections returned");
+        }
+
+        [Test]
+        public async Task CanFetchCollectionsById()
+        {
+            var id = fixture.Catalogues[0].Id;
+            Collection collection = (await ogcApi.Collections()).FindById(id);
+
+            Assert.IsInstanceOf<Collection>(collection, $"Collection {id} is not found");
+        }
+
+        [Test]
+        public async Task CanFetchCollectionItems()
+        {
+            var id = fixture.Catalogues[0].Id;
+            Collection collection = (await ogcApi.Collections()).FindById(id);
+
+            Assert.IsNotNull(collection, $"Collection {id} was null");
+            var items = await collection.Fetch();
+
+            Assert.IsNotNull(items, $"Items for collection {id} was null");
+            Assert.IsNotNull(items.Value, $"Feature collection in results for collection {id} was null");
+           
+            Assert.IsTrue(items.Value.Features.Count > 0, "No features were found in the collection");
         }
 
         [Test]

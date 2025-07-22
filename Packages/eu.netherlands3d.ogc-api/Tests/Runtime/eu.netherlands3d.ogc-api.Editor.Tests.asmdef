@@ -4,7 +4,8 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "eu.netherlands3d.ogc-api.Runtime"
+        "eu.netherlands3d.ogc-api.Runtime",
+        "GeoJSON.NET"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
