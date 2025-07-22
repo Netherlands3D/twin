@@ -28,6 +28,7 @@ using Netherlands3D.CartesianTiles;
 using System;
 using Netherlands3D.Twin.FloatingOrigin;
 using System.Linq;
+using Netherlands3D.Twin.ExtensionMethods;
 
 namespace Netherlands3D.Functionalities.Toponyms
 {
@@ -36,6 +37,7 @@ namespace Netherlands3D.Functionalities.Toponyms
         private string geoJsonUrlGeometry = "https://service.pdok.nl/rws/nwbwegen/wfs/v1_0?service=WFS&version=2.0.0&request=GetFeature&typeNames=nwbwegen:wegvakken&srsName=EPSG:4326&outputFormat=application/json&bbox=";
         private static Dictionary<string, bool> uniqueNames = new Dictionary<string, bool>();
         private static Dictionary<Vector2Int, List<StreetName>> streetNames = new Dictionary<Vector2Int, List<StreetName>>();
+        private static Dictionary<Vector2Int, List<StreetName>> streetNamesUpdateQueue = new Dictionary<Vector2Int, List<StreetName>>();
         private Material textMaterial;
         //private Coordinate previousCoordinate;       
         private Vector3 previousPosition;
@@ -144,6 +146,7 @@ namespace Netherlands3D.Functionalities.Toponyms
                     foreach(StreetName streetName in streetNames[tileKey])
                         Destroy(streetName.text);
                 streetNames.Remove(tileKey);
+                streetNamesUpdateQueue.Remove(tileKey);
 
                 Destroy(tiles[tileKey].gameObject);
             }
@@ -279,7 +282,6 @@ namespace Netherlands3D.Functionalities.Toponyms
 
                 Vector3 charCenter = new Vector3(charMidX, charInfo.baseLine - streetName.baseLineY, 0f);
                 Vector3 charWorldCenter = tmpTransform.TransformPoint(charCenter);
-                Vector3 worldCenter = charWorldCenter - tmpTransform.position;  
                 Vector3 charMidXWorld = tmpTransform.TransformPoint(Vector3.right * charMidX);
                 float charDist = Vector3.Distance(charMidXWorld, worldLeft);
                 float offset = reverse ? -0.5f * textLength + charDist : 0.5f * textLength - charDist;
@@ -323,6 +325,7 @@ namespace Netherlands3D.Functionalities.Toponyms
             streetName.text.UpdateGeometry(mesh, 0);
         }
 
+        private int namesPerFrame = 60;
         private void Update()
         {           
             //we changed height from zooming or yaw
@@ -333,10 +336,25 @@ namespace Netherlands3D.Functionalities.Toponyms
                 foreach (KeyValuePair<Vector2Int, List<StreetName>> kv in streetNames)
                 {
                     List<StreetName> list = kv.Value;
-                    foreach (StreetName streetName in list)
-                        UpdateStreetName(streetName);
+                    if (!streetNamesUpdateQueue.ContainsKey(kv.Key))
+                        streetNamesUpdateQueue.Add(kv.Key, new List<StreetName>());
+                    streetNamesUpdateQueue[kv.Key].Clear();
+                    streetNamesUpdateQueue[kv.Key].AddRange(list);
                 }
-            }            
+            }
+            foreach (KeyValuePair<Vector2Int, List<StreetName>> kv in streetNamesUpdateQueue)
+            {
+                int cnt = 0;
+                while (kv.Value.Count > 0)
+                {
+                    StreetName name = kv.Value[0];
+                    kv.Value.RemoveAt(0);
+                    UpdateStreetName(name);
+                    cnt++;
+                    if (cnt > namesPerFrame)
+                        break;
+                }
+            }
         }
 
         public static (Vector3 pos, Vector3 forward) SampleSplineAtDistance(Vector3[] points, float distance)
