@@ -230,7 +230,9 @@ namespace Netherlands3D.Functionalities.Toponyms
 
             //do we need to flip text upside down relative to the camera forward angle
             float dot = Vector3.Dot(startForward, mainCamera.transform.right);
+            float dotUp = Vector3.Dot(mainCamera.transform.forward, Vector3.up);
             bool reverse = dot > 0;
+            bool isUp = dotUp > 0;
 
             streetName.text.gameObject.transform.position = new Vector3(startPos.x, startHeight, startPos.z);
             streetName.text.gameObject.transform.localScale = Vector3.one * streetName.textSize;
@@ -258,8 +260,9 @@ namespace Netherlands3D.Functionalities.Toponyms
             {
                 scale = splineLength / textLength;
             }
-            if (scale > maxScale)
-                scale = maxScale;
+            float distToGround = Mathf.Abs(mainCamera.transform.position.y / 1000);
+            if (scale > maxScale + distToGround)
+                scale = maxScale + distToGround;
           
             for (int i = 0; i < characterCount; i++)
             {
@@ -278,7 +281,7 @@ namespace Netherlands3D.Functionalities.Toponyms
                 float dist = 0.5f * splineLength + offset * scale;
                 (Vector3 pos, Vector3 forward) = SampleSplineAtDistance(pathPoints, dist);
                 Quaternion rot = Quaternion.LookRotation(forward, Vector3.up);
-                Quaternion localRot = rot * Quaternion.Euler(90, Mathf.Sign(dot) * -90, 0);
+                Quaternion localRot = rot * Quaternion.Euler(Mathf.Sign(dotUp) * -90, Mathf.Sign(dot) * -90, 0);
                 Vector3 localPos = pos - startPos;
                 pos.y = startHeight;
                 for (int j = 0; j < 4; j++)
