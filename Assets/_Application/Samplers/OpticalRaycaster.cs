@@ -17,9 +17,14 @@ namespace Netherlands3D.Twin.Samplers
         private List<OpticalRequest> activeRequests = new List<OpticalRequest>();
         private Stack<MultiPointCallback> requestMultipointPool = new Stack<MultiPointCallback>();
 
+        private const int maxRequests = 3;
+
 
         public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, int cullingMask = ~0)
         {
+            if (activeRequests.Count > maxRequests)
+                return;
+
             OpticalRequest opticalRequest = GetRequest();
             opticalRequest.SetCullingMask(cullingMask);
             opticalRequest.SetScreenPoint(screenPoint);
@@ -32,6 +37,9 @@ namespace Netherlands3D.Twin.Samplers
 
         public void GetWorldPointsAsync(Vector3[] screenPoints, Action<Vector3[], bool> callback, int cullingMask = ~0)
         {
+            if (activeRequests.Count > maxRequests)
+                return;
+
             MultiPointCallback multipointCallback = GetMultipointCallback();
             multipointCallback.SetCallbackCompletion(callback);
 
@@ -51,6 +59,7 @@ namespace Netherlands3D.Twin.Samplers
         private void Update()
         {
             if (activeRequests.Count == 0) return;
+
 
             for(int i = activeRequests.Count - 1; i >= 0; i--) 
             {

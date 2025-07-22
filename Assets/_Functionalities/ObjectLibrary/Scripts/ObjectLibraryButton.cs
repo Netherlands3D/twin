@@ -41,7 +41,8 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
 
         private void SpawnObject(Vector3 opticalSpawnPoint, bool hasHit)
         {
-            SpawnObject(opticalSpawnPoint, prefab.transform.rotation);
+            if(hasHit)
+                SpawnObject(opticalSpawnPoint, prefab.transform.rotation);
         }
         
         private void SpawnObject(Vector3 opticalSpawnPoint, Quaternion rotation)
