@@ -1,0 +1,17 @@
+{
+    "name": "eu.netherlands3d.ogc-api.Runtime",
+    "rootNamespace": "Netherlands3D.OgcApi",
+    "references": [
+        "GUID:33a0d05a98c744ae9baf0f37b6cd5e93",
+        "GUID:89a9652a8b22fb74b912223ceba2da14"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
