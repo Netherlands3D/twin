@@ -25,6 +25,7 @@ using TMPro;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Netherlands3D.CartesianTiles;
+using System;
 
 namespace Netherlands3D.Functionalities.Toponyms
 {
@@ -65,7 +66,7 @@ namespace Netherlands3D.Functionalities.Toponyms
                 originalVertices = meshInfo.vertices;
                 originalUvs = new Vector2[meshInfo.uvs0.Length];
                 var uv0array = meshInfo.uvs0;
-                for(int i = 0; i < uv0array.Length; i++)
+                for (int i = 0; i < uv0array.Length; i++)
                     originalUvs[i] = uv0array[i];
 
                 vertices = new Vector3[originalVertices.Length];
@@ -151,6 +152,7 @@ namespace Netherlands3D.Functionalities.Toponyms
                     uniqueNames.Add(tileKey, new List<string>());
                 uniqueNames[tileKey].Clear();
                 GeoJsonFeatureCollection featureCollection = JsonConvert.DeserializeObject<GeoJsonFeatureCollection>(streetnameRequest.downloadHandler.text);
+                int parses = 0;
                 foreach (var feature in featureCollection.features)
                 {
                     string name = feature.properties["sttNaam"].ToString();
@@ -195,6 +197,12 @@ namespace Netherlands3D.Functionalities.Toponyms
                         }
                         streetNames[tileKey].Add(streetName);
                         UpdateStreetName(streetName);
+                        parses++;
+                        if (parses >= maxSpawnsPerFrame)
+                        {
+                            parses = 0;
+                            yield return null;
+                        }
                     }
                 }
                 yield return null;
