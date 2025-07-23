@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 
-namespace Netherlands3D.Twin.Samplers
+namespace Netherlands3D.Twin
 {
     public class OpticalRaycaster : MonoBehaviour
     {

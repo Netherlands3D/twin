@@ -30,15 +30,12 @@ namespace Netherlands3D.Functionalities.Toponyms
 {
     public class GeoJSONStreetLayerGameObject : GeoJSONTextLayer
     {
-        private string geoJsonUrlGeometry = "https://service.pdok.nl/rws/nwbwegen/wfs/v1_0?service=WFS&version=2.0.0&request=GetFeature&typeNames=nwbwegen:wegvakken&srsName=EPSG:4326&outputFormat=application/json&bbox=";
         private static Dictionary<Vector2Int, List<string>> uniqueNames = new Dictionary<Vector2Int, List<string>>();
         private static Dictionary<Vector2Int, List<StreetName>> streetNames = new Dictionary<Vector2Int, List<StreetName>>();
         private static Dictionary<Vector2Int, List<StreetName>> streetNamesUpdateQueue = new Dictionary<Vector2Int, List<StreetName>>();
         private Vector3 previousPosition;
         private Vector3 previousRotation;
         private Camera mainCamera;
-        //max updated streetnames per tile per frame, feels like 30 should be good for performance
-        private int namesPerFrame = 30;
         private float maxScale = 0.5f;
 
         public struct StreetName
@@ -108,6 +105,7 @@ namespace Netherlands3D.Functionalities.Toponyms
         {
             base.Start();
             mainCamera = Camera.main;
+            geoJsonUrl = "https://service.pdok.nl/rws/nwbwegen/wfs/v1_0?service=WFS&version=2.0.0&request=GetFeature&typeNames=nwbwegen:wegvakken&srsName=EPSG:4326&outputFormat=application/json&bbox=";
         }
 
         protected override void RemoveGameObjectFromTile(Vector2Int tileKey)
@@ -141,7 +139,7 @@ namespace Netherlands3D.Functionalities.Toponyms
 
         protected override IEnumerator DownloadTextNameData(TileChange tileChange, Tile tile, System.Action<TileChange> callback = null)
         {          
-            string geomUrl = $"{geoJsonUrlGeometry}{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
+            string geomUrl = $"{geoJsonUrl}{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
             var streetnameRequest = UnityWebRequest.Get(geomUrl);
             tile.runningWebRequest = streetnameRequest;
@@ -217,6 +215,7 @@ namespace Netherlands3D.Functionalities.Toponyms
         {
             Vector3[] pathPoints = streetName.pathPoints;
             float splineLength = streetName.splineLength;
+#if UNITY_EDITOR
             //debug spline
             Color rndColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1f);
             for (int i = 1; i < pathPoints.Length; i++)
@@ -224,6 +223,7 @@ namespace Netherlands3D.Functionalities.Toponyms
                 Vector3 height = Vector3.up * 10;
                 Debug.DrawLine(pathPoints[i-1] + height, pathPoints[i] + height, rndColor);
             }
+#endif
             //cache height so the optical raycaster can do its magic without overwriting the height
             float startHeight = streetName.text.gameObject.transform.position.y;
             (Vector3 startPos, Vector3 startForward) = SampleSplineAtDistance(pathPoints, 0.5f * splineLength);
@@ -273,17 +273,22 @@ namespace Netherlands3D.Functionalities.Toponyms
                 float charMidY = (charInfo.topLeft.y + charInfo.bottomLeft.y) * 0.5f;
                 float charMidX = (charInfo.bottomLeft.x + charInfo.bottomRight.x) * 0.5f;
 
+                //lets find the middle of the current character
                 Vector3 charCenter = new Vector3(charMidX, charInfo.baseLine - streetName.baseLineY, 0f);
                 Vector3 charWorldCenter = tmpTransform.TransformPoint(charCenter);
                 Vector3 charMidXWorld = tmpTransform.TransformPoint(Vector3.right * charMidX);
+                //lets calculate the distance from the left side to the character in world space
                 float charDist = Vector3.Distance(charMidXWorld, worldLeft);
                 float offset = reverse ? -0.5f * textLength + charDist : 0.5f * textLength - charDist;
                 float dist = 0.5f * splineLength + offset * scale;
+                //lets find the position on the spline relative to the center on the spline
                 (Vector3 pos, Vector3 forward) = SampleSplineAtDistance(pathPoints, dist);
                 Quaternion rot = Quaternion.LookRotation(forward, Vector3.up);
+                //the orientation of the character quad
                 Quaternion localRot = rot * Quaternion.Euler(Mathf.Sign(dotUp) * -90, Mathf.Sign(dot) * -90, 0);
                 Vector3 localPos = pos - startPos;
                 pos.y = startHeight;
+                //calculate the positions of the 4 vertices per quad, we bring it to world space and apply matrix calculations
                 for (int j = 0; j < 4; j++)
                 {
                     Vector3 originalLocal = streetName.originalVertices[vertexIndex + j];
@@ -342,7 +347,7 @@ namespace Netherlands3D.Functionalities.Toponyms
                     kv.Value.RemoveAt(rnd);
                     UpdateStreetName(name);
                     cnt++;
-                    if (cnt > namesPerFrame)
+                    if (cnt > maxSpawnsPerFrame)
                         break;
                 }
             }

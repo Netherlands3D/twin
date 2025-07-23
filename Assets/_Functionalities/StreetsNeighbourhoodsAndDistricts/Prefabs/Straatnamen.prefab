@@ -99,7 +99,7 @@ MonoBehaviour:
   textPrefab: {fileID: 6092693534695716574, guid: 243e47f95a812a641bfb4a23fb211229,
     type: 3}
   geoJsonUrl: https://geodata.nationaalgeoregister.nl/kadastralekaart/wfs/v4_0?service=WFS&version=2.0.0&request=GetFeature&TypeNames=kadastralekaartv4:openbareruimtenaam&&propertyName=plaatsingspunt,tekst,hoek,relatieveHoogteligging,openbareRuimteType&outputformat=geojson&srs=EPSG:28992&bbox=
-  maxSpawnsPerFrame: 100
+  maxSpawnsPerFrame: 30
   textsAndSizes:
   - textPropertyName: straatnaam
     drawWithSize: 0.5
