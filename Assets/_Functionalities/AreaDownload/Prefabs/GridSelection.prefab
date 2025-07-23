@@ -58,9 +58,6 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -97,8 +94,6 @@ GameObject:
   - component: {fileID: 6362551884031212892}
   - component: {fileID: 4300634644698399910}
   - component: {fileID: 2387899072786983831}
-  - component: {fileID: -6031011768656632901}
-  - component: {fileID: -2777456108115373871}
   m_Layer: 0
   m_Name: GridSelection
   m_TagString: Untagged
@@ -219,37 +214,6 @@ MonoBehaviour:
   boundingBoxRDEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &-6031011768656632901
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6295639419868117823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  worldTransformShifter: {fileID: -2777456108115373871}
-  onPreShift:
-    m_PersistentCalls:
-      m_Calls: []
-  onPostShift:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &-2777456108115373871
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6295639419868117823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56e4f63b8e2c543abae8e3a9ff95cd97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8160245633172219812
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,9 +272,6 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

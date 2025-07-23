@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Utility;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -17,11 +18,15 @@ namespace Netherlands3D.Dxf
     {
         [DllImport("__Internal")]
         private static extern void DownloadFileImmediate(string callbackGameObjectName, string callbackMethodName, string fileName, byte[] array, int byteLength);
-        public override bool KeepBoundsOffsetFromOrigin { get; set; } = true;
+
+        private BoundingBox boundingBox;
 
         protected override IEnumerator CreateFile(LayerMask includedLayers, Bounds selectedAreaBounds, float minClipBoundsHeight, bool destroyOnCompletion = true)
         {
             // FreezeLayers(layerList, true);
+            Coordinate bottomLeftRD = new Coordinate(selectedAreaBounds.min);
+            Coordinate topRightRD = new Coordinate(selectedAreaBounds.max);
+            boundingBox = new BoundingBox(bottomLeftRD, topRightRD);
             DxfFile dxfFile = new DxfFile();
             dxfFile.SetupDXF();
             yield return null;

@@ -31,7 +31,6 @@ namespace Netherlands3D.Twin.Cameras
 
         [SerializeField] private bool dragToMoveCamera = true;
         [SerializeField] private bool multiplySpeedBasedOnHeight = true;
-        [SerializeField] private GameObject crosshairVisual;
 
         [Header("Speeds")] [SerializeField] private float moveSpeed = 1.0f;
         [SerializeField] private float upAndDownSpeed = 10.0f;
@@ -100,7 +99,7 @@ namespace Netherlands3D.Twin.Cameras
         private Quaternion previousRotation;
         private Vector3 previousPosition;
         public OrthographicSwitcher orthographicSwitcher;
-        
+
         void Awake()
         {
             cameraComponent = GetComponent<Camera>();
@@ -322,18 +321,6 @@ namespace Netherlands3D.Twin.Cameras
             {
                 Clamp();
             }
-
-            SetCrosshair();
-        }
-
-        private void SetCrosshair()
-        {
-            if (!crosshairVisual)
-                return;
-            
-            bool visible = rotate || dragging;
-            crosshairVisual.gameObject.SetActive(visible);
-            crosshairVisual.transform.position = dragStart;
         }
 
         /// <summary>

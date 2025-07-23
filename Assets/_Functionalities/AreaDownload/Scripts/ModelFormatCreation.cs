@@ -20,9 +20,6 @@ public struct ObjectData
 
 public abstract class ModelFormatCreation : MonoBehaviour
 {
-    [field:SerializeField]
-    public virtual bool KeepBoundsOffsetFromOrigin { get; set; } = false;
-
     public void StartDownload(LayerMask includedLayers, Bounds selectedAreaBounds, float minClipBoundsHeight, bool destroyOnCompletion = true)
     {
         StartCoroutine(CreateFile(includedLayers, selectedAreaBounds, minClipBoundsHeight, destroyOnCompletion));
@@ -78,7 +75,7 @@ public abstract class ModelFormatCreation : MonoBehaviour
                 var clipBounds = selectedAreaBounds;
                 clipBounds.size = new Vector3(clipBounds.size.x, Mathf.Max(clipBounds.size.y, minClipBoundsHeight), clipBounds.size.z);
                 meshClipper.SetGameObject(meshFiltersInLayers[i].gameObject);
-                meshClipper.ClipSubMesh(clipBounds, j, KeepBoundsOffsetFromOrigin);
+                meshClipper.ClipSubMesh(clipBounds, j);
                 var verticesToAdd = meshClipper.clippedVertices;
                 if(verticesToAdd.Count == 0)
                     continue;

@@ -37,7 +37,6 @@ namespace Netherlands3D.Twin.FloatingOrigin
         private void Awake()
         {
             current = this;
-            Coordinate = new Coordinate(transform.position).Convert(CoordinateSystem.RDNAP);
         }
 
         private void Start()
@@ -115,7 +114,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
 #endif
 
             onPreShift.Invoke(currentOrigin, originDestination);
-            Coordinate = originDestination.Convert(CoordinateSystem.RDNAP);
+
             CoordinateSystems.SetOrigin(originDestination);
 
             // Shout to the world that the origin has changed to this coordinate

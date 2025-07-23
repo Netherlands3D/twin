@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Coordinates;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Tiles3D;
@@ -21,18 +20,17 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
     {
         [SerializeField] private string layerParentTag = "3DTileParent";
         public override BoundingBox Bounds => tileSet.root != null ? new BoundingBox(tileSet.root.BottomLeft, tileSet.root.TopRight) : null;
-        public Tile3DLayerPropertyData PropertyData => tile3DPropertyData;
+        public Tile3DLayerPropertyData PropertyData => urlPropertyData;
 
         private Read3DTileset tileSet;
         [SerializeField] private bool usePropertySections = true;
         private List<IPropertySectionInstantiator> propertySections = new();
 
-        private Tile3DLayerPropertyData tile3DPropertyData;
-        LayerPropertyData ILayerWithPropertyData.PropertyData => tile3DPropertyData;
+        private Tile3DLayerPropertyData urlPropertyData;
+        LayerPropertyData ILayerWithPropertyData.PropertyData => urlPropertyData;
 
         [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
-        public UnityEvent<Uri> OnURLChanged => tile3DPropertyData.OnUrlChanged;
-
+        public UnityEvent<Uri> OnURLChanged => urlPropertyData.OnUrlChanged;
 
         public UnityEvent<string> UnsupportedExtensionsMessage;
 
@@ -64,10 +62,10 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
             credentialHandler = GetComponent<ICredentialHandler>();
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
-            tile3DPropertyData = new Tile3DLayerPropertyData(TilesetURLWithoutQuery(tileSet.tilesetUrl),(int)Coordinates.CoordinateSystem.WGS84_ECEF);
+            urlPropertyData = new Tile3DLayerPropertyData(TilesetURLWithoutQuery(tileSet.tilesetUrl));
             //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
-            tile3DPropertyData.OnUrlChanged.AddListener(UpdateURL);
-            tile3DPropertyData.OnCRSChanged.AddListener(UpdateCRS);
+            urlPropertyData.OnUrlChanged.AddListener(UpdateURL);
+
             if (usePropertySections)
                 propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             else
@@ -122,15 +120,15 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         protected override void Start()
         {
             base.Start();
-            if (string.IsNullOrEmpty(tile3DPropertyData.Url) && !string.IsNullOrEmpty(tileSet.tilesetUrl)) //if we are making a new layer, we should take the serialized url from the tileset if it exists.
+            if (string.IsNullOrEmpty(urlPropertyData.Url) && !string.IsNullOrEmpty(tileSet.tilesetUrl)) //if we are making a new layer, we should take the serialized url from the tileset if it exists.
             {
                 UpdateURL(new Uri(tileSet.tilesetUrl));
             }
             else
             {
-                UpdateURL(new Uri(tile3DPropertyData.Url));
+                UpdateURL(new Uri(urlPropertyData.Url));
             }
-            UpdateCRS(tile3DPropertyData.ContentCRS);
+
             var layerParent = GameObject.FindWithTag(layerParentTag).transform;
             transform.SetParent(layerParent);
         }
@@ -146,10 +144,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             tileSet.tilesetUrl = storedUri.ToString();
             credentialHandler.ApplyCredentials();
             EnableTileset();
-        }
-        private void UpdateCRS(int crs)
-        {
-            tileSet.SetCoordinateSystem((Coordinates.CoordinateSystem)crs);
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
@@ -190,15 +184,13 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             var urlProperty = (Tile3DLayerPropertyData)properties.FirstOrDefault(p => p is Tile3DLayerPropertyData);
             if (urlProperty != null)
             {
-                tile3DPropertyData = urlProperty; //use existing object to overwrite the current instance
-                tileSet.contentCoordinateSystem = (Netherlands3D.Coordinates.CoordinateSystem)tile3DPropertyData.ContentCRS;
+                urlPropertyData = urlProperty; //use existing object to overwrite the current instance
             }
         }
 
         private void OnDestroy()
         {
-            tile3DPropertyData.OnUrlChanged.RemoveListener(UpdateURL);
-            tile3DPropertyData.OnCRSChanged.RemoveListener(UpdateCRS);
+            urlPropertyData.OnUrlChanged.RemoveListener(UpdateURL);
         }
     }
 }

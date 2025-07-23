@@ -119,8 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e036a60b5b724da08e373215a2ff0cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unlitShader: {fileID: -6465566751694194690, guid: 5532de98ab7d64f0c8f097877aa3f77d,
-    type: 3}
+  unlitShader: {fileID: 4800000, guid: d3cb4acefe10b4f76a1261c55e56f5f3, type: 3}
   metallicShader: {fileID: -6465566751694194690, guid: 885ac3670a51697469c9f66affc50fde,
     type: 3}
   specularShader: {fileID: -6465566751694194690, guid: 885ac3670a51697469c9f66affc50fde,

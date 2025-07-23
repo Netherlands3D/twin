@@ -1,6 +1,6 @@
 ﻿using Netherlands3D.CartesianTiles;
 using Netherlands3D.LayerStyles;
-using Netherlands3D.SerializableGisExpressions;
+using Netherlands3D.LayerStyles.Expressions;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
@@ -28,8 +28,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             // Add or set the colorization of this feature by its material index
             var stylingRule = new StylingRule(
                 stylingRuleName, 
-                Expression.EqualTo(
-                    Expression.Get(MaterialIndexIdentifier),
+                Expr.EqualsTo(
+                    Expr.GetVariable(MaterialIndexIdentifier),
                     materialIndexIdentifier.ToString()
                 )
             );

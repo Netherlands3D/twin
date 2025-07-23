@@ -3,36 +3,25 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Functionalities.Wms
 {
-    [RequireComponent(typeof(Image))]
     public class LegendImage : MonoBehaviour
-    {
-        [Tooltip("Schaalfactor op basis van de originele grootte van de afbeelding.")]
-        [SerializeField] private float scaleFactor = 1.1f;
-
+    {        
+        private Sprite sprite;
         private RectTransform rectTransform;
 
         public void SetSprite(Sprite sprite)
         {
-            if (sprite == null || sprite.texture == null)
-            {
-                Debug.LogWarning("Geen sprite of texture beschikbaar voor legend image.");
-                return;
-            }
+            this.sprite = sprite;
 
-            var image = GetComponent<Image>();
-            image.sprite = sprite;
+            GetComponent<Image>().sprite = sprite;
 
-            if (rectTransform == null)
+            if(rectTransform == null)
                 rectTransform = GetComponent<RectTransform>();
 
-            float originalHeight = sprite.texture.height;
-            float originalWidth = sprite.texture.width;
+            float ar = rectTransform.rect.width / sprite.texture.width; 
+            float height = rectTransform.rect.height;
 
-            float scaledHeight = originalHeight * scaleFactor;
-            float scaledWidth = originalWidth * scaleFactor;
-
-            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, scaledHeight);
-            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, scaledWidth);
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rectTransform.rect.width);
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, sprite.texture.height * ar);
         }
     }
 }
