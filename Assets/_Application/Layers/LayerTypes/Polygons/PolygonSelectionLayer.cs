@@ -68,7 +68,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         }
 
         public int maskBitIndex = -1;
-        private static int nextBitMaskIndex = 0;
+        private static int nextBitMaskIndex = 21;
         
         [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
 
