@@ -262,7 +262,7 @@ namespace Netherlands3D.Functionalities.Toponyms
             {
                 scale = splineLength / textLength;
             }
-            float distToGround = Mathf.Abs(mainCamera.transform.position.y / 1000);
+            float distToGround = Mathf.Abs(startHeight - mainCamera.transform.position.y) / 1000;
             if (scale > maxScale + distToGround)
                 scale = maxScale + distToGround;
           
