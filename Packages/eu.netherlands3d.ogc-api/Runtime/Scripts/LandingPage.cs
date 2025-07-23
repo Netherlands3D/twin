@@ -4,6 +4,9 @@ using Newtonsoft.Json.Linq;
 
 namespace Netherlands3D.OgcApi
 {
+    /// <seealso href="https://docs.ogc.org/is/19-072/19-072.html#_65d42b57-7d32-4f4e-963b-ba0d4f190f27">
+    /// OGC API - Common - Part 1: Core
+    /// </seealso>
     [JsonObject]
     public class LandingPage
     {
