@@ -34,7 +34,7 @@ namespace Netherlands3D.CartesianTiles
 		public string geoJsonUrl = "https://geodata.nationaalgeoregister.nl/kadastralekaart/wfs/v4_0?service=WFS&version=2.0.0&request=GetFeature&TypeNames=kadastralekaartv4:openbareruimtenaam&&propertyName=plaatsingspunt,tekst,hoek,relatieveHoogteligging,openbareRuimteType&outputformat=geojson&srs=EPSG:28992&bbox=";//121000,488000,122000,489000";
 
 		[SerializeField]
-		private int maxSpawnsPerFrame = 100;
+		protected int maxSpawnsPerFrame = 100;
 
 		public List<TextsAndSize> textsAndSizes = new List<TextsAndSize>();
 
