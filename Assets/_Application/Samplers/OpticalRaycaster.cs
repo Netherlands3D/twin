@@ -1,15 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 
-namespace Netherlands3D.Twin
+namespace Netherlands3D.Twin.Samplers
 {
     public class OpticalRaycaster : MonoBehaviour
     {
-        public Camera depthCameraPrefab; 
+        public Camera depthCameraPrefab;
         public Material depthToWorldMaterial; //capture depth data shader
         public Material visualizationMaterial; //convert to temp position data
 
@@ -32,7 +33,7 @@ namespace Netherlands3D.Twin
             opticalRequest.SetCullingMask(cullingMask);
             opticalRequest.SetScreenPoint(screenPoint);
             opticalRequest.AlignWithMainCamera();
-            opticalRequest.UpdateShaders();           
+            opticalRequest.UpdateShaders();
             opticalRequest.SetResultCallback(callback);
             opticalRequest.framesActive = 0;
             activeRequests.Add(opticalRequest);
@@ -49,7 +50,7 @@ namespace Netherlands3D.Twin
             MultiPointCallback multipointCallback = GetMultipointCallback();
             multipointCallback.SetCallbackCompletion(callback);
 
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 OpticalRequest opticalRequest = GetRequest();
                 opticalRequest.SetCullingMask(cullingMask);
@@ -67,10 +68,10 @@ namespace Netherlands3D.Twin
             if (activeRequests.Count == 0) return;
 
 
-            for(int i = activeRequests.Count - 1; i >= 0; i--) 
+            for (int i = activeRequests.Count - 1; i >= 0; i--)
             {
                 activeRequests[i].framesActive++;
-                if(activeRequests[i].framesActive > 1)
+                if (activeRequests[i].framesActive > 1)
                 {
                     //we need to wait a frame to be sure the depth camera is rendered (camera.Render is very heavy to manualy call)
                     activeRequests[i].onWaitFrameCallback();
@@ -87,6 +88,7 @@ namespace Netherlands3D.Twin
                 PoolRequest(opticalRequest);
                 return;
             }
+
             try
             {
                 var worldPosData = opticalRequest.request.GetData<Vector4>();
@@ -125,7 +127,7 @@ namespace Netherlands3D.Twin
         private OpticalRequest GetRequest()
         {
             OpticalRequest request = null;
-            if(requestPool.Count > 0)
+            if (requestPool.Count > 0)
             {
                 request = requestPool.Pop();
             }
@@ -133,8 +135,9 @@ namespace Netherlands3D.Twin
             {
                 request = new OpticalRequest(depthToWorldMaterial, visualizationMaterial, GetRenderTexture(), depthCameraPrefab);
                 request.depthCamera.transform.SetParent(gameObject.transform, false);
-                request.SetCallback(RequestCallBackMapped(request));                  
+                request.SetCallback(RequestCallBackMapped(request));
             }
+
             request.depthCamera.enabled = true;
             return request;
         }
@@ -162,11 +165,9 @@ namespace Netherlands3D.Twin
             }
             else
             {
-                callback = new MultiPointCallback(()=>
-                {
-                    PoolMultipointCallback(callback);
-                });
+                callback = new MultiPointCallback(() => { PoolMultipointCallback(callback); });
             }
+
             callback.Reset();
             return callback;
         }
@@ -254,10 +255,19 @@ namespace Netherlands3D.Twin
             public void UpdateShaders()
             {
                 if (depthMaterial == null) return;
-                
+
                 depthMaterial.SetTexture("_CameraDepthTexture", renderTexture);
                 depthMaterial.SetMatrix("_CameraInvProjection", depthCamera.projectionMatrix.inverse);
                 positionMaterial.SetTexture("_WorldPositionTexture", renderTexture);
+            }
+        }
+
+        public void CancelRequest(Action<Vector3, bool> resultCallback)
+        {
+            var requests = activeRequests.Where(r => r.resultCallback == resultCallback);
+            foreach (var request in requests.ToList()) //ToList makes a copy and stops Collection was modified exception
+            {
+                activeRequests.Remove(request);
             }
         }
 
@@ -275,8 +285,9 @@ namespace Netherlands3D.Twin
                 for (int i = 0; i < 4; i++)
                 {
                     int index = i;
-                    pointCallbacks[index] = (p,h) => InvokeCallback(index, p, h);
+                    pointCallbacks[index] = (p, h) => InvokeCallback(index, p, h);
                 }
+
                 this.onComplete = onComplete;
             }
 
