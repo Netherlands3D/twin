@@ -251,6 +251,8 @@ namespace Netherlands3D.Functionalities.Toponyms
             Vector3 worldLeft = tmpTransform.TransformPoint(leftVertex);
             Vector3 worldRight = tmpTransform.TransformPoint(rightVertex);
             float textLength = Vector3.Distance(worldLeft, worldRight);
+
+            //0.005f is a factor to have a uniform distance value to increase the size of text when zoomed out
             float cameraScale = Vector3.Distance(mainCamera.transform.position, tmpTransform.gameObject.transform.position) * 0.005f;
             float scale = cameraScale;
             float characterDistance = textLength / characterCount;
