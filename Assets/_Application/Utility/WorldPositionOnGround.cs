@@ -1,7 +1,4 @@
 using Netherlands3D.Twin.Samplers;
-using System;
-using System.Collections;
-using System.Data;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
@@ -26,8 +23,6 @@ namespace Netherlands3D.Twin
             worldXZ = new Vector3(transform.position.x, 0, transform.position.z);
             Vector3 screenPoint = Camera.main.WorldToScreenPoint(worldXZ);
 
-            // Destroy(this);
-
             opticalRaycaster.GetWorldPointAsync(screenPoint, Callback, 1 << LayerMask.NameToLayer("Terrain"));
         }
         
@@ -40,7 +35,7 @@ namespace Netherlands3D.Twin
                 Vector3 finalPosition = new Vector3(worldXZ.x, y, worldXZ.z);
                 transform.position = finalPosition;
             }
-            else
+            else if(this != null)
             {
                 Invoke(nameof(UpdatePosition), 1f); //lets retry in 1 sec or it will cause a stackoverflow
             }
@@ -49,11 +44,6 @@ namespace Netherlands3D.Twin
         public void SetDirty()
         {
             positionFound = false;
-        }
-
-        private void OnDestroy()
-        {
-            opticalRaycaster.CancelRequest(Callback);
         }
     }
 }

@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
@@ -259,15 +257,6 @@ namespace Netherlands3D.Twin.Samplers
                 depthMaterial.SetTexture("_CameraDepthTexture", renderTexture);
                 depthMaterial.SetMatrix("_CameraInvProjection", depthCamera.projectionMatrix.inverse);
                 positionMaterial.SetTexture("_WorldPositionTexture", renderTexture);
-            }
-        }
-
-        public void CancelRequest(Action<Vector3, bool> resultCallback)
-        {
-            var requests = activeRequests.Where(r => r.resultCallback == resultCallback);
-            foreach (var request in requests.ToList()) //ToList makes a copy and stops Collection was modified exception
-            {
-                activeRequests.Remove(request);
             }
         }
 
