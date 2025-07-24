@@ -8,7 +8,7 @@ namespace Netherlands3D.Twin.Samplers
     {
         public Vector3 WorldPoint { get; private set; } //Constantly updated world point
         private OpticalRaycaster opticalRaycaster;
-        private Action<Vector3> worldPointCallback;
+        private Action<Vector3, bool> worldPointCallback;
 
         private void Awake()
         {
@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.Samplers
 
         private void Start()
         {
-            worldPointCallback = w => WorldPoint = w;
+            worldPointCallback = (w,h) => WorldPoint = w;
         }
 
         private void Update()
