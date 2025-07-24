@@ -335,7 +335,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.cartesiantiles": {
-      "version": "1.1.6",
+      "version": "1.1.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -453,7 +453,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.obj-importer": {
-      "version": "1.2.2",
+      "version": "1.2.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
