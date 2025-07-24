@@ -32,7 +32,7 @@ namespace Netherlands3D.OgcApi.Tests
         }
 
         [Test]
-        public async Task CanFetchCollectionItemFromListing()
+        public async Task CanFetchItemFromCollectionListing()
         {
             var id = fixture.Catalogues[0].Id;
             Collection collection = (await ogcApi.Collections()).FindById(id);
@@ -42,12 +42,16 @@ namespace Netherlands3D.OgcApi.Tests
 
             Assert.IsNotNull(items, $"Items for collection {id} was null");
             Assert.IsNotNull(items.Value, $"Feature collection in results for collection {id} was null");
-
-            Assert.IsInstanceOf<Feature>(items.Value.Features[0]);
+            
+            var item = items.Value.Features[0];
+            
+            Assert.IsInstanceOf<Feature>(item);
+            CollectionAssert.Contains(item.Properties.Keys, "title");
+            CollectionAssert.Contains(item.Properties.Keys, "type");
         }
 
         [Test]
-        public async Task CanFetchCollectionItemFromListingById()
+        public async Task CanFetchItemFromCollectionById()
         {
             var id = fixture.Catalogues[0].Id;
             var recordId = fixture.Catalogues[0].ExampleRecordId;
@@ -57,6 +61,8 @@ namespace Netherlands3D.OgcApi.Tests
             var item = await collection.FetchItemById(recordId);
         
             Assert.IsInstanceOf<Feature>(item);
+            CollectionAssert.Contains(item.Properties.Keys, "title");
+            CollectionAssert.Contains(item.Properties.Keys, "type");
         }
     }
 }

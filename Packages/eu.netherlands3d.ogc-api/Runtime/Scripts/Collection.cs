@@ -56,7 +56,6 @@ namespace Netherlands3D.OgcApi
         public async Task<Feature> FetchItemById(string itemId)
         {
             var itemUri = GetItemUriBuilder(itemId).Uri;
-            Debug.Log(itemUri.ToString());
             var resource = new Resource<Feature>(itemUri);
 
             return await resource.Value;

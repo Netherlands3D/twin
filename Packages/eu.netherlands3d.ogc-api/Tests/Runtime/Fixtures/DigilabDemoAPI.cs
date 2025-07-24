@@ -13,7 +13,8 @@
                 {
                     Id = "03a71d9b-78d5-4014-940b-287ae4c99fc7",
                     Url = "https://digilab.geocat.live/ogcapi-records/collections/03a71d9b-78d5-4014-940b-287ae4c99fc7?f=application%2Fjson",
-                    Title = "Digilab Demo Catalogus"
+                    Title = "Digilab Demo Catalogus",
+                    ExampleRecordId = "fe48e569-f8d5-4c23-945e-78ffcad63c12"
                 },
                 new OgcApiCatalogueFixture
                 {

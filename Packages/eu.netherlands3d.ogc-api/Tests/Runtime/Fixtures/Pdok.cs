@@ -13,7 +13,8 @@
                 {
                     Id = "metadata:main",
                     Url = "https://api.pdok.nl/catalogus/v1-demo/collections/metadata:main",
-                    Title = "pycsw Geospatial Catalogue"
+                    Title = "pycsw Geospatial Catalogue",
+                    ExampleRecordId = "2891cc29-0a79-46d1-8649-287046d621c7"
                 }
             };
         }

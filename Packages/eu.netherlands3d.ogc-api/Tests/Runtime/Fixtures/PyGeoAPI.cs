@@ -12,8 +12,9 @@
                 new OgcApiCatalogueFixture
                 {
                     Id = "dutch-metadata",
-                    Url = "https://demo.pygeoapi.io/master/collections/dutch-metadata?f=json",
-                    Title = "Sample metadata records from Dutch Nationaal georegister"
+                    Url = "https://demo.pygeoapi.io/master/collections/dutch-metadata",
+                    Title = "Sample metadata records from Dutch Nationaal georegister",
+                    ExampleRecordId = "35149dfb-31d3-431c-a8bc-12a4034dac48"
                 }
             };
         }

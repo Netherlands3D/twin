@@ -12,8 +12,9 @@
                 new OgcApiCatalogueFixture
                 {
                     Id = "metadata:main",
-                    Url = "https://demo.pycsw.org/gisdata/collections/metadata:main?f=json",
-                    Title = "pycsw Geospatial Catalogue gisdata demo"
+                    Url = "https://demo.pycsw.org/gisdata/collections/metadata:main",
+                    Title = "pycsw Geospatial Catalogue gisdata demo",
+                    ExampleRecordId = "urn:uuid:dc9b6d52-932a-11ea-ad6f-823cf448c401"
                 }
             };
         }
