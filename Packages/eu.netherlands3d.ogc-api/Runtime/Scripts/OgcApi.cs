@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using KindMen.Uxios.Api;
-using Netherlands3D.OgcApi;
 
 namespace Netherlands3D.OgcApi
 {

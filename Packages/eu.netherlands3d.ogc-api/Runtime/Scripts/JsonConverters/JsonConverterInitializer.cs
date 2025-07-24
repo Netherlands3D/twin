@@ -1,6 +1,4 @@
 ﻿using GeoJSON.Net.Feature;
-using Netherlands3D.OgcApi;
-using Netherlands3D.OgcApi.Pagination;
 using Newtonsoft.Json;
 using UnityEngine;
 

@@ -5,6 +5,7 @@
         public string Id;
         public string Url;
         public string Title;
+        public object ExampleRecordId;
     }
 
     public record OgcApiFixture

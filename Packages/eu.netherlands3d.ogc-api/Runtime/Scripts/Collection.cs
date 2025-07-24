@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using GeoJSON.Net.Feature;
 using KindMen.Uxios.Api;
@@ -70,5 +69,10 @@ namespace Netherlands3D.OgcApi
 
             return await resource.Value;
         }
+
+        // public async Task<Feature> FetchRecordById(string recordId)
+        // {
+        //     
+        // }
     }
 }
