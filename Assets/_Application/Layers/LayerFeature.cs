@@ -1,14 +1,14 @@
-﻿using Netherlands3D.LayerStyles;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Netherlands3D.SerializableGisExpressions;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class LayerFeature
+    public class LayerFeature : IFeatureForExpression
     {
         // Geometry is used loosely here - this means _anything_ that represents the physical aspect of a feature
         // individual layer types are expected to know what type they are using, and thus how to retrieve it.
-        public readonly object Geometry;
-        public readonly Dictionary<string, string> Attributes;
+        public object Geometry { get; }
+        public Dictionary<string, string> Attributes { get; }
 
         private LayerFeature(object geometry, Dictionary<string, string> attributes = null)
         {
