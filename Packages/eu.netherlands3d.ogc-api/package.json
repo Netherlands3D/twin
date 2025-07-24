@@ -1,0 +1,16 @@
+﻿{
+  "name": "eu.netherlands3d.ogc-api",
+  "version": "1.0.0",
+  "displayName": "Netherlands3D - OGC API Client",
+  "description": "Allow interaction with OGC API api's",
+  "unity": "2022.3",
+  "license": "EUPL-1.2",
+  "keywords": [
+    "netherlands3d",
+    "ogc"
+  ],
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://netherlands3d.eu/"
+  }
+}
