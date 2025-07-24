@@ -39,9 +39,10 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
                 image.SpriteState = layerGameObject.Thumbnail;
         }
 
-        private void SpawnObject(Vector3 opticalSpawnPoint)
+        private void SpawnObject(Vector3 opticalSpawnPoint, bool hasHit)
         {
-            SpawnObject(opticalSpawnPoint, prefab.transform.rotation);
+            if(hasHit)
+                SpawnObject(opticalSpawnPoint, prefab.transform.rotation);
         }
         
         private void SpawnObject(Vector3 opticalSpawnPoint, Quaternion rotation)
@@ -67,7 +68,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
                     SpawnObject(Camera.main.transform.position, Camera.main.transform.rotation);
                     break;
                 case SpawnLocation.PrefabPosition:
-                    SpawnObject(prefab.transform.position);
+                    SpawnObject(prefab.transform.position, true);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

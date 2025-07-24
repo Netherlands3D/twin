@@ -27,13 +27,6 @@
       },
       "url": "https://package.openupm.com"
     },
-    "com.johanhelsing.oneof": {
-      "version": "0.1.1",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
-    },
     "com.joshclose.csvhelper": {
       "version": "13.0.0",
       "depth": 0,
@@ -73,7 +66,7 @@
       "dependencies": {}
     },
     "com.unity.burst": {
-      "version": "1.8.21",
+      "version": "1.8.19",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -156,7 +149,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.14.0",
+      "version": "1.13.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -285,11 +278,11 @@
       }
     },
     "com.unity.test-framework.performance": {
-      "version": "3.1.0",
+      "version": "3.0.3",
       "depth": 2,
       "source": "registry",
       "dependencies": {
-        "com.unity.test-framework": "1.1.33",
+        "com.unity.test-framework": "1.1.31",
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -342,7 +335,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.cartesiantiles": {
-      "version": "1.1.6",
+      "version": "1.1.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -361,7 +354,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.coordinates": {
-      "version": "2.1.0",
+      "version": "2.2.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -427,6 +420,12 @@
       },
       "url": "https://package.openupm.com"
     },
+    "eu.netherlands3d.layer-styles": {
+      "version": "file:eu.netherlands3d.layer-styles",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "eu.netherlands3d.masking": {
       "version": "2.0.1",
       "depth": 0,
@@ -442,7 +441,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "0b4407a447e08aa3b5260ba6fce5934b4cfde21d"
+      "hash": "2aaa164964ae67ceaa3f4ae4708b5573bb0a37bc"
     },
     "eu.netherlands3d.minimap": {
       "version": "1.1.8",
@@ -454,7 +453,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.obj-importer": {
-      "version": "1.2.2",
+      "version": "1.2.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -481,7 +480,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.selection-tools": {
-      "version": "2.8.0",
+      "version": "2.9.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -490,6 +489,12 @@
         "eu.netherlands3d.coordinates": "2.0.0"
       },
       "url": "https://package.openupm.com"
+    },
+    "eu.netherlands3d.serializable-gis-expressions": {
+      "version": "file:eu.netherlands3d.serializable-gis-expressions",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.simplejson": {
       "version": "1.0.0",
@@ -525,11 +530,11 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "2.0.0",
+      "version": "2.1.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "eu.netherlands3d.coordinates": "1.3.0",
+        "eu.netherlands3d.coordinates": "2.2.0",
         "com.unity.cloud.gltfast": "6.12.1",
         "com.unity.meshopt.decompress": "0.1.0-preview.5"
       },
