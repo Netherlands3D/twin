@@ -63,6 +63,8 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
+        public int maskBitMask = 16777215; //2^24-1, affected by all masks
+
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
         public UnityEvent OnStylingApplied = new();
         Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;
@@ -83,6 +85,19 @@ namespace Netherlands3D.Twin.Layers
                     var metaID = AssetDatabase.GUIDFromAssetPath(pathToPrefab);
                     prefabIdentifier = metaID.ToString();
                     EditorUtility.SetDirty(this);
+                }
+            }
+
+            SetMaskBitMask();
+        }
+
+        private void SetMaskBitMask()
+        {
+            foreach (var r in GetComponentsInChildren<Renderer>())
+            {
+                foreach (var m in r.materials)
+                {
+                    m.SetFloat("_MaskingChannelBitmask", maskBitMask);
                 }
             }
         }

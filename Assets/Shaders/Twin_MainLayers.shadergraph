@@ -56,6 +56,9 @@
         },
         {
             "m_Id": "c6fbc2f7488442a0b289277ee45c2449"
+        },
+        {
+            "m_Id": "cfb0cb963c3e4058b233a06b01699e0d"
         }
     ],
     "m_Keywords": [
@@ -222,6 +225,9 @@
         },
         {
             "m_Id": "a084b8eb4da24419909400e7e165e920"
+        },
+        {
+            "m_Id": "93ecbc5a83274026a5f59d7cb49c838d"
         }
     ],
     "m_GroupDatas": [
@@ -533,6 +539,20 @@
                     "m_Id": "849561001edf49e1b111dd99e1af391c"
                 },
                 "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "93ecbc5a83274026a5f59d7cb49c838d"
+                },
+                "m_SlotId": 0
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "310156dfc86e4550b7b921ebe88d4e40"
+                },
+                "m_SlotId": 728972203
             }
         },
         {
@@ -1442,6 +1462,21 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "2f095957cc384eb7b91f609ca0a7718d",
+    "m_Id": 728972203,
+    "m_DisplayName": "MaskingChannelBitmask",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "_MaskingChannelBitmask",
+    "m_StageCapability": 2,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.SubGraphNode",
     "m_ObjectId": "310156dfc86e4550b7b921ebe88d4e40",
     "m_Group": {
@@ -1472,7 +1507,13 @@
             "m_Id": "c54229e18f6c4bf1b33f1b63b0ece327"
         },
         {
+            "m_Id": "2f095957cc384eb7b91f609ca0a7718d"
+        },
+        {
             "m_Id": "4cd33642c43d4976ad0dcf116cd11938"
+        },
+        {
+            "m_Id": "d95212d5be224229a6d59bea1ac45501"
         }
     ],
     "synonyms": [],
@@ -1489,14 +1530,16 @@
         "69f6ef34-08a9-4bba-9d3d-3749b891eb74",
         "6ca38efb-dc1e-4c60-9155-0fb4d3bace26",
         "7794993b-b827-4fec-bccb-a23ae384e540",
-        "db322c68-e8da-4a4b-89e6-510495e41c69"
+        "db322c68-e8da-4a4b-89e6-510495e41c69",
+        "bf82a692-b790-4831-bd6e-810a144441d6"
     ],
     "m_PropertyIds": [
         700472113,
         529550264,
         -1308443225,
         1111453251,
-        -63650130
+        -63650130,
+        728972203
     ],
     "m_Dropdowns": [],
     "m_DropdownSelectedEntries": []
@@ -1644,7 +1687,7 @@
     "m_ObjectId": "37ccc1d943aa40c2ba5805a819a6f5f8",
     "m_Title": "Masking",
     "m_Position": {
-        "x": -2581.0,
+        "x": -2643.0,
         "y": 1055.0
     }
 }
@@ -2593,8 +2636,8 @@
     "m_ObjectId": "6a4885ff20ed48ab95666d9dc9d3a68b",
     "m_Title": "Coloring mode",
     "m_Position": {
-        "x": -1963.0001220703125,
-        "y": -586.9999389648438
+        "x": -1963.0,
+        "y": -587.0
     }
 }
 
@@ -3078,7 +3121,7 @@
     "m_Title": "Special vertex color ID's",
     "m_Position": {
         "x": -2940.0,
-        "y": -265.9999694824219
+        "y": -266.0
     }
 }
 
@@ -3282,6 +3325,42 @@
     "m_StageCapability": 3,
     "m_Value": false,
     "m_DefaultValue": false
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
+    "m_ObjectId": "93ecbc5a83274026a5f59d7cb49c838d",
+    "m_Group": {
+        "m_Id": "37ccc1d943aa40c2ba5805a819a6f5f8"
+    },
+    "m_Name": "Property",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": -2618.000244140625,
+            "y": 1295.0,
+            "width": 203.0,
+            "height": 34.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "f03e0f97128d4cae8ce502363a1ca501"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 1,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_Property": {
+        "m_Id": "cfb0cb963c3e4058b233a06b01699e0d"
+    }
 }
 
 {
@@ -4118,6 +4197,9 @@
         },
         {
             "m_Id": "a5f7a4f3ba5f4a659f1ba72e8271b976"
+        },
+        {
+            "m_Id": "cfb0cb963c3e4058b233a06b01699e0d"
         }
     ]
 }
@@ -4473,6 +4555,34 @@
 }
 
 {
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
+    "m_ObjectId": "cfb0cb963c3e4058b233a06b01699e0d",
+    "m_Guid": {
+        "m_GuidSerialized": "5ca355fc-3902-4509-b74f-41ee99833a8b"
+    },
+    "m_Name": "MaskingChannelBitmask",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "MaskingChannelBitmask",
+    "m_DefaultReferenceName": "_MaskingChannelBitmask",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 1,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": 0.0,
+    "m_FloatType": 0,
+    "m_RangeValues": {
+        "x": 0.0,
+        "y": 1.0
+    }
+}
+
+{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Texture2DMaterialSlot",
     "m_ObjectId": "d1cdf9949eb14dd79ec24d555b21f992",
@@ -4651,6 +4761,21 @@
     "m_Property": {
         "m_Id": "eba4f60a7cb7451a9185c434718b1b71"
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "d95212d5be224229a6d59bea1ac45501",
+    "m_Id": 2,
+    "m_DisplayName": "TestOut",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "TestOut",
+    "m_StageCapability": 2,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
 }
 
 {
@@ -4837,6 +4962,21 @@
         "x": 0.0,
         "y": 0.0
     },
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "f03e0f97128d4cae8ce502363a1ca501",
+    "m_Id": 0,
+    "m_DisplayName": "MaskingChannelBitmask",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Out",
+    "m_StageCapability": 3,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
     "m_Labels": []
 }
 
