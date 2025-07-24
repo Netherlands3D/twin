@@ -67,6 +67,7 @@ MonoBehaviour:
   textPrefab: {fileID: 8383371600766724334, guid: 8f30e63ba8737ec468056e0a256c6189,
     type: 3}
   geoJsonUrl: https://service.pdok.nl/cbs/wijkenbuurten/2022/wfs/v1_0?request=GetFeature&service=wfs&outputFormat=json&version=2.0.0&typeName=wijkenbuurten:buurten&propertyName=buurtnaam,geom&bbox=
+  geoJsonUrlGeometry: https://service.pdok.nl/rws/nwbwegen/wfs/v1_0?request=GetCapabilities&service=WFS
   maxSpawnsPerFrame: 100
   textsAndSizes:
   - textPropertyName: buurtnaam
@@ -95,6 +96,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabIdentifier: c3ba1b0d37f2843cf973cb1d03a3bd3c
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
+  OnStylingApplied:
+    m_PersistentCalls:
+      m_Calls: []
   onShow:
     m_PersistentCalls:
       m_Calls: []
