@@ -8,6 +8,7 @@ using Netherlands3D.OgcApi.JsonConverters;
 using Netherlands3D.OgcApi.Pagination;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 namespace Netherlands3D.OgcApi
 {
@@ -41,27 +42,9 @@ namespace Netherlands3D.OgcApi
         [JsonExtensionData]
         public IDictionary<string, JToken> ExtensionData { get; set; } = new Dictionary<string, JToken>();
 
-        public async Task<Results<FeatureCollection>> Fetch(int? limit = null, int? offset = null)
+        public async Task<Results<FeatureCollection>> FetchItems(int? limit = null, int? offset = null)
         {
-            var itemsLink = Links.FirstBy(RelationTypes.items, Formats.geojson)?.Href;
-
-            Uri uri = null;
-            if (itemsLink != null)
-            {
-                uri = new Uri(itemsLink);
-            }
-            
-            // Some API's don't follow the spec, so we are going to infer as a last resort
-            if (uri == null)
-            {
-                itemsLink = Links.FirstBy(RelationTypes.self, Formats.json)?.Href;
-                
-                if (itemsLink == null) throw new Exception("Unable to fetch collection items, no links found");
-
-                var uriBuilder = new UriBuilder(itemsLink);
-                uriBuilder.Path += "/items";
-                uri = uriBuilder.Uri;
-            }
+            var uri = GetItemsUriBuilder().Uri;
 
             var resource = new Resource<Results<FeatureCollection>>(uri);
             if (offset != null) resource.With("offset", offset.ToString());
@@ -70,9 +53,41 @@ namespace Netherlands3D.OgcApi
             return await resource.Value;
         }
 
-        // public async Task<Feature> FetchRecordById(string recordId)
-        // {
-        //     
-        // }
+        public async Task<Feature> FetchItemById(string itemId)
+        {
+            var itemUri = GetItemUriBuilder(itemId).Uri;
+            Debug.Log(itemUri.ToString());
+            var resource = new Resource<Feature>(itemUri);
+
+            return await resource.Value;
+        }
+
+        private UriBuilder GetItemsUriBuilder()
+        {
+            var itemsLink = Links.FirstBy(RelationTypes.items, Formats.geojson)?.Href;
+            if (!string.IsNullOrEmpty(itemsLink)) return new UriBuilder(itemsLink);
+
+            // Some API's don't follow the spec, so we are going to infer as a last resort
+            itemsLink = Links.FirstBy(RelationTypes.self, Formats.json)?.Href;
+            if (string.IsNullOrEmpty(itemsLink)) throw new Exception("Unable to fetch collection items, no links found");
+
+            return AppendPathSegment(new UriBuilder(itemsLink), "items");
+        }
+
+        private UriBuilder GetItemUriBuilder(string itemId)
+        {
+            // Technically, we could iterate over the results of the FetchItems method, but because of the paging and
+            // all this is more efficient and the url is predictable so no harm.
+            return AppendPathSegment(GetItemsUriBuilder(), itemId);
+        }
+
+        private static UriBuilder AppendPathSegment(UriBuilder uriBuilder, string segment)
+        {
+            // Using UriBuilder to alter the path will ensure all other aspects - such as anchor and query string -
+            // remain unaltered
+            uriBuilder.Path += $"/{segment}";
+            
+            return uriBuilder;
+        }
     }
 }

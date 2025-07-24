@@ -38,7 +38,7 @@ namespace Netherlands3D.OgcApi.Tests
             Collection collection = (await ogcApi.Collections()).FindById(id);
 
             Assert.IsNotNull(collection, $"Collection {id} was null");
-            var items = await collection.Fetch();
+            var items = await collection.FetchItems();
 
             Assert.IsNotNull(items, $"Items for collection {id} was null");
             Assert.IsNotNull(items.Value, $"Feature collection in results for collection {id} was null");
@@ -53,7 +53,7 @@ namespace Netherlands3D.OgcApi.Tests
             Collection collection = (await ogcApi.Collections()).FindById(id);
 
             Assert.IsNotNull(collection, $"Collection {id} was null");
-            var items = await collection.Fetch(2);
+            var items = await collection.FetchItems(2);
 
             Assert.IsInstanceOf<Results<FeatureCollection>>(items, $"Items for collection {id} was null");
             Assert.IsNotNull(items.Value, $"Feature collection in results for collection {id} was null");
@@ -71,7 +71,7 @@ namespace Netherlands3D.OgcApi.Tests
             Collection collection = (await ogcApi.Collections()).FindById(id);
 
             Assert.IsNotNull(collection, $"Collection {id} was null");
-            var items = await collection.Fetch(limit: 2);
+            var items = await collection.FetchItems(limit: 2);
 
             Assert.IsInstanceOf<Results<FeatureCollection>>(items, $"Items for collection {id} was null");
 
@@ -89,7 +89,7 @@ namespace Netherlands3D.OgcApi.Tests
             Collection collection = (await ogcApi.Collections()).FindById(id);
 
             Assert.IsNotNull(collection, $"Collection {id} was null");
-            var items = await collection.Fetch(limit: 2, offset: 2);
+            var items = await collection.FetchItems(limit: 2, offset: 2);
 
             Assert.IsInstanceOf<Results<FeatureCollection>>(items, $"Items for collection {id} was null");
             Assert.IsFalse(
