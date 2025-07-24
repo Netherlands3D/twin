@@ -1,0 +1,19 @@
+﻿{
+  "name": "eu.netherlands3d.layer-styles",
+  "version": "1.0.0",
+  "displayName": "Netherlands3D - Layer Styles",
+  "description": "",
+  "unity": "2022.3",
+  "license": "EUPL-1.2",
+  "keywords": [
+    "netherlands3d",
+    "building-block",
+    "layers",
+    "symbology",
+    "styling"
+  ],
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://netherlands3d.eu/"
+  }
+}
