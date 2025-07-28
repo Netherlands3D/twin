@@ -55,30 +55,16 @@ MonoBehaviour:
   Datasets:
   - Description: 
     geoLOD: 
-    path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked-24m/Terrain{x}_{y}.24.bin
-    pathQuery: 
-    maximumDistance: 10000
-    maximumDistanceSquared: 0
-    enabled: 1
-  - Description: 
-    geoLOD: 
-    path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked-12m/Terrain{x}_{y}.12.bin
+    path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked_simplified100/Terrain{x}_{y}.1.100.bin
     pathQuery: 
     maximumDistance: 8000
     maximumDistanceSquared: 0
     enabled: 1
   - Description: 
     geoLOD: 
-    path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked-6m/Terrain{x}_{y}.6.bin
-    pathQuery: 
-    maximumDistance: 4000
-    maximumDistanceSquared: 0
-    enabled: 1
-  - Description: 
-    geoLOD: 
     path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked/Terrain{x}_{y}.1.bin
     pathQuery: 
-    maximumDistance: 2000
+    maximumDistance: 3000
     maximumDistanceSquared: 0
     enabled: 1
   pauseLoading: 0
@@ -119,6 +105,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabIdentifier: 2e71ce721dd3e41c194c6fb05ad10520
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
   OnStylingApplied:
     m_PersistentCalls:
       m_Calls: []
