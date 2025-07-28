@@ -24,6 +24,8 @@ namespace Netherlands3D.Twin.Layers
     
     public abstract class LayerGameObject : MonoBehaviour, IStylable
     {
+        public const int DEFAULT_MASK_BIT_MASK = 0b_00000000011111111111111111111111; 
+        
         [SerializeField] private string prefabIdentifier;
         [SerializeField] private SpriteState thumbnail;
         [SerializeField] private SpawnLocation spawnLocation;
@@ -88,27 +90,11 @@ namespace Netherlands3D.Twin.Layers
                 }
             }
         }
-
-        private void SetMaskBitMask()
-        {
-            foreach (var r in GetComponentsInChildren<Renderer>())
-            {
-                foreach (var m in r.materials)
-                {
-                    m.SetFloat("_MaskingChannelBitmask", maskBitMask);
-                }
-            }
-        }
 #endif
 
         protected virtual void Start()
         {
             InitializeVisualisation();
-        }
-
-        private void OnTransformChildrenChanged()
-        {
-            SetMaskBitMask(); // set initial value in the shader todo: optimize this
         }
 
         //Use this function to initialize anything that has to be done after either:
@@ -214,10 +200,31 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void ApplyStyling()
         {
+            LayerStyler.Apply(this, LayerData.DefaultSymbolizer);
             //initialize the layer's style and emit an event for other services and/or UI to update
             OnStylingApplied.Invoke();
         }
-#endregion
+
+        public virtual void UpdateMaskBitMask(int[] bitmask)
+        {
+            foreach (var r in GetComponentsInChildren<Renderer>())
+            {
+                UpdateBitMaskForMaterials(bitmask, r.materials);
+            }
+        }
+
+        protected void UpdateBitMaskForMaterials(int[] bitmask, IEnumerable<Material> materials)
+        {
+            foreach (var m in materials)
+            {
+                Debug.Log("setting r bit mask: " + bitmask[0]);
+                float floatMaskValueR = BitConverter.Int32BitsToSingle(bitmask[0]);
+
+                m.SetFloat("_MaskingChannelBitmask", floatMaskValueR); //todo : r b
+            }
+        }
+
+        #endregion
 
 #region Features
 

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Netherlands3D.Twin.Layers;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Netherlands3D.LayerStyles
@@ -16,10 +18,10 @@ namespace Netherlands3D.LayerStyles
         ///
         /// As such: we simply use `dictionary with string,string` and use getters and setters to transform properties.
         /// </summary>
-        [DataMember(Name = "properties")] 
-        private Dictionary<string, string> properties = new();
+        [DataMember(Name = "properties")] private Dictionary<string, string> properties = new();
 
         #region Styles
+
         /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-fill-color"/>
         public void SetFillColor(Color color) => SetAndNormalizeColor("fill-color", color);
 
@@ -27,6 +29,25 @@ namespace Netherlands3D.LayerStyles
         public Color? GetFillColor() => GetAndNormalizeColor("fill-color");
 
         public void ClearFillColor() => ClearProperty("fill-color");
+
+        public void SetMaskLayerMask(int r, int g, int b) => SetProperty("mask-layer-mask", JsonConvert.SerializeObject(new int[] { r, g, b }));
+
+        public int[] GetMaskLayerMask()
+        {
+            var json = GetProperty("mask-layer-mask");
+            if (json == null || string.IsNullOrEmpty((string)json))
+            {
+                return new int[]
+                {
+                    LayerGameObject.DEFAULT_MASK_BIT_MASK,
+                    LayerGameObject.DEFAULT_MASK_BIT_MASK,
+                    LayerGameObject.DEFAULT_MASK_BIT_MASK
+                };
+            }
+            return JsonConvert.DeserializeObject<int[]>((string)json);
+        }
+
+        public void ClearMaskLayerMask() => ClearProperty("mask-layer-mask");
 
         /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-color"/>
         /// <remarks>
@@ -45,7 +66,7 @@ namespace Netherlands3D.LayerStyles
         public Color? GetStrokeColor() => GetAndNormalizeColor("stroke-color");
 
         public void ClearStrokeColor() => ClearProperty("stroke-color");
-        
+
         #endregion
 
         /// <summary>

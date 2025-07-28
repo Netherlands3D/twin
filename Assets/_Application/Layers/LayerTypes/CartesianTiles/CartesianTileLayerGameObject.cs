@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.Properties;
@@ -6,6 +7,7 @@ using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
@@ -115,6 +117,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             }
 
             base.ApplyStyling();
+        }
+
+        public override void UpdateMaskBitMask(int[] bitmask)
+        {
+            if (layer is BinaryMeshLayer binaryMeshLayer)
+            {
+                foreach (var m in binaryMeshLayer.DefaultMaterialList)
+                {
+                    UpdateBitMaskForMaterials(bitmask, binaryMeshLayer.DefaultMaterialList);
+                }
+            }
+        }
+
+        private void Update() //todo: remove this, for testing only
+        {
+            if (Keyboard.current.kKey.wasPressedThisFrame && Name.Contains("Gebouwen"))
+            {
+                LayerStyler.SetMaskLayerMask(this, 0);
+            }
         }
 
         protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
