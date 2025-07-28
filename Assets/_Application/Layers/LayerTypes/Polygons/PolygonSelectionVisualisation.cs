@@ -73,11 +73,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var newMat = new Material(polygonMaskMaterial);
             var bitMask = new Vector4(floatMaskValue, 0, 0, 1);
             newMat.SetVector("_MaskBitMask", bitMask);
-            
+
             if (isMask)
+            {
                 PolygonVisualisation.VisualisationMaterial = newMat;
-            // else
-            //     PolygonVisualisation.VisualisationMaterial = PolygonMeshMaterial;
+            }
+            else
+            {
+                Destroy(PolygonVisualisation.VisualisationMaterial); //clean up the mask material instance
+                PolygonVisualisation.VisualisationMaterial = PolygonMeshMaterial;
+            }
 
             Debug.Log("set r color to: " + System.Convert.ToString(maskValue, 2).PadLeft(32, '0'));
         }
