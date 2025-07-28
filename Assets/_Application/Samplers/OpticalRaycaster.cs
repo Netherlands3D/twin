@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
@@ -9,7 +8,7 @@ namespace Netherlands3D.Twin.Samplers
 {
     public class OpticalRaycaster : MonoBehaviour
     {
-        public Camera depthCameraPrefab; 
+        public Camera depthCameraPrefab;
         public Material depthToWorldMaterial; //capture depth data shader
         public Material visualizationMaterial; //convert to temp position data
 
@@ -17,26 +16,42 @@ namespace Netherlands3D.Twin.Samplers
         private List<OpticalRequest> activeRequests = new List<OpticalRequest>();
         private Stack<MultiPointCallback> requestMultipointPool = new Stack<MultiPointCallback>();
 
+        private const int maxRequests = 3;
 
-        public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3> callback)
+
+        public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, int cullingMask = ~0)
         {
+            if (activeRequests.Count > maxRequests)
+            {
+                callback.Invoke(Vector3.zero, false);
+                return;
+            }
+
             OpticalRequest opticalRequest = GetRequest();
+            opticalRequest.SetCullingMask(cullingMask);
             opticalRequest.SetScreenPoint(screenPoint);
             opticalRequest.AlignWithMainCamera();
-            opticalRequest.UpdateShaders();           
+            opticalRequest.UpdateShaders();
             opticalRequest.SetResultCallback(callback);
             opticalRequest.framesActive = 0;
             activeRequests.Add(opticalRequest);
         }
 
-        public void GetWorldPointsAsync(Vector3[] screenPoints, Action<Vector3[]> callback)
+        public void GetWorldPointsAsync(Vector3[] screenPoints, Action<Vector3[], bool> callback, int cullingMask = ~0)
         {
+            if (activeRequests.Count > maxRequests)
+            {
+                callback.Invoke(null, false);
+                return;
+            }
+
             MultiPointCallback multipointCallback = GetMultipointCallback();
             multipointCallback.SetCallbackCompletion(callback);
 
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 OpticalRequest opticalRequest = GetRequest();
+                opticalRequest.SetCullingMask(cullingMask);
                 opticalRequest.SetScreenPoint(screenPoints[i]);
                 opticalRequest.AlignWithMainCamera();
                 opticalRequest.UpdateShaders();
@@ -50,10 +65,11 @@ namespace Netherlands3D.Twin.Samplers
         {
             if (activeRequests.Count == 0) return;
 
-            for(int i = activeRequests.Count - 1; i >= 0; i--) 
+
+            for (int i = activeRequests.Count - 1; i >= 0; i--)
             {
                 activeRequests[i].framesActive++;
-                if(activeRequests[i].framesActive > 1)
+                if (activeRequests[i].framesActive > 1)
                 {
                     //we need to wait a frame to be sure the depth camera is rendered (camera.Render is very heavy to manualy call)
                     activeRequests[i].onWaitFrameCallback();
@@ -70,6 +86,7 @@ namespace Netherlands3D.Twin.Samplers
                 PoolRequest(opticalRequest);
                 return;
             }
+
             try
             {
                 var worldPosData = opticalRequest.request.GetData<Vector4>();
@@ -77,7 +94,8 @@ namespace Netherlands3D.Twin.Samplers
                 float worldPosY = worldPosData[0].y;
                 float worldPosZ = worldPosData[0].z;
                 Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
-                opticalRequest.resultCallback.Invoke(worldPos);
+                opticalRequest.hasHit = worldPosData[0].w > 0;
+                opticalRequest.resultCallback.Invoke(worldPos, opticalRequest.hasHit);
             }
             catch (Exception e)
             {
@@ -107,7 +125,7 @@ namespace Netherlands3D.Twin.Samplers
         private OpticalRequest GetRequest()
         {
             OpticalRequest request = null;
-            if(requestPool.Count > 0)
+            if (requestPool.Count > 0)
             {
                 request = requestPool.Pop();
             }
@@ -115,8 +133,9 @@ namespace Netherlands3D.Twin.Samplers
             {
                 request = new OpticalRequest(depthToWorldMaterial, visualizationMaterial, GetRenderTexture(), depthCameraPrefab);
                 request.depthCamera.transform.SetParent(gameObject.transform, false);
-                request.SetCallback(RequestCallBackMapped(request));                  
+                request.SetCallback(RequestCallBackMapped(request));
             }
+
             request.depthCamera.enabled = true;
             return request;
         }
@@ -144,11 +163,9 @@ namespace Netherlands3D.Twin.Samplers
             }
             else
             {
-                callback = new MultiPointCallback(()=>
-                {
-                    PoolMultipointCallback(callback);
-                });
+                callback = new MultiPointCallback(() => { PoolMultipointCallback(callback); });
             }
+
             callback.Reset();
             return callback;
         }
@@ -168,10 +185,11 @@ namespace Netherlands3D.Twin.Samplers
             public Vector3 screenPoint;
             public AsyncGPUReadbackRequest request;
             public Action<AsyncGPUReadbackRequest> callback;
-            public Action<Vector3> resultCallback;
+            public Action<Vector3, bool> resultCallback;
             public Action onWaitFrameCallback;
             public int framesActive = 0;
             public int resultCount = 0;
+            public bool hasHit = false;
 
             public OpticalRequest(Material depthMaterial, Material positionMaterial, RenderTexture rt, Camera prefab)
             {
@@ -180,7 +198,7 @@ namespace Netherlands3D.Twin.Samplers
                 this.renderTexture = rt;
                 this.depthCamera = Instantiate(prefab);
                 depthCamera.clearFlags = CameraClearFlags.SolidColor;
-                depthCamera.backgroundColor = Color.black;
+                depthCamera.backgroundColor = Color.clear;
                 depthCamera.depthTextureMode = DepthTextureMode.Depth;
                 depthCamera.targetTexture = rt;
                 depthCamera.forceIntoRenderTexture = true;
@@ -196,7 +214,7 @@ namespace Netherlands3D.Twin.Samplers
                 this.callback = callback;
             }
 
-            public void SetResultCallback(Action<Vector3> resultCallback)
+            public void SetResultCallback(Action<Vector3, bool> resultCallback)
             {
                 this.resultCallback = resultCallback;
             }
@@ -209,6 +227,11 @@ namespace Netherlands3D.Twin.Samplers
             public void SetScreenPoint(Vector3 screenPoint)
             {
                 this.screenPoint = screenPoint;
+            }
+
+            public void SetCullingMask(int mask)
+            {
+                depthCamera.cullingMask = mask;
             }
 
             public void AlignWithMainCamera()
@@ -230,7 +253,7 @@ namespace Netherlands3D.Twin.Samplers
             public void UpdateShaders()
             {
                 if (depthMaterial == null) return;
-                
+
                 depthMaterial.SetTexture("_CameraDepthTexture", renderTexture);
                 depthMaterial.SetMatrix("_CameraInvProjection", depthCamera.projectionMatrix.inverse);
                 positionMaterial.SetTexture("_WorldPositionTexture", renderTexture);
@@ -240,10 +263,10 @@ namespace Netherlands3D.Twin.Samplers
         //when getting a batch of points async we need to have a callback that can sync all points as one result
         private sealed class MultiPointCallback
         {
-            public Action<Vector3>[] pointCallbacks = new Action<Vector3>[4];
+            public Action<Vector3, bool>[] pointCallbacks = new Action<Vector3, bool>[4];
             private int callbackCount = 0;
             private Vector3[] result = new Vector3[4];
-            private Action<Vector3[]> callback;
+            private Action<Vector3[], bool> callback;
             private Action onComplete;
 
             public MultiPointCallback(Action onComplete)
@@ -251,21 +274,22 @@ namespace Netherlands3D.Twin.Samplers
                 for (int i = 0; i < 4; i++)
                 {
                     int index = i;
-                    pointCallbacks[index] = p => InvokeCallback(index, p);
+                    pointCallbacks[index] = (p, h) => InvokeCallback(index, p, h);
                 }
+
                 this.onComplete = onComplete;
             }
 
-            public void InvokeCallback(int index, Vector3 point)
+            public void InvokeCallback(int index, Vector3 point, bool hit)
             {
                 callbackCount++;
                 result[index] = point;
                 if (callbackCount >= 4)
-                    this.callback.Invoke(result);
+                    this.callback.Invoke(result, hit);
                 onComplete.Invoke();
             }
 
-            public void SetCallbackCompletion(Action<Vector3[]> callback)
+            public void SetCallbackCompletion(Action<Vector3[], bool> callback)
             {
                 this.callback = callback;
             }

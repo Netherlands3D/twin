@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -3206187947326476088}
   - component: {fileID: -250617364918305391}
   - component: {fileID: 1356503853171272600}
+  - component: {fileID: -182835730396412055}
   m_Layer: 7
   m_Name: Gebouwen (3D Tiles)
   m_TagString: Untagged
@@ -51,77 +52,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 870952d2aa83a564fb93f5fbf40f70ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tile:
-    level: 0
-    X: 0
-    Y: 0
-    hascontent: 0
-    priority: 0
-    childrenCountDelayingDispose: 0
-    boundingVolume:
-      boundingVolumeType: 0
-      values: []
-    BottomLeft:
-      coordinateSystem: 0
-      extraLongitudeRotation: 0
-      extraLattitudeRotation: 0
-      value1: 0
-      value2: 0
-      value3: 0
-      PointsLength: 0
-    TopRight:
-      coordinateSystem: 0
-      extraLongitudeRotation: 0
-      extraLattitudeRotation: 0
-      value1: 0
-      value2: 0
-      value3: 0
-      PointsLength: 0
-    inView: 0
-    requestedDispose: 0
-    requestedUpdate: 0
-    isLoading: 0
-    children: []
-    tileTransform:
-      m00: 1
-      m01: 0
-      m02: 0
-      m03: 0
-      m10: 0
-      m11: 1
-      m12: 0
-      m13: 0
-      m20: 0
-      m21: 0
-      m22: 1
-      m23: 0
-      m30: 0
-      m31: 0
-      m32: 0
-      m33: 1
-    transform:
-    - 1
-    - 0
-    - 0
-    - 0
-    - 0
-    - 1
-    - 0
-    - 0
-    - 0
-    - 0
-    - 1
-    - 0
-    - 0
-    - 0
-    - 0
-    - 1
-    geometricError: 0
-    screenSpaceError: 3.4028235e+38
-    refine: 
-    contentUri: 
-    content: {fileID: 0}
-    loadedChildren: 0
   settings:
     refinementType: 0
     subdivisionScheme: 0
@@ -136,6 +66,7 @@ MonoBehaviour:
     boundingRegion: []
   subtreeUrl: 
   isbusy: 0
+  debugLog: 0
 --- !u!114 &5648866956155822156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,6 +80,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilesetUrl: https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/gebouwen/3dtiles/tileset.json
+  contentCoordinateSystem: 4978
   publicKey: 
   personalKey: 
   queryKeyName: key
@@ -157,6 +89,7 @@ MonoBehaviour:
     X: 0
     Y: 0
     hascontent: 0
+    tileSet: {fileID: 0}
     priority: 0
     childrenCountDelayingDispose: 0
     boundingVolume:
@@ -169,7 +102,6 @@ MonoBehaviour:
       value1: 0
       value2: 0
       value3: 0
-      PointsLength: 0
     TopRight:
       coordinateSystem: 0
       extraLongitudeRotation: 0
@@ -177,7 +109,6 @@ MonoBehaviour:
       value1: 0
       value2: 0
       value3: 0
-      PointsLength: 0
     inView: 0
     requestedDispose: 0
     requestedUpdate: 0
@@ -245,6 +176,7 @@ MonoBehaviour:
   sseComponent: -1
   tilePrioritiser: {fileID: 7109194962515795805}
   materialOverride: {fileID: 2100000, guid: 0df5f2c6c1221f94cb0ff68c38ee66f0, type: 2}
+  debugLog: 0
   unsupportedExtensionsParsed:
     m_PersistentCalls:
       m_Calls: []
@@ -317,12 +249,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabIdentifier: 416bb3a0b4137324d860b58a6e8f484e
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
+  OnStylingApplied:
+    m_PersistentCalls:
+      m_Calls: []
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
     m_PersistentCalls:
       m_Calls: []
+  layerParentTag: 3DTileParent
   usePropertySections: 1
   UnsupportedExtensionsMessage:
     m_PersistentCalls:
@@ -384,7 +322,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldTransformShifter: {fileID: -250617364918305391}
-  referenceCoordinateSystem: 4326
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
@@ -416,6 +353,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
-  CredentialsSucceeded:
-    m_PersistentCalls:
-      m_Calls: []
+--- !u!114 &-182835730396412055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de5cd78f3fd5c1842b127eafceb944e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propertySectionPrefab: {fileID: 2842465798221092780, guid: aec1cc38c05be4c69b9adb0159593506,
+    type: 3}
