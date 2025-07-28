@@ -97,20 +97,6 @@
         {
             "m_OutputSlot": {
                 "m_Node": {
-                    "m_Id": "3932bb425aa646f28a1be393f97e871d"
-                },
-                "m_SlotId": 2
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "dd47399d418c4a6f88c7ae7eab52fcc8"
-                },
-                "m_SlotId": 2
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
                     "m_Id": "69a6c2834d8640429d112cc72bd3d295"
                 },
                 "m_SlotId": 0
@@ -635,21 +621,6 @@
 
 {
     "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "2ccf425409f84d9fa7024e479287b36a",
-    "m_Id": 2,
-    "m_DisplayName": "TestOut",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "TestOut",
-    "m_StageCapability": 2,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.SamplerStateMaterialSlot",
     "m_ObjectId": "3757cdc2e38d482194b2bac85fbe1ae9",
     "m_Id": 3,
@@ -673,10 +644,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 450.99993896484377,
-            "y": -149.00003051757813,
-            "width": 208.00006103515626,
-            "height": 302.0
+            "x": 451.0000305175781,
+            "y": -152.00003051757813,
+            "width": 208.00003051757813,
+            "height": 302.00006103515627
         }
     },
     "m_Slots": [
@@ -705,7 +676,7 @@
     "m_FunctionName": "Bitmask",
     "m_FunctionSource": "",
     "m_FunctionSourceUsePragmas": true,
-    "m_FunctionBody": "uint mask = asuint(TestValue);\nuint bitMask = (uint)round(BitMask);\nuint result = mask & bitMask;\n\nOut  =  (result != 0) ? 1.0 : 0.0;"
+    "m_FunctionBody": "uint testValue = asuint(TestValue);\nuint bitMask = asuint(BitMask);\nuint result = testValue & bitMask;\n\nOut  =  (result != 0) ? 1.0 : 0.0;"
 }
 
 {
@@ -886,7 +857,7 @@
     "m_ObjectId": "5a2528ef2ca14fb5b211cb42097954e8",
     "m_Title": "Masking",
     "m_Position": {
-        "x": -870.0000610351563,
+        "x": -870.0001220703125,
         "y": -536.0000610351563
     }
 }
@@ -1744,10 +1715,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 30.00006675720215,
-            "y": -248.0000457763672,
-            "width": 202.99996948242188,
-            "height": 34.00004577636719
+            "x": 55.00004959106445,
+            "y": -149.00001525878907,
+            "width": 202.99998474121095,
+            "height": 33.99999237060547
         }
     },
     "m_Slots": [
@@ -1780,18 +1751,15 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 1949.9998779296875,
-            "y": -96.00001525878906,
-            "width": 116.0003662109375,
-            "height": 77.00000762939453
+            "x": 2171.999755859375,
+            "y": -83.00000762939453,
+            "width": 116.000244140625,
+            "height": 101.0
         }
     },
     "m_Slots": [
         {
             "m_Id": "08641325d63f464fa87daed6179daeb0"
-        },
-        {
-            "m_Id": "2ccf425409f84d9fa7024e479287b36a"
         }
     ],
     "synonyms": [],

@@ -62,9 +62,9 @@ namespace Netherlands3D.Twin.Layers
                 }
             }
         }
-
-        public int maskBitMask = 16777215; //2^24-1, affected by all masks
-
+        
+        private int maskBitMask = 0b_00000000011111111111111111111111; //2^23-1, affected by all masks
+        
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
         public UnityEvent OnStylingApplied = new();
         Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;
@@ -87,8 +87,6 @@ namespace Netherlands3D.Twin.Layers
                     EditorUtility.SetDirty(this);
                 }
             }
-
-            SetMaskBitMask();
         }
 
         private void SetMaskBitMask()
@@ -108,11 +106,16 @@ namespace Netherlands3D.Twin.Layers
             InitializeVisualisation();
         }
 
+        private void OnTransformChildrenChanged()
+        {
+            SetMaskBitMask(); // set initial value in the shader todo: optimize this
+        }
+
         //Use this function to initialize anything that has to be done after either:
         // 1. Instantiating prefab -> creating new LayerData, or
         // 2. Creating LayerData (from project), Instantiating prefab, coupling that LayerData to this LayerGameObject
         protected virtual void InitializeVisualisation()
-        {
+        {            
             LayerData.LayerDoubleClicked.AddListener(OnDoubleClick);
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 

@@ -1511,9 +1511,6 @@
         },
         {
             "m_Id": "4cd33642c43d4976ad0dcf116cd11938"
-        },
-        {
-            "m_Id": "d95212d5be224229a6d59bea1ac45501"
         }
     ],
     "synonyms": [],
@@ -3339,7 +3336,7 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -2618.000244140625,
+            "x": -2618.0,
             "y": 1295.0,
             "width": 203.0,
             "height": 34.0
@@ -4571,8 +4568,8 @@
     "m_CustomSlotLabel": "",
     "m_DismissedVersion": 0,
     "m_Precision": 1,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
+    "overrideHLSLDeclaration": true,
+    "hlslDeclarationOverride": 2,
     "m_Hidden": false,
     "m_Value": 0.0,
     "m_FloatType": 0,
@@ -4761,21 +4758,6 @@
     "m_Property": {
         "m_Id": "eba4f60a7cb7451a9185c434718b1b71"
     }
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "d95212d5be224229a6d59bea1ac45501",
-    "m_Id": 2,
-    "m_DisplayName": "TestOut",
-    "m_SlotType": 1,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "TestOut",
-    "m_StageCapability": 2,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": []
 }
 
 {
