@@ -69,20 +69,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             // interpret the bitshifted mask value as a float without moving the bits around
             // due to the way floats work, the resulting value will be between 0 and 1 for the first 23 bits 
             float floatMaskValue = BitConverter.Int32BitsToSingle(maskValue); 
-
+            
             Debug.Log("maskvalue " + maskValue);
             Debug.Log("floatmaskvalue " + floatMaskValue);
             
             var newMat = new Material(polygonMaskMaterial);
-            newMat.color = new Color(floatMaskValue, 0, 0, 1);
+            // var newMat = (polygonMaskMaterial);
+            var bitMask = new Vector4(floatMaskValue, 0, 0, 1);
+            newMat.SetVector("_MaskBitMask", bitMask);
             
             if (isMask)
                 PolygonVisualisation.VisualisationMaterial = newMat;
             // else
             //     PolygonVisualisation.VisualisationMaterial = PolygonMeshMaterial;
 
-            var r = newMat.color.r;
-            Debug.Log("set r color to: " + r);
             Debug.Log("set r color to: " + System.Convert.ToString(maskValue, 2).PadLeft(32, '0'));
         }
     }
