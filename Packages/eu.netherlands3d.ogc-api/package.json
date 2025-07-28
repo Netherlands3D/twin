@@ -9,6 +9,11 @@
     "netherlands3d",
     "ogc"
   ],
+  "dependencies": {
+    "com.kind-men.uxios": "0.4.0",
+    "com.unity.nuget.newtonsoft-json": "2.0.0",
+    "com.virgis.geojson.net": "1.2.17"
+  },
   "author": {
     "name": "Netherlands3D",
     "url": "https://netherlands3d.eu/"
