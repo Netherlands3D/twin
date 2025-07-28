@@ -2026,7 +2026,7 @@
         }
     ],
     "synonyms": [],
-    "m_Precision": 0,
+    "m_Precision": 1,
     "m_PreviewExpanded": true,
     "m_DismissedVersion": 0,
     "m_PreviewMode": 0,
@@ -3524,7 +3524,7 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -2555.999755859375,
+            "x": -2556.0,
             "y": 1223.9998779296875,
             "width": 171.0,
             "height": 34.0
@@ -3536,7 +3536,7 @@
         }
     ],
     "synonyms": [],
-    "m_Precision": 0,
+    "m_Precision": 1,
     "m_PreviewExpanded": true,
     "m_DismissedVersion": 0,
     "m_PreviewMode": 0,
@@ -4695,7 +4695,7 @@
     "m_UseCustomSlotLabel": false,
     "m_CustomSlotLabel": "",
     "m_DismissedVersion": 0,
-    "m_Precision": 0,
+    "m_Precision": 1,
     "overrideHLSLDeclaration": true,
     "hlslDeclarationOverride": 1,
     "m_Hidden": false,
@@ -5078,7 +5078,7 @@
     "m_UseCustomSlotLabel": false,
     "m_CustomSlotLabel": "",
     "m_DismissedVersion": 0,
-    "m_Precision": 0,
+    "m_Precision": 1,
     "overrideHLSLDeclaration": true,
     "hlslDeclarationOverride": 1,
     "m_Hidden": false,

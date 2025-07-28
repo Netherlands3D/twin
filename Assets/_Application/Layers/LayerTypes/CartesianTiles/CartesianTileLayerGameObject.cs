@@ -130,11 +130,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             }
         }
 
+
+        public int test; //todo: remove
         private void Update() //todo: remove this, for testing only
         {
             if (Keyboard.current.kKey.wasPressedThisFrame && Name.Contains("Gebouwen"))
             {
-                LayerStyler.SetMaskLayerMask(this, 0);
+                LayerStyler.SetMaskLayerMask(this, test);
             }
         }
 

@@ -676,7 +676,7 @@
     "m_FunctionName": "Bitmask",
     "m_FunctionSource": "",
     "m_FunctionSourceUsePragmas": true,
-    "m_FunctionBody": "uint testValue = asuint(TestValue);\nuint bitMask = asuint(BitMask);\nuint result = testValue & bitMask;\n\nOut  =  (result != 0) ? 1.0 : 0.0;"
+    "m_FunctionBody": "uint testValue = uint(TestValue);\nuint bitMask = uint(BitMask);\nuint result = testValue & bitMask;\n\nOut  =  (result != 0) ? 1.0 : 0.0;"
 }
 
 {
@@ -857,8 +857,8 @@
     "m_ObjectId": "5a2528ef2ca14fb5b211cb42097954e8",
     "m_Title": "Masking",
     "m_Position": {
-        "x": -870.0001220703125,
-        "y": -536.0000610351563
+        "x": -869.9999389648438,
+        "y": -536.0
     }
 }
 

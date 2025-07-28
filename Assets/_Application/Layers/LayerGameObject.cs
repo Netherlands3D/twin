@@ -24,7 +24,8 @@ namespace Netherlands3D.Twin.Layers
     
     public abstract class LayerGameObject : MonoBehaviour, IStylable
     {
-        public const int DEFAULT_MASK_BIT_MASK = 0b_00000000011111111111111111111111; 
+        // public const int DEFAULT_MASK_BIT_MASK = 0b_00000000011111111111111111111111; 
+        public const int DEFAULT_MASK_BIT_MASK = 16777215; //(2^24)-1; 
         
         [SerializeField] private string prefabIdentifier;
         [SerializeField] private SpriteState thumbnail;
@@ -64,8 +65,6 @@ namespace Netherlands3D.Twin.Layers
                 }
             }
         }
-        
-        private int maskBitMask = 0b_00000000011111111111111111111111; //2^23-1, affected by all masks
         
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
         public UnityEvent OnStylingApplied = new();
@@ -218,9 +217,7 @@ namespace Netherlands3D.Twin.Layers
             foreach (var m in materials)
             {
                 Debug.Log("setting r bit mask: " + bitmask[0]);
-                float floatMaskValueR = BitConverter.Int32BitsToSingle(bitmask[0]);
-
-                m.SetFloat("_MaskingChannelBitmask", floatMaskValueR); //todo : r b
+                m.SetFloat("_MaskingChannelBitmask", bitmask[0]); //todo : r b
             }
         }
 

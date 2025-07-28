@@ -65,16 +65,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if (bitIndex > 23)
                 throw new IndexOutOfRangeException("bitIndex must be 23 or smaller to avoid floating point rounding errors since we must use a float formatted masking texture");
             
-            int maskValue = 0b_00111111000000000000000000000000 + (1 << bitIndex); //0b_ number is to make sure the exponent part of the float is 2^-1, to have a range of 0.5 to 1 for the color values
-            // interpret the bitshifted mask value as a float without moving the bits around
-            // due to the way floats work, the resulting value will be between 0 and 1 for the first 23 bits 
-            float floatMaskValue = BitConverter.Int32BitsToSingle(maskValue); 
+            // the max integer value we can represent in a float without rounding errors is 2^24-1, so we can support 23 masking bit channels
             
-            Debug.Log("maskvalue " + maskValue);
-            Debug.Log("floatmaskvalue " + floatMaskValue);
+            int maskValue = 1 << bitIndex;
+            float floatMaskValue = (float)maskValue;
             
             var newMat = new Material(polygonMaskMaterial);
-            // var newMat = (polygonMaskMaterial);
             var bitMask = new Vector4(floatMaskValue, 0, 0, 1);
             newMat.SetVector("_MaskBitMask", bitMask);
             
