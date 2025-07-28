@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -11,7 +13,8 @@ namespace Netherlands3D.OgcApi
         public double[][] Bbox { get; set; }
 
         [JsonProperty("crs", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Crs { get; set; }
+        [CanBeNull]
+        public Uri Crs { get; set; }
 
         [JsonExtensionData]
         public IDictionary<string, JToken> ExtensionData { get; set; } = new Dictionary<string, JToken>();

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace Netherlands3D.OgcApi.ExtensionMethods
 {
@@ -24,7 +25,8 @@ namespace Netherlands3D.OgcApi.ExtensionMethods
         /// <summary>
         /// Finds the first matching link (or null).
         /// </summary>
-        public static Link? FirstBy(
+        [CanBeNull]
+        public static Link FirstBy(
             this IEnumerable<Link> links,
             string[] relation,
             string[] format)
@@ -32,7 +34,8 @@ namespace Netherlands3D.OgcApi.ExtensionMethods
             return links.FilterBy(relation, format).FirstOrDefault();
         }
 
-        public static Link? FirstBy(this IEnumerable<Link> links, string[] relation)
+        [CanBeNull]
+        public static Link FirstBy(this IEnumerable<Link> links, string[] relation)
         {
             return links.FilterBy(relation).FirstOrDefault();
         }

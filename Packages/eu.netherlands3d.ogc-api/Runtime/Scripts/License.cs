@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -11,7 +12,8 @@ namespace Netherlands3D.OgcApi
         public string Name { get; set; }
 
         [JsonProperty("url", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Url { get; set; }
+        [CanBeNull]
+        public string Url { get; set; }
 
         [JsonExtensionData]
         public IDictionary<string, JToken> ExtensionData { get; set; } = new Dictionary<string, JToken>();

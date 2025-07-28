@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GeoJSON.Net.Feature;
+using JetBrains.Annotations;
 using KindMen.Uxios.Api;
 using Netherlands3D.OgcApi.ExtensionMethods;
+using Netherlands3D.OgcApi.Features;
 using Netherlands3D.OgcApi.JsonConverters;
-using Netherlands3D.OgcApi.Pagination;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UnityEngine;
 
 namespace Netherlands3D.OgcApi
 {
@@ -19,34 +18,38 @@ namespace Netherlands3D.OgcApi
         public string Id { get; set; }
 
         [JsonProperty("title", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Title { get; set; }
+        [CanBeNull]
+        public string Title { get; set; }
 
         [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Description { get; set; }
+        [CanBeNull]
+        public string Description { get; set; }
 
         [JsonProperty("links", Required = Required.Always)]
         public Link[] Links { get; set; }
 
         [JsonProperty("extent", NullValueHandling = NullValueHandling.Ignore)]
-        public Extent? Extent { get; set; }
+        [CanBeNull]
+        public Extent Extent { get; set; }
 
         [JsonProperty("itemType", NullValueHandling = NullValueHandling.Ignore)]
         public string ItemType { get; set; } = CollectionTypes.Default;
 
         [JsonProperty("crs", NullValueHandling = NullValueHandling.Ignore)]
-        [JsonConverter(typeof(NormalizeToArrayConverter<string>))]
-        public string[]? Crs { get; set; } = {
-            "http://www.opengis.net/def/crs/OGC/1.3/CRS84"
+        [JsonConverter(typeof(NormalizeToArrayConverter<Uri>))]
+        [CanBeNull]
+        public Uri[] Crs { get; set; } = {
+            new("http://www.opengis.net/def/crs/OGC/1.3/CRS84")
         };
 
         [JsonExtensionData]
         public IDictionary<string, JToken> ExtensionData { get; set; } = new Dictionary<string, JToken>();
 
-        public async Task<Results<FeatureCollection>> FetchItems(int? limit = null, int? offset = null)
+        public async Task<FeatureCollection> FetchItems(int? limit = null, int? offset = null)
         {
             var uri = GetItemsUriBuilder().Uri;
 
-            var resource = new Resource<Results<FeatureCollection>>(uri);
+            var resource = new Resource<FeatureCollection>(uri);
             if (offset != null) resource.With("offset", offset.ToString());
             if (limit != null) resource.With("limit", limit.ToString());
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -11,13 +12,16 @@ namespace Netherlands3D.OgcApi
     public class LandingPage
     {
         [JsonProperty("title", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Title { get; set; }
+        [CanBeNull]
+        public string Title { get; set; }
 
         [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Description { get; set; }
+        [CanBeNull]
+        public string Description { get; set; }
 
         [JsonProperty("attribution", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Attribution { get; set; }
+        [CanBeNull]
+        public string Attribution { get; set; }
 
         [JsonProperty("links", Required = Required.Always)]
         public Link[] Links { get; set; }

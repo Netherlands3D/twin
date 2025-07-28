@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
-using GeoJSON.Net.Feature;
-using Netherlands3D.OgcApi.Pagination;
+using Netherlands3D.OgcApi.Features;
 using Netherlands3D.OgcApi.Tests.Fixtures;
 using NUnit.Framework;
 
@@ -40,10 +39,10 @@ namespace Netherlands3D.OgcApi.Tests
             Assert.IsNotNull(collection, $"Collection {id} was null");
             var items = await collection.FetchItems();
 
-            Assert.IsNotNull(items, $"Items for collection {id} was null");
-            Assert.IsNotNull(items.Value, $"Feature collection in results for collection {id} was null");
+            // Assert.IsNotNull(items, $"Items for collection {id} was null");
+            Assert.IsNotNull(items, $"Feature collection in results for collection {id} was null");
             
-            var item = items.Value.Features[0];
+            var item = items.Features[0];
             
             Assert.IsInstanceOf<Feature>(item);
             CollectionAssert.Contains(item.Properties.Keys, "title");
@@ -63,6 +62,7 @@ namespace Netherlands3D.OgcApi.Tests
             Assert.IsInstanceOf<Feature>(item);
             CollectionAssert.Contains(item.Properties.Keys, "title");
             CollectionAssert.Contains(item.Properties.Keys, "type");
+            
         }
     }
 }
