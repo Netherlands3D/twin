@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 namespace Netherlands3D.OgcApi
 {
     [JsonObject]
-    public class TemporalExtent
+    public record TemporalExtent
     {
         [JsonProperty("interval", Required = Required.Always, NullValueHandling = NullValueHandling.Include)]
         public string[][] Interval { get; set; }

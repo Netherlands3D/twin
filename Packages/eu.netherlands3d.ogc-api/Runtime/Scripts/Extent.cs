@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 namespace Netherlands3D.OgcApi
 {
     [JsonObject]
-    public class Extent
+    public record Extent
     {
         [JsonProperty("spatial", NullValueHandling = NullValueHandling.Ignore)]
         [CanBeNull]

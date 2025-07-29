@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
 
 namespace Netherlands3D.OgcApi
 {
-    public class ConformanceDeclaration
+    public record ConformanceDeclaration
     {
         // TODO: add helpers methods to have readable checks on what an OGC API can do 
         [JsonProperty("conformsTo", Required = Required.Always)]

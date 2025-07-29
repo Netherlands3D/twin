@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 namespace Netherlands3D.OgcApi
 {
     [JsonObject]
-    public class Contact
+    public record Contact
     {
         [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
         [CanBeNull]

@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 namespace Netherlands3D.OgcApi
 {
     [JsonObject]
-    public class ServiceMetadata
+    public record ServiceMetadata
     {
         [JsonProperty("info", Required = Required.Always)]
         public Info Info { get; set; }

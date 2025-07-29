@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 namespace Netherlands3D.OgcApi
 {
     [JsonObject]
-    public class Link
+    public record Link
     {
         [JsonProperty("href", Required = Required.Always)]
         public string Href { get; set; }
