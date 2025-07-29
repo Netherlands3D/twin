@@ -55,6 +55,7 @@ namespace Netherlands3D.SerializableGisExpressions
                 
                 // https://docs.mapbox.com/style-spec/reference/expressions/#lookup
                 Expression.Operators.Get => GetOperation.Evaluate(expression, context),
+                Expression.Operators.In => InOperation.Evaluate(expression, context),
 
                 // https://docs.mapbox.com/style-spec/reference/expressions/#decision
                 Expression.Operators.Not => NotOperation.Evaluate(expression, context),

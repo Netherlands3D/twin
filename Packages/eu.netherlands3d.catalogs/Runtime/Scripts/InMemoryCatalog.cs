@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Netherlands3D.SerializableGisExpressions;
+using ExpressionEvaluator = Netherlands3D.SerializableGisExpressions.ExpressionEvaluator;
 
 namespace Netherlands3D.Catalogs
 {
@@ -31,8 +32,33 @@ namespace Netherlands3D.Catalogs
             return Task.FromResult<IPaginatedRecordCollection>(page);
         }
 
+        public Task<IPaginatedRecordCollection> SearchAsync(string query, int limit = 50, int offset = 0)
+        {
+            // Simple search: match on title or part thereof
+            return SearchAsync(Expression.In(query, Expression.Get("Title")), limit, offset);
+        }
+
         public Task<IPaginatedRecordCollection> SearchAsync(Expression expression, int limit = 50, int offset = 0)
-            => throw new NotImplementedException();
+        {
+            var page = new RecordCollectionPage(FilteredItems(allRecords), limit, offset);
+            
+            return Task.FromResult<IPaginatedRecordCollection>(page);
+
+            // use a function yielding results to avoid allocations and linq 
+            IEnumerable<ICatalogItem> FilteredItems(IEnumerable<ICatalogItem> items)
+            {
+                // Prepare the context and catalog item feature once and reuse it to reduce allocations.
+                var catalogItemFeature = new CatalogItemFeature();
+                var context = new ExpressionContext(catalogItemFeature);
+
+                foreach (var item in items)
+                {
+                    catalogItemFeature.ReplaceCatalogItem(item);
+
+                    if (ExpressionEvaluator.Evaluate(expression, context)) yield return item;
+                }
+            }
+        }
 
         public void Add(ICatalogItem record)
         {
@@ -69,6 +95,38 @@ namespace Netherlands3D.Catalogs
             int offset = 0
         ) {
             return new FolderItem(id, title, description, new RecordCollectionPage(records, limit, offset));       
+        }
+
+        private class CatalogItemFeature : IFeatureForExpression
+        {
+            private ICatalogItem CatalogItem { get; set; } = null;
+
+            public object Geometry => null;
+
+            public Dictionary<string, string> Attributes => null;
+
+            public void ReplaceCatalogItem(ICatalogItem item)
+            {
+                CatalogItem = item;
+            }
+
+            public string GetAttribute(string attributeKey)
+            {
+                if (CatalogItem == null) return null;
+
+                switch (attributeKey)
+                {
+                    case "Id": return CatalogItem.Id;
+                    case "Title": return CatalogItem.Title;
+                    case "Description": return CatalogItem.Description;
+
+                    // .. otherwise try to grab it from the metadata
+                    default:
+                        CatalogItem.Metadata.TryGetValue(attributeKey, out var haystackValue);
+
+                        return haystackValue?.ToString();
+                }
+            }
         }
 
         private class RecordCollectionPage : IPaginatedRecordCollection
