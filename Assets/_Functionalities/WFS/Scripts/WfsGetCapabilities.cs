@@ -5,6 +5,8 @@ using System.Xml;
 using System.Xml.Serialization;
 using Netherlands3D.Coordinates;
 using Netherlands3D.OgcWebServices.Shared;
+using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
@@ -14,9 +16,12 @@ namespace Netherlands3D.Functionalities.Wfs
     {
         public Uri GetCapabilitiesUri => Url;
         public const string DefaultFallbackVersion = "2.0.0"; // Default to 2.0.0 (released in 2010, compliant with ISO standards)
+        private string forcedCRS = null;
 
         public WfsGetCapabilities(Uri sourceUrl, string xml) : base(sourceUrl, xml)
         {
+            forcedCRS = ServiceLocator.GetService<ForcedParameterService>().ForcedCrs;            
+            SetForcedCRS(forcedCRS);
         }
 
         protected override Dictionary<string, string> defaultNameSpaces => new()
@@ -169,23 +174,9 @@ namespace Netherlands3D.Functionalities.Wfs
             return new BoundingBox(wgs84BottomLeft, wgs84TopRight);
         }
 
-
-        public CoordinateSystem GetCoordinateReferenceSystem()
+        public void SetForcedCRS(string crs)
         {
-            // Try to find the CRS in the FeatureType's DefaultCRS or DefaultSRS elements
-            var crsNode = xmlDocument?.DocumentElement?
-                .SelectSingleNode("//*[local-name()='FeatureTypeList']/*[local-name()='FeatureType']/*[local-name()='DefaultCRS' or local-name()='DefaultSRS']", namespaceManager);
-
-            if (crsNode == null)
-            {
-                Debug.LogWarning("Coordinate Reference System (CRS) not found in the WFS GetCapabilities response.");
-                return CoordinateSystem.Undefined;
-            }
-
-            CoordinateSystem crs = CoordinateSystems.FindCoordinateSystem(crsNode.InnerText);
-            if(crs == CoordinateSystem.Undefined)
-                Debug.LogWarning("Could not parse Coordinate Reference System (CRS) in the WFS GetCapabilities response. Founds CRS string: " + crsNode.InnerText);
-            return crs;
+            forcedCRS = crs;
         }
 
         public bool WFSBboxFilterCapability()
@@ -336,6 +327,9 @@ namespace Netherlands3D.Functionalities.Wfs
 
                 var crsNode = featureTypeNode.SelectSingleNode("wfs:DefaultSRS | wfs:DefaultCRS", namespaceManager);
                 string crs = crsNode?.InnerText;
+
+                if (forcedCRS != null)
+                    crs = forcedCRS;
 
                 using (XmlNodeReader reader = new XmlNodeReader(featureTypeNode))
                 {
