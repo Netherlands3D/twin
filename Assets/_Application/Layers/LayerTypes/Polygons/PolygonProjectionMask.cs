@@ -1,19 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 namespace Netherlands3D
 {
     public class PolygonProjectionMask : MonoBehaviour
     {
         // Match Shader Graph property names exactly
-        [Header("Mask settings")]
+        [Header("Mask settings")] 
         [SerializeField] private string centerProperty = "_MaskBBoxCenter";
+
         [SerializeField] private string extentsProperty = "_MaskBBoxExtents";
         [SerializeField] private string maskInvertTextureProperty = "_MaskInvertTexture";
         [SerializeField] private string maskTextureProperty = "_MaskTexture";
-        
+
         [SerializeField] private Camera maskCamera;
         [SerializeField] private Camera maskInvertCamera;
 
@@ -41,16 +41,16 @@ namespace Netherlands3D
                 forceUpdate = false;
             }
         }
-        
+
         // when there are 0 inverted masks, all geometry should be visible, so we should change the output texture to alpha=1 on all pixels, otherwise we need to set alpha=0 so the environment is masked away
         private void UpdateCameraBackgroundColor()
         {
-            if(invertedMasks.Count > 0)
+            if (invertedMasks.Count > 0)
                 maskInvertCamera.backgroundColor = Color.clear;
             else
                 maskInvertCamera.backgroundColor = Color.white;
         }
-        
+
         private void SetShaderMaskVectors()
         {
             Vector2 worldCenterXZ = new Vector2(maskCamera.transform.position.x, maskCamera.transform.position.z);
@@ -66,7 +66,7 @@ namespace Netherlands3D
         }
 
         public static void AddInvertedMask(GameObject invertedMask)
-        { 
+        {
             invertedMasks.Add(invertedMask);
         }
 
