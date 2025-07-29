@@ -6,7 +6,7 @@
     public interface IWritableCatalog : ICatalog
     {
         /// <summary>Adds a new record to the catalog.</summary>
-        void Add(Record record);
+        void Add(ICatalogItem record);
 
         /// <summary>Removes the record with the given Id. Returns true if something was removed.</summary>
         bool Remove(string id);

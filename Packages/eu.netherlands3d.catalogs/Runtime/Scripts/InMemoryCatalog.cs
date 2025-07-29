@@ -8,24 +8,33 @@ namespace Netherlands3D.Catalogs
 {
     public class InMemoryCatalog : IWritableCatalog
     {
-        private readonly List<Record> allRecords;
+        public string Id { get; }
+        public string Title { get; }
+        public string Description { get; }
+        public IDictionary<string, object> Metadata { get; }
+        
+        private readonly List<ICatalogItem> allRecords;
 
-        public InMemoryCatalog(IEnumerable<Record> records)
+        public InMemoryCatalog(string id, string title, string description, IEnumerable<ICatalogItem> records)
         {
+            Id = id;
+            Title = title;
+            Description = description;
+            Metadata = new Dictionary<string, object>();
             allRecords = records.ToList();
         }
-
-        public Task<IRecordCollection> BrowseAsync(int limit = 50, int offset = 0)
+        
+        public Task<IPaginatedRecordCollection> BrowseAsync(int limit = 50, int offset = 0)
         {
-            var page = new InMemoryPage(allRecords, limit, offset);
+            var page = new RecordCollectionPage(allRecords, limit, offset);
 
-            return Task.FromResult<IRecordCollection>(page);
+            return Task.FromResult<IPaginatedRecordCollection>(page);
         }
 
-        public Task<IRecordCollection> SearchAsync(Expression expression, int limit = 50, int offset = 0)
+        public Task<IPaginatedRecordCollection> SearchAsync(Expression expression, int limit = 50, int offset = 0)
             => throw new NotImplementedException();
 
-        public void Add(Record record)
+        public void Add(ICatalogItem record)
         {
             if (record == null) throw new ArgumentNullException(nameof(record));
 
@@ -41,14 +50,35 @@ namespace Netherlands3D.Catalogs
 
         public void Clear() => allRecords.Clear();
 
-        private class InMemoryPage : IPaginatedRecordCollection
+        public static RecordItem CreateRecord(string id, string title, string description)
         {
-            private readonly List<Record> source;
+            return new RecordItem
+            {
+                Id = id,
+                Title = title,
+                Description = description
+            };
+        }
+
+        public static FolderItem CreateFolder(
+            string id, 
+            string title, 
+            string description, 
+            IEnumerable<ICatalogItem> records, 
+            int limit = 25, 
+            int offset = 0
+        ) {
+            return new FolderItem(id, title, description, new RecordCollectionPage(records, limit, offset));       
+        }
+
+        private class RecordCollectionPage : IPaginatedRecordCollection
+        {
+            private readonly List<ICatalogItem> source;
             private readonly int limit;
             private readonly int offset;
-            private readonly List<Record> items;
+            private readonly List<ICatalogItem> items;
 
-            public InMemoryPage(IEnumerable<Record> source, int limit, int offset)
+            public RecordCollectionPage(IEnumerable<ICatalogItem> source, int limit, int offset)
             {
                 this.source = source.ToList();
                 this.limit = Math.Max(1, limit);
@@ -62,14 +92,14 @@ namespace Netherlands3D.Catalogs
             public bool IsFirstPage => !HasPreviousPage;
             public bool IsLastPage => !HasNextPage;
 
-            public Task<IEnumerable<Record>> GetItemsAsync()
-                => Task.FromResult<IEnumerable<Record>>(items);
+            public Task<IEnumerable<ICatalogItem>> GetItemsAsync()
+                => Task.FromResult<IEnumerable<ICatalogItem>>(items);
 
             public Task<IPaginatedRecordCollection> GetNextPageAsync()
             {
                 if (!HasNextPage) throw new InvalidOperationException("No next page available.");
 
-                var nextPage = new InMemoryPage(source, limit, offset + limit);
+                var nextPage = new RecordCollectionPage(source, limit, offset + limit);
                 return Task.FromResult<IPaginatedRecordCollection>(nextPage);
             }
 
@@ -78,7 +108,7 @@ namespace Netherlands3D.Catalogs
                 if (!HasPreviousPage) throw new InvalidOperationException("No previous page available.");
 
                 var prevOffset = Math.Max(0, offset - limit);
-                var prevPage = new InMemoryPage(source, limit, prevOffset);
+                var prevPage = new RecordCollectionPage(source, limit, prevOffset);
                 return Task.FromResult<IPaginatedRecordCollection>(prevPage);
             }
         }

@@ -13,21 +13,21 @@ namespace Netherlands3D.Catalogs
         [SetUp]
         public void SetUp()
         {
-            var starting = new List<Record>
+            var starting = new List<RecordItem>
             {
                 new() { Id = "A", Title = "One" },
                 new() { Id = "B", Title = "Two" }
             };
-            catalog = new InMemoryCatalog(starting);
+            catalog = new InMemoryCatalog("object-library", "Object Bibliotheek", null, starting);
         }
 
         [Test]
-        public async Task Add_Record_IncreasesCount()
+        public async Task Add_Record()
         {
             var collection = await catalog.BrowseAsync();
             var before = (await collection.GetItemsAsync()).Count();
 
-            catalog.Add(new Record { Id = "C", Title = "Three" });
+            catalog.Add(new RecordItem { Id = "C", Title = "Three" });
             var after = await (await catalog.BrowseAsync()).GetItemsAsync();
 
             Assert.AreEqual(before + 1, after.Count());
@@ -35,7 +35,7 @@ namespace Netherlands3D.Catalogs
         }
 
         [Test]
-        public async Task Remove_ExistingId_ReturnsTrueAndDecreasesCount()
+        public async Task Remove_Record()
         {
             var collection = await catalog.BrowseAsync();
             var before = (await collection.GetItemsAsync()).Count();
@@ -74,8 +74,8 @@ namespace Netherlands3D.Catalogs
         public async Task Mutations_ReflectInPaging()
         {
             // add two more to exceed default page size=2
-            catalog.Add(new Record { Id = "C", Title = "Three" });
-            catalog.Add(new Record { Id = "D", Title = "Four" });
+            catalog.Add(new RecordItem { Id = "C", Title = "Three" });
+            catalog.Add(new RecordItem { Id = "D", Title = "Four" });
 
             // now browse with pageSize=2
             var page1 = await catalog.BrowseAsync(limit: 2, offset: 0) as IPaginatedRecordCollection;

@@ -1,13 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Netherlands3D.Catalogs
 {
-    public interface IRecordCollection
-    {
-        public Task<IEnumerable<Record>> GetItemsAsync();
-    }
-
     public interface IPaginatedRecordCollection : IRecordCollection
     {
         /// <summary>
