@@ -27,7 +27,7 @@ namespace Netherlands3D.Catalogs
                     InMemoryCatalog.CreateRecord("8", "Pinklady", null),
                     InMemoryCatalog.CreateRecord("9", "Golden Delicious", null)
                 },
-                limit: 2 // page size inside folder, not relevant for top-level search
+                Pagination.WithOffset(0, 2) // page size inside folder, not relevant for top-level search
             ),
 
             // a nested catalog “Orchards”
@@ -110,7 +110,7 @@ namespace Netherlands3D.Catalogs
         public async Task SearchAsync_Pagination_WorksCorrectly()
         {
             // search "a", limit 2 → first 2 matching items
-            var page1 = await catalog.SearchAsync("a", limit: 2, offset: 0);
+            var page1 = await catalog.SearchAsync("a", Pagination.WithOffset(0, 2));
             var ids1 = (await page1.GetItemsAsync()).Select(i => i.Id).ToList();
             Assert.AreEqual(2, ids1.Count);
             Assert.IsTrue(page1.HasNextPage);

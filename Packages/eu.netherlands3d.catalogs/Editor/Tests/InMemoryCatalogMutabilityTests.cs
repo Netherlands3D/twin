@@ -78,7 +78,7 @@ namespace Netherlands3D.Catalogs
             catalog.Add(new RecordItem { Id = "D", Title = "Four" });
 
             // now browse with pageSize=2
-            var page1 = await catalog.BrowseAsync(limit: 2, offset: 0) as IPaginatedRecordCollection;
+            var page1 = await catalog.BrowseAsync(Pagination.WithOffset(0, 2));
             Assert.IsTrue(page1.HasNextPage); // we have 4 total
 
             var page2 = await page1.GetNextPageAsync();
@@ -87,7 +87,7 @@ namespace Netherlands3D.Catalogs
 
             // clear and verify no pages
             catalog.Clear();
-            var clearedPage = await catalog.BrowseAsync(limit: 2) as IPaginatedRecordCollection;
+            var clearedPage = await catalog.BrowseAsync(Pagination.WithOffset(0, 2));
             Assert.IsFalse(clearedPage.HasNextPage);
             Assert.IsFalse(clearedPage.HasPreviousPage);
             Assert.IsEmpty(clearedPage.GetItemsAsync().Result);

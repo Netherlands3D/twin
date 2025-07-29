@@ -25,22 +25,22 @@ namespace Netherlands3D.Catalogs
             allRecords = records.ToList();
         }
         
-        public Task<IPaginatedRecordCollection> BrowseAsync(int limit = 50, int offset = 0)
+        public Task<IPaginatedRecordCollection> BrowseAsync(Pagination pagination = null)
         {
-            var page = new RecordCollectionPage(allRecords, limit, offset);
+            var page = new RecordCollectionPage(allRecords, pagination);
 
             return Task.FromResult<IPaginatedRecordCollection>(page);
         }
 
-        public Task<IPaginatedRecordCollection> SearchAsync(string query, int limit = 50, int offset = 0)
+        public Task<IPaginatedRecordCollection> SearchAsync(string query, Pagination pagination = null)
         {
             // Simple search: match on title or part thereof
-            return SearchAsync(Expression.In(query, Expression.Get("Title")), limit, offset);
+            return SearchAsync(Expression.In(query, Expression.Get("Title")), pagination);
         }
 
-        public Task<IPaginatedRecordCollection> SearchAsync(Expression expression, int limit = 50, int offset = 0)
+        public Task<IPaginatedRecordCollection> SearchAsync(Expression expression, Pagination pagination = null)
         {
-            var page = new RecordCollectionPage(FilteredItems(allRecords), limit, offset);
+            var page = new RecordCollectionPage(FilteredItems(allRecords), pagination);
             
             return Task.FromResult<IPaginatedRecordCollection>(page);
 
@@ -76,13 +76,14 @@ namespace Netherlands3D.Catalogs
 
         public void Clear() => allRecords.Clear();
 
-        public static RecordItem CreateRecord(string id, string title, string description)
+        public static RecordItem CreateRecord(string id, string title, string description, Uri uri = null)
         {
             return new RecordItem
             {
                 Id = id,
                 Title = title,
-                Description = description
+                Description = description,
+                Url = uri
             };
         }
 
@@ -90,11 +91,10 @@ namespace Netherlands3D.Catalogs
             string id, 
             string title, 
             string description, 
-            IEnumerable<ICatalogItem> records, 
-            int limit = 25, 
-            int offset = 0
+            IEnumerable<ICatalogItem> records,
+            Pagination pagination = null
         ) {
-            return new FolderItem(id, title, description, new RecordCollectionPage(records, limit, offset));       
+            return new FolderItem(id, title, description, new RecordCollectionPage(records, pagination));       
         }
 
         private class CatalogItemFeature : IFeatureForExpression
@@ -132,20 +132,20 @@ namespace Netherlands3D.Catalogs
         private class RecordCollectionPage : IPaginatedRecordCollection
         {
             private readonly List<ICatalogItem> source;
-            private readonly int limit;
-            private readonly int offset;
+            private readonly Pagination pagination;
             private readonly List<ICatalogItem> items;
 
-            public RecordCollectionPage(IEnumerable<ICatalogItem> source, int limit, int offset)
+            public RecordCollectionPage(IEnumerable<ICatalogItem> source, Pagination pagination = null)
             {
+                pagination ??= new Pagination();
+
                 this.source = source.ToList();
-                this.limit = Math.Max(1, limit);
-                this.offset = Math.Max(0, offset);
-                items = this.source.Skip(this.offset).Take(this.limit).ToList();
+                this.pagination = pagination;
+                items = this.source.Skip(pagination.Offset).Take(pagination.Limit).ToList();
             }
 
-            public bool HasPreviousPage => offset > 0;
-            public bool HasNextPage => offset + limit < source.Count;
+            public bool HasPreviousPage => pagination.Offset > 0;
+            public bool HasNextPage => pagination.Offset + pagination.Limit < source.Count;
 
             public bool IsFirstPage => !HasPreviousPage;
             public bool IsLastPage => !HasNextPage;
@@ -157,7 +157,7 @@ namespace Netherlands3D.Catalogs
             {
                 if (!HasNextPage) throw new InvalidOperationException("No next page available.");
 
-                var nextPage = new RecordCollectionPage(source, limit, offset + limit);
+                var nextPage = new RecordCollectionPage(source, pagination.Next());
                 return Task.FromResult<IPaginatedRecordCollection>(nextPage);
             }
 
@@ -165,8 +165,7 @@ namespace Netherlands3D.Catalogs
             {
                 if (!HasPreviousPage) throw new InvalidOperationException("No previous page available.");
 
-                var prevOffset = Math.Max(0, offset - limit);
-                var prevPage = new RecordCollectionPage(source, limit, prevOffset);
+                var prevPage = new RecordCollectionPage(source, pagination.Previous());
                 return Task.FromResult<IPaginatedRecordCollection>(prevPage);
             }
         }

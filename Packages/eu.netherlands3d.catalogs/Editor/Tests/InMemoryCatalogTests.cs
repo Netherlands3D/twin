@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Netherlands3D.Catalogs;
 
 namespace Netherlands3D.Catalogs
 {
     [TestFixture]
     public class InMemoryCatalogTests
     {
-        private readonly List<ICatalogItem> sampleRecords = new()
+        private readonly List<ICatalogItem> sampleCatalogItems = new()
         {
-            InMemoryCatalog.CreateRecord("1", "Kiwi", "Fluffy fruit"),
+            InMemoryCatalog.CreateRecord("1", "Kiwi", "Fluffy fruit", new Uri("https://example.com/kiwi.jpg")),
             InMemoryCatalog.CreateRecord("2", "Banana", "Yellow fruit"),
             InMemoryCatalog.CreateRecord("3", "Cherry", "Small fruit"),
             InMemoryCatalog.CreateRecord("4", "Date", "Sweet fruit"),
@@ -29,7 +28,7 @@ namespace Netherlands3D.Catalogs
                     InMemoryCatalog.CreateRecord("8", "Pinklady", null),
                     InMemoryCatalog.CreateRecord("9", "Golden Delicious", null)
                 },
-                limit: 2
+                Pagination.WithOffset(0, 2)
             ),
 
             // A nested catalog of orchards
@@ -54,7 +53,7 @@ namespace Netherlands3D.Catalogs
                 id: "object-library",
                 title: "Object Bibliotheek",
                 description: null,
-                records: sampleRecords
+                records: sampleCatalogItems
             );
         }
 
@@ -66,7 +65,7 @@ namespace Netherlands3D.Catalogs
 
             // 6 top-level items: 4 records + 1 folder + 1 nested catalog
             Assert.AreEqual(6, items.Count);
-            CollectionAssert.AreEqual(sampleRecords, items);
+            CollectionAssert.AreEqual(sampleCatalogItems, items);
 
             Assert.IsFalse(page.HasNextPage);
             Assert.IsFalse(page.HasPreviousPage);
@@ -76,37 +75,55 @@ namespace Netherlands3D.Catalogs
         public async Task BrowseAsync_WithLimitAndOffset_PagesCorrectly()
         {
             // first page of size 2
-            var firstPage = await catalog.BrowseAsync(limit: 2, offset: 0);
+            var firstPage = await catalog.BrowseAsync(Pagination.WithOffset(0, 2));
             
             var firstItems = (await firstPage.GetItemsAsync()).ToList();
-            CollectionAssert.AreEqual(sampleRecords.Take(2), firstItems);
+            CollectionAssert.AreEqual(sampleCatalogItems.Take(2), firstItems);
             Assert.IsTrue(firstPage.HasNextPage);
+            Assert.IsTrue(firstPage.IsFirstPage);
             Assert.IsFalse(firstPage.HasPreviousPage);
+            Assert.IsFalse(firstPage.IsLastPage);
 
             // second page
             var secondPage = await firstPage.GetNextPageAsync();
             var secondItems = (await secondPage.GetItemsAsync()).ToList();
-            CollectionAssert.AreEqual(sampleRecords.Skip(2).Take(2), secondItems);
+            CollectionAssert.AreEqual(sampleCatalogItems.Skip(2).Take(2), secondItems);
             Assert.IsTrue(secondPage.HasNextPage);
             Assert.IsTrue(secondPage.HasPreviousPage);
 
             // third page
             var thirdPage = await secondPage.GetNextPageAsync();
             var thirdItems = (await thirdPage.GetItemsAsync()).ToList();
-            CollectionAssert.AreEqual(sampleRecords.Skip(4).Take(2), thirdItems);
+            CollectionAssert.AreEqual(sampleCatalogItems.Skip(4).Take(2), thirdItems);
             Assert.IsFalse(thirdPage.HasNextPage);
             Assert.IsTrue(thirdPage.HasPreviousPage);
 
             // back to first
             var backToFirst = await secondPage.GetPreviousPageAsync();
             var backItems = (await backToFirst.GetItemsAsync()).ToList();
-            CollectionAssert.AreEqual(sampleRecords.Take(2), backItems);
+            CollectionAssert.AreEqual(sampleCatalogItems.Take(2), backItems);
+        }
+
+        [Test]
+        public async Task BrowseAsync_WithLimitAndOffset_GetSecondPageDirectly()
+        {
+            int numberOfItemsPerPage = 2;
+            int pageNumber = 2;
+            
+            var secondPage = await catalog.BrowseAsync(
+                Pagination.WithPageNumber(pageNumber, numberOfItemsPerPage)
+            );
+            
+            var secondItems = (await secondPage.GetItemsAsync()).ToList();
+            CollectionAssert.AreEqual(sampleCatalogItems.Skip(2).Take(2), secondItems);
+            Assert.IsTrue(secondPage.HasNextPage);
+            Assert.IsTrue(secondPage.HasPreviousPage);
         }
 
         [Test]
         public async Task BrowseAsync_InvalidNextPage_ThrowsInvalidOperationException()
         {
-            var page = await catalog.BrowseAsync(limit: 10);
+            var page = await catalog.BrowseAsync();
             Assert.IsFalse(page.HasNextPage);
 
             Assert.ThrowsAsync<InvalidOperationException>(async () =>
@@ -117,7 +134,7 @@ namespace Netherlands3D.Catalogs
         [Test]
         public async Task BrowseAsync_InvalidPreviousPage_ThrowsInvalidOperationException()
         {
-            var page = await catalog.BrowseAsync(limit: 10);
+            var page = await catalog.BrowseAsync();
             Assert.IsFalse(page.HasPreviousPage);
 
             Assert.ThrowsAsync<InvalidOperationException>(async () =>

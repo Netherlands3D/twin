@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Netherlands3D.Catalogs
 {
@@ -20,6 +21,7 @@ namespace Netherlands3D.Catalogs
         /// May also be a Uri to a locally embedded file using the `project://` scheme, or addressable asset using
         /// the prefix `addressable://`.
         /// </summary>
+        [CanBeNull]
         public Uri Url { get; set; }
 
         /// <summary>
@@ -27,6 +29,7 @@ namespace Netherlands3D.Catalogs
         /// 
         /// https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#protocol
         /// </summary>
+        [CanBeNull]
         public string Type { get; set; }
     }
 }
