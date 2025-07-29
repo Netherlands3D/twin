@@ -86,6 +86,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             List<PolygonVisualisation> visualisations = data.Data;
             foreach (PolygonVisualisation polygon in visualisations)
             {
+                if(polygon.PolygonMesh == null)
+                {
+                    Debug.LogError("the polygon visualisation has a missing polygonmesh for feature:" + feature.Id);
+                    continue;
+                }
                 meshes.Add(polygon.PolygonMesh);
             }
 
