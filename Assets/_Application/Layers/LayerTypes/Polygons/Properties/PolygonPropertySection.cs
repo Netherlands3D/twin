@@ -1,4 +1,5 @@
 using Netherlands3D.Events;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [SerializeField] private Toggle maskInvertToggle;
         [SerializeField] private Button editGridSelectionButton;
         [SerializeField] private BoolEvent EnableGridInputInEditModeEvent;
+        [SerializeField] private RectTransform maskToggleParent;
+        [SerializeField] private MaskLayerToggle maskTogglePrefab;
         
         private PolygonSelectionLayer polygonLayer;
 
@@ -72,8 +75,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         private void OnIsMaskChanged(bool isMask)
         {
             polygonLayer.IsMask = isMask;
+
+            PopulateMaskLayerPanel();
         }
-        
+
+        private void PopulateMaskLayerPanel()
+        {
+            foreach (var layer in ProjectData.Current.RootLayer.ChildrenLayers)
+            {
+                var toggle = Instantiate(maskTogglePrefab, maskToggleParent);
+                toggle.Initialize(polygonLayer, layer);
+            }
+        }
+
         private void OnInvertMaskChanged(bool invert)
         {
             polygonLayer.InvertMask = invert;

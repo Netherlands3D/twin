@@ -24,7 +24,6 @@ namespace Netherlands3D.Twin.Layers
     
     public abstract class LayerGameObject : MonoBehaviour, IStylable
     {
-        // public const int DEFAULT_MASK_BIT_MASK = 0b_00000000011111111111111111111111; 
         public const int DEFAULT_MASK_BIT_MASK = 16777215; //(2^24)-1; 
         
         [SerializeField] private string prefabIdentifier;

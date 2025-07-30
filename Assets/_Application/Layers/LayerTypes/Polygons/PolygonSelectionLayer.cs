@@ -67,8 +67,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             set => polygonPropertyData.InvertMask = value;
         }
 
-        public int maskBitIndex = -1;
-        private static int nextBitMaskIndex = 0;
+        public int MaskBitIndex { get; private set; } = -1;
+        private static List<int> availableMaskChannels = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 };
         
         [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
 
@@ -283,17 +283,27 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         private void OnIsMaskChanged(bool isMask)
         {
+            if (isMask && availableMaskChannels.Count == 0)
+            {
+                Debug.LogError("No more masking channels available");
+                IsMask = false;
+            }
+            
             var layer = GetLayer(isMask, InvertMask);
             SetPolygonLayer(layer);
 
-            if (isMask && maskBitIndex < 0)
+            if (!isMask)
             {
-                maskBitIndex = nextBitMaskIndex;
-                nextBitMaskIndex++;
+                availableMaskChannels.Add(MaskBitIndex); //todo: remember the bit index so layers don't need to be selected again
+                MaskBitIndex = -1;
+                return;
             }
+            
+            MaskBitIndex = availableMaskChannels.First();
+            availableMaskChannels.Remove(MaskBitIndex);
 
-            Debug.Log(Name + "has bit index: " + maskBitIndex);
-            SetMaskingChannel(maskBitIndex);
+            Debug.Log(Name + "has bit index: " + MaskBitIndex);
+            SetMaskingChannel(MaskBitIndex);
         }
 
 
