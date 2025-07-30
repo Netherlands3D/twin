@@ -19,6 +19,8 @@ namespace Netherlands3D.Catalogs
             {
                 throw new ArgumentOutOfRangeException(nameof(limit), "The limit must be more than or equal to 1.");
             }
+            
+            // 1000 items is a common limit for OGC services, as such we enforce it here.
             if (limit > 1000)
             {
                 throw new ArgumentOutOfRangeException(nameof(limit), "The limit must be less than or equal to 1000.");
