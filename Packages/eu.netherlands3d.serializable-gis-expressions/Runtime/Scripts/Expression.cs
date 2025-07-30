@@ -98,8 +98,8 @@ namespace Netherlands3D.SerializableGisExpressions
             // [EnumMember(Value = "has")] 
             // Has,
             
-            // [EnumMember(Value = "in")] 
-            // In,
+            [EnumMember(Value = InOperation.Code)] 
+            In,
             
             // [EnumMember(Value = "index-of")] 
             // IndexOf,
