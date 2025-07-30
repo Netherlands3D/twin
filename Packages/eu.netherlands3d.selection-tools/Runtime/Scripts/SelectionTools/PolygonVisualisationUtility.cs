@@ -1,6 +1,9 @@
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Implementation;
+using NetTopologySuite.Triangulate.Polygon;
+using NetTopologySuite.Triangulate.Tri;
+using NUnit.Framework.Internal;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -102,8 +105,28 @@ namespace Netherlands3D.SelectionTools
                 }
             }
 
+            //var shell = polygon.ExteriorRing;
+            //if (!NetTopologySuite.Algorithm.Orientation.IsCCW(shell.CoordinateSequence))
+            //{
+            //    shell = (LinearRing)shell.Reverse();
+            //}
+
+            //var holes = new LinearRing[polygon.NumInteriorRings];
+            //for (int i = 0; i < polygon.NumInteriorRings; i++)
+            //{
+            //    var hole = polygon.GetInteriorRingN(i);
+            //    if (NetTopologySuite.Algorithm.Orientation.IsCCW(hole.CoordinateSequence))
+            //    {
+            //        hole = (LinearRing)hole.Reverse();
+            //    }
+            //    holes[i] = hole;
+            //}
+
+            //var fixedPolygon = new Polygon(shell, holes);
+
             Polygon polygon = geometryFactory.CreatePolygon(shell, holes);
-            return null;
+            Mesh mesh = PolygonToMesh(polygon);
+            return mesh;
 
             //var polygon = new Poly2Mesh.Polygon();
             //var outerContour = (List<Vector3>)contours[0];
@@ -150,6 +173,54 @@ namespace Netherlands3D.SelectionTools
             coords[points.Count] = coords[0]; // close the ring
             return coords;
         }
+
+        public static Mesh PolygonToMesh(Polygon polygon)
+        {
+            // Triangulate the polygon using NetTopologySuite
+
+            var cleaner = new NetTopologySuite.Simplify.TopologyPreservingSimplifier(polygon);
+            var cleanPolygon = cleaner.GetResultGeometry() as Polygon;
+
+         
+
+            var triangulator = new PolygonTriangulator(cleanPolygon);
+            List<Tri> triangles = triangulator.GetTriangles(); // Tri contains P0, P1, P2
+
+            List<Vector3> vertices = new List<Vector3>();
+            List<int> indices = new List<int>();
+            Dictionary<Coordinate, int> coordToIndex = new Dictionary<Coordinate, int>(new CoordinateEqualityComparer());
+
+            int nextIndex = 0;
+
+            for (int i = 0; i < triangles.Count; i++)
+            {
+                var tri = triangles[i];
+                Coordinate[] coords = new[] { tri.GetCoordinate(0), tri.GetCoordinate(1), tri.GetCoordinate(2) };
+
+                for (int j = 0; j < 3; j++)
+                {
+                    var coord = coords[j];
+
+                    if (!coordToIndex.TryGetValue(coord, out int index))
+                    {
+                        index = nextIndex++;
+                        coordToIndex[coord] = index;
+                        vertices.Add(new Vector3((float)coord.X, 0f, (float)coord.Y));
+                    }
+
+                    indices.Add(index);
+                }
+            }
+
+            Mesh mesh = new Mesh();
+            mesh.SetVertices(vertices);
+            mesh.SetTriangles(indices, 0);
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+            return mesh;
+        }
+
+
 
         #endregion
 
