@@ -27,6 +27,7 @@ namespace Netherlands3D.Tiles3D
         public Tile ParentTile { get => parentTile; set => parentTile = value; }
 
         public UnityEvent onDoneDownloading = new();
+        public UnityEvent<Content> onTileLoadCompleted = new();
 
         private UnityEngine.Material overrideMaterial;
 
@@ -145,9 +146,8 @@ namespace Netherlands3D.Tiles3D
         {
             State = ContentLoadState.DOWNLOADED;
             onDoneDownloading.Invoke();
-
+            onTileLoadCompleted.Invoke(this);
         }
-//       
 
         private void OverrideAllMaterials(Transform parent)
         {

@@ -91,7 +91,8 @@ namespace Netherlands3D.Tiles3D
         [HideInInspector] public UnityEvent<UnityWebRequest> OnServerResponseReceived = new();
         [HideInInspector] public UnityEvent<UnityWebRequest.Result> OnServerRequestFailed = new();
         [HideInInspector] public UnityEvent<ContentMetadata> OnLoadAssetMetadata = new();
-
+        [HideInInspector] public UnityEvent<Content> OnTileLoaded = new();
+        
         public string CredentialQuery { get; private set; } = string.Empty;
         
         public void ClearKeyFromURL()
@@ -400,6 +401,7 @@ namespace Netherlands3D.Tiles3D
                 tile.content.ParentTile = tile;
                 tile.content.uri = GetFullContentUri(tile);
                 tile.content.parseAssetMetaData = parseAssetMetadata;
+                tile.content.onTileLoadCompleted.AddListener(InvokeTileLoadedEvent);
 #if SUBOBJECT
                 tile.content.parseSubObjects = parseSubObjects;
                 tile.content.contentcoordinateSystem = contentCoordinateSystem;
@@ -416,6 +418,12 @@ namespace Netherlands3D.Tiles3D
                     tile.content.Load(materialOverride, verbose:debugLog);
                 }
             }
+        }
+
+        private void InvokeTileLoadedEvent(Content tileContent)
+        {
+            OnTileLoaded.Invoke(tileContent);
+            tileContent.onTileLoadCompleted.RemoveListener(InvokeTileLoadedEvent);
         }
 
         private void RequestDispose(Tile tile)
