@@ -401,7 +401,7 @@ namespace Netherlands3D.Tiles3D
                 tile.content.ParentTile = tile;
                 tile.content.uri = GetFullContentUri(tile);
                 tile.content.parseAssetMetaData = parseAssetMetadata;
-                tile.content.onTileLoadCompleted.AddListener(InvokeTileLoadedEvent);
+                tile.content.onTileLoadCompleted.AddListener(OnTileLoaded.Invoke);
 #if SUBOBJECT
                 tile.content.parseSubObjects = parseSubObjects;
                 tile.content.contentcoordinateSystem = contentCoordinateSystem;
@@ -418,12 +418,6 @@ namespace Netherlands3D.Tiles3D
                     tile.content.Load(materialOverride, verbose:debugLog);
                 }
             }
-        }
-
-        private void InvokeTileLoadedEvent(Content tileContent)
-        {
-            OnTileLoaded.Invoke(tileContent);
-            tileContent.onTileLoadCompleted.RemoveListener(InvokeTileLoadedEvent);
         }
 
         private void RequestDispose(Tile tile)
