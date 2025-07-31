@@ -1,10 +1,43 @@
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.Geometries.Implementation;
+using NetTopologySuite.Triangulate.Polygon;
+using NetTopologySuite.Triangulate.Tri;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 namespace Netherlands3D.SelectionTools
 {
     public static class PolygonVisualisationUtility
     {
+        private static NtsGeometryServices instance;
+        private static GeometryFactory geometryFactory;       
+
+        private static void SetUpInstance()
+        {
+            if (instance != null)
+                return;
+
+            //the following are the default proposed settings by NTS github page https://github.com/NetTopologySuite/NetTopologySuite/wiki/GettingStarted
+            instance = new NtsGeometryServices(
+            // default CoordinateSequenceFactory
+            CoordinateArraySequenceFactory.Instance,
+            // default precision model
+            new PrecisionModel(1000d),
+            // default SRID
+            4326,
+            /********************************************************************
+             * Note: the following arguments are only valid for NTS >= v2.2
+             ********************************************************************/
+            // Geometry overlay operation function set to use (Legacy or NG)
+            GeometryOverlay.NG,
+            // Coordinate equality comparer to use (CoordinateEqualityComparer or PerOrdinateEqualityComparer)
+            new CoordinateEqualityComparer());
+
+            geometryFactory = instance.CreateGeometryFactory();
+        }
+
         #region UnityComponents
         //Treat first contour as outer contour, and extra contours as holes
         public static PolygonVisualisation CreateAndReturnPolygonObject(List<List<Vector3>> contours,
@@ -53,40 +86,114 @@ namespace Netherlands3D.SelectionTools
             if (contours.Count == 0)
                 return null;
 
-            var polygon = new Poly2Mesh.Polygon();
-            var outerContour = (List<Vector3>)contours[0];
+            SetUpInstance();
 
-            if (outerContour.Count < 3)
-                return null;
-
-            polygon.outside = outerContour;
-
-            for (int i = 0; i < polygon.outside.Count; i++)
+            var shellCoords = EnsureOrientation(contours[0], true);
+            if (shellCoords == null)
             {
-                polygon.outside[i] = new Vector3(polygon.outside[i].x, polygon.outside[i].y, polygon.outside[i].z);
+                Debug.LogWarning("Outer shell is degenerate");
+                return null;
             }
-
+            var shell = geometryFactory.CreateLinearRing(shellCoords);
+            LinearRing[] holes = null;
+            //holes
             if (contours.Count > 1)
             {
+                holes = new LinearRing[contours.Count - 1];
                 for (int i = 1; i < contours.Count; i++)
                 {
-                    var holeContour = (List<Vector3>)contours[i];
-                    PolygonCalculator.FixSequentialDoubles(holeContour); //todo: put this function in this class or is it a usefull calculation tool in general?
-
-                    if (holeContour.Count > 2)
+                    var holeCoords = EnsureOrientation(contours[i], false);
+                    if (holeCoords == null)
                     {
-                        polygon.holes.Add(holeContour);
+                        Debug.LogWarning("Skipping degenerate hole at index " + i);
+                        continue;
                     }
+                    holes[i - 1] = geometryFactory.CreateLinearRing(holeCoords);
                 }
             }
-            var newPolygonMesh = Poly2Mesh.CreateMesh(polygon, extrusionHeight, addBottom);
-            if (newPolygonMesh)
-            {
-                newPolygonMesh.RecalculateNormals();
-                SetUVCoordinates(newPolygonMesh, uvCoordinate);
-            }
-            return newPolygonMesh;
+            Polygon polygon = geometryFactory.CreatePolygon(shell, holes);
+            Mesh mesh = PolygonToMesh(polygon);
+            return mesh;
         }
+
+        private static Coordinate[] EnsureOrientation(List<Vector3> points, bool counterClockwise)
+        {
+            var coords = ConvertToCoordinateArray(points);
+            if (NetTopologySuite.Algorithm.Orientation.IsCCW(coords) != counterClockwise)
+            {
+                System.Array.Reverse(coords);
+            }
+            return coords;
+        }
+
+        private static Coordinate[] ConvertToCoordinateArray(List<Vector3> points)
+        {
+            //check duplicates
+            var filtered = new List<Coordinate>();
+            Coordinate? last = null;
+            foreach (var pt in points)
+            {
+                var current = new Coordinate(pt.x, pt.z);
+                if (last == null || !current.Equals2D(last))
+                {
+                    filtered.Add(current);
+                    last = current;
+                }
+            }
+            if (filtered.Count < 3)
+                return null;
+
+            var coords = new Coordinate[filtered.Count + 1];
+            for (int i = 0; i < filtered.Count; i++)
+            {
+                coords[i] = filtered[i];
+            }
+            coords[filtered.Count] = coords[0];
+            return coords;
+        }
+
+        public static Mesh PolygonToMesh(Polygon polygon)
+        {
+            //triangulate
+            var cleaner = new NetTopologySuite.Simplify.TopologyPreservingSimplifier(polygon);
+            cleaner.DistanceTolerance = 0.01;
+            var cleanPolygon = cleaner.GetResultGeometry() as Polygon;
+            if (!cleanPolygon.IsValid)
+            {
+                Debug.LogError("Polygon is invalid: " + cleanPolygon.ToString());
+                return null;
+            }
+            var triangulator = new PolygonTriangulator(cleanPolygon);
+            List<Tri> triangles = triangulator.GetTriangles(); 
+            List<Vector3> vertices = new List<Vector3>();
+            List<int> indices = new List<int>();
+            Dictionary<Coordinate, int> coordToIndex = new Dictionary<Coordinate, int>(new CoordinateEqualityComparer());
+            int nextIndex = 0;
+            for (int i = 0; i < triangles.Count; i++)
+            {
+                var tri = triangles[i];
+                Coordinate[] coords = new[] { tri.GetCoordinate(0), tri.GetCoordinate(1), tri.GetCoordinate(2) };
+                for (int j = 0; j < 3; j++)
+                {
+                    var coord = coords[j];
+                    if (!coordToIndex.TryGetValue(coord, out int index))
+                    {
+                        index = nextIndex++;
+                        coordToIndex[coord] = index;
+                        vertices.Add(new Vector3((float)coord.X, 0f, (float)coord.Y));
+                    }
+                    indices.Add(index);
+                }
+            }
+
+            Mesh mesh = new Mesh();
+            mesh.SetVertices(vertices);
+            mesh.SetTriangles(indices, 0);
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+            return mesh;
+        }
+
         #endregion
 
         #region PolygonLine
