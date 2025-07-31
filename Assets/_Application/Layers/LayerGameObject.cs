@@ -199,24 +199,27 @@ namespace Netherlands3D.Twin.Layers
         public virtual void ApplyStyling()
         {
             LayerStyler.Apply(this, LayerData.DefaultSymbolizer);
+            
+            // var mask = LayerStyler.GetMaskLayerMask(this); todo?
             //initialize the layer's style and emit an event for other services and/or UI to update
             OnStylingApplied.Invoke();
         }
 
-        public virtual void UpdateMaskBitMask(int[] bitmask)
+        public virtual void UpdateMaskBitMask(int bitmask)
         {
+            print("updating bit mask for " + Name);
             foreach (var r in GetComponentsInChildren<Renderer>())
             {
+                print(r.gameObject.name);
                 UpdateBitMaskForMaterials(bitmask, r.materials);
             }
         }
 
-        protected void UpdateBitMaskForMaterials(int[] bitmask, IEnumerable<Material> materials)
+        protected void UpdateBitMaskForMaterials(int bitmask, IEnumerable<Material> materials)
         {
             foreach (var m in materials)
             {
-                Debug.Log("setting r bit mask: " + bitmask[0]);
-                m.SetFloat("_MaskingChannelBitmask", bitmask[0]); //todo : r b
+                m.SetFloat("_MaskingChannelBitmask", bitmask);
             }
         }
 

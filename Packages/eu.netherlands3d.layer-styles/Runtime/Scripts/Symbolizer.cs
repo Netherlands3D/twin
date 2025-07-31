@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Netherlands3D.Twin.Layers;
@@ -30,21 +31,19 @@ namespace Netherlands3D.LayerStyles
 
         public void ClearFillColor() => ClearProperty("fill-color");
 
-        public void SetMaskLayerMask(int r, int g, int b) => SetProperty("mask-layer-mask", JsonConvert.SerializeObject(new int[] { r, g, b }));
+        public void SetMaskLayerMask(int maskLayerMask) => SetProperty("mask-layer-mask", Convert.ToString(maskLayerMask, 2));
 
-        public int[] GetMaskLayerMask()
+        public int GetMaskLayerMask()
         {
             var json = GetProperty("mask-layer-mask");
             if (json == null || string.IsNullOrEmpty((string)json))
             {
-                return new int[]
-                {
-                    LayerGameObject.DEFAULT_MASK_BIT_MASK,
-                    LayerGameObject.DEFAULT_MASK_BIT_MASK,
-                    LayerGameObject.DEFAULT_MASK_BIT_MASK
-                };
+                return LayerGameObject.DEFAULT_MASK_BIT_MASK;
             }
-            return JsonConvert.DeserializeObject<int[]>((string)json);
+            
+            var bitMaskString = (string)json;
+            Debug.Log("bitmaskstring: " + bitMaskString);
+            return LayerStyler.StringToBitmask(bitMaskString);
         }
 
         public void ClearMaskLayerMask() => ClearProperty("mask-layer-mask");

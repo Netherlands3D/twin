@@ -54,19 +54,18 @@ namespace Netherlands3D.Twin.Layers
             if (layerData is ReferencedLayerData referencedLayerData)
             {
                 var currentLayerMask = LayerStyler.GetMaskLayerMask(referencedLayerData.Reference);
-                int r = currentLayerMask[0];
                 int maskBitToSet = 1 << MaskLayer.MaskBitIndex;
                 
                 if (acceptMask)
                 {
-                    r |= maskBitToSet; // set bit to 1
+                    currentLayerMask |= maskBitToSet; // set bit to 1
                 }
                 else
                 {
-                    r &= ~maskBitToSet; // set bit to 0
+                    currentLayerMask &= ~maskBitToSet; // set bit to 0
                 }
 
-                LayerStyler.SetMaskLayerMask(referencedLayerData.Reference, r);
+                LayerStyler.SetMaskLayerMask(referencedLayerData.Reference, currentLayerMask);
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using Netherlands3D.LayerStyles;
+﻿using System;
+using Netherlands3D.LayerStyles;
 
 namespace Netherlands3D.Twin.Layers
 {
@@ -10,16 +11,16 @@ namespace Netherlands3D.Twin.Layers
         /// <summary>
         /// Sets a bitmask to the layer to determine which masks affect the provided LayerGameObject
         /// </summary>
-        public static void SetMaskLayerMask(LayerGameObject layer, int rBitMask) //todo: g and b
+        public static void SetMaskLayerMask(LayerGameObject layer, int bitMask)
         {
-            layer.LayerData.DefaultStyle.AnyFeature.Symbolizer.SetMaskLayerMask(rBitMask, 0, 0);
+            layer.LayerData.DefaultStyle.AnyFeature.Symbolizer.SetMaskLayerMask(bitMask);
             layer.ApplyStyling();
         }
 
         /// <summary>
         /// Retrieves the bitmask for masking of the LayerGameObject.
         /// </summary>
-        public static int[] GetMaskLayerMask(LayerGameObject layer)
+        public static int GetMaskLayerMask(LayerGameObject layer)
         {
             return layer.LayerData.DefaultStyle.AnyFeature.Symbolizer.GetMaskLayerMask();
         }
@@ -30,6 +31,14 @@ namespace Netherlands3D.Twin.Layers
         public static void Apply(LayerGameObject layer, Symbolizer styling)
         {
             layer.UpdateMaskBitMask(styling.GetMaskLayerMask());
+        }
+        
+        public static int StringToBitmask(string bitString)
+        {
+            if (string.IsNullOrEmpty(bitString))
+                throw new ArgumentException("Input string cannot be null or empty.", nameof(bitString));
+
+            return Convert.ToInt32(bitString, 2);
         }
     }
 }

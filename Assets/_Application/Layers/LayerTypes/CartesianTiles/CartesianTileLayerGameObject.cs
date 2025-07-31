@@ -119,7 +119,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             base.ApplyStyling();
         }
 
-        public override void UpdateMaskBitMask(int[] bitmask)
+        public override void UpdateMaskBitMask(int bitmask)
         {
             if (layer is BinaryMeshLayer binaryMeshLayer)
             {
@@ -127,16 +127,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 {
                     UpdateBitMaskForMaterials(bitmask, binaryMeshLayer.DefaultMaterialList);
                 }
-            }
-        }
-
-
-        public int test; //todo: remove
-        private void Update() //todo: remove this, for testing only
-        {
-            if (Keyboard.current.kKey.wasPressedThisFrame && Name.Contains("Gebouwen"))
-            {
-                LayerStyler.SetMaskLayerMask(this, test);
             }
         }
 
