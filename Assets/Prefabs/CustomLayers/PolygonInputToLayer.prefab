@@ -148,7 +148,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6146125509947394895}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Pointer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -600,7 +600,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2125279392852574923}
   - component: {fileID: 5532159540410847097}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Pointer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
