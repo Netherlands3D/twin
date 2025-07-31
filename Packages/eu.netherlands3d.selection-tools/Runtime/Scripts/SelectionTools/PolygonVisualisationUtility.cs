@@ -12,8 +12,7 @@ namespace Netherlands3D.SelectionTools
     public static class PolygonVisualisationUtility
     {
         private static NtsGeometryServices instance;
-        private static GeometryFactory geometryFactory;
-       
+        private static GeometryFactory geometryFactory;       
 
         private static void SetUpInstance()
         {
@@ -88,125 +87,100 @@ namespace Netherlands3D.SelectionTools
 
             SetUpInstance();
 
-
-            // Convert the first ring to the shell
-            var shellCoords = ConvertToCoordinateArray(contours[0]);
+            var shellCoords = EnsureOrientation(contours[0], true);
+            if (shellCoords == null)
+            {
+                Debug.LogWarning("Outer shell is degenerate");
+                return null;
+            }
             var shell = geometryFactory.CreateLinearRing(shellCoords);
-
-            // Convert remaining rings to holes
             LinearRing[] holes = null;
+            //holes
             if (contours.Count > 1)
             {
                 holes = new LinearRing[contours.Count - 1];
                 for (int i = 1; i < contours.Count; i++)
                 {
-                    holes[i - 1] = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[i]));
+                    var holeCoords = EnsureOrientation(contours[i], false);
+                    if (holeCoords == null)
+                    {
+                        Debug.LogWarning("Skipping degenerate hole at index " + i);
+                        continue;
+                    }
+                    holes[i - 1] = geometryFactory.CreateLinearRing(holeCoords);
                 }
             }
-
-            //var shell = polygon.ExteriorRing;
-            //if (!NetTopologySuite.Algorithm.Orientation.IsCCW(shell.CoordinateSequence))
-            //{
-            //    shell = (LinearRing)shell.Reverse();
-            //}
-
-            //var holes = new LinearRing[polygon.NumInteriorRings];
-            //for (int i = 0; i < polygon.NumInteriorRings; i++)
-            //{
-            //    var hole = polygon.GetInteriorRingN(i);
-            //    if (NetTopologySuite.Algorithm.Orientation.IsCCW(hole.CoordinateSequence))
-            //    {
-            //        hole = (LinearRing)hole.Reverse();
-            //    }
-            //    holes[i] = hole;
-            //}
-
-            //var fixedPolygon = new Polygon(shell, holes);
-
             Polygon polygon = geometryFactory.CreatePolygon(shell, holes);
             Mesh mesh = PolygonToMesh(polygon);
             return mesh;
+        }
 
-            //var polygon = new Poly2Mesh.Polygon();
-            //var outerContour = (List<Vector3>)contours[0];
-
-            //if (outerContour.Count < 3)
-            //    return null;
-
-            //polygon.outside = outerContour;
-
-            //for (int i = 0; i < polygon.outside.Count; i++)
-            //{
-            //    polygon.outside[i] = new Vector3(polygon.outside[i].x, polygon.outside[i].y, polygon.outside[i].z);
-            //}
-
-            //if (contours.Count > 1)
-            //{
-            //    for (int i = 1; i < contours.Count; i++)
-            //    {
-            //        var holeContour = (List<Vector3>)contours[i];
-            //        PolygonCalculator.FixSequentialDoubles(holeContour); //todo: put this function in this class or is it a usefull calculation tool in general?
-
-            //        if (holeContour.Count > 2)
-            //        {
-            //            polygon.holes.Add(holeContour);
-            //        }
-            //    }
-            //}
-            //var newPolygonMesh = Poly2Mesh.CreateMesh(polygon, extrusionHeight, addBottom);
-            //if (newPolygonMesh)
-            //{
-            //    newPolygonMesh.RecalculateNormals();
-            //    SetUVCoordinates(newPolygonMesh, uvCoordinate);
-            //}
-            //return newPolygonMesh;
+        private static Coordinate[] EnsureOrientation(List<Vector3> points, bool counterClockwise)
+        {
+            var coords = ConvertToCoordinateArray(points);
+            if (NetTopologySuite.Algorithm.Orientation.IsCCW(coords) != counterClockwise)
+            {
+                System.Array.Reverse(coords);
+            }
+            return coords;
         }
 
         private static Coordinate[] ConvertToCoordinateArray(List<Vector3> points)
         {
-            var coords = new Coordinate[points.Count + 1];
-            for (int i = 0; i < points.Count; i++)
+            //check duplicates
+            var filtered = new List<Coordinate>();
+            Coordinate? last = null;
+            foreach (var pt in points)
             {
-                coords[i] = new Coordinate(points[i].x, points[i].z); // use .y if working in 2D
+                var current = new Coordinate(pt.x, pt.z);
+                if (last == null || !current.Equals2D(last))
+                {
+                    filtered.Add(current);
+                    last = current;
+                }
             }
-            coords[points.Count] = coords[0]; // close the ring
+            if (filtered.Count < 3)
+                return null;
+
+            var coords = new Coordinate[filtered.Count + 1];
+            for (int i = 0; i < filtered.Count; i++)
+            {
+                coords[i] = filtered[i];
+            }
+            coords[filtered.Count] = coords[0];
             return coords;
         }
 
         public static Mesh PolygonToMesh(Polygon polygon)
         {
-            // Triangulate the polygon using NetTopologySuite
-
+            //triangulate
             var cleaner = new NetTopologySuite.Simplify.TopologyPreservingSimplifier(polygon);
+            cleaner.DistanceTolerance = 0.01;
             var cleanPolygon = cleaner.GetResultGeometry() as Polygon;
-
-         
-
+            if (!cleanPolygon.IsValid)
+            {
+                Debug.LogError("Polygon is invalid: " + cleanPolygon.ToString());
+                return null;
+            }
             var triangulator = new PolygonTriangulator(cleanPolygon);
-            List<Tri> triangles = triangulator.GetTriangles(); // Tri contains P0, P1, P2
-
+            List<Tri> triangles = triangulator.GetTriangles(); 
             List<Vector3> vertices = new List<Vector3>();
             List<int> indices = new List<int>();
             Dictionary<Coordinate, int> coordToIndex = new Dictionary<Coordinate, int>(new CoordinateEqualityComparer());
-
             int nextIndex = 0;
-
             for (int i = 0; i < triangles.Count; i++)
             {
                 var tri = triangles[i];
                 Coordinate[] coords = new[] { tri.GetCoordinate(0), tri.GetCoordinate(1), tri.GetCoordinate(2) };
-
                 for (int j = 0; j < 3; j++)
                 {
                     var coord = coords[j];
-
                     if (!coordToIndex.TryGetValue(coord, out int index))
                     {
                         index = nextIndex++;
                         coordToIndex[coord] = index;
                         vertices.Add(new Vector3((float)coord.X, 0f, (float)coord.Y));
                     }
-
                     indices.Add(index);
                 }
             }
@@ -218,8 +192,6 @@ namespace Netherlands3D.SelectionTools
             mesh.RecalculateBounds();
             return mesh;
         }
-
-
 
         #endregion
 
