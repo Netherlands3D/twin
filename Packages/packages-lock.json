@@ -344,6 +344,12 @@
       },
       "url": "https://package.openupm.com"
     },
+    "eu.netherlands3d.catalogs": {
+      "version": "file:eu.netherlands3d.catalogs",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "eu.netherlands3d.collada": {
       "version": "0.1.1",
       "depth": 0,

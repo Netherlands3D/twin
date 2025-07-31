@@ -20,6 +20,7 @@
 
         // Feature lookup
         public static Expression Get(string key) => new(Operators.Get, key);
+        public static Expression In(object needle, object haystack) => new(Operators.In, needle, haystack);
 
         // Logic
         public static Expression Not(object v) => new(Operators.Not, v);

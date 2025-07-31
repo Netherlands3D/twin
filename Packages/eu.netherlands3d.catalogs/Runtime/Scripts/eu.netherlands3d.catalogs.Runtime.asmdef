@@ -1,0 +1,14 @@
+{
+    "name": "eu.netherlands3d.catalogs.Runtime",
+    "rootNamespace": "Netherlands3D.Catalogs",
+    "references": ["GUID:b350e99bab43dcc4eb0c8ba8ceda5e79"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
