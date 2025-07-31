@@ -19,7 +19,7 @@ namespace Netherlands3D.Twin.Samplers
         private const int maxRequests = 3;
 
 
-        public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, int cullingMask = ~0)
+        public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, int cullingMask = Physics.DefaultRaycastLayers)
         {
             if (activeRequests.Count > maxRequests)
             {

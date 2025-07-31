@@ -1,4 +1,5 @@
 using Netherlands3D.Events;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [SerializeField] private Toggle maskInvertToggle;
         [SerializeField] private Button editGridSelectionButton;
         [SerializeField] private BoolEvent EnableGridInputInEditModeEvent;
+        [SerializeField] private RectTransform maskToggleParent;
+        [SerializeField] private MaskLayerToggle maskTogglePrefab;
         
         private PolygonSelectionLayer polygonLayer;
 
@@ -71,43 +74,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 
         private void OnIsMaskChanged(bool isMask)
         {
-            var layer = GetLayer(isMask, maskInvertToggle.isOn);
-            SetPolygonLayer(layer);
             polygonLayer.IsMask = isMask;
+
+            PopulateMaskLayerPanel();
         }
-        
+
+        private void PopulateMaskLayerPanel()
+        {
+            foreach (var layer in ProjectData.Current.RootLayer.ChildrenLayers)
+            {
+                var toggle = Instantiate(maskTogglePrefab, maskToggleParent);
+                toggle.Initialize(polygonLayer, layer);
+            }
+        }
+
         private void OnInvertMaskChanged(bool invert)
         {
-            var layer = GetLayer(maskToggle.isOn, invert);
-            SetPolygonLayer(layer);
             polygonLayer.InvertMask = invert;
         }
-
-        private void SetPolygonLayer(LayerMask layer)
-        {
-            if (layer == LayerMask.NameToLayer("PolygonMaskInverted"))
-                PolygonProjectionMask.AddInvertedMask(polygonLayer.PolygonVisualisation.gameObject);
-            else
-                PolygonProjectionMask.RemoveInvertedMask(polygonLayer.PolygonVisualisation.gameObject);
-            
-            foreach (Transform t in polygonLayer.PolygonVisualisation.gameObject.transform)
-            {
-                t.gameObject.gameObject.layer = layer;
-            }
-
-            PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
-        }
-
-        private LayerMask GetLayer(bool isMask, bool invert)
-        {
-            var layer = LayerMask.NameToLayer("Projected");
-            if (isMask && !invert)
-                layer = LayerMask.NameToLayer("PolygonMask");
-            if (isMask && invert)
-                layer = LayerMask.NameToLayer("PolygonMaskInverted");
-
-            return layer;
-        }
+        
 
         private void HandleStrokeWidthChange(float newValue)
         {

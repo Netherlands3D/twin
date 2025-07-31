@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -51,20 +52,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 CreatePolygonFromLine(OriginalPolygon, value);
             }
         }
-        
+
         [JsonIgnore]
         public bool IsMask
         {
             get => polygonPropertyData.IsMask;
             set => polygonPropertyData.IsMask = value;
         }
-        
+
         [JsonIgnore]
         public bool InvertMask
         {
             get => polygonPropertyData.InvertMask;
             set => polygonPropertyData.InvertMask = value;
         }
+
+        public int MaskBitIndex { get; private set; } = -1;
+        private static List<int> availableMaskChannels = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 };
 
         [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
 
@@ -80,6 +84,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             //Add shifter that manipulates the polygon if the world origin is shifted
             Origin.current.onPostShift.AddListener(ShiftedPolygon);
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+            polygonPropertyData.OnIsMaskChanged.AddListener(OnIsMaskChanged);
+            polygonPropertyData.OnInvertMaskChanged.AddListener(OnInvertMaskChanged);
         }
 
         public PolygonSelectionLayer(string name, string prefabId, List<Vector3> polygonUnityInput, ShapeType shapeType, float defaultLineWidth = 10f) : base(name, prefabId, new List<LayerPropertyData>())
@@ -95,6 +101,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             //Add shifter that manipulates the polygon if the world origin is shifted
             Origin.current.onPostShift.AddListener(ShiftedPolygon);
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+            polygonPropertyData.OnIsMaskChanged.AddListener(OnIsMaskChanged);
+            polygonPropertyData.OnInvertMaskChanged.AddListener(OnInvertMaskChanged);
         }
 
         private static List<LayerPropertyData> CreateNewProperties()
@@ -108,6 +116,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
             Origin.current.onPostShift.RemoveListener(ShiftedPolygon);
+            polygonPropertyData.OnIsMaskChanged.RemoveListener(OnIsMaskChanged);
+            polygonPropertyData.OnInvertMaskChanged.RemoveListener(OnInvertMaskChanged);
         }
 
         private void ShiftedPolygon(Coordinate fromOrigin, Coordinate toOrigin)
@@ -116,9 +126,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             notifyOnPolygonChange = false;
             SetShape(OriginalPolygon);
             polygonMoved.Invoke();
-            if(IsSelected)
+            if (IsSelected)
                 polygonSelected.Invoke(this);
-            
+
             notifyOnPolygonChange = true;
         }
 
@@ -135,7 +145,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             else
                 SetPolygon(shape, ShapeType.Grid);
         }
-        
+
         /// <summary>
         /// Set the polygon of the layer as a solid filled polygon with Coordinates
         /// </summary>
@@ -269,6 +279,63 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 polygonPropertyData = polygonProperty; //take existing property to overwrite the unlinked one of this class
                 SetShape(OriginalPolygon); //initialize the shape again with properties (use shape instead of setLine to ensure polygon is also 
             }
+        }
+
+        private void OnIsMaskChanged(bool isMask)
+        {
+            if (isMask && availableMaskChannels.Count == 0)
+            {
+                Debug.LogError("No more masking channels available");
+                IsMask = false;
+            }
+
+            var layer = GetLayer(isMask);
+            SetPolygonLayer(layer, InvertMask);
+
+            if (!isMask)
+            {
+                availableMaskChannels.Add(MaskBitIndex); //todo: remember the bit index so layers don't need to be selected again
+                MaskBitIndex = -1;
+            }
+            else
+            {
+                MaskBitIndex = availableMaskChannels.First();
+                availableMaskChannels.Remove(MaskBitIndex);
+            }
+
+            PolygonVisualisation.SetMaterial(isMask, MaskBitIndex, InvertMask);
+        }
+
+        private void OnInvertMaskChanged(bool invert)
+        {
+            var layer = GetLayer(IsMask);
+            SetPolygonLayer(layer, invert);
+            PolygonVisualisation.SetMaterial(IsMask, MaskBitIndex, invert);
+            PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
+        }
+
+        private void SetPolygonLayer(LayerMask layer, bool invert)
+        {
+            if (layer == LayerMask.NameToLayer("PolygonMask") && invert)
+                PolygonProjectionMask.AddInvertedMask(PolygonVisualisation.gameObject);
+            else
+                PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject);
+
+            foreach (Transform t in PolygonVisualisation.gameObject.transform)
+            {
+                t.gameObject.gameObject.layer = layer;
+            }
+
+            PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
+        }
+
+        private LayerMask GetLayer(bool isMask)
+        {
+            var layer = LayerMask.NameToLayer("Projected");
+            if (isMask)
+                layer = LayerMask.NameToLayer("PolygonMask");
+
+            return layer;
         }
     }
 }

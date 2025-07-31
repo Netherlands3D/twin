@@ -24,6 +24,8 @@ namespace Netherlands3D.Twin.Layers
     
     public abstract class LayerGameObject : MonoBehaviour, IStylable
     {
+        public const int DEFAULT_MASK_BIT_MASK = 16777215; //(2^24)-1; 
+        
         [SerializeField] private string prefabIdentifier;
         [SerializeField] private SpriteState thumbnail;
         [SerializeField] private SpawnLocation spawnLocation;
@@ -62,7 +64,7 @@ namespace Netherlands3D.Twin.Layers
                 }
             }
         }
-
+        
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
         public UnityEvent OnStylingApplied = new();
         Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;
@@ -97,7 +99,7 @@ namespace Netherlands3D.Twin.Layers
         // 1. Instantiating prefab -> creating new LayerData, or
         // 2. Creating LayerData (from project), Instantiating prefab, coupling that LayerData to this LayerGameObject
         protected virtual void InitializeVisualisation()
-        {
+        {            
             LayerData.LayerDoubleClicked.AddListener(OnDoubleClick);
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 
@@ -196,10 +198,32 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void ApplyStyling()
         {
+            LayerStyler.Apply(this, LayerData.DefaultSymbolizer);
+            
+            // var mask = LayerStyler.GetMaskLayerMask(this); todo?
             //initialize the layer's style and emit an event for other services and/or UI to update
             OnStylingApplied.Invoke();
         }
-#endregion
+
+        public virtual void UpdateMaskBitMask(int bitmask)
+        {
+            print("updating bit mask for " + Name);
+            foreach (var r in GetComponentsInChildren<Renderer>())
+            {
+                print(r.gameObject.name);
+                UpdateBitMaskForMaterials(bitmask, r.materials);
+            }
+        }
+
+        protected void UpdateBitMaskForMaterials(int bitmask, IEnumerable<Material> materials)
+        {
+            foreach (var m in materials)
+            {
+                m.SetFloat("_MaskingChannelBitmask", bitmask);
+            }
+        }
+
+        #endregion
 
 #region Features
 

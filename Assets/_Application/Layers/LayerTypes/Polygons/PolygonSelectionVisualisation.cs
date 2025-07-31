@@ -15,6 +15,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public override BoundingBox Bounds => polygonBounds;
         public PolygonVisualisation PolygonVisualisation { get; private set; }
         public Material PolygonMeshMaterial;
+        [SerializeField] private Material polygonMaskMaterial;
 
         /// <summary>
         /// Create or update PolygonVisualisation
@@ -34,6 +35,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 PolygonVisualisation.UpdateVisualisation(polygon3D);
                 polygonBounds = new(PolygonVisualisation.GetComponent<Renderer>().bounds);
             }
+
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
         }
 
@@ -45,7 +47,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             //Add the polygon shifter to the polygon visualisation, so it can move with our origin shifts
             polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("Projected");
-            
+
             return polygonVisualisation;
         }
 
@@ -57,6 +59,31 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         protected virtual void OnDestroy()
         {
             Destroy(PolygonVisualisation.gameObject);
+        }
+
+        public void SetMaterial(bool isMask, int bitIndex, bool invert)
+        {
+            if (!isMask)
+            {
+                Debug.Log("no longer a mask");
+                Destroy(PolygonVisualisation.VisualisationMaterial); //clean up the mask material instance
+                PolygonVisualisation.VisualisationMaterial = PolygonMeshMaterial;
+                return;
+            }
+
+            // the max integer value we can represent in a float without rounding errors is 2^24-1, so we can support 23 masking bit channels
+            if (bitIndex < 0 || bitIndex > 23)
+                throw new IndexOutOfRangeException("bitIndex must be 23 or smaller to avoid floating point rounding errors since we must use a float formatted masking texture");
+            
+            int maskValue = 1 << bitIndex;
+            float floatMaskValue = (float)maskValue;
+
+            var newMat = new Material(polygonMaskMaterial);
+            var bitMask = new Vector4(floatMaskValue, 0, 0, 1); //regular masks use the red channel
+            if (invert)
+                bitMask = new Vector4(0, floatMaskValue, 0, 1); //invert masks use the green channel
+            newMat.SetVector("_MaskBitMask", bitMask);
+            PolygonVisualisation.VisualisationMaterial = newMat;
         }
     }
 }
