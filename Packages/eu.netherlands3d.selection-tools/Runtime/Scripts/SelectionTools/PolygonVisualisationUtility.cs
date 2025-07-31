@@ -19,6 +19,7 @@ namespace Netherlands3D.SelectionTools
             if (instance != null)
                 return;
 
+            //the following are the default proposed settings by NTS github page https://github.com/NetTopologySuite/NetTopologySuite/wiki/GettingStarted
             instance = new NtsGeometryServices(
             // default CoordinateSequenceFactory
             CoordinateArraySequenceFactory.Instance,
