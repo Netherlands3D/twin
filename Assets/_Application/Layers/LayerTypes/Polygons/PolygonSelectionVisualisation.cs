@@ -60,7 +60,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             Destroy(PolygonVisualisation.gameObject);
         }
 
-        public void SetMaterial(bool isMask, int bitIndex)
+        public void SetMaterial(bool isMask, int bitIndex, bool invert)
         {
             if (bitIndex > 23)
                 throw new IndexOutOfRangeException("bitIndex must be 23 or smaller to avoid floating point rounding errors since we must use a float formatted masking texture");
@@ -71,7 +71,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             float floatMaskValue = (float)maskValue;
             
             var newMat = new Material(polygonMaskMaterial);
-            var bitMask = new Vector4(floatMaskValue, 0, 0, 1);
+            var bitMask = new Vector4(floatMaskValue, 0, 0, 1); //regular masks use the red channel
+            if (invert)
+                bitMask = new Vector4(0, floatMaskValue, 0, 1); //invert masks use the green channel
             newMat.SetVector("_MaskBitMask", bitMask);
 
             if (isMask)

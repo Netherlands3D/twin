@@ -289,8 +289,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 IsMask = false;
             }
             
-            var layer = GetLayer(isMask, InvertMask);
-            SetPolygonLayer(layer);
+            var layer = GetLayer(isMask);
+            SetPolygonLayer(layer, InvertMask);
 
             if (!isMask)
             {
@@ -303,29 +303,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             availableMaskChannels.Remove(MaskBitIndex);
 
             Debug.Log(Name + "has bit index: " + MaskBitIndex);
-            SetMaskingChannel(MaskBitIndex);
-        }
-
-
-        /// <summary>
-        /// Maskes are rendered to a texture, each bit of the texture is a masking channel, where a mask pixel is written to.
-        /// </summary>
-        /// <param name="bitIndex"></param>
-        private void SetMaskingChannel(int bitIndex)
-        {
-            PolygonVisualisation.SetMaterial(IsMask, bitIndex);
-        }
-
-        private void OnInvertMaskChanged(bool invert)
-        {
-            var layer = GetLayer(IsMask, invert);
-            SetPolygonLayer(layer);
-            SetMaskingChannel(0);
+            PolygonVisualisation.SetMaterial(isMask, MaskBitIndex, InvertMask);
         }
         
-        private void SetPolygonLayer(LayerMask layer)
+        private void OnInvertMaskChanged(bool invert)
         {
-            if (layer == LayerMask.NameToLayer("PolygonMaskInverted"))
+            var layer = GetLayer(IsMask);
+            SetPolygonLayer(layer, invert);
+            PolygonVisualisation.SetMaterial(IsMask, MaskBitIndex, invert);
+            PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
+        }
+        
+        private void SetPolygonLayer(LayerMask layer, bool invert)
+        {
+            if (layer == LayerMask.NameToLayer("PolygonMask") && invert)
                 PolygonProjectionMask.AddInvertedMask(PolygonVisualisation.gameObject);
             else
                 PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject);
@@ -338,13 +329,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
         }
 
-        private LayerMask GetLayer(bool isMask, bool invert)
+        private LayerMask GetLayer(bool isMask)
         {
             var layer = LayerMask.NameToLayer("Projected");
-            if (isMask && !invert)
+            if (isMask)
                 layer = LayerMask.NameToLayer("PolygonMask");
-            if (isMask && invert)
-                layer = LayerMask.NameToLayer("PolygonMaskInverted");
 
             return layer;
         }
