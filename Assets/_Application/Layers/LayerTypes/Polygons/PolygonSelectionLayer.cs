@@ -52,14 +52,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 CreatePolygonFromLine(OriginalPolygon, value);
             }
         }
-        
+
         [JsonIgnore]
         public bool IsMask
         {
             get => polygonPropertyData.IsMask;
             set => polygonPropertyData.IsMask = value;
         }
-        
+
         [JsonIgnore]
         public bool InvertMask
         {
@@ -69,7 +69,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public int MaskBitIndex { get; private set; } = -1;
         private static List<int> availableMaskChannels = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 };
-        
+
         [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
 
         [JsonConstructor]
@@ -126,9 +126,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             notifyOnPolygonChange = false;
             SetShape(OriginalPolygon);
             polygonMoved.Invoke();
-            if(IsSelected)
+            if (IsSelected)
                 polygonSelected.Invoke(this);
-            
+
             notifyOnPolygonChange = true;
         }
 
@@ -145,7 +145,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             else
                 SetPolygon(shape, ShapeType.Grid);
         }
-        
+
         /// <summary>
         /// Set the polygon of the layer as a solid filled polygon with Coordinates
         /// </summary>
@@ -280,7 +280,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 SetShape(OriginalPolygon); //initialize the shape again with properties (use shape instead of setLine to ensure polygon is also 
             }
         }
-        
+
         private void OnIsMaskChanged(bool isMask)
         {
             if (isMask && availableMaskChannels.Count == 0)
@@ -288,7 +288,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 Debug.LogError("No more masking channels available");
                 IsMask = false;
             }
-            
+
             var layer = GetLayer(isMask);
             SetPolygonLayer(layer, InvertMask);
 
@@ -296,16 +296,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 availableMaskChannels.Add(MaskBitIndex); //todo: remember the bit index so layers don't need to be selected again
                 MaskBitIndex = -1;
-                return;
             }
-            
-            MaskBitIndex = availableMaskChannels.First();
-            availableMaskChannels.Remove(MaskBitIndex);
+            else
+            {
+                MaskBitIndex = availableMaskChannels.First();
+                availableMaskChannels.Remove(MaskBitIndex);
+            }
 
-            Debug.Log(Name + "has bit index: " + MaskBitIndex);
             PolygonVisualisation.SetMaterial(isMask, MaskBitIndex, InvertMask);
         }
-        
+
         private void OnInvertMaskChanged(bool invert)
         {
             var layer = GetLayer(IsMask);
@@ -313,14 +313,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             PolygonVisualisation.SetMaterial(IsMask, MaskBitIndex, invert);
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
         }
-        
+
         private void SetPolygonLayer(LayerMask layer, bool invert)
         {
             if (layer == LayerMask.NameToLayer("PolygonMask") && invert)
                 PolygonProjectionMask.AddInvertedMask(PolygonVisualisation.gameObject);
             else
                 PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject);
-            
+
             foreach (Transform t in PolygonVisualisation.gameObject.transform)
             {
                 t.gameObject.gameObject.layer = layer;
@@ -339,4 +339,3 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         }
     }
 }
-
