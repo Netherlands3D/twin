@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Netherlands3D.Catalogs
+namespace Netherlands3D.Catalogs.CatalogItems
 {
     public class RecordItem : ICatalogItem
     {

@@ -64,6 +64,31 @@ namespace Netherlands3D.OgcApi
             return await resource.Value;
         }
 
+        public async Task<FeatureCollection> SearchUsingKeyword(string keyword, int? limit = null, int? offset = null)
+        {
+            var uri = GetItemsUriBuilder().Uri;
+
+            var resource = new Resource<FeatureCollection>(uri);
+            if (offset != null) resource.With("offset", offset.ToString());
+            if (limit != null) resource.With("limit", limit.ToString());
+            if (limit != null) resource.With("q", keyword);
+
+            return await resource.Value;
+        }
+
+        public async Task<FeatureCollection> SearchUsingCql(string queryAsJson, int? limit = null, int? offset = null)
+        {
+            var uri = GetItemsUriBuilder().Uri;
+
+            var resource = new Resource<FeatureCollection>(uri);
+            if (offset != null) resource.With("offset", offset.ToString());
+            if (limit != null) resource.With("limit", limit.ToString());
+            if (limit != null) resource.With("filter", queryAsJson);
+            if (limit != null) resource.With("filter-lang", "cql-json");
+
+            return await resource.Value;
+        }
+        
         private UriBuilder GetItemsUriBuilder()
         {
             var itemsLink = Links.FirstBy(RelationTypes.items, Formats.geojson)?.Href;
