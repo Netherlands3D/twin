@@ -8,6 +8,7 @@ using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using System.Linq;
 
 namespace Netherlands3D.Functionalities.Wfs
 {
@@ -102,11 +103,34 @@ namespace Netherlands3D.Functionalities.Wfs
             if (isWfsGetFeature)
             {
                 var queryParameters = QueryString.Decode(sourceUrl);
-                var featureType = queryParameters.Single(WfsGetCapabilities.ParameterNameOfTypeNameBasedOnVersion(wfsVersion));
+                var paramName = WfsGetCapabilities.ParameterNameOfTypeNameBasedOnVersion(wfsVersion);
+                string featureType = queryParameters
+                    .Where(entry => string.Equals(entry.Key, paramName, StringComparison.OrdinalIgnoreCase))
+                    .Select(entry =>
+                    {
+                        string val = entry.Value.ToString();
+                        int equalsIndex = val.IndexOf('=');
+                        string extracted = equalsIndex >= 0 && equalsIndex < val.Length - 1
+                            ? val.Substring(equalsIndex + 1)
+                            : val;
+
+                        return Uri.UnescapeDataString(extracted).Trim();
+                    })
+                    .SingleOrDefault();
 
                 if (string.IsNullOrEmpty(featureType) == false)
                 {
-                    string crs = queryParameters.Single("srsname");
+                    string crs = queryParameters
+                        .Where(entry => string.Equals(entry.Key, "srsname", StringComparison.OrdinalIgnoreCase))
+                        .Select(entry =>
+                        {
+                            string val = entry.Value.ToString();
+                            int equalsIndex = val.IndexOf('=');
+                            return equalsIndex >= 0 && equalsIndex < val.Length - 1
+                                ? val.Substring(equalsIndex + 1)
+                                : val;
+                        })
+                        .SingleOrDefault();
                     // Can't deduct a human-readable title at the moment, we should add that we always query for the
                     // capabilities; this also helps with things like outputFormat and CRS
                     AddWFSLayer(featureType, sourceUrl, crs, wfsFolder, featureType, geoJsonOutputFormatString);
