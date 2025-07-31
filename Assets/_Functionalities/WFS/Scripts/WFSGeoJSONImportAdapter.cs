@@ -114,7 +114,7 @@ namespace Netherlands3D.Functionalities.Wfs
                             ? val.Substring(equalsIndex + 1)
                             : val;
 
-                        return Uri.UnescapeDataString(extracted).Trim();
+                        return extracted;
                     })
                     .SingleOrDefault();
 
