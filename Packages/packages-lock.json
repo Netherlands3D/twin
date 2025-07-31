@@ -66,7 +66,7 @@
       "dependencies": {}
     },
     "com.unity.burst": {
-      "version": "1.8.19",
+      "version": "1.8.21",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -149,7 +149,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.13.1",
+      "version": "1.14.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -278,11 +278,11 @@
       }
     },
     "com.unity.test-framework.performance": {
-      "version": "3.0.3",
+      "version": "3.1.0",
       "depth": 2,
       "source": "registry",
       "dependencies": {
-        "com.unity.test-framework": "1.1.31",
+        "com.unity.test-framework": "1.1.33",
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -343,6 +343,12 @@
         "com.unity.textmeshpro": "3.0.6"
       },
       "url": "https://package.openupm.com"
+    },
+    "eu.netherlands3d.catalogs": {
+      "version": "file:eu.netherlands3d.catalogs",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.collada": {
       "version": "0.1.1",
@@ -460,6 +466,16 @@
         "eu.netherlands3d.coordinates": "1.1.0"
       },
       "url": "https://package.openupm.com"
+    },
+    "eu.netherlands3d.ogc-api": {
+      "version": "file:eu.netherlands3d.ogc-api",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.kind-men.uxios": "0.4.0",
+        "com.unity.nuget.newtonsoft-json": "2.0.0",
+        "com.virgis.geojson.net": "1.2.17"
+      }
     },
     "eu.netherlands3d.periodic-snapshots": {
       "version": "2.3.1",

@@ -1,0 +1,25 @@
+{
+    "name": "eu.netherlands3d.catalogs.Editor.Tests",
+    "rootNamespace": "Netherlands3D.Catalogs",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "eu.netherlands3d.catalogs.Runtime",
+        "eu.netherlands3d.serializable-gis-expressions"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

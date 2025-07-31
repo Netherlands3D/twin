@@ -367,6 +367,21 @@ namespace Netherlands3D.SerializableGisExpressions
             Assert.IsInstanceOf<ExpressionValue>(expressionValue);
             Assert.AreEqual("100", (string)expressionValue);
         }
+        
+        [Test]
+        public void EvaluateInExpression()
+        {
+            var match = Expression.In("App", "Apple");
+            var noMatch = Expression.In("App", "Bee");
+
+            var equalsValue = ExpressionEvaluator.Evaluate(match, context);
+            var inequalValue = ExpressionEvaluator.Evaluate(noMatch, context);
+
+            Assert.IsInstanceOf<ExpressionValue>(equalsValue);
+
+            Assert.IsTrue(equalsValue);
+            Assert.IsFalse(inequalValue);
+        }
 
         [Test]
         public void EvaluateGetVariableExpressionWithUnknownVariableReturnsNull()
