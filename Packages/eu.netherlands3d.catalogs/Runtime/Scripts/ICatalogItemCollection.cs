@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Netherlands3D.Catalogs
 {
     /// <summary>
-    /// Represents a single “page” of <see cref="Record"/> results returned by a catalog.
+    /// Represents a single “page” of <see cref="CatalogItem"/> results returned by a catalog.
     /// </summary>
     /// <remarks>
     /// Different catalog implementations will supply their own paging logic:
@@ -14,12 +16,14 @@ namespace Netherlands3D.Catalogs
     /// Consumers can always treat pages uniformly:
     /// ```csharp
     /// var page = await catalog.BrowseAsync();
-    /// foreach(var record in await page.GetItemsAsync()) { … }
+    /// foreach(var catalogItem in await page.GetItemsAsync()) { … }
     /// if (page.HasNextPage)
     ///     page = await page.GetNextPageAsync();
     /// ```
-    public interface IPaginatedRecordCollection : IRecordCollection
+    public interface ICatalogItemCollection : ISearchable
     {
+        public Task<IEnumerable<ICatalogItem>> GetItemsAsync();
+
         /// <summary>
         /// Indicates whether this page is the very first page of results.
         /// </summary>
@@ -43,7 +47,7 @@ namespace Netherlands3D.Catalogs
         public bool HasPreviousPage { get; }
         
         /// <summary>
-        /// Retrieves the next page of records.
+        /// Retrieves the next page of catalog items.
         /// Implementations may:
         ///  – Slice a pre-loaded list (in-memory).
         ///  – Issue a web request to fetch the next page (OGC API, CSW, etc.).
@@ -51,15 +55,15 @@ namespace Netherlands3D.Catalogs
         /// </summary>
         /// <returns>
         /// A <see cref="Task{TResult}"/> that completes with the subsequent
-        /// <see cref="IPaginatedRecordCollection"/>.
+        /// <see cref="ICatalogItemCollection"/>.
         /// </returns>
         /// <exception cref="InvalidOperationException">
         /// Thrown if <see cref="HasNextPage"/> is false.
         /// </exception>
-        public Task<IPaginatedRecordCollection> GetNextPageAsync();
+        public Task<ICatalogItemCollection> GetNextPageAsync();
         
         /// <summary>
-        /// Retrieves the previous page of records.
+        /// Retrieves the previous page of catalog items.
         /// </summary>
         /// <remarks>
         /// Some implementations (e.g. streaming or forward‐only APIs) may choose
@@ -67,11 +71,11 @@ namespace Netherlands3D.Catalogs
         /// </remarks>
         /// <returns>
         /// A <see cref="Task{TResult}"/> that completes with the preceding
-        /// <see cref="IPaginatedRecordCollection"/>.
+        /// <see cref="ICatalogItemCollection"/>.
         /// </returns>
         /// <exception cref="InvalidOperationException">
         /// Thrown if <see cref="HasPreviousPage"/> is false.
         /// </exception>
-        public Task<IPaginatedRecordCollection> GetPreviousPageAsync();
+        public Task<ICatalogItemCollection> GetPreviousPageAsync();
     }
 }

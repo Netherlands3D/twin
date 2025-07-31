@@ -51,12 +51,16 @@ namespace Netherlands3D.OgcApi.Features
         public List<Feature> Features { get; private set; }
 
         #region OGC API Features Extension
+        [JsonProperty(PropertyName = "timeStamp")]
         public DateTime? TimeStamp { get; set; } = null;
 
+        [JsonProperty(PropertyName = "numberMatched", Required = Required.Always)]
         public long NumberMatched { get; set; } = 0;
 
+        [JsonProperty(PropertyName = "numberReturned", Required = Required.Always)]
         public long NumberReturned { get; set; } = 0;
 
+        [JsonProperty(PropertyName = "links", Required = Required.Always)]
         public Link[] Links { get; set; }
 
         public bool First()

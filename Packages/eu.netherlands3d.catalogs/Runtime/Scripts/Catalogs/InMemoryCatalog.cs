@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.SerializableGisExpressions;
 using ExpressionEvaluator = Netherlands3D.SerializableGisExpressions.ExpressionEvaluator;
 
-namespace Netherlands3D.Catalogs
+namespace Netherlands3D.Catalogs.Catalogs
 {
-    public class InMemoryCatalog : IWritableCatalog
+    public class InMemoryCatalog : IWritableCatalog, ISearchable
     {
         public string Id { get; }
         public string Title { get; }
@@ -25,24 +26,24 @@ namespace Netherlands3D.Catalogs
             allRecords = records.ToList();
         }
         
-        public Task<IPaginatedRecordCollection> BrowseAsync(Pagination pagination = null)
+        public Task<ICatalogItemCollection> BrowseAsync(Pagination pagination = null)
         {
-            var page = new RecordCollectionPage(allRecords, pagination);
+            var page = new CatalogItemCollectionPagePage(allRecords, pagination);
 
-            return Task.FromResult<IPaginatedRecordCollection>(page);
+            return Task.FromResult<ICatalogItemCollection>(page);
         }
 
-        public Task<IPaginatedRecordCollection> SearchAsync(string query, Pagination pagination = null)
+        public Task<ICatalogItemCollection> SearchAsync(string query, Pagination pagination = null)
         {
             // Simple search: match on title or part thereof
             return SearchAsync(Expression.In(query, Expression.Get("Title")), pagination);
         }
 
-        public Task<IPaginatedRecordCollection> SearchAsync(Expression expression, Pagination pagination = null)
+        public Task<ICatalogItemCollection> SearchAsync(Expression expression, Pagination pagination = null)
         {
-            var page = new RecordCollectionPage(FilteredItems(allRecords), pagination);
+            var page = new CatalogItemCollectionPagePage(FilteredItems(allRecords), pagination);
             
-            return Task.FromResult<IPaginatedRecordCollection>(page);
+            return Task.FromResult<ICatalogItemCollection>(page);
 
             // use a function yielding results to avoid allocations and linq 
             IEnumerable<ICatalogItem> FilteredItems(IEnumerable<ICatalogItem> items)
@@ -94,7 +95,7 @@ namespace Netherlands3D.Catalogs
             IEnumerable<ICatalogItem> records,
             Pagination pagination = null
         ) {
-            return new FolderItem(id, title, description, new RecordCollectionPage(records, pagination));       
+            return new FolderItem(id, title, description, new CatalogItemCollectionPagePage(records, pagination));       
         }
 
         private class CatalogItemFeature : IFeatureForExpression
@@ -129,45 +130,53 @@ namespace Netherlands3D.Catalogs
             }
         }
 
-        private class RecordCollectionPage : IPaginatedRecordCollection
+        private class CatalogItemCollectionPagePage : BaseCatalogItemCollectionPage<List<ICatalogItem>>
         {
-            private readonly List<ICatalogItem> source;
-            private readonly Pagination pagination;
             private readonly List<ICatalogItem> items;
+            protected override int MaxNumberOfItems => source.Count;
 
-            public RecordCollectionPage(IEnumerable<ICatalogItem> source, Pagination pagination = null)
+            public CatalogItemCollectionPagePage(IEnumerable<ICatalogItem> source, Pagination pagination)
+                : base(source.ToList(), pagination)
             {
-                pagination ??= new Pagination();
-
-                this.source = source.ToList();
-                this.pagination = pagination;
-                items = this.source.Skip(pagination.Offset).Take(pagination.Limit).ToList();
+                items = this.source
+                    .Skip(this.pagination.Offset)
+                    .Take(this.pagination.Limit)
+                    .ToList();
             }
 
-            public bool HasPreviousPage => pagination.Offset > 0;
-            public bool HasNextPage => pagination.Offset + pagination.Limit < source.Count;
-
-            public bool IsFirstPage => !HasPreviousPage;
-            public bool IsLastPage => !HasNextPage;
-
-            public Task<IEnumerable<ICatalogItem>> GetItemsAsync()
+            public override Task<IEnumerable<ICatalogItem>> GetItemsAsync()
                 => Task.FromResult<IEnumerable<ICatalogItem>>(items);
-
-            public Task<IPaginatedRecordCollection> GetNextPageAsync()
+            
+            public override Task<ICatalogItemCollection> SearchAsync(string query, Pagination pagination = null)
             {
-                if (!HasNextPage) throw new InvalidOperationException("No next page available.");
-
-                var nextPage = new RecordCollectionPage(source, pagination.Next());
-                return Task.FromResult<IPaginatedRecordCollection>(nextPage);
+                // Simple search: match on title or part thereof
+                return SearchAsync(Expression.In(query, Expression.Get("Title")), pagination);
             }
 
-            public Task<IPaginatedRecordCollection> GetPreviousPageAsync()
+            public override Task<ICatalogItemCollection> SearchAsync(Expression expression, Pagination pagination = null)
             {
-                if (!HasPreviousPage) throw new InvalidOperationException("No previous page available.");
+                var page = new CatalogItemCollectionPagePage(FilteredItems(source), pagination);
+            
+                return Task.FromResult<ICatalogItemCollection>(page);
 
-                var prevPage = new RecordCollectionPage(source, pagination.Previous());
-                return Task.FromResult<IPaginatedRecordCollection>(prevPage);
+                // use a function yielding results to avoid allocations and linq 
+                IEnumerable<ICatalogItem> FilteredItems(IEnumerable<ICatalogItem> itemsToFilter)
+                {
+                    // Prepare the context and catalog item feature once and reuse it to reduce allocations.
+                    var catalogItemFeature = new CatalogItemFeature();
+                    var context = new ExpressionContext(catalogItemFeature);
+
+                    foreach (var item in itemsToFilter)
+                    {
+                        catalogItemFeature.ReplaceCatalogItem(item);
+
+                        if (ExpressionEvaluator.Evaluate(expression, context)) yield return item;
+                    }
+                }
             }
+
+            protected override Task<BaseCatalogItemCollectionPage<List<ICatalogItem>>> CreatePageAsyncInternal(List<ICatalogItem> src, Pagination p)
+                => Task.FromResult<BaseCatalogItemCollectionPage<List<ICatalogItem>>>(new CatalogItemCollectionPagePage(src, p));
         }
     }
 }

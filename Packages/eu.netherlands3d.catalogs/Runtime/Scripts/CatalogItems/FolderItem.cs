@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Netherlands3D.SerializableGisExpressions;
 
-namespace Netherlands3D.Catalogs
+namespace Netherlands3D.Catalogs.CatalogItems
 {
     /// <summary>
     /// A folder in the catalog that contains its own paginated children.
     /// Implements IPaginatedRecordCollection so you can directly page through it.
     /// </summary>
-    public class FolderItem : ICatalogItem, IPaginatedRecordCollection
+    public class FolderItem : ICatalogItem, ICatalogItemCollection
     {
         public string Id { get; }
         public string Title { get; }
@@ -15,13 +16,13 @@ namespace Netherlands3D.Catalogs
 
         public IDictionary<string, object> Metadata { get; } = new Dictionary<string, object>();
 
-        private readonly IPaginatedRecordCollection children;
+        private readonly ICatalogItemCollection children;
 
         public FolderItem(
             string id,
             string title,
             string description,
-            IPaginatedRecordCollection children)
+            ICatalogItemCollection children)
         {
             Id = id;
             Title = title;
@@ -30,13 +31,17 @@ namespace Netherlands3D.Catalogs
         }
 
         public Task<IEnumerable<ICatalogItem>> GetItemsAsync() => children.GetItemsAsync();
+        public Task<ICatalogItemCollection> SearchAsync(string query, Pagination pagination = null) 
+            => children.SearchAsync(query, pagination);
+        public Task<ICatalogItemCollection> SearchAsync(Expression expression, Pagination pagination = null) 
+            => children.SearchAsync(expression, pagination);
 
         public bool HasNextPage => children.HasNextPage;
         public bool HasPreviousPage => children.HasPreviousPage;
         public bool IsFirstPage => children.IsFirstPage;
         public bool IsLastPage => children.IsLastPage;
 
-        public Task<IPaginatedRecordCollection> GetNextPageAsync() => children.GetNextPageAsync();
-        public Task<IPaginatedRecordCollection> GetPreviousPageAsync() => children.GetPreviousPageAsync();
+        public Task<ICatalogItemCollection> GetNextPageAsync() => children.GetNextPageAsync();
+        public Task<ICatalogItemCollection> GetPreviousPageAsync() => children.GetPreviousPageAsync();
     }
 }

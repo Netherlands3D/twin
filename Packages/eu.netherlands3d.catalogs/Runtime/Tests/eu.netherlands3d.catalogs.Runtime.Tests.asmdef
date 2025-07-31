@@ -1,0 +1,23 @@
+{
+    "name": "eu.netherlands3d.catalogs.Runtime.Tests",
+    "rootNamespace": "Netherlands3D.Catalogs",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "eu.netherlands3d.catalogs.Runtime",
+        "GeoJSON.NET"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

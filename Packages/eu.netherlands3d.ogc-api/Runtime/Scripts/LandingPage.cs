@@ -11,6 +11,10 @@ namespace Netherlands3D.OgcApi
     [JsonObject]
     public class LandingPage
     {
+        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
+        [CanBeNull]
+        public string Id { get; set; }
+
         [JsonProperty("title", NullValueHandling = NullValueHandling.Ignore)]
         [CanBeNull]
         public string Title { get; set; }
