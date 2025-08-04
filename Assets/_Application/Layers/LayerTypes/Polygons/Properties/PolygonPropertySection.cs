@@ -25,11 +25,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             {
                 polygonLayer = value;
                 strokeWidthSlider.value = polygonLayer.LineWidth;
-                maskToggle.isOn = polygonLayer.IsMask;
-                maskInvertToggle.isOn = polygonLayer.InvertMask;
+                maskToggle.SetIsOnWithoutNotify(polygonLayer.IsMask);
+                maskInvertToggle.SetIsOnWithoutNotify(polygonLayer.InvertMask);
 
                 SetLinePropertiesActive(polygonLayer.ShapeType == ShapeType.Line);
                 SetGridPropertiesActive(polygonLayer.ShapeType == ShapeType.Grid);
+                
+                if(polygonLayer.IsMask)
+                    PopulateMaskLayerPanel();
             }
         }
 
@@ -81,6 +84,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 
         private void PopulateMaskLayerPanel()
         {
+            foreach (var t in maskToggleParent.GetComponentsInChildren<MaskLayerToggle>())
+            {
+                Destroy(t.gameObject);
+            }
+            
             foreach (var layer in ProjectData.Current.RootLayer.ChildrenLayers)
             {
                 var toggle = Instantiate(maskTogglePrefab, maskToggleParent);

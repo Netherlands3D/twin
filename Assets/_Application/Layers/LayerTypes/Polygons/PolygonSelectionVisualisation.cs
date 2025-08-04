@@ -73,7 +73,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             // the max integer value we can represent in a float without rounding errors is 2^24-1, so we can support 23 masking bit channels
             if (bitIndex < 0 || bitIndex > 23)
-                throw new IndexOutOfRangeException("bitIndex must be 23 or smaller to avoid floating point rounding errors since we must use a float formatted masking texture");
+                throw new IndexOutOfRangeException("bitIndex must be 23 or smaller to avoid floating point rounding errors since we must use a float formatted masking texture. BitIndex value: " + bitIndex);
             
             int maskValue = 1 << bitIndex;
             float floatMaskValue = (float)maskValue;

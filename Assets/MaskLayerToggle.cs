@@ -37,6 +37,14 @@ namespace Netherlands3D.Twin.Layers
             LayerData = layer;
 
             layerNameLabel.text = LayerData.Name;
+
+            if (layerData is ReferencedLayerData referencedLayerData)
+            {
+                var currentLayerMask = LayerStyler.GetMaskLayerMask(referencedLayerData.Reference);
+                int maskBitToCheck = 1 << MaskLayer.MaskBitIndex;
+                bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
+                toggle.SetIsOnWithoutNotify(isBitSet);
+            }
         }
 
         private void OnEnable()
