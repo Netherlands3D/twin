@@ -86,6 +86,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
             polygonPropertyData.OnIsMaskChanged.AddListener(OnIsMaskChanged);
             polygonPropertyData.OnInvertMaskChanged.AddListener(OnInvertMaskChanged);
+            //initialize
+            OnIsMaskChanged(IsMask); 
+            OnInvertMaskChanged(InvertMask);
         }
 
         public PolygonSelectionLayer(string name, string prefabId, List<Vector3> polygonUnityInput, ShapeType shapeType, float defaultLineWidth = 10f) : base(name, prefabId, new List<LayerPropertyData>())
@@ -103,6 +106,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
             polygonPropertyData.OnIsMaskChanged.AddListener(OnIsMaskChanged);
             polygonPropertyData.OnInvertMaskChanged.AddListener(OnInvertMaskChanged);
+
+            //initialize
+            OnIsMaskChanged(IsMask);
+            OnInvertMaskChanged(InvertMask);
         }
 
         private static List<LayerPropertyData> CreateNewProperties()
@@ -221,7 +228,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
-            PolygonVisualisation.gameObject.SetActive(activeInHierarchy);
+            SetVisualisationActive(activeInHierarchy);
+        }
+
+        public void SetVisualisationActive(bool active)
+        {
+            PolygonVisualisation.gameObject.SetActive(active);
         }
 
         public override void SelectLayer(bool deselectOthers = false)
@@ -297,7 +309,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 availableMaskChannels.Add(MaskBitIndex); //todo: remember the bit index so layers don't need to be selected again
                 MaskBitIndex = -1;
             }
-            else
+            else if (MaskBitIndex == -1)
             {
                 MaskBitIndex = availableMaskChannels.First();
                 availableMaskChannels.Remove(MaskBitIndex);

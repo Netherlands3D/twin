@@ -42,7 +42,6 @@ namespace Netherlands3D.LayerStyles
             }
             
             var bitMaskString = (string)json;
-            Debug.Log("bitmaskstring: " + bitMaskString);
             return LayerStyler.StringToBitmask(bitMaskString);
         }
 

@@ -207,10 +207,8 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void UpdateMaskBitMask(int bitmask)
         {
-            print("updating bit mask for " + Name);
             foreach (var r in GetComponentsInChildren<Renderer>())
             {
-                print(r.gameObject.name);
                 UpdateBitMaskForMaterials(bitmask, r.materials);
             }
         }
