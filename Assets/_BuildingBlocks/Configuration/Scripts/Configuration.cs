@@ -266,7 +266,8 @@ namespace Netherlands3D.Twin.Configuration
                                         (int)Math.Round(y),
                                         (int)Math.Round(z));
 
-                CoordinateSystems.SetOrigin(Origin);
+                //TODO setting the origin is now disabled because it will crash the app when origin params are givin in the url
+                //CoordinateSystems.SetOrigin(Origin);
                 Debug.Log($"Set origin '{Origin}' from URL");
             }
             else
