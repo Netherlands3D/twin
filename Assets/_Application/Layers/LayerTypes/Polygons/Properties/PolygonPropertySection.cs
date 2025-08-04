@@ -25,8 +25,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             {
                 polygonLayer = value;
                 strokeWidthSlider.value = polygonLayer.LineWidth;
-                maskToggle.SetIsOnWithoutNotify(polygonLayer.IsMask);
-                maskInvertToggle.SetIsOnWithoutNotify(polygonLayer.InvertMask);
+                maskToggle.isOn = (polygonLayer.IsMask);
+                maskInvertToggle.isOn = (polygonLayer.InvertMask);
 
                 SetLinePropertiesActive(polygonLayer.ShapeType == ShapeType.Line);
                 SetGridPropertiesActive(polygonLayer.ShapeType == ShapeType.Grid);
@@ -79,20 +79,27 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         {
             polygonLayer.IsMask = isMask;
 
-            PopulateMaskLayerPanel();
+            if(isMask)
+                PopulateMaskLayerPanel();
+            else
+                ClearMaskLayerPanel();
         }
 
         private void PopulateMaskLayerPanel()
         {
-            foreach (var t in maskToggleParent.GetComponentsInChildren<MaskLayerToggle>())
-            {
-                Destroy(t.gameObject);
-            }
-            
-            foreach (var layer in ProjectData.Current.RootLayer.ChildrenLayers)
+            ClearMaskLayerPanel();
+            foreach (var layer in ProjectData.Current.RootLayer.GetFlatHierarchy())
             {
                 var toggle = Instantiate(maskTogglePrefab, maskToggleParent);
                 toggle.Initialize(polygonLayer, layer);
+            }
+        }
+
+        private void ClearMaskLayerPanel()
+        {
+            foreach (var t in maskToggleParent.GetComponentsInChildren<MaskLayerToggle>())
+            {
+                Destroy(t.gameObject);
             }
         }
 
