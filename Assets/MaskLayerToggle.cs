@@ -1,6 +1,8 @@
 using System;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +12,7 @@ namespace Netherlands3D.Twin.Layers
     public class MaskLayerToggle : MonoBehaviour
     {
         public PolygonSelectionLayer MaskLayer { get; set; }
-        
+
         private LayerData layerData;
         public LayerData LayerData
         {
@@ -22,12 +24,13 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        private Toggle toggle;
+        [SerializeField] private Toggle toggle;
         [SerializeField] private TextMeshProUGUI layerNameLabel;
-
+        [SerializeField] private Image layerIconImage;
+        [SerializeField] private LayerTypeSpriteLibrary layerTypeSpriteLibrary;
+        
         private void Awake()
         {
-            toggle = GetComponent<Toggle>();
             toggle.interactable = false;
         }
 
@@ -45,6 +48,8 @@ namespace Netherlands3D.Twin.Layers
                 bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
                 toggle.SetIsOnWithoutNotify(isBitSet);
             }
+
+            layerIconImage.sprite = layerTypeSpriteLibrary.GetLayerTypeSprite(layer);
         }
 
         private void OnEnable()

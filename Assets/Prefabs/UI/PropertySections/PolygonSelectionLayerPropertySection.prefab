@@ -1887,7 +1887,7 @@ MonoBehaviour:
   EnableGridInputInEditModeEvent: {fileID: 11400000, guid: a190728eac2c7460392df89e1ad25744,
     type: 2}
   maskToggleParent: {fileID: 4118279502823982014}
-  maskTogglePrefab: {fileID: 1070729925735103981, guid: e2b0faa9f6f4e43b292ced16c5be392c,
+  maskTogglePrefab: {fileID: 4488489414617367639, guid: e2b0faa9f6f4e43b292ced16c5be392c,
     type: 3}
 --- !u!1001 &4207979860404524919
 PrefabInstance:
