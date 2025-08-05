@@ -102,6 +102,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
             AddLayersRecursive(this, list);
 
+            list.Remove(this); //remove rootLayer
             return list;
         }
 
