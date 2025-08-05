@@ -197,7 +197,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             OnScaleChanged(string.Empty);
         }
 
-
+        //the param is doing nothing to match signature
         public void OnPositionChanged(string axisValue)
         {
             var numberFormat = new NumberFormatInfo
@@ -226,6 +226,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             TransformPropertyData.Position = rdCoordinate;
         }
 
+        //the param is doing nothing to match signature
         public void OnRotationChanged(string axisValue)
         {
             var numberFormat = new NumberFormatInfo
@@ -252,6 +253,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             TransformPropertyData.EulerRotation = new Vector3(x, y, z);
         }
 
+        //the param is doing nothing to match signature
         public void OnScaleChanged(string axisValue)
         {
             var numberFormat = new NumberFormatInfo
