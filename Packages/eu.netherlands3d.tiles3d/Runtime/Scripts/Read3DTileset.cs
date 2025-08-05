@@ -528,7 +528,23 @@ namespace Netherlands3D.Tiles3D
         private void CalculateTileScreenSpaceError(Tile child, Camera currentMainCamera, Vector3 closestPointOnBounds)
         {
             float sse;
-            if (Vector3.Distance(currentMainCamera.transform.position, closestPointOnBounds) < 0.1)
+            if (currentMainCamera.orthographic)
+            {
+                //geometric error has no influence anymore so lets calculate the sse camera values
+                Bounds bounds = child.ContentBounds;
+                Vector3 maxExtent = Vector3.one * 1000f;
+                Vector3 clampedExtents = Vector3.Min(bounds.extents, maxExtent);
+                float halfHeight = currentMainCamera.orthographicSize;
+                float halfWidth = halfHeight * currentMainCamera.aspect;
+                float frustumDiagonal = new Vector2(halfWidth * 2f, halfHeight * 2f).magnitude;
+                float tileGroundSize = new Vector2(clampedExtents.x * 2f, clampedExtents.z * 2f).magnitude;
+                float ratio = tileGroundSize / frustumDiagonal;
+                float adjustedRatio = Mathf.Pow(ratio, 0.5f);
+                float zoomFactor = Mathf.Clamp(halfHeight / 10f, 0.1f, 10f);
+                float rawSSE = sseComponent * adjustedRatio * zoomFactor * 2f;
+                sse = Mathf.Max(rawSSE, 0.5f);
+            }
+            else if (Vector3.Distance(currentMainCamera.transform.position, closestPointOnBounds) < 0.1)
             {
                 sse = float.MaxValue;
             }
@@ -536,7 +552,6 @@ namespace Netherlands3D.Tiles3D
             {
                 sse = (sseComponent * (float)child.geometricError) / Vector3.Distance(currentMainCamera.transform.position, closestPointOnBounds);
             }
-
             child.screenSpaceError = sse;
         }
 
