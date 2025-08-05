@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -50,7 +51,9 @@ namespace Netherlands3D.Twin.UI
 
         private void IncrementFieldValue(string currentValue, float delta)
         {
-            if (!int.TryParse(currentValue, out int parsedInt))
+            string numericString = Regex.Replace(currentValue, @"[^0-9\-]", "");
+
+            if (!int.TryParse(numericString, out int parsedInt))
             {
                 return;
             }
