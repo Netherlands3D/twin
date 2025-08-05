@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Netherlands3D.Catalogs.Catalogs.Strategies;
 
 namespace Netherlands3D.Catalogs.Catalogs
 {
@@ -8,9 +9,9 @@ namespace Netherlands3D.Catalogs.Catalogs
     /// TODO: Should this be in the Catalogs package, or in the application itself? Or in a separate PDOK package?
     /// 
     /// </summary>
-    public class PdokOgcApiCatalog : PyCswOgcApiCatalog
+    public class PdokOgcApiCatalog : OgcApiCatalog
     {
-        private PdokOgcApiCatalog(OgcApi.OgcApi ogcApi) : base(ogcApi)
+        private PdokOgcApiCatalog(OgcApi.OgcApi ogcApi, OgcApiRecordsStrategy recordsStrategy) : base(ogcApi, recordsStrategy)
         {
         }
 
@@ -21,13 +22,30 @@ namespace Netherlands3D.Catalogs.Catalogs
         public static async Task<PdokOgcApiCatalog> CreateAsync()
         {
             var ogcApi = new OgcApi.OgcApi("https://api.pdok.nl/catalogus/v1-demo/");
+            var conformance = await ogcApi.Conformance();
             
-            return new PdokOgcApiCatalog(ogcApi)
+            // We know PDOK is a PyCsw server, so we can use that to get the records strategy. We do need to include
+            // the fallback strategy for features that do not match PyCSW heuristics (which is any feature that is not
+            // a service definition with a recognized access point URL)
+            var recordsStrategy = new OgcApiStrategyDispatcher(conformance, new OgcApiRecordsStrategy[]
             {
-                Title = await ogcApi.Title(),
-                Description = await ogcApi.Description()
+                // PDOK also defines some of their features as OGC api features with "download" link, so we have an extra
+                // strategy for PDOK until we know whether this is PyCSW specific
+                new PdokOgcApiRecordsStrategy(conformance),
+                new PyCswOgcApiRecordsStrategy(conformance),
+                new FallbackOgcApiRecordsStrategy(conformance),
+            }); 
+
+            var id = await ogcApi.Id();
+            var title = await ogcApi.Title();
+            var description = await ogcApi.Description();
+            
+            return new PdokOgcApiCatalog(ogcApi, recordsStrategy)
+            {
+                Id = id,
+                Title = title,
+                Description = description
             };
         }
-
     }
 }

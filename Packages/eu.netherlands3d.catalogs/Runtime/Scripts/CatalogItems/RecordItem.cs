@@ -14,7 +14,7 @@ namespace Netherlands3D.Catalogs.CatalogItems
         /// Arbitrary metadata dictionary for catalog-specific properties 
         /// (e.g. bounding box, keywords, service operations, etc.)
         /// </summary>
-        public IDictionary<string, object> Metadata { get; } = new Dictionary<string, object>();
+        public IDictionary<string, object> Metadata { get; set; } = new Dictionary<string, object>();
 
         /// <summary>
         /// https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#url
@@ -30,6 +30,14 @@ namespace Netherlands3D.Catalogs.CatalogItems
         /// https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#protocol
         /// </summary>
         [CanBeNull]
-        public string Type { get; set; }
+        public string Protocol { get; set; }
+
+        /// <summary>
+        /// Describes the media type of data associated to this record described by the Url.
+        /// 
+        /// https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#codelist-mediatypes
+        /// </summary>
+        [CanBeNull]
+        public string MediaType { get; set; }
     }
 }

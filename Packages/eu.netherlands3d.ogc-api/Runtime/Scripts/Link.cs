@@ -13,7 +13,8 @@ namespace Netherlands3D.OgcApi
         [JsonProperty("href", Required = Required.Always)]
         public string Href { get; set; }
 
-        [JsonProperty("rel", Required = Required.Always)]
+        [JsonProperty("rel", NullValueHandling = NullValueHandling.Ignore)]
+        [CanBeNull]
         public string Rel { get; set; }
 
         [JsonProperty("type", NullValueHandling = NullValueHandling.Ignore)]
@@ -34,12 +35,12 @@ namespace Netherlands3D.OgcApi
         [JsonExtensionData]
         public IDictionary<string, JToken> ExtensionData { get; set; } = new Dictionary<string, JToken>();
 
-        public bool IsOfFormat(string[] format)
+        public bool IsOfMediaType(string[] mediaType)
         {
-            return format.Contains(Type);
+            return mediaType.Contains(Type);
         }
 
-        public bool IsOfFormat(string format)
+        public bool IsOfMediaType(string format)
         {
             return string.Compare(format, Type, StringComparison.OrdinalIgnoreCase) == 0;
         }

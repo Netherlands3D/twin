@@ -7,14 +7,14 @@ using NUnit.Framework;
 namespace Netherlands3D.Catalogs.Catalogs
 {
     [TestFixture]
-    public class PyCswOgcApiCatalogTests
+    public class OgcApiCatalogTests
     {
-        private PyCswOgcApiCatalog catalog;
+        private OgcApiCatalog catalog;
 
         [SetUp]
         public async Task SetUp()
         {
-            catalog = await PyCswOgcApiCatalog.CreateAsync("https://demo.pycsw.org/gisdata");
+            catalog = await OgcApiCatalog.CreateAsync("https://demo.pycsw.org/gisdata");
         }
 
         [Test]
