@@ -248,13 +248,32 @@ namespace Netherlands3D.Twin.Configuration
         private void LoadOriginFromString(string origin)
         {
             var originParts = origin.Split(',');
-            int.TryParse(originParts[0].Trim(), out int x);
-            int.TryParse(originParts[1].Trim(), out int y);
-            int.TryParse(originParts[2].Trim(), out int z);
+            if (originParts.Length != 3)
+            {
+                Debug.LogError($"Invalid origin format: '{origin}'");
+                return;
+            }
 
-            Origin = new Coordinate(CoordinateSystem.RDNAP, x, y, z);
-            CoordinateSystems.SetOrigin(Origin);
-            Debug.Log($"Set origin '{Origin}' from URL");
+            if (double.TryParse(originParts[0].Trim(), System.Globalization.NumberStyles.Any,
+                                System.Globalization.CultureInfo.InvariantCulture, out double x) &&
+                double.TryParse(originParts[1].Trim(), System.Globalization.NumberStyles.Any,
+                                System.Globalization.CultureInfo.InvariantCulture, out double y) &&
+                double.TryParse(originParts[2].Trim(), System.Globalization.NumberStyles.Any,
+                                System.Globalization.CultureInfo.InvariantCulture, out double z))
+            {
+                Origin = new Coordinate(CoordinateSystem.RDNAP,
+                                        (int)Math.Round(x),
+                                        (int)Math.Round(y),
+                                        (int)Math.Round(z));
+
+                //TODO setting the origin is now disabled because it will crash the app when origin params are givin in the url
+                //CoordinateSystems.SetOrigin(Origin);
+                Debug.Log($"Set origin '{Origin}' from URL");
+            }
+            else
+            {
+                Debug.LogError($"Failed to parse origin values from: '{origin}'");
+            }
         }
 
         private void LoadFunctionalitiesFromString(string functionalities)
