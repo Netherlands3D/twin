@@ -7,7 +7,7 @@ using Netherlands3D.OgcApi.Features;
 namespace Netherlands3D.Catalogs.Catalogs.Strategies
 {
     /// <summary>
-    /// A composite record-parsing strategy that dispatches to the most appropriate
+    /// A composite record-parsing strategy that selects to the most appropriate
     /// <see cref="OgcApiRecordsStrategy"/> implementation based on heuristics applied to each record.
     ///
     /// <para>
@@ -26,11 +26,11 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
     /// </para>
     ///
     /// <para>
-    /// <see cref="OgcApiStrategyDispatcher"/> encapsulates this runtime selection logic. It contains a list of
+    /// <see cref="OgcApiRecordsStrategySelector"/> encapsulates this runtime selection logic. It contains a list of
     /// registered <see cref="OgcApiRecordsStrategy"/> instances, each responsible for handling a specific variant of
     /// the standard.
     /// 
-    /// When <see cref="ParseFeature"/> is called, the dispatcher:
+    /// When <see cref="ParseFeature"/> is called, the selector:
     /// <list type="number">
     ///   <item>Evaluates each registered strategy's <see cref="OgcApiRecordsStrategy.CanHandle"/> method</item>
     ///   <item>Invokes <see cref="OgcApiRecordsStrategy.ParseFeature"/> on the first strategy that returns true</item>
@@ -50,7 +50,7 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
     /// <example>
     /// Example usage:
     /// <code>
-    /// var dispatcher = new OgcApiStrategyDispatcher(
+    /// var selector = new OgcApiRecordsStrategySelector(
     ///     conformance,
     ///     new[] {
     ///         new PyCswOgcApiRecordsStrategy(conformance),
@@ -58,21 +58,21 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
     ///     }
     /// );
     ///
-    /// var catalogItem = dispatcher.ParseFeature(feature); // Dispatches to correct strategy
+    /// var catalogItem = selector.ParseFeature(feature); // Selects and routes to correct strategy
     /// </code>
     /// </example>
     ///
     /// <remarks>
     /// This class itself is a subclass of <see cref="OgcApiRecordsStrategy"/>, meaning it can be passed
     /// anywhere a single strategy is expected. This provides full interoperability with systems that
-    /// consume strategies without needing to know whether dispatching is involved.
+    /// consume strategies without needing to know whether routing is involved.
     /// </remarks>
     /// </summary>
-    public class OgcApiStrategyDispatcher : OgcApiRecordsStrategy
+    public class OgcApiRecordsStrategySelector : OgcApiRecordsStrategy
     {
         private readonly List<OgcApiRecordsStrategy> strategies;
 
-        public OgcApiStrategyDispatcher(
+        public OgcApiRecordsStrategySelector(
             ConformanceDeclaration conformance,
             IEnumerable<OgcApiRecordsStrategy> strategies = null
         ) : base(conformance)

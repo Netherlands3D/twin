@@ -33,7 +33,7 @@ namespace Netherlands3D.Catalogs.Catalogs
         {
             var ogcApi = new OgcApi.OgcApi(url);
             var conformance = await ogcApi.Conformance();
-            var recordsStrategy = new OgcApiStrategyDispatcher(conformance);
+            var recordsStrategy = new OgcApiRecordsStrategySelector(conformance);
 
             var id = await ogcApi.Id();
             var title = await ogcApi.Title();
@@ -166,7 +166,6 @@ namespace Netherlands3D.Catalogs.Catalogs
 
             public override Task<IEnumerable<ICatalogItem>> GetItemsAsync() 
                 => Task.FromResult(items.Features.Select(recordsStrategy.ParseFeature));
-
 
             protected override async Task<BaseCatalogItemCollectionPage<Collection>> CreatePageAsyncInternal(Collection src, Pagination p)
                 => await CreateAsync(src, p, recordsStrategy);

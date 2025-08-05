@@ -28,7 +28,7 @@ namespace Netherlands3D.Catalogs.Catalogs
         
         public Task<ICatalogItemCollection> BrowseAsync(Pagination pagination = null)
         {
-            var page = new CatalogItemCollectionPagePage(allRecords, pagination);
+            var page = new CatalogItemCollectionPage(allRecords, pagination);
 
             return Task.FromResult<ICatalogItemCollection>(page);
         }
@@ -41,7 +41,7 @@ namespace Netherlands3D.Catalogs.Catalogs
 
         public Task<ICatalogItemCollection> SearchAsync(Expression expression, Pagination pagination = null)
         {
-            var page = new CatalogItemCollectionPagePage(FilteredItems(allRecords), pagination);
+            var page = new CatalogItemCollectionPage(FilteredItems(allRecords), pagination);
             
             return Task.FromResult<ICatalogItemCollection>(page);
 
@@ -79,13 +79,7 @@ namespace Netherlands3D.Catalogs.Catalogs
 
         public static RecordItem CreateRecord(string id, string title, string description, Uri uri = null)
         {
-            return new RecordItem
-            {
-                Id = id,
-                Title = title,
-                Description = description,
-                Url = uri
-            };
+            return new RecordItem(id, title, description, url: uri);
         }
 
         public static FolderItem CreateFolder(
@@ -95,7 +89,7 @@ namespace Netherlands3D.Catalogs.Catalogs
             IEnumerable<ICatalogItem> records,
             Pagination pagination = null
         ) {
-            return new FolderItem(id, title, description, new CatalogItemCollectionPagePage(records, pagination));       
+            return new FolderItem(id, title, description, new CatalogItemCollectionPage(records, pagination));       
         }
 
         private class CatalogItemFeature : IFeatureForExpression
@@ -130,12 +124,12 @@ namespace Netherlands3D.Catalogs.Catalogs
             }
         }
 
-        private class CatalogItemCollectionPagePage : BaseCatalogItemCollectionPage<List<ICatalogItem>>
+        private class CatalogItemCollectionPage : BaseCatalogItemCollectionPage<List<ICatalogItem>>
         {
             private readonly List<ICatalogItem> items;
             protected override int MaxNumberOfItems => source.Count;
 
-            public CatalogItemCollectionPagePage(IEnumerable<ICatalogItem> source, Pagination pagination)
+            public CatalogItemCollectionPage(IEnumerable<ICatalogItem> source, Pagination pagination)
                 : base(source.ToList(), pagination)
             {
                 items = this.source
@@ -155,7 +149,7 @@ namespace Netherlands3D.Catalogs.Catalogs
 
             public override Task<ICatalogItemCollection> SearchAsync(Expression expression, Pagination pagination = null)
             {
-                var page = new CatalogItemCollectionPagePage(FilteredItems(source), pagination);
+                var page = new CatalogItemCollectionPage(FilteredItems(source), pagination);
             
                 return Task.FromResult<ICatalogItemCollection>(page);
 
@@ -176,7 +170,7 @@ namespace Netherlands3D.Catalogs.Catalogs
             }
 
             protected override Task<BaseCatalogItemCollectionPage<List<ICatalogItem>>> CreatePageAsyncInternal(List<ICatalogItem> src, Pagination p)
-                => Task.FromResult<BaseCatalogItemCollectionPage<List<ICatalogItem>>>(new CatalogItemCollectionPagePage(src, p));
+                => Task.FromResult<BaseCatalogItemCollectionPage<List<ICatalogItem>>>(new CatalogItemCollectionPage(src, p));
         }
     }
 }

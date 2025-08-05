@@ -52,16 +52,14 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
             // if it is not a record, we don't need to do anything else
             if (catalogItem is not RecordItem recordItem) return true;
 
-
             var endpoint = FindEndpointLink(feature);
             var type = DetermineLinkMediaType(endpoint);
 
-            JToken protocol = null;
-            endpoint?.ExtensionData.TryGetValue("protocol", out protocol);
-            
-            recordItem.Url = endpoint != null ? new Uri(endpoint.Href) : null;
-            recordItem.MediaType = type;
-            recordItem.Protocol = (string)protocol;
+            recordItem.WithEndpoint(
+                endpoint != null ? new Uri(endpoint.Href) : null,
+                type,
+                endpoint?.GetExtensionData<string>("protocol")
+            );
 
             return true;
         }

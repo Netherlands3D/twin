@@ -54,5 +54,10 @@ namespace Netherlands3D.OgcApi
         {
             return string.Compare(type, Rel, StringComparison.OrdinalIgnoreCase) == 0;
         }
+
+        public T GetExtensionData<T>(string key)
+        {
+            return ExtensionData.TryGetValue(key, out var value) ? value.Value<T>() : default;
+        }
     }
 }

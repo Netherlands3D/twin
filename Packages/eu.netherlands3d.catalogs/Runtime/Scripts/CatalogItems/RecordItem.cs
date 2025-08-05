@@ -4,25 +4,15 @@ using JetBrains.Annotations;
 
 namespace Netherlands3D.Catalogs.CatalogItems
 {
-    public class RecordItem : ICatalogItem
+    public record RecordItem : BaseCatalogItem
     {
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Arbitrary metadata dictionary for catalog-specific properties 
-        /// (e.g. bounding box, keywords, service operations, etc.)
-        /// </summary>
-        public IDictionary<string, object> Metadata { get; set; } = new Dictionary<string, object>();
-
         /// <summary>
         /// https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#url
         /// May also be a Uri to a locally embedded file using the `project://` scheme, or addressable asset using
         /// the prefix `addressable://`.
         /// </summary>
         [CanBeNull]
-        public Uri Url { get; set; }
+        public Uri Url { get; private set; }
 
         /// <summary>
         /// Describes the type of data associated to this record described by the Url.
@@ -30,7 +20,7 @@ namespace Netherlands3D.Catalogs.CatalogItems
         /// https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#protocol
         /// </summary>
         [CanBeNull]
-        public string Protocol { get; set; }
+        public string Protocol { get; private set; }
 
         /// <summary>
         /// Describes the media type of data associated to this record described by the Url.
@@ -38,6 +28,25 @@ namespace Netherlands3D.Catalogs.CatalogItems
         /// https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#codelist-mediatypes
         /// </summary>
         [CanBeNull]
-        public string MediaType { get; set; }
+        public string MediaType { get; private set; }
+
+        public RecordItem(
+            string id, 
+            string title, 
+            string description = null,
+            IDictionary<string, object> metadata = null,
+            [CanBeNull] Uri url = null, 
+            [CanBeNull] string protocol = null, 
+            [CanBeNull] string mediaType = null
+        ) : base(id, title, description, metadata) {
+            WithEndpoint(url, protocol, mediaType);
+        }
+
+        public void WithEndpoint(Uri uri, string mediaType, string protocol)
+        {
+            Url = uri;
+            Protocol = protocol;
+            MediaType = mediaType;
+        }
     }
 }

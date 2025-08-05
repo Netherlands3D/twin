@@ -116,13 +116,13 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
             feature.Properties.TryGetValue("title", out var title);
             feature.Properties.TryGetValue("description", out var description);
 
-            catalogItem = new RecordItem
-            {
-                Id = feature.Id,
-                Title = title as string,
-                Description = description as string,
-                Metadata = feature.Properties.ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
-            };
+            catalogItem = new RecordItem(
+                feature.Id,
+                title as string,
+                description as string,
+                feature.Properties.ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
+            );
+
             return true;
         }
     }

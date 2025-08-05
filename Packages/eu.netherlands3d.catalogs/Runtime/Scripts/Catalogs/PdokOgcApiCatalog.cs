@@ -27,7 +27,7 @@ namespace Netherlands3D.Catalogs.Catalogs
             // We know PDOK is a PyCsw server, so we can use that to get the records strategy. We do need to include
             // the fallback strategy for features that do not match PyCSW heuristics (which is any feature that is not
             // a service definition with a recognized access point URL)
-            var recordsStrategy = new OgcApiStrategyDispatcher(conformance, new OgcApiRecordsStrategy[]
+            var recordsStrategy = new OgcApiRecordsStrategySelector(conformance, new OgcApiRecordsStrategy[]
             {
                 // PDOK also defines some of their features as OGC api features with "download" link, so we have an extra
                 // strategy for PDOK until we know whether this is PyCSW specific

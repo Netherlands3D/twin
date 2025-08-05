@@ -36,28 +36,38 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
 
         private static bool IsPdokOgcApiFeaturesServiceLink(Link link)
         {
-            if (!(link.Rel?.Equals("download", StringComparison.OrdinalIgnoreCase) ?? false)) return false;
+            // Doesn't have a rel attribute, then this is not what we are looking for
+            if (link.Rel == null) return false;
+            
+            // Doesn't have a download rel, then this is not what we are looking for
+            if (!link.Rel.Equals("download", StringComparison.OrdinalIgnoreCase)) return false;
 
+            // Doesn't have a protocol attribute, then this is not what we are looking for
             if (!link.ExtensionData.TryGetValue("protocol", out var protocolObj)) return false;
             
-            return ((string)protocolObj)?.Equals("OGC:API features", StringComparison.OrdinalIgnoreCase) ?? false;
+            // The protocol attribute is not set, then this is not what we are looking for
+            string protocol = (string)protocolObj;
+            if (string.IsNullOrEmpty(protocol)) return false;
+            
+            return protocol.Equals("OGC:API features", StringComparison.OrdinalIgnoreCase);
         }
 
         public override bool TryParseFeature(Feature feature, out ICatalogItem catalogItem)
         {
             if (!base.TryParseFeature(feature, out catalogItem)) return false;
             
-            feature.Properties.TryGetValue("protocol", out var protocol);
+            // if it is not a record, we don't need to do anything else
+            if (catalogItem is not RecordItem recordItem) return true;
 
             var endpoint = FindEndpointLink(feature);
-            var type = DetermineLinkMediaType(endpoint);
+            var type= DetermineLinkMediaType(endpoint);
 
-            catalogItem = new RecordItem
-            {
-                Url = endpoint != null ? new Uri(endpoint.Href) : null,
-                MediaType = type,
-                Protocol = protocol as string,
-            };
+            recordItem.WithEndpoint(
+                endpoint != null ? new Uri(endpoint.Href) : null,
+                type,
+                endpoint?.GetExtensionData<string>("protocol")
+            );
+            
             return true;
         }
 
