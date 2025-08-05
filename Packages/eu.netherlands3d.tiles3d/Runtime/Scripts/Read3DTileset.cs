@@ -532,16 +532,22 @@ namespace Netherlands3D.Tiles3D
             {
                 //geometric error has no influence anymore so lets calculate the sse camera values
                 Bounds bounds = child.ContentBounds;
-                Vector3 maxExtent = Vector3.one * 1000f;
-                Vector3 clampedExtents = Vector3.Min(bounds.extents, maxExtent);
+                Vector3 extents = bounds.extents;
+                Vector3 clampedExtents = Vector3.Min(extents, Vector3.one * 1000);
                 float halfHeight = currentMainCamera.orthographicSize;
                 float halfWidth = halfHeight * currentMainCamera.aspect;
-                float frustumDiagonal = new Vector2(halfWidth * 2f, halfHeight * 2f).magnitude;
-                float tileGroundSize = new Vector2(clampedExtents.x * 2f, clampedExtents.z * 2f).magnitude;
-                float ratio = tileGroundSize / frustumDiagonal;
-                float adjustedRatio = Mathf.Pow(ratio, 0.5f);
+                float fh2 = halfHeight * 2f;
+                float fw2 = halfWidth * 2f;
+                float frustumDiagonalSq = fw2 * fw2 + fh2 * fh2;
+                float tx = clampedExtents.x * 2f;
+                float tz = clampedExtents.z * 2f;
+                float tileGroundSizeSq = tx * tx + tz * tz;
+                float ratio = 0f;
+                if (frustumDiagonalSq > 0f)
+                    ratio = Mathf.Sqrt(tileGroundSizeSq / frustumDiagonalSq);
+
                 float zoomFactor = Mathf.Clamp(halfHeight / 10f, 0.1f, 10f);
-                float rawSSE = sseComponent * adjustedRatio * zoomFactor * 2f;
+                float rawSSE = sseComponent * ratio * zoomFactor * 2f;
                 sse = Mathf.Max(rawSSE, 0.5f);
             }
             else if (Vector3.Distance(currentMainCamera.transform.position, closestPointOnBounds) < 0.1)
