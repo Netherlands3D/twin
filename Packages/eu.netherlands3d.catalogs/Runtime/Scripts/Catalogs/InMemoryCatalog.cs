@@ -127,11 +127,13 @@ namespace Netherlands3D.Catalogs.Catalogs
         private class CatalogItemCollectionPage : BaseCatalogItemCollectionPage<List<ICatalogItem>>
         {
             private readonly List<ICatalogItem> items;
+            private readonly Filter filter;
             protected override int MaxNumberOfItems => source.Count;
 
             public CatalogItemCollectionPage(IEnumerable<ICatalogItem> source, Pagination pagination)
                 : base(source.ToList(), pagination)
             {
+                this.filter = new Filter();
                 items = this.source
                     .Skip(this.pagination.Offset)
                     .Take(this.pagination.Limit)
@@ -149,28 +151,37 @@ namespace Netherlands3D.Catalogs.Catalogs
 
             public override Task<ICatalogItemCollection> SearchAsync(Expression expression, Pagination pagination = null)
             {
-                var page = new CatalogItemCollectionPage(FilteredItems(source), pagination);
+                var filteredCatalogItems = filter.Perform(source, expression);
+                var page = new CatalogItemCollectionPage(filteredCatalogItems, pagination);
             
                 return Task.FromResult<ICatalogItemCollection>(page);
-
-                // use a function yielding results to avoid allocations and linq 
-                IEnumerable<ICatalogItem> FilteredItems(IEnumerable<ICatalogItem> itemsToFilter)
-                {
-                    // Prepare the context and catalog item feature once and reuse it to reduce allocations.
-                    var catalogItemFeature = new CatalogItemFeature();
-                    var context = new ExpressionContext(catalogItemFeature);
-
-                    foreach (var item in itemsToFilter)
-                    {
-                        catalogItemFeature.ReplaceCatalogItem(item);
-
-                        if (ExpressionEvaluator.Evaluate(expression, context)) yield return item;
-                    }
-                }
             }
 
             protected override Task<BaseCatalogItemCollectionPage<List<ICatalogItem>>> CreatePageAsyncInternal(List<ICatalogItem> src, Pagination p)
                 => Task.FromResult<BaseCatalogItemCollectionPage<List<ICatalogItem>>>(new CatalogItemCollectionPage(src, p));
+            
+            private class Filter
+            {
+                // Prepare the context and catalog item feature once and reuse it to reduce allocations.
+                private readonly CatalogItemFeature reusableCatalogItemFeature = new();
+                private readonly ExpressionContext reusableExpressionContext;
+
+                public Filter()
+                {
+                    reusableExpressionContext = new ExpressionContext(reusableCatalogItemFeature);
+                }
+
+                // use a function yielding results to avoid allocations and linq 
+                public IEnumerable<ICatalogItem> Perform(IEnumerable<ICatalogItem> itemsToFilter, Expression expression)
+                {
+                    foreach (var item in itemsToFilter)
+                    {
+                        reusableCatalogItemFeature.ReplaceCatalogItem(item);
+
+                        if (ExpressionEvaluator.Evaluate(expression, reusableExpressionContext)) yield return item;
+                    }
+                }
+            }
         }
     }
 }
