@@ -8,6 +8,9 @@ using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using System.Linq;
+using System.Collections.Generic;
+using KindMen.Uxios.Http;
 
 namespace Netherlands3D.Functionalities.Wfs
 {
@@ -102,11 +105,26 @@ namespace Netherlands3D.Functionalities.Wfs
             if (isWfsGetFeature)
             {
                 var queryParameters = QueryString.Decode(sourceUrl);
-                var featureType = queryParameters.Single(WfsGetCapabilities.ParameterNameOfTypeNameBasedOnVersion(wfsVersion));
-
-                if (string.IsNullOrEmpty(featureType) == false)
+                var paramName = WfsGetCapabilities.ParameterNameOfTypeNameBasedOnVersion(OgcWebServicesUtility.GetVersionFromUrl(url));
+                string featureType = null;
+                string crs = null;
+                foreach (KeyValuePair<string, QueryParameter> kv in queryParameters)
                 {
-                    string crs = queryParameters.Single("srsname");
+                    if(string.Equals(kv.Key, paramName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        string val = kv.Value.ToString();
+                        int equalsIndex = val.IndexOf('=');
+                        featureType = equalsIndex >= 0 && equalsIndex < val.Length - 1 ? val.Substring(equalsIndex + 1) : val;                        
+                    }
+                    if(string.Equals(kv.Key, "srsname", StringComparison.OrdinalIgnoreCase))
+                    {
+                        string val = kv.Value.ToString();
+                        int equalsIndex = val.IndexOf('=');
+                        crs = equalsIndex >= 0 && equalsIndex < val.Length - 1 ? val.Substring(equalsIndex + 1) : val;
+                    }
+                }
+                if (string.IsNullOrEmpty(featureType) == false)
+                {                     
                     // Can't deduct a human-readable title at the moment, we should add that we always query for the
                     // capabilities; this also helps with things like outputFormat and CRS
                     AddWFSLayer(featureType, sourceUrl, crs, wfsFolder, featureType, geoJsonOutputFormatString);

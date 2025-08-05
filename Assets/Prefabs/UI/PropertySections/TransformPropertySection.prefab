@@ -647,6 +647,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6983693740949535982}
+    - targetCorrespondingSourceObject: {fileID: 5880176716242951706, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 279975088069954226}
   m_SourcePrefab: {fileID: 100100000, guid: bc8bb3fe905a40c45a5fcc9a186bfb86, type: 3}
 --- !u!114 &3114825054205818457 stripped
 MonoBehaviour:
@@ -704,6 +708,37 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &279975088069954226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5970436403549731981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d0c197a007054398a638263d67bd95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensitivity: 10
+  minValue: -999999
+  maxValue: 999999
+  maxDelta: 1
+  fieldChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: ece5763759e409145a4e0a57eec2921a, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.IntEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &785510875147281258
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -865,6 +900,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1859319795893664254}
+    - targetCorrespondingSourceObject: {fileID: 5880176716242951706, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 632087470383383063}
   m_SourcePrefab: {fileID: 100100000, guid: bc8bb3fe905a40c45a5fcc9a186bfb86, type: 3}
 --- !u!114 &2494273805321238436 stripped
 MonoBehaviour:
@@ -922,6 +961,37 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &632087470383383063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6592183996752543088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d0c197a007054398a638263d67bd95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensitivity: 10
+  minValue: -999999
+  maxValue: 999999
+  maxDelta: 1
+  fieldChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 6b1ee83a2a5087543ab28147a1873fde, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.IntEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &889276526945175291
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -960,6 +1030,36 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnRight
       value: 
       objectReference: {fileID: 3183134990437864043}
+    - target: {fileID: 3417407207344517372, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417407207344517372, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417407207344517372, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417407207344517372, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ParseToInteger
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417407207344517372, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: StringNumberParser, eu.netherlands3d.event-system.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 3417407207344517372, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3852244505954252403, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
         type: 3}
       propertyPath: m_fontColor32.rgba
@@ -1078,6 +1178,10 @@ PrefabInstance:
         type: 3}
       insertIndex: 4
       addedObject: {fileID: 7458932584449080331}
+    - targetCorrespondingSourceObject: {fileID: 5880176716242951706, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7432799298165509789}
   m_SourcePrefab: {fileID: 100100000, guid: bc8bb3fe905a40c45a5fcc9a186bfb86, type: 3}
 --- !u!114 &2538422659025745415 stripped
 MonoBehaviour:
@@ -1135,6 +1239,37 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &7432799298165509789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6759284958441117921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d0c197a007054398a638263d67bd95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensitivity: 10
+  minValue: -999999
+  maxValue: 999999
+  maxDelta: 1
+  fieldChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: aef118e71edc3074998c237b1078b2b1, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.IntEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &1731635921601287163
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1296,6 +1431,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3821401359978866372}
+    - targetCorrespondingSourceObject: {fileID: 5880176716242951706, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3649936451647981653}
   m_SourcePrefab: {fileID: 100100000, guid: bc8bb3fe905a40c45a5fcc9a186bfb86, type: 3}
 --- !u!114 &3491345822493050677 stripped
 MonoBehaviour:
@@ -1347,6 +1486,37 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &3649936451647981653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5301462591954406881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d0c197a007054398a638263d67bd95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensitivity: 10
+  minValue: -999999
+  maxValue: 999999
+  maxDelta: 1
+  fieldChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 8a28a933670dae04baf6e91b5dfc3b28, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.IntEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &6210609698493416828 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5636401373350336135, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
@@ -1514,6 +1684,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1797204762911014160}
+    - targetCorrespondingSourceObject: {fileID: 5880176716242951706, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1558008242119070232}
   m_SourcePrefab: {fileID: 100100000, guid: bc8bb3fe905a40c45a5fcc9a186bfb86, type: 3}
 --- !u!114 &2017360283520801205 stripped
 MonoBehaviour:
@@ -1565,6 +1739,37 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1558008242119070232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7280242878468798291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d0c197a007054398a638263d67bd95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensitivity: 10
+  minValue: -1000
+  maxValue: 1000
+  maxDelta: 1
+  fieldChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 55b96f43b72fd194cbf2a33d357bb215, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.IntEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &8839034368762462158 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5636401373350336135, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
@@ -1732,6 +1937,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5596762816495285007}
+    - targetCorrespondingSourceObject: {fileID: 5880176716242951706, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4674708051985111260}
   m_SourcePrefab: {fileID: 100100000, guid: bc8bb3fe905a40c45a5fcc9a186bfb86, type: 3}
 --- !u!114 &1257882925733847773 stripped
 MonoBehaviour:
@@ -1783,6 +1992,37 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &4674708051985111260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8035373865857911867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d0c197a007054398a638263d67bd95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensitivity: 10
+  minValue: -999999
+  maxValue: 999999
+  maxDelta: 1
+  fieldChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 47e4976fb4cc46a4c8b1052f633e058f, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.IntEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &8079863774184866982 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5636401373350336135, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
@@ -1977,6 +2217,42 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 964705144372893445}
+    - targetCorrespondingSourceObject: {fileID: 6482568267866771571, guid: e3342ba09b3c3e245ac1e7d9f4102026,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2026229206907037495}
+    - targetCorrespondingSourceObject: {fileID: 6482568267866771571, guid: e3342ba09b3c3e245ac1e7d9f4102026,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 672078448530986152}
+    - targetCorrespondingSourceObject: {fileID: 6482568267866771571, guid: e3342ba09b3c3e245ac1e7d9f4102026,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3906314230571685938}
+    - targetCorrespondingSourceObject: {fileID: 6482568267866771571, guid: e3342ba09b3c3e245ac1e7d9f4102026,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5867177417053850575}
+    - targetCorrespondingSourceObject: {fileID: 6482568267866771571, guid: e3342ba09b3c3e245ac1e7d9f4102026,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6869926844905863643}
+    - targetCorrespondingSourceObject: {fileID: 6482568267866771571, guid: e3342ba09b3c3e245ac1e7d9f4102026,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8427252239941224128}
+    - targetCorrespondingSourceObject: {fileID: 6482568267866771571, guid: e3342ba09b3c3e245ac1e7d9f4102026,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3736705790453477520}
+    - targetCorrespondingSourceObject: {fileID: 6482568267866771571, guid: e3342ba09b3c3e245ac1e7d9f4102026,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6962316685359043981}
+    - targetCorrespondingSourceObject: {fileID: 6482568267866771571, guid: e3342ba09b3c3e245ac1e7d9f4102026,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7737379185249671700}
   m_SourcePrefab: {fileID: 100100000, guid: e3342ba09b3c3e245ac1e7d9f4102026, type: 3}
 --- !u!1 &1252027859236190791 stripped
 GameObject:
@@ -2008,6 +2284,274 @@ MonoBehaviour:
     xField: {fileID: 5162515647959348561}
     yField: {fileID: 2494273805321238436}
     zField: {fileID: 1612910241398376175}
+  positionDecimals: 0
+  positionUnitCharacter: 
+  rotationDecimals: 2
+  rotationUnitCharacter: 
+  scaleMultiplier: 100
+  scaleDecimals: 0
+  scaleUnitCharacter: '%'
+--- !u!114 &2026229206907037495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252027859236190791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5822546cad2a03b44b68937a44872fe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: aef118e71edc3074998c237b1078b2b1, type: 2}
+  trigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 964705144372893445}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformPropertySection,
+          eu.netherlands3d.twin
+        m_MethodName: SetPositionX
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &672078448530986152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252027859236190791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5822546cad2a03b44b68937a44872fe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: ece5763759e409145a4e0a57eec2921a, type: 2}
+  trigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 964705144372893445}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformPropertySection,
+          eu.netherlands3d.twin
+        m_MethodName: SetPositionY
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &3906314230571685938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252027859236190791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5822546cad2a03b44b68937a44872fe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 8a28a933670dae04baf6e91b5dfc3b28, type: 2}
+  trigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 964705144372893445}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformPropertySection,
+          eu.netherlands3d.twin
+        m_MethodName: SetPositionZ
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5867177417053850575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252027859236190791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5822546cad2a03b44b68937a44872fe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 55b96f43b72fd194cbf2a33d357bb215, type: 2}
+  trigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 964705144372893445}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformPropertySection,
+          eu.netherlands3d.twin
+        m_MethodName: SetRotationX
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6869926844905863643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252027859236190791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5822546cad2a03b44b68937a44872fe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: c42059af6706b7e48a0554e78c63b0bd, type: 2}
+  trigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 964705144372893445}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformPropertySection,
+          eu.netherlands3d.twin
+        m_MethodName: SetRotationY
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &8427252239941224128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252027859236190791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5822546cad2a03b44b68937a44872fe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 54ff6e40db041d845b01082c670574c5, type: 2}
+  trigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 964705144372893445}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformPropertySection,
+          eu.netherlands3d.twin
+        m_MethodName: SetRotationZ
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &3736705790453477520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252027859236190791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5822546cad2a03b44b68937a44872fe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 6227e84336d9c554c8986fb6c7502528, type: 2}
+  trigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 964705144372893445}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformPropertySection,
+          eu.netherlands3d.twin
+        m_MethodName: SetScaleX
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6962316685359043981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252027859236190791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5822546cad2a03b44b68937a44872fe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 6b1ee83a2a5087543ab28147a1873fde, type: 2}
+  trigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 964705144372893445}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformPropertySection,
+          eu.netherlands3d.twin
+        m_MethodName: SetScaleY
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7737379185249671700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252027859236190791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5822546cad2a03b44b68937a44872fe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 47e4976fb4cc46a4c8b1052f633e058f, type: 2}
+  trigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 964705144372893445}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformPropertySection,
+          eu.netherlands3d.twin
+        m_MethodName: SetScaleZ
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &3964240960759765200 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9193392669041292004, guid: e3342ba09b3c3e245ac1e7d9f4102026,
@@ -2180,6 +2724,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6988778406590863900}
+    - targetCorrespondingSourceObject: {fileID: 5880176716242951706, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8074436219485089772}
   m_SourcePrefab: {fileID: 100100000, guid: bc8bb3fe905a40c45a5fcc9a186bfb86, type: 3}
 --- !u!1 &541370801105775965 stripped
 GameObject:
@@ -2207,6 +2755,37 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &8074436219485089772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 541370801105775965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d0c197a007054398a638263d67bd95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensitivity: 10
+  minValue: -1000
+  maxValue: 1000
+  maxDelta: 1
+  fieldChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c42059af6706b7e48a0554e78c63b0bd, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.IntEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &1738747201465656768 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5636401373350336135, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
@@ -2403,6 +2982,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7141158076978242145}
+    - targetCorrespondingSourceObject: {fileID: 5880176716242951706, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4136949707530967696}
   m_SourcePrefab: {fileID: 100100000, guid: bc8bb3fe905a40c45a5fcc9a186bfb86, type: 3}
 --- !u!1 &1008152935115177340 stripped
 GameObject:
@@ -2430,6 +3013,37 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &4136949707530967696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008152935115177340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d0c197a007054398a638263d67bd95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensitivity: 10
+  minValue: -1000
+  maxValue: 1000
+  maxDelta: 1
+  fieldChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 54ff6e40db041d845b01082c670574c5, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.IntEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &1323985167738713569 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5636401373350336135, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
@@ -2621,6 +3235,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2790500712048821769}
+    - targetCorrespondingSourceObject: {fileID: 5880176716242951706, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2687617296913785556}
   m_SourcePrefab: {fileID: 100100000, guid: bc8bb3fe905a40c45a5fcc9a186bfb86, type: 3}
 --- !u!224 &2443120041159751448 stripped
 RectTransform:
@@ -2654,6 +3272,37 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &2687617296913785556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4487172948193181573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d0c197a007054398a638263d67bd95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensitivity: 10
+  minValue: -999999
+  maxValue: 999999
+  maxDelta: 1
+  fieldChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 6227e84336d9c554c8986fb6c7502528, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.IntEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &4661823936093606243 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3417407207344517372, guid: bc8bb3fe905a40c45a5fcc9a186bfb86,
