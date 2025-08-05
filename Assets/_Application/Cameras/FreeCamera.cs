@@ -324,6 +324,7 @@ namespace Netherlands3D.Twin.Cameras
             }
 
             SetCrosshair();
+            UpdateZoomVector();
         }
 
         private void SetCrosshair()
@@ -419,9 +420,27 @@ namespace Netherlands3D.Twin.Cameras
         /// <param name="amount">Zoom delta where 1 is towards, and -1 is backing up from zoompoint</param>
         public void ZoomToPointer(float amount)
         {
-            rotatingAroundPoint = false;
+            //lets use the sign of the amount because different platforms give different amounts
+            float signedAmount = Mathf.Sign(amount);
+            //when changing direction reset the vector and speed
+            if (Mathf.Sign(zoomVector) != signedAmount)
+            {
+                zoomVector = 0;
+                zoomSpeed = 0;
+            }
+            zoomVector += signedAmount * 60;
+            rotatingAroundPoint = false;            
+        }
 
+        private float zoomVector = 0;
+        private float zoomVectorFalloff = 0.5f;
+
+        private void UpdateZoomVector()
+        {
+            zoomVector *= zoomVectorFalloff;
+            zoomSpeed = Mathf.Lerp(zoomSpeed, zoomVector, Time.deltaTime * 60);
             CalculateSpeed();
+
             zoomTarget = GetWorldPoint();
             var direction = zoomTarget - this.transform.position;
 
@@ -431,8 +450,8 @@ namespace Netherlands3D.Twin.Cameras
 
             var targetIsBehind = Vector3.Dot(this.transform.forward, direction) < 0;
             if (targetIsBehind) direction = -direction;
-                        
-            this.transform.Translate(direction.normalized * dynamicZoomSpeed * Mathf.Clamp(amount, -1f, 1f) * Time.deltaTime, Space.World);
+
+            this.transform.Translate(direction.normalized * dynamicZoomSpeed * Time.deltaTime, Space.World);
         }
 
         /// <summary>
@@ -510,10 +529,10 @@ namespace Netherlands3D.Twin.Cameras
         {
             bool modifierKeysPressed = IsModifierKeyIsPressed();
             float newZoomSpeed = modifierKeysPressed ? zoomSpeed * zoomSpeedMultiplier : zoomSpeed;
-
+                      
             dynamicMoveSpeed = (multiplySpeedBasedOnHeight) ? moveSpeed * Mathf.Abs(this.transform.position.y) : moveSpeed;
             dynamicDragSpeed = (multiplySpeedBasedOnHeight) ? dragSpeed * Mathf.Abs(this.transform.position.y) : dragSpeed;
-            dynamicZoomSpeed = (multiplySpeedBasedOnHeight) ? newZoomSpeed * Mathf.Abs(this.transform.position.y) : newZoomSpeed;
+            dynamicZoomSpeed = (multiplySpeedBasedOnHeight) ? newZoomSpeed * Mathf.Max(1f, Mathf.Abs(this.transform.position.y)) : newZoomSpeed;
 
             //Clamp speeds
             dynamicMoveSpeed = Mathf.Clamp(dynamicMoveSpeed, minimumSpeed, maximumSpeed);
