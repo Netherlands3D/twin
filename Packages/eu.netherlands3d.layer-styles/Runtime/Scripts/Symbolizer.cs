@@ -42,9 +42,17 @@ namespace Netherlands3D.LayerStyles
             }
             
             var bitMaskString = (string)json;
-            return LayerStyler.StringToBitmask(bitMaskString);
+            return StringToBitmask(bitMaskString);
         }
 
+        private static int StringToBitmask(string bitString)
+        {
+            if (string.IsNullOrEmpty(bitString))
+                throw new ArgumentException("Input string cannot be null or empty.", nameof(bitString));
+
+            return Convert.ToInt32(bitString, 2);
+        }
+        
         public void ClearMaskLayerMask() => ClearProperty("mask-layer-mask");
 
         /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-color"/>

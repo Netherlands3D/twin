@@ -43,7 +43,7 @@ namespace Netherlands3D.Twin.Layers
 
             if (layerData is ReferencedLayerData referencedLayerData)
             {
-                var currentLayerMask = LayerStyler.GetMaskLayerMask(referencedLayerData.Reference);
+                var currentLayerMask = referencedLayerData.Reference.GetMaskLayerMask();
                 int maskBitToCheck = 1 << MaskLayer.MaskBitIndex;
                 bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
                 toggle.SetIsOnWithoutNotify(isBitSet);
@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin.Layers
         {
             if (layerData is ReferencedLayerData referencedLayerData)
             {
-                var currentLayerMask = LayerStyler.GetMaskLayerMask(referencedLayerData.Reference);
+                var currentLayerMask = referencedLayerData.Reference.GetMaskLayerMask();
                 int maskBitToSet = 1 << MaskLayer.MaskBitIndex;
                 
                 if (acceptMask)
@@ -78,7 +78,7 @@ namespace Netherlands3D.Twin.Layers
                     currentLayerMask &= ~maskBitToSet; // set bit to 0
                 }
 
-                LayerStyler.SetMaskLayerMask(referencedLayerData.Reference, currentLayerMask);
+                referencedLayerData.Reference.SetMaskLayerMask(currentLayerMask);
             }
         }
     }
