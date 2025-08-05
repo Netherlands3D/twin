@@ -99,8 +99,10 @@ namespace Netherlands3D.Twin.Configuration
         public IEnumerator Execute()
         {
             configuration.ShouldStartSetup = false;
-            var indicatorsConfiguration = GetFunctionalityConfigurationOfType<Netherlands3D.Functionalities.Indicators.Configuration.Configuration>();
-            indicatorsConfiguration.OnDossierIdChanged.RemoveListener(UpdateDossierIdAfterLoading);
+
+            //TODO the following is disabled temporarily
+            //var indicatorsConfiguration = GetFunctionalityConfigurationOfType<Netherlands3D.Functionalities.Indicators.Configuration.Configuration>();
+            //indicatorsConfiguration.OnDossierIdChanged.RemoveListener(UpdateDossierIdAfterLoading);
             
             OnStartedLoading.Invoke();
             
@@ -137,8 +139,9 @@ namespace Netherlands3D.Twin.Configuration
             ConfigureCorsProxy();
 
             OnLoaded.Invoke(configuration);
-            
-            indicatorsConfiguration.OnDossierIdChanged.AddListener(UpdateDossierIdAfterLoading);
+
+            //TODO the following is disabled temporarily
+            //indicatorsConfiguration.OnDossierIdChanged.AddListener(UpdateDossierIdAfterLoading);
 
             SceneManager.sceneLoaded += (scene, mode) => {
                 if(scene.name == mainSceneName && Configuration.ShouldStartSetup)
