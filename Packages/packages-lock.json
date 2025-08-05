@@ -488,19 +488,11 @@
       },
       "url": "https://package.openupm.com"
     },
-    "eu.netherlands3d.poly2tri": {
-      "version": "2.0.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
-    },
     "eu.netherlands3d.selection-tools": {
-      "version": "2.9.0",
+      "version": "3.0.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "eu.netherlands3d.poly2tri": "2.0.0",
         "com.unity.inputsystem": "1.5.1",
         "eu.netherlands3d.coordinates": "2.0.0"
       },
