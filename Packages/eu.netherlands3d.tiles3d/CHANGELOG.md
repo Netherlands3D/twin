@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [2.2.1] - 05-08-2025
-- Added events for when tile content is loaded
+- Added support for the screenspace error calculation for orthographic camera
 
 ## [2.2.0] - 31-07-2025
 - Added events for when tile content is loaded
