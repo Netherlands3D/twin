@@ -414,47 +414,44 @@ namespace Netherlands3D.Twin.Cameras
             dragging = isDragging;
         }
 
+
+
+        private float zoomVector = 0;
+        private float zoomVectorFalloff = 0.5f;
+
         /// <summary>
         /// Move towards/from zoompoint
         /// </summary>
         /// <param name="amount">Zoom delta where 1 is towards, and -1 is backing up from zoompoint</param>
         public void ZoomToPointer(float amount)
         {
-            //lets use the sign of the amount because different platforms give different amounts
             float signedAmount = Mathf.Sign(amount);
-            //when changing direction reset the vector and speed
+
             if (Mathf.Sign(zoomVector) != signedAmount)
             {
                 zoomVector = 0;
                 zoomSpeed = 0;
             }
-            if(Mathf.Abs(Mathf.Sign(zoomVector)) < zoomVectorMax)
-                zoomVector += signedAmount * Mathf.Max(1f,Mathf.Abs(this.transform.position.y)) * Mathf.Clamp01(Time.deltaTime * 60);
-            rotatingAroundPoint = false;            
-        }
 
-        private float zoomVectorMax = 60;
-        private float zoomVector = 0;
-        private float zoomVectorFalloff = 0.5f;
+            zoomVector += signedAmount * Mathf.Max(1f, Mathf.Abs(this.transform.position.y)) * 120f * Time.deltaTime;
+            zoomVector = Mathf.Clamp(zoomVector, minimumSpeed, maximumSpeed);
+            rotatingAroundPoint = false;
+        }
 
         private void UpdateZoomVector()
         {
-            zoomVector *= zoomVectorFalloff * Mathf.Clamp01(Time.deltaTime * 60);
-            zoomSpeed = Mathf.Lerp(zoomSpeed, zoomVector, Time.deltaTime * 60);
-            //CalculateSpeed();
-
+            zoomVector *= Mathf.Pow(zoomVectorFalloff, Time.deltaTime * 60f);
+            zoomSpeed = Mathf.Lerp(zoomSpeed, zoomVector, Time.deltaTime * 60f);
             zoomTarget = GetWorldPoint();
             var direction = zoomTarget - this.transform.position;
-
-            //Make sure we always have a direction. Even when the zoompoint is on the camera.
-            if (Vector3.Distance(zoomTarget, this.transform.position) < 0.01f)
+            if (direction.sqrMagnitude < 0.0001f)
                 direction = this.transform.forward;
+            if (Vector3.Dot(this.transform.forward, direction) < 0)
+                direction = -direction;
 
-            var targetIsBehind = Vector3.Dot(this.transform.forward, direction) < 0;
-            if (targetIsBehind) direction = -direction;
-
-            this.transform.Translate(direction.normalized * zoomSpeed, Space.World);
+            this.transform.Translate(direction.normalized * zoomSpeed * Time.deltaTime, Space.World);
         }
+
 
         /// <summary>
         /// Returns a position on the world 0 plane
