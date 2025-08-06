@@ -429,7 +429,7 @@ namespace Netherlands3D.Twin.Cameras
                 zoomSpeed = 0;
             }
             if(Mathf.Abs(Mathf.Sign(zoomVector)) < zoomVectorMax)
-                zoomVector += signedAmount * Time.deltaTime * 60;
+                zoomVector += signedAmount * Mathf.Max(1f,Mathf.Abs(this.transform.position.y)) * Mathf.Clamp01(Time.deltaTime * 60);
             rotatingAroundPoint = false;            
         }
 
@@ -439,9 +439,9 @@ namespace Netherlands3D.Twin.Cameras
 
         private void UpdateZoomVector()
         {
-            zoomVector *= zoomVectorFalloff * Time.deltaTime * 60;
+            zoomVector *= zoomVectorFalloff * Mathf.Clamp01(Time.deltaTime * 60);
             zoomSpeed = Mathf.Lerp(zoomSpeed, zoomVector, Time.deltaTime * 60);
-            CalculateSpeed();
+            //CalculateSpeed();
 
             zoomTarget = GetWorldPoint();
             var direction = zoomTarget - this.transform.position;
@@ -453,7 +453,7 @@ namespace Netherlands3D.Twin.Cameras
             var targetIsBehind = Vector3.Dot(this.transform.forward, direction) < 0;
             if (targetIsBehind) direction = -direction;
 
-            this.transform.Translate(direction.normalized * dynamicZoomSpeed, Space.World);
+            this.transform.Translate(direction.normalized * zoomSpeed, Space.World);
         }
 
         /// <summary>
