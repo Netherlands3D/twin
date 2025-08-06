@@ -229,6 +229,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             SetVisualisationActive(activeInHierarchy);
+            PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
         }
 
         public void SetVisualisationActive(bool active)
