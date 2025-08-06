@@ -429,7 +429,7 @@ namespace Netherlands3D.Twin.Cameras
                 zoomSpeed = 0;
             }
             if(Mathf.Abs(Mathf.Sign(zoomVector)) < zoomVectorMax)
-                zoomVector += signedAmount * 60;
+                zoomVector += signedAmount * Time.deltaTime * 60;
             rotatingAroundPoint = false;            
         }
 
@@ -453,7 +453,7 @@ namespace Netherlands3D.Twin.Cameras
             var targetIsBehind = Vector3.Dot(this.transform.forward, direction) < 0;
             if (targetIsBehind) direction = -direction;
 
-            this.transform.Translate(direction.normalized * dynamicZoomSpeed * Time.deltaTime, Space.World);
+            this.transform.Translate(direction.normalized * dynamicZoomSpeed, Space.World);
         }
 
         /// <summary>
