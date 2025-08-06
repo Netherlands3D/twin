@@ -428,10 +428,12 @@ namespace Netherlands3D.Twin.Cameras
                 zoomVector = 0;
                 zoomSpeed = 0;
             }
-            zoomVector += signedAmount * 60;
+            if(Mathf.Abs(Mathf.Sign(zoomVector)) < zoomVectorMax)
+                zoomVector += signedAmount * 60;
             rotatingAroundPoint = false;            
         }
 
+        private float zoomVectorMax = 60;
         private float zoomVector = 0;
         private float zoomVectorFalloff = 0.5f;
 
