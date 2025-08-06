@@ -430,18 +430,17 @@ namespace Netherlands3D.Twin.Cameras
             if (Mathf.Sign(zoomVector) != signedAmount)
             {
                 zoomVector = 0;
-                zoomSpeed = 0;
+                dynamicZoomSpeed = 0;
             }
 
-            zoomVector += signedAmount * Mathf.Max(1f, Mathf.Abs(this.transform.position.y)) * 120f * Time.deltaTime;
-            zoomVector = Mathf.Clamp(zoomVector, minimumSpeed, maximumSpeed);
+            zoomVector += signedAmount * Mathf.Max(1f, Mathf.Abs(this.transform.position.y)) * zoomSpeed * Time.deltaTime;
             rotatingAroundPoint = false;
         }
 
         private void UpdateZoomVector()
         {
             zoomVector *= Mathf.Pow(zoomVectorFalloff, Time.deltaTime * 60f);
-            zoomSpeed = Mathf.Lerp(zoomSpeed, zoomVector, Time.deltaTime * 60f);
+            dynamicZoomSpeed = Mathf.Lerp(dynamicZoomSpeed, zoomVector, Time.deltaTime * 60f);
             zoomTarget = GetWorldPoint();
             var direction = zoomTarget - this.transform.position;
             if (direction.sqrMagnitude < 0.0001f)
@@ -449,7 +448,10 @@ namespace Netherlands3D.Twin.Cameras
             if (Vector3.Dot(this.transform.forward, direction) < 0)
                 direction = -direction;
 
-            this.transform.Translate(direction.normalized * zoomSpeed * Time.deltaTime, Space.World);
+            bool modifierKeysPressed = IsModifierKeyIsPressed();
+            dynamicZoomSpeed = Mathf.Clamp(dynamicZoomSpeed, minimumSpeed, maximumSpeed);
+            dynamicZoomSpeed = modifierKeysPressed ? dynamicZoomSpeed * zoomSpeedMultiplier : dynamicZoomSpeed;
+            this.transform.Translate(direction.normalized * dynamicZoomSpeed * Time.deltaTime, Space.World);
         }
 
 
@@ -525,18 +527,15 @@ namespace Netherlands3D.Twin.Cameras
         /// Calculates the dynamic speed variables based on camera height
         /// </summary>
         private void CalculateSpeed()
-        {
-            bool modifierKeysPressed = IsModifierKeyIsPressed();
-            float newZoomSpeed = modifierKeysPressed ? zoomSpeed * zoomSpeedMultiplier : zoomSpeed;
-                      
+        {      
             dynamicMoveSpeed = (multiplySpeedBasedOnHeight) ? moveSpeed * Mathf.Abs(this.transform.position.y) : moveSpeed;
             dynamicDragSpeed = (multiplySpeedBasedOnHeight) ? dragSpeed * Mathf.Abs(this.transform.position.y) : dragSpeed;
-            dynamicZoomSpeed = (multiplySpeedBasedOnHeight) ? newZoomSpeed * Mathf.Max(1f, Mathf.Abs(this.transform.position.y)) : newZoomSpeed;
+            //dynamicZoomSpeed = (multiplySpeedBasedOnHeight) ? newZoomSpeed * Mathf.Max(1f, Mathf.Abs(this.transform.position.y)) : newZoomSpeed;
 
             //Clamp speeds
             dynamicMoveSpeed = Mathf.Clamp(dynamicMoveSpeed, minimumSpeed, maximumSpeed);
             dynamicDragSpeed = Mathf.Clamp(dynamicDragSpeed, minimumDragSpeed, maximumDragSpeed);
-            dynamicZoomSpeed = Mathf.Clamp(dynamicZoomSpeed, minimumSpeed, maximumSpeed);
+            //dynamicZoomSpeed = Mathf.Clamp(dynamicZoomSpeed, minimumSpeed, maximumSpeed);
         }
 
         private void OnDrawGizmos()
