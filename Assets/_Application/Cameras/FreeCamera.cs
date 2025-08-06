@@ -437,7 +437,7 @@ namespace Netherlands3D.Twin.Cameras
 
         private void UpdateZoomVector()
         {
-            zoomVector *= zoomVectorFalloff;
+            zoomVector *= zoomVectorFalloff * Time.deltaTime * 60;
             zoomSpeed = Mathf.Lerp(zoomSpeed, zoomVector, Time.deltaTime * 60);
             CalculateSpeed();
 
