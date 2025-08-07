@@ -90,8 +90,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             ClearMaskLayerPanel();
             foreach (var layer in ProjectData.Current.RootLayer.GetFlatHierarchy())
             {
-                var toggle = Instantiate(maskTogglePrefab, maskToggleParent);
-                toggle.Initialize(polygonLayer, layer);
+                if (layer is ReferencedLayerData data)
+                    if (data.Reference.IsMaskable)
+                    {
+                        var toggle = Instantiate(maskTogglePrefab, maskToggleParent);
+                        toggle.Initialize(polygonLayer, layer);
+                    }
             }
         }
 

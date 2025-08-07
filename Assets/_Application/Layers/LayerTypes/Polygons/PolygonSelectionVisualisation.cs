@@ -11,6 +11,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
     public class PolygonSelectionVisualisation : LayerGameObject, ILayerWithPropertyPanels
     {
+        public override bool IsMaskable => false;
+
         private BoundingBox polygonBounds;
         public override BoundingBox Bounds => polygonBounds;
         public PolygonVisualisation PolygonVisualisation { get; private set; }

@@ -32,7 +32,8 @@ namespace Netherlands3D.Twin.Layers
         public string PrefabIdentifier => prefabIdentifier;
         public SpriteState Thumbnail => thumbnail;
         public SpawnLocation SpawnLocation => spawnLocation;
-        
+        public virtual bool IsMaskable => true; // Can we mask this layer? Usually yes, but not in case of projections
+
         public string Name
         {
             get => LayerData.Name;

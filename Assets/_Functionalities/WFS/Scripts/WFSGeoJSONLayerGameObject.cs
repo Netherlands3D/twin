@@ -15,6 +15,8 @@ namespace Netherlands3D.Functionalities.Wfs
     /// </summary>
     public class WFSGeoJsonLayerGameObject : GeoJsonLayerGameObject
     {
+        public override bool IsMaskable => false;
+
         [SerializeField] private WFSGeoJSONTileDataLayer cartesianTileWFSLayer;
         public override BoundingBox Bounds => cartesianTileWFSLayer?.BoundingBox;
 

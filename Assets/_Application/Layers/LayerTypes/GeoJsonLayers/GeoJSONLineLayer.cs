@@ -17,6 +17,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
         public bool IsPolygon  => false;
+        public override bool IsMaskable => false;
+
         public Transform Transform => transform;
         public delegate void GeoJSONLineHandler(Feature feature);
         public event GeoJSONLineHandler FeatureRemoved;
