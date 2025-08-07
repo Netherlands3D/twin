@@ -1,0 +1,44 @@
+#Inspector {
+    margin-left: 88px;
+    margin-bottom: 44px;
+    padding-top: 24px;
+    padding-right: 24px;
+    padding-bottom: 24px;
+    padding-left: 24px;
+    background-color: rgb(255, 255, 255);
+    width: 512px;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+#Inspector > #InspectorHeader {
+    margin-bottom: 16px;
+}
+
+#Inspector > #Content {
+    margin-bottom: 16px;
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+#Inspector > #BottomNavigationBar {
+    flex-direction: row;
+}
+
+#Inspector > #BottomNavigationBar > #LeftSide {
+    flex-direction: row;
+    flex-shrink: 0;
+    flex-grow: 1;
+}
+
+#Inspector > #BottomNavigationBar > #LeftSide > .unity-button {
+    margin-right: 12px;
+}
+
+#Inspector > #BottomNavigationBar > #RightSide {
+    flex-direction: row-reverse;
+}
+
+#Inspector > #BottomNavigationBar > #RightSide > .unity-button {
+    margin-left: 12px;
+}

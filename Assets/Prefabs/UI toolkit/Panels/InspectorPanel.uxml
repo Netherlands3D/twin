@@ -1,0 +1,28 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Prefabs/UI%20toolkit/Styles/_Foundation.uss?fileID=7433441132597879392&amp;guid=9848e3ac5abe4964f8b6998ccbde0eef&amp;type=3#_Foundation" />
+    <Style src="project://database/Assets/Prefabs/UI%20toolkit/Styles/_Theme.uss?fileID=7433441132597879392&amp;guid=0f24ef838c8e4bf49a89503faf584878&amp;type=3#_Theme" />
+    <Style src="project://database/Assets/Prefabs/UI%20toolkit/Components/Button_basic.uss?fileID=7433441132597879392&amp;guid=0ebdee943ffa71e4aad7b09a5519babb&amp;type=3#Button_basic" />
+    <Style src="project://database/Assets/Prefabs/UI%20toolkit/Panels/InspectorPanel.uss?fileID=7433441132597879392&amp;guid=75b7f1bcbe4bc5c46b44243db97c2df5&amp;type=3#InspectorPanel" />
+    <ui:VisualElement name="Inspector">
+        <ui:Label text="Label" name="InspectorHeader" class="text-inspector-header" />
+        <ui:VisualElement name="Content" />
+        <ui:VisualElement name="BottomNavigationBar">
+            <ui:VisualElement name="LeftSide">
+                <ui:Button name="LibraryButton">
+                    <ui:VisualElement name="Icon" />
+                </ui:Button>
+            </ui:VisualElement>
+            <ui:VisualElement name="RightSide">
+                <ui:Button name="AddLayerButton">
+                    <ui:VisualElement name="Icon" style="background-image: url(&quot;project://database/Assets/Sprites/UI/Icons/Type=Plus,%20Color=white,%20Size=large.png?fileID=2800000&amp;guid=e45617c06d974124bab7b37c282937b4&amp;type=3#Type=Plus, Color=white, Size=large&quot;);" />
+                </ui:Button>
+                <ui:Button name="DeleteLayerButton">
+                    <ui:VisualElement name="Icon" style="background-image: url(&quot;project://database/Assets/Sprites/UI/Icons/Type=Trash,%20Color=white,%20Size=large.png?fileID=2800000&amp;guid=4bcafc2f6d18fe447917131c8be141a4&amp;type=3#Type=Trash, Color=white, Size=large&quot;);" />
+                </ui:Button>
+                <ui:Button name="AddFolderButton">
+                    <ui:VisualElement name="Icon" style="background-image: url(&quot;project://database/Assets/Sprites/UI/Icons/Type=Folder,%20Color=white,%20Size=large.png?fileID=2800000&amp;guid=de5d3295bcbc15e46ad6e6a2fd9896ad&amp;type=3#Type=Folder, Color=white, Size=large&quot;);" />
+                </ui:Button>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

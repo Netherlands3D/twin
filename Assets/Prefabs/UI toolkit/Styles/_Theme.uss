@@ -1,0 +1,43 @@
+:root {
+    --color-White: rgb(255, 255, 255);
+    --color-Black: rgb(0, 0, 0);
+    --color-Blue50: rgb(243, 247, 251);
+    --color-Blue100: rgb(223, 232, 242);
+    --color-Blue200: rgb(204, 215, 228);
+    --color-Blue300: rgb(113, 130, 150);
+    --color-Blue700: rgb(0, 70, 153);
+    --color-Blue900: rgb(47, 53, 80);
+    --color-Text: rgb(50, 57, 85);
+    --color-LinkText: rgb(51, 102, 204);
+    --color-Warning: rgb(227, 86, 86);
+    unity-font: "Inter";
+    --font-size-XS: 12px;
+    --font-size-S: 14px;
+    --font-size-M: 16px;
+    --font-size-L: 20px;
+    --font-size-XL: 36px;
+}
+
+.text-base {
+    -unity-font-definition: url("project://database/Assets/Fonts/Inter-Regular.ttf?fileID=12800000&guid=37ff50315a0d57a48a81f6f17f30a981&type=3#Inter-Regular");
+    font-size: var(--font-size-M);
+    -unity-font-style: normal;
+    color: var(--color-Text);
+}
+
+.text-header {
+    -unity-font-definition: url("project://database/Assets/Fonts/Inter-SemiBold.ttf?fileID=12800000&guid=7a0c5ca272b294044a6d4d543221d076&type=3#Inter-SemiBold");
+    font-size: var(--font-size-M);
+    -unity-font-style: normal;
+    color: var(--color-Text);
+}
+
+.text-inspector-header {
+    -unity-font-definition: url("project://database/Assets/Fonts/Inter-Bold.ttf?fileID=12800000&guid=746cabee1610bda42b4d03f49eeb6e09&type=3#Inter-Bold");
+    font-size: var(--font-size-XL);
+    -unity-font-style: normal;
+    color: var(--color-Text);
+}
+
+#ListViewItem {
+}

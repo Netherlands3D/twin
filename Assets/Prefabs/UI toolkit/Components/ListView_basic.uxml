@@ -1,0 +1,5 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Prefabs/UI%20toolkit/Components/ListView_basic.uss?fileID=7433441132597879392&amp;guid=9813a24c522d03d41be20c91ebd9cbec&amp;type=3#ListView_basic" />
+    <Style src="project://database/Assets/Prefabs/UI%20toolkit/Components/Scroller_basic.uss?fileID=7433441132597879392&amp;guid=7a22904e9f8a7124e9fa9a252aa266a4&amp;type=3#Scroller_basic" />
+    <ui:ListView virtualization-method="DynamicHeight" />
+</ui:UXML>

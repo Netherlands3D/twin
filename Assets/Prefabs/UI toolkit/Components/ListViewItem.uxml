@@ -1,0 +1,11 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Prefabs/UI%20toolkit/Styles/_Theme.uss?fileID=7433441132597879392&amp;guid=0f24ef838c8e4bf49a89503faf584878&amp;type=3#_Theme" />
+    <Style src="project://database/Assets/Prefabs/UI%20toolkit/Components/Button_basic.uss?fileID=7433441132597879392&amp;guid=0ebdee943ffa71e4aad7b09a5519babb&amp;type=3#Button_basic" />
+    <Style src="project://database/Assets/Prefabs/UI%20toolkit/Components/ListViewItem.uss?fileID=7433441132597879392&amp;guid=bdae2b1d5e3705e47b96f23e7d246012&amp;type=3#ListViewItem" />
+    <ui:VisualElement name="ListViewItem" style="flex-grow: 1;">
+        <ui:Button>
+            <ui:VisualElement name="Icon" style="flex-grow: 0;" />
+            <ui:Label text="Label" />
+        </ui:Button>
+    </ui:VisualElement>
+</ui:UXML>
