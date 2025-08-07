@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Netherlands3D.Catalogs.CatalogItems;
+using Netherlands3D.Catalogs.Catalogs;
 using NUnit.Framework;
 
 namespace Netherlands3D.Catalogs
@@ -15,8 +17,8 @@ namespace Netherlands3D.Catalogs
         {
             var starting = new List<RecordItem>
             {
-                new() { Id = "A", Title = "One" },
-                new() { Id = "B", Title = "Two" }
+                new("A", "One"),
+                new("B", "Two")
             };
             catalog = new InMemoryCatalog("object-library", "Object Bibliotheek", null, starting);
         }
@@ -27,7 +29,7 @@ namespace Netherlands3D.Catalogs
             var collection = await catalog.BrowseAsync();
             var before = (await collection.GetItemsAsync()).Count();
 
-            catalog.Add(new RecordItem { Id = "C", Title = "Three" });
+            catalog.Add(new RecordItem("C", "Three"));
             var after = await (await catalog.BrowseAsync()).GetItemsAsync();
 
             Assert.AreEqual(before + 1, after.Count());
@@ -74,8 +76,8 @@ namespace Netherlands3D.Catalogs
         public async Task Mutations_ReflectInPaging()
         {
             // add two more to exceed default page size=2
-            catalog.Add(new RecordItem { Id = "C", Title = "Three" });
-            catalog.Add(new RecordItem { Id = "D", Title = "Four" });
+            catalog.Add(new RecordItem("C", "Three"));
+            catalog.Add(new RecordItem("D", "Four"));
 
             // now browse with pageSize=2
             var page1 = await catalog.BrowseAsync(Pagination.WithOffset(0, 2));

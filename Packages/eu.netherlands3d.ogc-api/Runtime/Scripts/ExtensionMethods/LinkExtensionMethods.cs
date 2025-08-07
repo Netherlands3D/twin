@@ -17,9 +17,9 @@ namespace Netherlands3D.OgcApi.ExtensionMethods
         public static IEnumerable<Link> FilterBy(
             this IEnumerable<Link> links,
             string[] relation,
-            string[] format)
+            string[] mediaTypes)
         {
-            return FilterBy(links, relation).Where(link => link.IsOfFormat(format));
+            return FilterBy(links, relation).Where(link => link.IsOfMediaType(mediaTypes));
         }
 
         /// <summary>
@@ -29,9 +29,9 @@ namespace Netherlands3D.OgcApi.ExtensionMethods
         public static Link FirstBy(
             this IEnumerable<Link> links,
             string[] relation,
-            string[] format)
+            string[] mediaTypes)
         {
-            return links.FilterBy(relation, format).FirstOrDefault();
+            return links.FilterBy(relation, mediaTypes).FirstOrDefault();
         }
 
         [CanBeNull]
