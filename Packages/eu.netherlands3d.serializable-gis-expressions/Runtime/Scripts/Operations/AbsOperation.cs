@@ -8,7 +8,7 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
     /// <seealso href="https://docs.mapbox.com/style-spec/reference/expressions/#abs">
     ///   Mapbox “abs” expression reference
     /// </seealso>
-    public static class AbsOperation
+    public class AbsOperation : Operation<double>
     {
         /// <summary>The Mapbox operator string for “abs”.</summary>
         public const string Code = "abs";
@@ -24,7 +24,7 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
         /// </param>
         /// <returns>The absolute value of the numeric operand, as a <see cref="double"/>.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the operand is not a numeric type.</exception>
-        public static double Evaluate(Expression expression, ExpressionContext context)
+        protected override double Evaluate(Expression expression, ExpressionContext context)
         {
             Operations.GuardNumberOfOperands(Code, expression, 1);
 
@@ -32,5 +32,22 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
 
             return Math.Abs(number);
         }
+    }
+
+
+    public abstract class Operation<T> : IOperation
+    {
+        protected abstract T Evaluate(Expression expression, ExpressionContext context);
+
+        object IOperation.EvaluateHello(Expression expression, ExpressionContext context)
+        {
+            return Evaluate(expression, context);
+        }
+    }
+
+    public interface IOperation
+    {
+
+        object EvaluateHello(Expression expression, ExpressionContext context);
     }
 }

@@ -17,285 +17,285 @@ namespace Netherlands3D.SerializableGisExpressions
         /// Any commented operators are not yet supported but mentioned in the MApbox expression spec
         /// (https://docs.mapbox.com/style-spec/reference/expressions/) and can be added later.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public enum Operators
-        {
-            [EnumMember(Value = ArrayOperation.Code)]
-            Array,
+        //[JsonConverter(typeof(StringEnumConverter))]
+        //public enum Operators
+        //{
+        //    [EnumMember(Value = ArrayOperation.Code)]
+        //    Array,
 
-            [EnumMember(Value = BooleanOperation.Code)]
-            Boolean,
+        //    [EnumMember(Value = BooleanOperation.Code)]
+        //    Boolean,
             
-            // [EnumMember(Value = "collator")] 
-            // Collator,
+        //    // [EnumMember(Value = "collator")] 
+        //    // Collator,
             
-            // [EnumMember(Value = "format")] 
-            // Format,
+        //    // [EnumMember(Value = "format")] 
+        //    // Format,
             
-            // [EnumMember(Value = "image")] 
-            // Image,
+        //    // [EnumMember(Value = "image")] 
+        //    // Image,
 
-            [EnumMember(Value = LiteralOperation.Code)]
-            Literal,
+        //    [EnumMember(Value = LiteralOperation.Code)]
+        //    Literal,
 
-            [EnumMember(Value = NumberOperation.Code)]
-            Number,
+        //    [EnumMember(Value = NumberOperation.Code)]
+        //    Number,
 
-            [EnumMember(Value = NumberFormatOperation.Code)]
-            NumberFormat,
+        //    [EnumMember(Value = NumberFormatOperation.Code)]
+        //    NumberFormat,
 
-            [EnumMember(Value = ObjectOperation.Code)]
-            Object,
+        //    [EnumMember(Value = ObjectOperation.Code)]
+        //    Object,
 
-            [EnumMember(Value = StringOperation.Code)]
-            String,
+        //    [EnumMember(Value = StringOperation.Code)]
+        //    String,
 
-            [EnumMember(Value = ToBooleanOperation.Code)]
-            ToBoolean,
+        //    [EnumMember(Value = ToBooleanOperation.Code)]
+        //    ToBoolean,
 
-            [EnumMember(Value = ToColorOperation.Code)]
-            ToColor,
+        //    [EnumMember(Value = ToColorOperation.Code)]
+        //    ToColor,
 
-            [EnumMember(Value = ToNumberOperation.Code)]
-            ToNumber,
+        //    [EnumMember(Value = ToNumberOperation.Code)]
+        //    ToNumber,
 
-            [EnumMember(Value = ToStringOperation.Code)]
-            ToString,
+        //    [EnumMember(Value = ToStringOperation.Code)]
+        //    ToString,
 
-            [EnumMember(Value = TypeOfOperation.Code)]
-            TypeOf,
+        //    [EnumMember(Value = TypeOfOperation.Code)]
+        //    TypeOf,
 
-            // [EnumMember(Value = "accumulated")] 
-            // Accumulated,
+        //    // [EnumMember(Value = "accumulated")] 
+        //    // Accumulated,
             
-            // [EnumMember(Value = "feature-state")] 
-            // FeatureState,
+        //    // [EnumMember(Value = "feature-state")] 
+        //    // FeatureState,
             
-            // [EnumMember(Value = "geometry-type")] 
-            // GeometryType,
+        //    // [EnumMember(Value = "geometry-type")] 
+        //    // GeometryType,
            
-            // [EnumMember(Value = "id")] 
-            // Id,
+        //    // [EnumMember(Value = "id")] 
+        //    // Id,
             
-            // [EnumMember(Value = "line-progress")] 
-            // LineProgress,
+        //    // [EnumMember(Value = "line-progress")] 
+        //    // LineProgress,
             
-            // [EnumMember(Value = "properties")] 
-            // Properties,
+        //    // [EnumMember(Value = "properties")] 
+        //    // Properties,
 
-            // [EnumMember(Value = "at")] 
-            // At,
+        //    // [EnumMember(Value = "at")] 
+        //    // At,
 
-            // [EnumMember(Value = "at-interpolated")]
-            // AtInterpolated,
+        //    // [EnumMember(Value = "at-interpolated")]
+        //    // AtInterpolated,
 
-            // [EnumMember(Value = "config")] 
-            // Config,
+        //    // [EnumMember(Value = "config")] 
+        //    // Config,
 
-            [EnumMember(Value = GetOperation.Code)]
-            Get,
+        //    [EnumMember(Value = GetOperation.Code)]
+        //    Get,
             
-            // [EnumMember(Value = "has")] 
-            // Has,
+        //    // [EnumMember(Value = "has")] 
+        //    // Has,
             
-            [EnumMember(Value = InOperation.Code)] 
-            In,
+        //    [EnumMember(Value = InOperation.Code)] 
+        //    In,
             
-            // [EnumMember(Value = "index-of")] 
-            // IndexOf,
+        //    // [EnumMember(Value = "index-of")] 
+        //    // IndexOf,
             
-            // [EnumMember(Value = "length")] 
-            // Length,
+        //    // [EnumMember(Value = "length")] 
+        //    // Length,
             
-            // [EnumMember(Value = "measure-light")] 
-            // MeasureLight,
+        //    // [EnumMember(Value = "measure-light")] 
+        //    // MeasureLight,
             
-            // [EnumMember(Value = "slice")] 
-            // Slice,
+        //    // [EnumMember(Value = "slice")] 
+        //    // Slice,
 
-            [EnumMember(Value = NotOperation.Code)]
-            Not,
+        //    [EnumMember(Value = NotOperation.Code)]
+        //    Not,
 
-            [EnumMember(Value = NotEqualOperation.Code)]
-            NotEqual,
+        //    [EnumMember(Value = NotEqualOperation.Code)]
+        //    NotEqual,
 
-            [EnumMember(Value = LessThanOperation.Code)]
-            LessThan,
+        //    [EnumMember(Value = LessThanOperation.Code)]
+        //    LessThan,
 
-            [EnumMember(Value = LessThanOrEqualOperation.Code)]
-            LessThanOrEqual,
+        //    [EnumMember(Value = LessThanOrEqualOperation.Code)]
+        //    LessThanOrEqual,
 
-            [EnumMember(Value = EqualOperation.Code)]
-            EqualTo,
+        //    [EnumMember(Value = EqualOperation.Code)]
+        //    EqualTo,
 
-            [EnumMember(Value = GreaterThanOperation.Code)]
-            GreaterThan,
+        //    [EnumMember(Value = GreaterThanOperation.Code)]
+        //    GreaterThan,
 
-            [EnumMember(Value = GreaterThanOrEqualOperation.Code)]
-            GreaterThanOrEqual,
+        //    [EnumMember(Value = GreaterThanOrEqualOperation.Code)]
+        //    GreaterThanOrEqual,
 
-            [EnumMember(Value = AllOperation.Code)]
-            All,
+        //    [EnumMember(Value = AllOperation.Code)]
+        //    All,
 
-            [EnumMember(Value = AnyOperation.Code)]
-            Any,
+        //    [EnumMember(Value = AnyOperation.Code)]
+        //    Any,
             
-            // [EnumMember(Value = "case")] 
-            // Case,
+        //    // [EnumMember(Value = "case")] 
+        //    // Case,
             
-            // [EnumMember(Value = "coalesce")] 
-            // Coalesce,
+        //    // [EnumMember(Value = "coalesce")] 
+        //    // Coalesce,
             
-            // [EnumMember(Value = "match")] 
-            // Match,
+        //    // [EnumMember(Value = "match")] 
+        //    // Match,
             
-            // [EnumMember(Value = "within")] 
-            // Within,
+        //    // [EnumMember(Value = "within")] 
+        //    // Within,
 
-            // [EnumMember(Value = "interpolate")] 
-            // Interpolate,
+        //    // [EnumMember(Value = "interpolate")] 
+        //    // Interpolate,
 
-            // [EnumMember(Value = "interpolate-hcl")]
-            // InterpolateHcl,
+        //    // [EnumMember(Value = "interpolate-hcl")]
+        //    // InterpolateHcl,
 
-            // [EnumMember(Value = "interpolate-lab")]
-            // InterpolateLab,
+        //    // [EnumMember(Value = "interpolate-lab")]
+        //    // InterpolateLab,
             
-            // [EnumMember(Value = "step")] 
-            // Step,
+        //    // [EnumMember(Value = "step")] 
+        //    // Step,
             
-            // [EnumMember(Value = "let")] 
-            // Let,
+        //    // [EnumMember(Value = "let")] 
+        //    // Let,
             
-            // [EnumMember(Value = "var")] 
-            // Var,
+        //    // [EnumMember(Value = "var")] 
+        //    // Var,
             
-            // [EnumMember(Value = "concat")] 
-            // Concat,
+        //    // [EnumMember(Value = "concat")] 
+        //    // Concat,
             
-            // [EnumMember(Value = "downcase")] 
-            // Downcase,
+        //    // [EnumMember(Value = "downcase")] 
+        //    // Downcase,
 
-            // [EnumMember(Value = "is-supported-script")]
-            // IsSupportedScript,
+        //    // [EnumMember(Value = "is-supported-script")]
+        //    // IsSupportedScript,
 
-            // [EnumMember(Value = "resolved-locale")]
-            // ResolvedLocale,
+        //    // [EnumMember(Value = "resolved-locale")]
+        //    // ResolvedLocale,
             
-            // [EnumMember(Value = "upcase")] 
-            // Upcase,
+        //    // [EnumMember(Value = "upcase")] 
+        //    // Upcase,
 
-            [EnumMember(Value = HslOperation.Code)]
-            Hsl,
+        //    [EnumMember(Value = HslOperation.Code)]
+        //    Hsl,
 
-            [EnumMember(Value = HslaOperation.Code)]
-            Hsla,
+        //    [EnumMember(Value = HslaOperation.Code)]
+        //    Hsla,
 
-            [EnumMember(Value = RgbOperation.Code)]
-            Rgb,
+        //    [EnumMember(Value = RgbOperation.Code)]
+        //    Rgb,
 
-            [EnumMember(Value = RgbaOperation.Code)]
-            Rgba,
+        //    [EnumMember(Value = RgbaOperation.Code)]
+        //    Rgba,
 
-            [EnumMember(Value = ToHslaOperation.Code)]
-            ToHsla,
+        //    [EnumMember(Value = ToHslaOperation.Code)]
+        //    ToHsla,
 
-            [EnumMember(Value = ToRgbaOperation.Code)]
-            ToRgba,
+        //    [EnumMember(Value = ToRgbaOperation.Code)]
+        //    ToRgba,
 
-            [EnumMember(Value = SubtractOperation.Code)]
-            Subtract,
+        //    [EnumMember(Value = SubtractOperation.Code)]
+        //    Subtract,
 
-            [EnumMember(Value = MultiplyOperation.Code)]
-            Multiply,
+        //    [EnumMember(Value = MultiplyOperation.Code)]
+        //    Multiply,
 
-            [EnumMember(Value = DivideOperation.Code)]
-            Divide,
+        //    [EnumMember(Value = DivideOperation.Code)]
+        //    Divide,
 
-            [EnumMember(Value = ModuloOperation.Code)]
-            Modulo,
+        //    [EnumMember(Value = ModuloOperation.Code)]
+        //    Modulo,
 
-            [EnumMember(Value = PowerOperation.Code)]
-            Power,
+        //    [EnumMember(Value = PowerOperation.Code)]
+        //    Power,
 
-            [EnumMember(Value = AddOperation.Code)]
-            Add,
+        //    [EnumMember(Value = AddOperation.Code)]
+        //    Add,
 
-            [EnumMember(Value = AbsOperation.Code)]
-            Abs,
+        //    [EnumMember(Value = AbsOperation.Code)]
+        //    Abs,
 
-            [EnumMember(Value = AcosOperation.Code)]
-            Acos,
+        //    [EnumMember(Value = AcosOperation.Code)]
+        //    Acos,
 
-            [EnumMember(Value = AsinOperation.Code)]
-            Asin,
+        //    [EnumMember(Value = AsinOperation.Code)]
+        //    Asin,
 
-            [EnumMember(Value = AtanOperation.Code)]
-            Atan,
+        //    [EnumMember(Value = AtanOperation.Code)]
+        //    Atan,
 
-            [EnumMember(Value = CeilOperation.Code)]
-            Ceil,
+        //    [EnumMember(Value = CeilOperation.Code)]
+        //    Ceil,
 
-            [EnumMember(Value = CosOperation.Code)]
-            Cos,
+        //    [EnumMember(Value = CosOperation.Code)]
+        //    Cos,
 
-            // [EnumMember(Value = "distance")]
-            // Distance,
+        //    // [EnumMember(Value = "distance")]
+        //    // Distance,
 
-            [EnumMember(Value = EOperation.Code)]
-            E,
+        //    [EnumMember(Value = EOperation.Code)]
+        //    E,
 
-            [EnumMember(Value = FloorOperation.Code)]
-            Floor,
+        //    [EnumMember(Value = FloorOperation.Code)]
+        //    Floor,
 
-            [EnumMember(Value = LnOperation.Code)]
-            Ln,
+        //    [EnumMember(Value = LnOperation.Code)]
+        //    Ln,
 
-            [EnumMember(Value = Ln2Operation.Code)]
-            Ln2,
+        //    [EnumMember(Value = Ln2Operation.Code)]
+        //    Ln2,
 
-            [EnumMember(Value = Log10Operation.Code)]
-            Log10,
+        //    [EnumMember(Value = Log10Operation.Code)]
+        //    Log10,
 
-            [EnumMember(Value = Log2Operation.Code)]
-            Log2,
+        //    [EnumMember(Value = Log2Operation.Code)]
+        //    Log2,
 
-            [EnumMember(Value = MaxOperation.Code)]
-            Max,
+        //    [EnumMember(Value = MaxOperation.Code)]
+        //    Max,
 
-            [EnumMember(Value = MinOperation.Code)]
-            Min,
+        //    [EnumMember(Value = MinOperation.Code)]
+        //    Min,
 
-            [EnumMember(Value = PiOperation.Code)]
-            Pi,
+        //    [EnumMember(Value = PiOperation.Code)]
+        //    Pi,
 
-            [EnumMember(Value = RandomOperation.Code)]
-            Random,
+        //    [EnumMember(Value = RandomOperation.Code)]
+        //    Random,
 
-            [EnumMember(Value = RoundOperation.Code)]
-            Round,
+        //    [EnumMember(Value = RoundOperation.Code)]
+        //    Round,
 
-            [EnumMember(Value = SinOperation.Code)]
-            Sin,
+        //    [EnumMember(Value = SinOperation.Code)]
+        //    Sin,
 
-            [EnumMember(Value = SqrtOperation.Code)]
-            Sqrt,
+        //    [EnumMember(Value = SqrtOperation.Code)]
+        //    Sqrt,
 
-            [EnumMember(Value = TanOperation.Code)]
-            Tan,
+        //    [EnumMember(Value = TanOperation.Code)]
+        //    Tan,
 
-            // [EnumMember(Value = "distance-from-center")]
-            // DistanceFromCenter,
+        //    // [EnumMember(Value = "distance-from-center")]
+        //    // DistanceFromCenter,
             
-            // [EnumMember(Value = "pitch")] 
-            // Pitch,
+        //    // [EnumMember(Value = "pitch")] 
+        //    // Pitch,
             
-            // [EnumMember(Value = "zoom")] 
-            // Zoom,
+        //    // [EnumMember(Value = "zoom")] 
+        //    // Zoom,
 
-            // [EnumMember(Value = "heatmap-density")]
-            // HeatmapDensity,
-        }
+        //    // [EnumMember(Value = "heatmap-density")]
+        //    // HeatmapDensity,
+        //}
 
         /// <summary>
         /// A thin value‐type wrapper around one of an Expression’s operands,
@@ -341,11 +341,11 @@ namespace Netherlands3D.SerializableGisExpressions
             public static implicit operator Expression(OperandView o) => o.AsExpression;
         }
 
-        public readonly Operators Operator;
+        public readonly IOperation Operator;
         public readonly object[] Operands;
         public OperandView Operand(int index) => new OperandView(Operands[index]);
 
-        public Expression(Operators @operator, params object[] operands)
+        public Expression(IOperation @operator, params object[] operands)
         {
             Operator = @operator;
             Operands = operands;

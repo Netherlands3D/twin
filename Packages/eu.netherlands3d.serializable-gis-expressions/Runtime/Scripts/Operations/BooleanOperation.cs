@@ -9,7 +9,7 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
     /// <seealso href="https://docs.mapbox.com/style-spec/reference/expressions/#types-boolean">
     ///   Mapbox “boolean” expression reference
     /// </seealso>
-    public static class BooleanOperation
+    public class BooleanOperation : Operation<bool>
     {
         /// <summary>The Mapbox operator string for “boolean”.</summary>
         public const string Code = "boolean";
@@ -24,7 +24,7 @@ namespace Netherlands3D.SerializableGisExpressions.Operations
         /// </param>
         /// <returns>The first operand value that is a <c>bool</c>.</returns>
         /// <exception cref="InvalidOperationException">Thrown if no operand evaluates to a boolean.</exception>
-        public static bool Evaluate(Expression expression, ExpressionContext context)
+        protected override bool Evaluate(Expression expression, ExpressionContext context)
         {
             Operations.GuardAtLeastNumberOfOperands(Code, expression, 1);
 

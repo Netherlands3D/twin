@@ -1,4 +1,5 @@
 ﻿using System;
+using Netherlands3D.SerializableGisExpressions.Operations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine.Scripting;
@@ -38,7 +39,7 @@ namespace Netherlands3D.SerializableGisExpressions
             }
 
             // Parse operator via EnumMember
-            var opCode = arr[0].ToObject<Expression.Operators>(serializer);
+            var opCode = arr[0].ToObject<IOperation>(serializer);
 
             // Prepare operands
             var operands = new object[arr.Count - 1];
