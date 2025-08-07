@@ -439,6 +439,7 @@ namespace Netherlands3D.Twin.Cameras
 
         private void UpdateZoomVector()
         {
+
             zoomVector *= Mathf.Pow(zoomVectorFalloff, Time.deltaTime * 60f);
             dynamicZoomSpeed = Mathf.Lerp(dynamicZoomSpeed, zoomVector, Time.deltaTime * 60f);
             zoomTarget = GetWorldPoint();
