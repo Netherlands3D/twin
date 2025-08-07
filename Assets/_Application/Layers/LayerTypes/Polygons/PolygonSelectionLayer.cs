@@ -22,11 +22,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     }
 
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "PolygonSelection")]
-    public class PolygonSelectionLayer : ReferencedLayerData, ILayerWithPropertyData//, ILayerWithPropertyPanels
+    public class PolygonSelectionLayer : ReferencedLayerData, ILayerWithPropertyData //, ILayerWithPropertyPanels
     {
         [DataMember] public List<Coordinate> OriginalPolygon { get; private set; }
         [DataMember] private ShapeType shapeType;
-        
+
         [JsonIgnore] private PolygonSelectionLayerPropertyData polygonPropertyData;
         [JsonIgnore] public LayerPropertyData PropertyData => polygonPropertyData;
         [JsonIgnore] public CompoundPolygon Polygon { get; set; }
@@ -68,7 +68,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         }
 
         public int MaskBitIndex { get; private set; } = -1;
-        private static List<int> availableMaskChannels = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 };
+        private static List<int> availableMaskChannels = new List<int>() { 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+        public static int NumAvailableMasks => availableMaskChannels.Count;
+        public static int MaxAvailableMasks => 22;
 
         [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
 
@@ -87,7 +89,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             polygonPropertyData.OnIsMaskChanged.AddListener(OnIsMaskChanged);
             polygonPropertyData.OnInvertMaskChanged.AddListener(OnInvertMaskChanged);
             //initialize
-            OnIsMaskChanged(IsMask); 
+            OnIsMaskChanged(IsMask);
             OnInvertMaskChanged(InvertMask);
         }
 
@@ -296,7 +298,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void OnIsMaskChanged(bool isMask)
         {
-            if (isMask && availableMaskChannels.Count == 0)
+            if (isMask && MaskBitIndex == -1 && availableMaskChannels.Count == 0)
             {
                 Debug.LogError("No more masking channels available");
                 IsMask = false;
@@ -305,17 +307,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var layer = GetLayer(isMask);
             SetPolygonLayer(layer, InvertMask);
 
-            if (!isMask)
+            if (!isMask && MaskBitIndex != -1)
             {
-                availableMaskChannels.Add(MaskBitIndex); //todo: remember the bit index so layers don't need to be selected again
+                availableMaskChannels.Add(MaskBitIndex);
                 MaskBitIndex = -1;
             }
-            else if (MaskBitIndex == -1)
+            else if (isMask && MaskBitIndex == -1)
             {
-                MaskBitIndex = availableMaskChannels.First();
+                MaskBitIndex = availableMaskChannels.Last();
                 availableMaskChannels.Remove(MaskBitIndex);
             }
-
+            
             PolygonVisualisation.SetMaterial(isMask, MaskBitIndex, InvertMask);
         }
 

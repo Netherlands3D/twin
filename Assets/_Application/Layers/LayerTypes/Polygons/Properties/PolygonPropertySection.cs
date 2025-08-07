@@ -1,5 +1,7 @@
+using System;
 using Netherlands3D.Events;
 using Netherlands3D.Twin.Projects;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +17,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [SerializeField] private BoolEvent EnableGridInputInEditModeEvent;
         [SerializeField] private RectTransform maskToggleParent;
         [SerializeField] private MaskLayerToggle maskTogglePrefab;
+        [SerializeField] private TextMeshProUGUI maxMasksText;
+        private string maxMasksTextTemplate;
         
         private PolygonSelectionLayer polygonLayer;
 
@@ -25,15 +29,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             {
                 polygonLayer = value;
                 strokeWidthSlider.value = polygonLayer.LineWidth;
-                maskToggle.isOn = (polygonLayer.IsMask);
-                maskInvertToggle.isOn = (polygonLayer.InvertMask);
+                maskToggle.isOn = polygonLayer.IsMask;
+                maskInvertToggle.isOn = polygonLayer.InvertMask;
 
                 SetLinePropertiesActive(polygonLayer.ShapeType == ShapeType.Line);
                 SetGridPropertiesActive(polygonLayer.ShapeType == ShapeType.Grid);
+
+                maskToggle.interactable = maskToggle.isOn || PolygonSelectionLayer.NumAvailableMasks > 0;
+                SetMaxMasksText();
                 
                 if(polygonLayer.IsMask)
                     PopulateMaskLayerPanel();
             }
+        }
+
+        private void SetMaxMasksText()
+        {
+            maxMasksText.text = string.Format(maxMasksTextTemplate, PolygonSelectionLayer.NumAvailableMasks.ToString(), PolygonSelectionLayer.MaxAvailableMasks.ToString());
         }
 
         private void SetLinePropertiesActive(bool isLine)
@@ -54,6 +66,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         {
             polygonLayer.SelectLayer(true);
             EnableGridInputInEditModeEvent.InvokeStarted(true);
+        }
+
+        private void Awake()
+        {
+            maxMasksTextTemplate = maxMasksText.text;
         }
 
         private void OnEnable()
@@ -83,6 +100,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
                 PopulateMaskLayerPanel();
             else
                 ClearMaskLayerPanel();
+            
+            print("setting text : " + PolygonSelectionLayer.NumAvailableMasks);
+            SetMaxMasksText();
         }
 
         private void PopulateMaskLayerPanel()
