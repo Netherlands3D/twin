@@ -579,7 +579,7 @@ namespace Netherlands3D.SelectionTools
             {
                 blockCameraDrag.Invoke(false);
                 if (!closedLoop && lineHandle.pointIndex == 0)
-                    CloseLoop(false);
+                    CloseLoop(true);
             });
             lineHandle.dragged.AddListener(() =>
             {
