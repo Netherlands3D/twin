@@ -322,7 +322,7 @@ namespace Netherlands3D.Twin.Cameras.Input
 
             if (zoomValue.magnitude > 0)
             {
-                zoomInput.InvokeStarted(zoomValue.y);
+                zoomInput.InvokeStarted(-zoomValue.x + zoomValue.y);
             }
 
             if (rotateValue.magnitude > 0)

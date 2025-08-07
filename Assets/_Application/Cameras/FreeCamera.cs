@@ -1,4 +1,6 @@
 using Netherlands3D.Events;
+using Netherlands3D.Twin.Samplers;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -81,7 +83,10 @@ namespace Netherlands3D.Twin.Cameras
         [SerializeField] private float focusAngle = 45.0f;
         [SerializeField] private float focusDistanceMultiplier = 2.0f;
 
+        public Vector3 WorldTarget => worldTarget;
+
         private Vector3 currentPointerPosition;
+        private Vector3 worldTarget;
         private Vector3 zoomTarget;
         private Camera cameraComponent;
         private Plane worldPlane;
@@ -100,10 +105,12 @@ namespace Netherlands3D.Twin.Cameras
         private Quaternion previousRotation;
         private Vector3 previousPosition;
         public OrthographicSwitcher orthographicSwitcher;
+        private OpticalRaycaster raycaster;
         
         void Awake()
         {
             cameraComponent = GetComponent<Camera>();
+            raycaster = FindAnyObjectByType<OpticalRaycaster>();
             orthographicSwitcher = orthographicSwitcher ? orthographicSwitcher : GetComponent<OrthographicSwitcher>();
 
             worldPlane = new Plane(Vector3.up, Vector3.zero);
@@ -185,11 +192,6 @@ namespace Netherlands3D.Twin.Cameras
 
             if (rotate)
             {
-                if (!rotatingAroundPoint)
-                {
-                    dragStart = GetWorldPoint();
-                }
-
                 rotatingAroundPoint = true;
                 RotateAroundPoint(pointerDelta);
             }
@@ -317,6 +319,7 @@ namespace Netherlands3D.Twin.Cameras
 
         void Update()
         {
+            UpdateWorldPoint();
             EaseDragTarget();
             if (!lockDraggingInput)
             {
@@ -441,10 +444,14 @@ namespace Netherlands3D.Twin.Cameras
 
         private void UpdateZoomVector()
         {
+            //optical raycaster hitpoint als hoogte
+            //curve dichterbij verbeteren en verder weg
+            //vector < 0.001 = 0
+
+            
 
             zoomVector *= Mathf.Pow(zoomVectorFalloff, Time.deltaTime * 60f);
             dynamicZoomSpeed = Mathf.Lerp(dynamicZoomSpeed, zoomVector, Time.deltaTime * 60f);
-            zoomTarget = GetWorldPoint();
             var direction = zoomTarget - this.transform.position;
             if (direction.sqrMagnitude < 0.0001f)
                 direction = this.transform.forward;
@@ -463,18 +470,34 @@ namespace Netherlands3D.Twin.Cameras
         /// </summary>
         /// <param name="screenPoint">Optional screen position. Defaults to pointer input position.</param>
         /// <returns>World position</returns>
-        public Vector3 GetWorldPoint(Vector3 screenPoint = default)
+        public void UpdateWorldPoint()
         {
-            if (screenPoint == default)
+            GetWorldPoint(currentPointerPosition, pos =>
             {
-                screenPoint = currentPointerPosition;
-            }
+                if (!rotatingAroundPoint)
+                    dragStart = pos;
+                zoomTarget = pos;
+                worldTarget = pos;
+            });
+        }
 
-            var screenRay = cameraComponent.ScreenPointToRay(screenPoint);
-            worldPlane.Raycast(screenRay, out float distance);
-            var samplePoint = screenRay.GetPoint(Mathf.Min(maxPointerDistance, distance));
+        public void GetWorldPoint(Vector3 screenPosition, Action<Vector3> callBack)
+        {
+            raycaster.GetWorldPointAsync(screenPosition, (pos, hit) =>
+            {
+                if (hit)
+                {
+                   callBack(pos);
+                }
+                else
+                {
+                    var screenRay = cameraComponent.ScreenPointToRay(screenPosition);
+                    worldPlane.Raycast(screenRay, out float distance);
+                    var samplePoint = screenRay.GetPoint(Mathf.Min(maxPointerDistance, distance));
+                    callBack(samplePoint);
+                }
 
-            return samplePoint;
+            }); //, 1 << LayerMask.NameToLayer("Terrain")
         }
 
         /// <summary>

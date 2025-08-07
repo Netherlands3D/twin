@@ -68,17 +68,18 @@ namespace Netherlands3D.Twin.Cameras
             previousPitchWhenSwitchingToAndFromOrtho = cameraTransform.eulerAngles.x;
 
             // Pull forward camera to make sure that what is in center of the screen stays there
-            var cameraLookWorldPosition = freeCamera.GetWorldPoint(
-                new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0)
-            );
-            cameraLookWorldPosition.y = transform.position.y;
+            freeCamera.GetWorldPoint(new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0), pos =>
+            {
+                var cameraLookWorldPosition = pos;
+                cameraLookWorldPosition.y = transform.position.y;
 
-            // Look downwards
-            var flattenedForward = cameraTransform.forward;
-            flattenedForward.y = 0;
-            var rotateTo = Quaternion.LookRotation(Vector3.down, flattenedForward);
+                // Look downwards
+                var flattenedForward = cameraTransform.forward;
+                flattenedForward.y = 0;
+                var rotateTo = Quaternion.LookRotation(Vector3.down, flattenedForward);
 
-            StartAnimation(cameraLookWorldPosition, rotateTo, true);
+                StartAnimation(cameraLookWorldPosition, rotateTo, true);
+            });            
         }
 
         private void SwitchToPerspectiveMode()
