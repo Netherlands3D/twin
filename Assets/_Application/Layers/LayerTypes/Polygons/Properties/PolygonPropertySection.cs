@@ -101,7 +101,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             else
                 ClearMaskLayerPanel();
             
-            print("setting text : " + PolygonSelectionLayer.NumAvailableMasks);
             SetMaxMasksText();
         }
 
