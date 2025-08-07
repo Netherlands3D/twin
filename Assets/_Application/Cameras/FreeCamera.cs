@@ -425,6 +425,9 @@ namespace Netherlands3D.Twin.Cameras
         /// <param name="amount">Zoom delta where 1 is towards, and -1 is backing up from zoompoint</param>
         public void ZoomToPointer(float amount)
         {
+            if (rotatingAroundPoint)
+                return;
+
             float signedAmount = Mathf.Sign(amount);
 
             if (Mathf.Sign(zoomVector) != signedAmount)
@@ -434,7 +437,6 @@ namespace Netherlands3D.Twin.Cameras
             }
 
             zoomVector += signedAmount * Mathf.Max(1f, Mathf.Abs(this.transform.position.y)) * zoomSpeed * Time.deltaTime;
-            rotatingAroundPoint = false;
         }
 
         private void UpdateZoomVector()
