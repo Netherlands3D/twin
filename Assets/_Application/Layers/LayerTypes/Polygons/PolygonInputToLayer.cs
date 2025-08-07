@@ -21,6 +21,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             set { activeLayer = value; }
         }
 
+        [SerializeField] private PolygonSelectionCalculator selectionCalculator;
         [SerializeField] private PolygonInput polygonInput;
 
         [Header("Line settings")] 
@@ -174,10 +175,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public void ShowPolygonVisualisations(bool enabled)
         {
-            foreach (var visualisation in layers.Keys)
+            foreach (var polygonLayer in layers.Values)
             {
-                visualisation.gameObject.SetActive(enabled);
+                if (polygonLayer.IsMask)
+                {
+                    continue;
+                }
+
+                polygonLayer.PolygonVisualisation.gameObject.SetActive(enabled);
             }
+
+            selectionCalculator.gameObject.SetActive(enabled);
         }
 
         private void CreatePolygonLayer(List<Vector3> unityPolygon)
