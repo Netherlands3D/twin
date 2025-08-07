@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Netherlands3D.Catalogs.CatalogItems;
+using Netherlands3D.Catalogs.Catalogs;
 using NUnit.Framework;
 
 namespace Netherlands3D.Catalogs
@@ -149,7 +151,7 @@ namespace Netherlands3D.Catalogs
             var page = await catalog.BrowseAsync();
             var items = (await page.GetItemsAsync()).ToList();
 
-            IPaginatedRecordCollection folder = items
+            ICatalogItemCollection folder = items
                 .OfType<FolderItem>()
                 .Single(f => f.Id == "5");
 
