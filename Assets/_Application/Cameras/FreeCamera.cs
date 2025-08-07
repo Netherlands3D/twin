@@ -2,6 +2,7 @@ using Netherlands3D.Events;
 using Netherlands3D.Twin.Samplers;
 using System;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.InputSystem;
 
 /*
@@ -439,26 +440,29 @@ namespace Netherlands3D.Twin.Cameras
                 dynamicZoomSpeed = 0;
             }
 
-            zoomVector += signedAmount * Mathf.Max(1f, Mathf.Abs(this.transform.position.y)) * zoomSpeed * Time.deltaTime;
+            //ease the curve to slow it down nearing ground
+            float y = Mathf.Max(1f, Mathf.Abs(transform.position.y));
+            float t = Mathf.Clamp01(y / maxCameraHeight);
+            float v = Mathf.Lerp(1f, maxCameraHeight, t * t);
+            zoomVector += signedAmount * v * zoomSpeed * Time.deltaTime;
         }
 
         private void UpdateZoomVector()
         {
-            //optical raycaster hitpoint als hoogte
             //curve dichterbij verbeteren en verder weg
-            //vector < 0.001 = 0
+            float dt = Time.deltaTime * 60; 
+            bool modifierKeysPressed = IsModifierKeyIsPressed();
+            zoomVector *= Mathf.Pow(zoomVectorFalloff, modifierKeysPressed ? zoomSpeedMultiplier * dt : dt);
+            if (Mathf.Abs(zoomVector) < 0.001f)
+                return;
 
-            
-
-            zoomVector *= Mathf.Pow(zoomVectorFalloff, Time.deltaTime * 60f);
-            dynamicZoomSpeed = Mathf.Lerp(dynamicZoomSpeed, zoomVector, Time.deltaTime * 60f);
+            dynamicZoomSpeed = Mathf.Lerp(dynamicZoomSpeed, zoomVector, dt);
             var direction = zoomTarget - this.transform.position;
             if (direction.sqrMagnitude < 0.0001f)
                 direction = this.transform.forward;
             if (Vector3.Dot(this.transform.forward, direction) < 0)
                 direction = -direction;
 
-            bool modifierKeysPressed = IsModifierKeyIsPressed();
             dynamicZoomSpeed = Mathf.Clamp(dynamicZoomSpeed, minimumSpeed, maximumSpeed);
             dynamicZoomSpeed = modifierKeysPressed ? dynamicZoomSpeed * zoomSpeedMultiplier : dynamicZoomSpeed;
             this.transform.Translate(direction.normalized * dynamicZoomSpeed * Time.deltaTime, Space.World);
@@ -497,7 +501,7 @@ namespace Netherlands3D.Twin.Cameras
                     callBack(samplePoint);
                 }
 
-            }); //, 1 << LayerMask.NameToLayer("Terrain")
+            }); //, 1 << LayerMask.NameToLayer("Terrain") //use this if the pointer should always hit the ground instead of also buildigns
         }
 
         /// <summary>
