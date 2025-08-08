@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -67,7 +66,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             set => polygonPropertyData.InvertMask = value;
         }
 
-        public int MaskBitIndex { get; private set; } = -1;
+        [JsonIgnore]
+        public int MaskBitIndex
+        {
+            get => polygonPropertyData.MaskBitIndex;
+            set => polygonPropertyData.MaskBitIndex = value;
+        }
         private static List<int> availableMaskChannels = new List<int>() { 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
         public static int NumAvailableMasks => availableMaskChannels.Count;
         public static int MaxAvailableMasks => 22;
@@ -88,7 +92,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
             polygonPropertyData.OnIsMaskChanged.AddListener(OnIsMaskChanged);
             polygonPropertyData.OnInvertMaskChanged.AddListener(OnInvertMaskChanged);
+            
             //initialize
+            availableMaskChannels.Remove(MaskBitIndex);
             OnIsMaskChanged(IsMask);
             OnInvertMaskChanged(InvertMask);
         }
@@ -119,14 +125,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var properties = new List<LayerPropertyData>(1);
             properties.Add(new PolygonSelectionLayerPropertyData());
             return properties;
-        }
-
-        ~PolygonSelectionLayer()
-        {
-            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
-            Origin.current.onPostShift.RemoveListener(ShiftedPolygon);
-            polygonPropertyData.OnIsMaskChanged.RemoveListener(OnIsMaskChanged);
-            polygonPropertyData.OnInvertMaskChanged.RemoveListener(OnInvertMaskChanged);
         }
 
         private void ShiftedPolygon(Coordinate fromOrigin, Coordinate toOrigin)
@@ -257,6 +255,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             base.DestroyLayer();
             PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject);
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
+            
+            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
+            Origin.current.onPostShift.RemoveListener(ShiftedPolygon);
+            polygonPropertyData.OnIsMaskChanged.RemoveListener(OnIsMaskChanged);
+            polygonPropertyData.OnInvertMaskChanged.RemoveListener(OnInvertMaskChanged);
+            
+            if (MaskBitIndex >= 0)
+            {
+                availableMaskChannels.Add(MaskBitIndex);
+            }
         }
 
         public List<Vector3> GetPolygonAsUnityPoints()
