@@ -4,6 +4,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Utility;
@@ -115,13 +116,22 @@ namespace Netherlands3D.Twin.Layers
         protected virtual void OnEnable()
         {
             onShow.Invoke();
+            if(IsMaskable)
+                PolygonSelectionLayer.MaskDestroyed.AddListener(ResetMask);
         }
 
         protected virtual void OnDisable()
         {
             onHide.Invoke();
+            if(IsMaskable)
+                PolygonSelectionLayer.MaskDestroyed.RemoveListener(ResetMask);
         }
 
+        private void ResetMask(int maskBitIndex)
+        {
+            SetMaskBit(maskBitIndex, true); //reset accepting masks
+        }
+        
         protected virtual void OnDestroy()
         {
             //don't unsubscribe in OnDisable, because we still want to be able to center to a 
@@ -228,6 +238,23 @@ namespace Netherlands3D.Twin.Layers
         {
             LayerData.DefaultStyle.AnyFeature.Symbolizer.SetMaskLayerMask(bitMask);
             ApplyStyling();
+        }
+
+        public void SetMaskBit(int bitIndex, bool enableBit)
+        {
+            var currentLayerMask = GetMaskLayerMask();
+            int maskBitToSet = 1 << bitIndex;
+                
+            if (enableBit)
+            {
+                currentLayerMask |= maskBitToSet; // set bit to 1
+            }
+            else
+            {
+                currentLayerMask &= ~maskBitToSet; // set bit to 0
+            }
+
+            SetMaskLayerMask(currentLayerMask);
         }
 
         /// <summary>

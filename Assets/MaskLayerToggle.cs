@@ -51,7 +51,7 @@ namespace Netherlands3D.Twin.Layers
 
             layerIconImage.sprite = layerTypeSpriteLibrary.GetLayerTypeSprite(layer);
         }
-
+        
         private void OnEnable()
         {
             toggle.onValueChanged.AddListener(OnValueChanged);
@@ -66,19 +66,7 @@ namespace Netherlands3D.Twin.Layers
         {
             if (layerData is ReferencedLayerData referencedLayerData)
             {
-                var currentLayerMask = referencedLayerData.Reference.GetMaskLayerMask();
-                int maskBitToSet = 1 << MaskLayer.MaskBitIndex;
-                
-                if (acceptMask)
-                {
-                    currentLayerMask |= maskBitToSet; // set bit to 1
-                }
-                else
-                {
-                    currentLayerMask &= ~maskBitToSet; // set bit to 0
-                }
-
-                referencedLayerData.Reference.SetMaskLayerMask(currentLayerMask);
+                referencedLayerData.Reference.SetMaskBit(MaskLayer.MaskBitIndex, acceptMask);
             }
         }
     }

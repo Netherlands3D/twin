@@ -67,7 +67,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             if (!isMask)
             {
-                Debug.Log("no longer a mask");
                 Destroy(PolygonVisualisation.VisualisationMaterial); //clean up the mask material instance
                 PolygonVisualisation.VisualisationMaterial = PolygonMeshMaterial;
                 return;

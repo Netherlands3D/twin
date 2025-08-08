@@ -19,7 +19,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [SerializeField] private MaskLayerToggle maskTogglePrefab;
         [SerializeField] private TextMeshProUGUI maxMasksText;
         private string maxMasksTextTemplate;
-        
+
         private PolygonSelectionLayer polygonLayer;
 
         public PolygonSelectionLayer PolygonLayer
@@ -37,8 +37,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 
                 maskToggle.interactable = maskToggle.isOn || PolygonSelectionLayer.NumAvailableMasks > 0;
                 SetMaxMasksText();
-                
-                if(polygonLayer.IsMask)
+
+                if (polygonLayer.IsMask)
                     PopulateMaskLayerPanel();
             }
         }
@@ -83,12 +83,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         {
             if (polygonLayer.ShapeType == ShapeType.Line)
                 strokeWidthSlider.onValueChanged.RemoveListener(HandleStrokeWidthChange);
-            if(polygonLayer.ShapeType == ShapeType.Grid)
+            if (polygonLayer.ShapeType == ShapeType.Grid)
                 editGridSelectionButton.onClick.RemoveListener(ReselectLayer);
-            
+
             maskToggle.onValueChanged.RemoveListener(OnIsMaskChanged);
             maskInvertToggle.onValueChanged.RemoveListener(OnInvertMaskChanged);
-            
+
             EnableGridInputInEditModeEvent.InvokeStarted(false);
         }
 
@@ -96,11 +96,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         {
             polygonLayer.IsMask = isMask;
 
-            if(isMask)
+            if (isMask)
                 PopulateMaskLayerPanel();
             else
                 ClearMaskLayerPanel();
-            
+
             SetMaxMasksText();
         }
 
@@ -109,12 +109,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             ClearMaskLayerPanel();
             foreach (var layer in ProjectData.Current.RootLayer.GetFlatHierarchy())
             {
-                if (layer is ReferencedLayerData data)
-                    if (data.Reference.IsMaskable)
-                    {
-                        var toggle = Instantiate(maskTogglePrefab, maskToggleParent);
-                        toggle.Initialize(polygonLayer, layer);
-                    }
+                if (layer is ReferencedLayerData data && data.Reference.IsMaskable)
+                {
+                    var toggle = Instantiate(maskTogglePrefab, maskToggleParent);
+                    toggle.Initialize(polygonLayer, layer);
+                }
             }
         }
 
@@ -130,7 +129,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         {
             polygonLayer.InvertMask = invert;
         }
-        
+
 
         private void HandleStrokeWidthChange(float newValue)
         {

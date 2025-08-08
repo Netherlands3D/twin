@@ -75,6 +75,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private static List<int> availableMaskChannels = new List<int>() { 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
         public static int NumAvailableMasks => availableMaskChannels.Count;
         public static int MaxAvailableMasks => 22;
+        public static UnityEvent<int> MaskDestroyed = new();
 
         [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
 
@@ -264,6 +265,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if (MaskBitIndex >= 0)
             {
                 availableMaskChannels.Add(MaskBitIndex);
+                MaskDestroyed.Invoke(MaskBitIndex);
             }
         }
 
