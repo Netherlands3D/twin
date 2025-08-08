@@ -541,20 +541,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LayerUIPrefab: {fileID: 2127760596796970168, guid: 67f661495874545c8847acccfa777e7e,
     type: 3}
-  layerTypeSprites:
-  - {fileID: 21300000, guid: 8195ba93da7d54414990e31bfc4040cd, type: 3}
-  - {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25, type: 3}
-  - {fileID: 21300000, guid: 3765d3359f9e147d68845fa587338a6e, type: 3}
-  - {fileID: 21300000, guid: 2c832d49ceeba4326aa064851cbb7bc7, type: 3}
-  - {fileID: 21300000, guid: 15bc370712bc94ceaa909cdc8b259d71, type: 3}
-  - {fileID: 21300000, guid: f08423d0fb71848ec9bf1e77397260a2, type: 3}
-  - {fileID: 21300000, guid: dc4aeda70a7a447c4b457e41e216a80a, type: 3}
-  - {fileID: 21300000, guid: 4c0989c5e9ec1404ab9e3523c94f6b29, type: 3}
-  - {fileID: 21300000, guid: 1c8435c321d2348d6b890dae0769264b, type: 3}
-  - {fileID: 21300000, guid: 302449484203745dbac0d82605206394, type: 3}
-  - {fileID: 21300000, guid: 675193f4a560b4698b5f5ec01af3ba36, type: 3}
-  - {fileID: 21300000, guid: e4bf1be4a2ec6ab4da3735fdfcc314da, type: 3}
-  - {fileID: 21300000, guid: dcb7e9de9d2b4429ba1476b040a73dd0, type: 3}
   layerUIContainer: {fileID: 4503089938938308058}
   dragGhostPrefab: {fileID: -5549004017849562441, guid: f37464b169eec47cf8d80ee264145f3f,
     type: 3}

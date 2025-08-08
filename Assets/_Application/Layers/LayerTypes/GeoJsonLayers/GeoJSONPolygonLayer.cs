@@ -29,6 +29,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
         public bool IsPolygon => true;
+        public override bool IsMaskable => false;
         public Transform Transform { get => transform; }
         public delegate void GeoJSONPointHandler(Feature feature);
         public event GeoJSONPointHandler FeatureRemoved;

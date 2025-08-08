@@ -47,12 +47,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var maxDimension = Mathf.Max(w,h);
 
             var pos = new Vector3((float)extent.CenterX, 500, (float)extent.CenterY);
-            var size = new Vector3(maxDimension, maxDimension, decalProjector.size.z);
-
-            decalProjector.transform.position = pos;
-            decalProjector.size = size;
             
+            ProjectionCamera.transform.position = pos;
             ProjectionCamera.orthographicSize = maxDimension / 2;
+
+            if (decalProjector)
+            {
+                var size = new Vector3(maxDimension, maxDimension, decalProjector.size.z);
+                decalProjector.size = size;
+            }
         }
 
         private float EstimateCameraHeight()

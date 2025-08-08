@@ -4,6 +4,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Utility;
@@ -24,13 +25,16 @@ namespace Netherlands3D.Twin.Layers
     
     public abstract class LayerGameObject : MonoBehaviour, IStylable
     {
+        public const int DEFAULT_MASK_BIT_MASK = 16777215; //(2^24)-1; 
+        
         [SerializeField] private string prefabIdentifier;
         [SerializeField] private SpriteState thumbnail;
         [SerializeField] private SpawnLocation spawnLocation;
         public string PrefabIdentifier => prefabIdentifier;
         public SpriteState Thumbnail => thumbnail;
         public SpawnLocation SpawnLocation => spawnLocation;
-        
+        public virtual bool IsMaskable => true; // Can we mask this layer? Usually yes, but not in case of projections
+
         public string Name
         {
             get => LayerData.Name;
@@ -62,7 +66,7 @@ namespace Netherlands3D.Twin.Layers
                 }
             }
         }
-
+        
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
         public UnityEvent OnStylingApplied = new();
         Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;
@@ -97,7 +101,7 @@ namespace Netherlands3D.Twin.Layers
         // 1. Instantiating prefab -> creating new LayerData, or
         // 2. Creating LayerData (from project), Instantiating prefab, coupling that LayerData to this LayerGameObject
         protected virtual void InitializeVisualisation()
-        {
+        {            
             LayerData.LayerDoubleClicked.AddListener(OnDoubleClick);
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 
@@ -112,13 +116,22 @@ namespace Netherlands3D.Twin.Layers
         protected virtual void OnEnable()
         {
             onShow.Invoke();
+            if(IsMaskable)
+                PolygonSelectionLayer.MaskDestroyed.AddListener(ResetMask);
         }
 
         protected virtual void OnDisable()
         {
             onHide.Invoke();
+            if(IsMaskable)
+                PolygonSelectionLayer.MaskDestroyed.RemoveListener(ResetMask);
         }
 
+        private void ResetMask(int maskBitIndex)
+        {
+            SetMaskBit(maskBitIndex, true); //reset accepting masks
+        }
+        
         protected virtual void OnDestroy()
         {
             //don't unsubscribe in OnDisable, because we still want to be able to center to a 
@@ -196,8 +209,60 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void ApplyStyling()
         {
+            UpdateMaskBitMask(LayerData.DefaultSymbolizer.GetMaskLayerMask());
+            // var mask = LayerStyler.GetMaskLayerMask(this); todo?
             //initialize the layer's style and emit an event for other services and/or UI to update
             OnStylingApplied.Invoke();
+        }
+
+        public virtual void UpdateMaskBitMask(int bitmask)
+        {
+            foreach (var r in GetComponentsInChildren<Renderer>())
+            {
+                UpdateBitMaskForMaterials(bitmask, r.materials);
+            }
+        }
+
+        protected void UpdateBitMaskForMaterials(int bitmask, IEnumerable<Material> materials)
+        {
+            foreach (var m in materials)
+            {
+                m.SetFloat("_MaskingChannelBitmask", bitmask);
+            }
+        }
+
+        /// <summary>
+        /// Sets a bitmask to the layer to determine which masks affect the provided LayerGameObject
+        /// </summary>
+        public void SetMaskLayerMask(int bitMask)
+        {
+            LayerData.DefaultStyle.AnyFeature.Symbolizer.SetMaskLayerMask(bitMask);
+            ApplyStyling();
+        }
+
+        public void SetMaskBit(int bitIndex, bool enableBit)
+        {
+            var currentLayerMask = GetMaskLayerMask();
+            int maskBitToSet = 1 << bitIndex;
+                
+            if (enableBit)
+            {
+                currentLayerMask |= maskBitToSet; // set bit to 1
+            }
+            else
+            {
+                currentLayerMask &= ~maskBitToSet; // set bit to 0
+            }
+
+            SetMaskLayerMask(currentLayerMask);
+        }
+
+        /// <summary>
+        /// Retrieves the bitmask for masking of the LayerGameObject.
+        /// </summary>
+        public int GetMaskLayerMask()
+        {
+            return LayerData.DefaultStyle.AnyFeature.Symbolizer.GetMaskLayerMask();
         }
 #endregion
 

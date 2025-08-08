@@ -1,14 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Functionalities.OGC3DTiles;
-using Netherlands3D.Functionalities.Wms;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
-using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -21,7 +15,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         public List<LayerUI> LayerUIsVisibleInInspector { get; private set; } = new List<LayerUI>();
 
         [SerializeField] private LayerUI LayerUIPrefab;
-        [SerializeField] private List<Sprite> layerTypeSprites;
         [SerializeField] private RectTransform layerUIContainer;
 
         public RectTransform LayerUIContainer => layerUIContainer;
@@ -158,59 +151,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         {
             var folder = new FolderLayer("Folder");
             return folder;
-        }
-
-        public Sprite GetLayerTypeSprite(LayerData layer)
-        {
-            switch (layer)
-            {
-                case PolygonSelectionLayer selectionLayer:
-                    if (selectionLayer.ShapeType == ShapeType.Line)
-                        return layerTypeSprites[7];
-                    else if (selectionLayer.ShapeType == ShapeType.Grid)
-                        return layerTypeSprites[12];
-                    return layerTypeSprites[6];
-                case ReferencedLayerData data:
-                    var reference = data.Reference;
-                    return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);
-                case FolderLayer _:
-                    return layerTypeSprites[2];
-                default:
-                    Debug.LogError("layer type of " + layer.Name + " is not specified");
-                    return layerTypeSprites[0];
-            }
-        }
-
-        private Sprite GetProxyLayerSprite(LayerGameObject layer)
-        {
-            switch (layer)
-            {
-                case WMSLayerGameObject _:
-                case GeoJsonLayerGameObject _:
-                    return layerTypeSprites[8];
-                case CartesianTileLayerGameObject _:
-                case Tile3DLayerGameObject _:
-                    return layerTypeSprites[1];
-                case WorldAnnotationLayerGameObject _:
-                    return layerTypeSprites[10];
-                case CameraPositionLayerGameObject _:
-                    return layerTypeSprites[11];
-                case HierarchicalObjectLayerGameObject _:
-                    return layerTypeSprites[3];
-                case ObjectScatterLayerGameObject _:
-                    return layerTypeSprites[4];
-                case CartesianTileSubObjectColorLayerGameObject _:
-                    return layerTypeSprites[5];
-                case GeoJSONPolygonLayer _:
-                    return layerTypeSprites[6];
-                case GeoJSONLineLayer _:
-                    return layerTypeSprites[7];                
-                case GeoJSONPointLayer _:
-                    return layerTypeSprites[9];
-                default:
-                    Debug.LogError("layer type of " + layer.Name + " is not specified");
-                    return layerTypeSprites[0];
-            }
         }
 
         private void Update()

@@ -17,6 +17,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         [SerializeField] private GameObject ghostGameObject;
         private Color defaultColor;
         CameraPropertyData cameraPropertyData => (CameraPropertyData)transformPropertyData;
+        public override bool IsMaskable => false;
 
         protected override void Awake()
         {
