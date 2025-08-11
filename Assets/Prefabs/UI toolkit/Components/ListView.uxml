@@ -2,6 +2,7 @@
     <Style src="project://database/Assets/Prefabs/UI%20toolkit/Styles/_Theme.uss?fileID=7433441132597879392&amp;guid=0f24ef838c8e4bf49a89503faf584878&amp;type=3#_Theme" />
     <Style src="project://database/Assets/Prefabs/UI%20toolkit/Components/ScrollView.uss?fileID=7433441132597879392&amp;guid=f2a3a6709dd042c43aea4d57c1064b39&amp;type=3#ScrollView" />
     <Style src="project://database/Assets/Prefabs/UI%20toolkit/Components/Scroller_basic.uss?fileID=7433441132597879392&amp;guid=7a22904e9f8a7124e9fa9a252aa266a4&amp;type=3#Scroller_basic" />
-    <Style src="project://database/Assets/Prefabs/UI%20toolkit/Components/ListView_basic.uss?fileID=7433441132597879392&amp;guid=9813a24c522d03d41be20c91ebd9cbec&amp;type=3#ListView_basic" />
+    <Style src="project://database/Assets/Prefabs/UI%20toolkit/Components/ListViewItem.uss?fileID=7433441132597879392&amp;guid=53d917cd5acb0a549a2adf0e0f8cbe03&amp;type=3#ListViewItem" />
+    <Style src="project://database/Assets/Prefabs/UI%20toolkit/Components/ListView.uss?fileID=7433441132597879392&amp;guid=9813a24c522d03d41be20c91ebd9cbec&amp;type=3#ListView" />
     <ui:ListView virtualization-method="DynamicHeight" />
 </ui:UXML>
