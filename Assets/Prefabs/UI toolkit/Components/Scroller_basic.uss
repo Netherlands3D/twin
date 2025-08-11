@@ -1,1 +1,60 @@
-VisualElement {}
+.unity-scroller {
+    margin: 0;
+    padding: 0;
+    width: 16px;
+    height: auto;
+    min-width: 16px;
+    min-height: auto;
+}
+
+.unity-scroller__low-button {
+    display: none;
+}
+
+.unity-scroller__high-button {
+    display: none;
+}
+
+.unity-slider {
+    margin: 0;
+    padding: 0;
+    width: auto;
+    height: auto;
+    min-height: auto;
+    min-width: auto;
+}
+
+.unity-base-slider__drag-container {
+    margin: 0;
+    padding: 0;
+}
+
+.unity-base-slider__tracker {
+    margin: 0;
+    padding: 0;
+    width: 16px;
+    height: auto;
+    min-width: 16px;
+    min-height: auto;
+    background-color: var(--color-Blue100);
+    border-width: 0;
+}
+
+.unity-base-slider__dragger-border {
+    margin: 0;
+    padding: 0;
+}
+
+.unity-base-slider__dragger {
+    top: auto;
+    left: auto;
+    width: 16px;
+    min-width: 16px;
+    height: auto;
+    min-height: auto;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-Blue300);
+    border-color: var(--color-Blue300);
+    border-width: 2px;
+}

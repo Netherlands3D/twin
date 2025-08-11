@@ -38,6 +38,3 @@
     -unity-font-style: normal;
     color: var(--color-Text);
 }
-
-#ListViewItem {
-}

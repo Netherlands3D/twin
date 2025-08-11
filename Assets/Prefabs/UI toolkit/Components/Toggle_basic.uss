@@ -1,0 +1,67 @@
+.unity-toggle {
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    align-self: flex-start;
+    padding-right: 12px;
+    padding-left: 12px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: var(--color-White);
+    border-color: var(--color-Blue200);
+    border-width: 2px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    flex-basis: auto;
+}
+
+.unity-base-field__label {
+    display: none;
+}
+
+.unity-base-field__input {
+    display: none;
+}
+
+.unity-toggle > #Icon {
+    width: 24px;
+    height: 24px;
+    background-image: url("project://database/Assets/Sprites/UI/Icons/Type=Map,%20Color=white,%20Size=large.png?fileID=2800000&guid=be23f11ede1084b4785c8f49e1902060&type=3#Type=Map, Color=white, Size=large");
+    -unity-background-image-tint-color: var(--color-Blue900);
+    flex-shrink: 0;
+    flex-grow: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.unity-label {
+    white-space: normal;
+    margin-left: 8px;
+}
+
+.unity-toggle:hover {
+    border-color: var(--color-Blue700);
+}
+
+.unity-toggle:checked {
+    background-color: var(--color-Blue700);
+    border-color: var(--color-Blue700);
+}
+
+.unity-toggle:checked .unity-label {
+    color: var(--color-White);
+}
+
+.unity-toggle:checked > #Icon {
+    -unity-background-image-tint-color: var(--color-White);
+}

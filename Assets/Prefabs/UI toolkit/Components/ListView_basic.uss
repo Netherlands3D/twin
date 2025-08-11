@@ -3,18 +3,11 @@
     flex-shrink: 0;
 }
 
-.unity-scroll-view {
-}
-
 .unity-scroll-view__content-and-vertical-scroll-container {
 }
 
 .unity-scroll-view__content-viewport {
 }
 
-.unity-scroll-view__content-container {
-}
-
-#ListViewItem {
-    margin-bottom: 12px;
+.unity-scroll-view__content-container:hover {
 }
