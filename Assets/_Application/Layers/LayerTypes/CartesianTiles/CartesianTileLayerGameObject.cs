@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
     public class CartesianTileLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
     {
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
-        
+
         private Layer layer;
         private TileHandler tileHandler;
 
@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             layer.isEnabled = isActive;
         }
-        
+
         protected virtual void Awake()
         {
             tileHandler = FindAnyObjectByType<TileHandler>();
@@ -75,7 +75,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             if (transformInterfaceToggle)
                 transformInterfaceToggle.ShowVisibilityPanel(false);
         }
-        
+
         protected virtual void OnDestroy()
         {
             if (Application.isPlaying && tileHandler && layer)
@@ -98,7 +98,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 return propertySections;
             }
             set => propertySections = value;
-        }       
+        }
 
         public List<IPropertySectionInstantiator> GetPropertySections()
         {
@@ -123,10 +123,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             if (layer is BinaryMeshLayer binaryMeshLayer)
             {
-                foreach (var m in binaryMeshLayer.DefaultMaterialList)
-                {
-                    UpdateBitMaskForMaterials(bitmask, binaryMeshLayer.DefaultMaterialList);
-                }
+                UpdateBitMaskForMaterials(bitmask, binaryMeshLayer.DefaultMaterialList);
             }
         }
 
@@ -137,7 +134,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             if (feature.Geometry is not Material mat) return feature;
 
             feature.Attributes.Add(
-                CartesianTileLayerStyler.MaterialIndexIdentifier, 
+                CartesianTileLayerStyler.MaterialIndexIdentifier,
                 meshLayer.DefaultMaterialList.IndexOf(mat).ToString()
             );
             feature.Attributes.Add(CartesianTileLayerStyler.MaterialNameIdentifier, mat.name);
