@@ -32,6 +32,9 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             {
                 if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "type")
                 {
+                    if ((string)jsonReader.Value == "CityJSON")
+                        return false; //this is a cityjson, not a geojson
+                    
                     jsonReader.Read(); //reads the value of the type object
                     if ((string)jsonReader.Value == "FeatureCollection" || (string)jsonReader.Value == "Feature")
                         return true;
