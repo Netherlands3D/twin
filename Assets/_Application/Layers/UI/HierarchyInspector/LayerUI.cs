@@ -47,7 +47,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         [SerializeField] private float indentWidth = 40f;
         [Tooltip("Buttons ignore the layout group, this is an added right margin for the button group")]
         [SerializeField] private float buttonGroupWidth = 23 + 23;
-
+        
         [Header("Identification")]
         [SerializeField] private Image layerTypeImage;
         [SerializeField] private TMP_Text layerNameText;
@@ -64,6 +64,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         [SerializeField] private Sprite[] visibilitySprites;
         [SerializeField] private Sprite[] foldoutSprites;
         [SerializeField] private Sprite[] backgroundSprites;
+        [SerializeField] private LayerTypeSpriteLibrary layerTypeSpriteLibrary;
 
         [Header("Layout elements")]
         [SerializeField] private TMP_Text debugIndexText;
@@ -391,7 +392,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void SetLayerTypeImage()
         {
-            var sprite = layerUIManager.GetLayerTypeSprite(Layer);
+            var sprite = layerTypeSpriteLibrary.GetLayerTypeSprite(Layer);
             layerTypeImage.sprite = sprite;
         }
 

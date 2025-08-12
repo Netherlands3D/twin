@@ -110,6 +110,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             base.OnEnable();
             tileSet.unsupportedExtensionsParsed.AddListener(InvokeUnsupportedExtensionsMessage);
             tileSet.OnServerResponseReceived.AddListener(ProcessServerResponse);
+            tileSet.OnTileLoaded.AddListener(InitializeStyling);
         }
 
         protected override void OnDisable()
@@ -117,6 +118,16 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             base.OnDisable();
             tileSet.unsupportedExtensionsParsed.RemoveListener(InvokeUnsupportedExtensionsMessage);
             tileSet.OnServerResponseReceived.RemoveListener(ProcessServerResponse);
+            tileSet.OnTileLoaded.RemoveListener(InitializeStyling);
+        }
+
+        private void InitializeStyling(Content content)
+        {
+            var bitmask = LayerData.DefaultSymbolizer.GetMaskLayerMask();
+            foreach (var r in GetComponentsInChildren<Renderer>())
+            {
+                UpdateBitMaskForMaterials(bitmask, r.materials);
+            }
         }
 
         protected override void Start()
