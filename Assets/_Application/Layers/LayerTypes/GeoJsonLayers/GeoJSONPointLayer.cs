@@ -19,6 +19,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     {
         [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
         public bool IsPolygon => false;
+        public override bool IsMaskable => false;
+
         public Transform Transform => transform;
         public delegate void GeoJSONPointHandler(Feature feature);
         public event GeoJSONPointHandler FeatureRemoved;

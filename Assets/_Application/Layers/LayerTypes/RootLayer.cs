@@ -95,5 +95,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                 children[i].RootIndex = i;
             }
         }
+        
+        public List<LayerData> GetFlatHierarchy()
+        {
+            var list = new List<LayerData>();
+
+            AddLayersRecursive(this, list);
+
+            list.Remove(this); //remove rootLayer
+            return list;
+        }
+
+        private void AddLayersRecursive(LayerData layer, List<LayerData> list)
+        {
+            list.Add(layer);
+            foreach (var child in layer.ChildrenLayers)
+            {
+                AddLayersRecursive(child, list);
+            }
+        }
     }
 }
