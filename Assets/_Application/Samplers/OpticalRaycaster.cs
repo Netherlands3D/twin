@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.Samplers
         private Stack<MultiPointCallback> requestMultipointPool = new Stack<MultiPointCallback>();
 
         private const int maxRequests = 3;
-        private const int defaultRaycastLayers = ~((1 << 2) + (1 << 13) + (1 << 14)); // all layers except IgnoreRaycast, PolygonMask, PolygonMaskInverted
+        private const int defaultRaycastLayers = ~((1 << 2) + (1 << 12) + (1 << 13) + (1 << 14)); // all layers except IgnoreRaycast, Projected, PolygonMask, PolygonMaskInverted
 
         public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, int cullingMask = defaultRaycastLayers)
         {
