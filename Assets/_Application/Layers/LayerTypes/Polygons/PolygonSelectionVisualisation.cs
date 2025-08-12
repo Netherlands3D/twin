@@ -18,6 +18,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public PolygonVisualisation PolygonVisualisation { get; private set; }
         public Material PolygonMeshMaterial;
         [SerializeField] private Material polygonMaskMaterial;
+        private bool isMask;
 
         /// <summary>
         /// Create or update PolygonVisualisation
@@ -69,6 +70,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 Destroy(PolygonVisualisation.VisualisationMaterial); //clean up the mask material instance
                 PolygonVisualisation.VisualisationMaterial = PolygonMeshMaterial;
+                this.isMask = false;
+
                 return;
             }
 
@@ -78,13 +81,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             
             int maskValue = 1 << bitIndex;
             float floatMaskValue = (float)maskValue;
-
-            var newMat = new Material(polygonMaskMaterial);
             var bitMask = new Vector4(floatMaskValue, 0, 0, 1); //regular masks use the red channel
             if (invert)
                 bitMask = new Vector4(0, floatMaskValue, 0, 1); //invert masks use the green channel
-            newMat.SetVector("_MaskBitMask", bitMask);
-            PolygonVisualisation.VisualisationMaterial = newMat;
+
+            if (this.isMask != isMask)
+            {
+                var newMat = new Material(polygonMaskMaterial);
+                PolygonVisualisation.VisualisationMaterial = newMat;
+            }
+            
+            PolygonVisualisation.VisualisationMaterial.SetVector("_MaskBitMask", bitMask);
+            
+            this.isMask = true;
         }
     }
 }
