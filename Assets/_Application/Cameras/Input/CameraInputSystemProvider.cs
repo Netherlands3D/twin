@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using System;
 #endif
 
 /* Copyright(C)  X Gemeente
@@ -322,7 +323,11 @@ namespace Netherlands3D.Twin.Cameras.Input
 
             if (zoomValue.magnitude > 0)
             {
-                zoomInput.InvokeStarted(-zoomValue.x + zoomValue.y);
+                //we have to take the highest input value because some platforms tend to switch values when pressing modifier keys
+                float v = zoomValue.y;
+                if (Mathf.Abs(zoomValue.x) > Mathf.Abs(zoomValue.y))
+                    v = zoomValue.x;
+                zoomInput.InvokeStarted(v);
             }
 
             if (rotateValue.magnitude > 0)
