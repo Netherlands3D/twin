@@ -2,9 +2,7 @@ using Netherlands3D.Events;
 using Netherlands3D.Twin.Samplers;
 using System;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 using UnityEngine.InputSystem;
-using static UnityEditor.PlayerSettings;
 
 /*
 *  Copyright (C) X Gemeente
