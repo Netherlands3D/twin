@@ -1,35 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 namespace Netherlands3D
 {
     public class PolygonProjectionMask : MonoBehaviour
     {
         // Match Shader Graph property names exactly
-        [Header("Mask settings")]
+        [Header("Mask settings")] 
         [SerializeField] private string centerProperty = "_MaskBBoxCenter";
+
         [SerializeField] private string extentsProperty = "_MaskBBoxExtents";
-        [SerializeField] private string maskInvertTextureProperty = "_MaskInvertTexture";
         [SerializeField] private string maskTextureProperty = "_MaskTexture";
+        [SerializeField] private string enableInvertMasksProperty = "_EnableInvertMasks";
         
-        private DecalProjector decalProjector;
         [SerializeField] private Camera maskCamera;
-        [SerializeField] private Camera maskInvertCamera;
 
         private static bool forceUpdate;
         private static readonly HashSet<GameObject> invertedMasks = new(); // when there are 0 inverted masks, all geometry should be visible, so we should change the output texture to alpha=1 on all pixels.
-        
-        private void Awake()
-        {
-            decalProjector = maskCamera.GetComponent<DecalProjector>();
-        }
 
         private IEnumerator Start()
         {
             Shader.SetGlobalTexture(maskTextureProperty, maskCamera.targetTexture);
-            Shader.SetGlobalTexture(maskInvertTextureProperty, maskInvertCamera.targetTexture);
 
             yield return null;
             ForceUpdateVectorsAtEndOfFrame();
@@ -40,27 +32,18 @@ namespace Netherlands3D
             if (forceUpdate || transform.hasChanged)
             {
                 SetShaderMaskVectors();
-                UpdateCameraBackgroundColor();
+                // when there are 0 inverted masks, all geometry should be visible, so we should change the shader to output alpha=1 on all pixels without an inverted mask, otherwise we need to set alpha=0 so the environment is masked away
+                Shader.SetGlobalInteger(enableInvertMasksProperty,  invertedMasks.Count > 0 ? 1 : 0);
                 maskCamera.Render(); //force a render so the texture is ready to be sampled by the regular pipeline
-                maskInvertCamera.Render(); //force a render so the texture is ready to be sampled by the regular pipeline
                 transform.hasChanged = false;
                 forceUpdate = false;
             }
         }
-        
-        // when there are 0 inverted masks, all geometry should be visible, so we should change the output texture to alpha=1 on all pixels, otherwise we need to set alpha=0 so the environment is masked away
-        private void UpdateCameraBackgroundColor()
-        {
-            if(invertedMasks.Count > 0)
-                maskInvertCamera.backgroundColor = Color.clear;
-            else
-                maskInvertCamera.backgroundColor = Color.black;
-        }
-        
+
         private void SetShaderMaskVectors()
         {
             Vector2 worldCenterXZ = new Vector2(maskCamera.transform.position.x, maskCamera.transform.position.z);
-            Vector2 worldExtentsXZ = new Vector2(decalProjector.size.x / 2, decalProjector.size.y /2); //projector uses xy plane instead of xz plane
+            Vector2 worldExtentsXZ = new Vector2(maskCamera.orthographicSize, maskCamera.orthographicSize); //projector uses xy plane instead of xz plane
 
             Shader.SetGlobalVector(centerProperty, worldCenterXZ);
             Shader.SetGlobalVector(extentsProperty, worldExtentsXZ);
@@ -72,7 +55,7 @@ namespace Netherlands3D
         }
 
         public static void AddInvertedMask(GameObject invertedMask)
-        { 
+        {
             invertedMasks.Add(invertedMask);
         }
 
