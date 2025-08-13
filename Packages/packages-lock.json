@@ -538,15 +538,15 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "2.2.1",
+      "version": "https://github.com/Netherlands3D/3DTiles.git#fix/improve_memory_usage",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {
         "eu.netherlands3d.coordinates": "2.2.0",
         "com.unity.cloud.gltfast": "6.12.1",
         "com.unity.meshopt.decompress": "0.1.0-preview.5"
       },
-      "url": "https://package.openupm.com"
+      "hash": "aa10902daa41642b0f9e4b41f9d467a87173edaa"
     },
     "eu.netherlands3d.transform-handles": {
       "version": "1.1.2",
