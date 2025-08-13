@@ -450,9 +450,8 @@ namespace Netherlands3D.Twin.Cameras
         private void UpdateZoomVector()
         {
             //curve dichterbij verbeteren en verder weg
-            float dt = Time.deltaTime * 60; 
-            bool modifierKeysPressed = IsModifierKeyIsPressed();
-            zoomVector *= Mathf.Pow(zoomVectorFalloff, modifierKeysPressed ? zoomSpeedMultiplier * dt : dt);
+            float dt = Time.deltaTime * 60;      
+            zoomVector *= Mathf.Pow(zoomVectorFalloff, dt);
             if (Mathf.Abs(zoomVector) < 0.001f)
                 return;
 
@@ -464,6 +463,7 @@ namespace Netherlands3D.Twin.Cameras
                 direction = -direction;
 
             dynamicZoomSpeed = Mathf.Clamp(dynamicZoomSpeed, minimumSpeed, maximumSpeed);
+            bool modifierKeysPressed = IsModifierKeyIsPressed();
             dynamicZoomSpeed = modifierKeysPressed ? dynamicZoomSpeed * zoomSpeedMultiplier : dynamicZoomSpeed;
             this.transform.Translate(direction.normalized * dynamicZoomSpeed * Time.deltaTime, Space.World);
         }
