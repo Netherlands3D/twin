@@ -198,7 +198,7 @@ namespace Netherlands3D.AddressSearch
             }
 
             // If user pressed Enter before results loaded → auto-pick
-            if (autoSelectFirstWhenReady && resultButtons.Count > 0 /* && lastSubmittedTerm == searchTerm */)
+            if (autoSelectFirstWhenReady && resultButtons.Count > 0)
             {
                 autoSelectFirstWhenReady = false; // reset flag
                 int indexToUse = selectedIndex >= 0 && selectedIndex < resultButtons.Count ? selectedIndex : 0;
