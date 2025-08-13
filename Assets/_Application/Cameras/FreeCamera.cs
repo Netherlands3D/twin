@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.InputSystem;
+using static UnityEditor.PlayerSettings;
 
 /*
 *  Copyright (C) X Gemeente
@@ -88,6 +89,7 @@ namespace Netherlands3D.Twin.Cameras
 
         private Vector3 currentPointerPosition;
         private Vector3 worldTarget;
+        private Vector3 rotateTarget;
         private Vector3 zoomTarget;
         private Camera cameraComponent;
         private Plane worldPlane;
@@ -260,10 +262,10 @@ namespace Netherlands3D.Twin.Cameras
 
             StorePreviousTransform();
 
-            this.transform.RotateAround(dragStart, Vector3.up, pointerDelta.x * rotateAroundPointSpeed);
+            this.transform.RotateAround(rotateTarget, Vector3.up, pointerDelta.x * rotateAroundPointSpeed);
             if (!cameraComponent.orthographic)
             {
-                this.transform.RotateAround(dragStart, this.transform.right, -pointerDelta.y * rotateAroundPointSpeed);
+                this.transform.RotateAround(rotateTarget, this.transform.right, -pointerDelta.y * rotateAroundPointSpeed);
                 RevertIfOverAxis();
             }
         }
@@ -306,7 +308,7 @@ namespace Netherlands3D.Twin.Cameras
         public void Rotate(bool rotate)
         {
             this.rotate = rotate;
-            if (!rotate) rotatingAroundPoint = false;
+            rotatingAroundPoint = rotate;
         }
 
         /// <summary>
@@ -336,9 +338,9 @@ namespace Netherlands3D.Twin.Cameras
             if (!crosshairVisual)
                 return;
             
-            bool visible = rotate || dragging;
+            bool visible = rotatingAroundPoint;
             crosshairVisual.gameObject.SetActive(visible);
-            crosshairVisual.transform.position = dragStart;
+            crosshairVisual.transform.position = rotatingAroundPoint ? rotateTarget : dragStart;
         }
 
         /// <summary>
@@ -477,12 +479,12 @@ namespace Netherlands3D.Twin.Cameras
         public void UpdateWorldPoint()
         {
             GetWorldPoint(currentPointerPosition, pos =>
-            {
-                if (!rotatingAroundPoint)
-                    dragStart = pos;
+            {               
                 zoomTarget = pos;
                 worldTarget = pos;
             });
+            if (!rotatingAroundPoint)
+                rotateTarget = worldTarget;
         }
 
         public void GetWorldPoint(Vector3 screenPosition, Action<Vector3> callBack)
