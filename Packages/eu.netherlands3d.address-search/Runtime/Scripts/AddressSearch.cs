@@ -83,9 +83,8 @@ namespace Netherlands3D.AddressSearch
         private void Update()
         {
             var keyboard = Keyboard.current;
-            if (keyboard == null) return; // no keyboard available (e.g., mobile)
+            if (keyboard == null) return; // no keyboard available (e.g. mobile)
 
-            // If input is focused, capture Enter/Return
             if (IsFocused && (keyboard.enterKey.wasPressedThisFrame || keyboard.numpadEnterKey.wasPressedThisFrame))
             {
                 OnSubmitSearch(searchInputField.text);
@@ -97,7 +96,7 @@ namespace Netherlands3D.AddressSearch
                 if (keyboard.downArrowKey.wasPressedThisFrame)
                 {
                     navigatingResults = true;
-                    MoveSelection(+1);
+                    MoveSelection(1);
                 }
                 else if (keyboard.upArrowKey.wasPressedThisFrame)
                 {
