@@ -474,6 +474,13 @@ namespace Netherlands3D.Twin.Cameras
                 rotateTarget = pointer.WorldPoint;
         }
 
+        public void UpdateWorldPoint(Vector3 offset)
+        {
+            zoomTarget -= offset;
+            if(rotatingAroundPoint)
+                rotateTarget -= offset;
+        }
+
         /// <summary>
         /// Sets the pointer screen position
         /// </summary>
