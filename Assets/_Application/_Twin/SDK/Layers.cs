@@ -57,18 +57,30 @@ namespace Netherlands3D._Application._Twin.SDK
 
             if (!string.IsNullOrEmpty(layer.Name))
                 layerData.Name = layer.Name;
+
             if (layer.Color.HasValue)
                 layerData.Color = layer.Color.Value;
+
+            if (layer.Parent != null)
+                layerData.SetParent(layer.Parent);
 
             foreach (var property in layer.Properties)
             {
                 layerData.AddProperty(property);
             }
 
+            if (layer.DefaultSymbolizer != null)
+            {
+                layerData.DefaultStyle.AnyFeature.Symbolizer = layer.DefaultSymbolizer;
+            }
+            
             foreach (var style in layer.Styles)
             {
                 layerData.AddStyle(style);
             }
+            
+            // We changed the properties - so we load them into the visualisations with this LayerGameObject
+            layerGameObject.LoadPropertiesInVisualisations();
             
             return layerData;
         }

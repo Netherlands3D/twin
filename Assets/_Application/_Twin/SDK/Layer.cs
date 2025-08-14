@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers;
@@ -11,6 +12,7 @@ namespace Netherlands3D._Application._Twin.SDK
     public record Layer
     {
         internal string Type { get; }
+        internal Uri Url { get; private set;}
         internal string Name { get; private set; }
         internal Vector3? Position { get; private set; }
         internal Quaternion? Rotation { get; private set; }
@@ -18,6 +20,7 @@ namespace Netherlands3D._Application._Twin.SDK
         internal LayerData Parent { get; private set; }
         internal StoredAuthorization Credentials { get; private set; }
         internal List<LayerPropertyData> Properties { get; } = new();
+        [CanBeNull] internal Symbolizer DefaultSymbolizer { get; private set; }
         internal List<LayerStyle> Styles { get; } = new();
 
         private Layer(string type)
@@ -44,10 +47,7 @@ namespace Netherlands3D._Application._Twin.SDK
 
         public Layer At(Uri url)
         {
-            AddProperty(new LayerURLPropertyData
-            {
-                Data = url
-            });
+            Url = url;
 
             return this;
         }
@@ -76,12 +76,6 @@ namespace Netherlands3D._Application._Twin.SDK
             return this;
         }
 
-        public Layer AddStyle(LayerStyle style)
-        {
-            Styles.Add(style);
-            return this;
-        }
-
         public Layer PositionedAt(Vector3 position)
         {
             Position = position;
@@ -93,6 +87,20 @@ namespace Netherlands3D._Application._Twin.SDK
         {
             Rotation = rotation;
             
+            return this;
+        }
+
+        public Layer SetDefaultStyling(Symbolizer symbolizer)
+        {
+            DefaultSymbolizer = symbolizer;
+            
+            return this;
+        }
+
+        public Layer AddStyle(LayerStyle style)
+        {
+            Styles.Add(style);
+
             return this;
         }
     }

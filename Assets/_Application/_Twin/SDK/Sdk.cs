@@ -4,9 +4,9 @@ using UnityEngine;
 namespace Netherlands3D
 {
     [RequireComponent(typeof(Layers))]
-    public class Netherlands3D : MonoBehaviour
+    public class Sdk : MonoBehaviour
     {
-        private static Netherlands3D instance;
+        private static Sdk instance;
 
         public static Layers Layers { get; private set; }
         

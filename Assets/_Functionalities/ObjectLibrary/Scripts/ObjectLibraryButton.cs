@@ -53,7 +53,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             // TODO: Replace PrefabIdentifier with type - but this requires a change in all buttons
             var layer = Layer.OfType(prefab.PrefabIdentifier).NamedAs(prefab.name);
             
-            return await Netherlands3D.Layers.Add(layer);
+            return await Sdk.Layers.Add(layer);
         }
     }
 }
