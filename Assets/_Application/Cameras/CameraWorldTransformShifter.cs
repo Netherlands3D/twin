@@ -21,10 +21,10 @@ namespace Netherlands3D
         public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
             base.ShiftTo(worldTransform, fromOrigin, toOrigin);
-            Vector3 from = fromOrigin.ToUnity();
-            Vector3 to = toOrigin.ToUnity();
-            Vector3 offset = to - from;
-            camera.UpdateWorldPoint(offset);
+            //(double x, double y, double z) from = fromOrigin.ToUnityDouble3();
+            //(double x, double y, double z) to = toOrigin.ToUnityDouble3();
+            //(double x, double y, double z) offset = (to.x - from.x, to.y - from.y, to.z - from.z);
+            //camera.UpdateWorldPoint(new Vector3((float)offset.x, (float)offset.y, (float)offset.z));
         }
     }
 }
