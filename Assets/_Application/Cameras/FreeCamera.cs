@@ -86,8 +86,8 @@ namespace Netherlands3D.Twin.Cameras
         [SerializeField] private float focusDistanceMultiplier = 2.0f;
        
         private Coordinate currentPointerPosition;
-        public WorldTransform zoomTarget;
-        public WorldTransform rotateTarget;
+        public Coordinate zoomTarget;
+        public Coordinate rotateTarget;
         private Camera cameraComponent;
 
         private Vector3 dragStart;
@@ -107,16 +107,10 @@ namespace Netherlands3D.Twin.Cameras
         private PointerToWorldPosition pointer;
         private WorldTransform worldTransform;
 
-        public bool lockUpdateWorldPoint = false;
-
-
         void Awake()
         {
             cameraComponent = GetComponent<Camera>();
             worldTransform = GetComponent<WorldTransform>();
-          
-            zoomTarget.onPreShift.AddListener((w,c)=> { lockUpdateWorldPoint = true; });
-            zoomTarget.onPostShift.AddListener((w, c) => { lockUpdateWorldPoint = false; });
 
             pointer = FindAnyObjectByType<PointerToWorldPosition>();
             orthographicSwitcher = orthographicSwitcher ? orthographicSwitcher : GetComponent<OrthographicSwitcher>();            
@@ -264,7 +258,7 @@ namespace Netherlands3D.Twin.Cameras
             StopEasing();
 
             StorePreviousTransform();
-            Vector3 target = rotateTarget.Coordinate.ToUnity();
+            Vector3 target = rotateTarget.ToUnity();
             this.transform.RotateAround(target, Vector3.up, pointerDelta.x * rotateAroundPointSpeed);
             if (!cameraComponent.orthographic)
             {
@@ -337,7 +331,7 @@ namespace Netherlands3D.Twin.Cameras
             
             bool visible = rotatingAroundPoint;
             crosshairVisual.gameObject.SetActive(visible);
-            crosshairVisual.transform.position = rotatingAroundPoint ? rotateTarget.Coordinate.ToUnity() : dragStart;
+            crosshairVisual.transform.position = rotatingAroundPoint ? rotateTarget.ToUnity() : dragStart;
         }
 
         /// <summary>
@@ -432,7 +426,7 @@ namespace Netherlands3D.Twin.Cameras
         public void ZoomToPointer(float amount)
         {
             float signedAmount = Mathf.Sign(amount);
-            if (rotatingAroundPoint || lockUpdateWorldPoint)
+            if (rotatingAroundPoint)
                 return;                       
 
             if (Mathf.Sign(zoomVector) != signedAmount)
@@ -453,9 +447,6 @@ namespace Netherlands3D.Twin.Cameras
         private Vector3 lastDirection;
         public void UpdateZoomVector()
         {
-            if (lockUpdateWorldPoint)
-                return;
-
             zoomVector *= zoomVectorFalloff;
             if (Mathf.Abs(zoomVector) < 0.001f)
             {
@@ -465,27 +456,17 @@ namespace Netherlands3D.Twin.Cameras
 
             dynamicZoomSpeed = zoomVector;
             Vector3 pos = worldTransform.Coordinate.ToUnity();
-            var direction = zoomTarget.Coordinate.ToUnity() - pos;
+            var direction = zoomTarget.ToUnity() - pos;
             if (direction.sqrMagnitude < 0.0001f)
                 direction = this.transform.forward;
             if (Vector3.Dot(this.transform.forward, direction) < 0)
-                direction = -direction;
+                return;
 
             dynamicZoomSpeed = Mathf.Clamp(dynamicZoomSpeed, minimumSpeed, maximumSpeed);
             bool modifierKeysPressed = IsModifierKeyIsPressed();
             var translation = dynamicZoomSpeed * Time.deltaTime;
             translation *= modifierKeysPressed ? zoomSpeedMultiplier : 1;
 
-            float dot = Vector3.Dot(lastDirection, direction);
-            if (dot >= 0)
-            {               
-                //this.transform.Translate(direction.normalized * translation, Space.World);
-                lastDirection = direction;
-            }
-            else
-            {
-                direction = lastDirection;
-            }
             worldTransform.MoveToCoordinate(new Coordinate(pos + direction.normalized * translation));
         }
 
@@ -497,12 +478,9 @@ namespace Netherlands3D.Twin.Cameras
         /// <returns>World position</returns>
         public void UpdateWorldPoint()
         {
-            if (lockUpdateWorldPoint)
-                return;
-
-            zoomTarget.MoveToCoordinate(new Coordinate(pointer.WorldPoint.ToUnity()));
+            zoomTarget = new Coordinate(pointer.WorldPoint.ToUnity());
             if (!rotatingAroundPoint)
-                rotateTarget.MoveToCoordinate(new Coordinate(pointer.WorldPoint.ToUnity()));
+                rotateTarget = new Coordinate(pointer.WorldPoint.ToUnity());
         }
 
         public void ForceUpdateWorldPoint()
@@ -511,16 +489,18 @@ namespace Netherlands3D.Twin.Cameras
             Plane worldPlane = new Plane(Vector3.up, Vector3.zero);
             var screenRay = cameraComponent.ScreenPointToRay(screenPoint);
             worldPlane.Raycast(screenRay, out float distance);
-            zoomTarget.MoveToCoordinate(new Coordinate(screenRay.GetPoint(Mathf.Min(float.MaxValue, distance))));
+            zoomTarget = new Coordinate(screenRay.GetPoint(Mathf.Min(float.MaxValue, distance)));
             if (!rotatingAroundPoint)
                 rotateTarget = zoomTarget;
         }
 
         public void UpdateWorldPoint(Vector3 offset)
         {
-            zoomTarget.MoveToCoordinate(new Coordinate(zoomTarget.Coordinate.ToUnity() - offset));
+            Vector3 debugTargetA = zoomTarget.ToUnity();
+            zoomTarget = new Coordinate(zoomTarget.ToUnity() - offset);
+            Vector3 debugTarget = zoomTarget.ToUnity();
             if (rotatingAroundPoint)
-                rotateTarget.MoveToCoordinate(new Coordinate(rotateTarget.Coordinate.ToUnity() - offset));
+                rotateTarget = new Coordinate(rotateTarget.ToUnity() - offset);
         }
 
         /// <summary>
@@ -595,7 +575,7 @@ namespace Netherlands3D.Twin.Cameras
             }
             else
             {
-                Gizmos.DrawSphere(zoomTarget.Coordinate.ToUnity(), 1.0f);
+                Gizmos.DrawSphere(zoomTarget.ToUnity(), 1.0f);
             }
         }
 
