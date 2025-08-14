@@ -2,31 +2,46 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D
 {
     public class CameraWorldTransformShifter : GameObjectWorldTransformShifter
     {
         private FreeCamera camera;
+        private Vector3 previousPosition;
 
         private void Awake()
         {
             camera = GetComponent<FreeCamera>();    
+            //WorldTransform transform = camera.gameObject.GetComponent<WorldTransform>();
+            //transform.onPostShift.AddListener(OnPostShift);
         }
 
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
-            camera.lockUpdateWorldPoint = true;
+            //camera.lockUpdateWorldPoint = true;
+            //previousPosition = worldTransform.Coordinate.ToUnity();
         }
 
         public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
             base.ShiftTo(worldTransform, fromOrigin, toOrigin);
-            (double x, double y, double z) from = fromOrigin.ToUnityDouble3();
-            (double x, double y, double z) to = toOrigin.ToUnityDouble3();
-            (double x, double y, double z) offset = (to.x - from.x, to.y - from.y, to.z - from.z);
-            camera.UpdateWorldPoint(new Vector3((float)offset.x, (float)offset.y, (float)offset.z));
-            camera.lockUpdateWorldPoint = false;
+
+            
         }
+
+        //private void OnPostShift(WorldTransform worldTransform, Coordinate coordinate)
+        //{
+        //    camera.lockUpdateWorldPoint = false;
+        //    //var screenPoint = Pointer.current.position.ReadValue();
+        //    //Plane worldPlane = new Plane(Vector3.up, Vector3.zero);
+        //    //var screenRay = Camera.main.ScreenPointToRay(screenPoint);
+        //    //worldPlane.Raycast(screenRay, out float distance);
+        //    //worldTransform.MoveToCoordinate(new Coordinate(screenRay.GetPoint(Mathf.Min(float.MaxValue, distance))));
+        //    Vector3 currentPosition = worldTransform.Coordinate.ToUnity();
+        //    worldTransform.MoveToCoordinate(new Coordinate(new Vector3(currentPosition.x, previousPosition.y, currentPosition.z)));
+        //    camera.UpdateZoomVector();
+        //}
     }
 }

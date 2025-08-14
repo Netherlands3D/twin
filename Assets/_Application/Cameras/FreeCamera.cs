@@ -106,13 +106,13 @@ namespace Netherlands3D.Twin.Cameras
         public OrthographicSwitcher orthographicSwitcher;
         private PointerToWorldPosition pointer;
         private WorldTransform worldTransform;
-
-        public bool lockUpdateWorldPoint = false;
         
         void Awake()
         {
             cameraComponent = GetComponent<Camera>();
             worldTransform = GetComponent<WorldTransform>();
+            worldTransform.onPreShift.AddListener((w,c) => LockDragging(true));
+            worldTransform.onPostShift.AddListener((w, c) => LockDragging(false));
             pointer = FindAnyObjectByType<PointerToWorldPosition>();
             orthographicSwitcher = orthographicSwitcher ? orthographicSwitcher : GetComponent<OrthographicSwitcher>();            
 
@@ -317,13 +317,12 @@ namespace Netherlands3D.Twin.Cameras
         {
             UpdateWorldPoint();
             EaseDragTarget();
+            SetCrosshair();
+            UpdateZoomVector();
             if (!lockDraggingInput)
             {
                 Clamp();
             }
-
-            SetCrosshair();
-            UpdateZoomVector();
         }
 
         private void SetCrosshair()
@@ -427,10 +426,9 @@ namespace Netherlands3D.Twin.Cameras
         /// <param name="amount">Zoom delta where 1 is towards, and -1 is backing up from zoompoint</param>
         public void ZoomToPointer(float amount)
         {
-            if (rotatingAroundPoint)
-                return;
-
             float signedAmount = Mathf.Sign(amount);
+            if (rotatingAroundPoint)
+                return;                       
 
             if (Mathf.Sign(zoomVector) != signedAmount)
             {
@@ -446,11 +444,16 @@ namespace Netherlands3D.Twin.Cameras
             zoomVector += signedAmount * v * zoomSpeed;
         }
 
-        private void UpdateZoomVector()
-        {   
+
+        private Vector3 lastDirection;
+        public void UpdateZoomVector()
+        {          
             zoomVector *= zoomVectorFalloff;
             if (Mathf.Abs(zoomVector) < 0.001f)
+            {
+                zoomVector = 0;
                 return;
+            }
 
             dynamicZoomSpeed = zoomVector;
             Vector3 pos = worldTransform.Coordinate.ToUnity();
@@ -464,8 +467,17 @@ namespace Netherlands3D.Twin.Cameras
             bool modifierKeysPressed = IsModifierKeyIsPressed();
             var translation = dynamicZoomSpeed * Time.deltaTime;
             translation *= modifierKeysPressed ? zoomSpeedMultiplier : 1;
-            //this.transform.Translate(direction.normalized * translation, Space.World);
 
+            float dot = Vector3.Dot(lastDirection, direction);
+            if (dot >= 0)
+            {               
+                //this.transform.Translate(direction.normalized * translation, Space.World);
+                lastDirection = direction;
+            }
+            else
+            {
+                direction = lastDirection;
+            }
             worldTransform.MoveToCoordinate(new Coordinate(pos + direction.normalized * translation));
         }
 
@@ -477,21 +489,29 @@ namespace Netherlands3D.Twin.Cameras
         /// <returns>World position</returns>
         public void UpdateWorldPoint()
         {
-            if (lockUpdateWorldPoint)
-                return;
-
-            zoomTarget = new Coordinate(pointer.WorldPoint);
+            zoomTarget = new Coordinate(pointer.WorldPoint.ToUnity());
             if (!rotatingAroundPoint)
-                rotateTarget = new Coordinate(pointer.WorldPoint);
+                rotateTarget = new Coordinate(pointer.WorldPoint.ToUnity());
         }
 
-        public void UpdateWorldPoint(Vector3 offset)
+        public void ForceUpdateWorldPoint()
         {
-            zoomTarget = new Coordinate(zoomTarget.ToUnity() - offset);
-            if(rotatingAroundPoint)
-                rotateTarget = new Coordinate(rotateTarget.ToUnity() - offset);
-            UpdateZoomVector();
+            var screenPoint = Pointer.current.position.ReadValue();
+            Plane worldPlane = new Plane(Vector3.up, Vector3.zero);
+            var screenRay = cameraComponent.ScreenPointToRay(screenPoint);
+            worldPlane.Raycast(screenRay, out float distance);
+            zoomTarget = new Coordinate(screenRay.GetPoint(Mathf.Min(float.MaxValue, distance)));
+            if (!rotatingAroundPoint)
+                rotateTarget = zoomTarget;
         }
+
+        //public void UpdateWorldPoint(Vector3 offset)
+        //{
+        //    zoomTarget = new Coordinate(zoomTarget.ToUnity() - offset);
+        //    if (rotatingAroundPoint)
+        //        rotateTarget = new Coordinate(rotateTarget.ToUnity() - offset);
+        //    UpdateZoomVector();
+        //}
 
         /// <summary>
         /// Sets the pointer screen position
