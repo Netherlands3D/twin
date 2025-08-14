@@ -959,7 +959,7 @@ PrefabInstance:
     - target: {fileID: 1629620604472758691, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 2510
+      value: 1870
       objectReference: {fileID: 0}
     - target: {fileID: 1629620604472758691, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
@@ -1029,12 +1029,12 @@ PrefabInstance:
     - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
@@ -1064,7 +1064,7 @@ PrefabInstance:
     - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: SetUri
+      value: ApplyCredentials
       objectReference: {fileID: 0}
     - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
@@ -1074,7 +1074,7 @@ PrefabInstance:
     - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: Netherlands3D.Credentials.CredentialHandler, Assembly-CSharp
+      value: Netherlands3D.Credentials.CredentialHandler, eu.netherlands3d.twin
       objectReference: {fileID: 0}
     - target: {fileID: 1866605984593444270, guid: 13d604e32abf3494fb16b5a7b8170c14,
         type: 3}
