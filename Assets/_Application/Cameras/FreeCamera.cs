@@ -1,5 +1,6 @@
 using Netherlands3D.Coordinates;
 using Netherlands3D.Events;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
 using System;
 using UnityEngine;
@@ -84,7 +85,7 @@ namespace Netherlands3D.Twin.Cameras
         [SerializeField] private float focusAngle = 45.0f;
         [SerializeField] private float focusDistanceMultiplier = 2.0f;
        
-        private Vector3 currentPointerPosition;
+        private Coordinate currentPointerPosition;
         private Coordinate rotateTarget;
         private Coordinate zoomTarget;
         private Camera cameraComponent;
@@ -104,10 +105,14 @@ namespace Netherlands3D.Twin.Cameras
         private Vector3 previousPosition;
         public OrthographicSwitcher orthographicSwitcher;
         private PointerToWorldPosition pointer;
+        private WorldTransform worldTransform;
+
+        public bool lockUpdateWorldPoint = false;
         
         void Awake()
         {
             cameraComponent = GetComponent<Camera>();
+            worldTransform = GetComponent<WorldTransform>();
             pointer = FindAnyObjectByType<PointerToWorldPosition>();
             orthographicSwitcher = orthographicSwitcher ? orthographicSwitcher : GetComponent<OrthographicSwitcher>();            
 
@@ -289,11 +294,6 @@ namespace Netherlands3D.Twin.Cameras
             this.transform.Translate(value.x * gamepadMoveSpeed * Time.deltaTime, 0, value.y * gamepadMoveSpeed * Time.deltaTime, Space.Self);
         }
 
-        public void MoveToTarget(Vector3 newPosition)
-        {
-            transform.position = newPosition;
-        }
-
         /// <summary>
         /// Activate rotation modifier
         /// </summary>
@@ -341,13 +341,16 @@ namespace Netherlands3D.Twin.Cameras
         /// </summary>
         private void Clamp()
         {
-            if (this.transform.position.y > maxCameraHeight)
+            Vector3 pos = worldTransform.Coordinate.ToUnity();
+            if (pos.y > maxCameraHeight)
             {
-                this.transform.position = new Vector3(this.transform.position.x, maxCameraHeight, this.transform.position.z);
+                Vector3 target = new Vector3(pos.x, maxCameraHeight, pos.z);
+                worldTransform.MoveToCoordinate(new Coordinate(target));
             }
-            else if (this.transform.position.y < minCameraHeight)
+            else if (pos.y < minCameraHeight)
             {
-                this.transform.position = new Vector3(this.transform.position.x, minCameraHeight, this.transform.position.z);
+                Vector3 target = new Vector3(pos.x, minCameraHeight, pos.z);
+                worldTransform.MoveToCoordinate(new Coordinate(target));
             }
         }
 
@@ -388,7 +391,7 @@ namespace Netherlands3D.Twin.Cameras
             if (!dragging && isDragging)
             {
                 dragStart = this.transform.position;
-                dragStartPointerPosition = currentPointerPosition;
+                dragStartPointerPosition = currentPointerPosition.ToUnity();
             }
             else if (dragging && !rotatingAroundPoint && currentPointerDelta.magnitude > 0 && !firstPersonRotate)
             {
@@ -436,7 +439,8 @@ namespace Netherlands3D.Twin.Cameras
             }
 
             //ease the curve to slow it down nearing ground
-            float y = Mathf.Max(1f, Mathf.Abs(transform.position.y));
+            Vector3 pos = worldTransform.Coordinate.ToUnity();
+            float y = Mathf.Max(1f, Mathf.Abs(pos.y));
             float t = Mathf.Clamp01(y / maxCameraHeight);
             float v = Mathf.Lerp(1f, maxCameraHeight, t * t);
             zoomVector += signedAmount * v * zoomSpeed;
@@ -449,7 +453,8 @@ namespace Netherlands3D.Twin.Cameras
                 return;
 
             dynamicZoomSpeed = zoomVector;
-            var direction = zoomTarget.ToUnity() - this.transform.position;
+            Vector3 pos = worldTransform.Coordinate.ToUnity();
+            var direction = zoomTarget.ToUnity() - pos;
             if (direction.sqrMagnitude < 0.0001f)
                 direction = this.transform.forward;
             if (Vector3.Dot(this.transform.forward, direction) < 0)
@@ -459,7 +464,9 @@ namespace Netherlands3D.Twin.Cameras
             bool modifierKeysPressed = IsModifierKeyIsPressed();
             var translation = dynamicZoomSpeed * Time.deltaTime;
             translation *= modifierKeysPressed ? zoomSpeedMultiplier : 1;
-            this.transform.Translate(direction.normalized * translation, Space.World);
+            //this.transform.Translate(direction.normalized * translation, Space.World);
+
+            worldTransform.MoveToCoordinate(new Coordinate(pos + direction.normalized * translation));
         }
 
 
@@ -470,27 +477,21 @@ namespace Netherlands3D.Twin.Cameras
         /// <returns>World position</returns>
         public void UpdateWorldPoint()
         {
+            if (lockUpdateWorldPoint)
+                return;
+
             zoomTarget = new Coordinate(pointer.WorldPoint);
             if (!rotatingAroundPoint)
                 rotateTarget = new Coordinate(pointer.WorldPoint);
         }
 
-        //public void UpdateWorldPoint(Vector3 offset)
-        //{
-        //    //zoomTarget -= offset;
-        //    //if(rotatingAroundPoint)
-        //    //    rotateTarget -= offset;
-
-        //    var screenPoint = Pointer.current.position.ReadValue();
-        //    var screenRay = cameraComponent.ScreenPointToRay(screenPoint);
-        //    Plane worldPlane = new Plane(Vector3.up, Vector3.zero);
-        //    worldPlane.Raycast(screenRay, out float distance);
-        //    zoomTarget = screenRay.GetPoint(Mathf.Min(float.MaxValue, distance));
-        //    if (!rotatingAroundPoint)
-        //        rotateTarget = zoomTarget;
-
-        //    UpdateZoomVector();
-        //}
+        public void UpdateWorldPoint(Vector3 offset)
+        {
+            zoomTarget = new Coordinate(zoomTarget.ToUnity() - offset);
+            if(rotatingAroundPoint)
+                rotateTarget = new Coordinate(rotateTarget.ToUnity() - offset);
+            UpdateZoomVector();
+        }
 
         /// <summary>
         /// Sets the pointer screen position
@@ -498,7 +499,7 @@ namespace Netherlands3D.Twin.Cameras
         /// <param name="pointerPosition">Screen coordinates</param>
         public void SetPointerPosition(Vector3 pointerPosition)
         {
-            currentPointerPosition = pointerPosition;
+            currentPointerPosition = new Coordinate(pointerPosition);
         }
 
         /// <summary>
