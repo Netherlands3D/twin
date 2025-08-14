@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
+using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Cameras
@@ -8,6 +9,9 @@ namespace Netherlands3D.Twin.Cameras
     {
         private Camera cameraComponent;
         private FreeCamera freeCamera;
+        private OpticalRaycaster raycaster;
+
+        private Plane worldPlane;
         private Transform cameraTransform;
         private float previousPitchWhenSwitchingToAndFromOrtho = 60f;
         private float previousFovWhenSwitchingToAndFromOrtho = 60f;
@@ -19,11 +23,14 @@ namespace Netherlands3D.Twin.Cameras
         [Tooltip("The animation dynamically heightens the Simulated Orthogonal FOV if the predicted height of the camera exceeds this number")]
         [SerializeField] private float maxCameraHeightWhenSimulating = 8000f;
 
+        [SerializeField] private float maxPointerDistance = 10000;
+
         private void Awake()
         {
             cameraComponent = GetComponent<Camera>();
             cameraTransform = cameraComponent.transform;
             freeCamera = GetComponent<FreeCamera>();
+            raycaster = FindAnyObjectByType<OpticalRaycaster>();
 
             // Initialize orthographicSize for calculations
             cameraComponent.orthographicSize = transform.position.y;
@@ -31,6 +38,8 @@ namespace Netherlands3D.Twin.Cameras
             // Initialize cached value with a preset
             previousPitchWhenSwitchingToAndFromOrtho = cameraTransform.eulerAngles.x;
             previousFovWhenSwitchingToAndFromOrtho = cameraComponent.fieldOfView;
+
+            worldPlane = new Plane(Vector3.up, Vector3.zero);
         }
 
         private void Update()
@@ -68,9 +77,18 @@ namespace Netherlands3D.Twin.Cameras
             previousPitchWhenSwitchingToAndFromOrtho = cameraTransform.eulerAngles.x;
 
             // Pull forward camera to make sure that what is in center of the screen stays there
-            freeCamera.GetWorldPoint(new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0), pos =>
+            Vector3 screenPosition = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);
+            raycaster.GetWorldPointAsync(screenPosition, (pos, hit) =>
             {
-                var cameraLookWorldPosition = pos;
+                Vector3 target = pos;
+                if(!hit)
+                {
+                    var screenRay = cameraComponent.ScreenPointToRay(screenPosition);
+                    worldPlane.Raycast(screenRay, out float distance);
+                    target = screenRay.GetPoint(Mathf.Min(maxPointerDistance, distance));
+                }
+
+                var cameraLookWorldPosition = target;
                 cameraLookWorldPosition.y = transform.position.y;
 
                 // Look downwards
@@ -78,8 +96,10 @@ namespace Netherlands3D.Twin.Cameras
                 flattenedForward.y = 0;
                 var rotateTo = Quaternion.LookRotation(Vector3.down, flattenedForward);
 
-                StartAnimation(cameraLookWorldPosition, rotateTo, true);
-            });            
+                StartAnimation(cameraLookWorldPosition, rotateTo, true);               
+
+            }); //, 1 << LayerMask.NameToLayer("Terrain") //use this if the pointer should always hit the ground instead of also buildigns            
+            
         }
 
         private void SwitchToPerspectiveMode()

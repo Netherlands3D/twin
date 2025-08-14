@@ -1,6 +1,5 @@
 using Netherlands3D.Events;
 using Netherlands3D.Twin.Samplers;
-using PlasticGui.WorkspaceWindow.CodeReview.Conversation;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -57,7 +56,7 @@ namespace Netherlands3D.Twin.Cameras
         [Header("Gamepad")] [SerializeField] private float gamepadRotateSpeed = 1.0f;
         [SerializeField] private float gamepadMoveSpeed = 1.0f;
 
-        [Header("Limits")] [SerializeField] private float maxPointerDistance = 10000;
+        [Header("Limits")]
         [SerializeField] private float maxCameraHeight = 1500;
         [SerializeField] private float minCameraHeight = -500;
         [SerializeField] private bool useRotationLimits = true;
@@ -83,15 +82,11 @@ namespace Netherlands3D.Twin.Cameras
         [SerializeField] public GameObjectEvent focusOnObject;
         [SerializeField] private float focusAngle = 45.0f;
         [SerializeField] private float focusDistanceMultiplier = 2.0f;
-
-        public Vector3 WorldTarget => worldTarget;
-
+       
         private Vector3 currentPointerPosition;
-        private Vector3 worldTarget;
         private Vector3 rotateTarget;
         private Vector3 zoomTarget;
         private Camera cameraComponent;
-        private Plane worldPlane;
 
         private Vector3 dragStart;
         private Vector3 dragVelocity;
@@ -107,15 +102,13 @@ namespace Netherlands3D.Twin.Cameras
         private Quaternion previousRotation;
         private Vector3 previousPosition;
         public OrthographicSwitcher orthographicSwitcher;
-        private OpticalRaycaster raycaster;
+        private PointerToWorldPosition pointer;
         
         void Awake()
         {
             cameraComponent = GetComponent<Camera>();
-            raycaster = FindAnyObjectByType<OpticalRaycaster>();
-            orthographicSwitcher = orthographicSwitcher ? orthographicSwitcher : GetComponent<OrthographicSwitcher>();
-
-            worldPlane = new Plane(Vector3.up, Vector3.zero);
+            pointer = FindAnyObjectByType<PointerToWorldPosition>();
+            orthographicSwitcher = orthographicSwitcher ? orthographicSwitcher : GetComponent<OrthographicSwitcher>();            
 
             horizontalInput.AddListenerStarted(MoveHorizontally);
             verticalInput.AddListenerStarted(MoveForwardBackwards);
@@ -476,32 +469,9 @@ namespace Netherlands3D.Twin.Cameras
         /// <returns>World position</returns>
         public void UpdateWorldPoint()
         {
-            GetWorldPoint(currentPointerPosition, pos =>
-            {               
-                zoomTarget = pos;
-                worldTarget = pos;
-            });
+            zoomTarget = pointer.WorldPoint;
             if (!rotatingAroundPoint)
-                rotateTarget = worldTarget;
-        }
-
-        public void GetWorldPoint(Vector3 screenPosition, Action<Vector3> callBack)
-        {
-            raycaster.GetWorldPointAsync(screenPosition, (pos, hit) =>
-            {
-                if (hit)
-                {
-                   callBack(pos);
-                }
-                else
-                {
-                    var screenRay = cameraComponent.ScreenPointToRay(screenPosition);
-                    worldPlane.Raycast(screenRay, out float distance);
-                    var samplePoint = screenRay.GetPoint(Mathf.Min(maxPointerDistance, distance));
-                    callBack(samplePoint);
-                }
-
-            }); //, 1 << LayerMask.NameToLayer("Terrain") //use this if the pointer should always hit the ground instead of also buildigns
+                rotateTarget = pointer.WorldPoint;
         }
 
         /// <summary>
