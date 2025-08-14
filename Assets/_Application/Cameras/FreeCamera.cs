@@ -460,7 +460,7 @@ namespace Netherlands3D.Twin.Cameras
             if (direction.sqrMagnitude < 0.0001f)
                 direction = this.transform.forward;
             if (Vector3.Dot(this.transform.forward, direction) < 0)
-                return;
+                direction = lastDirection;
 
             dynamicZoomSpeed = Mathf.Clamp(dynamicZoomSpeed, minimumSpeed, maximumSpeed);
             bool modifierKeysPressed = IsModifierKeyIsPressed();
@@ -468,6 +468,7 @@ namespace Netherlands3D.Twin.Cameras
             translation *= modifierKeysPressed ? zoomSpeedMultiplier : 1;
 
             worldTransform.MoveToCoordinate(new Coordinate(pos + direction.normalized * translation));
+            lastDirection = direction;
         }
 
 
