@@ -319,8 +319,11 @@ namespace Netherlands3D.Twin.Layers
                 int index = layerProperties.IndexOf(existingProperty);
                 layerProperties[index] = propertyData;
             }
+            else
+            {
+                layerProperties.Add(propertyData);
+            }
             
-            layerProperties.Add(propertyData);
             PropertyAdded.Invoke(propertyData);
         }
 

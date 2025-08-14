@@ -59,14 +59,10 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 layerData = value;
-
-                foreach (var layer in GetComponents<ILayerWithPropertyData>())
-                {
-                    layer.LoadProperties(layerData.LayerProperties); //initial load
-                }
+                LoadPropertiesInVisualisations();
             }
         }
-        
+
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
         public UnityEvent OnStylingApplied = new();
         Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;
@@ -106,6 +102,14 @@ namespace Netherlands3D.Twin.Layers
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 
             ApplyStyling();
+        }
+
+        public void LoadPropertiesInVisualisations()
+        {
+            foreach (var visualisation in GetComponents<ILayerWithPropertyData>())
+            {
+                visualisation.LoadProperties(layerData.LayerProperties);
+            }
         }
 
         private void CreateProxy()
