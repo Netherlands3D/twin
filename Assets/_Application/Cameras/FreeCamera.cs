@@ -1,5 +1,6 @@
 using Netherlands3D.Events;
 using Netherlands3D.Twin.Samplers;
+using PlasticGui.WorkspaceWindow.CodeReview.Conversation;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -444,18 +445,16 @@ namespace Netherlands3D.Twin.Cameras
             float y = Mathf.Max(1f, Mathf.Abs(transform.position.y));
             float t = Mathf.Clamp01(y / maxCameraHeight);
             float v = Mathf.Lerp(1f, maxCameraHeight, t * t);
-            zoomVector += signedAmount * v * zoomSpeed * Time.deltaTime;
+            zoomVector += signedAmount * v * zoomSpeed;
         }
 
         private void UpdateZoomVector()
-        {
-            //curve dichterbij verbeteren en verder weg
-            float dt = Time.deltaTime * 60;      
-            zoomVector *= Mathf.Pow(zoomVectorFalloff, dt);
+        {   
+            zoomVector *= zoomVectorFalloff;
             if (Mathf.Abs(zoomVector) < 0.001f)
                 return;
 
-            dynamicZoomSpeed = Mathf.Lerp(dynamicZoomSpeed, zoomVector, dt);
+            dynamicZoomSpeed = zoomVector;
             var direction = zoomTarget - this.transform.position;
             if (direction.sqrMagnitude < 0.0001f)
                 direction = this.transform.forward;
@@ -464,8 +463,9 @@ namespace Netherlands3D.Twin.Cameras
 
             dynamicZoomSpeed = Mathf.Clamp(dynamicZoomSpeed, minimumSpeed, maximumSpeed);
             bool modifierKeysPressed = IsModifierKeyIsPressed();
-            dynamicZoomSpeed = modifierKeysPressed ? dynamicZoomSpeed * zoomSpeedMultiplier : dynamicZoomSpeed;
-            this.transform.Translate(direction.normalized * dynamicZoomSpeed * Time.deltaTime, Space.World);
+            var translation = dynamicZoomSpeed * Time.deltaTime;
+            translation *= modifierKeysPressed ? zoomSpeedMultiplier : 1;
+            this.transform.Translate(direction.normalized * translation, Space.World);
         }
 
 

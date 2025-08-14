@@ -326,7 +326,7 @@ namespace Netherlands3D.Twin.Cameras.Input
                 //we have to take the highest input value because some platforms tend to switch values when pressing modifier keys
                 float v = zoomValue.y;
                 if (Mathf.Abs(zoomValue.x) > Mathf.Abs(zoomValue.y))
-                    v = zoomValue.x;
+                    v = -zoomValue.x;
                 zoomInput.InvokeStarted(v);
             }
 
