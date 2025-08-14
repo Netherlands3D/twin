@@ -1,4 +1,6 @@
 using Netherlands3D.Events;
+using Netherlands3D.Twin.Samplers;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -54,7 +56,7 @@ namespace Netherlands3D.Twin.Cameras
         [Header("Gamepad")] [SerializeField] private float gamepadRotateSpeed = 1.0f;
         [SerializeField] private float gamepadMoveSpeed = 1.0f;
 
-        [Header("Limits")] [SerializeField] private float maxPointerDistance = 10000;
+        [Header("Limits")]
         [SerializeField] private float maxCameraHeight = 1500;
         [SerializeField] private float minCameraHeight = -500;
         [SerializeField] private bool useRotationLimits = true;
@@ -80,11 +82,11 @@ namespace Netherlands3D.Twin.Cameras
         [SerializeField] public GameObjectEvent focusOnObject;
         [SerializeField] private float focusAngle = 45.0f;
         [SerializeField] private float focusDistanceMultiplier = 2.0f;
-
+       
         private Vector3 currentPointerPosition;
+        private Vector3 rotateTarget;
         private Vector3 zoomTarget;
         private Camera cameraComponent;
-        private Plane worldPlane;
 
         private Vector3 dragStart;
         private Vector3 dragVelocity;
@@ -100,13 +102,13 @@ namespace Netherlands3D.Twin.Cameras
         private Quaternion previousRotation;
         private Vector3 previousPosition;
         public OrthographicSwitcher orthographicSwitcher;
+        private PointerToWorldPosition pointer;
         
         void Awake()
         {
             cameraComponent = GetComponent<Camera>();
-            orthographicSwitcher = orthographicSwitcher ? orthographicSwitcher : GetComponent<OrthographicSwitcher>();
-
-            worldPlane = new Plane(Vector3.up, Vector3.zero);
+            pointer = FindAnyObjectByType<PointerToWorldPosition>();
+            orthographicSwitcher = orthographicSwitcher ? orthographicSwitcher : GetComponent<OrthographicSwitcher>();            
 
             horizontalInput.AddListenerStarted(MoveHorizontally);
             verticalInput.AddListenerStarted(MoveForwardBackwards);
@@ -185,11 +187,6 @@ namespace Netherlands3D.Twin.Cameras
 
             if (rotate)
             {
-                if (!rotatingAroundPoint)
-                {
-                    dragStart = GetWorldPoint();
-                }
-
                 rotatingAroundPoint = true;
                 RotateAroundPoint(pointerDelta);
             }
@@ -257,10 +254,10 @@ namespace Netherlands3D.Twin.Cameras
 
             StorePreviousTransform();
 
-            this.transform.RotateAround(dragStart, Vector3.up, pointerDelta.x * rotateAroundPointSpeed);
+            this.transform.RotateAround(rotateTarget, Vector3.up, pointerDelta.x * rotateAroundPointSpeed);
             if (!cameraComponent.orthographic)
             {
-                this.transform.RotateAround(dragStart, this.transform.right, -pointerDelta.y * rotateAroundPointSpeed);
+                this.transform.RotateAround(rotateTarget, this.transform.right, -pointerDelta.y * rotateAroundPointSpeed);
                 RevertIfOverAxis();
             }
         }
@@ -303,7 +300,7 @@ namespace Netherlands3D.Twin.Cameras
         public void Rotate(bool rotate)
         {
             this.rotate = rotate;
-            if (!rotate) rotatingAroundPoint = false;
+            rotatingAroundPoint = rotate;
         }
 
         /// <summary>
@@ -317,6 +314,7 @@ namespace Netherlands3D.Twin.Cameras
 
         void Update()
         {
+            UpdateWorldPoint();
             EaseDragTarget();
             if (!lockDraggingInput)
             {
@@ -324,6 +322,7 @@ namespace Netherlands3D.Twin.Cameras
             }
 
             SetCrosshair();
+            UpdateZoomVector();
         }
 
         private void SetCrosshair()
@@ -331,9 +330,9 @@ namespace Netherlands3D.Twin.Cameras
             if (!crosshairVisual)
                 return;
             
-            bool visible = rotate || dragging;
+            bool visible = rotatingAroundPoint;
             crosshairVisual.gameObject.SetActive(visible);
-            crosshairVisual.transform.position = dragStart;
+            crosshairVisual.transform.position = rotatingAroundPoint ? rotateTarget : dragStart;
         }
 
         /// <summary>
@@ -413,45 +412,66 @@ namespace Netherlands3D.Twin.Cameras
             dragging = isDragging;
         }
 
+
+
+        private float zoomVector = 0;
+        private float zoomVectorFalloff = 0.5f;
+
         /// <summary>
         /// Move towards/from zoompoint
         /// </summary>
         /// <param name="amount">Zoom delta where 1 is towards, and -1 is backing up from zoompoint</param>
         public void ZoomToPointer(float amount)
         {
-            rotatingAroundPoint = false;
+            if (rotatingAroundPoint)
+                return;
 
-            CalculateSpeed();
-            zoomTarget = GetWorldPoint();
-            var direction = zoomTarget - this.transform.position;
+            float signedAmount = Mathf.Sign(amount);
 
-            //Make sure we always have a direction. Even when the zoompoint is on the camera.
-            if (Vector3.Distance(zoomTarget, this.transform.position) < 0.01f)
-                direction = this.transform.forward;
+            if (Mathf.Sign(zoomVector) != signedAmount)
+            {
+                zoomVector = 0;
+                dynamicZoomSpeed = 0;
+            }
 
-            var targetIsBehind = Vector3.Dot(this.transform.forward, direction) < 0;
-            if (targetIsBehind) direction = -direction;
-                        
-            this.transform.Translate(direction.normalized * dynamicZoomSpeed * Mathf.Clamp(amount, -1f, 1f) * Time.deltaTime, Space.World);
+            //ease the curve to slow it down nearing ground
+            float y = Mathf.Max(1f, Mathf.Abs(transform.position.y));
+            float t = Mathf.Clamp01(y / maxCameraHeight);
+            float v = Mathf.Lerp(1f, maxCameraHeight, t * t);
+            zoomVector += signedAmount * v * zoomSpeed;
         }
+
+        private void UpdateZoomVector()
+        {   
+            zoomVector *= zoomVectorFalloff;
+            if (Mathf.Abs(zoomVector) < 0.001f)
+                return;
+
+            dynamicZoomSpeed = zoomVector;
+            var direction = zoomTarget - this.transform.position;
+            if (direction.sqrMagnitude < 0.0001f)
+                direction = this.transform.forward;
+            if (Vector3.Dot(this.transform.forward, direction) < 0)
+                direction = -direction;
+
+            dynamicZoomSpeed = Mathf.Clamp(dynamicZoomSpeed, minimumSpeed, maximumSpeed);
+            bool modifierKeysPressed = IsModifierKeyIsPressed();
+            var translation = dynamicZoomSpeed * Time.deltaTime;
+            translation *= modifierKeysPressed ? zoomSpeedMultiplier : 1;
+            this.transform.Translate(direction.normalized * translation, Space.World);
+        }
+
 
         /// <summary>
         /// Returns a position on the world 0 plane
         /// </summary>
         /// <param name="screenPoint">Optional screen position. Defaults to pointer input position.</param>
         /// <returns>World position</returns>
-        public Vector3 GetWorldPoint(Vector3 screenPoint = default)
+        public void UpdateWorldPoint()
         {
-            if (screenPoint == default)
-            {
-                screenPoint = currentPointerPosition;
-            }
-
-            var screenRay = cameraComponent.ScreenPointToRay(screenPoint);
-            worldPlane.Raycast(screenRay, out float distance);
-            var samplePoint = screenRay.GetPoint(Mathf.Min(maxPointerDistance, distance));
-
-            return samplePoint;
+            zoomTarget = pointer.WorldPoint;
+            if (!rotatingAroundPoint)
+                rotateTarget = pointer.WorldPoint;
         }
 
         /// <summary>
@@ -507,18 +527,15 @@ namespace Netherlands3D.Twin.Cameras
         /// Calculates the dynamic speed variables based on camera height
         /// </summary>
         private void CalculateSpeed()
-        {
-            bool modifierKeysPressed = IsModifierKeyIsPressed();
-            float newZoomSpeed = modifierKeysPressed ? zoomSpeed * zoomSpeedMultiplier : zoomSpeed;
-
+        {      
             dynamicMoveSpeed = (multiplySpeedBasedOnHeight) ? moveSpeed * Mathf.Abs(this.transform.position.y) : moveSpeed;
             dynamicDragSpeed = (multiplySpeedBasedOnHeight) ? dragSpeed * Mathf.Abs(this.transform.position.y) : dragSpeed;
-            dynamicZoomSpeed = (multiplySpeedBasedOnHeight) ? newZoomSpeed * Mathf.Abs(this.transform.position.y) : newZoomSpeed;
+            //dynamicZoomSpeed = (multiplySpeedBasedOnHeight) ? newZoomSpeed * Mathf.Max(1f, Mathf.Abs(this.transform.position.y)) : newZoomSpeed;
 
             //Clamp speeds
             dynamicMoveSpeed = Mathf.Clamp(dynamicMoveSpeed, minimumSpeed, maximumSpeed);
             dynamicDragSpeed = Mathf.Clamp(dynamicDragSpeed, minimumDragSpeed, maximumDragSpeed);
-            dynamicZoomSpeed = Mathf.Clamp(dynamicZoomSpeed, minimumSpeed, maximumSpeed);
+            //dynamicZoomSpeed = Mathf.Clamp(dynamicZoomSpeed, minimumSpeed, maximumSpeed);
         }
 
         private void OnDrawGizmos()
