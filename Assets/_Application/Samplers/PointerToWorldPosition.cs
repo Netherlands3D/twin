@@ -13,7 +13,7 @@ namespace Netherlands3D.Twin.Samplers
         private OpticalRaycaster opticalRaycaster;
         private Action<Vector3, bool> worldPointCallback;
         private Coordinate worldPoint;
-        private int cullingMask = Physics.DefaultRaycastLayers & ~(1 << 0); //lets exclude the ground plane, so we get a better position on a failed optical raycast
+        private int cullingMask = Physics.DefaultRaycastLayers;
 
         private void Awake()
         {
