@@ -11,7 +11,11 @@
     --color-Selection: rgba(0, 120, 250, 0.2);
     --color-LinkText: rgb(51, 102, 204);
     --color-Warning: rgb(227, 86, 86);
-    unity-font: "Inter";
+    --icon-plus: url("project://database/Assets/Sprites/UI/Icons/Type=Plus,%20Color=white,%20Size=large.png");
+    --icon-map: url("project://database/Assets/Sprites/UI/Icons/Type=Map,%20Color=white,%20Size=large.png");
+    --icon-folder: url("project://database/Assets/Sprites/UI/Icons/Type=Folder,%20Color=white,%20Size=large.png");
+    --icon-trash: url("project://database/Assets/Sprites/UI/Icons/Type=Trash,%20Color=white,%20Size=large.png");
+    --unity-font: "Inter";
     --font-size-XS: 12px;
     --font-size-S: 14px;
     --font-size-M: 16px;
