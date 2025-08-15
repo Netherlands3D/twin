@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
@@ -26,25 +27,29 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             using var reader = new StreamReader(localFile.LocalFilePath);
             using var jsonReader = new JsonTextReader(reader);
 
-
             //todo, we should check against a schema for optimization https://geojson.org/schema/GeoJSON.json
             while (jsonReader.Read())
             {
-                if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "type")
+                if (jsonReader.TokenType == JsonToken.PropertyName &&
+                    string.Equals((string)jsonReader.Value, "type", StringComparison.OrdinalIgnoreCase))
                 {
-                    if ((string)jsonReader.Value == "CityJSON")
-                        return false; //this is a cityjson, not a geojson
+                    jsonReader.Read(); //read the value of the "type" property
+                    string typeValue = jsonReader.Value?.ToString();
                     
-                    jsonReader.Read(); //reads the value of the type object
-                    if ((string)jsonReader.Value == "FeatureCollection" || (string)jsonReader.Value == "Feature")
+                    if (string.Equals(typeValue, "CityJSON", StringComparison.OrdinalIgnoreCase))
+                        return false; //this is a cityjson, not a geojson
+
+                    if (typeValue.Equals("FeatureCollection", StringComparison.OrdinalIgnoreCase) ||
+                        typeValue.Equals("Feature", StringComparison.OrdinalIgnoreCase))
                         return true;
                 }
 
-                if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "asset")
+                if (jsonReader.TokenType == JsonToken.PropertyName &&
+                    string.Equals((string)jsonReader.Value, "asset", StringComparison.OrdinalIgnoreCase))
                 {
                     jsonReader.Read(); //reads StartObject {
                     jsonReader.Read(); //reads new object key which should be the version
-                    if ((string)jsonReader.Value == "version")
+                    if (string.Equals((string)jsonReader.Value, "version", StringComparison.OrdinalIgnoreCase))
                         return false; //this is a 3D Tileset, not a GeoJson
                 }
             }
@@ -71,11 +76,10 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
         private void CreateGeoJSONLayer(LocalFile localFile, UnityEvent<string> onErrorCallback = null)
         {
-            var localFilePath = Path.Combine(Application.persistentDataPath, localFile.LocalFilePath);
-            var geoJsonLayerName = Path.GetFileName(localFile.SourceUrl);
-            if(localFile.SourceUrl.Length > 0)
-                geoJsonLayerName = localFile.SourceUrl;    
-        
+            var geoJsonLayerName = localFile.SourceUrl;
+            if (localFile.LocalFilePath.Length > 0)
+                geoJsonLayerName = Path.GetFileName(localFile.SourceUrl);
+
             GeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
             newLayer.Name = geoJsonLayerName;
             newLayer.gameObject.name = geoJsonLayerName;
@@ -86,15 +90,16 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
             randomLayerColor.a = 0.5f;
             newLayer.LayerData.Color = randomLayerColor;
-            
+
             var symbolizer = newLayer.LayerData.DefaultSymbolizer;
             symbolizer?.SetFillColor(randomLayerColor);
             symbolizer?.SetStrokeColor(randomLayerColor);
-            
-            var localPath = localFile.LocalFilePath;
+
+            var fullPath = localFile.LocalFilePath;
+            var localPath = Path.GetRelativePath(Application.persistentDataPath, fullPath);
             var propertyData = newLayer.PropertyData as LayerURLPropertyData;
-            propertyData.Data = localFile.SourceUrl.StartsWith("http") 
-                ? AssetUriFactory.CreateRemoteAssetUri(localFile.SourceUrl) 
+            propertyData.Data = localFile.SourceUrl.StartsWith("http")
+                ? AssetUriFactory.CreateRemoteAssetUri(localFile.SourceUrl)
                 : AssetUriFactory.CreateProjectAssetUri(localPath);
         }
     }

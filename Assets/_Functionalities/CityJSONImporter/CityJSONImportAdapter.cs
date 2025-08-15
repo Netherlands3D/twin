@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using UnityEngine;
 using Netherlands3D.DataTypeAdapters;
@@ -20,14 +21,30 @@ namespace Netherlands3D.Functionalities.CityJSON
             using var reader = new StreamReader(localFile.LocalFilePath);
             using var jsonReader = new JsonTextReader(reader);
 
-            //todo, we should check against a schema for optimization
+            //todo, we should check against a schema for optimization https://geojson.org/schema/GeoJSON.json
             while (jsonReader.Read())
             {
-                if (jsonReader.TokenType == JsonToken.PropertyName && (string)jsonReader.Value == "type")
+                if (jsonReader.TokenType == JsonToken.PropertyName &&
+                    string.Equals((string)jsonReader.Value, "type", StringComparison.OrdinalIgnoreCase))
                 {
-                    jsonReader.Read(); //reads the value of the type object
-                    if ((string)jsonReader.Value == "CityJSON")
-                        return true;
+                    jsonReader.Read(); //read the value of the "type" property
+                    string typeValue = jsonReader.Value?.ToString();
+
+                    if (string.Equals(typeValue, "CityJSON", StringComparison.OrdinalIgnoreCase))
+                        return true; //this is a cityjson, not a geojson
+
+                    if (typeValue.Equals("FeatureCollection", StringComparison.OrdinalIgnoreCase) ||
+                        typeValue.Equals("Feature", StringComparison.OrdinalIgnoreCase))
+                        return false; //this is a geojson, not a cityjson
+                }
+
+                if (jsonReader.TokenType == JsonToken.PropertyName &&
+                    string.Equals((string)jsonReader.Value, "asset", StringComparison.OrdinalIgnoreCase))
+                {
+                    jsonReader.Read(); //reads StartObject {
+                    jsonReader.Read(); //reads new object key which should be the version
+                    if (string.Equals((string)jsonReader.Value, "version", StringComparison.OrdinalIgnoreCase))
+                        return false; //this is a 3D Tileset, not a GeoJson
                 }
             }
 
@@ -42,7 +59,7 @@ namespace Netherlands3D.Functionalities.CityJSON
         }
 
         public void Execute(LocalFile localFile)
-        {            
+        {
             var fullPath = localFile.LocalFilePath;
             var fileName = Path.GetFileName(fullPath);
             CityJSONSpawner newLayer = Instantiate(layerPrefab);

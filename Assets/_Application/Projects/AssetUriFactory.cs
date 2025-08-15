@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using UnityEngine;
 
 namespace Netherlands3D.Twin.Projects
 {
@@ -6,6 +8,9 @@ namespace Netherlands3D.Twin.Projects
     {
         public static Uri CreateProjectAssetUri(string pathInProject)
         {
+            if (pathInProject.StartsWith("project:///"))
+                return new Uri(pathInProject);
+            
             return new Uri("project:///" + pathInProject);
         }
 
@@ -14,6 +19,17 @@ namespace Netherlands3D.Twin.Projects
             if (!url.StartsWith("http") && !url.StartsWith("https")) return null;
             
             return new Uri(url);
+        }
+
+        public static string GetLocalPath(Uri projectAssetUri)
+        {
+            if (projectAssetUri.Scheme =="project")
+            {
+                string localPath = projectAssetUri.LocalPath.TrimStart('/', '\\');
+                return Path.Combine(Application.persistentDataPath, localPath);
+            }
+
+            return null;
         }
     }
 }
