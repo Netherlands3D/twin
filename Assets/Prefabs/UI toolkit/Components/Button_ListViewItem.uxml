@@ -3,7 +3,7 @@
     <Style src="project://database/Assets/Prefabs/UI%20toolkit/Components/Button_basic.uss?fileID=7433441132597879392&amp;guid=0ebdee943ffa71e4aad7b09a5519babb&amp;type=3#Button_basic" />
     <ui:VisualElement name="ListViewItem" style="flex-grow: 1;">
         <ui:Button style="align-self: stretch;">
-            <ui:VisualElement name="Icon" style="flex-grow: 0;" />
+            <Netherlands3D.UI.Components.Icon name="Icon" style="flex-grow: 0;" />
             <ui:Label name="ItemLabel" text="Label" />
         </ui:Button>
     </ui:VisualElement>

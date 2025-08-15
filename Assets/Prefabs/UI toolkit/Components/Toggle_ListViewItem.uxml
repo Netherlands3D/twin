@@ -3,7 +3,7 @@
     <Style src="project://database/Assets/Prefabs/UI%20toolkit/Components/Toggle_basic.uss?fileID=7433441132597879392&amp;guid=8cd361dd85d08fc47bf1e5d0d2693f85&amp;type=3#Toggle_basic" />
     <ui:VisualElement name="ListViewItem" style="flex-grow: 1;">
         <ui:Toggle label="Toggle" style="align-self: stretch;">
-            <ui:VisualElement name="Icon" style="flex-grow: 0;" />
+            <Netherlands3D.UI.Components.Icon name="Icon" style="flex-grow: 0;" />
             <ui:Label name="ItemLabel" text="Label" />
         </ui:Toggle>
     </ui:VisualElement>

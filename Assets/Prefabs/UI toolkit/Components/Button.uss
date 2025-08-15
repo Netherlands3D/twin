@@ -22,18 +22,6 @@
 .unity-button > #Icon {
     width: 24px;
     height: 24px;
-    background-image: url("project://database/Assets/Sprites/UI/Icons/Type=Map,%20Color=white,%20Size=large.png?fileID=2800000&guid=be23f11ede1084b4785c8f49e1902060&type=3#Type=Map, Color=white, Size=large");
-    -unity-background-image-tint-color: var(--color-Blue900);
-    flex-shrink: 0;
-    flex-grow: 0;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
 }
 
 .unity-label {
