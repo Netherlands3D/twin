@@ -66,11 +66,6 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
         public void Execute(LocalFile localFile)
         {
-            ParseGeoJSON(localFile);
-        }
-
-        public void ParseGeoJSON(LocalFile localFile)
-        {
             CreateGeoJSONLayer(localFile, displayErrorMessageEvent);
         }
 
