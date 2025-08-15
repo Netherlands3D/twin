@@ -1,12 +1,11 @@
-<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="ListView_basic" src="project://database/Assets/Prefabs/UI%20toolkit/Components/ListView.uxml?fileID=9197481963319205126&amp;guid=2b813d9972f2e524086a56c1cf8782e5&amp;type=3#ListView" />
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Prefabs/UI%20toolkit/Styles/_Theme.uss?fileID=7433441132597879392&amp;guid=0f24ef838c8e4bf49a89503faf584878&amp;type=3#_Theme" />
     <Style src="project://database/Assets/Prefabs/UI%20toolkit/Panels/AddLayerPanel.uss?fileID=7433441132597879392&amp;guid=4de6c5ffd721cca4991fea5f9e6792a5&amp;type=3#AddLayerPanel" />
     <ui:VisualElement name="AddLayerPanel" class="add-layer-panel">
         <ui:VisualElement name="BreadcrumContainer">
-            <ui:VisualElement name="Icon" />
+            <nl3d:Icon name="Icon" image="map" />
             <ui:Label name="BreadcrumbLabel" text="Start &gt; Laagbeheer" class="text-base" />
         </ui:VisualElement>
-        <ui:Instance template="ListView_basic" name="ItemListView" style="flex-grow: 1; flex-shrink: 0;" />
+        <nl3d:ListView name="ItemListView" virtualization-method="DynamicHeight" />
     </ui:VisualElement>
 </ui:UXML>
