@@ -1,0 +1,11 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    editor-extension-mode="False" 
+    class="button text-base unity-button"
+>
+    <nl3d:Icon name="Icon" color="black"/>
+    <ui:Label name="Label" text="Label" />
+</ui:UXML>
