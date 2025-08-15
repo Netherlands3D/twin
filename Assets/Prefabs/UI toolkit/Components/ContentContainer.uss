@@ -1,0 +1,54 @@
+.unity-foldout {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    background-color: var(--color-White);
+    border-color: var(--color-Blue100);
+    border-radius: 4px;
+    border-width: 2px;
+    flex-direction: column;
+}
+
+.unity-foldout:checked {
+    padding-bottom: 16px;
+}
+
+.unity-foldout__toggle {
+    margin: 0;
+}
+
+.unity-toggle__input {
+    flex-direction: row-reverse;
+}
+
+.unity-foldout:checked .unity-toggle__input {
+    margin-bottom: 12px;
+}
+
+.unity-foldout__checkmark {
+    background-image: url("project://database/Assets/Sprites/UI/Icons/Type=ChevronRight,%20Color=white,%20Size=large.png?fileID=2800000&guid=5cf89d2bfaf2ee845b6bb43aaae5ca48&type=3#Type=ChevronRight, Color=white, Size=large");
+    margin: 0;
+}
+
+.unity-foldout:checked .unity-foldout__checkmark {
+    background-image: url("project://database/Assets/Sprites/UI/Icons/Type=ChevronDown,%20Color=white,%20Size=large.png?fileID=2800000&guid=006acdccfd61c2640979a901f8e421d5&type=3#Type=ChevronDown, Color=white, Size=large");
+}
+
+.unity-foldout .unity-label {
+    flex-grow: 1;
+    margin: 0;
+    color: var(--color-Text);
+}
+
+.unity-foldout__content {
+    margin: 0;
+}
+
+#Divider {
+    flex-grow: 1;
+    height: 2px;
+    min-height: 2px;
+    margin-bottom: 12px;
+    background-color: var(--color-Blue100);
+}

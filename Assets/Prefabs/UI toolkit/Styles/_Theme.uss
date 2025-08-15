@@ -8,6 +8,7 @@
     --color-Blue700: rgb(0, 70, 153);
     --color-Blue900: rgb(47, 53, 80);
     --color-Text: rgb(50, 57, 85);
+    --color-Selection: rgba(0, 120, 250, 0.2);
     --color-LinkText: rgb(51, 102, 204);
     --color-Warning: rgb(227, 86, 86);
     --icon-plus: url("project://database/Assets/Sprites/UI/Icons/Type=Plus,%20Color=white,%20Size=large.png");
