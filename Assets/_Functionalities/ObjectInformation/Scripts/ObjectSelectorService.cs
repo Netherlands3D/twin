@@ -125,6 +125,25 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
+        public LayerGameObject GetLayerGameObjectFromMapping(IMapping mapping)
+        {
+            if (mapping is MeshMapping meshMapping)
+            {
+                //when tile is replacing lod this can be null
+                if (meshMapping.ObjectMapping == null)
+                    return null;
+
+                Transform parent = meshMapping.ObjectMapping.gameObject.transform.parent;
+                LayerGameObject layerGameObject = parent.GetComponent<LayerGameObject>();
+                return layerGameObject;
+            }
+            else if(mapping is FeatureMapping featureMapping)
+            {
+                return featureMapping.VisualisationParent;
+            }
+            return null;
+        }
+
         private bool IsAnyToolActive()
         {
             foreach (Tool tool in activeForTools)

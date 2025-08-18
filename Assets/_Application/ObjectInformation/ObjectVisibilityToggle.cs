@@ -2,6 +2,9 @@ using Netherlands3D.Functionalities.ObjectInformation;
 using UnityEngine;
 using UnityEngine.UI;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.SubObjects;
 
 namespace Netherlands3D.Twin.UI
 {
@@ -13,7 +16,7 @@ namespace Netherlands3D.Twin.UI
         [SerializeField] private ToggleGroupItem visibilityToggle;
         [SerializeField] private Dialog visibilityDialog;
 
-        private object currentSelectedFeatureObject;
+        private IMapping currentSelectedFeatureObject;
         private object currentSelectedTransformObject;
         private string currentSelectedBagId;        
 
@@ -66,6 +69,23 @@ namespace Netherlands3D.Twin.UI
             {
                 service.ShowDialog(visibilityDialog, new Vector2(20, 0), visibilityToggle.GetComponent<RectTransform>());
                 service.ActiveDialog.Close.AddListener(() => visibilityToggle.Toggle.isOn = false);
+                service.ActiveDialog.Confirm.AddListener(() =>
+                {
+                    //TODO this is work in progress and the logic should be moved to its own service
+                    LayerGameObject layer = selector.GetLayerGameObjectFromMapping(currentSelectedFeatureObject);
+                    if (currentSelectedFeatureObject is MeshMapping mapping)
+                    {
+                        foreach (ObjectMappingItem item in mapping.ObjectMapping.items)
+                        {
+                            if (currentSelectedBagId == item.objectID)
+                            {
+                                LayerFeature layerFeature = layer.LayerFeatures[item];
+                                CartesianTileLayerStyler.SetVisibilityForSubObject(layer, layerFeature, false);
+                                break;
+                            }
+                        }
+                    }                    
+                });
 
                 if (currentSelectedBagId != null)
                 {
@@ -77,7 +97,7 @@ namespace Netherlands3D.Twin.UI
 
         private void OnBagIdFound(IMapping mapping, string bagId)
         {
-            currentSelectedFeatureObject = mapping.MappingObject;
+            currentSelectedFeatureObject = mapping;
             currentSelectedBagId = bagId;
 
             //when selecting a new bag id we should close any dialog if active
@@ -87,7 +107,7 @@ namespace Netherlands3D.Twin.UI
 
         private void OnFeatureFound(IMapping mapping)
         {
-            currentSelectedFeatureObject = mapping.MappingObject;
+            currentSelectedFeatureObject = mapping;
 
             //when selecting a new bag id we should close any dialog if active
             CloseDialog();

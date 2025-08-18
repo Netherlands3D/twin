@@ -54,8 +54,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             {
                 foreach (ObjectMappingItem item in mapping.items)
                 {
-                    var layerFeature = CreateFeature(item);
-                    LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                    //bool skip = false;
+                    //foreach(KeyValuePair<object, LayerFeature> lf in LayerFeatures)
+                    //{
+                    //    if (lf.Key is ObjectMappingItem mapItem)
+                    //    {
+                    //        if (mapItem.objectID == item.objectID)
+                    //        {
+                    //            skip = true;
+                    //            break;
+                    //        }
+                    //    }
+                    //}
+                    //if (!skip)
+                    //{
+                        var layerFeature = CreateFeature(item);
+                        LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                    //}
                 }
             });
 
