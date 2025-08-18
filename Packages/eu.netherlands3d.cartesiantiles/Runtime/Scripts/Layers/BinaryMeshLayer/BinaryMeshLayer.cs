@@ -18,7 +18,7 @@ namespace Netherlands3D.CartesianTiles
     {
         public Dictionary<Vector2Int, ObjectMapping> Mappings = new Dictionary<Vector2Int, ObjectMapping>();
         public UnityEvent<ObjectMapping> OnMappingCreated = new();
-        public UnityEvent<ObjectMapping> OnMappingRemove = new();
+        public UnityEvent<ObjectMapping> OnMappingRemoved = new();
 
 #if SUBOBJECT
         public bool hasMetaData = false;
@@ -84,8 +84,9 @@ namespace Netherlands3D.CartesianTiles
 
             if (Mappings.ContainsKey(tileKey))
             {
-                OnMappingRemove.Invoke(Mappings[tileKey]);
+                ObjectMapping mapping = Mappings[tileKey];
                 Mappings.Remove(tileKey);
+                OnMappingRemoved.Invoke(mapping);                
             }
             
             RemoveGameObject(tileGameObject);
