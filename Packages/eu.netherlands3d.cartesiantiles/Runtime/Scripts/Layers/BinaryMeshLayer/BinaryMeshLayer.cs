@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering;
 using Netherlands3D.Coordinates;
+using UnityEngine.Events;
+
 #if SUBOBJECT
 using Netherlands3D.SubObjects;
 #endif
@@ -14,6 +16,10 @@ namespace Netherlands3D.CartesianTiles
     [AddComponentMenu("Netherlands3D/CartesianTiles/BinaryMeshLayer")]
     public class BinaryMeshLayer : Layer
     {
+        public Dictionary<Vector2Int, ObjectMapping> Mappings = new Dictionary<Vector2Int, ObjectMapping>();
+        public UnityEvent<ObjectMapping> OnMappingCreated = new();
+        public UnityEvent<ObjectMapping> OnMappingRemove = new();
+
 #if SUBOBJECT
         public bool hasMetaData = false;
         public string removeFromID;
@@ -75,6 +81,12 @@ namespace Netherlands3D.CartesianTiles
 
             var tileGameObject = tile.gameObject;
             if (tileGameObject==null) return;
+
+            if (Mappings.ContainsKey(tileKey))
+            {
+                OnMappingRemove.Invoke(Mappings[tileKey]);
+                Mappings.Remove(tileKey);
+            }
             
             RemoveGameObject(tileGameObject);
         }
@@ -151,7 +163,7 @@ namespace Netherlands3D.CartesianTiles
 #if SUBOBJECT
                 if (hasMetaData)
                 {
-                    yield return StartCoroutine(LoadMetaData(newGameobject, url));
+                    yield return StartCoroutine(LoadMetaData(newGameobject, url, tileChange));
                 }
 #endif
             }
@@ -165,7 +177,7 @@ namespace Netherlands3D.CartesianTiles
         }
 
 #if SUBOBJECT
-        private IEnumerator LoadMetaData(GameObject gameObject, string geometryUrl)
+        private IEnumerator LoadMetaData(GameObject gameObject, string geometryUrl, TileChange tileChange)
         {
 
             var metaDataName = geometryUrl.Replace(".bin", "-data.bin");
@@ -184,17 +196,21 @@ namespace Netherlands3D.CartesianTiles
                 if (gameObject == null) yield return null;
 
                 byte[] results = webRequest.downloadHandler.data;
-                ReadMetaDataFile(results, gameObject);
+                ReadMetaDataFile(results, gameObject, tileChange);
                 yield return null;
             }
             yield return null;
         }
 
-        private void ReadMetaDataFile(byte[] results, GameObject gameobject)
+        private void ReadMetaDataFile(byte[] results, GameObject gameobject, TileChange tileChange)
         {
             // The gameobject could be destroyed in the mean time
             if (!gameobject) return;
-    
+
+            Vector2Int tileKey = new Vector2Int(tileChange.X, tileChange.Y);
+            if (!tiles.ContainsKey(tileKey))
+                return;
+
             ObjectMapping objectMapping = gameobject.AddComponent<ObjectMapping>();
             objectMapping.items = new List<ObjectMappingItem>();
             using (var stream = new MemoryStream(results))
@@ -224,6 +240,8 @@ namespace Netherlands3D.CartesianTiles
                     }
                 }
             }
+            Mappings.TryAdd(tileKey, objectMapping);
+            OnMappingCreated.Invoke(objectMapping);
         }
 #endif
         public void EnableShadows(bool enabled)
@@ -235,9 +253,7 @@ namespace Netherlands3D.CartesianTiles
             {
                 renderer.shadowCastingMode = tileShadowCastingMode;
             }
-        }
-
-        
+        }        
 
         private GameObject CreateNewGameObject(string source, byte[] binaryMeshData, TileChange tileChange)
         {
