@@ -28,7 +28,7 @@ namespace Netherlands3D.Twin.Layers
                 );
             }
 
-            return prefab.SpawnLocation switch
+            var resultingLayer = prefab.SpawnLocation switch
             {
                 SpawnLocation.OpticalCenter => await SpawnAtOpticalPosition(prefab),
                 SpawnLocation.CameraPosition => await SpawnObject(
@@ -39,6 +39,9 @@ namespace Netherlands3D.Twin.Layers
                 SpawnLocation.PrefabPosition => await SpawnObject(prefab, prefab.transform.position, true),
                 _ => throw new ArgumentOutOfRangeException()
             };
+            
+            Debug.Log($"Spawned layer {resultingLayer}");
+            return resultingLayer;
         }
 
         private async Task<LayerGameObject> SpawnAtOpticalPosition(LayerGameObject prefab)

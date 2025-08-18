@@ -1,9 +1,12 @@
 using System.IO;
+using Netherlands3D._Application._Twin.SDK;
 using UnityEngine;
 using UnityEngine.Events;
 using Newtonsoft.Json;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -66,28 +69,34 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             CreateGeoJSONLayer(localFile, displayErrorMessageEvent);
         }
 
-        private void CreateGeoJSONLayer(LocalFile localFile, UnityEvent<string> onErrorCallback = null)
+        private async void CreateGeoJSONLayer(LocalFile localFile, UnityEvent<string> onErrorCallback = null)
         {
-            var localFilePath = Path.Combine(Application.persistentDataPath, localFile.LocalFilePath);
             var geoJsonLayerName = Path.GetFileName(localFile.SourceUrl);
-            if(localFile.SourceUrl.Length > 0)
-                geoJsonLayerName = localFile.SourceUrl;    
-        
-            GeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
-            newLayer.Name = geoJsonLayerName;
+            if (localFile.SourceUrl is { Length: > 0 })
+            {
+                geoJsonLayerName = localFile.SourceUrl;
+            }
+
+            var randomLayerColor = LayerColor.Random();
+
+            var symbolizer = new Symbolizer();
+            symbolizer.SetFillColor(randomLayerColor);
+            symbolizer.SetStrokeColor(randomLayerColor);
+            
+            var layerData = await Sdk.Layers.Add(
+                Layer.OfType(layerPrefab.PrefabIdentifier)
+                    .NamedAs(geoJsonLayerName)
+                    .WithColor(randomLayerColor)
+                    .SetDefaultStyling(symbolizer)
+            );
+
+            GeoJsonLayerGameObject newLayer = layerData.Reference as GeoJsonLayerGameObject;
             newLayer.gameObject.name = geoJsonLayerName;
             if (onErrorCallback != null)
+            {
                 newLayer.Parser.OnParseError.AddListener(onErrorCallback.Invoke);
+            }
 
-            //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
-            var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
-            randomLayerColor.a = 0.5f;
-            newLayer.LayerData.Color = randomLayerColor;
-            
-            var symbolizer = newLayer.LayerData.DefaultSymbolizer;
-            symbolizer?.SetFillColor(randomLayerColor);
-            symbolizer?.SetStrokeColor(randomLayerColor);
-            
             var localPath = localFile.LocalFilePath;
             var propertyData = newLayer.PropertyData as LayerURLPropertyData;
             propertyData.Data = localFile.SourceUrl.StartsWith("http") 

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.DataTypeAdapters;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
@@ -22,8 +23,9 @@ namespace Netherlands3D._Application._Twin.SDK
             spawner = new LayerSpawner();
         }
 
-        public async Task<LayerData> Add(Layer layer)
+        public async Task<ReferencedLayerData> Add(Layer layer)
         {
+            LayerGameObject layerGameObjectPrefab = null;
             LayerGameObject layerGameObject = null;
             if (layer.Type == "url")
             {
@@ -41,18 +43,30 @@ namespace Netherlands3D._Application._Twin.SDK
             }
             else
             {
-                var layerGameObjectPrefab = prefabLibrary.GetPrefabById(layer.Type);
+                layerGameObjectPrefab = prefabLibrary.GetPrefabById(layer.Type);
 
                 // We use Async methods to support Addressables and Asset Bundles
                 layerGameObject = await spawner.Spawn(layerGameObjectPrefab, layer.Position, layer.Rotation);
             }
 
+            Debug.Log(layerGameObjectPrefab);
+            Debug.Log(layerGameObject);
+            Debug.Log(layer.Type);
+            
             if (layerGameObject == null)
             {
                 throw new Exception($"Could not find layer of type: {layer.Type}");
             }
 
-            LayerData layerData = layerGameObject.LayerData;
+            // We can provide our own layerData instead of constructing a new one - and that means we don't need the
+            // rest
+            if (layer.LayerData != null)
+            {
+                layerGameObject.LayerData = layer.LayerData;
+                return layer.LayerData;
+            }
+
+            ReferencedLayerData layerData = layerGameObject.LayerData;
             if (layerData == null) return null;
 
             if (!string.IsNullOrEmpty(layer.Name))

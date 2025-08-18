@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ namespace Netherlands3D._Application._Twin.SDK
         internal Vector3? Position { get; private set; }
         internal Quaternion? Rotation { get; private set; }
         internal Color? Color { get; private set; }
+        [CanBeNull] internal ReferencedLayerData LayerData { get; private set; }
         internal LayerData Parent { get; private set; }
         internal StoredAuthorization Credentials { get; private set; }
         internal List<LayerPropertyData> Properties { get; } = new();
@@ -32,6 +34,12 @@ namespace Netherlands3D._Application._Twin.SDK
         public static Layer FromUrl(Uri url) => new Layer("url").At(url).WithCredentials(new Public(url));
         public static Layer FromUrl(string url) => FromUrl(new Uri(url));
         public static Layer FromFile(Uri url) => new Layer("file").At(url);
+
+        public Layer UsingData(ReferencedLayerData layerData)
+        {
+            LayerData = layerData;
+            return this;
+        }
 
         public Layer NamedAs(string name)
         {
