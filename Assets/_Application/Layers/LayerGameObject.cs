@@ -209,7 +209,11 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void ApplyStyling()
         {
-            UpdateMaskBitMask(LayerData.DefaultSymbolizer.GetMaskLayerMask());
+            int? bitMask = LayerData.DefaultSymbolizer.GetMaskLayerMask();
+            if (bitMask == null)
+                bitMask = LayerGameObject.DEFAULT_MASK_BIT_MASK;
+
+            UpdateMaskBitMask(bitMask.Value);
             // var mask = LayerStyler.GetMaskLayerMask(this); todo?
             //initialize the layer's style and emit an event for other services and/or UI to update
             OnStylingApplied.Invoke();
@@ -262,7 +266,11 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         public int GetMaskLayerMask()
         {
-            return LayerData.DefaultStyle.AnyFeature.Symbolizer.GetMaskLayerMask();
+            int? bitMask = LayerData.DefaultStyle.AnyFeature.Symbolizer.GetMaskLayerMask();
+            if (bitMask == null)
+                bitMask = LayerGameObject.DEFAULT_MASK_BIT_MASK;
+
+            return bitMask.Value;
         }
 #endregion
 

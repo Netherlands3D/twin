@@ -1,6 +1,8 @@
 ﻿using Netherlands3D.CartesianTiles;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.SerializableGisExpressions;
+using Netherlands3D.SubObjects;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
@@ -15,6 +17,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
     {
         public const string MaterialNameIdentifier = "data-materialname";
         public const string MaterialIndexIdentifier = "data-materialindex";
+        public const string VisibilityIdentifier = "data-visibility";
+
+        public static ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
+        private static Dictionary<string, Color> buildingColors = new Dictionary<string, Color>();
 
         /// <summary>
         /// Sets a custom color for all layer features matching the material index of the given layer feature.
@@ -27,14 +33,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             // Add or set the colorization of this feature by its material index
             var stylingRule = new StylingRule(
-                stylingRuleName, 
+                stylingRuleName,
                 Expression.EqualTo(
                     Expression.Get(MaterialIndexIdentifier),
                     materialIndexIdentifier.ToString()
                 )
             );
             stylingRule.Symbolizer.SetFillColor(color);
-                
+
             layer.LayerData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
             layer.ApplyStyling();
         }
@@ -49,7 +55,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             int.TryParse(layerFeature.GetAttribute(MaterialIndexIdentifier), out int materialIndexIdentifier);
             var stylingRuleName = ColorizationStyleRuleName(materialIndexIdentifier);
-            
+
             var defaultColor = ((Material)layerFeature.Geometry).color;
             if (!layer.LayerData.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
             {
@@ -59,23 +65,88 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             return stylingRule.Symbolizer.GetFillColor();
         }
 
+        public static void SetVisibilityForSubObject(LayerGameObject layer, LayerFeature layerFeature, bool visible)
+        {
+            int.TryParse(layerFeature.Attributes[VisibilityIdentifier], out int visibilityIdentifier);
+
+            //string id = ((ObjectMappingItem)layerFeature.Geometry).objectID;
+            var stylingRuleName = VisibilityStyleRuleName(visibilityIdentifier);
+
+            // Add or set the colorization of this feature by its material index
+            var stylingRule = new StylingRule(
+                stylingRuleName,
+                Expression.EqualTo(
+                    Expression.Get(VisibilityIdentifier),
+                    visibilityIdentifier.ToString()
+                )
+            );
+            stylingRule.Symbolizer.SetVisibility(visible);
+
+            layer.LayerData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
+            layer.ApplyStyling();
+        }
+
+        public static bool? GetVisibilityForSubObject(LayerGameObject layer, LayerFeature layerFeature)
+        {
+            int.TryParse(layerFeature.GetAttribute(VisibilityIdentifier), out int visibilityIdentifier);
+
+            //string id = ((ObjectMappingItem)layerFeature.Geometry).objectID;
+            var stylingRuleName = VisibilityStyleRuleName(visibilityIdentifier);
+
+            if (!layer.LayerData.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
+            {
+                return true;
+            }
+
+            return stylingRule.Symbolizer.GetVisibility();
+        }
+
         /// <summary>
         /// The other methods deal with manipulating the styles for a layerfeature, this method takes the outcome of
         /// those actions and applies them to the materials for the binary mesh layer.
         /// </summary>
         public static void Apply(BinaryMeshLayer layer, Symbolizer styling, LayerFeature layerFeature)
         {
-            Color? color = styling.GetFillColor();
-            if (!color.HasValue) return;
+            if (layerFeature.Geometry is Material)
+            {
+                Color? color = styling.GetFillColor();
+                if (color.HasValue)
+                {
+                    if (int.TryParse(layerFeature.Attributes[MaterialIndexIdentifier], out var materialIndex))
+                        layer.DefaultMaterialList[materialIndex].color = color.Value;
+                }
+            }
 
-            if (!int.TryParse(layerFeature.Attributes[MaterialIndexIdentifier], out var materialIndex)) return;
-
-            layer.DefaultMaterialList[materialIndex].color = color.Value;
+            if (layerFeature.Geometry is ObjectMappingItem item)
+            {
+                bool? visiblity = styling.GetVisibility();
+                if (visiblity.HasValue)
+                {
+                    if (int.TryParse(layerFeature.Attributes[VisibilityIdentifier], out var visibiltyIdentifier))
+                    {
+                        if (visiblity == true)
+                        {
+                            var color = styling.GetFillColor() ?? Color.white;
+                            GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { item.objectID, color } });
+                        }
+                        else
+                        {
+                            var color = Color.clear;
+                            GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { item.objectID, color } });
+                        }
+                    }
+                }
+            }
         }
-
+       
         private static string ColorizationStyleRuleName(int materialIndexIdentifier)
         {
             return $"feature.{materialIndexIdentifier}.colorize";
+        }        
+
+        private static string VisibilityStyleRuleName(int visibilityIdentifier)
+        {
+            return $"feature.{visibilityIdentifier}.visibility";
         }
     }
 }

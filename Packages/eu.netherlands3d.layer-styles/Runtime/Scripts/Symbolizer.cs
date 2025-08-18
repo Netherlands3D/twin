@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Netherlands3D.LayerStyles
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling", Name = "Symbolizer")]
-    public class Symbolizer
+    public sealed class Symbolizer
     {
         /// <summary>
         /// Store each property as a string, and use specific getters and setting to convert from and to string.
@@ -33,13 +33,11 @@ namespace Netherlands3D.LayerStyles
 
         public void SetMaskLayerMask(int maskLayerMask) => SetProperty("mask-layer-mask", Convert.ToString(maskLayerMask, 2));
 
-        public int GetMaskLayerMask()
+        public int? GetMaskLayerMask()
         {
             var json = GetProperty("mask-layer-mask");
-            if (json == null || string.IsNullOrEmpty((string)json))
-            {
-                return LayerGameObject.DEFAULT_MASK_BIT_MASK;
-            }
+            if(json == null || string.IsNullOrEmpty((string)json))
+                return null;
             
             var bitMaskString = (string)json;
             return StringToBitmask(bitMaskString);
@@ -72,6 +70,20 @@ namespace Netherlands3D.LayerStyles
         public Color? GetStrokeColor() => GetAndNormalizeColor("stroke-color");
 
         public void ClearStrokeColor() => ClearProperty("stroke-color");
+
+        public void SetVisibility(bool visible) => SetProperty("visibility", visible ? "visible" : "none");
+
+        public bool? GetVisibility()
+        {         
+            if (GetProperty("visibility") is not string property) return null;
+
+            if (property == "visible") return true;
+
+            return false;            
+        }
+
+        public void ClearVisibility() => ClearProperty("visibility");
+        
 
         #endregion
 
@@ -146,6 +158,13 @@ namespace Netherlands3D.LayerStyles
         {
             properties.Remove(propertyName);
         }
+
+        public Nullable<T> GetValueOrNull<T>() where T : struct
+        {
+            // example: return null to indicate "no value"
+            return null;
+        }
+
 
         #endregion
     }

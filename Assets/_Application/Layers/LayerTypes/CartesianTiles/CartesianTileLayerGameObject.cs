@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Netherlands3D.SubObjects;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
@@ -49,6 +50,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             if (layer is not BinaryMeshLayer binaryMeshLayer) return;
 
+            binaryMeshLayer.OnMappingCreated.AddListener(mapping =>
+            {
+                foreach (ObjectMappingItem item in mapping.items)
+                {
+                    var layerFeature = CreateFeature(item);
+                    LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                }
+            });
+
             for (var materialIndex = 0; materialIndex < binaryMeshLayer.DefaultMaterialList.Count; materialIndex++)
             {
                 // Make a copy of the default material, so we can change the color without affecting the original
@@ -76,12 +86,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 transformInterfaceToggle.ShowVisibilityPanel(false);
         }
 
-        protected virtual void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
+            if(layer is BinaryMeshLayer binaryMeshLayer)
+            {
+                binaryMeshLayer.OnMappingCreated.RemoveAllListeners();
+            }
             if (Application.isPlaying && tileHandler && layer)
             {
                 tileHandler.RemoveLayer(layer);
             }
+
         }
 
         private List<IPropertySectionInstantiator> propertySections;
@@ -116,6 +132,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 }
             }
 
+
             base.ApplyStyling();
         }
 
@@ -131,6 +148,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             // WMS and other projection layers also use this class as base - but they should not add their materials
             if (layer is not BinaryMeshLayer meshLayer) return feature;
+
+            if(feature.Geometry is ObjectMappingItem item)
+            {
+                feature.Attributes.Add(CartesianTileLayerStyler.VisibilityIdentifier, item.objectID);                
+            }
+
             if (feature.Geometry is not Material mat) return feature;
 
             feature.Attributes.Add(
