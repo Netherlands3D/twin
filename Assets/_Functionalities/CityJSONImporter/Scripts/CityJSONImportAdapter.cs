@@ -61,11 +61,12 @@ namespace Netherlands3D.Functionalities.CityJSON
         public void Execute(LocalFile localFile)
         {
             var fullPath = localFile.LocalFilePath;
+            var localPath = Path.GetRelativePath(Application.persistentDataPath, fullPath);
             var fileName = Path.GetFileName(fullPath);
             CityJSONSpawner newLayer = Instantiate(layerPrefab);
             newLayer.gameObject.name = fileName;
 
-            newLayer.SetCityJSONPathInPropertyData(fullPath);
+            newLayer.SetCityJSONPathInPropertyData(localPath);
         }
     }
 }
