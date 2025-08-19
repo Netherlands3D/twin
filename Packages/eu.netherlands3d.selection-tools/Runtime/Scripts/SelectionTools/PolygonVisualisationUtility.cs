@@ -1,3 +1,4 @@
+using System;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Implementation;
@@ -12,33 +13,31 @@ namespace Netherlands3D.SelectionTools
     public static class PolygonVisualisationUtility
     {
         private static NtsGeometryServices instance;
-        private static GeometryFactory geometryFactory;       
+        private static GeometryFactory geometryFactory;
 
-        private static void SetUpInstance()
+        static PolygonVisualisationUtility()
         {
-            if (instance != null)
-                return;
-
             //the following are the default proposed settings by NTS github page https://github.com/NetTopologySuite/NetTopologySuite/wiki/GettingStarted
             instance = new NtsGeometryServices(
-            // default CoordinateSequenceFactory
-            CoordinateArraySequenceFactory.Instance,
-            // default precision model
-            new PrecisionModel(1000d),
-            // default SRID
-            4326,
-            /********************************************************************
-             * Note: the following arguments are only valid for NTS >= v2.2
-             ********************************************************************/
-            // Geometry overlay operation function set to use (Legacy or NG)
-            GeometryOverlay.NG,
-            // Coordinate equality comparer to use (CoordinateEqualityComparer or PerOrdinateEqualityComparer)
-            new CoordinateEqualityComparer());
+                // default CoordinateSequenceFactory
+                CoordinateArraySequenceFactory.Instance,
+                // default precision model
+                new PrecisionModel(1000d),
+                // default SRID
+                4326,
+                /********************************************************************
+                 * Note: the following arguments are only valid for NTS >= v2.2
+                 ********************************************************************/
+                // Geometry overlay operation function set to use (Legacy or NG)
+                GeometryOverlay.NG,
+                // Coordinate equality comparer to use (CoordinateEqualityComparer or PerOrdinateEqualityComparer)
+                new CoordinateEqualityComparer());
 
             geometryFactory = instance.CreateGeometryFactory();
         }
 
         #region UnityComponents
+
         //Treat first contour as outer contour, and extra contours as holes
         public static PolygonVisualisation CreateAndReturnPolygonObject(List<List<Vector3>> contours,
             float meshExtrusionHeight,
@@ -54,7 +53,7 @@ namespace Netherlands3D.SelectionTools
         {
             var newPolygonObject = new GameObject();
             newPolygonObject.name = "PolygonVisualisation";
-            
+
             var meshFilter = newPolygonObject.AddComponent<MeshFilter>(); //mesh is created by the PolygonVisualisation script
             var meshRenderer = newPolygonObject.AddComponent<MeshRenderer>();
             meshRenderer.material = meshMaterial;
@@ -73,6 +72,7 @@ namespace Netherlands3D.SelectionTools
         #endregion
 
         #region PolygonMesh
+
         /// <summary>
         /// 
         /// </summary>
@@ -83,73 +83,90 @@ namespace Netherlands3D.SelectionTools
         /// <returns></returns>
         public static Mesh CreatePolygonMesh(List<List<Vector3>> contours, float extrusionHeight, bool addBottom, Vector2 uvCoordinate = new Vector2())
         {
-            if (contours.Count == 0)
+            if (contours == null || contours.Count == 0)
                 return null;
 
-            SetUpInstance();
+            // STEP 1: Compute polygon plane
+            var solidPlane = contours[0];
+            Plane plane = ComputeBestFitPlane(solidPlane);
+            Vector3 normal = plane.normal.normalized;
 
-            var shellCoords = EnsureOrientation(contours[0], true);
-            if (shellCoords == null)
+            //u and v are the x and y axis relative to the plane we project on
+            Vector3 u = Vector3.Cross(normal, Vector3.up);
+            if (u.sqrMagnitude < 1e-6f)
+                u = Vector3.Cross(normal, Vector3.right);
+
+            u.Normalize();
+            Vector3 v = Vector3.Cross(normal, u);
+            Vector3 origin = contours[0][0];
+
+            // === STEP 2: Build NTS polygon ===
+            LinearRing outerRing = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[0], origin, u, v));
+            LinearRing[] holes = new LinearRing[contours.Count - 1];
+            for (int h = 1; h < contours.Count; h++)
+                holes[h - 1] = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[h], origin, u, v));
+
+            var polygon = geometryFactory.CreatePolygon(outerRing, holes);
+            // STEP 3: Triangulate in 2D
+            var triangulated = ConstrainedDelaunayTriangulator.Triangulate(polygon);
+
+            // STEP 4: Build Unity Mesh in 3D
+            List<Vector3> verts = new List<Vector3>();
+            List<int> tris = new List<int>();
+            var vertMap = new Dictionary<Coordinate, int>();
+
+            for (int i = 0; i < triangulated.NumGeometries; i++)
             {
-                Debug.LogWarning("Outer shell is degenerate");
-                return null;
-            }
-            var shell = geometryFactory.CreateLinearRing(shellCoords);
-            LinearRing[] holes = null;
-            //holes
-            if (contours.Count > 1)
-            {
-                holes = new LinearRing[contours.Count - 1];
-                for (int i = 1; i < contours.Count; i++)
+                var tri = triangulated.GetGeometryN(i);
+                if (tri is Polygon tPoly)
                 {
-                    var holeCoords = EnsureOrientation(contours[i], false);
-                    if (holeCoords == null)
+                    var coords = tPoly.Coordinates;
+                    for (int j = 2; j >= 0; j--) // Unity triangle winding order is reversed so we go backwards here
                     {
-                        Debug.LogWarning("Skipping degenerate hole at index " + i);
-                        continue;
+                        var c2D = coords[j];
+                        if (!vertMap.TryGetValue(c2D, out int idx))
+                        {
+                            Vector3 v3 = To3D(c2D, origin, u, v);
+                            idx = verts.Count;
+                            verts.Add(v3);
+                            vertMap[c2D] = idx;
+                        }
+
+                        tris.Add(idx);
                     }
-                    holes[i - 1] = geometryFactory.CreateLinearRing(holeCoords);
                 }
             }
-            Polygon polygon = geometryFactory.CreatePolygon(shell, holes);
-            Mesh mesh = PolygonToMesh(polygon);
+
+            Mesh mesh = new Mesh();
+            mesh.vertices = verts.ToArray();
+            mesh.triangles = tris.ToArray();
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+
             return mesh;
         }
 
-        private static Coordinate[] EnsureOrientation(List<Vector3> points, bool counterClockwise)
+        private static Coordinate[] ConvertToCoordinateArray(List<Vector3> points, Vector3 origin, Vector3 u, Vector3 v)
         {
-            var coords = ConvertToCoordinateArray(points);
-            if (NetTopologySuite.Algorithm.Orientation.IsCCW(coords) != counterClockwise)
+            var coords = new List<Coordinate>(points.Count + 1);
+            for (int i = 0; i < points.Count; i++)
             {
-                System.Array.Reverse(coords);
+                Vector3 d = points[i] - origin;
+                coords.Add(new Coordinate(Vector3.Dot(d, u), Vector3.Dot(d, v)));
             }
-            return coords;
-        }
 
-        private static Coordinate[] ConvertToCoordinateArray(List<Vector3> points)
-        {
-            //check duplicates
-            var filtered = new List<Coordinate>();
-            Coordinate? last = null;
-            foreach (var pt in points)
+            if (!coords[0].Equals2D(coords[^1]))
             {
-                var current = new Coordinate(pt.x, pt.z);
-                if (last == null || !current.Equals2D(last))
-                {
-                    filtered.Add(current);
-                    last = current;
-                }
+                coords.Add(coords[0]);
             }
-            if (filtered.Count < 3)
-                return null;
 
-            var coords = new Coordinate[filtered.Count + 1];
-            for (int i = 0; i < filtered.Count; i++)
+            var coordsArray = coords.ToArray();
+            if (!NetTopologySuite.Algorithm.Orientation.IsCCW(coordsArray))
             {
-                coords[i] = filtered[i];
+                Array.Reverse(coordsArray);
             }
-            coords[filtered.Count] = coords[0];
-            return coords;
+
+            return coordsArray;
         }
 
         public static Mesh PolygonToMesh(Polygon polygon)
@@ -163,8 +180,9 @@ namespace Netherlands3D.SelectionTools
                 Debug.LogError("Polygon is invalid: " + cleanPolygon.ToString());
                 return null;
             }
+
             var triangulator = new PolygonTriangulator(cleanPolygon);
-            List<Tri> triangles = triangulator.GetTriangles(); 
+            List<Tri> triangles = triangulator.GetTriangles();
             List<Vector3> vertices = new List<Vector3>();
             List<int> indices = new List<int>();
             Dictionary<Coordinate, int> coordToIndex = new Dictionary<Coordinate, int>(new CoordinateEqualityComparer());
@@ -182,6 +200,7 @@ namespace Netherlands3D.SelectionTools
                         coordToIndex[coord] = index;
                         vertices.Add(new Vector3((float)coord.X, 0f, (float)coord.Y));
                     }
+
                     indices.Add(index);
                 }
             }
@@ -197,6 +216,7 @@ namespace Netherlands3D.SelectionTools
         #endregion
 
         #region PolygonLine
+
         public static List<LineRenderer> CreateLineRenderers(List<List<Vector3>> polygons, Material lineMaterial, Color lineColor, Transform parent = null)
         {
             var list = new List<LineRenderer>();
@@ -204,6 +224,7 @@ namespace Netherlands3D.SelectionTools
             {
                 list.Add(CreateAndReturnPolygonLine((List<Vector3>)contour, lineMaterial, lineColor, parent)); //todo: require explicit List<List<Vector3>> as argument?
             }
+
             return list;
         }
 
@@ -224,6 +245,7 @@ namespace Netherlands3D.SelectionTools
 
             return lineRenderer;
         }
+
         #endregion
 
         public static void SetUVCoordinates(Mesh newPolygonMesh, Vector2 uvCoordinate)
@@ -233,7 +255,36 @@ namespace Netherlands3D.SelectionTools
             {
                 uvs[i] = uvCoordinate;
             }
+
             newPolygonMesh.uv = uvs;
+        }
+
+        private static Coordinate[] ToCoordinates(List<Vector3> contour, Func<Vector3, Coordinate> project)
+        {
+            var coords = new Coordinate[contour.Count];
+            for (int i = 0; i < contour.Count; i++)
+                coords[i] = project(contour[i]);
+            return coords;
+        }
+
+        /// <summary>
+        /// Reconstructs a 3D point from its 2D plane coordinate.
+        /// </summary>
+        private static Vector3 To3D(Coordinate c, Vector3 origin, Vector3 u, Vector3 v)
+        {
+            return origin + (float)c.X * u + (float)c.Y * v;
+        }
+
+        /// <summary>
+        /// Computes a best-fit plane for a polygon (assumes it's planar).
+        /// </summary>
+        private static Plane ComputeBestFitPlane(List<Vector3> contour)
+        {
+            if (contour.Count < 3)
+                throw new ArgumentException("Need at least 3 points for a plane");
+
+            Vector3 normal = Vector3.Cross(contour[1] - contour[0], contour[2] - contour[0]).normalized;
+            return new Plane(normal, contour[0]);
         }
     }
 }
