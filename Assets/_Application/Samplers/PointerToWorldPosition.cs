@@ -64,6 +64,7 @@ namespace Netherlands3D.Twin.Samplers
             var screenRay = Camera.main.ScreenPointToRay(screenPoint);
             worldPlane.Raycast(screenRay, out float distance);
             Vector3 position;
+            //when no valid point is found in for the raycast, lets invert the distance so we get a point in the sky
             if (distance < 0)
                 position = screenRay.GetPoint(Mathf.Min(maxDistance, -distance));
             else
