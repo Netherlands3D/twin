@@ -131,7 +131,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             {
                 //when tile is replacing lod this can be null
                 if (meshMapping.ObjectMapping == null)
-                    return null;
+                {
+                    //Deselect();
+                    subObjectSelector.FindSubObjectAtPointerPosition();
+                    meshMapping = FindObjectMapping() as MeshMapping;
+                    if (meshMapping == null || meshMapping.ObjectMapping == null)
+                        return null;
+                }
 
                 Transform parent = meshMapping.ObjectMapping.gameObject.transform.parent;
                 LayerGameObject layerGameObject = parent.GetComponent<LayerGameObject>();
