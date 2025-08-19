@@ -61,17 +61,8 @@ namespace Netherlands3D.Functionalities.CityJSON
                 yield break;
             }
 
-            // FileStream fileStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.None);
             var json = File.ReadAllText(file);
-            
-            // var root = new GameObject("CityJSONRoot");
-            // var cityjson = root.AddComponent<T3DPipeline.CityJSON>();
             GetComponent<T3DPipeline.CityJSON>().ParseCityJSON(json);
-            foreach (var cityObject in GetComponentsInChildren<CityObject>())
-            {
-                cityObject.gameObject.AddComponent<CityObjectVisualizer>();
-            }
-
             OnObjImported(gameObject);
         }
 

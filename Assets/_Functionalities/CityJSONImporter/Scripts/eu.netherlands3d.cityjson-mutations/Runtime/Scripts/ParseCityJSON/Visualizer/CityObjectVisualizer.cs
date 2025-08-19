@@ -296,10 +296,6 @@ namespace Netherlands3D.T3DPipeline
             {
                 contours.Add(GetConvertedPolygonVertices(hole, coordinateSystem));
             }
-
-            // Poly2Mesh.Polygon polygon = new Poly2Mesh.Polygon();
-            // polygon.outside = solidSurfacePolygon;
-            // polygon.holes = holePolygons;
             
             var mesh = PolygonVisualisationUtility.CreatePolygonMesh(contours, 0, false, default);
             var semanticsObject = surface.SemanticsObject;
