@@ -63,7 +63,11 @@ namespace Netherlands3D.Twin.Samplers
             Plane worldPlane = new Plane(Vector3.up, Vector3.zero);
             var screenRay = Camera.main.ScreenPointToRay(screenPoint);
             worldPlane.Raycast(screenRay, out float distance);
-            Vector3 position = screenRay.GetPoint(Mathf.Min(maxDistance, distance));
+            Vector3 position;
+            if (distance < 0)
+                position = screenRay.GetPoint(Mathf.Min(maxDistance, -distance));
+            else
+                position = screenRay.GetPoint(Mathf.Min(maxDistance, distance));
             return position;
         }
     }
