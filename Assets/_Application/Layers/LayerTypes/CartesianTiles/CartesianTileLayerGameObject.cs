@@ -50,27 +50,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             if (layer is not BinaryMeshLayer binaryMeshLayer) return;
 
+            //we have to apply styling when mappings are created, before we cannot load the values like from awake
+            binaryMeshLayer.OnMappingCreated.AddListener(m => ApplyStyling());
             binaryMeshLayer.OnMappingCreated.AddListener(mapping =>
             {
                 foreach (ObjectMappingItem item in mapping.items)
                 {
-                    //bool skip = false;
-                    //foreach(KeyValuePair<object, LayerFeature> lf in LayerFeatures)
-                    //{
-                    //    if (lf.Key is ObjectMappingItem mapItem)
-                    //    {
-                    //        if (mapItem.objectID == item.objectID)
-                    //        {
-                    //            skip = true;
-                    //            break;
-                    //        }
-                    //    }
-                    //}
-                    //if (!skip)
-                    //{
-                        var layerFeature = CreateFeature(item);
-                        LayerFeatures.Add(layerFeature.Geometry, layerFeature);
-                    //}
+                    var layerFeature = CreateFeature(item);
+                    LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                }
+
+            });
+           
+            binaryMeshLayer.OnMappingRemoved.AddListener(mapping =>
+            {
+                foreach(ObjectMappingItem item in mapping.items)
+                {
+                    LayerFeatures.Remove(item);
                 }
             });
 
@@ -107,6 +103,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             if(layer is BinaryMeshLayer binaryMeshLayer)
             {
                 binaryMeshLayer.OnMappingCreated.RemoveAllListeners();
+                
             }
             if (Application.isPlaying && tileHandler && layer)
             {
