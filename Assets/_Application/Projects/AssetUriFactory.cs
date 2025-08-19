@@ -6,12 +6,15 @@ namespace Netherlands3D.Twin.Projects
 {
     public static class AssetUriFactory
     {
-        public static Uri CreateProjectAssetUri(string pathInProject)
+        public static Uri CreateProjectAssetUri(string path)
         {
-            if (pathInProject.StartsWith("project:///"))
-                return new Uri(pathInProject);
+            if (path.StartsWith("project:///"))
+                return new Uri(path);
             
-            return new Uri("project:///" + pathInProject);
+            if (path.StartsWith(Application.persistentDataPath))
+                path = Path.GetRelativePath(Application.persistentDataPath, path);
+            
+            return new Uri("project:///" + path);
         }
 
         public static Uri CreateRemoteAssetUri(string url)
