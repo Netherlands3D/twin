@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3482478533686408333}
   - component: {fileID: -8031406265216150104}
   - component: {fileID: -5290351893147975871}
+  - component: {fileID: 8150899206447481378}
   m_Layer: 0
   m_Name: CityJSONlayer
   m_TagString: Untagged
@@ -148,3 +149,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750cab32e815340f8b7fe1890c8fb7e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraDistanceFromGeoReferencedObject: 150
+--- !u!114 &8150899206447481378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9204913902124509902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36187846006a245e39b1c2c56fb7a686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cityObjectPrefab: {fileID: 1807838613596807431, guid: 5db4ea97f9b3f4daa97b8121c433dd2c,
+    type: 3}
+  useAsRelativeRDCenter: 0
+  onCityJSONReceived: {fileID: 0}
+  onAllCityObjectsProcessed: {fileID: 0}
+  isCityJSONType: {fileID: 0}
