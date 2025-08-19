@@ -8,11 +8,11 @@ namespace Netherlands3D.Twin.Projects
     {
         public static Uri CreateProjectAssetUri(string path)
         {
-            if (path.StartsWith(Application.persistentDataPath))
-                path = Path.GetRelativePath(Application.persistentDataPath, path);
-
             if (path.StartsWith("project:///"))
                 return new Uri(path);
+            
+            if (path.StartsWith(Application.persistentDataPath))
+                path = Path.GetRelativePath(Application.persistentDataPath, path);
             
             return new Uri("project:///" + path);
         }
