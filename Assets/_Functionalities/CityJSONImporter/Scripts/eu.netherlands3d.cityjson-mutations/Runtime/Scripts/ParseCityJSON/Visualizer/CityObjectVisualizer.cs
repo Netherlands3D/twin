@@ -297,7 +297,7 @@ namespace Netherlands3D.T3DPipeline
                 contours.Add(GetConvertedPolygonVertices(hole, coordinateSystem));
             }
             
-            var mesh = PolygonVisualisationUtility.CreatePolygonMesh(contours, 0, false, default);
+            var mesh = PolygonVisualisationUtility.CreatePolygonMesh(contours);
             var semanticsObject = surface.SemanticsObject;
             return new BoundaryMesh(mesh, semanticsObject);
         }

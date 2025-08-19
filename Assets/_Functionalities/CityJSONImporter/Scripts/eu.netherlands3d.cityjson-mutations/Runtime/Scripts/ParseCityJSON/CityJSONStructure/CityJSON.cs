@@ -141,7 +141,7 @@ namespace Netherlands3D.T3DPipeline
             if (Metadata.Count > 0)
             {
                 var coordinateSystemNode = Metadata["referenceSystem"];
-                CoordinateSystem = ParseCoordinateSystem(coordinateSystemNode);
+                CoordinateSystem = CoordinateSystems.FindCoordinateSystem(coordinateSystemNode.Value);
 
                 var geographicalExtent = Metadata["geographicalExtent"];
                 if (geographicalExtent.Count > 0)
@@ -211,21 +211,6 @@ namespace Netherlands3D.T3DPipeline
 
             if (onAllCityObjectsProcessed)
                 onAllCityObjectsProcessed.InvokeStarted();
-        }
-
-        //currently only RD and WGS84 are supported as coordinate systems.
-        private static CoordinateSystem ParseCoordinateSystem(JSONNode coordinateSystemNode)
-        {
-            Debug.Log("Parsing coordinate system: " + coordinateSystemNode.Value);
-            if (coordinateSystemNode.Value == "urn:ogc:def:crs:EPSG::7415")
-                return CoordinateSystem.RDNAP;
-            if (coordinateSystemNode.Value == "urn:ogc:def:crs:EPSG::28992")
-                return CoordinateSystem.RD;
-            if (coordinateSystemNode.Value == "urn:ogc:def:crs:EPSG::4979")
-                return CoordinateSystem.WGS84;
-
-            Debug.Log("Parsing coordinateSystem failed, using Undefined Coordinate Sytem");
-            return CoordinateSystem.Undefined;
         }
 
         //custom nodes must be added as is to the exporter to ensure they are preserved.
