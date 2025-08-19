@@ -17,12 +17,11 @@ namespace Netherlands3D.Functionalities.OBJImporter
         public void Execute(LocalFile localFile)
         {
             var fullPath = localFile.LocalFilePath;
-            var localPath = Path.GetRelativePath(Application.persistentDataPath, fullPath);
             var fileName = Path.GetFileName(fullPath);
             OBJSpawner newLayer = Instantiate(layerPrefab);
             newLayer.gameObject.name = fileName;
 
-            newLayer.SetObjPathInPropertyData(localPath);
+            newLayer.SetObjPathInPropertyData(fullPath);
         }
     }
 }

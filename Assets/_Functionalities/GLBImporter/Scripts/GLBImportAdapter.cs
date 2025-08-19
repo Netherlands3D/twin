@@ -41,12 +41,11 @@ namespace Netherlands3D.Functionalities.GLBImporter
         public void Execute(LocalFile localFile)
         {            
             var fullPath = localFile.LocalFilePath;
-            var localPath = Path.GetRelativePath(Application.persistentDataPath, fullPath);
             var fileName = Path.GetFileName(fullPath);
             GLBSpawner newLayer = Instantiate(layerPrefab);
             newLayer.gameObject.name = fileName;
 
-            newLayer.SetGlbPathInPropertyData(localPath);
+            newLayer.SetGlbPathInPropertyData(fullPath);
         }
     }
 }
