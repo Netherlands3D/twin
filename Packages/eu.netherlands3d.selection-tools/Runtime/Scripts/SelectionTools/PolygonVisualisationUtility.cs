@@ -3,7 +3,6 @@ using NetTopologySuite;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Implementation;
 using NetTopologySuite.Triangulate.Polygon;
-using NetTopologySuite.Triangulate.Tri;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -81,7 +80,7 @@ namespace Netherlands3D.SelectionTools
         /// <param name="addBottom"></param>
         /// <param name="uvCoordinate"></param>
         /// <returns></returns>
-        public static Mesh CreatePolygonMesh(List<List<Vector3>> contours, float extrusionHeight, bool addBottom, Vector2 uvCoordinate = new Vector2())
+        public static Mesh CreatePolygonMesh(List<List<Vector3>> contours)
         {
             if (contours == null || contours.Count == 0)
                 return null;
@@ -168,51 +167,6 @@ namespace Netherlands3D.SelectionTools
 
             return coordsArray;
         }
-
-        public static Mesh PolygonToMesh(Polygon polygon)
-        {
-            //triangulate
-            var cleaner = new NetTopologySuite.Simplify.TopologyPreservingSimplifier(polygon);
-            cleaner.DistanceTolerance = 0.01;
-            var cleanPolygon = cleaner.GetResultGeometry() as Polygon;
-            if (!cleanPolygon.IsValid)
-            {
-                Debug.LogError("Polygon is invalid: " + cleanPolygon.ToString());
-                return null;
-            }
-
-            var triangulator = new PolygonTriangulator(cleanPolygon);
-            List<Tri> triangles = triangulator.GetTriangles();
-            List<Vector3> vertices = new List<Vector3>();
-            List<int> indices = new List<int>();
-            Dictionary<Coordinate, int> coordToIndex = new Dictionary<Coordinate, int>(new CoordinateEqualityComparer());
-            int nextIndex = 0;
-            for (int i = 0; i < triangles.Count; i++)
-            {
-                var tri = triangles[i];
-                Coordinate[] coords = new[] { tri.GetCoordinate(0), tri.GetCoordinate(1), tri.GetCoordinate(2) };
-                for (int j = 0; j < 3; j++)
-                {
-                    var coord = coords[j];
-                    if (!coordToIndex.TryGetValue(coord, out int index))
-                    {
-                        index = nextIndex++;
-                        coordToIndex[coord] = index;
-                        vertices.Add(new Vector3((float)coord.X, 0f, (float)coord.Y));
-                    }
-
-                    indices.Add(index);
-                }
-            }
-
-            Mesh mesh = new Mesh();
-            mesh.SetVertices(vertices);
-            mesh.SetTriangles(indices, 0);
-            mesh.RecalculateNormals();
-            mesh.RecalculateBounds();
-            return mesh;
-        }
-
         #endregion
 
         #region PolygonLine
@@ -247,25 +201,6 @@ namespace Netherlands3D.SelectionTools
         }
 
         #endregion
-
-        public static void SetUVCoordinates(Mesh newPolygonMesh, Vector2 uvCoordinate)
-        {
-            var uvs = new Vector2[newPolygonMesh.vertexCount];
-            for (int i = 0; i < uvs.Length; i++)
-            {
-                uvs[i] = uvCoordinate;
-            }
-
-            newPolygonMesh.uv = uvs;
-        }
-
-        private static Coordinate[] ToCoordinates(List<Vector3> contour, Func<Vector3, Coordinate> project)
-        {
-            var coords = new Coordinate[contour.Count];
-            for (int i = 0; i < contour.Count; i++)
-                coords[i] = project(contour[i]);
-            return coords;
-        }
 
         /// <summary>
         /// Reconstructs a 3D point from its 2D plane coordinate.
