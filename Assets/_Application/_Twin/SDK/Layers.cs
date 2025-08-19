@@ -25,31 +25,30 @@ namespace Netherlands3D._Application._Twin.SDK
 
         public async Task<ReferencedLayerData> Add(Layer layer)
         {
-            LayerGameObject layerGameObjectPrefab = null;
             LayerGameObject layerGameObject = null;
-            if (layer.Type == "url")
+            switch (layer.Type)
             {
-                var url = RetrieveUrlForLayer(layer);
-                fromUrlImporter.DetermineAdapter(url, layer.Credentials);
+                case "url":
+                {
+                    var url = RetrieveUrlForLayer(layer);
+                    fromUrlImporter.DetermineAdapter(url, layer.Credentials);
                 
-                // TODO: Capture created LayerData and return it
-            }
-            else if (layer.Type == "file")
-            {
-                var url = RetrieveUrlForLayer(layer);
-                fromFileImporter.ProcessFile(url.ToString());
+                    // TODO: Capture created LayerData and return it
+                    return null;
+                }
+                case "file":
+                {
+                    var url = RetrieveUrlForLayer(layer);
+                    fromFileImporter.ProcessFile(url.ToString());
 
-                // TODO: Capture created LayerData and return it
-            }
-            else
-            {
-                layerGameObjectPrefab = prefabLibrary.GetPrefabById(layer.Type);
-
-                // We use Async methods to support Addressables and Asset Bundles
-                layerGameObject = await spawner.Spawn(layerGameObjectPrefab, layer.Position, layer.Rotation);
+                    // TODO: Capture created LayerData and return it
+                    return null;
+                }
+                default:
+                    layerGameObject = await SpawnLayerUsingSpecification(layer);
+                    break;
             }
 
-            Debug.Log(layerGameObjectPrefab);
             Debug.Log(layerGameObject);
             Debug.Log(layer.Type);
             
@@ -97,6 +96,28 @@ namespace Netherlands3D._Application._Twin.SDK
             layerGameObject.LoadPropertiesInVisualisations();
             
             return layerData;
+        }
+
+        private async Task<LayerGameObject> SpawnLayerUsingSpecification(Layer layer)
+        {
+            LayerGameObject layerGameObjectPrefab;
+            LayerGameObject layerGameObject;
+            layerGameObjectPrefab = prefabLibrary.GetPrefabById(layer.Type);
+            Debug.Log(layerGameObjectPrefab);
+
+            // We use Async methods to support Addressables and Asset Bundles
+            if (layer.Position.HasValue)
+            {
+                layerGameObject = await spawner.Spawn(
+                    layerGameObjectPrefab, 
+                    layer.Position.Value, 
+                    layer.Rotation ?? Quaternion.identity
+                );
+            } else {
+                layerGameObject = await spawner.Spawn(layerGameObjectPrefab);
+            }
+
+            return layerGameObject;
         }
 
         private Uri RetrieveUrlForLayer(Layer layer)
