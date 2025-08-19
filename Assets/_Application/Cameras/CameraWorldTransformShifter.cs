@@ -35,6 +35,7 @@ namespace Netherlands3D
 
         private void OnPostShift(WorldTransform worldTransform, Coordinate coordinate)
         {
+            //camera.ForceUpdateWorldPoint();
             //camera.lockUpdateWorldPoint = false;
         }
     }

@@ -134,6 +134,12 @@ namespace Netherlands3D.Twin.Cameras
             if (focusOnObject) focusOnObject.AddListenerStarted(FocusOnObject);
         }
 
+        private void Start()
+        {
+            //Application.targetFrameRate = 60;
+        }
+
+
         /// <summary>
         /// Switch camera to ortographic mode and limit its controls
         /// </summary>
@@ -191,7 +197,7 @@ namespace Netherlands3D.Twin.Cameras
             currentPointerDelta = pointerDelta;
 
             if (rotate)
-            {
+            {                
                 rotatingAroundPoint = true;
                 RotateAroundPoint(pointerDelta);
             }
@@ -447,7 +453,10 @@ namespace Netherlands3D.Twin.Cameras
         private Vector3 lastDirection;
         public void UpdateZoomVector()
         {
-            zoomVector *= zoomVectorFalloff;
+            bool modifierKeysPressed = IsModifierKeyIsPressed();
+
+            //we devide by the Time.deltaTime because on slower machines we dont want the vector to stay large on frame drop
+            zoomVector *= zoomVectorFalloff / Mathf.Max(Time.deltaTime * 60, 1);
             if (Mathf.Abs(zoomVector) < 0.001f)
             {
                 zoomVector = 0;
@@ -456,21 +465,25 @@ namespace Netherlands3D.Twin.Cameras
 
             dynamicZoomSpeed = zoomVector;
             Vector3 pos = worldTransform.Coordinate.ToUnity();
-            var direction = zoomTarget.ToUnity() - pos;
-            if (direction.sqrMagnitude < 0.0001f)
-                direction = this.transform.forward;
-            if (Vector3.Dot(this.transform.forward, direction) < 0)
-                direction = lastDirection;
+            var direction = (zoomTarget.ToUnity() - pos);
+
+            //if getting to close to the target or the direction suddenly becomes flipped, lets default to camera forward direction
+            if (direction.sqrMagnitude < 0.0001f || Vector3.Dot(transform.forward, direction) < 0)
+                direction = transform.forward;
+            else
+                direction.Normalize();
 
             dynamicZoomSpeed = Mathf.Clamp(dynamicZoomSpeed, minimumSpeed, maximumSpeed);
-            bool modifierKeysPressed = IsModifierKeyIsPressed();
+            
             var translation = dynamicZoomSpeed * Time.deltaTime;
             translation *= modifierKeysPressed ? zoomSpeedMultiplier : 1;
 
-            worldTransform.MoveToCoordinate(new Coordinate(pos + direction.normalized * translation));
+            worldTransform.MoveToCoordinate(new Coordinate(pos + direction * translation));
             lastDirection = direction;
         }
 
+
+        private bool wasNotRotating = false;
 
         /// <summary>
         /// Returns a position on the world 0 plane
@@ -481,7 +494,24 @@ namespace Netherlands3D.Twin.Cameras
         {
             zoomTarget = new Coordinate(pointer.WorldPoint.ToUnity());
             if (!rotatingAroundPoint)
-                rotateTarget = new Coordinate(pointer.WorldPoint.ToUnity());
+            {
+                wasNotRotating = false;
+            }
+            else
+            {
+                if (!wasNotRotating)
+                {
+                    Vector3 position = pointer.GetWorldPoint();
+                    rotateTarget = new Coordinate(position);
+                    zoomTarget = new Coordinate(position);
+                    pointer.GetPointerWorldPointAsync(result =>
+                    {
+                        rotateTarget = new Coordinate(result);
+                        zoomTarget = new Coordinate(result);
+                    });
+                }
+                wasNotRotating = true;                
+            }
         }
 
         public void ForceUpdateWorldPoint()
@@ -500,7 +530,7 @@ namespace Netherlands3D.Twin.Cameras
             Vector3 debugTargetA = zoomTarget.ToUnity();
             zoomTarget = new Coordinate(zoomTarget.ToUnity() - offset);
             Vector3 debugTarget = zoomTarget.ToUnity();
-            if (rotatingAroundPoint)
+            //if (!rotatingAroundPoint)
                 rotateTarget = new Coordinate(rotateTarget.ToUnity() - offset);
         }
 

@@ -14,6 +14,7 @@ namespace Netherlands3D.Twin.Samplers
         private Action<Vector3, bool> worldPointCallback;
         private Coordinate worldPoint;
         private int cullingMask = Physics.DefaultRaycastLayers;
+        private float maxDistance = 10000;
 
         private void Awake()
         {
@@ -28,11 +29,8 @@ namespace Netherlands3D.Twin.Samplers
                     worldPoint = new Coordinate(w);
                 else
                 {
-                    var screenPoint = Pointer.current.position.ReadValue();
-                    Plane worldPlane = new Plane(Vector3.up, Vector3.zero);
-                    var screenRay = Camera.main.ScreenPointToRay(screenPoint);
-                    worldPlane.Raycast(screenRay, out float distance);
-                    worldPoint = new Coordinate(screenRay.GetPoint(Mathf.Min(float.MaxValue, distance)));
+                    Vector3 position = GetWorldPoint();
+                    worldPoint = new Coordinate(position);
                 }
             };
         }
@@ -41,6 +39,32 @@ namespace Netherlands3D.Twin.Samplers
         {
             var screenPoint = Pointer.current.position.ReadValue();
             opticalRaycaster.GetWorldPointAsync(screenPoint, worldPointCallback, cullingMask);
+        }
+
+        public void GetPointerWorldPointAsync(Action<Vector3> result)
+        {
+            var screenPoint = Pointer.current.position.ReadValue();
+            opticalRaycaster.GetWorldPointAsync(screenPoint, (point, hit) =>
+            {
+                if (hit)
+                    result.Invoke(point);
+                else
+                {
+                    Vector3 position = GetWorldPoint();
+                    result.Invoke(position);
+                }
+
+            }, cullingMask);
+        }
+
+        public Vector3 GetWorldPoint()
+        {
+            var screenPoint = Pointer.current.position.ReadValue();
+            Plane worldPlane = new Plane(Vector3.up, Vector3.zero);
+            var screenRay = Camera.main.ScreenPointToRay(screenPoint);
+            worldPlane.Raycast(screenRay, out float distance);
+            Vector3 position = screenRay.GetPoint(Mathf.Min(maxDistance, distance));
+            return position;
         }
     }
 }
