@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -126,6 +127,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var properties = new List<LayerPropertyData>(1);
             properties.Add(new PolygonSelectionLayerPropertyData());
             return properties;
+        }
+
+        public override void ReplaceReference(LayerGameObject layerGameObject)
+        {
+            throw new NotImplementedException("Replacing polygon references is currently not supported");
         }
 
         private void ShiftedPolygon(Coordinate fromOrigin, Coordinate toOrigin)

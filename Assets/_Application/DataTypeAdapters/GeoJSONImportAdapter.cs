@@ -1,5 +1,4 @@
 using System.IO;
-using Netherlands3D._Application._Twin.SDK;
 using UnityEngine;
 using UnityEngine.Events;
 using Newtonsoft.Json;
@@ -10,6 +9,7 @@ using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Services;
 
 namespace Netherlands3D.Twin.DataTypeAdapters
 {
@@ -83,8 +83,9 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             symbolizer.SetFillColor(randomLayerColor);
             symbolizer.SetStrokeColor(randomLayerColor);
             
-            var layerData = await Sdk.Layers.Add(
-                Layer.OfType(layerPrefab.PrefabIdentifier)
+            var layerData = await App.Layers.Add(
+                LayerBuilder.Start
+                    .OfType(layerPrefab.PrefabIdentifier)
                     .NamedAs(geoJsonLayerName)
                     .WithColor(randomLayerColor)
                     .SetDefaultStyling(symbolizer)

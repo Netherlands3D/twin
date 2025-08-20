@@ -59,7 +59,6 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 layerData = value;
-                value.Reference = this;
                 LoadPropertiesInVisualisations();
             }
         }

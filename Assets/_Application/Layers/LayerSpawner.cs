@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -10,7 +12,37 @@ namespace Netherlands3D.Twin.Layers
 {
     public class LayerSpawner
     {
-        public async Task<LayerGameObject> Spawn(LayerGameObject prefab) 
+        private readonly PrefabLibrary prefabLibrary;
+
+        public LayerSpawner(PrefabLibrary prefabLibrary)
+        {
+            this.prefabLibrary = prefabLibrary;
+        }
+
+        public async Task<LayerGameObject> Spawn(ReferencedLayerData layerData)
+        {
+            var prefab = prefabLibrary.GetPrefabById(layerData.TypeOfLayer);
+
+            var layerGameObject = await Spawn(prefab);
+            layerData.ReplaceReference(layerGameObject);
+
+            return layerGameObject;
+        }
+
+        public async Task<LayerGameObject> Spawn(
+            ReferencedLayerData layerData, 
+            Vector3 position, 
+            Quaternion rotation
+        ) {
+            var prefab = prefabLibrary.GetPrefabById(layerData.TypeOfLayer);
+
+            var layerGameObject = await SpawnObject(prefab, position, rotation);
+            layerData.ReplaceReference(layerGameObject);
+
+            return layerGameObject;        
+        }
+
+        private async Task<LayerGameObject> Spawn(LayerGameObject prefab) 
         {
             return prefab.SpawnLocation switch
             {
@@ -19,14 +51,6 @@ namespace Netherlands3D.Twin.Layers
                 SpawnLocation.PrefabPosition => await SpawnObject(prefab, prefab.transform.position, true),
                 _ => throw new ArgumentOutOfRangeException()
             };
-        }
-
-        public async Task<LayerGameObject> Spawn(
-            LayerGameObject prefab, 
-            Vector3 position, 
-            Quaternion rotation
-        ) {
-            return await SpawnObject(prefab, position, rotation);
         }
 
         private async Task<LayerGameObject> SpawnAtOpticalPosition(LayerGameObject prefab)

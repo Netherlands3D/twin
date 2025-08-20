@@ -10,8 +10,9 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using System.Collections.Generic;
 using KindMen.Uxios.Http;
-using Netherlands3D._Application._Twin.SDK;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin;
+using Netherlands3D.Twin.Services;
 
 namespace Netherlands3D.Functionalities.Wfs
 {
@@ -155,14 +156,15 @@ namespace Netherlands3D.Functionalities.Wfs
             styling.SetFillColor(randomLayerColor);
             styling.SetStrokeColor(randomLayerColor);
 
-            var layerSpecification = Layer.OfType(layerPrefab.PrefabIdentifier)
+            var layerSpecification = LayerBuilder.Start
+                .OfType(layerPrefab.PrefabIdentifier)
                 .NamedAs(title)
                 .ParentUnder(folderLayer)
                 .WithColor(randomLayerColor)
                 .AddProperty(urlProperty)
                 .SetDefaultStyling(styling);
 
-            _ = Sdk.Layers.Add(layerSpecification);
+            _ = App.Layers.Add(layerSpecification);
         }
 
         private UriBuilder CreateLayerGetFeatureUri(string featureType, string sourceUrl, string crs, string geoJsonOutputFormatString)

@@ -1,10 +1,12 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
-using Netherlands3D._Application._Twin.SDK;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
+using UnityEngine;
+using UnityEngine.Events;
+using Object = UnityEngine.Object;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes
 {
@@ -12,16 +14,46 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
     public class ReferencedLayerData : LayerData
     {
         [DataMember] private string prefabId;
-        [JsonIgnore] public LayerGameObject Reference { get; internal set; }
+        public string TypeOfLayer => prefabId;
+
+        [JsonIgnore] private LayerGameObject reference;
+        [JsonIgnore]
+        public LayerGameObject Reference
+        {
+            get => reference;
+            private set
+            {
+                if (reference == value) return;
+
+                if (reference)
+                {
+                    reference.DestroyLayerGameObject();
+                }
+
+                reference = value;
+                if (!reference) return;
+    
+                reference.LayerData = this;
+                reference.gameObject.name = Name;
+                prefabId = reference.PrefabIdentifier;
+            }
+        }
+
         [JsonIgnore] public bool KeepReferenceOnDestroy { get; set; } = false;
+        [JsonIgnore] public UnityEvent OnReferenceChanged = new();
 
         public ReferencedLayerData(string name, LayerGameObject reference) : base(name)
         {
             Reference = reference;
-            this.prefabId = reference.PrefabIdentifier;
 
-            ProjectData.Current.AddStandardLayer(this); //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
+            //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
+            ProjectData.Current.AddStandardLayer(this);
             RegisterEventListeners();
+        }
+
+        public ReferencedLayerData(string name, string prefabId, LayerGameObject reference) : this(name, reference)
+        {
+            this.prefabId = prefabId;
         }
 
         [JsonConstructor]
@@ -34,9 +66,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
         private async void SpawnLayer(List<LayerPropertyData> layerProperties)
         {
-            await Sdk.Layers.Add(Layer.OfType(prefabId).UsingData(this));
+            var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
             
-            Reference.gameObject.name = Name;
+            var layerGameObjects = await Object.InstantiateAsync(prefab);
+            var layerGameObject = layerGameObjects.FirstOrDefault();
+            if (!layerGameObject)
+            {
+                Debug.LogError("Prefab not found: " + prefabId);
+                return;
+            }
+            
+            this.ReplaceReference(layerGameObject);
             this.layerProperties = layerProperties;
 
             //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
@@ -63,6 +103,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             ChildrenChanged.RemoveListener(OnChildrenChanged);
             ParentOrSiblingIndexChanged.RemoveListener(OnSiblingIndexOrParentChanged);
             LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
+        }
+
+        public virtual void ReplaceReference(LayerGameObject layerGameObject)
+        {
+            bool reselect = false;
+            if (IsSelected)
+            {
+                DeselectLayer();
+                reselect = true;
+            }
+
+            Reference = layerGameObject;
+
+            OnReferenceChanged.Invoke();
+
+            if (reselect)
+            {
+                SelectLayer();
+            }
         }
 
         public override void DestroyLayer()
