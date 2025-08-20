@@ -32,7 +32,8 @@ namespace Netherlands3D.Twin.UI
             if (currentDialog != null)
             {
                 currentDialog.Show(false);
-                Destroy(currentDialog.gameObject);
+                if(currentDialog != null)
+                    Destroy(currentDialog.gameObject);
                 currentDialog = null;
             }
         }
