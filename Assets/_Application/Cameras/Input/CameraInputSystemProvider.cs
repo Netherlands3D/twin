@@ -252,6 +252,7 @@ namespace Netherlands3D.Twin.Cameras.Input
                     var currentPinchDistance = Vector2.Distance(primaryPointerPosition, secondaryPointerPosition);
                     var pinchDelta = currentPinchDistance - previousPinchDistance;
                     zoomValue.y = (pinchDelta / Screen.height) * pinchStrength;
+                    zoomValue.x = zoomValue.y;
 
                     previousPinchDistance = currentPinchDistance;
 
