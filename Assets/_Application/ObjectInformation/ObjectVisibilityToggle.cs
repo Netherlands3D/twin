@@ -16,6 +16,8 @@ namespace Netherlands3D.Twin.UI
         [SerializeField] private ToggleGroupItem visibilityToggle;
         [SerializeField] private Dialog visibilityDialog;
 
+        [SerializeField] private Vector2 offset;
+
         private IMapping currentSelectedFeatureObject;
         private object currentSelectedTransformObject;
         private string currentSelectedBagId;        
@@ -71,24 +73,19 @@ namespace Netherlands3D.Twin.UI
             
             if (toggle)
             {
-                service.ShowDialog(visibilityDialog, new Vector2(20, 0), visibilityToggle.GetComponent<RectTransform>());
+                service.ShowDialog(visibilityDialog, offset, visibilityToggle.GetComponent<RectTransform>());
                 service.ActiveDialog.Close.AddListener(() => visibilityToggle.Toggle.isOn = false);
                 service.ActiveDialog.Confirm.AddListener(() =>
                 {
-                    //TODO this is work in progress and the logic should be moved to its own service
-                    LayerGameObject layer = selector.GetLayerGameObjectFromMapping(currentSelectedFeatureObject);
-                    if (currentSelectedFeatureObject is MeshMapping mapping)
-                    {
-                        foreach (ObjectMappingItem item in mapping.ObjectMapping.items)
-                        {
-                            if (currentSelectedBagId == item.objectID)
-                            {
-                                LayerFeature layerFeature = layer.LayerFeatures[item];
-                                CartesianTileLayerStyler.SetVisibilityForSubObject(layer, layerFeature, false);
-                                break;
-                            }
-                        }
-                    }                    
+                    LayerGameObject layer;
+                    LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out layer);                  
+                    CartesianTileLayerStyler.SetVisibilityForSubObject(layer, feature, false);
+
+
+                    //if(layer is CartesianTileLayerGameObject obj)
+                    //{
+                    //    obj.SetVisibility(feature, false);
+                    //}
                 });
 
                 if (currentSelectedBagId != null)

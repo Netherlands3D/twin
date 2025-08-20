@@ -210,6 +210,7 @@ MonoBehaviour:
   visibilityToggle: {fileID: 8108018487823674463}
   visibilityDialog: {fileID: 5929048841642740412, guid: 7b20863b969f0e34c8a56e230c699e64,
     type: 3}
+  offset: {x: 20, y: 0}
 --- !u!114 &8108018487823674463 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 389471132520581330, guid: 317b76632deb4184f8c6322f3f7ea442,
