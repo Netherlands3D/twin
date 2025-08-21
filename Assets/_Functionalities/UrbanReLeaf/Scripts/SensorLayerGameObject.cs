@@ -19,21 +19,20 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
 
         private List<IPropertySectionInstantiator> propertySections = new();
 
-        public List<IPropertySectionInstantiator> GetPropertySections()
+        public new List<IPropertySectionInstantiator> GetPropertySections()
         {
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             return propertySections;
         }
 
-        protected override void Awake()
+        protected override void OnLayerInitialize()
         {
-            base.Awake();
+            base.OnLayerInitialize();
             sensorProjectionLayer = GetComponent<SensorProjectionLayer>();
         }
 
-        protected override void Start()
+        protected override void OnLayerReady()
         {
-            base.Start();           
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
         }

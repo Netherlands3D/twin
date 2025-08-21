@@ -11,21 +11,26 @@ using Object = UnityEngine.Object;
 
 namespace Netherlands3D.Twin.Services
 {
-    public class LayerBuilder : ILayerBuilder
+    public class LayerBuilder : BaseLayerBuilder
+    {
+        
+    }
+
+    public class BaseLayerBuilder : ILayerBuilder
     {
         internal string Type { get; private set; }
-        internal Uri Url { get; private set;}
-        internal string Name { get; private set; }
         internal Vector3? Position { get; private set; }
         internal Quaternion? Rotation { get; private set; }
-        internal Color? Color { get; private set; }
-        internal LayerData Parent { get; private set; }
-        internal StoredAuthorization Credentials { get; private set; }
+        private Uri Url { get; set;}
+        private string Name { get; set; }
+        private Color? Color { get; set; }
+        private LayerData Parent { get; set; }
+        internal StoredAuthorization Credentials { get; set; }
         internal List<LayerPropertyData> Properties { get; } = new();
-        [CanBeNull] internal Symbolizer DefaultSymbolizer { get; private set; }
-        internal List<LayerStyle> Styles { get; } = new();
+        [CanBeNull] private Symbolizer DefaultSymbolizer { get; set; }
+        private List<LayerStyle> Styles { get; } = new();
         
-        private LayerBuilder()
+        protected BaseLayerBuilder()
         {
         }
 
@@ -64,27 +69,31 @@ namespace Netherlands3D.Twin.Services
             return this;
         }
 
-        public ILayerBuilder ParentUnder(LayerData parent)
+        public ILayerBuilder ChildOf(LayerData parent)
         {
             Parent = parent;
+            
             return this;
         }
 
         public ILayerBuilder WithCredentials(StoredAuthorization creds)
         {
             Credentials = creds;
+            
             return this;
         }
 
         public ILayerBuilder AddProperty(LayerPropertyData property)
         {
             Properties.Add(property);
+            
             return this;
         }
 
         public ILayerBuilder AddProperties(params LayerPropertyData[] properties)
         {
             Properties.AddRange(properties);
+            
             return this;
         }
 
@@ -116,14 +125,9 @@ namespace Netherlands3D.Twin.Services
             return this;
         }
 
-        public LayerData Build(LayerGameObject placeholderPrefab)
+        public LayerData Build(LayerGameObject ontoReference)
         {
-            var placeholder = Object.Instantiate(
-                placeholderPrefab, 
-                Position ?? Vector3.zero, 
-                Rotation ?? Quaternion.identity
-            );
-            var layerData = new ReferencedLayerData(Name, Type, placeholder);
+            var layerData = new ReferencedLayerData(Name, Type, ontoReference);
             
             if (!string.IsNullOrEmpty(this.Name))
                 layerData.Name = this.Name;
@@ -149,6 +153,11 @@ namespace Netherlands3D.Twin.Services
                 layerData.AddStyle(style);
             }
 
+            return AddOntoBuild(layerData);
+        }
+
+        protected virtual LayerData AddOntoBuild(ReferencedLayerData layerData)
+        {
             return layerData;
         }
     }

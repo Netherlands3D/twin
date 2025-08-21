@@ -9,9 +9,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         [SerializeField] private CoordinateSystem coordinateSystem;
 
 
-        protected override void Start()
+        protected override void OnLayerReady()
         {
-            base.Start();
+            base.OnLayerReady();
             transformPropertyData.Position = new Coordinate(coordinateSystem, Coordinates.y, Coordinates.x, Coordinates.z);
             transformPropertyData.EulerRotation = transform.rotation.eulerAngles;
             transformPropertyData.LocalScale = transform.localScale;

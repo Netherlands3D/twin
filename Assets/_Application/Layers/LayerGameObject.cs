@@ -6,7 +6,6 @@ using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Events;
@@ -47,15 +46,7 @@ namespace Netherlands3D.Twin.Layers
 
         public ReferencedLayerData LayerData
         {
-            get
-            {
-                if (layerData == null)
-                {
-                    CreateProxy();
-                }
-
-                return layerData;
-            }
+            get => layerData;
             set
             {
                 layerData = value;
@@ -88,9 +79,40 @@ namespace Netherlands3D.Twin.Layers
         }
 #endif
 
-        protected virtual void Start()
+        [Obsolete("Do not use Awake in subclasses, use OnLayerInitialize instead", true)]
+        private void Awake()
         {
+            if (
+                layerData == null 
+                && transform.parent 
+                && transform.parent.GetComponent<LayerSpawner.LayerSpawnerPlaceholder>() is { } layerSpawner
+            ) {
+                layerSpawner.ReplaceWith(this);
+            }
+
+            // Call a template method that children are free to play with - this way we can avoid using
+            // the awake method directly and prevent forgetting to call the base.Awake() from children and thus
+            // forgetting to grab the layerdata from the spawning context
+            OnLayerInitialize();
+        }
+
+        protected virtual void OnLayerInitialize()
+        {
+            
+        }
+
+        [Obsolete("Do not use Awake in subclasses, use OnLayerReady instead", true)]
+        private void Start()
+        {
+            // Call a template method that children are free to play with - this way we can avoid using
+            // the start method directly and prevent forgetting to call the base.Start() from children
+            OnLayerReady();
             InitializeVisualisation();
+        }
+
+        protected virtual void OnLayerReady()
+        {
+            
         }
 
         //Use this function to initialize anything that has to be done after either:
@@ -110,11 +132,6 @@ namespace Netherlands3D.Twin.Layers
             {
                 visualisation.LoadProperties(layerData.LayerProperties);
             }
-        }
-
-        private void CreateProxy()
-        {
-            ProjectData.AddReferenceLayer(this);
         }
 
         protected virtual void OnEnable()

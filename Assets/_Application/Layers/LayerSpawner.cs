@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using GG.Extensions;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
@@ -12,6 +15,23 @@ namespace Netherlands3D.Twin.Layers
 {
     public class LayerSpawner
     {
+        [RequireComponent(typeof(LayerGameObject))]
+        public class LayerSpawnerPlaceholder : MonoBehaviour
+        {
+            public void ReplaceWith(LayerGameObject layerGameObject)
+            {
+                var placeholderLayerGameObject = GetComponent<LayerGameObject>();
+                var layerData = placeholderLayerGameObject.LayerData;
+                
+                // Reparent the final layerGameObject to the parent of the placeholder so that the situation is as 
+                // it should be before doing the switcheroo
+                layerGameObject.transform.SetParent(placeholderLayerGameObject.transform.parent, false);
+            
+                // Does the whole switcheroo, including transplanting the LayerData and destroying the placeholder
+                layerData.SetReference(layerGameObject);
+            }
+        }
+
         private readonly PrefabLibrary prefabLibrary;
 
         public LayerSpawner(PrefabLibrary prefabLibrary)
@@ -21,45 +41,40 @@ namespace Netherlands3D.Twin.Layers
 
         public async Task<LayerGameObject> Spawn(ReferencedLayerData layerData)
         {
-            var prefab = prefabLibrary.GetPrefabById(layerData.TypeOfLayer);
+            var prefab = prefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
 
-            var layerGameObject = await Spawn(prefab);
-            layerData.ReplaceReference(layerGameObject);
-
-            return layerGameObject;
+            return await Spawn(layerData, prefab);
         }
 
         public async Task<LayerGameObject> Spawn(
-            ReferencedLayerData layerData, 
-            Vector3 position, 
+            ReferencedLayerData layerData,
+            Vector3 position,
             Quaternion rotation
         ) {
-            var prefab = prefabLibrary.GetPrefabById(layerData.TypeOfLayer);
+            var prefab = prefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
 
-            var layerGameObject = await SpawnObject(prefab, position, rotation);
-            layerData.ReplaceReference(layerGameObject);
-
-            return layerGameObject;        
+            return await SpawnObject(layerData, prefab, position, rotation);
         }
 
-        private async Task<LayerGameObject> Spawn(LayerGameObject prefab) 
+        private async Task<LayerGameObject> Spawn(ReferencedLayerData layerData, LayerGameObject prefab)
         {
             return prefab.SpawnLocation switch
             {
-                SpawnLocation.OpticalCenter => await SpawnAtOpticalPosition(prefab),
-                SpawnLocation.CameraPosition => await SpawnAtCameraPosition(prefab),
-                SpawnLocation.PrefabPosition => await SpawnObject(prefab, prefab.transform.position, true),
+                SpawnLocation.OpticalCenter => await SpawnAtOpticalPosition(layerData, prefab),
+                SpawnLocation.CameraPosition => await SpawnAtCameraPosition(layerData, prefab),
+                SpawnLocation.PrefabPosition => await SpawnObject(layerData, prefab, prefab.transform.position, true),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
 
-        private async Task<LayerGameObject> SpawnAtOpticalPosition(LayerGameObject prefab)
+        private async Task<LayerGameObject> SpawnAtOpticalPosition(ReferencedLayerData layerData,
+            LayerGameObject prefab)
         {
             var opticalRaycaster = Object.FindAnyObjectByType<OpticalRaycaster>();
             if (!opticalRaycaster)
             {
                 // if there is no optical raycaster - we fallback to the ObjectPlacementUtility's SpawnPoint
-                return await SpawnObjectAtSpawnPoint(prefab);
+                return await SpawnObjectAtSpawnPoint(layerData, prefab);
             }
 
             var centerOfViewport = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);
@@ -71,7 +86,7 @@ namespace Netherlands3D.Twin.Layers
             {
                 try
                 {
-                    var result = await SpawnObject(prefab, position, isHit);
+                    var result = await SpawnObject(layerData, prefab, position, isHit);
                     tcs.SetResult(result);
                 }
                 catch (Exception ex)
@@ -83,47 +98,69 @@ namespace Netherlands3D.Twin.Layers
             return await tcs.Task;
         }
 
-        private async Task<LayerGameObject> SpawnAtCameraPosition(LayerGameObject prefab)
+        private async Task<LayerGameObject> SpawnAtCameraPosition(ReferencedLayerData layerData, LayerGameObject prefab)
         {
             var mainCameraTransform = Camera.main?.transform;
 
             return await SpawnObject(
+                layerData,
                 prefab,
                 mainCameraTransform?.position ?? Vector3.zero,
                 mainCameraTransform?.rotation ?? Quaternion.identity
             );
         }
 
-        private async Task<LayerGameObject> SpawnObject(LayerGameObject prefab, Vector3 position, bool hasHit)
+        private async Task<LayerGameObject> SpawnObject(ReferencedLayerData layerData, LayerGameObject prefab,
+            Vector3 position, bool hasHit)
         {
             if (!hasHit)
             {
                 // if there is no hit from the optical raycaster - we fallback to the ObjectPlacementUtility's
                 // SpawnPoint
-                return await SpawnObjectAtSpawnPoint(prefab);
+                return await SpawnObjectAtSpawnPoint(layerData, prefab);
             }
 
-            return await SpawnObject(prefab, position, prefab.transform.rotation);
+            return await SpawnObject(layerData, prefab, position, prefab.transform.rotation);
         }
 
-        private async Task<LayerGameObject> SpawnObject(LayerGameObject prefab, Vector3 position, Quaternion rotation)
+        private async Task<LayerGameObject> SpawnObject(
+            ReferencedLayerData layerData,
+            LayerGameObject prefab,
+            Vector3 position,
+            Quaternion rotation
+        )
         {
             if (position == Vector3.zero)
             {
-                return await SpawnObjectAtSpawnPoint(prefab);
+                return await SpawnObjectAtSpawnPoint(layerData, prefab);
             }
 
-            var layerGameObjects = await Object.InstantiateAsync(prefab, position, rotation);
-            
-            return layerGameObjects.FirstOrDefault();
+            return await SpawnObjectAt(layerData, prefab, position, rotation);
         }
 
-        private async Task<LayerGameObject> SpawnObjectAtSpawnPoint(LayerGameObject prefab)
+        private async Task<LayerGameObject> SpawnObjectAtSpawnPoint(ReferencedLayerData layerData,
+            LayerGameObject prefab)
         {
             var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
+
+            return await SpawnObjectAt(layerData, prefab, spawnPoint, Quaternion.identity);
+        }
+
+        private static async Task<LayerGameObject> SpawnObjectAt(
+            ReferencedLayerData layerData,
+            LayerGameObject prefab,
+            Vector3 position,
+            Quaternion rotation
+        ) {
+            var placeholder = layerData.Reference;
             
-            var layerGameObjects = await Object.InstantiateAsync(prefab, spawnPoint, Quaternion.identity);
-            
+            var layerGameObjects = await Object.InstantiateAsync(
+                prefab,
+                placeholder.transform,
+                position,
+                rotation
+            );
+
             return layerGameObjects.FirstOrDefault();
         }
     }

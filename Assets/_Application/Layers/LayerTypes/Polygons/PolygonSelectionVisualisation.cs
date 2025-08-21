@@ -59,7 +59,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             return GetComponents<IPropertySectionInstantiator>().ToList();
         }
 
-        protected virtual void OnDestroy()
+        protected override void OnDestroy()
         {
             Destroy(PolygonVisualisation.gameObject);
         }

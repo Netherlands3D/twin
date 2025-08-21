@@ -1,13 +1,11 @@
-using System;
+using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
@@ -26,8 +24,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             layer.isEnabled = isActive;
         }
 
-        protected virtual void Awake()
+        protected override void OnLayerInitialize()
         {
+            Debug.LogError("Initializing CTLGO");
             tileHandler = FindAnyObjectByType<TileHandler>();
             transform.SetParent(tileHandler.transform);
             layer = GetComponent<Layer>();
@@ -76,10 +75,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 transformInterfaceToggle.ShowVisibilityPanel(false);
         }
 
-        protected virtual void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             if (Application.isPlaying && tileHandler && layer)
             {
+                Debug.LogError("Destroying CTLGO");
                 tileHandler.RemoveLayer(layer);
             }
         }

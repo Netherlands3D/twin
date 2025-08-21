@@ -129,7 +129,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             return properties;
         }
 
-        public override void ReplaceReference(LayerGameObject layerGameObject)
+        public override void SetReference(LayerGameObject layerGameObject, bool keepPrefabIdentifier = false)
         {
             throw new NotImplementedException("Replacing polygon references is currently not supported");
         }

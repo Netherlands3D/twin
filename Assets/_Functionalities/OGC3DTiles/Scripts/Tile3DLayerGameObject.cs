@@ -58,7 +58,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
                 tileSet.RefreshTiles();
         }
 
-        protected void Awake()
+        protected override void OnLayerInitialize()
         {
             tileSet = GetComponent<Read3DTileset>();
 
@@ -130,9 +130,8 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             }
         }
 
-        protected override void Start()
+        protected override void OnLayerReady()
         {
-            base.Start();
             if (string.IsNullOrEmpty(tile3DPropertyData.Url) && !string.IsNullOrEmpty(tileSet.tilesetUrl)) //if we are making a new layer, we should take the serialized url from the tileset if it exists.
             {
                 UpdateURL(new Uri(tileSet.tilesetUrl));
@@ -206,7 +205,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             }
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             tile3DPropertyData.OnUrlChanged.RemoveListener(UpdateURL);
             tile3DPropertyData.OnCRSChanged.RemoveListener(UpdateCRS);

@@ -1,12 +1,10 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
-using Object = UnityEngine.Object;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes
 {
@@ -14,7 +12,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
     public class ReferencedLayerData : LayerData
     {
         [DataMember] private string prefabId;
-        public string TypeOfLayer => prefabId;
+        public string PrefabIdentifier => prefabId;
 
         [JsonIgnore] private LayerGameObject reference;
         [JsonIgnore]
@@ -46,7 +44,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         {
             Reference = reference;
 
-            //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
+            // AddDefaultLayer should be after setting the reference so the reference is assigned
+            // when the NewLayer event is called
             ProjectData.Current.AddStandardLayer(this);
             RegisterEventListeners();
         }
@@ -61,25 +60,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         {
             Name = name;
             this.prefabId = prefabId;
-            SpawnLayer(layerProperties);
+            this.layerProperties = layerProperties;
+            
+            SpawnLayer();
         }
 
-        private async void SpawnLayer(List<LayerPropertyData> layerProperties)
+        private async void SpawnLayer()
         {
-            var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
+            await App.Layers.Add(this);
             
-            var layerGameObjects = await Object.InstantiateAsync(prefab);
-            var layerGameObject = layerGameObjects.FirstOrDefault();
+            // populated after adding the layer
+            var layerGameObject = this.Reference;
             if (!layerGameObject)
             {
                 Debug.LogError("Prefab not found: " + prefabId);
                 return;
             }
             
-            this.ReplaceReference(layerGameObject);
-            this.layerProperties = layerProperties;
-
-            //AddDefaultLayer should be after setting the reference so the reference is assigned when the NewLayer event is called
+            // AddDefaultLayer should be after setting the reference so the reference is assigned when
+            // the NewLayer event is called
             ProjectData.Current.AddStandardLayer(this); 
             RegisterEventListeners();
         }
@@ -105,8 +104,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
         }
 
-        public virtual void ReplaceReference(LayerGameObject layerGameObject)
+        public virtual void SetReference(LayerGameObject layerGameObject, bool keepPrefabIdentifier = false)
         {
+            string previousPrefabId = null;
+            if (keepPrefabIdentifier && !string.IsNullOrEmpty(prefabId))
+            {
+                previousPrefabId = prefabId;
+            }
+            if (!reference)
+            {
+                Reference = layerGameObject;
+                if (keepPrefabIdentifier && !string.IsNullOrEmpty(previousPrefabId))
+                {
+                    prefabId = previousPrefabId;
+                }
+                return;
+            }
+
             bool reselect = false;
             if (IsSelected)
             {
@@ -115,6 +129,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             }
 
             Reference = layerGameObject;
+            if (keepPrefabIdentifier && !string.IsNullOrEmpty(previousPrefabId))
+            {
+                prefabId = previousPrefabId;
+            }
 
             OnReferenceChanged.Invoke();
 

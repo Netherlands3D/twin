@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using KindMen.Uxios.Http;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Services;
 
 namespace Netherlands3D.Functionalities.Wfs
@@ -137,34 +138,21 @@ namespace Netherlands3D.Functionalities.Wfs
             Debug.LogError("Unrecognized WFS request type: " + url);
         }
 
-        private void AddWFSLayer(string featureType, string sourceUrl, string crsType, FolderLayer folderLayer, string title, string geoJsonOutputFormatString)
+        private async void AddWFSLayer(string featureType, string sourceUrl, string crsType, FolderLayer folderLayer, string title, string geoJsonOutputFormatString)
         {
             // Create a GetFeature URL for the specific featureType
             UriBuilder uriBuilder = CreateLayerGetFeatureUri(featureType, sourceUrl, crsType, geoJsonOutputFormatString);
-            var getFeatureUrl = uriBuilder.Uri.ToString();
+            var getFeatureUrl = uriBuilder.Uri;
 
             Debug.Log($"Adding WFS layer '{featureType}' with url '{getFeatureUrl}'");
 
-            var remoteAssetUri = AssetUriFactory.CreateRemoteAssetUri(getFeatureUrl);
-            var urlProperty = new LayerURLPropertyData { Data = remoteAssetUri };
+            var layerBuilder = new WfsLayerBuilder(
+                getFeatureUrl,
+                title,
+                folderLayer
+            );
 
-            //GeoJSON layer+visual colors are set to random colors initially
-            var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
-            randomLayerColor.a = 0.5f;
-
-            var styling = new Symbolizer();
-            styling.SetFillColor(randomLayerColor);
-            styling.SetStrokeColor(randomLayerColor);
-
-            var layerSpecification = LayerBuilder.Start
-                .OfType(layerPrefab.PrefabIdentifier)
-                .NamedAs(title)
-                .ParentUnder(folderLayer)
-                .WithColor(randomLayerColor)
-                .AddProperty(urlProperty)
-                .SetDefaultStyling(styling);
-
-            _ = App.Layers.Add(layerSpecification);
+            await App.Layers.Add(layerBuilder);
         }
 
         private UriBuilder CreateLayerGetFeatureUri(string featureType, string sourceUrl, string crs, string geoJsonOutputFormatString)

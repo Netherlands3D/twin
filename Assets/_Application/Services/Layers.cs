@@ -8,6 +8,7 @@ using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Netherlands3D.Twin.Services
 {
@@ -25,7 +26,7 @@ namespace Netherlands3D.Twin.Services
 
         public async Task<ReferencedLayerData> Add(ILayerBuilder builder)
         {
-            if (builder is not LayerBuilder layerBuilder)
+            if (builder is not BaseLayerBuilder layerBuilder)
             {
                 throw new NotSupportedException("Unsupported layer builder type: " + builder.GetType().Name);
             }
@@ -62,10 +63,27 @@ namespace Netherlands3D.Twin.Services
             return layerGameObject.LayerData;
         }
 
-        private async Task<LayerGameObject> SpawnLayer(LayerBuilder layerBuilder)
+        public async Task<ReferencedLayerData> Add(ReferencedLayerData layerData)
         {
-            var layerData = layerBuilder.Build(prefabLibrary.fallbackPrefab);
+            layerData.SetReference(SpawnPlaceholder(), true);
 
+            await spawner.Spawn(layerData);
+            
+            return layerData;
+        }
+
+        public async Task<ReferencedLayerData> Add(ReferencedLayerData layerData, Vector3 position, Quaternion? rotation = null)
+        {
+            layerData.SetReference(SpawnPlaceholder(), true);
+            
+            await spawner.Spawn(layerData, position, rotation ?? Quaternion.identity);
+            
+            return layerData;
+        }
+
+        private async Task<LayerGameObject> SpawnLayer(BaseLayerBuilder layerBuilder)
+        {
+            var layerData = layerBuilder.Build(SpawnPlaceholder());
             if (layerData is not ReferencedLayerData referencedLayerData)
             {
                 throw new Exception("Cannot add layer");
@@ -83,8 +101,17 @@ namespace Netherlands3D.Twin.Services
             );
         }
 
-        private Uri RetrieveUrlForLayer(LayerBuilder layerBuilder)
+        private LayerGameObject SpawnPlaceholder()
         {
+            var placeholder = Instantiate(prefabLibrary.fallbackPrefab);
+            placeholder.gameObject.AddComponent<LayerSpawner.LayerSpawnerPlaceholder>();
+
+            return placeholder;
+        }
+
+        private Uri RetrieveUrlForLayer(BaseLayerBuilder layerBuilder)
+        {
+            // TODO: Can't we do this another way? This feels leaky
             var urlPropertyData = layerBuilder.Properties.Cast<LayerURLPropertyData>().SingleOrDefault(data => data != null);
             if (urlPropertyData == null)
             {

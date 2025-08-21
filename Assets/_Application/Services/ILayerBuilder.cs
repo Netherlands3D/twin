@@ -18,7 +18,7 @@ namespace Netherlands3D.Twin.Services
         ILayerBuilder NamedAs(string name);
         ILayerBuilder WithColor(Color color);
         ILayerBuilder At(Uri url);
-        ILayerBuilder ParentUnder(LayerData parent);
+        ILayerBuilder ChildOf(LayerData parent);
         ILayerBuilder WithCredentials(StoredAuthorization creds);
         ILayerBuilder AddProperty(LayerPropertyData property);
         ILayerBuilder AddProperties(params LayerPropertyData[] properties);
@@ -26,6 +26,6 @@ namespace Netherlands3D.Twin.Services
         ILayerBuilder Rotated(Quaternion rotation);
         ILayerBuilder SetDefaultStyling(Symbolizer symbolizer);
         ILayerBuilder AddStyle(LayerStyle style);
-        LayerData Build(LayerGameObject placeholderPrefab);
+        LayerData Build(LayerGameObject ontoReference);
     }
 }

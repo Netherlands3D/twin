@@ -96,6 +96,7 @@ namespace Netherlands3D.Twin.Projects
             {
                 RootLayer.AddChild(layer, 0);
             }
+            Debug.LogWarning("Adding layer " + layer.Name + " to project");;
             LayerAdded.Invoke(layer);           
         }
 

@@ -19,9 +19,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         CameraPropertyData cameraPropertyData => (CameraPropertyData)transformPropertyData;
         public override bool IsMaskable => false;
 
-        protected override void Awake()
+        protected override void OnLayerInitialize()
         {
-            base.Awake();
+            base.OnLayerInitialize();
             cameraPropertyData.OnOrthographicChanged.AddListener(SetOrthographic);
 
             defaultColor = ghostMaterial.color;
