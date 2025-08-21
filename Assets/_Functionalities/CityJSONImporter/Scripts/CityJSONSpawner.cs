@@ -76,7 +76,7 @@ namespace Netherlands3D.Functionalities.CityJSON
                 //GLB stores coordinates as 32 bit floats, and therefore cannot accurately be georeferenced.
                 //However, we will still do a check to ensure at least the model will appear roughly where it should if it is still georeferenced despite this.
                 var referencePosition = returnedGameObject.transform.GetChild(0).localPosition;
-                if (IsValidRD(referencePosition.x, referencePosition.y, referencePosition.z, out var origin))
+                if (EPSG7415.IsValid(referencePosition.x, referencePosition.y, referencePosition.z, out var origin))
                 {
                     PositionGeoReferencedCityJson(returnedGameObject, holgo, origin);
                 }
@@ -93,25 +93,6 @@ namespace Netherlands3D.Functionalities.CityJSON
 
             // Object is loaded / replaced - trigger the application of styling
             holgo.ApplyStyling();
-        }
-        
-        //todo: this function should move to the Coordinates package
-        private bool IsValidRD(double x, double y, double z, out Coordinate rdOrigin)
-        {
-            if (EPSG7415.IsValid(new Vector3RD(x, z, y)))
-            {
-                rdOrigin = new Coordinate(CoordinateSystem.RDNAP, x, z, 0); //don't offset the height
-                return true;
-            }
-
-            if (EPSG7415.IsValid(new Vector3RD(x, y, z)))
-            {
-                rdOrigin = new Coordinate(CoordinateSystem.RDNAP, x, y, 0); //don't offset the height
-                return true;
-            }
-
-            rdOrigin = new Coordinate();
-            return false;
         }
         
         private void PositionNonGeoReferencedCityJson(GameObject returnedGameObject, HierarchicalObjectLayerGameObject holgo)
