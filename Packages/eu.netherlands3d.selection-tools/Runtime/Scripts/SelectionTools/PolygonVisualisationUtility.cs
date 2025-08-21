@@ -82,7 +82,7 @@ namespace Netherlands3D.SelectionTools
         /// <returns></returns>
         public static Mesh CreatePolygonMesh(List<List<Vector3>> contours)
         {
-            if (contours == null || contours.Count == 0)
+            if (contours == null || contours.Count == 0 || contours[0].Count < 3)
                 return null;
 
             // STEP 1: Compute polygon plane
@@ -106,7 +106,14 @@ namespace Netherlands3D.SelectionTools
                 holes[h - 1] = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[h], origin, u, v));
 
             var polygon = geometryFactory.CreatePolygon(outerRing, holes);
+            
             // STEP 3: Triangulate in 2D
+            if (!polygon.IsValid)
+            {
+                Debug.Log("invalid polygon");
+                return null;
+            }
+            
             var triangulated = ConstrainedDelaunayTriangulator.Triangulate(polygon);
 
             // STEP 4: Build Unity Mesh in 3D
@@ -167,6 +174,7 @@ namespace Netherlands3D.SelectionTools
 
             return coordsArray;
         }
+
         #endregion
 
         #region PolygonLine
