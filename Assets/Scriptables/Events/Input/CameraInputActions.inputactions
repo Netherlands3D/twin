@@ -9,7 +9,7 @@
                     "name": "Move",
                     "type": "Button",
                     "id": "8fb49d59-dad6-49e9-ab94-8d099cc57a0b",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -459,7 +459,7 @@
                     "name": "Drag",
                     "type": "Button",
                     "id": "5f4388a3-84ab-4408-9fd0-0b5e168724ed",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -518,6 +518,17 @@
                     "action": "DragSecondary",
                     "isComposite": true,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "ce1c82fc-6d75-49d8-b181-e4ee8d4ca9b8",
+                    "path": "<Touchscreen>/touch1/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Touch",
+                    "action": "DragSecondary",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 },
                 {
                     "name": "binding",
