@@ -2,7 +2,6 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Events;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -136,7 +135,7 @@ namespace Netherlands3D.Twin.Cameras
 
         private void Start()
         {
-            //Application.targetFrameRate = 60;
+            //Application.targetFrameRate = 15;
         }
 
 
@@ -456,13 +455,14 @@ namespace Netherlands3D.Twin.Cameras
             if (Mathf.Abs(zoomVector) < 0.001f)
             {
                 zoomVector = 0;
+                dynamicZoomSpeed = 0;                
                 return;
             }
 
             dynamicZoomSpeed = zoomVector;
             Vector3 pos = worldTransform.Coordinate.ToUnity();
+            
             var direction = (zoomTarget.ToUnity() - pos);
-
             //if getting to close to the target or the direction suddenly becomes flipped, lets default to camera forward direction
             if (direction.sqrMagnitude < 0.0001f || Vector3.Dot(transform.forward, direction) < 0)
                 direction = transform.forward;
@@ -479,6 +479,7 @@ namespace Netherlands3D.Twin.Cameras
 
 
         private bool wasNotRotating = false;
+        private bool cancelPointerAsync = false;
 
         /// <summary>
         /// Returns a position on the world 0 plane
@@ -487,7 +488,8 @@ namespace Netherlands3D.Twin.Cameras
         /// <returns>World position</returns>
         public void UpdateWorldPoint()
         {
-            zoomTarget = new Coordinate(pointer.WorldPoint.ToUnity());
+            Vector3 position = pointer.GetWorldPoint();
+            zoomTarget = new Coordinate(position);
             if (!rotatingAroundPoint)
             {
                 wasNotRotating = false;
@@ -495,14 +497,13 @@ namespace Netherlands3D.Twin.Cameras
             else
             {
                 if (!wasNotRotating)
-                {
-                    Vector3 position = pointer.GetWorldPoint();
+                {                    
                     rotateTarget = new Coordinate(position);
                     zoomTarget = new Coordinate(position);
                     pointer.GetPointerWorldPointAsync(result =>
                     {
                         rotateTarget = new Coordinate(result);
-                        zoomTarget = new Coordinate(result);
+                        //zoomTarget = new Coordinate(result);
                     });
                 }
                 wasNotRotating = true;                
