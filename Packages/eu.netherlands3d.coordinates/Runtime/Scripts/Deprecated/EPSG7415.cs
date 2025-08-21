@@ -260,6 +260,24 @@ namespace Netherlands3D.Coordinates
             );
         }
 
+        public static bool IsValid(double x, double y, double z, out Coordinate coordinate)
+        {
+            if (IsValid(new Vector3RD(x, z, y)))
+            {
+                coordinate = new Coordinate(CoordinateSystem.RDNAP, x, z, 0); //don't offset the height
+                return true;
+            }
+
+            if (IsValid(new Vector3RD(x, y, z)))
+            {
+                coordinate = new Coordinate(CoordinateSystem.RDNAP, x, y, 0); //don't offset the height
+                return true;
+            }
+
+            coordinate = new Coordinate();
+            return false;
+        }
+        
         /// <summary>
         /// checks if RD-coordinate is within the defined valid region
         /// </summary>
@@ -267,14 +285,10 @@ namespace Netherlands3D.Coordinates
         /// <returns>true if coordinate is valid</returns>
         public static bool IsValid(Vector3RD coordinate)
         {
-            if (coordinate.x > -7000 && coordinate.x < 300000)
-            {
-                if (coordinate.y > 289000 && coordinate.y < 629000)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return coordinate.x > -7000 && 
+                   coordinate.x < 300000 && 
+                   coordinate.y > 289000 && 
+                   coordinate.y < 629000;
         }
 
         public static Vector3RD ToVector3RD(this Coordinate coordinate)
