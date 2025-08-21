@@ -196,7 +196,7 @@ namespace Netherlands3D.Twin.Cameras
             currentPointerDelta = pointerDelta;
 
             if (rotate)
-            {                
+            {
                 rotatingAroundPoint = true;
                 RotateAroundPoint(pointerDelta);
             }
@@ -430,6 +430,10 @@ namespace Netherlands3D.Twin.Cameras
         /// <param name="amount">Zoom delta where 1 is towards, and -1 is backing up from zoompoint</param>
         public void ZoomToPointer(float amount)
         {
+
+            if (Mathf.Abs(currentPointerDelta.x) > 1 || Mathf.Abs(currentPointerDelta.y) > 1)
+                return;
+
             float signedAmount = Mathf.Sign(amount);
            
             if (Mathf.Sign(zoomVector) != signedAmount)
