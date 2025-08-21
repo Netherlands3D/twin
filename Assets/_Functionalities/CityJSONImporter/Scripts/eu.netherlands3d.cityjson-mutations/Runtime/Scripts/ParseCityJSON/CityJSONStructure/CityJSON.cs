@@ -5,6 +5,7 @@ using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Netherlands3D.Events;
+using Netherlands3D.Twin.FloatingOrigin;
 
 namespace Netherlands3D.T3DPipeline
 {
@@ -28,7 +29,9 @@ namespace Netherlands3D.T3DPipeline
         public List<CityObject> CityObjects { get; private set; } = new List<CityObject>();
         public Vector3Double MinExtent { get; private set; }
         public Vector3Double MaxExtent { get; private set; }
-        public Vector3Double AbsoluteCenter { get { return (MaxExtent + MinExtent) / 2; } }
+        public Vector3Double RelativeCenter =>  (MaxExtent - MinExtent) / 2;
+        public Vector3Double AbsoluteCenter => (MaxExtent + MinExtent) / 2;
+
         public CoordinateSystem CoordinateSystem { get; private set; } = CoordinateSystem.Undefined;
 
         private Dictionary<string, JSONNode> extensionNodes = new Dictionary<string, JSONNode>();
@@ -86,6 +89,7 @@ namespace Netherlands3D.T3DPipeline
                 Destroy(co.gameObject);
                 CityObjects = new List<CityObject>(); //reset this in case an invalid CityJSON is parsed after a succesful parse
             }
+
             RemoveExtensionNodes(extensionNodes);
 
             //parse
@@ -131,6 +135,7 @@ namespace Netherlands3D.T3DPipeline
                 vert += TransformTranslate;
                 parsedVertices.Add(vert);
             }
+
             if (parsedVertices.Count == 0)
             {
                 Debug.LogWarning("Vertex list is empty, nothing can be visualized because empty meshes will be created!");
@@ -182,6 +187,7 @@ namespace Netherlands3D.T3DPipeline
                     go = Instantiate(cityObjectPrefab, transform);
                     co = go.GetComponent<CityObject>();
                 }
+
                 co.FromJSONNode(cityObjectNode.Key, cityObjectNode.Value, CoordinateSystem, parsedVertices);
                 cityObjects.Add(cityObjectNode.Value, co);
             }
@@ -196,13 +202,14 @@ namespace Netherlands3D.T3DPipeline
                     string parentId = parents[i];
                     parentObjects[i] = cityObjects.First(co => co.Value.Id == parentId).Value;
                 }
+
                 co.Value.SetParents(parentObjects);
             }
 
             CityObjects = cityObjects.Values.ToList();
 
-            if (useAsRelativeRDCenter)
-                SetRelativeCenter();
+            if (TryGetComponent<WorldTransform>(out var worldTransform))
+                SetRelativeCenter(worldTransform);
 
             foreach (var co in CityObjects)
             {
@@ -240,14 +247,11 @@ namespace Netherlands3D.T3DPipeline
         }
 
         // set the relative RD center to avoid floating point issues of GameObject far from the Unity origin
-        private void SetRelativeCenter()
+        private void SetRelativeCenter(WorldTransform worldTransform)
         {
-            if (CoordinateSystem == CoordinateSystem.RD)
-            {
-                var relativeCenterRD = (MinExtent + MaxExtent) / 2;
-                Debug.Log("Setting Relative RD Center to: " + relativeCenterRD);
-                CoordinateSystems.SetOrigin( new Coordinate(CoordinateSystem.RD, relativeCenterRD.x, relativeCenterRD.y));
-            }
+            var absoluteCenter = AbsoluteCenter;
+            var coord = new Coordinate(CoordinateSystem, absoluteCenter.x, absoluteCenter.y, absoluteCenter.z);
+            worldTransform.MoveToCoordinate(coord);
         }
     }
 }
