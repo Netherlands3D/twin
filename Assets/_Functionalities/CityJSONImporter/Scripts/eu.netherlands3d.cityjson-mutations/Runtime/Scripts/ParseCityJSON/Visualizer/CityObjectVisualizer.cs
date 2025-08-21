@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Events;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
 
 namespace Netherlands3D.T3DPipeline
@@ -92,6 +94,12 @@ namespace Netherlands3D.T3DPipeline
         //create the meshes
         private void Visualize()
         {
+            StartCoroutine(Test());
+        }
+
+        private IEnumerator Test()
+        {
+            yield return null;
             transform.localPosition = SetPosition(cityObject); //set position first so the CityObject's transformationMatrix can be used to position the mesh.
             meshes = CreateMeshes(cityObject);
             var highestLod = meshes.Keys.Max(g => g.Lod);
@@ -101,9 +109,9 @@ namespace Netherlands3D.T3DPipeline
 
         private Vector3 SetPosition(CityObject cityObject)
         {
-            var center = cityObject.AbsoluteCenter; 
-            var coordinate = new Coordinate(cityObject.CoordinateSystem, center.x, center.y, center.z);
-            return coordinate.ToUnity();
+            var relativeCenter = cityObject.RelativeCenter;
+            var relativeCoordinate = new Coordinate(cityObject.CoordinateSystem, relativeCenter.x, relativeCenter.y, relativeCenter.z); //this is not a valid coordinate, but we need to use the Coordinate struct to determine the axis order
+            return new Vector3((float)relativeCoordinate.easting, (float)relativeCoordinate.northing, (float)relativeCoordinate.height);
         }
 
 
@@ -170,6 +178,7 @@ namespace Netherlands3D.T3DPipeline
             var boundaryMeshes = BoundariesToMeshes(geometry.BoundaryObject, coordinateSystem);
             var subMeshes = CombineBoundaryMeshesWithTheSameSemanticObject(boundaryMeshes, transformationMatrix, out var types);
             var materials = new Material[types.Count];
+            
             for (int i = 0; i < materials.Length; i++)
             {
                 materials[i] = GetMaterial(types[i]);
@@ -180,8 +189,8 @@ namespace Netherlands3D.T3DPipeline
 
         public static List<Mesh> CombineBoundaryMeshesWithTheSameSemanticObject(List<BoundaryMesh> boundaryMeshes, Matrix4x4 transformationMatrix, out List<SurfaceSemanticType> types)
         {
-            List<Mesh> combinedMeshes = new List<Mesh>();
-            types = new List<SurfaceSemanticType>();
+            List<Mesh> combinedMeshes = new List<Mesh>(boundaryMeshes.Count);
+            types = new List<SurfaceSemanticType>(boundaryMeshes.Count);
             while (boundaryMeshes.Count > 0)
             {
                 List<Mesh> meshesToCombine = new List<Mesh>();
@@ -285,13 +294,13 @@ namespace Netherlands3D.T3DPipeline
         //create a mesh of a surface.
         private static BoundaryMesh CitySurfaceToMesh(CitySurface surface, CoordinateSystem coordinateSystem)
         {
-
             if (surface.VertexCount == 0)
                 return null;
 
             // List<Vector3> solidSurfacePolygon = GetConvertedPolygonVertices(surface.SolidSurfacePolygon, coordinateSystem);
             List<List<Vector3>> contours = new List<List<Vector3>>();
-            contours.Add(GetConvertedPolygonVertices(surface.SolidSurfacePolygon, coordinateSystem));
+            var convertedVerts = GetConvertedPolygonVertices(surface.SolidSurfacePolygon, coordinateSystem);
+            contours.Add(convertedVerts);
             foreach (var hole in surface.HolePolygons)
             {
                 contours.Add(GetConvertedPolygonVertices(hole, coordinateSystem));
@@ -314,7 +323,7 @@ namespace Netherlands3D.T3DPipeline
                 {
                     case CoordinateSystem.WGS84:
                         var wgs = new Coordinate(CoordinateSystem.WGS84_LatLonHeight,relativeVert.x, relativeVert.y, relativeVert.z);
-                        convertedVert =wgs.ToUnity();
+                        convertedVert = wgs.ToUnity();
                         break;
                     case CoordinateSystem.RD:
                         var rd = new Coordinate(CoordinateSystem.RDNAP,relativeVert.x, relativeVert.y, relativeVert.z);

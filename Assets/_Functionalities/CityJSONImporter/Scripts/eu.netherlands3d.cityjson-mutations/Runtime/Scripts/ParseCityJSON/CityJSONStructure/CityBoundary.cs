@@ -27,7 +27,7 @@ namespace Netherlands3D.T3DPipeline
         public abstract int VertexCount { get; }
         public abstract void FromJSONNode(JSONArray boundariesNode, List<Vector3Double> combinedVertices); //pass the complete list of vertices, the needed vertices will be saved per boundary object.
         public abstract JSONArray GetBoundariesAndAddNewVertices(Dictionary<Vector3Double, int> currentCityJSONVertices); // pass a dictionary of the already processed vertices for the CityJSON to recombine them into a single List without duplicates
-        public abstract List<Vector3Double> GetUncombinedVertices(); // returns a list of all vertices used by the boundary object without filtering for duplicates
+        public abstract IEnumerable<Vector3Double> GetUncombinedVertices(); // returns a list of all vertices used by the boundary object without filtering for duplicates
     }
 
     public class CityMultiPoint : CityBoundary
@@ -44,9 +44,9 @@ namespace Netherlands3D.T3DPipeline
         {
             return Points.GetJSONPolygonAndAddNewVertices(false, currentCityJSONVertices);
         }
-        public override List<Vector3Double> GetUncombinedVertices()
+        public override IEnumerable<Vector3Double> GetUncombinedVertices()
         {
-            return Points.Vertices.ToList();
+            return Points.Vertices;
         }
     }
 
@@ -85,12 +85,12 @@ namespace Netherlands3D.T3DPipeline
             }
             return node;
         }
-        public override List<Vector3Double> GetUncombinedVertices()
+        public override IEnumerable<Vector3Double> GetUncombinedVertices()
         {
             var vertices = new List<Vector3Double>();
             foreach (var polygon in LineStrings)
             {
-                vertices = vertices.Concat(polygon.Vertices).ToList();
+                vertices.AddRange(polygon.Vertices);
             }
             return vertices;
         }
@@ -142,12 +142,12 @@ namespace Netherlands3D.T3DPipeline
             return surfaceArray;
         }
 
-        public override List<Vector3Double> GetUncombinedVertices()
+        public override IEnumerable<Vector3Double> GetUncombinedVertices()
         {
             var vertices = new List<Vector3Double>();
             foreach (var polygon in Polygons)
             {
-                vertices = vertices.Concat(polygon.Vertices).ToList();
+                vertices.AddRange(polygon.Vertices);
             }
             return vertices;
         }
@@ -227,12 +227,12 @@ namespace Netherlands3D.T3DPipeline
             return boundariesNode;
         }
 
-        public override List<Vector3Double> GetUncombinedVertices()
+        public override IEnumerable<Vector3Double> GetUncombinedVertices()
         {
             var vertices = new List<Vector3Double>();
             foreach (var surface in Surfaces)
             {
-                vertices = vertices.Concat(surface.GetUncombinedVertices()).ToList();
+                vertices.AddRange(surface.GetUncombinedVertices());
             }
             return vertices;
         }
@@ -288,12 +288,12 @@ namespace Netherlands3D.T3DPipeline
             return boundariesNode;
         }
 
-        public override List<Vector3Double> GetUncombinedVertices()
+        public override IEnumerable<Vector3Double> GetUncombinedVertices()
         {
             var vertices = new List<Vector3Double>();
             foreach (var shell in Shells)
             {
-                vertices = vertices.Concat(shell.GetUncombinedVertices()).ToList();
+                vertices.AddRange(shell.GetUncombinedVertices());
             }
             return vertices;
         }
@@ -334,12 +334,12 @@ namespace Netherlands3D.T3DPipeline
             return boundariesNode;
         }
 
-        public override List<Vector3Double> GetUncombinedVertices()
+        public override IEnumerable<Vector3Double> GetUncombinedVertices()
         {
             var vertices = new List<Vector3Double>();
             foreach (var solid in Solids)
             {
-                vertices = vertices.Concat(solid.GetUncombinedVertices()).ToList();
+                vertices.AddRange(solid.GetUncombinedVertices());
             }
             return vertices;
         }

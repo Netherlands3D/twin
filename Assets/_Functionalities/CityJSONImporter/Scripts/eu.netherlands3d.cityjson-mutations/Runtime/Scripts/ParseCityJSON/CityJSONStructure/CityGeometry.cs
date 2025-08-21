@@ -140,7 +140,7 @@ namespace Netherlands3D.T3DPipeline
             return geometryNode;
         }
 
-        public List<Vector3Double> GetUncombinedVertices()
+        public IEnumerable<Vector3Double> GetUncombinedVertices()
         {
             return BoundaryObject.GetUncombinedVertices();
         }

@@ -118,8 +118,6 @@ namespace Netherlands3D.T3DPipeline
             if ((int)((int)child.Type / 10 - 200) == (int)((int)parent.Type / 10 - 100) || ((int)child.Type / 10) == ((int)parent.Type / 10))
                 return true;
 
-
-            //Debug.Log(child.Type + "\t" + parent, child.gameObject);
             return false;
         }
 
@@ -173,12 +171,12 @@ namespace Netherlands3D.T3DPipeline
         }
 
         //returns a list of vertices, without removing duplicates
-        public List<Vector3Double> GetUncombinedGeometryVertices()
+        public IEnumerable<Vector3Double> GetUncombinedGeometryVertices()
         {
             List<Vector3Double> geometryVertices = new List<Vector3Double>();
             foreach (var g in Geometries)
             {
-                geometryVertices = geometryVertices.Concat(g.GetUncombinedVertices()).ToList();
+                geometryVertices.AddRange(g.GetUncombinedVertices());
             }
             return geometryVertices;
         }
@@ -252,7 +250,7 @@ namespace Netherlands3D.T3DPipeline
         public void RecalculateExtents()
         {
             var verts = GetUncombinedGeometryVertices();
-            if (verts.Count > 0)
+            if (verts.Count() > 0)
             {
                 var minX = verts.Min(v => v.x);
                 var minY = verts.Min(v => v.y);
