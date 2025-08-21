@@ -432,12 +432,7 @@ namespace Netherlands3D.Twin.Cameras
         public void ZoomToPointer(float amount)
         {
             float signedAmount = Mathf.Sign(amount);
-            Debug.Log(signedAmount + "signed amount");
-            if (rotatingAroundPoint)
-                return;                       
-
-            
-
+           
             if (Mathf.Sign(zoomVector) != signedAmount)
             {
                 zoomVector = 0;
