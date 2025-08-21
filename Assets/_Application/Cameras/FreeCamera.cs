@@ -319,7 +319,8 @@ namespace Netherlands3D.Twin.Cameras
 
         void Update()
         {
-            UpdateWorldPoint();
+            if(!rotatingAroundPoint)
+                UpdateWorldPoint();
             EaseDragTarget();
             SetCrosshair();
             UpdateZoomVector();
@@ -478,9 +479,6 @@ namespace Netherlands3D.Twin.Cameras
         }
 
 
-        private bool wasNotRotating = false;
-        private bool cancelPointerAsync = false;
-
         /// <summary>
         /// Returns a position on the world 0 plane
         /// </summary>
@@ -488,26 +486,16 @@ namespace Netherlands3D.Twin.Cameras
         /// <returns>World position</returns>
         public void UpdateWorldPoint()
         {
-            Vector3 position = pointer.GetWorldPoint();
-            zoomTarget = new Coordinate(position);
-            if (!rotatingAroundPoint)
+            if(Time.deltaTime < 1f / 20f)
             {
-                wasNotRotating = false;
+                rotateTarget = pointer.WorldPoint;
             }
             else
             {
-                if (!wasNotRotating)
-                {                    
-                    rotateTarget = new Coordinate(position);
-                    zoomTarget = new Coordinate(position);
-                    pointer.GetPointerWorldPointAsync(result =>
-                    {
-                        rotateTarget = new Coordinate(result);
-                        //zoomTarget = new Coordinate(result);
-                    });
-                }
-                wasNotRotating = true;                
+                rotateTarget = new Coordinate(pointer.GetWorldPoint());
             }
+            
+            zoomTarget = pointer.WorldPoint;
         }
 
         public void ForceUpdateWorldPoint()
