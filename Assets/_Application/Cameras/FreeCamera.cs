@@ -486,16 +486,17 @@ namespace Netherlands3D.Twin.Cameras
         /// <returns>World position</returns>
         public void UpdateWorldPoint()
         {
-            if(Time.deltaTime < 1f / 20f)
-            {
-                rotateTarget = pointer.WorldPoint;
-            }
-            else
-            {
-                rotateTarget = new Coordinate(pointer.GetWorldPoint());
-            }
-            
-            zoomTarget = pointer.WorldPoint;
+            //if(Time.deltaTime < 1f / 20f)
+            //{
+            //    rotateTarget = pointer.WorldPoint;
+            //}
+            //else
+            //{
+            //    rotateTarget = new Coordinate(pointer.GetWorldPoint());
+            //}
+            Vector3 position = pointer.GetWorldPoint();
+            rotateTarget = new Coordinate(position);
+            zoomTarget = new Coordinate(position);
         }
 
         public void ForceUpdateWorldPoint()
