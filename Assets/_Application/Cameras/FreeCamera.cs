@@ -449,7 +449,10 @@ namespace Netherlands3D.Twin.Cameras
             float y = Mathf.Max(1f, Mathf.Abs(pos.y));
             float t = Mathf.Clamp01(y / maxCameraHeight);
             float v = Mathf.Lerp(1f, maxCameraHeight, t * t);
-            zoomVector += signedAmount * v * zoomSpeed;
+
+            float mobileFactor = Application.isMobilePlatform ? 50 : 1;
+
+            zoomVector += signedAmount * v * zoomSpeed * mobileFactor;
         }
 
         public void UpdateZoomVector()
