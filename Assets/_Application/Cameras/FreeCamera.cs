@@ -480,6 +480,7 @@ namespace Netherlands3D.Twin.Cameras
             translation *= modifierKeysPressed ? zoomSpeedMultiplier : 1;
 
             worldTransform.MoveToCoordinate(new Coordinate(pos + direction * translation));
+            lastDirection = direction;
         }
 
 
