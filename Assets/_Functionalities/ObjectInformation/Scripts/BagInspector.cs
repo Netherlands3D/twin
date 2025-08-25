@@ -188,7 +188,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 				PointerToWorldPosition pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
 
                 //TODO: Use bbox and geometry.coordinates from GeoJSON object to create bounds to render thumbnail
-                Bounds currentObjectBounds = new Bounds(pointerToWorldPosition.WorldPoint, Vector3.one * 50.0f);
+                Bounds currentObjectBounds = new Bounds(pointerToWorldPosition.WorldPoint.ToUnity(), Vector3.one * 50.0f);
 				buildingThumbnail.RenderThumbnail(currentObjectBounds);
 			}
 		}
