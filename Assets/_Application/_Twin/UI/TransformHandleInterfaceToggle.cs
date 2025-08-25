@@ -10,6 +10,7 @@ namespace Netherlands3D.Twin.UI
         [SerializeField] private TransformHandleButtonsPanel handleButtonsPanel;
 
         public UnityEvent<GameObject> SetTarget = new();
+        public UnityEvent SnapTarget = new();
 
         public RuntimeTransformHandle RuntimeTransformHandle { get => runtimeTransformHandle; private set => runtimeTransformHandle = value; }
 
@@ -53,6 +54,11 @@ namespace Netherlands3D.Twin.UI
         public void ShowVisibilityPanel(bool show)
         {
             handleButtonsPanel.ShowVisibilityPanel(show);
+        }
+
+        public void SnapObject()
+        {
+            SnapTarget.Invoke();
         }
     }
 }

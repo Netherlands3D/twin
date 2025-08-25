@@ -10,6 +10,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -22,6 +23,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
     public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, ILayerWithPropertyPanels, ILayerWithPropertyData
     {
         public override BoundingBox Bounds => CalculateWorldBoundsFromRenderers();
+
+        private int snappingCullingMask = 0;
 
         private BoundingBox CalculateWorldBoundsFromRenderers()
         {
@@ -58,6 +61,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected virtual void Awake()
         {
+            snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings"));
             transformPropertyData = InitializePropertyData();
 
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
@@ -123,6 +127,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 transform.localScale = newScale;
         }
 
+        public void SnapToGround()
+        {
+            Vector3 heightExtent = new Vector3(0, Bounds.Size.ToUnity().y * 0.5f, 0);
+            Vector3 pivotOffset = Bounds.Center.ToUnity() - transform.position;
+            Vector3 startPosition = WorldTransform.Coordinate.ToUnity() - heightExtent;
+            Vector3 previousPosition = WorldTransform.Coordinate.ToUnity();
+            OpticalRaycaster raycaster = FindAnyObjectByType<OpticalRaycaster>();
+            raycaster.GetWorldPointFromDirectionAsync(startPosition, Vector3.down, (w, h) =>
+            {
+                if (h)
+                    transform.position = w + heightExtent - pivotOffset;
+                else
+                {
+                    //object is below ground? check if we can snap in the up direction
+                    transform.position = previousPosition;
+                    startPosition = WorldTransform.Coordinate.ToUnity() + heightExtent;
+                    raycaster.GetWorldPointFromDirectionAsync(startPosition, Vector3.up, (ww, hh) =>
+                    {
+                        if (hh)
+                            transform.position = ww - heightExtent - pivotOffset;
+                        else //TODO the default fallback position when no hits are found is at the 0 plane, needs to be replaced with the texture height feature
+                            transform.position = new Vector3(previousPosition.x, 0, previousPosition.z);
+                    }, snappingCullingMask);
+                }
+            }, snappingCullingMask);
+        }
+
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             var transformProperty = (TransformLayerPropertyData)properties.FirstOrDefault(p => p is TransformLayerPropertyData);
@@ -172,6 +203,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 transformPropertyData.LocalScale = transform.localScale;
                 previousScale = transform.localScale;
             }
+
+            Bounds.Debug(Color.magenta);
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
@@ -208,6 +241,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             else
             {
                 transformInterfaceToggle.SetTransformTarget(gameObject);
+                transformInterfaceToggle.SnapTarget.AddListener(SnapToGround);
             }
         }
 
@@ -221,7 +255,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
 
             if (transformInterfaceToggle)
+            {
                 transformInterfaceToggle.ClearTransformTarget();
+                transformInterfaceToggle.SnapTarget.RemoveListener(SnapToGround);
+            }
         }
 
         public List<IPropertySectionInstantiator> GetPropertySections()
