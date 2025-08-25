@@ -24,6 +24,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
     {
         public override BoundingBox Bounds => CalculateWorldBoundsFromRenderers();
 
+        private int snappingCullingMask = 0;
+
         private BoundingBox CalculateWorldBoundsFromRenderers()
         {
             var renderers = GetComponentsInChildren<Renderer>(); //needs to be optimized if we call this function every frame.
@@ -59,6 +61,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected virtual void Awake()
         {
+            snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings"));
             transformPropertyData = InitializePropertyData();
 
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
@@ -127,13 +130,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public void SnapToGround()
         {
             Vector3 heightExtent = new Vector3(0, Bounds.Size.ToUnity().y * 0.5f, 0);
+            Vector3 pivotOffset = Bounds.Center.ToUnity() - transform.position;
             Vector3 startPosition = WorldTransform.Coordinate.ToUnity() - heightExtent;
             Vector3 previousPosition = WorldTransform.Coordinate.ToUnity();
             OpticalRaycaster raycaster = FindAnyObjectByType<OpticalRaycaster>();
             raycaster.GetWorldPointFromDirectionAsync(startPosition, Vector3.down, (w, h) =>
             {
                 if (h)
-                    transform.position = w + heightExtent;
+                    transform.position = w + heightExtent - pivotOffset;
                 else
                 {
                     //object is below ground? check if we can snap in the up direction
@@ -142,12 +146,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                     raycaster.GetWorldPointFromDirectionAsync(startPosition, Vector3.up, (ww, hh) =>
                     {
                         if (hh)
-                            transform.position = ww - heightExtent;
+                            transform.position = ww - heightExtent - pivotOffset;
                         else //TODO the default fallback position when no hits are found is at the 0 plane, needs to be replaced with the texture height feature
                             transform.position = new Vector3(previousPosition.x, 0, previousPosition.z);
-                    });
+                    }, snappingCullingMask);
                 }
-            });
+            }, snappingCullingMask);
         }
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
@@ -199,6 +203,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 transformPropertyData.LocalScale = transform.localScale;
                 previousScale = transform.localScale;
             }
+
+            Bounds.Debug(Color.magenta);
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
