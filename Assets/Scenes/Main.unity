@@ -545,16 +545,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e96d038b62419942afd968aadbba8d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &767208775
+--- !u!114 &767208764 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 1477530456811102049, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
+    type: 3}
+  m_PrefabInstance: {fileID: 1991327936011043875}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 767208734}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7d9cc7851b41444592ee5433f05c6b8, type: 3}
+  m_Script: {fileID: 11500000, guid: 50fab43e07a540b89d245bd4ec8e4887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &859080883
@@ -1191,14 +1191,15 @@ PrefabInstance:
       propertyPath: origin
       value: 
       objectReference: {fileID: 409187179}
+    - target: {fileID: 8068913146316752299, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
+        type: 3}
+      propertyPath: worldTransformShifter
+      value: 
+      objectReference: {fileID: 767208764}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5315891981602308680, guid: 0f6ad95dabe72044aa90eb8ae2e45366,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 767208775}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f6ad95dabe72044aa90eb8ae2e45366, type: 3}
 --- !u!1001 &2488954073963816146
 PrefabInstance:
