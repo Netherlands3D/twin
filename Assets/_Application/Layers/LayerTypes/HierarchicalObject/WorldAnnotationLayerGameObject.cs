@@ -30,9 +30,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
         public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one), new Coordinate(transform.position + 5 * Vector3.one));
 
-        protected override void Awake()
+        protected override void OnLayerInitialize()
         {
-            base.Awake();
+            base.OnLayerInitialize();
             CreateTextPopup();
             annotationPropertyData.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
             WorldInteractionBlocker.ClickedOnBlocker.AddListener(OnBlockerClicked);

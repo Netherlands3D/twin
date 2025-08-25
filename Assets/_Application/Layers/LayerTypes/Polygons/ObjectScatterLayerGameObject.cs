@@ -46,7 +46,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private bool completedInitialization;
         public LayerPropertyData PropertyData => settings;
 
-        private void Awake()
+        protected override void OnLayerInitialize()
         {
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
             propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
@@ -54,7 +54,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         public void Initialize(LayerGameObject originalObject, PolygonSelectionLayer polygon)
         {
-            
             foreach (var property in originalObject.LayerData.LayerProperties)
             {
                 LayerData.AddProperty(property); //copy properties to be able to revert
@@ -152,7 +151,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             polygonLayer.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
         }
 
-        protected void OnDestroy()
+        protected override void OnDestroy()
         {
             RemoveReScatterListeners();
         }

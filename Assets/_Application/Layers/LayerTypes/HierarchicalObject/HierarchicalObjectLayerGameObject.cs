@@ -56,7 +56,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         LayerPropertyData ILayerWithPropertyData.PropertyData => transformPropertyData;
         public bool TransformIsSetFromProperty { get; private set; } = false;
 
-        protected virtual void Awake()
+        protected override void OnLayerInitialize()
         {
             transformPropertyData = InitializePropertyData();
 
@@ -83,9 +83,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             ClickNothingPlane.ClickedOnNothing.RemoveListener(OnMouseClickNothing);
         }
 
-        protected override void Start()
+        protected override void OnLayerReady()
         {
-            base.Start();
             WorldTransform.RecalculatePositionAndRotation();
             previousCoordinate = WorldTransform.Coordinate;
             previousRotation = WorldTransform.Rotation;
@@ -231,7 +230,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnProxyTransformParentChanged()
         {
-            if (toggleScatterPropertySectionInstantiator.PropertySection)
+            if (toggleScatterPropertySectionInstantiator?.PropertySection)
             {
                 toggleScatterPropertySectionInstantiator.PropertySection.TogglePropertyToggle();
             }

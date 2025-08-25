@@ -37,24 +37,22 @@ namespace Netherlands3D.Functionalities.Wms
 
         private ICredentialHandler credentialHandler;
 
-        public List<IPropertySectionInstantiator> GetPropertySections()
+        public new List<IPropertySectionInstantiator> GetPropertySections()
         {
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             return propertySections;
         }
 
-        protected override void Awake()
+        protected override void OnLayerInitialize()
         {
-            base.Awake();
             wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
 
             credentialHandler = GetComponent<ICredentialHandler>();
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
         }
 
-        protected override void Start()
+        protected override void OnLayerReady()
         {
-            base.Start();
             UpdateURL(urlPropertyData.Data);
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
