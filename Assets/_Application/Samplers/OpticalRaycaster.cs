@@ -61,7 +61,7 @@ namespace Netherlands3D.Twin.Samplers
             }
         }
 
-        public void GetWorldPointAsyncTopDown(Vector3 worldPosition, Action<Vector3, bool> callback, int cullingMask = defaultRaycastLayers)
+        public void GetWorldPointFromDirectionAsync(Vector3 worldPosition, Vector3 direction, Action<Vector3, bool> callback, int cullingMask = defaultRaycastLayers)
         {
             if (activeRequests.Count > maxRequests)
             {
@@ -72,7 +72,7 @@ namespace Netherlands3D.Twin.Samplers
             OpticalRequest opticalRequest = GetRequest();
             opticalRequest.SetCullingMask(cullingMask);
             opticalRequest.SetScreenPoint(worldPosition);
-            opticalRequest.AlignCameraTopDown();
+            opticalRequest.AlignCameraFromDirection(direction);
             opticalRequest.UpdateShaders();
             opticalRequest.SetResultCallback(callback);
             opticalRequest.framesActive = 0;
@@ -268,10 +268,10 @@ namespace Netherlands3D.Twin.Samplers
                 }
             }
 
-            public void AlignCameraTopDown()
+            public void AlignCameraFromDirection(Vector3 direction)
             {
                 depthCamera.transform.position = screenPoint;
-                depthCamera.transform.LookAt(screenPoint + Vector3.down);
+                depthCamera.transform.LookAt(screenPoint + direction.normalized);
             }
 
             public void UpdateShaders()

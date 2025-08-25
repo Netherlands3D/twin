@@ -128,10 +128,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             Vector3 heightExtent = new Vector3(0, Bounds.Size.ToUnity().y * 0.5f, 0);
             Vector3 startPosition = WorldTransform.Coordinate.ToUnity() - heightExtent;
-            FindAnyObjectByType<OpticalRaycaster>().GetWorldPointAsyncTopDown(startPosition, (w, h) =>
+            Vector3 previousPosition = WorldTransform.Coordinate.ToUnity();
+            OpticalRaycaster raycaster = FindAnyObjectByType<OpticalRaycaster>();
+            raycaster.GetWorldPointFromDirectionAsync(startPosition, Vector3.down, (w, h) =>
             {
                 if (h)
                     transform.position = w + heightExtent;
+                else
+                {
+                    //object is below ground? check if we can snap in the up direction
+                    transform.position = previousPosition;
+                    startPosition = WorldTransform.Coordinate.ToUnity() + heightExtent;
+                    raycaster.GetWorldPointFromDirectionAsync(startPosition, Vector3.up, (ww, hh) =>
+                    {
+                        if (hh)
+                            transform.position = ww - heightExtent;
+                        else //TODO the default fallback position when no hits are found is at the 0 plane, needs to be replaced with the texture height feature
+                            transform.position = new Vector3(previousPosition.x, 0, previousPosition.z);
+                    });
+                }
             });
         }
 
