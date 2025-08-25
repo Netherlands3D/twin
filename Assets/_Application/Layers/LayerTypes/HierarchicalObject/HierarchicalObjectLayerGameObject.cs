@@ -10,6 +10,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -123,6 +124,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 transform.localScale = newScale;
         }
 
+        public void SnapToGround()
+        {
+            Vector3 heightExtent = new Vector3(0, Bounds.Size.ToUnity().y * 0.5f, 0);
+            Vector3 startPosition = WorldTransform.Coordinate.ToUnity() - heightExtent;
+            FindAnyObjectByType<OpticalRaycaster>().GetWorldPointAsyncTopDown(startPosition, (w, h) =>
+            {
+                if (h)
+                    transform.position = w + heightExtent;
+            });
+        }
+
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             var transformProperty = (TransformLayerPropertyData)properties.FirstOrDefault(p => p is TransformLayerPropertyData);
@@ -208,6 +220,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             else
             {
                 transformInterfaceToggle.SetTransformTarget(gameObject);
+                transformInterfaceToggle.SnapTarget.AddListener(SnapToGround);
             }
         }
 
@@ -221,7 +234,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
 
             if (transformInterfaceToggle)
+            {
                 transformInterfaceToggle.ClearTransformTarget();
+                transformInterfaceToggle.SnapTarget.RemoveListener(SnapToGround);
+            }
         }
 
         public List<IPropertySectionInstantiator> GetPropertySections()
