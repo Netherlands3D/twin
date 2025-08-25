@@ -319,7 +319,7 @@ namespace Netherlands3D.Twin.Cameras
             EaseDragTarget();
             SetCrosshair();
             UpdateZoomVector();
-            if (!lockDraggingInput)
+            if (!lockDraggingInput && !rotatingAroundPoint)
             {
                 Clamp();
             }
