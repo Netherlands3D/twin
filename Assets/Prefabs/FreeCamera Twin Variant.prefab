@@ -71,6 +71,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1107191816428015816, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1107191816428015816, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1107191816428015816, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1107191816428015816, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1107191816428015816, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 2039
       objectReference: {fileID: 0}
@@ -142,17 +162,17 @@ PrefabInstance:
     - target: {fileID: 1107191816428015819, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
       propertyPath: zoomSpeed
-      value: 1
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1107191816428015819, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
       propertyPath: maximumSpeed
-      value: 6000
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 1107191816428015819, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
       propertyPath: minimumSpeed
-      value: 6
+      value: -1000
       objectReference: {fileID: 0}
     - target: {fileID: 1107191816428015819, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
@@ -222,7 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldTransformShifter: {fileID: 0}
+  worldTransformShifter: {fileID: 1477530456811102049}
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
