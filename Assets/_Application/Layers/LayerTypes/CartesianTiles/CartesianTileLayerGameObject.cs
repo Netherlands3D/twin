@@ -36,6 +36,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             SetupFeatures();
         }
 
+        public int TileHandlerLayerIndex => tileHandler.layers.IndexOf(layer);
+        
         /// <summary>
         /// Cartesian Tiles have 'virtual' features, each type of terrain (grass, cycling path, etc) can be styled
         /// independently and thus is a feature. At the moment, the most concrete list of criteria for which features
