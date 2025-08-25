@@ -75,7 +75,7 @@ namespace Netherlands3D.Twin.UI
                 service.ActiveDialog.Close.AddListener(() => visibilityToggle.Toggle.isOn = false);
                 service.ActiveDialog.Confirm.AddListener(() =>
                 {
-                    //TODO this is work in progress and the logic should be moved to its own service
+                    //TODO this is work in progress and the logic should be moved to its own service?
                     LayerGameObject layer = selector.GetLayerGameObjectFromMapping(currentSelectedFeatureObject);
                     if (currentSelectedFeatureObject is MeshMapping mapping)
                     {
@@ -84,7 +84,7 @@ namespace Netherlands3D.Twin.UI
                             if (currentSelectedBagId == item.objectID)
                             {
                                 LayerFeature layerFeature = layer.LayerFeatures[item];
-                                CartesianTileLayerStyler.SetVisibilityForSubObject(layer, layerFeature, false);
+                                (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(layerFeature, false);
                                 break;
                             }
                         }

@@ -17,6 +17,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
     {
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
 
+        public Layer Layer => layer;
+
         private Layer layer;
         private TileHandler tileHandler;
 
@@ -25,10 +27,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             get 
             {
                 if (styler == null)
+                {
                     styler = new CartesianTileLayerStyler();
-                return Styler;
+                    styler.SetLayerGameObject(this);
+                }
+                return styler;
             } 
         }
+        public CartesianTileLayerStyler CartesianStyler => (CartesianTileLayerStyler)styler;
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
@@ -150,7 +156,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             {
                 foreach (var (_, feature) in LayerFeatures)
                 {
-                    CartesianTileLayerStyler.Apply(binaryMeshLayer, GetStyling(feature), feature);
+                    (styler as CartesianTileLayerStyler).Apply(GetStyling(feature), feature);
                 }
             }
 

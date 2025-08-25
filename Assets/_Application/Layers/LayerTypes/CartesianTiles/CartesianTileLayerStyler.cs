@@ -22,10 +22,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         public static ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
         private static Dictionary<string, Color> buildingColors = new Dictionary<string, Color>();
 
+        private LayerGameObject layer;
+
+        public void SetLayerGameObject(LayerGameObject layer)
+        {
+            this.layer = layer;
+        }
+
         /// <summary>
         /// Sets a custom color for all layer features matching the material index of the given layer feature.
         /// </summary>
-        public void SetColor(LayerGameObject layer, LayerFeature layerFeature, Color color)
+        public void SetColor(LayerFeature layerFeature, Color color)
         {
             int.TryParse(layerFeature.Attributes[MaterialIndexIdentifier], out int materialIndexIdentifier);
 
@@ -51,7 +58,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         /// This method will provide a color override that has been set earlier, or it will return the current
         /// material's color if none was set. This can help in the UI to set swatches.
         /// </summary>
-        public Color? GetColor(LayerGameObject layer, LayerFeature layerFeature)
+        public Color? GetColor(LayerFeature layerFeature)
         {
             int.TryParse(layerFeature.GetAttribute(MaterialIndexIdentifier), out int materialIndexIdentifier);
             var stylingRuleName = ColorizationStyleRuleName(materialIndexIdentifier);
@@ -65,7 +72,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             return stylingRule.Symbolizer.GetFillColor();
         }
 
-        public void SetVisibilityForSubObject(LayerGameObject layer, LayerFeature layerFeature, bool visible)
+        public void SetVisibilityForSubObject(LayerFeature layerFeature, bool visible)
         {
             string id = layerFeature.Attributes[VisibilityIdentifier];
 
@@ -86,7 +93,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             layer.ApplyStyling();
         }
 
-        public bool? GetVisibilityForSubObject(LayerGameObject layer, LayerFeature layerFeature)
+        public bool? GetVisibilityForSubObject(LayerFeature layerFeature)
         {
             string id = layerFeature.GetAttribute(VisibilityIdentifier);
 
@@ -105,7 +112,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         /// The other methods deal with manipulating the styles for a layerfeature, this method takes the outcome of
         /// those actions and applies them to the materials for the binary mesh layer.
         /// </summary>
-        public void Apply(BinaryMeshLayer layer, Symbolizer styling, LayerFeature layerFeature)
+        public void Apply(Symbolizer styling, LayerFeature layerFeature)
         {
             if (layerFeature.Geometry is Material)
             {
@@ -113,7 +120,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 if (color.HasValue)
                 {
                     if (int.TryParse(layerFeature.Attributes[MaterialIndexIdentifier], out var materialIndex))
-                        layer.DefaultMaterialList[materialIndex].color = color.Value;
+                    {
+                        BinaryMeshLayer binaryMeshLayer = (layer as CartesianTileLayerGameObject).Layer as BinaryMeshLayer;
+                        binaryMeshLayer.DefaultMaterialList[materialIndex].color = color.Value;
+                    }
                 }
             }
 
