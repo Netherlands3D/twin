@@ -13,7 +13,6 @@ namespace Netherlands3D.Twin.Samplers
         private OpticalRaycaster opticalRaycaster;
         private Action<Vector3, bool> worldPointCallback;
         private Coordinate worldPoint;
-        private int cullingMask = Physics.DefaultRaycastLayers;
         private float maxDistance = 10000;
 
         private void Awake()
@@ -38,7 +37,7 @@ namespace Netherlands3D.Twin.Samplers
         private void Update()
         {
             var screenPoint = Pointer.current.position.ReadValue();
-            opticalRaycaster.GetWorldPointAsync(screenPoint, worldPointCallback, cullingMask);
+            opticalRaycaster.GetWorldPointAsync(screenPoint, worldPointCallback);
         }
 
         public void GetPointerWorldPointAsync(Action<Vector3> result)
@@ -54,14 +53,19 @@ namespace Netherlands3D.Twin.Samplers
                     result.Invoke(position);
                 }
 
-            }, cullingMask);
+            });
         }
 
         public Vector3 GetWorldPoint()
         {
             var screenPoint = Pointer.current.position.ReadValue();
+            return GetWorldPoint(screenPoint);
+        }
+
+        public Vector3 GetWorldPoint(Vector2 screenPosition)
+        {            
             Plane worldPlane = new Plane(Vector3.up, Vector3.zero);
-            var screenRay = Camera.main.ScreenPointToRay(screenPoint);
+            var screenRay = Camera.main.ScreenPointToRay(screenPosition);
             worldPlane.Raycast(screenRay, out float distance);
             Vector3 position;
             //when no valid point is found in for the raycast, lets invert the distance so we get a point in the sky

@@ -9,7 +9,7 @@ namespace Netherlands3D.Twin.Cameras
     {
         private Camera cameraComponent;
         private FreeCamera freeCamera;
-        private OpticalRaycaster raycaster;
+        private PointerToWorldPosition pointer;
 
         private Plane worldPlane;
         private Transform cameraTransform;
@@ -30,7 +30,7 @@ namespace Netherlands3D.Twin.Cameras
             cameraComponent = GetComponent<Camera>();
             cameraTransform = cameraComponent.transform;
             freeCamera = GetComponent<FreeCamera>();
-            raycaster = FindAnyObjectByType<OpticalRaycaster>();
+            pointer = FindAnyObjectByType<PointerToWorldPosition>();
 
             // Initialize orthographicSize for calculations
             cameraComponent.orthographicSize = transform.position.y;
@@ -77,29 +77,17 @@ namespace Netherlands3D.Twin.Cameras
             previousPitchWhenSwitchingToAndFromOrtho = cameraTransform.eulerAngles.x;
 
             // Pull forward camera to make sure that what is in center of the screen stays there
-            Vector3 screenPosition = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);
-            raycaster.GetWorldPointAsync(screenPosition, (pos, hit) =>
-            {
-                Vector3 target = pos;
-                if(!hit)
-                {
-                    var screenRay = cameraComponent.ScreenPointToRay(screenPosition);
-                    worldPlane.Raycast(screenRay, out float distance);
-                    target = screenRay.GetPoint(Mathf.Min(maxPointerDistance, distance));
-                }
+            Vector3 screenPosition = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);            
+            Vector3 target = pointer.GetWorldPoint(screenPosition);            
+            var cameraLookWorldPosition = target;
+            cameraLookWorldPosition.y = transform.position.y;
 
-                var cameraLookWorldPosition = target;
-                cameraLookWorldPosition.y = transform.position.y;
+            // Look downwards
+            var flattenedForward = cameraTransform.forward;
+            flattenedForward.y = 0;
+            var rotateTo = Quaternion.LookRotation(Vector3.down, flattenedForward);
 
-                // Look downwards
-                var flattenedForward = cameraTransform.forward;
-                flattenedForward.y = 0;
-                var rotateTo = Quaternion.LookRotation(Vector3.down, flattenedForward);
-
-                StartAnimation(cameraLookWorldPosition, rotateTo, true);               
-
-            }); //, 1 << LayerMask.NameToLayer("Terrain") //use this if the pointer should always hit the ground instead of also buildigns            
-            
+            StartAnimation(cameraLookWorldPosition, rotateTo, true);
         }
 
         private void SwitchToPerspectiveMode()

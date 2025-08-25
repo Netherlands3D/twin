@@ -132,13 +132,7 @@ namespace Netherlands3D.Twin.Cameras
             if (ortographicEnabled) ortographicEnabled.AddListenerStarted(EnableOrtographic);
             if (focusOnObject) focusOnObject.AddListenerStarted(FocusOnObject);
         }
-
-        private void Start()
-        {
-            //Application.targetFrameRate = 15;
-        }
-
-
+                
         /// <summary>
         /// Switch camera to ortographic mode and limit its controls
         /// </summary>
@@ -575,12 +569,10 @@ namespace Netherlands3D.Twin.Cameras
         {      
             dynamicMoveSpeed = (multiplySpeedBasedOnHeight) ? moveSpeed * Mathf.Abs(this.transform.position.y) : moveSpeed;
             dynamicDragSpeed = (multiplySpeedBasedOnHeight) ? dragSpeed * Mathf.Abs(this.transform.position.y) : dragSpeed;
-            //dynamicZoomSpeed = (multiplySpeedBasedOnHeight) ? newZoomSpeed * Mathf.Max(1f, Mathf.Abs(this.transform.position.y)) : newZoomSpeed;
-
+        
             //Clamp speeds
             dynamicMoveSpeed = Mathf.Clamp(dynamicMoveSpeed, minimumSpeed, maximumSpeed);
             dynamicDragSpeed = Mathf.Clamp(dynamicDragSpeed, minimumDragSpeed, maximumDragSpeed);
-            //dynamicZoomSpeed = Mathf.Clamp(dynamicZoomSpeed, minimumSpeed, maximumSpeed);
         }
 
         private void OnDrawGizmos()
