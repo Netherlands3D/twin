@@ -10,9 +10,11 @@ namespace Netherlands3D.Twin.UI
         [SerializeField] private ToggleGroupItem positionToggle;
         [SerializeField] private ToggleGroupItem rotationToggle;
         [SerializeField] private ToggleGroupItem scaleToggle;
-      
 
-        public TransformHandleInterfaceToggle TransformHandleInterfaceToggle { get; set; }
+        [SerializeField] private UIButtonLogic snapButton;
+
+
+       public TransformHandleInterfaceToggle TransformHandleInterfaceToggle { get; set; }
         private TransformAxes transformLocks;
 
         private void OnEnable()
