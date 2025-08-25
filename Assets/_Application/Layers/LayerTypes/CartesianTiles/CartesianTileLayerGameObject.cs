@@ -34,7 +34,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 return styler;
             } 
         }
-        public CartesianTileLayerStyler CartesianStyler => (CartesianTileLayerStyler)styler;
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
@@ -156,7 +155,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             {
                 foreach (var (_, feature) in LayerFeatures)
                 {
-                    (styler as CartesianTileLayerStyler).Apply(GetStyling(feature), feature);
+                    (Styler as CartesianTileLayerStyler).Apply(GetStyling(feature), feature);
                 }
             }
 

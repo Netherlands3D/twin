@@ -79,13 +79,7 @@ namespace Netherlands3D.Twin.UI
                 {
                     LayerGameObject layer;
                     LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out layer);                  
-                    CartesianTileLayerStyler.SetVisibilityForSubObject(layer, feature, false);
-
-
-                    //if(layer is CartesianTileLayerGameObject obj)
-                    //{
-                    //    obj.SetVisibility(feature, false);
-                    //}
+                    (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(feature, false);
                 });
 
                 if (currentSelectedBagId != null)
