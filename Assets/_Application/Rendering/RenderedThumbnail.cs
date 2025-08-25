@@ -45,7 +45,8 @@ namespace Netherlands3D.Twin.Rendering
 			temporaryThumbnailCamera.enabled = false; // Only render on demand
 			temporaryThumbnailCamera.farClipPlane = farClipPlaneCamera;
 			temporaryThumbnailCamera.targetTexture = thumbnailRenderTexture;
-			
+			temporaryThumbnailCamera.cullingMask = ~((1 << 13) + (1 << 14)); // all layers except PolygonMask, PolygonMaskInverted		
+            
 			// Determine distance to cover bounds with camera
 			var targetBoundsCenter = targetBounds.center;
 			var targetBoundsSize = targetBounds.size;

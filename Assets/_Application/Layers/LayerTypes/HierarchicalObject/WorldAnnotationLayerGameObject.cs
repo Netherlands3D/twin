@@ -16,6 +16,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         [SerializeField] private TextPopout popoutPrefab;
         [SerializeField] private Tool layerTool;
 
+        public override bool IsMaskable => false;
         private TextPopout annotation;
         private AnnotationPropertyData annotationPropertyData => (AnnotationPropertyData)transformPropertyData;
         private enum EditMode

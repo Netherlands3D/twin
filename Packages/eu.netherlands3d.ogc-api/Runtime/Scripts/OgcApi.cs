@@ -18,6 +18,7 @@ namespace Netherlands3D.OgcApi
             conformanceResource = new Resource<ConformanceDeclaration>(new Uri($"{baseUrl}/conformance"));
         }
 
+        public async Task<string> Id() => (await LandingPage()).Id;
         public async Task<string> Title() => (await LandingPage()).Title;
         public async Task<string> Description() => (await LandingPage()).Description;
         public async Task<string> Attribution() => (await LandingPage()).Attribution;

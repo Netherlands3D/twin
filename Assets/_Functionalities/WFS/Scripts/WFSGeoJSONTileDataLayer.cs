@@ -164,14 +164,22 @@ namespace Netherlands3D.Functionalities.Wfs
             var queryParameters = QueryString.Decode(new Uri(wfsUrl).Query);
             string spatialReference = queryParameters.Single("srsname");
 
-            CoordinateSystem system = CoordinateSystems.FindCoordinateSystem(spatialReference);
-            if (system == CoordinateSystem.Undefined)
-                system = DefaultEpsgCoordinateSystem;
-            
+            CoordinateSystem system = DefaultEpsgCoordinateSystem;
+            if (!string.IsNullOrEmpty(spatialReference))
+            {
+                system = CoordinateSystems.FindCoordinateSystem(spatialReference);
+                if (system == CoordinateSystem.Undefined) system = DefaultEpsgCoordinateSystem;
+            }
+
             var boundingBox = DetermineBoundingBox(tileChange, system);
             
-            //we need to add the coordinate system value to the bbox as 5th value according to the ogc standards
-            string url = wfsUrl.Replace("{0}", boundingBox.ToString() + "," + spatialReference);
+            string url = wfsUrl.Replace("{0}", boundingBox.ToString());
+
+            // we need to add the coordinate system value to the bbox as 5th value according to the ogc standards
+            if (!string.IsNullOrEmpty(spatialReference))
+            {
+                url += "," + spatialReference;
+            }
 
             string jsonString = null;
             var geoJsonRequest = Uxios.DefaultInstance.Get<string>(new Uri(url), requestConfig);

@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.Properties;
@@ -6,6 +7,7 @@ using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
@@ -13,7 +15,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
     public class CartesianTileLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
     {
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
-        
+
         private Layer layer;
         private TileHandler tileHandler;
 
@@ -23,7 +25,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             layer.isEnabled = isActive;
         }
-        
+
         protected virtual void Awake()
         {
             tileHandler = FindAnyObjectByType<TileHandler>();
@@ -73,7 +75,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             if (transformInterfaceToggle)
                 transformInterfaceToggle.ShowVisibilityPanel(false);
         }
-        
+
         protected virtual void OnDestroy()
         {
             if (Application.isPlaying && tileHandler && layer)
@@ -96,7 +98,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 return propertySections;
             }
             set => propertySections = value;
-        }       
+        }
 
         public List<IPropertySectionInstantiator> GetPropertySections()
         {
@@ -117,6 +119,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             base.ApplyStyling();
         }
 
+        public override void UpdateMaskBitMask(int bitmask)
+        {
+            if (layer is BinaryMeshLayer binaryMeshLayer)
+            {
+                UpdateBitMaskForMaterials(bitmask, binaryMeshLayer.DefaultMaterialList);
+            }
+        }
+
         protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
         {
             // WMS and other projection layers also use this class as base - but they should not add their materials
@@ -124,7 +134,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             if (feature.Geometry is not Material mat) return feature;
 
             feature.Attributes.Add(
-                CartesianTileLayerStyler.MaterialIndexIdentifier, 
+                CartesianTileLayerStyler.MaterialIndexIdentifier,
                 meshLayer.DefaultMaterialList.IndexOf(mat).ToString()
             );
             feature.Attributes.Add(CartesianTileLayerStyler.MaterialNameIdentifier, mat.name);
