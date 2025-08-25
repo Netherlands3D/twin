@@ -3,6 +3,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Tools;
@@ -257,6 +258,29 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public void SelectFeatureMapping(FeatureMapping feature)
         {
             featureSelector.Select(feature);
+        }
+
+        public ObjectMappingItem GetMappingItemForBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
+        {
+            layer = GetLayerGameObjectFromMapping(selectedMapping);
+            if (selectedMapping is MeshMapping mapping)
+            {
+                foreach (ObjectMappingItem item in mapping.ObjectMapping.items)
+                {
+                    if (bagID == item.objectID)
+                    {
+                        return item;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public LayerFeature GetLayerFeatureFromBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
+        {
+            ObjectMappingItem item = GetMappingItemForBagID(bagID, selectedMapping, out layer);
+            LayerFeature feature = layer.LayerFeatures[item];
+            return feature;
         }
 
         /// <summary>

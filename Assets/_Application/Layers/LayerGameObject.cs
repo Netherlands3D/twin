@@ -232,6 +232,11 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
+        public virtual void SetVisibility(LayerFeature feature, bool visible)
+        {
+
+        }
+
         protected void UpdateBitMaskForMaterials(int bitmask, IEnumerable<Material> materials)
         {
             foreach (var m in materials)
