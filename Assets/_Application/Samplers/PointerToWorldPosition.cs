@@ -62,6 +62,7 @@ namespace Netherlands3D.Twin.Samplers
             return GetWorldPoint(screenPoint);
         }
 
+        //TODO this method should be expanded on with the new texture maaiveld height feature (current should be a fallback?)
         public Vector3 GetWorldPoint(Vector2 screenPosition)
         {            
             Plane worldPlane = new Plane(Vector3.up, Vector3.zero);

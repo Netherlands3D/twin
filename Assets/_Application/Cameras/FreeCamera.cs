@@ -92,7 +92,8 @@ namespace Netherlands3D.Twin.Cameras
         private Vector3 dragStart;
         private Vector3 dragVelocity;
         private Vector3 currentPointerDelta;
-
+        private float zoomVector = 0;
+        private float zoomVectorFalloff = 0.5f;
         private bool dragging = false;
         private bool lockDraggingInput = false;
         private bool rotate = false;
@@ -318,7 +319,7 @@ namespace Netherlands3D.Twin.Cameras
             EaseDragTarget();
             SetCrosshair();
             UpdateZoomVector();
-            if (!lockDraggingInput && !rotatingAroundPoint)
+            if (!lockDraggingInput)
             {
                 Clamp();
             }
@@ -416,8 +417,7 @@ namespace Netherlands3D.Twin.Cameras
 
 
 
-        private float zoomVector = 0;
-        private float zoomVectorFalloff = 0.5f;
+      
 
         /// <summary>
         /// Move towards/from zoompoint
@@ -435,6 +435,8 @@ namespace Netherlands3D.Twin.Cameras
 
             //ease the curve to slow it down nearing ground
             Vector3 pos = worldTransform.Coordinate.ToUnity();
+
+            //TODO the y should be replaced with the distance between the wolrdtransform position and the maaiveld height from texture feature
             float y = Mathf.Max(1f, Mathf.Abs(pos.y));
             float t = Mathf.Clamp01(y / maxCameraHeight);
             float v = Mathf.Lerp(1f, maxCameraHeight, t * t);
@@ -480,37 +482,10 @@ namespace Netherlands3D.Twin.Cameras
         /// <returns>World position</returns>
         public void UpdateWorldPoint()
         {
-            //if(Time.deltaTime < 1f / 20f)
-            //{
-            //    rotateTarget = pointer.WorldPoint;
-            //}
-            //else
-            //{
-            //    rotateTarget = new Coordinate(pointer.GetWorldPoint());
-            //}
             Vector3 position = pointer.GetWorldPoint();
             rotateTarget = new Coordinate(position);
             zoomTarget = new Coordinate(position);
-        }
-
-        public void ForceUpdateWorldPoint()
-        {
-            var screenPoint = Pointer.current.position.ReadValue();
-            Plane worldPlane = new Plane(Vector3.up, Vector3.zero);
-            var screenRay = cameraComponent.ScreenPointToRay(screenPoint);
-            worldPlane.Raycast(screenRay, out float distance);
-            zoomTarget = new Coordinate(screenRay.GetPoint(Mathf.Min(float.MaxValue, distance)));
-            if (!rotatingAroundPoint)
-                rotateTarget = zoomTarget;
-        }
-
-        public void UpdateWorldPoint(Vector3 offset)
-        {
-            Vector3 debugTargetA = zoomTarget.ToUnity();
-            zoomTarget = new Coordinate(zoomTarget.ToUnity() - offset);
-            Vector3 debugTarget = zoomTarget.ToUnity();
-            //if (!rotatingAroundPoint)
-                rotateTarget = new Coordinate(rotateTarget.ToUnity() - offset);
+            dragStart = position;
         }
 
         /// <summary>
