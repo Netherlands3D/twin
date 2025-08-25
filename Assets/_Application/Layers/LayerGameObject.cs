@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.Properties;
@@ -34,6 +35,10 @@ namespace Netherlands3D.Twin.Layers
         public SpriteState Thumbnail => thumbnail;
         public SpawnLocation SpawnLocation => spawnLocation;
         public virtual bool IsMaskable => true; // Can we mask this layer? Usually yes, but not in case of projections
+
+        public virtual IStyler Styler => styler;
+        protected IStyler styler;
+        
 
         public string Name
         {

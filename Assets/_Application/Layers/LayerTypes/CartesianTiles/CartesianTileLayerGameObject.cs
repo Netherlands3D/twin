@@ -20,6 +20,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         private Layer layer;
         private TileHandler tileHandler;
 
+        public override IStyler Styler 
+        {  
+            get 
+            {
+                if (styler == null)
+                    styler = new CartesianTileLayerStyler();
+                return Styler;
+            } 
+        }
+
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             if (!layer || layer.isEnabled == isActive) return;
