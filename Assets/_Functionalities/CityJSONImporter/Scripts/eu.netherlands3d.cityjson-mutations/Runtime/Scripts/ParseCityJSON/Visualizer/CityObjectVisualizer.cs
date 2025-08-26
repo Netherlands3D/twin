@@ -99,6 +99,7 @@ namespace Netherlands3D.T3DPipeline
             yield return null;
             transform.localPosition = SetLocalPosition(cityObject); //set position first so the CityObject's transformationMatrix can be used to position the mesh.
             meshes = CreateMeshes(cityObject);
+            //SetMaterials(cityObject); //todo: create the materials for the meshes
             var highestLod = meshes.Keys.Max(g => g.Lod);
             SetLODActive(highestLod);
             jsonVisualized.InvokeStarted(gameObject);
@@ -177,9 +178,6 @@ namespace Netherlands3D.T3DPipeline
                     var convertedCoord = cityJsonCoord.Convert(cityObject.CoordinateSystem);
                     origin = new Vector3Double(convertedCoord.value1, convertedCoord.value2, convertedCoord.value3);
                 }
-                
-                Debug.Log("cityjson origin: " + origin + "\t");
-                Debug.Log("object offset: " + relativeCenter);
 
                 var mesh = CreateMeshFromGeometry(geometry, cityObject.CoordinateSystem, origin,relativeCenter);
                 meshes.Add(geometry, mesh);
@@ -333,8 +331,33 @@ namespace Netherlands3D.T3DPipeline
             var triangulationData = PolygonVisualisationUtility.CreatePolygonGeometryTriangulationData(contours);
             // var mesh = PolygonVisualisationUtility.CreatePolygonMesh(new List<GeometryTriangulationData>(){triangulationData});
             var semanticsObject = surface.SemanticsObject;
+
+            // Vector3 sum = Vector3.zero;
+            // foreach (var v in contours[0])
+            // {
+            //     sum += v;
+            // }
+            //
+            // sum /= contours[0].Count;
+            
+            // debugOrigins.Add(sum);
+            // debugNormals.Add(triangulationData.normal);
             return new BoundaryMeshData(triangulationData, semanticsObject);
         }
+
+        // private static List<Vector3> debugOrigins = new();
+        // private static List<Vector3> debugNormals = new();
+        //
+        // private void DebugLines()
+        // {
+        //     for (var i = 0; i < debugOrigins.Count; i++)
+        //     {
+        //         var boundsCenter = GetComponentInChildren<Renderer>().bounds.center;
+        //         var pivotOffset = boundsCenter - transform.position;
+        //         var o = debugOrigins[i] - pivotOffset + transform.position - transform.localPosition;
+        //         Debug.DrawLine(o, o + debugNormals[i]*.25f, Color.green);
+        //     }
+        // }
 
         // convert the list of Vector3Doubles to a list of Vector3s and convert the coordinates to unity in the process.
         public static List<Vector3> GetConvertedPolygonVertices(CityPolygon polygon, CoordinateSystem coordinateSystem, Vector3Double origin)
