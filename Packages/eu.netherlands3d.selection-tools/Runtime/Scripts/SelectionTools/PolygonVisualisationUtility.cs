@@ -10,19 +10,21 @@ namespace Netherlands3D.SelectionTools
 {
     public class GeometryTriangulationData
     {
-        public GeometryTriangulationData(Geometry geometry, Vector3 origin, Vector3 u, Vector3 v)
+        public GeometryTriangulationData(Geometry geometry, Vector3 origin, Vector3 u, Vector3 v/*, Vector3 normal*/)
         {
             this.geometry = geometry;
             this.origin = origin;
             this.u = u;
             this.v = v;
+            // this.normal = normal;
         }
 
         public Geometry geometry;
         public Vector3 origin;
         public Vector3 u;
-
         public Vector3 v;
+
+        // public Vector3 normal;
     }
 
     public static class PolygonVisualisationUtility
@@ -127,8 +129,8 @@ namespace Netherlands3D.SelectionTools
             Geometry triangulated;
             try
             {
-                // triangulated = PolygonTriangulator.Triangulate(polygon);
-                triangulated = ConstrainedDelaunayTriangulator.Triangulate(polygon);
+                triangulated = PolygonTriangulator.Triangulate(polygon);
+                // triangulated = ConstrainedDelaunayTriangulator.Triangulate(polygon);
             }
             catch // An polygon.IsValid check is very garbage intensive, this is cheaper
             {
@@ -136,8 +138,7 @@ namespace Netherlands3D.SelectionTools
                 return null;
             }
 
-            return new GeometryTriangulationData(triangulated, origin, u, v);
-            // return PolygonMesh(triangulated, origin, u, v);
+            return new GeometryTriangulationData(triangulated, origin, u, v/*, normal*/);
         }
 
         public static Mesh CreatePolygonMesh(List<GeometryTriangulationData> datas, Vector3 offset)
@@ -157,13 +158,12 @@ namespace Netherlands3D.SelectionTools
                     {
                         var coords = tPoly.Coordinates;
                         
-                        for (int k = 0; k <= 2; k++) 
+                        for (int k = 0; k <= 2; k++)
                         {
                             var c2D = coords[k];
                             Vector3 v3 = To3D(c2D, data.origin, data.u, data.v) - offset; 
                             int idx = verts.Count;
                             verts.Add(v3); //todo: skip duplicate vertices
-
                             tris.Add(idx);
                         }
                     }
