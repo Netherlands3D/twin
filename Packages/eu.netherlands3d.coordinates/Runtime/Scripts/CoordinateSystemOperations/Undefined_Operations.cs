@@ -17,15 +17,15 @@ namespace Netherlands3D.Coordinates
 
         public override int NorthingIndex()
         {
-            return -1;
+            return 1;
         }
         public override int EastingIndex()
         {
-            return -1;
+            return 0;
         }
         public override int AxisCount()
         {
-            return 0;
+            return 3;
         }
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
         {
