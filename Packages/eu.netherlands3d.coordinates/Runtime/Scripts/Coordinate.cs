@@ -121,7 +121,7 @@ namespace Netherlands3D.Coordinates
                     case 0: return value1;
                     case 1: return value2;
                     case 2: return value3;
-                    default: return value1;
+                    default: return value2;
                 }
             }
             set
