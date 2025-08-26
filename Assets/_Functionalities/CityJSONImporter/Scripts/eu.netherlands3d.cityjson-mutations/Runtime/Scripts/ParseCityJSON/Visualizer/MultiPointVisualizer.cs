@@ -10,18 +10,18 @@ namespace Netherlands3D.T3DPipeline
         [SerializeField]
         private GameObject visualizationObject;
 
-        protected override List<BoundaryMesh> BoundariesToMeshes(CityBoundary boundary, CoordinateSystem coordinateSystem)
+        protected override List<BoundaryMeshData> BoundariesToMeshes(CityBoundary boundary, CoordinateSystem coordinateSystem, Vector3Double origin)
         {
             if (!(boundary is CityMultiPoint))
                 throw new NotSupportedException("Boundary is not of Type MultiPoint, use CityObjectVisualiser instead.");
 
-            return PointsToMeshes(boundary as CityMultiPoint, coordinateSystem, visualizationObject);
+            return PointsToMeshes(boundary as CityMultiPoint, coordinateSystem, visualizationObject, origin);
         }
 
-        private List<BoundaryMesh> PointsToMeshes(CityMultiPoint boundary, CoordinateSystem coordinateSystem, GameObject visualizationObject)
+        private List<BoundaryMeshData> PointsToMeshes(CityMultiPoint boundary, CoordinateSystem coordinateSystem, GameObject visualizationObject, Vector3Double origin)
         {
-            var meshes = new List<BoundaryMesh>();
-            var verts = GetConvertedPolygonVertices(boundary.Points, coordinateSystem);
+            var meshes = new List<BoundaryMeshData>();
+            var verts = GetConvertedPolygonVertices(boundary.Points, coordinateSystem, origin);
             for (int i = 0; i < boundary.VertexCount; i++)
             {
                 CityGeometrySemanticsObject semantics = null;
@@ -29,7 +29,8 @@ namespace Netherlands3D.T3DPipeline
                     semantics = boundary.SemanticsObjects[i];
 
                 var mesh = InstantiateObjectAtPoint(verts[i], coordinateSystem, visualizationObject);
-                meshes.Add(new BoundaryMesh(mesh, semantics));
+                // meshes.Add(new BoundaryMeshData(mesh, semantics));
+            //todo: fix this
             }
             return meshes;
         }

@@ -10,14 +10,14 @@ using UnityEngine;
 
 namespace Netherlands3D.T3DPipeline
 {
-    public class BoundaryMesh
+    public class BoundaryMeshData
     {
-        public Mesh Mesh;
+        public GeometryTriangulationData TriangulationData;
         public CityGeometrySemanticsObject SemanticsObject;
 
-        public BoundaryMesh(Mesh mesh, CityGeometrySemanticsObject semanticsObject)
+        public BoundaryMeshData(GeometryTriangulationData triangulationData, CityGeometrySemanticsObject semanticsObject)
         {
-            Mesh = mesh;
+            TriangulationData = triangulationData;
             SemanticsObject = semanticsObject;
         }
     }
@@ -55,15 +55,12 @@ namespace Netherlands3D.T3DPipeline
         private MeshRenderer meshRenderer;
         private MeshCollider meshCollider;
 
-        [SerializeField]
-        private int activeLOD;
+        [SerializeField] private int activeLOD;
         public int ActiveLod => activeLOD;
         public Mesh ActiveMesh { get; private set; }
 
-        [SerializeField]
-        private GameObjectEvent jsonVisualized;
-        [SerializeField]
-        private SemanticMaterials[] materials;
+        [SerializeField] private GameObjectEvent jsonVisualized;
+        [SerializeField] private SemanticMaterials[] materials;
 
 #if UNITY_EDITOR
         // allow to change the visible LOD from the inspector during runtime
@@ -100,14 +97,14 @@ namespace Netherlands3D.T3DPipeline
         private IEnumerator Test()
         {
             yield return null;
-            transform.localPosition = SetPosition(cityObject); //set position first so the CityObject's transformationMatrix can be used to position the mesh.
+            transform.localPosition = SetLocalPosition(cityObject); //set position first so the CityObject's transformationMatrix can be used to position the mesh.
             meshes = CreateMeshes(cityObject);
             var highestLod = meshes.Keys.Max(g => g.Lod);
             SetLODActive(highestLod);
             jsonVisualized.InvokeStarted(gameObject);
         }
 
-        private Vector3 SetPosition(CityObject cityObject)
+        private Vector3 SetLocalPosition(CityObject cityObject)
         {
             var relativeCenter = cityObject.RelativeCenter;
             var relativeCoordinate = new Coordinate(cityObject.CoordinateSystem, relativeCenter.x, relativeCenter.y, relativeCenter.z); //this is not a valid coordinate, but we need to use the Coordinate struct to determine the axis order
@@ -126,6 +123,7 @@ namespace Netherlands3D.T3DPipeline
                 SetMesh(meshes[geometry]);
                 return true;
             }
+
             SetMesh(null);
             return false;
         }
@@ -167,50 +165,73 @@ namespace Netherlands3D.T3DPipeline
             meshes = new Dictionary<CityGeometry, MeshWithMaterials>();
             foreach (var geometry in cityObject.Geometries)
             {
-                var mesh = CreateMeshFromGeometry(geometry, cityObject.CoordinateSystem, cityObject.transform.worldToLocalMatrix);
+                var cityJsonCoord = GetComponentInParent<WorldTransform>().Coordinate;
+                var relativeCenter = this.cityObject.RelativeCenter;
+                Vector3Double origin;
+                if (cityObject.CoordinateSystem == CoordinateSystem.Undefined) //we cannot convert an undefined crs, so we assume the origin is 0, 0, 0
+                {
+                    origin = new Vector3Double();
+                }
+                else
+                {
+                    var convertedCoord = cityJsonCoord.Convert(cityObject.CoordinateSystem);
+                    origin = new Vector3Double(convertedCoord.value1, convertedCoord.value2, convertedCoord.value3);
+                }
+                
+                Debug.Log("cityjson origin: " + origin + "\t");
+                Debug.Log("object offset: " + relativeCenter);
+
+                var mesh = CreateMeshFromGeometry(geometry, cityObject.CoordinateSystem, origin,relativeCenter);
                 meshes.Add(geometry, mesh);
             }
+
             return meshes;
         }
 
-        public MeshWithMaterials CreateMeshFromGeometry(CityGeometry geometry, CoordinateSystem coordinateSystem, Matrix4x4 transformationMatrix)
+        public MeshWithMaterials CreateMeshFromGeometry(CityGeometry geometry, CoordinateSystem coordinateSystem, Vector3Double vertexOffset, Vector3Double objectOffset)
         {
-            var boundaryMeshes = BoundariesToMeshes(geometry.BoundaryObject, coordinateSystem);
-            var subMeshes = CombineBoundaryMeshesWithTheSameSemanticObject(boundaryMeshes, transformationMatrix, out var types);
+            var boundaryMeshes = BoundariesToMeshes(geometry.BoundaryObject, coordinateSystem, vertexOffset);
+            var subMeshes = CombineBoundaryMeshesWithTheSameSemanticObject(boundaryMeshes, objectOffset, out var types);
             var materials = new Material[types.Count];
-            
+
             for (int i = 0; i < materials.Length; i++)
             {
                 materials[i] = GetMaterial(types[i]);
             }
+
             var mesh = CombineMeshes(subMeshes, Matrix4x4.identity, false); //use identity matrix because we already transformed the submeshes
             return new MeshWithMaterials(mesh, materials);
         }
 
-        public static List<Mesh> CombineBoundaryMeshesWithTheSameSemanticObject(List<BoundaryMesh> boundaryMeshes, Matrix4x4 transformationMatrix, out List<SurfaceSemanticType> types)
+        public static List<Mesh> CombineBoundaryMeshesWithTheSameSemanticObject(List<BoundaryMeshData> boundaryMeshes, Vector3Double offset, out List<SurfaceSemanticType> types)
         {
             List<Mesh> combinedMeshes = new List<Mesh>(boundaryMeshes.Count);
             types = new List<SurfaceSemanticType>(boundaryMeshes.Count);
+            // var offset = 
             while (boundaryMeshes.Count > 0)
             {
-                List<Mesh> meshesToCombine = new List<Mesh>();
+                List<GeometryTriangulationData> meshDataToCombine = new List<GeometryTriangulationData>();
                 CityGeometrySemanticsObject activeSemanticsObject = boundaryMeshes[boundaryMeshes.Count - 1].SemanticsObject;
                 for (int i = boundaryMeshes.Count - 1; i >= 0; i--) //go backwards because collection will be modified
                 {
                     var boundaryMesh = boundaryMeshes[i];
                     if (boundaryMesh.SemanticsObject == activeSemanticsObject)
                     {
-                        meshesToCombine.Add(boundaryMesh.Mesh);
+                        if (boundaryMesh.TriangulationData != null) //skip invalid polygons
+                            meshDataToCombine.Add(boundaryMesh.TriangulationData);
                         boundaryMeshes.Remove(boundaryMesh);
                     }
                 }
-                var combinedMesh = CombineMeshes(meshesToCombine, transformationMatrix, true);
+
+                var combinedMesh = PolygonVisualisationUtility.CreatePolygonMesh(meshDataToCombine, offset.AsVector3());
+                // var combinedMesh = CombineMeshes(meshDataToCombine, transformationMatrix, true);
                 combinedMeshes.Add(combinedMesh);
                 if (activeSemanticsObject != null)
                     types.Add(activeSemanticsObject.SurfaceType);
                 else
                     types.Add(SurfaceSemanticType.Null);
             }
+
             return combinedMeshes;
         }
 
@@ -232,107 +253,118 @@ namespace Netherlands3D.T3DPipeline
         }
 
         //Different boundary objects need to be parsed into meshes in different ways because of the different depths of the boundary arrays. We need to go as deep as needed to create meshes from surfaces.
-        protected virtual List<BoundaryMesh> BoundariesToMeshes(CityBoundary boundary, CoordinateSystem coordinateSystem)
+        protected virtual List<BoundaryMeshData> BoundariesToMeshes(CityBoundary boundary, CoordinateSystem coordinateSystem, Vector3Double origin)
         {
             if (boundary is CityMultiPoint)
                 throw new NotSupportedException("Boundary of type " + typeof(CityMultiPoint) + "is not supported by this Visualiser script since it contains no mesh data. Use MultiPointVisualiser instead and assign an object to use as visualization of the points");
             if (boundary is CityMultiLineString) //todo this boundary type is not supported at all
                 throw new NotSupportedException("Boundary of type " + typeof(CityMultiLineString) + "is currently not supported.");
             if (boundary is CitySurface)
-                return BoundariesToMeshes(boundary as CitySurface, coordinateSystem);
+                return BoundariesToMeshes(boundary as CitySurface, coordinateSystem, origin);
             if (boundary is CityMultiOrCompositeSurface)
-                return BoundariesToMeshes(boundary as CityMultiOrCompositeSurface, coordinateSystem);
+                return BoundariesToMeshes(boundary as CityMultiOrCompositeSurface, coordinateSystem, origin);
             if (boundary is CitySolid)
-                return BoundariesToMeshes(boundary as CitySolid, coordinateSystem);
+                return BoundariesToMeshes(boundary as CitySolid, coordinateSystem, origin);
             if (boundary is CityMultiOrCompositeSolid)
-                return BoundariesToMeshes(boundary as CityMultiOrCompositeSolid, coordinateSystem);
+                return BoundariesToMeshes(boundary as CityMultiOrCompositeSolid, coordinateSystem, origin);
 
             throw new ArgumentException("Unknown boundary type: " + boundary.GetType() + " is not supported to convert to mesh");
         }
 
-        private static List<BoundaryMesh> BoundariesToMeshes(CitySurface boundary, CoordinateSystem coordinateSystem)
+        private static List<BoundaryMeshData> BoundariesToMeshes(CitySurface boundary, CoordinateSystem coordinateSystem, Vector3Double origin)
         {
-            var meshes = new List<BoundaryMesh>();
-            var mesh = CitySurfaceToMesh(boundary, coordinateSystem);
+            var meshes = new List<BoundaryMeshData>();
+            var mesh = CitySurfaceToMesh(boundary, coordinateSystem, origin);
             meshes.Add(mesh);
             return meshes;
         }
 
-        private static List<BoundaryMesh> BoundariesToMeshes(CityMultiOrCompositeSurface boundary, CoordinateSystem coordinateSystem)
+        private static List<BoundaryMeshData> BoundariesToMeshes(CityMultiOrCompositeSurface boundary, CoordinateSystem coordinateSystem, Vector3Double origin)
         {
-            var meshes = new List<BoundaryMesh>();
+            var meshes = new List<BoundaryMeshData>();
             foreach (var surface in boundary.Surfaces)
             {
-                var mesh = CitySurfaceToMesh(surface, coordinateSystem);
+                var mesh = CitySurfaceToMesh(surface, coordinateSystem, origin);
                 meshes.Add(mesh);
             }
+
             return meshes;
         }
 
-        private static List<BoundaryMesh> BoundariesToMeshes(CitySolid boundary, CoordinateSystem coordinateSystem)
+        private static List<BoundaryMeshData> BoundariesToMeshes(CitySolid boundary, CoordinateSystem coordinateSystem, Vector3Double origin)
         {
-            var meshes = new List<BoundaryMesh>();
+            var meshes = new List<BoundaryMeshData>();
             foreach (var shell in boundary.Shells)
             {
-                var shellMeshes = BoundariesToMeshes(shell, coordinateSystem);
-                meshes = meshes.Concat(shellMeshes).ToList();
+                var shellMeshes = BoundariesToMeshes(shell, coordinateSystem, origin);
+                meshes.AddRange(shellMeshes);
             }
+
             return meshes;
         }
 
-        private static List<BoundaryMesh> BoundariesToMeshes(CityMultiOrCompositeSolid boundary, CoordinateSystem coordinateSystem)
+        private static List<BoundaryMeshData> BoundariesToMeshes(CityMultiOrCompositeSolid boundary, CoordinateSystem coordinateSystem, Vector3Double origin)
         {
-            var meshes = new List<BoundaryMesh>();
+            var meshes = new List<BoundaryMeshData>();
             foreach (var solid in boundary.Solids)
             {
-                var solidMeshes = BoundariesToMeshes(solid, coordinateSystem);
-                meshes = meshes.Concat(solidMeshes).ToList();
+                var solidMeshes = BoundariesToMeshes(solid, coordinateSystem, origin);
+                meshes.AddRange(solidMeshes);
             }
+
             return meshes;
         }
 
         //create a mesh of a surface.
-        private static BoundaryMesh CitySurfaceToMesh(CitySurface surface, CoordinateSystem coordinateSystem)
+        private static BoundaryMeshData CitySurfaceToMesh(CitySurface surface, CoordinateSystem coordinateSystem, Vector3Double origin)
         {
             if (surface.VertexCount == 0)
                 return null;
 
             // List<Vector3> solidSurfacePolygon = GetConvertedPolygonVertices(surface.SolidSurfacePolygon, coordinateSystem);
-            List<List<Vector3>> contours = new List<List<Vector3>>();
-            var convertedVerts = GetConvertedPolygonVertices(surface.SolidSurfacePolygon, coordinateSystem);
+            List<List<Vector3>> contours = new List<List<Vector3>>(surface.Polygons.Count);
+            var convertedVerts = GetConvertedPolygonVertices(surface.SolidSurfacePolygon, coordinateSystem, origin);
             contours.Add(convertedVerts);
             foreach (var hole in surface.HolePolygons)
             {
-                contours.Add(GetConvertedPolygonVertices(hole, coordinateSystem));
+                contours.Add(GetConvertedPolygonVertices(hole, coordinateSystem, origin));
             }
-            
-            var mesh = PolygonVisualisationUtility.CreatePolygonMesh(contours);
+
+            var triangulationData = PolygonVisualisationUtility.CreatePolygonGeometryTriangulationData(contours);
+            // var mesh = PolygonVisualisationUtility.CreatePolygonMesh(new List<GeometryTriangulationData>(){triangulationData});
             var semanticsObject = surface.SemanticsObject;
-            return new BoundaryMesh(mesh, semanticsObject);
+            return new BoundaryMeshData(triangulationData, semanticsObject);
         }
 
         // convert the list of Vector3Doubles to a list of Vector3s and convert the coordinates to unity in the process.
-        public static List<Vector3> GetConvertedPolygonVertices(CityPolygon polygon, CoordinateSystem coordinateSystem)
+        public static List<Vector3> GetConvertedPolygonVertices(CityPolygon polygon, CoordinateSystem coordinateSystem, Vector3Double origin)
         {
-            List<Vector3> convertedPolygon = new List<Vector3>();
+            List<Vector3> convertedPolygon = new List<Vector3>(polygon.Vertices.Length);
             foreach (var vert in polygon.Vertices)
             {
-                var relativeVert = vert;
-                Vector3 convertedVert;
-                switch (coordinateSystem)
+                var relativeVert = vert - origin;
+                Vector3 convertedVert = relativeVert.AsVector3();
+
+                if (coordinateSystem == CoordinateSystem.RD)
                 {
-                    case CoordinateSystem.WGS84:
-                        var wgs = new Coordinate(CoordinateSystem.WGS84_LatLonHeight,relativeVert.x, relativeVert.y, relativeVert.z);
-                        convertedVert = wgs.ToUnity();
-                        break;
-                    case CoordinateSystem.RD:
-                        var rd = new Coordinate(CoordinateSystem.RDNAP,relativeVert.x, relativeVert.y, relativeVert.z);
-                        convertedVert = rd.ToUnity();
-                        break;
-                    default:
-                        convertedVert = new Vector3((float)relativeVert.x, (float)relativeVert.z, (float)relativeVert.y);
-                        break;
+                    convertedVert = new Vector3(convertedVert.x, convertedVert.z, convertedVert.y);
                 }
+
+                // Vector3 convertedVert;
+                // switch (coordinateSystem)
+                // {
+                //     case CoordinateSystem.WGS84:
+                //         var wgs = new Coordinate(CoordinateSystem.WGS84_LatLonHeight,relativeVert.x, relativeVert.y, relativeVert.z);
+                //         convertedVert = wgs.ToUnity();
+                //         break;
+                //     case CoordinateSystem.RD:
+                //         var rd = new Coordinate(CoordinateSystem.RDNAP,relativeVert.x, relativeVert.y, relativeVert.z);
+                //         convertedVert = rd.ToUnity();
+                //         break;
+                //     default:
+                //         convertedVert = new Vector3((float)relativeVert.x, (float)relativeVert.z, (float)relativeVert.y);
+                //         break;
+                // }
 
                 convertedPolygon.Add(convertedVert);
             }
