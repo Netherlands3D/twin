@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92795e992dcbe4b3c8ada171c5551674, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabIdentifier: 9c30c9cc071ed4343b05fb7ded7859d2
+  prefabIdentifier: 0ff2a6c5552aa41b394c269af0d25e45
   thumbnail: {fileID: 0}
   spawnLocation: 0
   OnStylingApplied:
