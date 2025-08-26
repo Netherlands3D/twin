@@ -5,7 +5,7 @@ using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Netherlands3D.T3DPipeline
+namespace Netherlands3D.CityJson.Structure
 {
     /// <summary>
     /// This class serves as the nested array of indices to point to which semantic object the boundary object with a corresponding index points.

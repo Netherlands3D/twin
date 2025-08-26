@@ -7,7 +7,7 @@ using UnityEngine.Assertions;
 using Netherlands3D.Events;
 using Netherlands3D.Twin.FloatingOrigin;
 
-namespace Netherlands3D.T3DPipeline
+namespace Netherlands3D.CityJson.Structure
 {
     /// <summary>
     /// Class to represent and parse a CityJSON. Currently based on CityJSON v1.0.3

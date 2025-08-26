@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using UnityEngine;
 
-namespace Netherlands3D.T3DPipeline
+namespace Netherlands3D.CityJson.Structure
 {
     [RequireComponent(typeof(MeshFilter))]
     public class MeshToCityObject : CityObject

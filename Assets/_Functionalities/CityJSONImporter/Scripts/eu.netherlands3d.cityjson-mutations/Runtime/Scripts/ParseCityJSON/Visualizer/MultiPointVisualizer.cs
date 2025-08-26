@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Netherlands3D.CityJson.Structure;
 using Netherlands3D.Coordinates;
 using UnityEngine;
 
-namespace Netherlands3D.T3DPipeline
+namespace Netherlands3D.CityJson.Visualisation
 {
     public class MultiPointVisualizer : CityObjectVisualizer
     {

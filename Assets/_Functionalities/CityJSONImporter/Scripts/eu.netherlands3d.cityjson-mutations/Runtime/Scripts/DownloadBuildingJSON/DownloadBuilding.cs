@@ -4,7 +4,7 @@ using Netherlands3D.Events;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Netherlands3D.T3DPipeline
+namespace Netherlands3D.CityJson.T3DPipeline
 {
     public class DownloadBuilding : MonoBehaviour
     {

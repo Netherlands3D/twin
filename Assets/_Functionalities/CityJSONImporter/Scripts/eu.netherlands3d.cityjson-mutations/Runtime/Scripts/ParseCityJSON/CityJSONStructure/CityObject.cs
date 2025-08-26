@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
 
-namespace Netherlands3D.T3DPipeline
+namespace Netherlands3D.CityJson.Structure
 {
     /// <summary>
     /// A City Object is a JSON object for which the type member’s value is one of the following (of type string):

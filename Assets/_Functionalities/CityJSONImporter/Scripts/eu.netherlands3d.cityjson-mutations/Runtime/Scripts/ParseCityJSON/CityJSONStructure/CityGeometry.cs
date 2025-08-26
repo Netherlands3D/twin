@@ -5,7 +5,7 @@ using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Netherlands3D.T3DPipeline
+namespace Netherlands3D.CityJson.Structure
 {
     /// <summary>
     /// 3. A Geometry object is a JSON object for which the type member’s value is one of the following

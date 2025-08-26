@@ -1,10 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using SimpleJSON;
-using UnityEngine;
 
-namespace Netherlands3D.T3DPipeline
+namespace Netherlands3D.CityJson.Structure
 {
     /// <summary>
     /// A representation of a polygon, with vertices and indices.

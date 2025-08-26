@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Netherlands3D.Twin.ExtensionMethods;
 using SimpleJSON;
 
-namespace Netherlands3D.T3DPipeline
+namespace Netherlands3D.CityJson.Structure
 {
     /// <summary>
     /// Class to Format a CityJSON and export all the CityObjects.

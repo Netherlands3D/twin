@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using Netherlands3D.CityJson.Structure;
 using Netherlands3D.Events;
-using Netherlands3D.T3DPipeline;
 using UnityEngine;
 
 [RequireComponent(typeof(CityJSON))]

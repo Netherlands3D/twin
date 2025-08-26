@@ -3,7 +3,7 @@ using System.Linq;
 using SimpleJSON;
 using UnityEngine;
 
-namespace Netherlands3D.T3DPipeline
+namespace Netherlands3D.CityJson.Structure
 {
     /// <summary>
     /// from https://www.cityjson.org/specs/1.0.3/#geometry-objects:

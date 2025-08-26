@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using SimpleJSON;
-using UnityEngine;
 
-namespace Netherlands3D.T3DPipeline
+namespace Netherlands3D.CityJson.Structure
 {
     /// <summary>
     /// Custom attribute class. A CityObject can have attributes with a key and a value.

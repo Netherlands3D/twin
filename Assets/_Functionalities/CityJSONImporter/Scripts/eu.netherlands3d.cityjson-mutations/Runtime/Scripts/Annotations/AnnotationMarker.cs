@@ -1,33 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
 using Netherlands3D.Events;
 using UnityEngine;
 
-public class AnnotationMarker : MonoBehaviour
+namespace Netherlands3D.CityJson.Annotations
 {
-    [SerializeField]
-    private TriggerEvent onAnnotationSubmitted;
-    [SerializeField]
-    private Material activeMaterial, inactiveMaterial;
-
-    private void OnEnable()
+    public class AnnotationMarker : MonoBehaviour
     {
-        onAnnotationSubmitted.AddListenerStarted(DeactivateMarker);
-    }
+        [SerializeField] private TriggerEvent onAnnotationSubmitted;
+        [SerializeField] private Material activeMaterial, inactiveMaterial;
 
-    private void OnDisable()
-    {
-        onAnnotationSubmitted.RemoveListenerStarted(DeactivateMarker);
-    }
+        private void OnEnable()
+        {
+            onAnnotationSubmitted.AddListenerStarted(DeactivateMarker);
+        }
 
-    //public virtual void ActivateMarker(GameObject activatedAnnotationMarker)
-    //{
-    //    if (activatedAnnotationMarker == gameObject)
-    //        GetComponent<MeshRenderer>().material = activeMaterial;
-    //}
+        private void OnDisable()
+        {
+            onAnnotationSubmitted.RemoveListenerStarted(DeactivateMarker);
+        }
 
-    public virtual void DeactivateMarker()
-    {
-        GetComponent<MeshRenderer>().material = inactiveMaterial;
+        //public virtual void ActivateMarker(GameObject activatedAnnotationMarker)
+        //{
+        //    if (activatedAnnotationMarker == gameObject)
+        //        GetComponent<MeshRenderer>().material = activeMaterial;
+        //}
+
+        public virtual void DeactivateMarker()
+        {
+            GetComponent<MeshRenderer>().material = inactiveMaterial;
+        }
     }
 }

@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using Netherlands3D.Events;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Netherlands3D.T3DPipeline
+namespace Netherlands3D.CityJson.Annotations
 {
     /// <summary>
     /// Generic class to process a pointer click and fires the event with the 3D click position. Requires a PhysicsRaycaster to work

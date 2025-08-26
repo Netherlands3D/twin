@@ -58,7 +58,7 @@ namespace Netherlands3D.Functionalities.CityJSON
             }
 
             var json = File.ReadAllText(file);
-            GetComponent<T3DPipeline.CityJSON>().ParseCityJSON(json);
+            GetComponent<CityJson.Structure.CityJSON>().ParseCityJSON(json);
             OnObjImported();
         }
 

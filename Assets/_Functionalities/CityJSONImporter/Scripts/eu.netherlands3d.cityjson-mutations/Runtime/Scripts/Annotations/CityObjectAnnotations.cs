@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.CityJson.Structure;
 using Netherlands3D.Events;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Netherlands3D.T3DPipeline
+namespace Netherlands3D.CityJson.Annotations
 {
     /// <summary>
     /// Annotations are added to a CityObject's attribute node. All annotations of a CityObject are grouped under a single Attribute.

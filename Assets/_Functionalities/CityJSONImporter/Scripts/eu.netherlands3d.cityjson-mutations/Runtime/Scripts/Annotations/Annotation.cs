@@ -1,7 +1,7 @@
 using SimpleJSON;
 using UnityEngine;
 
-namespace Netherlands3D.T3DPipeline
+namespace Netherlands3D.CityJson.Annotations
 {
     /// <summary>
     /// Class to hold an annotation that can be added to a building.
