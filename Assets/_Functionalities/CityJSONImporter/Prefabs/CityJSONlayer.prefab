@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3482478533686408333}
   - component: {fileID: -8031406265216150104}
   - component: {fileID: -5290351893147975871}
-  - component: {fileID: 8150899206447481378}
+  - component: {fileID: 5482031777458148174}
   m_Layer: 0
   m_Name: CityJSONlayer
   m_TagString: Untagged
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraDistanceFromGeoReferencedObject: 150
---- !u!114 &8150899206447481378
+--- !u!114 &5482031777458148174
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

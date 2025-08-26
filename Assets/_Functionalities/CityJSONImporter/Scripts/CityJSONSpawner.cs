@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Netherlands3D.Coordinates;
-using Netherlands3D.T3DPipeline;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
@@ -17,9 +16,9 @@ namespace Netherlands3D.Functionalities.CityJSON
     public class CityJSONSpawner : MonoBehaviour, ILayerWithPropertyData
     {
         [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
+        [SerializeField] private bool addMeshCollidersToCityObjects = true;
         private CityJSONPropertyData propertyData = new();
         public LayerPropertyData PropertyData => propertyData;
-        private GameObject importedObject;
 
         private void Awake()
         {
@@ -46,13 +45,10 @@ namespace Netherlands3D.Functionalities.CityJSON
 
         private void StartImport()
         {
-            if (importedObject)
-                Destroy(importedObject);
-
             var path = GetCityJsonPathFromPropertyData();
             StartCoroutine(LoadCityJson(path));
         }
-        
+
         private IEnumerator LoadCityJson(string file)
         {
             if (string.IsNullOrWhiteSpace(file) || !File.Exists(file))
@@ -63,70 +59,52 @@ namespace Netherlands3D.Functionalities.CityJSON
 
             var json = File.ReadAllText(file);
             GetComponent<T3DPipeline.CityJSON>().ParseCityJSON(json);
-            OnObjImported(gameObject);
+            OnObjImported();
         }
 
-        private void OnObjImported(GameObject returnedGameObject)
+        private void OnObjImported()
         {
             var holgo = GetComponent<HierarchicalObjectLayerGameObject>();
 
-            var isGeoReferenced = false;
-            if (returnedGameObject.transform.childCount > 0)
+            if (holgo.TransformIsSetFromProperty) //use transform property if it is set
             {
-                //GLB stores coordinates as 32 bit floats, and therefore cannot accurately be georeferenced.
-                //However, we will still do a check to ensure at least the model will appear roughly where it should if it is still georeferenced despite this.
-                var referencePosition = returnedGameObject.transform.GetChild(0).localPosition;
-                if (EPSG7415.IsValid(referencePosition.x, referencePosition.y, referencePosition.z, out var origin))
+                var transformPropterty = (TransformLayerPropertyData)((ILayerWithPropertyData)holgo).PropertyData;
+                holgo.WorldTransform.MoveToCoordinate(transformPropterty.Position);
+            }
+            else //transform property is not set, we need to set it if it is georeferenced, if not, we just keep the position it was at.
+            {
+                if (transform.childCount > 0)
                 {
-                    PositionGeoReferencedCityJson(returnedGameObject, holgo, origin);
+                    var referencePosition = transform.GetChild(0).localPosition;
+                    if (EPSG7415.IsValid(referencePosition.x, referencePosition.y, referencePosition.z, out var origin))
+                    {
+                        PositionGeoReferencedCityJson(holgo, origin);
+                    }
                 }
             }
-            
-            if(!isGeoReferenced)
-                PositionNonGeoReferencedCityJson(returnedGameObject, holgo);
 
-            importedObject = returnedGameObject;
-            foreach (var meshFilter in returnedGameObject.GetComponentsInChildren<MeshFilter>())
+            if (addMeshCollidersToCityObjects)
             {
-                meshFilter.gameObject.AddComponent<MeshCollider>();
+                foreach (var meshFilter in GetComponentsInChildren<MeshFilter>())
+                {
+                    meshFilter.gameObject.AddComponent<MeshCollider>();
+                }
             }
 
             // Object is loaded / replaced - trigger the application of styling
             holgo.ApplyStyling();
         }
         
-        private void PositionNonGeoReferencedCityJson(GameObject returnedGameObject, HierarchicalObjectLayerGameObject holgo)
-        {
-            //if we have saved transform data, we will use that position, otherwise we will use this object's current position.
-            if (holgo.TransformIsSetFromProperty)
-            {
-                //apply any transformation if present in the data
-                var transformPropterty = (TransformLayerPropertyData)((ILayerWithPropertyData)holgo).PropertyData;
-                transform.position = transformPropterty.Position.ToUnity();
-                returnedGameObject.transform.SetParent(transform, false); // imported object should move to saved (parent's) position
-            }
-            else
-            {
-                //no transform property or georeference present, this object should just take on the parent's position
-                returnedGameObject.transform.SetParent(transform, false); // imported object should move to saved (parent's) position
-            }
-        }        
-        
-        private void PositionGeoReferencedCityJson(GameObject returnedGameObject, HierarchicalObjectLayerGameObject holgo, Coordinate origin)
+
+        private void PositionGeoReferencedCityJson(HierarchicalObjectLayerGameObject holgo, Coordinate origin)
         {
             if (!holgo.TransformIsSetFromProperty) //move the camera only if this is is a user imported object, not if this is a project import. We know this because a project import has its Transform property set.
             {
                 var cameraMover = Camera.main.GetComponent<MoveCameraToCoordinate>();
                 cameraMover.LookAtTarget(origin, cameraDistanceFromGeoReferencedObject); //move the camera to the georeferenced position, this also shifts the origin if needed.
             }
-            
+
             holgo.WorldTransform.MoveToCoordinate(origin); //set this object to the georeferenced position, since this is the correct position.
-            returnedGameObject.transform.SetParent(transform, false); // we set the parent and reset its localPosition, since the origin might have changed.
-            returnedGameObject.transform.localPosition = Vector3.zero;
-            foreach (Transform t in returnedGameObject.transform)
-            {
-                t.localPosition -= origin.ToUnity();
-            }
 
             // imported object should stay where it is initially, and only then apply any user transformations if present.
             if (holgo.TransformIsSetFromProperty)
@@ -135,13 +113,13 @@ namespace Netherlands3D.Functionalities.CityJSON
                 holgo.WorldTransform.MoveToCoordinate(transformPropterty.Position); //apply saved user changes to position.
             }
         }
-        
+
         public void SetCityJSONPathInPropertyData(string fullPath)
         {
             var propertyData = PropertyData as CityJSONPropertyData;
             propertyData.CityJsonFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
         }
-        
+
         private string GetCityJsonPathFromPropertyData()
         {
             if (propertyData.CityJsonFile == null)
