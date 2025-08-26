@@ -8,8 +8,7 @@ namespace Netherlands3D.CityJson.Visualisation
 {
     public class MultiPointVisualizer : CityObjectVisualizer
     {
-        [SerializeField]
-        private GameObject visualizationObject;
+        [SerializeField] private GameObject visualizationObject;
 
         protected override List<BoundaryMeshData> BoundariesToMeshes(CityBoundary boundary, CoordinateSystem coordinateSystem, Vector3Double origin)
         {
@@ -31,8 +30,9 @@ namespace Netherlands3D.CityJson.Visualisation
 
                 var mesh = InstantiateObjectAtPoint(verts[i], coordinateSystem, visualizationObject);
                 // meshes.Add(new BoundaryMeshData(mesh, semantics));
-            //todo: fix this
+                throw new NotImplementedException("Due to the separation of triangulation and mesh combination, this class is no longer able to visualize MultiPoint geometries");
             }
+
             return meshes;
         }
 
