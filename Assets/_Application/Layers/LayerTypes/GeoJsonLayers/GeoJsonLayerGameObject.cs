@@ -11,6 +11,7 @@ using System.Linq;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
 
@@ -187,8 +188,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 return polygonLayer;
             }
 
-            // TODO: This doesn't work anymore because CreateProxy is dead - use spawner
+            // TODO: Should use LayerSpawner? This is a temporary layer?
             GeoJSONPolygonLayer newPolygonLayerGameObject = Instantiate(polygonLayerPrefab);
+            ProjectData.CreateAndAttachReferenceLayerTo(newPolygonLayerGameObject);
             newPolygonLayerGameObject.LayerData.Color = LayerData.Color;
 
             // Replace default style with the parent's default style
@@ -210,7 +212,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 return lineLayer;
             }
 
+            // TODO: Should use LayerSpawner? This is a temporary layer?
             GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
+            ProjectData.CreateAndAttachReferenceLayerTo(newLineLayerGameObject);
             newLineLayerGameObject.LayerData.Color = LayerData.Color;
 
             // Replace default style with the parent's default style
@@ -232,7 +236,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 return pointLayer;
             }
 
+            // TODO: Should use LayerSpawner? This is a temporary layer?
             GeoJSONPointLayer newPointLayerGameObject = Instantiate(pointLayerPrefab);
+            ProjectData.CreateAndAttachReferenceLayerTo(newPointLayerGameObject);
             newPointLayerGameObject.LayerData.Color = LayerData.Color;
 
             // Replace default style with the parent's default style

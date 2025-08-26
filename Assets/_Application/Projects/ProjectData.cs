@@ -99,7 +99,7 @@ namespace Netherlands3D.Twin.Projects
             LayerAdded.Invoke(layer);           
         }
 
-        public static void AddReferenceLayer(LayerGameObject referencedLayer)
+        public static void CreateAndAttachReferenceLayerTo(LayerGameObject referencedLayer)
         {
             var referenceName = referencedLayer.name.Replace("(Clone)", "").Trim();
 

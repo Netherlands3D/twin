@@ -7,7 +7,6 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Netherlands3D.Twin.Services
 {
@@ -127,30 +126,25 @@ namespace Netherlands3D.Twin.Services
 
         public LayerData Build(LayerGameObject ontoReference)
         {
-            // FIXME: this is a catch22 - LayerData needs the LayerGameObject and the LayerGameObject needs the LayerData
             var layerData = new ReferencedLayerData(Name, Type, ontoReference);
             ontoReference.LayerData = layerData;
             
-            if (!string.IsNullOrEmpty(this.Name))
-                layerData.Name = this.Name;
+            if (!string.IsNullOrEmpty(Name)) layerData.Name = Name;
+            if (Color.HasValue) layerData.Color = Color.Value;
+            if (Parent != null) layerData.SetParent(Parent);
 
-            if (this.Color.HasValue)
-                layerData.Color = this.Color.Value;
-
-            if (this.Parent != null)
-                layerData.SetParent(this.Parent);
-
-            foreach (var property in this.Properties)
+            foreach (var property in Properties)
             {
+                Debug.Log("Setting property " + property.GetType());
                 layerData.SetProperty(property);
             }
 
-            if (this.DefaultSymbolizer != null)
+            if (DefaultSymbolizer != null)
             {
-                layerData.DefaultStyle.AnyFeature.Symbolizer = this.DefaultSymbolizer;
+                layerData.DefaultStyle.AnyFeature.Symbolizer = DefaultSymbolizer;
             }
             
-            foreach (var style in this.Styles)
+            foreach (var style in Styles)
             {
                 layerData.AddStyle(style);
             }

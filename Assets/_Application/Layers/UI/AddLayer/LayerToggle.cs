@@ -1,5 +1,6 @@
 using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Services;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
@@ -14,7 +15,7 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
         [SerializeField] protected Transform layerParent;
         protected Toggle toggle;
         [FormerlySerializedAs("layer")] [SerializeField] protected LayerGameObject layerGameObject;
-        [SerializeField] protected GameObject prefab;
+        [SerializeField] protected LayerGameObject prefab;
         [SerializeField] protected GameObject binImage;
         [SerializeField] protected Sprite hoverSprite;
         protected Sprite defaultSprite;
@@ -54,24 +55,29 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
             }
         }
 
-        private void CreateOrDestroyObject(bool isOn)
+        private async void CreateOrDestroyObject(bool isOn)
         {
             if (isOn)
-                layerGameObject = CreateObject();
-            else
-                layerGameObject.DestroyLayer();
+            {
+                CreateObject();
+                return;
+            }
+
+            await App.Layers.Remove(layerGameObject.LayerData);
+            layerGameObject = null;
         }
 
-        private LayerGameObject CreateObject()
+        private async void CreateObject()
         {
-            var newObject = Instantiate(prefab, Vector3.zero, Quaternion.identity, layerParent);
-            newObject.name = prefab.name;
-
-            var layerComponent = newObject.GetComponent<LayerGameObject>();
-            if (!layerComponent)
-                layerComponent = newObject.AddComponent<LayerGameObject>();
+            var layerData = await App.Layers.Add(
+                LayerBuilder.Start
+                    .OfType(prefab.PrefabIdentifier)
+                    .PositionedAt(Vector3.zero)
+                    .Rotated(Quaternion.identity)
+                    .NamedAs(prefab.name)
+            );
             
-            return layerComponent;
+            layerGameObject = layerData.Reference;
         }
 
         public virtual void OnPointerEnter(PointerEventData eventData)

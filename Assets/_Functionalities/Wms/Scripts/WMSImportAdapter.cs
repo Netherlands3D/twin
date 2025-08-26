@@ -6,6 +6,7 @@ using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wms
@@ -101,7 +102,9 @@ namespace Netherlands3D.Functionalities.Wms
 
         private void CreateLayer(MapFilters mapFilters, Uri url, FolderLayer folderLayer, bool defaultEnabled = true)
         {
+            // TODO: Replace with App.Layer.Add
             WMSLayerGameObject newLayer = Instantiate(layerPrefab);
+            ProjectData.CreateAndAttachReferenceLayerTo(newLayer);
             newLayer.gameObject.name = mapFilters.name;
             newLayer.LayerData.SetParent(folderLayer);
             newLayer.Name = mapFilters.name;

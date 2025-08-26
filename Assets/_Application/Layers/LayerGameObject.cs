@@ -123,8 +123,8 @@ namespace Netherlands3D.Twin.Layers
         {
             // Call a template method that children are free to play with - this way we can avoid using
             // the start method directly and prevent forgetting to call the base.Start() from children
-            OnLayerReady();
             LoadPropertiesInVisualisations();
+            OnLayerReady();
             InitializeVisualisation();
         }
 
@@ -356,5 +356,16 @@ namespace Netherlands3D.Twin.Layers
             return feature;
         }
         #endregion
+        
+        protected T GetAndCacheComponent<T>(ref T cache) where T : class
+        {
+            // 'is' works both on interfaces and Unity's lifecycle check because is is overridden
+            if (cache is null)
+            {
+                cache = GetComponent<T>();
+            }
+
+            return cache;
+        }
     }
 }

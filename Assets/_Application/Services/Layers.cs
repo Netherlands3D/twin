@@ -82,6 +82,13 @@ namespace Netherlands3D.Twin.Services
             return layerData;
         }
 
+        public Task Remove(ReferencedLayerData layerData)
+        {
+            layerData.DestroyLayer();
+            
+            return Task.CompletedTask;
+        }
+
         private async Task<LayerGameObject> SpawnLayer(BaseLayerBuilder layerBuilder)
         {
             var layerGameObject = SpawnPlaceholder(null);
