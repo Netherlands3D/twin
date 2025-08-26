@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fallbackPrefab: {fileID: 221556199992705649, guid: 754eb7a73e57a46f8bb8de137184cc10,
     type: 3}
+  placeholderPrefab: {fileID: -3856457989731036500, guid: 92eb3c25fd746c6439c2418dcc107f4b,
+    type: 3}
   prefabGroups:
   - groupName: Basislagen
     autoPopulateUI: 0

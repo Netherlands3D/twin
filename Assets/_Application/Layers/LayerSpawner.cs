@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GG.Extensions;
 using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Utility;
@@ -15,23 +16,6 @@ namespace Netherlands3D.Twin.Layers
 {
     public class LayerSpawner
     {
-        [RequireComponent(typeof(LayerGameObject))]
-        public class LayerSpawnerPlaceholder : MonoBehaviour
-        {
-            public void ReplaceWith(LayerGameObject layerGameObject)
-            {
-                var placeholderLayerGameObject = GetComponent<LayerGameObject>();
-                var layerData = placeholderLayerGameObject.LayerData;
-                
-                // Reparent the final layerGameObject to the parent of the placeholder so that the situation is as 
-                // it should be before doing the switcheroo
-                layerGameObject.transform.SetParent(placeholderLayerGameObject.transform.parent, false);
-            
-                // Does the whole switcheroo, including transplanting the LayerData and destroying the placeholder
-                layerData.SetReference(layerGameObject);
-            }
-        }
-
         private readonly PrefabLibrary prefabLibrary;
 
         public LayerSpawner(PrefabLibrary prefabLibrary)
@@ -58,6 +42,17 @@ namespace Netherlands3D.Twin.Layers
 
         private async Task<LayerGameObject> Spawn(ReferencedLayerData layerData, LayerGameObject prefab)
         {
+            var property = layerData.GetProperty<TransformLayerPropertyData>();
+            if (property != null)
+            {
+                return await SpawnObjectAt(
+                    layerData, 
+                    prefab, 
+                    property.LocalPosition, 
+                    property.Rotation
+                );
+            }
+            
             return prefab.SpawnLocation switch
             {
                 SpawnLocation.OpticalCenter => await SpawnAtOpticalPosition(layerData, prefab),
@@ -110,9 +105,12 @@ namespace Netherlands3D.Twin.Layers
             );
         }
 
-        private async Task<LayerGameObject> SpawnObject(ReferencedLayerData layerData, LayerGameObject prefab,
-            Vector3 position, bool hasHit)
-        {
+        private async Task<LayerGameObject> SpawnObject(
+            ReferencedLayerData layerData, 
+            LayerGameObject prefab,
+            Vector3 position, 
+            bool hasHit
+        ) {
             if (!hasHit)
             {
                 // if there is no hit from the optical raycaster - we fallback to the ObjectPlacementUtility's
@@ -128,8 +126,7 @@ namespace Netherlands3D.Twin.Layers
             LayerGameObject prefab,
             Vector3 position,
             Quaternion rotation
-        )
-        {
+        ) {
             if (position == Vector3.zero)
             {
                 return await SpawnObjectAtSpawnPoint(layerData, prefab);
@@ -138,9 +135,10 @@ namespace Netherlands3D.Twin.Layers
             return await SpawnObjectAt(layerData, prefab, position, rotation);
         }
 
-        private async Task<LayerGameObject> SpawnObjectAtSpawnPoint(ReferencedLayerData layerData,
-            LayerGameObject prefab)
-        {
+        private async Task<LayerGameObject> SpawnObjectAtSpawnPoint(
+            ReferencedLayerData layerData,
+            LayerGameObject prefab
+        ) {
             var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
 
             return await SpawnObjectAt(layerData, prefab, spawnPoint, Quaternion.identity);

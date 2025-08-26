@@ -4,6 +4,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
@@ -40,17 +41,19 @@ namespace Netherlands3D.Twin.Layers
             set => LayerData.Name = value;
         }
 
-        public bool HasLayerData => layerData != null;
-        
-        private ReferencedLayerData layerData;
+        public bool HasLayerData => LayerData != null;
 
+        private ReferencedLayerData layerData;
         public ReferencedLayerData LayerData
         {
             get => layerData;
             set
             {
+                // Make idempotent - only continue if layerData actually changes
+                if (value == layerData) return;
+
                 layerData = value;
-                LoadPropertiesInVisualisations();
+                OnLayerInitialize();
             }
         }
 
@@ -82,20 +85,34 @@ namespace Netherlands3D.Twin.Layers
         [Obsolete("Do not use Awake in subclasses, use OnLayerInitialize instead", true)]
         private void Awake()
         {
-            if (
-                layerData == null 
-                && transform.parent 
-                && transform.parent.GetComponent<LayerSpawner.LayerSpawnerPlaceholder>() is { } layerSpawner
-            ) {
-                layerSpawner.ReplaceWith(this);
-            }
+            // Technically not possible, but is a safeguard.
+            if (LayerData != null) return;
+            
+            // No parent, definitely no placeholder to replace
+            if (!transform.parent) return;
+            
+            // Get the placeholder if there is one, and it there is none we do nothing
+            if (transform.parent.GetComponent<PlaceholderLayerGameObject>() is not { } placeholder) return;
 
-            // Call a template method that children are free to play with - this way we can avoid using
-            // the awake method directly and prevent forgetting to call the base.Awake() from children and thus
-            // forgetting to grab the layerdata from the spawning context
-            OnLayerInitialize();
+            // Replacing the placeholder will change the Reference property of the LayerData,
+            // and that will trigger the LayerData property of this LayerGameObject to be set.
+            // Since the LayerData is responsible for initializing the Layer, it will trigger the
+            // real OnLayerInitialize method below
+            // By doing it this way, we could directly instantiate LayerGameObjects and defer their
+            // initialisation until a LayerData is present, as is done in the PlaceholderLayerGameObject.
+            placeholder.ReplaceWith(this);
         }
 
+        /// <summary>
+        /// Called when the Layer needs to be (re)initialised once a new LayerData is provided.
+        ///
+        /// As soon as a LayerData property is assigned to this LayerGameObject, this method is called to initialize
+        /// this layer game object. Keep in mind that this could be called from the Awake function, it is recommended
+        /// to use this as little as possible.
+        ///
+        /// When using the LayerSpawner, the OnLayerReady will be called once after this method is fired the first time.
+        /// When you have a custom instantiation flow this is not guaranteed.
+        /// </summary>
         protected virtual void OnLayerInitialize()
         {
             
@@ -107,6 +124,7 @@ namespace Netherlands3D.Twin.Layers
             // Call a template method that children are free to play with - this way we can avoid using
             // the start method directly and prevent forgetting to call the base.Start() from children
             OnLayerReady();
+            LoadPropertiesInVisualisations();
             InitializeVisualisation();
         }
 
@@ -130,7 +148,7 @@ namespace Netherlands3D.Twin.Layers
         {
             foreach (var visualisation in GetComponents<ILayerWithPropertyData>())
             {
-                visualisation.LoadProperties(layerData.LayerProperties);
+                visualisation.LoadProperties(LayerData.LayerProperties);
             }
         }
 
@@ -156,7 +174,7 @@ namespace Netherlands3D.Twin.Layers
         protected virtual void OnDestroy()
         {
             //don't unsubscribe in OnDisable, because we still want to be able to center to a 
-            layerData.LayerDoubleClicked.RemoveListener(OnDoubleClick);
+            LayerData.LayerDoubleClicked.RemoveListener(OnDoubleClick);
         }
 
         public virtual void OnSelect()
@@ -169,7 +187,7 @@ namespace Netherlands3D.Twin.Layers
 
         public void DestroyLayer()
         {
-            layerData.DestroyLayer();
+            LayerData.DestroyLayer();
         }
 
         public virtual void DestroyLayerGameObject()

@@ -18,7 +18,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override bool IsMaskable => false;
         private TextPopout annotation;
-        private AnnotationPropertyData annotationPropertyData => (AnnotationPropertyData)transformPropertyData;
+        private AnnotationPropertyData annotationPropertyData => (AnnotationPropertyData)TransformPropertyData;
         private enum EditMode
         {
             Disabled, // Neither move the annotation, nor edit the text
@@ -44,9 +44,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 SetEditMode(EditMode.Move);
         }
 
-        protected override TransformLayerPropertyData InitializePropertyData()
+        protected override void InitializePropertyData()
         {
-            return new AnnotationPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale, "");
+            LayerData.SetProperty(new AnnotationPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale, ""));
         }
 
         private void CreateTextPopup()
@@ -148,20 +148,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             base.LoadProperties(properties);
     
-            var annotationProperty = (AnnotationPropertyData)properties.FirstOrDefault(p => p is AnnotationPropertyData);
-            if (annotationProperty != null)
+            var annotationProperty = properties.OfType<AnnotationPropertyData>().FirstOrDefault();
+            if (annotationProperty == null) return;
+            if (annotationPropertyData != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
             {
-                if (annotationPropertyData != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
-                {
-                    annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
-                }
-
-                transformPropertyData = annotationProperty; //take existing TransformProperty to overwrite the unlinked one of this class
-
-                UpdateAnnotation(this.annotationPropertyData.AnnotationText);
-
-                annotationPropertyData.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
+                annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
             }
+
+            LayerData.SetProperty(annotationProperty); 
+
+            UpdateAnnotation(annotationProperty.AnnotationText);
+
+            annotationProperty.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
         }
 
         private void UpdateAnnotation(string newText)

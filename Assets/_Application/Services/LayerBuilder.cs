@@ -127,7 +127,9 @@ namespace Netherlands3D.Twin.Services
 
         public LayerData Build(LayerGameObject ontoReference)
         {
+            // FIXME: this is a catch22 - LayerData needs the LayerGameObject and the LayerGameObject needs the LayerData
             var layerData = new ReferencedLayerData(Name, Type, ontoReference);
+            ontoReference.LayerData = layerData;
             
             if (!string.IsNullOrEmpty(this.Name))
                 layerData.Name = this.Name;
@@ -140,7 +142,7 @@ namespace Netherlands3D.Twin.Services
 
             foreach (var property in this.Properties)
             {
-                layerData.AddProperty(property);
+                layerData.SetProperty(property);
             }
 
             if (this.DefaultSymbolizer != null)

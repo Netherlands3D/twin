@@ -26,6 +26,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
         }
 
         [JsonIgnore]
+        public Vector3 LocalPosition => position.ToUnity();
+
+        [JsonIgnore]
         public Vector3 EulerRotation
         {
             get => eulerRotation;
@@ -35,6 +38,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
                 OnRotationChanged.Invoke(value);
             }
         }
+        
+        [JsonIgnore]
+        public Quaternion Rotation => Quaternion.Euler(eulerRotation);
 
         [JsonIgnore]
         public Vector3 LocalScale

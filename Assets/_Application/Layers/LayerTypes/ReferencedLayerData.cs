@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -30,10 +31,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
                 reference = value;
                 if (!reference) return;
-    
-                reference.LayerData = this;
+
                 reference.gameObject.name = Name;
                 prefabId = reference.PrefabIdentifier;
+                reference.LayerData = this;
             }
         }
 
@@ -60,7 +61,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         {
             Name = name;
             this.prefabId = prefabId;
-            this.layerProperties = layerProperties;
+            this.layerProperties = layerProperties ?? new List<LayerPropertyData>();
             
             SpawnLayer();
         }

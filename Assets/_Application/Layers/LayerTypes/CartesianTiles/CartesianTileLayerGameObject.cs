@@ -26,7 +26,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         protected override void OnLayerInitialize()
         {
-            Debug.LogError("Initializing CTLGO");
             tileHandler = FindAnyObjectByType<TileHandler>();
             transform.SetParent(tileHandler.transform);
             layer = GetComponent<Layer>();
@@ -82,7 +81,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             base.OnDestroy();
             if (Application.isPlaying && tileHandler && layer)
             {
-                Debug.LogError("Destroying CTLGO");
                 tileHandler.RemoveLayer(layer);
             }
         }

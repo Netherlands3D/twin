@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -126,10 +127,7 @@ namespace Netherlands3D.Twin.Layers
             get
             {
                 // When unserializing, and the layerproperties ain't there: make sure we have a valid list object.
-                if (layerProperties == null)
-                {
-                    layerProperties = new();
-                }
+                layerProperties ??= new List<LayerPropertyData>();
 
                 return layerProperties;
             }
@@ -149,7 +147,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        [JsonIgnore] public bool HasProperties => layerProperties.Count > 0;
+        [JsonIgnore] public bool HasProperties => LayerProperties.Count > 0;
 
         [JsonIgnore] public Dictionary<string, LayerStyle> Styles => styles;
         
@@ -227,7 +225,7 @@ namespace Netherlands3D.Twin.Layers
             Name = name;
             if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
                 InitializeParent();
-            this.layerProperties = layerProperties;
+            this.layerProperties = layerProperties ?? new List<LayerPropertyData>();
         }
 
         public void SetParent(LayerData newParent, int siblingIndex = -1)
@@ -310,18 +308,23 @@ namespace Netherlands3D.Twin.Layers
             LayerDestroyed.Invoke();
         }
 
-        public void AddProperty(LayerPropertyData propertyData)
+        
+        public T GetProperty<T>() where T : LayerPropertyData
         {
-            var existingProperty = layerProperties.FirstOrDefault(prop => prop.GetType() == propertyData.GetType());
+            return LayerProperties.Get<T>();
+        }
+
+        public void SetProperty<T>(T propertyData) where T : LayerPropertyData
+        {
+            var existingProperty = LayerProperties.Get<T>();
             if (existingProperty != null)
             {
-                Debug.Log("A property of type" +propertyData.GetType() + " already exists for " + Name + ". Overwriting the old PropertyData");
-                int index = layerProperties.IndexOf(existingProperty);
-                layerProperties[index] = propertyData;
+                int index = LayerProperties.IndexOf(existingProperty);
+                LayerProperties[index] = propertyData;
             }
             else
             {
-                layerProperties.Add(propertyData);
+                LayerProperties.Add(propertyData);
             }
             
             PropertyAdded.Invoke(propertyData);
@@ -329,7 +332,7 @@ namespace Netherlands3D.Twin.Layers
 
         public void RemoveProperty(LayerPropertyData propertyData)
         {
-            layerProperties.Remove(propertyData);
+            LayerProperties.Remove(propertyData);
             PropertyRemoved.Invoke(propertyData);
         }
 
@@ -357,12 +360,9 @@ namespace Netherlands3D.Twin.Layers
         public IEnumerable<LayerAsset> GetAssets()
         {
             IEnumerable<LayerAsset> assetsOfCurrentLayer = new List<LayerAsset>();
-            if (layerProperties != null)
-            {
-                assetsOfCurrentLayer = layerProperties
-                    .OfType<ILayerPropertyDataWithAssets>()
-                    .SelectMany(p => p.GetAssets());
-            }
+            assetsOfCurrentLayer = LayerProperties
+                .OfType<ILayerPropertyDataWithAssets>()
+                .SelectMany(p => p.GetAssets());
 
             var assetsOfAllChildLayers = children
                 .SelectMany(l => l.GetAssets());

@@ -12,9 +12,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void OnLayerReady()
         {
             base.OnLayerReady();
-            transformPropertyData.Position = new Coordinate(coordinateSystem, Coordinates.y, Coordinates.x, Coordinates.z);
-            transformPropertyData.EulerRotation = transform.rotation.eulerAngles;
-            transformPropertyData.LocalScale = transform.localScale;
+            TransformPropertyData.Position = new Coordinate(coordinateSystem, Coordinates.y, Coordinates.x, Coordinates.z);
+            TransformPropertyData.EulerRotation = transform.rotation.eulerAngles;
+            TransformPropertyData.LocalScale = transform.localScale;
         }
 
         public override void OnSelect()

@@ -96,7 +96,6 @@ namespace Netherlands3D.Twin.Projects
             {
                 RootLayer.AddChild(layer, 0);
             }
-            Debug.LogWarning("Adding layer " + layer.Name + " to project");;
             LayerAdded.Invoke(layer);           
         }
 
@@ -111,7 +110,7 @@ namespace Netherlands3D.Twin.Projects
             var layersWithPropertyData = referencedLayer.GetComponents<ILayerWithPropertyData>();
             foreach (var layerWithPropertyData in layersWithPropertyData)
             {
-                referencedLayer.LayerData.AddProperty(layerWithPropertyData.PropertyData);
+                referencedLayer.LayerData.SetProperty(layerWithPropertyData.PropertyData);
             }
         }
 
@@ -140,10 +139,13 @@ namespace Netherlands3D.Twin.Projects
 
         public void AddFunctionality(FunctionalityData data)
         {
-            if (!functionalities.Contains(data))
-                functionalities.Add(data);
-            else
-                Debug.LogWarning("Not adding " + data.Id + " to ProjectData. A functionality with this ID already exists.");
+            if (functionalities.Contains(data))
+            {
+                Debug.LogWarning($"Not adding {data.Id} to ProjectData. A functionality with this ID already exists.");
+                return;
+            }
+
+            functionalities.Add(data);
         }
 
         public void RemoveFunctionality(FunctionalityData data)

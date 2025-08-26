@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.DataTypeAdapters;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -65,7 +66,7 @@ namespace Netherlands3D.Twin.Services
 
         public async Task<ReferencedLayerData> Add(ReferencedLayerData layerData)
         {
-            layerData.SetReference(SpawnPlaceholder(), true);
+            layerData.SetReference(SpawnPlaceholder(layerData), true);
 
             await spawner.Spawn(layerData);
             
@@ -74,7 +75,7 @@ namespace Netherlands3D.Twin.Services
 
         public async Task<ReferencedLayerData> Add(ReferencedLayerData layerData, Vector3 position, Quaternion? rotation = null)
         {
-            layerData.SetReference(SpawnPlaceholder(), true);
+            layerData.SetReference(SpawnPlaceholder(layerData), true);
             
             await spawner.Spawn(layerData, position, rotation ?? Quaternion.identity);
             
@@ -83,7 +84,8 @@ namespace Netherlands3D.Twin.Services
 
         private async Task<LayerGameObject> SpawnLayer(BaseLayerBuilder layerBuilder)
         {
-            var layerData = layerBuilder.Build(SpawnPlaceholder());
+            var layerGameObject = SpawnPlaceholder(null);
+            var layerData = layerBuilder.Build(layerGameObject);
             if (layerData is not ReferencedLayerData referencedLayerData)
             {
                 throw new Exception("Cannot add layer");
@@ -101,18 +103,15 @@ namespace Netherlands3D.Twin.Services
             );
         }
 
-        private LayerGameObject SpawnPlaceholder()
+        private LayerGameObject SpawnPlaceholder(ReferencedLayerData layerData)
         {
-            var placeholder = Instantiate(prefabLibrary.fallbackPrefab);
-            placeholder.gameObject.AddComponent<LayerSpawner.LayerSpawnerPlaceholder>();
-
-            return placeholder;
+            return prefabLibrary.placeholderPrefab.Instantiate(layerData);
         }
 
         private Uri RetrieveUrlForLayer(BaseLayerBuilder layerBuilder)
         {
             // TODO: Can't we do this another way? This feels leaky
-            var urlPropertyData = layerBuilder.Properties.Cast<LayerURLPropertyData>().SingleOrDefault(data => data != null);
+            var urlPropertyData = layerBuilder.Properties.Get<LayerURLPropertyData>();
             if (urlPropertyData == null)
             {
                 throw new Exception("Cannot add layer with type 'auto' without a URL property");

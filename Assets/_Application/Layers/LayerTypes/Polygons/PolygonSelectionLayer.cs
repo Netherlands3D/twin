@@ -104,7 +104,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public PolygonSelectionLayer(string name, string prefabId, List<Vector3> polygonUnityInput, ShapeType shapeType, float defaultLineWidth = 10f) : base(name, prefabId, new List<LayerPropertyData>())
         {
             polygonPropertyData = new PolygonSelectionLayerPropertyData();
-            AddProperty(polygonPropertyData);
+            SetProperty(polygonPropertyData);
             ShapeType = shapeType;
 
             var coordinates = ConvertToCoordinates(polygonUnityInput);
