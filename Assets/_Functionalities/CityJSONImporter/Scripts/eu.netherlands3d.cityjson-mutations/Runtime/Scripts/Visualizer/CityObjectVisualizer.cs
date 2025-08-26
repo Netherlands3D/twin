@@ -50,6 +50,10 @@ namespace Netherlands3D.CityJson.Visualisation
     [RequireComponent(typeof(MeshRenderer))]
     public class CityObjectVisualizer : MonoBehaviour
     {
+        private static int meshesCreatedThisFrame = 0;
+        private const int maxMeshesPerFrame = 20;
+        private static int lastFrameCount = -1;
+
         private CityObject cityObject;
         private Dictionary<CityGeometry, MeshWithMaterials> meshes;
         private MeshFilter meshFilter;
@@ -92,17 +96,33 @@ namespace Netherlands3D.CityJson.Visualisation
         //create the meshes
         private void Visualize()
         {
-            StartCoroutine(Test());
-        }
-
-        private IEnumerator Test()
-        {
-            yield return null;
             transform.localPosition = SetLocalPosition(cityObject); //set position first so the CityObject's transformationMatrix can be used to position the mesh.
+            StartCoroutine(CreateMeshesPerFrame(maxMeshesPerFrame));
+        }
+        
+        private IEnumerator CreateMeshesPerFrame(int maxCallsPerFrame)
+        {
+            yield return null; //a bit ugly, but we wait a frame to process the garbage of parsing the data.
+            
+            while (meshesCreatedThisFrame >= maxCallsPerFrame)
+            {
+                yield return null; // wait next frame (the counter will be reset there)
+                if (Time.frameCount != lastFrameCount)
+                {
+                    lastFrameCount = Time.frameCount;
+                    meshesCreatedThisFrame = 0;
+                }
+            }
+
+           
+            meshesCreatedThisFrame++;
             meshes = CreateMeshes(cityObject);
+            
             //SetMaterials(cityObject); //todo: create the materials for the meshes
+            
             var highestLod = meshes.Keys.Max(g => g.Lod);
             SetLODActive(highestLod);
+            
             jsonVisualized.InvokeStarted(gameObject);
         }
 
