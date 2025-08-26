@@ -6,9 +6,25 @@ using NetTopologySuite.Triangulate.Polygon;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 namespace Netherlands3D.SelectionTools
 {
+    public class GeometryTriangulationData
+    {
+        public GeometryTriangulationData(Geometry geometry, Vector3 origin, Vector3 u, Vector3 v)
+        {
+            this.geometry = geometry;
+            this.origin = origin;
+            this.u = u;
+            this.v = v;
+        }
+
+        public Geometry geometry;
+        public Vector3 origin;
+        public Vector3 u;
+
+        public Vector3 v;
+    }
+
     public static class PolygonVisualisationUtility
     {
         private static NtsGeometryServices instance;
@@ -80,7 +96,7 @@ namespace Netherlands3D.SelectionTools
         /// <param name="addBottom"></param>
         /// <param name="uvCoordinate"></param>
         /// <returns></returns>
-        public static Mesh CreatePolygonMesh(List<List<Vector3>> contours)
+        public static GeometryTriangulationData CreatePolygonGeometryTriangulationData(List<List<Vector3>> contours)
         {
             if (contours == null || contours.Count == 0 || contours[0].Count < 3)
                 return null;
@@ -100,45 +116,56 @@ namespace Netherlands3D.SelectionTools
             Vector3 origin = contours[0][0];
 
             // === STEP 2: Build NTS polygon ===
-            LinearRing outerRing = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[0], origin, u, v));
+            LinearRing outerRing = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[0], origin, u, v, true));
             LinearRing[] holes = new LinearRing[contours.Count - 1];
             for (int h = 1; h < contours.Count; h++)
-                holes[h - 1] = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[h], origin, u, v));
+                holes[h - 1] = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[h], origin, u, v, false));
 
             var polygon = geometryFactory.CreatePolygon(outerRing, holes);
-            
+
             // STEP 3: Triangulate in 2D
-            if (!polygon.IsValid)
+            Geometry triangulated;
+            try
             {
-                Debug.Log("invalid polygon");
+                // triangulated = PolygonTriangulator.Triangulate(polygon);
+                triangulated = ConstrainedDelaunayTriangulator.Triangulate(polygon);
+            }
+            catch // An polygon.IsValid check is very garbage intensive, this is cheaper
+            {
+                Debug.LogError("invalid polygon");
                 return null;
             }
-            
-            var triangulated = ConstrainedDelaunayTriangulator.Triangulate(polygon);
 
+            return new GeometryTriangulationData(triangulated, origin, u, v);
+            // return PolygonMesh(triangulated, origin, u, v);
+        }
+
+        public static Mesh CreatePolygonMesh(List<GeometryTriangulationData> datas, Vector3 offset)
+        {
             // STEP 4: Build Unity Mesh in 3D
             List<Vector3> verts = new List<Vector3>();
-            List<int> tris = new List<int>();
-            var vertMap = new Dictionary<Coordinate, int>();
+            List<int> tris = new List<int>(); //we don't know the tri count, so make a guess
 
-            for (int i = 0; i < triangulated.NumGeometries; i++)
+            for (int i = 0; i < datas.Count; i++)
             {
-                var tri = triangulated.GetGeometryN(i);
-                if (tri is Polygon tPoly)
-                {
-                    var coords = tPoly.Coordinates;
-                    for (int j = 2; j >= 0; j--) // Unity triangle winding order is reversed so we go backwards here
-                    {
-                        var c2D = coords[j];
-                        if (!vertMap.TryGetValue(c2D, out int idx))
-                        {
-                            Vector3 v3 = To3D(c2D, origin, u, v);
-                            idx = verts.Count;
-                            verts.Add(v3);
-                            vertMap[c2D] = idx;
-                        }
+                var data = datas[i];
 
-                        tris.Add(idx);
+                for (int j = 0; j < data.geometry.NumGeometries; j++)
+                {
+                    var tri = data.geometry.GetGeometryN(j);
+                    if (tri is Polygon tPoly)
+                    {
+                        var coords = tPoly.Coordinates;
+                        
+                        for (int k = 0; k <= 2; k++) 
+                        {
+                            var c2D = coords[k];
+                            Vector3 v3 = To3D(c2D, data.origin, data.u, data.v) - offset; 
+                            int idx = verts.Count;
+                            verts.Add(v3); //todo: skip duplicate vertices
+
+                            tris.Add(idx);
+                        }
                     }
                 }
             }
@@ -152,7 +179,13 @@ namespace Netherlands3D.SelectionTools
             return mesh;
         }
 
-        private static Coordinate[] ConvertToCoordinateArray(List<Vector3> points, Vector3 origin, Vector3 u, Vector3 v)
+        public static Mesh CreatePolygonMesh(List<List<Vector3>> contours)
+        {
+            var triangulationData = CreatePolygonGeometryTriangulationData(contours);
+            return CreatePolygonMesh(new List<GeometryTriangulationData>() { triangulationData }, Vector3.zero);
+        }
+
+        private static Coordinate[] ConvertToCoordinateArray(List<Vector3> points, Vector3 origin, Vector3 u, Vector3 v, bool shouldBeCCW)
         {
             var coords = new List<Coordinate>(points.Count + 1);
             for (int i = 0; i < points.Count; i++)
@@ -167,7 +200,8 @@ namespace Netherlands3D.SelectionTools
             }
 
             var coordsArray = coords.ToArray();
-            if (!NetTopologySuite.Algorithm.Orientation.IsCCW(coordsArray))
+            var isCCW = NetTopologySuite.Algorithm.Orientation.IsCCW(coordsArray);
+            if (isCCW ^ shouldBeCCW)
             {
                 Array.Reverse(coordsArray);
             }
