@@ -71,6 +71,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1107191816428015816, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1107191816428015816, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1107191816428015816, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1107191816428015816, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1107191816428015816, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 2039
       objectReference: {fileID: 0}
@@ -142,17 +162,17 @@ PrefabInstance:
     - target: {fileID: 1107191816428015819, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
       propertyPath: zoomSpeed
-      value: 1
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1107191816428015819, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
       propertyPath: maximumSpeed
-      value: 6000
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 1107191816428015819, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
       propertyPath: minimumSpeed
-      value: 6
+      value: -1000
       objectReference: {fileID: 0}
     - target: {fileID: 1107191816428015819, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
@@ -180,10 +200,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1107191816428015814, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7827784630567191569}
-    - targetCorrespondingSourceObject: {fileID: 1107191816428015814, guid: 8a8c1bdd94f08d144a7410a838c895ad,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 2623645220532331873}
     - targetCorrespondingSourceObject: {fileID: 1107191816428015814, guid: 8a8c1bdd94f08d144a7410a838c895ad,
         type: 3}
@@ -197,6 +213,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1515747955998932631}
+    - targetCorrespondingSourceObject: {fileID: 1107191816428015814, guid: 8a8c1bdd94f08d144a7410a838c895ad,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1477530456811102049}
   m_SourcePrefab: {fileID: 100100000, guid: 8a8c1bdd94f08d144a7410a838c895ad, type: 3}
 --- !u!4 &5315891981602308679 stripped
 Transform:
@@ -222,25 +242,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldTransformShifter: {fileID: 0}
+  worldTransformShifter: {fileID: 1477530456811102049}
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
   onPostShift:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7827784630567191569
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5315891981602308680}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50fab43e07a540b89d245bd4ec8e4887, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2623645220532331873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,6 +308,7 @@ MonoBehaviour:
   repositioningDuration: 0.3
   simulatedOrthoFov: 0.1
   maxCameraHeightWhenSimulating: 8000
+  maxPointerDistance: 10000
 --- !u!114 &1515747955998932631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,3 +325,15 @@ MonoBehaviour:
   NorthColor: {r: 0.18431373, g: 0.20784314, b: 0.3137255, a: 1}
   inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6,
     type: 3}
+--- !u!114 &1477530456811102049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5315891981602308680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50fab43e07a540b89d245bd4ec8e4887, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
