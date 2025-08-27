@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.CityJson.Structure;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Events;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.CityJson.Visualisation
 {
@@ -64,7 +64,7 @@ namespace Netherlands3D.CityJson.Visualisation
         public int ActiveLod => activeLOD;
         public Mesh ActiveMesh { get; private set; }
 
-        [SerializeField] private GameObjectEvent jsonVisualized;
+        public UnityEvent<GameObject> jsonVisualized;
         [SerializeField] private SemanticMaterials[] materials;
 
 #if UNITY_EDITOR
@@ -123,7 +123,7 @@ namespace Netherlands3D.CityJson.Visualisation
             var highestLod = meshes.Keys.Max(g => g.Lod);
             SetLODActive(highestLod);
             
-            jsonVisualized.InvokeStarted(gameObject);
+            jsonVisualized?.Invoke(gameObject);
         }
 
         private Vector3 SetLocalPosition(CityObject cityObject)
