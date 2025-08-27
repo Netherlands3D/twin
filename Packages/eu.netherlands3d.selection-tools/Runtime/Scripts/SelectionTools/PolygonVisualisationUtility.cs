@@ -10,7 +10,7 @@ namespace Netherlands3D.SelectionTools
 {
     public class GeometryTriangulationData
     {
-        public GeometryTriangulationData(Geometry geometry, Vector3 origin, Vector3 u, Vector3 v/*, Vector3 normal*/)
+        public GeometryTriangulationData(Geometry geometry, Vector3 origin, Vector3 u, Vector3 v /*, Vector3 normal*/)
         {
             this.geometry = geometry;
             this.origin = origin;
@@ -125,20 +125,19 @@ namespace Netherlands3D.SelectionTools
 
             var polygon = geometryFactory.CreatePolygon(outerRing, holes);
 
-            // STEP 3: Triangulate in 2D
-            Geometry triangulated;
-            try
+            
+            // todo: this check is needed, but very garbage intensive if possible use a different check to determine polygon validity
+            // a try catch block is not possible, since it does not work in webgl and the app can end up in an infinite loop
+            if (!polygon.IsValid) 
             {
-                triangulated = PolygonTriangulator.Triangulate(polygon);
-                // triangulated = ConstrainedDelaunayTriangulator.Triangulate(polygon);
-            }
-            catch // An polygon.IsValid check is very garbage intensive, this is cheaper
-            {
-                Debug.LogError("invalid polygon");
                 return null;
             }
 
-            return new GeometryTriangulationData(triangulated, origin, u, v/*, normal*/);
+            // STEP 3: Triangulate in 2D
+            Geometry triangulated;
+            triangulated = ConstrainedDelaunayTriangulator.Triangulate(polygon);
+
+            return new GeometryTriangulationData(triangulated, origin, u, v /*, normal*/);
         }
 
         public static Mesh CreatePolygonMesh(List<GeometryTriangulationData> datas, Vector3 offset)
@@ -157,11 +156,11 @@ namespace Netherlands3D.SelectionTools
                     if (tri is Polygon tPoly)
                     {
                         var coords = tPoly.Coordinates;
-                        
+
                         for (int k = 0; k <= 2; k++)
                         {
                             var c2D = coords[k];
-                            Vector3 v3 = To3D(c2D, data.origin, data.u, data.v) - offset; 
+                            Vector3 v3 = To3D(c2D, data.origin, data.u, data.v) - offset;
                             int idx = verts.Count;
                             verts.Add(v3); //todo: skip duplicate vertices
                             tris.Add(idx);
