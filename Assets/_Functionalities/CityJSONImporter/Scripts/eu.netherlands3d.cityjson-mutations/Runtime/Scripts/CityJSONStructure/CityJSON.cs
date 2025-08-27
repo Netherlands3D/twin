@@ -1,11 +1,10 @@
+using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.FloatingOrigin;
+using SimpleJSON;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Coordinates;
-using SimpleJSON;
 using UnityEngine;
-using UnityEngine.Assertions;
-using Netherlands3D.Events;
-using Netherlands3D.Twin.FloatingOrigin;
+using UnityEngine.Events;
 
 namespace Netherlands3D.CityJson.Structure
 {
@@ -29,42 +28,22 @@ namespace Netherlands3D.CityJson.Structure
         public List<CityObject> CityObjects { get; private set; } = new List<CityObject>();
         public Vector3Double MinExtent { get; private set; }
         public Vector3Double MaxExtent { get; private set; }
-        public Vector3Double RelativeCenter =>  (MaxExtent - MinExtent) / 2;
+        public Vector3Double RelativeCenter => (MaxExtent - MinExtent) / 2;
         public Vector3Double AbsoluteCenter => (MaxExtent + MinExtent) / 2;
 
         public CoordinateSystem CoordinateSystem { get; private set; } = CoordinateSystem.Undefined;
 
         private Dictionary<string, JSONNode> extensionNodes = new Dictionary<string, JSONNode>();
 
-        [Tooltip("A cityObject will be created as a GameObject with a CityObject script. This field can hold a prefab with multiple extra scripts (such as CityObjectVisualizer) to be created instead. This prefab must have a CityObject script attached.")]
-        [SerializeField]
+        [Tooltip("A cityObject will be created as a GameObject with a CityObject script. This field can hold a prefab with multiple extra scripts (such as CityObjectVisualizer) to be created instead. This prefab must have a CityObject script attached.")] [SerializeField]
         private GameObject cityObjectPrefab;
-        [SerializeField]
-        [Tooltip("If checked the CityJSON parsed by this script will set the relative center of the RD coordinate system to the center of this CityJSON")]
-        private bool useAsRelativeRDCenter;
 
-        [Header("Optional events")]
-        [Tooltip("Event that provides a CityJSON to parse. If not assigned call ParseCityJSON() directly to start parsing")]
-        [SerializeField]
-        private StringEvent onCityJSONReceived;
-        [Tooltip("Event that is called when the CityJSON is parsed")]
-        [SerializeField]
-        private TriggerEvent onAllCityObjectsProcessed;
+        [Header("Optional events")] 
+        [Tooltip("Event that is called when the CityJSON is parsed")] 
+        public UnityEvent onAllCityObjectsProcessed;
+
         [Tooltip("If assigned it will call this event instead of Asserting the type field is \"CityJSON\"")]
-        [SerializeField]
-        private BoolEvent isCityJSONType; //if assigned it will call this event instead of Asserting the type field is "CityJSON"
-
-        private void OnEnable()
-        {
-            if (onCityJSONReceived)
-                onCityJSONReceived.AddListenerStarted(ParseCityJSON);
-        }
-
-        private void OnDisable()
-        {
-            if (onCityJSONReceived)
-                onCityJSONReceived.RemoveAllListenersStarted();
-        }
+        public UnityEvent<bool> isCityJSONType; //if assigned it will call this event instead of Asserting the type field is "CityJSON"
 
         public static CityJSON CreateEmpty()
         {
@@ -97,15 +76,12 @@ namespace Netherlands3D.CityJson.Structure
 
             var type = node["type"];
             var isCityJSON = type == "CityJSON";
-            if (isCityJSONType)
+
+            isCityJSONType.Invoke(isCityJSON);
+            if (!isCityJSON)
             {
-                isCityJSONType.InvokeStarted(isCityJSON);
-                if (!isCityJSON)
-                    return;
-            }
-            else
-            {
-                Assert.IsTrue(isCityJSON);
+                Debug.LogError("The provided string is not a CityJSON");
+                return;
             }
 
             Version = node["version"];
@@ -216,8 +192,7 @@ namespace Netherlands3D.CityJson.Structure
                 co.OnCityObjectParseCompleted();
             }
 
-            if (onAllCityObjectsProcessed)
-                onAllCityObjectsProcessed.InvokeStarted();
+            onAllCityObjectsProcessed?.Invoke();
         }
 
         //custom nodes must be added as is to the exporter to ensure they are preserved.
