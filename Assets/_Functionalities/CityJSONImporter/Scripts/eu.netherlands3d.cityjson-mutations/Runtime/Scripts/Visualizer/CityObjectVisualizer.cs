@@ -128,9 +128,15 @@ namespace Netherlands3D.CityJson.Visualisation
 
         private Vector3 SetLocalPosition(CityObject cityObject)
         {
+            var crs = cityObject.CoordinateSystem;
+            if (cityObject.CoordinateSystem == CoordinateSystem.RD) //todo: Make a generic check for 2d CRD and include the height
+            {
+                crs = CoordinateSystem.RDNAP;
+            }
+            
             var relativeCenter = cityObject.RelativeCenter;
-            var relativeCoordinate = new Coordinate(cityObject.CoordinateSystem, relativeCenter.x, relativeCenter.y, relativeCenter.z); //this is not a valid coordinate, but we need to use the Coordinate struct to determine the axis order
-            return new Vector3((float)relativeCoordinate.easting, (float)relativeCoordinate.northing, (float)relativeCoordinate.height);
+            var relativeCoordinate = new Coordinate(crs, relativeCenter.x, relativeCenter.y, relativeCenter.z); //this is not a valid coordinate, but we need to use the Coordinate struct to determine the axis order
+            return new Vector3((float)relativeCoordinate.easting, (float)relativeCoordinate.height, (float)relativeCoordinate.northing);
         }
 
 
@@ -187,8 +193,7 @@ namespace Netherlands3D.CityJson.Visualisation
             meshes = new Dictionary<CityGeometry, MeshWithMaterials>();
             foreach (var geometry in cityObject.Geometries)
             {
-                var cityJsonCoord = GetComponentInParent<WorldTransform>().Coordinate;
-                var relativeCenter = this.cityObject.RelativeCenter;
+                var cityJsonCoord = GetComponentInParent<WorldTransform>().Coordinate; //todo: this getComponentInParent is a bit hacky
                 Vector3Double origin;
                 if (cityObject.CoordinateSystem == CoordinateSystem.Undefined) //we cannot convert an undefined crs, so we assume the origin is 0, 0, 0
                 {
@@ -200,14 +205,16 @@ namespace Netherlands3D.CityJson.Visualisation
                     origin = new Vector3Double(convertedCoord.value1, convertedCoord.value2, convertedCoord.value3);
                 }
 
-                var mesh = CreateMeshFromGeometry(geometry, cityObject.CoordinateSystem, origin,relativeCenter);
+                // The geometry's vertices are in world space, so we need to subtract the cityJSON's origin to get them in cityJSON space, and then subtract the cityObject's origin to be able to create a mesh with the origin at the cityObject's position.
+                // The CityJSON origin is at the citJSON WorldTransform coordinate, the CityObject's origin is its localPosition, since we set it previously.
+                var mesh = CreateMeshFromGeometry(geometry, cityObject.CoordinateSystem, origin, cityObject.transform.localPosition); 
                 meshes.Add(geometry, mesh);
             }
 
             return meshes;
         }
 
-        public MeshWithMaterials CreateMeshFromGeometry(CityGeometry geometry, CoordinateSystem coordinateSystem, Vector3Double vertexOffset, Vector3Double objectOffset)
+        public MeshWithMaterials CreateMeshFromGeometry(CityGeometry geometry, CoordinateSystem coordinateSystem, Vector3Double vertexOffset, Vector3 objectOffset)
         {
             var boundaryMeshes = BoundariesToMeshes(geometry.BoundaryObject, coordinateSystem, vertexOffset);
             var subMeshes = CombineBoundaryMeshesWithTheSameSemanticObject(boundaryMeshes, objectOffset, out var types);
@@ -222,7 +229,7 @@ namespace Netherlands3D.CityJson.Visualisation
             return new MeshWithMaterials(mesh, materials);
         }
 
-        public static List<Mesh> CombineBoundaryMeshesWithTheSameSemanticObject(List<BoundaryMeshData> boundaryMeshes, Vector3Double offset, out List<SurfaceSemanticType> types)
+        public static List<Mesh> CombineBoundaryMeshesWithTheSameSemanticObject(List<BoundaryMeshData> boundaryMeshes, Vector3 offset, out List<SurfaceSemanticType> types)
         {
             List<Mesh> combinedMeshes = new List<Mesh>(boundaryMeshes.Count);
             types = new List<SurfaceSemanticType>(boundaryMeshes.Count);
@@ -242,8 +249,7 @@ namespace Netherlands3D.CityJson.Visualisation
                     }
                 }
 
-                var combinedMesh = PolygonVisualisationUtility.CreatePolygonMesh(meshDataToCombine, offset.AsVector3());
-                // var combinedMesh = CombineMeshes(meshDataToCombine, transformationMatrix, true);
+                var combinedMesh = PolygonVisualisationUtility.CreatePolygonMesh(meshDataToCombine, offset);
                 combinedMeshes.Add(combinedMesh);
                 if (activeSemanticsObject != null)
                     types.Add(activeSemanticsObject.SurfaceType);
