@@ -18,6 +18,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class ObjectSelectorService : MonoBehaviour
     {
+        public SubObjectSelector SubObjectSelector => subObjectSelector;
+
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
         public UnityEvent OnDeselect = new();
@@ -176,8 +178,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                         lastSelectedMappingLayerData = null;
                     }
                     if (mapping is MeshMapping map)
-                    {                      
+                    {
                         LayerData layerData = subObjectSelector.GetLayerDataForSubObject(map.ObjectMapping);
+                        //TODO maybe to the best place here to have a dependency to the cartesianlayerstyler, needs a better implementation
+                        LayerFeature feature = GetLayerFeatureFromBagID(bagId, map, out LayerGameObject layer);
+                        bool? v = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(feature);
+                        if (v != true) return;
+
                         layerData.SelectLayer(true);
                         lastSelectedMappingLayerData = layerData;
                         SelectBagId(bagId);
@@ -279,6 +286,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public LayerFeature GetLayerFeatureFromBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
         {
             ObjectMappingItem item = GetMappingItemForBagID(bagID, selectedMapping, out layer);
+            if (layer == null)
+                return null;
             LayerFeature feature = layer.LayerFeatures[item];
             return feature;
         }

@@ -1,10 +1,10 @@
+
 using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using UnityEngine;
 using UnityEngine.UI;
-using Netherlands3D.Services;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.SubObjects;
 
 namespace Netherlands3D.Twin.UI
 {
@@ -20,7 +20,7 @@ namespace Netherlands3D.Twin.UI
 
         private IMapping currentSelectedFeatureObject;
         private object currentSelectedTransformObject;
-        private string currentSelectedBagId;        
+        private string currentSelectedBagId;
 
         private void Awake()
         {
@@ -78,8 +78,12 @@ namespace Netherlands3D.Twin.UI
                 service.ActiveDialog.Confirm.AddListener(() =>
                 {
                     LayerGameObject layer;
-                    LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out layer);                  
-                    (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(feature, false);
+                    LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out layer);
+                    if (layer != null)
+                    {
+                        (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(feature, false);                        
+                    }
+                    UpdateButton();
                 });
 
                 if (currentSelectedBagId != null)
@@ -137,7 +141,16 @@ namespace Netherlands3D.Twin.UI
 
         private void UpdateButton()
         {
-            SetVisibile(currentSelectedFeatureObject != null || currentSelectedTransformObject != null);
+            bool visible = currentSelectedTransformObject != null;
+            //we need to check if the featue was already hidden, if so lets not show the toggle to be visible because we shouldnt be able to hide it again
+            if (currentSelectedBagId != null && currentSelectedFeatureObject != null)
+            {
+                LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out LayerGameObject layer);
+                bool? v = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(feature);
+                if(v == true) visible = true;                
+            }
+
+            SetVisibile(visible);
         }
 
         private void SetVisibile(bool visible)
