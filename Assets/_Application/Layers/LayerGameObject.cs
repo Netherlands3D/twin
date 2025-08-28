@@ -53,15 +53,19 @@ namespace Netherlands3D.Twin.Layers
 
                 layerData = value;
                 OnLayerInitialize();
+                onLayerInitialized.Invoke();
             }
         }
 
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
-        public UnityEvent OnStylingApplied = new();
         Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;
 
-        [Space] public UnityEvent onShow = new();
+        [Space] 
+        public UnityEvent onShow = new();
         public UnityEvent onHide = new();
+        public UnityEvent onLayerInitialized = new();
+        public UnityEvent onLayerReady = new();
+        public UnityEvent OnStylingApplied = new();
 
         public abstract BoundingBox Bounds { get; }
 
@@ -90,7 +94,7 @@ namespace Netherlands3D.Twin.Layers
             // No parent, definitely no placeholder to replace
             if (!transform.parent) return;
             
-            // Get the placeholder if there is one, and it there is none we do nothing
+            // Immediately return if there is no Placeholder as parent - no action needed
             if (transform.parent.GetComponent<PlaceholderLayerGameObject>() is not { } placeholder) return;
 
             // Replacing the placeholder will change the Reference property of the LayerData,
@@ -114,7 +118,8 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         protected virtual void OnLayerInitialize()
         {
-            
+            // Intentionally left blank as it is a template method and child classes should not have to
+            // call `base.OnLayerInitialize` (and possibly forget to do that)
         }
 
         [Obsolete("Do not use Awake in subclasses, use OnLayerReady instead", true)]
@@ -124,12 +129,17 @@ namespace Netherlands3D.Twin.Layers
             // the start method directly and prevent forgetting to call the base.Start() from children
             LoadPropertiesInVisualisations();
             OnLayerReady();
+            // Event invocation is separate from template method on purpose to ensure child classes complete their
+            // readiness before external classes get to act - it also prevents forgetting calling the base method
+            // when overriding OnLayerReady
+            onLayerReady.Invoke();
             InitializeVisualisation();
         }
 
         protected virtual void OnLayerReady()
         {
-            
+            // Intentionally left blank as it is a template method and child classes should not have to
+            // call `base.OnLayerReady` (and possibly forget to do that)
         }
 
         //Use this function to initialize anything that has to be done after either:
