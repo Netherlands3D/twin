@@ -1,13 +1,14 @@
-﻿using Netherlands3D.Twin.Utility;
+﻿using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
+namespace Netherlands3D.Twin.Layers
 {
     /// <summary>
     /// Specialized LayerGameObject for visualising placeholder that will be replaced by actual LayerGameObjects
     /// specific to the prefab id in the LayerData.
     /// </summary>
-    public class PlaceholderLayerGameObject : LayerGameObject
+    public sealed class PlaceholderLayerGameObject : LayerGameObject
     {
         public override BoundingBox Bounds => new(new Bounds());
         
