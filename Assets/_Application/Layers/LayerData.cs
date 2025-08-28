@@ -136,10 +136,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore]
         public bool HasValidCredentials
         {
-            get
-            {
-                return hasValidCredentials;
-            }
+            get => hasValidCredentials;
             set
             {
                 hasValidCredentials = value;
@@ -176,7 +173,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent ParentChanged = new();
         [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
-        [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyAdded = new();
+        [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertySet = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleAdded = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleRemoved = new();
@@ -316,24 +313,18 @@ namespace Netherlands3D.Twin.Layers
 
         public void SetProperty<T>(T propertyData) where T : LayerPropertyData
         {
-            var existingProperty = LayerProperties.Get<T>();
-            if (existingProperty != null)
+            if (LayerProperties.Set(propertyData))
             {
-                int index = LayerProperties.IndexOf(existingProperty);
-                LayerProperties[index] = propertyData;
+                PropertySet.Invoke(propertyData);
             }
-            else
-            {
-                LayerProperties.Add(propertyData);
-            }
-            
-            PropertyAdded.Invoke(propertyData);
         }
 
         public void RemoveProperty(LayerPropertyData propertyData)
         {
-            LayerProperties.Remove(propertyData);
-            PropertyRemoved.Invoke(propertyData);
+            if (LayerProperties.Remove(propertyData))
+            {
+                PropertyRemoved.Invoke(propertyData);
+            }
         }
 
         public void AddStyle(LayerStyle style)

@@ -7,6 +7,26 @@ namespace Netherlands3D.Twin.Layers.ExtensionMethods
 {
     public static class LayerPropertyListExtensions
     {
+        public static bool Set<T>(this List<LayerPropertyData> properties, T propertyData) where T : LayerPropertyData
+        {
+            var existingProperty = properties.Get<T>();
+            if (existingProperty == null)
+            {
+                properties.Add(propertyData);
+                return true;
+            }
+
+            if (existingProperty == propertyData)
+            {
+                return false;
+            }
+
+            int index = properties.IndexOf(existingProperty);
+            properties[index] = propertyData;
+
+            return true;
+        }
+
         public static T Get<T>(this List<LayerPropertyData> properties) where T : LayerPropertyData
         {
             return properties.OfType<T>().FirstOrDefault();
