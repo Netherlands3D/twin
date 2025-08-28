@@ -4,6 +4,8 @@ using UnityEngine.Events;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.OGC3DTiles;
 using System.IO;
+using Netherlands3D.Functionalities.OGC3DTiles.LayerPresets;
+using Netherlands3D.Twin.Layers;
 using Newtonsoft.Json;
 
 namespace Netherlands3D.Twin.DataTypeAdapters
@@ -12,19 +14,6 @@ namespace Netherlands3D.Twin.DataTypeAdapters
     public class Tiles3DImportAdapter : ScriptableObject, IDataTypeAdapter
     {
         [SerializeField] private Tile3DLayerGameObject layerPrefab;
-
-        public void Execute(LocalFile localFile)
-        {
-            var newObject = Instantiate(layerPrefab, Vector3.zero, layerPrefab.transform.rotation);
-
-            if (!newObject.gameObject.TryGetComponent<Tile3DLayerGameObject>(out var layerComponent))
-            {
-                throw new MissingComponentException("Missing the Tile3DLayerGameObject component!");
-            }
-
-            layerComponent.Name = layerPrefab.name;
-            layerComponent.PropertyData.Url = localFile.SourceUrl; //set url to get tiles
-        }
 
         public bool Supports(LocalFile localFile)
         {
@@ -95,6 +84,11 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 Debug.Log(e.Message);
                 return false;
             }
+        }
+
+        public async void Execute(LocalFile localFile)
+        {
+            await App.Layers.Add("3d-tiles", new OGC3DTiles.Args(localFile.SourceUrl));
         }
     }
 }
