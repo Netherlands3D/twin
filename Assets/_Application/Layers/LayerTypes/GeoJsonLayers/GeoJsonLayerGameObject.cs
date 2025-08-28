@@ -75,7 +75,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             if (urlPropertyData.Data.IsStoredInProject())
             {
-                string path = Path.Combine(Application.persistentDataPath, urlPropertyData.Data.LocalPath.TrimStart('/', '\\'));
+                string path = AssetUriFactory.GetLocalPath(urlPropertyData.Data);
                 StartCoroutine(parser.ParseGeoJSONLocal(path));
             }
             else if (urlPropertyData.Data.IsRemoteAsset())

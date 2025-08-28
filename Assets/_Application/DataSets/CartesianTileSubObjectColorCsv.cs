@@ -7,6 +7,7 @@ using System.Linq;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Netherlands3D.SubObjects;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.DataSets
@@ -33,7 +34,7 @@ namespace Netherlands3D.Twin.DataSets
                 );
             }
 
-            this.path = Path.Combine(Application.persistentDataPath, uri.LocalPath.TrimStart('/', '\\'));
+            this.path = AssetUriFactory.GetLocalPath(uri);
             this.maxParsesPerFrame = maxParsesPerFrame;
         }
 

@@ -200,9 +200,8 @@ namespace Netherlands3D.Functionalities.GLBImporter
             if (propertyData.GlbFile == null)
                 return "";
 
-            var localPath = propertyData.GlbFile.LocalPath.TrimStart('/', '\\');
-            var path = Path.Combine(Application.persistentDataPath, localPath);
-            return path;
+            var localPath = AssetUriFactory.GetLocalPath(propertyData.GlbFile);
+            return localPath;
         }
     }
 }

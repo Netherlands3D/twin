@@ -178,9 +178,8 @@ namespace Netherlands3D.Functionalities.OBJImporter
             if (propertyData.ObjFile == null)
                 return "";
 
-            var localPath = propertyData.ObjFile.LocalPath.TrimStart('/', '\\');
-            var path = Path.Combine(Application.persistentDataPath, localPath);
-            return path;
+            var localPath = AssetUriFactory.GetLocalPath(propertyData.ObjFile);
+            return localPath;
         }
 
         private string GetMtlPathFromPropertyData()
@@ -188,9 +187,8 @@ namespace Netherlands3D.Functionalities.OBJImporter
             if (propertyData.MtlFile == null)
                 return "";
 
-            var localPath = propertyData.MtlFile.LocalPath.TrimStart('/', '\\');
-            var path = Path.Combine(Application.persistentDataPath, localPath);
-            return path;
+            var localPath = AssetUriFactory.GetLocalPath(propertyData.MtlFile);
+            return localPath;
         }
     }
 }
