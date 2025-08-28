@@ -1,16 +1,13 @@
 ﻿using System;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.LayerStyles;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.Services
+namespace Netherlands3D.Twin.Layers
 {
     public interface ILayerBuilder
     {
-        public static ILayerBuilder Start { get; }
-
         ILayerBuilder OfType(string type);
         ILayerBuilder FromUrl(Uri url);
         ILayerBuilder FromUrl(string url);

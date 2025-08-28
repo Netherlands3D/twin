@@ -3,19 +3,14 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.LayerStyles;
-using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.Services
+namespace Netherlands3D.Twin.Layers
 {
-    public class LayerBuilder : BaseLayerBuilder
-    {
-        
-    }
-
-    public class BaseLayerBuilder : ILayerBuilder
+    public class LayerBuilder : ILayerBuilder
     {
         internal string Type { get; private set; }
         internal Vector3? Position { get; private set; }
@@ -29,11 +24,19 @@ namespace Netherlands3D.Twin.Services
         [CanBeNull] private Symbolizer DefaultSymbolizer { get; set; }
         private List<LayerStyle> Styles { get; } = new();
         
-        protected BaseLayerBuilder()
+        internal LayerBuilder()
         {
         }
 
-        public static ILayerBuilder Start => new LayerBuilder();
+        public static ILayerBuilder Create()
+        {
+            return new LayerBuilder();
+        }
+
+        public static ILayerBuilder Create(string preset, LayerPresetArgs args)
+        {
+            return LayerPresetRegistry.Create(preset, args);
+        }
 
         public ILayerBuilder OfType(string type)
         {
@@ -135,7 +138,6 @@ namespace Netherlands3D.Twin.Services
 
             foreach (var property in Properties)
             {
-                Debug.Log("Setting property " + property.GetType());
                 layerData.SetProperty(property);
             }
 
@@ -149,11 +151,6 @@ namespace Netherlands3D.Twin.Services
                 layerData.AddStyle(style);
             }
 
-            return AddOntoBuild(layerData);
-        }
-
-        protected virtual LayerData AddOntoBuild(ReferencedLayerData layerData)
-        {
             return layerData;
         }
     }

@@ -5,6 +5,7 @@ using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.DataTypeAdapters;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -25,9 +26,14 @@ namespace Netherlands3D.Twin.Services
             spawner = new LayerSpawner(prefabLibrary);
         }
 
+        public async Task<ReferencedLayerData> Add(string preset, LayerPresetArgs args)
+        {
+            return await Add(LayerBuilder.Create(preset, args));
+        }
+
         public async Task<ReferencedLayerData> Add(ILayerBuilder builder)
         {
-            if (builder is not BaseLayerBuilder layerBuilder)
+            if (builder is not LayerBuilder layerBuilder)
             {
                 throw new NotSupportedException("Unsupported layer builder type: " + builder.GetType().Name);
             }
@@ -89,7 +95,7 @@ namespace Netherlands3D.Twin.Services
             return Task.CompletedTask;
         }
 
-        private async Task<LayerGameObject> SpawnLayer(BaseLayerBuilder layerBuilder)
+        private async Task<LayerGameObject> SpawnLayer(LayerBuilder layerBuilder)
         {
             var layerGameObject = SpawnPlaceholder(null);
             var layerData = layerBuilder.Build(layerGameObject);
@@ -115,7 +121,7 @@ namespace Netherlands3D.Twin.Services
             return prefabLibrary.placeholderPrefab.Instantiate(layerData);
         }
 
-        private Uri RetrieveUrlForLayer(BaseLayerBuilder layerBuilder)
+        private Uri RetrieveUrlForLayer(LayerBuilder layerBuilder)
         {
             // TODO: Can't we do this another way? This feels leaky
             var urlPropertyData = layerBuilder.Properties.Get<LayerURLPropertyData>();

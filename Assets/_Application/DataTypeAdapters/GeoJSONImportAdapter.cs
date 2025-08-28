@@ -1,34 +1,27 @@
 using System.IO;
+using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.Projects;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
-using Newtonsoft.Json;
-using Netherlands3D.DataTypeAdapters;
-using Netherlands3D.LayerStyles;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.Services;
+using GeoJSONArgs = Netherlands3D.Functionalities.GeoJSON.LayerPresets.GeoJSON.Args;
 
 namespace Netherlands3D.Twin.DataTypeAdapters
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/GeoJSONImportAdapter", fileName = "GeoJSONImportAdapter", order = 0)]
     public class GeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter
     {
-        [SerializeField] private GeoJsonLayerGameObject layerPrefab;
         [SerializeField] private UnityEvent<string> displayErrorMessageEvent;
 
         public bool Supports(LocalFile localFile)
         {
             // Check if the file has JSON content
-            if (!LooksLikeAJSONFile(localFile.LocalFilePath))
-                return false;
+            if (!LooksLikeAJSONFile(localFile.LocalFilePath)) return false;
 
             // Streamread the JSON until we find some GeoJSON properties
             using var reader = new StreamReader(localFile.LocalFilePath);
             using var jsonReader = new JsonTextReader(reader);
-
 
             //todo, we should check against a schema for optimization https://geojson.org/schema/GeoJSON.json
             while (jsonReader.Read())
@@ -64,12 +57,24 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             ParseGeoJSON(localFile);
         }
 
-        public void ParseGeoJSON(LocalFile localFile)
+        private async void ParseGeoJSON(LocalFile localFile)
         {
-            CreateGeoJSONLayer(localFile, displayErrorMessageEvent);
+            var layerName = CreateName(localFile);
+            var url = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
+
+            var layerData = await App.Layers.Add("geojson", new GeoJSONArgs(layerName, url));
+
+            GeoJsonLayerGameObject newLayer = layerData.Reference as GeoJsonLayerGameObject;
+            
+            // TODO: double check if the title in the args above don't already do this?
+            newLayer.gameObject.name = layerName;
+            if (displayErrorMessageEvent != null)
+            {
+                newLayer.Parser.OnParseError.AddListener(displayErrorMessageEvent.Invoke);
+            }
         }
 
-        private async void CreateGeoJSONLayer(LocalFile localFile, UnityEvent<string> onErrorCallback = null)
+        private static string CreateName(LocalFile localFile)
         {
             var geoJsonLayerName = Path.GetFileName(localFile.SourceUrl);
             if (localFile.SourceUrl is { Length: > 0 })
@@ -77,32 +82,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 geoJsonLayerName = localFile.SourceUrl;
             }
 
-            var randomLayerColor = LayerColor.Random();
-
-            var symbolizer = new Symbolizer();
-            symbolizer.SetFillColor(randomLayerColor);
-            symbolizer.SetStrokeColor(randomLayerColor);
-            
-            var layerData = await App.Layers.Add(
-                LayerBuilder.Start
-                    .OfType(layerPrefab.PrefabIdentifier)
-                    .NamedAs(geoJsonLayerName)
-                    .WithColor(randomLayerColor)
-                    .SetDefaultStyling(symbolizer)
-            );
-
-            GeoJsonLayerGameObject newLayer = layerData.Reference as GeoJsonLayerGameObject;
-            newLayer.gameObject.name = geoJsonLayerName;
-            if (onErrorCallback != null)
-            {
-                newLayer.Parser.OnParseError.AddListener(onErrorCallback.Invoke);
-            }
-
-            var localPath = localFile.LocalFilePath;
-            var propertyData = newLayer.PropertyData as LayerURLPropertyData;
-            propertyData.Data = localFile.SourceUrl.StartsWith("http") 
-                ? AssetUriFactory.CreateRemoteAssetUri(localFile.SourceUrl) 
-                : AssetUriFactory.CreateProjectAssetUri(localPath);
+            return geoJsonLayerName;
         }
     }
 }

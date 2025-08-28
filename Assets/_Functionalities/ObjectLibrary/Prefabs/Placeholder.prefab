@@ -61,21 +61,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 3937650689336427930}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f00a762c4b347c5ae806d751a57b3e4, type: 3}
+  m_Script: {fileID: 11500000, guid: 0e1351059b6a4f9eac9f246328c23f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabIdentifier: 754eb7a73e57a46f8bb8de137184cc10
+  prefabIdentifier: 
   thumbnail: {fileID: 0}
   spawnLocation: 0
-  OnStylingApplied:
-    m_PersistentCalls:
-      m_Calls: []
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
     m_PersistentCalls:
       m_Calls: []
-  objectCreated:
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStylingApplied:
     m_PersistentCalls:
       m_Calls: []

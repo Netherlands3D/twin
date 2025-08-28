@@ -10,9 +10,11 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using System.Collections.Generic;
 using KindMen.Uxios.Http;
+using Netherlands3D.Functionalities.Wfs.LayerPresets;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Services;
 
 namespace Netherlands3D.Functionalities.Wfs
@@ -146,13 +148,14 @@ namespace Netherlands3D.Functionalities.Wfs
 
             Debug.Log($"Adding WFS layer '{featureType}' with url '{getFeatureUrl}'");
 
-            var layerBuilder = new WfsLayerBuilder(
-                getFeatureUrl,
-                title,
-                folderLayer
+            await App.Layers.Add(
+                "wfs-layer", 
+                new WfsLayer.Args(
+                    getFeatureUrl,
+                    title,
+                    folderLayer
+                )
             );
-
-            await App.Layers.Add(layerBuilder);
         }
 
         private UriBuilder CreateLayerGetFeatureUri(string featureType, string sourceUrl, string crs, string geoJsonOutputFormatString)

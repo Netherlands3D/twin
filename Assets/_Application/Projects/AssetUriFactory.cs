@@ -1,11 +1,20 @@
 using System;
 using System.IO;
+using Netherlands3D.DataTypeAdapters;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Projects
 {
     public static class AssetUriFactory
     {
+        public static Uri ConvertLocalFileToAssetUri(LocalFile localFile)
+        {
+            var localPath = localFile.LocalFilePath;
+            return localFile.SourceUrl.StartsWith("http") 
+                ? CreateRemoteAssetUri(localFile.SourceUrl) 
+                : CreateProjectAssetUri(localPath);
+        }
+
         public static Uri CreateProjectAssetUri(string path)
         {
             if (path.StartsWith("project:///"))

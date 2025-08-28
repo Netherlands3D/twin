@@ -12,7 +12,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
     {
         protected override async Task<LayerData> CreateLayer(ILayerBuilder layerBuilder = null)
         {
-            layerBuilder ??= LayerBuilder.Start;
+            layerBuilder ??= LayerBuilder.Create();
             layerBuilder.NamedAs(prefab.name);
             
             if (await base.CreateLayer(layerBuilder) is not ReferencedLayerData newLayer)

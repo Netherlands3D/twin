@@ -70,7 +70,7 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
         private async void CreateObject()
         {
             var layerData = await App.Layers.Add(
-                LayerBuilder.Start
+                LayerBuilder.Create()
                     .OfType(prefab.PrefabIdentifier)
                     .PositionedAt(Vector3.zero)
                     .Rotated(Quaternion.identity)

@@ -51,7 +51,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         /// </summary>
         protected virtual async Task<LayerData> CreateLayer(ILayerBuilder layerBuilder = null)
         {
-            layerBuilder ??= LayerBuilder.Start;
+            layerBuilder ??= LayerBuilder.Create();
 
             // TODO: Replace PrefabIdentifier with type - but this requires a change in all buttons
             var layer = layerBuilder.OfType(prefab.PrefabIdentifier).NamedAs(prefab.name);

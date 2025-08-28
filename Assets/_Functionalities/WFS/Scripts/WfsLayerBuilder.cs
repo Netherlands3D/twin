@@ -1,5 +1,6 @@
 ﻿using System;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wfs
 {
-    public class WfsLayerBuilder : BaseLayerBuilder
+    public class WfsLayerBuilder : LayerBuilder
     {
         public WfsLayerBuilder(
             Uri featureUrl, 
