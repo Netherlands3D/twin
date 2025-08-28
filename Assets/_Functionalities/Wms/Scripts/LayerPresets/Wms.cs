@@ -4,10 +4,10 @@ using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 
-namespace Netherlands3D.Functionalities.Wfs.LayerPresets
+namespace Netherlands3D.Functionalities.Wms.LayerPresets
 {
-    [LayerPreset("wfs")]
-    public sealed class Wfs : ILayerPreset
+    [LayerPreset("wms")]
+    public sealed class Wms : ILayerPreset
     {
         public sealed class Args : LayerPresetArgs
         {
@@ -21,12 +21,12 @@ namespace Netherlands3D.Functionalities.Wfs.LayerPresets
 
         public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args)
         {
-            if (args is not Args wfsArgs)
+            if (args is not Args wmsArgs)
             {
-                throw new ArgumentException($"Expected {nameof(Args)} for preset wfs.");
+                throw new ArgumentException($"Expected {nameof(Args)} for preset wms.");
             }
 
-            var uri = AssetUriFactory.CreateRemoteAssetUri(wfsArgs.CapabilitiesUrl.ToString());
+            var uri = AssetUriFactory.CreateRemoteAssetUri(wmsArgs.CapabilitiesUrl.ToString());
 
             return builder
                 .OfType("url")

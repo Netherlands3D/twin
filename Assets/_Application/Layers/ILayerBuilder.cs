@@ -24,5 +24,6 @@ namespace Netherlands3D.Twin.Layers
         ILayerBuilder SetDefaultStyling(Symbolizer symbolizer);
         ILayerBuilder AddStyle(LayerStyle style);
         LayerData Build(LayerGameObject ontoReference);
+        ILayerBuilder PostBuild(Action<LayerData> callback);
     }
 }

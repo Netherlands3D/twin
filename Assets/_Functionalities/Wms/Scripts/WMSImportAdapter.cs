@@ -3,7 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Functionalities.OBJImporter.LayerPresets;
+using Netherlands3D.Functionalities.Wms.LayerPresets;
 using Netherlands3D.OgcWebServices.Shared;
+using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -79,7 +83,7 @@ namespace Netherlands3D.Functionalities.Wms
                     layerPrefab.PreferredImageSize.y,
                     layerPrefab.TransparencyEnabled
                 );
-                CreateLayer(map, url, wmsFolder);
+                CreateLayer(map, url, wmsFolder, true);
 
                 return;
             }
@@ -100,20 +104,12 @@ namespace Netherlands3D.Functionalities.Wms
             Destroy(coroutineRunner);
         }
 
-        private void CreateLayer(MapFilters mapFilters, Uri url, FolderLayer folderLayer, bool defaultEnabled = true)
+        private async void CreateLayer(MapFilters mapFilters, Uri url, FolderLayer folderLayer, bool defaultEnabled)
         {
-            // TODO: Replace with App.Layer.Add
-            WMSLayerGameObject newLayer = Instantiate(layerPrefab);
-            ProjectData.CreateAndAttachReferenceLayerTo(newLayer);
-            newLayer.gameObject.name = mapFilters.name;
-            newLayer.LayerData.SetParent(folderLayer);
-            newLayer.Name = mapFilters.name;
-            newLayer.LayerData.ActiveSelf = defaultEnabled;
-            
-            url = mapFilters.ToUrlBasedOn(url);
-
-            var propertyData = newLayer.PropertyData as LayerURLPropertyData;
-            propertyData.Data = url;
+            await App.Layers.Add(
+                "wms-layer", 
+                new WmsLayer.Args(url, mapFilters, folderLayer, defaultEnabled)
+            );
         }
     }
 }

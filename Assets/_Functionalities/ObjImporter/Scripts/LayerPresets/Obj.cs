@@ -1,10 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
-using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerPresets;
-using Netherlands3D.Twin.Layers.Properties;
 
 namespace Netherlands3D.Functionalities.OBJImporter.LayerPresets
 {

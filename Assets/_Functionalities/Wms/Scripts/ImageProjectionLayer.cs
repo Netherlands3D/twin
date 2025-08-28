@@ -74,6 +74,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         public override void HandleTile(TileChange tileChange, Action<TileChange> callback = null)
         {
+            Debug.LogError("Image projection layer handles tile " + tileChange);
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
 
             switch (tileChange.action)

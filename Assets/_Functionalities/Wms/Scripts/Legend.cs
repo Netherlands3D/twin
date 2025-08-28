@@ -227,6 +227,7 @@ namespace Netherlands3D.Functionalities.Wms
 
                 ClearGraphics();
 
+                if (!legendUrlDictionary.ContainsKey(getCapabilitiesUri.ToString())) return;
                 var urlContainer = legendUrlDictionary[getCapabilitiesUri.ToString()];
                 runningCoroutine = StartCoroutine(DownloadLegendGraphics(urlContainer, auth));
             }

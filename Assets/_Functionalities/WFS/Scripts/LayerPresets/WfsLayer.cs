@@ -42,15 +42,15 @@ namespace Netherlands3D.Functionalities.Wfs.LayerPresets
             styling.SetFillColor(color);
             styling.SetStrokeColor(color);
 
+            var uri = AssetUriFactory.CreateRemoteAssetUri(wfsArgs.FeatureUrl.ToString());
+
             return builder
                 .OfType(PrefabIdentifier)
                 .NamedAs(wfsArgs.Title)
                 .ChildOf(wfsArgs.Parent)
                 .WithColor(color)
                 .SetDefaultStyling(styling)
-                .AddProperty(new LayerURLPropertyData {
-                    Data = AssetUriFactory.CreateRemoteAssetUri(wfsArgs.FeatureUrl.ToString())
-                });
+                .AddProperty(new LayerURLPropertyData(uri));
         }
     }
 }
