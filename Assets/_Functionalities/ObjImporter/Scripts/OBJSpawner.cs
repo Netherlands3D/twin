@@ -29,7 +29,10 @@ namespace Netherlands3D.Functionalities.OBJImporter
         private Netherlands3D.ObjImporter.ObjImporter importer;
         private GameObject importedObject;
 
-        public bool HasMtl => GetMtlPathFromPropertyData() != string.Empty;
+        private string ObjFilePath => propertyData.ObjFile != null ? AssetUriFactory.GetLocalPath(propertyData.ObjFile) : string.Empty;
+        private string MtlFilePath => propertyData.MtlFile != null ? AssetUriFactory.GetLocalPath(propertyData.MtlFile) : string.Empty;
+
+        public bool HasMtl => MtlFilePath != string.Empty;
         public UnityEvent<bool> MtlImportSuccess = new();
 
         private void Awake()
@@ -63,10 +66,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
             importer = Instantiate(importerPrefab);
 
-            var objPath = GetObjPathFromPropertyData();
-            var mtlPath = GetMtlPathFromPropertyData();
-
-            ImportObj(objPath, mtlPath);
+            ImportObj(ObjFilePath, MtlFilePath);
         }
 
         private void ImportObj(string objPath, string mtlPath = "")
@@ -154,41 +154,15 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
         private void DisposeImporter()
         {
-            if (importer != null)
-            {
-                importer.MtlImportSucceeded.RemoveListener(MtlImportSuccess.Invoke);
-                Destroy(importer.gameObject);
-            }
-        }
+            if (importer == null) return;
 
-        public void SetObjPathInPropertyData(string fullPath)
-        {
-            var propertyData = PropertyData as OBJPropertyData;
-            propertyData.ObjFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
+            importer.MtlImportSucceeded.RemoveListener(MtlImportSuccess.Invoke);
+            Destroy(importer.gameObject);
         }
 
         public void SetMtlPathInPropertyData(string fullPath)
         {
-            var propertyData = PropertyData as OBJPropertyData;
             propertyData.MtlFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
-        }
-
-        private string GetObjPathFromPropertyData()
-        {
-            if (propertyData.ObjFile == null)
-                return "";
-
-            var localPath = AssetUriFactory.GetLocalPath(propertyData.ObjFile);
-            return localPath;
-        }
-
-        private string GetMtlPathFromPropertyData()
-        {
-            if (propertyData.MtlFile == null)
-                return "";
-
-            var localPath = AssetUriFactory.GetLocalPath(propertyData.MtlFile);
-            return localPath;
         }
     }
 }
