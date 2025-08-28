@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using GG.Extensions;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Projects;
@@ -14,7 +11,7 @@ using Object = UnityEngine.Object;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class LayerSpawner
+    public class LayerSpawner : ILayerSpawner
     {
         private readonly PrefabLibrary prefabLibrary;
 
@@ -27,7 +24,7 @@ namespace Netherlands3D.Twin.Layers
         {
             var prefab = prefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
 
-            return await Spawn(layerData, prefab);
+            return await SpawnUsingLayerGameObject(layerData, prefab);
         }
 
         public async Task<LayerGameObject> Spawn(
@@ -40,7 +37,7 @@ namespace Netherlands3D.Twin.Layers
             return await SpawnObject(layerData, prefab, position, rotation);
         }
 
-        private async Task<LayerGameObject> Spawn(ReferencedLayerData layerData, LayerGameObject prefab)
+        private async Task<LayerGameObject> SpawnUsingLayerGameObject(ReferencedLayerData layerData, LayerGameObject prefab)
         {
             var property = layerData.GetProperty<TransformLayerPropertyData>();
             if (property != null)
@@ -62,9 +59,10 @@ namespace Netherlands3D.Twin.Layers
             };
         }
 
-        private async Task<LayerGameObject> SpawnAtOpticalPosition(ReferencedLayerData layerData,
-            LayerGameObject prefab)
-        {
+        private async Task<LayerGameObject> SpawnAtOpticalPosition(
+            ReferencedLayerData layerData,
+            LayerGameObject prefab
+        ) {
             var opticalRaycaster = Object.FindAnyObjectByType<OpticalRaycaster>();
             if (!opticalRaycaster)
             {
