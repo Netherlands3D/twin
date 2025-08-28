@@ -28,15 +28,16 @@ namespace Netherlands3D.Twin.Layers
         {
         }
 
-        public static ILayerBuilder Create()
-        {
-            return new LayerBuilder();
-        }
+        public static ILayerBuilder Create() => new LayerBuilder();
 
-        public static ILayerBuilder Create(string preset, LayerPresetArgs args)
-        {
-            return LayerPresetRegistry.Create(preset, args);
-        }
+        public static ILayerBuilder Create(string preset, LayerPresetArgs args) 
+            => LayerPresetRegistry.Create(preset, args);
+
+        public ILayerBuilder FromUrl(Uri url) => OfType("url").At(url).WithCredentials(new Public(url));
+
+        public ILayerBuilder FromUrl(string url) => FromUrl(new Uri(url));
+
+        public ILayerBuilder FromFile(Uri url) => OfType("file").At(url);
 
         public ILayerBuilder OfType(string type)
         {
@@ -44,11 +45,6 @@ namespace Netherlands3D.Twin.Layers
             
             return this;
         }
-
-        public ILayerBuilder FromUrl(Uri url) => OfType("url").At(url).WithCredentials(new Public(url));
-
-        public ILayerBuilder FromUrl(string url) => FromUrl(new Uri(url));
-        public ILayerBuilder FromFile(Uri url) => OfType("file").At(url);
 
         public ILayerBuilder NamedAs(string name)
         {
