@@ -4,6 +4,7 @@ using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
@@ -68,7 +69,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected virtual void InitializePropertyData()
         {
-            LayerData.SetProperty(new TransformLayerPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale));
+            LayerData.SetProperty(
+                new TransformLayerPropertyData(
+                    new Coordinate(transform.position), 
+                    transform.eulerAngles, 
+                    transform.localScale
+                )
+            );
         }
 
         protected override void OnEnable()
@@ -118,13 +125,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void UpdateScale(Vector3 newScale)
         {
-            if (newScale != transform.localScale)
-                transform.localScale = newScale;
+            if (newScale == transform.localScale) return;
+            
+            transform.localScale = newScale;
         }
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
-            var transformProperty = properties.OfType<TransformLayerPropertyData>().FirstOrDefault();
+            var transformProperty = properties.Get<TransformLayerPropertyData>();
             if (transformProperty == null) return;
 
             if (TransformPropertyData != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
@@ -184,10 +192,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void OnMouseClickNothing()
         {
-            if (LayerData.IsSelected)
-            {
-                LayerData.DeselectLayer();
-            }
+            if (!LayerData.IsSelected) return;
+
+            LayerData.DeselectLayer();
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -202,11 +209,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             if (!transformInterfaceToggle)
             {
                 Debug.LogError("Transform handles interface toggles not found, cannot set transform target");
+                return;
             }
-            else
-            {
-                transformInterfaceToggle.SetTransformTarget(gameObject);
-            }
+
+            transformInterfaceToggle.SetTransformTarget(gameObject);
         }
 
         public override void OnDeselect()
@@ -229,14 +235,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void OnProxyTransformParentChanged()
         {
-            if (toggleScatterPropertySectionInstantiator?.PropertySection)
-            {
-                toggleScatterPropertySectionInstantiator.PropertySection.TogglePropertyToggle();
-            }
+            // TODO: Is this a valid scenario - or worthy of an error message?
+            if (!toggleScatterPropertySectionInstantiator) return;
+            if (!toggleScatterPropertySectionInstantiator.PropertySection) return;
+
+            toggleScatterPropertySectionInstantiator.PropertySection.TogglePropertyToggle();
         }
 
         public static ObjectScatterLayerGameObject ConvertToScatterLayer(HierarchicalObjectLayerGameObject objectLayerGameObject)
         {
+            // TODO: Use LayerSpawner or App.Layers to replace the gameobject
             var scatterPrefab = ProjectData.Current.PrefabLibrary.GetPrefabById(ObjectScatterLayerGameObject.ScatterBasePrefabID);
             var scatterLayer = Instantiate(scatterPrefab) as ObjectScatterLayerGameObject;
             scatterLayer.Name = objectLayerGameObject.Name + "_Scatter";

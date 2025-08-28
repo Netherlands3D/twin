@@ -779,7 +779,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private void RegisterWithPropertiesPanel(Properties.Properties propertiesPanel)
         {
             var layerWithProperties = Properties.Properties.TryFindProperties(Layer);
-            var hasProperties = layerWithProperties != null && layerWithProperties.GetPropertySections().Count > 0;
+            var hasProperties = layerWithProperties is { HasPropertySections: true };
             propertyToggle.gameObject.SetActive(hasProperties);
 
             if (!hasProperties)

@@ -153,7 +153,7 @@ namespace Netherlands3D.Twin.Layers
             ApplyStyling();
         }
 
-        public void LoadPropertiesInVisualisations()
+        private void LoadPropertiesInVisualisations()
         {
             foreach (var visualisation in GetComponents<ILayerWithPropertyData>())
             {

@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Coordinates;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Services;
 using Netherlands3D.Tiles3D;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
@@ -141,8 +141,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
                 UpdateURL(new Uri(tile3DPropertyData.Url));
             }
             UpdateCRS(tile3DPropertyData.ContentCRS);
-            var layerParent = GameObject.FindWithTag(layerParentTag).transform;
-            transform.SetParent(layerParent);
+            transform.SetParent(ServiceLocator.GetService(layerParentTag).transform);
         }
 
         private void ProcessServerResponse(UnityWebRequest request)

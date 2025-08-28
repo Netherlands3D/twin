@@ -1,4 +1,5 @@
 using System.Linq;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.UI.AddLayer;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         protected override void Awake()
         {
             base.Awake();
-            layerParent = GameObject.FindWithTag("3DTileParent").transform;
+            layerParent = ServiceLocator.GetService("3DTileParent").transform;
             layerGameObject = layerParent.GetComponentsInChildren<Tile3DLayerGameObject>().FirstOrDefault(l => l.PrefabIdentifier == prefab.GetComponent<Tile3DLayerGameObject>().PrefabIdentifier);
         }
     }

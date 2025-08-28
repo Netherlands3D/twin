@@ -45,7 +45,7 @@ namespace Netherlands3D.Twin.Layers
                 return await SpawnObjectAt(
                     layerData, 
                     prefab, 
-                    property.LocalPosition, 
+                    property.UnityPosition, 
                     property.Rotation
                 );
             }

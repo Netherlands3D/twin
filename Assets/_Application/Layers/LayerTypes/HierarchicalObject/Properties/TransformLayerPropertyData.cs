@@ -26,7 +26,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
         }
 
         [JsonIgnore]
-        public Vector3 LocalPosition => position.ToUnity();
+        public Vector3 UnityPosition => position.ToUnity();
 
         [JsonIgnore]
         public Vector3 EulerRotation

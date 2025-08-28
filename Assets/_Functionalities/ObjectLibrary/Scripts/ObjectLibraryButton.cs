@@ -49,10 +49,12 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         /// Provide an extension point where we can capture the LayerData, and thus the LayerGameObject, so that
         /// subclasses can manipulate the instantiated LayerGameObject.
         /// </summary>
-        protected virtual async Task<LayerData> CreateLayer()
+        protected virtual async Task<LayerData> CreateLayer(ILayerBuilder layerBuilder = null)
         {
+            layerBuilder ??= LayerBuilder.Start;
+
             // TODO: Replace PrefabIdentifier with type - but this requires a change in all buttons
-            var layer = LayerBuilder.Start.OfType(prefab.PrefabIdentifier).NamedAs(prefab.name);
+            var layer = layerBuilder.OfType(prefab.PrefabIdentifier).NamedAs(prefab.name);
             
             return await App.Layers.Add(layer);
         }

@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.UI;
@@ -33,6 +32,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void OnLayerInitialize()
         {
             base.OnLayerInitialize();
+
             CreateTextPopup();
             annotationPropertyData.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
             WorldInteractionBlocker.ClickedOnBlocker.AddListener(OnBlockerClicked);
@@ -40,13 +40,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void OnBlockerClicked()
         {
-            if(mode == EditMode.TextEdit)
-                SetEditMode(EditMode.Move);
+            if (mode != EditMode.TextEdit) return;
+            
+            SetEditMode(EditMode.Move);
         }
 
         protected override void InitializePropertyData()
         {
-            LayerData.SetProperty(new AnnotationPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale, ""));
+            LayerData.SetProperty(
+                new AnnotationPropertyData(
+                    new Coordinate(transform.position), 
+                    transform.eulerAngles, 
+                    transform.localScale, 
+                    ""
+                )
+            );
         }
 
         private void CreateTextPopup()
@@ -82,23 +90,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void OnAnnotationSelected()
         {
-            if(!layerTool.Open)
-                return;
+            if(!layerTool.Open) return;
             
             SetEditMode(EditMode.Move);
         }
 
         private void OnAnnotationDoubleClicked()
         {
-            if (!layerTool.Open)
-            {
-                layerTool.OpenInspector();
-                SetEditMode(EditMode.Move);
-            }
-            else
+            if (layerTool.Open)
             {
                 SetEditMode(EditMode.TextEdit);
+                return;
             }
+
+            layerTool.OpenInspector();
+            SetEditMode(EditMode.Move);
         }
         
         private void OnAnnotationTextConfirmed()
@@ -148,7 +154,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             base.LoadProperties(properties);
     
-            var annotationProperty = properties.OfType<AnnotationPropertyData>().FirstOrDefault();
+            var annotationProperty = properties.Get<AnnotationPropertyData>();
             if (annotationProperty == null) return;
             if (annotationPropertyData != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
             {
@@ -170,6 +176,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             base.OnLayerActiveInHierarchyChanged(isActive);
+
             annotation.gameObject.SetActive(isActive);
         }
     }
