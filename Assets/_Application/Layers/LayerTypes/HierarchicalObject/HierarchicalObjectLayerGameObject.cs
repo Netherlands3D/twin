@@ -69,13 +69,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected virtual void InitializePropertyData()
         {
-            LayerData.SetProperty(
-                new TransformLayerPropertyData(
-                    new Coordinate(transform.position), 
-                    transform.eulerAngles, 
-                    transform.localScale
-                )
-            );
+            if (!LayerData.HasProperty<TransformLayerPropertyData>())
+            {
+                LayerData.SetProperty(
+                    new TransformLayerPropertyData(
+                        new Coordinate(transform.position),
+                        transform.eulerAngles,
+                        transform.localScale
+                    )
+                );
+            }
         }
 
         protected override void OnEnable()

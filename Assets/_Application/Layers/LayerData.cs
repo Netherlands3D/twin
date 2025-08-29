@@ -306,6 +306,12 @@ namespace Netherlands3D.Twin.Layers
         }
 
         
+
+        public bool HasProperty<T>() where T : LayerPropertyData
+        {
+            return LayerProperties.Contains<T>();
+        }
+
         public T GetProperty<T>() where T : LayerPropertyData
         {
             return LayerProperties.Get<T>();

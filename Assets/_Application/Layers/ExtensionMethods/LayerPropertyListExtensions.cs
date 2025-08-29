@@ -32,6 +32,11 @@ namespace Netherlands3D.Twin.Layers.ExtensionMethods
             return properties.OfType<T>().FirstOrDefault();
         }
 
+        public static bool Contains<T>(this List<LayerPropertyData> properties) where T : LayerPropertyData
+        {
+            return properties.OfType<T>().Any();
+        }
+
         public static LayerPropertyData Get(this List<LayerPropertyData> properties, Type type) 
         {
             return properties.FirstOrDefault(data => data.GetType() == type);
