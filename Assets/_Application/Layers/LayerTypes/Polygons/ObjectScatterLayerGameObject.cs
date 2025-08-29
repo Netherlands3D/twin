@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -396,7 +396,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         private static float CalculateLineAngle(PolygonSelectionLayer polygon)
         {
-            var linePoints = polygon.GetPolygonAsUnityPoints();
+            var linePoints = polygon.OriginalPolygon.ToUnityPositions().ToList();
             var start = new Vector2(linePoints[0].x, linePoints[0].z);
             var end = new Vector2(linePoints[1].x, linePoints[1].z);
             var dir = end - start;

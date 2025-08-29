@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
@@ -10,7 +12,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
     public class PolygonInputToLayer : MonoBehaviour
     {
-        private const string prefabId = "0dd48855510674827b667fa4abd5cf60";
+        [SerializeField] private PolygonSelectionVisualisation polygonSelectionVisualisationPrefab;
         private Dictionary<PolygonSelectionVisualisation, PolygonSelectionLayer> layers = new();
 
         private PolygonSelectionLayer activeLayer;
@@ -125,21 +127,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void ReselectInputByType(PolygonSelectionLayer layer)
         {
             EnablePolygonInputByType(layer.ShapeType);
+            var polygonAsUnityPoints = layer.OriginalPolygon.ToUnityPositions().ToList();
+            
             switch (layer.ShapeType)
             {
-                case ShapeType.Polygon:
-                    polygonInput.ReselectPolygon(layer.GetPolygonAsUnityPoints());
-                    break;
-                case ShapeType.Line:
-                    lineInput.ReselectPolygon(layer.GetPolygonAsUnityPoints());
-                    break;
-                case ShapeType.Grid:
-                    gridInput.ReselectAreaFromPolygon(layer.GetPolygonAsUnityPoints());
-                    break;
+                case ShapeType.Polygon: polygonInput.ReselectPolygon(polygonAsUnityPoints); break;
+                case ShapeType.Line: lineInput.ReselectPolygon(polygonAsUnityPoints); break;
+                case ShapeType.Grid: gridInput.ReselectAreaFromPolygon(polygonAsUnityPoints); break;
                 default:
                     Debug.LogError("Polygon shape type undefined, defaulting to PolygonInput");
                     polygonInput.gameObject.SetActive(true);
-                    polygonInput.ReselectPolygon(layer.GetPolygonAsUnityPoints());
+                    polygonInput.ReselectPolygon(polygonAsUnityPoints);
                     break;
             }
         }
@@ -148,17 +146,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             switch (type)
             {
-                case ShapeType.Undefined:
-                    break;
-                case ShapeType.Polygon:
-                    polygonInput.gameObject.SetActive(true);
-                    break;
-                case ShapeType.Line:
-                    lineInput.gameObject.SetActive(true);
-                    break;
-                case ShapeType.Grid:
-                    gridInput.gameObject.SetActive(true);
-                    break;
+                case ShapeType.Undefined: break;
+                case ShapeType.Polygon: polygonInput.gameObject.SetActive(true); break;
+                case ShapeType.Line: lineInput.gameObject.SetActive(true); break;
+                case ShapeType.Grid: gridInput.gameObject.SetActive(true); break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -190,27 +181,47 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void CreatePolygonLayer(List<Vector3> unityPolygon)
         {
-            var layer = new PolygonSelectionLayer("Polygon", prefabId, unityPolygon, ShapeType.Polygon);
-            layers.Add(layer.PolygonVisualisation, layer);
-            layer.polygonSelected.AddListener(ProcessPolygonSelection);
-            polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
-            ProcessPolygonSelection(layer);
+            _ = new PolygonSelectionLayer(
+                "Polygon", 
+                polygonSelectionVisualisationPrefab.PrefabIdentifier, 
+                unityPolygon, 
+                ShapeType.Polygon,
+                10f,
+                data =>
+                {
+                    if (data is not PolygonSelectionLayer layer) return;
+
+                    layers.Add(layer.PolygonVisualisation, layer);
+                    layer.polygonSelected.AddListener(ProcessPolygonSelection);
+                    polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
+                    ProcessPolygonSelection(layer);
+                }
+            );
+            
         }
 
         private void UpdateLayer(List<Vector3> editedPolygon)
         {
-            var coordinates = PolygonSelectionLayer.ConvertToCoordinates(editedPolygon);
-            ActiveLayer.SetShape(coordinates);
+            ActiveLayer.ChangeShape(editedPolygon.ToCoordinates().ToList());
         }
 
         private void CreateLineLayer(List<Vector3> unityLine)
         {
-            // var visualisation = Instantiate(polygonVisualisationPrefab);
-            var layer = new PolygonSelectionLayer("Line", prefabId, unityLine, ShapeType.Line, defaultLineWidth);
-            layers.Add(layer.PolygonVisualisation, layer);
-            layer.polygonSelected.AddListener(ProcessPolygonSelection);
-            lineInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
-            ProcessPolygonSelection(layer);
+            _ = new PolygonSelectionLayer(
+                "Line", 
+                polygonSelectionVisualisationPrefab.PrefabIdentifier, 
+                unityLine, 
+                ShapeType.Line, 
+                defaultLineWidth,
+                layer =>
+                {
+                    if (layer is not PolygonSelectionLayer polygonSelectionLayer) return;
+                    layers.Add(polygonSelectionLayer.PolygonVisualisation, polygonSelectionLayer);
+                    polygonSelectionLayer.polygonSelected.AddListener(ProcessPolygonSelection);
+                    lineInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
+                    ProcessPolygonSelection(polygonSelectionLayer);
+                }
+            );
         }
 
         //called in the inspector
@@ -223,14 +234,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             if (ActiveLayer?.ShapeType == ShapeType.Grid)
             {
-                ActiveLayer.SetShape(new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(topLeft), new Coordinate(topRight), new Coordinate(bottomRight) });
+                ActiveLayer.ChangeShape(new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(topLeft), new Coordinate(topRight), new Coordinate(bottomRight) });
                 return;
             }
             
-            var layer = new PolygonSelectionLayer("Grid", prefabId, new List<Vector3>() { bottomLeft, topLeft, topRight, bottomRight }, ShapeType.Grid);
-            layers.Add(layer.PolygonVisualisation, layer);
-            layer.polygonSelected.AddListener(ProcessPolygonSelection);
-            ProcessPolygonSelection(layer);
+            _ = new PolygonSelectionLayer(
+                "Grid", 
+                polygonSelectionVisualisationPrefab.PrefabIdentifier, 
+                new List<Vector3>() { bottomLeft, topLeft, topRight, bottomRight }, 
+                ShapeType.Grid,
+                10f,
+                data =>
+                {
+                    if (data is not PolygonSelectionLayer layer) return;
+
+                    layers.Add(layer.PolygonVisualisation, layer);
+                    layer.polygonSelected.AddListener(ProcessPolygonSelection);
+                    ProcessPolygonSelection(layer);
+                }
+            );
         }
 
         public void SetPolygonInputModeToCreate(bool isCreateMode)

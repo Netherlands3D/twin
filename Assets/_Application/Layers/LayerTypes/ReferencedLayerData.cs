@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -57,16 +57,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         }
 
         [JsonConstructor]
-        public ReferencedLayerData(string name, string prefabId, List<LayerPropertyData> layerProperties) : base(name, layerProperties)
-        {
-            Name = name;
+        public ReferencedLayerData(
+            string name, 
+            string prefabId, 
+            List<LayerPropertyData> layerProperties,
+            Action<ReferencedLayerData> onSpawn = null
+        ) : base(name, layerProperties) {
             this.prefabId = prefabId;
-            this.layerProperties = layerProperties ?? new List<LayerPropertyData>();
-            
-            SpawnLayer();
+
+            // TODO: In the future this should be refactored out of this class - it is now needed because
+            // deserialisation of the project data and reconstitution of the visualisation classes is not
+            // separated but this would be an awesome future step
+            SpawnLayer(onSpawn);
         }
 
-        private async void SpawnLayer()
+        private async void SpawnLayer(Action<ReferencedLayerData> onComplete = null)
         {
             await App.Layers.Add(this);
             
@@ -82,6 +87,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             // the NewLayer event is called
             ProjectData.Current.AddStandardLayer(this); 
             RegisterEventListeners();
+
+            if (onComplete != null)
+            {
+                onComplete(this);
+            }
         }
 
         ~ReferencedLayerData()

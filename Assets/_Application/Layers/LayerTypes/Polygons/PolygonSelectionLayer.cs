@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
@@ -22,57 +23,60 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     }
 
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "PolygonSelection")]
-    public class PolygonSelectionLayer : ReferencedLayerData, ILayerWithPropertyData //, ILayerWithPropertyPanels
+    public class PolygonSelectionLayer : ReferencedLayerData
     {
         [DataMember] public List<Coordinate> OriginalPolygon { get; private set; }
         [DataMember] private ShapeType shapeType;
 
-        [JsonIgnore] private PolygonSelectionLayerPropertyData polygonPropertyData;
-        [JsonIgnore] public LayerPropertyData PropertyData => polygonPropertyData;
+        [JsonIgnore] private PolygonSelectionLayerPropertyData PolygonPropertyData => GetProperty<PolygonSelectionLayerPropertyData>();
         [JsonIgnore] public CompoundPolygon Polygon { get; set; }
         [JsonIgnore] public UnityEvent<PolygonSelectionLayer> polygonSelected = new();
         [JsonIgnore] public UnityEvent polygonMoved = new();
         [JsonIgnore] public UnityEvent polygonChanged = new();
-        [JsonIgnore] private bool notifyOnPolygonChange = true;
 
         [JsonIgnore]
         public ShapeType ShapeType
         {
             get => shapeType;
-            set => shapeType = value;
+            set
+            {
+                shapeType = value;
+                RecalculatePolygon();
+            }
         }
 
         [JsonIgnore]
         public float LineWidth
         {
-            get => polygonPropertyData.LineWidth;
+            get => PolygonPropertyData.LineWidth;
             set
             {
-                polygonPropertyData.LineWidth = value;
-                CreatePolygonFromLine(OriginalPolygon, value);
+                PolygonPropertyData.LineWidth = value;
+                RecalculatePolygon();
             }
         }
 
         [JsonIgnore]
         public bool IsMask
         {
-            get => polygonPropertyData.IsMask;
-            set => polygonPropertyData.IsMask = value;
+            get => PolygonPropertyData.IsMask;
+            set => PolygonPropertyData.IsMask = value;
         }
 
         [JsonIgnore]
         public bool InvertMask
         {
-            get => polygonPropertyData.InvertMask;
-            set => polygonPropertyData.InvertMask = value;
+            get => PolygonPropertyData.InvertMask;
+            set => PolygonPropertyData.InvertMask = value;
         }
 
         [JsonIgnore]
         public int MaskBitIndex
         {
-            get => polygonPropertyData.MaskBitIndex;
-            set => polygonPropertyData.MaskBitIndex = value;
+            get => PolygonPropertyData.MaskBitIndex;
+            set => PolygonPropertyData.MaskBitIndex = value;
         }
+
         private static List<int> availableMaskChannels = new List<int>() { 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
         public static int NumAvailableMasks => availableMaskChannels.Count;
         public static int MaxAvailableMasks => 22;
@@ -81,146 +85,152 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
 
         [JsonConstructor]
-        public PolygonSelectionLayer(string name, string prefabId, List<LayerPropertyData> layerProperties, List<Coordinate> originalPolygon, ShapeType shapeType) : base(name, prefabId, layerProperties)
-        {
-            OriginalPolygon = originalPolygon;
-            ShapeType = shapeType;
+        public PolygonSelectionLayer(
+            string name, 
+            string prefabId, 
+            List<LayerPropertyData> layerProperties, 
+            List<Coordinate> originalPolygon, 
+            ShapeType shapeType
+        ) : base(name, prefabId, layerProperties) {
+            this.shapeType = shapeType;
 
-            LoadProperties(layerProperties);
+            ChangeShape(originalPolygon); 
             PolygonSelectionCalculator.RegisterPolygon(this);
 
-            //Add shifter that manipulates the polygon if the world origin is shifted
-            Origin.current.onPostShift.AddListener(ShiftedPolygon);
-            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
-            polygonPropertyData.OnIsMaskChanged.AddListener(OnIsMaskChanged);
-            polygonPropertyData.OnInvertMaskChanged.AddListener(OnInvertMaskChanged);
-            
-            //initialize
+            RegisterListeners();
             availableMaskChannels.Remove(MaskBitIndex);
-            OnIsMaskChanged(IsMask);
-            OnInvertMaskChanged(InvertMask);
         }
 
-        public PolygonSelectionLayer(string name, string prefabId, List<Vector3> polygonUnityInput, ShapeType shapeType, float defaultLineWidth = 10f) : base(name, prefabId, new List<LayerPropertyData>())
-        {
-            polygonPropertyData = new PolygonSelectionLayerPropertyData();
-            SetProperty(polygonPropertyData);
-            ShapeType = shapeType;
+        public PolygonSelectionLayer(string name,
+            string prefabId,
+            List<Vector3> polygonUnityInput,
+            ShapeType shapeType,
+            float defaultLineWidth = 10f, 
+            Action<ReferencedLayerData> onSpawn = null
+        ) : base(
+            name, 
+            prefabId, 
+            new List<LayerPropertyData>
+            {
+                new PolygonSelectionLayerPropertyData() { LineWidth = defaultLineWidth }
+            },
+            onSpawn
+        ) {
+            this.shapeType = shapeType;
 
-            var coordinates = ConvertToCoordinates(polygonUnityInput);
-            SetShape(coordinates);
+            ChangeShape(polygonUnityInput.ToCoordinates().ToList());
             PolygonSelectionCalculator.RegisterPolygon(this);
 
+            RegisterListeners();
+        }
+
+        private void RegisterListeners()
+        {
             //Add shifter that manipulates the polygon if the world origin is shifted
             Origin.current.onPostShift.AddListener(ShiftedPolygon);
-            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
-            polygonPropertyData.OnIsMaskChanged.AddListener(OnIsMaskChanged);
-            polygonPropertyData.OnInvertMaskChanged.AddListener(OnInvertMaskChanged);
 
-            //initialize
+            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+            PolygonPropertyData.OnIsMaskChanged.AddListener(OnIsMaskChanged);
+            PolygonPropertyData.OnInvertMaskChanged.AddListener(OnInvertMaskChanged);
+        }
+
+        private void SetMasking()
+        {
             OnIsMaskChanged(IsMask);
             OnInvertMaskChanged(InvertMask);
         }
 
-        private static List<LayerPropertyData> CreateNewProperties()
+        private void UnregisterListeners()
         {
-            var properties = new List<LayerPropertyData>(1);
-            properties.Add(new PolygonSelectionLayerPropertyData());
-            return properties;
+            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
+            Origin.current.onPostShift.RemoveListener(ShiftedPolygon);
+            PolygonPropertyData.OnIsMaskChanged.RemoveListener(OnIsMaskChanged);
+            PolygonPropertyData.OnInvertMaskChanged.RemoveListener(OnInvertMaskChanged);
+        }
+
+        private void CleanupMasking()
+        {
+            if (MaskBitIndex < 0) return;
+            
+            availableMaskChannels.Add(MaskBitIndex);
+            MaskDestroyed.Invoke(MaskBitIndex);
         }
 
         public override void SetReference(LayerGameObject layerGameObject, bool keepPrefabIdentifier = false)
         {
-            throw new NotImplementedException("Replacing polygon references is currently not supported");
+            base.SetReference(layerGameObject, keepPrefabIdentifier);
+
+            if (PolygonVisualisation)
+            {
+                var vertices = CoordinatesToVertices(OriginalPolygon);
+                PolygonVisualisation.UpdateVisualisation(vertices, PolygonPropertyData.ExtrusionHeight);
+                SetMasking();
+            }
         }
 
         private void ShiftedPolygon(Coordinate fromOrigin, Coordinate toOrigin)
         {
             //Silent update of the polygon shape, so the visualisation is updated without notifying the listeners
-            notifyOnPolygonChange = false;
-            SetShape(OriginalPolygon);
+            RecalculatePolygon();
             polygonMoved.Invoke();
             if (IsSelected)
+            {
                 polygonSelected.Invoke(this);
-
-            notifyOnPolygonChange = true;
+            }
         }
 
         /// <summary>
         /// Sets the contour causing update of Line or Polygon, based on chosen ShapeType
         /// </summary>
-        /// <param name="unityShape">Contour</param>
-        public void SetShape(List<Coordinate> shape)
+        public void ChangeShape(List<Coordinate> coordinates)
         {
-            if (shapeType == ShapeType.Line)
-                SetLine(shape);
-            else if (shapeType == ShapeType.Polygon)
-                SetPolygon(shape);
-            else
-                SetPolygon(shape, ShapeType.Grid);
-        }
+            OriginalPolygon = coordinates;
+            RecalculatePolygon();
 
-        /// <summary>
-        /// Set the polygon of the layer as a solid filled polygon with Coordinates
-        /// </summary>
-        private void SetPolygon(List<Coordinate> solidPolygon, ShapeType polygonType = ShapeType.Polygon)
-        {
-            ShapeType = polygonType;
-            OriginalPolygon = solidPolygon;
-
-            var unityPolygon = ConvertToUnityPoints(solidPolygon);
-            var flatPolygon = PolygonCalculator.FlattenPolygon(unityPolygon, new Plane(Vector3.up, 0));
-            Polygon = new CompoundPolygon(flatPolygon);
-            PolygonVisualisation.UpdateVisualisation(flatPolygon, polygonPropertyData.ExtrusionHeight);
-
-            if (notifyOnPolygonChange)
-            {
-                polygonChanged.Invoke();
+            if (PolygonVisualisation) {
+                var vertices = CoordinatesToVertices(coordinates);
+                PolygonVisualisation.UpdateVisualisation(vertices, PolygonPropertyData.ExtrusionHeight);
+                SetMasking();
             }
+
+            polygonChanged.Invoke();
         }
 
-        /// <summary>
-        /// Set the layer as a 'line' with Coordinates. This will create a rectangle polygon from the line with a given width.
-        /// </summary>
-        private void SetLine(List<Coordinate> line)
+        private void RecalculatePolygon()
         {
-            ShapeType = ShapeType.Line;
-            OriginalPolygon = line;
-            CreatePolygonFromLine(line, polygonPropertyData.LineWidth);
+            var vertices = CoordinatesToVertices(OriginalPolygon);
+            Polygon = new CompoundPolygon(vertices);
         }
 
-        private void CreatePolygonFromLine(List<Coordinate> line, float width)
+        private Vector2[] CoordinatesToVertices(List<Coordinate> coordinates)
         {
-            var rectangle = PolygonFromLine(line, width);
-            Polygon = new CompoundPolygon(rectangle);
-            PolygonVisualisation.UpdateVisualisation(rectangle, polygonPropertyData.ExtrusionHeight);
-
-            if (notifyOnPolygonChange)
+            var positions = coordinates.ToUnityPositions().ToList();
+            var vertices = PolygonCalculator.FlattenPolygon(positions, new Plane(Vector3.up, 0));
+            if (vertices.Length == 2)
             {
-                polygonChanged.Invoke();
+                vertices = LineToPolygon(vertices, PolygonPropertyData.LineWidth);
             }
+
+            return vertices;
         }
 
-        private static Vector2[] PolygonFromLine(List<Coordinate> originalLine, float width)
+        private static Vector2[] LineToPolygon(Vector2[] vertices, float width)
         {
-            if (originalLine.Count != 2)
+            if (vertices.Length != 2)
             {
                 Debug.LogError("cannot create rectangle because position list contains more than 2 entries");
                 return null;
             }
 
-            var worldPlane = new Plane(Vector3.up, 0); //todo: work with terrain height
-            var unityLine = ConvertToUnityPoints(originalLine);
-            var flatPolygon = PolygonCalculator.FlattenPolygon(unityLine, worldPlane);
-            var dir = flatPolygon[1] - flatPolygon[0];
+            var dir = vertices[1] - vertices[0];
             var normal = new Vector2(-dir.y, dir.x).normalized;
 
             var dist = normal * width / 2;
 
-            var point1 = flatPolygon[0] + new Vector2(dist.x, dist.y);
-            var point4 = flatPolygon[1] + new Vector2(dist.x, dist.y);
-            var point3 = flatPolygon[1] - new Vector2(dist.x, dist.y);
-            var point2 = flatPolygon[0] - new Vector2(dist.x, dist.y);
+            var point1 = vertices[0] + new Vector2(dist.x, dist.y);
+            var point4 = vertices[1] + new Vector2(dist.x, dist.y);
+            var point3 = vertices[1] - new Vector2(dist.x, dist.y);
+            var point2 = vertices[0] - new Vector2(dist.x, dist.y);
 
             var polygon = new Vector2[]
             {
@@ -263,53 +273,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject);
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
             
-            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
-            Origin.current.onPostShift.RemoveListener(ShiftedPolygon);
-            polygonPropertyData.OnIsMaskChanged.RemoveListener(OnIsMaskChanged);
-            polygonPropertyData.OnInvertMaskChanged.RemoveListener(OnInvertMaskChanged);
-            
-            if (MaskBitIndex >= 0)
-            {
-                availableMaskChannels.Add(MaskBitIndex);
-                MaskDestroyed.Invoke(MaskBitIndex);
-            }
-        }
-
-        public List<Vector3> GetPolygonAsUnityPoints()
-        {
-            return ConvertToUnityPoints(OriginalPolygon);
-        }
-
-        public static List<Coordinate> ConvertToCoordinates(List<Vector3> unityCoordinates)
-        {
-            var coordList = new List<Coordinate>(unityCoordinates.Capacity);
-            foreach (var point in unityCoordinates)
-            {
-                coordList.Add(new Coordinate(point));
-            }
-
-            return coordList;
-        }
-
-        public static List<Vector3> ConvertToUnityPoints(List<Coordinate> coordinateList)
-        {
-            var pointList = new List<Vector3>(coordinateList.Capacity);
-            foreach (var coord in coordinateList)
-            {
-                pointList.Add(coord.ToUnity());
-            }
-
-            return pointList;
-        }
-
-        public void LoadProperties(List<LayerPropertyData> properties)
-        {
-            var polygonProperty = (PolygonSelectionLayerPropertyData)properties.FirstOrDefault(p => p is PolygonSelectionLayerPropertyData);
-            if (polygonProperty != null)
-            {
-                polygonPropertyData = polygonProperty; //take existing property to overwrite the unlinked one of this class
-                SetShape(OriginalPolygon); //initialize the shape again with properties (use shape instead of setLine to ensure polygon is also 
-            }
+            UnregisterListeners();
+            CleanupMasking();
         }
 
         private void OnIsMaskChanged(bool isMask)
@@ -348,9 +313,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void SetPolygonLayer(LayerMask layer, bool invert)
         {
             if (layer == LayerMask.NameToLayer("PolygonMask") && invert)
+            {
                 PolygonProjectionMask.AddInvertedMask(PolygonVisualisation.gameObject);
+            }
             else
+            {
                 PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject);
+            }
 
             foreach (Transform t in PolygonVisualisation.gameObject.transform)
             {
@@ -363,10 +332,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private LayerMask GetLayer(bool isMask)
         {
             var layer = LayerMask.NameToLayer("Projected");
-            if (isMask)
-                layer = LayerMask.NameToLayer("PolygonMask");
+            if (!isMask) return layer;
 
-            return layer;
+            return LayerMask.NameToLayer("PolygonMask");
         }
     }
 }
