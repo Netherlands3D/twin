@@ -38,11 +38,13 @@ namespace Netherlands3D.Functionalities.Wms
         
         protected override void OnLayerInitialize()
         {
+            base.OnLayerInitialize();
             CredentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
         }
 
         protected override void OnLayerReady()
         {
+            base.OnLayerReady();
             UpdateURL(URLPropertyData.Data);
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
