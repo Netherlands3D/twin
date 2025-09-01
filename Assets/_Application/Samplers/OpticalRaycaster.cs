@@ -90,6 +90,13 @@ namespace Netherlands3D.Twin.Samplers
             try
             {
                 var worldPosData = opticalRequest.request.GetData<Vector4>();
+                if(worldPosData == null ||  worldPosData.Length == 0)
+                {
+                    opticalRequest.hasHit = false;
+                    opticalRequest.resultCallback.Invoke(Vector3.zero, false);
+                    Debug.LogError("readback has invalid data");
+                    return;
+                }
                 float worldPosX = worldPosData[0].x;
                 float worldPosY = worldPosData[0].y;
                 float worldPosZ = worldPosData[0].z;
