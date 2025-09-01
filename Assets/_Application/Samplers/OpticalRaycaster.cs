@@ -106,7 +106,7 @@ namespace Netherlands3D.Twin.Samplers
             }
             catch (Exception e)
             {
-                Debug.LogError($"Exception in optical request: {e}");
+                Debug.LogError($"Exception in optical request: {e.StackTrace}");
             }
             finally
             {
