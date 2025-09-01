@@ -89,6 +89,7 @@ namespace Netherlands3D.Twin.Samplers
 
             try
             {
+                Debug.LogError("resultcallback:" + opticalRequest.resultCallback);
                 var worldPosData = opticalRequest.request.GetData<Vector4>();
                 if(worldPosData == null ||  worldPosData.Length == 0)
                 {
@@ -101,8 +102,7 @@ namespace Netherlands3D.Twin.Samplers
                 float worldPosY = worldPosData[0].y;
                 float worldPosZ = worldPosData[0].z;
                 Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
-                Debug.LogError("resultcallback:" + opticalRequest.resultCallback);
-                Debug.LogError("opticalrequest_request:" + opticalRequest.request);
+                
                 opticalRequest.hasHit = worldPosData[0].w > 0;
                 opticalRequest.resultCallback.Invoke(worldPos, opticalRequest.hasHit);
             }
