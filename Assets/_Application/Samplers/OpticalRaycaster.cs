@@ -101,12 +101,16 @@ namespace Netherlands3D.Twin.Samplers
                 float worldPosY = worldPosData[0].y;
                 float worldPosZ = worldPosData[0].z;
                 Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
+                Debug.LogError("resultcallback:" + opticalRequest.resultCallback);
+                Debug.LogError("opticalrequest_request:" + opticalRequest.request);
                 opticalRequest.hasHit = worldPosData[0].w > 0;
                 opticalRequest.resultCallback.Invoke(worldPos, opticalRequest.hasHit);
             }
             catch (Exception e)
             {
                 Debug.LogError($"Exception in optical request: {e.StackTrace}");
+
+                Debug.LogException(e);
             }
             finally
             {
