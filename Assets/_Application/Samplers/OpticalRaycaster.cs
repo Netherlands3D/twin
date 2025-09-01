@@ -89,7 +89,6 @@ namespace Netherlands3D.Twin.Samplers
 
             try
             {
-                Debug.LogError("resultcallback:" + opticalRequest.resultCallback);
                 var worldPosData = opticalRequest.request.GetData<Vector4>();
                 if(worldPosData == null ||  worldPosData.Length == 0)
                 {
