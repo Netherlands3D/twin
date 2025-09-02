@@ -118,9 +118,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             base.OnDestroy();
             if(layer is BinaryMeshLayer binaryMeshLayer)
             {
-                binaryMeshLayer.OnMappingCreated.RemoveAllListeners();
-                binaryMeshLayer.OnMappingRemoved.RemoveAllListeners();
-                
+                binaryMeshLayer.OnMappingCreated.RemoveListener(OnAddedMapping);
+                binaryMeshLayer.OnMappingRemoved.RemoveListener(OnRemovedMapping);
+
             }
             if (Application.isPlaying && tileHandler && layer)
             {

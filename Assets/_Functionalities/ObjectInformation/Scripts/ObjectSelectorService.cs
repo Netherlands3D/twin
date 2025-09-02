@@ -182,8 +182,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                         LayerData layerData = subObjectSelector.GetLayerDataForSubObject(map.ObjectMapping);
                         //TODO maybe to the best place here to have a dependency to the cartesianlayerstyler, needs a better implementation
                         LayerFeature feature = GetLayerFeatureFromBagID(bagId, map, out LayerGameObject layer);
-                        bool? v = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(feature);
-                        if (v != true) return;
+                        if (feature != null)
+                        {
+                            bool? v = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(feature);
+                            if (v != true) return;
+                        }
 
                         layerData.SelectLayer(true);
                         lastSelectedMappingLayerData = layerData;
