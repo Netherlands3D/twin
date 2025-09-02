@@ -13,7 +13,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
