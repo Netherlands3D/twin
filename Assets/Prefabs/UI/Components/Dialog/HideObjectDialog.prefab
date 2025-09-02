@@ -308,7 +308,7 @@ PrefabInstance:
     - target: {fileID: 6459790589391533589, guid: df8e4a22a351ae24daddf044727a7035,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 105.27348
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6459790589391533589, guid: df8e4a22a351ae24daddf044727a7035,
         type: 3}
@@ -541,6 +541,26 @@ PrefabInstance:
       propertyPath: m_Spacing
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 2564877326683533841, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
+        type: 3}
+      propertyPath: m_Padding.m_Top
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2564877326683533841, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
+        type: 3}
+      propertyPath: m_Padding.m_Left
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2564877326683533841, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
+        type: 3}
+      propertyPath: m_Padding.m_Right
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2564877326683533841, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
+        type: 3}
+      propertyPath: m_Padding.m_Bottom
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 2736949016061015013, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -607,6 +627,36 @@ PrefabInstance:
       value: 'Verbergen
 
 '
+      objectReference: {fileID: 0}
+    - target: {fileID: 3013705634763999871, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 3013705634763999871, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193291168253556781, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
+        type: 3}
+      propertyPath: m_Padding.m_Top
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193291168253556781, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
+        type: 3}
+      propertyPath: m_Padding.m_Left
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193291168253556781, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
+        type: 3}
+      propertyPath: m_Padding.m_Right
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193291168253556781, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
+        type: 3}
+      propertyPath: m_Padding.m_Bottom
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 3220576951915755946, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
         type: 3}
@@ -734,6 +784,16 @@ PrefabInstance:
       value: 'Terug
 
 '
+      objectReference: {fileID: 0}
+    - target: {fileID: 5751662582296243142, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 5751662582296243142, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 6482568267866771571, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
         type: 3}
@@ -1008,6 +1068,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   Confirm:
+    m_PersistentCalls:
+      m_Calls: []
+  Close:
     m_PersistentCalls:
       m_Calls: []
   bagIdText: {fileID: 863426974070376669}
