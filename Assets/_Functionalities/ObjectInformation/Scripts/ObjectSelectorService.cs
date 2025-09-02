@@ -13,6 +13,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
@@ -171,7 +172,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     //the following method calls need to run in order!
                     string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
                     IMapping mapping = FindObjectMapping();
-                    if (mapping == null && lastSelectedMappingLayerData != null)
+                    bool mappingVisible = IsMappingVisible(mapping, bagId);
+                    if ((mapping == null || !mappingVisible) && lastSelectedMappingLayerData != null)
                     {
                         //when nothing is selected but there was something selected, deselect the current active layer
                         lastSelectedMappingLayerData.DeselectLayer();
@@ -180,13 +182,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     if (mapping is MeshMapping map)
                     {
                         LayerData layerData = subObjectSelector.GetLayerDataForSubObject(map.ObjectMapping);
-                        //TODO maybe to the best place here to have a dependency to the cartesianlayerstyler, needs a better implementation
-                        LayerFeature feature = GetLayerFeatureFromBagID(bagId, map, out LayerGameObject layer);
-                        if (feature != null)
-                        {
-                            bool? v = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(feature);
-                            if (v != true) return;
-                        }
+                        if (!mappingVisible)
+                            return;
 
                         layerData.SelectLayer(true);
                         lastSelectedMappingLayerData = layerData;
@@ -229,6 +226,21 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (draggedBeforeRelease) return false;
 
             return cameraInputSystemProvider.OverLockingObject == false;
+        }
+
+        private bool IsMappingVisible(IMapping mapping, string bagId)
+        {
+            if (mapping is MeshMapping map)
+            {
+                //TODO maybe to the best place here to have a dependency to the cartesianlayerstyler, needs a better implementation
+                LayerFeature feature = GetLayerFeatureFromBagID(bagId, map, out LayerGameObject layer);
+                if (feature != null)
+                {
+                    bool? v = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(feature);
+                    if (v != true) return false;
+                }
+            }
+            return true;
         }
 
         private void OnAddObjectMapping(ObjectMapping mapping)
