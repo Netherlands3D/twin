@@ -16,16 +16,17 @@
 *  permissions and limitations under the License.
 */
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Networking;
+using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
-using TMPro;
+using Netherlands3D.Twin.Rendering;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Netherlands3D.CartesianTiles;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Netherlands3D.Functionalities.Toponyms
 {
@@ -126,7 +127,12 @@ namespace Netherlands3D.Functionalities.Toponyms
                 RemoveStreetNames(tile, tileKey);
                 Destroy(tiles[tileKey].gameObject);
             }
-        }       
+        }
+
+        private void OnDestroy()
+        {
+            RemoveTiles();
+        }
 
         private void RemoveStreetNames(Tile tile, Vector2Int tileKey)
         {
@@ -142,8 +148,7 @@ namespace Netherlands3D.Functionalities.Toponyms
             streetNamesUpdateQueue.Remove(tileKey);
             uniqueNames.Remove(tileKey);
         }
-
-        protected override IEnumerator DownloadTextNameData(TileChange tileChange, Tile tile, System.Action<TileChange> callback = null)
+        protected override IEnumerator DownloadTextNameData(TileChange tileChange, Tile tile, Action<TileChange> callback = null)
         {          
             string geomUrl = $"{geoJsonUrl}{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
@@ -349,14 +354,6 @@ namespace Netherlands3D.Functionalities.Toponyms
         {
             UpdateStreetNames(false);
         }
-
-        private Coroutine updateTilesRoutine = null;
-        private bool visibleTilesDirty = false;
-        private List<TileChange> queuedChanges = new List<TileChange>();
-        private float lastUpdatedTimeStamp = 0;
-        private float lastUpdatedInterval = 1f;
-        private WaitForSeconds wfs = new WaitForSeconds(0.5f);
-
 
         public void RemoveTiles()
         {           
