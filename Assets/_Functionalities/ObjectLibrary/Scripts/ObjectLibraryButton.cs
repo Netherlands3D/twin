@@ -1,4 +1,5 @@
 using System;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.UI;
@@ -47,7 +48,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         
         private void SpawnObject(Vector3 opticalSpawnPoint, Quaternion rotation)
         {
-            var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
+            var spawnPoint = ObjectPlacementUtility.GetSpawnPoint(); //TODO this should be replaced and unified with the new heightmap feature for default height instead of the 0 plane
             if (opticalSpawnPoint != Vector3.zero)
             {
                 spawnPoint = opticalSpawnPoint;
@@ -77,7 +78,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
 
         private void SpawnAtOpticalPosition()
         {
-            var opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
+            var opticalRaycaster = ServiceLocator.GetService<OpticalRaycaster>();
             if (opticalRaycaster)
             {
                 var centerOfViewport = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);

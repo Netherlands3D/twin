@@ -133,26 +133,38 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             Vector3 pivotOffset = Bounds.Center.ToUnity() - transform.position;
             Vector3 startPosition = WorldTransform.Coordinate.ToUnity() - heightExtent;
             Vector3 previousPosition = WorldTransform.Coordinate.ToUnity();
-            OpticalRaycaster raycaster = FindAnyObjectByType<OpticalRaycaster>();
-            raycaster.GetWorldPointFromDirectionAsync(startPosition, Vector3.down, (w, h) =>
-            {
-                if (h)
-                    transform.position = w + heightExtent - pivotOffset;
-                else
-                {
-                    //object is below ground? check if we can snap in the up direction
-                    transform.position = previousPosition;
-                    startPosition = WorldTransform.Coordinate.ToUnity() + heightExtent;
-                    raycaster.GetWorldPointFromDirectionAsync(startPosition, Vector3.up, (ww, hh) =>
-                    {
-                        if (hh)
-                            transform.position = ww - heightExtent - pivotOffset;
-                        else //TODO the default fallback position when no hits are found is at the 0 plane, needs to be replaced with the texture height feature
-                            transform.position = new Vector3(previousPosition.x, 0, previousPosition.z);
-                    }, snappingCullingMask);
-                }
-            }, snappingCullingMask);
+            OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
+            raycaster.GetWorldPointFromDirectionAsync(
+                startPosition,
+                Vector3.down,
+                (hitPos, hit) => OnRaycastDown(hitPos, hit, heightExtent, pivotOffset, previousPosition, raycaster),
+                snappingCullingMask
+            );
         }
+
+        private void OnRaycastDown(Vector3 worldPos, bool hit, Vector3 heightExtent, Vector3 pivotOffset, Vector3 previousPosition, OpticalRaycaster raycaster)
+        {
+            if (hit)
+            {
+                transform.position = worldPos + heightExtent - pivotOffset;
+            }
+            else
+            {
+                transform.position = previousPosition;
+                Vector3 startPosition = WorldTransform.Coordinate.ToUnity() + heightExtent;
+                raycaster.GetWorldPointFromDirectionAsync(
+                    startPosition,
+                    Vector3.up,
+                    (w, h) => OnRaycastUp(w, h, heightExtent, pivotOffset, previousPosition),
+                    snappingCullingMask
+                );
+            }
+        }
+
+        private void OnRaycastUp(Vector3 worldPos, bool hit, Vector3 heightExtent, Vector3 pivotOffset, Vector3 previousPosition)
+        {
+            transform.position = hit ? worldPos - heightExtent - pivotOffset : new Vector3(previousPosition.x, 0, previousPosition.z); // TODO: replace default value with texture height feature
+        } 
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -204,7 +216,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 previousScale = transform.localScale;
             }
 
-            Bounds.Debug(Color.magenta);
+            //enable this to debug the exact bounds in worldspace, based on the Bounds (3d)
+            //Bounds.Debug(Color.magenta);
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)

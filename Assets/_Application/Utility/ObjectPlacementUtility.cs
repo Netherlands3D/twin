@@ -4,6 +4,8 @@ namespace Netherlands3D.Twin.Utility
 {
     public static class ObjectPlacementUtility
     {
+        //TODO make a replacement for this with the new heightmap feature to have a new default 0 plane
+
         public static Vector3 GetSpawnPoint()
         {
             var camera = Camera.main;
