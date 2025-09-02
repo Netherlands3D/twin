@@ -20,25 +20,3 @@
     flex-grow: 1;
     flex-shrink: 0;
 }
-
-#Inspector > #BottomNavigationBar {
-    flex-direction: row;
-}
-
-#Inspector > #BottomNavigationBar > #LeftSide {
-    flex-direction: row;
-    flex-shrink: 0;
-    flex-grow: 1;
-}
-
-#Inspector > #BottomNavigationBar > #LeftSide > .unity-button {
-    margin-right: 12px;
-}
-
-#Inspector > #BottomNavigationBar > #RightSide {
-    flex-direction: row-reverse;
-}
-
-#Inspector > #BottomNavigationBar > #RightSide > .unity-button {
-    margin-left: 12px;
-}

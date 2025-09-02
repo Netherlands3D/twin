@@ -1,0 +1,14 @@
+<ui:UXML 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:ui="UnityEngine.UIElements" 
+  xmlns:nl3d="Netherlands3D.UI.Components" 
+  noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+  editor-extension-mode="False" 
+  class="contentcontainer text-header unity-foldout">
+
+  <!-- Header icons -->
+  <nl3d:Icon name="LeadingIcon" class="leading-icon" />
+  <nl3d:HelpButton name="HelpButton" class="help-button" />
+
+  <ui:VisualElement name="Divider" class="divider" />
+</ui:UXML>

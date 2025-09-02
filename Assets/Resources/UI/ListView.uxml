@@ -1,8 +1,10 @@
 <ui:UXML 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:ui="UnityEngine.UIElements" 
-    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
-    editor-extension-mode="False"
-    class="list-view"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:ui="UnityEngine.UIElements" 
+  xmlns:nl3d="Netherlands3D.UI.Components"
+  noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+  editor-extension-mode="False"
+  class="listview"
 >
+
 </ui:UXML>

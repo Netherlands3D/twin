@@ -13,8 +13,12 @@ namespace Netherlands3D.UI.Components
             asset.CloneTree(this);
 
             // Find and load USS stylesheet specific for this component
-            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(ListViewItem));
+            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(ListViewItem) + "-style");
             styleSheets.Add(styleSheet);
+
+            // Stable hooks for selectors
+            AddToClassList("listview-item");
+            if (string.IsNullOrEmpty(name)) name = nameof(ListViewItem);
         }
     }
 }

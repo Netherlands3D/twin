@@ -14,6 +14,11 @@ namespace Netherlands3D.UI.Components
             Map,
             Folder,
             Trash,
+            ChevronDown,
+            ChevronRight,
+            Help,
+            Library,
+            LibraryAdd,
         }
 
         public enum IconColor
@@ -28,7 +33,7 @@ namespace Netherlands3D.UI.Components
             Blue900,
         }
 
-        private IconImage image = IconImage.Plus;
+        private IconImage image = IconImage.Map;
         [UxmlAttribute("image")]
         public IconImage Image
         {
@@ -51,7 +56,7 @@ namespace Netherlands3D.UI.Components
             asset.CloneTree(this);
         
             // Find and load USS stylesheet specific for this component
-            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(Icon));
+            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(Icon) + "-style");
             styleSheets.Add(styleSheet);
         }
     }

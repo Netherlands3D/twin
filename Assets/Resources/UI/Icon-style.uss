@@ -1,7 +1,7 @@
 ﻿/* The actual image node */
 .icon {
-    --icon-image: var(--icon-plus);
-    --icon-tint-color: var(--color-Blue700);
+    --icon-image: var(--icon-map);
+    --icon-tint-color: var(--color-Blue900);
     
     background-repeat: no-repeat;
     background-position: 50% 50%;
@@ -33,6 +33,11 @@
 .icon.tint-blue-900 { --icon-tint-color: var(--color-Blue900); }
 
 .icon.image-plus { --icon-image: var(--icon-plus); }
-.icon.image-map { --icon-image: var(--icon-map); }
 .icon.image-folder { --icon-image: var(--icon-folder); }
+.icon.image-map { --icon-image: var(--icon-map); }
 .icon.image-trash { --icon-image: var(--icon-trash); }
+.icon.image-help { --icon-image: var(--icon-help); }
+.icon.image-chevron-down { --icon-image: var(--icon-chevrondown); }
+.icon.image-chevron-right { --icon-image: var(--icon-chevronright); }
+.icon.image-library { --icon-image: var(--icon-library); }
+.icon.image-library-add { --icon-image: var(--icon-libraryadd); }

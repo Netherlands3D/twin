@@ -885,12 +885,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   addLayerPanelUXML: {fileID: 9197481963319205126, guid: fc60425722d355049830cd08b55ccc28,
     type: 3}
-  listViewItemUXML: {fileID: 9197481963319205126, guid: 05b41fe168838c04bac2b98a92fd727c,
-    type: 3}
-  inspectorDocument: {fileID: 0}
-  iconEntries:
-  - key: icon_layer_a
-    texture: {fileID: 2800000, guid: e487ae8f8cad8eb448015bc2d49cb75a, type: 3}
+  inspectorDocument: {fileID: 1677727759}
 --- !u!1 &2026991244
 GameObject:
   m_ObjectHideFlags: 0

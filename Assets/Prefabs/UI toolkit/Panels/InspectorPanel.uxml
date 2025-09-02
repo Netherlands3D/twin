@@ -1,22 +1,10 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Prefabs/UI%20toolkit/Styles/_Foundation.uss?fileID=7433441132597879392&amp;guid=9848e3ac5abe4964f8b6998ccbde0eef&amp;type=3#_Foundation" />
     <Style src="project://database/Assets/Prefabs/UI%20toolkit/Styles/_Theme.uss?fileID=7433441132597879392&amp;guid=0f24ef838c8e4bf49a89503faf584878&amp;type=3#_Theme" />
-    <Style src="project://database/Assets/Resources/UI/Button.uss?fileID=7433441132597879392&amp;guid=0ebdee943ffa71e4aad7b09a5519babb&amp;type=3#Button" />
     <Style src="project://database/Assets/Prefabs/UI%20toolkit/Panels/InspectorPanel.uss?fileID=7433441132597879392&amp;guid=75b7f1bcbe4bc5c46b44243db97c2df5&amp;type=3#InspectorPanel" />
     <ui:VisualElement name="Inspector">
         <ui:Label text="Label" name="InspectorHeader" class="text-inspector-header" />
-        <ui:VisualElement name="Content">
-            <nl3d:Button button-style="WithIcon" icon="Map" LabelText="This is my label" />
-        </ui:VisualElement>
-        <ui:VisualElement name="BottomNavigationBar">
-            <ui:VisualElement name="LeftSide">
-                <nl3d:Button name="LibraryButton" icon="Map" button-style="IconOnly" />
-            </ui:VisualElement>
-            <ui:VisualElement name="RightSide">
-                <nl3d:Button name="AddLayerButton" icon="Map" button-style="IconOnly" />
-                <nl3d:Button name="DeleteLayerButton" icon="trash" button-style="IconOnly" />
-                <nl3d:Button name="AddFolderButton" icon="folder" button-style="IconOnly" />
-            </ui:VisualElement>
-        </ui:VisualElement>
+        <ui:VisualElement name="Content" />
+        <nl3d:ToolbarInspector />
     </ui:VisualElement>
 </ui:UXML>

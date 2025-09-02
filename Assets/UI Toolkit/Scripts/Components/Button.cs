@@ -59,10 +59,28 @@ namespace Netherlands3D.UI.Components
             // Find and load UXML template for this component
             var asset = Resources.Load<VisualTreeAsset>("UI/" + nameof(Button));
             asset.CloneTree(this);
-        
+
             // Find and load USS stylesheet specific for this component
-            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(Button));
+            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(Button) + "-style");
             styleSheets.Add(styleSheet);
+
+            AddToClassList("button");
+            RegisterCallback<AttachToPanelEvent>(_ =>
+            {
+                ApplyCurrentVariantClasses();
+            });
+        }
+
+        private void ApplyCurrentVariantClasses()
+        {
+            // Style variant
+            EnableInClassList("button-style-normal", buttonStyle == ButtonStyle.Normal);
+            EnableInClassList("button-style-with-icon", buttonStyle == ButtonStyle.WithIcon);
+            EnableInClassList("button-style-icon-only", buttonStyle == ButtonStyle.IconOnly);
+
+            // Icon position
+            EnableInClassList("button-icon-position-left", buttonIconPosition == ButtonIconPosition.Left);
+            EnableInClassList("button-icon-position-right", buttonIconPosition == ButtonIconPosition.Right);
         }
     }
 }

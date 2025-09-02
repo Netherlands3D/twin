@@ -2,7 +2,7 @@
     --button-bg-color: var(--color-White);
     --button-active-color: var(--color-Blue700);
     --button-active-contrast-color: var(--button-bg-color);
-    --button-border-padding: 12px;
+    --button-padding: 12px;
     --button-border-color: var(--color-Blue200);
     --button-border-width: 2px;
     --button-border-radius: 8px;
@@ -14,7 +14,7 @@
     flex-wrap: wrap;
     align-items: center;
     align-self: flex-start;
-    padding: var(--button-border-padding);
+    padding: var(--button-padding);
     background-color: var(--button-bg-color);
     border-color: var(--button-border-color);
     border-width: var(--button-border-width);
@@ -39,16 +39,16 @@
     display: none;
 }
 
-.button.button-icon-position-left > #Label {
-    margin-left: var(--button-icon-gap);
+.button.button-style-with-icon.button-icon-position-left > #Icon {
+    margin-right: var(--button-icon-gap);
 }
 
-.button.button-icon-position-right {
+.button.button-style-with-icon.button-icon-position-right {
     flex-direction: row-reverse;
 }
 
-.button.button-icon-position-right > #Label {
-    margin-right: var(--button-icon-gap);
+.button.button-style-with-icon.button-icon-position-right > #Icon {
+    margin-left: var(--button-icon-gap);
 }
 
 .button:hover {

@@ -1,17 +1,15 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-using System.Collections.Generic;
 using Netherlands3D.UI.Components;
-using Button = UnityEngine.UIElements.Button;
-using ListView = UnityEngine.UIElements.ListView;
 
 public class AddLayerPanelController : MonoBehaviour
 {
     [Header("UI Assets")]
-    [SerializeField] private VisualTreeAsset addLayerPanelUXML; // AddLayerPanel UXML
+    [SerializeField] private VisualTreeAsset addLayerPanelUXML;
 
     [Header("Inspector (optional)")]
-    [SerializeField] private UIDocument inspectorDocument; // If not assigned, will use GetComponent<UIDocument>()
+    [SerializeField] private UIDocument inspectorDocument;
 
     // Simple data model for each layer entry (label + icon key)
     private readonly List<(string label, Icon.IconImage iconKey)> layerItems = new()
@@ -22,69 +20,119 @@ public class AddLayerPanelController : MonoBehaviour
         ("Layer D", Icon.IconImage.Folder)
     };
 
-    private VisualElement Root => inspectorDocument.rootVisualElement;
-    private Button LibraryButton => Root.Q<Button>("LibraryButton");
-    private VisualElement ContentPlaceholder => Root.Q("Content");
+    // Cached UI references
+    private VisualElement Root => inspectorDocument != null ? inspectorDocument.rootVisualElement : null;
+    private Netherlands3D.UI.Components.Toggle OpenLibraryToggle;
+    private VisualElement ContentPlaceholder;  // Placeholder where the panel is inserted
+    private TemplateContainer currentPanel;    // The instantiated AddLayerPanel
+
+    // Keep callback reference to unsubscribe cleanly
+    private EventCallback<ChangeEvent<bool>> _onOpenLibraryChanged;
 
     private void Awake()
     {
         // Get the UIDocument from Inspector or from the same GameObject
         if (inspectorDocument == null)
-        {
             inspectorDocument = GetComponent<UIDocument>();
-        }
     }
 
     private void OnEnable()
     {
-        // Show the AddLayerPanel on click
-        if (LibraryButton != null)
+        if (Root == null) return;
+
+        // Query toolbar toggle and content area
+        OpenLibraryToggle = Root.Q<Netherlands3D.UI.Components.Toggle>("OpenLibrary");
+        ContentPlaceholder = Root.Q("Content");
+
+        if (OpenLibraryToggle != null)
         {
-            LibraryButton.clicked += ShowAddLayerPanel;
+            _onOpenLibraryChanged = OnOpenLibraryChanged;
+            OpenLibraryToggle.RegisterValueChangedCallback(_onOpenLibraryChanged);
         }
     }
 
     private void OnDisable()
     {
-        if (LibraryButton != null)
-        {
-            LibraryButton.clicked -= ShowAddLayerPanel;
-        }
+        if (OpenLibraryToggle != null && _onOpenLibraryChanged != null)
+            OpenLibraryToggle.UnregisterValueChangedCallback(_onOpenLibraryChanged);
     }
 
+    /// <summary>
+    /// Toggle changed: ON opens the panel, OFF closes it.
+    /// </summary>
+    private void OnOpenLibraryChanged(ChangeEvent<bool> evt)
+    {
+        if (evt.newValue) ShowAddLayerPanel();
+        else CloseAddLayerPanel();
+    }
+
+    /// <summary>
+    /// Instantiate and display the AddLayerPanel. Rebuilds every time it is opened.
+    /// </summary>
     private void ShowAddLayerPanel()
     {
-        // Instantiate the AddLayerPanel and make it visible
-        var panel = addLayerPanelUXML.CloneTree();
-        panel.style.display = DisplayStyle.Flex;
+        if (addLayerPanelUXML == null || ContentPlaceholder == null) return;
 
-        // Replace previous content and add the panel to the placeholder
+        // Instantiate the panel
+        currentPanel = addLayerPanelUXML.CloneTree();
+        currentPanel.style.display = DisplayStyle.Flex;
+
+        // Replace previous content
         ContentPlaceholder.Clear();
-        ContentPlaceholder.Add(panel);
+        ContentPlaceholder.Add(currentPanel);
 
-        // Find the first ListView in the panel (no hardcoded name required)
-        var layerListView = panel.Q<ListView>();
-        layerListView.itemsSource = layerItems;
-        layerListView.makeItem = MakeListViewItem;
-        layerListView.bindItem = BindListViewItem;
-        layerListView.selectionType = SelectionType.None;
+        // Find the NL3D ListView inside the panel
+        var listView = currentPanel.Q<Netherlands3D.UI.Components.ListView>();
+        if (listView == null) return;
+
+        // Virtualization and selection
+        listView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+        listView.selectionType = SelectionType.None;
+
+        // Provide data and binding; NL3D ListView supplies a wrapper with #Content
+        listView.itemsSource = layerItems;
+        listView.bindItem = BindListViewItem;
+
+        // Keep toggle visually on (avoid loops)
+        if (OpenLibraryToggle != null)
+            OpenLibraryToggle.SetValueWithoutNotify(true);
     }
 
-    private VisualElement MakeListViewItem()
+    /// <summary>
+    /// Remove the panel and keep the toggle state consistent.
+    /// </summary>
+    private void CloseAddLayerPanel()
     {
-        return new ListViewItem();
+        if (ContentPlaceholder == null) return;
+        ContentPlaceholder.Clear();
+        currentPanel = null;
+
+        // Keep toggle visually off (avoid loops)
+        if (OpenLibraryToggle != null)
+            OpenLibraryToggle.SetValueWithoutNotify(false);
     }
 
-    // Bind the label and icon to each list view item as a child button
-    private void BindListViewItem(VisualElement element, int index)
+    /// <summary>
+    /// Bind data to a recycled item: ensure a single NL3D Button under #Content and set its data.
+    /// </summary>
+    private void BindListViewItem(VisualElement item, int index)
     {
-        if (element is not ListViewItem item) return;
+        var content = item.Q("Content");
+        if (content == null) return;
 
-        var button = new Netherlands3D.UI.Components.Button();
-        button.style.alignSelf = Align.Stretch;
-        button.LabelText = layerItems[index].label;
-        button.Image = layerItems[index].iconKey;
+        // Create once per recycled item
+        Netherlands3D.UI.Components.Button btn = content.Q<Netherlands3D.UI.Components.Button>("LayerButton");
+        if (btn == null)
+        {
+            btn = new Netherlands3D.UI.Components.Button { name = "LayerButton" };
+            btn.style.alignSelf = Align.Stretch;
+            btn.style.flexGrow = 1;
+            content.Add(btn);
+        }
 
-        item.Add(button);
+        // Bind data
+        var (label, iconKey) = layerItems[index];
+        btn.LabelText = label;
+        btn.Image = iconKey;
     }
 }

@@ -4,8 +4,9 @@
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
     xmlns:nl3d="Netherlands3D.UI.Components"
     editor-extension-mode="False" 
-    class="button text-base unity-button"
+    class="breadcrumb text-base"
 >
-    <nl3d:Icon name="Icon"/>
-    <ui:Label name="Label" text="Label" />
+    <nl3d:Icon name="Icon" image="map" />
+    <ui:Label name="BreadcrumbLabel" text="Start &gt; Laagbeheer" class="text-base" />   
+
 </ui:UXML>
