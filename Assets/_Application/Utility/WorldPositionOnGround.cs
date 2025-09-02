@@ -1,5 +1,5 @@
-using Netherlands3D.Services;
 using Netherlands3D.Twin.Samplers;
+using System.Collections;
 using UnityEngine;
 
 namespace Netherlands3D.Twin
@@ -9,36 +9,33 @@ namespace Netherlands3D.Twin
         private OpticalRaycaster opticalRaycaster;
         private bool positionFound = false;
         private Vector3 worldXZ;
+        private WaitForSeconds waitSecond = new WaitForSeconds(1f);
         
         void Start()
         {
-            opticalRaycaster = ServiceLocator.GetService<OpticalRaycaster>();
-            UpdatePosition();
-        }
-
-        private void UpdatePosition()
-        {
-            if (positionFound)
-                return;
-
+            opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
             worldXZ = new Vector3(transform.position.x, 0, transform.position.z);
-            Vector3 screenPoint = Camera.main.WorldToScreenPoint(worldXZ);
-
-            opticalRaycaster.GetWorldPointAsync(screenPoint, Callback, 1 << LayerMask.NameToLayer("Terrain"));
+            StartCoroutine(UpdatePositionCheck());
         }
-        
+
+        private IEnumerator UpdatePositionCheck()
+        {
+            while(!positionFound && this != null)
+            {
+                Vector3 screenPoint = Camera.main.WorldToScreenPoint(worldXZ);
+                opticalRaycaster.GetWorldPointAsync(screenPoint, Callback, 1 << LayerMask.NameToLayer("Terrain"));
+                yield return waitSecond;
+            }
+            if(positionFound)
+                transform.position = worldXZ;
+        }
+
         private void Callback(Vector3 hitWorldPoint, bool hasHit)
         {
             if (hasHit)
             {
                 positionFound = true;
-                float y = hitWorldPoint.y;
-                Vector3 finalPosition = new Vector3(worldXZ.x, y, worldXZ.z);
-                transform.position = finalPosition;
-            }
-            else if(this != null)
-            {
-                Invoke(nameof(UpdatePosition), 1f); //lets retry in 1 sec or it will cause a stackoverflow
+                worldXZ.y = hitWorldPoint.y;
             }
         }
         

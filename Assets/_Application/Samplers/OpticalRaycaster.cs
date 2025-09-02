@@ -108,16 +108,26 @@ namespace Netherlands3D.Twin.Samplers
             try
             {
                 var worldPosData = opticalRequest.request.GetData<Vector4>();
+                if(worldPosData == null ||  worldPosData.Length == 0)
+                {
+                    opticalRequest.hasHit = false;
+                    opticalRequest.resultCallback.Invoke(Vector3.zero, false);
+                    Debug.LogError("readback has invalid data");
+                    return;
+                }
                 float worldPosX = worldPosData[0].x;
                 float worldPosY = worldPosData[0].y;
                 float worldPosZ = worldPosData[0].z;
                 Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
+                
                 opticalRequest.hasHit = worldPosData[0].w > 0;
                 opticalRequest.resultCallback.Invoke(worldPos, opticalRequest.hasHit);
             }
             catch (Exception e)
             {
-                Debug.LogError($"Exception in optical request: {e}");
+                Debug.LogError($"Exception in optical request: {e.StackTrace}");
+
+                Debug.LogException(e);
             }
             finally
             {
