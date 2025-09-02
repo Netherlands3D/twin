@@ -23,6 +23,8 @@ namespace Netherlands3D.CityJson.Structure
         public List<MaterialInfo> Materials { get; private set; } = new List<MaterialInfo>();
         public List<TextureInfo> Textures { get; private set; } = new List<TextureInfo>();
 
+        private static Dictionary<MaterialInfo, Material> cachedMaterials = new Dictionary<MaterialInfo, Material>();
+
       
 
         public static CityAppearance FromJSON(JSONNode node)
@@ -52,18 +54,27 @@ namespace Netherlands3D.CityJson.Structure
             return appearance;
         }
 
-        public void GenerateMaterialsForGeometry(CityGeometry geometry)
+        public Material[] GenerateMaterialsForGeometry(CityGeometry geometry)
         {
+            Material[] materials = new Material[geometry.MaterialIndices.Count];
             for (int i = 0; i < geometry.MaterialIndices.Count; i++)
             {
                 int matIndex = geometry.MaterialIndices[i];
                 if (matIndex >= 0 && matIndex < Materials.Count)
                 {
                     var matInfo = Materials[matIndex];
+                    if (cachedMaterials.ContainsKey(matInfo))
+                    {
+                        materials[i] = cachedMaterials[matInfo];
+                        continue;
+                    }
+
                     Material unityMat = MaterialInfo.ToUnityMaterial(matInfo, defaultMaterial);
-                    // assign unityMat to the mesh face i
+                    cachedMaterials.Add(matInfo, unityMat);
+                    materials[i] = unityMat;
                 }
             }
+            return materials;
         }
     }
     

@@ -218,12 +218,12 @@ namespace Netherlands3D.CityJson.Visualisation
         {
             var boundaryMeshes = BoundariesToMeshes(geometry.BoundaryObject, coordinateSystem, vertexOffset);
             var subMeshes = CombineBoundaryMeshesWithTheSameSemanticObject(boundaryMeshes, objectOffset, out var types);
-            var materials = new Material[types.Count];
+            var materials = cityObject.Appearance.GenerateMaterialsForGeometry(geometry); //new Material[types.Count];
 
-            for (int i = 0; i < materials.Length; i++)
-            {
-                materials[i] = GetMaterial(types[i]);
-            }
+            //for (int i = 0; i < materials.Length; i++)
+            //{
+            //    materials[i] = GetMaterial(types[i]);
+            //}
 
             var mesh = CombineMeshes(subMeshes, Matrix4x4.identity, false); //use identity matrix because we already transformed the submeshes
             return new MeshWithMaterials(mesh, materials);
