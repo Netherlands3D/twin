@@ -37,6 +37,7 @@
 .icon.image-map { --icon-image: var(--icon-map); }
 .icon.image-trash { --icon-image: var(--icon-trash); }
 .icon.image-help { --icon-image: var(--icon-help); }
+.icon.image-back { --icon-image: var(--icon-back); }
 .icon.image-chevron-down { --icon-image: var(--icon-chevrondown); }
 .icon.image-chevron-right { --icon-image: var(--icon-chevronright); }
 .icon.image-library { --icon-image: var(--icon-library); }

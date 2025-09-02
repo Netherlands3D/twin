@@ -8,4 +8,7 @@
 >
     <nl3d:Icon name="Icon"/>
     <ui:Label name="Label" text="Label" />
+
+    <ui:VisualElement name="Divider" class="divider" />
+    <ui:Label text="Type" class="type-label" />
 </ui:UXML>

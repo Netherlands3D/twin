@@ -830,7 +830,7 @@ GameObject:
   - component: {fileID: 1677727759}
   - component: {fileID: 1677727760}
   m_Layer: 5
-  m_Name: Inspector
+  m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -863,9 +863,9 @@ MonoBehaviour:
   m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PanelSettings: {fileID: 11400000, guid: 3bb7e05469dbf8d4997548eb3a35710a, type: 2}
+  m_PanelSettings: {fileID: 11400000, guid: 9f7be72ae5639dd469eb35ed8bd40f63, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: cf311c3fd77c4204c8845105ce651070,
+  sourceAsset: {fileID: 9197481963319205126, guid: 6647caf475c8b1c4d997f363bebbaf1e,
     type: 3}
   m_SortingOrder: 0
   m_WorldSpaceSizeMode: 1

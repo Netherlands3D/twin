@@ -14,6 +14,7 @@ namespace Netherlands3D.UI.Components
             Map,
             Folder,
             Trash,
+            Back,
             ChevronDown,
             ChevronRight,
             Help,

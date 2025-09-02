@@ -6,7 +6,13 @@
     editor-extension-mode="False" 
     class="breadcrumb text-base"
 >
-    <nl3d:Icon name="Icon" image="map" />
-    <ui:Label name="BreadcrumbLabel" text="Start &gt; Laagbeheer" class="text-base" />   
+  <!-- Optional backbutton (style with-backbutton) -->
+  <nl3d:BackButton name="BackButton" class="backbutton" />
+
+  <!-- Optional leading icon (style with-icon) -->
+  <nl3d:Icon name="Icon" class="leadingicon" />
+
+  <!-- Trail: build C#-logic for crumbs + separators here -->
+  <ui:VisualElement name="Trail" class="trail" />
 
 </ui:UXML>

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 19101, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: InspectorPanelSettings
+  m_Name: NL3D Panel Settings
   m_EditorClassIdentifier: 
   themeUss: {fileID: -4733365628477956816, guid: d6ccd5a86de3c4d479f59d456d5cc531,
     type: 3}
@@ -18,8 +18,8 @@ MonoBehaviour:
   m_TargetTexture: {fileID: 0}
   m_RenderMode: 0
   m_WorldSpaceLayer: 0
-  m_ScaleMode: 1
-  m_ReferenceSpritePixelsPerUnit: 100
+  m_ScaleMode: 0
+  m_ReferenceSpritePixelsPerUnit: 96
   m_PixelsPerUnit: 100
   m_Scale: 1
   m_ReferenceDpi: 96

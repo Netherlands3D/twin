@@ -16,6 +16,7 @@
     --icon-map: url("project://database/Assets/Sprites/UI/Icons/Type=Map,%20Color=white,%20Size=large.png");
     --icon-folder: url("project://database/Assets/Sprites/UI/Icons/Type=Folder,%20Color=white,%20Size=large.png");
     --icon-trash: url("project://database/Assets/Sprites/UI/Icons/Type=Trash,%20Color=white,%20Size=large.png");
+    --icon-back: url("project://database/Assets/Sprites/UI/Icons/Type=Back,%20Color=white,%20Size=large.png");
     --icon-chevrondown: url("project://database/Assets/Sprites/UI/Icons/Type=ChevronDown,%20Color=white,%20Size=large.png");
     --icon-chevronright: url("project://database/Assets/Sprites/UI/Icons/Type=ChevronRight,%20Color=white,%20Size=large.png");
     --icon-help: url("project://database/Assets/Sprites/UI/Icons/Type=Help,%20Color=white,%20Size=large.png");

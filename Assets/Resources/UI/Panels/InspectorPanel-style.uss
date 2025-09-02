@@ -1,4 +1,4 @@
-#Inspector {
+.inspector {
     margin-left: 88px;
     margin-bottom: 44px;
     padding-top: 24px;
@@ -11,11 +11,11 @@
     justify-content: space-between;
 }
 
-#Inspector > #InspectorHeader {
+.inspector .inspector-header {
     margin-bottom: 16px;
 }
 
-#Inspector > #Content {
+.inspector > #Content {
     margin-bottom: 16px;
     flex-grow: 1;
     flex-shrink: 0;

@@ -1,22 +1,47 @@
 .breadcrumb {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    flex-grow: 0;
-    margin-bottom: 12px;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px; /* alleen ruimte tussen hoofdblokken; crumbs zelf regelen spacing intern */
 }
 
-.breadcrumb > #Icon {
-    flex-shrink: 0;
-    flex-grow: 0;
-    width: 24px;
-    height: 24px;
-    background-image: url("project://database/Assets/Sprites/UI/Icons/Type=Map,%20Color=white,%20Size=large.png?fileID=2800000&guid=be23f11ede1084b4785c8f49e1902060&type=3#Type=Map, Color=white, Size=large");
-    -unity-background-image-tint-color: var(--color-Blue900);
+/* Leading icon */
+.breadcrumb .leadingicon {
+  width: 24px;
+  height: 24px;
+  margin-right: 4px; /* 4px voor tight spacing */
 }
 
-.breadcrumb > #BreadcrumbLabel {
-    margin-left: 8px;
-    flex-shrink: 0;
-    flex-grow: 1;
+/* Back button: laat component zelf klein/stekkerig ogen via zijn eigen -style,
+   hier alleen positionering indien nodig */
+.breadcrumb .backbutton {
+  margin-right: 8px;
 }
+
+/* Trail container en children */
+.breadcrumb .trail {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Crumb link: minimal button look (we stylen via extra crumb-link class) */
+.breadcrumb .crumb-link.button {
+  padding-left: 0;
+  padding-right: 0;
+  min-height: auto;
+}
+
+/* Separator (ChevronRight via Icon) */
+.breadcrumb .separator.icon {
+  width: 24px;
+  height: 24px;
+  --icon-image: var(--icon-chevron-right);
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+/* Visibility toggles (default visible; hide when class present on root) */
+.breadcrumb.no-leading-icon .leadingicon { display: none; }
+.breadcrumb.no-back-button  .backbutton  { display: none; }
+
