@@ -105,7 +105,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void FindFeatureAtPointerPosition()
         {            
-            Vector3 groundPosition = pointerToWorldPosition.WorldPoint;
+            Vector3 groundPosition = pointerToWorldPosition.WorldPoint.ToUnity();
             FindFeatureByPosition(groundPosition);            
         }
 

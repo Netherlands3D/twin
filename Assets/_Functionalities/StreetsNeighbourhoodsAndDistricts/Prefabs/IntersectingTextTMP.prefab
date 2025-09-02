@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1040987033523816731}
   - component: {fileID: 5959483343946712676}
   - component: {fileID: -1681167514951252975}
-  - component: {fileID: -8454406908728090507}
+  - component: {fileID: -8985408002272745732}
   m_Layer: 0
   m_Name: IntersectingTextTMP
   m_TagString: Untagged
@@ -190,7 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 480be2e7389d3294a9ea3287980976a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-8454406908728090507
+--- !u!114 &-8985408002272745732
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -199,7 +199,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 8383371600766724334}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3f6482c3d267104b8b86d87be3c2419, type: 3}
+  m_Script: {fileID: 11500000, guid: b53187569164af24e932508911f599ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scaleMultiplier: 0.001

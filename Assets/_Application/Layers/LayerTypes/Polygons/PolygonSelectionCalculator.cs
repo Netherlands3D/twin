@@ -53,7 +53,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             var camera = Camera.main;
             Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(camera);
-            var worldPoint = pointerToWorldPosition.WorldPoint;
+            var worldPoint = pointerToWorldPosition.WorldPoint.ToUnity();
 
             foreach (var layer in Layers)
             {

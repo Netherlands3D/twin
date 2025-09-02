@@ -39,7 +39,7 @@ namespace Netherlands3D.Twin.Projects
 
         private string lastSavePath;
 
-        public void LoadFromFile(string fileName)
+        public void LoadFromFile(string filePath)
         {
             ProjectData.Current.RootLayer.DestroyLayer();
             ProjectData.Current.ClearFunctionalityData();
@@ -47,7 +47,7 @@ namespace Netherlands3D.Twin.Projects
             Resources.UnloadUnusedAssets();
 
             // Open the zip file
-            using FileStream fs = File.OpenRead(Path.Combine(Application.persistentDataPath, fileName));
+            using FileStream fs = File.OpenRead(filePath);
 
             //Extract specific project.json from zip using CsharpLib
             using ZipFile zf = new(fs);
