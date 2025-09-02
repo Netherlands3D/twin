@@ -7,14 +7,10 @@ namespace Netherlands3D.Twin.UI
     {
         [SerializeField] private RectTransform buttonsPanel;
         [SerializeField] private RectTransform visibilityPanel;
-
         [SerializeField] private ToggleGroupItem positionToggle;
         [SerializeField] private ToggleGroupItem rotationToggle;
         [SerializeField] private ToggleGroupItem scaleToggle;
-
         [SerializeField] private Button snapButton;
-
-
        public TransformHandleInterfaceToggle TransformHandleInterfaceToggle { get; set; }
         private TransformAxes transformLocks;
 
@@ -23,9 +19,7 @@ namespace Netherlands3D.Twin.UI
             positionToggle.Toggle.onValueChanged.AddListener(UpdateGizmoHandles);
             rotationToggle.Toggle.onValueChanged.AddListener(UpdateGizmoHandles);
             scaleToggle.Toggle.onValueChanged.AddListener(UpdateGizmoHandles);
-            snapButton.onClick.AddListener(SnapObject);
-
-           
+            snapButton.onClick.AddListener(SnapObject);           
         }
         
         private void OnDisable()

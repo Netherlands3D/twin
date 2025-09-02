@@ -23,6 +23,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
     public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, ILayerWithPropertyPanels, ILayerWithPropertyData
     {
         public override BoundingBox Bounds => CalculateWorldBoundsFromRenderers();
+        public bool DebugBoundingBox = false;
 
         private int snappingCullingMask = 0;
 
@@ -131,40 +132,36 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             Vector3 heightExtent = new Vector3(0, Bounds.Size.ToUnity().y * 0.5f, 0);
             Vector3 pivotOffset = Bounds.Center.ToUnity() - transform.position;
-            Vector3 startPosition = WorldTransform.Coordinate.ToUnity() - heightExtent;
+            Vector3 startPosition = Bounds.Center.ToUnity() - heightExtent; //check from the bottom of this object downwards, because we cannot rely on its hitmask
             Vector3 previousPosition = WorldTransform.Coordinate.ToUnity();
+
             OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
             raycaster.GetWorldPointFromDirectionAsync(
                 startPosition,
                 Vector3.down,
-                (hitPos, hit) => OnRaycastDown(hitPos, hit, heightExtent, pivotOffset, previousPosition, raycaster),
+                (hitPos, hit) => OnRaycastDown(hitPos, hit, heightExtent, pivotOffset, previousPosition, raycaster, true),
                 snappingCullingMask
             );
         }
 
-        private void OnRaycastDown(Vector3 worldPos, bool hit, Vector3 heightExtent, Vector3 pivotOffset, Vector3 previousPosition, OpticalRaycaster raycaster)
+        private void OnRaycastDown(Vector3 worldPos, bool hit, Vector3 heightExtent, Vector3 pivotOffset, Vector3 previousPosition, OpticalRaycaster raycaster, bool invertSnapping)
         {
             if (hit)
             {
-                transform.position = worldPos + heightExtent - pivotOffset;
+                transform.position = worldPos + (invertSnapping ? heightExtent : -heightExtent) - pivotOffset;
             }
             else
             {
                 transform.position = previousPosition;
-                Vector3 startPosition = WorldTransform.Coordinate.ToUnity() + heightExtent;
+                // we didnt hit downwards, this could mean we are below ground, lets do a very high up one
                 raycaster.GetWorldPointFromDirectionAsync(
-                    startPosition,
-                    Vector3.up,
-                    (w, h) => OnRaycastUp(w, h, heightExtent, pivotOffset, previousPosition),
-                    snappingCullingMask
-                );
+                      previousPosition + Vector3.up * 10000,
+                      Vector3.down,
+                      (hitPos, hit) => OnRaycastDown(hitPos, hit, heightExtent, pivotOffset, previousPosition, raycaster, false),
+                      snappingCullingMask
+                 );
             }
         }
-
-        private void OnRaycastUp(Vector3 worldPos, bool hit, Vector3 heightExtent, Vector3 pivotOffset, Vector3 previousPosition)
-        {
-            transform.position = hit ? worldPos - heightExtent - pivotOffset : new Vector3(previousPosition.x, 0, previousPosition.z); // TODO: replace default value with texture height feature
-        } 
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -217,7 +214,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
 
             //enable this to debug the exact bounds in worldspace, based on the Bounds (3d)
-            //Bounds.Debug(Color.magenta);
+            if(DebugBoundingBox)
+                Bounds.Debug(Color.magenta);
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
