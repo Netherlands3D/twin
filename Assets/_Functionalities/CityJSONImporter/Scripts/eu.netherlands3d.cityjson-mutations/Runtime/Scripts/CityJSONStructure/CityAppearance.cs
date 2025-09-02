@@ -1,6 +1,7 @@
+using Netherlands3D.Tiles3D;
+using SimpleJSON;
 using System.Collections.Generic;
 using UnityEngine;
-using SimpleJSON;
 
 namespace Netherlands3D.CityJson.Structure
 {
@@ -11,8 +12,18 @@ namespace Netherlands3D.CityJson.Structure
     [System.Serializable]
     public class CityAppearance
     {
+        static CityAppearance()
+        {
+            var materialGenerator = new NL3DMaterialGenerator();
+            defaultMaterial = materialGenerator.GetDefaultMaterial();
+        }
+
+        private static Material defaultMaterial;
+
         public List<MaterialInfo> Materials { get; private set; } = new List<MaterialInfo>();
         public List<TextureInfo> Textures { get; private set; } = new List<TextureInfo>();
+
+      
 
         public static CityAppearance FromJSON(JSONNode node)
         {
@@ -40,16 +51,31 @@ namespace Netherlands3D.CityJson.Structure
 
             return appearance;
         }
+
+        public void GenerateMaterialsForGeometry(CityGeometry geometry)
+        {
+            for (int i = 0; i < geometry.MaterialIndices.Count; i++)
+            {
+                int matIndex = geometry.MaterialIndices[i];
+                if (matIndex >= 0 && matIndex < Materials.Count)
+                {
+                    var matInfo = Materials[matIndex];
+                    Material unityMat = MaterialInfo.ToUnityMaterial(matInfo, defaultMaterial);
+                    // assign unityMat to the mesh face i
+                }
+            }
+        }
     }
+    
 
     [System.Serializable]
     public class MaterialInfo
     {
         public string Name { get; private set; }
         public float AmbientIntensity { get; private set; }
-        public Color DiffuseColor { get; private set; }
-        public Color SpecularColor { get; private set; }
-        public float Shininess { get; private set; }
+        public Color? DiffuseColor { get; private set; }
+        public Color? SpecularColor { get; private set; }
+        public float? Shininess { get; private set; }
         public float Transparency { get; private set; }
 
         public static MaterialInfo FromJSON(JSONNode node)
@@ -65,6 +91,36 @@ namespace Netherlands3D.CityJson.Structure
                 Shininess = node["shininess"].AsFloat,
                 Transparency = node["transparency"].AsFloat
             };
+        }
+
+        public static Material ToUnityMaterial(MaterialInfo matInfo, Material defaultMaterial)
+        {
+            // Use Unity's built-in Standard Shader or URP Lit, depending on your pipeline
+
+            var mat = new Material(defaultMaterial);
+
+            if (matInfo.DiffuseColor.HasValue)
+            {
+                mat.color = matInfo.DiffuseColor.Value;
+            }
+
+            if (matInfo.SpecularColor.HasValue)
+            {
+                mat.SetColor("_SpecColor", matInfo.SpecularColor.Value);
+            }
+
+            //if (matInfo.EmissiveColor.HasValue)
+            //{
+            //    mat.SetColor("_EmissionColor", matInfo.EmissiveColor.Value);
+            //    mat.EnableKeyword("_EMISSION");
+            //}
+
+            if (matInfo.Shininess.HasValue)
+            {
+                mat.SetFloat("_Glossiness", matInfo.Shininess.Value);
+            }
+
+            return mat;
         }
 
         private static Color ParseColor(JSONNode arr)

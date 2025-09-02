@@ -33,6 +33,8 @@ namespace Netherlands3D.CityJson.Structure
         public bool IncludeMaterials { get; set; } //todo: Materials currently not implemented yet
         public bool IncludeTextures { get; set; } //todo: Textures currently not implemented yet
 
+        public List<int> MaterialIndices { get; private set; }
+
         //Certain CityObjectTypes can only have certain types of geometry. This is described in the specs
         public static bool IsValidType(CityObjectType cityObjectType, GeometryType geometryType)
         {
@@ -132,8 +134,8 @@ namespace Netherlands3D.CityJson.Structure
 
             if (IncludeSemantics)
                 geometryNode["semantics"] = CityGeometrySemantics.GetSemanticObject(BoundaryObject);
-            if (IncludeMaterials)
-                geometryNode["material"] = GetMaterials();
+            //if (IncludeMaterials)
+                //geometryNode["material"] = GetMaterials();
             if (IncludeTextures)
                 geometryNode["texture"] = GetTextures();
 
@@ -165,12 +167,28 @@ namespace Netherlands3D.CityJson.Structure
             if (includeSemantics)
                 CityGeometrySemantics.FromJSONNode(semanticsNode, geometry.BoundaryObject);
 
+            if(includeMaterials)
+            {
+                geometry.MaterialIndices = GetMaterialsFromJSONNode(materialsNode["default_theme"]);
+                
+            }
+
             return geometry;
         }
 
-        private JSONNode GetMaterials()
+        private static List<int> GetMaterialsFromJSONNode(JSONNode materialNode)
         {
-            throw new System.NotImplementedException();
+            List<int> indices = null;
+            if (materialNode != null)
+            {
+                indices = new List<int>();
+                var values = materialNode["values"];
+                foreach (JSONNode v in values.AsArray)
+                {
+                    indices.Add(v.AsInt);
+                }
+            }
+            return indices;
         }
 
         private JSONNode GetTextures()
