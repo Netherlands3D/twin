@@ -735,6 +735,41 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2506052420223465944}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1135948137 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 402635920728730451, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
+    type: 3}
+  m_PrefabInstance: {fileID: 7980937525333781997}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1135948142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1135948137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a728a3527b1f334390e5bfd25ce6aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fileExtentions: obj,csv,json,geojson,glb
+  multiSelect: 0
+  onFilesSelected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 6558aaaeb70ee44688f49da028828a19, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.FileTypeAdapter, Assembly-CSharp
+        m_MethodName: ProcessFile
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1235137767 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1748615501916967598, guid: 0d52ffd9c87ab484b88610c4acf5db24,
@@ -2122,6 +2157,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2289527239827756690, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2365553591865472663, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -2707,6 +2747,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8264278291076824804, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8502773575971021889, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -2822,10 +2867,15 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2289527239827756690, guid: 02c20fd0e6c83ab46afacb4c2e6263df, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 402635920728730451, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1135948142}
   m_SourcePrefab: {fileID: 100100000, guid: 02c20fd0e6c83ab46afacb4c2e6263df, type: 3}
 --- !u!1001 &8208335865081263597
 PrefabInstance:
