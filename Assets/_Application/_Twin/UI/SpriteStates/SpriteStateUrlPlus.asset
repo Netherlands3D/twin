@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fccee172854014a7a9587c4912e3e53d, type: 3}
-  m_Name: SpriteStatePlus
+  m_Name: SpriteStateUrlPlus
   m_EditorClassIdentifier: 
   defaultSprite: {fileID: 21300000, guid: 19dbfadde39b575418870c46411e6d19, type: 3}
   highlightedSprite: {fileID: 0}
