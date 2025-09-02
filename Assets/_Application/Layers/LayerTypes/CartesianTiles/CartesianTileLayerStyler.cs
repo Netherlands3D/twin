@@ -20,11 +20,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         public const string VisibilityIdentifier = "data-visibility";
 
         public static ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
-        private static Dictionary<string, Color> buildingColors = new Dictionary<string, Color>();
 
         private LayerGameObject layer;
 
-        public void SetLayerGameObject(LayerGameObject layer)
+        public CartesianTileLayerStyler(LayerGameObject layer)
         {
             this.layer = layer;
         }
@@ -76,7 +75,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             string id = layerFeature.Attributes[VisibilityIdentifier];
 
-            //string id = ((ObjectMappingItem)layerFeature.Geometry).objectID;
             var stylingRuleName = VisibilityStyleRuleName(id);
 
             // Add or set the colorization of this feature by its material index
@@ -97,7 +95,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             string id = layerFeature.GetAttribute(VisibilityIdentifier);
 
-            //string id = ((ObjectMappingItem)layerFeature.Geometry).objectID;
             var stylingRuleName = VisibilityStyleRuleName(id);
 
             if (!layer.LayerData.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
@@ -114,35 +111,42 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         /// </summary>
         public void Apply(Symbolizer styling, LayerFeature layerFeature)
         {
-            if (layerFeature.Geometry is Material)
+            ApplyMaterial(styling, layerFeature);
+            ApplyVisibility(styling, layerFeature);
+        }
+
+        private void ApplyMaterial(Symbolizer styling, LayerFeature layerFeature)
+        {
+            if (layerFeature.Geometry is not Material material) return;
+
+            Color? color = styling.GetFillColor();
+            if (color.HasValue)
             {
-                Color? color = styling.GetFillColor();
-                if (color.HasValue)
+                if (int.TryParse(layerFeature.Attributes[MaterialIndexIdentifier], out var materialIndex))
                 {
-                    if (int.TryParse(layerFeature.Attributes[MaterialIndexIdentifier], out var materialIndex))
-                    {
-                        BinaryMeshLayer binaryMeshLayer = (layer as CartesianTileLayerGameObject).Layer as BinaryMeshLayer;
-                        binaryMeshLayer.DefaultMaterialList[materialIndex].color = color.Value;
-                    }
+                    BinaryMeshLayer binaryMeshLayer = (layer as CartesianTileLayerGameObject).Layer as BinaryMeshLayer;
+                    binaryMeshLayer.DefaultMaterialList[materialIndex].color = color.Value;
                 }
             }
+        }
 
-            if (layerFeature.Geometry is ObjectMappingItem item)
+        private void ApplyVisibility(Symbolizer styling, LayerFeature layerFeature)
+        {
+            if (layerFeature.Geometry is not ObjectMappingItem item) return;
+
+            bool? visiblity = styling.GetVisibility();
+            if (visiblity.HasValue)
             {
-                bool? visiblity = styling.GetVisibility();
-                if (visiblity.HasValue)
+                string id = layerFeature.Attributes[VisibilityIdentifier];
+                if (visiblity == true)
                 {
-                    string id = layerFeature.Attributes[VisibilityIdentifier];
-                    if (visiblity == true)
-                    {
-                        var color = styling.GetFillColor() ?? Color.white;
-                        GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, color } });
-                    }
-                    else
-                    {
-                        var color = Color.clear;
-                        GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, color } });
-                    }
+                    var color = styling.GetFillColor() ?? Color.white;
+                    GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, color } });
+                }
+                else
+                {
+                    var color = Color.clear;
+                    GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, color } });
                 }
             }
         }

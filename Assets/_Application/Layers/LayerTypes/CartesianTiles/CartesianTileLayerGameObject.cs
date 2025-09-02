@@ -28,8 +28,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             {
                 if (styler == null)
                 {
-                    styler = new CartesianTileLayerStyler();
-                    styler.SetLayerGameObject(this);
+                    styler = new CartesianTileLayerStyler(this);
                 }
                 return styler;
             } 
@@ -66,24 +65,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             if (layer is not BinaryMeshLayer binaryMeshLayer) return;
 
             //we have to apply styling when mappings are created, before we cannot load the values like from awake
-            binaryMeshLayer.OnMappingCreated.AddListener(m => ApplyStyling());
-            binaryMeshLayer.OnMappingCreated.AddListener(mapping =>
-            {
-                foreach (ObjectMappingItem item in mapping.items)
-                {
-                    var layerFeature = CreateFeature(item);
-                    LayerFeatures.Add(layerFeature.Geometry, layerFeature);
-                }
-
-            });
-           
-            binaryMeshLayer.OnMappingRemoved.AddListener(mapping =>
-            {
-                foreach(ObjectMappingItem item in mapping.items)
-                {
-                    LayerFeatures.Remove(item);
-                }
-            });
+            binaryMeshLayer.OnMappingCreated.AddListener(OnAddedMapping);         
+            binaryMeshLayer.OnMappingRemoved.AddListener(OnRemovedMapping);
 
             for (var materialIndex = 0; materialIndex < binaryMeshLayer.DefaultMaterialList.Count; materialIndex++)
             {
@@ -95,6 +78,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
                 var layerFeature = CreateFeature(material);
                 LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+            }
+        }
+
+        private void OnAddedMapping(ObjectMapping mapping)
+        {
+            foreach (ObjectMappingItem item in mapping.items)
+            {
+                var layerFeature = CreateFeature(item);
+                LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+            }
+            ApplyStyling();
+        }
+
+        private void OnRemovedMapping(ObjectMapping mapping)
+        {
+            foreach (ObjectMappingItem item in mapping.items)
+            {
+                LayerFeatures.Remove(item);
             }
         }
 
@@ -118,6 +119,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             if(layer is BinaryMeshLayer binaryMeshLayer)
             {
                 binaryMeshLayer.OnMappingCreated.RemoveAllListeners();
+                binaryMeshLayer.OnMappingRemoved.RemoveAllListeners();
                 
             }
             if (Application.isPlaying && tileHandler && layer)

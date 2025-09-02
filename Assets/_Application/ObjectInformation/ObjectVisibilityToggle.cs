@@ -16,7 +16,7 @@ namespace Netherlands3D.Twin.UI
         [SerializeField] private ToggleGroupItem visibilityToggle;
         [SerializeField] private Dialog visibilityDialog;
 
-        [SerializeField] private Vector2 offset;
+        [SerializeField] private Vector2 offset = Vector2.zero;
 
         private IMapping currentSelectedFeatureObject;
         private object currentSelectedTransformObject;

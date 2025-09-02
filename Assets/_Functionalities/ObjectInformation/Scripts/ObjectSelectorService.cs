@@ -130,26 +130,26 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public LayerGameObject GetLayerGameObjectFromMapping(IMapping mapping)
         {
+            if (mapping is FeatureMapping featureMapping)
+            {
+                return featureMapping.VisualisationParent;
+            }
+
             if (mapping is MeshMapping meshMapping)
             {
                 //when tile is replacing lod this can be null
                 if (meshMapping.ObjectMapping == null)
                 {
-                    //Deselect();
                     subObjectSelector.FindSubObjectAtPointerPosition();
                     meshMapping = FindObjectMapping() as MeshMapping;
-                    if (meshMapping == null || meshMapping.ObjectMapping == null)
-                        return null;
+                    if (meshMapping?.ObjectMapping == null) return null;
                 }
 
                 Transform parent = meshMapping.ObjectMapping.gameObject.transform.parent;
                 LayerGameObject layerGameObject = parent.GetComponent<LayerGameObject>();
                 return layerGameObject;
             }
-            else if(mapping is FeatureMapping featureMapping)
-            {
-                return featureMapping.VisualisationParent;
-            }
+
             return null;
         }
 
@@ -269,27 +269,20 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public ObjectMappingItem GetMappingItemForBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
         {
+            layer = null;
+            if (selectedMapping is not MeshMapping mapping) return null;
+
             layer = GetLayerGameObjectFromMapping(selectedMapping);
-            if (selectedMapping is MeshMapping mapping)
-            {
-                foreach (ObjectMappingItem item in mapping.ObjectMapping.items)
-                {
-                    if (bagID == item.objectID)
-                    {
-                        return item;
-                    }
-                }
-            }
-            return null;
+            return mapping.ObjectMapping.items.FirstOrDefault(item => bagID == item.objectID);
         }
 
         public LayerFeature GetLayerFeatureFromBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
         {
             ObjectMappingItem item = GetMappingItemForBagID(bagID, selectedMapping, out layer);
-            if (layer == null)
+            if (layer == null || !layer.LayerFeatures.ContainsKey(item))
                 return null;
-            LayerFeature feature = layer.LayerFeatures[item];
-            return feature;
+            
+            return layer.LayerFeatures[item]; 
         }
 
         /// <summary>

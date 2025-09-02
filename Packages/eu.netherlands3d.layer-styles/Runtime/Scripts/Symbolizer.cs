@@ -159,13 +159,6 @@ namespace Netherlands3D.LayerStyles
             properties.Remove(propertyName);
         }
 
-        public Nullable<T> GetValueOrNull<T>() where T : struct
-        {
-            // example: return null to indicate "no value"
-            return null;
-        }
-
-
         #endregion
     }
 }
