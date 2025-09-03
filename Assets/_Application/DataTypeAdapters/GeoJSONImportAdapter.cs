@@ -5,7 +5,7 @@ using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
-using GeoJSONArgs = Netherlands3D.Functionalities.GeoJSON.LayerPresets.GeoJSON.Args;
+using static Netherlands3D.Functionalities.GeoJSON.LayerPresets.GeoJSON;
 
 namespace Netherlands3D.Twin.DataTypeAdapters
 {
@@ -62,7 +62,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             var layerName = CreateName(localFile);
             var url = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
 
-            var layerData = await App.Layers.Add("geojson", new GeoJSONArgs(layerName, url));
+            var layerData = await App.Layers.Add("geojson", new Args(layerName, url));
 
             GeoJsonLayerGameObject newLayer = layerData.Reference as GeoJsonLayerGameObject;
             
