@@ -1,3 +1,4 @@
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Samplers;
 using System.Collections;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace Netherlands3D.Twin
         
         void Start()
         {
-            opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
+            opticalRaycaster = ServiceLocator.GetService<OpticalRaycaster>();
             worldXZ = new Vector3(transform.position.x, 0, transform.position.z);
             StartCoroutine(UpdatePositionCheck());
         }
