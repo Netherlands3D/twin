@@ -132,7 +132,7 @@ namespace Netherlands3D.SelectionTools
 
             DestroyPolygonMesh(); //cleanup to avoid memory leaks
 
-            PolygonMesh = PolygonVisualisationUtility.CreatePolygonMesh(polygons);//, extrusionHeight, addBottom, uvCoordinate);
+            PolygonMesh = PolygonVisualisationUtility.CreatePolygonMesh(polygons);
             var meshFilter = GetComponent<MeshFilter>();
 
             meshFilter.sharedMesh = PolygonMesh;
