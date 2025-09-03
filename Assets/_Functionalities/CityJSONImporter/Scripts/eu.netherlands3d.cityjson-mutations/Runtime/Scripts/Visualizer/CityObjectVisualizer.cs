@@ -256,11 +256,12 @@ namespace Netherlands3D.CityJson.Visualisation
                 else
                 {
                     List<int> matIndices = geometry.MaterialIndices;
+                    List<int> boundaryMeshesToRemove = new List<int>();
                     foreach(int uniqueMatIndex in geometry.MaterialUniqueIndices)
                     {
                         List<GeometryTriangulationData> meshDataToCombine = new List<GeometryTriangulationData>();
                         CityGeometrySemanticsObject activeSemanticsObject = boundaryMeshes[boundaryMeshes.Count - 1].SemanticsObject;
-                        for (int i = boundaryMeshes.Count - 1; i >= 0; i--) //go backwards because collection will be modified
+                        for (int i = 0; i < boundaryMeshes.Count; i++) //go backwards because collection will be modified
                         {
                             if (uniqueMatIndex == matIndices[i])
                             {
@@ -269,6 +270,8 @@ namespace Netherlands3D.CityJson.Visualisation
                                 {
                                     if (boundaryMesh.TriangulationData != null) //skip invalid polygons
                                         meshDataToCombine.Add(boundaryMesh.TriangulationData);
+                                    boundaryMeshesToRemove.Add(i);
+                                    //cant remove the boundary mesh here because we need to keep the indices matched with material indices
                                 }
                             }
                         }
@@ -281,7 +284,10 @@ namespace Netherlands3D.CityJson.Visualisation
                         else
                             types.Add(SurfaceSemanticType.Null);
                     }
-                    boundaryMeshes.Clear();
+                    for (int i = boundaryMeshesToRemove.Count - 1; i >= 0; i--)
+                    {
+                        boundaryMeshes.RemoveAt(i);
+                    }
                 }               
             }
 
