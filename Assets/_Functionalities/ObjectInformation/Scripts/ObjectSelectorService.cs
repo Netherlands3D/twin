@@ -3,6 +3,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Tools;
@@ -17,6 +18,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class ObjectSelectorService : MonoBehaviour
     {
+        public SubObjectSelector SubObjectSelector => subObjectSelector;
+
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
         public UnityEvent OnDeselect = new();
@@ -125,6 +128,31 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
+        public LayerGameObject GetLayerGameObjectFromMapping(IMapping mapping)
+        {
+            if (mapping is FeatureMapping featureMapping)
+            {
+                return featureMapping.VisualisationParent;
+            }
+
+            if (mapping is MeshMapping meshMapping)
+            {
+                //when tile is replacing lod this can be null
+                if (meshMapping.ObjectMapping == null)
+                {
+                    subObjectSelector.FindSubObjectAtPointerPosition();
+                    meshMapping = FindObjectMapping() as MeshMapping;
+                    if (meshMapping?.ObjectMapping == null) return null;
+                }
+
+                Transform parent = meshMapping.ObjectMapping.gameObject.transform.parent;
+                LayerGameObject layerGameObject = parent.GetComponent<LayerGameObject>();
+                return layerGameObject;
+            }
+
+            return null;
+        }
+
         private bool IsAnyToolActive()
         {
             foreach (Tool tool in activeForTools)
@@ -143,15 +171,19 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     //the following method calls need to run in order!
                     string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
                     IMapping mapping = FindObjectMapping();
-                    if (mapping == null && lastSelectedMappingLayerData != null)
+                    bool mappingVisible = IsMappingVisible(mapping, bagId);
+                    if ((mapping == null || !mappingVisible) && lastSelectedMappingLayerData != null)
                     {
                         //when nothing is selected but there was something selected, deselect the current active layer
                         lastSelectedMappingLayerData.DeselectLayer();
                         lastSelectedMappingLayerData = null;
                     }
                     if (mapping is MeshMapping map)
-                    {                      
+                    {
                         LayerData layerData = subObjectSelector.GetLayerDataForSubObject(map.ObjectMapping);
+                        if (!mappingVisible)
+                            return;
+
                         layerData.SelectLayer(true);
                         lastSelectedMappingLayerData = layerData;
                         SelectBagId(bagId);
@@ -195,6 +227,21 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return cameraInputSystemProvider.OverLockingObject == false;
         }
 
+        private bool IsMappingVisible(IMapping mapping, string bagId)
+        {
+            if (mapping is MeshMapping map)
+            {
+                //TODO maybe to the best place here to have a dependency to the cartesianlayerstyler, needs a better implementation
+                LayerFeature feature = GetLayerFeatureFromBagID(bagId, map, out LayerGameObject layer);
+                if (feature != null)
+                {
+                    bool? v = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(feature);
+                    if (v != true) return false;
+                }
+            }
+            return true;
+        }
+
         private void OnAddObjectMapping(ObjectMapping mapping)
         {
             MeshMapping objectMapping = new MeshMapping();
@@ -234,14 +281,32 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             featureSelector.Select(feature);
         }
 
+        public ObjectMappingItem GetMappingItemForBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
+        {
+            layer = null;
+            if (selectedMapping is not MeshMapping mapping) return null;
+
+            layer = GetLayerGameObjectFromMapping(selectedMapping);
+            return mapping.ObjectMapping.items.FirstOrDefault(item => bagID == item.objectID);
+        }
+
+        public LayerFeature GetLayerFeatureFromBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
+        {
+            ObjectMappingItem item = GetMappingItemForBagID(bagID, selectedMapping, out layer);
+            if (layer == null || !layer.LayerFeatures.ContainsKey(item))
+                return null;
+            
+            return layer.LayerFeatures[item]; 
+        }
+
         /// <summary>
         /// Finds a Mapping in the world by the current optical raycaster worldposition
         /// </summary>
         /// <returns></returns>
         public IMapping FindObjectMapping()
         {
-            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.WorldPoint) < minClickDistance;
-            lastWorldClickedPosition = pointerToWorldPosition.WorldPoint;
+            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.WorldPoint.ToUnity()) < minClickDistance;
+            lastWorldClickedPosition = pointerToWorldPosition.WorldPoint.ToUnity();
 
             bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
             lastTimeClicked = Time.time;

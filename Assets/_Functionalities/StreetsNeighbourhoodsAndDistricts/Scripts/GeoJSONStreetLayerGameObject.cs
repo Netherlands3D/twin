@@ -16,16 +16,17 @@
 *  permissions and limitations under the License.
 */
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Networking;
+using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
-using TMPro;
+using Netherlands3D.Twin.Rendering;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Netherlands3D.CartesianTiles;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Netherlands3D.Functionalities.Toponyms
 {
@@ -122,23 +123,32 @@ namespace Netherlands3D.Functionalities.Toponyms
                 {
                     return;
                 }
-                MeshFilter mf = tile.gameObject.GetComponent<MeshFilter>();
-                if (mf != null)
-                {
-                    Destroy(tile.gameObject.GetComponent<MeshFilter>().sharedMesh);
-                }
-                if(streetNames.ContainsKey(tileKey))
-                    foreach(StreetName streetName in streetNames[tileKey])
-                        Destroy(streetName.text);
-                streetNames.Remove(tileKey);
-                streetNamesUpdateQueue.Remove(tileKey);
-                uniqueNames.Remove(tileKey);
 
+                RemoveStreetNames(tile, tileKey);
                 Destroy(tiles[tileKey].gameObject);
             }
-        }       
+        }
 
-        protected override IEnumerator DownloadTextNameData(TileChange tileChange, Tile tile, System.Action<TileChange> callback = null)
+        private void OnDestroy()
+        {
+            RemoveTiles();
+        }
+
+        private void RemoveStreetNames(Tile tile, Vector2Int tileKey)
+        {
+            MeshFilter mf = tile.gameObject.GetComponent<MeshFilter>();
+            if (mf != null)
+            {
+                Destroy(tile.gameObject.GetComponent<MeshFilter>().sharedMesh);
+            }
+            if (streetNames.ContainsKey(tileKey))
+                foreach (StreetName streetName in streetNames[tileKey])
+                    Destroy(streetName.text.gameObject);
+            streetNames.Remove(tileKey);
+            streetNamesUpdateQueue.Remove(tileKey);
+            uniqueNames.Remove(tileKey);
+        }
+        protected override IEnumerator DownloadTextNameData(TileChange tileChange, Tile tile, Action<TileChange> callback = null)
         {          
             string geomUrl = $"{geoJsonUrl}{tileChange.X},{tileChange.Y},{(tileChange.X + tileSize)},{(tileChange.Y + tileSize)}";
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
@@ -328,12 +338,69 @@ namespace Netherlands3D.Functionalities.Toponyms
             mesh.RecalculateBounds();
             streetName.text.UpdateGeometry(mesh, 0);
         }
-        
-        private void Update()
-        {           
-            //we changed height from zooming or yaw
-            if(mainCamera.transform.position.y != previousPosition.y || mainCamera.transform.rotation.eulerAngles.y != previousRotation.y)
+
+        public override void LayerToggled()
+        {
+            base.LayerToggled();
+            if (isEnabled)
             {
+                RestoreTiles();
+            }
+            else
+                RemoveTiles();
+        }
+
+        private void Update()
+        {
+            UpdateStreetNames(false);
+        }
+
+        public void RemoveTiles()
+        {           
+            foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
+            {
+                if (tile.Value == null || tile.Value.gameObject == null)
+                    continue;
+
+                if (tile.Value.runningCoroutine != null)
+                {
+                    StopCoroutine(tile.Value.runningCoroutine);
+                    tile.Value.runningCoroutine = null;
+                }
+                RemoveStreetNames(tile.Value, tile.Key);
+            }
+        }
+
+        private void RestoreTiles()
+        {
+            foreach (KeyValuePair<Vector2Int, Tile> tile in tiles)
+            {
+                if (tile.Value == null || tile.Value.gameObject == null)
+                    continue;
+
+                if (tile.Value.runningCoroutine != null)
+                {
+                    StopCoroutine(tile.Value.runningCoroutine);
+                    tile.Value.runningCoroutine = null;
+                }
+
+                TileChange tileChange = new TileChange();
+                tileChange.X = tile.Key.x;
+                tileChange.Y = tile.Key.y;
+                tiles[tile.Key].runningCoroutine = StartCoroutine(DownloadTextNameData(tileChange, tile.Value));
+            }
+        }
+
+        protected virtual void OnPreUpdateTile(Tile tile)
+        {
+
+        }
+
+        public void UpdateStreetNames(bool force)
+        {
+            //we changed height from zooming or yaw
+            if (mainCamera.transform.position.y != previousPosition.y || mainCamera.transform.rotation.eulerAngles.y != previousRotation.y || force)
+            {                
                 previousPosition = mainCamera.transform.position;
                 previousRotation = mainCamera.transform.rotation.eulerAngles;
                 foreach (KeyValuePair<Vector2Int, List<StreetName>> kv in streetNames)
@@ -345,6 +412,7 @@ namespace Netherlands3D.Functionalities.Toponyms
                     streetNamesUpdateQueue[kv.Key].AddRange(list);
                 }
             }
+
             //update in a queue to smooth out any spikes (large data will cause this)
             foreach (KeyValuePair<Vector2Int, List<StreetName>> kv in streetNamesUpdateQueue)
             {
@@ -354,11 +422,13 @@ namespace Netherlands3D.Functionalities.Toponyms
                     //by randomly updating this we smooth it out a bit
                     int rnd = Mathf.FloorToInt(UnityEngine.Random.value * kv.Value.Count);
                     StreetName name = kv.Value[rnd];
-                    kv.Value.RemoveAt(rnd);
+                    kv.Value.RemoveAt(rnd);                
                     UpdateStreetName(name);
                     cnt++;
                     if (cnt > maxSpawnsPerFrame)
+                    {                        
                         break;
+                    }
                 }
             }
         }

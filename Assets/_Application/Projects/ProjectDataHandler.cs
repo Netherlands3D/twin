@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin.Projects
         private static extern void PreventDefaultShortcuts();
 
         [UsedImplicitly] private DataTypeChain fileImporter; // don't remove, this is used in LoadDefaultProject()
-        [UsedImplicitly] private CredentialHandler credentialHandler;// don't remove, this is used in LoadDefaultProject()
+        [UsedImplicitly] private CredentialHandler credentialHandler; // don't remove, this is used in LoadDefaultProject()
         [SerializeField] private string defaultProjectFileName = "ProjectTemplate.nl3d";
         [SerializeField] private ProjectDataStore projectDataStore;
 
@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin.Projects
             }
             set { instance = value; }
         }
-        
+
         private void Awake()
         {
             openProjectAction = applicationActionMap.FindAction("Projects/Open");
@@ -102,7 +102,7 @@ namespace Netherlands3D.Twin.Projects
         private void OnDestroy()
         {
             AssetBundleLoader loader = FindObjectOfType<AssetBundleLoader>();
-            if(loader)
+            if (loader)
                 loader.OnAssetsLoaded.RemoveListener(OnPreloadedAssets);
         }
 
@@ -119,9 +119,8 @@ namespace Netherlands3D.Twin.Projects
 
             redoAction.Enable();
             redoAction.performed += OnRedoAction;
-            
-            credentialHandler.OnAuthorizationHandled.AddListener(fileImporter.DetermineAdapter);
 
+            credentialHandler.OnAuthorizationHandled.AddListener(fileImporter.DetermineAdapter);
         }
 
         private void OnDisable()
@@ -137,7 +136,7 @@ namespace Netherlands3D.Twin.Projects
 
             redoAction.performed -= OnRedoAction;
             redoAction.Disable();
-            
+
             credentialHandler.OnAuthorizationHandled.RemoveListener(fileImporter.DetermineAdapter);
         }
 
@@ -197,20 +196,16 @@ namespace Netherlands3D.Twin.Projects
 #endif
         }
 
-        public void LoadFromFile(string filePaths)
+        public void LoadFromFile(string filePath)
         {
             OnLoadStarted.Invoke();
 
-            var files = filePaths.Split(',');
-            foreach (var filePath in files)
+            if (filePath.ToLower().EndsWith(".nl3d"))
             {
-                if (filePath.ToLower().EndsWith(".nl3d"))
-                {
-                    Debug.Log("loading nl3d file: " + filePath);
-                    projectDataStore.LoadFromFile(filePath);
-                    OnLoadCompleted.Invoke();
-                    return;
-                }
+                Debug.Log("loading nl3d file: " + filePath);
+                projectDataStore.LoadFromFile(filePath);
+                OnLoadCompleted.Invoke();
+                return;
             }
 
             OnLoadFailed.Invoke();
