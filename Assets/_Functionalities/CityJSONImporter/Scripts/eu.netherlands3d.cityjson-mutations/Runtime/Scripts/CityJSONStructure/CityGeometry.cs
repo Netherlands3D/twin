@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -34,6 +35,20 @@ namespace Netherlands3D.CityJson.Structure
         public bool IncludeTextures { get; set; } //todo: Textures currently not implemented yet
 
         public List<int> MaterialIndices { get; private set; }
+        public List<int> MaterialUniqueIndices { get; private set; }
+        private int materialCount;
+        public int MaterialCount
+        {
+            get
+            {
+                if (MaterialIndices == null || MaterialIndices.Count == 0)
+                    return 0;
+
+                MaterialUniqueIndices = MaterialIndices.Distinct().ToList();
+                materialCount = MaterialUniqueIndices.Count();
+                return materialCount;
+            }            
+        }
 
         //Certain CityObjectTypes can only have certain types of geometry. This is described in the specs
         public static bool IsValidType(CityObjectType cityObjectType, GeometryType geometryType)
@@ -155,7 +170,7 @@ namespace Netherlands3D.CityJson.Structure
 
             //private CityBoundary boundaryObject;
             var semanticsNode = geometryNode["semantics"];
-            var materialsNode = geometryNode["materials"];
+            var materialsNode = geometryNode["material"];
             var texturesNode = geometryNode["texture"];
 
             var includeSemantics = semanticsNode.Count > 0;
@@ -202,5 +217,6 @@ namespace Netherlands3D.CityJson.Structure
             multiSurface.FromMesh(mesh);
             BoundaryObject = multiSurface;
         }
+
     }
 }

@@ -12,20 +12,25 @@ namespace Netherlands3D.CityJson.Structure
     [System.Serializable]
     public class CityAppearance
     {
-        static CityAppearance()
-        {
-            var materialGenerator = new NL3DMaterialGenerator();
-            defaultMaterial = materialGenerator.GetDefaultMaterial();
-        }
+        //static CityAppearance()
+        //{
+        //    var materialGenerator = new NL3DMaterialGenerator();
+        //    defaultMaterial = materialGenerator.GetDefaultMaterial();
+        //}
 
         private static Material defaultMaterial;
+        private static Material[] defaultMaterials;
 
         public List<MaterialInfo> Materials { get; private set; } = new List<MaterialInfo>();
         public List<TextureInfo> Textures { get; private set; } = new List<TextureInfo>();
 
-        private static Dictionary<MaterialInfo, Material> cachedMaterials = new Dictionary<MaterialInfo, Material>();
+        private static Dictionary<int, Material> cachedMaterials = new Dictionary<int, Material>();
 
-      
+        public void SetDefaultMaterial(Material material)
+        {
+            defaultMaterial = material;
+            defaultMaterials = new Material[1] { defaultMaterial };
+        }
 
         public static CityAppearance FromJSON(JSONNode node)
         {
@@ -56,21 +61,27 @@ namespace Netherlands3D.CityJson.Structure
 
         public Material[] GenerateMaterialsForGeometry(CityGeometry geometry)
         {
-            Material[] materials = new Material[geometry.MaterialIndices.Count];
-            for (int i = 0; i < geometry.MaterialIndices.Count; i++)
+            Material[] materials = null;
+            if (geometry.MaterialCount == 0)
             {
-                int matIndex = geometry.MaterialIndices[i];
+                return defaultMaterials;
+            }
+
+            materials = new Material[geometry.MaterialCount];
+            for (int i = 0; i < geometry.MaterialUniqueIndices.Count; i++)
+            {
+                int matIndex = geometry.MaterialUniqueIndices[i];
                 if (matIndex >= 0 && matIndex < Materials.Count)
                 {
                     var matInfo = Materials[matIndex];
-                    if (cachedMaterials.ContainsKey(matInfo))
+                    if (cachedMaterials.ContainsKey(matIndex))
                     {
-                        materials[i] = cachedMaterials[matInfo];
+                        materials[i] = cachedMaterials[matIndex];
                         continue;
                     }
 
                     Material unityMat = MaterialInfo.ToUnityMaterial(matInfo, defaultMaterial);
-                    cachedMaterials.Add(matInfo, unityMat);
+                    cachedMaterials.Add(matIndex, unityMat);
                     materials[i] = unityMat;
                 }
             }

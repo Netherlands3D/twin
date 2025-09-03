@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraDistanceFromGeoReferencedObject: 150
+  addMeshCollidersToCityObjects: 1
 --- !u!114 &5482031777458148174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,7 +165,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cityObjectPrefab: {fileID: 1807838613596807431, guid: 5db4ea97f9b3f4daa97b8121c433dd2c,
     type: 3}
-  useAsRelativeRDCenter: 0
-  onCityJSONReceived: {fileID: 0}
-  onAllCityObjectsProcessed: {fileID: 0}
-  isCityJSONType: {fileID: 0}
+  onAllCityObjectsProcessed:
+    m_PersistentCalls:
+      m_Calls: []
+  isCityJSONType:
+    m_PersistentCalls:
+      m_Calls: []
+  DefaultMaterial: {fileID: 2100000, guid: 4964f8b7303387145a5d0c6b232294cd, type: 2}

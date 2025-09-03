@@ -45,6 +45,8 @@ namespace Netherlands3D.CityJson.Structure
         [Tooltip("If assigned it will call this event instead of Asserting the type field is \"CityJSON\"")]
         public UnityEvent<bool> isCityJSONType; //if assigned it will call this event instead of Asserting the type field is "CityJSON"
 
+        [SerializeField] private Material DefaultMaterial; //TODO get this automaticaly from the material generator?
+
         public static CityJSON CreateEmpty()
         {
             var cityJSON = new GameObject("CityJSON").AddComponent<CityJSON>();
@@ -90,6 +92,7 @@ namespace Netherlands3D.CityJson.Structure
             Extensions = node["extensions"];
             Metadata = node["metadata"];
             Appearance = CityAppearance.FromJSON(node["appearance"]); //todo: not implemented yet
+            Appearance.SetDefaultMaterial(DefaultMaterial);
             GeometryTemplates = node["geometry-templates"]; //todo: not implemented yet
             var transformNode = node["transform"];
 
@@ -163,7 +166,7 @@ namespace Netherlands3D.CityJson.Structure
                     go = Instantiate(cityObjectPrefab, transform);
                     co = go.GetComponent<CityObject>();
                 }
-
+                co.SetCityAppearance(Appearance);
                 co.FromJSONNode(cityObjectNode.Key, cityObjectNode.Value, CoordinateSystem, parsedVertices);
                 cityObjects.Add(cityObjectNode.Value, co);
             }
