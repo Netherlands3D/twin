@@ -6,6 +6,7 @@ using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Services;
 using Netherlands3D.Tiles3D;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
@@ -19,7 +20,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
     [RequireComponent(typeof(Read3DTileset))]
     public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels
     {
-        [SerializeField] private string layerParentTag = "3DTileParent";
         public override BoundingBox Bounds => TileSet.root != null ? new BoundingBox(TileSet.root.BottomLeft, TileSet.root.TopRight) : null;
         public Tile3DLayerPropertyData PropertyData => tile3DPropertyData;
 
@@ -141,7 +141,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
                 UpdateURL(new Uri(tile3DPropertyData.Url));
             }
             UpdateCRS(tile3DPropertyData.ContentCRS);
-            transform.SetParent(ServiceLocator.GetService(layerParentTag).transform);
+            ServiceLocator.GetService<Tile3DLayerSet>().Attach(this);
         }
 
         private void ProcessServerResponse(UnityWebRequest request)
@@ -196,12 +196,11 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var urlProperty = (Tile3DLayerPropertyData)properties.FirstOrDefault(p => p is Tile3DLayerPropertyData);
-            if (urlProperty != null)
-            {
-                tile3DPropertyData = urlProperty; //use existing object to overwrite the current instance
-                TileSet.contentCoordinateSystem = (Netherlands3D.Coordinates.CoordinateSystem)tile3DPropertyData.ContentCRS;
-            }
+            var urlProperty = properties.Get<Tile3DLayerPropertyData>();
+            if (urlProperty == null) return;
+
+            tile3DPropertyData = urlProperty; //use existing object to overwrite the current instance
+            TileSet.contentCoordinateSystem = (Coordinates.CoordinateSystem)tile3DPropertyData.ContentCRS;
         }
 
         protected override void OnDestroy()
