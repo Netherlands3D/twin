@@ -36,6 +36,11 @@ namespace Netherlands3D.Catalogs.Catalogs
 
             return Task.FromResult<ICatalogItemCollection>(page);
         }
+        
+        public Task<ICatalogItem> GetAsync(string id)
+        {
+            return Task.FromResult(allRecords.FirstOrDefault(item => item.Id == id));
+        }
 
         public Task<ICatalogItemCollection> SearchAsync(string query, Pagination pagination = null)
         {

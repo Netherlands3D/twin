@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5be2493fce847d3bf08c9085136a4a7, type: 3}
+  m_Name: AssetLibrary
+  m_EditorClassIdentifier: 
+  items:
+  - type: 0
+    id: 1f771842-0be3-48c8-b998-ef42df9ad4fc
+    title: ProRail WFS
+    description: 
+    url: https://service.pdok.nl/prorail/spoorwegen/wfs/v1_0?request=GetCapabilities&service=WFS
+    prefab: {fileID: 0}
+    children: []
+  - type: 1
+    id: 1f771842-0be3-48c8-b998-ef42df9ad4fd
+    title: Kubus
+    description: 
+    url: prefab-library://e0272ce89eb284961a0185f7a4f2ce3f
+    prefab: {fileID: 4705758047892485819, guid: e0272ce89eb284961a0185f7a4f2ce3f,
+      type: 3}
+    children: []

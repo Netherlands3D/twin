@@ -44,6 +44,13 @@ namespace Netherlands3D.Twin.Services
                 case "url":
                 {
                     var url = RetrieveUrlForLayer(layerBuilder);
+                    if (url.Scheme == "prefab-library")
+                    {
+                        // This is a stored prefab identifier from the prefab library, so let's try it again but
+                        // then as a direct build
+                        return await Add(layerBuilder.OfType(url.AbsolutePath));
+                    }
+                    
                     fromUrlImporter.DetermineAdapter(url, layerBuilder.Credentials);
                 
                     // TODO: Capture created LayerData and return it
@@ -123,11 +130,17 @@ namespace Netherlands3D.Twin.Services
 
         private Uri RetrieveUrlForLayer(LayerBuilder layerBuilder)
         {
-            // TODO: Can't we do this another way? This feels leaky
+            // We prefer the direct approach
+            if (layerBuilder.Url != null)
+            {
+                return layerBuilder.Url;
+            }
+
+            // But we need a fallback for project-loaded layers
             var urlPropertyData = layerBuilder.Properties.Get<LayerURLPropertyData>();
             if (urlPropertyData == null)
             {
-                throw new Exception("Cannot add layer with type 'auto' without a URL property");
+                throw new Exception("Cannot add layer with type 'url' without a URL");
             }
 
             return urlPropertyData.Data;
