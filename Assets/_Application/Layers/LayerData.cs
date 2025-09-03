@@ -21,6 +21,7 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, DataMember] protected Guid UUID = Guid.NewGuid();
         public Guid Id => UUID;
 
+        [JsonIgnore] public bool IsNew { get; private set; } = true;
         [SerializeField, DataMember] protected string name;
         [SerializeField, DataMember] protected bool activeSelf = true;
         
@@ -178,6 +179,18 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleAdded = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleRemoved = new();
         [JsonIgnore] public readonly UnityEvent<bool> HasValidCredentialsChanged = new();
+
+        /// <summary>
+        /// Track whether this data object is new, in other words instantiated during this session, or whether it comes
+        /// from persistence. If it was deserialized using Newtonsoft, we know it is not new. In which case we flip the
+        /// flag.
+        /// </summary>
+        /// <param name="_"></param>
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext _)
+        {
+            IsNew = false;
+        }
 
         public void InitializeParent(LayerData initialParent = null)
         { 
