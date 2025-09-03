@@ -216,45 +216,73 @@ namespace Netherlands3D.CityJson.Visualisation
 
         public MeshWithMaterials CreateMeshFromGeometry(CityGeometry geometry, CoordinateSystem coordinateSystem, Vector3Double vertexOffset, Vector3 objectOffset)
         {
+            var materials = cityObject.Appearance.GenerateMaterialsForGeometry(geometry);
             var boundaryMeshes = BoundariesToMeshes(geometry.BoundaryObject, coordinateSystem, vertexOffset);
-            var subMeshes = CombineBoundaryMeshesWithTheSameSemanticObject(boundaryMeshes, objectOffset, out var types);
-            var materials = cityObject.Appearance.GenerateMaterialsForGeometry(geometry); //new Material[types.Count];
-
-            //for (int i = 0; i < materials.Length; i++)
-            //{
-            //    materials[i] = GetMaterial(types[i]);
-            //}
-
+            var subMeshes = CombineBoundaryMeshesWithTheSameSemanticObject(boundaryMeshes, objectOffset, out var types, geometry);
             var mesh = CombineMeshes(subMeshes, Matrix4x4.identity, false); //use identity matrix because we already transformed the submeshes
             return new MeshWithMaterials(mesh, materials);
         }
 
-        public static List<Mesh> CombineBoundaryMeshesWithTheSameSemanticObject(List<BoundaryMeshData> boundaryMeshes, Vector3 offset, out List<SurfaceSemanticType> types)
-        {
+        public static List<Mesh> CombineBoundaryMeshesWithTheSameSemanticObject(List<BoundaryMeshData> boundaryMeshes, Vector3 offset, out List<SurfaceSemanticType> types, CityGeometry geometry)
+        { 
             List<Mesh> combinedMeshes = new List<Mesh>(boundaryMeshes.Count);
             types = new List<SurfaceSemanticType>(boundaryMeshes.Count);
             // var offset = 
             while (boundaryMeshes.Count > 0)
             {
-                List<GeometryTriangulationData> meshDataToCombine = new List<GeometryTriangulationData>();
-                CityGeometrySemanticsObject activeSemanticsObject = boundaryMeshes[boundaryMeshes.Count - 1].SemanticsObject;
-                for (int i = boundaryMeshes.Count - 1; i >= 0; i--) //go backwards because collection will be modified
+                if (geometry.MaterialCount <= 1)
                 {
-                    var boundaryMesh = boundaryMeshes[i];
-                    if (boundaryMesh.SemanticsObject == activeSemanticsObject)
+                    List<GeometryTriangulationData> meshDataToCombine = new List<GeometryTriangulationData>();
+                    CityGeometrySemanticsObject activeSemanticsObject = boundaryMeshes[boundaryMeshes.Count - 1].SemanticsObject;
+                    for (int i = boundaryMeshes.Count - 1; i >= 0; i--) //go backwards because collection will be modified
                     {
-                        if (boundaryMesh.TriangulationData != null) //skip invalid polygons
-                            meshDataToCombine.Add(boundaryMesh.TriangulationData);
-                        boundaryMeshes.Remove(boundaryMesh);
+                        var boundaryMesh = boundaryMeshes[i];
+                        if (boundaryMesh.SemanticsObject == activeSemanticsObject)
+                        {
+                            if (boundaryMesh.TriangulationData != null) //skip invalid polygons
+                                meshDataToCombine.Add(boundaryMesh.TriangulationData);
+                            boundaryMeshes.Remove(boundaryMesh);
+                        }
                     }
-                }
 
-                var combinedMesh = PolygonVisualisationUtility.CreatePolygonMesh(meshDataToCombine, offset);
-                combinedMeshes.Add(combinedMesh);
-                if (activeSemanticsObject != null)
-                    types.Add(activeSemanticsObject.SurfaceType);
+                    var combinedMesh = PolygonVisualisationUtility.CreatePolygonMesh(meshDataToCombine, offset);
+                
+                    combinedMeshes.Add(combinedMesh);
+                    if (activeSemanticsObject != null)
+                        types.Add(activeSemanticsObject.SurfaceType);
+                    else
+                        types.Add(SurfaceSemanticType.Null);
+                }
                 else
-                    types.Add(SurfaceSemanticType.Null);
+                {
+                    List<int> matIndices = geometry.MaterialIndices;
+                    foreach(int uniqueMatIndex in geometry.MaterialUniqueIndices)
+                    {
+                        List<GeometryTriangulationData> meshDataToCombine = new List<GeometryTriangulationData>();
+                        CityGeometrySemanticsObject activeSemanticsObject = boundaryMeshes[boundaryMeshes.Count - 1].SemanticsObject;
+                        for (int i = boundaryMeshes.Count - 1; i >= 0; i--) //go backwards because collection will be modified
+                        {
+                            if (uniqueMatIndex == matIndices[i])
+                            {
+                                var boundaryMesh = boundaryMeshes[i];
+                                if (boundaryMesh.SemanticsObject == activeSemanticsObject)
+                                {
+                                    if (boundaryMesh.TriangulationData != null) //skip invalid polygons
+                                        meshDataToCombine.Add(boundaryMesh.TriangulationData);
+                                }
+                            }
+                        }
+                        
+                        var combinedMesh = PolygonVisualisationUtility.CreatePolygonMesh(meshDataToCombine, offset);
+
+                        combinedMeshes.Add(combinedMesh);
+                        if (activeSemanticsObject != null)
+                            types.Add(activeSemanticsObject.SurfaceType);
+                        else
+                            types.Add(SurfaceSemanticType.Null);
+                    }
+                    boundaryMeshes.Clear();
+                }               
             }
 
             return combinedMeshes;
