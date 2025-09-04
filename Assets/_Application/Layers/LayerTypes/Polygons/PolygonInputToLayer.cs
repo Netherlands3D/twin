@@ -60,16 +60,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             foreach (var layer in newData.RootLayer.ChildrenLayers)
             {
-                if (layer is PolygonSelectionLayer polygon)
-                {
-                    polygon.polygonSelected.AddListener(ProcessPolygonSelection);
-                    layers.Add(polygon.PolygonVisualisation, polygon);
+                if (layer is not PolygonSelectionLayer polygon) continue;
+                // TODO: Why did I need to add this to stop a project from crashing?
+                if (!polygon.PolygonVisualisation) continue;
+
+                polygon.polygonSelected.AddListener(ProcessPolygonSelection);
+                layers.Add(polygon.PolygonVisualisation, polygon);
                     
-                    // Disable the visualisations when loading a project, because the layer panel is not opened.
-                    // If it is a mask it should not be disabled because we need to render it to get the desired masking effect even if the layer panel is not opened.
-                    if(!polygon.IsMask)
-                        polygon.SetVisualisationActive(enabled); 
-                }
+                // Disable the visualisations when loading a project, because the layer panel is not opened.
+                // If it is a mask it should not be disabled because we need to render it to get the desired masking effect even if the layer panel is not opened.
+                if (polygon.IsMask) continue;
+
+                polygon.SetVisualisationActive(enabled);
             }
         }
 
