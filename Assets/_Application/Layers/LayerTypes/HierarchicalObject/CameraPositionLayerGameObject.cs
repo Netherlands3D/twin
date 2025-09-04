@@ -33,7 +33,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void InitializePropertyData()
         {
             var cam = Camera.main;
-            LayerData.SetProperty(new CameraPropertyData(new Coordinate(cam.transform.position), cam.transform.eulerAngles, cam.transform.localScale, cam.orthographic));
+            LayerData.SetProperty(
+                new CameraPropertyData(
+                    new Coordinate(cam.transform.position), 
+                    cam.transform.eulerAngles, 
+                    cam.transform.localScale, 
+                    cam.orthographic
+                )
+            );
         }
 
         protected override void OnDestroy()

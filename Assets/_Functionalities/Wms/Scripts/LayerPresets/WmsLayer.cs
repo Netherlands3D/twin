@@ -42,7 +42,7 @@ namespace Netherlands3D.Functionalities.Wms.LayerPresets
                 .NamedAs(wmsLayerArgs.Filters.name)
                 .ChildOf(wmsLayerArgs.Parent)
                 .AddProperty(new LayerURLPropertyData(wmsLayerArgs.Filters.ToUrlBasedOn(wmsLayerArgs.Url)))
-                .PostBuild(layerData => layerData.ActiveSelf = wmsLayerArgs.DefaultEnabled);
+                .WhenBuilt(layerData => layerData.ActiveSelf = wmsLayerArgs.DefaultEnabled);
         }
     }
 }

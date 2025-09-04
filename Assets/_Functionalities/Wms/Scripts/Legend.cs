@@ -63,7 +63,7 @@ namespace Netherlands3D.Functionalities.Wms
             {
                 if (instance == null)
                 {
-                    instance = FindObjectOfType<Legend>(true);
+                    instance = FindAnyObjectByType<Legend>(FindObjectsInactive.Include);
                 }
 
                 return instance;
@@ -77,7 +77,6 @@ namespace Netherlands3D.Functionalities.Wms
             credentialHandler = GetComponent<ICredentialHandler>();
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
         }
-
 
         private void OnDestroy()
         {
@@ -220,17 +219,23 @@ namespace Netherlands3D.Functionalities.Wms
 
         private void RequestGraphics(Uri getCapabilitiesUri, StoredAuthorization auth)
         {
-            if (activeLegendUrl != requestedLegendUrl)
+            if (activeLegendUrl == requestedLegendUrl) return;
+
+            if (runningCoroutine != null)
             {
-                if (runningCoroutine != null)
-                    StopCoroutine(runningCoroutine);
-
-                ClearGraphics();
-
-                if (!legendUrlDictionary.ContainsKey(getCapabilitiesUri.ToString())) return;
-                var urlContainer = legendUrlDictionary[getCapabilitiesUri.ToString()];
-                runningCoroutine = StartCoroutine(DownloadLegendGraphics(urlContainer, auth));
+                StopCoroutine(runningCoroutine);
             }
+
+            ClearGraphics();
+
+            if (!legendUrlDictionary.ContainsKey(getCapabilitiesUri.ToString()))
+            {
+                Debug.LogError("Could not find legend urls for the given WMS service " + getCapabilitiesUri);
+                return;
+            }
+
+            var urlContainer = legendUrlDictionary[getCapabilitiesUri.ToString()];
+            runningCoroutine = StartCoroutine(DownloadLegendGraphics(urlContainer, auth));
         }
 
 

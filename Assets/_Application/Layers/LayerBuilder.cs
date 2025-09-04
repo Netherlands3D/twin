@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin.Layers
         internal List<LayerPropertyData> Properties { get; } = new();
         [CanBeNull] private Symbolizer DefaultSymbolizer { get; set; }
         private List<LayerStyle> Styles { get; } = new();
-        private Action<LayerData> onPostBuild;
+        private Action<LayerData> whenBuilt;
         
         internal LayerBuilder()
         {
@@ -124,9 +124,9 @@ namespace Netherlands3D.Twin.Layers
             return this;
         }
 
-        public ILayerBuilder PostBuild(Action<LayerData> callback)
+        public ILayerBuilder WhenBuilt(Action<LayerData> callback)
         {
-            this.onPostBuild = callback;
+            this.whenBuilt = callback;
 
             return this;
         }
@@ -155,7 +155,7 @@ namespace Netherlands3D.Twin.Layers
                 layerData.AddStyle(style);
             }
 
-            onPostBuild?.Invoke(layerData);
+            whenBuilt?.Invoke(layerData);
 
             return layerData;
         }

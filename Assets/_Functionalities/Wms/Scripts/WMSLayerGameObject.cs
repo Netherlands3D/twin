@@ -116,7 +116,7 @@ namespace Netherlands3D.Functionalities.Wms
             base.OnDestroy();
             LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
             CredentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
-            Legend.Instance?.UnregisterUrl(URLPropertyData.Data.ToString());
+            Legend.Instance.UnregisterUrl(URLPropertyData.Data.ToString());
         }
 
         public override void OnSelect()

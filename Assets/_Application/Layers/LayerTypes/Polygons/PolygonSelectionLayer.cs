@@ -94,7 +94,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         ) : base(name, prefabId, layerProperties) {
             this.shapeType = shapeType;
 
-            ChangeShape(originalPolygon); 
+            SetShape(originalPolygon); 
             PolygonSelectionCalculator.RegisterPolygon(this);
 
             RegisterListeners();
@@ -118,7 +118,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         ) {
             this.shapeType = shapeType;
 
-            ChangeShape(polygonUnityInput.ToCoordinates().ToList());
+            SetShape(polygonUnityInput.ToCoordinates().ToList());
             PolygonSelectionCalculator.RegisterPolygon(this);
 
             RegisterListeners();
@@ -182,7 +182,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         /// <summary>
         /// Sets the contour causing update of Line or Polygon, based on chosen ShapeType
         /// </summary>
-        public void ChangeShape(List<Coordinate> coordinates)
+        public void SetShape(List<Coordinate> coordinates)
         {
             OriginalPolygon = coordinates;
             RecalculatePolygon();

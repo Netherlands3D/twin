@@ -186,8 +186,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 polygonSelectionVisualisationPrefab.PrefabIdentifier, 
                 unityPolygon, 
                 ShapeType.Polygon,
-                10f,
-                data =>
+                onSpawn: data =>
                 {
                     if (data is not PolygonSelectionLayer layer) return;
 
@@ -202,7 +201,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void UpdateLayer(List<Vector3> editedPolygon)
         {
-            ActiveLayer.ChangeShape(editedPolygon.ToCoordinates().ToList());
+            ActiveLayer.SetShape(editedPolygon.ToCoordinates().ToList());
         }
 
         private void CreateLineLayer(List<Vector3> unityLine)
@@ -234,7 +233,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             if (ActiveLayer?.ShapeType == ShapeType.Grid)
             {
-                ActiveLayer.ChangeShape(new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(topLeft), new Coordinate(topRight), new Coordinate(bottomRight) });
+                ActiveLayer.SetShape(new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(topLeft), new Coordinate(topRight), new Coordinate(bottomRight) });
                 return;
             }
             
@@ -243,8 +242,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 polygonSelectionVisualisationPrefab.PrefabIdentifier, 
                 new List<Vector3>() { bottomLeft, topLeft, topRight, bottomRight }, 
                 ShapeType.Grid,
-                10f,
-                data =>
+                onSpawn: data =>
                 {
                     if (data is not PolygonSelectionLayer layer) return;
 

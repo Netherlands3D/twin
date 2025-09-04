@@ -8,7 +8,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public Vector3 Coordinates = Vector3.zero;
         [SerializeField] private CoordinateSystem coordinateSystem;
 
-
         protected override void OnLayerReady()
         {
             base.OnLayerReady();
