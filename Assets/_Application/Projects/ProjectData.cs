@@ -99,7 +99,7 @@ namespace Netherlands3D.Twin.Projects
             LayerAdded.Invoke(layer);           
         }
 
-        public static void AddReferenceLayer(LayerGameObject referencedLayer)
+        public static void CreateAndAttachReferenceLayerTo(LayerGameObject referencedLayer)
         {
             var referenceName = referencedLayer.name.Replace("(Clone)", "").Trim();
 
@@ -110,7 +110,7 @@ namespace Netherlands3D.Twin.Projects
             var layersWithPropertyData = referencedLayer.GetComponents<ILayerWithPropertyData>();
             foreach (var layerWithPropertyData in layersWithPropertyData)
             {
-                referencedLayer.LayerData.AddProperty(layerWithPropertyData.PropertyData);
+                referencedLayer.LayerData.SetProperty(layerWithPropertyData.PropertyData);
             }
         }
 
@@ -139,10 +139,13 @@ namespace Netherlands3D.Twin.Projects
 
         public void AddFunctionality(FunctionalityData data)
         {
-            if (!functionalities.Contains(data))
-                functionalities.Add(data);
-            else
-                Debug.LogWarning("Not adding " + data.Id + " to ProjectData. A functionality with this ID already exists.");
+            if (functionalities.Contains(data))
+            {
+                Debug.LogWarning($"Not adding {data.Id} to ProjectData. A functionality with this ID already exists.");
+                return;
+            }
+
+            functionalities.Add(data);
         }
 
         public void RemoveFunctionality(FunctionalityData data)

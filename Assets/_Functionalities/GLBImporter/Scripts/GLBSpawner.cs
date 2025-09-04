@@ -6,6 +6,7 @@ using GLTFast;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Tiles3D;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -22,14 +23,9 @@ namespace Netherlands3D.Functionalities.GLBImporter
         public LayerPropertyData PropertyData => propertyData;
         private GameObject importedObject;
 
-        private void Awake()
-        {
-            gameObject.transform.position = ObjectPlacementUtility.GetSpawnPoint();
-        }
-
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var propertyData = properties.OfType<GLBPropertyData>().FirstOrDefault();
+            var propertyData = properties.Get<GLBPropertyData>();
             if (propertyData == null) return;
 
             // Property data is set here, and the parsing and loading of the actual data is done

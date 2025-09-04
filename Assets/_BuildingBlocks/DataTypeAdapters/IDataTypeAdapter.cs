@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 
 namespace Netherlands3D.DataTypeAdapters
 {
@@ -6,6 +7,7 @@ namespace Netherlands3D.DataTypeAdapters
     {
         public string SourceUrl;
         public string LocalFilePath;
+        public string FileName => Path.GetFileName(LocalFilePath);
 
         public List<string> log = new();
     }

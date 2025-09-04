@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Services
 {
-    public class UniqueMonobehaviourService : MonoBehaviour
+    public class UniqueMonoBehaviourService : MonoBehaviour
     {
         [SerializeField] private MonoBehaviour service;
 
@@ -14,7 +14,7 @@ namespace Netherlands3D.Services
 
         private void OnDestroy()
         {
-            ServiceLocator.UnRegisterService(service);
+            ServiceLocator.UnregisterService(service);
         }
     }
 }

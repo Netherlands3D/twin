@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -21,6 +22,7 @@ namespace Netherlands3D.Twin.Projects
     public class PrefabLibrary : ScriptableObject
     {
         public LayerGameObject fallbackPrefab;
+        public PlaceholderLayerGameObject placeholderPrefab;
         public List<PrefabGroup> prefabGroups;
         [NonSerialized] private List<PrefabGroup> prefabRuntimeGroups = new();
         public List<PrefabGroup> PrefabRuntimeGroups => prefabRuntimeGroups;
