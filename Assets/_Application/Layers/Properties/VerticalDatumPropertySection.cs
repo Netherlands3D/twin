@@ -1,23 +1,29 @@
-using System;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
+using NUnit.Framework.Constraints;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Functionalities.OGC3DTiles
+namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class Tile3DLayerPropertySection : PropertySectionWithLayerGameObject
+    public class VerticalDatumPropertySection : PropertySectionWithLayerGameObject
     {
         [SerializeField] private Toggle ellipsoidToggle;
         [SerializeField] private Toggle geoidToggle;
+
+        private ILayerPropertyDataWithCRS propertyData;
         
         private void Start()
         {
-            var tile3dLayerGameObject = LayerGameObject as Tile3DLayerGameObject;
-            var usesEllipsoid = tile3dLayerGameObject.PropertyData.ContentCRS == (int)CoordinateSystem.WGS84_ECEF;
+            propertyData = LayerGameObject.LayerData.LayerProperties.Get<ILayerPropertyDataWithCRS>();
+            if (propertyData == null) return;
 
-            if(usesEllipsoid)
+            // Set initial toggle states
+            var usesEllipsoid = propertyData.ContentCRS == (int)CoordinateSystem.WGS84_ECEF;
+            ellipsoidToggle.isOn = usesEllipsoid;
+            geoidToggle.isOn = !usesEllipsoid;
+            if (usesEllipsoid)
                 ellipsoidToggle.isOn = true;
             else
                 geoidToggle.isOn = true;
@@ -36,16 +42,16 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         {
             if (!isOn)
                 return;
-            var tile3dLayerGameObject = LayerGameObject as Tile3DLayerGameObject;
-            tile3dLayerGameObject.PropertyData.ContentCRS = (int)CoordinateSystem.WGS84_ECEF;
+
+            propertyData.ContentCRS = (int)CoordinateSystem.WGS84_ECEF;
         }
         
         private void SetGeoidHeight(bool isOn)
         {
             if (!isOn)
                 return;
-            var tile3dLayerGameObject = LayerGameObject as Tile3DLayerGameObject;
-            tile3dLayerGameObject.PropertyData.ContentCRS = (int)CoordinateSystem.WGS84_NAP_ECEF;
+
+            propertyData.ContentCRS = (int)CoordinateSystem.WGS84_NAP_ECEF;
         }
     }
 }

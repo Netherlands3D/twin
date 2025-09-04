@@ -1,14 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Tiles3D;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Utility;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.CityJSON
@@ -23,6 +25,8 @@ namespace Netherlands3D.Functionalities.CityJSON
         private void Awake()
         {
             gameObject.transform.position = ObjectPlacementUtility.GetSpawnPoint();
+
+            propertyData.OnCRSChanged.AddListener(UpdateCRS);
         }
 
 
@@ -36,6 +40,19 @@ namespace Netherlands3D.Functionalities.CityJSON
             // If we do that here, then this may conflict with the loading of the project file and it would
             // cause duplication when adding a layer manually instead of through the loading mechanism
             this.propertyData = propertyData;
+        }
+        private void UpdateCRS(int crs)
+        {
+            CoordinateSystem system = (CoordinateSystem)crs;            
+
+            //var holgo = GetComponent<HierarchicalObjectLayerGameObject>();            
+            //if (holgo.WorldTransform.Coordinate.CoordinateSystem == crs) return;
+
+            //Coordinate newCoord = new Coordinate(system);
+            //newCoord.easting = holgo.WorldTransform.Coordinate.easting;
+            //newCoord.northing = holgo.WorldTransform.Coordinate.northing;
+            //newCoord.height = holgo.WorldTransform.Coordinate.height;
+            //holgo.WorldTransform.MoveToCoordinate(newCoord);
         }
 
         private void Start()
@@ -90,7 +107,6 @@ namespace Netherlands3D.Functionalities.CityJSON
                     meshFilter.gameObject.AddComponent<MeshCollider>();
                 }
             }
-
             // Object is loaded / replaced - trigger the application of styling
             holgo.ApplyStyling();
         }
@@ -127,6 +143,11 @@ namespace Netherlands3D.Functionalities.CityJSON
 
             var localPath = AssetUriFactory.GetLocalPath(propertyData.CityJsonFile);
             return localPath;
+        }
+
+        private void OnDestroy()
+        {       
+            propertyData.OnCRSChanged.RemoveListener(UpdateCRS);
         }
     }
 }
