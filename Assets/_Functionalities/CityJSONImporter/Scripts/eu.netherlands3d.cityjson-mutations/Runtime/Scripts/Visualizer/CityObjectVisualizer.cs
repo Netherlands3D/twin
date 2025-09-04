@@ -230,7 +230,7 @@ namespace Netherlands3D.CityJson.Visualisation
             // var offset = 
             while (boundaryMeshes.Count > 0)
             {
-                if (geometry.MaterialCount <= 1)
+                if (geometry.MaterialCount <= 1) //maybe the <= 1 check is obsolete, test if this increases performance
                 {
                     List<GeometryTriangulationData> meshDataToCombine = new List<GeometryTriangulationData>();
                     CityGeometrySemanticsObject activeSemanticsObject = boundaryMeshes[boundaryMeshes.Count - 1].SemanticsObject;
