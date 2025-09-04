@@ -11,6 +11,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -23,6 +24,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
     public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, ILayerWithPropertyPanels, ILayerWithPropertyData
     {
         public override BoundingBox Bounds => CalculateWorldBoundsFromRenderers();
+        public bool DebugBoundingBox = false;
+
+        private int snappingCullingMask = 0;
 
         private BoundingBox CalculateWorldBoundsFromRenderers()
         {
@@ -59,6 +63,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected override void OnLayerInitialize()
         {
+            snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings"));
             WorldTransform = GetComponent<WorldTransform>();
 
             InitializePropertyData();
@@ -133,6 +138,41 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             transform.localScale = newScale;
         }
 
+        public void SnapToGround()
+        {
+            Vector3 heightExtent = new Vector3(0, Bounds.Size.ToUnity().y * 0.5f, 0);
+            Vector3 pivotOffset = Bounds.Center.ToUnity() - transform.position;
+            Vector3 startPosition = Bounds.Center.ToUnity() - heightExtent; //check from the bottom of this object downwards, because we cannot rely on its hitmask
+            Vector3 previousPosition = WorldTransform.Coordinate.ToUnity();
+
+            OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
+            raycaster.GetWorldPointFromDirectionAsync(
+                startPosition,
+                Vector3.down,
+                (hitPos, hit) => OnRaycastDown(hitPos, hit, heightExtent, pivotOffset, previousPosition, raycaster, true),
+                snappingCullingMask
+            );
+        }
+
+        private void OnRaycastDown(Vector3 worldPos, bool hit, Vector3 heightExtent, Vector3 pivotOffset, Vector3 previousPosition, OpticalRaycaster raycaster, bool invertSnapping)
+        {
+            if (hit)
+            {
+                transform.position = worldPos + (invertSnapping ? heightExtent : -heightExtent) - pivotOffset;
+            }
+            else
+            {
+                transform.position = previousPosition;
+                // we didnt hit downwards, this could mean we are below ground, lets do a very high up one
+                raycaster.GetWorldPointFromDirectionAsync(
+                      previousPosition + Vector3.up * 10000,
+                      Vector3.down,
+                      (hitPos, hit) => OnRaycastDown(hitPos, hit, heightExtent, pivotOffset, previousPosition, raycaster, false),
+                      snappingCullingMask
+                 );
+            }
+        }
+
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             var transformProperty = properties.Get<TransformLayerPropertyData>();
@@ -181,6 +221,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 TransformPropertyData.LocalScale = transform.localScale;
                 previousScale = transform.localScale;
             }
+
+            //enable this to debug the exact bounds in worldspace, based on the Bounds (3d)
+            if(DebugBoundingBox)
+                Bounds.Debug(Color.magenta);
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
@@ -216,6 +260,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
 
             transformInterfaceToggle.SetTransformTarget(gameObject);
+            transformInterfaceToggle.SnapTarget.AddListener(SnapToGround);
         }
 
         public override void OnDeselect()
@@ -228,7 +273,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
 
             if (transformInterfaceToggle)
+            {
                 transformInterfaceToggle.ClearTransformTarget();
+                transformInterfaceToggle.SnapTarget.RemoveListener(SnapToGround);
+            }
         }
 
         public List<IPropertySectionInstantiator> GetPropertySections()

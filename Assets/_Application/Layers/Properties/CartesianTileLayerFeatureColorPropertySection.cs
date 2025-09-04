@@ -133,7 +133,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void SetColorizationStylingRule(LayerFeature layerFeature, Color color)
         {
-            CartesianTileLayerStyler.SetColor(layer, layerFeature, color);
+            (layer.Styler as CartesianTileLayerStyler).SetColor(layerFeature, color);
         }
 
         private void UpdateSwatches()
@@ -148,8 +148,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             // if there is no swatch matching this layer feature, we can skip this update
             if (!swatches.TryGetValue(layerFeature, out var swatch)) return;
-
-            var color = CartesianTileLayerStyler.GetColor(layer, layerFeature);
+            
+            var color = (layer.Styler as CartesianTileLayerStyler).GetColor(layerFeature);
 
             swatch.SetColor(color.GetValueOrDefault(Color.white));
         }

@@ -124,9 +124,13 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         private void InitializeStyling(Content content)
         {
             var bitmask = LayerData.DefaultSymbolizer.GetMaskLayerMask();
+            
+            if (bitmask == null)
+                bitmask = LayerGameObject.DEFAULT_MASK_BIT_MASK; 
+            
             foreach (var r in GetComponentsInChildren<Renderer>())
             {
-                UpdateBitMaskForMaterials(bitmask, r.materials);
+                UpdateBitMaskForMaterials(bitmask.Value, r.materials);
             }
         }
 

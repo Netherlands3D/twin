@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.UI
 {
@@ -6,13 +7,11 @@ namespace Netherlands3D.Twin.UI
     {
         [SerializeField] private RectTransform buttonsPanel;
         [SerializeField] private RectTransform visibilityPanel;
-
         [SerializeField] private ToggleGroupItem positionToggle;
         [SerializeField] private ToggleGroupItem rotationToggle;
         [SerializeField] private ToggleGroupItem scaleToggle;
-      
-
-        public TransformHandleInterfaceToggle TransformHandleInterfaceToggle { get; set; }
+        [SerializeField] private Button snapButton;
+       public TransformHandleInterfaceToggle TransformHandleInterfaceToggle { get; set; }
         private TransformAxes transformLocks;
 
         private void OnEnable()
@@ -20,6 +19,7 @@ namespace Netherlands3D.Twin.UI
             positionToggle.Toggle.onValueChanged.AddListener(UpdateGizmoHandles);
             rotationToggle.Toggle.onValueChanged.AddListener(UpdateGizmoHandles);
             scaleToggle.Toggle.onValueChanged.AddListener(UpdateGizmoHandles);
+            snapButton.onClick.AddListener(SnapObject);           
         }
         
         private void OnDisable()
@@ -27,6 +27,7 @@ namespace Netherlands3D.Twin.UI
             positionToggle.Toggle.onValueChanged.RemoveListener(UpdateGizmoHandles);
             rotationToggle.Toggle.onValueChanged.RemoveListener(UpdateGizmoHandles);
             scaleToggle.Toggle.onValueChanged.RemoveListener(UpdateGizmoHandles);
+            snapButton.onClick.RemoveListener(SnapObject);
         }
 
         private void Start()
@@ -109,6 +110,11 @@ namespace Netherlands3D.Twin.UI
                 else if (rotationToggle.IsInteractable)
                     rotationToggle.Toggle.isOn = true;
             }
+        }
+
+        private void SnapObject()
+        {
+            TransformHandleInterfaceToggle.SnapObject();
         }
     }
 }

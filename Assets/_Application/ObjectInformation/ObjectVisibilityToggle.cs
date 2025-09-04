@@ -1,7 +1,10 @@
+
 using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using UnityEngine;
 using UnityEngine.UI;
-using Netherlands3D.Services;
 
 namespace Netherlands3D.Twin.UI
 {
@@ -13,9 +16,11 @@ namespace Netherlands3D.Twin.UI
         [SerializeField] private ToggleGroupItem visibilityToggle;
         [SerializeField] private Dialog visibilityDialog;
 
-        private object currentSelectedFeatureObject;
+        [SerializeField] private Vector2 offset = Vector2.zero;
+
+        private IMapping currentSelectedFeatureObject;
         private object currentSelectedTransformObject;
-        private string currentSelectedBagId;        
+        private string currentSelectedBagId;
 
         private void Awake()
         {
@@ -30,8 +35,12 @@ namespace Netherlands3D.Twin.UI
         private void OnEnable()
         {            
             transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
-            transformInterfaceToggle.SetTarget.AddListener(OnTransformObjectFound);
+            if (transformInterfaceToggle == null) return;
             selector = ServiceLocator.GetService<ObjectSelectorService>();
+            if (selector == null) return;
+
+            transformInterfaceToggle.SetTarget.AddListener(OnTransformObjectFound);          
+
             selector.SelectSubObjectWithBagId.AddListener(OnBagIdFound);
             selector.SelectFeature.AddListener(OnFeatureFound);
             selector.OnSelectDifferentLayer.AddListener(ClearSelection);
@@ -64,8 +73,18 @@ namespace Netherlands3D.Twin.UI
             
             if (toggle)
             {
-                service.ShowDialog(visibilityDialog, new Vector2(20, 0), visibilityToggle.GetComponent<RectTransform>());
+                service.ShowDialog(visibilityDialog, offset, visibilityToggle.GetComponent<RectTransform>());
                 service.ActiveDialog.Close.AddListener(() => visibilityToggle.Toggle.isOn = false);
+                service.ActiveDialog.Confirm.AddListener(() =>
+                {
+                    LayerGameObject layer;
+                    LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out layer);
+                    if (layer != null)
+                    {
+                        (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(feature, false);                        
+                    }
+                    UpdateButton();
+                });
 
                 if (currentSelectedBagId != null)
                 {
@@ -77,7 +96,7 @@ namespace Netherlands3D.Twin.UI
 
         private void OnBagIdFound(IMapping mapping, string bagId)
         {
-            currentSelectedFeatureObject = mapping.MappingObject;
+            currentSelectedFeatureObject = mapping;
             currentSelectedBagId = bagId;
 
             //when selecting a new bag id we should close any dialog if active
@@ -87,7 +106,7 @@ namespace Netherlands3D.Twin.UI
 
         private void OnFeatureFound(IMapping mapping)
         {
-            currentSelectedFeatureObject = mapping.MappingObject;
+            currentSelectedFeatureObject = mapping;
 
             //when selecting a new bag id we should close any dialog if active
             CloseDialog();
@@ -122,7 +141,16 @@ namespace Netherlands3D.Twin.UI
 
         private void UpdateButton()
         {
-            SetVisibile(currentSelectedFeatureObject != null || currentSelectedTransformObject != null);
+            bool visible = currentSelectedTransformObject != null;
+            //we need to check if the featue was already hidden, if so lets not show the toggle to be visible because we shouldnt be able to hide it again
+            if (currentSelectedBagId != null && currentSelectedFeatureObject != null)
+            {
+                LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out LayerGameObject layer);
+                bool? v = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(feature);
+                if(v == true) visible = true;                
+            }
+
+            SetVisibile(visible);
         }
 
         private void SetVisibile(bool visible)

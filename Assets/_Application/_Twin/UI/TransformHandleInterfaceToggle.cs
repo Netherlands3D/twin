@@ -10,6 +10,7 @@ namespace Netherlands3D.Twin.UI
         [SerializeField] private TransformHandleButtonsPanel handleButtonsPanel;
 
         public UnityEvent<GameObject> SetTarget = new();
+        public UnityEvent SnapTarget = new();
 
         public RuntimeTransformHandle RuntimeTransformHandle { get => runtimeTransformHandle; private set => runtimeTransformHandle = value; }
 
@@ -22,7 +23,7 @@ namespace Netherlands3D.Twin.UI
         public void SetTransformTarget(GameObject targetGameObject)
         {
             handleButtonsPanel.ShowPanel(true);
-            handleButtonsPanel.ShowVisibilityPanel(true);
+            handleButtonsPanel.ShowVisibilityPanel(false); //enable this if objects need to have the visibility toggle (disabled for now)
 
             //Set the target of the transform handle
             RuntimeTransformHandle.SetTarget(targetGameObject);
@@ -53,6 +54,11 @@ namespace Netherlands3D.Twin.UI
         public void ShowVisibilityPanel(bool show)
         {
             handleButtonsPanel.ShowVisibilityPanel(show);
+        }
+
+        public void SnapObject()
+        {
+            SnapTarget.Invoke();
         }
     }
 }

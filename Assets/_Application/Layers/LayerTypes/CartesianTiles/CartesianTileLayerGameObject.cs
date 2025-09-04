@@ -6,6 +6,7 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
+using Netherlands3D.SubObjects;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
@@ -14,8 +15,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
     {
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
 
+        public Layer Layer => layer;
+
         private Layer layer;
         private TileHandler tileHandler;
+
+        public override IStyler Styler 
+        {  
+            get 
+            {
+                if (styler == null)
+                {
+                    styler = new CartesianTileLayerStyler(this);
+                }
+                return styler;
+            } 
+        }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
@@ -49,6 +64,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             if (layer is not BinaryMeshLayer binaryMeshLayer) return;
 
+            //we have to apply styling when mappings are created, before we cannot load the values like from awake
+            binaryMeshLayer.OnMappingCreated.AddListener(OnAddedMapping);         
+            binaryMeshLayer.OnMappingRemoved.AddListener(OnRemovedMapping);
+
             for (var materialIndex = 0; materialIndex < binaryMeshLayer.DefaultMaterialList.Count; materialIndex++)
             {
                 // Make a copy of the default material, so we can change the color without affecting the original
@@ -59,6 +78,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
                 var layerFeature = CreateFeature(material);
                 LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+            }
+        }
+
+        private void OnAddedMapping(ObjectMapping mapping)
+        {
+            foreach (ObjectMappingItem item in mapping.items)
+            {
+                var layerFeature = CreateFeature(item);
+                LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+            }
+            ApplyStyling();
+        }
+
+        private void OnRemovedMapping(ObjectMapping mapping)
+        {
+            foreach (ObjectMappingItem item in mapping.items)
+            {
+                LayerFeatures.Remove(item);
             }
         }
 
@@ -79,6 +116,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            if (layer is BinaryMeshLayer binaryMeshLayer)
+            {
+                binaryMeshLayer.OnMappingCreated.RemoveListener(OnAddedMapping);
+                binaryMeshLayer.OnMappingRemoved.RemoveListener(OnRemovedMapping);
+            }
+
             if (Application.isPlaying && tileHandler && layer)
             {
                 tileHandler.RemoveLayer(layer);
@@ -113,9 +156,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             {
                 foreach (var (_, feature) in LayerFeatures)
                 {
-                    CartesianTileLayerStyler.Apply(binaryMeshLayer, GetStyling(feature), feature);
+                    (Styler as CartesianTileLayerStyler).Apply(GetStyling(feature), feature);
                 }
             }
+
 
             base.ApplyStyling();
         }
@@ -132,6 +176,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             // WMS and other projection layers also use this class as base - but they should not add their materials
             if (layer is not BinaryMeshLayer meshLayer) return feature;
+
+            if(feature.Geometry is ObjectMappingItem item)
+            {
+                feature.Attributes.Add(CartesianTileLayerStyler.VisibilityIdentifier, item.objectID);                
+            }
+
             if (feature.Geometry is not Material mat) return feature;
 
             feature.Attributes.Add(
