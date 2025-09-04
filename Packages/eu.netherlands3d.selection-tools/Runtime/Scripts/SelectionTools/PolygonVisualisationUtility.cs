@@ -98,7 +98,7 @@ namespace Netherlands3D.SelectionTools
         /// <param name="addBottom"></param>
         /// <param name="uvCoordinate"></param>
         /// <returns></returns>
-        public static GeometryTriangulationData CreatePolygonGeometryTriangulationData(List<List<Vector3>> contours)
+        public static GeometryTriangulationData CreatePolygonGeometryTriangulationData(List<List<Vector3>> contours, bool invertWindingOrder = false)
         {
             if (contours == null || contours.Count == 0 || contours[0].Count < 3)
                 return null;
@@ -118,10 +118,10 @@ namespace Netherlands3D.SelectionTools
             Vector3 origin = contours[0][0];
 
             // === STEP 2: Build NTS polygon ===
-            LinearRing outerRing = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[0], origin, u, v, true));
+            LinearRing outerRing = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[0], origin, u, v, !invertWindingOrder));
             LinearRing[] holes = new LinearRing[contours.Count - 1];
             for (int h = 1; h < contours.Count; h++)
-                holes[h - 1] = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[h], origin, u, v, false));
+                holes[h - 1] = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[h], origin, u, v, invertWindingOrder));
 
             var polygon = geometryFactory.CreatePolygon(outerRing, holes);
 
@@ -156,7 +156,6 @@ namespace Netherlands3D.SelectionTools
                     if (tri is Polygon tPoly)
                     {
                         var coords = tPoly.Coordinates;
-
                         for (int k = 0; k <= 2; k++)
                         {
                             var c2D = coords[k];
@@ -178,9 +177,9 @@ namespace Netherlands3D.SelectionTools
             return mesh;
         }
 
-        public static Mesh CreatePolygonMesh(List<List<Vector3>> contours)
+        public static Mesh CreatePolygonMesh(List<List<Vector3>> contours, bool invertWindingOrder = false)
         {
-            var triangulationData = CreatePolygonGeometryTriangulationData(contours);
+            var triangulationData = CreatePolygonGeometryTriangulationData(contours, invertWindingOrder);
             return CreatePolygonMesh(new List<GeometryTriangulationData>() { triangulationData }, Vector3.zero);
         }
 

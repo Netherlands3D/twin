@@ -116,23 +116,16 @@ namespace Netherlands3D.SelectionTools
         {
             polygons = newPolygon;
 
+            bool invertWindingOrder = false;
             if (newPolygon.Count > 0)
             {
                 var polygon2D = PolygonCalculator.FlattenPolygon(newPolygon[0], new Plane(Vector3.up, 0));
-                var clockwise = PolygonCalculator.PolygonIsClockwise(polygon2D);
-
-                if (clockwise == createInwardMesh) // (clockwise && inward) || (!clockwise && !inward)
-                {
-                    foreach (var contour in newPolygon)
-                    {
-                        contour.Reverse();
-                    }
-                }
+                invertWindingOrder = PolygonCalculator.PolygonIsClockwise(polygon2D) == createInwardMesh;
             }
 
             DestroyPolygonMesh(); //cleanup to avoid memory leaks
 
-            PolygonMesh = PolygonVisualisationUtility.CreatePolygonMesh(polygons);
+            PolygonMesh = PolygonVisualisationUtility.CreatePolygonMesh(polygons, invertWindingOrder);
             var meshFilter = GetComponent<MeshFilter>();
 
             meshFilter.sharedMesh = PolygonMesh;
