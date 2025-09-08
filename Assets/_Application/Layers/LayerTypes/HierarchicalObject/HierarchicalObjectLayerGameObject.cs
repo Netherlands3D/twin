@@ -131,9 +131,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public void SnapToGround()
         {
             Vector3 currentPosition = transform.position;
+            BoundingBox bounds = Bounds;
             UpdatePosition(new Coordinate(currentPosition + Vector3.up)); //temporary set the object up by 1
-            Vector3 heightExtent = new Vector3(0, Bounds.Size.ToUnity().y * 0.5f, 0);
-            float pivotOffset = Bounds.Center.ToUnity().y - transform.position.y;
+            float heightExtent = bounds.Size.ToUnity().y * 0.5f;
+            float pivotOffset = bounds.Center.ToUnity().y - transform.position.y;
             Vector3 startPosition = currentPosition + Vector3.up * 0.5f; //temporary set the raycast startpoint up by 0.5 and check from the bottom of this object downwards, because we cannot rely on its hitmask
           
             OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
@@ -145,11 +146,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             );
         }
 
-        private void OnRaycastDown(Vector3 worldPos, bool hit, Vector3 heightExtent, float pivotOffset, Vector3 previousPosition, OpticalRaycaster raycaster, bool invertSnapping)
+        private void OnRaycastDown(Vector3 worldPos, bool hit, float heightExtent, float pivotOffset, Vector3 previousPosition, OpticalRaycaster raycaster, bool invertSnapping)
         {
             if (hit)
             {
-                Coordinate target = new Coordinate(worldPos + (invertSnapping ? heightExtent : -heightExtent) - Vector3.up * pivotOffset);
+                Coordinate target = new Coordinate(worldPos + Vector3.up * (invertSnapping ? heightExtent : -heightExtent) - Vector3.up * pivotOffset);
                 UpdatePosition(target);
             }
             else
