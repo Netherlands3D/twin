@@ -60,6 +60,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         LayerPropertyData ILayerWithPropertyData.PropertyData => transformPropertyData;
         public bool TransformIsSetFromProperty { get; private set; } = false;
 
+        private BoundingBox 
+
         protected virtual void Awake()
         {
             snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings"));
@@ -148,11 +150,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             if (hit)
             {
-                transform.position = worldPos + (invertSnapping ? heightExtent : -heightExtent) - pivotOffset;
+                Coordinate target = new Coordinate(worldPos + (invertSnapping ? heightExtent : -heightExtent) - pivotOffset);
+                UpdatePosition(target);
             }
             else
             {
-                transform.position = previousPosition;
+                Coordinate target = new Coordinate(previousPosition);
+                UpdatePosition(target);
+
+                if(!invertSnapping)
+                    return;
                 // we didnt hit downwards, this could mean we are below ground, lets do a very high up one
                 raycaster.GetWorldPointFromDirectionAsync(
                       previousPosition + Vector3.up * 10000,
