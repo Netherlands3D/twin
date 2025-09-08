@@ -132,11 +132,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             Vector3 currentPosition = transform.position;
             BoundingBox bounds = Bounds;
-            UpdatePosition(new Coordinate(currentPosition + Vector3.up * OpticalRaycaster.MinimumDepth * 3)); //temporary set the object up by 1
+            Vector3 boundsCenter = bounds.Center.ToUnity();
             float heightExtent = bounds.Size.ToUnity().y * 0.5f;
-            float pivotOffset = bounds.Center.ToUnity().y - transform.position.y;
-            Vector3 startPosition = currentPosition + Vector3.up * OpticalRaycaster.MinimumDepth * 2; //temporary set the raycast startpoint up by 0.5 and check from the bottom of this object downwards, because we cannot rely on its hitmask
-          
+            float pivotOffset = boundsCenter.y - currentPosition.y;
+            
+            Vector3 startPosition = new Vector3(currentPosition.x, boundsCenter.y, currentPosition.z);
             OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
             raycaster.GetWorldPointFromDirectionAsync(
                 startPosition,
@@ -155,10 +155,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
             else
             {
-                Debug.Log("no hit " );
-                Coordinate target = new Coordinate(previousPosition); //move the object back
-                UpdatePosition(target);
-                
                 if (!invertSnapping)
                     return;
                 // we didnt hit downwards, this could mean we are below ground, lets do a very high up one
