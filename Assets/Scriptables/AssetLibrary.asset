@@ -14,17 +14,81 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items:
   - type: 0
-    id: 1f771842-0be3-48c8-b998-ef42df9ad4fc
+    id: test-prorail-wfs
     title: ProRail WFS
     description: 
     url: https://service.pdok.nl/prorail/spoorwegen/wfs/v1_0?request=GetCapabilities&service=WFS
     prefab: {fileID: 0}
     children: []
   - type: 1
-    id: 1f771842-0be3-48c8-b998-ef42df9ad4fd
+    id: test-kubus
     title: Kubus
     description: 
     url: prefab-library://e0272ce89eb284961a0185f7a4f2ce3f
     prefab: {fileID: 4705758047892485819, guid: e0272ce89eb284961a0185f7a4f2ce3f,
       type: 3}
     children: []
+  - type: 2
+    id: folder-basislagen
+    title: Basislagen
+    description: 
+    url: prefab-library://e0272ce89eb284961a0185f7a4f2ce3f
+    prefab: {fileID: 4705758047892485819, guid: e0272ce89eb284961a0185f7a4f2ce3f,
+      type: 3}
+    children:
+    - type: 1
+      id: basislaag-maaiveld
+      title: Maaiveld
+      description: 
+      url: 
+      prefab: {fileID: 4447745080902320339, guid: 2e71ce721dd3e41c194c6fb05ad10520,
+        type: 3}
+      children: []
+    - type: 1
+      id: basislaag-gebouwen
+      title: Gebouwen
+      description: 
+      url: 
+      prefab: {fileID: 6432123512545269546, guid: cc9d0f9a5a1724c9695a1bef5ecccaec,
+        type: 3}
+      children: []
+    - type: 1
+      id: basislaag-bomen
+      title: Bomen
+      description: 
+      url: 
+      prefab: {fileID: 3732835547605356908, guid: 6915dd70276474a0688a5fb1a9c248c0,
+        type: 3}
+      children: []
+    - type: 1
+      id: basislaag-bossen
+      title: Bossen
+      description: 
+      url: 
+      prefab: {fileID: 3732835547605356908, guid: 65e87ace5e7c94c2dba27317474f1179,
+        type: 3}
+      children: []
+  - type: 2
+    id: folder-3d-tiles
+    title: 3D Tiles
+    description: 
+    url: prefab-library://e0272ce89eb284961a0185f7a4f2ce3f
+    prefab: {fileID: 4705758047892485819, guid: e0272ce89eb284961a0185f7a4f2ce3f,
+      type: 3}
+    children:
+    - type: 1
+      id: 3d-tiles-gebouwen
+      title: Gebouwen (3D Tiles)
+      description: 
+      url: 
+      prefab: {fileID: 4142489338678956943, guid: 416bb3a0b4137324d860b58a6e8f484e,
+        type: 3}
+      children: []
+    - type: 1
+      id: 3d-tiles-maaiveld
+      title: Maaiveld (3D Tiles)
+      description: 
+      url: 
+      prefab: {fileID: 4142489338678956943, guid: 2823e5ec82fe248febd620a0b025bcca,
+        type: 3}
+      children: []

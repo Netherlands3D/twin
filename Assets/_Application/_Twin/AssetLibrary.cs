@@ -113,16 +113,23 @@ namespace Netherlands3D._Application._Twin
 
         public async void Load(string id)
         {
+            Debug.Log("Loading " + id);
             var item = await Catalog.GetAsync(id);
+            Debug.Log(item);
             var layerBuilder = CreateLayerBuilder(item);
             await App.Layers.Add(layerBuilder);
         }
 
         private ILayerBuilder CreateLayerBuilder(ICatalogItem item)
         {
+            if (item is null)
+            {
+                Debug.LogError("No catalog item was passed to create a layer from");
+                return null;
+            }
             if (item is not RecordItem recordItem)
             {
-                Debug.LogError("Attempting to load a catalog item that is not a record");
+                Debug.LogError("Attempting to load a catalog item that is not a record, got " + item.GetType());
                 return null;
             }
             

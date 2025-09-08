@@ -15,11 +15,14 @@ namespace Netherlands3D._Application._Twin.Editor
 
             public SerializedProperty Id => prop.FindPropertyRelative("id");
             public SerializedProperty Type => prop.FindPropertyRelative("type");
+            public AssetLibrary.EntryType TypeValue => (AssetLibrary.EntryType)Type.enumValueIndex;
             public SerializedProperty Title => prop.FindPropertyRelative("title");
             public SerializedProperty Description => prop.FindPropertyRelative("description");
             public SerializedProperty Prefab => prop.FindPropertyRelative("prefab");
             public SerializedProperty Url => prop.FindPropertyRelative("url");
             public SerializedProperty Children => prop.FindPropertyRelative("children");
+
+            public bool IsImportable => TypeValue is AssetLibrary.EntryType.Prefab or AssetLibrary.EntryType.Url;
 
             public BaseField<string> CreateTitleField(Foldout root)
             {
@@ -55,19 +58,30 @@ namespace Netherlands3D._Application._Twin.Editor
                 return typeField;
             }
 
-            public VisualElement CreateIdField()
+            public VisualElement CreateIdFieldWithButton()
             {
-                var idField = new PropertyField(Id, "Id");
-                
-                idField.RegisterCallback<AttachToPanelEvent>(evt =>
-                {
-                    if (!string.IsNullOrEmpty(Id.stringValue)) return;
+                var row = new VisualElement();
+                row.style.flexDirection = FlexDirection.Row;
+                row.style.alignItems = Align.Center;
 
+                var idText = new TextField("Id")
+                {
+                    bindingPath = Id.propertyPath,
+                    style = { flexGrow = 1 }
+                };
+
+                var genBtn = new Button(() =>
+                {
                     Id.stringValue = Guid.NewGuid().ToString();
-                    prop.serializedObject.ApplyModifiedProperties();
-                });
-                
-                return idField;
+                    Id.serializedObject.ApplyModifiedProperties();
+                    idText.SetValueWithoutNotify(Id.stringValue);
+                })
+                { text = "Generate" };
+
+                row.Add(idText);
+                row.Add(genBtn);
+
+                return row;
             }
 
             public VisualElement CreateDescriptionField() => new PropertyField(Description, "Description");
@@ -104,7 +118,7 @@ namespace Netherlands3D._Application._Twin.Editor
 
             root.text = string.IsNullOrEmpty(entry.Title.stringValue) ? "Entry" : entry.Title.stringValue;
             root.Add(entry.CreateTypeField(_ => RefreshVisibility(urlField, prefabField, childrenField, entry)));
-            root.Add(entry.CreateIdField());
+            root.Add(entry.CreateIdFieldWithButton());
             root.Add(entry.CreateTitleField(root));
             root.Add(entry.CreateDescriptionField());
             root.Add(CreateSeparator());
@@ -113,7 +127,7 @@ namespace Netherlands3D._Application._Twin.Editor
             root.Add(childrenField);
             root.Bind(prop.serializedObject);
 
-            if (Application.isPlaying)
+            if (entry.IsImportable && Application.isPlaying)
             {
                 var actionBtn = new Button(entry.Load) { text = "Import" };
                 root.Add(actionBtn);
@@ -127,10 +141,9 @@ namespace Netherlands3D._Application._Twin.Editor
 
         private void RefreshVisibility(VisualElement url, VisualElement prefab, VisualElement children, EntryProps entry)
         {
-            var t = (AssetLibrary.EntryType)entry.Type.enumValueIndex;
-            url.style.display = t == AssetLibrary.EntryType.Url ? DisplayStyle.Flex : DisplayStyle.None;
-            prefab.style.display = t == AssetLibrary.EntryType.Prefab ? DisplayStyle.Flex : DisplayStyle.None;
-            children.style.display = t is AssetLibrary.EntryType.Folder or AssetLibrary.EntryType.DataSet 
+            url.style.display = entry.TypeValue == AssetLibrary.EntryType.Url ? DisplayStyle.Flex : DisplayStyle.None;
+            prefab.style.display = entry.TypeValue == AssetLibrary.EntryType.Prefab ? DisplayStyle.Flex : DisplayStyle.None;
+            children.style.display = entry.TypeValue is AssetLibrary.EntryType.Folder or AssetLibrary.EntryType.DataSet 
                 ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
