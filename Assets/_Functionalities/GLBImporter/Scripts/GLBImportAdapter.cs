@@ -1,13 +1,9 @@
 using System.IO;
-using UnityEngine;
-using UnityEngine.Events;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.GLBImporter.LayerPresets;
-using Netherlands3D.Functionalities.OBJImporter.LayerPresets;
 using Netherlands3D.Twin;
-using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
-using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using UnityEngine;
 
 namespace Netherlands3D.Functionalities.GLBImporter
 {

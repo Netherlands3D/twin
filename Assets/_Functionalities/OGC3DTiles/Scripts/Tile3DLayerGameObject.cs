@@ -63,7 +63,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         protected override void OnLayerInitialize()
         {
             CredentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
-            tile3DPropertyData = new Tile3DLayerPropertyData(TilesetURLWithoutQuery(TileSet.tilesetUrl),(int)Coordinates.CoordinateSystem.WGS84_ECEF);
+            tile3DPropertyData = new Tile3DLayerPropertyData(TilesetURLWithoutQuery(TileSet.tilesetUrl));
             
             // listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
             tile3DPropertyData.OnUrlChanged.AddListener(UpdateURL);

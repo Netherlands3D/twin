@@ -72,8 +72,6 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
             var layerData = await App.Layers.Add(
                 LayerBuilder.Create()
                     .OfType(prefab.PrefabIdentifier)
-                    .PositionedAt(Vector3.zero)
-                    .Rotated(Quaternion.identity)
                     .NamedAs(prefab.name)
             );
             

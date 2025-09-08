@@ -52,6 +52,7 @@ namespace Netherlands3D.Twin.Layers
             
             return prefab.SpawnLocation switch
             {
+                SpawnLocation.Auto => await SpawnObject(layerData, prefab),
                 SpawnLocation.OpticalCenter => await SpawnAtOpticalPosition(layerData, prefab),
                 SpawnLocation.CameraPosition => await SpawnAtCameraPosition(layerData, prefab),
                 SpawnLocation.PrefabPosition => await SpawnObject(layerData, prefab, prefab.transform.position, true),
@@ -117,6 +118,17 @@ namespace Netherlands3D.Twin.Layers
             }
 
             return await SpawnObject(layerData, prefab, position, prefab.transform.rotation);
+        }
+
+        private async Task<LayerGameObject> SpawnObject(
+            ReferencedLayerData layerData,
+            LayerGameObject prefab
+        ) {
+            var placeholder = layerData.Reference;
+            
+            var layerGameObjects = await Object.InstantiateAsync(prefab, placeholder.transform);
+
+            return layerGameObjects.FirstOrDefault();
         }
 
         private async Task<LayerGameObject> SpawnObject(

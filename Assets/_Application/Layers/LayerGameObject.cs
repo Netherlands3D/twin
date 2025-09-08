@@ -18,9 +18,10 @@ namespace Netherlands3D.Twin.Layers
 {
     public enum SpawnLocation
     {
-        OpticalCenter, //Center of the screen calculated through the optical Raycaster, keep the prefab rotation
-        CameraPosition, //Position and rotation of the main camera
-        PrefabPosition //keep the original prefab position and rotation
+        Auto = -1, // Do not pass a spawn location - similar to Instantiate without position and rotation properties
+        OpticalCenter = 0, //Center of the screen calculated through the optical Raycaster, keep the prefab rotation
+        CameraPosition = 1, //Position and rotation of the main camera
+        PrefabPosition = 2 //keep the original prefab position and rotation
     }
     
     public abstract class LayerGameObject : MonoBehaviour, IStylable
