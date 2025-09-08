@@ -59,7 +59,7 @@ namespace Netherlands3D._Application._Twin
                         var resolved = url;
                         if (prefab)
                         {
-                            resolved = $"prefab-library://{prefab.PrefabIdentifier}";
+                            resolved = $"prefab-library:///{prefab.PrefabIdentifier}";
                         }
 
                         return InMemoryCatalog.CreateRecord(
@@ -126,12 +126,9 @@ namespace Netherlands3D._Application._Twin
                 return null;
             }
             
-            var lb = LayerBuilder.Create();
-            lb.FromUrl(recordItem.Url);
-            
-            // convert item to LayerBuilder
-
-            return lb;
+            return LayerBuilder.Create()
+                .FromUrl(recordItem.Url)
+                .NamedAs(recordItem.Title);
         }
     }
 }

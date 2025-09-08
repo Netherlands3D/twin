@@ -48,7 +48,7 @@ namespace Netherlands3D.Twin.Services
                     {
                         // This is a stored prefab identifier from the prefab library, so let's try it again but
                         // then as a direct build
-                        return await Add(layerBuilder.OfType(url.AbsolutePath));
+                        return await Add(layerBuilder.OfType(url.AbsolutePath.Trim('/')));
                     }
                     
                     fromUrlImporter.DetermineAdapter(url, layerBuilder.Credentials);
