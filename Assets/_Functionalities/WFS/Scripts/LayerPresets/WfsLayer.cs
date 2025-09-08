@@ -4,7 +4,6 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
 
 namespace Netherlands3D.Functionalities.Wfs.LayerPresets
 {
@@ -42,15 +41,13 @@ namespace Netherlands3D.Functionalities.Wfs.LayerPresets
             styling.SetFillColor(color);
             styling.SetStrokeColor(color);
 
-            var uri = AssetUriFactory.CreateRemoteAssetUri(wfsArgs.FeatureUrl.ToString());
-
             return builder
                 .OfType(PrefabIdentifier)
                 .NamedAs(wfsArgs.Title)
                 .ChildOf(wfsArgs.Parent)
                 .WithColor(color)
                 .SetDefaultStyling(styling)
-                .AddProperty(new LayerURLPropertyData(uri));
+                .AddProperty(new LayerURLPropertyData(wfsArgs.FeatureUrl));
         }
     }
 }
