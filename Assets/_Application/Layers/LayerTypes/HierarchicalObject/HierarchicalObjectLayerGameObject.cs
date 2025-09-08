@@ -60,7 +60,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         LayerPropertyData ILayerWithPropertyData.PropertyData => transformPropertyData;
         public bool TransformIsSetFromProperty { get; private set; } = false;
 
-        private BoundingBox 
+        private BoundingBox initializedBounds;
 
         protected virtual void Awake()
         {
@@ -104,6 +104,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
             transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
             transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
+
+            initializedBounds = CalculateWorldBoundsFromRenderers();
         }
 
         protected override void OnDestroy()
@@ -132,9 +134,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public void SnapToGround()
         {
-            Vector3 heightExtent = new Vector3(0, Bounds.Size.ToUnity().y * 0.5f, 0);
-            Vector3 pivotOffset = Bounds.Center.ToUnity() - transform.position;
-            Vector3 startPosition = Bounds.Center.ToUnity() - heightExtent; //check from the bottom of this object downwards, because we cannot rely on its hitmask
+            Vector3 heightExtent = new Vector3(0, initializedBounds.Size.ToUnity().y * 0.5f, 0);
+            Vector3 pivotOffset = initializedBounds.Center.ToUnity() - transform.position;
+            Vector3 startPosition = initializedBounds.Center.ToUnity() - heightExtent; //check from the bottom of this object downwards, because we cannot rely on its hitmask
             Vector3 previousPosition = WorldTransform.Coordinate.ToUnity();
 
             OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
