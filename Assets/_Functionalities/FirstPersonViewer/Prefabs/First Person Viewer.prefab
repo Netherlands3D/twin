@@ -232,6 +232,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b283f1e59e3075444aa23b5cf9a685a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6,
+    type: 3}
   verticalInput: {fileID: 11400000, guid: 22faa7b25fade4845812eab67089a12b, type: 2}
   horizontalInput: {fileID: 11400000, guid: 93242d5c5434ab44c966480e1ff5c8d5, type: 2}
   walkSpeed: 10

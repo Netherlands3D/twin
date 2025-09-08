@@ -9,27 +9,71 @@ namespace Netherlands3D.FirstPersonViewer
 {
     public class FirstPersonViewer : MonoBehaviour
     {
-        [SerializeField] private FloatEvent verticalInput;
-        [SerializeField] private FloatEvent horizontalInput;
+        [Header("Input")]
+        [SerializeField] private InputActionAsset inputActionAsset;
 
+        private InputAction moveAction;
+
+        //Raycasting
         private OpticalRaycaster raycaster;
         private int snappingCullingMask = 0;
 
-        [Header("TEMP")]
-        [SerializeField] private float walkSpeed;
+        //Falling
+        private float fallSpeed;
+        private readonly float gravity = 9.81f;
+        private readonly float maxFallSpeed = 55f;
         private float yPositionTarget;
 
-        private bool isFalling;
-        private Vector3 targetPosition;
+        [Header("TEMP")]
+        [SerializeField] private float walkSpeed;
+
+        [Header("Remove")]
+        [SerializeField] private FloatEvent verticalInput;
+        [SerializeField] private FloatEvent horizontalInput;
+
 
         private void Start()
         {
-            verticalInput.AddListenerStarted(MoveForwardBackwards);
-            horizontalInput.AddListenerStarted(MoveHorizontally);
+            yPositionTarget = transform.position.y;
+
+            moveAction = inputActionAsset.FindAction("Move");
+
+            //verticalInput.AddListenerStarted(MoveForwardBackwards);
+            //horizontalInput.AddListenerStarted(MoveHorizontally);
 
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
             snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings"));
+        }
+
+        private void Update()
+        {
+            Vector2 moveInput = moveAction.ReadValue<Vector2>();
+            if(moveInput.magnitude > 0)
+            {
+                MoveCamera(moveInput);
+            }
+
+
+            if (transform.position.y > yPositionTarget)
+            {
+                fallSpeed = Mathf.Min(fallSpeed + gravity * Time.deltaTime, maxFallSpeed);
+                
+                transform.position += Vector3.down * fallSpeed * Time.deltaTime; 
+            }
+            else if (transform.position.y < yPositionTarget)
+            {
+                transform.position = new Vector3(transform.position.x, yPositionTarget, transform.position.z);
+                fallSpeed = 0f;
+            }
+        }
+
+        private void MoveCamera(Vector2 moveInput)
+        {
+            Vector3 direction = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
+
+            transform.Translate(direction * walkSpeed * Time.deltaTime);
+            SnapToFloor();
         }
 
         private void MoveForwardBackwards(float amount)
@@ -42,7 +86,7 @@ namespace Netherlands3D.FirstPersonViewer
         private void MoveHorizontally(float amount)
         {
             transform.Translate(transform.right * amount * walkSpeed * Time.deltaTime, Space.World);
-        }     
+        }
 
         private void SnapToFloor()
         {
@@ -50,10 +94,7 @@ namespace Netherlands3D.FirstPersonViewer
             {
                 if (hit)
                 {
-                    targetPosition = transform.position;
-                    targetPosition.y = point.y;
-
-                    transform.position = targetPosition;
+                    yPositionTarget = point.y;
                 }
             }, snappingCullingMask);
         }

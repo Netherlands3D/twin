@@ -8,20 +8,27 @@ namespace Netherlands3D
 {
     public class FirstPersonViewerCamera : MonoBehaviour
     {
+        [Header("Input")]
+        [SerializeField] private InputActionAsset inputActionAsset;
+        //private InputAction lookInput;
+
+
         private Camera firstPersonViewerCamera;
 
         [SerializeField] private FloatEvent cameraHeight;
         [SerializeField] private FloatEvent sensitivty;
 
-        private float cameraHeightOffset = 2f;
+        private float cameraHeightOffset = 1.75f;
         private float currentsensitivity = 10f;
 
         [SerializeField] private Transform viewerBase;
         private float xRotation;
 
+        private Camera mainCam;
+
+        [Header("Remove")]
         [SerializeField] private Vector3Event lookInput;
 
-        private Camera mainCam;
 
         private void Start()
         {
