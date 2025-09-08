@@ -155,15 +155,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
             else
             {
-                Coordinate target = new Coordinate(previousPosition);
+                Debug.Log("no hit " );
+                Coordinate target = new Coordinate(previousPosition); //move the object back
                 UpdatePosition(target);
-
+                
                 if (!invertSnapping)
                     return;
                 // we didnt hit downwards, this could mean we are below ground, lets do a very high up one
                 raycaster.GetWorldPointFromDirectionAsync(
-                      previousPosition + Vector3.up * 1000,
-                      Vector3.down,
+                      previousPosition + Vector3.down * 1000,
+                      Vector3.up,
                       (hitPos, hit) => OnRaycastDown(hitPos, hit, heightExtent, pivotOffset, previousPosition, raycaster, false),
                       snappingCullingMask
                  );
