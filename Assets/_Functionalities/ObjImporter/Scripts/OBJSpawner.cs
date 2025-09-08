@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -13,6 +14,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Functionalities.OBJImporter
 {
+    [RequireComponent(typeof(HierarchicalObjectLayerGameObject))]
     public class OBJSpawner : MonoBehaviour, ILayerWithPropertyData
     {
         [Header("Required input")]
@@ -47,7 +49,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var propertyData = properties.OfType<OBJPropertyData>().FirstOrDefault();
+            var propertyData = properties.Get<OBJPropertyData>();
             if (propertyData == null) return;
 
             // Property data is set here, and the parsing and loading of the actual data is done
@@ -116,11 +118,9 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
         private void PositionImportedGameObject(GameObject returnedGameObject)
         {
-            bool isGeoReferenced = !importer.createdGameobjectIsMoveable;
-
-            if (isGeoReferenced)
+            if (IsGeoReferenced())
             {
-                PositionGeoReferencedObj(returnedGameObject);
+                PositionGeoReferencedObj(returnedGameObject, TransformPropertyData.Position);
                 return;
             }
 
@@ -132,21 +132,19 @@ namespace Netherlands3D.Functionalities.OBJImporter
             }
         }
 
-        private void PositionGeoReferencedObj(GameObject returnedGameObject)
+        private bool IsGeoReferenced()
         {
-            var coordinate = TransformPropertyData.Position;
+            return !importer.createdGameobjectIsMoveable;
+        }
 
+        private void PositionGeoReferencedObj(GameObject returnedGameObject, Coordinate coordinate)
+        {
             if (layerGameObject.LayerData.IsNew)
             {
                 // georeferenced position as coordinate. todo: there is already precision lost in the importer, this should
                 // be preserved while parsing, as there is nothing we can do now anymore.
                 coordinate = new Coordinate(returnedGameObject.transform.position);
-            }
             
-            // move the camera only if this is a user imported object, not if this is a project import. We know this
-            // because a project import has its Transform property set.
-            if (layerGameObject.LayerData.IsNew) 
-            {
                 // move the camera to the georeferenced position, this also shifts the origin if needed.
                 cameraMover.LookAtTarget(coordinate, cameraDistanceFromGeoReferencedObject); 
             }
