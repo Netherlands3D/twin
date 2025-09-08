@@ -141,29 +141,37 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             raycaster.GetWorldPointFromDirectionAsync(
                 startPosition,
                 Vector3.down,
-                (hitPos, hit) => OnRaycastDown(hitPos, hit, heightExtent, pivotOffset, currentPosition, raycaster, true),
+                (hitPos, hit) => OnRaycastDown(hitPos, hit, heightExtent, pivotOffset, currentPosition, raycaster),
                 snappingCullingMask
             );
         }
 
-        private void OnRaycastDown(Vector3 worldPos, bool hit, float heightExtent, float pivotOffset, Vector3 previousPosition, OpticalRaycaster raycaster, bool invertSnapping)
+        //invert snapping direction based on the direction of the raycast
+        private void OnRaycastDown(Vector3 worldPos, bool hit, float heightExtent, float pivotOffset, Vector3 previousPosition, OpticalRaycaster raycaster)
         {
             if (hit)
             {
-                Coordinate target = new Coordinate(worldPos + Vector3.up * (invertSnapping ? heightExtent : -heightExtent) - Vector3.up * pivotOffset);
+                Coordinate target = new Coordinate(worldPos + Vector3.up * (heightExtent - pivotOffset));
                 UpdatePosition(target);
             }
             else
             {
-                if (!invertSnapping)
-                    return;
-                // we didnt hit downwards, this could mean we are below ground, lets do a very high up one
+                // we didnt hit downwards, this could mean we are below ground, lets raycast up to move it aginst the ground
                 raycaster.GetWorldPointFromDirectionAsync(
-                      previousPosition + Vector3.down * 1000,
+                      previousPosition,
                       Vector3.up,
-                      (hitPos, hit) => OnRaycastDown(hitPos, hit, heightExtent, pivotOffset, previousPosition, raycaster, false),
+                      (hitPos, hit) => OnRaycastUp(hitPos, hit, heightExtent, pivotOffset),
                       snappingCullingMask
                  );
+            }
+        }
+
+        private void OnRaycastUp(Vector3 worldPos, bool hit, float heightExtent, float pivotOffset)
+        {
+            if (hit)
+            {
+                Coordinate target = new Coordinate(worldPos + Vector3.up * (-heightExtent - pivotOffset));
+                UpdatePosition(target);
             }
         }
 
