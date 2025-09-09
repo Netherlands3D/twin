@@ -38,9 +38,6 @@ namespace Netherlands3D.FirstPersonViewer
 
             moveAction = inputActionAsset.FindAction("Move");
 
-            //verticalInput.AddListenerStarted(MoveForwardBackwards);
-            //horizontalInput.AddListenerStarted(MoveHorizontally);
-
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
             snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings"));
@@ -72,20 +69,8 @@ namespace Netherlands3D.FirstPersonViewer
         {
             Vector3 direction = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
 
-            transform.Translate(direction * walkSpeed * Time.deltaTime);
+            transform.Translate(direction * walkSpeed * Time.deltaTime, Space.World);
             SnapToFloor();
-        }
-
-        private void MoveForwardBackwards(float amount)
-        {
-            transform.Translate(transform.forward * amount * walkSpeed * Time.deltaTime, Space.World);
-
-            SnapToFloor();
-        }
-
-        private void MoveHorizontally(float amount)
-        {
-            transform.Translate(transform.right * amount * walkSpeed * Time.deltaTime, Space.World);
         }
 
         private void SnapToFloor()
