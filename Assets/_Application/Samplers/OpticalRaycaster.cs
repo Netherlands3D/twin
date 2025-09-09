@@ -19,6 +19,8 @@ namespace Netherlands3D.Twin.Samplers
         private const int maxRequests = 3;
         private const int defaultRaycastLayers = ~((1 << 2) + (1 << 12) + (1 << 13) + (1 << 14)); // all layers except IgnoreRaycast, Projected, PolygonMask, PolygonMaskInverted
 
+        public const float MinimumDepth = 0.0001f;
+
         public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, int cullingMask = defaultRaycastLayers)
         {
             if (activeRequests.Count > maxRequests)
@@ -225,6 +227,7 @@ namespace Netherlands3D.Twin.Samplers
                 this.positionMaterial = new Material(positionMaterial);
                 this.renderTexture = rt;
                 this.depthCamera = Instantiate(prefab);
+                depthCamera.nearClipPlane = MinimumDepth;
                 depthCamera.clearFlags = CameraClearFlags.SolidColor;
                 depthCamera.backgroundColor = Color.clear;
                 depthCamera.depthTextureMode = DepthTextureMode.Depth;
