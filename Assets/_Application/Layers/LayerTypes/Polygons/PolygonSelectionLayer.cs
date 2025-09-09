@@ -41,7 +41,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             set
             {
                 shapeType = value;
-                RecalculatePolygon();
+                SetShape(OriginalPolygon);
             }
         }
 
@@ -52,7 +52,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             set
             {
                 PolygonPropertyData.LineWidth = value;
-                RecalculatePolygon();
+                SetShape(OriginalPolygon);
             }
         }
 
