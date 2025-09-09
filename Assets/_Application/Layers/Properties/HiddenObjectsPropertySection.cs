@@ -15,6 +15,8 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private LayerGameObject layer;
 
+        private Dictionary<LayerFeature, HiddenObjectsVisibilityItem> hiddenObjects = new();
+
         public override LayerGameObject LayerGameObject
         {
             get => layer;
@@ -25,6 +27,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             this.layer = layer;
             CreateItems();
+            UpdateVisibility();
             layer.OnStylingApplied.AddListener(UpdateVisibility);
 
             StartCoroutine(OnPropertySectionsLoaded());
@@ -47,96 +50,50 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void CreateItems()
         {
             layerContent.ClearAllChildren();
-            int debugCounter = 0;
-            foreach (var layerFeature in layer.LayerFeatures.Values)
+            foreach(var layerFeature in layer.LayerFeatures.Values)
             {
-                debugCounter++;
-                CreateVisibilityItem(layerFeature);
-                if (debugCounter > 3)
-                    return;
+                bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(layerFeature);
+                if(visibility == false)
+                    CreateVisibilityItem(layerFeature);
             }
+
+            //int debugCounter = 0;
+            //foreach (var layerFeature in layer.LayerFeatures.Values)
+            //{
+            //    if(debugCounter < 3 || layerFeature.GetAttribute(CartesianTileLayerStyler.VisibilityIdentifier) == "0307100000333887")
+            //        CreateVisibilityItem(layerFeature);
+
+            //    debugCounter++;
+            //}            
         }
 
         private void CreateVisibilityItem(LayerFeature layerFeature)
         {
-            GameObject swatchObject = Instantiate(hiddenItemPrefab, layerContent);
+            if(hiddenObjects.ContainsKey(layerFeature)) return;
+
+            GameObject visibilityObject = Instantiate(hiddenItemPrefab, layerContent);
             string layerName = layerFeature.GetAttribute(CartesianTileLayerStyler.VisibilityIdentifier);
+            HiddenObjectsVisibilityItem item = visibilityObject.GetComponent<HiddenObjectsVisibilityItem>();
+            item.SetBagId(layerName);
+            item.SetLayerFeature(layerFeature);
+            //because all ui elements will be destroyed on close an anonymous listener is fine here              
+            item.ToggleVisibility.AddListener(visible => SetVisibilityForFeature(layerFeature, visible));
 
-            //    swatch.SetLayerName(layerName);
-            //    swatch.SetInputText(layerName);
-
-            //    //because all ui elements will be destroyed on close an anonymous listener is fine here              
-            //    swatch.onClickDown.AddListener(pointer => OnClickedOnSwatch(pointer, swatch));
-
-
+            hiddenObjects.Add(layerFeature, item);
         }
-
-        //private void OnClickedOnSwatch(PointerEventData _, ColorSwatch swatch)
-        //{
-        //    if (swatch.IsSelected)
-        //    {
-        //        DeselectAllSwatches();
-        //        DeselectSwatch(swatch);
-        //        return;
-        //    }
-
-        //    DeselectAllSwatches();
-        //    SelectSwatch(swatch);
-        //}
-
-        //private void SelectSwatch(ColorSwatch swatch)
-        //{
-        //    ShowColorPicker();
-        //    colorPicker.PickColorWithoutNotify(swatch.Color);
-
-        //    swatch.SetSelected(true);
-        //}
-
-        //private void DeselectAllSwatches()
-        //{
-        //    foreach (var (_, swatch) in swatches)
-        //    {
-        //        if (swatch.IsSelected) continue;
-
-        //        DeselectSwatch(swatch);
-        //    }
-        //}
-
-        //private void DeselectSwatch(ColorSwatch swatch)
-        //{
-        //    swatch.SetSelected(false);
-
-        //    HideColorPicker();
-        //}
-
-        //private void OnPickColor(Color color)
-        //{
-        //    foreach ((LayerFeature layerFeature, ColorSwatch swatch) in swatches)
-        //    {
-        //        if (!swatch.IsSelected) continue;
-
-        //        swatch.SetColor(color);
-        //        SetColorizationStylingRule(layerFeature, color);
-        //    }
-        //}
-
-        //private void SetColorizationStylingRule(LayerFeature layerFeature, Color color)
-        //{
-        //    (layer.Styler as CartesianTileLayerStyler).SetColor(layerFeature, color);
-        //}
 
         private void UpdateVisibility()
         {
-            foreach (KeyValuePair<object, LayerFeature> kv in layer.LayerFeatures)
+            foreach (KeyValuePair<LayerFeature, HiddenObjectsVisibilityItem> kv in hiddenObjects)
             {
-                SetVisibilityFromFeature(kv.Value);
+                bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(kv.Key);
+                kv.Value.SetToggleState(visibility == true);
             }
-        }
+        }        
 
-        private void SetVisibilityFromFeature(LayerFeature layerFeature)
-        {          
-            bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(layerFeature);
-            //todo : set visibility on UI element
+        private void SetVisibilityForFeature(LayerFeature layerFeature, bool visible)
+        {
+            (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(layerFeature, visible);
         }
     }
 }
