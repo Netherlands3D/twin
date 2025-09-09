@@ -130,36 +130,48 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public void SnapToGround()
         {
-            Vector3 heightExtent = new Vector3(0, Bounds.Size.ToUnity().y * 0.5f, 0);
-            Vector3 pivotOffset = Bounds.Center.ToUnity() - transform.position;
-            Vector3 startPosition = Bounds.Center.ToUnity() - heightExtent; //check from the bottom of this object downwards, because we cannot rely on its hitmask
-            Vector3 previousPosition = WorldTransform.Coordinate.ToUnity();
-
+            Vector3 currentPosition = transform.position;
+            BoundingBox bounds = Bounds;
+            Vector3 boundsCenter = bounds.Center.ToUnity();
+            float heightExtent = bounds.Size.ToUnity().y * 0.5f;
+            float pivotOffset = boundsCenter.y - currentPosition.y;
+            
+            Vector3 startPosition = new Vector3(currentPosition.x, boundsCenter.y, currentPosition.z);
             OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
             raycaster.GetWorldPointFromDirectionAsync(
                 startPosition,
                 Vector3.down,
-                (hitPos, hit) => OnRaycastDown(hitPos, hit, heightExtent, pivotOffset, previousPosition, raycaster, true),
+                (hitPos, hit) => OnRaycastDown(hitPos, hit, heightExtent, pivotOffset, currentPosition, raycaster),
                 snappingCullingMask
             );
         }
 
-        private void OnRaycastDown(Vector3 worldPos, bool hit, Vector3 heightExtent, Vector3 pivotOffset, Vector3 previousPosition, OpticalRaycaster raycaster, bool invertSnapping)
+        //invert snapping direction based on the direction of the raycast
+        private void OnRaycastDown(Vector3 worldPos, bool hit, float heightExtent, float pivotOffset, Vector3 previousPosition, OpticalRaycaster raycaster)
         {
             if (hit)
             {
-                transform.position = worldPos + (invertSnapping ? heightExtent : -heightExtent) - pivotOffset;
+                Coordinate target = new Coordinate(worldPos + Vector3.up * (heightExtent - pivotOffset));
+                UpdatePosition(target);
             }
             else
             {
-                transform.position = previousPosition;
-                // we didnt hit downwards, this could mean we are below ground, lets do a very high up one
+                // we didnt hit downwards, this could mean we are below ground, lets raycast up to move it aginst the ground
                 raycaster.GetWorldPointFromDirectionAsync(
-                      previousPosition + Vector3.up * 10000,
-                      Vector3.down,
-                      (hitPos, hit) => OnRaycastDown(hitPos, hit, heightExtent, pivotOffset, previousPosition, raycaster, false),
+                      previousPosition,
+                      Vector3.up,
+                      (hitPos, hit) => OnRaycastUp(hitPos, hit, heightExtent, pivotOffset),
                       snappingCullingMask
                  );
+            }
+        }
+
+        private void OnRaycastUp(Vector3 worldPos, bool hit, float heightExtent, float pivotOffset)
+        {
+            if (hit)
+            {
+                Coordinate target = new Coordinate(worldPos + Vector3.up * (-heightExtent - pivotOffset));
+                UpdatePosition(target);
             }
         }
 

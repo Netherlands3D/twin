@@ -606,7 +606,8 @@ PrefabInstance:
         type: 3}
       propertyPath: depthToWorldMaterial
       value: 
-      objectReference: {fileID: 2100000, guid: 5f4b4770e3b06a141aaed4641eeac46b, type: 2}
+      objectReference: {fileID: -876546973899608171, guid: 8ebfa318f2201a749b9ff7d16e5ae727,
+        type: 3}
     - target: {fileID: 7073721482847640295, guid: ee361773856b5e0419afdbf630604742,
         type: 3}
       propertyPath: visualizationMaterial
