@@ -1839,6 +1839,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
         type: 3}
+      propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
       propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 0
       objectReference: {fileID: 0}
@@ -1846,16 +1851,17 @@ PrefabInstance:
         type: 3}
       propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6970481386311860828}
+      objectReference: {fileID: 11400000, guid: e64696f66bdcc5343ad26d8c620d845a,
+        type: 2}
     - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
         type: 3}
       propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: CreateOrEditGridLayer
+      value: SetSelectionAreaBounds
       objectReference: {fileID: 0}
     - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
         type: 3}
       propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.Twin.Layers.LayerTypes.Polygons.PolygonInputToLayer, eu.netherlands3d.twin
+      value: Netherlands3D.Twin.AreaSelection, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6295639419868117823, guid: dc5ce5f60fb3b074394ab446caa210d5,
         type: 3}
