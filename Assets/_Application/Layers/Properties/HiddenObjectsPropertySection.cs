@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
@@ -48,27 +47,29 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void CreateItems()
         {
             layerContent.ClearAllChildren();
+            int debugCounter = 0;
             foreach (var layerFeature in layer.LayerFeatures.Values)
             {
-                //create list item
+                debugCounter++;
+                CreateVisibilityItem(layerFeature);
+                if (debugCounter > 3)
+                    return;
             }
         }
 
-        //private ColorSwatch CreateSwatch(LayerFeature layerFeature)
-        //{
-        //    GameObject swatchObject = Instantiate(colorSwatchPrefab, layerContent);
-        //    ColorSwatch swatch = swatchObject.GetComponent<ColorSwatch>();
+        private void CreateVisibilityItem(LayerFeature layerFeature)
+        {
+            GameObject swatchObject = Instantiate(hiddenItemPrefab, layerContent);
+            string layerName = layerFeature.GetAttribute(CartesianTileLayerStyler.VisibilityIdentifier);
 
-        //    string layerName = layerFeature.GetAttribute(CartesianTileLayerStyler.MaterialNameIdentifier);
+            //    swatch.SetLayerName(layerName);
+            //    swatch.SetInputText(layerName);
 
-        //    swatch.SetLayerName(layerName);
-        //    swatch.SetInputText(layerName);
+            //    //because all ui elements will be destroyed on close an anonymous listener is fine here              
+            //    swatch.onClickDown.AddListener(pointer => OnClickedOnSwatch(pointer, swatch));
 
-        //    //because all ui elements will be destroyed on close an anonymous listener is fine here              
-        //    swatch.onClickDown.AddListener(pointer => OnClickedOnSwatch(pointer, swatch));
 
-        //    return swatch;
-        //}
+        }
 
         //private void OnClickedOnSwatch(PointerEventData _, ColorSwatch swatch)
         //{
@@ -134,7 +135,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void SetVisibilityFromFeature(LayerFeature layerFeature)
         {          
-            var visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(layerFeature);
+            bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(layerFeature);
             //todo : set visibility on UI element
         }
     }
