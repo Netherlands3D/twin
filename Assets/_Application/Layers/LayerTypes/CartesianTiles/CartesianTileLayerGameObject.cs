@@ -1,13 +1,11 @@
-using System;
+using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Netherlands3D.SubObjects;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
@@ -41,7 +39,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             layer.isEnabled = isActive;
         }
 
-        protected virtual void Awake()
+        protected override void OnLayerInitialize()
         {
             tileHandler = FindAnyObjectByType<TileHandler>();
             transform.SetParent(tileHandler.transform);
@@ -52,6 +50,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             SetupFeatures();
         }
 
+        public int TileHandlerLayerIndex => tileHandler.layers.IndexOf(layer);
+        
         /// <summary>
         /// Cartesian Tiles have 'virtual' features, each type of terrain (grass, cycling path, etc) can be styled
         /// independently and thus is a feature. At the moment, the most concrete list of criteria for which features
@@ -116,17 +116,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            if(layer is BinaryMeshLayer binaryMeshLayer)
+            if (layer is BinaryMeshLayer binaryMeshLayer)
             {
                 binaryMeshLayer.OnMappingCreated.RemoveListener(OnAddedMapping);
                 binaryMeshLayer.OnMappingRemoved.RemoveListener(OnRemovedMapping);
-
             }
+
             if (Application.isPlaying && tileHandler && layer)
             {
                 tileHandler.RemoveLayer(layer);
             }
-
         }
 
         private List<IPropertySectionInstantiator> propertySections;

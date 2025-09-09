@@ -48,14 +48,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabIdentifier: b1bd3a7a50cb3bd4bb3236aadf5c32b6
   thumbnail: {fileID: 0}
-  spawnLocation: 0
-  OnStylingApplied:
-    m_PersistentCalls:
-      m_Calls: []
+  spawnLocation: -1
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStylingApplied:
     m_PersistentCalls:
       m_Calls: []
   polygonLayerPrefab: {fileID: 5640076176564817079, guid: 509ce6cf579d6ed4b946913dff7eaed4,

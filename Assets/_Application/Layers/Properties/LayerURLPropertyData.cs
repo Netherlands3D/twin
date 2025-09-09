@@ -24,6 +24,16 @@ namespace Netherlands3D.Twin.Layers.Properties
             }
         }
 
+        public LayerURLPropertyData()
+        {
+            
+        }
+
+        public LayerURLPropertyData(Uri url)
+        {
+            this.url = url;
+        }
+
         public IEnumerable<LayerAsset> GetAssets()
         {
             return new List<LayerAsset>()

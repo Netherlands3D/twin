@@ -85,6 +85,8 @@ GameObject:
   m_Component:
   - component: {fileID: 9043962494800117598}
   - component: {fileID: 3752456093720130427}
+  - component: {fileID: 7909008367482467072}
+  - component: {fileID: 8100965388876723417}
   m_Layer: 0
   m_Name: 3DTiles
   m_TagString: 3DTileParent
@@ -125,6 +127,31 @@ MonoBehaviour:
     type: 3}
   specularShader: {fileID: -6465566751694194690, guid: 885ac3670a51697469c9f66affc50fde,
     type: 3}
+--- !u!114 &7909008367482467072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 655776049567972843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  service: {fileID: 8100965388876723417}
+--- !u!114 &8100965388876723417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 655776049567972843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b169ed746e7f494b9a511c9c59e1f38c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2921212951514727232
 GameObject:
   m_ObjectHideFlags: 0

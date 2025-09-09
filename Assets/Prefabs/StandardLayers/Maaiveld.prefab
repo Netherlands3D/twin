@@ -74,6 +74,12 @@ MonoBehaviour:
   onLayerDisabled:
     m_PersistentCalls:
       m_Calls: []
+  OnMappingCreated:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMappingRemoved:
+    m_PersistentCalls:
+      m_Calls: []
   hasMetaData: 0
   removeFromID: 
   DefaultMaterialList:
@@ -106,14 +112,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabIdentifier: 2e71ce721dd3e41c194c6fb05ad10520
   thumbnail: {fileID: 0}
-  spawnLocation: 0
-  OnStylingApplied:
-    m_PersistentCalls:
-      m_Calls: []
+  spawnLocation: -1
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStylingApplied:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &8284198237993072344

@@ -174,6 +174,11 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             Layer.ParentOrSiblingIndexChanged.AddListener(OnParentOrSiblingIndexChanged);
             Layer.LayerDestroyed.AddListener(DestroyUI);
 
+            if (Layer is ReferencedLayerData referencedLayerData)
+            {
+                referencedLayerData.OnReferenceChanged.AddListener(UpdateReference);
+            }
+            
             MarkLayerUIAsDirty();
 
             //Match initial layer states
@@ -757,12 +762,24 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             Layer.ChildrenChanged.RemoveListener(OnLayerChildrenChanged);
             Layer.ParentOrSiblingIndexChanged.RemoveListener(OnParentOrSiblingIndexChanged);
             Layer.LayerDestroyed.RemoveListener(DestroyUI);
+            
+            if (Layer is ReferencedLayerData referencedLayerData)
+            {
+                referencedLayerData.OnReferenceChanged.RemoveListener(UpdateReference);
+            }
+        }
+        
+        private void UpdateReference()
+        {
+            MarkLayerUIAsDirty();
+            RegisterWithPropertiesPanel(ServiceLocator.GetService<Properties.Properties>());
+            propertyToggle.isOn = false;
         }
 
         private void RegisterWithPropertiesPanel(Properties.Properties propertiesPanel)
         {
             var layerWithProperties = Properties.Properties.TryFindProperties(Layer);
-            var hasProperties = layerWithProperties != null && layerWithProperties.GetPropertySections().Count > 0;
+            var hasProperties = layerWithProperties is { HasPropertySections: true };
             propertyToggle.gameObject.SetActive(hasProperties);
 
             if (!hasProperties)

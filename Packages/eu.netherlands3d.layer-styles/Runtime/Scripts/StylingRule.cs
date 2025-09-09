@@ -40,7 +40,7 @@ namespace Netherlands3D.LayerStyles
         /// matching "Requirement Classes" matching types of properties in
         /// https://docs.ogc.org/DRAFTS/18-067r4.html#overview.
         /// </summary>
-        [DataMember(Name = "symbolizer")] public Symbolizer Symbolizer { get; } = new();
+        [DataMember(Name = "symbolizer")] public Symbolizer Symbolizer { get; internal set; } = new();
 
         /// <summary>
         /// An expression whether a feature should match this styling rule, matching is done using an expression as

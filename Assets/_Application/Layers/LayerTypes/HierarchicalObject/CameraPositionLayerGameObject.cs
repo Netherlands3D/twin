@@ -16,12 +16,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         [SerializeField] private Tool layerTool;
         [SerializeField] private GameObject ghostGameObject;
         private Color defaultColor;
-        CameraPropertyData cameraPropertyData => (CameraPropertyData)transformPropertyData;
+        CameraPropertyData cameraPropertyData => (CameraPropertyData)TransformPropertyData;
         public override bool IsMaskable => false;
 
-        protected override void Awake()
+        protected override void OnLayerInitialize()
         {
-            base.Awake();
+            base.OnLayerInitialize();
             cameraPropertyData.OnOrthographicChanged.AddListener(SetOrthographic);
 
             defaultColor = ghostMaterial.color;
@@ -30,10 +30,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             layerTool.onClose.AddListener(DisableGhost);
         }
 
-        protected override TransformLayerPropertyData InitializePropertyData()
+        protected override void InitializePropertyData()
         {
             var cam = Camera.main;
-            return new CameraPropertyData(new Coordinate(cam.transform.position), cam.transform.eulerAngles, cam.transform.localScale, cam.orthographic);
+            LayerData.SetProperty(
+                new CameraPropertyData(
+                    new Coordinate(cam.transform.position), 
+                    cam.transform.eulerAngles, 
+                    cam.transform.localScale, 
+                    cam.orthographic
+                )
+            );
         }
 
         protected override void OnDestroy()
@@ -48,20 +55,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             base.LoadProperties(properties);
 
-            var cameraProperty = (CameraPropertyData)properties.FirstOrDefault(p => p is AnnotationPropertyData);
-            if (cameraProperty != null)
+            var cameraProperty = properties.OfType<CameraPropertyData>().FirstOrDefault();
+
+            if (cameraProperty == null) return;
+            
+            if (cameraPropertyData != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
             {
-                if (cameraPropertyData != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
-                {
-                    cameraPropertyData.OnOrthographicChanged.RemoveListener(SetOrthographic);
-                }
-
-                transformPropertyData = cameraProperty; //take existing TransformProperty to overwrite the unlinked one of this class
-                
-                SetOrthographic(cameraProperty.Orthographic);
-
-                cameraProperty.OnOrthographicChanged.AddListener(SetOrthographic);
+                cameraPropertyData.OnOrthographicChanged.RemoveListener(SetOrthographic);
             }
+
+            LayerData.SetProperty(cameraProperty);
+                
+            SetOrthographic(cameraProperty.Orthographic);
+
+            cameraProperty.OnOrthographicChanged.AddListener(SetOrthographic);
         }
 
         private void SetOrthographic(bool orthographic)
