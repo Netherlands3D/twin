@@ -13,6 +13,10 @@ namespace Netherlands3D.FirstPersonViewer
         [SerializeField] private InputActionAsset inputActionAsset;
 
         private InputAction moveAction;
+        private InputAction sprintAction;
+
+        //Movement
+        private float movementMultiplier = 2f; //Should be replaced by a ScriptableObject
 
         //Raycasting
         private OpticalRaycaster raycaster;
@@ -27,20 +31,26 @@ namespace Netherlands3D.FirstPersonViewer
         [Header("TEMP")]
         [SerializeField] private float walkSpeed;
 
-        [Header("Remove")]
-        [SerializeField] private FloatEvent verticalInput;
-        [SerializeField] private FloatEvent horizontalInput;
+        private void OnEnable()
+        {
+            inputActionAsset.Enable();
+        }
 
+        private void OnDisable()
+        {
+            inputActionAsset.Disable();
+        }
 
         private void Start()
         {
             yPositionTarget = transform.position.y;
 
             moveAction = inputActionAsset.FindAction("Move");
+            sprintAction = inputActionAsset.FindAction("Sprint");
 
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
-            snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings"));
+            snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings") | (1 << LayerMask.NameToLayer("Default")));
         }
 
         private void Update()
@@ -48,9 +58,8 @@ namespace Netherlands3D.FirstPersonViewer
             Vector2 moveInput = moveAction.ReadValue<Vector2>();
             if(moveInput.magnitude > 0)
             {
-                MoveCamera(moveInput);
+                MovePlayer(moveInput);
             }
-
 
             if (transform.position.y > yPositionTarget)
             {
@@ -65,17 +74,19 @@ namespace Netherlands3D.FirstPersonViewer
             }
         }
 
-        private void MoveCamera(Vector2 moveInput)
+        private void MovePlayer(Vector2 moveInput)
         {
             Vector3 direction = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
 
-            transform.Translate(direction * walkSpeed * Time.deltaTime, Space.World);
+            float movementSpeed = walkSpeed * (sprintAction.IsPressed() ? movementMultiplier : 1);
+
+            transform.Translate(direction * movementSpeed * Time.deltaTime, Space.World);
             SnapToFloor();
         }
 
         private void SnapToFloor()
         {
-            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * 5, Vector3.down, (point, hit) =>
+            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up, Vector3.down, (point, hit) =>
             {
                 if (hit)
                 {

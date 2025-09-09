@@ -18,7 +18,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void Start()
         {
-            snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings"));
+            snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings") | (1 << LayerMask.NameToLayer("Default")));
         }
 
         public void PointerDown()

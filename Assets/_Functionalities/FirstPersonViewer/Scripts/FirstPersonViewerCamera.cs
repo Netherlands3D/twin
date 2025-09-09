@@ -1,6 +1,7 @@
 using DG.Tweening;
 using Netherlands3D.Events;
 using Netherlands3D.Twin.Cameras;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,8 +11,9 @@ namespace Netherlands3D
     {
         [Header("Input")]
         [SerializeField] private InputActionAsset inputActionAsset;
-        //private InputAction lookInput;
-
+        
+        private InputAction lookInput;
+        private InputAction exitInput; //Should be moved to other script. Currently not possible due to how Camera.Main is handled.
 
         private Camera firstPersonViewerCamera;
 
@@ -24,15 +26,21 @@ namespace Netherlands3D
         [SerializeField] private Transform viewerBase;
         private float xRotation;
 
-        private Camera mainCam;
+        private bool didSetup;
 
-        [Header("Remove")]
-        [SerializeField] private Vector3Event lookInput;
+        private float exitTimer;
+        [SerializeField] private float exitDuration = .75f;
+
+        //TEMP
+        private Camera mainCam;
 
 
         private void Start()
         {
             cameraHeight.AddListenerStarted(SetCameraHeight);
+
+            lookInput = inputActionAsset.FindAction("Look");
+            exitInput = inputActionAsset.FindAction("Exit");
 
             firstPersonViewerCamera = GetComponent<Camera>();
 
@@ -56,26 +64,41 @@ namespace Netherlands3D
             Quaternion targetRot = Quaternion.LookRotation(forward, Vector3.up);
 
             firstPersonViewerCamera.transform.DOLocalMove(Vector3.zero + Vector3.up * cameraHeightOffset, 2f).SetEase(Ease.InOutSine);
-            firstPersonViewerCamera.transform.DORotateQuaternion(targetRot, 2f).SetEase(Ease.InOutSine).OnComplete(() => SetupEvents());
+            firstPersonViewerCamera.transform.DORotateQuaternion(targetRot, 2f).SetEase(Ease.InOutSine).OnComplete(() =>
+            {
+                xRotation = transform.localEulerAngles.x;
+                didSetup = true;
+            });
 
+            //Somehow we need to stop using this to support modularity. Without breaking the camera.
             mainCam.GetComponent<FreeCamera>().enabled = false; //TEMP FIX FOR CAMERA MOVEMENT WHILE IN FPV. $$
-            mainCam.targetDisplay = 1;
+            mainCam.targetDisplay = 1; 
             //mainCam.enabled = false; //Creates a lot of errors
             Camera.SetupCurrent(firstPersonViewerCamera);
         }
 
-        private void SetupEvents()
-        {
-            xRotation = transform.localEulerAngles.x;
-            lookInput.AddListenerStarted(PointerDelta);
-        }
-
         private void Update()
         {
-            if (Keyboard.current.escapeKey.wasPressedThisFrame) ExitViewer();
+            if (didSetup)
+            {
+                Vector2 cameraMovement = lookInput.ReadValue<Vector2>();
+
+                if (cameraMovement.magnitude > 0)
+                {
+                    PointerDelta(cameraMovement);
+                }
+            }
+
+            if (exitInput.IsPressed()) //Should be moved to other script. Currently not possible due to how Camera.Main is handled.
+            {
+                exitTimer = Mathf.Max(exitTimer - Time.deltaTime, 0);
+
+                if (exitTimer == 0) ExitViewer();
+            }
+            else exitTimer = exitDuration;
         }
 
-        public void PointerDelta(Vector3 pointerDelta)
+        private void PointerDelta(Vector2 pointerDelta)
         {
             Vector2 mouseLook = pointerDelta * 10 * Time.deltaTime;
 
@@ -85,10 +108,11 @@ namespace Netherlands3D
             viewerBase.Rotate(Vector3.up * mouseLook.x);
         }
 
-        private void ExitViewer()
+        [Obsolete("Should be moved to other script. Currently not possible due to how Camera.Main is handled.")]
+        private void ExitViewer() 
         {
             mainCam.targetDisplay = 0;
-            mainCam.GetComponent<FreeCamera>().enabled = true;
+            mainCam.GetComponent<FreeCamera>().enabled = true; //Somehow we need to stop using this to support modularity. Without breaking the camera.
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
