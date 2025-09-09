@@ -6,7 +6,6 @@ using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Services;
 using Netherlands3D.Tiles3D;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
@@ -29,7 +28,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         [SerializeField] private bool usePropertySections = true;
         private List<IPropertySectionInstantiator> propertySections = new();
 
-        private Tile3DLayerPropertyData tile3DPropertyData;
+        private Tile3DLayerPropertyData tile3DPropertyData => LayerData.GetProperty<Tile3DLayerPropertyData>();
         LayerPropertyData ILayerWithPropertyData.PropertyData => tile3DPropertyData;
 
         [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
@@ -39,18 +38,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         private ICredentialHandler CredentialHandler => GetAndCacheComponent(ref credentialHandler);
         
         public UnityEvent<string> UnsupportedExtensionsMessage;
-
-        private string TilesetURLWithoutQuery(string value)
-        {
-            if (!value.Contains("?"))
-                return value;
-
-            var uriBuilder = new UriBuilder(value);
-            uriBuilder.Query = "";
-
-            var urlWithoutQuery = uriBuilder.Uri.ToString();
-            return urlWithoutQuery;
-        }
 
         private void EnableTileset()
         {
@@ -63,7 +50,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         protected override void OnLayerInitialize()
         {
             CredentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
-            tile3DPropertyData = new Tile3DLayerPropertyData(TilesetURLWithoutQuery(TileSet.tilesetUrl));
             
             // listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
             tile3DPropertyData.OnUrlChanged.AddListener(UpdateURL);
@@ -160,6 +146,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             CredentialHandler.ApplyCredentials();
             EnableTileset();
         }
+
         private void UpdateCRS(int crs)
         {
             TileSet.SetCoordinateSystem((Coordinates.CoordinateSystem)crs);
@@ -200,10 +187,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var urlProperty = properties.Get<Tile3DLayerPropertyData>();
-            if (urlProperty == null) return;
-
-            tile3DPropertyData = urlProperty; //use existing object to overwrite the current instance
             TileSet.contentCoordinateSystem = (Coordinates.CoordinateSystem)tile3DPropertyData.ContentCRS;
         }
 
