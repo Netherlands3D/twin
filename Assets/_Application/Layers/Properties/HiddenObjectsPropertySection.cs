@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private LayerGameObject layer;
 
-        private Dictionary<LayerFeature, HiddenObjectsVisibilityItem> hiddenObjects = new();
+        private Dictionary<string, HiddenObjectsVisibilityItem> hiddenObjects = new();
 
         public override LayerGameObject LayerGameObject
         {
@@ -69,24 +69,25 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void CreateVisibilityItem(LayerFeature layerFeature)
         {
-            if(hiddenObjects.ContainsKey(layerFeature)) return;
+            string layerName = layerFeature.GetAttribute(CartesianTileLayerStyler.VisibilityIdentifier);
+            if (hiddenObjects.ContainsKey(layerName)) return;
 
             GameObject visibilityObject = Instantiate(hiddenItemPrefab, layerContent);
-            string layerName = layerFeature.GetAttribute(CartesianTileLayerStyler.VisibilityIdentifier);
+            
             HiddenObjectsVisibilityItem item = visibilityObject.GetComponent<HiddenObjectsVisibilityItem>();
             item.SetBagId(layerName);
             item.SetLayerFeature(layerFeature);
             //because all ui elements will be destroyed on close an anonymous listener is fine here              
             item.ToggleVisibility.AddListener(visible => SetVisibilityForFeature(layerFeature, visible));
 
-            hiddenObjects.Add(layerFeature, item);
+            hiddenObjects.Add(layerName, item);
         }
 
         private void UpdateVisibility()
         {
-            foreach (KeyValuePair<LayerFeature, HiddenObjectsVisibilityItem> kv in hiddenObjects)
+            foreach (KeyValuePair<string, HiddenObjectsVisibilityItem> kv in hiddenObjects)
             {
-                bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(kv.Key);
+                bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(kv.Value.LayerFeature);
                 kv.Value.SetToggleState(visibility == true);
             }
         }        
