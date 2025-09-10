@@ -812,6 +812,25 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7980937525333781997}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1675095167 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 613693013314438116, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
+    type: 3}
+  m_PrefabInstance: {fileID: 7980937525333781997}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1675095174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675095167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Plaats op maaiveld
 --- !u!1 &2052049205
 GameObject:
   m_ObjectHideFlags: 0
@@ -3018,7 +3037,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 613693013314438116, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1675095174}
   m_SourcePrefab: {fileID: 100100000, guid: 02c20fd0e6c83ab46afacb4c2e6263df, type: 3}
 --- !u!1001 &8208335865081263597
 PrefabInstance:
