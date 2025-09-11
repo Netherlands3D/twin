@@ -357,9 +357,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toggle: {fileID: 6684286503542890919}
-  bagId: {fileID: 8859056685006136352}
+  objectId: {fileID: 8859056685006136352}
   visible: {fileID: 21300000, guid: 29296650b38894fed952bbfaae3724a0, type: 3}
   invisible: {fileID: 21300000, guid: 91bc36cf0b91144d6bf80029e4a4f944, type: 3}
+  ToggleVisibility:
+    m_PersistentCalls:
+      m_Calls: []
+  OnClickHiddenItem:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3393863635237783506
 GameObject:
   m_ObjectHideFlags: 0

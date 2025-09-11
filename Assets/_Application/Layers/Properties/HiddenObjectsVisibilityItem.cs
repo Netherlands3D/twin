@@ -1,19 +1,21 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class HiddenObjectsVisibilityItem : MonoBehaviour
+    public class HiddenObjectsVisibilityItem : MonoBehaviour, IPointerDownHandler
     {
         [SerializeField] private Toggle toggle;
-        [SerializeField] private TMP_Text bagId;
+        [SerializeField] private TMP_Text objectId;
 
         [SerializeField] private Sprite visible;
         [SerializeField] private Sprite invisible;
 
         public UnityEvent<bool> ToggleVisibility = new();
+        public UnityEvent<LayerFeature> OnClickHiddenItem = new();
         public LayerFeature LayerFeature => feature;
 
         private Image image;
@@ -26,13 +28,13 @@ namespace Netherlands3D.Twin.Layers.Properties
         }
 
         void OnToggle(bool isOn)
-        {   
+        {
             ToggleVisibility.Invoke(isOn);
             UpdateGraphic();
         }
 
         public void SetToggleState(bool isOn)
-        {      
+        {
             toggle.isOn = isOn;
         }
 
@@ -51,9 +53,17 @@ namespace Netherlands3D.Twin.Layers.Properties
             this.feature = feature;
         }
 
-        public void SetBagId(string id)
+        public void SetObjectId(string id)
         {
-            bagId.text = id;
+            objectId.text = id;
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Left)
+            {
+                OnClickHiddenItem.Invoke(LayerFeature);
+            }
         }
     }
 }

@@ -1,7 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.Coordinates;
+using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.Services;
+using Netherlands3D.SubObjects;
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +18,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private RectTransform content;
         [SerializeField] private GameObject hiddenItemPrefab;
         [SerializeField] private RectTransform layerContent;
+        [SerializeField] private float cameraDistance = 150f;
 
         private LayerGameObject layer;
 
@@ -56,31 +63,23 @@ namespace Netherlands3D.Twin.Layers.Properties
                 if(visibility == false)
                     CreateVisibilityItem(layerFeature);
             }
-
-            //int debugCounter = 0;
-            //foreach (var layerFeature in layer.LayerFeatures.Values)
-            //{
-            //    if(debugCounter < 3 || layerFeature.GetAttribute(CartesianTileLayerStyler.VisibilityIdentifier) == "0307100000333887")
-            //        CreateVisibilityItem(layerFeature);
-
-            //    debugCounter++;
-            //}            
         }
 
         private void CreateVisibilityItem(LayerFeature layerFeature)
         {
-            string layerName = layerFeature.GetAttribute(CartesianTileLayerStyler.VisibilityIdentifier);
-            if (hiddenObjects.ContainsKey(layerName)) return;
+            string objectID = layerFeature.GetAttribute(CartesianTileLayerStyler.VisibilityIdentifier);
+            if (hiddenObjects.ContainsKey(objectID)) return;
 
             GameObject visibilityObject = Instantiate(hiddenItemPrefab, layerContent);
             
             HiddenObjectsVisibilityItem item = visibilityObject.GetComponent<HiddenObjectsVisibilityItem>();
-            item.SetBagId(layerName);
+            item.SetObjectId(objectID);
             item.SetLayerFeature(layerFeature);
             //because all ui elements will be destroyed on close an anonymous listener is fine here              
             item.ToggleVisibility.AddListener(visible => SetVisibilityForFeature(layerFeature, visible));
+            item.OnClickHiddenItem.AddListener(feature => HiddenFeatureSelected(layerFeature));
 
-            hiddenObjects.Add(layerName, item);
+            hiddenObjects.Add(objectID, item);
         }
 
         private void UpdateVisibility()
@@ -95,6 +94,41 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void SetVisibilityForFeature(LayerFeature layerFeature, bool visible)
         {
             (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(layerFeature, visible);
+        }
+
+        private void HiddenFeatureSelected(LayerFeature layerFeature)
+        {
+            if (layerFeature.Geometry is ObjectMappingItem mapping)
+            {
+                CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
+                ObjectMapping objectMapping = cartesianTileLayerGameObject.FindObjectMapping(mapping);
+                MeshFilter mFilter = objectMapping.gameObject.GetComponent<MeshFilter>();
+                Vector3[] vertices = mFilter.sharedMesh.vertices;
+                Vector3 centr = Vector3.zero;
+                for (int i = mapping.firstVertex; i < mapping.firstVertex + mapping.verticesLength; i++)
+                    centr += vertices[i];
+                centr /= mapping.verticesLength;
+                
+                Vector3 centroidWorld = mFilter.transform.TransformPoint(centr);
+                Coordinate coord = new Coordinate(centroidWorld);
+                
+                //DebugVertices(vertices, mapping.firstVertex, mapping.verticesLength, mFilter.transform);
+                Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(coord, cameraDistance);
+            }
+        }
+
+        private void DebugVertices(Vector3[] vertices, int start, int length, Transform transform)
+        {
+            for (int i = start; i < start + length; i++)
+            {
+                Vector3 vertexWorld = transform.TransformPoint(vertices[i]);
+
+                GameObject testPos = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                vertexWorld.y = 50;
+                testPos.transform.position = vertexWorld;
+                testPos.GetComponent<MeshRenderer>().material.color = Color.green;
+                testPos.transform.localScale = Vector3.one * 5;
+            }
         }
     }
 }

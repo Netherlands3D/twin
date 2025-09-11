@@ -82,7 +82,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         }
 
         private void OnAddedMapping(ObjectMapping mapping)
-        {
+        {         
             foreach (ObjectMappingItem item in mapping.items)
             {
                 var layerFeature = CreateFeature(item);
@@ -97,6 +97,54 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             {
                 LayerFeatures.Remove(item);
             }
+        }
+
+        public ObjectMapping FindObjectMapping(ObjectMappingItem item)
+        {
+            if (layer is not BinaryMeshLayer binaryMeshLayer) return null;
+
+            return FindObjectMapping(item.objectID);
+        }
+
+        //TODO, this should be optimized
+        public ObjectMapping FindObjectMapping(string bagId)
+        {
+            if (layer is not BinaryMeshLayer binaryMeshLayer) return null;
+
+            foreach (ObjectMapping mapping in binaryMeshLayer.Mappings.Values)
+            {
+                foreach(ObjectMappingItem item in mapping.items)
+                {
+                    if (item.objectID == bagId)
+                        return mapping;
+                }
+            }
+            return null;
+        }
+
+        public List<ObjectMapping> FindObjectMappings(ObjectMappingItem item)
+        {
+            if (layer is not BinaryMeshLayer binaryMeshLayer) return null;
+
+            return FindObjectMappings(item.objectID);
+        }
+
+        public List<ObjectMapping> FindObjectMappings(string bagId)
+        {
+            List<ObjectMapping> mappings = new List<ObjectMapping>();
+            if (layer is not BinaryMeshLayer binaryMeshLayer) return null;
+            foreach (ObjectMapping mapping in binaryMeshLayer.Mappings.Values)
+            {
+                foreach (ObjectMappingItem item in mapping.items)
+                {
+                    if (item.objectID == bagId)
+                    {
+                        mappings.Add(mapping);
+                        break;
+                    }
+                }
+            }
+            return mappings;
         }
 
         public override void OnSelect()
