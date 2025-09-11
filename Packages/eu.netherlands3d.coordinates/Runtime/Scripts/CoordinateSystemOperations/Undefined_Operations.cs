@@ -17,11 +17,11 @@ namespace Netherlands3D.Coordinates
 
         public override int NorthingIndex()
         {
-            return 1;
+            return -1;
         }
         public override int EastingIndex()
         {
-            return 0;
+            return -1;
         }
         public override int AxisCount()
         {
