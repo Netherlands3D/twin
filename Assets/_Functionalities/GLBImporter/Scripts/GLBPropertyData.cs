@@ -12,7 +12,7 @@ namespace Netherlands3D.Functionalities.GLBImporter
     {
         [DataMember] private Uri glbFile;
 
-        [JsonIgnore] public readonly UnityEvent<Uri> OnGlbUriChanged = new();
+        [JsonIgnore] public readonly UnityEvent<Uri> GlbUriChanged = new();
 
         [JsonIgnore]
         public Uri GlbFile
@@ -21,7 +21,7 @@ namespace Netherlands3D.Functionalities.GLBImporter
             set
             {
                 glbFile = value;
-                OnGlbUriChanged.Invoke(value);
+                GlbUriChanged.Invoke(value);
             }
         }
 
