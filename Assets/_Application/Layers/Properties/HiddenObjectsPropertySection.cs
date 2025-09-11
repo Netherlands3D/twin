@@ -19,6 +19,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private GameObject hiddenItemPrefab;
         [SerializeField] private RectTransform layerContent;
         [SerializeField] private float cameraDistance = 150f;
+        [SerializeField] private Material selectionMaterial;
 
         private LayerGameObject layer;
 
@@ -79,7 +80,8 @@ namespace Netherlands3D.Twin.Layers.Properties
             item.SetLayerFeature(layerFeature);
             //because all ui elements will be destroyed on close an anonymous listener is fine here              
             item.ToggleVisibility.AddListener(visible => SetVisibilityForFeature(layerFeature, visible));
-            item.OnClickHiddenItem.AddListener(feature => HiddenFeatureSelected(layerFeature));
+            item.OnSelectItem.AddListener(feature => HiddenFeatureSelected(layerFeature));
+            item.OnDeselectItem.AddListener(feature => HiddenFeatureDeselected(layerFeature));
 
             hiddenObjects.Add(objectID, item);
         }
@@ -98,6 +100,8 @@ namespace Netherlands3D.Twin.Layers.Properties
             (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(layerFeature, visible);           
         }
 
+        private GameObject selectedHiddenObject;
+
         private void HiddenFeatureSelected(LayerFeature layerFeature)
         {
             if (layerFeature.Geometry is ObjectMappingItem mapping)
@@ -107,24 +111,35 @@ namespace Netherlands3D.Twin.Layers.Properties
                 {
                     Coordinate coord = CartesianTileLayerStyler.VisibilityPositionFromIdentifierValue(coordString);
                     Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(coord, cameraDistance);
-                }
+
+                    CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
+
+                    selectedHiddenObject = new GameObject(mapping.objectID);
+                    MeshFilter mFilter = selectedHiddenObject.AddComponent<MeshFilter>();
+                    ObjectMapping objectMapping = cartesianTileLayerGameObject.FindObjectMapping(mapping);
+                    Mesh mesh = CartesianTileLayerGameObject.CreateMeshFromMapping(objectMapping, mapping, out Vector3 localCentroid);
+                    mFilter.mesh = mesh;
+                    MeshRenderer mRenderer = selectedHiddenObject.AddComponent<MeshRenderer>();
+                    mRenderer.material = selectionMaterial;
+                    selectedHiddenObject.transform.position = objectMapping.transform.TransformPoint(localCentroid);
+                }                
             }
         }
 
-        private void DebugVertices(Vector3[] vertices, int start, int length, Transform transform)
+        private void HiddenFeatureDeselected(LayerFeature layerFeature)
         {
-            for (int i = start; i < start + length; i++)
+            if(selectedHiddenObject != null)
             {
-                Vector3 vertexWorld = transform.TransformPoint(vertices[i]);
-
-                GameObject testPos = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                vertexWorld.y = 50;
-                testPos.transform.position = vertexWorld;
-                testPos.GetComponent<MeshRenderer>().material.color = Color.green;
-                testPos.transform.localScale = Vector3.one * 5;
+                Destroy(selectedHiddenObject);
+                selectedHiddenObject = null;
+            }
+            if (layerFeature.Geometry is ObjectMappingItem mapping)
+            {
+               
             }
         }
 
+        
         
     }
 }

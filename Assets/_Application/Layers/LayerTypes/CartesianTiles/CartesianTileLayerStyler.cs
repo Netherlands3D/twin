@@ -159,7 +159,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                     CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
                     ObjectMapping objectMapping = cartesianTileLayerGameObject.FindObjectMapping(item);
                     Coordinate coord = cartesianTileLayerGameObject.GetCoordinateForObjectMappingItem(objectMapping, item);
-                    layerFeature.Attributes.Add(VisibilityPositionIdentifier, VisibilityPositionIdentifierValue(item.objectID, coord));
+                    layerFeature.Attributes.Add(VisibilityPositionIdentifier, VisibilityPositionToIdentifierValue(item.objectID, coord));
                 }
             }            
         }
@@ -174,7 +174,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             return $"feature.{visibilityIdentifier}.visibility";
         }
 
-        public static string VisibilityPositionIdentifierValue(string id, Coordinate position)
+        public static string VisibilityPositionToIdentifierValue(string id, Coordinate position)
         {
             return id + position.ToString() + position.CoordinateSystem.ToString();
         }

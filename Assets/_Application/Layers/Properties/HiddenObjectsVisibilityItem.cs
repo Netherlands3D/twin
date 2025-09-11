@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class HiddenObjectsVisibilityItem : MonoBehaviour, IPointerDownHandler
-    {
+    public class HiddenObjectsVisibilityItem : MonoBehaviour, IPointerDownHandler, ISelectHandler, IDeselectHandler
+    {  
         [SerializeField] private Toggle toggle;
         [SerializeField] private TMP_Text objectId;
 
@@ -15,7 +15,9 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private Sprite invisible;
 
         public UnityEvent<bool> ToggleVisibility = new();
-        public UnityEvent<LayerFeature> OnClickHiddenItem = new();
+        public UnityEvent<LayerFeature> OnClickItem = new();
+        public UnityEvent<LayerFeature> OnSelectItem = new();
+        public UnityEvent<LayerFeature> OnDeselectItem = new();
         public LayerFeature LayerFeature => feature;
 
         private Image image;
@@ -62,8 +64,18 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             if (eventData.button == PointerEventData.InputButton.Left)
             {
-                OnClickHiddenItem.Invoke(LayerFeature);
+                OnClickItem.Invoke(LayerFeature);
             }
+        }
+
+        public void OnSelect(BaseEventData eventData)
+        {
+            OnSelectItem.Invoke(LayerFeature);
+        }
+
+        public void OnDeselect(BaseEventData eventData)
+        {
+            OnDeselectItem.Invoke(LayerFeature);
         }
     }
 }

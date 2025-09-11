@@ -768,6 +768,8 @@ MonoBehaviour:
   hiddenItemPrefab: {fileID: 2377971748709196841, guid: e9fd05fffa4db924fb1cfaebbca14477,
     type: 3}
   layerContent: {fileID: 8485659025928402752}
+  cameraDistance: 150
+  selectionMaterial: {fileID: 2100000, guid: 32d66cb461963494c8545032b6d11bd0, type: 2}
 --- !u!1 &5881972325828035840
 GameObject:
   m_ObjectHideFlags: 0
