@@ -30,11 +30,14 @@ namespace Netherlands3D.CityJson.Structure
         public GeometryType Type { get; private set; }
         public int Lod { get; private set; }
         public CityBoundary BoundaryObject { get; private set; }
+        public bool UseSingleMaterialForEntireGeometry => !IncludeMaterials || MaterialIndicesForFullGeometry.Count > 0;
+        public Dictionary<string, int> MaterialThemes { get; private set; } = new();
+        public List<int> MaterialIndicesForFullGeometry { get; private set; } = new();
         public bool IncludeSemantics { get; set; }
-        public bool IncludeMaterials { get; set; } //todo: Materials currently not implemented yet
+        public bool IncludeMaterials { get; set; } //todo: remove?
         public bool IncludeTextures { get; set; } //todo: Textures currently not implemented yet
 
-        public List<int> MaterialIndices { get; private set; }
+        // public List<int> MaterialIndices { get; private set; }
         public List<int> MaterialUniqueIndices { get; private set; }
         private int materialCount;
         public int MaterialCount
@@ -185,7 +188,7 @@ namespace Netherlands3D.CityJson.Structure
             if(includeMaterials)
             {
                 geometry.MaterialIndices = GetMaterialsFromJSONNode(materialsNode["default_theme"]);
-                
+                geometry.BoundaryObject.ParseMaterialsNode();
             }
 
             return geometry;
@@ -218,5 +221,14 @@ namespace Netherlands3D.CityJson.Structure
             BoundaryObject = multiSurface;
         }
 
+        public void AddMaterialTheme(string themeName, int themeIndex)
+        {
+            MaterialThemes.Add(themeName, themeIndex);
+        }
+
+        public void AddMaterialIndex(int themeIndex, int materialIndex)
+        {
+            MaterialIndicesForFullGeometry.Insert(themeIndex, materialIndex);
+        }
     }
 }

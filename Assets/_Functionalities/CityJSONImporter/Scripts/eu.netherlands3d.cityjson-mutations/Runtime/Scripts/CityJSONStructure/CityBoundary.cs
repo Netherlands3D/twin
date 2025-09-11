@@ -102,6 +102,7 @@ namespace Netherlands3D.CityJson.Structure
         public CityPolygon SolidSurfacePolygon => Polygons[0]; //the first polygon is solid, with all other polygons being holes in the first polygon
         public CityPolygon[] HolePolygons => Polygons.Skip(1).ToArray();
         public CityGeometrySemanticsObject SemanticsObject { get; set; }
+        public List<int> materialIndices; // the theme names ar stored in the Geometry object to reduce duplicate memory allocations for the theme in each surface
 
         public override int VertexCount
         {
@@ -187,6 +188,11 @@ namespace Netherlands3D.CityJson.Structure
                 return true;
             }
             return false;
+        }
+        
+        public void AddMaterialIndex(int themeIndex, int materialIndex)
+        {
+            materialIndices.Insert(themeIndex, materialIndex);
         }
     }
 
