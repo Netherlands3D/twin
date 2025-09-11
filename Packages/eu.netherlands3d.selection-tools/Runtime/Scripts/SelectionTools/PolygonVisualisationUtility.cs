@@ -1,44 +1,60 @@
+using System;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Implementation;
 using NetTopologySuite.Triangulate.Polygon;
-using NetTopologySuite.Triangulate.Tri;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 namespace Netherlands3D.SelectionTools
 {
+    public class GeometryTriangulationData
+    {
+        public GeometryTriangulationData(Geometry geometry, Vector3 origin, Vector3 u, Vector3 v /*, Vector3 normal*/)
+        {
+            this.geometry = geometry;
+            this.origin = origin;
+            this.u = u;
+            this.v = v;
+            // this.normal = normal;
+        }
+
+        public Geometry geometry;
+        public Vector3 origin;
+        public Vector3 u;
+        public Vector3 v;
+
+        // public Vector3 normal;
+    }
+
     public static class PolygonVisualisationUtility
     {
         private static NtsGeometryServices instance;
-        private static GeometryFactory geometryFactory;       
+        private static GeometryFactory geometryFactory;
 
-        private static void SetUpInstance()
+        static PolygonVisualisationUtility()
         {
-            if (instance != null)
-                return;
-
             //the following are the default proposed settings by NTS github page https://github.com/NetTopologySuite/NetTopologySuite/wiki/GettingStarted
             instance = new NtsGeometryServices(
-            // default CoordinateSequenceFactory
-            CoordinateArraySequenceFactory.Instance,
-            // default precision model
-            new PrecisionModel(1000d),
-            // default SRID
-            4326,
-            /********************************************************************
-             * Note: the following arguments are only valid for NTS >= v2.2
-             ********************************************************************/
-            // Geometry overlay operation function set to use (Legacy or NG)
-            GeometryOverlay.NG,
-            // Coordinate equality comparer to use (CoordinateEqualityComparer or PerOrdinateEqualityComparer)
-            new CoordinateEqualityComparer());
+                // default CoordinateSequenceFactory
+                CoordinateArraySequenceFactory.Instance,
+                // default precision model
+                new PrecisionModel(1000d),
+                // default SRID
+                4326,
+                /********************************************************************
+                 * Note: the following arguments are only valid for NTS >= v2.2
+                 ********************************************************************/
+                // Geometry overlay operation function set to use (Legacy or NG)
+                GeometryOverlay.NG,
+                // Coordinate equality comparer to use (CoordinateEqualityComparer or PerOrdinateEqualityComparer)
+                new CoordinateEqualityComparer());
 
             geometryFactory = instance.CreateGeometryFactory();
         }
 
         #region UnityComponents
+
         //Treat first contour as outer contour, and extra contours as holes
         public static PolygonVisualisation CreateAndReturnPolygonObject(List<List<Vector3>> contours,
             float meshExtrusionHeight,
@@ -54,7 +70,7 @@ namespace Netherlands3D.SelectionTools
         {
             var newPolygonObject = new GameObject();
             newPolygonObject.name = "PolygonVisualisation";
-            
+
             var meshFilter = newPolygonObject.AddComponent<MeshFilter>(); //mesh is created by the PolygonVisualisation script
             var meshRenderer = newPolygonObject.AddComponent<MeshRenderer>();
             meshRenderer.material = meshMaterial;
@@ -73,6 +89,7 @@ namespace Netherlands3D.SelectionTools
         #endregion
 
         #region PolygonMesh
+
         /// <summary>
         /// 
         /// </summary>
@@ -81,122 +98,119 @@ namespace Netherlands3D.SelectionTools
         /// <param name="addBottom"></param>
         /// <param name="uvCoordinate"></param>
         /// <returns></returns>
-        public static Mesh CreatePolygonMesh(List<List<Vector3>> contours, float extrusionHeight, bool addBottom, Vector2 uvCoordinate = new Vector2())
+        public static GeometryTriangulationData CreatePolygonGeometryTriangulationData(List<List<Vector3>> contours, bool invertWindingOrder = false)
         {
-            if (contours.Count == 0)
+            if (contours == null || contours.Count == 0 || contours[0].Count < 3)
                 return null;
 
-            SetUpInstance();
+            // STEP 1: Compute polygon plane
+            var solidPlane = contours[0];
+            Plane plane = ComputeBestFitPlane(solidPlane);
+            Vector3 normal = plane.normal.normalized;
 
-            var shellCoords = EnsureOrientation(contours[0], true);
-            if (shellCoords == null)
+            //u and v are the x and y axis relative to the plane we project on
+            Vector3 u = Vector3.Cross(normal, Vector3.up);
+            if (u.sqrMagnitude < 1e-6f)
+                u = Vector3.Cross(normal, Vector3.right);
+
+            u.Normalize();
+            Vector3 v = Vector3.Cross(normal, u);
+            Vector3 origin = contours[0][0];
+
+            // === STEP 2: Build NTS polygon ===
+            LinearRing outerRing = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[0], origin, u, v, !invertWindingOrder));
+            LinearRing[] holes = new LinearRing[contours.Count - 1];
+            for (int h = 1; h < contours.Count; h++)
+                holes[h - 1] = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[h], origin, u, v, invertWindingOrder));
+
+            var polygon = geometryFactory.CreatePolygon(outerRing, holes);
+
+            
+            // todo: this check is needed, but very garbage intensive if possible use a different check to determine polygon validity
+            // a try catch block is not possible, since it does not work in webgl and the app can end up in an infinite loop
+            if (!polygon.IsValid) 
             {
-                Debug.LogWarning("Outer shell is degenerate");
                 return null;
             }
-            var shell = geometryFactory.CreateLinearRing(shellCoords);
-            LinearRing[] holes = null;
-            //holes
-            if (contours.Count > 1)
+
+            // STEP 3: Triangulate in 2D
+            Geometry triangulated;
+            triangulated = ConstrainedDelaunayTriangulator.Triangulate(polygon);
+
+            return new GeometryTriangulationData(triangulated, origin, u, v /*, normal*/);
+        }
+
+        public static Mesh CreatePolygonMesh(List<GeometryTriangulationData> datas, Vector3 offset)
+        {
+            // STEP 4: Build Unity Mesh in 3D
+            List<Vector3> verts = new List<Vector3>();
+            List<int> tris = new List<int>(); //we don't know the tri count, so make a guess
+
+            for (int i = 0; i < datas.Count; i++)
             {
-                holes = new LinearRing[contours.Count - 1];
-                for (int i = 1; i < contours.Count; i++)
+                var data = datas[i];
+
+                for (int j = 0; j < data.geometry.NumGeometries; j++)
                 {
-                    var holeCoords = EnsureOrientation(contours[i], false);
-                    if (holeCoords == null)
+                    var tri = data.geometry.GetGeometryN(j);
+                    if (tri is Polygon tPoly)
                     {
-                        Debug.LogWarning("Skipping degenerate hole at index " + i);
-                        continue;
+                        var coords = tPoly.Coordinates;
+                        for (int k = 0; k <= 2; k++)
+                        {
+                            var c2D = coords[k];
+                            Vector3 v3 = To3D(c2D, data.origin, data.u, data.v) - offset;
+                            int idx = verts.Count;
+                            verts.Add(v3); //todo: skip duplicate vertices
+                            tris.Add(idx);
+                        }
                     }
-                    holes[i - 1] = geometryFactory.CreateLinearRing(holeCoords);
-                }
-            }
-            Polygon polygon = geometryFactory.CreatePolygon(shell, holes);
-            Mesh mesh = PolygonToMesh(polygon);
-            return mesh;
-        }
-
-        private static Coordinate[] EnsureOrientation(List<Vector3> points, bool counterClockwise)
-        {
-            var coords = ConvertToCoordinateArray(points);
-            if (NetTopologySuite.Algorithm.Orientation.IsCCW(coords) != counterClockwise)
-            {
-                System.Array.Reverse(coords);
-            }
-            return coords;
-        }
-
-        private static Coordinate[] ConvertToCoordinateArray(List<Vector3> points)
-        {
-            //check duplicates
-            var filtered = new List<Coordinate>();
-            Coordinate? last = null;
-            foreach (var pt in points)
-            {
-                var current = new Coordinate(pt.x, pt.z);
-                if (last == null || !current.Equals2D(last))
-                {
-                    filtered.Add(current);
-                    last = current;
-                }
-            }
-            if (filtered.Count < 3)
-                return null;
-
-            var coords = new Coordinate[filtered.Count + 1];
-            for (int i = 0; i < filtered.Count; i++)
-            {
-                coords[i] = filtered[i];
-            }
-            coords[filtered.Count] = coords[0];
-            return coords;
-        }
-
-        public static Mesh PolygonToMesh(Polygon polygon)
-        {
-            //triangulate
-            var cleaner = new NetTopologySuite.Simplify.TopologyPreservingSimplifier(polygon);
-            cleaner.DistanceTolerance = 0.01;
-            var cleanPolygon = cleaner.GetResultGeometry() as Polygon;
-            if (!cleanPolygon.IsValid)
-            {
-                Debug.LogError("Polygon is invalid: " + cleanPolygon.ToString());
-                return null;
-            }
-            var triangulator = new PolygonTriangulator(cleanPolygon);
-            List<Tri> triangles = triangulator.GetTriangles(); 
-            List<Vector3> vertices = new List<Vector3>();
-            List<int> indices = new List<int>();
-            Dictionary<Coordinate, int> coordToIndex = new Dictionary<Coordinate, int>(new CoordinateEqualityComparer());
-            int nextIndex = 0;
-            for (int i = 0; i < triangles.Count; i++)
-            {
-                var tri = triangles[i];
-                Coordinate[] coords = new[] { tri.GetCoordinate(0), tri.GetCoordinate(1), tri.GetCoordinate(2) };
-                for (int j = 0; j < 3; j++)
-                {
-                    var coord = coords[j];
-                    if (!coordToIndex.TryGetValue(coord, out int index))
-                    {
-                        index = nextIndex++;
-                        coordToIndex[coord] = index;
-                        vertices.Add(new Vector3((float)coord.X, 0f, (float)coord.Y));
-                    }
-                    indices.Add(index);
                 }
             }
 
             Mesh mesh = new Mesh();
-            mesh.SetVertices(vertices);
-            mesh.SetTriangles(indices, 0);
+            mesh.vertices = verts.ToArray();
+            mesh.triangles = tris.ToArray();
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
+
             return mesh;
+        }
+
+        public static Mesh CreatePolygonMesh(List<List<Vector3>> contours, bool invertWindingOrder = false)
+        {
+            var triangulationData = CreatePolygonGeometryTriangulationData(contours, invertWindingOrder);
+            return CreatePolygonMesh(new List<GeometryTriangulationData>() { triangulationData }, Vector3.zero);
+        }
+
+        private static Coordinate[] ConvertToCoordinateArray(List<Vector3> points, Vector3 origin, Vector3 u, Vector3 v, bool shouldBeCCW)
+        {
+            var coords = new List<Coordinate>(points.Count + 1);
+            for (int i = 0; i < points.Count; i++)
+            {
+                Vector3 d = points[i] - origin;
+                coords.Add(new Coordinate(Vector3.Dot(d, u), Vector3.Dot(d, v)));
+            }
+
+            if (!coords[0].Equals2D(coords[^1]))
+            {
+                coords.Add(coords[0]);
+            }
+
+            var coordsArray = coords.ToArray();
+            var isCCW = NetTopologySuite.Algorithm.Orientation.IsCCW(coordsArray);
+            if (isCCW ^ shouldBeCCW)
+            {
+                Array.Reverse(coordsArray);
+            }
+
+            return coordsArray;
         }
 
         #endregion
 
         #region PolygonLine
+
         public static List<LineRenderer> CreateLineRenderers(List<List<Vector3>> polygons, Material lineMaterial, Color lineColor, Transform parent = null)
         {
             var list = new List<LineRenderer>();
@@ -204,6 +218,7 @@ namespace Netherlands3D.SelectionTools
             {
                 list.Add(CreateAndReturnPolygonLine((List<Vector3>)contour, lineMaterial, lineColor, parent)); //todo: require explicit List<List<Vector3>> as argument?
             }
+
             return list;
         }
 
@@ -224,16 +239,27 @@ namespace Netherlands3D.SelectionTools
 
             return lineRenderer;
         }
+
         #endregion
 
-        public static void SetUVCoordinates(Mesh newPolygonMesh, Vector2 uvCoordinate)
+        /// <summary>
+        /// Reconstructs a 3D point from its 2D plane coordinate.
+        /// </summary>
+        private static Vector3 To3D(Coordinate c, Vector3 origin, Vector3 u, Vector3 v)
         {
-            var uvs = new Vector2[newPolygonMesh.vertexCount];
-            for (int i = 0; i < uvs.Length; i++)
-            {
-                uvs[i] = uvCoordinate;
-            }
-            newPolygonMesh.uv = uvs;
+            return origin + (float)c.X * u + (float)c.Y * v;
+        }
+
+        /// <summary>
+        /// Computes a best-fit plane for a polygon (assumes it's planar).
+        /// </summary>
+        private static Plane ComputeBestFitPlane(List<Vector3> contour)
+        {
+            if (contour.Count < 3)
+                throw new ArgumentException("Need at least 3 points for a plane");
+
+            Vector3 normal = Vector3.Cross(contour[1] - contour[0], contour[2] - contour[0]).normalized;
+            return new Plane(normal, contour[0]);
         }
     }
 }
