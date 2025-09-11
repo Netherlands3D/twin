@@ -121,7 +121,7 @@ namespace Netherlands3D.Coordinates
                     case 0: return value1;
                     case 1: return value2;
                     case 2: return value3;
-                    default: return value1;
+                    default: return value2;
                 }
             }
             set
@@ -471,6 +471,8 @@ namespace Netherlands3D.Coordinates
 
         public Vector3 ToUnity()
         {
+            if ((CoordinateSystem)coordinateSystem == Netherlands3D.Coordinates.CoordinateSystem.Undefined) //we cannot convert an undefined CRS, so we just return it as a Unity Vector3
+                return new Vector3((float)value1, (float)value2, (float)value3);
 
             Coordinate connectionCoordinate = CoordinateSystems.CoordinateAtUnityOrigin;
             //transform current coordinate to connectioncoordinate;

@@ -25,7 +25,7 @@ namespace Netherlands3D.Coordinates
         }
         public override int AxisCount()
         {
-            return 0;
+            return 3;
         }
         public override Coordinate ConvertFromWGS84LatLonH(Coordinate coordinate)
         {
