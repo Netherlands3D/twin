@@ -10,26 +10,32 @@ namespace Netherlands3D.FirstPersonViewer
 {
     public class FirstPersonViewer : MonoBehaviour
     {
+        [Header("State Machine")]
+        private FirstPersonViewerStateMachine fsm;
+        [SerializeField] private ViewerState startState; //Should be from default MovementPreset.
+
         [Header("Input")]
         [SerializeField] private InputActionAsset inputActionAsset;
 
-        private InputAction moveAction;
-        private InputAction sprintAction;
+        public InputAction MoveAction { private set; get; }
+        public InputAction SprintAction {  private set; get; }
 
-        [Header("Movement"), Tooltip("temporary movement input (Should be replaced with button event or something like that)")]
-        [SerializeField] private MovementPresets movementModus;
-        private float movementSpeed;
+        [Header("Movement")]
+        [field: SerializeField, Tooltip("temporary movement input (Should be replaced with button event or something like that)")] public MovementPresets MovementModus { private set; get; }
+        public float MovementSpeed { private set; get; }
 
         //Raycasting
         private OpticalRaycaster raycaster;
         private int snappingCullingMask = 0;
 
         //Falling
+        public Vector2 Velocity => velocity;
         private Vector2 velocity;
         private readonly float gravity = -9.81f;
         private readonly float maxFallSpeed = -55f;
         private float yPositionTarget;
-        private bool isGrounded;
+        public bool isGrounded;
+        [SerializeField] private float groundDistance = .2f;
 
         private void OnEnable()
         {
@@ -44,48 +50,39 @@ namespace Netherlands3D.FirstPersonViewer
         private void Start()
         {
             //TEMP
-            movementSpeed = movementModus.speedInKm / 3.6f;
+            MovementSpeed = MovementModus.speedInKm / 3.6f;
 
             yPositionTarget = transform.position.y;
 
-            moveAction = inputActionAsset.FindAction("Move");
-            sprintAction = inputActionAsset.FindAction("Sprint");
+            MoveAction = inputActionAsset.FindAction("Move");
+            SprintAction = inputActionAsset.FindAction("Sprint");
 
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
             snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings") | (1 << LayerMask.NameToLayer("Default")));
+
+            SetupFSM();
+        }
+
+        private void SetupFSM()
+        {
+            ViewerState[] playerStates = GetComponents<ViewerState>();
+
+            fsm = new FirstPersonViewerStateMachine(this, startState.GetType(), playerStates);
         }
 
         private void Update()
         {
-            Vector2 moveInput = moveAction.ReadValue<Vector2>();
-            if(moveInput.magnitude > 0)
-            {
-                MovePlayer(moveInput);
-            }
-
             CheckGroundCollision();
 
-            Jump();
-
-            ApplyGravity();
+            fsm.OnUpdate();
 
             transform.position += Vector3.up * velocity.y * Time.deltaTime;
         }
 
-        private void MovePlayer(Vector2 moveInput)
+        public void GetGroundPosition()
         {
-            Vector3 direction = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
-
-            float calculatedSpeed = movementSpeed * (sprintAction.IsPressed() ? movementModus.runningMultiplier : 1);
-
-            transform.Translate(direction * calculatedSpeed * Time.deltaTime, Space.World);
-            GetGroundPosition();
-        }
-
-        private void GetGroundPosition()
-        {
-            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * movementModus.stepHeight, Vector3.down, (point, hit) =>
+            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * MovementModus.stepHeight, Vector3.down, (point, hit) =>
             {
                 if (hit)
                 {
@@ -103,18 +100,11 @@ namespace Netherlands3D.FirstPersonViewer
                 isGrounded = true;
             }
             else isGrounded = false;
+
+            if (Mathf.Abs(transform.position.y - yPositionTarget) < groundDistance) isGrounded = true;
         }
 
-        private void Jump()
-        {
-            if (Keyboard.current.spaceKey.wasPressedThisFrame && isGrounded)
-            {
-                velocity.y = movementModus.jumpHeight;
-                isGrounded = false;
-            }
-        }
-
-        private void ApplyGravity()
+        public void ApplyGravity()
         {
             if (!isGrounded)
             {
@@ -123,6 +113,6 @@ namespace Netherlands3D.FirstPersonViewer
             }
         }
 
-       
+        public void SetVelocity(Vector2 velocity) => this.velocity = velocity;
     }
 }
