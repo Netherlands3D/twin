@@ -110,14 +110,30 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void SetVisibilityForFeature(string objectId, bool visible)
         {
             LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
-            (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(layerFeature, visible);           
+            if(layerFeature != null)
+            {
+                (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(layerFeature, visible);
+                return;
+            }
+            (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObjectByAttributeTag(objectId, visible);
         }
 
         private GameObject selectedHiddenObject;
 
         private void HiddenFeatureSelected(string objectId)
         {
-            LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
+            //foreach (KeyValuePair<string, StylingRule> kv in layer.LayerData.DefaultStyle.StylingRules)
+            //{
+            //    if (kv.Key.Contains("visibility" && kv.Key.Contains(objectId))
+            //    {
+            //    }
+            //}
+
+            //TODO get the position attribute from data without layerfeature
+
+
+
+                    LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
             if (layerFeature.Geometry is ObjectMappingItem mapping)
             {
                 string coordString = layerFeature.GetAttribute(CartesianTileLayerStyler.VisibilityPositionIdentifier);

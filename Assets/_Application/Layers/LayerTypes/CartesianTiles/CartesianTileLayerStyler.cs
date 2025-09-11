@@ -91,7 +91,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             layer.LayerData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
             layer.ApplyStyling();
-        }        
+        }   
+        
+        public void SetVisibilityForSubObjectByAttributeTag(string objectId, bool visible)
+        {
+            var stylingRuleName = VisibilityStyleRuleName(objectId);
+
+            // Add or set the colorization of this feature by its material index
+            var stylingRule = new StylingRule(
+                stylingRuleName,
+                Expression.EqualTo(
+                    Expression.Get(VisibilityIdentifier),
+                    objectId
+                )
+            );
+            stylingRule.Symbolizer.SetVisibility(visible);
+
+            layer.LayerData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
+            layer.ApplyStyling();
+        }
 
         public bool? GetVisibilityForSubObject(LayerFeature layerFeature)
         {
