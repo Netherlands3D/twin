@@ -8,7 +8,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Functionalities.OGC3DTiles
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "3DTiles")]
-    public class Tile3DLayerPropertyData : LayerPropertyData
+    public class Tile3DLayerPropertyData : LayerPropertyData, ILayerPropertyDataWithCRS
     {
         [DataMember] private string url;
 
