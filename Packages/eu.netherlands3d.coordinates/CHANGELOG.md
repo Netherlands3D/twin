@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] 11-09-2025
+
+### Added
+* Added IsValid check to check if a coordinate could be a EPSG7415 (RDNAP) Coordinate.
+* Changed default axis for northing to value 2 (y)
+* UndefinedOperations now have an axisCount of 3 so height won't be ignored/set to 0.
+* ToUnity now returns the coordinate values in order as a Vector3
+
 ## [2.2.0] 10-07-2025
 
 ### Added
