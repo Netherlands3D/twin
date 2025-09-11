@@ -43,6 +43,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void OnDestroy()
         {
             layer.OnStylingApplied.RemoveListener(UpdateVisibility);
+
+            //TODO we need to actively clear any layerfeatures visibility position data on destroy
         }
 
         private IEnumerator OnPropertySectionsLoaded()
@@ -93,27 +95,19 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void SetVisibilityForFeature(LayerFeature layerFeature, bool visible)
         {
-            (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(layerFeature, visible);
+            (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(layerFeature, visible);           
         }
 
         private void HiddenFeatureSelected(LayerFeature layerFeature)
         {
             if (layerFeature.Geometry is ObjectMappingItem mapping)
             {
-                CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
-                ObjectMapping objectMapping = cartesianTileLayerGameObject.FindObjectMapping(mapping);
-                MeshFilter mFilter = objectMapping.gameObject.GetComponent<MeshFilter>();
-                Vector3[] vertices = mFilter.sharedMesh.vertices;
-                Vector3 centr = Vector3.zero;
-                for (int i = mapping.firstVertex; i < mapping.firstVertex + mapping.verticesLength; i++)
-                    centr += vertices[i];
-                centr /= mapping.verticesLength;
-                
-                Vector3 centroidWorld = mFilter.transform.TransformPoint(centr);
-                Coordinate coord = new Coordinate(centroidWorld);
-                
-                //DebugVertices(vertices, mapping.firstVertex, mapping.verticesLength, mFilter.transform);
-                Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(coord, cameraDistance);
+                string coordString = layerFeature.GetAttribute(CartesianTileLayerStyler.VisibilityPositionIdentifier);
+                if(coordString != null)
+                {
+                    Coordinate coord = CartesianTileLayerStyler.VisibilityPositionFromIdentifierValue(coordString);
+                    Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(coord, cameraDistance);
+                }
             }
         }
 
@@ -130,5 +124,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 testPos.transform.localScale = Vector3.one * 5;
             }
         }
+
+        
     }
 }

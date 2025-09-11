@@ -9,6 +9,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Netherlands3D.SubObjects;
+using Netherlands3D.Coordinates;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
@@ -122,29 +123,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             return null;
         }
 
-        public List<ObjectMapping> FindObjectMappings(ObjectMappingItem item)
+        public Coordinate GetCoordinateForObjectMappingItem(ObjectMapping objectMapping, ObjectMappingItem mapping)
         {
-            if (layer is not BinaryMeshLayer binaryMeshLayer) return null;
+            MeshFilter mFilter = objectMapping.gameObject.GetComponent<MeshFilter>();
+            Vector3[] vertices = mFilter.sharedMesh.vertices;
+            Vector3 centr = Vector3.zero;
+            for (int i = mapping.firstVertex; i < mapping.firstVertex + mapping.verticesLength; i++)
+                centr += vertices[i];
+            centr /= mapping.verticesLength;
 
-            return FindObjectMappings(item.objectID);
-        }
+            //DebugVertices(vertices, mapping.firstVertex, mapping.verticesLength, mFilter.transform);
 
-        public List<ObjectMapping> FindObjectMappings(string bagId)
-        {
-            List<ObjectMapping> mappings = new List<ObjectMapping>();
-            if (layer is not BinaryMeshLayer binaryMeshLayer) return null;
-            foreach (ObjectMapping mapping in binaryMeshLayer.Mappings.Values)
-            {
-                foreach (ObjectMappingItem item in mapping.items)
-                {
-                    if (item.objectID == bagId)
-                    {
-                        mappings.Add(mapping);
-                        break;
-                    }
-                }
-            }
-            return mappings;
+            Vector3 centroidWorld = mFilter.transform.TransformPoint(centr);
+            Coordinate coord = new Coordinate(centroidWorld);
+            return coord;
         }
 
         public override void OnSelect()
@@ -228,7 +220,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             if(feature.Geometry is ObjectMappingItem item)
             {
-                feature.Attributes.Add(CartesianTileLayerStyler.VisibilityIdentifier, item.objectID);                
+                feature.Attributes.Add(CartesianTileLayerStyler.VisibilityIdentifier, item.objectID); 
             }
 
             if (feature.Geometry is not Material mat) return feature;

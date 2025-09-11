@@ -1,4 +1,5 @@
 ﻿using Netherlands3D.CartesianTiles;
+using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.SerializableGisExpressions;
 using Netherlands3D.SubObjects;
@@ -18,6 +19,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         public const string MaterialNameIdentifier = "data-materialname";
         public const string MaterialIndexIdentifier = "data-materialindex";
         public const string VisibilityIdentifier = "data-visibility";
+        public const string VisibilityPositionIdentifier = "data-visibility-position";
 
         public static ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
 
@@ -89,7 +91,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             layer.LayerData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
             layer.ApplyStyling();
-        }
+        }        
 
         public bool? GetVisibilityForSubObject(LayerFeature layerFeature)
         {
@@ -142,13 +144,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 {
                     var color = styling.GetFillColor() ?? Color.white;
                     GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, color } });
+
+                    //TODO we need a check or callback when the panel will close and all visible layerfeatures are removed
+                    //layerFeature.Attributes.Remove(VisibilityPositionIdentifier);
+
                 }
                 else
                 {
                     var color = Color.clear;
                     GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, color } });
+
+                    if(layerFeature.Attributes.ContainsKey(VisibilityPositionIdentifier)) return;
+
+                    CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
+                    ObjectMapping objectMapping = cartesianTileLayerGameObject.FindObjectMapping(item);
+                    Coordinate coord = cartesianTileLayerGameObject.GetCoordinateForObjectMappingItem(objectMapping, item);
+                    layerFeature.Attributes.Add(VisibilityPositionIdentifier, VisibilityPositionIdentifierValue(item.objectID, coord));
                 }
-            }
+            }            
         }
        
         private static string ColorizationStyleRuleName(int materialIndexIdentifier)
@@ -159,6 +172,29 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         private static string VisibilityStyleRuleName(string visibilityIdentifier)
         {
             return $"feature.{visibilityIdentifier}.visibility";
+        }
+
+        public static string VisibilityPositionIdentifierValue(string id, Coordinate position)
+        {
+            return id + position.ToString();
+        }
+
+        public static Coordinate VisibilityPositionFromIdentifierValue(string value)
+        {
+            int index = value.IndexOf('(');
+            if (index > 0)
+            {
+                string coordString = value.Substring(index);
+                coordString = coordString.Trim('(', ')');
+                var parts = coordString.Split(',');
+
+                double value1 = double.Parse(parts[0]);
+                double value2 = double.Parse(parts[1]);
+                double value3 = double.Parse(parts[2]);
+                Coordinate coord = new Coordinate(CoordinateSystems.connectedCoordinateSystem, value1, value2, value3);
+                return coord;
+            }
+            return default;
         }
     }
 }
