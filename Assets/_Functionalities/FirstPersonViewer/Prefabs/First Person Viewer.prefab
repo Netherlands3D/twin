@@ -155,7 +155,7 @@ MonoBehaviour:
   cameraHeight: {fileID: 11400000, guid: 09e37ecfe8486d94ba5d9a3e0e40f623, type: 2}
   sensitivty: {fileID: 0}
   viewerBase: {fileID: 2359970039064756521}
-  lookInput: {fileID: 11400000, guid: 2c3816b621c39ad4f8e5937537db770d, type: 2}
+  exitDuration: 0.75
 --- !u!1 &8111522683061574636
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,6 +236,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputActionAsset: {fileID: -944628639613478452, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
     type: 3}
+  movementModus: {fileID: 11400000, guid: 6b26168bc00d5ff4e8b4e234367924ba, type: 2}
+  jumpForce: 10
   walkSpeed: 10
-  verticalInput: {fileID: 11400000, guid: 22faa7b25fade4845812eab67089a12b, type: 2}
-  horizontalInput: {fileID: 11400000, guid: 93242d5c5434ab44c966480e1ff5c8d5, type: 2}
