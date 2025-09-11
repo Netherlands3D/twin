@@ -123,6 +123,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             return null;
         }
 
+        public LayerFeature GetLayerFeatureFromBagId(string bagId)
+        {
+            if (layer is not BinaryMeshLayer binaryMeshLayer) return null;
+
+            foreach (ObjectMapping mapping in binaryMeshLayer.Mappings.Values)
+            {
+                foreach (ObjectMappingItem item in mapping.items)
+                {
+                    var layerFeature = CreateFeature(item);
+                    return layerFeature;
+                }
+            }
+            return null;
+        }
+
         public Coordinate GetCoordinateForObjectMappingItem(ObjectMapping objectMapping, ObjectMappingItem mapping)
         {
             MeshFilter mFilter = objectMapping.gameObject.GetComponent<MeshFilter>();

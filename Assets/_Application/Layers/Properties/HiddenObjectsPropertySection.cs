@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Cameras;
@@ -60,28 +61,39 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void CreateItems()
         {
             layerContent.ClearAllChildren();
-            foreach(var layerFeature in layer.LayerFeatures.Values)
+            //find attributes within the data, we cannot rely on layer.layerfeatures.values because tiles arent potentialy loaded
+            foreach(KeyValuePair<string, StylingRule> kv in layer.LayerData.DefaultStyle.StylingRules)
             {
-                bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(layerFeature);
-                if(visibility == false)
-                    CreateVisibilityItem(layerFeature);
+                if(kv.Key.Contains("visibility"))
+                {
+                    string objectId = CartesianTileLayerStyler.ObjectIdFromVisibilityStyleRuleName(kv.Key);                    
+                    bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(objectId);
+                    if (visibility == false)
+                        CreateVisibilityItem(objectId);
+                }
             }
+            //foreach(var layerFeature in layer.LayerFeatures.Values)
+            //{
+            //    bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(layerFeature);
+            //    if(visibility == false)
+            //        CreateVisibilityItem(layerFeature);
+            //}
         }
 
-        private void CreateVisibilityItem(LayerFeature layerFeature)
+        private void CreateVisibilityItem(string objectID)
         {
-            string objectID = layerFeature.GetAttribute(CartesianTileLayerStyler.VisibilityIdentifier);
+            //string objectID = layerFeature.GetAttribute(CartesianTileLayerStyler.VisibilityIdentifier);
             if (hiddenObjects.ContainsKey(objectID)) return;
 
             GameObject visibilityObject = Instantiate(hiddenItemPrefab, layerContent);
             
             HiddenObjectsVisibilityItem item = visibilityObject.GetComponent<HiddenObjectsVisibilityItem>();
             item.SetObjectId(objectID);
-            item.SetLayerFeature(layerFeature);
+            //item.SetLayerFeature(layerFeature);
             //because all ui elements will be destroyed on close an anonymous listener is fine here              
-            item.ToggleVisibility.AddListener(visible => SetVisibilityForFeature(layerFeature, visible));
-            item.OnSelectItem.AddListener(feature => HiddenFeatureSelected(layerFeature));
-            item.OnDeselectItem.AddListener(feature => HiddenFeatureDeselected(layerFeature));
+            item.ToggleVisibility.AddListener(visible => SetVisibilityForFeature(objectID, visible));
+            item.OnSelectItem.AddListener(feature => HiddenFeatureSelected(objectID));
+            item.OnDeselectItem.AddListener(feature => HiddenFeatureDeselected(objectID));
 
             hiddenObjects.Add(objectID, item);
         }
@@ -90,20 +102,22 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             foreach (KeyValuePair<string, HiddenObjectsVisibilityItem> kv in hiddenObjects)
             {
-                bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(kv.Value.LayerFeature);
+                bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(kv.Key);
                 kv.Value.SetToggleState(visibility == true);
             }
         }        
 
-        private void SetVisibilityForFeature(LayerFeature layerFeature, bool visible)
+        private void SetVisibilityForFeature(string objectId, bool visible)
         {
+            LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
             (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(layerFeature, visible);           
         }
 
         private GameObject selectedHiddenObject;
 
-        private void HiddenFeatureSelected(LayerFeature layerFeature)
+        private void HiddenFeatureSelected(string objectId)
         {
+            LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
             if (layerFeature.Geometry is ObjectMappingItem mapping)
             {
                 string coordString = layerFeature.GetAttribute(CartesianTileLayerStyler.VisibilityPositionIdentifier);
@@ -126,13 +140,14 @@ namespace Netherlands3D.Twin.Layers.Properties
             }
         }
 
-        private void HiddenFeatureDeselected(LayerFeature layerFeature)
+        private void HiddenFeatureDeselected(string objectId)
         {
             if(selectedHiddenObject != null)
             {
                 Destroy(selectedHiddenObject);
                 selectedHiddenObject = null;
             }
+            LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
             if (layerFeature.Geometry is ObjectMappingItem mapping)
             {
                

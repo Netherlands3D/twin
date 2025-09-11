@@ -107,6 +107,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             return stylingRule.Symbolizer.GetVisibility();
         }
 
+        public bool? GetVisibilityForSubObjectByAttributeTag(string id)
+        {
+            var stylingRuleName = VisibilityStyleRuleName(id);
+
+            if (!layer.LayerData.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
+            {
+                return true;
+            }
+
+            return stylingRule.Symbolizer.GetVisibility();
+        }
+
         /// <summary>
         /// The other methods deal with manipulating the styles for a layerfeature, this method takes the outcome of
         /// those actions and applies them to the materials for the binary mesh layer.
@@ -172,6 +184,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         private static string VisibilityStyleRuleName(string visibilityIdentifier)
         {
             return $"feature.{visibilityIdentifier}.visibility";
+        }
+
+        public static string ObjectIdFromVisibilityStyleRuleName(string styleRuleName)
+        {
+            int startIndex = styleRuleName.IndexOf('.') + 1;
+            int endIndex = styleRuleName.LastIndexOf('.');
+            if (startIndex > 0 && endIndex > startIndex)
+            {
+                return styleRuleName.Substring(startIndex, endIndex - startIndex);
+            }
+            return null;
         }
 
         public static string VisibilityPositionToIdentifierValue(string id, Coordinate position)
