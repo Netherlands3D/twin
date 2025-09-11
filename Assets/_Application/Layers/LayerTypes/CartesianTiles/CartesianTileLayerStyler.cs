@@ -176,7 +176,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         public static string VisibilityPositionIdentifierValue(string id, Coordinate position)
         {
-            return id + position.ToString();
+            return id + position.ToString() + position.CoordinateSystem.ToString();
         }
 
         public static Coordinate VisibilityPositionFromIdentifierValue(string value)
@@ -184,14 +184,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             int index = value.IndexOf('(');
             if (index > 0)
             {
-                string coordString = value.Substring(index);
+                int endIndex = value.IndexOf(')');
+                string coordString = value.Substring(index, endIndex + 1 - index);
+                string crs = value.Substring(endIndex + 1);
                 coordString = coordString.Trim('(', ')');
                 var parts = coordString.Split(',');
 
                 double value1 = double.Parse(parts[0]);
                 double value2 = double.Parse(parts[1]);
                 double value3 = double.Parse(parts[2]);
-                Coordinate coord = new Coordinate(CoordinateSystems.connectedCoordinateSystem, value1, value2, value3);
+
+                int coordinateSystem = int.Parse(crs);
+                Coordinate coord = new Coordinate(coordinateSystem, value1, value2, value3);
                 return coord;
             }
             return default;
