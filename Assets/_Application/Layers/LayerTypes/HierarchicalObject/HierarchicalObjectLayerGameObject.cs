@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
@@ -10,6 +10,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -22,6 +23,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
     public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, ILayerWithPropertyPanels, ILayerWithPropertyData
     {
         public override BoundingBox Bounds => CalculateWorldBoundsFromRenderers();
+        public bool DebugBoundingBox = false;
+
+        private int snappingCullingMask = 0;
 
         private BoundingBox CalculateWorldBoundsFromRenderers()
         {
@@ -58,6 +62,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected virtual void Awake()
         {
+            snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings"));
             transformPropertyData = InitializePropertyData();
 
             propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
@@ -123,6 +128,72 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 transform.localScale = newScale;
         }
 
+        public void SnapToGround()
+        {
+            Vector3 currentPosition = transform.position;
+            BoundingBox bounds = Bounds;
+            Vector3 boundsCenter = bounds.Center.ToUnity();
+
+            var context = new SnapContext
+            {
+                HeightExtent = bounds.Size.ToUnity().y * 0.5f,
+                PivotOffset = boundsCenter.y - currentPosition.y,
+                PreviousPosition = currentPosition,
+                Target = this,
+                Raycaster = ServiceLocator.GetService<OpticalRaycaster>(),
+                cullingMask = snappingCullingMask
+            };
+
+            context.SnapFromPosition(new Vector3(currentPosition.x, boundsCenter.y, currentPosition.z));
+        }
+
+        private struct SnapContext
+        {
+            public float HeightExtent;
+            public float PivotOffset;
+            public Vector3 PreviousPosition;
+            public OpticalRaycaster Raycaster;
+            public HierarchicalObjectLayerGameObject Target;
+            public int cullingMask; 
+
+            public void SnapFromPosition(Vector3 position)
+            {
+               Raycaster.GetWorldPointFromDirectionAsync(
+                   position,
+                   Vector3.down,
+                   OnRaycastDown,
+                   cullingMask
+               );
+            }
+
+            private void OnRaycastDown(Vector3 worldPos, bool hit)
+            {                
+                if (hit)
+                {
+                    Coordinate target = new Coordinate(worldPos + Vector3.up * (HeightExtent - PivotOffset));
+                    Target.UpdatePosition(target);
+                }
+                else
+                {
+                    Raycaster.GetWorldPointFromDirectionAsync(
+                        PreviousPosition,
+                        Vector3.up,
+                        OnRaycastUp,
+                        cullingMask
+                    );
+                }
+            }
+
+            private void OnRaycastUp(Vector3 worldPos, bool hit)
+            {                
+                if (hit)
+                {
+                    Coordinate target = new Coordinate(worldPos + Vector3.up * (-HeightExtent - PivotOffset));
+                    Target.UpdatePosition(target);
+                }
+            }
+        }
+
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             var transformProperty = (TransformLayerPropertyData)properties.FirstOrDefault(p => p is TransformLayerPropertyData);
@@ -172,6 +243,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 transformPropertyData.LocalScale = transform.localScale;
                 previousScale = transform.localScale;
             }
+
+            //enable this to debug the exact bounds in worldspace, based on the Bounds (3d)
+            if(DebugBoundingBox)
+                Bounds.Debug(Color.magenta);
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
@@ -208,6 +283,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             else
             {
                 transformInterfaceToggle.SetTransformTarget(gameObject);
+                transformInterfaceToggle.SnapTarget.AddListener(SnapToGround);
             }
         }
 
@@ -221,7 +297,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
 
             if (transformInterfaceToggle)
+            {
                 transformInterfaceToggle.ClearTransformTarget();
+                transformInterfaceToggle.SnapTarget.RemoveListener(SnapToGround);
+            }
         }
 
         public List<IPropertySectionInstantiator> GetPropertySections()

@@ -23,6 +23,8 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         protected Dictionary<string, LayerStyle> Styles { get; }
 
+        public IStyler Styler {get;}
+
         /// <summary>
         /// Visualisations produced by this may apply styling from all Styling rules associated with this object.
         ///

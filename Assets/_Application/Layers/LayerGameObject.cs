@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.Properties;
@@ -34,6 +35,10 @@ namespace Netherlands3D.Twin.Layers
         public SpriteState Thumbnail => thumbnail;
         public SpawnLocation SpawnLocation => spawnLocation;
         public virtual bool IsMaskable => true; // Can we mask this layer? Usually yes, but not in case of projections
+
+        public virtual IStyler Styler => styler;
+        protected IStyler styler;
+        
 
         public string Name
         {
@@ -209,7 +214,11 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void ApplyStyling()
         {
-            UpdateMaskBitMask(LayerData.DefaultSymbolizer.GetMaskLayerMask());
+            int? bitMask = LayerData.DefaultSymbolizer.GetMaskLayerMask();
+            if (bitMask == null)
+                bitMask = LayerGameObject.DEFAULT_MASK_BIT_MASK;
+
+            UpdateMaskBitMask(bitMask.Value);
             // var mask = LayerStyler.GetMaskLayerMask(this); todo?
             //initialize the layer's style and emit an event for other services and/or UI to update
             OnStylingApplied.Invoke();
@@ -262,7 +271,11 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         public int GetMaskLayerMask()
         {
-            return LayerData.DefaultStyle.AnyFeature.Symbolizer.GetMaskLayerMask();
+            int? bitMask = LayerData.DefaultStyle.AnyFeature.Symbolizer.GetMaskLayerMask();
+            if (bitMask == null)
+                bitMask = LayerGameObject.DEFAULT_MASK_BIT_MASK;
+
+            return bitMask.Value;
         }
 #endregion
 
