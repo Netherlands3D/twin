@@ -15,7 +15,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             viewer.FirstPersonCamera.transform.localRotation = Quaternion.identity;
 
             viewer.SetVelocity(Vector2.zero);
-            viewer.FirstPersonCamera.UpdateCameraState(CameraState.CONTROL_BOTH);
+            viewer.FirstPersonCamera.UpdateCameraConstrain(CameraConstrain.CONTROL_BOTH);
         }
 
         public override void OnUpdate()
@@ -23,7 +23,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             Vector2 moveInput = viewer.MoveAction.ReadValue<Vector2>();
             if (moveInput.magnitude > 0)
             {
-                MovePlayer(moveInput);
+                MoveFreeCam(moveInput);
             }
 
             float verticalInput = viewer.VerticalMoveAction.ReadValue<float>();
@@ -33,7 +33,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             }
         }
 
-        private void MovePlayer(Vector2 moveInput)
+        private void MoveFreeCam(Vector2 moveInput)
         {
             Vector3 direction = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
 

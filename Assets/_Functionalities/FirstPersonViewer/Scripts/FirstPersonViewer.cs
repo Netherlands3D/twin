@@ -87,6 +87,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             if (Keyboard.current.numpad1Key.wasPressedThisFrame) fsm.SwitchState(typeof(ViewerWalkingState));
             else if (Keyboard.current.numpad2Key.wasPressedThisFrame) fsm.SwitchState(typeof(ViewerFlyingState));
+            else if (Keyboard.current.numpad3Key.wasPressedThisFrame) fsm.SwitchState(typeof(ViewerVehicularState));
         }
 
         public void GetGroundPosition()

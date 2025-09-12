@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace Netherlands3D.FirstPersonViewer
 {
-    public enum CameraState { CONTROL_Y, CONTROL_BOTH, CONTROL_NONE }
+    public enum CameraConstrain { CONTROL_Y, CONTROL_BOTH, CONTROL_NONE }
 
     public class FirstPersonViewerCamera : MonoBehaviour
     {
@@ -37,7 +37,7 @@ namespace Netherlands3D.FirstPersonViewer
         //TEMP
         private Camera mainCam;
 
-        public CameraState cameraState;
+        public CameraConstrain cameraState;
 
         private void Start()
         {
@@ -104,7 +104,7 @@ namespace Netherlands3D.FirstPersonViewer
             else exitTimer = exitDuration;
         }
 
-        public void UpdateCameraState(CameraState state) => cameraState = state;
+        public void UpdateCameraConstrain(CameraConstrain state) => cameraState = state;
         
 
         private void PointerDelta(Vector2 pointerDelta)
@@ -116,14 +116,14 @@ namespace Netherlands3D.FirstPersonViewer
 
             switch (cameraState)
             {
-                case CameraState.CONTROL_Y:
+                case CameraConstrain.CONTROL_Y:
                     transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
                     viewerBase.Rotate(Vector3.up * mouseLook.x);
                     break;
-                case CameraState.CONTROL_BOTH:
+                case CameraConstrain.CONTROL_BOTH:
                     viewerBase.rotation = Quaternion.Euler(xRotation, yRotation, 0);
                     break;
-                case CameraState.CONTROL_NONE:
+                case CameraConstrain.CONTROL_NONE:
                     transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
                     break;
             }
