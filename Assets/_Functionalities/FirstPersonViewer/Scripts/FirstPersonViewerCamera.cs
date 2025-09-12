@@ -5,13 +5,15 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Netherlands3D
+namespace Netherlands3D.FirstPersonViewer
 {
+    public enum CameraState { CONTROL_Y, CONTROL_BOTH, CONTROL_NONE }
+
     public class FirstPersonViewerCamera : MonoBehaviour
     {
         [Header("Input")]
         [SerializeField] private InputActionAsset inputActionAsset;
-        
+
         private InputAction lookInput;
         private InputAction exitInput; //Should be moved to other script. Currently not possible due to how Camera.Main is handled.
 
@@ -25,6 +27,7 @@ namespace Netherlands3D
 
         [SerializeField] private Transform viewerBase;
         private float xRotation;
+        private float yRotation;
 
         private bool didSetup;
 
@@ -34,9 +37,12 @@ namespace Netherlands3D
         //TEMP
         private Camera mainCam;
 
+        public CameraState cameraState;
 
         private void Start()
         {
+            //ViewerEvents.UpdateCameraState += UpdateCameraState;
+
             cameraHeight.AddListenerStarted(SetCameraHeight);
 
             lookInput = inputActionAsset.FindAction("Look");
@@ -72,7 +78,7 @@ namespace Netherlands3D
 
             //Somehow we need to stop using this to support modularity. Without breaking the camera.
             mainCam.GetComponent<FreeCamera>().enabled = false; //TEMP FIX FOR CAMERA MOVEMENT WHILE IN FPV. $$
-            mainCam.targetDisplay = 1; 
+            mainCam.targetDisplay = 1;
             //mainCam.enabled = false; //Creates a lot of errors
             Camera.SetupCurrent(firstPersonViewerCamera);
         }
@@ -98,18 +104,33 @@ namespace Netherlands3D
             else exitTimer = exitDuration;
         }
 
+        public void UpdateCameraState(CameraState state) => cameraState = state;
+        
+
         private void PointerDelta(Vector2 pointerDelta)
         {
             Vector2 mouseLook = pointerDelta * 10 * Time.deltaTime;
 
             xRotation = Mathf.Clamp(xRotation - mouseLook.y, -90, 90);
+            yRotation = yRotation + mouseLook.x;
 
-            transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
-            viewerBase.Rotate(Vector3.up * mouseLook.x);
+            switch (cameraState)
+            {
+                case CameraState.CONTROL_Y:
+                    transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+                    viewerBase.Rotate(Vector3.up * mouseLook.x);
+                    break;
+                case CameraState.CONTROL_BOTH:
+                    viewerBase.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+                    break;
+                case CameraState.CONTROL_NONE:
+                    transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
+                    break;
+            }
         }
 
         [Obsolete("Should be moved to other script. Currently not possible due to how Camera.Main is handled.")]
-        private void ExitViewer() 
+        private void ExitViewer()
         {
             mainCam.targetDisplay = 0;
             mainCam.GetComponent<FreeCamera>().enabled = true; //Somehow we need to stop using this to support modularity. Without breaking the camera.

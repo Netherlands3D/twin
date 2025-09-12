@@ -156,6 +156,7 @@ MonoBehaviour:
   sensitivty: {fileID: 0}
   viewerBase: {fileID: 2359970039064756521}
   exitDuration: 0.75
+  cameraState: 0
 --- !u!1 &8111522683061574636
 GameObject:
   m_ObjectHideFlags: 0
@@ -169,6 +170,7 @@ GameObject:
   - component: {fileID: 1775169427224426892}
   - component: {fileID: 3034395081720571745}
   - component: {fileID: -7202614291581304945}
+  - component: {fileID: -8547530675755365502}
   m_Layer: 0
   m_Name: First Person Viewer
   m_TagString: Untagged
@@ -235,6 +237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b283f1e59e3075444aa23b5cf9a685a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FirstPersonCamera: {fileID: 2754359901435342932}
   startState: {fileID: -7202614291581304945}
   inputActionAsset: {fileID: -944628639613478452, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
     type: 3}
@@ -252,5 +255,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c0e4186aed324b142b4be93f81deb807, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-8547530675755365502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8111522683061574636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37748b16695f8464b998fdbfd9bdcddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

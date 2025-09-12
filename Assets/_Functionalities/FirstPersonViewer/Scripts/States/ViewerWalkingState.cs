@@ -7,7 +7,17 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     {
         public override void OnEnter()
         {
-            
+            viewer.transform.position = viewer.transform.position + Vector3.down * viewer.MovementModus.viewHeight;
+            viewer.FirstPersonCamera.transform.localPosition = Vector3.up * viewer.MovementModus.viewHeight;
+
+            float pitch = viewer.FirstPersonCamera.transform.localEulerAngles.x;
+            Vector3 euler = viewer.transform.eulerAngles;
+
+            viewer.transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
+            viewer.FirstPersonCamera.transform.localRotation = Quaternion.Euler(euler.x, 0f, 0f);
+
+            viewer.GetGroundPosition();
+            viewer.FirstPersonCamera.UpdateCameraState(CameraState.CONTROL_Y);
         }
 
         public override void OnUpdate()
@@ -17,6 +27,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             {
                 MovePlayer(moveInput);
             }
+
+            viewer.SnapToGround();
 
             Jump();
 
@@ -35,7 +47,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         private void Jump()
         {
-            if (Keyboard.current.spaceKey.wasPressedThisFrame && viewer.isGrounded)
+            if (viewer.JumpAction.triggered && viewer.isGrounded)
             {
                 viewer.SetVelocity(new Vector2(viewer.Velocity.x, viewer.MovementModus.jumpHeight));
                 viewer.isGrounded = false;

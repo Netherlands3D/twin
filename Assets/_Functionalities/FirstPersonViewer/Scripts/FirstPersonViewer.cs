@@ -10,6 +10,8 @@ namespace Netherlands3D.FirstPersonViewer
 {
     public class FirstPersonViewer : MonoBehaviour
     {
+        [field: SerializeField] public FirstPersonViewerCamera FirstPersonCamera;
+
         [Header("State Machine")]
         private FirstPersonViewerStateMachine fsm;
         [SerializeField] private ViewerState startState; //Should be from default MovementPreset.
@@ -19,6 +21,8 @@ namespace Netherlands3D.FirstPersonViewer
 
         public InputAction MoveAction { private set; get; }
         public InputAction SprintAction {  private set; get; }
+        public InputAction JumpAction { private set; get; }
+        public InputAction VerticalMoveAction { private set; get; } 
 
         [Header("Movement")]
         [field: SerializeField, Tooltip("temporary movement input (Should be replaced with button event or something like that)")] public MovementPresets MovementModus { private set; get; }
@@ -26,7 +30,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         //Raycasting
         private OpticalRaycaster raycaster;
-        private int snappingCullingMask = 0;
+        private int snappingCullingMask;
 
         //Falling
         public Vector2 Velocity => velocity;
@@ -56,6 +60,8 @@ namespace Netherlands3D.FirstPersonViewer
 
             MoveAction = inputActionAsset.FindAction("Move");
             SprintAction = inputActionAsset.FindAction("Sprint");
+            JumpAction = inputActionAsset.FindAction("Jump");
+            VerticalMoveAction = inputActionAsset.FindAction("VerticalMove");
 
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
@@ -78,6 +84,9 @@ namespace Netherlands3D.FirstPersonViewer
             fsm.OnUpdate();
 
             transform.position += Vector3.up * velocity.y * Time.deltaTime;
+
+            if (Keyboard.current.numpad1Key.wasPressedThisFrame) fsm.SwitchState(typeof(ViewerWalkingState));
+            else if (Keyboard.current.numpad2Key.wasPressedThisFrame) fsm.SwitchState(typeof(ViewerFlyingState));
         }
 
         public void GetGroundPosition()
@@ -93,15 +102,17 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void CheckGroundCollision()
         {
+            if (Mathf.Abs(transform.position.y - yPositionTarget) < groundDistance) isGrounded = true;
+            else isGrounded = false;
+        }
+
+        public void SnapToGround()
+        {
             if (transform.position.y <= yPositionTarget)
             {
                 transform.position = new Vector3(transform.position.x, yPositionTarget, transform.position.z);
                 velocity.y = Mathf.Max(0, velocity.y);
-                isGrounded = true;
             }
-            else isGrounded = false;
-
-            if (Mathf.Abs(transform.position.y - yPositionTarget) < groundDistance) isGrounded = true;
         }
 
         public void ApplyGravity()

@@ -1,9 +1,11 @@
-using Netherlands3D.Twin.Samplers;
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Samplers;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using Netherlands3D.Twin.FloatingOrigin;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -36,11 +38,34 @@ namespace Netherlands3D.FirstPersonViewer
                 OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
                 Vector2 screenPoint = Pointer.current.position.ReadValue();
+
+                if (IsPointerOverUIObject()) return;
+
                 raycaster.GetWorldPointAsync(screenPoint, (point, hit) =>
                 {
-                    if (hit) Instantiate(firstPersonViewerPrefab, point, Quaternion.identity);
+                    if (hit)
+                    {
+                        ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
+                        SubObjectSelector subObjectSelector = objectSelectorService.SubObjectSelector;
+
+                        string bagID = subObjectSelector.FindSubObjectAtPosition(screenPoint);
+                        IMapping mapping = objectSelectorService.FindObjectMapping();
+                        objectSelectorService.IsMappingVisible(mapping, bagID);
+
+                        Instantiate(firstPersonViewerPrefab, point, Quaternion.identity);
+                    }
                 }, snappingCullingMask);
             }           
+        }
+
+        //Kinda slow
+        public static bool IsPointerOverUIObject()
+        {
+            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+            eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+            return results.Count > 1; //Idk there seems to be an invisble ui element somewhere.
         }
     }
 }
