@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7515799807325457902}
   - component: {fileID: 2227739956244784443}
   - component: {fileID: 2754359901435342932}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FPV Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -156,7 +156,7 @@ MonoBehaviour:
   sensitivty: {fileID: 0}
   viewerBase: {fileID: 2359970039064756521}
   exitDuration: 0.75
-  cameraState: 0
+  cameraConstrain: 0
 --- !u!1 &8111522683061574636
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,13 +166,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2359970039064756521}
+  - component: {fileID: 1340550924402796226}
+  - component: {fileID: 4480026687665075982}
   - component: {fileID: 5494620854880697425}
   - component: {fileID: 1775169427224426892}
   - component: {fileID: 3034395081720571745}
   - component: {fileID: -7202614291581304945}
   - component: {fileID: -8443884779799250748}
   - component: {fileID: -8547530675755365502}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: First Person Viewer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,6 +197,59 @@ Transform:
   - {fileID: 7278744538935726679}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1340550924402796226
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8111522683061574636}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: -876546973899608171, guid: f4ba087105f7c714693b2e350cb97d7a, type: 3}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &4480026687665075982
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8111522683061574636}
+  m_Mesh: {fileID: 0}
 --- !u!114 &5494620854880697425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,8 +297,6 @@ MonoBehaviour:
   startState: {fileID: -7202614291581304945}
   inputActionAsset: {fileID: -944628639613478452, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
     type: 3}
-  <MovementModus>k__BackingField: {fileID: 11400000, guid: 6b26168bc00d5ff4e8b4e234367924ba,
-    type: 2}
   isGrounded: 0
   groundDistance: 0.2
 --- !u!114 &-7202614291581304945
@@ -270,6 +323,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0456e01045a91a4e8de05a269bf5872, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  acceleration: 10
+  deceleration: 5
+  turnSpeed: 100
 --- !u!114 &-8547530675755365502
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,6 +12,7 @@ namespace Netherlands3D.FirstPersonViewer
     public class FirstPersonViewer : MonoBehaviour
     {
         [field: SerializeField] public FirstPersonViewerCamera FirstPersonCamera;
+        private MeshFilter meshFilter;
 
         [Header("State Machine")]
         private FirstPersonViewerStateMachine fsm;
@@ -71,6 +72,7 @@ namespace Netherlands3D.FirstPersonViewer
             JumpAction = inputActionAsset.FindAction("Jump");
             VerticalMoveAction = inputActionAsset.FindAction("VerticalMove");
 
+            meshFilter = GetComponent<MeshFilter>();
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
             snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings") | (1 << LayerMask.NameToLayer("Default")));
@@ -138,6 +140,9 @@ namespace Netherlands3D.FirstPersonViewer
         private void SetMovementModus(MovementPresets movementPresets)
         {
             MovementModus = movementPresets;
+
+            if(movementPresets.viewMesh != null) meshFilter.mesh = movementPresets.viewMesh;
+            else meshFilter.mesh = null;
 
             switch (movementPresets.viewModus)
             {

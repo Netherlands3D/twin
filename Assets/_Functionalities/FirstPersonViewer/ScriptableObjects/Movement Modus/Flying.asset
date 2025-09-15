@@ -15,11 +15,11 @@ MonoBehaviour:
   viewHeight: 0
   fieldOfView: 60
   speedInKm: 40
-  runningMultiplier: 2
+  runningMultiplier: 2.5
   jumpHeight: 0
   maxFallingSpeed: 0
   stepHeight: 1
   viewModus: 2
   viewName: Vliegen
   viewIcon: {fileID: 21300000, guid: 12c7f6d079de49b439e74d7ee2d18f90, type: 3}
-  viewMesh: {fileID: 0}
+  viewMesh: {fileID: 174012050967936489, guid: aa52c616a7592714fa3409c656abb4ae, type: 3}
