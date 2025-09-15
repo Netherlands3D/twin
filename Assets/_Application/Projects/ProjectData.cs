@@ -21,7 +21,6 @@ namespace Netherlands3D.Twin.Projects
     {
         [JsonIgnore] private static ProjectData current;
         [JsonIgnore] public static ProjectData Current => current;
-        [JsonIgnore, NonSerialized] public bool isLoading = false; //is the project data currently loading? if true don't add the Layers to the root's childList, because this list is stored in the json, if false, a layer was created in app, and it should be initialized 
 
         [Header("Serialized data")] public int Version = 1;
         public string SavedTimestamp = "";
@@ -92,10 +91,7 @@ namespace Netherlands3D.Twin.Projects
 
         public void AddStandardLayer(LayerData layer)
         {
-            if (!isLoading)
-            {
-                RootLayer.AddChild(layer, 0);
-            }
+            RootLayer.AddChild(layer, 0);
             LayerAdded.Invoke(layer);           
         }
 
