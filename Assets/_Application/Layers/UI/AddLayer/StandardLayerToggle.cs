@@ -9,10 +9,15 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
         private CartesianTiles.TileHandler tileHandler;
 
         protected override void OnEnable()
-        { 
+        {
             tileHandler = FindAnyObjectByType<CartesianTiles.TileHandler>(FindObjectsInactive.Include);
             layerParent = tileHandler.transform;
-            layerGameObject = tileHandler.layers.FirstOrDefault(l => l.GetComponent<CartesianTileLayerGameObject>().PrefabIdentifier == prefab.GetComponent<CartesianTileLayerGameObject>().PrefabIdentifier)?.GetComponent<CartesianTileLayerGameObject>();
+            var prefabIdentifier = prefab.GetComponent<CartesianTileLayerGameObject>().PrefabIdentifier;
+
+            layerGameObject = tileHandler.layers
+                .Select(layer => layer.GetComponent<CartesianTileLayerGameObject>())
+                .FirstOrDefault(l => l.PrefabIdentifier == prefabIdentifier);
+
             base.OnEnable();
         }
     }

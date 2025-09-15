@@ -61,14 +61,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public LayerPropertyData PropertyData => urlPropertyData;
 
-        private void Awake()
+        protected override void OnLayerInitialize()
         {
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
         }
 
-        protected override void Start()
+        protected override void OnLayerReady()
         {
-            base.Start();
             StartLoadingData();
         }
 
@@ -105,7 +104,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             parser.OnFeatureParsed.RemoveListener(AddFeatureVisualisation);
             var credentialHandler = GetComponent<ICredentialHandler>();
@@ -189,7 +188,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 return polygonLayer;
             }
 
+            // TODO: Should use LayerSpawner? This is a temporary layer?
             GeoJSONPolygonLayer newPolygonLayerGameObject = Instantiate(polygonLayerPrefab);
+            ProjectData.CreateAndAttachReferenceLayerTo(newPolygonLayerGameObject);
             newPolygonLayerGameObject.LayerData.Color = LayerData.Color;
 
             // Replace default style with the parent's default style
@@ -211,7 +212,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 return lineLayer;
             }
 
+            // TODO: Should use LayerSpawner? This is a temporary layer?
             GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
+            ProjectData.CreateAndAttachReferenceLayerTo(newLineLayerGameObject);
             newLineLayerGameObject.LayerData.Color = LayerData.Color;
 
             // Replace default style with the parent's default style
@@ -233,7 +236,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 return pointLayer;
             }
 
+            // TODO: Should use LayerSpawner? This is a temporary layer?
             GeoJSONPointLayer newPointLayerGameObject = Instantiate(pointLayerPrefab);
+            ProjectData.CreateAndAttachReferenceLayerTo(newPointLayerGameObject);
             newPointLayerGameObject.LayerData.Color = LayerData.Color;
 
             // Replace default style with the parent's default style

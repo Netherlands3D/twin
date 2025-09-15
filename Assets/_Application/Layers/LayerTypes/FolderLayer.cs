@@ -8,7 +8,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
     {
         public FolderLayer(string name) : base(name)
         {
-            ProjectData.Current.AddStandardLayer(this);
         }
     }
 }

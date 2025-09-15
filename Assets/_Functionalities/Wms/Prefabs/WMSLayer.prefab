@@ -53,14 +53,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabIdentifier: 7ddb78a6acbf44d4e84910b5684042b7
   thumbnail: {fileID: 0}
-  spawnLocation: 0
-  OnStylingApplied:
-    m_PersistentCalls:
-      m_Calls: []
+  spawnLocation: -1
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStylingApplied:
     m_PersistentCalls:
       m_Calls: []
   TransparencyEnabled: 1
