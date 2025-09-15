@@ -17,11 +17,13 @@ namespace Netherlands3D.Twin.DataTypeAdapters
         public bool Supports(LocalFile localFile)
         {
             // Check if the file has JSON content
-            if (!LooksLikeAJSONFile(localFile.LocalFilePath)) return false;
+            if (!LooksLikeAJSONFile(localFile.LocalFilePath))
+                return false;
 
             // Streamread the JSON until we find some GeoJSON properties
             using var reader = new StreamReader(localFile.LocalFilePath);
             using var jsonReader = new JsonTextReader(reader);
+
 
             //todo, we should check against a schema for optimization https://geojson.org/schema/GeoJSON.json
             while (jsonReader.Read())

@@ -133,9 +133,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void UpdateScale(Vector3 newScale)
         {
-            if (newScale == transform.localScale) return;
-            
-            transform.localScale = newScale;
+            if (newScale != transform.localScale)
+                transform.localScale = newScale;
         }
 
         public void SnapToGround()
@@ -270,9 +269,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void OnMouseClickNothing()
         {
-            if (!LayerData.IsSelected) return;
-
-            LayerData.DeselectLayer();
+            if (LayerData.IsSelected)
+            {
+                LayerData.DeselectLayer();
+            }
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -287,11 +287,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             if (!transformInterfaceToggle)
             {
                 Debug.LogError("Transform handles interface toggles not found, cannot set transform target");
-                return;
             }
-
-            transformInterfaceToggle.SetTransformTarget(gameObject);
-            transformInterfaceToggle.SnapTarget.AddListener(SnapToGround);
+            else
+            {
+                transformInterfaceToggle.SetTransformTarget(gameObject);
+                transformInterfaceToggle.SnapTarget.AddListener(SnapToGround);
+            }
         }
 
         public override void OnDeselect()

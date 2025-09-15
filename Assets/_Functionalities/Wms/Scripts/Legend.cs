@@ -63,7 +63,7 @@ namespace Netherlands3D.Functionalities.Wms
             {
                 if (instance == null)
                 {
-                    instance = FindAnyObjectByType<Legend>(FindObjectsInactive.Include);
+                    instance = FindObjectOfType<Legend>(true);
                 }
 
                 return instance;
@@ -77,6 +77,7 @@ namespace Netherlands3D.Functionalities.Wms
             credentialHandler = GetComponent<ICredentialHandler>();
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
         }
+
 
         private void OnDestroy()
         {
