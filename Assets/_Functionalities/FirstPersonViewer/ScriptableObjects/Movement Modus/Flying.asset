@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee67a7067d471274fb5ee9ab3988bc8f, type: 3}
-  m_Name: Walking
+  m_Name: Flying
   m_EditorClassIdentifier: 
-  viewHeight: 1.75
+  viewHeight: 0
   fieldOfView: 60
-  speedInKm: 20
+  speedInKm: 40
   runningMultiplier: 2
-  jumpHeight: 10
-  maxFallingSpeed: 55
+  jumpHeight: 0
+  maxFallingSpeed: 0
   stepHeight: 1
-  viewModus: 0
-  viewName: Lopen
-  viewIcon: {fileID: 21300000, guid: 4fabccc9e43961d48b9ce2684e3bc712, type: 3}
+  viewModus: 2
+  viewName: Vliegen
+  viewIcon: {fileID: 21300000, guid: 12c7f6d079de49b439e74d7ee2d18f90, type: 3}
   viewMesh: {fileID: 0}

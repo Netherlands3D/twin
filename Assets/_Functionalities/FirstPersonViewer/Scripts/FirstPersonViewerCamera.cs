@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Netherlands3D.Events;
+using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.Twin.Cameras;
 using System;
 using UnityEngine;
@@ -30,6 +31,7 @@ namespace Netherlands3D.FirstPersonViewer
         private float yRotation;
 
         private bool didSetup;
+        [Obsolete("Will be handled differntly (Prob with some kind of transitionState")] public bool DidSetup => didSetup;
 
         private float exitTimer;
         [SerializeField] private float exitDuration = .75f;
@@ -37,7 +39,7 @@ namespace Netherlands3D.FirstPersonViewer
         //TEMP
         private Camera mainCam;
 
-        public CameraConstrain cameraState;
+        public CameraConstrain cameraConstrain;
 
         private void Start()
         {
@@ -48,12 +50,21 @@ namespace Netherlands3D.FirstPersonViewer
             lookInput = inputActionAsset.FindAction("Look");
             exitInput = inputActionAsset.FindAction("Exit");
 
+            ViewerEvents.ChangeViewHeight += SetCameraHeight;
+            ViewerEvents.ChangeFOV += SetCameraFOV;
+
             firstPersonViewerCamera = GetComponent<Camera>();
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
             SetupViewer();
+        }
+
+        private void OnDestroy()
+        {
+            ViewerEvents.ChangeViewHeight -= SetCameraHeight;
+            ViewerEvents.ChangeFOV -= SetCameraFOV;
         }
 
         private void SetupViewer()
@@ -80,7 +91,7 @@ namespace Netherlands3D.FirstPersonViewer
             mainCam.GetComponent<FreeCamera>().enabled = false; //TEMP FIX FOR CAMERA MOVEMENT WHILE IN FPV. $$
             mainCam.targetDisplay = 1;
             //mainCam.enabled = false; //Creates a lot of errors
-            Camera.SetupCurrent(firstPersonViewerCamera);
+            //Camera.SetupCurrent(firstPersonViewerCamera);
         }
 
         private void Update()
@@ -104,8 +115,13 @@ namespace Netherlands3D.FirstPersonViewer
             else exitTimer = exitDuration;
         }
 
-        public void UpdateCameraConstrain(CameraConstrain state) => cameraState = state;
-        
+        public void UpdateCameraConstrain(CameraConstrain state)
+        {
+            if (state == CameraConstrain.CONTROL_BOTH) yRotation = transform.eulerAngles.y;
+            else yRotation = transform.localEulerAngles.y;
+            
+            cameraConstrain = state;
+        }
 
         private void PointerDelta(Vector2 pointerDelta)
         {
@@ -114,7 +130,7 @@ namespace Netherlands3D.FirstPersonViewer
             xRotation = Mathf.Clamp(xRotation - mouseLook.y, -90, 90);
             yRotation = yRotation + mouseLook.x;
 
-            switch (cameraState)
+            switch (cameraConstrain)
             {
                 case CameraConstrain.CONTROL_Y:
                     transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
@@ -138,9 +154,34 @@ namespace Netherlands3D.FirstPersonViewer
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 
+            ViewerEvents.OnViewerExitd?.Invoke();
+
             Destroy(transform.parent.gameObject);
         }
 
-        private void SetCameraHeight(float height) => cameraHeightOffset = height;
+        private void SetCameraHeight(float height)
+        {
+            if (!didSetup) return;
+
+            cameraHeightOffset = height;
+            transform.localPosition = Vector3.up * cameraHeightOffset;
+        }
+
+        private void SetCameraFOV(float FOV) => firstPersonViewerCamera.fieldOfView = FOV;
+
+        public Vector3 GetEulerRotation()
+        {
+            switch (cameraConstrain)
+            {
+                case CameraConstrain.CONTROL_Y:
+                    return transform.eulerAngles;
+                case CameraConstrain.CONTROL_BOTH:
+                    return transform.eulerAngles;
+                case CameraConstrain.CONTROL_NONE:
+                    return transform.parent.eulerAngles;
+            }
+
+            return default;
+        }
     }
 }

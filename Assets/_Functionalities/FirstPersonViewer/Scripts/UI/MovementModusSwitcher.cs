@@ -1,0 +1,75 @@
+using Netherlands3D.FirstPersonViewer.ViewModus;
+using Netherlands3D.FirstPersonViewer.Events;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
+
+namespace Netherlands3D.FirstPersonViewer.UI
+{
+    public class MovementModusSwitcher : MonoBehaviour
+    {
+        [Header("Input")]
+        [SerializeField] private InputActionAsset inputMap;
+        private InputAction cycleModusAction;
+
+        [Header("UI")]
+        [SerializeField] private Image currentMovemodeImage;
+        [SerializeField] private Image nextMovemodeImage;
+        [SerializeField] private Image prevMovemodeImage;
+
+        [Header("Movement")]
+        [SerializeField] private MovementCollection movementPresets;
+        private MovementPresets currentMovement;
+
+        private void Start()
+        {
+            cycleModusAction = inputMap.FindAction("MovementModusSwitch");
+
+            LoadMoveModus(0);
+        }
+
+        private void Update()
+        {
+            if (cycleModusAction.triggered)
+            {
+                float cycleModusInput = cycleModusAction.ReadValue<float>();
+
+                if (Mathf.Abs(cycleModusInput) > .1f) ChangeViewerModus(Mathf.FloorToInt(cycleModusInput));
+            }
+        }
+
+        public void ChangeViewerModus(int switchDirection)
+        {
+            int currentIndex = movementPresets.presets.IndexOf(currentMovement) + switchDirection;
+
+            if (currentIndex < 0) currentIndex = movementPresets.presets.Count - 1;
+            else if (currentIndex >= movementPresets.presets.Count) currentIndex = 0;
+
+            LoadMoveModus(currentIndex);
+        }
+
+        private void LoadMoveModus(int index)
+        {
+            if (index >= movementPresets.presets.Count || index < 0) return;
+
+            currentMovement = movementPresets.presets[index];
+            currentMovemodeImage.sprite = currentMovement.viewIcon;
+
+            int nextIndex = index + 1;
+            if (nextIndex >= movementPresets.presets.Count) nextIndex = 0;
+
+            nextMovemodeImage.sprite = movementPresets.presets[nextIndex].viewIcon; 
+
+            int prevIndex = index - 1;
+            if (prevIndex < 0) prevIndex = movementPresets.presets.Count - 1;
+
+            prevMovemodeImage.sprite = movementPresets.presets[prevIndex].viewIcon;
+
+            //Send events
+            ViewerEvents.OnMovementPresetChanged?.Invoke(currentMovement);
+            ViewerEvents.ChangeViewHeight?.Invoke(currentMovement.viewHeight);
+            ViewerEvents.ChangeFOV?.Invoke(currentMovement.fieldOfView);
+            ViewerEvents.ChangeSpeed?.Invoke(currentMovement.speedInKm);
+        }
+    }
+}

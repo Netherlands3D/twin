@@ -6,16 +6,22 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     {
         public override void OnEnter()
         {
-            Vector3 camPosition = viewer.FirstPersonCamera.transform.position;
-            viewer.transform.position = camPosition;
-            viewer.FirstPersonCamera.transform.localPosition = Vector3.zero;
+            //When viewheight is the same don't change it.
+            if (viewer.FirstPersonCamera.transform.localPosition.y != viewer.MovementModus.viewHeight)
+            {
+                Vector3 camPosition = viewer.FirstPersonCamera.transform.position;
+                viewer.transform.position = camPosition;
+                viewer.FirstPersonCamera.transform.localPosition = Vector3.zero;
+            }
 
-            Quaternion camRotation = viewer.FirstPersonCamera.transform.rotation;
-            viewer.transform.rotation = camRotation;
-            viewer.FirstPersonCamera.transform.localRotation = Quaternion.identity;
+            Vector3 eulerRotation = viewer.FirstPersonCamera.GetEulerRotation();
+
+            //Quaternion camRotation = viewer.FirstPersonCamera.transform.rotation;
+            viewer.transform.eulerAngles = eulerRotation;
+            viewer.FirstPersonCamera.transform.localEulerAngles = Vector3.zero;
 
             viewer.SetVelocity(Vector2.zero);
-            viewer.FirstPersonCamera.UpdateCameraConstrain(CameraConstrain.CONTROL_BOTH);
+            viewer.FirstPersonCamera.UpdateCameraConstrain(CameraConstrain.CONTROL_BOTH); //Can be moved to be contained in the Preset.
         }
 
         public override void OnUpdate()

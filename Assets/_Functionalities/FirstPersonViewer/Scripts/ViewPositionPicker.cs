@@ -1,3 +1,4 @@
+using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.FloatingOrigin;
@@ -53,6 +54,8 @@ namespace Netherlands3D.FirstPersonViewer
                         objectSelectorService.IsMappingVisible(mapping, bagID);
 
                         Instantiate(firstPersonViewerPrefab, point, Quaternion.identity);
+
+                        ViewerEvents.OnViewerEntered?.Invoke();
                     }
                 }, snappingCullingMask);
             }           

@@ -14,11 +14,13 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnEnter()
         {
-            viewer.transform.position = viewer.transform.position + Vector3.down * viewer.MovementModus.viewHeight;
-            viewer.FirstPersonCamera.transform.localPosition = Vector3.up * viewer.MovementModus.viewHeight;
+            if (viewer.FirstPersonCamera.transform.localPosition.y == 0)
+            {
+                viewer.transform.position = viewer.transform.position + Vector3.down * viewer.MovementModus.viewHeight;
+                viewer.FirstPersonCamera.transform.localPosition = Vector3.up * viewer.MovementModus.viewHeight;
+            }
 
-            float pitch = viewer.FirstPersonCamera.transform.localEulerAngles.x;
-            Vector3 euler = viewer.transform.eulerAngles;
+            Vector3 euler = viewer.FirstPersonCamera.GetEulerRotation();
 
             viewer.transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
             viewer.FirstPersonCamera.transform.localRotation = Quaternion.Euler(euler.x, 0f, 0f);
@@ -26,7 +28,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             currentSpeed = 0;
 
             viewer.GetGroundPosition();
-            viewer.FirstPersonCamera.UpdateCameraConstrain(CameraConstrain.CONTROL_NONE);
+            viewer.FirstPersonCamera.UpdateCameraConstrain(CameraConstrain.CONTROL_NONE); //Can be moved to be contained in the Preset.
         }
 
         public override void OnUpdate()

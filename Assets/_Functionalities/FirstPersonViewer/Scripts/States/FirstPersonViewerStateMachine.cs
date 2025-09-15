@@ -17,7 +17,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
                 stateDictionary.Add(state.GetType(), state);
             }
 
-            SwitchState(startState);
+            //SwitchState(startState);
         }
 
         public void OnUpdate()

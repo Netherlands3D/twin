@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Netherlands3D.Events;
+using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Samplers;
@@ -24,8 +25,8 @@ namespace Netherlands3D.FirstPersonViewer
         public InputAction JumpAction { private set; get; }
         public InputAction VerticalMoveAction { private set; get; } 
 
-        [Header("Movement")]
-        [field: SerializeField, Tooltip("temporary movement input (Should be replaced with button event or something like that)")] public MovementPresets MovementModus { private set; get; }
+        //Movement
+        public MovementPresets MovementModus { private set; get; }
         public float MovementSpeed { private set; get; }
 
         //Raycasting
@@ -41,20 +42,27 @@ namespace Netherlands3D.FirstPersonViewer
         public bool isGrounded;
         [SerializeField] private float groundDistance = .2f;
 
+        //Don't like this being handled here.
         private void OnEnable()
         {
             inputActionAsset.Enable();
         }
 
+        //Don't like this being handled here.
         private void OnDisable()
         {
             inputActionAsset.Disable();
         }
 
+        private void Awake()
+        {
+            SetupFSM();
+        }
+
         private void Start()
         {
-            //TEMP
-            MovementSpeed = MovementModus.speedInKm / 3.6f;
+            ViewerEvents.ChangeSpeed += SetMovementSpeed;
+            ViewerEvents.OnMovementPresetChanged += SetMovementModus;
 
             yPositionTarget = transform.position.y;
 
@@ -66,15 +74,19 @@ namespace Netherlands3D.FirstPersonViewer
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
             snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings") | (1 << LayerMask.NameToLayer("Default")));
+        }
 
-            SetupFSM();
+        private void OnDestroy()
+        {
+            ViewerEvents.ChangeSpeed -= SetMovementSpeed;
+            ViewerEvents.OnMovementPresetChanged -= SetMovementModus;
         }
 
         private void SetupFSM()
         {
             ViewerState[] playerStates = GetComponents<ViewerState>();
 
-            fsm = new FirstPersonViewerStateMachine(this, startState.GetType(), playerStates);
+            fsm = new FirstPersonViewerStateMachine(this, null, playerStates);
         }
 
         private void Update()
@@ -84,10 +96,6 @@ namespace Netherlands3D.FirstPersonViewer
             fsm.OnUpdate();
 
             transform.position += Vector3.up * velocity.y * Time.deltaTime;
-
-            if (Keyboard.current.numpad1Key.wasPressedThisFrame) fsm.SwitchState(typeof(ViewerWalkingState));
-            else if (Keyboard.current.numpad2Key.wasPressedThisFrame) fsm.SwitchState(typeof(ViewerFlyingState));
-            else if (Keyboard.current.numpad3Key.wasPressedThisFrame) fsm.SwitchState(typeof(ViewerVehicularState));
         }
 
         public void GetGroundPosition()
@@ -126,5 +134,26 @@ namespace Netherlands3D.FirstPersonViewer
         }
 
         public void SetVelocity(Vector2 velocity) => this.velocity = velocity;
+
+        private void SetMovementModus(MovementPresets movementPresets)
+        {
+            MovementModus = movementPresets;
+
+            switch (movementPresets.viewModus)
+            {
+                case ViewModus.ViewModus.STANDARD:
+                    fsm.SwitchState(typeof(ViewerWalkingState));
+                    break;
+                case ViewModus.ViewModus.VEHICULAR:
+                    fsm.SwitchState(typeof(ViewerVehicularState));
+                    break;
+                case ViewModus.ViewModus.FREECAM:
+                    fsm.SwitchState(typeof(ViewerFlyingState));
+                    break;
+            }
+        }
+
+
+        private void SetMovementSpeed(float speed) => MovementSpeed = speed / 3.6f;
     }
 }
