@@ -538,7 +538,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "https://github.com/Netherlands3D/3DTiles.git#fix/3dtilesfixbart",
+      "version": "https://github.com/Netherlands3D/3DTiles.git#3dtilesfixbart2",
       "depth": 0,
       "source": "git",
       "dependencies": {
@@ -546,7 +546,7 @@
         "com.unity.cloud.gltfast": "6.12.1",
         "com.unity.meshopt.decompress": "0.1.0-preview.5"
       },
-      "hash": "4b9a373e6e5059aef53d9dd57795686aa3dd34dc"
+      "hash": "612ca398f1744f71d7c97e236c3ea4243ea1161a"
     },
     "eu.netherlands3d.transform-handles": {
       "version": "1.1.2",

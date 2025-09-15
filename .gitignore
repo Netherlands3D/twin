@@ -88,3 +88,6 @@ crashlytics-build.properties
 
 #Original versions file of the package switcher
 manifest_original_versions.json
+
+# API Keys - keep private
+google-apikey.txt
