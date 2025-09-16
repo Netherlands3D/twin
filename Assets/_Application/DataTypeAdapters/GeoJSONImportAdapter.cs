@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using Newtonsoft.Json;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -80,8 +81,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 newLayer.Parser.OnParseError.AddListener(onErrorCallback.Invoke);
 
             //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
-            var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
-            randomLayerColor.a = 0.5f;
+            var randomLayerColor = LayerColor.Random();
             newLayer.LayerData.Color = randomLayerColor;
             
             var symbolizer = newLayer.LayerData.DefaultSymbolizer;
