@@ -196,18 +196,17 @@ namespace Netherlands3D.CityJson.Visualisation
             meshes = new Dictionary<CityGeometry, MeshWithMaterials>();
             foreach (var geometry in cityObject.Geometries)
             {
+                Vector3Double origin = new Vector3Double();
                 var cityJsonCoord = GetComponentInParent<WorldTransform>().Coordinate; //todo: this getComponentInParent is a bit hacky
-                Vector3Double origin;
-                if (cityObject.CoordinateSystem == CoordinateSystem.Undefined) //we cannot convert an undefined crs, so we assume the origin is 0, 0, 0
-                {
-                    origin = new Vector3Double();
-                }
-                else
+                if (cityObject.CoordinateSystem != CoordinateSystem.Undefined) 
                 {
                     var convertedCoord = cityJsonCoord.Convert(cityObject.CoordinateSystem);
                     origin = new Vector3Double(convertedCoord.value1, convertedCoord.value2, convertedCoord.value3);
                 }
-
+                else
+                {
+                    origin = GetComponentInParent<CityJSON>().AbsoluteCenter;//we cannot convert an undefined crs, so we assume the origin is at the absolute center
+                }
                 // The geometry's vertices are in world space, so we need to subtract the cityJSON's origin to get them in cityJSON space, and then subtract the cityObject's origin to be able to create a mesh with the origin at the cityObject's position.
                 // The CityJSON origin is at the citJSON WorldTransform coordinate, the CityObject's origin is its localPosition, since we set it previously.
 
