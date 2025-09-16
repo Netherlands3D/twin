@@ -75,11 +75,12 @@ namespace Netherlands3D.Functionalities.CityJSON
             }
 
             var json = File.ReadAllText(file);
-            GetComponent<CityJson.Structure.CityJSON>().ParseCityJSON(json);
-            OnObjImported();
+            var cityJson = GetComponent<CityJson.Structure.CityJSON>();
+            cityJson.ParseCityJSON(json);
+            OnCityJSONImported(cityJson);
         }
 
-        private void OnObjImported()
+        private void OnCityJSONImported(CityJson.Structure.CityJSON cityJson)
         {
             var holgo = GetComponent<HierarchicalObjectLayerGameObject>();
 
@@ -92,7 +93,7 @@ namespace Netherlands3D.Functionalities.CityJSON
             {
                 if (transform.childCount > 0)
                 {
-                    var referencePosition = transform.GetChild(0).localPosition;
+                    var referencePosition = cityJson.AbsoluteCenter;
                     if (EPSG7415.IsValid(referencePosition.x, referencePosition.y, referencePosition.z, out var origin))
                     {
                         PositionGeoReferencedCityJson(holgo, origin);
