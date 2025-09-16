@@ -82,10 +82,14 @@ namespace Netherlands3D.Twin.UI
                     LayerGameObject layer;
                     if(currentSelectedFeatureObject is MeshMapping mapping)
                     {
-                        LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out layer);
+                        //was the mapping selected before a lod replacement?
+                        if (mapping.ObjectMapping == null)
+                            mapping = selector.GetReplacedMapping(mapping);
+
+                        LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, mapping, out layer);
                         if (layer != null)
-                        {                            
-                            Coordinate coord = ((CartesianTileLayerGameObject)layer).GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
+                        {   
+                            Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
                             (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(feature, false, coord);
                         }
                     }
@@ -152,9 +156,13 @@ namespace Netherlands3D.Twin.UI
             //we need to check if the featue was already hidden, if so lets not show the toggle to be visible because we shouldnt be able to hide it again
             if (currentSelectedBagId != null && currentSelectedFeatureObject != null)
             {
+                bool? v;
                 LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out LayerGameObject layer);
-                bool? v = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(feature);
-                if(v == true) visible = true;                
+                if (feature == null)
+                    v = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(currentSelectedBagId);
+                else
+                    v = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(feature);
+                if (v == true) visible = true;                
             }
 
             SetVisibile(visible);

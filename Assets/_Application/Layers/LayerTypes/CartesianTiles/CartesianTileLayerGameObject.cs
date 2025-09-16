@@ -100,29 +100,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             }
         }
 
-        public ObjectMapping FindObjectMapping(ObjectMappingItem item)
-        {
-            if (layer is not BinaryMeshLayer binaryMeshLayer) return null;
-
-            return FindObjectMapping(item.objectID);
-        }
-
-        //TODO, this should be optimized
-        public ObjectMapping FindObjectMapping(string bagId)
-        {
-            if (layer is not BinaryMeshLayer binaryMeshLayer) return null;
-
-            foreach (ObjectMapping mapping in binaryMeshLayer.Mappings.Values)
-            {
-                foreach(ObjectMappingItem item in mapping.items)
-                {
-                    if (item.objectID == bagId)
-                        return mapping;
-                }
-            }
-            return null;
-        }
-
         public LayerFeature GetLayerFeatureFromBagId(string bagId)
         {
             if (layer is not BinaryMeshLayer binaryMeshLayer) return null;
@@ -139,74 +116,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 }
             }
             return null;
-        }
-
-        public Coordinate GetCoordinateForObjectMappingItem(ObjectMapping objectMapping, ObjectMappingItem mapping)
-        {
-            MeshFilter mFilter = objectMapping.gameObject.GetComponent<MeshFilter>();
-            Vector3[] vertices = mFilter.sharedMesh.vertices;
-            Vector3 centr = Vector3.zero;
-            for (int i = mapping.firstVertex; i < mapping.firstVertex + mapping.verticesLength; i++)
-                centr += vertices[i];
-            centr /= mapping.verticesLength;
-
-            Vector3 centroidWorld = mFilter.transform.TransformPoint(centr);
-            Coordinate coord = new Coordinate(centroidWorld);
-            return coord;
-        }
-
-        public static Mesh CreateMeshFromMapping(ObjectMapping objectMapping, ObjectMappingItem mapping, out Vector3 localCentroid, bool centerMesh = true)
-        {
-            var srcTf = objectMapping.gameObject.transform;
-            MeshFilter mf = objectMapping.gameObject.GetComponent<MeshFilter>();
-            Mesh src = mf.sharedMesh;
-
-            Vector3[] srcV = src.vertices;
-            Vector3[] srcN = src.normals;
-            int[] srcT = src.triangles;
-
-            int start = mapping.firstVertex;
-            int len = mapping.verticesLength;
-
-            // compute centroid in source mesh local space
-            localCentroid = Vector3.zero;
-            for (int i = 0; i < len; i++)
-                localCentroid += srcV[start + i];
-            localCentroid /= Mathf.Max(1, len);
-
-            // copy and optionally center vertices
-            Vector3[] newV = new Vector3[len];
-            Vector3[] newN = (srcN != null && srcN.Length == srcV.Length) ? new Vector3[len] : null;
-            for (int i = 0; i < len; i++)
-            {
-                var v = srcV[start + i];
-                newV[i] = centerMesh ? (v - localCentroid) : v;
-                if (newN != null) newN[i] = srcN[start + i];
-            }
-
-            // remap triangles that are fully inside the selected vertex range
-            var newTris = new List<int>();
-            for (int i = 0; i < srcT.Length; i += 3)
-            {
-                int a = srcT[i], b = srcT[i + 1], c = srcT[i + 2];
-                if (a >= start && a < start + len &&
-                    b >= start && b < start + len &&
-                    c >= start && c < start + len)
-                {
-                    newTris.Add(a - start);
-                    newTris.Add(b - start);
-                    newTris.Add(c - start);
-                }
-            }
-
-            var mesh = new Mesh();
-            mesh.vertices = newV;
-            if (newN != null) mesh.normals = newN;
-            mesh.triangles = newTris.ToArray();
-            mesh.RecalculateBounds();
-            if (newN == null || newN.Length == 0) mesh.RecalculateNormals();
-
-            return mesh;
         }
 
         public override void OnSelect()

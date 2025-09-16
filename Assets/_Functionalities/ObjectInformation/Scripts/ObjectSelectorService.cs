@@ -137,20 +137,34 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
             if (mapping is MeshMapping meshMapping)
             {
-                //when tile is replacing lod this can be null
-                if (meshMapping.ObjectMapping == null)
+                MeshMapping map = meshMapping;
+                if (meshMapping.ObjectMapping == null)                    
                 {
-                    subObjectSelector.FindSubObjectAtPointerPosition();
-                    meshMapping = FindObjectMapping() as MeshMapping;
-                    if (meshMapping?.ObjectMapping == null) return null;
+                    //when tile is replacing lod the objectmapping can be missing
+                    map = GetReplacedMapping(meshMapping);
                 }
-
-                Transform parent = meshMapping.ObjectMapping.gameObject.transform.parent;
+                if (map == null) return null;
+                
+                Transform parent = map.ObjectMapping.gameObject.transform.parent;
                 LayerGameObject layerGameObject = parent.GetComponent<LayerGameObject>();
                 return layerGameObject;
             }
-
             return null;
+        }
+
+        public T GetReplacedMapping<T>(T mapping) where T : IMapping
+        {
+            List<IMapping> mappings = MappingTree.QueryMappingsContainingNode<T>(mapping.BoundingBox.Center);
+            if (mappings.Count == 0)
+                return default;
+
+            foreach (IMapping map in mappings)
+            {
+                if (map.MappingObject == null || map.Id != mapping.Id) continue;
+
+                return (T)map;
+            }
+            return default;
         }
 
         private bool IsAnyToolActive()
@@ -244,7 +258,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void OnAddObjectMapping(ObjectMapping mapping)
         {
-            MeshMapping objectMapping = new MeshMapping();
+            MeshMapping objectMapping = new MeshMapping(mapping.name);
             objectMapping.SetMeshObject(mapping);
             objectMapping.UpdateBoundingBox();
             MappingTree.RootInsert(objectMapping);

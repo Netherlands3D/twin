@@ -11,6 +11,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     /// </summary>
     public class MeshMapping : IMapping
     {
+        public string Id => id;
         public object MappingObject => objectMapping;
         public ObjectMapping ObjectMapping => objectMapping;
         public BoundingBox BoundingBox => boundingBox;
@@ -22,6 +23,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private MeshFilter meshFilter;
         private List<MeshMappingItem> items = null;
 
+        private Vector3[] vertices;
+        private int[] triangles;
+        private Transform mTransform;
+
+        private string id;
+
+        public MeshMapping(string id)
+        {
+            this.id = id;
+        }
+
         public void SetMeshObject(ObjectMapping mapping)
         {
             this.objectMapping = mapping;
@@ -31,19 +43,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public MeshMappingItem FindItemForPosition(Vector3 position)
         {
-            Coordinate target = new Coordinate(position).Convert(CoordinateSystem.WGS84_LatLon);
-            Vector3[] vertices = meshFilter.sharedMesh.vertices;
-            int[] triangles = meshFilter.sharedMesh.triangles;
-            Transform mTransform = meshFilter.gameObject.transform;
-            if (items == null)
-            {
-                items = new List<MeshMappingItem>();
-                foreach (ObjectMappingItem item in objectMapping.items)
-                {
-                    MeshMappingItem mapItem = new MeshMappingItem(item, vertices, mTransform);
-                    items.Add(mapItem);
-                }
-            }           
+            Coordinate target = new Coordinate(position).Convert(CoordinateSystem.WGS84_LatLon);          
+            CacheItems();
             foreach (MeshMappingItem item in items)
             {
                 if (item.BoundingBox.Contains(target) && item.IsPositionHit(position, vertices, triangles, mTransform))
@@ -52,6 +53,101 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 }
             }
             return null;
+        }
+
+        public MeshMappingItem FindItemById(string id)
+        {
+            CacheItems();
+            foreach (MeshMappingItem item in items)
+            {
+                if (item.ObjectMappingItem.objectID == id)
+                    return item;
+            }
+            return null;
+        }
+
+        private void CacheItems()
+        {
+            if (items == null)
+            {
+                vertices = meshFilter.sharedMesh.vertices;
+                triangles = meshFilter.sharedMesh.triangles;
+                mTransform = meshFilter.gameObject.transform;
+                items = new List<MeshMappingItem>();
+                foreach (ObjectMappingItem item in objectMapping.items)
+                {
+                    MeshMappingItem mapItem = new MeshMappingItem(item, vertices, mTransform);
+                    items.Add(mapItem);
+                }
+            }
+        }
+
+        public Coordinate GetCoordinateForObjectMappingItem(ObjectMapping objectMapping, ObjectMappingItem mapping)
+        {
+            MeshFilter mFilter = objectMapping.gameObject.GetComponent<MeshFilter>();
+            Vector3[] vertices = mFilter.sharedMesh.vertices;
+            Vector3 centr = Vector3.zero;
+            for (int i = mapping.firstVertex; i < mapping.firstVertex + mapping.verticesLength; i++)
+                centr += vertices[i];
+            centr /= mapping.verticesLength;
+
+            Vector3 centroidWorld = mFilter.transform.TransformPoint(centr);
+            Coordinate coord = new Coordinate(centroidWorld);
+            return coord;
+        }
+
+        public static Mesh CreateMeshFromMapping(ObjectMapping objectMapping, ObjectMappingItem mapping, out Vector3 localCentroid, bool centerMesh = true)
+        {
+            var srcTf = objectMapping.gameObject.transform;
+            MeshFilter mf = objectMapping.gameObject.GetComponent<MeshFilter>();
+            Mesh src = mf.sharedMesh;
+
+            Vector3[] srcV = src.vertices;
+            Vector3[] srcN = src.normals;
+            int[] srcT = src.triangles;
+
+            int start = mapping.firstVertex;
+            int len = mapping.verticesLength;
+
+            // compute centroid in source mesh local space
+            localCentroid = Vector3.zero;
+            for (int i = 0; i < len; i++)
+                localCentroid += srcV[start + i];
+            localCentroid /= Mathf.Max(1, len);
+
+            // copy and optionally center vertices
+            Vector3[] newV = new Vector3[len];
+            Vector3[] newN = (srcN != null && srcN.Length == srcV.Length) ? new Vector3[len] : null;
+            for (int i = 0; i < len; i++)
+            {
+                var v = srcV[start + i];
+                newV[i] = centerMesh ? (v - localCentroid) : v;
+                if (newN != null) newN[i] = srcN[start + i];
+            }
+
+            // remap triangles that are fully inside the selected vertex range
+            var newTris = new List<int>();
+            for (int i = 0; i < srcT.Length; i += 3)
+            {
+                int a = srcT[i], b = srcT[i + 1], c = srcT[i + 2];
+                if (a >= start && a < start + len &&
+                    b >= start && b < start + len &&
+                    c >= start && c < start + len)
+                {
+                    newTris.Add(a - start);
+                    newTris.Add(b - start);
+                    newTris.Add(c - start);
+                }
+            }
+
+            var mesh = new Mesh();
+            mesh.vertices = newV;
+            if (newN != null) mesh.normals = newN;
+            mesh.triangles = newTris.ToArray();
+            mesh.RecalculateBounds();
+            if (newN == null || newN.Length == 0) mesh.RecalculateNormals();
+
+            return mesh;
         }
 
         //maybe this should be automated and called within the set visualisation layer

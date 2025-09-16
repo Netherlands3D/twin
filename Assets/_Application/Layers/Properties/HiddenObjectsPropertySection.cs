@@ -92,7 +92,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             item.SetObjectId(objectID);
             //item.SetLayerFeature(layerFeature);
             //because all ui elements will be destroyed on close an anonymous listener is fine here              
-            item.ToggleVisibility.AddListener(visible => SetVisibilityForFeature(objectID, visible));
+            item.ToggleVisibility.AddListener(visible => ToggleVisibilityForFeature(objectID, visible));
             item.OnSelectItem.AddListener(HiddenFeatureSelected);
             item.OnDeselectItem.AddListener(HiddenFeatureDeselected);
 
@@ -108,20 +108,29 @@ namespace Netherlands3D.Twin.Layers.Properties
             }
         }        
 
-        private void SetVisibilityForFeature(string objectId, bool visible)
+        private void ToggleVisibilityForFeature(string objectId, bool visible)
         {
-            Coordinate coord;
+            //the feature being changed should always have its coordinate within the styling rule!
+            Coordinate? coord;
             LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
             if(layerFeature != null)
-            {
-                CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
-                ObjectMapping objectMapping = cartesianTileLayerGameObject.FindObjectMapping(objectId);
-                coord = cartesianTileLayerGameObject.GetCoordinateForObjectMappingItem(objectMapping, (ObjectMappingItem)layerFeature.Geometry);
-                (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(layerFeature, visible, coord);
+            {               
+                coord = (layer.Styler as CartesianTileLayerStyler).GetVisibilityCoordinateForSubObject(layerFeature);
+                if(coord == null)
+                {
+                    Debug.LogError("the styling rule does not contain a coordinate for this feature!");
+                    return;
+                }
+                (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(layerFeature, visible, (Coordinate)coord);
                 return;
             }
             coord = (Coordinate)(layer.Styler as CartesianTileLayerStyler).GetVisibilityCoordinateForSubObjectByTag(objectId);
-            (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObjectByAttributeTag(objectId, visible, coord);
+            if (coord == null)
+            {
+                Debug.LogError("the styling rule does not contain a coordinate for this feature!");
+                return;
+            }
+            (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObjectByAttributeTag(objectId, visible, (Coordinate)coord);
         }
 
         private GameObject selectedHiddenObject;
@@ -139,22 +148,34 @@ namespace Netherlands3D.Twin.Layers.Properties
             //go to that position and load tile
             //if no layerfeature then attach listener and get layerfeature when tile loaded
 
-            Coordinate coord = (Coordinate)(layer.Styler as CartesianTileLayerStyler).GetVisibilityCoordinateForSubObjectByTag(objectId);
+            Coordinate? coord = (layer.Styler as CartesianTileLayerStyler).GetVisibilityCoordinateForSubObjectByTag(objectId);
+            if (coord == null)
+            {
+                Debug.LogError("the styling rule does not contain a coordinate for this feature!");
+                return;
+            }
 
             LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
             if (layerFeature.Geometry is ObjectMappingItem mapping)
             {
-                Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(coord, cameraDistance);
+                Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget((Coordinate)coord, cameraDistance);
+                List<IMapping> mappings = ObjectSelectorService.MappingTree.Query<MeshMapping>((Coordinate)coord);
+                foreach(IMapping m in mappings)
+                {
+                    if (m is not MeshMapping meshMapping) continue;
 
-                CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
-                selectedHiddenObject = new GameObject(mapping.objectID);
-                MeshFilter mFilter = selectedHiddenObject.AddComponent<MeshFilter>();
-                ObjectMapping objectMapping = cartesianTileLayerGameObject.FindObjectMapping(mapping);
-                Mesh mesh = CartesianTileLayerGameObject.CreateMeshFromMapping(objectMapping, mapping, out Vector3 localCentroid);
-                mFilter.mesh = mesh;
-                MeshRenderer mRenderer = selectedHiddenObject.AddComponent<MeshRenderer>();
-                mRenderer.material = selectionMaterial;
-                selectedHiddenObject.transform.position = objectMapping.transform.TransformPoint(localCentroid);
+                    MeshMappingItem item = meshMapping.FindItemById(objectId);
+                    if (item == null) continue;
+
+                    selectedHiddenObject = new GameObject(mapping.objectID);
+                    Mesh mesh = MeshMapping.CreateMeshFromMapping(meshMapping.ObjectMapping, mapping, out Vector3 localCentroid);
+                    MeshFilter mFilter = selectedHiddenObject.AddComponent<MeshFilter>();
+                    mFilter.mesh = mesh;
+                    MeshRenderer mRenderer = selectedHiddenObject.AddComponent<MeshRenderer>();
+                    mRenderer.material = selectionMaterial;
+                    selectedHiddenObject.transform.position = meshMapping.ObjectMapping.transform.TransformPoint(localCentroid);
+                    return;
+                }                
             }
         }
 

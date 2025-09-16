@@ -16,7 +16,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public string DebugID;
 
         public object MappingObject => feature;
-        public string FeatureID => feature.Id;
+        public string Id => feature.Id;
         public IGeoJsonVisualisationLayer VisualisationLayer { get { return visualisationLayer; } }
         public GeoJsonLayerGameObject VisualisationParent { get { return geoJsonLayerParent; } }
         public List<Mesh> FeatureMeshes { get { return visualisationLayer.GetMeshData(feature); } }
