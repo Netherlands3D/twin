@@ -5,17 +5,17 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     public class ViewerState : MonoBehaviour
     {
         protected FirstPersonViewerStateMachine owner;
-        //protected PlayerData playerData;
-        //protected PlayerInputHandler playerInput;
+        protected FirstPersonViewerInput input;
         protected FirstPersonViewer viewer;
 
         protected Transform transform;
 
-        public void Initialize(FirstPersonViewerStateMachine owner, FirstPersonViewer viewer)
+        public bool isAcive;
+
+        public void Initialize(FirstPersonViewerStateMachine owner, FirstPersonViewer viewer, FirstPersonViewerInput input)
         {
             this.owner = owner;
-            //playerData = player.PlayerData;
-            //playerInput = player.PlayerInputHandler;
+            this.input = input;
             this.viewer = viewer;
 
             transform = viewer.transform;

@@ -1,3 +1,4 @@
+using Netherlands3D.FirstPersonViewer.Events;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,18 +16,18 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
                 viewer.FirstPersonCamera.transform.localPosition = Vector3.up * viewer.MovementModus.viewHeight;
             }
 
+            //Get Rotation this depends on the current Camera Constrain
             Vector3 euler = viewer.FirstPersonCamera.GetEulerRotation();
-
             viewer.transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
             viewer.FirstPersonCamera.transform.localRotation = Quaternion.Euler(euler.x, 0f, 0f);
 
             viewer.GetGroundPosition();
-            viewer.FirstPersonCamera.UpdateCameraConstrain(CameraConstrain.CONTROL_Y); //Can be moved to be contained in the Preset.
+            ViewerEvents.ChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_Y);
         }
 
         public override void OnUpdate()
         {
-            Vector2 moveInput = viewer.MoveAction.ReadValue<Vector2>();
+            Vector2 moveInput = input.MoveAction.ReadValue<Vector2>();
             if (moveInput.magnitude > 0)
             {
                 MovePlayer(moveInput);
@@ -43,7 +44,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             Vector3 direction = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
 
-            float calculatedSpeed = viewer.MovementSpeed * (viewer.SprintAction.IsPressed() ? viewer.MovementModus.runningMultiplier : 1);
+            float calculatedSpeed = viewer.MovementSpeed * (input.SprintAction.IsPressed() ? viewer.MovementModus.runningMultiplier : 1);
 
             transform.Translate(direction * calculatedSpeed * Time.deltaTime, Space.World);
             viewer.GetGroundPosition();
@@ -51,7 +52,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         private void Jump()
         {
-            if (viewer.JumpAction.triggered && viewer.isGrounded)
+            if (input.JumpAction.triggered && viewer.isGrounded)
             {
                 viewer.SetVelocity(new Vector2(viewer.Velocity.x, viewer.MovementModus.jumpHeight));
                 viewer.isGrounded = false;

@@ -16,7 +16,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             viewerGroup = viewerUI.GetComponent<CanvasGroup>();
 
             ViewerEvents.OnViewerEntered += EnterViewer;
-            ViewerEvents.OnViewerExitd += ExitViewer;
+            ViewerEvents.OnViewerExited += ExitViewer;
 
             viewerUI.SetActive(false);
         }
@@ -24,7 +24,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
         private void OnDestroy()
         {
             ViewerEvents.OnViewerEntered -= EnterViewer;
-            ViewerEvents.OnViewerExitd -= ExitViewer;
+            ViewerEvents.OnViewerExited -= ExitViewer;
         }
 
         private void EnterViewer()

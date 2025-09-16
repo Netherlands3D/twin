@@ -9,22 +9,15 @@ using UnityEngine.InputSystem;
 
 namespace Netherlands3D.FirstPersonViewer
 {
+    [RequireComponent(typeof(FirstPersonViewerInput))]
     public class FirstPersonViewer : MonoBehaviour
     {
+        [Header("Camera")]
         [field: SerializeField] public FirstPersonViewerCamera FirstPersonCamera;
+
         private MeshFilter meshFilter;
-
-        [Header("State Machine")]
+        private FirstPersonViewerInput input;
         private FirstPersonViewerStateMachine fsm;
-        [SerializeField] private ViewerState startState; //Should be from default MovementPreset.
-
-        [Header("Input")]
-        [SerializeField] private InputActionAsset inputActionAsset;
-
-        public InputAction MoveAction { private set; get; }
-        public InputAction SprintAction {  private set; get; }
-        public InputAction JumpAction { private set; get; }
-        public InputAction VerticalMoveAction { private set; get; } 
 
         //Movement
         public MovementPresets MovementModus { private set; get; }
@@ -35,44 +28,30 @@ namespace Netherlands3D.FirstPersonViewer
         private int snappingCullingMask;
 
         //Falling
+        [Header("Ground")]
+        [SerializeField] private float groundDistance = .2f;
         public Vector2 Velocity => velocity;
         private Vector2 velocity;
         private readonly float gravity = -9.81f;
         private readonly float maxFallSpeed = -55f;
         private float yPositionTarget;
         public bool isGrounded;
-        [SerializeField] private float groundDistance = .2f;
-
-        //Don't like this being handled here.
-        private void OnEnable()
-        {
-            inputActionAsset.Enable();
-        }
-
-        //Don't like this being handled here.
-        private void OnDisable()
-        {
-            inputActionAsset.Disable();
-        }
 
         private void Awake()
         {
+            input = GetComponent<FirstPersonViewerInput>();
+            meshFilter = GetComponent<MeshFilter>();
+
             SetupFSM();
+
+            ViewerEvents.ChangeSpeed += SetMovementSpeed;
+            ViewerEvents.OnMovementPresetChanged += SetMovementModus;
         }
 
         private void Start()
         {
-            ViewerEvents.ChangeSpeed += SetMovementSpeed;
-            ViewerEvents.OnMovementPresetChanged += SetMovementModus;
-
             yPositionTarget = transform.position.y;
-
-            MoveAction = inputActionAsset.FindAction("Move");
-            SprintAction = inputActionAsset.FindAction("Sprint");
-            JumpAction = inputActionAsset.FindAction("Jump");
-            VerticalMoveAction = inputActionAsset.FindAction("VerticalMove");
-
-            meshFilter = GetComponent<MeshFilter>();
+            
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
             snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings") | (1 << LayerMask.NameToLayer("Default")));
@@ -88,7 +67,7 @@ namespace Netherlands3D.FirstPersonViewer
         {
             ViewerState[] playerStates = GetComponents<ViewerState>();
 
-            fsm = new FirstPersonViewerStateMachine(this, null, playerStates);
+            fsm = new FirstPersonViewerStateMachine(this, input, null, playerStates);
         }
 
         private void Update()

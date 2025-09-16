@@ -1,3 +1,4 @@
+using Netherlands3D.FirstPersonViewer.Events;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.ViewModus
@@ -8,7 +9,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         [SerializeField] float acceleration = 10f;
         [SerializeField] float deceleration = 5f;
         [SerializeField] private float turnSpeed = 100f;
-        private float tempSpeed = 20f;
 
         private float currentSpeed;
 
@@ -20,20 +20,20 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
                 viewer.FirstPersonCamera.transform.localPosition = Vector3.up * viewer.MovementModus.viewHeight;
             }
 
+            //Get Rotation this depends on the current Camera Constrain
             Vector3 euler = viewer.FirstPersonCamera.GetEulerRotation();
-
             viewer.transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
             viewer.FirstPersonCamera.transform.localRotation = Quaternion.Euler(euler.x, 0f, 0f);
 
             currentSpeed = 0;
 
             viewer.GetGroundPosition();
-            viewer.FirstPersonCamera.UpdateCameraConstrain(CameraConstrain.CONTROL_NONE); //Can be moved to be contained in the Preset.
+            ViewerEvents.ChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_NONE);
         }
 
         public override void OnUpdate()
         {
-            Vector2 moveInput = viewer.MoveAction.ReadValue<Vector2>();
+            Vector2 moveInput = input.MoveAction.ReadValue<Vector2>();
             MoveVehicle(moveInput);
 
             viewer.SnapToGround();
@@ -43,7 +43,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         private void MoveVehicle(Vector2 moveInput)
         {
-            float targetSpeed = moveInput.y * tempSpeed;//viewer.MovementSpeed;
+            float targetSpeed = moveInput.y * viewer.MovementSpeed;
 
             if (Mathf.Abs(targetSpeed) > 0.1f && viewer.isGrounded) currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * Time.deltaTime);
             else currentSpeed = Mathf.MoveTowards(currentSpeed, 0, deceleration * Time.deltaTime);

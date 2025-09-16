@@ -16,16 +16,29 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private Image currentMovemodeImage;
         [SerializeField] private Image nextMovemodeImage;
         [SerializeField] private Image prevMovemodeImage;
+        [SerializeField] private MovementModusButton movementButtonPrefab;
+        [SerializeField] private Transform movementButtonParent;
 
         [Header("Movement")]
         [SerializeField] private MovementCollection movementPresets;
         private MovementPresets currentMovement;
 
+        private void OnEnable()
+        {
+            LoadMoveModus(0);
+
+        }
+
         private void Start()
         {
             cycleModusAction = inputMap.FindAction("MovementModusSwitch");
 
-            LoadMoveModus(0);
+            movementPresets.presets.ForEach(preset =>
+            {
+                MovementModusButton tempButton = Instantiate(movementButtonPrefab, movementButtonParent);
+                tempButton.SetupButton(preset, this);
+            });
+
         }
 
         private void Update()
@@ -58,7 +71,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             int nextIndex = index + 1;
             if (nextIndex >= movementPresets.presets.Count) nextIndex = 0;
 
-            nextMovemodeImage.sprite = movementPresets.presets[nextIndex].viewIcon; 
+            nextMovemodeImage.sprite = movementPresets.presets[nextIndex].viewIcon;
 
             int prevIndex = index - 1;
             if (prevIndex < 0) prevIndex = movementPresets.presets.Count - 1;
@@ -70,6 +83,13 @@ namespace Netherlands3D.FirstPersonViewer.UI
             ViewerEvents.ChangeViewHeight?.Invoke(currentMovement.viewHeight);
             ViewerEvents.ChangeFOV?.Invoke(currentMovement.fieldOfView);
             ViewerEvents.ChangeSpeed?.Invoke(currentMovement.speedInKm);
+        }
+
+        public void LoadMoveModus(MovementPresets movePresets) => LoadMoveModus(movementPresets.presets.IndexOf(movePresets));
+
+        public void SetMovementVisible()
+        {
+            movementButtonParent.gameObject.SetActive(!movementButtonParent.gameObject.activeSelf);
         }
     }
 }

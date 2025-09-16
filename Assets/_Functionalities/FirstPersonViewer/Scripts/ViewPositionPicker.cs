@@ -40,7 +40,7 @@ namespace Netherlands3D.FirstPersonViewer
 
                 Vector2 screenPoint = Pointer.current.position.ReadValue();
 
-                if (IsPointerOverUIObject()) return;
+                if (FirstPersonViewerInput.IsPointerOverUIObject()) return;
 
                 raycaster.GetWorldPointAsync(screenPoint, (point, hit) =>
                 {
@@ -59,16 +59,6 @@ namespace Netherlands3D.FirstPersonViewer
                     }
                 }, snappingCullingMask);
             }           
-        }
-
-        //Kinda slow
-        public static bool IsPointerOverUIObject()
-        {
-            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
-            eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            List<RaycastResult> results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
-            return results.Count > 1; //Idk there seems to be an invisble ui element somewhere.
         }
     }
 }

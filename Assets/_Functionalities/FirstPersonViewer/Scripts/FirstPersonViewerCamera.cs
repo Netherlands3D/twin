@@ -13,58 +13,44 @@ namespace Netherlands3D.FirstPersonViewer
     public class FirstPersonViewerCamera : MonoBehaviour
     {
         [Header("Input")]
-        [SerializeField] private InputActionAsset inputActionAsset;
-
-        private InputAction lookInput;
-        private InputAction exitInput; //Should be moved to other script. Currently not possible due to how Camera.Main is handled.
-
+        [SerializeField] private FirstPersonViewerInput input;
         private Camera firstPersonViewerCamera;
-
-        [SerializeField] private FloatEvent cameraHeight;
-        [SerializeField] private FloatEvent sensitivty;
 
         private float cameraHeightOffset = 1.75f;
         private float currentsensitivity = 10f;
 
+        [Header("Viewer")]
         [SerializeField] private Transform viewerBase;
         private float xRotation;
         private float yRotation;
-
-        private bool didSetup;
-        [Obsolete("Will be handled differntly (Prob with some kind of transitionState")] public bool DidSetup => didSetup;
-
-        private float exitTimer;
-        [SerializeField] private float exitDuration = .75f;
+        public CameraConstrain cameraConstrain;
 
         //TEMP
         private Camera mainCam;
+        private bool didSetup;
+        [Obsolete("Will be handled differntly (Prob with some kind of transitionState")] public bool DidSetup => didSetup;
 
-        public CameraConstrain cameraConstrain;
 
         private void Start()
         {
-            //ViewerEvents.UpdateCameraState += UpdateCameraState;
-
-            cameraHeight.AddListenerStarted(SetCameraHeight);
-
-            lookInput = inputActionAsset.FindAction("Look");
-            exitInput = inputActionAsset.FindAction("Exit");
-
+            ViewerEvents.ChangeCameraConstrain += SetCameraConstrain;
             ViewerEvents.ChangeViewHeight += SetCameraHeight;
             ViewerEvents.ChangeFOV += SetCameraFOV;
 
-            firstPersonViewerCamera = GetComponent<Camera>();
+            ViewerEvents.OnViewerExited += ExitViewer;
 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            firstPersonViewerCamera = GetComponent<Camera>();
 
             SetupViewer();
         }
 
         private void OnDestroy()
         {
+            ViewerEvents.ChangeCameraConstrain -= SetCameraConstrain;
             ViewerEvents.ChangeViewHeight -= SetCameraHeight;
             ViewerEvents.ChangeFOV -= SetCameraFOV;
+
+            ViewerEvents.OnViewerExited -= ExitViewer;
         }
 
         private void SetupViewer()
@@ -98,29 +84,13 @@ namespace Netherlands3D.FirstPersonViewer
         {
             if (didSetup)
             {
-                Vector2 cameraMovement = lookInput.ReadValue<Vector2>();
+                Vector2 cameraMovement = input.LookInput.ReadValue<Vector2>();
 
                 if (cameraMovement.magnitude > 0)
                 {
                     PointerDelta(cameraMovement);
                 }
             }
-
-            if (exitInput.IsPressed()) //Should be moved to other script. Currently not possible due to how Camera.Main is handled.
-            {
-                exitTimer = Mathf.Max(exitTimer - Time.deltaTime, 0);
-
-                if (exitTimer == 0) ExitViewer();
-            }
-            else exitTimer = exitDuration;
-        }
-
-        public void UpdateCameraConstrain(CameraConstrain state)
-        {
-            if (state == CameraConstrain.CONTROL_BOTH) yRotation = transform.eulerAngles.y;
-            else yRotation = transform.localEulerAngles.y;
-            
-            cameraConstrain = state;
         }
 
         private void PointerDelta(Vector2 pointerDelta)
@@ -145,18 +115,19 @@ namespace Netherlands3D.FirstPersonViewer
             }
         }
 
-        [Obsolete("Should be moved to other script. Currently not possible due to how Camera.Main is handled.")]
+        [Obsolete("Should be moved to other script. Currently not possible due to how Camera.Main is handled. Current state: Input is no longer handled here it now uses an event.")]
         private void ExitViewer()
         {
             mainCam.targetDisplay = 0;
             mainCam.GetComponent<FreeCamera>().enabled = true; //Somehow we need to stop using this to support modularity. Without breaking the camera.
+        }
 
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+        private void SetCameraConstrain(CameraConstrain state)
+        {
+            if (state == CameraConstrain.CONTROL_BOTH) yRotation = transform.eulerAngles.y;
+            else yRotation = transform.localEulerAngles.y;
 
-            ViewerEvents.OnViewerExitd?.Invoke();
-
-            Destroy(transform.parent.gameObject);
+            cameraConstrain = state;
         }
 
         private void SetCameraHeight(float height)

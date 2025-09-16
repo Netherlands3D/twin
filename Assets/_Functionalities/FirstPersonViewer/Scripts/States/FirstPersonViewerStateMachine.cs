@@ -9,15 +9,15 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         private Dictionary<Type, ViewerState> stateDictionary = new Dictionary<Type, ViewerState>();
         public ViewerState CurrentState { private set; get; }
 
-        public FirstPersonViewerStateMachine(FirstPersonViewer player, Type startState, params ViewerState[] states)
+        public FirstPersonViewerStateMachine(FirstPersonViewer player, FirstPersonViewerInput input, Type startState, params ViewerState[] states)
         {
             foreach (ViewerState state in states)
             {
-                state.Initialize(this, player);
+                state.Initialize(this, player, input);
                 stateDictionary.Add(state.GetType(), state);
             }
 
-            //SwitchState(startState);
+            if(startState != null) SwitchState(startState);
         }
 
         public void OnUpdate()
@@ -32,9 +32,11 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
                 Debug.Log($"State {newStateType} not found.");
             }
 
+            if(CurrentState != null) CurrentState.isAcive = false;
             CurrentState?.OnExit();
             CurrentState = stateDictionary[newStateType];
             CurrentState?.OnEnter();
+            CurrentState.isAcive = true;
         }
     }
 }
