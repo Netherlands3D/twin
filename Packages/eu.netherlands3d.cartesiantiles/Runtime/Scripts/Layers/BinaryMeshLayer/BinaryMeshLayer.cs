@@ -28,9 +28,9 @@ namespace Netherlands3D.CartesianTiles
         public ShadowCastingMode tileShadowCastingMode = ShadowCastingMode.On;
 
         public string brotliCompressedExtention = ".br";
-        
+
         private GameObject container;
-        
+
         private MeshRenderer meshRenderer;
 
         [System.Obsolete("This field is obsolete, use the CreateMeshColliders property instead.")]
@@ -54,7 +54,7 @@ namespace Netherlands3D.CartesianTiles
                     break;
                 case TileAction.Remove:
                     InteruptRunningProcesses(tileKey);
-                    RemoveGameObjectFromTile(tileKey);
+                    RemoveGameObject(tileKey);
                     tiles.Remove(tileKey);
                     callback?.Invoke(tileChange);
                     return;
@@ -75,37 +75,38 @@ namespace Netherlands3D.CartesianTiles
             };
         }
 
-        private void RemoveGameObjectFromTile(Vector2Int tileKey)
+        private void RemoveGameObject(Vector2Int tileKey)
+        {
+            RemoveVisualisation(tileKey);
+            RemoveMapping(tileKey);
+        }
+
+        private void RemoveVisualisation(Vector2Int tileKey)
         {
             if (!tiles.TryGetValue(tileKey, out var tile)) return;
 
-            var tileGameObject = tile.gameObject;
-            if (tileGameObject==null) return;
+            GameObject tileObject = tile.gameObject;
+            if (tileObject == null) return;
 
-            if (Mappings.ContainsKey(tileKey))
-            {
-                ObjectMapping mapping = Mappings[tileKey];
-                Mappings.Remove(tileKey);
-                OnMappingRemoved.Invoke(mapping);                
-            }
-            
-            RemoveGameObject(tileGameObject);
-        }
-
-        private static void RemoveGameObject(GameObject tileGameObject)
-        {
-            MeshFilter[] meshFilters = tileGameObject.GetComponentsInChildren<MeshFilter>();
+            MeshFilter[] meshFilters = tileObject.GetComponentsInChildren<MeshFilter>();
             foreach (var meshFilter in meshFilters)
             {
-                if (meshFilter.sharedMesh != null)
-                {
-                    Mesh sharedmesh = meshFilter.sharedMesh;
-                    meshFilter.sharedMesh.Clear();
-                    //DestroyImmediate(sharedmesh,true);
-                    Destroy(sharedmesh);
-                }
+                if (meshFilter.sharedMesh == null) continue;
+
+                Mesh sharedmesh = meshFilter.sharedMesh;
+                meshFilter.sharedMesh.Clear();
+                Destroy(sharedmesh);
             }
-            Destroy(tileGameObject);
+            Destroy(tileObject);
+        }
+
+        private void RemoveMapping(Vector2Int tileKey)
+        {
+            if (!Mappings.ContainsKey(tileKey)) return;
+            
+            ObjectMapping mapping = Mappings[tileKey];
+            Mappings.Remove(tileKey);
+            OnMappingRemoved.Invoke(mapping);            
         }
 
         private IEnumerator DownloadBinaryMesh(TileChange tileChange, System.Action<TileChange> callback = null)
@@ -139,7 +140,7 @@ namespace Netherlands3D.CartesianTiles
 
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                RemoveGameObjectFromTile(tileKey);
+                RemoveGameObject(tileKey);
                 callback?.Invoke(tileChange);
                 yield break;
             }
@@ -148,7 +149,7 @@ namespace Netherlands3D.CartesianTiles
 
             yield return new WaitUntil(() => pauseLoading == false);
             GameObject newGameobject = CreateNewGameObject(url, results, tileChange);
-            
+
             if (!newGameobject)
             {
                 callback?.Invoke(tileChange);
@@ -157,10 +158,10 @@ namespace Netherlands3D.CartesianTiles
 
             if (tiles.TryGetValue(tileKey, out tile))
             {
-                if (tile.gameObject) RemoveGameObject(tile.gameObject);
+                if (tile.gameObject) RemoveGameObject(tileKey);
 
                 tile.gameObject = newGameobject;
-                
+
 #if SUBOBJECT
                 if (hasMetaData)
                 {
@@ -171,7 +172,7 @@ namespace Netherlands3D.CartesianTiles
             else
             {
                 // Tile was destroyed in the mean time.. destroy this game object too then.
-                RemoveGameObject(newGameobject);
+                RemoveGameObject(tileKey);
             }
 
             callback?.Invoke(tileChange);
@@ -241,7 +242,7 @@ namespace Netherlands3D.CartesianTiles
                     }
                 }
             }
-            Mappings.TryAdd(tileKey, objectMapping);
+            Mappings[tileKey] = objectMapping;
             OnMappingCreated.Invoke(objectMapping);
         }
 #endif
@@ -254,7 +255,7 @@ namespace Netherlands3D.CartesianTiles
             {
                 renderer.shadowCastingMode = tileShadowCastingMode;
             }
-        }        
+        }
 
         private GameObject CreateNewGameObject(string source, byte[] binaryMeshData, TileChange tileChange)
         {
