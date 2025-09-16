@@ -186,4 +186,4 @@ MonoBehaviour:
   isCityJSONType:
     m_PersistentCalls:
       m_Calls: []
-  DefaultMaterial: {fileID: 2100000, guid: 4964f8b7303387145a5d0c6b232294cd, type: 2}
+  materialTemplate: {fileID: 2100000, guid: 4964f8b7303387145a5d0c6b232294cd, type: 2}

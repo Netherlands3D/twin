@@ -18,32 +18,35 @@ namespace Netherlands3D.CityJson.Structure
         //    defaultMaterial = materialGenerator.GetDefaultMaterial();
         //}
 
-        private static Material defaultMaterial;
-        private static Material[] defaultMaterials;
-
-        public List<MaterialInfo> Materials { get; private set; } = new List<MaterialInfo>();
+        // private static Material defaultMaterial;
+        // private static Material[] defaultMaterials;
+        private Material materialTemplate;
+        public List<Material> Materials = new();
+        
+        public List<MaterialInfo> MaterialInfos { get; private set; } = new List<MaterialInfo>();
         public List<TextureInfo> Textures { get; private set; } = new List<TextureInfo>();
 
         private static Dictionary<int, Material> cachedMaterials = new Dictionary<int, Material>();
 
-        public void SetDefaultMaterial(Material material)
+        public CityAppearance(Material materialTemplate)
         {
-            defaultMaterial = material;
-            defaultMaterials = new Material[1] { defaultMaterial };
+            this.materialTemplate = materialTemplate;
         }
 
-        public static CityAppearance FromJSON(JSONNode node)
+        public static CityAppearance FromJSON(JSONNode node, Material materialTemplate)
         {
             if (node == null || node.Count == 0) return null;
 
-            var appearance = new CityAppearance();
+            var appearance = new CityAppearance(materialTemplate);
 
             var materialsNode = node["materials"];
             if (materialsNode != null && materialsNode.IsArray)
             {
                 foreach (var matNode in materialsNode.AsArray)
                 {
-                    appearance.Materials.Add(MaterialInfo.FromJSON(matNode));
+                    var materialInfo = MaterialInfo.FromJSON(matNode);
+                    var material = MaterialInfo.ToUnityMaterial(materialInfo, materialTemplate);
+                    appearance.Materials.Add(material);
                 }
             }
 
@@ -59,34 +62,39 @@ namespace Netherlands3D.CityJson.Structure
             return appearance;
         }
 
-        public Material[] GenerateMaterialsForGeometry(CityGeometry geometry)
+        public Material[] GetMaterialsForGeometry(CityGeometry geometry)
         {
-            Material[] materials = null;
-            if (geometry.MaterialCount == 0)
-            {
-                return defaultMaterials;
-            }
-
-            materials = new Material[geometry.MaterialCount];
-            for (int i = 0; i < geometry.MaterialUniqueIndices.Count; i++)
-            {
-                int matIndex = geometry.MaterialUniqueIndices[i];
-                if (matIndex >= 0 && matIndex < Materials.Count)
-                {
-                    var matInfo = Materials[matIndex];
-                    if (cachedMaterials.ContainsKey(matIndex))
-                    {
-                        materials[i] = cachedMaterials[matIndex];
-                        continue;
-                    }
-
-                    Material unityMat = MaterialInfo.ToUnityMaterial(matInfo, defaultMaterial);
-                    cachedMaterials.Add(matIndex, unityMat);
-                    materials[i] = unityMat;
-                }
-            }
-            return materials;
+            return new[] { materialTemplate }; //todo: make this return the correct materials
         }
+
+        //     public Material[] GenerateMaterialsForGeometry(CityGeometry geometry)
+        //     {
+        //         // Material[] materials = null;
+        //         // if (geometry.MaterialCount == 0)
+        //         // {
+        //         //     return defaultMaterials;
+        //         // }
+        //
+        //         var materials = new Material[geometry.MaterialCount];
+        //         for (int i = 0; i < geometry.MaterialUniqueIndices.Count; i++)
+        //         {
+        //             int matIndex = geometry.MaterialUniqueIndices[i];
+        //             if (matIndex >= 0 && matIndex < Materials.Count)
+        //             {
+        //                 var matInfo = Materials[matIndex];
+        //                 if (cachedMaterials.ContainsKey(matIndex))
+        //                 {
+        //                     materials[i] = cachedMaterials[matIndex];
+        //                     continue;
+        //                 }
+        //
+        //                 Material unityMat = MaterialInfo.ToUnityMaterial(matInfo, defaultMaterial);
+        //                 cachedMaterials.Add(matIndex, unityMat);
+        //                 materials[i] = unityMat;
+        //             }
+        //         }
+        //         return materials;
+        //     }
     }
     
 

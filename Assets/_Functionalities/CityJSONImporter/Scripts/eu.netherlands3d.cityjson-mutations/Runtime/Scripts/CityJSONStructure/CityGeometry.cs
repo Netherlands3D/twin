@@ -38,20 +38,20 @@ namespace Netherlands3D.CityJson.Structure
         public bool IncludeTextures { get; set; } //todo: Textures currently not implemented yet
 
         // public List<int> MaterialIndices { get; private set; }
-        public List<int> MaterialUniqueIndices { get; private set; }
-        private int materialCount;
-        public int MaterialCount
-        {
-            get
-            {
-                if (MaterialIndices == null || MaterialIndices.Count == 0)
-                    return 0;
-
-                MaterialUniqueIndices = MaterialIndices.Distinct().ToList();
-                materialCount = MaterialUniqueIndices.Count();
-                return materialCount;
-            }            
-        }
+        // public List<int> MaterialUniqueIndices { get; private set; }
+        // private int materialCount;
+        // public int MaterialCount
+        // {
+        //     get
+        //     {
+        //         if (MaterialIndices == null || MaterialIndices.Count == 0)
+        //             return 0;
+        //
+        //         MaterialUniqueIndices = MaterialIndices.Distinct().ToList();
+        //         materialCount = MaterialUniqueIndices.Count();
+        //         return materialCount;
+        //     }            
+        // }
 
         //Certain CityObjectTypes can only have certain types of geometry. This is described in the specs
         public static bool IsValidType(CityObjectType cityObjectType, GeometryType geometryType)
@@ -187,27 +187,27 @@ namespace Netherlands3D.CityJson.Structure
 
             if(includeMaterials)
             {
-                geometry.MaterialIndices = GetMaterialsFromJSONNode(materialsNode["default_theme"]);
-                geometry.BoundaryObject.ParseMaterialsNode();
+                // geometry.MaterialIndices = GetMaterialsFromJSONNode(materialsNode["default_theme"]);
+                CityMaterial.FromJSONNode(materialsNode, geometry);
             }
 
             return geometry;
         }
 
-        private static List<int> GetMaterialsFromJSONNode(JSONNode materialNode)
-        {
-            List<int> indices = null;
-            if (materialNode != null)
-            {
-                indices = new List<int>();
-                var values = materialNode["values"];
-                foreach (JSONNode v in values.AsArray)
-                {
-                    indices.Add(v.AsInt);
-                }
-            }
-            return indices;
-        }
+        // private static List<int> GetMaterialsFromJSONNode(JSONNode materialNode)
+        // {
+        //     List<int> indices = null;
+        //     if (materialNode != null)
+        //     {
+        //         indices = new List<int>();
+        //         var values = materialNode["values"];
+        //         foreach (JSONNode v in values.AsArray)
+        //         {
+        //             indices.Add(v.AsInt);
+        //         }
+        //     }
+        //     return indices;
+        // }
 
         private JSONNode GetTextures()
         {
