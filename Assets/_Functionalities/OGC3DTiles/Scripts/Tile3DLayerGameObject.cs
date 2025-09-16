@@ -187,7 +187,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            TileSet.contentCoordinateSystem = (Coordinates.CoordinateSystem)tile3DPropertyData.ContentCRS;
+            UpdateCRS(tile3DPropertyData.ContentCRS);
         }
 
         protected override void OnDestroy()
