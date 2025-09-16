@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
@@ -133,45 +133,64 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             Vector3 currentPosition = transform.position;
             BoundingBox bounds = Bounds;
             Vector3 boundsCenter = bounds.Center.ToUnity();
-            float heightExtent = bounds.Size.ToUnity().y * 0.5f;
-            float pivotOffset = boundsCenter.y - currentPosition.y;
-            
-            Vector3 startPosition = new Vector3(currentPosition.x, boundsCenter.y, currentPosition.z);
-            OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
-            raycaster.GetWorldPointFromDirectionAsync(
-                startPosition,
-                Vector3.down,
-                (hitPos, hit) => OnRaycastDown(hitPos, hit, heightExtent, pivotOffset, currentPosition, raycaster),
-                snappingCullingMask
-            );
+
+            var context = new SnapContext
+            {
+                HeightExtent = bounds.Size.ToUnity().y * 0.5f,
+                PivotOffset = boundsCenter.y - currentPosition.y,
+                PreviousPosition = currentPosition,
+                Target = this,
+                Raycaster = ServiceLocator.GetService<OpticalRaycaster>(),
+                cullingMask = snappingCullingMask
+            };
+
+            context.SnapFromPosition(new Vector3(currentPosition.x, boundsCenter.y, currentPosition.z));
         }
 
-        //invert snapping direction based on the direction of the raycast
-        private void OnRaycastDown(Vector3 worldPos, bool hit, float heightExtent, float pivotOffset, Vector3 previousPosition, OpticalRaycaster raycaster)
+        private struct SnapContext
         {
-            if (hit)
-            {
-                Coordinate target = new Coordinate(worldPos + Vector3.up * (heightExtent - pivotOffset));
-                UpdatePosition(target);
-            }
-            else
-            {
-                // we didnt hit downwards, this could mean we are below ground, lets raycast up to move it aginst the ground
-                raycaster.GetWorldPointFromDirectionAsync(
-                      previousPosition,
-                      Vector3.up,
-                      (hitPos, hit) => OnRaycastUp(hitPos, hit, heightExtent, pivotOffset),
-                      snappingCullingMask
-                 );
-            }
-        }
+            public float HeightExtent;
+            public float PivotOffset;
+            public Vector3 PreviousPosition;
+            public OpticalRaycaster Raycaster;
+            public HierarchicalObjectLayerGameObject Target;
+            public int cullingMask; 
 
-        private void OnRaycastUp(Vector3 worldPos, bool hit, float heightExtent, float pivotOffset)
-        {
-            if (hit)
+            public void SnapFromPosition(Vector3 position)
             {
-                Coordinate target = new Coordinate(worldPos + Vector3.up * (-heightExtent - pivotOffset));
-                UpdatePosition(target);
+               Raycaster.GetWorldPointFromDirectionAsync(
+                   position,
+                   Vector3.down,
+                   OnRaycastDown,
+                   cullingMask
+               );
+            }
+
+            private void OnRaycastDown(Vector3 worldPos, bool hit)
+            {                
+                if (hit)
+                {
+                    Coordinate target = new Coordinate(worldPos + Vector3.up * (HeightExtent - PivotOffset));
+                    Target.UpdatePosition(target);
+                }
+                else
+                {
+                    Raycaster.GetWorldPointFromDirectionAsync(
+                        PreviousPosition,
+                        Vector3.up,
+                        OnRaycastUp,
+                        cullingMask
+                    );
+                }
+            }
+
+            private void OnRaycastUp(Vector3 worldPos, bool hit)
+            {                
+                if (hit)
+                {
+                    Coordinate target = new Coordinate(worldPos + Vector3.up * (-HeightExtent - PivotOffset));
+                    Target.UpdatePosition(target);
+                }
             }
         }
 
