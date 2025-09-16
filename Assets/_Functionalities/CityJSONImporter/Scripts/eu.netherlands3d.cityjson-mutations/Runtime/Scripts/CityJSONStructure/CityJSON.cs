@@ -103,7 +103,7 @@ namespace Netherlands3D.CityJson.Structure
             AddExtensionNodesToExporter(node, out extensionNodes);
 
             //vertices
-            List<Vector3Double> parsedVertices = new List<Vector3Double>();
+            List<Vector3Double> parsedVertices = new List<Vector3Double>(node["vertices"].Count);
             foreach (var vertArray in node["vertices"])
             {
                 var vert = new Vector3Double(vertArray.Value.AsArray);
@@ -185,7 +185,7 @@ namespace Netherlands3D.CityJson.Structure
             CityObjects = cityObjects.Values.ToList();
 
             if (TryGetComponent<WorldTransform>(out var worldTransform))
-                SetRelativeCenter(worldTransform);
+                MoveToAbsoluteCenter(worldTransform);
 
             foreach (var co in CityObjects)
             {
@@ -222,7 +222,7 @@ namespace Netherlands3D.CityJson.Structure
         }
 
         // set the relative RD center to avoid floating point issues of GameObject far from the Unity origin
-        private void SetRelativeCenter(WorldTransform worldTransform)
+        private void MoveToAbsoluteCenter(WorldTransform worldTransform)
         {
             var absoluteCenter = AbsoluteCenter;
             var coord = new Coordinate(CoordinateSystem, absoluteCenter.x, absoluteCenter.y, absoluteCenter.z);
