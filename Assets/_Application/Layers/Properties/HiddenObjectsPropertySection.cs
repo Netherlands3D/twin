@@ -130,10 +130,10 @@ namespace Netherlands3D.Twin.Layers.Properties
             //}
 
             //TODO get the position attribute from data without layerfeature
+            //go to that position and load tile
+            //if no layerfeature then attach listener and get layerfeature when tile loaded
 
-
-
-                    LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
+            LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
             if (layerFeature.Geometry is ObjectMappingItem mapping)
             {
                 string coordString = layerFeature.GetAttribute(CartesianTileLayerStyler.VisibilityPositionIdentifier);
@@ -143,7 +143,6 @@ namespace Netherlands3D.Twin.Layers.Properties
                     Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(coord, cameraDistance);
 
                     CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
-
                     selectedHiddenObject = new GameObject(mapping.objectID);
                     MeshFilter mFilter = selectedHiddenObject.AddComponent<MeshFilter>();
                     ObjectMapping objectMapping = cartesianTileLayerGameObject.FindObjectMapping(mapping);
@@ -169,8 +168,5 @@ namespace Netherlands3D.Twin.Layers.Properties
                
             }
         }
-
-        
-        
     }
 }
