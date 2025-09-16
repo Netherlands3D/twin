@@ -77,28 +77,36 @@ namespace Netherlands3D.CartesianTiles
 
         private void RemoveGameObject(Vector2Int tileKey)
         {
-            if (tiles.ContainsKey(tileKey) && tiles[tileKey] != null && tiles[tileKey].gameObject != null)
-            {
-                MeshFilter[] meshFilters = tiles[tileKey].gameObject.GetComponentsInChildren<MeshFilter>();
-                foreach (var meshFilter in meshFilters)
-                {
-                    if (meshFilter.sharedMesh != null)
-                    {
-                        Mesh sharedmesh = meshFilter.sharedMesh;
-                        meshFilter.sharedMesh.Clear();
-                        //DestroyImmediate(sharedmesh,true);
-                        Destroy(sharedmesh);
-                    }
-                }
-                Destroy(tiles[tileKey].gameObject);
-            }
-            if (Mappings.ContainsKey(tileKey))
-            {
-                ObjectMapping mapping = Mappings[tileKey];
-                Mappings.Remove(tileKey);
-                OnMappingRemoved.Invoke(mapping);
-            }
+            RemoveVisualisation(tileKey);
+            RemoveMapping(tileKey);
+        }
 
+        private void RemoveVisualisation(Vector2Int tileKey)
+        {
+            if (!tiles.TryGetValue(tileKey, out var tile)) return;
+
+            GameObject tileObject = tile.gameObject;
+            if (tileObject == null) return;
+
+            MeshFilter[] meshFilters = tileObject.GetComponentsInChildren<MeshFilter>();
+            foreach (var meshFilter in meshFilters)
+            {
+                if (meshFilter.sharedMesh == null) continue;
+
+                Mesh sharedmesh = meshFilter.sharedMesh;
+                meshFilter.sharedMesh.Clear();
+                Destroy(sharedmesh);
+            }
+            Destroy(tileObject);
+        }
+
+        private void RemoveMapping(Vector2Int tileKey)
+        {
+            if (!Mappings.ContainsKey(tileKey)) return;
+            
+            ObjectMapping mapping = Mappings[tileKey];
+            Mappings.Remove(tileKey);
+            OnMappingRemoved.Invoke(mapping);            
         }
 
         private IEnumerator DownloadBinaryMesh(TileChange tileChange, System.Action<TileChange> callback = null)
