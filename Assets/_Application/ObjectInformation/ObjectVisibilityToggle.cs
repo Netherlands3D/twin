@@ -1,6 +1,8 @@
 
+using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
+using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using UnityEngine;
@@ -78,11 +80,16 @@ namespace Netherlands3D.Twin.UI
                 service.ActiveDialog.Confirm.AddListener(() =>
                 {
                     LayerGameObject layer;
-                    LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out layer);
-                    if (layer != null)
+                    if(currentSelectedFeatureObject is MeshMapping mapping)
                     {
-                        (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(feature, false);                        
+                        LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out layer);
+                        if (layer != null)
+                        {                            
+                            Coordinate coord = ((CartesianTileLayerGameObject)layer).GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
+                            (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(feature, false, coord);
+                        }
                     }
+                    
                     UpdateButton();
                 });
 

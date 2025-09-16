@@ -3,6 +3,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.SerializableGisExpressions;
 using Netherlands3D.SubObjects;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -73,27 +74,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             return stylingRule.Symbolizer.GetFillColor();
         }
 
-        public void SetVisibilityForSubObject(LayerFeature layerFeature, bool visible)
+        public void SetVisibilityForSubObject(LayerFeature layerFeature, bool visible, Coordinate coordinate)
         {
             string id = layerFeature.Attributes[VisibilityIdentifier];
-
-            var stylingRuleName = VisibilityStyleRuleName(id);
-
-            // Add or set the colorization of this feature by its material index
-            var stylingRule = new StylingRule(
-                stylingRuleName,
-                Expression.EqualTo(
-                    Expression.Get(VisibilityIdentifier),
-                    id
-                )
-            );
-            stylingRule.Symbolizer.SetVisibility(visible);
-
-            layer.LayerData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
-            layer.ApplyStyling();
+            SetVisibilityForSubObjectByAttributeTag(id, visible, coordinate);
         }   
         
-        public void SetVisibilityForSubObjectByAttributeTag(string objectId, bool visible)
+        public void SetVisibilityForSubObjectByAttributeTag(string objectId, bool visible, Coordinate coordinate)
         {
             var stylingRuleName = VisibilityStyleRuleName(objectId);
 
@@ -106,6 +93,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 )
             );
             stylingRule.Symbolizer.SetVisibility(visible);
+            stylingRule.Symbolizer.SetCustomProperty(VisibilityPositionIdentifier, coordinate);
+            
 
             layer.LayerData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
             layer.ApplyStyling();
@@ -114,15 +103,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         public bool? GetVisibilityForSubObject(LayerFeature layerFeature)
         {
             string id = layerFeature.GetAttribute(VisibilityIdentifier);
-
-            var stylingRuleName = VisibilityStyleRuleName(id);
-
-            if (!layer.LayerData.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
-            {
-                return true;
-            }
-
-            return stylingRule.Symbolizer.GetVisibility();
+            return GetVisibilityForSubObjectByAttributeTag(id);
         }
 
         public bool? GetVisibilityForSubObjectByAttributeTag(string id)
@@ -135,6 +116,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             }
 
             return stylingRule.Symbolizer.GetVisibility();
+        }
+
+        public Coordinate? GetVisibilityCoordinateForSubObject(LayerFeature layerFeature)
+        {
+            string id = layerFeature.GetAttribute(VisibilityIdentifier);
+            return GetVisibilityCoordinateForSubObjectByTag(id);
+        }
+
+        public Coordinate? GetVisibilityCoordinateForSubObjectByTag(string objectId)
+        {
+            var stylingRuleName = VisibilityStyleRuleName(objectId);
+            if (!layer.LayerData.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
+            {
+                return null;
+            }
+            return stylingRule.Symbolizer.GetCustomProperty<Coordinate>(VisibilityPositionIdentifier);
         }
 
         /// <summary>
@@ -182,14 +179,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 else
                 {
                     var color = Color.clear;
-                    GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, color } });
-
-                    if(layerFeature.Attributes.ContainsKey(VisibilityPositionIdentifier)) return;
-
-                    CartesianTileLayerGameObject cartesianTileLayerGameObject = layer as CartesianTileLayerGameObject;
-                    ObjectMapping objectMapping = cartesianTileLayerGameObject.FindObjectMapping(item);
-                    Coordinate coord = cartesianTileLayerGameObject.GetCoordinateForObjectMappingItem(objectMapping, item);
-                    layerFeature.Attributes.Add(VisibilityPositionIdentifier, VisibilityPositionToIdentifierValue(item.objectID, coord));
+                    GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, color } });                   
                 }
             }            
         }

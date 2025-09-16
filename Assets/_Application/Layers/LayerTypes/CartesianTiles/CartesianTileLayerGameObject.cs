@@ -131,8 +131,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             {
                 foreach (ObjectMappingItem item in mapping.items)
                 {
-                    var layerFeature = CreateFeature(item);
-                    return layerFeature;
+                    if (item.objectID == bagId)
+                    {
+                        var layerFeature = CreateFeature(item);
+                        return layerFeature;
+                    }
                 }
             }
             return null;

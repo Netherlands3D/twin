@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class HiddenObjectsVisibilityItem : MonoBehaviour, IPointerDownHandler, ISelectHandler, IDeselectHandler
+    public class HiddenObjectsVisibilityItem : MonoBehaviour, ISelectHandler, IDeselectHandler
     {  
         [SerializeField] private Toggle toggle;
         [SerializeField] private TMP_Text objectId;
@@ -15,13 +15,10 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private Sprite invisible;
 
         public UnityEvent<bool> ToggleVisibility = new();
-        public UnityEvent<LayerFeature> OnClickItem = new();
-        public UnityEvent<LayerFeature> OnSelectItem = new();
-        public UnityEvent<LayerFeature> OnDeselectItem = new();
-        public LayerFeature LayerFeature => feature;
+        public UnityEvent<string> OnSelectItem = new();
+        public UnityEvent<string> OnDeselectItem = new();
 
         private Image image;
-        private LayerFeature feature;
 
         private void Awake()
         {
@@ -37,7 +34,8 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public void SetToggleState(bool isOn)
         {
-            toggle.isOn = isOn;
+            toggle.SetIsOnWithoutNotify(isOn);
+            UpdateGraphic();
         }
 
         private void UpdateGraphic()
@@ -50,32 +48,19 @@ namespace Netherlands3D.Twin.Layers.Properties
             toggle.onValueChanged.RemoveListener(OnToggle);
         }
 
-        public void SetLayerFeature(LayerFeature feature)
-        {
-            this.feature = feature;
-        }
-
         public void SetObjectId(string id)
         {
             objectId.text = id;
         }
 
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            if (eventData.button == PointerEventData.InputButton.Left)
-            {
-                OnClickItem.Invoke(LayerFeature);
-            }
-        }
-
         public void OnSelect(BaseEventData eventData)
         {
-            OnSelectItem.Invoke(LayerFeature);
+            OnSelectItem.Invoke(objectId.text);
         }
 
         public void OnDeselect(BaseEventData eventData)
         {
-            OnDeselectItem.Invoke(LayerFeature);
+            OnDeselectItem.Invoke(objectId.text);
         }
     }
 }
