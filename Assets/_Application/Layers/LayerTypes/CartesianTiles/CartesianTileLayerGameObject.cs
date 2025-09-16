@@ -150,8 +150,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 centr += vertices[i];
             centr /= mapping.verticesLength;
 
-            //DebugVertices(vertices, mapping.firstVertex, mapping.verticesLength, mFilter.transform);
-
             Vector3 centroidWorld = mFilter.transform.TransformPoint(centr);
             Coordinate coord = new Coordinate(centroidWorld);
             return coord;
@@ -210,21 +208,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             return mesh;
         }
-
-        private void DebugVertices(Vector3[] vertices, int start, int length, Transform transform)
-        {
-            for (int i = start; i < start + length; i++)
-            {
-                Vector3 vertexWorld = transform.TransformPoint(vertices[i]);
-
-                GameObject testPos = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                vertexWorld.y = 50;
-                testPos.transform.position = vertexWorld;
-                testPos.GetComponent<MeshRenderer>().material.color = Color.green;
-                testPos.transform.localScale = Vector3.one * 5;
-            }
-        }
-
 
         public override void OnSelect()
         {
