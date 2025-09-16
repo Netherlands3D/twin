@@ -1,5 +1,6 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
@@ -11,6 +12,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
@@ -134,20 +136,10 @@ namespace Netherlands3D.Twin.Layers.Properties
         }
 
         private GameObject selectedHiddenObject;
+        private UnityAction<IMapping> waitForMappingLoaded;
 
         private void HiddenFeatureSelected(string objectId)
         {
-            //foreach (KeyValuePair<string, StylingRule> kv in layer.LayerData.DefaultStyle.StylingRules)
-            //{
-            //    if (kv.Key.Contains("visibility" && kv.Key.Contains(objectId))
-            //    {
-            //    }
-            //}
-
-            //TODO get the position attribute from data without layerfeature
-            //go to that position and load tile
-            //if no layerfeature then attach listener and get layerfeature when tile loaded
-
             Coordinate? coord = (layer.Styler as CartesianTileLayerStyler).GetVisibilityCoordinateForSubObjectByTag(objectId);
             if (coord == null)
             {
@@ -156,9 +148,32 @@ namespace Netherlands3D.Twin.Layers.Properties
             }
 
             LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
+            if(layerFeature == null)
+            {
+                if(waitForMappingLoaded == null)
+                {
+                    waitForMappingLoaded = (mapping) =>
+                    {                        
+                        if (mapping is not MeshMapping meshMapping) return;
+                        MeshMappingItem item = meshMapping.FindItemById(objectId);
+                        if (item == null) return;
+
+                        ObjectSelectorService.MappingTree.OnMappingAdded.RemoveListener(waitForMappingLoaded);
+                        HiddenFeatureSelected(objectId);
+                    };
+                }
+                ObjectSelectorService.MappingTree.OnMappingAdded.AddListener(waitForMappingLoaded);
+                Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget((Coordinate)coord, cameraDistance);
+                return;
+            }
+
             if (layerFeature.Geometry is ObjectMappingItem mapping)
             {
                 Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget((Coordinate)coord, cameraDistance);
+                bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(objectId);
+                if (visibility == true)
+                    return;
+               
                 List<IMapping> mappings = ObjectSelectorService.MappingTree.Query<MeshMapping>((Coordinate)coord);
                 foreach(IMapping m in mappings)
                 {
@@ -186,11 +201,11 @@ namespace Netherlands3D.Twin.Layers.Properties
                 Destroy(selectedHiddenObject);
                 selectedHiddenObject = null;
             }
-            LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
-            if (layerFeature.Geometry is ObjectMappingItem mapping)
-            {
+            //LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
+            //if (layerFeature.Geometry is ObjectMappingItem mapping)
+            //{
                
-            }
+            //}
         }
     }
 }

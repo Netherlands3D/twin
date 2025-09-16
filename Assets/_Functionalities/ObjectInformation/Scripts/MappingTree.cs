@@ -3,11 +3,15 @@ using Netherlands3D.Twin.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public sealed class MappingTree
     {
+        public UnityEvent<IMapping> OnMappingAdded = new();
+        public UnityEvent<IMapping> OnMappingRemoved = new();
+
         private class Node
         {
             public BoundingBox Bounds;
@@ -33,7 +37,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             this.maxDepth = maxDepth;
         }
 
-        public void RootInsert(IMapping obj) => Insert(root, obj, 0);
+        public void RootInsert(IMapping obj)
+        {
+            Insert(root, obj, 0);
+            OnMappingAdded.Invoke(obj);
+        }
 
         private void Insert(Node node, IMapping obj, int depth)
         {
@@ -72,6 +80,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public void Remove(IMapping obj)
         {
             bool isRemoved = Remove(root, obj);
+            if (isRemoved)
+                OnMappingRemoved.Invoke(obj);
         }
 
         private bool Remove(Node node, IMapping obj)

@@ -25,6 +25,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public UnityEvent OnDeselect = new();
         public UnityEvent OnSelectDifferentLayer = new();
 
+
+
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
         private List<IMapping> orderedMappings = new List<IMapping>();
@@ -48,7 +50,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 if (mappingTreeInstance == null)
                 {
                     BoundingBox bbox = StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds;
-                    MappingTree tree = new MappingTree(bbox, 4, 12);
+                    MappingTree tree = new MappingTree(bbox, 4, 12);                    
                     mappingTreeInstance = tree;
                 }
                 return mappingTreeInstance;
