@@ -40,7 +40,7 @@ namespace Netherlands3D.Twin.Layers
                 
             // Reparent the final layerGameObject to the parent of the placeholder so that the situation is as 
             // it should be before doing the switcheroo
-            layerGameObject.transform.SetParent(transform.parent, false);
+            layerGameObject.transform.SetParent(transform.parent, true);
             
             // Does the whole switcheroo, including transplanting the LayerData and destroying the placeholder
             layerData.SetReference(layerGameObject);

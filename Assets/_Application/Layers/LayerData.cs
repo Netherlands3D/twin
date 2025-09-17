@@ -14,7 +14,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public abstract class LayerData
+    public abstract class LayerData : IEquatable<LayerData>
     {
         private const string NameOfDefaultStyle = "default";
 
@@ -391,5 +391,17 @@ namespace Netherlands3D.Twin.Layers
             layerDataTree.AddRange(children.SelectMany(l => l.GetLayerDataTree()).ToList());
             return layerDataTree;
         }
+        
+        public bool Equals(LayerData other) => other is not null && other.Id == Id;
+        public override bool Equals(object obj) => Equals(obj as LayerData);
+        public override int GetHashCode() => Id.GetHashCode();
+        public static bool operator ==(LayerData left, LayerData right)
+        {
+            if (ReferenceEquals(left, right)) return true;
+            if (left is null || right is null) return false;
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(LayerData left, LayerData right) => !(left == right);
     }
 }

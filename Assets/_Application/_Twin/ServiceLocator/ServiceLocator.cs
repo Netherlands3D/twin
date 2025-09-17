@@ -14,17 +14,18 @@ namespace Netherlands3D.Services
             registeredServices.Add(service.GetType(), service);
         }
 
-        public static void UnregisterService(MonoBehaviour service)
+        public static void UnRegisterService(MonoBehaviour service)
         {
             Debug.Log("Unregistering service: " + service.GetType(), service);
             registeredServices.Remove(service.GetType());
         }
-
+     
         public static T GetService<T>() where T : MonoBehaviour
         {
-            registeredServices.TryGetValue(typeof(T), out var service);
-            
+            MonoBehaviour service;
+            registeredServices.TryGetValue(typeof(T), out service);
             return service as T;
         }
+
     }
 }

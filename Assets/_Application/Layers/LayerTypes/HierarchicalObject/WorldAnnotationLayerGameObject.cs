@@ -40,9 +40,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void OnBlockerClicked()
         {
-            if (mode != EditMode.TextEdit) return;
-            
-            SetEditMode(EditMode.Move);
+            if(mode == EditMode.TextEdit)
+                SetEditMode(EditMode.Move);
         }
 
         protected override void InitializePropertyData()
@@ -90,21 +89,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void OnAnnotationSelected()
         {
-            if(!layerTool.Open) return;
+            if(!layerTool.Open)
+                return;
             
             SetEditMode(EditMode.Move);
         }
 
         private void OnAnnotationDoubleClicked()
         {
-            if (layerTool.Open)
+            if (!layerTool.Open)
+            {
+                layerTool.OpenInspector();
+                SetEditMode(EditMode.Move);
+            }
+            else
             {
                 SetEditMode(EditMode.TextEdit);
-                return;
             }
-
-            layerTool.OpenInspector();
-            SetEditMode(EditMode.Move);
         }
         
         private void OnAnnotationTextConfirmed()
@@ -176,7 +177,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             base.OnLayerActiveInHierarchyChanged(isActive);
-
             annotation.gameObject.SetActive(isActive);
         }
     }

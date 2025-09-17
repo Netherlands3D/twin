@@ -116,16 +116,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            if (layer is BinaryMeshLayer binaryMeshLayer)
+            if(layer is BinaryMeshLayer binaryMeshLayer)
             {
                 binaryMeshLayer.OnMappingCreated.RemoveListener(OnAddedMapping);
                 binaryMeshLayer.OnMappingRemoved.RemoveListener(OnRemovedMapping);
-            }
 
+            }
             if (Application.isPlaying && tileHandler && layer)
             {
                 tileHandler.RemoveLayer(layer);
             }
+
         }
 
         private List<IPropertySectionInstantiator> propertySections;

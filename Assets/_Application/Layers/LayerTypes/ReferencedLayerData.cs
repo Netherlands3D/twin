@@ -4,7 +4,6 @@ using System.Runtime.Serialization;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes
@@ -60,6 +59,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         public ReferencedLayerData(
             string name, 
             string prefabId, 
+            List<LayerPropertyData> layerProperties
+        ) : base(name, layerProperties) {
+            this.prefabId = prefabId;
+        }
+
+        public ReferencedLayerData(
+            string name, 
+            string prefabId, 
             List<LayerPropertyData> layerProperties,
             Action<ReferencedLayerData> onSpawn = null
         ) : base(name, layerProperties) {
@@ -68,24 +75,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             // TODO: In the future this should be refactored out of this class - it is now needed because
             // deserialisation of the project data and reconstitution of the visualisation classes is not
             // separated but this would be an awesome future step
-            SpawnLayer(onSpawn);
+            AddToProject(onSpawn);
         }
 
-        private async void SpawnLayer(Action<ReferencedLayerData> onComplete = null)
+        [OnDeserialized]
+        private async void OnDeserialized(StreamingContext ctx)
+        {
+            // TODO: In the future this should be refactored out of this class - it is now needed because
+            // deserialisation of the project data and reconstitution of the visualisation classes is not
+            // separated but this would be an awesome future step
+            await App.Layers.Add(this);
+            RegisterEventListeners();
+        }
+
+        private async void AddToProject(Action<ReferencedLayerData> onComplete = null)
         {
             await App.Layers.Add(this);
             
-            // populated after adding the layer
-            var layerGameObject = this.Reference;
-            if (!layerGameObject)
-            {
-                Debug.LogError("Prefab not found: " + prefabId);
-                return;
-            }
-            
             // AddDefaultLayer should be after setting the reference so the reference is assigned when
             // the NewLayer event is called
-            ProjectData.Current.AddStandardLayer(this); 
+            ProjectData.Current.AddStandardLayer(this);
             RegisterEventListeners();
 
             if (onComplete != null)

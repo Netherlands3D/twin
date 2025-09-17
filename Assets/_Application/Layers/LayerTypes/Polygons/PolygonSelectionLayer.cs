@@ -41,7 +41,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             set
             {
                 shapeType = value;
-                RecalculatePolygon();
+                SetShape(OriginalPolygon);
             }
         }
 
@@ -52,7 +52,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             set
             {
                 PolygonPropertyData.LineWidth = value;
-                RecalculatePolygon();
+                SetShape(OriginalPolygon);
             }
         }
 
@@ -76,7 +76,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             get => PolygonPropertyData.MaskBitIndex;
             set => PolygonPropertyData.MaskBitIndex = value;
         }
-
         private static List<int> availableMaskChannels = new List<int>() { 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
         public static int NumAvailableMasks => availableMaskChannels.Count;
         public static int MaxAvailableMasks => 22;

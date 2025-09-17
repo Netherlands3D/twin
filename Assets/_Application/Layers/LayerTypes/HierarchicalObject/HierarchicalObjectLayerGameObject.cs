@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
@@ -133,43 +133,73 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void UpdateScale(Vector3 newScale)
         {
-            if (newScale == transform.localScale) return;
-            
-            transform.localScale = newScale;
+            if (newScale != transform.localScale)
+                transform.localScale = newScale;
         }
 
         public void SnapToGround()
         {
-            Vector3 heightExtent = new Vector3(0, Bounds.Size.ToUnity().y * 0.5f, 0);
-            Vector3 pivotOffset = Bounds.Center.ToUnity() - transform.position;
-            Vector3 startPosition = Bounds.Center.ToUnity() - heightExtent; //check from the bottom of this object downwards, because we cannot rely on its hitmask
-            Vector3 previousPosition = WorldTransform.Coordinate.ToUnity();
+            Vector3 currentPosition = transform.position;
+            BoundingBox bounds = Bounds;
+            Vector3 boundsCenter = bounds.Center.ToUnity();
 
-            OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
-            raycaster.GetWorldPointFromDirectionAsync(
-                startPosition,
-                Vector3.down,
-                (hitPos, hit) => OnRaycastDown(hitPos, hit, heightExtent, pivotOffset, previousPosition, raycaster, true),
-                snappingCullingMask
-            );
+            var context = new SnapContext
+            {
+                HeightExtent = bounds.Size.ToUnity().y * 0.5f,
+                PivotOffset = boundsCenter.y - currentPosition.y,
+                PreviousPosition = currentPosition,
+                Target = this,
+                Raycaster = ServiceLocator.GetService<OpticalRaycaster>(),
+                cullingMask = snappingCullingMask
+            };
+
+            context.SnapFromPosition(new Vector3(currentPosition.x, boundsCenter.y, currentPosition.z));
         }
 
-        private void OnRaycastDown(Vector3 worldPos, bool hit, Vector3 heightExtent, Vector3 pivotOffset, Vector3 previousPosition, OpticalRaycaster raycaster, bool invertSnapping)
+        private struct SnapContext
         {
-            if (hit)
+            public float HeightExtent;
+            public float PivotOffset;
+            public Vector3 PreviousPosition;
+            public OpticalRaycaster Raycaster;
+            public HierarchicalObjectLayerGameObject Target;
+            public int cullingMask; 
+
+            public void SnapFromPosition(Vector3 position)
             {
-                transform.position = worldPos + (invertSnapping ? heightExtent : -heightExtent) - pivotOffset;
+               Raycaster.GetWorldPointFromDirectionAsync(
+                   position,
+                   Vector3.down,
+                   OnRaycastDown,
+                   cullingMask
+               );
             }
-            else
-            {
-                transform.position = previousPosition;
-                // we didnt hit downwards, this could mean we are below ground, lets do a very high up one
-                raycaster.GetWorldPointFromDirectionAsync(
-                      previousPosition + Vector3.up * 10000,
-                      Vector3.down,
-                      (hitPos, hit) => OnRaycastDown(hitPos, hit, heightExtent, pivotOffset, previousPosition, raycaster, false),
-                      snappingCullingMask
-                 );
+
+            private void OnRaycastDown(Vector3 worldPos, bool hit)
+            {                
+                if (hit)
+                {
+                    Coordinate target = new Coordinate(worldPos + Vector3.up * (HeightExtent - PivotOffset));
+                    Target.UpdatePosition(target);
+                }
+                else
+                {
+                    Raycaster.GetWorldPointFromDirectionAsync(
+                        PreviousPosition,
+                        Vector3.up,
+                        OnRaycastUp,
+                        cullingMask
+                    );
+                }
+            }
+
+            private void OnRaycastUp(Vector3 worldPos, bool hit)
+            {                
+                if (hit)
+                {
+                    Coordinate target = new Coordinate(worldPos + Vector3.up * (-HeightExtent - PivotOffset));
+                    Target.UpdatePosition(target);
+                }
             }
         }
 
@@ -239,9 +269,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void OnMouseClickNothing()
         {
-            if (!LayerData.IsSelected) return;
-
-            LayerData.DeselectLayer();
+            if (LayerData.IsSelected)
+            {
+                LayerData.DeselectLayer();
+            }
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -256,11 +287,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             if (!transformInterfaceToggle)
             {
                 Debug.LogError("Transform handles interface toggles not found, cannot set transform target");
-                return;
             }
-
-            transformInterfaceToggle.SetTransformTarget(gameObject);
-            transformInterfaceToggle.SnapTarget.AddListener(SnapToGround);
+            else
+            {
+                transformInterfaceToggle.SetTransformTarget(gameObject);
+                transformInterfaceToggle.SnapTarget.AddListener(SnapToGround);
+            }
         }
 
         public override void OnDeselect()
