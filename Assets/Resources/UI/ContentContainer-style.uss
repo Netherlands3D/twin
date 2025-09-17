@@ -1,0 +1,83 @@
+.contentcontainer {
+    --container-input-padding-x: 12px;
+    --container-input-padding-y: 12px;
+    --container-bg-color: var(--color-White);
+    --divider-bg-color: var(--color-Blue100);
+    --container-border-color: var(--color-Blue200);
+    --container-border-width: 2px;
+    --container-border-radius: 4px;
+    --container-icon-gap: 8px;
+
+    padding-top: var(--container-input-padding-y);
+    padding-bottom: var(--container-input-padding-y);
+    padding-left: var(--container-input-padding-x);
+    padding-right: var(--container-input-padding-x);
+    background-color: var(--container-bg-color);
+    border-color: var(--container-border-color);
+    border-radius: var(--container-border-radius);
+    border-width: var(--container-border-width);
+    flex-direction: column;
+}
+
+.contentcontainer:checked {
+    padding-bottom: 16px;
+}
+
+.contentcontainer .unity-foldout__toggle {
+    margin: 0;
+}
+
+.contentcontainer .unity-toggle__input {
+}
+
+.contentcontainer:checked .unity-toggle__input {
+    margin-bottom: 12px;
+}
+
+.contentcontainer .unity-foldout__checkmark {
+    background-image: var(--icon-chevronright); 
+    width: 24px;
+    height: 24px;
+    margin: 0;
+}
+
+.contentcontainer:checked .unity-foldout__checkmark {
+    background-image: var(--icon-chevrondown);
+}
+
+.contentcontainer .hide-checkmark { 
+    display: none; 
+}
+
+.contentcontainer .unity-toggle__input > .unity-label {
+    flex-grow: 1;
+    margin: 0;
+    color: var(--color-Text);
+}
+
+.contentcontainer.unity-foldout__content {
+    margin: 0;
+}
+
+.contentcontainer .divider {
+    flex-grow: 1;
+    height: 2px;
+    min-height: 2px;
+    margin-bottom: 12px;
+    background-color: var(--divider-bg-color);
+}
+
+/* Header icons */
+.contentcontainer .leading-icon,
+.contentcontainer .help-button {
+    width: 24px;
+    height: 24px;
+}
+
+.contentcontainer .leading-icon { 
+    margin-right: var(--container-icon-gap);
+}
+
+.contentcontainer .help-button { 
+    margin-right: var(--container-icon-gap);
+}
