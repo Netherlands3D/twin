@@ -394,26 +394,12 @@ namespace Netherlands3D.CityJson.Visualisation
                 var relativeVert = vert - origin;
                 Vector3 convertedVert = relativeVert.AsVector3();
 
-                if (coordinateSystem == CoordinateSystem.RD)
+                if (coordinateSystem == CoordinateSystem.RD ||
+                    coordinateSystem == CoordinateSystem.RDNAP ||
+                    coordinateSystem == CoordinateSystem.Undefined) // todo: make this consistent for all crs
                 {
                     convertedVert = new Vector3(convertedVert.x, convertedVert.z, convertedVert.y);
                 }
-
-                // Vector3 convertedVert;
-                // switch (coordinateSystem)
-                // {
-                //     case CoordinateSystem.WGS84:
-                //         var wgs = new Coordinate(CoordinateSystem.WGS84_LatLonHeight,relativeVert.x, relativeVert.y, relativeVert.z);
-                //         convertedVert = wgs.ToUnity();
-                //         break;
-                //     case CoordinateSystem.RD:
-                //         var rd = new Coordinate(CoordinateSystem.RDNAP,relativeVert.x, relativeVert.y, relativeVert.z);
-                //         convertedVert = rd.ToUnity();
-                //         break;
-                //     default:
-                //         convertedVert = new Vector3((float)relativeVert.x, (float)relativeVert.z, (float)relativeVert.y);
-                //         break;
-                // }
 
                 convertedPolygon.Add(convertedVert);
             }
