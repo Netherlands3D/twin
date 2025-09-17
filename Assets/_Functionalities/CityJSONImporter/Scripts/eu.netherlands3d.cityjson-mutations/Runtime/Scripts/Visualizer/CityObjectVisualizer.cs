@@ -345,7 +345,6 @@ namespace Netherlands3D.CityJson.Visualisation
             if (surface.VertexCount == 0)
                 return null;
 
-            // List<Vector3> solidSurfacePolygon = GetConvertedPolygonVertices(surface.SolidSurfacePolygon, coordinateSystem);
             List<List<Vector3>> contours = new List<List<Vector3>>(surface.Polygons.Count);
             var convertedVerts = GetConvertedPolygonVertices(surface.SolidSurfacePolygon, coordinateSystem, origin);
             contours.Add(convertedVerts);
@@ -355,36 +354,11 @@ namespace Netherlands3D.CityJson.Visualisation
             }
 
             var triangulationData = PolygonVisualisationUtility.CreatePolygonGeometryTriangulationData(contours);
-            // var mesh = PolygonVisualisationUtility.CreatePolygonMesh(new List<GeometryTriangulationData>(){triangulationData});
             var semanticsObject = surface.SemanticsObject;
-
-            // Vector3 sum = Vector3.zero;
-            // foreach (var v in contours[0])
-            // {
-            //     sum += v;
-            // }
-            //
-            // sum /= contours[0].Count;
             
-            // debugOrigins.Add(sum);
-            // debugNormals.Add(triangulationData.normal);
             return new BoundaryMeshData(triangulationData, semanticsObject);
         }
-
-        // private static List<Vector3> debugOrigins = new();
-        // private static List<Vector3> debugNormals = new();
-        //
-        // private void DebugLines()
-        // {
-        //     for (var i = 0; i < debugOrigins.Count; i++)
-        //     {
-        //         var boundsCenter = GetComponentInChildren<Renderer>().bounds.center;
-        //         var pivotOffset = boundsCenter - transform.position;
-        //         var o = debugOrigins[i] - pivotOffset + transform.position - transform.localPosition;
-        //         Debug.DrawLine(o, o + debugNormals[i]*.25f, Color.green);
-        //     }
-        // }
-
+        
         // convert the list of Vector3Doubles to a list of Vector3s and convert the coordinates to unity in the process.
         public static List<Vector3> GetConvertedPolygonVertices(CityPolygon polygon, CoordinateSystem coordinateSystem, Vector3Double origin)
         {
@@ -400,7 +374,7 @@ namespace Netherlands3D.CityJson.Visualisation
                 {
                     convertedVert = new Vector3(convertedVert.x, convertedVert.z, convertedVert.y);
                 }
-
+                
                 convertedPolygon.Add(convertedVert);
             }
 
