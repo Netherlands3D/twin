@@ -7,6 +7,7 @@ using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
+using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -22,7 +23,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private Material selectionMaterial;
 
         private LayerGameObject layer;
-        private Dictionary<string, HiddenObjectsVisibilityItem> hiddenObjects = new();
+        private List<HiddenObjectsVisibilityItem> hiddenObjects = new();
         private GameObject selectedHiddenObject;
         private UnityAction<IMapping> waitForMappingLoaded;
 
@@ -86,25 +87,28 @@ namespace Netherlands3D.Twin.Layers.Properties
         }
 
         private void CreateVisibilityItem(string objectID)
-        {           
-            if (hiddenObjects.ContainsKey(objectID)) return;
+        {
+            foreach (HiddenObjectsVisibilityItem obj in hiddenObjects)
+                if (obj.ObjectId == objectID)
+                    return;
 
             GameObject visibilityObject = Instantiate(hiddenItemPrefab, layerContent);            
             HiddenObjectsVisibilityItem item = visibilityObject.GetComponent<HiddenObjectsVisibilityItem>();
             item.SetObjectId(objectID);
             //because all ui elements will be destroyed on close an anonymous listener is fine here              
             item.ToggleVisibility.AddListener(visible => ToggleVisibilityForFeature(objectID, visible));
+            item.OnSelectItem.AddListener(OnClickItem);
             item.OnSelectItem.AddListener(HiddenFeatureSelected);
             item.OnDeselectItem.AddListener(HiddenFeatureDeselected);
-            hiddenObjects.Add(objectID, item);
+            hiddenObjects.Add(item);
         }
 
         private void UpdateVisibility()
         {
-            foreach (KeyValuePair<string, HiddenObjectsVisibilityItem> kv in hiddenObjects)
+            foreach (HiddenObjectsVisibilityItem item in hiddenObjects)
             {
-                bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(kv.Key);
-                kv.Value.SetToggleState(visibility == true);
+                bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(item.ObjectId);
+                item.SetToggleState(visibility == true);
             }
         }        
 
@@ -133,9 +137,24 @@ namespace Netherlands3D.Twin.Layers.Properties
             (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObjectByAttributeTag(objectId, visible, (Coordinate)coord);
         }
 
+        private void OnClickItem(string objectId)
+        {        
+            currentButtonIndex = -1;
+            foreach (HiddenObjectsVisibilityItem item in hiddenObjects)
+                if (item.ObjectId == objectId)
+                {
+                    currentButtonIndex = hiddenObjects.IndexOf(item);
+                    break;
+                }
+            if (currentButtonIndex < 0) return;
+
+            ProcessLayerSelection();
+            UpdateSelection();
+        }
+
         private void HiddenFeatureSelected(string objectId)
         {
-            Coordinate? coord = (layer.Styler as CartesianTileLayerStyler).GetVisibilityCoordinateForSubObjectByTag(objectId);
+            Coordinate ? coord = (layer.Styler as CartesianTileLayerStyler).GetVisibilityCoordinateForSubObjectByTag(objectId);
             if (coord == null)
             {
                 Debug.LogError("the styling rule does not contain a coordinate for this feature!");
@@ -196,6 +215,54 @@ namespace Netherlands3D.Twin.Layers.Properties
                 Destroy(selectedHiddenObject);
                 selectedHiddenObject = null;
             }
+        }
+
+        private int currentButtonIndex = -1;
+
+
+        private bool NoModifierKeyPressed()
+        {
+            return !LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed();
+        }
+
+        private void ProcessLayerSelection()
+        {
+            if (LayerUI.SequentialSelectionModifierKeyIsPressed() && selectedItems.Count > 0) //if no layers are selected, there will be no reference layer to add to
+            {
+                int lastIndex = hiddenObjects.IndexOf(selectedItems[selectedItems.Count - 1]); //last element is always the last selected layer                               
+                int targetIndex = currentButtonIndex;
+                if (lastIndex > targetIndex)
+                {
+                    int temp = lastIndex;
+                    lastIndex = targetIndex;
+                    targetIndex = temp;
+                }
+                bool addSelection = !hiddenObjects[currentButtonIndex].IsSelected;
+                for (int i = lastIndex; i <= targetIndex; i++)
+                    hiddenObjects[i].SetSelected(addSelection);
+                hiddenObjects[currentButtonIndex].SetSelected(!addSelection);
+            }
+            if (NoModifierKeyPressed())
+            {
+                foreach (var item in selectedItems)
+                    item.SetSelected(false);
+
+            }
+            UpdateSelection();
+        }
+
+        private List<HiddenObjectsVisibilityItem> selectedItems = new();
+        private List<int> selectedIndices = new();
+        private void UpdateSelection()
+        {
+            selectedIndices.Clear();
+            selectedItems.Clear();
+            foreach (HiddenObjectsVisibilityItem item in hiddenObjects)
+                if (item.IsSelected)
+                {
+                    selectedItems.Add(item);
+                    selectedIndices.Add(hiddenObjects.IndexOf(item));
+                }
         }
     }
 }

@@ -66,7 +66,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return null;
         }
 
-        private void CacheItems()
+        public void CacheItems()
         {
             if (items == null)
             {

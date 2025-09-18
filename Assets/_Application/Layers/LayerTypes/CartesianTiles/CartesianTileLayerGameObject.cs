@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Functionalities.ObjectInformation;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
@@ -69,6 +70,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             binaryMeshLayer.OnMappingCreated.AddListener(OnAddedMapping);         
             binaryMeshLayer.OnMappingRemoved.AddListener(OnRemovedMapping);
 
+            if(debugFeatures)
+            {
+                ObjectSelectorService.MappingTree.OnMappingAdded.AddListener(OnDebugMapping);
+            }
+
             for (var materialIndex = 0; materialIndex < binaryMeshLayer.DefaultMaterialList.Count; materialIndex++)
             {
                 // Make a copy of the default material, so we can change the color without affecting the original
@@ -82,13 +88,34 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             }
         }
 
+        bool debugFeatures = true;
+
+        private void OnDebugMapping(IMapping mapping)
+        {
+            if (debugFeatures)
+            {
+                if (mapping is MeshMapping map)
+                {
+                    for(int i = 0; i < 10; i++)
+                    {
+                        map.CacheItems();
+                        ObjectMappingItem item = map.Items[i].ObjectMappingItem;
+                        Coordinate coord = map.GetCoordinateForObjectMappingItem(map.ObjectMapping, item);
+                        var layerFeature = CreateFeature(item);
+                        (Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(layerFeature, false, coord);
+                    }                    
+                }
+                debugFeatures = false;
+            }
+        }
+
         private void OnAddedMapping(ObjectMapping mapping)
         {         
             foreach (ObjectMappingItem item in mapping.items)
             {
                 var layerFeature = CreateFeature(item);
                 LayerFeatures.Add(layerFeature.Geometry, layerFeature);
-            }
+            }            
             ApplyStyling();
         }
 

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace Netherlands3D.Twin.Layers.Properties
 {
     public class HiddenObjectsVisibilityItem : MonoBehaviour, ISelectHandler, IDeselectHandler
-    {  
+    {
         [SerializeField] private Toggle toggle;
         [SerializeField] private TMP_Text objectId;
 
@@ -18,12 +18,19 @@ namespace Netherlands3D.Twin.Layers.Properties
         public UnityEvent<string> OnSelectItem = new();
         public UnityEvent<string> OnDeselectItem = new();
 
+        public bool IsSelected => selected;
+        public string ObjectId => objectId.text;
+
+        private bool selected = false;
         private Image image;
+        private HiddenObjectsSelectableButton button;
 
         private void Awake()
         {
             toggle.onValueChanged.AddListener(OnToggle);
             image = toggle.targetGraphic.GetComponent<Image>();
+            button = gameObject.GetComponent<HiddenObjectsSelectableButton>();
+
         }
 
         void OnToggle(bool isOn)
@@ -59,11 +66,19 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void OnSelect(BaseEventData eventData)
         {
             OnSelectItem.Invoke(objectId.text);
+            selected = true;
         }
 
         public void OnDeselect(BaseEventData eventData)
         {
             OnDeselectItem.Invoke(objectId.text);
+            selected = false;
+        }
+
+        public void SetSelected(bool isSelected)
+        {
+            selected = isSelected;
+            button.ForceVisualSelection(isSelected);
         }
     }
 }
