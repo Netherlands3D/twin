@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewHeight: 0
   fieldOfView: 60
-  speedInKm: 40
-  runningMultiplier: 2.5
+  speedInKm: 45
+  runningMultiplier: 2.75
   jumpHeight: 0
   maxFallingSpeed: 0
   stepHeight: 1

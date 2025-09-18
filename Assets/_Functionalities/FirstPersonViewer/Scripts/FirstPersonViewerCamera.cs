@@ -26,18 +26,19 @@ namespace Netherlands3D.FirstPersonViewer
         public CameraConstrain cameraConstrain;
 
         //TEMP
-        private Camera mainCam;
         private bool didSetup;
         [Obsolete("Will be handled differntly (Prob with some kind of transitionState")] public bool DidSetup => didSetup;
 
 
-        private void Start()
+        private void Awake()
         {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            currentsensitivity = 3f;
+#endif
+
             ViewerEvents.ChangeCameraConstrain += SetCameraConstrain;
             ViewerEvents.ChangeViewHeight += SetCameraHeight;
             ViewerEvents.ChangeFOV += SetCameraFOV;
-
-            ViewerEvents.OnViewerExited += ExitViewer;
 
             firstPersonViewerCamera = GetComponent<Camera>();
 
@@ -49,16 +50,12 @@ namespace Netherlands3D.FirstPersonViewer
             ViewerEvents.ChangeCameraConstrain -= SetCameraConstrain;
             ViewerEvents.ChangeViewHeight -= SetCameraHeight;
             ViewerEvents.ChangeFOV -= SetCameraFOV;
-
-            ViewerEvents.OnViewerExited -= ExitViewer;
         }
 
         private void SetupViewer()
         {
-            mainCam = Camera.main;
-
-            firstPersonViewerCamera.transform.position = mainCam.transform.position;
-            firstPersonViewerCamera.transform.rotation = mainCam.transform.rotation;
+            firstPersonViewerCamera.transform.position = Camera.main.transform.position;
+            firstPersonViewerCamera.transform.rotation = Camera.main.transform.rotation;
 
             Vector3 forward = Camera.main.transform.forward;
             forward.y = 0;
@@ -72,16 +69,12 @@ namespace Netherlands3D.FirstPersonViewer
                 xRotation = transform.localEulerAngles.x;
                 didSetup = true;
             });
-
-            //Somehow we need to stop using this to support modularity. Without breaking the camera.
-            mainCam.GetComponent<FreeCamera>().enabled = false; //TEMP FIX FOR CAMERA MOVEMENT WHILE IN FPV. $$
-            mainCam.targetDisplay = 1;
-            //mainCam.enabled = false; //Creates a lot of errors
-            //Camera.SetupCurrent(firstPersonViewerCamera);
         }
 
         private void Update()
         {
+            if (input.LockCamera) return;
+
             if (didSetup)
             {
                 Vector2 cameraMovement = input.LookInput.ReadValue<Vector2>();
@@ -95,7 +88,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void PointerDelta(Vector2 pointerDelta)
         {
-            Vector2 mouseLook = pointerDelta * 10 * Time.deltaTime;
+            Vector2 mouseLook = pointerDelta * currentsensitivity * Time.deltaTime;
 
             xRotation = Mathf.Clamp(xRotation - mouseLook.y, -90, 90);
             yRotation = yRotation + mouseLook.x;
@@ -113,13 +106,6 @@ namespace Netherlands3D.FirstPersonViewer
                     transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
                     break;
             }
-        }
-
-        [Obsolete("Should be moved to other script. Currently not possible due to how Camera.Main is handled. Current state: Input is no longer handled here it now uses an event.")]
-        private void ExitViewer()
-        {
-            mainCam.targetDisplay = 0;
-            mainCam.GetComponent<FreeCamera>().enabled = true; //Somehow we need to stop using this to support modularity. Without breaking the camera.
         }
 
         private void SetCameraConstrain(CameraConstrain state)

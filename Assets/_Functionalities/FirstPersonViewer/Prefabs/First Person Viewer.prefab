@@ -293,6 +293,7 @@ MonoBehaviour:
   FirstPersonCamera: {fileID: 2754359901435342932}
   groundDistance: 0.2
   isGrounded: 0
+  cameraHeightAboveGround: 500
 --- !u!114 &6660788825186363282
 MonoBehaviour:
   m_ObjectHideFlags: 0

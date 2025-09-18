@@ -32,11 +32,9 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
                 Debug.Log($"State {newStateType} not found.");
             }
 
-            if(CurrentState != null) CurrentState.isAcive = false;
             CurrentState?.OnExit();
             CurrentState = stateDictionary[newStateType];
             CurrentState?.OnEnter();
-            CurrentState.isAcive = true;
         }
     }
 }

@@ -37,6 +37,13 @@ namespace Netherlands3D.FirstPersonViewer
         private float yPositionTarget;
         public bool isGrounded;
 
+        [Header("Main Cam")]
+        [SerializeField] private float cameraHeightAboveGround;
+        private Camera mainCam;
+        private Vector3 prevCameraPosition;
+        private Quaternion prevCameraRotation;
+        private int prevCameraCullingMask;
+
         private void Awake()
         {
             input = GetComponent<FirstPersonViewerInput>();
@@ -46,6 +53,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             ViewerEvents.ChangeSpeed += SetMovementSpeed;
             ViewerEvents.OnMovementPresetChanged += SetMovementModus;
+            ViewerEvents.OnViewerExited += ExitViewer;
         }
 
         private void Start()
@@ -55,12 +63,15 @@ namespace Netherlands3D.FirstPersonViewer
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
             snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings") | (1 << LayerMask.NameToLayer("Default")));
+
+            SetupMainCam();
         }
 
         private void OnDestroy()
         {
             ViewerEvents.ChangeSpeed -= SetMovementSpeed;
             ViewerEvents.OnMovementPresetChanged -= SetMovementModus;
+            ViewerEvents.OnViewerExited -= ExitViewer;
         }
 
         private void SetupFSM()
@@ -70,6 +81,22 @@ namespace Netherlands3D.FirstPersonViewer
             fsm = new FirstPersonViewerStateMachine(this, input, null, playerStates);
         }
 
+        private void SetupMainCam()
+        {
+            mainCam = Camera.main;
+
+            prevCameraPosition = mainCam.transform.position;
+            prevCameraRotation = mainCam.transform.rotation;
+            prevCameraCullingMask = mainCam.cullingMask;
+
+            mainCam.transform.position = transform.position + Vector3.up * 20;
+            mainCam.transform.rotation = Quaternion.Euler(90, 0, 0);
+            mainCam.cullingMask = 0;
+
+            mainCam.orthographic = true;
+            mainCam.targetDisplay = 1;
+        }
+
         private void Update()
         {
             CheckGroundCollision();
@@ -77,6 +104,11 @@ namespace Netherlands3D.FirstPersonViewer
             fsm.OnUpdate();
 
             transform.position += Vector3.up * velocity.y * Time.deltaTime;
+
+            //Update Cam position
+            Vector3 camPos = transform.position;
+            camPos.y = cameraHeightAboveGround;
+            mainCam.transform.position = camPos;
         }
 
         public void GetGroundPosition()
@@ -139,5 +171,14 @@ namespace Netherlands3D.FirstPersonViewer
 
 
         private void SetMovementSpeed(float speed) => MovementSpeed = speed / 3.6f;
+
+        private void ExitViewer()
+        {
+            mainCam.transform.position = prevCameraPosition;
+            mainCam.transform.rotation = prevCameraRotation;
+            mainCam.cullingMask = prevCameraCullingMask;
+            mainCam.orthographic = false;
+            mainCam.targetDisplay = 0;
+        }
     }
 }

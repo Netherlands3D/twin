@@ -10,8 +10,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         protected Transform transform;
 
-        public bool isAcive;
-
         public void Initialize(FirstPersonViewerStateMachine owner, FirstPersonViewer viewer, FirstPersonViewerInput input)
         {
             this.owner = owner;

@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Netherlands3D.FirstPersonViewer
 {
+
     public class FirstPersonViewerInput : MonoBehaviour
     {
         [Header("Input")]
@@ -22,6 +23,9 @@ namespace Netherlands3D.FirstPersonViewer
         [Header("Exit")]
         [SerializeField] private float exitDuration = .75f;
         private float exitTimer;
+
+        private List<MonoBehaviour> cameraLocks;
+        public bool LockCamera => cameraLocks.Count > 0;
 
         private void Awake()
         {
@@ -41,6 +45,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void OnEnable()
         {
+            cameraLocks = new List<MonoBehaviour>();
             inputActionAsset.Enable();
         }
 
@@ -60,10 +65,12 @@ namespace Netherlands3D.FirstPersonViewer
             {
                 if(Cursor.lockState == CursorLockMode.Locked)
                 {
+                    AddCameraLockConstrain(this);
                     Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = true;
                 } else
                 {
+                    RemoveCameraLockConstrain(this);
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false; 
                 }
@@ -71,6 +78,7 @@ namespace Netherlands3D.FirstPersonViewer
             {
                 if(!IsPointerOverUIObject())
                 {
+                    RemoveCameraLockConstrain(this);
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
                 }
@@ -93,6 +101,9 @@ namespace Netherlands3D.FirstPersonViewer
             Destroy(gameObject);
         }
 
+        public void AddCameraLockConstrain(MonoBehaviour monoBehaviour) => cameraLocks.Add(monoBehaviour);
+
+        public void RemoveCameraLockConstrain(MonoBehaviour monoBehaviour) => cameraLocks.Remove(monoBehaviour);
 
         //Kinda slow
         public static bool IsPointerOverUIObject()
