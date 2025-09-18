@@ -190,7 +190,7 @@ namespace Netherlands3D.Twin.Projects
             credentialHandler.SetUri(url);
             credentialHandler.ApplyCredentials();
 #else
-            var filePath = Path.Combine(Application.streamingAssetsPath, defaultProjectFileName);
+            var filePath = Path.Combine(Application.persistentDataPath, Application.streamingAssetsPath, defaultProjectFileName);
             Debug.Log("loading default project file: " + filePath);
             projectDataStore.LoadFromFile(filePath);
 #endif
