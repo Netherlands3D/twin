@@ -73,6 +73,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void OnDestroy()
         {
+            DestroyGhostMesh();
             layer.OnStylingApplied.RemoveListener(UpdateVisibility);
             List<string> idsToRemove = new List<string>();
             foreach (KeyValuePair<string, StylingRule> kv in layer.LayerData.DefaultStyle.StylingRules)
