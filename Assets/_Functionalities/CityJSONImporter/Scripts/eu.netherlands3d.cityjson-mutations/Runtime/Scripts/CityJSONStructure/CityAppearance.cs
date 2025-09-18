@@ -20,13 +20,16 @@ namespace Netherlands3D.CityJson.Structure
 
         // private static Material defaultMaterial;
         // private static Material[] defaultMaterials;
-        private Material materialTemplate;
-        public List<Material> Materials = new();
-        
         public List<MaterialInfo> MaterialInfos { get; private set; } = new List<MaterialInfo>();
-        public List<TextureInfo> Textures { get; private set; } = new List<TextureInfo>();
+        public List<TextureInfo> TextureInfos { get; private set; } = new List<TextureInfo>();
+        // Todo: Add vertices-texture support
+        // Todo: Add default-theme-texture support
+        // Todo: Add default-theme-material support
+        
+        private Material materialTemplate;
+        public Material[] cachedMaterials;
 
-        private static Dictionary<int, Material> cachedMaterials = new Dictionary<int, Material>();
+        // private static Dictionary<int, Material> cachedMaterials = new Dictionary<int, Material>();
 
         public CityAppearance(Material materialTemplate)
         {
@@ -35,19 +38,19 @@ namespace Netherlands3D.CityJson.Structure
 
         public static CityAppearance FromJSON(JSONNode node, Material materialTemplate)
         {
-            if (node == null || node.Count == 0) return null;
+            // if (node == null || node.Count == 0) return null;
 
             var appearance = new CityAppearance(materialTemplate);
 
             var materialsNode = node["materials"];
-            if (materialsNode != null && materialsNode.IsArray)
+
+            appearance.cachedMaterials = new Material[materialsNode.Count];
+            for (var i = 0; i < materialsNode.Count; i++)
             {
-                foreach (var matNode in materialsNode.AsArray)
-                {
-                    var materialInfo = MaterialInfo.FromJSON(matNode);
-                    var material = MaterialInfo.ToUnityMaterial(materialInfo, materialTemplate);
-                    appearance.Materials.Add(material);
-                }
+                var matNode = materialsNode[i];
+                var materialInfo = MaterialInfo.FromJSON(matNode);
+                var material = MaterialInfo.ToUnityMaterial(materialInfo, materialTemplate);
+                appearance.cachedMaterials[i] = material;
             }
 
             var texturesNode = node["textures"];
@@ -55,16 +58,32 @@ namespace Netherlands3D.CityJson.Structure
             {
                 foreach (var texNode in texturesNode.AsArray)
                 {
-                    appearance.Textures.Add(TextureInfo.FromJSON(texNode));
+                    appearance.TextureInfos.Add(TextureInfo.FromJSON(texNode));
                 }
             }
 
             return appearance;
         }
 
-        public Material[] GetMaterialsForGeometry(CityGeometry geometry)
+        public Material[] GetMaterials(List<int> materialIndices)
         {
-            return new[] { materialTemplate }; //todo: make this return the correct materials
+            if (materialIndices == null || materialIndices.Count == 0) //no materials defined, return the default
+                return new[] { materialTemplate };
+            
+            var materials = new Material[materialIndices.Count];
+            for (var i = 0; i < materialIndices.Count; i++)
+            {
+                var materialIndex = materialIndices[i];
+                if (materialIndex == -1) //no material defined
+                {
+                    materials[i] = materialTemplate;
+                    continue;
+                }
+
+                materials[i] = cachedMaterials[materialIndex];
+            }
+
+            return materials;
         }
 
         //     public Material[] GenerateMaterialsForGeometry(CityGeometry geometry)
@@ -96,7 +115,7 @@ namespace Netherlands3D.CityJson.Structure
         //         return materials;
         //     }
     }
-    
+
 
     [System.Serializable]
     public class MaterialInfo
@@ -128,6 +147,7 @@ namespace Netherlands3D.CityJson.Structure
             // Use Unity's built-in Standard Shader or URP Lit, depending on your pipeline
 
             var mat = new Material(defaultMaterial);
+            mat.name = matInfo.Name;
 
             if (matInfo.DiffuseColor.HasValue)
             {

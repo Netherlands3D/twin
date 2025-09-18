@@ -221,17 +221,39 @@ namespace Netherlands3D.CityJson.Visualisation
 
         public MeshWithMaterials CreateMeshFromGeometry(CityGeometry geometry, CoordinateSystem coordinateSystem, Vector3Double vertexOffset, Vector3 objectOffset)
         {
-            var materials = cityObject.Appearance.GetMaterialsForGeometry(geometry);
             var boundaryMeshes = BoundariesToMeshes(geometry.BoundaryObject, coordinateSystem, vertexOffset);
             // var subMeshes = CombineBoundaryMeshesWithTheSameSemanticObject(boundaryMeshes, objectOffset, out var types, geometry);
             List<Mesh> subMeshes;
+            Material[] materials;
             if (geometry.UseSingleMaterialForEntireGeometry)
+            {
                 subMeshes = CombineBoundaryMeshes(boundaryMeshes, objectOffset);
+                if (log)
+                {
+                    Debug.Log(name +" has material index count: "+ geometry.MaterialIndicesForFullGeometry.Count);
+                    foreach (var i in geometry.MaterialIndicesForFullGeometry)
+                    {
+                        Debug.Log("index: " + i);
+                    }
+                }
+                materials = cityObject.Appearance.GetMaterials(new List<int> {geometry.MaterialIndicesForFullGeometry[0]});
+            }
             else
-                subMeshes = CombineBoundaryMeshesWithTheSameMaterial(boundaryMeshes, objectOffset);
+            {
+                subMeshes = CombineBoundaryMeshesWithTheSameMaterial(boundaryMeshes, objectOffset, out var materialIndices);
+                if (log)
+                {
+                    Debug.Log(name +" has material index count: "+ materialIndices.Count);
+                    foreach (var i in materialIndices)
+                    {
+                        Debug.Log("index: " + i);
+                    }
+                }
+                materials = cityObject.Appearance.GetMaterials(materialIndices);
+            }
 
-            // subMeshes = CombineBoundaryMeshesWithTheSameSemanticObject(boundaryMeshes, objectOffset, out var types, geometry);
             //todo: add option to create submeshes based on surface semantics.
+            // subMeshes = CombineBoundaryMeshesWithTheSameSemanticObject(boundaryMeshes, objectOffset, out var types, geometry);
 
             var mesh = CombineMeshes(subMeshes, Matrix4x4.identity, false); //use identity matrix because we already transformed the submeshes
             return new MeshWithMaterials(mesh, materials);
@@ -269,16 +291,35 @@ namespace Netherlands3D.CityJson.Visualisation
             return combinedMeshes;
         }
 
-        public static List<Mesh> CombineBoundaryMeshesWithTheSameMaterial(List<BoundaryMeshData> boundaryMeshData, Vector3 offset)
+        [SerializeField] private bool regenerateMesh = false; 
+        private static bool log = false;
+        private void Update()
+        {
+            if (regenerateMesh)
+            {
+                log = true;
+                Visualize();
+                regenerateMesh = false;
+            }
+        }
+
+        public static List<Mesh> CombineBoundaryMeshesWithTheSameMaterial(List<BoundaryMeshData> boundaryMeshData, Vector3 offset, out List<int> materialIndices)
         {
             List<Mesh> combinedMeshes = new List<Mesh>(boundaryMeshData.Count);
             List<GeometryTriangulationData> meshDataToCombine = new List<GeometryTriangulationData>(boundaryMeshData.Count);
             List<GeometryTriangulationData> meshDataWithNullMaterial = new List<GeometryTriangulationData>(boundaryMeshData.Count);
-
+            materialIndices = new List<int>();
+            
             //combine mesh datas per materialIndexList. Since we want to support different themes, we can only combine meshes that have the same exact MaterialIndexList
             while (boundaryMeshData.Count > 0)
             {
-                List<int> activeMaterialList = boundaryMeshData[boundaryMeshData.Count - 1].MaterialIndices;
+                // List<int> activeMaterialList = boundaryMeshData[boundaryMeshData.Count - 1].MaterialIndices;
+                int activeMaterialIndex = boundaryMeshData[boundaryMeshData.Count - 1].MaterialIndices[0];// todo: instead of [0] we should return the index of the active theme
+                if (log)
+                    Debug.Log("active material index: " + activeMaterialIndex);
+                
+                materialIndices.Add(activeMaterialIndex); 
+
                 for (int i = boundaryMeshData.Count - 1; i >= 0; i--) //go backwards because collection will be modified
                 {
                     var boundaryMesh = boundaryMeshData[i];
@@ -289,10 +330,13 @@ namespace Netherlands3D.CityJson.Visualisation
                         continue;
                     }
 
-                    if (boundaryMesh.MaterialIndices.SequenceEqual(activeMaterialList))
+                    // if (boundaryMesh.MaterialIndices.SequenceEqual(activeMaterialList))
+                    if (boundaryMesh.MaterialIndices[0] == activeMaterialIndex)
                     {
                         if (boundaryMesh.TriangulationData != null) //skip invalid polygons
+                        {
                             meshDataToCombine.Add(boundaryMesh.TriangulationData);
+                        }
                         boundaryMeshData.Remove(boundaryMesh);
                     }
                 }
@@ -306,6 +350,7 @@ namespace Netherlands3D.CityJson.Visualisation
             {
                 var meshWithNullMaterial = PolygonVisualisationUtility.CreatePolygonMesh(meshDataWithNullMaterial, offset);
                 combinedMeshes.Add(meshWithNullMaterial);
+                materialIndices.Add(-1); //no material is defined, so we use material index -1 for the submesh
             }
 
             return combinedMeshes;
