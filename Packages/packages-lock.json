@@ -131,7 +131,7 @@
       "dependencies": {}
     },
     "com.unity.ide.rider": {
-      "version": "3.0.36",
+      "version": "3.0.37",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -360,7 +360,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.coordinates": {
-      "version": "2.2.0",
+      "version": "2.3.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -489,7 +489,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.selection-tools": {
-      "version": "3.0.1",
+      "version": "3.1.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {

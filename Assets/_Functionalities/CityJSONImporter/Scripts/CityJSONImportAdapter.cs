@@ -1,22 +1,15 @@
 using System;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Events;
-using Newtonsoft.Json;
 using Netherlands3D.DataTypeAdapters;
-using Netherlands3D.LayerStyles;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
+using Newtonsoft.Json;
 
-namespace Netherlands3D.Twin.DataTypeAdapters
+namespace Netherlands3D.Functionalities.CityJSON
 {
-    [CreateAssetMenu(menuName = "Netherlands3D/Adapters/GeoJSONImportAdapter", fileName = "GeoJSONImportAdapter", order = 0)]
-    public class GeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter
+    [CreateAssetMenu(menuName = "Netherlands3D/Adapters/CityJSONImportAdapter", fileName = "CityJSONImportAdapter", order = 0)]
+    public class CityJSONImportAdapter : ScriptableObject, IDataTypeAdapter
     {
-        [SerializeField] private GeoJsonLayerGameObject layerPrefab;
-        [SerializeField] private UnityEvent<string> displayErrorMessageEvent;
+        [SerializeField] private CityJSONSpawner layerPrefab;
 
         public bool Supports(LocalFile localFile)
         {
@@ -36,13 +29,13 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 {
                     jsonReader.Read(); //read the value of the "type" property
                     string typeValue = jsonReader.Value?.ToString();
-                    
+
                     if (string.Equals(typeValue, "CityJSON", StringComparison.OrdinalIgnoreCase))
-                        return false; //this is a cityjson, not a geojson
+                        return true; //this is a cityjson, not a geojson
 
                     if (typeValue.Equals("FeatureCollection", StringComparison.OrdinalIgnoreCase) ||
                         typeValue.Equals("Feature", StringComparison.OrdinalIgnoreCase))
-                        return true;
+                        return false; //this is a geojson, not a cityjson
                 }
 
                 if (jsonReader.TokenType == JsonToken.PropertyName &&
@@ -67,35 +60,13 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
         public void Execute(LocalFile localFile)
         {
-            CreateGeoJSONLayer(localFile, displayErrorMessageEvent);
-        }
-
-        private void CreateGeoJSONLayer(LocalFile localFile, UnityEvent<string> onErrorCallback = null)
-        {
-            var geoJsonLayerName = localFile.SourceUrl;
-            if (localFile.LocalFilePath.Length > 0)
-                geoJsonLayerName = Path.GetFileName(localFile.SourceUrl);
-
-            GeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
-            newLayer.Name = geoJsonLayerName;
-            newLayer.gameObject.name = geoJsonLayerName;
-            if (onErrorCallback != null)
-                newLayer.Parser.OnParseError.AddListener(onErrorCallback.Invoke);
-
-            //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
-            var randomLayerColor = LayerColor.Random();
-            newLayer.LayerData.Color = randomLayerColor;
-
-            var symbolizer = newLayer.LayerData.DefaultSymbolizer;
-            symbolizer?.SetFillColor(randomLayerColor);
-            symbolizer?.SetStrokeColor(randomLayerColor);
-
             var fullPath = localFile.LocalFilePath;
             var localPath = Path.GetRelativePath(Application.persistentDataPath, fullPath);
-            var propertyData = newLayer.PropertyData as LayerURLPropertyData;
-            propertyData.Data = localFile.SourceUrl.StartsWith("http")
-                ? AssetUriFactory.CreateRemoteAssetUri(localFile.SourceUrl)
-                : AssetUriFactory.CreateProjectAssetUri(localPath);
+            var fileName = Path.GetFileName(fullPath);
+            CityJSONSpawner newLayer = Instantiate(layerPrefab);
+            newLayer.gameObject.name = fileName;
+
+            newLayer.SetCityJSONPathInPropertyData(localPath);
         }
     }
 }
