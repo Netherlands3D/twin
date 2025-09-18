@@ -199,7 +199,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             if(feature.Geometry is ObjectMappingItem item)
             {
-                feature.Attributes.Add(CartesianTileLayerStyler.VisibilityIdentifier, item.objectID); 
+                feature.Attributes.Add(CartesianTileLayerStyler.VisibilityAttributeIdentifier, item.objectID); 
             }
 
             if (feature.Geometry is not Material mat) return feature;

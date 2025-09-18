@@ -30,7 +30,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             ToggleVisibility.Invoke(isOn);
             UpdateGraphic();
-            //when the toggle is off (so object invisible) keep selection on
+            //keep behaviour the same as when selecting the item when pressing toggle
             if (!isOn)
                 EventSystem.current.SetSelectedGameObject(gameObject);
         }
