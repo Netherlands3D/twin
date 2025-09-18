@@ -113,8 +113,7 @@ namespace Netherlands3D.CityJson.Visualisation
                     meshesCreatedThisFrame = 0;
                 }
             }
-
-           
+            
             meshesCreatedThisFrame++;
             meshes = CreateMeshes(cityObject);
             
@@ -129,7 +128,9 @@ namespace Netherlands3D.CityJson.Visualisation
         private Vector3 SetLocalPosition(CityObject cityObject)
         {
             var crs = cityObject.CoordinateSystem;
-            if (cityObject.CoordinateSystem == CoordinateSystem.RD) //todo: Make a generic check for 2d CRD and include the height
+            
+            //todo: Any 2D CRS should be converted to its 3D counterpart (like RD to RDNAP), we should check if we want to do this in the initial CityJSON parsing function or here
+            if (cityObject.CoordinateSystem == CoordinateSystem.RD) 
             {
                 crs = CoordinateSystem.RDNAP;
             }
@@ -195,9 +196,10 @@ namespace Netherlands3D.CityJson.Visualisation
             {
                 Vector3Double origin = new Vector3Double();
                 var cityJsonCoord = GetComponentInParent<WorldTransform>().Coordinate; //todo: this getComponentInParent is a bit hacky
-                if (cityObject.CoordinateSystem != CoordinateSystem.Undefined) 
+                var coordinateSystem = cityObject.CoordinateSystem;
+                if (coordinateSystem != CoordinateSystem.Undefined) 
                 {
-                    var convertedCoord = cityJsonCoord.Convert(cityObject.CoordinateSystem);
+                    var convertedCoord = cityJsonCoord.Convert(coordinateSystem);
                     origin = new Vector3Double(convertedCoord.value1, convertedCoord.value2, convertedCoord.value3);
                 }
                 else
@@ -206,7 +208,7 @@ namespace Netherlands3D.CityJson.Visualisation
                 }
                 // The geometry's vertices are in world space, so we need to subtract the cityJSON's origin to get them in cityJSON space, and then subtract the cityObject's origin to be able to create a mesh with the origin at the cityObject's position.
                 // The CityJSON origin is at the citJSON WorldTransform coordinate, the CityObject's origin is its localPosition, since we set it previously.
-                var mesh = CreateMeshFromGeometry(geometry, cityObject.CoordinateSystem, origin, cityObject.transform.localPosition); 
+                var mesh = CreateMeshFromGeometry(geometry, coordinateSystem, origin, cityObject.transform.localPosition); 
                 meshes.Add(geometry, mesh);
             }
 
