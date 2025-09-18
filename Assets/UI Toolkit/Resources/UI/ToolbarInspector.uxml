@@ -6,10 +6,10 @@
   editor-extension-mode="False" 
   class="toolbar-inspector"
 >
-        <ui:VisualElement name="Left">
+        <ui:VisualElement class="toolbar-inspector-content left">
             <nl3d:Toggle name="OpenLibrary" toggle-style="IconOnly" icon="Library" />
         </ui:VisualElement>
-        <ui:VisualElement name="Right">
+        <ui:VisualElement class="toolbar-inspector-content right">
             <nl3d:Button name="AddFolder" button-style="IconOnly" icon="Folder" />
             <nl3d:Button name="Delete" button-style="IconOnly" icon="Trash" />
             <nl3d:Toggle name="AddToLibrary" toggle-style="IconOnly" icon="LibraryAdd" />

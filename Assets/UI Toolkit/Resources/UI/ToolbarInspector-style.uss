@@ -4,23 +4,21 @@
     padding: 24px;
 }
 
-.toolbar-inspector #Left {
+.toolbar-inspector-content {
+    flex-direction: row;
+}
+
+.toolbar-inspector-content.left {
     flex-direction: row;
     flex-shrink: 0;
     flex-grow: 1;
 }
 
-.toolbar-inspector #Right {
-    flex-direction: row;
+.toolbar-inspector-content.left > * {
+    margin-right: 12px;
 }
 
-.toolbar-inspector #Left > .button,
-.toolbar-inspector #Left > .toggle {
-  margin-right: 12px;
-}
-
-.toolbar-inspector #Right > .button,
-.toolbar-inspector #Right > .toggle {
+.toolbar-inspector-content.right > * {
   margin-left: 12px;
 }
 
