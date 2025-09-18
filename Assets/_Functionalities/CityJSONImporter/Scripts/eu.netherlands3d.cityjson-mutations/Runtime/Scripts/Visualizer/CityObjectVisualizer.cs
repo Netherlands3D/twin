@@ -228,27 +228,11 @@ namespace Netherlands3D.CityJson.Visualisation
             if (geometry.UseSingleMaterialForEntireGeometry)
             {
                 subMeshes = CombineBoundaryMeshes(boundaryMeshes, objectOffset);
-                if (log)
-                {
-                    Debug.Log(name +" has material index count: "+ geometry.MaterialIndicesForFullGeometry.Count);
-                    foreach (var i in geometry.MaterialIndicesForFullGeometry)
-                    {
-                        Debug.Log("index: " + i);
-                    }
-                }
                 materials = cityObject.Appearance.GetMaterials(new List<int> {geometry.MaterialIndicesForFullGeometry[0]});
             }
             else
             {
                 subMeshes = CombineBoundaryMeshesWithTheSameMaterial(boundaryMeshes, objectOffset, out var materialIndices);
-                if (log)
-                {
-                    Debug.Log(name +" has material index count: "+ materialIndices.Count);
-                    foreach (var i in materialIndices)
-                    {
-                        Debug.Log("index: " + i);
-                    }
-                }
                 materials = cityObject.Appearance.GetMaterials(materialIndices);
             }
 
@@ -290,19 +274,7 @@ namespace Netherlands3D.CityJson.Visualisation
 
             return combinedMeshes;
         }
-
-        [SerializeField] private bool regenerateMesh = false; 
-        private static bool log = false;
-        private void Update()
-        {
-            if (regenerateMesh)
-            {
-                log = true;
-                Visualize();
-                regenerateMesh = false;
-            }
-        }
-
+        
         public static List<Mesh> CombineBoundaryMeshesWithTheSameMaterial(List<BoundaryMeshData> boundaryMeshData, Vector3 offset, out List<int> materialIndices)
         {
             List<Mesh> combinedMeshes = new List<Mesh>(boundaryMeshData.Count);
@@ -315,9 +287,6 @@ namespace Netherlands3D.CityJson.Visualisation
             {
                 // List<int> activeMaterialList = boundaryMeshData[boundaryMeshData.Count - 1].MaterialIndices;
                 int activeMaterialIndex = boundaryMeshData[boundaryMeshData.Count - 1].MaterialIndices[0];// todo: instead of [0] we should return the index of the active theme
-                if (log)
-                    Debug.Log("active material index: " + activeMaterialIndex);
-                
                 materialIndices.Add(activeMaterialIndex); 
 
                 for (int i = boundaryMeshData.Count - 1; i >= 0; i--) //go backwards because collection will be modified
