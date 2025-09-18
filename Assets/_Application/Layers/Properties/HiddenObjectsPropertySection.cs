@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
-using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
@@ -75,6 +74,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             DestroyGhostMesh();
             layer.OnStylingApplied.RemoveListener(UpdateVisibility);
+
+            //remove all visibility data for features that became visible
             List<string> idsToRemove = new List<string>();
             foreach (KeyValuePair<string, StylingRule> kv in layer.LayerData.DefaultStyle.StylingRules)
             {
@@ -110,6 +111,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void UpdateVisibility()
         {
+            //update the toggles based on visibility attributes in data
             foreach (HiddenObjectsVisibilityItem item in hiddenObjects)
             {
                 bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(item.ObjectId);
@@ -204,6 +206,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
             if(layerFeature == null)
             {
+                //there is no layerfeature present, lets attach a listener to wait for the mapping to be loaded
                 DestroyGhostMesh();
                 AddListenerForLoadingMapping(objectId);
                 Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget((Coordinate)coord, cameraDistance);
@@ -330,6 +333,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                     item.SetSelected(false);                
                 hiddenObjects[currentButtonIndex].SetSelected(true);
                 UpdateSelection();
+                //cache the first selected item for sequential selection to always know where to start
                 if (selectedItems.Count == 0 || (selectedItems.Count == 1 && firstSelectedItem != hiddenObjects[currentButtonIndex]))
                     firstSelectedItem = hiddenObjects[currentButtonIndex];
             }
