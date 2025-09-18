@@ -211,7 +211,6 @@ namespace Netherlands3D.CityJson.Visualisation
                 }
                 // The geometry's vertices are in world space, so we need to subtract the cityJSON's origin to get them in cityJSON space, and then subtract the cityObject's origin to be able to create a mesh with the origin at the cityObject's position.
                 // The CityJSON origin is at the citJSON WorldTransform coordinate, the CityObject's origin is its localPosition, since we set it previously.
-                Debug.Log(this.cityObject.name + "\t" + geometry + "use single material: " + geometry.UseSingleMaterialForEntireGeometry);
                 var mesh = CreateMeshFromGeometry(geometry, coordinateSystem, origin, cityObject.transform.localPosition); 
                 meshes.Add(geometry, mesh);
             }
@@ -228,7 +227,20 @@ namespace Netherlands3D.CityJson.Visualisation
             if (geometry.UseSingleMaterialForEntireGeometry)
             {
                 subMeshes = CombineBoundaryMeshes(boundaryMeshes, objectOffset);
-                materials = cityObject.Appearance.GetMaterials(new List<int> {geometry.MaterialIndicesForFullGeometry[0]});
+                if (geometry.IncludeMaterials)
+                {
+                    materials = cityObject.Appearance.GetMaterials(new List<int> {geometry.MaterialIndicesForFullGeometry[0]});
+                }
+                else
+                { //todo: this should be refactored to not generate an unnecessary list of -1s, but just apply the default material to all open slots of the MeshRenderer.
+                    var defaultMaterialList = new List<int>(subMeshes.Count);
+                    for (int i = 0; i < subMeshes.Count; i++)
+                    {
+                        defaultMaterialList.Add(-1);
+                    }
+                
+                    materials = cityObject.Appearance.GetMaterials(defaultMaterialList);
+                }
             }
             else
             {

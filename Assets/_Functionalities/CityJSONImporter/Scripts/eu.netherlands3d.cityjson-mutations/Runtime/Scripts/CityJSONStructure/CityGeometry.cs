@@ -34,7 +34,7 @@ namespace Netherlands3D.CityJson.Structure
         public Dictionary<string, int> MaterialThemes { get; private set; } = new();
         public List<int> MaterialIndicesForFullGeometry { get; private set; } = new();
         public bool IncludeSemantics { get; set; }
-        public bool IncludeMaterials { get; set; } //todo: remove?
+        public bool IncludeMaterials { get; set; }
         public bool IncludeTextures { get; set; } //todo: Textures currently not implemented yet
 
         // public List<int> MaterialIndices { get; private set; }
