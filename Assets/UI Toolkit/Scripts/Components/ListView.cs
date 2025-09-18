@@ -16,26 +16,6 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ListView : UnityEngine.UIElements.ListView
     {
-        private const string RootClass = "listview";
-        private const string ItemClass = "listview-item";
-        private const string ContentName = "Content";
-        private const string SpacerName = "Spacer";
-
-        // Inter-item gap (pixels) applied as Spacer height.
-        private float itemGap = 8f;
-
-        /// <summary>Vertical spacing between items, in pixels.</summary>
-        [UxmlAttribute("item-gap")]
-        public float ItemGap
-        {
-            get => itemGap;
-            set { itemGap = value; ApplyItemSpacerHeight(); }
-        }
-
-        // Inline icon gaps for NL3D components inside items (configurable if desired).
-        [UxmlAttribute("button-icon-gap")] private float buttonIconGap = 8f;
-        [UxmlAttribute("toggle-icon-gap")] private float toggleIconGap = 8f;
-
         // Keep user bind so we can call it first.
         private Action<VisualElement, int> _userBind;
 
@@ -93,13 +73,6 @@ namespace Netherlands3D.UI.Components
             // Defaults only if user code did not set factories
             if (makeItem == null) makeItem = CreateDefaultItem;
             if (base.bindItem == null) this.bindItem = DefaultBind;
-
-            // Keep spacer heights in sync with realized items
-            this.RegisterCallback<AttachToPanelEvent>(_ =>
-            {
-                HookSpacerHandlers();
-                ApplyItemSpacerHeight();
-            });
         }
 
         /// <summary>
@@ -107,80 +80,12 @@ namespace Netherlands3D.UI.Components
         /// </summary>
         private VisualElement CreateDefaultItem()
         {
-            var vta = Resources.Load<VisualTreeAsset>("UI/" + nameof(ListViewItem));
-            if (vta != null)
-            {
-                var root = vta.Instantiate();
-                var ss = Resources.Load<StyleSheet>("UI/" + nameof(ListViewItem) + "-style");
-                if (ss != null) root.styleSheets.Add(ss);
-
-                if (!root.ClassListContains(ItemClass)) root.AddToClassList(ItemClass);
-
-                var content = root.Q(ContentName) ?? new VisualElement { name = ContentName };
-                if (content.parent != root) root.Add(content);
-
-                var spacer = root.Q<VisualElement>(SpacerName);
-                if (spacer == null)
-                {
-                    spacer = new VisualElement { name = SpacerName };
-                    spacer.style.flexShrink = 0;
-                    root.Add(spacer);
-                }
-                spacer.style.height = itemGap;
-
-                return root;
-            }
-
-            // Fallback (code-built)
-            var fallback = new VisualElement();
-            fallback.AddToClassList(ItemClass);
-
-            var contentVe = new VisualElement { name = ContentName };
-            fallback.Add(contentVe);
-
-            var spacerVe = new VisualElement { name = SpacerName };
-            spacerVe.style.flexShrink = 0;
-            spacerVe.style.height = itemGap;
-            fallback.Add(spacerVe);
-
-            return fallback;
+            return new ListViewItem();
         }
 
         /// <summary>
         /// Default bind does nothing; controllers populate #Content in their bindItem.
         /// </summary>
         private void DefaultBind(VisualElement item, int index) { }
-
-        /// <summary>
-        /// Re-apply spacer heights whenever realized items change.
-        /// </summary>
-        private void HookSpacerHandlers()
-        {
-            var content = GetInternalContentContainer();
-            if (content == null) return;
-
-            content.RegisterCallback<GeometryChangedEvent>(_ => ApplyItemSpacerHeight());
-        }
-
-        /// <summary>
-        /// Set Spacer height on all realized item roots.
-        /// </summary>
-        private void ApplyItemSpacerHeight()
-        {
-            var content = GetInternalContentContainer();
-            if (content == null) return;
-
-            int n = content.childCount;
-            for (int i = 0; i < n; i++)
-            {
-                var itemRoot = content.ElementAt(i);
-                var spacer = itemRoot?.Q<VisualElement>(SpacerName);
-                if (spacer != null)
-                {
-                    spacer.style.height = itemGap;
-                    spacer.style.display = DisplayStyle.Flex;
-                }
-            }
-        }
     }
 }

@@ -30,6 +30,7 @@
 
 /* Variants */
 .button.button-style-normal > #Icon { display: none; }
+.button.button-style-wide { align-self: stretch; flex-grow: 1; }
 
 .button > #Label { white-space: normal; }
 

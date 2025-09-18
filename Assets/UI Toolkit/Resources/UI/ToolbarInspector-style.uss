@@ -1,0 +1,44 @@
+.toolbar-inspector {
+    flex-direction: row;
+    background-color: var(--color-Blue50);
+    padding: 24px;
+}
+
+.toolbar-inspector #Left {
+    flex-direction: row;
+    flex-shrink: 0;
+    flex-grow: 1;
+}
+
+.toolbar-inspector #Right {
+    flex-direction: row;
+}
+
+.toolbar-inspector #Left > .button,
+.toolbar-inspector #Left > .toggle {
+  margin-right: 12px;
+}
+
+.toolbar-inspector #Right > .button,
+.toolbar-inspector #Right > .toggle {
+  margin-left: 12px;
+}
+
+/* Toolbar styles */
+.toolbar-inspector.toolbar-style-normal #AddToLibrary { display: none; }
+
+.toolbar-inspector.toolbar-style-library #AddFolder,
+.toolbar-inspector.toolbar-style-library #AddLayer { display: none; }
+
+.toolbar-inspector.toolbar-style-add-layer #AddFolder,
+.toolbar-inspector.toolbar-style-add-layer #Delete,
+.toolbar-inspector.toolbar-style-add-layer #AddToLibrary { display: none; }
+
+/* ============================================================================================= */
+/* TODO: remove these overrides as soon as we have implemented the whole inspector               */
+/* These override make sure that the inspector aligns nicely as an overlay to the UGUI inspector */
+.toolbar-inspector {
+    padding: 21px;
+    padding-left: 12px;
+}
+/* ============================================================================================= */

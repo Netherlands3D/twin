@@ -2359,6 +2359,47 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 24
       objectReference: {fileID: 0}
+    - target: {fileID: 8450333756607484198, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8450333756607484198, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8450333756607484198, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e1951c1f4825a64e8bd337dc0a50df3,
+        type: 2}
+    - target: {fileID: 8450333756607484198, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8450333756607484198, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: InvokeStarted
+      objectReference: {fileID: 0}
+    - target: {fileID: 8450333756607484198, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 8450333756607484198, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8450333756607484198, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 8456441954330656784, guid: 0aafdcbc1971b475d8d34e7cdc0493a8,
         type: 3}
       propertyPath: m_Sprite

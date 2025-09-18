@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -7,6 +8,8 @@ namespace Netherlands3D.UI.Components
     public partial class InspectorPanel : VisualElement
     {
         private Label Header => this.Q<Label>(className: "inspector-header");
+
+        [UxmlAttribute("open")] public bool IsOpen { get; set; } = false;
 
         /// <summary>
         /// Header text pass-through so it can be set from UXML/Inspector.
@@ -18,7 +21,8 @@ namespace Netherlands3D.UI.Components
             set { if (Header != null) Header.text = value; }
         }
 
-        private ToolbarInspector Toolbar => this.Q<ToolbarInspector>();
+        private ToolbarInspector toolbar;
+        public ToolbarInspector Toolbar => toolbar ??= this.Q<ToolbarInspector>();
         private ToolbarInspector.ToolbarStyle _toolbarStyleCache = ToolbarInspector.ToolbarStyle.Normal;
 
         /// <summary>
@@ -54,7 +58,25 @@ namespace Netherlands3D.UI.Components
             {
                 // Apply cached toolbar style when child is available
                 if (Toolbar != null) Toolbar.Style = _toolbarStyleCache;
+                ApplyClasses();
             });
+        }
+
+        public void Open()
+        {
+            this.IsOpen = true;
+            ApplyClasses();
+        }
+
+        public void Close()
+        {
+            this.IsOpen = false;
+            ApplyClasses();
+        }
+
+        private void ApplyClasses()
+        {
+            EnableInClassList("active", IsOpen);
         }
     }
 }

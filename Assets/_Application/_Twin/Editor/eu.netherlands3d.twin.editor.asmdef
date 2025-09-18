@@ -2,7 +2,8 @@
     "name": "eu.netherlands3d.twin.editor",
     "rootNamespace": "",
     "references": [
-        "GUID:62201132dbbaf094ea723182597cd288"
+        "GUID:62201132dbbaf094ea723182597cd288",
+        "GUID:0a456d7057b7fb3459ed423fc64840f9"
     ],
     "includePlatforms": [
         "Editor"

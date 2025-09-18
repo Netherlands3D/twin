@@ -1,6 +1,7 @@
 .listview-item {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 8px;
 }
 
 .listview-item.unity-list-view__item {

@@ -7,12 +7,12 @@
   class="toolbar-inspector"
 >
         <ui:VisualElement name="Left">
-            <nl3d:Toggle name="OpenLibrary" />
+            <nl3d:Toggle name="OpenLibrary" toggle-style="IconOnly" icon="Library" />
         </ui:VisualElement>
         <ui:VisualElement name="Right">
-            <nl3d:Button name="AddFolder" />
-            <nl3d:Button name="Delete" />
-            <nl3d:Toggle name="AddToLibrary" />
-            <nl3d:Toggle name="AddLayer" />
+            <nl3d:Button name="AddFolder" button-style="IconOnly" icon="Folder" />
+            <nl3d:Button name="Delete" button-style="IconOnly" icon="Trash" />
+            <nl3d:Toggle name="AddToLibrary" toggle-style="IconOnly" icon="LibraryAdd" />
+            <nl3d:Toggle name="AddLayer" toggle-style="IconOnly" icon="Plus" />
         </ui:VisualElement>
 </ui:UXML>

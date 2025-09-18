@@ -11,15 +11,14 @@ namespace Netherlands3D.UI.ExtensionMethods
             T newValue, 
             string prefix = ""
         ) {
-            visualElement.RemoveFromClassList(prefix + ToKebabCase(visualElement, field.ToString()));
+            visualElement.RemoveFromClassList(prefix + field.ToString().ToKebabCase());
             field = newValue;
-            visualElement.AddToClassList(prefix + ToKebabCase(visualElement,field.ToString()));
+            visualElement.AddToClassList(prefix + field.ToString().ToKebabCase());
         }
     
-        public static string ToKebabCase(this VisualElement _, string input)
+        public static string ToKebabCase(this string input)
         {
-            if (string.IsNullOrWhiteSpace(input))
-                return string.Empty;
+            if (string.IsNullOrWhiteSpace(input)) return string.Empty;
 
             var sb = new StringBuilder();
             char? prev = null;

@@ -113,10 +113,14 @@ namespace Netherlands3D._Application._Twin
 
         public async void Load(string id)
         {
-            Debug.Log("Loading " + id);
             var item = await Catalog.GetAsync(id);
-            Debug.Log(item);
             var layerBuilder = CreateLayerBuilder(item);
+            await App.Layers.Add(layerBuilder);
+        }
+
+        public async void Load(ICatalogItem catalogItem)
+        {
+            var layerBuilder = CreateLayerBuilder(catalogItem);
             await App.Layers.Add(layerBuilder);
         }
 
@@ -133,6 +137,9 @@ namespace Netherlands3D._Application._Twin
                 return null;
             }
             
+            // This uses the Import from URL flow, and thus automatically detects which type of service is imported
+            // using the ImportAdapters. This is why there is no further specification here - the information below
+            // is all we need to get the ball rolling.
             return LayerBuilder.Create()
                 .FromUrl(recordItem.Url)
                 .NamedAs(recordItem.Title);
