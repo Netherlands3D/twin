@@ -88,8 +88,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             }
         }
 
-        bool debugFeatures = true;
-
+        bool debugFeatures = false;
         private void OnDebugMapping(IMapping mapping)
         {
             if (debugFeatures)
@@ -206,8 +205,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                     (Styler as CartesianTileLayerStyler).Apply(GetStyling(feature), feature);
                 }
             }
-
-
             base.ApplyStyling();
         }
 

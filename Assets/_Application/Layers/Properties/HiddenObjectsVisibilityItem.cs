@@ -20,6 +20,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public bool IsSelected => selected;
         public string ObjectId => objectId.text;
+        public Image Image => image;
 
         private bool selected = false;
         private Image image;
@@ -37,9 +38,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             ToggleVisibility.Invoke(isOn);
             UpdateGraphic();
-            //keep behaviour the same as when selecting the item when pressing toggle
-            if (!isOn)
-                EventSystem.current.SetSelectedGameObject(gameObject);
         }
 
         public void SetToggleState(bool isOn)
@@ -66,19 +64,17 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void OnSelect(BaseEventData eventData)
         {
             OnSelectItem.Invoke(objectId.text);
-            selected = true;
         }
 
         public void OnDeselect(BaseEventData eventData)
         {
-            OnDeselectItem.Invoke(objectId.text);
-            selected = false;
+            OnDeselectItem.Invoke(objectId.text);         
         }
 
         public void SetSelected(bool isSelected)
         {
             selected = isSelected;
-            button.ForceVisualSelection(isSelected);
+            button.ForceVisualSelection(isSelected);           
         }
     }
 }

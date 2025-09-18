@@ -24,8 +24,11 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private LayerGameObject layer;
         private List<HiddenObjectsVisibilityItem> hiddenObjects = new();
+        private List<HiddenObjectsVisibilityItem> selectedItems = new();
+        private HiddenObjectsVisibilityItem firstSelectedItem;
         private GameObject selectedHiddenObject;
         private UnityAction<IMapping> waitForMappingLoaded;
+        private int currentButtonIndex = -1; 
 
         public override LayerGameObject LayerGameObject
         {
@@ -95,8 +98,9 @@ namespace Netherlands3D.Twin.Layers.Properties
             GameObject visibilityObject = Instantiate(hiddenItemPrefab, layerContent);            
             HiddenObjectsVisibilityItem item = visibilityObject.GetComponent<HiddenObjectsVisibilityItem>();
             item.SetObjectId(objectID);
-            //because all ui elements will be destroyed on close an anonymous listener is fine here              
-            item.ToggleVisibility.AddListener(visible => ToggleVisibilityForFeature(objectID, visible));
+            //because all ui elements will be destroyed on close an anonymous listener is fine here  
+            item.ToggleVisibility.AddListener(isOn => OnClickToggle(objectID));
+            item.ToggleVisibility.AddListener(visible => ToggleVisibilityForSelectedFeatures(objectID, visible));
             item.OnSelectItem.AddListener(OnClickItem);
             item.OnSelectItem.AddListener(HiddenFeatureSelected);
             item.OnDeselectItem.AddListener(HiddenFeatureDeselected);
@@ -134,11 +138,24 @@ namespace Netherlands3D.Twin.Layers.Properties
                 Debug.LogError("the styling rule does not contain a coordinate for this feature!");
                 return;
             }
-            (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObjectByAttributeTag(objectId, visible, (Coordinate)coord);
+            (layer.Styler as CartesianTileLayerStyler).SetVisibilityForSubObjectByAttributeTag(objectId, visible, (Coordinate)coord);            
         }
 
-        private void OnClickItem(string objectId)
-        {        
+        private void ToggleVisibilityForSelectedFeatures(string objectId, bool visible)
+        {
+            foreach (HiddenObjectsVisibilityItem item in selectedItems)
+            {
+                ToggleVisibilityForFeature(item.ObjectId, visible);
+            }
+
+            if (!visible)
+                ShowGhostMesh(objectId);
+            else
+                DestroyGhostMesh();
+        }
+
+        private void UpdateSelectedButtonIndex(string objectId)
+        {
             currentButtonIndex = -1;
             foreach (HiddenObjectsVisibilityItem item in hiddenObjects)
                 if (item.ObjectId == objectId)
@@ -146,10 +163,32 @@ namespace Netherlands3D.Twin.Layers.Properties
                     currentButtonIndex = hiddenObjects.IndexOf(item);
                     break;
                 }
-            if (currentButtonIndex < 0) return;
+        }
 
-            ProcessLayerSelection();
+        private void OnClickItem(string objectId)
+        {        
+            //select layer
+            UpdateSelectedButtonIndex(objectId);
+            ProcessLayerSelection();            
             UpdateSelection();
+        }
+
+        private void OnClickToggle(string objectId)
+        {
+            //if there was already a selection of layers,
+            //we should only toggle but not process a new selection of layers
+            //but if the selected toggle was outside the selection of layers then process a new selection and select that layer
+            if (selectedItems.Count > 1)
+            {
+                UpdateSelectedButtonIndex(objectId);
+                if (!selectedItems.Contains(hiddenObjects[currentButtonIndex]))
+                {
+                    OnClickItem(objectId);                    
+                }
+                return;
+            }
+            //select the new layer
+            OnClickItem(objectId);
         }
 
         private void HiddenFeatureSelected(string objectId)
@@ -164,61 +203,84 @@ namespace Netherlands3D.Twin.Layers.Properties
             LayerFeature layerFeature = (layer as CartesianTileLayerGameObject).GetLayerFeatureFromBagId(objectId);
             if(layerFeature == null)
             {
-                if(waitForMappingLoaded == null)
-                {
-                    waitForMappingLoaded = (mapping) =>
-                    {                        
-                        if (mapping is not MeshMapping meshMapping) return;
-                        MeshMappingItem item = meshMapping.FindItemById(objectId);
-                        if (item == null) return;
-
-                        ObjectSelectorService.MappingTree.OnMappingAdded.RemoveListener(waitForMappingLoaded);
-                        HiddenFeatureSelected(objectId);
-                    };
-                }
-                ObjectSelectorService.MappingTree.OnMappingAdded.AddListener(waitForMappingLoaded);
+                DestroyGhostMesh();
+                AddListenerForLoadingMapping(objectId);
                 Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget((Coordinate)coord, cameraDistance);
                 return;
             }
+            Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget((Coordinate)coord, cameraDistance);
+            ShowGhostMesh(objectId);
+        }
 
-            if (layerFeature.Geometry is ObjectMappingItem mapping)
+        private void AddListenerForLoadingMapping(string objectId)
+        {
+            //remove previous listener if present
+            if(waitForMappingLoaded != null)
+                ObjectSelectorService.MappingTree.OnMappingAdded.RemoveListener(waitForMappingLoaded);
+                
+            waitForMappingLoaded = mapping => OnMappingLoaded(mapping, objectId);
+            ObjectSelectorService.MappingTree.OnMappingAdded.AddListener(waitForMappingLoaded);
+        }
+
+        private void OnMappingLoaded(IMapping mapping, string objectId)
+        {
+            if (mapping is not MeshMapping meshMapping) return;
+            MeshMappingItem item = meshMapping.FindItemById(objectId);
+            if (item == null) return;
+
+            //dont remove the listener yet, we want to be able to refresh the ghost mesh when a new lod is loaded
+            //ObjectSelectorService.MappingTree.OnMappingAdded.RemoveListener(waitForMappingLoaded);
+            HiddenFeatureSelected(objectId);
+        }
+
+        public void ShowGhostMesh(string objectId)
+        {
+            DestroyGhostMesh();
+            bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(objectId);
+            if (visibility == true)
             {
-                Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget((Coordinate)coord, cameraDistance);
-                bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(objectId);
-                if (visibility == true)
-                    return;
-               
-                List<IMapping> mappings = ObjectSelectorService.MappingTree.Query<MeshMapping>((Coordinate)coord);
-                foreach(IMapping m in mappings)
-                {
-                    if (m is not MeshMapping meshMapping) continue;
+                return;
+            }
 
-                    MeshMappingItem item = meshMapping.FindItemById(objectId);
-                    if (item == null) continue;
+            Coordinate? coord = (layer.Styler as CartesianTileLayerStyler).GetVisibilityCoordinateForSubObjectByTag(objectId);
+            if (coord == null)
+            {
+                Debug.LogError("the styling rule does not contain a coordinate for this feature!");
+                return;
+            }
 
-                    selectedHiddenObject = new GameObject(mapping.objectID);
-                    Mesh mesh = MeshMapping.CreateMeshFromMapping(meshMapping.ObjectMapping, mapping, out Vector3 localCentroid);
-                    MeshFilter mFilter = selectedHiddenObject.AddComponent<MeshFilter>();
-                    mFilter.mesh = mesh;
-                    MeshRenderer mRenderer = selectedHiddenObject.AddComponent<MeshRenderer>();
-                    mRenderer.material = selectionMaterial;
-                    selectedHiddenObject.transform.position = meshMapping.ObjectMapping.transform.TransformPoint(localCentroid);
-                    return;
-                }                
+            List<IMapping> mappings = ObjectSelectorService.MappingTree.Query<MeshMapping>((Coordinate)coord);
+            foreach (IMapping m in mappings)
+            {
+                if (m is not MeshMapping meshMapping) continue;
+
+                MeshMappingItem item = meshMapping.FindItemById(objectId);
+                if (item == null) continue;
+
+                selectedHiddenObject = new GameObject(objectId);
+                Mesh mesh = MeshMapping.CreateMeshFromMapping(meshMapping.ObjectMapping, item.ObjectMappingItem, out Vector3 localCentroid);
+                MeshFilter mFilter = selectedHiddenObject.AddComponent<MeshFilter>();
+                mFilter.mesh = mesh;
+                MeshRenderer mRenderer = selectedHiddenObject.AddComponent<MeshRenderer>();
+                mRenderer.material = selectionMaterial;
+                selectedHiddenObject.transform.position = meshMapping.ObjectMapping.transform.TransformPoint(localCentroid);
+                return;
             }
         }
 
-        private void HiddenFeatureDeselected(string objectId)
+        public void DestroyGhostMesh()
         {
-            if(selectedHiddenObject != null)
+            if (selectedHiddenObject != null)
             {
                 Destroy(selectedHiddenObject);
                 selectedHiddenObject = null;
             }
         }
 
-        private int currentButtonIndex = -1;
-
+        private void HiddenFeatureDeselected(string objectId)
+        {
+            //DestroyGhostMesh();
+        }
 
         private bool NoModifierKeyPressed()
         {
@@ -227,42 +289,59 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void ProcessLayerSelection()
         {
-            if (LayerUI.SequentialSelectionModifierKeyIsPressed() && selectedItems.Count > 0) //if no layers are selected, there will be no reference layer to add to
-            {
-                int lastIndex = hiddenObjects.IndexOf(selectedItems[selectedItems.Count - 1]); //last element is always the last selected layer                               
-                int targetIndex = currentButtonIndex;
-                if (lastIndex > targetIndex)
+            if (LayerUI.SequentialSelectionModifierKeyIsPressed()) 
+            {               
+                if (selectedItems.Count > 0)
                 {
-                    int temp = lastIndex;
-                    lastIndex = targetIndex;
-                    targetIndex = temp;
+                    int firstSelectedIndex = hiddenObjects.IndexOf(selectedItems[0]);
+                    int lastSelectedIndex = hiddenObjects.IndexOf(selectedItems[selectedItems.Count - 1]);                           
+                    int targetIndex = currentButtonIndex;
+                    int firstIndex = hiddenObjects.IndexOf(firstSelectedItem);
+                   
+                    bool addSelection = !hiddenObjects[currentButtonIndex].IsSelected;
+                    if(!addSelection)
+                    {
+                        if (firstIndex < targetIndex)
+                            for (int i = targetIndex + 1; i <= lastSelectedIndex; i++)
+                                hiddenObjects[i].SetSelected(addSelection);
+                        else if(firstIndex > targetIndex)
+                            for (int i = 0; i < targetIndex; i++)
+                                hiddenObjects[i].SetSelected(addSelection);
+                        else if(firstIndex == targetIndex)
+                            for (int i = 0; i <= lastSelectedIndex; i++)
+                                if(i != currentButtonIndex)
+                                    hiddenObjects[i].SetSelected(addSelection);
+                    }
+                    else
+                    {
+                        if(firstSelectedIndex < targetIndex)
+                            for (int i = firstSelectedIndex; i <= targetIndex; i++)
+                                hiddenObjects[i].SetSelected(addSelection);
+                        else if(lastSelectedIndex > targetIndex)
+                            for (int i = targetIndex; i <= lastSelectedIndex; i++)
+                                hiddenObjects[i].SetSelected(addSelection);
+                    }                    
                 }
-                bool addSelection = !hiddenObjects[currentButtonIndex].IsSelected;
-                for (int i = lastIndex; i <= targetIndex; i++)
-                    hiddenObjects[i].SetSelected(addSelection);
-                hiddenObjects[currentButtonIndex].SetSelected(!addSelection);
             }
             if (NoModifierKeyPressed())
             {
-                foreach (var item in selectedItems)
-                    item.SetSelected(false);
-
+                foreach (var item in hiddenObjects)
+                    item.SetSelected(false);                
+                hiddenObjects[currentButtonIndex].SetSelected(true);
+                UpdateSelection();
+                if (selectedItems.Count == 0 || (selectedItems.Count == 1 && firstSelectedItem != hiddenObjects[currentButtonIndex]))
+                    firstSelectedItem = hiddenObjects[currentButtonIndex];
             }
-            UpdateSelection();
         }
-
-        private List<HiddenObjectsVisibilityItem> selectedItems = new();
-        private List<int> selectedIndices = new();
+        
         private void UpdateSelection()
         {
-            selectedIndices.Clear();
             selectedItems.Clear();
             foreach (HiddenObjectsVisibilityItem item in hiddenObjects)
                 if (item.IsSelected)
-                {
                     selectedItems.Add(item);
-                    selectedIndices.Add(hiddenObjects.IndexOf(item));
-                }
+            if (selectedItems.Count == 0)
+                firstSelectedItem = null;
         }
     }
 }
