@@ -264,8 +264,9 @@ namespace Netherlands3D.CityJson.Visualisation
                 }
 
                 var combinedMesh = PolygonVisualisationUtility.CreatePolygonMesh(meshDataToCombine, offset);
-
                 combinedMeshes.Add(combinedMesh);
+                meshDataToCombine.Clear();
+                
                 if (activeSemanticsObject != null)
                     types.Add(activeSemanticsObject.SurfaceType);
                 else
