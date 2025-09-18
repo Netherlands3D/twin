@@ -116,8 +116,7 @@ namespace Netherlands3D.CityJson.Visualisation
                     meshesCreatedThisFrame = 0;
                 }
             }
-
-
+            
             meshesCreatedThisFrame++;
             meshes = CreateMeshes(cityObject);
 
@@ -132,7 +131,9 @@ namespace Netherlands3D.CityJson.Visualisation
         private Vector3 SetLocalPosition(CityObject cityObject)
         {
             var crs = cityObject.CoordinateSystem;
-            if (cityObject.CoordinateSystem == CoordinateSystem.RD) //todo: Make a generic check for 2d CRD and include the height
+            
+            //todo: Any 2D CRS should be converted to its 3D counterpart (like RD to RDNAP), we should check if we want to do this in the initial CityJSON parsing function or here
+            if (cityObject.CoordinateSystem == CoordinateSystem.RD) 
             {
                 crs = CoordinateSystem.RDNAP;
             }
@@ -198,9 +199,10 @@ namespace Netherlands3D.CityJson.Visualisation
             {
                 Vector3Double origin = new Vector3Double();
                 var cityJsonCoord = GetComponentInParent<WorldTransform>().Coordinate; //todo: this getComponentInParent is a bit hacky
-                if (cityObject.CoordinateSystem != CoordinateSystem.Undefined) 
+                var coordinateSystem = cityObject.CoordinateSystem;
+                if (coordinateSystem != CoordinateSystem.Undefined) 
                 {
-                    var convertedCoord = cityJsonCoord.Convert(cityObject.CoordinateSystem);
+                    var convertedCoord = cityJsonCoord.Convert(coordinateSystem);
                     origin = new Vector3Double(convertedCoord.value1, convertedCoord.value2, convertedCoord.value3);
                 }
                 else
@@ -209,9 +211,8 @@ namespace Netherlands3D.CityJson.Visualisation
                 }
                 // The geometry's vertices are in world space, so we need to subtract the cityJSON's origin to get them in cityJSON space, and then subtract the cityObject's origin to be able to create a mesh with the origin at the cityObject's position.
                 // The CityJSON origin is at the citJSON WorldTransform coordinate, the CityObject's origin is its localPosition, since we set it previously.
-
                 Debug.Log(this.cityObject.name + "\t" + geometry + "use single material: " + geometry.UseSingleMaterialForEntireGeometry);
-                var mesh = CreateMeshFromGeometry(geometry, cityObject.CoordinateSystem, origin, cityObject.transform.localPosition);
+                var mesh = CreateMeshFromGeometry(geometry, coordinateSystem, origin, cityObject.transform.localPosition); 
                 meshes.Add(geometry, mesh);
             }
 
@@ -410,7 +411,6 @@ namespace Netherlands3D.CityJson.Visualisation
             if (surface.VertexCount == 0)
                 return null;
 
-            // List<Vector3> solidSurfacePolygon = GetConvertedPolygonVertices(surface.SolidSurfacePolygon, coordinateSystem);
             List<List<Vector3>> contours = new List<List<Vector3>>(surface.Polygons.Count);
             var convertedVerts = GetConvertedPolygonVertices(surface.SolidSurfacePolygon, coordinateSystem, origin);
             contours.Add(convertedVerts);
@@ -420,36 +420,11 @@ namespace Netherlands3D.CityJson.Visualisation
             }
 
             var triangulationData = PolygonVisualisationUtility.CreatePolygonGeometryTriangulationData(contours);
-            // var mesh = PolygonVisualisationUtility.CreatePolygonMesh(new List<GeometryTriangulationData>(){triangulationData});
             var semanticsObject = surface.SemanticsObject;
-
-            // Vector3 sum = Vector3.zero;
-            // foreach (var v in contours[0])
-            // {
-            //     sum += v;
-            // }
-            //
-            // sum /= contours[0].Count;
-
-            // debugOrigins.Add(sum);
-            // debugNormals.Add(triangulationData.normal);
-            return new BoundaryMeshData(triangulationData, semanticsObject, surface.materialIndices);
+            
+            return new BoundaryMeshData(triangulationData, semanticsObject);
         }
-
-        // private static List<Vector3> debugOrigins = new();
-        // private static List<Vector3> debugNormals = new();
-        //
-        // private void DebugLines()
-        // {
-        //     for (var i = 0; i < debugOrigins.Count; i++)
-        //     {
-        //         var boundsCenter = GetComponentInChildren<Renderer>().bounds.center;
-        //         var pivotOffset = boundsCenter - transform.position;
-        //         var o = debugOrigins[i] - pivotOffset + transform.position - transform.localPosition;
-        //         Debug.DrawLine(o, o + debugNormals[i]*.25f, Color.green);
-        //     }
-        // }
-
+        
         // convert the list of Vector3Doubles to a list of Vector3s and convert the coordinates to unity in the process.
         public static List<Vector3> GetConvertedPolygonVertices(CityPolygon polygon, CoordinateSystem coordinateSystem, Vector3Double origin)
         {
@@ -459,27 +434,13 @@ namespace Netherlands3D.CityJson.Visualisation
                 var relativeVert = vert - origin;
                 Vector3 convertedVert = relativeVert.AsVector3();
 
-                if (coordinateSystem == CoordinateSystem.RD)
+                if (coordinateSystem == CoordinateSystem.RD ||
+                    coordinateSystem == CoordinateSystem.RDNAP ||
+                    coordinateSystem == CoordinateSystem.Undefined) // todo: make this consistent for all crs
                 {
                     convertedVert = new Vector3(convertedVert.x, convertedVert.z, convertedVert.y);
                 }
-
-                // Vector3 convertedVert;
-                // switch (coordinateSystem)
-                // {
-                //     case CoordinateSystem.WGS84:
-                //         var wgs = new Coordinate(CoordinateSystem.WGS84_LatLonHeight,relativeVert.x, relativeVert.y, relativeVert.z);
-                //         convertedVert = wgs.ToUnity();
-                //         break;
-                //     case CoordinateSystem.RD:
-                //         var rd = new Coordinate(CoordinateSystem.RDNAP,relativeVert.x, relativeVert.y, relativeVert.z);
-                //         convertedVert = rd.ToUnity();
-                //         break;
-                //     default:
-                //         convertedVert = new Vector3((float)relativeVert.x, (float)relativeVert.z, (float)relativeVert.y);
-                //         break;
-                // }
-
+                
                 convertedPolygon.Add(convertedVert);
             }
 
