@@ -422,7 +422,7 @@ namespace Netherlands3D.CityJson.Visualisation
             var triangulationData = PolygonVisualisationUtility.CreatePolygonGeometryTriangulationData(contours);
             var semanticsObject = surface.SemanticsObject;
             
-            return new BoundaryMeshData(triangulationData, semanticsObject);
+            return new BoundaryMeshData(triangulationData, semanticsObject, surface.materialIndices);
         }
         
         // convert the list of Vector3Doubles to a list of Vector3s and convert the coordinates to unity in the process.
