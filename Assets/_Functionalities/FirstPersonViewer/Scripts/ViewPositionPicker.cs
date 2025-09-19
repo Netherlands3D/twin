@@ -51,11 +51,13 @@ namespace Netherlands3D.FirstPersonViewer
 
                         string bagID = subObjectSelector.FindSubObjectAtPosition(screenPoint);
                         IMapping mapping = objectSelectorService.FindObjectMapping();
-                        objectSelectorService.IsMappingVisible(mapping, bagID);
+                        if (objectSelectorService.IsMappingVisible(mapping, bagID))
+                        {
 
-                        Instantiate(firstPersonViewerPrefab, point, Quaternion.identity);
+                            Instantiate(firstPersonViewerPrefab, point, Quaternion.identity);
 
-                        ViewerEvents.OnViewerEntered?.Invoke();
+                            ViewerEvents.OnViewerEntered?.Invoke();
+                        }
                     }
                 }, snappingCullingMask);
             }           
