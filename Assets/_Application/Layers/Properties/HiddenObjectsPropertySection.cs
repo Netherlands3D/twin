@@ -42,6 +42,8 @@ namespace Netherlands3D.Twin.Layers.Properties
             UpdateVisibility();
             layer.OnStylingApplied.AddListener(UpdateVisibility);
 
+            ObjectSelectorService.MappingTree.OnMappingRemoved.AddListener(OnMappingRemoved);
+
             StartCoroutine(OnPropertySectionsLoaded());
         }
 
@@ -74,6 +76,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             DestroyGhostMesh();
             layer.OnStylingApplied.RemoveListener(UpdateVisibility);
+            ObjectSelectorService.MappingTree.OnMappingRemoved.RemoveListener(OnMappingRemoved);
 
             //remove all visibility data for features that became visible
             List<string> idsToRemove = new List<string>();
@@ -237,6 +240,18 @@ namespace Netherlands3D.Twin.Layers.Properties
             HiddenFeatureSelected(objectId);
         }
 
+        private void OnMappingRemoved(IMapping mapping)
+        {
+            if (mapping is not MeshMapping meshMapping) return;
+            if(selectedHiddenObject == null) return;
+
+            string objectId = selectedHiddenObject.name;
+            if(meshMapping.HasItemWithId(objectId))
+            {
+                DestroyGhostMesh();
+            }
+        }
+
         public void ShowGhostMesh(string objectId)
         {
             DestroyGhostMesh();
@@ -283,6 +298,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void HiddenFeatureDeselected(string objectId)
         {
+            //lets not destroy the ghost yet as you can move around while having it in view
             //DestroyGhostMesh();
         }
 

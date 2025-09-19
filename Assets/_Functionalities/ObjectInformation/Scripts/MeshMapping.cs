@@ -66,6 +66,16 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return null;
         }
 
+        public bool HasItemWithId(string id)
+        {         
+            foreach (ObjectMappingItem item in ObjectMapping.items)
+            {
+                if (item.objectID == id)
+                    return true;
+            }
+            return false;
+        }
+
         public void CacheItems()
         {
             if (items == null)
