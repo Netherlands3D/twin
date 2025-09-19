@@ -56,6 +56,8 @@ namespace Netherlands3D.CityJson.Structure
         public List<CityGeometry> Geometries { get; protected set; } = new List<CityGeometry>();
         public List<CityObjectAttribute> Attributes { get; protected set; } = new List<CityObjectAttribute>();
 
+        public CityAppearance Appearance { get; protected set; }
+
         protected List<CityObject> cityChildren = new List<CityObject>();
         public CityObject[] CityChildren => cityChildren.ToArray();
         public CityObject[] CityParents { get; private set; } = new CityObject[0];
@@ -107,6 +109,11 @@ namespace Netherlands3D.CityJson.Structure
             }
             // set newparents for this
             CityParents = newParents;
+        }
+
+        public void SetCityAppearance(CityAppearance appearance)
+        {
+            Appearance = appearance;
         }
 
         // A CityObject of a certain type may only be a child of an object of a certain type. this function tests that validity. See specs for details

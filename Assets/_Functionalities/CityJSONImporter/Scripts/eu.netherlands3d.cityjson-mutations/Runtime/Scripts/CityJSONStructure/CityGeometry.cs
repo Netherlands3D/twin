@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -29,9 +30,28 @@ namespace Netherlands3D.CityJson.Structure
         public GeometryType Type { get; private set; }
         public int Lod { get; private set; }
         public CityBoundary BoundaryObject { get; private set; }
+        public bool UseSingleMaterialForEntireGeometry => !IncludeMaterials || MaterialIndicesForFullGeometry.Count > 0;
+        public Dictionary<string, int> MaterialThemes { get; private set; } = new();
+        public List<int> MaterialIndicesForFullGeometry { get; private set; } = new();
         public bool IncludeSemantics { get; set; }
-        public bool IncludeMaterials { get; set; } //todo: Materials currently not implemented yet
+        public bool IncludeMaterials { get; set; }
         public bool IncludeTextures { get; set; } //todo: Textures currently not implemented yet
+
+        // public List<int> MaterialIndices { get; private set; }
+        // public List<int> MaterialUniqueIndices { get; private set; }
+        // private int materialCount;
+        // public int MaterialCount
+        // {
+        //     get
+        //     {
+        //         if (MaterialIndices == null || MaterialIndices.Count == 0)
+        //             return 0;
+        //
+        //         MaterialUniqueIndices = MaterialIndices.Distinct().ToList();
+        //         materialCount = MaterialUniqueIndices.Count();
+        //         return materialCount;
+        //     }            
+        // }
 
         //Certain CityObjectTypes can only have certain types of geometry. This is described in the specs
         public static bool IsValidType(CityObjectType cityObjectType, GeometryType geometryType)
@@ -132,8 +152,8 @@ namespace Netherlands3D.CityJson.Structure
 
             if (IncludeSemantics)
                 geometryNode["semantics"] = CityGeometrySemantics.GetSemanticObject(BoundaryObject);
-            if (IncludeMaterials)
-                geometryNode["material"] = GetMaterials();
+            //if (IncludeMaterials)
+                //geometryNode["material"] = GetMaterials();
             if (IncludeTextures)
                 geometryNode["texture"] = GetTextures();
 
@@ -153,7 +173,7 @@ namespace Netherlands3D.CityJson.Structure
 
             //private CityBoundary boundaryObject;
             var semanticsNode = geometryNode["semantics"];
-            var materialsNode = geometryNode["materials"];
+            var materialsNode = geometryNode["material"];
             var texturesNode = geometryNode["texture"];
 
             var includeSemantics = semanticsNode.Count > 0;
@@ -165,13 +185,29 @@ namespace Netherlands3D.CityJson.Structure
             if (includeSemantics)
                 CityGeometrySemantics.FromJSONNode(semanticsNode, geometry.BoundaryObject);
 
+            if(includeMaterials)
+            {
+                // geometry.MaterialIndices = GetMaterialsFromJSONNode(materialsNode["default_theme"]);
+                CityMaterial.FromJSONNode(materialsNode, geometry);
+            }
+
             return geometry;
         }
 
-        private JSONNode GetMaterials()
-        {
-            throw new System.NotImplementedException();
-        }
+        // private static List<int> GetMaterialsFromJSONNode(JSONNode materialNode)
+        // {
+        //     List<int> indices = null;
+        //     if (materialNode != null)
+        //     {
+        //         indices = new List<int>();
+        //         var values = materialNode["values"];
+        //         foreach (JSONNode v in values.AsArray)
+        //         {
+        //             indices.Add(v.AsInt);
+        //         }
+        //     }
+        //     return indices;
+        // }
 
         private JSONNode GetTextures()
         {
@@ -183,6 +219,16 @@ namespace Netherlands3D.CityJson.Structure
             var multiSurface = new CityMultiOrCompositeSurface();
             multiSurface.FromMesh(mesh);
             BoundaryObject = multiSurface;
+        }
+
+        public void AddMaterialTheme(string themeName, int themeIndex)
+        {
+            MaterialThemes.Add(themeName, themeIndex);
+        }
+
+        public void AddMaterialIndex(int themeIndex, int materialIndex)
+        {
+            MaterialIndicesForFullGeometry.Insert(themeIndex, materialIndex);
         }
     }
 }
