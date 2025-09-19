@@ -123,7 +123,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             var stylingRuleName = VisibilityStyleRuleName(id);
             bool dataRemoved = layer.LayerData.DefaultStyle.StylingRules.Remove(stylingRuleName);
-            Debug.Log(dataRemoved + "visibility data removed");
         }
 
         public Coordinate? GetVisibilityCoordinateForSubObject(LayerFeature layerFeature)

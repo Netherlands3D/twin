@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
@@ -43,6 +44,9 @@ namespace Netherlands3D.Twin.Layers.Properties
             layer.OnStylingApplied.AddListener(UpdateVisibility);
 
             ObjectSelectorService.MappingTree.OnMappingRemoved.AddListener(OnMappingRemoved);
+            //deselect any selected feature in the world when opening the hidden feature panel
+            ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
+            selector.Deselect();
 
             StartCoroutine(OnPropertySectionsLoaded());
         }
@@ -231,6 +235,12 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void OnMappingLoaded(IMapping mapping, string objectId)
         {
+            if (this == null)
+            {
+                DestroyGhostMesh();
+                return; //object got destroyed in the meantime
+            }
+
             if (mapping is not MeshMapping meshMapping) return;
             MeshMappingItem item = meshMapping.FindItemById(objectId);
             if (item == null) return;
@@ -276,6 +286,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 MeshMappingItem item = meshMapping.FindItemById(objectId);
                 if (item == null) continue;
 
+                DestroyGhostMesh();
                 selectedHiddenObject = new GameObject(objectId);
                 Mesh mesh = MeshMapping.CreateMeshFromMapping(meshMapping.ObjectMapping, item.ObjectMappingItem, out Vector3 localCentroid);
                 MeshFilter mFilter = selectedHiddenObject.AddComponent<MeshFilter>();
