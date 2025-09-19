@@ -15,5 +15,7 @@ namespace Netherlands3D.FirstPersonViewer.Events
         public static Action<float> ChangeViewHeight;
         public static Action<float> ChangeFOV;
         public static Action<float> ChangeSpeed;
+        public static Action<Vector3> OnCameraRotation;
+        public static Action SetCameraNorth;
     }
 }

@@ -39,6 +39,7 @@ namespace Netherlands3D.FirstPersonViewer
             ViewerEvents.ChangeCameraConstrain += SetCameraConstrain;
             ViewerEvents.ChangeViewHeight += SetCameraHeight;
             ViewerEvents.ChangeFOV += SetCameraFOV;
+            ViewerEvents.SetCameraNorth += SetCameraNorth;
 
             firstPersonViewerCamera = GetComponent<Camera>();
 
@@ -50,6 +51,7 @@ namespace Netherlands3D.FirstPersonViewer
             ViewerEvents.ChangeCameraConstrain -= SetCameraConstrain;
             ViewerEvents.ChangeViewHeight -= SetCameraHeight;
             ViewerEvents.ChangeFOV -= SetCameraFOV;
+            ViewerEvents.SetCameraNorth -= SetCameraNorth;
         }
 
         private void SetupViewer()
@@ -98,12 +100,15 @@ namespace Netherlands3D.FirstPersonViewer
                 case CameraConstrain.CONTROL_Y:
                     transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
                     viewerBase.Rotate(Vector3.up * mouseLook.x);
+                    ViewerEvents.OnCameraRotation?.Invoke(viewerBase.forward);
                     break;
                 case CameraConstrain.CONTROL_BOTH:
                     viewerBase.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+                    ViewerEvents.OnCameraRotation?.Invoke(viewerBase.localEulerAngles);
                     break;
                 case CameraConstrain.CONTROL_NONE:
                     transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
+                    ViewerEvents.OnCameraRotation?.Invoke(transform.localEulerAngles);
                     break;
             }
         }
@@ -124,6 +129,19 @@ namespace Netherlands3D.FirstPersonViewer
             transform.localPosition = Vector3.up * cameraHeightOffset;
         }
 
+        private void SetCameraNorth()
+        {
+            Debug.Log("Reset to north!");
+            switch (cameraConstrain)
+            {
+                case CameraConstrain.CONTROL_Y:
+                    transform.DORotate(Vector3.zero, .2f); break;
+                case CameraConstrain.CONTROL_BOTH:
+                    transform.DORotate(Vector3.zero, .2f); break;
+                case CameraConstrain.CONTROL_NONE:
+                    transform.DORotate(Vector3.zero, .2f); break;
+            }
+        }
         private void SetCameraFOV(float FOV) => firstPersonViewerCamera.fieldOfView = FOV;
 
         public Vector3 GetEulerRotation()
