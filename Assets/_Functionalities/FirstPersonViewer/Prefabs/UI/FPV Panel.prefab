@@ -2233,7 +2233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipText: Wissel tussen orthografisch/perspectief
+  tooltipText: Toggle UI hiding modus
 --- !u!114 &5599331511777983950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2645,7 +2645,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipText: Wissel tussen orthografisch/perspectief
+  tooltipText: Reset naar het startpunt
 --- !u!114 &7845256807810938703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2685,11 +2685,23 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 7556582124257035795}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 474986964326212686}
+        m_TargetAssemblyTypeName: Netherlands3D.ViewerUIButtons, eu.netherlands3d.twin
+        m_MethodName: ResetToStart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4600470270349734180
 GameObject:
   m_ObjectHideFlags: 0
@@ -3574,6 +3586,7 @@ GameObject:
   - component: {fileID: 297942020326514440}
   - component: {fileID: 898963798061876152}
   - component: {fileID: 790557086420049307}
+  - component: {fileID: 474986964326212686}
   m_Layer: 5
   m_Name: FPV Panel
   m_TagString: Untagged
@@ -3654,6 +3667,18 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &474986964326212686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5031786889156781905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 082ee06cfed3ba24c82368651a321939, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5136376136886478764
 GameObject:
   m_ObjectHideFlags: 0

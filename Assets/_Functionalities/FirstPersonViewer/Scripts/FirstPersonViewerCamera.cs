@@ -25,6 +25,8 @@ namespace Netherlands3D.FirstPersonViewer
         private float yRotation;
         public CameraConstrain cameraConstrain;
 
+        private Quaternion startRotation;
+
         //TEMP
         private bool didSetup;
         [Obsolete("Will be handled differntly (Prob with some kind of transitionState")] public bool DidSetup => didSetup;
@@ -39,6 +41,7 @@ namespace Netherlands3D.FirstPersonViewer
             ViewerEvents.ChangeCameraConstrain += SetCameraConstrain;
             ViewerEvents.ChangeViewHeight += SetCameraHeight;
             ViewerEvents.ChangeFOV += SetCameraFOV;
+            ViewerEvents.OnResetToStart += ResetToStart;
 
             firstPersonViewerCamera = GetComponent<Camera>();
 
@@ -50,6 +53,7 @@ namespace Netherlands3D.FirstPersonViewer
             ViewerEvents.ChangeCameraConstrain -= SetCameraConstrain;
             ViewerEvents.ChangeViewHeight -= SetCameraHeight;
             ViewerEvents.ChangeFOV -= SetCameraFOV;
+            ViewerEvents.OnResetToStart -= ResetToStart;
         }
 
         private void SetupViewer()
@@ -67,6 +71,7 @@ namespace Netherlands3D.FirstPersonViewer
             firstPersonViewerCamera.transform.DORotateQuaternion(targetRot, 2f).SetEase(Ease.InOutSine).OnComplete(() =>
             {
                 xRotation = transform.localEulerAngles.x;
+                startRotation = transform.rotation;
                 didSetup = true;
             });
         }
@@ -140,5 +145,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             return default;
         }
+
+        private void ResetToStart() => transform.rotation = startRotation;
     }
 }

@@ -1,6 +1,7 @@
 using DG.Tweening;
 using Netherlands3D.Events;
 using Netherlands3D.FirstPersonViewer.Events;
+using Netherlands3D.FirstPersonViewer.Miscellaneous;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Samplers;
@@ -22,8 +23,11 @@ namespace Netherlands3D.FirstPersonViewer
         //Movement
         public MovementPresets MovementModus { private set; get; }
         public float MovementSpeed { private set; get; }
+        private Vector3 startPosition;
+        private Quaternion startRotation;
 
         //Raycasting
+        //private OpticalInstantRaycaster test;
         private OpticalRaycaster raycaster;
         private int snappingCullingMask;
 
@@ -54,12 +58,16 @@ namespace Netherlands3D.FirstPersonViewer
             ViewerEvents.ChangeSpeed += SetMovementSpeed;
             ViewerEvents.OnMovementPresetChanged += SetMovementModus;
             ViewerEvents.OnViewerExited += ExitViewer;
+            ViewerEvents.OnResetToStart += ResetToStart;
         }
 
         private void Start()
         {
+            startPosition = transform.position;
+            startRotation = transform.rotation;
             yPositionTarget = transform.position.y;
             
+            //test = ServiceLocator.GetService<OpticalInstantRaycaster>();
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
             snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings") | (1 << LayerMask.NameToLayer("Default")));
@@ -72,6 +80,7 @@ namespace Netherlands3D.FirstPersonViewer
             ViewerEvents.ChangeSpeed -= SetMovementSpeed;
             ViewerEvents.OnMovementPresetChanged -= SetMovementModus;
             ViewerEvents.OnViewerExited -= ExitViewer;
+            ViewerEvents.OnResetToStart -= ResetToStart;
         }
 
         private void SetupFSM()
@@ -113,6 +122,10 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void GetGroundPosition()
         {
+            //Vector3 point = test.GetWorldPointFromPosition(transform.position + Vector3.up * MovementModus.stepHeight * 5f, Vector3.down);
+            //Debug.Log(point);
+            //yPositionTarget = point.y;
+
             raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * MovementModus.stepHeight, Vector3.down, (point, hit) =>
             {
                 if (hit)
@@ -169,8 +182,14 @@ namespace Netherlands3D.FirstPersonViewer
             }
         }
 
-
         private void SetMovementSpeed(float speed) => MovementSpeed = speed / 3.6f;
+
+        private void ResetToStart()
+        {
+            transform.position = startPosition;
+            transform.rotation = startRotation;
+            yPositionTarget = startPosition.y;
+        }
 
         private void ExitViewer()
         {
