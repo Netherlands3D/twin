@@ -76,28 +76,6 @@ namespace Netherlands3D.Twin.Layers.Properties
             }
         }
 
-        private void OnDestroy()
-        {
-            DestroyGhostMesh();
-            layer.OnStylingApplied.RemoveListener(UpdateVisibility);
-            ObjectSelectorService.MappingTree.OnMappingRemoved.RemoveListener(OnMappingRemoved);
-
-            //remove all visibility data for features that became visible
-            List<string> idsToRemove = new List<string>();
-            foreach (KeyValuePair<string, StylingRule> kv in layer.LayerData.DefaultStyle.StylingRules)
-            {
-                if (kv.Key.Contains(CartesianTileLayerStyler.VisibilityIdentifier))
-                {
-                    string objectId = CartesianTileLayerStyler.ObjectIdFromVisibilityStyleRuleName(kv.Key);
-                    bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(objectId);
-                    if (visibility == true)
-                        idsToRemove.Add(objectId);
-                }
-            }
-            foreach (string id in idsToRemove)
-                (layer.Styler as CartesianTileLayerStyler).RemoveVisibilityForSubObjectByAttributeTag(id);
-        }
-
         private void CreateVisibilityItem(string objectID)
         {
             foreach (HiddenObjectsVisibilityItem obj in hiddenObjects)
@@ -262,51 +240,6 @@ namespace Netherlands3D.Twin.Layers.Properties
             }
         }
 
-        public void ShowGhostMesh(string objectId)
-        {
-            DestroyGhostMesh();
-            bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(objectId);
-            if (visibility == true)
-            {
-                return;
-            }
-
-            Coordinate? coord = (layer.Styler as CartesianTileLayerStyler).GetVisibilityCoordinateForSubObjectByTag(objectId);
-            if (coord == null)
-            {
-                Debug.LogError("the styling rule does not contain a coordinate for this feature!");
-                return;
-            }
-
-            List<IMapping> mappings = ObjectSelectorService.MappingTree.Query<MeshMapping>((Coordinate)coord);
-            foreach (IMapping m in mappings)
-            {
-                if (m is not MeshMapping meshMapping) continue;
-
-                MeshMappingItem item = meshMapping.FindItemById(objectId);
-                if (item == null) continue;
-
-                DestroyGhostMesh();
-                selectedHiddenObject = new GameObject(objectId);
-                Mesh mesh = MeshMapping.CreateMeshFromMapping(meshMapping.ObjectMapping, item.ObjectMappingItem, out Vector3 localCentroid);
-                MeshFilter mFilter = selectedHiddenObject.AddComponent<MeshFilter>();
-                mFilter.mesh = mesh;
-                MeshRenderer mRenderer = selectedHiddenObject.AddComponent<MeshRenderer>();
-                mRenderer.material = selectionMaterial;
-                selectedHiddenObject.transform.position = meshMapping.ObjectMapping.transform.TransformPoint(localCentroid);
-                return;
-            }
-        }
-
-        public void DestroyGhostMesh()
-        {
-            if (selectedHiddenObject != null)
-            {
-                Destroy(selectedHiddenObject);
-                selectedHiddenObject = null;
-            }
-        }
-
         private void HiddenFeatureDeselected(string objectId)
         {
             //lets not destroy the ghost yet as you can move around while having it in view
@@ -374,6 +307,73 @@ namespace Netherlands3D.Twin.Layers.Properties
                     selectedItems.Add(item);
             if (selectedItems.Count == 0)
                 firstSelectedItem = null;
+        }
+
+        public void ShowGhostMesh(string objectId)
+        {
+            DestroyGhostMesh();
+            bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(objectId);
+            if (visibility == true)
+            {
+                return;
+            }
+
+            Coordinate? coord = (layer.Styler as CartesianTileLayerStyler).GetVisibilityCoordinateForSubObjectByTag(objectId);
+            if (coord == null)
+            {
+                Debug.LogError("the styling rule does not contain a coordinate for this feature!");
+                return;
+            }
+
+            List<IMapping> mappings = ObjectSelectorService.MappingTree.Query<MeshMapping>((Coordinate)coord);
+            foreach (IMapping m in mappings)
+            {
+                if (m is not MeshMapping meshMapping) continue;
+
+                MeshMappingItem item = meshMapping.FindItemById(objectId);
+                if (item == null) continue;
+
+                DestroyGhostMesh();
+                selectedHiddenObject = new GameObject(objectId);
+                Mesh mesh = MeshMapping.CreateMeshFromMapping(meshMapping.ObjectMapping, item.ObjectMappingItem, out Vector3 localCentroid);
+                MeshFilter mFilter = selectedHiddenObject.AddComponent<MeshFilter>();
+                mFilter.mesh = mesh;
+                MeshRenderer mRenderer = selectedHiddenObject.AddComponent<MeshRenderer>();
+                mRenderer.material = selectionMaterial;
+                selectedHiddenObject.transform.position = meshMapping.ObjectMapping.transform.TransformPoint(localCentroid);
+                return;
+            }
+        }
+
+        public void DestroyGhostMesh()
+        {
+            if (selectedHiddenObject != null)
+            {
+                Destroy(selectedHiddenObject);
+                selectedHiddenObject = null;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            DestroyGhostMesh();
+            layer.OnStylingApplied.RemoveListener(UpdateVisibility);
+            ObjectSelectorService.MappingTree.OnMappingRemoved.RemoveListener(OnMappingRemoved);
+
+            //remove all visibility data for features that became visible
+            List<string> idsToRemove = new List<string>();
+            foreach (KeyValuePair<string, StylingRule> kv in layer.LayerData.DefaultStyle.StylingRules)
+            {
+                if (kv.Key.Contains(CartesianTileLayerStyler.VisibilityIdentifier))
+                {
+                    string objectId = CartesianTileLayerStyler.ObjectIdFromVisibilityStyleRuleName(kv.Key);
+                    bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(objectId);
+                    if (visibility == true)
+                        idsToRemove.Add(objectId);
+                }
+            }
+            foreach (string id in idsToRemove)
+                (layer.Styler as CartesianTileLayerStyler).RemoveVisibilityForSubObjectByAttributeTag(id);
         }
     }
 }
