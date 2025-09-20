@@ -165,7 +165,16 @@ namespace Netherlands3D.Twin.Utility
         {
             return lhs > rhs ? lhs : rhs;
         }
-        
+
+        public bool Equals(BoundingBox other)
+        {
+            if (other == null) return false;
+            if (other.CoordinateSystem != CoordinateSystem)
+                other.Convert(CoordinateSystem);
+
+            return BottomLeft.Equals(other.BottomLeft) && TopRight.Equals(other.TopRight);
+        }
+
         public void Debug(Color color)
         {
             Vector3 unityBottomLeft = BottomLeft.ToUnity();

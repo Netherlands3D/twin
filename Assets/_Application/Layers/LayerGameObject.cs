@@ -186,7 +186,7 @@ namespace Netherlands3D.Twin.Layers
             CenterInView(layer);
         }
         
-        private void CenterInView(LayerData layer)
+        public void CenterInView(LayerData layer)
         {
             if (Bounds == null)
             {

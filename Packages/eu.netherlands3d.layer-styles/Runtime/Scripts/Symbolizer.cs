@@ -9,7 +9,22 @@ namespace Netherlands3D.LayerStyles
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling", Name = "Symbolizer")]
     public sealed class Symbolizer
-    {
+    {       
+        //Constants for property keys
+        private const string FillColorProperty = "fill-color";
+        private const string StrokeColorProperty = "stroke-color";
+        private const string VisibilityProperty = "visibility";
+        private const string MaskLayerMaskProperty = "mask-layer-mask";
+
+        //Constants for property values
+        private const string VisibilityVisible = "visible";
+        private const string VisibilityNone = "none";
+
+        //Constants for custom properties
+        private const string CustomPropertyPrefix = "--";
+
+
+
         /// <summary>
         /// Store each property as a string, and use specific getters and setting to convert from and to string.
         ///
@@ -24,18 +39,18 @@ namespace Netherlands3D.LayerStyles
         #region Styles
 
         /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-fill-color"/>
-        public void SetFillColor(Color color) => SetAndNormalizeColor("fill-color", color);
+        public void SetFillColor(Color color) => SetAndNormalizeColor(FillColorProperty, color);
 
         /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-fill-color"/>
-        public Color? GetFillColor() => GetAndNormalizeColor("fill-color");
+        public Color? GetFillColor() => GetAndNormalizeColor(FillColorProperty);
 
-        public void ClearFillColor() => ClearProperty("fill-color");
+        public void ClearFillColor() => ClearProperty(FillColorProperty);
 
-        public void SetMaskLayerMask(int maskLayerMask) => SetProperty("mask-layer-mask", Convert.ToString(maskLayerMask, 2));
+        public void SetMaskLayerMask(int maskLayerMask) => SetProperty(MaskLayerMaskProperty, Convert.ToString(maskLayerMask, 2));
 
         public int? GetMaskLayerMask()
         {
-            var json = GetProperty("mask-layer-mask");
+            var json = GetProperty(MaskLayerMaskProperty);
             if(json == null || string.IsNullOrEmpty((string)json))
                 return null;
             
@@ -51,7 +66,7 @@ namespace Netherlands3D.LayerStyles
             return Convert.ToInt32(bitString, 2);
         }
         
-        public void ClearMaskLayerMask() => ClearProperty("mask-layer-mask");
+        public void ClearMaskLayerMask() => ClearProperty(MaskLayerMaskProperty);
 
         /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-color"/>
         /// <remarks>
@@ -59,7 +74,7 @@ namespace Netherlands3D.LayerStyles
         /// mapbox implementation is easier to read, we refer to that now but for backwards-compatibility we still use
         /// the term Stroke Color instead of Mapbox' Line Color.
         /// </remarks>
-        public void SetStrokeColor(Color color) => SetAndNormalizeColor("stroke-color", color);
+        public void SetStrokeColor(Color color) => SetAndNormalizeColor(StrokeColorProperty, color);
 
         /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-color"/>
         /// <remarks>
@@ -67,23 +82,52 @@ namespace Netherlands3D.LayerStyles
         /// mapbox implementation is easier to read, we refer to that now but for backwards-compatibility we still use
         /// the term Stroke Color instead of Mapbox' Line Color.
         /// </remarks>
-        public Color? GetStrokeColor() => GetAndNormalizeColor("stroke-color");
+        public Color? GetStrokeColor() => GetAndNormalizeColor(StrokeColorProperty);
 
-        public void ClearStrokeColor() => ClearProperty("stroke-color");
+        public void ClearStrokeColor() => ClearProperty(StrokeColorProperty);
 
-        public void SetVisibility(bool visible) => SetProperty("visibility", visible ? "visible" : "none");
+        public void SetVisibility(bool visible) => SetProperty(VisibilityProperty, visible ? VisibilityVisible : VisibilityNone);
 
         public bool? GetVisibility()
         {         
-            if (GetProperty("visibility") is not string property) return null;
+            if (GetProperty(VisibilityProperty) is not string property) return null;
 
-            if (property == "visible") return true;
+            if (property == VisibilityVisible) return true;
 
             return false;            
         }
 
-        public void ClearVisibility() => ClearProperty("visibility");
+        public void ClearVisibility() => ClearProperty(VisibilityProperty);
         
+        public void SetCustomProperty(string key, object value)
+        {
+            string prefix = CustomPropertyPrefix;
+            if (!key.StartsWith(prefix))
+            {
+                key = prefix + key;
+            }
+            SetProperty(key, JsonConvert.SerializeObject(value));
+        }
+
+        public T GetCustomProperty<T>(string key)
+        {
+            string prefix = CustomPropertyPrefix;
+            if(!key.StartsWith(prefix))
+            {
+                key = prefix + key;
+            }
+            return JsonConvert.DeserializeObject<T>(GetProperty(key));
+        }
+
+        public void ClearCustomProperty(string key)
+        {
+            string prefix = CustomPropertyPrefix;
+            if (!key.StartsWith(prefix))
+            {
+                key = prefix + key;
+            }
+            ClearProperty(key);
+        }
 
         #endregion
 
@@ -139,7 +183,7 @@ namespace Netherlands3D.LayerStyles
             return color;
         }
 
-        private object GetProperty(string key)
+        private string GetProperty(string key)
         {
             // explicitly return null when value is not present, so that caller knows it should ignore using this field 
             return properties.ContainsKey(key) ? properties[key] : null;
