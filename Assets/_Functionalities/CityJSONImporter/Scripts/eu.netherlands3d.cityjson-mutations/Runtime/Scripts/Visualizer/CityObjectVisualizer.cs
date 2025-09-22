@@ -67,6 +67,7 @@ namespace Netherlands3D.CityJson.Visualisation
         public Mesh ActiveMesh { get; private set; }
 
         public UnityEvent<GameObject> jsonVisualized;
+        [SerializeField] private CityMaterialConverter materialConverter;
         [SerializeField] private SemanticMaterials[] materials;
         [SerializeField] private Material defaultMaterial; //TODO get this automaticaly from the material generator?
 
@@ -100,6 +101,7 @@ namespace Netherlands3D.CityJson.Visualisation
         private void Visualize()
         {
             transform.localPosition = SetLocalPosition(cityObject); //set position first so the CityObject's transformationMatrix can be used to position the mesh.
+            materialConverter.Initialize(cityObject.Appearance);
             StartCoroutine(CreateMeshesPerFrame(maxMeshesPerFrame));
         }
 
@@ -223,24 +225,21 @@ namespace Netherlands3D.CityJson.Visualisation
             List<Mesh> subMeshes = new List<Mesh>();
             List<Material> materials = new List<Material>();
 
-            //todo: add option to create submeshes based on surface semantics.
             Dictionary<SurfaceSemanticType, List<BoundaryMeshData>> sortedBoundaryMeshData = SortBoundaryMeshDataBySemanticObject(boundaryMeshData);
-            // subMeshes = CombineBoundaryMeshesWithTheSameSemanticObject(boundaryMeshData, objectOffset, out var types);
 
             foreach (var semanticTypeKVP in sortedBoundaryMeshData)
             {
                 if (geometry.UseSingleMaterialForEntireGeometry)
                 {
                     subMeshes.AddRange(CombineBoundaryMeshes(semanticTypeKVP.Value, objectOffset));
-                    // subMeshes = CombineBoundaryMeshesWithTheSameSemanticObject(boundaryMeshes, objectOffset, out var types, geometry);
                     var materialIndices = geometry.GetMaterialIndices(string.Empty); //TODO: we currently don't support themes, and will always return the first available theme
-                    materials.AddRange(cityObject.Appearance.GetMaterials(materialIndices));
+                    materials.AddRange(materialConverter.GetMaterials(materialIndices, semanticTypeKVP.Key));
                 }
                 else
                 {
                     var themeIndex = geometry.GetThemeIndex(string.Empty); //TODO: we currently don't support themes, and will always return the first available theme
                     subMeshes.AddRange(CombineBoundaryMeshesWithTheSameMaterial(semanticTypeKVP.Value, objectOffset, themeIndex, out var materialIndices));
-                    materials.AddRange(cityObject.Appearance.GetMaterials(materialIndices));
+                    materials.AddRange(materialConverter.GetMaterials(materialIndices, semanticTypeKVP.Key));
                 }
             }
             

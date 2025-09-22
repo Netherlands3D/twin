@@ -90,7 +90,7 @@ namespace Netherlands3D.CityJson.Structure
             //optional data
             Extensions = node["extensions"];
             Metadata = node["metadata"];
-            Appearance = CityAppearance.FromJSON(node["appearance"], materialTemplate); //todo: not implemented yet
+            Appearance = CityAppearance.FromJSON(node["appearance"]);
             GeometryTemplates = node["geometry-templates"]; //todo: not implemented yet
             var transformNode = node["transform"];
 
