@@ -120,8 +120,6 @@ namespace Netherlands3D.CityJson.Visualisation
             meshesCreatedThisFrame++;
             meshes = CreateMeshes(cityObject);
 
-            //SetMaterials(cityObject); //todo: create the materials for the meshes
-
             var highestLod = meshes.Keys.Max(g => g.Lod);
             SetLODActive(highestLod);
 
@@ -221,30 +219,62 @@ namespace Netherlands3D.CityJson.Visualisation
 
         public MeshWithMaterials CreateMeshFromGeometry(CityGeometry geometry, CoordinateSystem coordinateSystem, Vector3Double vertexOffset, Vector3 objectOffset)
         {
-            var boundaryMeshes = BoundariesToMeshes(geometry.BoundaryObject, coordinateSystem, vertexOffset);
-            List<Mesh> subMeshes;
-            Material[] materials;
-            if (geometry.UseSingleMaterialForEntireGeometry)
-            {
-                subMeshes = CombineBoundaryMeshes(boundaryMeshes, objectOffset);
-                var materialIndices = geometry.GetMaterialIndices(string.Empty); //TODO: we currently don't support themes, and will always return the first available theme
-                materials = cityObject.Appearance.GetMaterials(materialIndices);
-            }
-            else
-            {
-                var themeIndex = geometry.GetThemeIndex(string.Empty); //TODO: we currently don't support themes, and will always return the first available theme
-                subMeshes = CombineBoundaryMeshesWithTheSameMaterial(boundaryMeshes, objectOffset, themeIndex, out var materialIndices); 
-                materials = cityObject.Appearance.GetMaterials(materialIndices);
-            }
+            var boundaryMeshData = BoundariesToMeshes(geometry.BoundaryObject, coordinateSystem, vertexOffset);
+            List<Mesh> subMeshes = new List<Mesh>();
+            List<Material> materials = new List<Material>();
 
             //todo: add option to create submeshes based on surface semantics.
-            // subMeshes = CombineBoundaryMeshesWithTheSameSemanticObject(boundaryMeshes, objectOffset, out var types, geometry);
+            Dictionary<SurfaceSemanticType, List<BoundaryMeshData>> sortedBoundaryMeshData = SortBoundaryMeshDataBySemanticObject(boundaryMeshData);
+            // subMeshes = CombineBoundaryMeshesWithTheSameSemanticObject(boundaryMeshData, objectOffset, out var types);
 
+            foreach (var semanticTypeKVP in sortedBoundaryMeshData)
+            {
+                if (geometry.UseSingleMaterialForEntireGeometry)
+                {
+                    subMeshes.AddRange(CombineBoundaryMeshes(semanticTypeKVP.Value, objectOffset));
+                    // subMeshes = CombineBoundaryMeshesWithTheSameSemanticObject(boundaryMeshes, objectOffset, out var types, geometry);
+                    var materialIndices = geometry.GetMaterialIndices(string.Empty); //TODO: we currently don't support themes, and will always return the first available theme
+                    materials.AddRange(cityObject.Appearance.GetMaterials(materialIndices));
+                }
+                else
+                {
+                    var themeIndex = geometry.GetThemeIndex(string.Empty); //TODO: we currently don't support themes, and will always return the first available theme
+                    subMeshes.AddRange(CombineBoundaryMeshesWithTheSameMaterial(semanticTypeKVP.Value, objectOffset, themeIndex, out var materialIndices));
+                    materials.AddRange(cityObject.Appearance.GetMaterials(materialIndices));
+                }
+            }
+            
             var mesh = CombineMeshes(subMeshes, Matrix4x4.identity, false); //use identity matrix because we already transformed the submeshes
-            return new MeshWithMaterials(mesh, materials);
+            return new MeshWithMaterials(mesh, materials.ToArray());
         }
 
-        public static List<Mesh> CombineBoundaryMeshesWithTheSameSemanticObject(List<BoundaryMeshData> boundaryMeshData, Vector3 offset, out List<SurfaceSemanticType> types, CityGeometry geometry)
+        public static Dictionary<SurfaceSemanticType, List<BoundaryMeshData>> SortBoundaryMeshDataBySemanticObject(List<BoundaryMeshData> boundaryMeshData)
+        {
+            var dictionary = new Dictionary<SurfaceSemanticType, List<BoundaryMeshData>>();
+            while (boundaryMeshData.Count > 0)
+            {
+                List<BoundaryMeshData> list = new List<BoundaryMeshData>();
+                CityGeometrySemanticsObject activeSemanticsObject = boundaryMeshData[^1].SemanticsObject;
+                for (int i = boundaryMeshData.Count - 1; i >= 0; i--) //go backwards because collection will be modified
+                {
+                    var boundaryMesh = boundaryMeshData[i];
+                    if (boundaryMesh.SemanticsObject == activeSemanticsObject)
+                    {
+                        list.Add(boundaryMesh);
+                        boundaryMeshData.Remove(boundaryMesh);
+                    }
+                }
+                
+                if (activeSemanticsObject != null)
+                    dictionary.Add(activeSemanticsObject.SurfaceType, list);
+                else
+                    dictionary.Add(SurfaceSemanticType.Null, list);
+            }
+
+            return dictionary;
+        }
+
+        public static List<Mesh> CombineBoundaryMeshesWithTheSameSemanticObject(List<BoundaryMeshData> boundaryMeshData, Vector3 offset, out List<SurfaceSemanticType> types)
         {
             List<Mesh> combinedMeshes = new List<Mesh>(boundaryMeshData.Count);
             types = new List<SurfaceSemanticType>(boundaryMeshData.Count);
@@ -287,7 +317,6 @@ namespace Netherlands3D.CityJson.Visualisation
             //combine mesh datas per materialIndexList. Since we want to support different themes, we can only combine meshes that have the same exact MaterialIndexList
             while (boundaryMeshData.Count > 0)
             {
-                // List<int> activeMaterialList = boundaryMeshData[boundaryMeshData.Count - 1].MaterialIndices;
                 int activeMaterialIndex = boundaryMeshData[boundaryMeshData.Count - 1].MaterialIndices[themeIndex];
                 materialIndices.Add(activeMaterialIndex);
 
@@ -301,7 +330,6 @@ namespace Netherlands3D.CityJson.Visualisation
                         continue;
                     }
 
-                    // if (boundaryMesh.MaterialIndices.SequenceEqual(activeMaterialList))
                     if (boundaryMesh.MaterialIndices[themeIndex] == activeMaterialIndex)
                     {
                         if (boundaryMesh.TriangulationData != null) //skip invalid polygons
