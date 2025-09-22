@@ -116,7 +116,7 @@ namespace Netherlands3D.CityJson.Visualisation
                     meshesCreatedThisFrame = 0;
                 }
             }
-            
+
             meshesCreatedThisFrame++;
             meshes = CreateMeshes(cityObject);
 
@@ -131,9 +131,9 @@ namespace Netherlands3D.CityJson.Visualisation
         private Vector3 SetLocalPosition(CityObject cityObject)
         {
             var crs = cityObject.CoordinateSystem;
-            
+
             //todo: Any 2D CRS should be converted to its 3D counterpart (like RD to RDNAP), we should check if we want to do this in the initial CityJSON parsing function or here
-            if (cityObject.CoordinateSystem == CoordinateSystem.RD) 
+            if (cityObject.CoordinateSystem == CoordinateSystem.RD)
             {
                 crs = CoordinateSystem.RDNAP;
             }
@@ -200,18 +200,19 @@ namespace Netherlands3D.CityJson.Visualisation
                 Vector3Double origin = new Vector3Double();
                 var cityJsonCoord = GetComponentInParent<WorldTransform>().Coordinate; //todo: this getComponentInParent is a bit hacky
                 var coordinateSystem = cityObject.CoordinateSystem;
-                if (coordinateSystem != CoordinateSystem.Undefined) 
+                if (coordinateSystem != CoordinateSystem.Undefined)
                 {
                     var convertedCoord = cityJsonCoord.Convert(coordinateSystem);
                     origin = new Vector3Double(convertedCoord.value1, convertedCoord.value2, convertedCoord.value3);
                 }
                 else
                 {
-                    origin = GetComponentInParent<CityJSON>().AbsoluteCenter;//we cannot convert an undefined crs, so we assume the origin is at the absolute center
+                    origin = GetComponentInParent<CityJSON>().AbsoluteCenter; //we cannot convert an undefined crs, so we assume the origin is at the absolute center
                 }
+
                 // The geometry's vertices are in world space, so we need to subtract the cityJSON's origin to get them in cityJSON space, and then subtract the cityObject's origin to be able to create a mesh with the origin at the cityObject's position.
                 // The CityJSON origin is at the citJSON WorldTransform coordinate, the CityObject's origin is its localPosition, since we set it previously.
-                var mesh = CreateMeshFromGeometry(geometry, coordinateSystem, origin, cityObject.transform.localPosition); 
+                var mesh = CreateMeshFromGeometry(geometry, coordinateSystem, origin, cityObject.transform.localPosition);
                 meshes.Add(geometry, mesh);
             }
 
@@ -227,20 +228,8 @@ namespace Netherlands3D.CityJson.Visualisation
             if (geometry.UseSingleMaterialForEntireGeometry)
             {
                 subMeshes = CombineBoundaryMeshes(boundaryMeshes, objectOffset);
-                if (geometry.IncludeMaterials)
-                {
-                    materials = cityObject.Appearance.GetMaterials(new List<int> {geometry.MaterialIndicesForFullGeometry[0]});
-                }
-                else
-                { //todo: this should be refactored to not generate an unnecessary list of -1s, but just apply the default material to all open slots of the MeshRenderer.
-                    var defaultMaterialList = new List<int>(subMeshes.Count);
-                    for (int i = 0; i < subMeshes.Count; i++)
-                    {
-                        defaultMaterialList.Add(-1);
-                    }
-                
-                    materials = cityObject.Appearance.GetMaterials(defaultMaterialList);
-                }
+                var materialIndices = geometry.GetMaterialIndices(string.Empty); //TODO: we currently don't support themes, and will always return the first available theme
+                materials = cityObject.Appearance.GetMaterials(materialIndices);
             }
             else
             {
@@ -278,7 +267,7 @@ namespace Netherlands3D.CityJson.Visualisation
                 var combinedMesh = PolygonVisualisationUtility.CreatePolygonMesh(meshDataToCombine, offset);
                 combinedMeshes.Add(combinedMesh);
                 meshDataToCombine.Clear();
-                
+
                 if (activeSemanticsObject != null)
                     types.Add(activeSemanticsObject.SurfaceType);
                 else
@@ -287,20 +276,20 @@ namespace Netherlands3D.CityJson.Visualisation
 
             return combinedMeshes;
         }
-        
+
         public static List<Mesh> CombineBoundaryMeshesWithTheSameMaterial(List<BoundaryMeshData> boundaryMeshData, Vector3 offset, out List<int> materialIndices)
         {
             List<Mesh> combinedMeshes = new List<Mesh>(boundaryMeshData.Count);
             List<GeometryTriangulationData> meshDataToCombine = new List<GeometryTriangulationData>(boundaryMeshData.Count);
             List<GeometryTriangulationData> meshDataWithNullMaterial = new List<GeometryTriangulationData>(boundaryMeshData.Count);
             materialIndices = new List<int>();
-            
+
             //combine mesh datas per materialIndexList. Since we want to support different themes, we can only combine meshes that have the same exact MaterialIndexList
             while (boundaryMeshData.Count > 0)
             {
                 // List<int> activeMaterialList = boundaryMeshData[boundaryMeshData.Count - 1].MaterialIndices;
-                int activeMaterialIndex = boundaryMeshData[boundaryMeshData.Count - 1].MaterialIndices[0];// todo: instead of [0] we should return the index of the active theme
-                materialIndices.Add(activeMaterialIndex); 
+                int activeMaterialIndex = boundaryMeshData[boundaryMeshData.Count - 1].MaterialIndices[0]; // todo: instead of [0] we should return the index of the active theme
+                materialIndices.Add(activeMaterialIndex);
 
                 for (int i = boundaryMeshData.Count - 1; i >= 0; i--) //go backwards because collection will be modified
                 {
@@ -319,6 +308,7 @@ namespace Netherlands3D.CityJson.Visualisation
                         {
                             meshDataToCombine.Add(boundaryMesh.TriangulationData);
                         }
+
                         boundaryMeshData.Remove(boundaryMesh);
                     }
                 }
@@ -448,10 +438,10 @@ namespace Netherlands3D.CityJson.Visualisation
 
             var triangulationData = PolygonVisualisationUtility.CreatePolygonGeometryTriangulationData(contours);
             var semanticsObject = surface.SemanticsObject;
-            
+
             return new BoundaryMeshData(triangulationData, semanticsObject, surface.materialIndices);
         }
-        
+
         // convert the list of Vector3Doubles to a list of Vector3s and convert the coordinates to unity in the process.
         public static List<Vector3> GetConvertedPolygonVertices(CityPolygon polygon, CoordinateSystem coordinateSystem, Vector3Double origin)
         {
@@ -467,7 +457,7 @@ namespace Netherlands3D.CityJson.Visualisation
                 {
                     convertedVert = new Vector3(convertedVert.x, convertedVert.z, convertedVert.y);
                 }
-                
+
                 convertedPolygon.Add(convertedVert);
             }
 

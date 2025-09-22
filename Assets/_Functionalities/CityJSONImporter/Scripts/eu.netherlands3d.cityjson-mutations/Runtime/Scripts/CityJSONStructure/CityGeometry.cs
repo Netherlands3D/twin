@@ -153,7 +153,7 @@ namespace Netherlands3D.CityJson.Structure
             if (IncludeSemantics)
                 geometryNode["semantics"] = CityGeometrySemantics.GetSemanticObject(BoundaryObject);
             //if (IncludeMaterials)
-                //geometryNode["material"] = GetMaterials();
+            //geometryNode["material"] = GetMaterials();
             if (IncludeTextures)
                 geometryNode["texture"] = GetTextures();
 
@@ -185,7 +185,7 @@ namespace Netherlands3D.CityJson.Structure
             if (includeSemantics)
                 CityGeometrySemantics.FromJSONNode(semanticsNode, geometry.BoundaryObject);
 
-            if(includeMaterials)
+            if (includeMaterials)
             {
                 // geometry.MaterialIndices = GetMaterialsFromJSONNode(materialsNode["default_theme"]);
                 CityMaterial.FromJSONNode(materialsNode, geometry);
@@ -229,6 +229,22 @@ namespace Netherlands3D.CityJson.Structure
         public void AddMaterialIndex(int themeIndex, int materialIndex)
         {
             MaterialIndicesForFullGeometry.Insert(themeIndex, materialIndex);
+        }
+
+        public List<int> GetMaterialIndices(string themeName)
+        {
+            if (MaterialThemes.TryGetValue(themeName, out int themeIndex))
+            {
+                return new List<int> { MaterialIndicesForFullGeometry[themeIndex] };
+            }
+
+            //theme not found, return the first theme if there are themes defined
+            if (MaterialIndicesForFullGeometry.Count > 0)
+            {
+                return new List<int>(){MaterialIndicesForFullGeometry[0]};
+            }
+            
+            return new List<int>(); //no materials defined
         }
     }
 }
