@@ -246,5 +246,10 @@ namespace Netherlands3D.CityJson.Structure
             
             return new List<int>(); //no materials defined
         }
+
+        public int GetThemeIndex(string themeName)
+        {
+            return MaterialThemes.GetValueOrDefault(themeName, 0); //return the first available theme index when the theme name is not found
+        }
     }
 }
