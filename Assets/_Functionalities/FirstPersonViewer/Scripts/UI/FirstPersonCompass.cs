@@ -33,7 +33,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public void OnCompassClick()
         {
-            ViewerEvents.SetCameraNorth?.Invoke();
+            ViewerEvents.OnSetCameraNorth?.Invoke();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             viewer.FirstPersonCamera.transform.localEulerAngles = Vector3.zero;
 
             viewer.SetVelocity(Vector2.zero);
-            ViewerEvents.ChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_BOTH);
+            ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_BOTH);
         }
 
         public override void OnUpdate()

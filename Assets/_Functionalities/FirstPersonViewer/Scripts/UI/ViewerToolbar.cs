@@ -1,4 +1,6 @@
 using DG.Tweening;
+using Netherlands3D.Twin.UI;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,20 +9,25 @@ namespace Netherlands3D.FirstPersonViewer.UI
     public class ViewerToolbar : MonoBehaviour
     {
         private RectTransform rect;
-        private bool isOpen;
+        private ContentFitterRefresh contentFilterRefresh; //TWIN Dependent
 
-        private RectTransform opendPrefab;
         [SerializeField] private RectTransform contentParent;
 
+        private bool isOpen;
         private bool isAnimating;
         private Sequence currentSequence;
+        private ViewerTool currentTool;
+
+
+        public event Action<ViewerTool> OnViewerToolChanged;
 
         private void Start()
         {
             rect = GetComponent<RectTransform>();
+            contentFilterRefresh = GetComponent<ContentFitterRefresh>(); //TWIN Dependent
         }
 
-        public void OpenWindow(RectTransform windowPrefab)
+        public void OpenWindow(RectTransform windowPrefab, ViewerTool viewTool)
         {
             if (isAnimating) return;
             isAnimating = true;
@@ -38,19 +45,19 @@ namespace Netherlands3D.FirstPersonViewer.UI
                     {
                         Destroy(t.gameObject);
                     }
+                    contentFilterRefresh.RefreshContentFitters(); //TWIN Dependent
                 });
+                currentSequence.AppendInterval(Time.deltaTime);
             }
 
             //Switch
-            if (windowPrefab != opendPrefab)
+            if (viewTool != currentTool)
             {
                 currentSequence.AppendCallback(() =>
                 {
                     RectTransform windowPanel = Instantiate(windowPrefab, contentParent);
 
-                    LayoutRebuilder.ForceRebuildLayoutImmediate(contentParent);
-                    LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
-                    Canvas.ForceUpdateCanvases();
+                    contentFilterRefresh.RefreshContentFitters(); //TWIN Dependent
 
                     windowPanel.anchoredPosition = new Vector2(windowPanel.anchoredPosition.x, -rect.sizeDelta.y);
 
@@ -59,16 +66,17 @@ namespace Netherlands3D.FirstPersonViewer.UI
                 currentSequence.AppendInterval(Time.deltaTime);
                 currentSequence.Append(rect.DOAnchorPosY(56, .75f)).SetEase(Ease.OutSine);
 
-                opendPrefab = windowPrefab;
+                currentTool = viewTool;
 
                 isOpen = true;
             }
             else
             {
                 isOpen = false;
-                opendPrefab = null;
+                currentTool = null;
             }
 
+            OnViewerToolChanged?.Invoke(currentTool);
             currentSequence.OnComplete(() => isAnimating = false);
             currentSequence.Play();
         }

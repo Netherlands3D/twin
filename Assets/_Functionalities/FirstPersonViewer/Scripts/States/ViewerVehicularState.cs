@@ -28,7 +28,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             currentSpeed = 0;
 
             viewer.GetGroundPosition();
-            ViewerEvents.ChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_NONE);
+            ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_NONE);
         }
 
         public override void OnUpdate()

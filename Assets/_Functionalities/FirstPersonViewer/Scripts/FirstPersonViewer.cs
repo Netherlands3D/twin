@@ -1,12 +1,9 @@
-using DG.Tweening;
-using Netherlands3D.Events;
+using Netherlands3D.Coordinates;
 using Netherlands3D.FirstPersonViewer.Events;
-using Netherlands3D.FirstPersonViewer.Miscellaneous;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -23,7 +20,7 @@ namespace Netherlands3D.FirstPersonViewer
         //Movement
         public MovementPresets MovementModus { private set; get; }
         public float MovementSpeed { private set; get; }
-        private Vector3 startPosition;
+        private Coordinate startPosition;
         private Quaternion startRotation;
 
         //Raycasting
@@ -55,7 +52,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             SetupFSM();
 
-            ViewerEvents.ChangeSpeed += SetMovementSpeed;
+            ViewerEvents.OnSpeedChanged += SetMovementSpeed;
             ViewerEvents.OnMovementPresetChanged += SetMovementModus;
             ViewerEvents.OnViewerExited += ExitViewer;
             ViewerEvents.OnResetToStart += ResetToStart;
@@ -63,7 +60,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void Start()
         {
-            startPosition = transform.position;
+            startPosition = new Coordinate(transform.position);
             startRotation = transform.rotation;
             yPositionTarget = transform.position.y;
             
@@ -77,7 +74,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void OnDestroy()
         {
-            ViewerEvents.ChangeSpeed -= SetMovementSpeed;
+            ViewerEvents.OnSpeedChanged -= SetMovementSpeed;
             ViewerEvents.OnMovementPresetChanged -= SetMovementModus;
             ViewerEvents.OnViewerExited -= ExitViewer;
             ViewerEvents.OnResetToStart -= ResetToStart;
@@ -186,9 +183,12 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void ResetToStart()
         {
-            transform.position = startPosition;
+            transform.position = startPosition.ToUnity();
             transform.rotation = startRotation;
-            yPositionTarget = startPosition.y;
+            yPositionTarget = transform.position.y;
+
+            //When in the flying state add 1.5 meter offset
+            if (fsm.CurrentState.GetType() == typeof(ViewerFlyingState)) transform.position += Vector3.up * 1.5f;  
         }
 
         private void ExitViewer()

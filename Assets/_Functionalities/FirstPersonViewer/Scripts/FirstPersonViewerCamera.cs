@@ -35,11 +35,11 @@ namespace Netherlands3D.FirstPersonViewer
             currentsensitivity = 3f;
 #endif
 
-            ViewerEvents.ChangeCameraConstrain += SetCameraConstrain;
-            ViewerEvents.ChangeViewHeight += SetCameraHeight;
-            ViewerEvents.ChangeFOV += SetCameraFOV;
+            ViewerEvents.OnChangeCameraConstrain += SetCameraConstrain;
+            ViewerEvents.OnViewheightChanged += SetCameraHeight;
+            ViewerEvents.OnFOVChanged += SetCameraFOV;
             ViewerEvents.OnResetToStart += ResetToStart;
-            ViewerEvents.SetCameraNorth += SetCameraNorth;
+            ViewerEvents.OnSetCameraNorth += SetCameraNorth;
 
             firstPersonViewerCamera = GetComponent<Camera>();
 
@@ -48,11 +48,11 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void OnDestroy()
         {
-            ViewerEvents.ChangeCameraConstrain -= SetCameraConstrain;
-            ViewerEvents.ChangeViewHeight -= SetCameraHeight;
-            ViewerEvents.ChangeFOV -= SetCameraFOV;
+            ViewerEvents.OnChangeCameraConstrain -= SetCameraConstrain;
+            ViewerEvents.OnViewheightChanged -= SetCameraHeight;
+            ViewerEvents.OnFOVChanged -= SetCameraFOV;
             ViewerEvents.OnResetToStart -= ResetToStart;
-            ViewerEvents.SetCameraNorth -= SetCameraNorth;
+            ViewerEvents.OnSetCameraNorth -= SetCameraNorth;
         }
 
         private void SetupViewer()
@@ -134,18 +134,11 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetCameraNorth()
         {
-            //switch (cameraConstrain)
-            //{
-            //    case CameraConstrain.CONTROL_Y:
-            //        transform.DORotate(Vector3.zero, .2f); break;
-            //    case CameraConstrain.CONTROL_BOTH:
-            //        transform.DORotate(Vector3.zero, .2f); break;
-            //    case CameraConstrain.CONTROL_NONE:
-            //         break;
-            //}
             transform.DORotate(Vector3.zero, .4f).SetEase(Ease.InOutCubic); 
             viewerBase.DORotate(Vector3.zero, .4f).SetEase(Ease.InOutCubic);
-            xRotation = 0; yRotation = 0;
+            
+            xRotation = 0; 
+            yRotation = 0;
 
             ViewerEvents.OnCameraRotation.Invoke(Vector3.zero);
         }

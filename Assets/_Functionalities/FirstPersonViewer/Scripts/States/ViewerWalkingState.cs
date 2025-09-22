@@ -22,7 +22,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             viewer.FirstPersonCamera.transform.localRotation = Quaternion.Euler(euler.x, 0f, 0f);
 
             viewer.GetGroundPosition();
-            ViewerEvents.ChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_Y);
+            ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_Y);
         }
 
         public override void OnUpdate()

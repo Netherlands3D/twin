@@ -10,14 +10,14 @@ namespace Netherlands3D.FirstPersonViewer.Events
         public static Action OnViewerExited;
 
         public static Action<MovementPresets> OnMovementPresetChanged;
+        public static Action<CameraConstrain> OnChangeCameraConstrain;
+        public static Action<float> OnViewheightChanged;
+        public static Action<float> OnFOVChanged;
+        public static Action<float> OnSpeedChanged;
 
-        public static Action<CameraConstrain> ChangeCameraConstrain;
-        public static Action<float> ChangeViewHeight;
-        public static Action<float> ChangeFOV;
-        public static Action<float> ChangeSpeed;
+        public static Action<Vector3> OnCameraRotation;
 
         public static Action OnResetToStart;
-        public static Action<Vector3> OnCameraRotation;
-        public static Action SetCameraNorth;
+        public static Action OnSetCameraNorth;
     }
 }
