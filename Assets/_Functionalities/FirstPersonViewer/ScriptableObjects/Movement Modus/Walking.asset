@@ -18,7 +18,7 @@ MonoBehaviour:
   runningMultiplier: 2
   jumpHeight: 7
   maxFallingSpeed: 55
-  stepHeight: 1
+  stepHeight: 1.5
   viewModus: 0
   viewName: Lopen
   viewIcon: {fileID: 21300000, guid: 4fabccc9e43961d48b9ce2684e3bc712, type: 3}

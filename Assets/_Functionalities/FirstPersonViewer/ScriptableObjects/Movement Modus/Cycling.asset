@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewHeight: 1.85
   fieldOfView: 60
-  speedInKm: 5000
+  speedInKm: 50
   runningMultiplier: 2
   jumpHeight: 0
   maxFallingSpeed: 55
-  stepHeight: 1
+  stepHeight: 1.5
   viewModus: 1
   viewName: Fiets
   viewIcon: {fileID: 21300000, guid: 472b5870cf490104c8d1bfb5dfb76f3b, type: 3}

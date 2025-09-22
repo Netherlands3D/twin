@@ -1,10 +1,7 @@
 using DG.Tweening;
-using Netherlands3D.Events;
 using Netherlands3D.FirstPersonViewer.Events;
-using Netherlands3D.Twin.Cameras;
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -75,6 +72,7 @@ namespace Netherlands3D.FirstPersonViewer
                 xRotation = transform.localEulerAngles.x;
                 startRotation = transform.rotation;
                 didSetup = true;
+                ViewerEvents.OnCameraRotation.Invoke(firstPersonViewerCamera.transform.forward);
             });
         }
 
@@ -139,17 +137,18 @@ namespace Netherlands3D.FirstPersonViewer
             switch (cameraConstrain)
             {
                 case CameraConstrain.CONTROL_Y:
-                    viewerBase.DORotate(Vector3.zero, .2f); xRotation = 0; yRotation = 0;
                     transform.DORotate(Vector3.zero, .2f); break;
                 case CameraConstrain.CONTROL_BOTH:
-                    viewerBase.DORotate(Vector3.zero, .2f); xRotation = 0; yRotation = 0;
                     transform.DORotate(Vector3.zero, .2f); break;
                 case CameraConstrain.CONTROL_NONE:
-                    viewerBase.DORotate(Vector3.zero, .2f); xRotation = 0; yRotation = 0;
                     transform.DORotate(Vector3.zero, .2f); break;
             }
+            viewerBase.DORotate(Vector3.zero, .2f).SetEase(Ease.InOutCubic);
+            xRotation = 0; yRotation = 0;
+
             ViewerEvents.OnCameraRotation.Invoke(Vector3.zero);
-    }
+        }
+
         private void SetCameraFOV(float FOV) => firstPersonViewerCamera.fieldOfView = FOV;
 
         public Vector3 GetEulerRotation()
