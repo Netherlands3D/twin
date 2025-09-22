@@ -7236,22 +7236,6 @@ PrefabInstance:
       propertyPath: m_Transition
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2905702030834297639, guid: 5d754f91c9971484ab04e373187cdc91,
-        type: 3}
-      propertyPath: m_Interactable
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2905702030834297639, guid: 5d754f91c9971484ab04e373187cdc91,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SwitchToNorth
-      objectReference: {fileID: 0}
-    - target: {fileID: 2905702030834297639, guid: 5d754f91c9971484ab04e373187cdc91,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.Twin.PackageStagingArea.eu.netherlands3d.cameras.Runtime.Scripts.Cameras.Compass,
-        Assembly-CSharp
-      objectReference: {fileID: 0}
     - target: {fileID: 3303049918096478673, guid: 5d754f91c9971484ab04e373187cdc91,
         type: 3}
       propertyPath: m_AnchorMax.x
