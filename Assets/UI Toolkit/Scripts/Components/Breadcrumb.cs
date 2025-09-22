@@ -8,12 +8,13 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class Breadcrumb : VisualElement
     {
+        private int CurrentCrumbIndex => crumbs.Count - 1;
+        private int PreviousCrumbIndex => CurrentCrumbIndex - 1;
+
         // ---- CSS / UXML constants ----
-        private const string RootClass = "breadcrumb";
         private const string NoLeadingIconClass = "no-leading-icon";
         private const string NoBackButtonClass = "no-back-button";
         private const string LeadingIconClass = "leadingicon";
-        private const string BackButtonName = "BackButton";
         private const string TrailName = "Trail";
         private const string SeparatorClass = "separator";
         private const string CrumbLinkClass = "crumb-link";
@@ -21,8 +22,9 @@ namespace Netherlands3D.UI.Components
         private const string CurrentClass = "current";
 
         // ---- Cached references (set after CloneTree) ----
-        private Icon _leadingIcon;
-        private VisualElement _trail;
+        private readonly Icon leadingIcon;
+        private readonly VisualElement trail;
+        private readonly BackButton backButton;
 
         // ---- Visibility toggles (default ON) ----
         private bool showLeadingIcon = true;
@@ -33,7 +35,13 @@ namespace Netherlands3D.UI.Components
         public bool ShowLeadingIcon
         {
             get => showLeadingIcon;
-            set { if (showLeadingIcon != value) { showLeadingIcon = value; ApplyVisibility(); } }
+            set
+            {
+                if (showLeadingIcon == value) return;
+                
+                showLeadingIcon = value;
+                ApplyVisibility();
+            }
         }
 
         /// <summary>Show or hide the back button. Default: true.</summary>
@@ -41,7 +49,13 @@ namespace Netherlands3D.UI.Components
         public bool ShowBackButton
         {
             get => showBackButton;
-            set { if (showBackButton != value) { showBackButton = value; ApplyVisibility(); } }
+            set
+            {
+                if (showBackButton == value) return;
+                
+                showBackButton = value;
+                ApplyVisibility();
+            }
         }
 
         /// <summary>
@@ -50,12 +64,22 @@ namespace Netherlands3D.UI.Components
         [UxmlAttribute("leading-icon-image")]
         public Icon.IconImage LeadingIconImageExposed
         {
-            get => _leadingIcon != null ? _leadingIcon.Image : default;
-            set { if (_leadingIcon != null) _leadingIcon.Image = value; }
+            get => leadingIcon != null ? leadingIcon.Image : default;
+            set
+            {
+                if (leadingIcon == null) return;
+                
+                leadingIcon.Image = value;
+            }
         }
 
         // ---- Data model ----
-        public struct Crumb { public string Label; public string Route; }
+        public record Crumb
+        {
+            public string Label;
+            public object Target;
+        }
+
         private readonly List<Crumb> crumbs = new();
 
         /// <summary>Raised when a non-last crumb is clicked: (index, crumb).</summary>
@@ -72,21 +96,20 @@ namespace Netherlands3D.UI.Components
             if (ss != null) styleSheets.Add(ss);
 
             // Cache references now that tree is cloned
-            _leadingIcon = this.Q<Icon>(className: LeadingIconClass);
-            _trail = this.Q(TrailName);
+            leadingIcon = this.Q<Icon>(className: LeadingIconClass);
+            backButton = this.Q<BackButton>();
+            backButton.Clicked += GoBack;
+            trail = this.Q(TrailName);
 
             // Ensure defaults are reflected in classes on attach
-            RegisterCallback<AttachToPanelEvent>(_ =>
-            { 
-                ApplyVisibility(); 
-            });
+            RegisterCallback<AttachToPanelEvent>(_ => ApplyVisibility());
         }
 
         /// <summary>Toggle root classes for visibility based on current booleans.</summary>
         private void ApplyVisibility()
         {
-            EnableInClassList(NoLeadingIconClass, !showLeadingIcon);
-            EnableInClassList(NoBackButtonClass, !showBackButton);
+            EnableInClassList(NoLeadingIconClass, !showLeadingIcon || CurrentCrumbIndex > 0);
+            EnableInClassList(NoBackButtonClass, !showBackButton || CurrentCrumbIndex == 0);
         }
 
         /// <summary>Replace the entire crumb path and rebuild the UI.</summary>
@@ -98,10 +121,24 @@ namespace Netherlands3D.UI.Components
         }
 
         /// <summary>Add a single crumb at the end and rebuild.</summary>
-        public void AddCrumb(string label, string route)
+        public void AddCrumb(string label, object target)
         {
-            crumbs.Add(new Crumb { Label = label, Route = route });
+            crumbs.Add(new Crumb { Label = label, Target = target });
             RebuildTrail();
+        }
+
+        public void GoTo(int index)
+        {
+            if (index < 0 || index >= CurrentCrumbIndex) return;
+
+            CrumbClicked?.Invoke(index, crumbs[index]);
+            // Remove any crumb after this one as we have now this level selected
+            RemoveAfterCrumb(crumbs[index]);
+        }
+
+        public void GoBack()
+        {
+            GoTo(PreviousCrumbIndex);
         }
 
         /// <summary>Remove all crumbs and rebuild.</summary>
@@ -111,24 +148,36 @@ namespace Netherlands3D.UI.Components
             RebuildTrail();
         }
 
-        // ---- UI building ----
+        private void RemoveAfterCrumb(Crumb crumb)
+        {
+            var index = crumbs.IndexOf(crumb);
+            if (index >= 0 && index < CurrentCrumbIndex)
+            {
+                crumbs.RemoveRange(index + 1, crumbs.Count - (index + 1));
+            }
+
+            RebuildTrail();
+        }
+
         private void RebuildTrail()
         {
-            if (_trail == null) return;
+            if (trail == null) return;
 
-            _trail.Clear();
+            trail.Clear();
             int count = crumbs.Count;
 
             for (int i = 0; i < count; i++)
             {
-                if (i > 0) _trail.Add(CreateSeparator(i));
+                if (i > 0) trail.Add(CreateSeparator(i));
 
-                bool isLast = (i == count - 1);
-                if (isLast)
-                    _trail.Add(CreateCrumbLabel(crumbs[i].Label, i));
-                else
-                    _trail.Add(CreateCrumbButton(crumbs[i].Label, i));
+                bool isLast = i == count - 1;
+                var crumb = !isLast
+                    ? CreateCrumbButton(crumbs[i].Label, i)
+                    : CreateCrumbLabel(crumbs[i].Label, i);
+                trail.Add(crumb);
             }
+
+            ApplyVisibility();
         }
 
         private VisualElement CreateSeparator(int index)
@@ -142,8 +191,8 @@ namespace Netherlands3D.UI.Components
         {
             var btn = new Button { name = $"Crumb{index}" };
             btn.AddToClassList(CrumbLinkClass);
-            btn.text = text ?? string.Empty;    // defensive
-            btn.clicked += () => CrumbClicked?.Invoke(index, crumbs[index]);
+            btn.LabelText = text ?? string.Empty;
+            btn.clicked += () => GoTo(index);
             return btn;
         }
 

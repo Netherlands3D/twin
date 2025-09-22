@@ -2,6 +2,11 @@
     display: flex;
     flex-direction: column;
     padding-bottom: 8px;
+    background-color: yellow;
+}
+
+.listview-item > * {
+    width: 100%;
 }
 
 .listview-item.unity-list-view__item {

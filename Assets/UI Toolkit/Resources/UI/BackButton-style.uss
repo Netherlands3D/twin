@@ -1,5 +1,6 @@
 .backbutton {
     --button-bg-color: transparent;
+    --button-hover-contrast-color: var(--color-Blue300);
     --button-active-contrast-color: var(--color-Blue700);
     --button-border-padding: 0px;
     --button-border-color: transparent;
@@ -30,10 +31,8 @@
     display: none;
 }
 
-.backbutton:hover {
-}
-
-.backbutton:active {
+.backbutton:hover > #Icon {
+    -unity-background-image-tint-color: var(--button-hover-contrast-color);
 }
 
 .backbutton:active > #Icon {

@@ -4,23 +4,11 @@ using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
 {
-    /// <summary>
-    /// Small back button used inside Breadcrumb.
-    /// - Loads UXML/USS from Resources/UI.
-    /// - Exposes a Route string and a Clicked event.
-    /// - Uses NL3D Icon for the glyph; image is resolved via CSS by default.
-    /// </summary>
     [UxmlElement]
     public partial class BackButton : VisualElement
     {
-        private Icon Icon => this.Q<Icon>("Icon");
-
-        /// <summary>Optional route or token the host can use for navigation.</summary>
-        [UxmlAttribute("route")]
-        public string Route { get; set; }
-
         /// <summary>Raised when the back button is activated.</summary>
-        public event Action<string> Clicked;
+        public event Action Clicked;
 
         public BackButton()
         {
@@ -32,22 +20,20 @@ namespace Netherlands3D.UI.Components
             var ss = Resources.Load<StyleSheet>("UI/" + nameof(BackButton) + "-style");
             styleSheets.Add(ss);
 
-            AddToClassList("backbutton");
-
             // Basic interactivity
             focusable = true;
             pickingMode = PickingMode.Position;
 
             // Pointer click
-            this.RegisterCallback<ClickEvent>(_ => Clicked?.Invoke(Route));
+            RegisterCallback<ClickEvent>(_ => Clicked?.Invoke());
+
             // Keyboard: Space/Enter activate
-            this.RegisterCallback<KeyDownEvent>(e =>
+            RegisterCallback<KeyDownEvent>(e =>
             {
-                if (e.keyCode == KeyCode.Return || e.keyCode == KeyCode.Space)
-                {
-                    Clicked?.Invoke(Route);
-                    e.StopPropagation();
-                }
+                if (e.keyCode != KeyCode.Return && e.keyCode != KeyCode.Space) return;
+
+                Clicked?.Invoke();
+                e.StopPropagation();
             });
         }
     }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Netherlands3D._Application._Twin;
 using Netherlands3D.Catalogs;
 using Netherlands3D.UI.Components;
@@ -13,10 +14,11 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class AssetLibraryPanel : VisualElement
     {
-        private ListView listView;
-        private List<ICatalogItem> currentPageWithItems;
         private AssetLibrary assetLibrary;
+        private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
+        private Breadcrumb breadcrumb;
+        private Breadcrumb Breadcrumb => breadcrumb ??= this.Q<Breadcrumb>();
 
         public AssetLibraryPanel()
         {
@@ -31,6 +33,15 @@ namespace Netherlands3D.UI.Panels
             // Virtualization and selection
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             ListView.selectionType = SelectionType.None;
+            
+            ListView.makeItem = MakeListViewItem;
+            ListView.bindItem = BindListViewItem;
+            Breadcrumb.CrumbClicked += OnBreadcrumbClicked;
+        }
+
+        private void OnBreadcrumbClicked(int _, Breadcrumb.Crumb crumb)
+        {
+            ShowItemsFromCollection(crumb.Target as ICatalogItemCollection);
         }
 
         public void Show()
@@ -46,50 +57,57 @@ namespace Netherlands3D.UI.Panels
         public async void SetAssetLibrary(AssetLibrary assetLibrary)
         {
             this.assetLibrary = assetLibrary;
+            Breadcrumb.ClearCrumbs();
 
             // TODO: show loader
-            var itemCollectionPage = await assetLibrary.Catalog.BrowseAsync();
-            var catalogItems = await itemCollectionPage.GetItemsAsync();
+
+            var catalogItemCollection = await assetLibrary.Catalog.BrowseAsync();
+            Breadcrumb.AddCrumb("Bibliotheek", catalogItemCollection);
+            ShowItemsFromCollection(catalogItemCollection);
+        }
+
+        private async void ShowItemsFromCollection(ICatalogItemCollection itemCollectionPage)
+        {
+            // TODO: show loader
             
-            currentPageWithItems = catalogItems.ToList();
-            ListView.itemsSource = currentPageWithItems;
-            ListView.bindItem = BindListViewItem;
+            var currentCatalogItems = await itemCollectionPage.GetItemsAsync();
+
+            ListView.itemsSource = currentCatalogItems.ToList();
             ListView.RefreshItems();
         }
-        
-        private void BindListViewItem(VisualElement item, int index)
+
+        private VisualElement MakeListViewItem()
         {
-            var content = item.Q("Content");
-            if (content == null) return;
+            var button = new Button { name = "LayerButton" };
+            button.RegisterCallback<ClickEvent>(_ => OpenAsset(button.userData as ICatalogItem));
+            
+            var listViewItem = new ListViewItem();
+            listViewItem.Add(button);
 
-            var button = EnsureButtonExists(content);
-
-            ICatalogItem catalogItem = currentPageWithItems[index];
-            button.LabelText = catalogItem.Title;
-            button.Image = Icon.IconImage.Folder;
-            button.RegisterCallback<ClickEvent>(evt =>
-            {
-                assetLibrary.Load(catalogItem);
-            });
+            return listViewItem;
         }
 
-        private static Button EnsureButtonExists(VisualElement content)
+        private void OpenAsset(ICatalogItem catalogItem)
         {
-            Button button = content.Q<Button>("LayerButton");
-            if (button != null) return button;
-            
-            button = new Button
+            if (catalogItem is ICatalogItemCollection collection)
             {
-                name = "LayerButton",
-                style =
-                {
-                    alignSelf = Align.Stretch,
-                    flexGrow = 1
-                }
-            };
-            content.Add(button);
+                Breadcrumb.AddCrumb(catalogItem.Title, collection);
+                ShowItemsFromCollection(collection);
+                return;
+            }
 
-            return button;
+            assetLibrary.Load(catalogItem);
+        }
+
+        private void BindListViewItem(VisualElement item, int index)
+        {
+            if (item is not ListViewItem listViewItem) return;
+            if (listViewItem.Q<Button>() is not Button button) return;
+            
+            ICatalogItem catalogItem = ListView.itemsSource[index] as ICatalogItem;
+            button.LabelText = catalogItem.Title;
+            button.Image = catalogItem is ICatalogItemCollection ? Icon.IconImage.Folder : Icon.IconImage.Map;
+            button.userData = catalogItem;
         }
     }
 }
