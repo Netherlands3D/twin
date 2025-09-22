@@ -22,7 +22,7 @@ MonoBehaviour:
   m_ReferenceSpritePixelsPerUnit: 72
   m_PixelsPerUnit: 100
   m_Scale: 1
-  m_ReferenceDpi: 72
+  m_ReferenceDpi: 96
   m_FallbackDpi: 72
   m_ReferenceResolution: {x: 1200, y: 800}
   m_ScreenMatchMode: 0
