@@ -68,8 +68,6 @@ namespace Netherlands3D.CityJson.Visualisation
 
         public UnityEvent<GameObject> jsonVisualized;
         [SerializeField] private CityMaterialConverter materialConverter;
-        [SerializeField] private SemanticMaterials[] materials;
-        [SerializeField] private Material defaultMaterial; //TODO get this automaticaly from the material generator?
 
 #if UNITY_EDITOR
         // allow to change the visible LOD from the inspector during runtime
@@ -176,19 +174,6 @@ namespace Netherlands3D.CityJson.Visualisation
 
             if (meshCollider)
                 meshCollider.sharedMesh = ActiveMesh;
-        }
-
-        private Material GetMaterial(SurfaceSemanticType type)
-        {
-            var mat = materials.FirstOrDefault(m => m.Type == type);
-            if (mat != null)
-                return mat.Material;
-
-            mat = materials.FirstOrDefault(m => m.Type == SurfaceSemanticType.Null);
-            if (mat != null)
-                return mat.Material;
-
-            return null;
         }
 
         //create the meshes for the object geometries
