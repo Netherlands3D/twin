@@ -12,6 +12,9 @@ namespace Netherlands3D.FirstPersonViewer.UI
         private RectTransform opendPrefab;
         [SerializeField] private RectTransform contentParent;
 
+        private bool isAnimating;
+        private Sequence currentSequence;
+
         private void Start()
         {
             rect = GetComponent<RectTransform>();
@@ -19,13 +22,17 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public void OpenWindow(RectTransform windowPrefab)
         {
-            Sequence openSequence = DOTween.Sequence();
+            if (isAnimating) return;
+            isAnimating = true;
+
+            currentSequence?.Kill();
+            currentSequence = DOTween.Sequence();
 
             if (isOpen)
             {
-                openSequence.Append(rect.DOAnchorPosY(-rect.sizeDelta.y - 5, 1f));
+                currentSequence.Append(rect.DOAnchorPosY(-rect.sizeDelta.y - 5, .75f).SetEase(Ease.InSine));
 
-                openSequence.AppendCallback(() =>
+                currentSequence.AppendCallback(() =>
                 {
                     foreach (Transform t in contentParent)
                     {
@@ -37,17 +44,24 @@ namespace Netherlands3D.FirstPersonViewer.UI
             //Switch
             if (windowPrefab != opendPrefab)
             {
-                openSequence.AppendCallback(() => Instantiate(windowPrefab, contentParent));
-                openSequence.AppendInterval(0f);
-                openSequence.AppendCallback(() =>
+                currentSequence.AppendCallback(() =>
                 {
+                    RectTransform windowPanel = Instantiate(windowPrefab, contentParent);
+
                     LayoutRebuilder.ForceRebuildLayoutImmediate(contentParent);
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
                     Canvas.ForceUpdateCanvases();
-                    transform.localPosition = new Vector3(-135, -rect.sizeDelta.y, 0);
+
+                    windowPanel.anchoredPosition = new Vector2(windowPanel.anchoredPosition.x, -rect.sizeDelta.y);
+
                 });
-                openSequence.Append(rect.DOAnchorPosY(56, 1f));
+
+                currentSequence.AppendInterval(Time.deltaTime);
+                currentSequence.Append(rect.DOAnchorPosY(56, .75f)).SetEase(Ease.OutSine);
 
                 opendPrefab = windowPrefab;
+
+                isOpen = true;
             }
             else
             {
@@ -55,8 +69,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
                 opendPrefab = null;
             }
 
-            openSequence.Play();
-            isOpen = true;
+            currentSequence.OnComplete(() => isAnimating = false);
+            currentSequence.Play();
         }
     }
 }
