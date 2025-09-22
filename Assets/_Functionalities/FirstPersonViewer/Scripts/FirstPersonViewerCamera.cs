@@ -109,11 +109,11 @@ namespace Netherlands3D.FirstPersonViewer
                     break;
                 case CameraConstrain.CONTROL_BOTH:
                     viewerBase.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-                    ViewerEvents.OnCameraRotation?.Invoke(viewerBase.localEulerAngles);
+                    ViewerEvents.OnCameraRotation?.Invoke(viewerBase.forward);
                     break;
                 case CameraConstrain.CONTROL_NONE:
                     transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
-                    ViewerEvents.OnCameraRotation?.Invoke(transform.localEulerAngles);
+                    ViewerEvents.OnCameraRotation?.Invoke(transform.forward);
                     break;
             }
         }
@@ -136,17 +136,20 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetCameraNorth()
         {
-            Debug.Log("Reset to north!");
             switch (cameraConstrain)
             {
                 case CameraConstrain.CONTROL_Y:
+                    viewerBase.DORotate(Vector3.zero, .2f); xRotation = 0; yRotation = 0;
                     transform.DORotate(Vector3.zero, .2f); break;
                 case CameraConstrain.CONTROL_BOTH:
+                    viewerBase.DORotate(Vector3.zero, .2f); xRotation = 0; yRotation = 0;
                     transform.DORotate(Vector3.zero, .2f); break;
                 case CameraConstrain.CONTROL_NONE:
+                    viewerBase.DORotate(Vector3.zero, .2f); xRotation = 0; yRotation = 0;
                     transform.DORotate(Vector3.zero, .2f); break;
             }
-        }
+            ViewerEvents.OnCameraRotation.Invoke(Vector3.zero);
+    }
         private void SetCameraFOV(float FOV) => firstPersonViewerCamera.fieldOfView = FOV;
 
         public Vector3 GetEulerRotation()
