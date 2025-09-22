@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee67a7067d471274fb5ee9ab3988bc8f, type: 3}
+  m_Name: Driving
+  m_EditorClassIdentifier: 
+  viewHeight: 1.5
+  fieldOfView: 80
+  speedInKm: 100
+  runningMultiplier: 2
+  jumpHeight: 0
+  maxFallingSpeed: 55
+  stepHeight: 1.5
+  viewModus: 1
+  viewName: Auto
+  viewIcon: {fileID: 21300000, guid: dca9ce9f8c1f0d0418a06d316e41cabf, type: 3}
+  viewMesh: {fileID: -7929139438592967118, guid: e2545f50cc16d8a4e9a15892e614c838,
+    type: 3}

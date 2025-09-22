@@ -134,16 +134,17 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetCameraNorth()
         {
-            switch (cameraConstrain)
-            {
-                case CameraConstrain.CONTROL_Y:
-                    transform.DORotate(Vector3.zero, .2f); break;
-                case CameraConstrain.CONTROL_BOTH:
-                    transform.DORotate(Vector3.zero, .2f); break;
-                case CameraConstrain.CONTROL_NONE:
-                    transform.DORotate(Vector3.zero, .2f); break;
-            }
-            viewerBase.DORotate(Vector3.zero, .2f).SetEase(Ease.InOutCubic);
+            //switch (cameraConstrain)
+            //{
+            //    case CameraConstrain.CONTROL_Y:
+            //        transform.DORotate(Vector3.zero, .2f); break;
+            //    case CameraConstrain.CONTROL_BOTH:
+            //        transform.DORotate(Vector3.zero, .2f); break;
+            //    case CameraConstrain.CONTROL_NONE:
+            //         break;
+            //}
+            transform.DORotate(Vector3.zero, .4f).SetEase(Ease.InOutCubic); 
+            viewerBase.DORotate(Vector3.zero, .4f).SetEase(Ease.InOutCubic);
             xRotation = 0; yRotation = 0;
 
             ViewerEvents.OnCameraRotation.Invoke(Vector3.zero);
