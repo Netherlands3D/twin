@@ -165,18 +165,7 @@ namespace Netherlands3D.FirstPersonViewer
             if(movementPresets.viewMesh != null) meshFilter.mesh = movementPresets.viewMesh;
             else meshFilter.mesh = null;
 
-            switch (movementPresets.viewModus)
-            {
-                case ViewModus.ViewModus.STANDARD:
-                    fsm.SwitchState(typeof(ViewerWalkingState));
-                    break;
-                case ViewModus.ViewModus.VEHICULAR:
-                    fsm.SwitchState(typeof(ViewerVehicularState));
-                    break;
-                case ViewModus.ViewModus.FREECAM:
-                    fsm.SwitchState(typeof(ViewerFlyingState));
-                    break;
-            }
+            fsm.SwitchState(movementPresets.GetViewerState());
         }
 
         private void SetMovementSpeed(float speed) => MovementSpeed = speed / 3.6f;

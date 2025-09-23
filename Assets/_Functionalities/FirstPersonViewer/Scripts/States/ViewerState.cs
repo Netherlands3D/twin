@@ -19,7 +19,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             transform = viewer.transform;
         }
 
-
         public virtual void OnEnter() { }
         public virtual void OnExit() { }
         public virtual void OnUpdate() { }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
@@ -19,12 +20,26 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public string viewName;
         public Sprite viewIcon;
         public Mesh viewMesh;
-    }
-    public enum ViewModus
-    {
-        STANDARD = 0,
-        VEHICULAR = 1,
-        FREECAM = 2
+
+        public Type GetViewerState()
+        {
+            switch (viewModus)
+            {
+                default:
+                case ViewModus.STANDARD:
+                    return typeof(ViewerWalkingState);
+                case ViewModus.VEHICULAR:
+                    return typeof(ViewerVehicularState);
+                case ViewModus.FREECAM:
+                    return typeof(ViewerFlyingState);
+            }
+        }
+        public enum ViewModus
+        {
+            STANDARD = 0,
+            VEHICULAR = 1,
+            FREECAM = 2
+        }
     }
 }
 
