@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
@@ -10,6 +6,11 @@ using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Utility;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Netherlands3D.CityJson.Visualisation;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.CityJSON
@@ -55,10 +56,16 @@ namespace Netherlands3D.Functionalities.CityJSON
             var json = File.ReadAllText(file);
             var cityJson = GetComponent<CityJson.Structure.CityJSON>();
             cityJson.ParseCityJSON(json);
-            OnCityJSONImported(cityJson);
+
+            foreach (var co in cityJson.CityObjects)
+            {
+                co.GetComponent<CityObjectVisualizer>().cityObjectVisualized.AddListener(OnCityObjectVisualized);
+            }
+
+            SetCityJSONPosition(cityJson);
         }
 
-        private void OnCityJSONImported(CityJson.Structure.CityJSON cityJson)
+        private void SetCityJSONPosition(CityJson.Structure.CityJSON cityJson)
         {
             var layerGameObject = GetComponent<HierarchicalObjectLayerGameObject>();
 
@@ -67,28 +74,27 @@ namespace Netherlands3D.Functionalities.CityJSON
                 var transformProperty = layerGameObject.LayerData.GetProperty<TransformLayerPropertyData>();
                 layerGameObject.WorldTransform.MoveToCoordinate(transformProperty.Position);
             }
-            else if (transform.childCount > 0)
+            else
             {
-                // transform property is not set, we need to set it if it is georeferenced, if not, we just keep the position it was at.
                 var referencePosition = cityJson.AbsoluteCenter;
                 if (EPSG7415.IsValid(referencePosition.x, referencePosition.y, referencePosition.z, out var origin))
                 {
                     PositionGeoReferencedCityJson(layerGameObject, origin);
                 }
             }
+        }
 
+        private void OnCityObjectVisualized(CityObjectVisualizer visualizer)
+        {
             if (addMeshCollidersToCityObjects)
             {
-                foreach (var meshFilter in GetComponentsInChildren<MeshFilter>())
-                {
-                    meshFilter.gameObject.AddComponent<MeshCollider>();
-                }
+                visualizer.gameObject.AddComponent<MeshCollider>();
             }
 
             // Object is loaded / replaced - trigger the application of styling
-            layerGameObject.ApplyStyling();
+            var layerGameObject = GetComponent<HierarchicalObjectLayerGameObject>();
+            layerGameObject.ApplyStylingToRenderer(visualizer.GetComponent<Renderer>());
         }
-        
 
         private void PositionGeoReferencedCityJson(HierarchicalObjectLayerGameObject layerGameObject, Coordinate origin)
         {
@@ -106,6 +112,12 @@ namespace Netherlands3D.Functionalities.CityJSON
                 var transformProperty = layerGameObject.LayerData.GetProperty<TransformLayerPropertyData>();
                 layerGameObject.WorldTransform.MoveToCoordinate(transformProperty.Position); //apply saved user changes to position.
             }
+        }
+
+        public void SetCityJSONPathInPropertyData(string fullPath)
+        {
+            var propertyData = PropertyData as CityJSONPropertyData;
+            propertyData.CityJsonFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
         }
 
         private string GetCityJsonPathFromPropertyData()

@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -317,8 +317,6 @@ namespace Netherlands3D.Twin.Layers
             ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
         }
-
-        
 
         public bool HasProperty<T>() where T : LayerPropertyData
         {

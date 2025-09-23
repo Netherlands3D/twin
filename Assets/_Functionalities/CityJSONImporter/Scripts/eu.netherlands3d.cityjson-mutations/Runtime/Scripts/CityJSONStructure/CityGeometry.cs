@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using SimpleJSON;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace Netherlands3D.CityJson.Structure
 {
@@ -29,10 +27,13 @@ namespace Netherlands3D.CityJson.Structure
         public GeometryType Type { get; private set; }
         public int Lod { get; private set; }
         public CityBoundary BoundaryObject { get; private set; }
+        public bool UseSingleMaterialForEntireGeometry => !IncludeMaterials || MaterialIndicesForFullGeometry.Count > 0;
+        public Dictionary<string, int> MaterialThemes { get; private set; } = new();
+        public List<int> MaterialIndicesForFullGeometry { get; private set; } = new();
         public bool IncludeSemantics { get; set; }
-        public bool IncludeMaterials { get; set; } //todo: Materials currently not implemented yet
+        public bool IncludeMaterials { get; set; }
         public bool IncludeTextures { get; set; } //todo: Textures currently not implemented yet
-
+        
         //Certain CityObjectTypes can only have certain types of geometry. This is described in the specs
         public static bool IsValidType(CityObjectType cityObjectType, GeometryType geometryType)
         {
@@ -132,8 +133,8 @@ namespace Netherlands3D.CityJson.Structure
 
             if (IncludeSemantics)
                 geometryNode["semantics"] = CityGeometrySemantics.GetSemanticObject(BoundaryObject);
-            if (IncludeMaterials)
-                geometryNode["material"] = GetMaterials();
+            //if (IncludeMaterials)
+            //geometryNode["material"] = GetMaterials();
             if (IncludeTextures)
                 geometryNode["texture"] = GetTextures();
 
@@ -153,7 +154,7 @@ namespace Netherlands3D.CityJson.Structure
 
             //private CityBoundary boundaryObject;
             var semanticsNode = geometryNode["semantics"];
-            var materialsNode = geometryNode["materials"];
+            var materialsNode = geometryNode["material"];
             var texturesNode = geometryNode["texture"];
 
             var includeSemantics = semanticsNode.Count > 0;
@@ -165,12 +166,13 @@ namespace Netherlands3D.CityJson.Structure
             if (includeSemantics)
                 CityGeometrySemantics.FromJSONNode(semanticsNode, geometry.BoundaryObject);
 
-            return geometry;
-        }
+            if (includeMaterials)
+            {
+                // geometry.MaterialIndices = GetMaterialsFromJSONNode(materialsNode["default_theme"]);
+                CityMaterial.FromJSONNode(materialsNode, geometry);
+            }
 
-        private JSONNode GetMaterials()
-        {
-            throw new System.NotImplementedException();
+            return geometry;
         }
 
         private JSONNode GetTextures()
@@ -183,6 +185,37 @@ namespace Netherlands3D.CityJson.Structure
             var multiSurface = new CityMultiOrCompositeSurface();
             multiSurface.FromMesh(mesh);
             BoundaryObject = multiSurface;
+        }
+
+        public void AddMaterialTheme(string themeName, int themeIndex)
+        {
+            MaterialThemes.Add(themeName, themeIndex);
+        }
+
+        public void AddMaterialIndex(int themeIndex, int materialIndex)
+        {
+            MaterialIndicesForFullGeometry.Insert(themeIndex, materialIndex);
+        }
+
+        public List<int> GetMaterialIndices(string themeName)
+        {
+            if (MaterialThemes.TryGetValue(themeName, out int themeIndex))
+            {
+                return new List<int> { MaterialIndicesForFullGeometry[themeIndex] };
+            }
+
+            //theme not found, return the first theme if there are themes defined
+            if (MaterialIndicesForFullGeometry.Count > 0)
+            {
+                return new List<int>(){MaterialIndicesForFullGeometry[0]};
+            }
+            
+            return new List<int>(); //no materials defined
+        }
+
+        public int GetThemeIndex(string themeName)
+        {
+            return MaterialThemes.GetValueOrDefault(themeName, 0); //return the first available theme index when the theme name is not found
         }
     }
 }

@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1646213389209705716}
   - component: {fileID: 8128677453936289607}
   - component: {fileID: 2362124063262672280}
-  - component: {fileID: 3482478533686408333}
   - component: {fileID: -8031406265216150104}
   - component: {fileID: -5290351893147975871}
   - component: {fileID: 5482031777458148174}
@@ -63,6 +62,7 @@ MonoBehaviour:
   onHide:
     m_PersistentCalls:
       m_Calls: []
+  DebugBoundingBox: 0
   objectCreated:
     m_PersistentCalls:
       m_Calls: []
@@ -111,18 +111,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propertySectionPrefab: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672,
     type: 3}
---- !u!114 &3482478533686408333
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9204913902124509902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ffc363b02a0945c7ad8cdc45e55f5ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-8031406265216150104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,6 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraDistanceFromGeoReferencedObject: 150
+  addMeshCollidersToCityObjects: 1
 --- !u!114 &5482031777458148174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,7 +153,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cityObjectPrefab: {fileID: 1807838613596807431, guid: 5db4ea97f9b3f4daa97b8121c433dd2c,
     type: 3}
-  useAsRelativeRDCenter: 0
-  onCityJSONReceived: {fileID: 0}
-  onAllCityObjectsProcessed: {fileID: 0}
-  isCityJSONType: {fileID: 0}
+  onAllCityObjectsProcessed:
+    m_PersistentCalls:
+      m_Calls: []
+  isCityJSONType:
+    m_PersistentCalls:
+      m_Calls: []
+  materialTemplate: {fileID: 2100000, guid: 4964f8b7303387145a5d0c6b232294cd, type: 2}
