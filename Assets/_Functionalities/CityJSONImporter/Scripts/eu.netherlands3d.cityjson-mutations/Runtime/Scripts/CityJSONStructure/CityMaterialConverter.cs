@@ -12,7 +12,7 @@ namespace Netherlands3D.CityJson.Visualisation
         [SerializeField] private SemanticMaterials[] semanticMaterials;
         private Material materialTemplate;
         public Material[] cachedMaterials;
-        
+
         public void Initialize(CityAppearance appearance)
         {
             var nullMaterial = semanticMaterials.FirstOrDefault(sm => sm.Type == SurfaceSemanticType.Null);
@@ -67,27 +67,22 @@ namespace Netherlands3D.CityJson.Visualisation
         {
             var mat = new Material(materialTemplate);
             mat.name = matInfo.Name;
+            
+            Color diffuseColor = matInfo.DiffuseColor.HasValue ? matInfo.DiffuseColor.Value : Color.white;
+            float ambientIntensity = matInfo.AmbientIntensity.HasValue ? matInfo.AmbientIntensity.Value : 1f;
 
-            if (matInfo.DiffuseColor.HasValue)
-            {
-                mat.color = matInfo.DiffuseColor.Value;
-            }
-
-            if (matInfo.SpecularColor.HasValue)
-            {
-                mat.SetColor("_SpecColor", matInfo.SpecularColor.Value);
-            }
-
-            //if (matInfo.EmissiveColor.HasValue)
-            //{
-            //    mat.SetColor("_EmissionColor", matInfo.EmissiveColor.Value);
-            //    mat.EnableKeyword("_EMISSION");
-            //}
-
+            Color materialColor = diffuseColor * ambientIntensity;
+            mat.color = materialColor;
+            
             if (matInfo.Shininess.HasValue)
             {
-                mat.SetFloat("_Glossiness", matInfo.Shininess.Value);
+                mat.SetFloat("_Smoothness", matInfo.Shininess.Value);
             }
+            
+            // Emission is currently not supported
+            // SpecularColor is currently not supported
+            // Transparency is currently not supported
+            // Flat shading (isSmooth = false) is currently not supported
 
             return mat;
         }
