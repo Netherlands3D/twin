@@ -12,14 +12,17 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnEnable()
         {
+            ViewerEvents.OnViewheightChanged += OnViewHeightChanged;
+            ViewerEvents.OnFOVChanged += OnFOVChanged;   
+            ViewerEvents.OnSpeedChanged += OnSpeedChanged;
+        }
+
+        private void Start()
+        {
             //Not a big fan of this
             viewheightInput.text = FirstPersonViewerData.Instance.ViewHeight.ToString();
             fieldOfViewInput.text = FirstPersonViewerData.Instance.FOV.ToString();
             speedInput.text = FirstPersonViewerData.Instance.Speed.ToString();
-
-            ViewerEvents.OnViewheightChanged += OnViewHeightChanged;
-            ViewerEvents.OnFOVChanged += OnFOVChanged;   
-            ViewerEvents.OnSpeedChanged += OnSpeedChanged;
         }
 
         private void OnDisable()
