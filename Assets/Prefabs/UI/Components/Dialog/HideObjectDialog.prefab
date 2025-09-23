@@ -255,6 +255,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BagIdRow
       objectReference: {fileID: 0}
+    - target: {fileID: 5504585733611791607, guid: df8e4a22a351ae24daddf044727a7035,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6459790589391533589, guid: df8e4a22a351ae24daddf044727a7035,
         type: 3}
       propertyPath: m_Pivot.x
