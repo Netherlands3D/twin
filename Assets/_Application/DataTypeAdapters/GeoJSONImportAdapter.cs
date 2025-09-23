@@ -13,7 +13,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/GeoJSONImportAdapter", fileName = "GeoJSONImportAdapter", order = 0)]
     public class GeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter
     {
-        [SerializeField] private UnityEvent<string> displayErrorMessageEvent;
+        [SerializeField] private UnityEvent<string> displayErrorMessageEvent = new();
 
         public bool Supports(LocalFile localFile)
         {
@@ -78,10 +78,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             
             // TODO: double check if the title in the args above don't already do this?
             newLayer.gameObject.name = layerName;
-            if (displayErrorMessageEvent != null)
-            {
-                newLayer.Parser.OnParseError.AddListener(displayErrorMessageEvent.Invoke);
-            }
+            newLayer.Parser.OnParseError.AddListener(displayErrorMessageEvent.Invoke);
         }
 
         private static string CreateName(LocalFile localFile)

@@ -65,6 +65,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         protected override void OnDestroy()
         {
             RemoveCustomColorSet();
+            base.OnDestroy();
         }
 
         public void RemoveCustomColorSet()
