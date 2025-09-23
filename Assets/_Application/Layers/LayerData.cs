@@ -1,12 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -178,7 +179,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent ParentChanged = new();
         [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
-        [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyAdded = new();
+        [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertySet = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleAdded = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleRemoved = new();
@@ -310,24 +311,31 @@ namespace Netherlands3D.Twin.Layers
             LayerDestroyed.Invoke();
         }
 
-        public void AddProperty(LayerPropertyData propertyData)
+        
+        public bool HasProperty<T>() where T : LayerPropertyData
         {
-            var existingProperty = layerProperties.FirstOrDefault(prop => prop.GetType() == propertyData.GetType());
-            if (existingProperty != null)
+            return LayerProperties.Contains<T>();
+        }
+
+        public T GetProperty<T>() where T : LayerPropertyData
+        {
+            return LayerProperties.Get<T>();
+        }
+
+        public void SetProperty<T>(T propertyData) where T : LayerPropertyData
+        {
+            if (LayerProperties.Set(propertyData))
             {
-                Debug.Log("A property of type" +propertyData.GetType() + " already exists for " + Name + ". Overwriting the old PropertyData");
-                int index = layerProperties.IndexOf(existingProperty);
-                layerProperties[index] = propertyData;
+                PropertySet.Invoke(propertyData);
             }
-            
-            layerProperties.Add(propertyData);
-            PropertyAdded.Invoke(propertyData);
         }
 
         public void RemoveProperty(LayerPropertyData propertyData)
         {
-            layerProperties.Remove(propertyData);
-            PropertyRemoved.Invoke(propertyData);
+            if (LayerProperties.Remove(propertyData))
+            {
+                PropertyRemoved.Invoke(propertyData);
+            }
         }
 
         public void AddStyle(LayerStyle style)

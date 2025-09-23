@@ -214,14 +214,20 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void ApplyStyling()
         {
-            int? bitMask = LayerData.DefaultSymbolizer.GetMaskLayerMask();
-            if (bitMask == null)
-                bitMask = LayerGameObject.DEFAULT_MASK_BIT_MASK;
-
-            UpdateMaskBitMask(bitMask.Value);
+            var bitMask = GetBitMask();
+            UpdateMaskBitMask(bitMask);
             // var mask = LayerStyler.GetMaskLayerMask(this); todo?
             //initialize the layer's style and emit an event for other services and/or UI to update
             OnStylingApplied.Invoke();
+        }
+
+        protected int GetBitMask()
+        {
+            int? bitMask = LayerData.DefaultSymbolizer.GetMaskLayerMask();
+            if (bitMask == null)
+                bitMask = DEFAULT_MASK_BIT_MASK;
+            
+            return bitMask.Value;
         }
 
         public virtual void UpdateMaskBitMask(int bitmask)

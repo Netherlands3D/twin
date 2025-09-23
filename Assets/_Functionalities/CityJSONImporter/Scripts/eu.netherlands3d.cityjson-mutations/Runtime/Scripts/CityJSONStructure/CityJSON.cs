@@ -22,7 +22,7 @@ namespace Netherlands3D.CityJson.Structure
         public JSONNode Metadata { get; private set; }
         public Vector3Double TransformScale { get; private set; } = new Vector3Double(1d, 1d, 1d);
         public Vector3Double TransformTranslate { get; private set; } = new Vector3Double(0d, 0d, 0d);
-        public JSONNode Appearance { get; private set; }
+        public CityAppearance Appearance { get; private set; }
         public JSONNode GeometryTemplates { get; private set; }
 
         public List<CityObject> CityObjects { get; private set; } = new List<CityObject>();
@@ -44,6 +44,7 @@ namespace Netherlands3D.CityJson.Structure
 
         [Tooltip("If assigned it will call this event instead of Asserting the type field is \"CityJSON\"")]
         public UnityEvent<bool> isCityJSONType; //if assigned it will call this event instead of Asserting the type field is "CityJSON"
+        [SerializeField] private Material materialTemplate; //TODO get this automaticaly from the material generator?
 
         public static CityJSON CreateEmpty()
         {
@@ -89,7 +90,7 @@ namespace Netherlands3D.CityJson.Structure
             //optional data
             Extensions = node["extensions"];
             Metadata = node["metadata"];
-            Appearance = node["appearance"]; //todo: not implemented yet
+            Appearance = CityAppearance.FromJSON(node["appearance"]);
             GeometryTemplates = node["geometry-templates"]; //todo: not implemented yet
             var transformNode = node["transform"];
 
@@ -171,7 +172,7 @@ namespace Netherlands3D.CityJson.Structure
                     go = Instantiate(cityObjectPrefab, transform);
                     co = go.GetComponent<CityObject>();
                 }
-
+                co.SetCityAppearance(Appearance);
                 co.FromJSONNode(cityObjectNode.Key, cityObjectNode.Value, CoordinateSystem, parsedVertices);
                 cityObjects.Add(cityObjectNode.Value, co);
             }
