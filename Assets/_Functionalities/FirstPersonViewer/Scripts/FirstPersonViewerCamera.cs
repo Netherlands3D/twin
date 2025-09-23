@@ -134,8 +134,9 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetCameraNorth()
         {
-            transform.DORotate(Vector3.zero, .4f).SetEase(Ease.InOutCubic); 
-            viewerBase.DORotate(Vector3.zero, .4f).SetEase(Ease.InOutCubic);
+            input.AddCameraLockConstrain(this);
+            transform.DORotate(Vector3.zero, .4f).SetEase(Ease.InOutCubic);
+            viewerBase.DORotate(Vector3.zero, .4f).SetEase(Ease.InOutCubic).OnComplete(() => input.RemoveCameraLockConstrain(this));
             
             xRotation = 0; 
             yRotation = 0;
