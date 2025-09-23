@@ -20,9 +20,9 @@ namespace Netherlands3D.UI
             Debug.Log("Fallback DPI: " + fallbackDpi);
             Debug.Log("Screen DPI: " + Screen.dpi);
             
-            var reported = Screen.dpi > 0 ? Screen.dpi : fallbackDpi;
-            ps.scale = targetDpi / reported; // e.g., Win(96) => 0.75, Mac(72) => 1.0
-            Debug.Log("UI Scale: " + ps.scale);
+            // var reported = Screen.dpi > 0 ? Screen.dpi : fallbackDpi;
+            // ps.scale = targetDpi / reported; // e.g., Win(96) => 0.75, Mac(72) => 1.0
+            // Debug.Log("UI Scale: " + ps.scale);
         }
     }
 }
