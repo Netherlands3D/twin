@@ -49,6 +49,10 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         protected override void OnLayerInitialize()
         {
+            if (tile3DPropertyData == null)
+            {
+                LayerData.SetProperty(new Tile3DLayerPropertyData(TileSet.tilesetUrl));
+            }
             CredentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             
             // listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
