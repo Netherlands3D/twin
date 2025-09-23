@@ -1262,10 +1262,20 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1256548661617150309, guid: 0304daefec15ff34da9a1263fe57b2fe,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2117494700592838229, guid: 0304daefec15ff34da9a1263fe57b2fe,
         type: 3}
       propertyPath: m_Name
       value: CanvasWorld
+      objectReference: {fileID: 0}
+    - target: {fileID: 6700670542534746841, guid: 0304daefec15ff34da9a1263fe57b2fe,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7376965506954241684, guid: 0304daefec15ff34da9a1263fe57b2fe,
         type: 3}
@@ -1558,22 +1568,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.20579392
+      value: -0.7512772
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08769552
+      value: -0.6012348
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.89664197
+      value: 0.21253234
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.38208845
+      value: -0.17008613
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -2587,6 +2597,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4191284208189608404, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4382893533792524090, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3375,6 +3390,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -15.205
       objectReference: {fileID: 0}
+    - target: {fileID: 2652659933462131470, guid: 32168277a01252346bf6d9fd7aaebe0e,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5018310546720804204, guid: 32168277a01252346bf6d9fd7aaebe0e,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -3383,6 +3403,11 @@ PrefabInstance:
     - target: {fileID: 5018310546720804204, guid: 32168277a01252346bf6d9fd7aaebe0e,
         type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7938876872399145723, guid: 32168277a01252346bf6d9fd7aaebe0e,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8021461611406565324, guid: 32168277a01252346bf6d9fd7aaebe0e,
