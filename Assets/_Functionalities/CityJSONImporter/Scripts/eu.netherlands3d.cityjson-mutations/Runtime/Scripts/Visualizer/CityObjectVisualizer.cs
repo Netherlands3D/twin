@@ -66,7 +66,7 @@ namespace Netherlands3D.CityJson.Visualisation
         public int ActiveLod => activeLOD;
         public Mesh ActiveMesh { get; private set; }
 
-        public UnityEvent<GameObject> jsonVisualized;
+        public UnityEvent<CityObjectVisualizer> cityObjectVisualized;
         [SerializeField] private CityMaterialConverter materialConverter;
 
 #if UNITY_EDITOR
@@ -123,7 +123,7 @@ namespace Netherlands3D.CityJson.Visualisation
             var highestLod = meshes.Keys.Max(g => g.Lod);
             SetLODActive(highestLod);
 
-            jsonVisualized?.Invoke(gameObject);
+            cityObjectVisualized?.Invoke(this);
         }
 
         private Vector3 SetLocalPosition(CityObject cityObject)

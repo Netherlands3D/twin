@@ -1,7 +1,5 @@
 using Netherlands3D.Coordinates;
-using Netherlands3D.Tiles3D;
 using Netherlands3D.Twin.Cameras;
-using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -11,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Netherlands3D.CityJson.Visualisation;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.CityJSON
@@ -41,9 +40,10 @@ namespace Netherlands3D.Functionalities.CityJSON
             // cause duplication when adding a layer manually instead of through the loading mechanism
             this.propertyData = propertyData;
         }
+
         private void UpdateCRS(int crs)
         {
-            CoordinateSystem system = (CoordinateSystem)crs;            
+            CoordinateSystem system = (CoordinateSystem)crs;
 
             //var holgo = GetComponent<HierarchicalObjectLayerGameObject>();            
             //if (holgo.WorldTransform.Coordinate.CoordinateSystem == crs) return;
@@ -77,10 +77,16 @@ namespace Netherlands3D.Functionalities.CityJSON
             var json = File.ReadAllText(file);
             var cityJson = GetComponent<CityJson.Structure.CityJSON>();
             cityJson.ParseCityJSON(json);
-            OnCityJSONImported(cityJson);
+
+            foreach (var co in cityJson.CityObjects)
+            {
+                co.GetComponent<CityObjectVisualizer>().cityObjectVisualized.AddListener(OnCityObjectVisualized);
+            }
+
+            SetCityJSONPosition(cityJson);
         }
 
-        private void OnCityJSONImported(CityJson.Structure.CityJSON cityJson)
+        private void SetCityJSONPosition(CityJson.Structure.CityJSON cityJson)
         {
             var holgo = GetComponent<HierarchicalObjectLayerGameObject>();
 
@@ -91,27 +97,25 @@ namespace Netherlands3D.Functionalities.CityJSON
             }
             else //transform property is not set, we need to set it if it is georeferenced, if not, we just keep the position it was at.
             {
-                if (transform.childCount > 0)
+                var referencePosition = cityJson.AbsoluteCenter;
+                if (EPSG7415.IsValid(referencePosition.x, referencePosition.y, referencePosition.z, out var origin))
                 {
-                    var referencePosition = cityJson.AbsoluteCenter;
-                    if (EPSG7415.IsValid(referencePosition.x, referencePosition.y, referencePosition.z, out var origin))
-                    {
-                        PositionGeoReferencedCityJson(holgo, origin);
-                    }
+                    PositionGeoReferencedCityJson(holgo, origin);
                 }
             }
+        }
 
+        private void OnCityObjectVisualized(CityObjectVisualizer visualizer)
+        {
             if (addMeshCollidersToCityObjects)
             {
-                foreach (var meshFilter in GetComponentsInChildren<MeshFilter>())
-                {
-                    meshFilter.gameObject.AddComponent<MeshCollider>();
-                }
+                visualizer.gameObject.AddComponent<MeshCollider>();
             }
+
             // Object is loaded / replaced - trigger the application of styling
-            holgo.ApplyStyling();
+            var holgo = GetComponent<HierarchicalObjectLayerGameObject>();
+            holgo.ApplyStylingToRenderer(visualizer.GetComponent<Renderer>());
         }
-        
 
         private void PositionGeoReferencedCityJson(HierarchicalObjectLayerGameObject holgo, Coordinate origin)
         {
@@ -147,7 +151,7 @@ namespace Netherlands3D.Functionalities.CityJSON
         }
 
         private void OnDestroy()
-        {       
+        {
             propertyData.OnCRSChanged.RemoveListener(UpdateCRS);
         }
     }
