@@ -66,12 +66,23 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             tile3DPropertyData = new Tile3DLayerPropertyData(TilesetURLWithoutQuery(tileSet.tilesetUrl),(int)Coordinates.CoordinateSystem.WGS84_ECEF);
             //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
-            tile3DPropertyData.OnUrlChanged.AddListener(UpdateURL);
-            tile3DPropertyData.OnCRSChanged.AddListener(UpdateCRS);
+            SubscribePropertyDataEvents();
             if (usePropertySections)
                 propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             else
                 propertySections = new();
+        }
+
+        private void SubscribePropertyDataEvents()
+        {
+            tile3DPropertyData.OnUrlChanged.AddListener(UpdateURL);
+            tile3DPropertyData.OnCRSChanged.AddListener(UpdateCRS);
+        }
+        
+        private void UnsubscribePropertyDataEvents()
+        {
+            tile3DPropertyData.OnUrlChanged.RemoveListener(UpdateURL);
+            tile3DPropertyData.OnCRSChanged.RemoveListener(UpdateCRS);
         }
 
         private void HandleCredentials(Uri uri, StoredAuthorization auth)
@@ -205,15 +216,16 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             var urlProperty = (Tile3DLayerPropertyData)properties.FirstOrDefault(p => p is Tile3DLayerPropertyData);
             if (urlProperty != null)
             {
+                UnsubscribePropertyDataEvents(); //unsubscribe from the old property data that will be overwritten
                 tile3DPropertyData = urlProperty; //use existing object to overwrite the current instance
-                tileSet.contentCoordinateSystem = (Netherlands3D.Coordinates.CoordinateSystem)tile3DPropertyData.ContentCRS;
+                tileSet.contentCoordinateSystem = (CoordinateSystem)tile3DPropertyData.ContentCRS; // update the crs from the loaded property data
+                SubscribePropertyDataEvents(); //resubscribe events to the new property data
             }
         }
 
         private void OnDestroy()
         {
-            tile3DPropertyData.OnUrlChanged.RemoveListener(UpdateURL);
-            tile3DPropertyData.OnCRSChanged.RemoveListener(UpdateCRS);
+            UnsubscribePropertyDataEvents();
         }
     }
 }
