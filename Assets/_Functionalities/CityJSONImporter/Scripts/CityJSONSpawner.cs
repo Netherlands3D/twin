@@ -95,10 +95,11 @@ namespace Netherlands3D.Functionalities.CityJSON
                 var transformPropterty = (TransformLayerPropertyData)((ILayerWithPropertyData)holgo).PropertyData;
                 holgo.WorldTransform.MoveToCoordinate(transformPropterty.Position);
             }
-            else //transform property is not set, we need to set it if it is georeferenced, if not, we just keep the position it was at.
+            else if(cityJson.CoordinateSystem != CoordinateSystem.Undefined) //transform property is not set, we need to set it if it is georeferenced, if not, we just keep the position it was at.
             {
                 var referencePosition = cityJson.AbsoluteCenter;
-                if (EPSG7415.IsValid(referencePosition.x, referencePosition.y, referencePosition.z, out var origin))
+                var origin = new Coordinate(cityJson.CoordinateSystem, referencePosition.x, referencePosition.y, referencePosition.z);
+                if (origin.IsValid())
                 {
                     PositionGeoReferencedCityJson(holgo, origin);
                 }
