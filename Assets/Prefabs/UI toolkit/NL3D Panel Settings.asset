@@ -18,7 +18,7 @@ MonoBehaviour:
   m_TargetTexture: {fileID: 0}
   m_RenderMode: 0
   m_WorldSpaceLayer: 0
-  m_ScaleMode: 0
+  m_ScaleMode: 1
   m_ReferenceSpritePixelsPerUnit: 96
   m_PixelsPerUnit: 100
   m_Scale: 1
