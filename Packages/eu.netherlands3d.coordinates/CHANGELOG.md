@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 * Added TryFindValidCoordinate functions
 * Added functions to convert a CRS to its 2D or 3D equivalent
+* Fixed Conversion from RD to RDNAP
 
 ## [2.3.0] 11-09-2025
 
