@@ -40,9 +40,8 @@ namespace Netherlands3D.Coordinates
         {
             CoordinateSystemOperation converter = CoordinateSystems.operators[CoordinateSystem.RDNAP];
             //add third dimension to point              
-            Coordinate newCoordinate = new Coordinate(coordinate.CoordinateSystem, coordinate.value1, coordinate.value2, 0);
+            Coordinate newCoordinate = new Coordinate(CoordinateSystem.RDNAP, coordinate.value1, coordinate.value2, 0);
             Coordinate result = converter.ConvertToWGS84LatLonH(newCoordinate);
-            result = new Coordinate(result.CoordinateSystem, result.value1, result.value2, 0);
             return result;
         }
 
