@@ -7,6 +7,8 @@ using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using Netherlands3D.SubObjects;
+using Netherlands3D.Coordinates;
+using Netherlands3D.Functionalities.ObjectInformation;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
@@ -68,6 +70,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             binaryMeshLayer.OnMappingCreated.AddListener(OnAddedMapping);         
             binaryMeshLayer.OnMappingRemoved.AddListener(OnRemovedMapping);
 
+            if(debugFeatures)
+            {
+                ObjectSelectorService.MappingTree.OnMappingAdded.AddListener(OnDebugMapping);
+            }
+
             for (var materialIndex = 0; materialIndex < binaryMeshLayer.DefaultMaterialList.Count; materialIndex++)
             {
                 // Make a copy of the default material, so we can change the color without affecting the original
@@ -81,13 +88,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             }
         }
 
-        private void OnAddedMapping(ObjectMapping mapping)
+        bool debugFeatures = false;
+        private void OnDebugMapping(IMapping mapping)
         {
+            if (debugFeatures)
+            {
+                if (mapping is MeshMapping map)
+                {
+                    for(int i = 0; i < 10; i++)
+                    {
+                        map.CacheItems();
+                        ObjectMappingItem item = map.Items[i].ObjectMappingItem;
+                        Coordinate coord = map.GetCoordinateForObjectMappingItem(map.ObjectMapping, item);
+                        var layerFeature = CreateFeature(item);
+                        (Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(layerFeature, false, coord);
+                    }                    
+                }
+                debugFeatures = false;
+            }
+        }
+
+        private void OnAddedMapping(ObjectMapping mapping)
+        {         
             foreach (ObjectMappingItem item in mapping.items)
             {
                 var layerFeature = CreateFeature(item);
                 LayerFeatures.Add(layerFeature.Geometry, layerFeature);
-            }
+            }            
             ApplyStyling();
         }
 
@@ -97,6 +124,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             {
                 LayerFeatures.Remove(item);
             }
+        }
+
+        public LayerFeature GetLayerFeatureFromBagId(string bagId)
+        {
+            if (layer is not BinaryMeshLayer binaryMeshLayer) return null;
+
+            foreach (ObjectMapping mapping in binaryMeshLayer.Mappings.Values)
+            {
+                foreach (ObjectMappingItem item in mapping.items)
+                {
+                    if (item.objectID == bagId)
+                    {
+                        var layerFeature = CreateFeature(item);
+                        return layerFeature;
+                    }
+                }
+            }
+            return null;
         }
 
         public override void OnSelect()
@@ -160,8 +205,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                     (Styler as CartesianTileLayerStyler).Apply(GetStyling(feature), feature);
                 }
             }
-
-
             base.ApplyStyling();
         }
 
@@ -180,7 +223,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             if(feature.Geometry is ObjectMappingItem item)
             {
-                feature.Attributes.Add(CartesianTileLayerStyler.VisibilityIdentifier, item.objectID);                
+                feature.Attributes.Add(CartesianTileLayerStyler.VisibilityAttributeIdentifier, item.objectID); 
             }
 
             if (feature.Geometry is not Material mat) return feature;
