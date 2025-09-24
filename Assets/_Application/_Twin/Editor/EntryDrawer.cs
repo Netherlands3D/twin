@@ -19,6 +19,7 @@ namespace Netherlands3D._Application._Twin.Editor
             public SerializedProperty Title => prop.FindPropertyRelative("title");
             public SerializedProperty Description => prop.FindPropertyRelative("description");
             public SerializedProperty Prefab => prop.FindPropertyRelative("prefab");
+            public SerializedProperty ScriptableObjectEvent => prop.FindPropertyRelative("scriptableObjectEvent");
             public SerializedProperty Url => prop.FindPropertyRelative("url");
             public SerializedProperty Children => prop.FindPropertyRelative("children");
 
@@ -86,6 +87,7 @@ namespace Netherlands3D._Application._Twin.Editor
 
             public VisualElement CreateDescriptionField() => new PropertyField(Description, "Description");
             public VisualElement CreatePrefabField() => new PropertyField(Prefab, "Prefab");
+            public VisualElement CreateScriptableObjectEventField() => new PropertyField(ScriptableObjectEvent, "Event");
             public VisualElement CreateUrlField() => new PropertyField(Url, "Url");
             public VisualElement CreateChildrenField() => new PropertyField(Children, "Children");
             
@@ -109,23 +111,29 @@ namespace Netherlands3D._Application._Twin.Editor
 
         public override VisualElement CreatePropertyGUI(SerializedProperty prop)
         {
+            if (prop?.serializedObject == null || prop.serializedObject.targetObject == null)
+                return new Label("Domain reload in progress, please wait");
+    
             var root = new Foldout();
             var entry = new EntryProps(prop);
 
             var prefabField = entry.CreatePrefabField();
+            var scriptableObjectEventField = entry.CreateScriptableObjectEventField();
             var urlField = entry.CreateUrlField();
             var childrenField = entry.CreateChildrenField();
 
             root.text = string.IsNullOrEmpty(entry.Title.stringValue) ? "Entry" : entry.Title.stringValue;
-            root.Add(entry.CreateTypeField(_ => RefreshVisibility(urlField, prefabField, childrenField, entry)));
+            root.Add(entry.CreateTypeField(_ => RefreshVisibility(urlField, prefabField, scriptableObjectEventField, childrenField, entry)));
             root.Add(entry.CreateIdFieldWithButton());
             root.Add(entry.CreateTitleField(root));
             root.Add(entry.CreateDescriptionField());
             root.Add(CreateSeparator());
             root.Add(urlField);
             root.Add(prefabField);
+            root.Add(scriptableObjectEventField);
             root.Add(childrenField);
             root.Bind(prop.serializedObject);
+            
 
             if (entry.IsImportable && Application.isPlaying)
             {
@@ -134,15 +142,19 @@ namespace Netherlands3D._Application._Twin.Editor
             }
 
             // Initial refresh of the UI state
-            RefreshVisibility(urlField, prefabField, childrenField, entry);
+            RefreshVisibility(urlField, prefabField, scriptableObjectEventField, childrenField, entry);
 
             return root;
         }
 
-        private void RefreshVisibility(VisualElement url, VisualElement prefab, VisualElement children, EntryProps entry)
+        private void RefreshVisibility(VisualElement url, VisualElement prefab, VisualElement scriptableObjectEventField, VisualElement children, EntryProps entry)
         {
-            url.style.display = entry.TypeValue == AssetLibrary.EntryType.Url ? DisplayStyle.Flex : DisplayStyle.None;
-            prefab.style.display = entry.TypeValue == AssetLibrary.EntryType.Prefab ? DisplayStyle.Flex : DisplayStyle.None;
+            url.style.display = entry.TypeValue is AssetLibrary.EntryType.Url or AssetLibrary.EntryType.Process 
+                ? DisplayStyle.Flex : DisplayStyle.None;
+            prefab.style.display = entry.TypeValue == AssetLibrary.EntryType.Prefab 
+                ? DisplayStyle.Flex : DisplayStyle.None;
+            scriptableObjectEventField.style.display = entry.TypeValue == AssetLibrary.EntryType.ScriptableObjectEvent 
+                ? DisplayStyle.Flex : DisplayStyle.None;
             children.style.display = entry.TypeValue is AssetLibrary.EntryType.Folder or AssetLibrary.EntryType.DataSet 
                 ? DisplayStyle.Flex : DisplayStyle.None;
         }

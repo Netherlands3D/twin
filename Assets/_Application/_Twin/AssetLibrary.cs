@@ -7,6 +7,7 @@ using Netherlands3D.Catalogs.Catalogs;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Netherlands3D._Application._Twin
 {
@@ -26,10 +27,12 @@ namespace Netherlands3D._Application._Twin
     {
         public enum EntryType
         {
-            Url,
-            Prefab,
-            Folder,
-            DataSet
+            Url = 0,
+            Prefab = 1,
+            Process = 4,
+            ScriptableObjectEvent = 5,
+            Folder = 2,
+            DataSet = 3
         }
 
         [Serializable]
@@ -41,6 +44,7 @@ namespace Netherlands3D._Application._Twin
             [TextArea] public string description;
             public string url;
             public LayerGameObject prefab;
+            public ScriptableObject scriptableObjectEvent;
             public List<Entry> children = new();
 
             public ICatalogItem ToCatalogItem()
@@ -53,6 +57,31 @@ namespace Netherlands3D._Application._Twin
                             title,
                             description,
                             string.IsNullOrWhiteSpace(url) ? null : new Uri(url, UriKind.Absolute)
+                        );
+
+                    // Experimental feature to support calling processes, which may be scriptable events in our case
+                    case EntryType.Process:
+                        return new ProcessItem(
+                            id, 
+                            title, 
+                            description,
+                            processAddress: string.IsNullOrWhiteSpace(url) ? null : new Uri(url, UriKind.Absolute)
+                        );
+
+                    // Experimental feature to support calling processes, which may be scriptable events in our case
+                    case EntryType.ScriptableObjectEvent:
+                        var resolvedProcess = url;
+                        if (scriptableObjectEvent)
+                        {
+                            resolvedProcess = $"event:///{scriptableObjectEvent.GetInstanceID()}";
+                        }
+
+                        return new ProcessItem(
+                            id, 
+                            title, 
+                            description,
+                            processAddress: string.IsNullOrWhiteSpace(resolvedProcess) 
+                                ? null : new Uri(resolvedProcess, UriKind.Absolute)
                         );
 
                     case EntryType.Prefab:
@@ -114,13 +143,19 @@ namespace Netherlands3D._Application._Twin
         public async void Load(string id)
         {
             var item = await Catalog.GetAsync(id);
-            var layerBuilder = CreateLayerBuilder(item);
-            await App.Layers.Add(layerBuilder);
+            Load(item);
         }
 
         public async void Load(ICatalogItem catalogItem)
         {
-            var layerBuilder = CreateLayerBuilder(catalogItem);
+            if (catalogItem is not RecordItem recordItem)
+            {
+                Debug.LogWarning(
+                    "Unable to load catalog item of type " + catalogItem.GetType() + ", expected a RecordItem"
+                );
+                return;
+            }
+            var layerBuilder = CreateLayerBuilder(recordItem);
             await App.Layers.Add(layerBuilder);
         }
 
