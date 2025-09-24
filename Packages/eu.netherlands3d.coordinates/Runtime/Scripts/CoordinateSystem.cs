@@ -153,7 +153,114 @@ namespace Netherlands3D.Coordinates
         static Coordinate _coordinateAtOrigin = new Coordinate(Vector3.zero);
 
         public static Coordinate CoordinateAtUnityOrigin => _coordinateAtOrigin;
+
+        public static bool TryFindValidCoordinates(double value1, double value2, double value3, out List<Coordinate> results)
+        {
+            results = new List<Coordinate>(operators.Count);
+            foreach (var kvp in operators)
+            {
+                if (kvp.Key == CoordinateSystem.Undefined)
+                    continue;
+                
+                if(kvp.Value.AxisCount() != 3) //we only want 3d coordinate systems 
+                    continue;
+                
+                var potentialCoordinate = new Coordinate(kvp.Key, value1, value2, value3);
+                if (potentialCoordinate.IsValid())
+                {
+                    if(potentialCoordinate.Convert(connectedCoordinateSystem).IsValid()) 
+                        results.Add(potentialCoordinate);
+                }
+            }
+
+            return results.Count > 0;
+        }
         
+        public static bool TryFindValidCoordinates(double value1, double value2, out List<Coordinate> results)
+        {
+            results = new List<Coordinate>(operators.Count);
+            foreach (var kvp in operators)
+            {
+                if (kvp.Key == CoordinateSystem.Undefined)
+                    continue;
+                
+                if(kvp.Value.AxisCount() != 2) //we only want 3d coordinate systems 
+                    continue;
+                
+                var potentialCoordinate = new Coordinate(kvp.Key, value1, value2);
+                if (potentialCoordinate.IsValid())
+                {
+                    if(potentialCoordinate.Convert(connectedCoordinateSystem).IsValid()) 
+                        results.Add(potentialCoordinate);
+                }
+            }
+
+            return results.Count > 0;
+        }
+
+        public static CoordinateSystem To3D(CoordinateSystem crs)
+        {
+            var converter = operators[crs];
+            if (converter.AxisCount() == 3)
+                return crs;
+            
+            var group = converter.GetCoordinateSystemGroup();
+            if (group == CoordinateSystemGroup.None)
+            {
+                Debug.LogError("Could not find 3D equivalent of crs: " + crs + " since it has no CoordinateSystemGroup");
+                return crs;
+            }
+            
+            foreach (var kvp in operators)
+            {
+                var c = kvp.Value;
+                if(c.GetCoordinateSystemType() == CoordinateSystemType.Geocentric) // Geocentric CRS has no 2D equivalent
+                    continue;
+                
+                if (c.GetCoordinateSystemGroup() == group)
+                {
+                    if (c.AxisCount() == 3)
+                        return kvp.Key;
+                }
+            }
+            Debug.LogError("Could not find 3D equivalent of crs: " + crs);
+            return crs;
+        }
+        
+        public static CoordinateSystem To2D(CoordinateSystem crs)
+        {
+            var converter = operators[crs];
+            if (converter.GetCoordinateSystemType() == CoordinateSystemType.Geocentric) // Geocentric CRS has no 2D equivalent
+            {
+                Debug.LogError("Geocentric crs has no 2D equivalent: " + crs);
+                return crs;
+            }
+            
+            if (converter.AxisCount() == 2)
+                return crs;
+            
+            var group = converter.GetCoordinateSystemGroup();
+            if (group == CoordinateSystemGroup.None)
+            {
+                Debug.LogError("Could not find 3D equivalent of crs: " + crs + " since it has no CoordinateSystemGroup");
+                return crs;
+            }
+            
+            foreach (var kvp in operators)
+            {
+                var c = kvp.Value;
+                if(c.GetCoordinateSystemType() == CoordinateSystemType.Geocentric) // Geocentric CRS has no 2D equivalent
+                    continue;
+                
+                if (c.GetCoordinateSystemGroup() == group)
+                {
+                    if (c.AxisCount() == 2)
+                        return kvp.Key;
+                }
+            }
+            Debug.LogError("Could not find 3D equivalent of crs: " + crs);
+            return crs;
+        }
     }
 
 }
