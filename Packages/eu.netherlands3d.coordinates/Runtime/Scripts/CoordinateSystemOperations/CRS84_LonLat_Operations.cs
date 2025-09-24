@@ -69,7 +69,7 @@ namespace Netherlands3D.Coordinates
 
         public override CoordinateSystemGroup GetCoordinateSystemGroup()
         {
-            return CoordinateSystemGroup.WGS84;
+            return CoordinateSystemGroup.None;
         }
 
         public override CoordinateSystemType GetCoordinateSystemType()
