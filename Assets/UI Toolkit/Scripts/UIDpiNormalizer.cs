@@ -6,23 +6,47 @@ namespace Netherlands3D.UI
     public class UiDpiNormalizer : MonoBehaviour
     {
         [SerializeField] private UIDocument doc;
-        [SerializeField] private float targetDpi = 72f; // what you want it to look like
-        [SerializeField] private float fallbackDpi = 96f; // used when Screen.dpi <= 0
+#pragma warning disable 0414
+        [Tooltip("The factor to adjust the scaling with on Windows, should generally be .75 to represent the difference between Mac and Windows DPI")]
+        [SerializeField] private float factor = 0.75f;
+#pragma warning restore 0414
 
-        private void Awake()
+#if UNITY_WEBGL && !UNITY_EDITOR
+        private float previousScaleFactor = 0f;
+
+        [DllImport("__Internal")]
+        private static extern bool IsWindowsOS();
+#endif
+
+        void Start()
         {
-            var ps = doc.panelSettings;
-            ps.scaleMode = PanelScaleMode.ConstantPixelSize;
-            ps.referenceDpi = fallbackDpi;
-            ps.fallbackDpi = fallbackDpi;
+            // Adjust the scale only if we're running in a WebGL build on Windows
+#if UNITY_WEBGL && !UNITY_EDITOR
+            ScaleCanvasForWindows();
+#endif
+        }
 
-            Debug.Log("Target DPI: " + targetDpi);
-            Debug.Log("Fallback DPI: " + fallbackDpi);
-            Debug.Log("Screen DPI: " + Screen.dpi);
-            
-            // var reported = Screen.dpi > 0 ? Screen.dpi : fallbackDpi;
-            // ps.scale = targetDpi / reported; // e.g., Win(96) => 0.75, Mac(72) => 1.0
-            // Debug.Log("UI Scale: " + ps.scale);
+#if UNITY_WEBGL && !UNITY_EDITOR
+        // This method is used to scale the canvas on Windows.
+        // The canvas is scaled down by the factor in this class to account for the PPI difference.
+        void ScaleCanvasForWindows()
+        {
+            if (!IsWindowsOS()) return;
+
+            doc.runtimePanel.panelSettings.scale *= factor;
+            previousScaleFactor = doc.runtimePanel.panelSettings.scale;
+        }
+#endif
+
+        private void Update()
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            if (Mathf.Approximately(doc.runtimePanel.panelSettings.scale, previousScaleFactor) == false)
+            {
+                Debug.Log("Detected zooming of the canvas, readjusting scale factor");
+                ScaleCanvasForWindows();
+            }
+#endif
         }
     }
 }

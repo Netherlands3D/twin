@@ -1102,8 +1102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doc: {fileID: 1677727759}
-  targetDpi: 96
-  fallbackDpi: 72
+  factor: 0.75
 --- !u!1 &2052049205
 GameObject:
   m_ObjectHideFlags: 0
@@ -1262,20 +1261,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1256548661617150309, guid: 0304daefec15ff34da9a1263fe57b2fe,
-        type: 3}
-      propertyPath: m_UiScaleMode
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2117494700592838229, guid: 0304daefec15ff34da9a1263fe57b2fe,
         type: 3}
       propertyPath: m_Name
       value: CanvasWorld
-      objectReference: {fileID: 0}
-    - target: {fileID: 6700670542534746841, guid: 0304daefec15ff34da9a1263fe57b2fe,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7376965506954241684, guid: 0304daefec15ff34da9a1263fe57b2fe,
         type: 3}
@@ -2522,11 +2511,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3579519539280436220, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3980239270655141160, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -2595,11 +2579,6 @@ PrefabInstance:
     - target: {fileID: 4083857885819375157, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4191284208189608404, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
-        type: 3}
-      propertyPath: m_UiScaleMode
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4382893533792524090, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
@@ -3390,11 +3369,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -15.205
       objectReference: {fileID: 0}
-    - target: {fileID: 2652659933462131470, guid: 32168277a01252346bf6d9fd7aaebe0e,
-        type: 3}
-      propertyPath: m_UiScaleMode
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5018310546720804204, guid: 32168277a01252346bf6d9fd7aaebe0e,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -3403,11 +3377,6 @@ PrefabInstance:
     - target: {fileID: 5018310546720804204, guid: 32168277a01252346bf6d9fd7aaebe0e,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7938876872399145723, guid: 32168277a01252346bf6d9fd7aaebe0e,
-        type: 3}
-      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8021461611406565324, guid: 32168277a01252346bf6d9fd7aaebe0e,
