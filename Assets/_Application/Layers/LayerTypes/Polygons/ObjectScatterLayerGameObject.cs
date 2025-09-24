@@ -57,7 +57,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             
             foreach (var property in originalObject.LayerData.LayerProperties)
             {
-                LayerData.AddProperty(property); //copy properties to be able to revert
+                LayerData.SetProperty(property); //copy properties to be able to revert
             }
 
             InitializeScatterMesh(originalObject.PrefabIdentifier);
@@ -340,7 +340,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var revertedLayer = GameObject.Instantiate(prefab) as HierarchicalObjectLayerGameObject;
             revertedLayer.LoadProperties(LayerData.LayerProperties); //load the saved (transform) properties in this object 
             revertedLayer.LayerData.ActiveSelf = LayerData.ActiveSelf;
-            revertedLayer.LayerData.AddProperty(settings); //add the scatter settings to the object properties so it can be reloaded if the user decides to turn the scatter on again
+            revertedLayer.LayerData.SetProperty((LayerPropertyData)settings); //add the scatter settings to the object properties so it can be reloaded if the user decides to turn the scatter on again
 
             for (var i = LayerData.ChildrenLayers.Count - 1; i >= 0; i--) //go in reverse to avoid a collectionWasModifiedError
             {

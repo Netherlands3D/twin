@@ -1,7 +1,9 @@
 ﻿using Netherlands3D.CartesianTiles;
+using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.SerializableGisExpressions;
 using Netherlands3D.SubObjects;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,7 +19,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
     {
         public const string MaterialNameIdentifier = "data-materialname";
         public const string MaterialIndexIdentifier = "data-materialindex";
-        public const string VisibilityIdentifier = "data-visibility";
+        public const string VisibilityAttributeIdentifier = "data-visibility";
+        public const string VisibilityAttributePositionIdentifier = "data-visibility-position";
+        public const string VisibilityIdentifier = "visibility";
 
         public static ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
 
@@ -71,21 +75,27 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             return stylingRule.Symbolizer.GetFillColor();
         }
 
-        public void SetVisibilityForSubObject(LayerFeature layerFeature, bool visible)
+        public void SetVisibilityForSubObject(LayerFeature layerFeature, bool visible, Coordinate coordinate)
         {
-            string id = layerFeature.Attributes[VisibilityIdentifier];
-
-            var stylingRuleName = VisibilityStyleRuleName(id);
+            string id = layerFeature.Attributes[VisibilityAttributeIdentifier];
+            SetVisibilityForSubObjectByAttributeTag(id, visible, coordinate);
+        }   
+        
+        public void SetVisibilityForSubObjectByAttributeTag(string objectId, bool visible, Coordinate coordinate)
+        {
+            var stylingRuleName = VisibilityStyleRuleName(objectId);
 
             // Add or set the colorization of this feature by its material index
             var stylingRule = new StylingRule(
                 stylingRuleName,
                 Expression.EqualTo(
-                    Expression.Get(VisibilityIdentifier),
-                    id
+                    Expression.Get(VisibilityAttributeIdentifier),
+                    objectId
                 )
             );
             stylingRule.Symbolizer.SetVisibility(visible);
+            stylingRule.Symbolizer.SetCustomProperty(VisibilityAttributePositionIdentifier, coordinate);
+            
 
             layer.LayerData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
             layer.ApplyStyling();
@@ -93,8 +103,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         public bool? GetVisibilityForSubObject(LayerFeature layerFeature)
         {
-            string id = layerFeature.GetAttribute(VisibilityIdentifier);
+            string id = layerFeature.GetAttribute(VisibilityAttributeIdentifier);
+            return GetVisibilityForSubObjectByAttributeTag(id);
+        }
 
+        public bool? GetVisibilityForSubObjectByAttributeTag(string id)
+        {
             var stylingRuleName = VisibilityStyleRuleName(id);
 
             if (!layer.LayerData.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
@@ -103,6 +117,28 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             }
 
             return stylingRule.Symbolizer.GetVisibility();
+        }
+
+        public void RemoveVisibilityForSubObjectByAttributeTag(string id)
+        {
+            var stylingRuleName = VisibilityStyleRuleName(id);
+            bool dataRemoved = layer.LayerData.DefaultStyle.StylingRules.Remove(stylingRuleName);
+        }
+
+        public Coordinate? GetVisibilityCoordinateForSubObject(LayerFeature layerFeature)
+        {
+            string id = layerFeature.GetAttribute(VisibilityAttributeIdentifier);
+            return GetVisibilityCoordinateForSubObjectByTag(id);
+        }
+
+        public Coordinate? GetVisibilityCoordinateForSubObjectByTag(string objectId)
+        {
+            var stylingRuleName = VisibilityStyleRuleName(objectId);
+            if (!layer.LayerData.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
+            {
+                return null;
+            }
+            return stylingRule.Symbolizer.GetCustomProperty<Coordinate>(VisibilityAttributePositionIdentifier);
         }
 
         /// <summary>
@@ -137,18 +173,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             bool? visiblity = styling.GetVisibility();
             if (visiblity.HasValue)
             {
-                string id = layerFeature.Attributes[VisibilityIdentifier];
-                if (visiblity == true)
-                {
-                    var color = styling.GetFillColor() ?? Color.white;
-                    GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, color } });
-                }
-                else
-                {
-                    var color = Color.clear;
-                    GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, color } });
-                }
-            }
+                string id = layerFeature.Attributes[VisibilityAttributeIdentifier];
+                var color = visiblity == true ? styling.GetFillColor() ?? Color.white : Color.clear;
+                GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, color } });
+            }            
         }
        
         private static string ColorizationStyleRuleName(int materialIndexIdentifier)
@@ -158,7 +186,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         private static string VisibilityStyleRuleName(string visibilityIdentifier)
         {
-            return $"feature.{visibilityIdentifier}.visibility";
+            return $"feature.{visibilityIdentifier}.{VisibilityIdentifier}";
         }
+
+        public static string ObjectIdFromVisibilityStyleRuleName(string styleRuleName)
+        {
+            int startIndex = styleRuleName.IndexOf('.') + 1;
+            int endIndex = styleRuleName.LastIndexOf('.');
+            if (startIndex > 0 && endIndex > startIndex)
+            {
+                return styleRuleName.Substring(startIndex, endIndex - startIndex);
+            }
+            return null;
+        }       
     }
 }

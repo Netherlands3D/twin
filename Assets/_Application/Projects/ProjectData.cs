@@ -110,7 +110,7 @@ namespace Netherlands3D.Twin.Projects
             var layersWithPropertyData = referencedLayer.GetComponents<ILayerWithPropertyData>();
             foreach (var layerWithPropertyData in layersWithPropertyData)
             {
-                referencedLayer.LayerData.AddProperty(layerWithPropertyData.PropertyData);
+                referencedLayer.LayerData.SetProperty(layerWithPropertyData.PropertyData);
             }
         }
 
