@@ -69,9 +69,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             selected = isSelected;
             button.ForceVisualSelection(isSelected);
-
-            //debug
-            image.color = isSelected ? Color.green : Color.red;
         }
     }
 }
