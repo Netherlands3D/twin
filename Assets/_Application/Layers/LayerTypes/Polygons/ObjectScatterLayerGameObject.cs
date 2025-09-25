@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -46,7 +46,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private bool completedInitialization;
         public LayerPropertyData PropertyData => settings;
 
-        private void Awake()
+        protected override void OnLayerInitialize()
         {
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
             propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
@@ -54,7 +54,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         public void Initialize(LayerGameObject originalObject, PolygonSelectionLayer polygon)
         {
-            
             foreach (var property in originalObject.LayerData.LayerProperties)
             {
                 LayerData.SetProperty(property); //copy properties to be able to revert
@@ -152,7 +151,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             polygonLayer.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
         }
 
-        protected void OnDestroy()
+        protected override void OnDestroy()
         {
             RemoveReScatterListeners();
         }
@@ -340,7 +339,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var revertedLayer = GameObject.Instantiate(prefab) as HierarchicalObjectLayerGameObject;
             revertedLayer.LoadProperties(LayerData.LayerProperties); //load the saved (transform) properties in this object 
             revertedLayer.LayerData.ActiveSelf = LayerData.ActiveSelf;
-            revertedLayer.LayerData.SetProperty((LayerPropertyData)settings); //add the scatter settings to the object properties so it can be reloaded if the user decides to turn the scatter on again
+            revertedLayer.LayerData.SetProperty(settings); //add the scatter settings to the object properties so it can be reloaded if the user decides to turn the scatter on again
 
             for (var i = LayerData.ChildrenLayers.Count - 1; i >= 0; i--) //go in reverse to avoid a collectionWasModifiedError
             {
@@ -397,7 +396,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         private static float CalculateLineAngle(PolygonSelectionLayer polygon)
         {
-            var linePoints = polygon.GetPolygonAsUnityPoints();
+            var linePoints = polygon.OriginalPolygon.ToUnityPositions().ToList();
             var start = new Vector2(linePoints[0].x, linePoints[0].z);
             var end = new Vector2(linePoints[1].x, linePoints[1].z);
             var dir = end - start;

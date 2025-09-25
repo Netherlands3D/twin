@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fallbackPrefab: {fileID: 221556199992705649, guid: 754eb7a73e57a46f8bb8de137184cc10,
     type: 3}
+  placeholderPrefab: {fileID: -3856457989731036500, guid: 92eb3c25fd746c6439c2418dcc107f4b,
+    type: 3}
   prefabGroups:
   - groupName: Basislagen
     autoPopulateUI: 0
@@ -60,3 +62,9 @@ MonoBehaviour:
     - {fileID: 7611614742349668521, guid: 7ddb78a6acbf44d4e84910b5684042b7, type: 3}
     - {fileID: 8209116542904522024, guid: 9c30c9cc071ed4343b05fb7ded7859d2, type: 3}
     - {fileID: 8209116542904522024, guid: 0ff2a6c5552aa41b394c269af0d25e45, type: 3}
+  - groupName: Urban Releaf
+    autoPopulateUI: 0
+    prefabs:
+    - {fileID: 4977096601700651112, guid: d128af3d82c1ec74ca2915dca7794e65, type: 3}
+    - {fileID: 3472074814285716244, guid: 01cef4f031ccfda4aa53cc81dc95674a, type: 3}
+    - {fileID: 4476188689757322987, guid: a3423cc30b04fd74caa657b5830b8985, type: 3}

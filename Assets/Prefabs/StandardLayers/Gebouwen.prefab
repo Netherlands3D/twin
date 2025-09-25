@@ -101,14 +101,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabIdentifier: cc9d0f9a5a1724c9695a1bef5ecccaec
   thumbnail: {fileID: 0}
-  spawnLocation: 0
-  OnStylingApplied:
-    m_PersistentCalls:
-      m_Calls: []
+  spawnLocation: -1
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStylingApplied:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &-1780917372914214898

@@ -66,6 +66,12 @@ MonoBehaviour:
   onLayerDisabled:
     m_PersistentCalls:
       m_Calls: []
+  OnMappingCreated:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMappingRemoved:
+    m_PersistentCalls:
+      m_Calls: []
   hasMetaData: 0
   removeFromID: 
   DefaultMaterialList:
@@ -86,10 +92,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabIdentifier: 65e87ace5e7c94c2dba27317474f1179
+  thumbnail: {fileID: 0}
+  spawnLocation: -1
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStylingApplied:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &-8208161768726854444
@@ -136,9 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {fileID: 0}
   worldTransformShifter: {fileID: 2570833008177719654}
-  referenceCoordinateSystem: 2
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
