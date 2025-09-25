@@ -1,4 +1,7 @@
+using Netherlands3D.Events;
+using Netherlands3D.Twin.Tools;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.FirstPersonViewer.UI
 {
@@ -10,6 +13,10 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [Header("Button")]
         [SerializeField] private GameObject buttonRegular;
         [SerializeField] private GameObject buttonSelected;
+
+        [Header("Events")]
+        public UnityEvent OnToolSelected;
+        public UnityEvent OnToolDeselected;
 
         private void OnEnable()
         {
@@ -24,6 +31,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
         public void OnClick()
         {
             toolbar.OpenWindow(panelPrefab, this);
+            OnToolSelected?.Invoke();
         }
 
         private void ViewToolChanged(ViewerTool viewTool)
@@ -31,6 +39,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             bool isToolSelf = viewTool == this;
             buttonRegular.SetActive(!isToolSelf);
             buttonSelected.SetActive(isToolSelf);
+            OnToolDeselected?.Invoke();
         }
     }
 }

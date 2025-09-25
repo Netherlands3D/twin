@@ -111,8 +111,8 @@ namespace Netherlands3D.FirstPersonViewer
 
             transform.position += Vector3.up * velocity.y * Time.deltaTime;
 
-            //Update Cam position
-            Vector3 camPos = transform.position;
+            //Update Main Cam position
+            Vector3 camPos = transform.position; //CHECK
             camPos.y = cameraHeightAboveGround;
             mainCam.transform.position = camPos;
         }

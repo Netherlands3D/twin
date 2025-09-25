@@ -2414,7 +2414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipText: Lagen
+  tooltipText: Viewer instellingen
 --- !u!114 &6403454199553889241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2509,6 +2509,12 @@ MonoBehaviour:
   toolbar: {fileID: 5605894596699867571}
   buttonRegular: {fileID: 979208982107779316}
   buttonSelected: {fileID: 5573688037440001779}
+  OnToolSelected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnToolDeselected:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3944331969959826014
 GameObject:
   m_ObjectHideFlags: 0
@@ -3336,9 +3342,7 @@ GameObject:
   - component: {fileID: 4875962263667687260}
   - component: {fileID: 1113854796155858908}
   - component: {fileID: 3786414258801945320}
-  - component: {fileID: 4958778680800439077}
-  - component: {fileID: 4613256008780515323}
-  - component: {fileID: 1990936812236442021}
+  - component: {fileID: 9158230434932633248}
   m_Layer: 5
   m_Name: ToolbarButton_Pointer
   m_TagString: Untagged
@@ -3419,14 +3423,15 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 4875962263529374694}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4958778680800439077}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.ToolButton, Assembly-CSharp
-        m_MethodName: Toggle
+      - m_Target: {fileID: 9158230434932633248}
+        m_TargetAssemblyTypeName: Netherlands3D.FirstPersonViewer.UI.ViewerTool,
+          eu.netherlands3d.twin
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3436,7 +3441,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4958778680800439077
+--- !u!114 &9158230434932633248
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3445,49 +3450,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 4875962263667687263}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 819acda3c5420ee42b2e0dcc594db116, type: 3}
+  m_Script: {fileID: 11500000, guid: 9dc151b7ec278c1478071b9dd78f32a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tool: {fileID: 11400000, guid: ca2d8a328016a5640ac4872c78c151ad, type: 2}
-  toolbar: {fileID: 0}
-  enabledObjects: {fileID: 8183209300475672286}
-  disabledObjects: {fileID: 6096530079640359785}
---- !u!114 &4613256008780515323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4875962263667687263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  functionalities:
-  - {fileID: 11400000, guid: afc2ee87715890948a93c9f9558e4464, type: 2}
-  OnEnableFunctionality:
+  panelPrefab: {fileID: 766479281542820589, guid: c917a5f78a8bda54ab5f591f82ecb585,
+    type: 3}
+  toolbar: {fileID: 5605894596699867571}
+  buttonRegular: {fileID: 6096530079640359785}
+  buttonSelected: {fileID: 8183209300475672286}
+  OnToolSelected:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4875962263667687263}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-  OnDisableFunctionality:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4875962263667687263}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 11400000, guid: ca2d8a328016a5640ac4872c78c151ad, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Tools.Tool, eu.netherlands3d.twin
+        m_MethodName: OpenInspector
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3496,26 +3473,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1990936812236442021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4875962263667687263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: -1
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
+  OnToolDeselected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: ca2d8a328016a5640ac4872c78c151ad, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Tools.Tool, eu.netherlands3d.twin
+        m_MethodName: CloseInspector
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4875962264067883396
 GameObject:
   m_ObjectHideFlags: 0
@@ -6584,6 +6556,12 @@ MonoBehaviour:
   toolbar: {fileID: 5605894596699867571}
   buttonRegular: {fileID: 7080699504199827995}
   buttonSelected: {fileID: 5136376136886478764}
+  OnToolSelected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnToolDeselected:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8462948391529664758
 GameObject:
   m_ObjectHideFlags: 0
@@ -6992,7 +6970,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 7964509747914808128}
+      objectReference: {fileID: 474986964326212686}
     - target: {fileID: 6740410228911076946, guid: b9565e5e6806aa84fa4bee3688c5cb46,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -7006,7 +6984,7 @@ PrefabInstance:
     - target: {fileID: 6740410228911076946, guid: b9565e5e6806aa84fa4bee3688c5cb46,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.FirstPersonViewer.UI.ViewerExitButton, eu.netherlands3d.twin
+      value: Netherlands3D.FirstPersonViewer.UI.ViewerUIButtons, eu.netherlands3d.twin
       objectReference: {fileID: 0}
     - target: {fileID: 6740410228911076946, guid: b9565e5e6806aa84fa4bee3688c5cb46,
         type: 3}
@@ -7131,10 +7109,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 4573165684931258792}
-    - targetCorrespondingSourceObject: {fileID: 2664015473938025932, guid: b9565e5e6806aa84fa4bee3688c5cb46,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7964509747914808128}
   m_SourcePrefab: {fileID: 100100000, guid: b9565e5e6806aa84fa4bee3688c5cb46, type: 3}
 --- !u!1 &445942146643272527 stripped
 GameObject:
@@ -7155,18 +7129,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tooltipText: Informatie over Netherlands 3D (opent in nieuw tabblad)
---- !u!114 &7964509747914808128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 445942146643272527}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e8805b7e56305e4dbaed3fa8863211f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &6151074720974636489 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8616850838438046538, guid: b9565e5e6806aa84fa4bee3688c5cb46,

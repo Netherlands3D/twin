@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.Twin.UI;
 using System;
 using UnityEngine;
@@ -25,6 +26,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
         {
             rect = GetComponent<RectTransform>();
             contentFilterRefresh = GetComponent<ContentFitterRefresh>(); //TWIN Dependent
+
+            ViewerEvents.OnViewerExited += ViewerExited;
         }
 
         public void OpenWindow(RectTransform windowPrefab, ViewerTool viewTool)
@@ -37,7 +40,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
             if (isOpen)
             {
-                currentSequence.Append(rect.DOAnchorPosY(-rect.sizeDelta.y - 5, .75f).SetEase(Ease.InSine));
+                currentSequence.Append(rect.DOAnchorPosY(-rect.sizeDelta.y - 5, .5f).SetEase(Ease.InSine));
 
                 currentSequence.AppendCallback(() =>
                 {
@@ -64,7 +67,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
                 });
 
                 currentSequence.AppendInterval(Time.deltaTime);
-                currentSequence.Append(rect.DOAnchorPosY(56, .75f)).SetEase(Ease.OutSine);
+                currentSequence.Append(rect.DOAnchorPosY(56, .5f)).SetEase(Ease.OutSine);
 
                 currentTool = viewTool;
 
@@ -79,6 +82,11 @@ namespace Netherlands3D.FirstPersonViewer.UI
             OnViewerToolChanged?.Invoke(currentTool);
             currentSequence.OnComplete(() => isAnimating = false);
             currentSequence.Play();
+        }
+
+        private void ViewerExited()
+        {
+            OpenWindow(null, currentTool);
         }
     }
 }

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Netherlands3D.FirstPersonViewer.Events;
 using UnityEngine;
 
@@ -56,7 +57,11 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
                 transform.Rotate(Vector3.up * turn);
             }
 
-            if(currentSpeed > 0) viewer.GetGroundPosition();
+            if (currentSpeed > 0)
+            {
+                viewer.GetGroundPosition();
+                ViewerEvents.OnCameraRotation?.Invoke(viewer.FirstPersonCamera.transform.forward);
+            }
         }
     }
 }

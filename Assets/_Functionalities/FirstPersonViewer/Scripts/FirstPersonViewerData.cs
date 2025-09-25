@@ -13,6 +13,7 @@ namespace Netherlands3D.FirstPersonViewer
         public float FOV { private set; get; }
         public float Speed { private set; get; } 
 
+        public Camera FPVCamera { private set; get; }
         private void Awake()
         {
             if (Instance == null) Instance = this;
@@ -21,6 +22,8 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void OnEnable()
         {
+            FPVCamera = GetComponentInChildren<Camera>();
+
             ViewerEvents.OnViewheightChanged += OnViewHeightChanged;
             ViewerEvents.OnFOVChanged += OnFOVChanged;
             ViewerEvents.OnSpeedChanged += OnSpeedChanged;
