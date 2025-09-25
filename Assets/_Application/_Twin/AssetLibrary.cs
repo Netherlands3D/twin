@@ -120,6 +120,9 @@ namespace Netherlands3D._Application._Twin
         }
 
         [SerializeField] private List<Entry> items = new();
+        
+        // Cached list of scriptable object events that have been registered
+        private readonly Dictionary<int, ScriptableObject> scriptableObjectEvents = new();
 
         public InMemoryCatalog Catalog { get; private set; }
 
@@ -132,7 +135,19 @@ namespace Netherlands3D._Application._Twin
                 "Application",
                 "Built from ApplicationCatalog asset"
             );
-            items.ForEach(entry => Import(entry.ToCatalogItem()));
+            foreach (var entry in items)
+            {
+                RegisterEntry(entry);
+            }
+        }
+
+        private void RegisterEntry(Entry entry)
+        {
+            if (entry.type == EntryType.ScriptableObjectEvent)
+            {
+                this.scriptableObjectEvents[entry.scriptableObjectEvent.GetInstanceID()] = entry.scriptableObjectEvent;
+            }
+            Import(entry.ToCatalogItem());
         }
 
         public void Import(ICatalogItem catalogItem)
@@ -143,29 +158,31 @@ namespace Netherlands3D._Application._Twin
         public async void Load(string id)
         {
             var item = await Catalog.GetAsync(id);
-            Load(item);
+            if (item is RecordItem recordItem) Load(recordItem);
+            if (item is ProcessItem processItem) Trigger(processItem);
         }
 
-        public async void Load(ICatalogItem catalogItem)
+        public async void Load(RecordItem recordItem)
         {
-            if (catalogItem is not RecordItem recordItem)
-            {
-                Debug.LogWarning(
-                    "Unable to load catalog item of type " + catalogItem.GetType() + ", expected a RecordItem"
-                );
-                return;
-            }
             var layerBuilder = CreateLayerBuilder(recordItem);
             await App.Layers.Add(layerBuilder);
         }
 
+        public async void Trigger(ProcessItem processItem)
+        {
+            var processAddress = processItem.ProcessAddress;
+            if (processAddress?.Scheme == "event")
+            {
+                if (int.TryParse(processAddress.AbsolutePath, out var processId)
+                    && scriptableObjectEvents.TryGetValue(processId, out var soEvent))
+                {
+                    // TODO: trigger event, but how?
+                }
+            }
+        }
+
         private ILayerBuilder CreateLayerBuilder(ICatalogItem item)
         {
-            if (item is null)
-            {
-                Debug.LogError("No catalog item was passed to create a layer from");
-                return null;
-            }
             if (item is not RecordItem recordItem)
             {
                 Debug.LogError("Attempting to load a catalog item that is not a record, got " + item.GetType());

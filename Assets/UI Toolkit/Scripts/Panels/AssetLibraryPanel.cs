@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Netherlands3D._Application._Twin;
 using Netherlands3D.Catalogs;
+using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -89,14 +90,16 @@ namespace Netherlands3D.UI.Panels
 
         private void OpenAsset(ICatalogItem catalogItem)
         {
-            if (catalogItem is ICatalogItemCollection collection)
+            switch (catalogItem)
             {
-                Breadcrumb.AddCrumb(catalogItem.Title, collection);
-                ShowItemsFromCollection(collection);
-                return;
+                case ICatalogItemCollection collection:
+                    Breadcrumb.AddCrumb(catalogItem.Title, collection);
+                    ShowItemsFromCollection(collection);
+                    return;
+                case RecordItem recordItem: assetLibrary.Load(recordItem); break;
+                case ProcessItem processItem: assetLibrary.Trigger(processItem); break;
+                default: Debug.LogWarning("Attempted to open an unknown type of catalog item"); break;
             }
-
-            assetLibrary.Load(catalogItem);
         }
 
         private void BindListViewItem(VisualElement item, int index)
