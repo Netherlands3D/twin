@@ -184,6 +184,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void ProcessLayerSelection()
         {
             List<ColorSwatch> items = swatches.Values.ToList();
+            bool anySelected = false;
             if (LayerUI.SequentialSelectionModifierKeyIsPressed())
             {
                 if (selectedItems.Count > 0)
@@ -220,15 +221,8 @@ namespace Netherlands3D.Twin.Layers.Properties
                 }
                 else
                 {
+                    anySelected = true;
                     items[currentButtonIndex].SetSelected(true);
-
-                    UpdateSelection();
-                    //cache the first selected item for sequential selection to always know where to start
-                    if (selectedItems.Count == 0 || (selectedItems.Count == 1 && firstSelectedItem != items[currentButtonIndex]))
-                        firstSelectedItem = items[currentButtonIndex];
-
-                    ShowColorPicker();
-                    colorPicker.PickColorWithoutNotify(items[currentButtonIndex].Color);
                 }
             }
             else if(LayerUI.AddToSelectionModifierKeyIsPressed())
@@ -236,20 +230,8 @@ namespace Netherlands3D.Twin.Layers.Properties
                 items[currentButtonIndex].SetSelected(!items[currentButtonIndex].IsSelected);
                 if (items[currentButtonIndex].IsSelected)
                 {
-                    UpdateSelection();
+                    anySelected = true;
                     firstSelectedItem = items[currentButtonIndex];
-
-
-                    ShowColorPicker();
-                    colorPicker.PickColorWithoutNotify(items[currentButtonIndex].Color);
-                }
-                else
-                {
-                    UpdateSelection();
-                    if (selectedItems.Count == 0)
-                    {
-                        HideColorPicker();
-                    }
                 }
             }
             if (NoModifierKeyPressed())
@@ -258,23 +240,25 @@ namespace Netherlands3D.Twin.Layers.Properties
                     item.SetSelected(false);
 
                 //are we toggling the previous selected only item?
-                if (selectedItems.Count == 1 && selectedItems[0] == items[currentButtonIndex])
+                if (selectedItems.Count != 1 || selectedItems[0] != items[currentButtonIndex])
                 {
-                    UpdateSelection();
-                    HideColorPicker();
-                }
-                else
-                {
+                    anySelected = true;
                     items[currentButtonIndex].SetSelected(true);
-
-                    UpdateSelection();
-                    //cache the first selected item for sequential selection to always know where to start
-                    if (selectedItems.Count == 0 || (selectedItems.Count == 1 && firstSelectedItem != items[currentButtonIndex]))
-                        firstSelectedItem = items[currentButtonIndex];
-
-                    ShowColorPicker();
-                    colorPicker.PickColorWithoutNotify(items[currentButtonIndex].Color);
                 }
+            }
+            UpdateSelection();
+            if (anySelected)
+            {
+                //cache the first selected item for sequential selection to always know where to start
+                if (selectedItems.Count == 0 || (selectedItems.Count == 1 && firstSelectedItem != items[currentButtonIndex]))
+                    firstSelectedItem = items[currentButtonIndex];
+
+                ShowColorPicker();
+                colorPicker.PickColorWithoutNotify(items[currentButtonIndex].Color);
+            }
+            else if (selectedItems.Count == 0)
+            {
+                HideColorPicker();
             }
         }
 
