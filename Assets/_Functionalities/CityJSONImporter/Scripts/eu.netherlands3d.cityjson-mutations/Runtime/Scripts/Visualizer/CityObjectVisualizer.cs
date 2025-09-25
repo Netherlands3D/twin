@@ -129,12 +129,7 @@ namespace Netherlands3D.CityJson.Visualisation
         private Vector3 SetLocalPosition(CityObject cityObject)
         {
             var crs = cityObject.CoordinateSystem;
-
-            //todo: Any 2D CRS should be converted to its 3D counterpart (like RD to RDNAP), we should check if we want to do this in the initial CityJSON parsing function or here
-            if (cityObject.CoordinateSystem == CoordinateSystem.RD)
-            {
-                crs = CoordinateSystem.RDNAP;
-            }
+            crs = CoordinateSystems.To3D(crs);
 
             var relativeCenter = cityObject.RelativeCenter;
             var relativeCoordinate = new Coordinate(crs, relativeCenter.x, relativeCenter.y, relativeCenter.z); //this is not a valid coordinate, but we need to use the Coordinate struct to determine the axis order
