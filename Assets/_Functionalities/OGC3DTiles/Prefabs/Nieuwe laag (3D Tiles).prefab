@@ -190,6 +190,9 @@ MonoBehaviour:
   OnLoadAssetMetadata:
     m_PersistentCalls:
       m_Calls: []
+  OnTileLoaded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7109194962515795805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,17 +254,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabIdentifier: 395dd4e52bd3b42cfb24f183f3839bba
   thumbnail: {fileID: 0}
-  spawnLocation: 0
-  OnStylingApplied:
-    m_PersistentCalls:
-      m_Calls: []
+  spawnLocation: -1
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
     m_PersistentCalls:
       m_Calls: []
-  layerParentTag: 3DTileParent
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStylingApplied:
+    m_PersistentCalls:
+      m_Calls: []
   usePropertySections: 1
   UnsupportedExtensionsMessage:
     m_PersistentCalls:

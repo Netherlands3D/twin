@@ -39,14 +39,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        protected override void Start()
+        protected override void OnLayerReady()
         {
             // Ensure that PointRenderer3D.Material has a Material Instance to prevent accidental destruction
             // of a material asset when replacing the material - no destroy of the old material must be done because
             // that is an asset and not an instance
             PointRenderer3D.Material = new Material(PointRenderer3D.Material);
-
-            base.Start();
         }
 
         public List<Mesh> GetMeshData(Feature feature)

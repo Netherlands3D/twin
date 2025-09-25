@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Functionalities
@@ -51,8 +53,19 @@ namespace Netherlands3D.Twin.Functionalities
             }
         }
 
-        public void Spawn(GameObject layer)
+        public async void Spawn(GameObject layer)
         {
+            var layerGameObject = layer.GetComponent<LayerGameObject>();
+            if (layerGameObject)
+            {
+                var layerBuilder = LayerBuilder.Create()
+                    .OfType(layerGameObject.PrefabIdentifier)
+                    .NamedAs(layer.name)
+                    .WhenBuilt(data => ((ReferencedLayerData)data).Reference.transform.parent = transform);
+                await App.Layers.Add(layerBuilder);
+                return;
+            }
+
             var newLayer = Instantiate(layer, transform);
             newLayer.name = layer.name;
         }

@@ -1,5 +1,6 @@
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -21,17 +22,9 @@ namespace Netherlands3D.Functionalities.CityJSON
         private CityJSONPropertyData propertyData = new();
         public LayerPropertyData PropertyData => propertyData;
 
-        private void Awake()
-        {
-            gameObject.transform.position = ObjectPlacementUtility.GetSpawnPoint();
-
-            propertyData.OnCRSChanged.AddListener(UpdateCRS);
-        }
-
-
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var propertyData = properties.OfType<CityJSONPropertyData>().FirstOrDefault();
+            var propertyData = properties.Get<CityJSONPropertyData>();
             if (propertyData == null) return;
 
             // Property data is set here, and the parsing and loading of the actual data is done
@@ -39,20 +32,6 @@ namespace Netherlands3D.Functionalities.CityJSON
             // If we do that here, then this may conflict with the loading of the project file and it would
             // cause duplication when adding a layer manually instead of through the loading mechanism
             this.propertyData = propertyData;
-        }
-
-        private void UpdateCRS(int crs)
-        {
-            CoordinateSystem system = (CoordinateSystem)crs;
-
-            //var holgo = GetComponent<HierarchicalObjectLayerGameObject>();            
-            //if (holgo.WorldTransform.Coordinate.CoordinateSystem == crs) return;
-
-            //Coordinate newCoord = new Coordinate(system);
-            //newCoord.easting = holgo.WorldTransform.Coordinate.easting;
-            //newCoord.northing = holgo.WorldTransform.Coordinate.northing;
-            //newCoord.height = holgo.WorldTransform.Coordinate.height;
-            //holgo.WorldTransform.MoveToCoordinate(newCoord);
         }
 
         private void Start()
@@ -88,19 +67,19 @@ namespace Netherlands3D.Functionalities.CityJSON
 
         private void SetCityJSONPosition(CityJson.Structure.CityJSON cityJson)
         {
-            var holgo = GetComponent<HierarchicalObjectLayerGameObject>();
+            var layerGameObject = GetComponent<HierarchicalObjectLayerGameObject>();
 
-            if (holgo.TransformIsSetFromProperty) //use transform property if it is set
+            if (!layerGameObject.LayerData.IsNew) //use transform property if it is set
             {
-                var transformPropterty = (TransformLayerPropertyData)((ILayerWithPropertyData)holgo).PropertyData;
-                holgo.WorldTransform.MoveToCoordinate(transformPropterty.Position);
+                var transformProperty = layerGameObject.LayerData.GetProperty<TransformLayerPropertyData>();
+                layerGameObject.WorldTransform.MoveToCoordinate(transformProperty.Position);
             }
-            else //transform property is not set, we need to set it if it is georeferenced, if not, we just keep the position it was at.
+            else
             {
                 var referencePosition = cityJson.AbsoluteCenter;
                 if (EPSG7415.IsValid(referencePosition.x, referencePosition.y, referencePosition.z, out var origin))
                 {
-                    PositionGeoReferencedCityJson(holgo, origin);
+                    PositionGeoReferencedCityJson(layerGameObject, origin);
                 }
             }
         }
@@ -113,25 +92,25 @@ namespace Netherlands3D.Functionalities.CityJSON
             }
 
             // Object is loaded / replaced - trigger the application of styling
-            var holgo = GetComponent<HierarchicalObjectLayerGameObject>();
-            holgo.ApplyStylingToRenderer(visualizer.GetComponent<Renderer>());
+            var layerGameObject = GetComponent<HierarchicalObjectLayerGameObject>();
+            layerGameObject.ApplyStylingToRenderer(visualizer.GetComponent<Renderer>());
         }
 
-        private void PositionGeoReferencedCityJson(HierarchicalObjectLayerGameObject holgo, Coordinate origin)
+        private void PositionGeoReferencedCityJson(HierarchicalObjectLayerGameObject layerGameObject, Coordinate origin)
         {
-            if (!holgo.TransformIsSetFromProperty) //move the camera only if this is is a user imported object, not if this is a project import. We know this because a project import has its Transform property set.
+            if (layerGameObject.LayerData.IsNew) //move the camera only if this is is a user imported object, not if this is a project import. We know this because a project import has its Transform property set.
             {
                 var cameraMover = Camera.main.GetComponent<MoveCameraToCoordinate>();
                 cameraMover.LookAtTarget(origin, cameraDistanceFromGeoReferencedObject); //move the camera to the georeferenced position, this also shifts the origin if needed.
             }
 
-            holgo.WorldTransform.MoveToCoordinate(origin); //set this object to the georeferenced position, since this is the correct position.
+            layerGameObject.WorldTransform.MoveToCoordinate(origin); //set this object to the georeferenced position, since this is the correct position.
 
             // imported object should stay where it is initially, and only then apply any user transformations if present.
-            if (holgo.TransformIsSetFromProperty)
+            if (!layerGameObject.LayerData.IsNew)
             {
-                var transformPropterty = (TransformLayerPropertyData)((ILayerWithPropertyData)holgo).PropertyData;
-                holgo.WorldTransform.MoveToCoordinate(transformPropterty.Position); //apply saved user changes to position.
+                var transformProperty = layerGameObject.LayerData.GetProperty<TransformLayerPropertyData>();
+                layerGameObject.WorldTransform.MoveToCoordinate(transformProperty.Position); //apply saved user changes to position.
             }
         }
 
@@ -143,16 +122,9 @@ namespace Netherlands3D.Functionalities.CityJSON
 
         private string GetCityJsonPathFromPropertyData()
         {
-            if (propertyData.CityJsonFile == null)
-                return "";
+            if (propertyData.CityJsonFile == null) return "";
 
-            var localPath = AssetUriFactory.GetLocalPath(propertyData.CityJsonFile);
-            return localPath;
-        }
-
-        private void OnDestroy()
-        {
-            propertyData.OnCRSChanged.RemoveListener(UpdateCRS);
+            return AssetUriFactory.GetLocalPath(propertyData.CityJsonFile);
         }
     }
 }

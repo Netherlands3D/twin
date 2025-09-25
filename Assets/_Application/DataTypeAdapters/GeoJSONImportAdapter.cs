@@ -1,22 +1,19 @@
 using System;
 using System.IO;
+using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.Projects;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
-using Newtonsoft.Json;
-using Netherlands3D.DataTypeAdapters;
-using Netherlands3D.LayerStyles;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
+using static Netherlands3D.Functionalities.GeoJSON.LayerPresets.GeoJSON;
 
 namespace Netherlands3D.Twin.DataTypeAdapters
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/GeoJSONImportAdapter", fileName = "GeoJSONImportAdapter", order = 0)]
     public class GeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter
     {
-        [SerializeField] private GeoJsonLayerGameObject layerPrefab;
-        [SerializeField] private UnityEvent<string> displayErrorMessageEvent;
+        [SerializeField] private UnityEvent<string> displayErrorMessageEvent = new();
 
         public bool Supports(LocalFile localFile)
         {
@@ -67,35 +64,32 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
         public void Execute(LocalFile localFile)
         {
-            CreateGeoJSONLayer(localFile, displayErrorMessageEvent);
+            ParseGeoJSON(localFile);
         }
 
-        private void CreateGeoJSONLayer(LocalFile localFile, UnityEvent<string> onErrorCallback = null)
+        private async void ParseGeoJSON(LocalFile localFile)
         {
-            var geoJsonLayerName = localFile.SourceUrl;
-            if (localFile.LocalFilePath.Length > 0)
-                geoJsonLayerName = Path.GetFileName(localFile.SourceUrl);
+            var layerName = CreateName(localFile);
+            var url = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
 
-            GeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
-            newLayer.Name = geoJsonLayerName;
-            newLayer.gameObject.name = geoJsonLayerName;
-            if (onErrorCallback != null)
-                newLayer.Parser.OnParseError.AddListener(onErrorCallback.Invoke);
+            var layerData = await App.Layers.Add("geojson", new Args(layerName, url));
 
-            //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
-            var randomLayerColor = LayerColor.Random();
-            newLayer.LayerData.Color = randomLayerColor;
+            GeoJsonLayerGameObject newLayer = layerData.Reference as GeoJsonLayerGameObject;
+            
+            // TODO: double check if the title in the args above don't already do this?
+            newLayer.gameObject.name = layerName;
+            newLayer.Parser.OnParseError.AddListener(displayErrorMessageEvent.Invoke);
+        }
 
-            var symbolizer = newLayer.LayerData.DefaultSymbolizer;
-            symbolizer?.SetFillColor(randomLayerColor);
-            symbolizer?.SetStrokeColor(randomLayerColor);
+        private static string CreateName(LocalFile localFile)
+        {
+            var geoJsonLayerName = Path.GetFileName(localFile.SourceUrl);
+            if (localFile.SourceUrl is { Length: > 0 })
+            {
+                geoJsonLayerName = localFile.SourceUrl;
+            }
 
-            var fullPath = localFile.LocalFilePath;
-            var localPath = Path.GetRelativePath(Application.persistentDataPath, fullPath);
-            var propertyData = newLayer.PropertyData as LayerURLPropertyData;
-            propertyData.Data = localFile.SourceUrl.StartsWith("http")
-                ? AssetUriFactory.CreateRemoteAssetUri(localFile.SourceUrl)
-                : AssetUriFactory.CreateProjectAssetUri(localPath);
+            return geoJsonLayerName;
         }
     }
 }

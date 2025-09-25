@@ -1,35 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using GLTFast;
+using GLTFast.Logging;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Tiles3D;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.GLBImporter
 {
+    [RequireComponent(typeof(HierarchicalObjectLayerGameObject))]
     public class GLBSpawner : MonoBehaviour, ILayerWithPropertyData
     {
-        [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
         private GLBPropertyData propertyData = new();
         public LayerPropertyData PropertyData => propertyData;
         private GameObject importedObject;
-
-        private void Awake()
-        {
-            gameObject.transform.position = ObjectPlacementUtility.GetSpawnPoint();
-        }
+        private HierarchicalObjectLayerGameObject layerGameObject;
+        private MoveCameraToCoordinate cameraMover;
+        private TransformLayerPropertyData TransformPropertyData => (TransformLayerPropertyData)((ILayerWithPropertyData)layerGameObject).PropertyData;
+        
+        [Header("Settings")]
+        [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var propertyData = properties.OfType<GLBPropertyData>().FirstOrDefault();
+            var propertyData = properties.Get<GLBPropertyData>();
             if (propertyData == null) return;
 
             // Property data is set here, and the parsing and loading of the actual data is done
@@ -37,6 +39,12 @@ namespace Netherlands3D.Functionalities.GLBImporter
             // If we do that here, then this may conflict with the loading of the project file and it would
             // cause duplication when adding a layer manually instead of through the loading mechanism
             this.propertyData = propertyData;
+        }
+
+        private void Awake()
+        {
+            cameraMover = Camera.main.GetComponent<MoveCameraToCoordinate>();
+            layerGameObject = GetComponent<HierarchicalObjectLayerGameObject>();
         }
 
         private void Start()
@@ -66,7 +74,7 @@ namespace Netherlands3D.Functionalities.GLBImporter
                 yield break;
             }
 
-            var consoleLogger = new GLTFast.Logging.ConsoleLogger();
+            var consoleLogger = new ConsoleLogger();
             var materialGenerator = new NL3DMaterialGenerator();
             GltfImport gltf = new GltfImport(null, null, materialGenerator, consoleLogger);
 
@@ -106,22 +114,7 @@ namespace Netherlands3D.Functionalities.GLBImporter
 
         private void OnObjImported(GameObject returnedGameObject)
         {
-            var holgo = GetComponent<HierarchicalObjectLayerGameObject>();
-
-            var isGeoReferenced = false;
-            if (returnedGameObject.transform.childCount > 0)
-            {
-                //GLB stores coordinates as 32 bit floats, and therefore cannot accurately be georeferenced.
-                //However, we will still do a check to ensure at least the model will appear roughly where it should if it is still georeferenced despite this.
-                var referencePosition = returnedGameObject.transform.GetChild(0).localPosition;
-                if (EPSG7415.IsValid(referencePosition.x, referencePosition.y, referencePosition.z, out var origin))
-                {
-                    PositionGeoReferencedGlb(returnedGameObject, holgo, origin);
-                }
-            }
-            
-            if(!isGeoReferenced)
-                PositionNonGeoReferencedGlb(returnedGameObject, holgo);
+            PositionImportedGameObject(returnedGameObject);
 
             importedObject = returnedGameObject;
             foreach (var meshFilter in returnedGameObject.GetComponentsInChildren<MeshFilter>())
@@ -130,63 +123,95 @@ namespace Netherlands3D.Functionalities.GLBImporter
             }
 
             // Object is loaded / replaced - trigger the application of styling
-            holgo.ApplyStyling();
+            layerGameObject.ApplyStyling();
         }
 
-        private void PositionNonGeoReferencedGlb(GameObject returnedGameObject, HierarchicalObjectLayerGameObject holgo)
+        private void PositionImportedGameObject(GameObject returnedGameObject)
         {
-            //if we have saved transform data, we will use that position, otherwise we will use this object's current position.
-            if (holgo.TransformIsSetFromProperty)
+            var rootObject = GetRootObject(returnedGameObject);
+            if (rootObject)
             {
-                //apply any transformation if present in the data
-                var transformPropterty = (TransformLayerPropertyData)((ILayerWithPropertyData)holgo).PropertyData;
-                transform.position = transformPropterty.Position.ToUnity();
-                returnedGameObject.transform.SetParent(transform, false); // imported object should move to saved (parent's) position
+                //GLB stores coordinates as 32 bit floats, and therefore cannot accurately be georeferenced.
+                //However, we will still do a check to ensure at least the model will appear roughly where it should if it is still georeferenced despite this.
+                var isGeoReferenced = IsGeoReferenced(
+                    rootObject.localPosition.x, 
+                    rootObject.localPosition.y, 
+                    rootObject.localPosition.z, 
+                    out var geoReferencedOrigin
+                );
+
+                if (isGeoReferenced)
+                {
+                    PositionGeoReferencedGlb(geoReferencedOrigin);
+                    ParentImportedGameObject(returnedGameObject, geoReferencedOrigin);
+                    return;
+                }
             }
-            else
+            
+            if (layerGameObject.LayerData.IsNew)
             {
-                //no transform property or georeference present, this object should just take on the parent's position
-                returnedGameObject.transform.SetParent(transform, false); // imported object should move to saved (parent's) position
+                GetComponent<WorldTransform>().MoveToCoordinate(new Coordinate(transform.position));
             }
+
+            returnedGameObject.transform.SetParent(transform, false); // imported object should move to saved (parent's) position
         }
 
-        private void PositionGeoReferencedGlb(GameObject returnedGameObject, HierarchicalObjectLayerGameObject holgo, Coordinate origin)
+        private Transform GetRootObject(GameObject returnedGameObject)
         {
-            if (!holgo.TransformIsSetFromProperty) //move the camera only if this is is a user imported object, not if this is a project import. We know this because a project import has its Transform property set.
+            if (returnedGameObject.transform.childCount <= 0) return null;
+
+            return returnedGameObject.transform.GetChild(0);
+        }
+
+        private bool IsGeoReferenced(double x, double y, double z, out Coordinate rdOrigin)
+        {
+            if (EPSG7415.IsValid(new Vector3RD(x, z, y)))
             {
-                var cameraMover = Camera.main.GetComponent<MoveCameraToCoordinate>();
+                rdOrigin = new Coordinate(CoordinateSystem.RDNAP, x, z, 0); //don't offset the height
+                return true;
+            }
+
+            if (EPSG7415.IsValid(new Vector3RD(x, y, z)))
+            {
+                rdOrigin = new Coordinate(CoordinateSystem.RDNAP, x, y, 0); //don't offset the height
+                return true;
+            }
+
+            rdOrigin = new Coordinate();
+            return false;
+        }
+        
+        private void PositionGeoReferencedGlb(Coordinate origin)
+        {
+            if (layerGameObject.LayerData.IsNew)
+            {
                 cameraMover.LookAtTarget(origin, cameraDistanceFromGeoReferencedObject); //move the camera to the georeferenced position, this also shifts the origin if needed.
             }
             
-            holgo.WorldTransform.MoveToCoordinate(origin); //set this object to the georeferenced position, since this is the correct position.
+            Coordinate position = origin;
+            if (!layerGameObject.LayerData.IsNew)
+            {
+                position = TransformPropertyData.Position;
+            }
+            
+            layerGameObject.WorldTransform.MoveToCoordinate(position);
+        }
+
+        private void ParentImportedGameObject(GameObject returnedGameObject, Coordinate origin)
+        {
             returnedGameObject.transform.SetParent(transform, false); // we set the parent and reset its localPosition, since the origin might have changed.
             returnedGameObject.transform.localPosition = Vector3.zero;
             foreach (Transform t in returnedGameObject.transform)
             {
                 t.localPosition -= origin.ToUnity();
             }
-
-            // imported object should stay where it is initially, and only then apply any user transformations if present.
-            if (holgo.TransformIsSetFromProperty)
-            {
-                var transformPropterty = (TransformLayerPropertyData)((ILayerWithPropertyData)holgo).PropertyData;
-                holgo.WorldTransform.MoveToCoordinate(transformPropterty.Position); //apply saved user changes to position.
-            }
-        }
-
-        public void SetGlbPathInPropertyData(string fullPath)
-        {
-            var propertyData = PropertyData as GLBPropertyData;
-            propertyData.GlbFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
         }
 
         private string GetGlbPathFromPropertyData()
         {
-            if (propertyData.GlbFile == null)
-                return "";
+            if (propertyData.GlbFile == null) return string.Empty;
 
-            var localPath = AssetUriFactory.GetLocalPath(propertyData.GlbFile);
-            return localPath;
+            return AssetUriFactory.GetLocalPath(propertyData.GlbFile);
         }
     }
 }

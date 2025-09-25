@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers.Properties;
@@ -32,9 +32,9 @@ namespace Netherlands3D.Twin.Layers.ExtensionMethods
             return properties.OfType<T>().FirstOrDefault();
         }
 
-        public static T Get<T>(this IEnumerable<LayerPropertyData> properties) where T : class
+        public static IEnumerable<T> FindAll<T>(this List<LayerPropertyData> properties) where T : class
         {
-            return properties.OfType<T>().FirstOrDefault();
+            return properties.OfType<T>();
         }
 
         public static bool Contains<T>(this List<LayerPropertyData> properties) where T : LayerPropertyData
@@ -42,7 +42,7 @@ namespace Netherlands3D.Twin.Layers.ExtensionMethods
             return properties.OfType<T>().Any();
         }
 
-        public static LayerPropertyData Get(this List<LayerPropertyData> properties, Type type)
+        public static LayerPropertyData Get(this List<LayerPropertyData> properties, Type type) 
         {
             return properties.FirstOrDefault(data => data.GetType() == type);
         }

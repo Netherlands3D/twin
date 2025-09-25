@@ -362,6 +362,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f01518e17ca84bcba8478a2b11f92a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  polygonSelectionVisualisationPrefab: {fileID: 2578961074007820944, guid: 0dd48855510674827b667fa4abd5cf60,
+    type: 3}
   selectionCalculator: {fileID: 3544518474178100614}
   polygonInput: {fileID: 2971444630074657358}
   lineInput: {fileID: 6819746166564945398}
@@ -1837,6 +1839,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
         type: 3}
+      propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
+        type: 3}
       propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 0
       objectReference: {fileID: 0}
@@ -1844,16 +1851,17 @@ PrefabInstance:
         type: 3}
       propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6970481386311860828}
+      objectReference: {fileID: 11400000, guid: e64696f66bdcc5343ad26d8c620d845a,
+        type: 2}
     - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
         type: 3}
       propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: CreateOrEditGridLayer
+      value: SetSelectionAreaBounds
       objectReference: {fileID: 0}
     - target: {fileID: 4300634644698399910, guid: dc5ce5f60fb3b074394ab446caa210d5,
         type: 3}
       propertyPath: whenAreaIsSelected.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.Twin.Layers.LayerTypes.Polygons.PolygonInputToLayer, eu.netherlands3d.twin
+      value: Netherlands3D.Twin.AreaSelection, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6295639419868117823, guid: dc5ce5f60fb3b074394ab446caa210d5,
         type: 3}

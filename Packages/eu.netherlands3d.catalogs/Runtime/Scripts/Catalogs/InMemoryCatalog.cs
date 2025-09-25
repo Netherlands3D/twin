@@ -17,13 +17,17 @@ namespace Netherlands3D.Catalogs.Catalogs
         
         private readonly List<ICatalogItem> allRecords;
 
-        public InMemoryCatalog(string id, string title, string description, IEnumerable<ICatalogItem> records)
-        {
+        public InMemoryCatalog(
+            string id, 
+            string title, 
+            string description = null, 
+            IEnumerable<ICatalogItem> records = null
+        ) {
             Id = id;
             Title = title;
             Description = description;
             Metadata = new Dictionary<string, object>();
-            allRecords = records.ToList();
+            allRecords = (records ?? Array.Empty<ICatalogItem>()).ToList();
         }
         
         public Task<ICatalogItemCollection> BrowseAsync(Pagination pagination = null)
@@ -90,6 +94,16 @@ namespace Netherlands3D.Catalogs.Catalogs
             Pagination pagination = null
         ) {
             return new FolderItem(id, title, description, new CatalogItemCollectionPage(records, pagination));       
+        }
+        
+        public static ICatalogItem CreateDataset(
+            string id, 
+            string title, 
+            string description, 
+            IEnumerable<ICatalogItem> records,
+            Pagination pagination = null
+        ) {
+            return new DataSetItem(id, title, description, new CatalogItemCollectionPage(records, pagination));       
         }
 
         private class CatalogItemFeature : IFeatureForExpression

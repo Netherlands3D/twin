@@ -1,6 +1,5 @@
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
-using NUnit.Framework.Constraints;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +15,10 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         private void Start()
         {
-            propertyData = LayerGameObject.LayerData.LayerProperties.Get<ILayerPropertyDataWithCRS>();
+            propertyData = LayerGameObject
+                .LayerData
+                .LayerProperties
+                .FindAll<ILayerPropertyDataWithCRS>().FirstOrDefault();
             if (propertyData == null) return;
 
             // Set initial toggle states
