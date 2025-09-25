@@ -24,6 +24,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         private Layer layer;
         private TileHandler tileHandler;
 
+        bool debugFeatures = true;
+
         public override IStyler Styler 
         {  
             get 
@@ -87,8 +89,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             }
         }
-
-        bool debugFeatures = false;
+       
         private void OnDebugMapping(IMapping mapping)
         {
             if (debugFeatures)
