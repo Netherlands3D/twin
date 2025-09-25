@@ -1,0 +1,5 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" class="inspector">
+    <ui:Label text="Label" class="inspector-header text-inspector-header" />
+    <ui:VisualElement name="Content" />
+    <nl3d:ToolbarInspector />
+</ui:UXML>

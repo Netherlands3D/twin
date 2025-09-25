@@ -1,0 +1,26 @@
+.listview-item {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 8px;
+    background-color: yellow;
+}
+
+.listview-item > * {
+    width: 100%;
+}
+
+.listview-item.unity-list-view__item {
+    background-color: transparent;
+}
+
+.listview-item.unity-list-view__item:hover {
+    background-color: transparent;
+}
+
+.listview-item.unity-collection-view__item {
+    background-color: transparent;
+}
+
+.listview-item.unity-collection-view__item:hover {
+    background-color: transparent;
+}
