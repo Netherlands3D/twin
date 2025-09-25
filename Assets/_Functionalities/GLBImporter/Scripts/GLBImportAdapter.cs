@@ -1,10 +1,9 @@
 using System.IO;
-using UnityEngine;
-using UnityEngine.Events;
 using Netherlands3D.DataTypeAdapters;
-using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
-using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Functionalities.GLBImporter.LayerPresets;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Projects;
+using UnityEngine;
 
 namespace Netherlands3D.Functionalities.GLBImporter
 {
@@ -40,13 +39,9 @@ namespace Netherlands3D.Functionalities.GLBImporter
 
         public void Execute(LocalFile localFile)
         {            
-            var fullPath = localFile.LocalFilePath;
-            var localPath = Path.GetRelativePath(Application.persistentDataPath, fullPath);
-            var fileName = Path.GetFileName(fullPath);
-            GLBSpawner newLayer = Instantiate(layerPrefab);
-            newLayer.gameObject.name = fileName;
+            var uri = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
 
-            newLayer.SetGlbPathInPropertyData(localPath);
+            App.Layers.Add("gltf", new Gltf.Args(localFile.FileName, uri));
         }
     }
 }

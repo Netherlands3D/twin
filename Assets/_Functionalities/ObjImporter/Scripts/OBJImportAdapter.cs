@@ -1,5 +1,7 @@
-using System.IO;
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Functionalities.OBJImporter.LayerPresets;
+using Netherlands3D.Twin;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.OBJImporter
@@ -7,22 +9,16 @@ namespace Netherlands3D.Functionalities.OBJImporter
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/OBJImportAdapter", fileName = "OBJImportAdapter", order = 0)]
     public class OBJImportAdapter : ScriptableObject, IDataTypeAdapter
     {
-        [SerializeField] private OBJSpawner layerPrefab;
+        private const string SupportedFileExtension = "obj";
+        private const string LayerPresetCode = "obj";
 
-        public bool Supports(LocalFile localFile)
-        {
-            return localFile.LocalFilePath.EndsWith(".obj");
-        }
+        public bool Supports(LocalFile localFile) => localFile.LocalFilePath.EndsWith($".{SupportedFileExtension}");
 
         public void Execute(LocalFile localFile)
         {
-            var fullPath = localFile.LocalFilePath;
-            var localPath = Path.GetRelativePath(Application.persistentDataPath, fullPath);
-            var fileName = Path.GetFileName(fullPath);
-            OBJSpawner newLayer = Instantiate(layerPrefab);
-            newLayer.gameObject.name = fileName;
+            var uri = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
 
-            newLayer.SetObjPathInPropertyData(localPath);
+            App.Layers.Add(LayerPresetCode, new Obj.Args(localFile.FileName, uri));
         }
     }
 }

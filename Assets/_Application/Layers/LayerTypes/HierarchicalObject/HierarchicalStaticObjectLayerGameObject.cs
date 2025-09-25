@@ -8,13 +8,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public Vector3 Coordinates = Vector3.zero;
         [SerializeField] private CoordinateSystem coordinateSystem;
 
-
-        protected override void Start()
+        protected override void OnLayerReady()
         {
-            base.Start();
-            transformPropertyData.Position = new Coordinate(coordinateSystem, Coordinates.y, Coordinates.x, Coordinates.z);
-            transformPropertyData.EulerRotation = transform.rotation.eulerAngles;
-            transformPropertyData.LocalScale = transform.localScale;
+            base.OnLayerReady();
+            TransformPropertyData.Position = new Coordinate(coordinateSystem, Coordinates.y, Coordinates.x, Coordinates.z);
+            TransformPropertyData.EulerRotation = transform.rotation.eulerAngles;
+            TransformPropertyData.LocalScale = transform.localScale;
         }
 
         public override void OnSelect()

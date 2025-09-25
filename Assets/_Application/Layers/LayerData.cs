@@ -1,25 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public abstract class LayerData
+    public abstract class LayerData : IEquatable<LayerData>
     {
         private const string NameOfDefaultStyle = "default";
 
         [SerializeField, DataMember] protected Guid UUID = Guid.NewGuid();
         public Guid Id => UUID;
 
+        [JsonIgnore] public bool IsNew { get; private set; } = true;
         [SerializeField, DataMember] protected string name;
         [SerializeField, DataMember] protected bool activeSelf = true;
         
@@ -126,10 +128,7 @@ namespace Netherlands3D.Twin.Layers
             get
             {
                 // When unserializing, and the layerproperties ain't there: make sure we have a valid list object.
-                if (layerProperties == null)
-                {
-                    layerProperties = new();
-                }
+                layerProperties ??= new List<LayerPropertyData>();
 
                 return layerProperties;
             }
@@ -138,10 +137,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore]
         public bool HasValidCredentials
         {
-            get
-            {
-                return hasValidCredentials;
-            }
+            get => hasValidCredentials;
             set
             {
                 hasValidCredentials = value;
@@ -149,7 +145,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        [JsonIgnore] public bool HasProperties => layerProperties.Count > 0;
+        [JsonIgnore] public bool HasProperties => LayerProperties.Count > 0;
 
         [JsonIgnore] public Dictionary<string, LayerStyle> Styles => styles;
         
@@ -178,11 +174,23 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent ParentChanged = new();
         [JsonIgnore] public readonly UnityEvent ChildrenChanged = new();
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
-        [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyAdded = new();
+        [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertySet = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleAdded = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleRemoved = new();
         [JsonIgnore] public readonly UnityEvent<bool> HasValidCredentialsChanged = new();
+
+        /// <summary>
+        /// Track whether this data object is new, in other words instantiated during this session, or whether it comes
+        /// from persistence. If it was deserialized using Newtonsoft, we know it is not new. In which case we flip the
+        /// flag.
+        /// </summary>
+        /// <param name="_"></param>
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext _)
+        {
+            IsNew = false;
+        }
 
         public void InitializeParent(LayerData initialParent = null)
         { 
@@ -227,7 +235,7 @@ namespace Netherlands3D.Twin.Layers
             Name = name;
             if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
                 InitializeParent();
-            this.layerProperties = layerProperties;
+            this.layerProperties = layerProperties ?? new List<LayerPropertyData>();
         }
 
         public void SetParent(LayerData newParent, int siblingIndex = -1)
@@ -310,24 +318,30 @@ namespace Netherlands3D.Twin.Layers
             LayerDestroyed.Invoke();
         }
 
-        public void AddProperty(LayerPropertyData propertyData)
+        public bool HasProperty<T>() where T : LayerPropertyData
         {
-            var existingProperty = layerProperties.FirstOrDefault(prop => prop.GetType() == propertyData.GetType());
-            if (existingProperty != null)
+            return LayerProperties.Contains<T>();
+        }
+
+        public T GetProperty<T>() where T : LayerPropertyData
+        {
+            return LayerProperties.Get<T>();
+        }
+
+        public void SetProperty<T>(T propertyData) where T : LayerPropertyData
+        {
+            if (LayerProperties.Set(propertyData))
             {
-                Debug.Log("A property of type" +propertyData.GetType() + " already exists for " + Name + ". Overwriting the old PropertyData");
-                int index = layerProperties.IndexOf(existingProperty);
-                layerProperties[index] = propertyData;
+                PropertySet.Invoke(propertyData);
             }
-            
-            layerProperties.Add(propertyData);
-            PropertyAdded.Invoke(propertyData);
         }
 
         public void RemoveProperty(LayerPropertyData propertyData)
         {
-            layerProperties.Remove(propertyData);
-            PropertyRemoved.Invoke(propertyData);
+            if (LayerProperties.Remove(propertyData))
+            {
+                PropertyRemoved.Invoke(propertyData);
+            }
         }
 
         public void AddStyle(LayerStyle style)
@@ -354,12 +368,9 @@ namespace Netherlands3D.Twin.Layers
         public IEnumerable<LayerAsset> GetAssets()
         {
             IEnumerable<LayerAsset> assetsOfCurrentLayer = new List<LayerAsset>();
-            if (layerProperties != null)
-            {
-                assetsOfCurrentLayer = layerProperties
-                    .OfType<ILayerPropertyDataWithAssets>()
-                    .SelectMany(p => p.GetAssets());
-            }
+            assetsOfCurrentLayer = LayerProperties
+                .OfType<ILayerPropertyDataWithAssets>()
+                .SelectMany(p => p.GetAssets());
 
             var assetsOfAllChildLayers = children
                 .SelectMany(l => l.GetAssets());
@@ -378,5 +389,17 @@ namespace Netherlands3D.Twin.Layers
             layerDataTree.AddRange(children.SelectMany(l => l.GetLayerDataTree()).ToList());
             return layerDataTree;
         }
+        
+        public bool Equals(LayerData other) => other is not null && other.Id == Id;
+        public override bool Equals(object obj) => Equals(obj as LayerData);
+        public override int GetHashCode() => Id.GetHashCode();
+        public static bool operator ==(LayerData left, LayerData right)
+        {
+            if (ReferenceEquals(left, right)) return true;
+            if (left is null || right is null) return false;
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(LayerData left, LayerData right) => !(left == right);
     }
 }

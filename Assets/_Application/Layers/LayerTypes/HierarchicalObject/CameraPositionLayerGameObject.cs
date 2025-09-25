@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Cameras;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
@@ -16,12 +14,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         [SerializeField] private Tool layerTool;
         [SerializeField] private GameObject ghostGameObject;
         private Color defaultColor;
-        CameraPropertyData cameraPropertyData => (CameraPropertyData)transformPropertyData;
+        private CameraPropertyData cameraPropertyData => LayerData.GetProperty<CameraPropertyData>();
         public override bool IsMaskable => false;
 
-        protected override void Awake()
+        protected override void OnLayerInitialize()
         {
-            base.Awake();
+            base.OnLayerInitialize();
             cameraPropertyData.OnOrthographicChanged.AddListener(SetOrthographic);
 
             defaultColor = ghostMaterial.color;
@@ -30,10 +28,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             layerTool.onClose.AddListener(DisableGhost);
         }
 
-        protected override TransformLayerPropertyData InitializePropertyData()
+        protected override void InitializePropertyData()
         {
+            if (cameraPropertyData != null) return;
+
             var cam = Camera.main;
-            return new CameraPropertyData(new Coordinate(cam.transform.position), cam.transform.eulerAngles, cam.transform.localScale, cam.orthographic);
+            var camTransform = cam.transform;
+
+            LayerData.SetProperty(
+                new CameraPropertyData(
+                    new Coordinate(camTransform.position), 
+                    camTransform.eulerAngles, 
+                    camTransform.localScale, 
+                    cam.orthographic
+                )
+            );
         }
 
         protected override void OnDestroy()
@@ -48,20 +57,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             base.LoadProperties(properties);
 
-            var cameraProperty = (CameraPropertyData)properties.FirstOrDefault(p => p is AnnotationPropertyData);
-            if (cameraProperty != null)
-            {
-                if (cameraPropertyData != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
-                {
-                    cameraPropertyData.OnOrthographicChanged.RemoveListener(SetOrthographic);
-                }
-
-                transformPropertyData = cameraProperty; //take existing TransformProperty to overwrite the unlinked one of this class
-                
-                SetOrthographic(cameraProperty.Orthographic);
-
-                cameraProperty.OnOrthographicChanged.AddListener(SetOrthographic);
-            }
+            SetOrthographic(cameraPropertyData.Orthographic);
         }
 
         private void SetOrthographic(bool orthographic)

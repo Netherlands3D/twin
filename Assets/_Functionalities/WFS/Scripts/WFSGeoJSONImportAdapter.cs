@@ -8,10 +8,14 @@ using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
-using System.Linq;
 using System.Collections.Generic;
 using KindMen.Uxios.Http;
+using Netherlands3D.Functionalities.Wfs.LayerPresets;
+using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerPresets;
+using Netherlands3D.Twin.Services;
 
 namespace Netherlands3D.Functionalities.Wfs
 {
@@ -136,29 +140,22 @@ namespace Netherlands3D.Functionalities.Wfs
             Debug.LogError("Unrecognized WFS request type: " + url);
         }
 
-        private void AddWFSLayer(string featureType, string sourceUrl, string crsType, FolderLayer folderLayer, string title, string geoJsonOutputFormatString)
+        private async void AddWFSLayer(string featureType, string sourceUrl, string crsType, FolderLayer folderLayer, string title, string geoJsonOutputFormatString)
         {
             // Create a GetFeature URL for the specific featureType
             UriBuilder uriBuilder = CreateLayerGetFeatureUri(featureType, sourceUrl, crsType, geoJsonOutputFormatString);
-            var getFeatureUrl = uriBuilder.Uri.ToString();
+            var getFeatureUrl = uriBuilder.Uri;
 
             Debug.Log($"Adding WFS layer '{featureType}' with url '{getFeatureUrl}'");
 
-            //Spawn a new WFS GeoJSON layer
-            WFSGeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
-            newLayer.LayerData.SetParent(folderLayer);
-            newLayer.Name = title;
-
-            var propertyData = newLayer.PropertyData as LayerURLPropertyData;
-            propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(getFeatureUrl);
-
-            //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
-            var randomLayerColor = LayerColor.Random();
-            newLayer.LayerData.Color = randomLayerColor;
-
-            var symbolizer = newLayer.LayerData.DefaultSymbolizer;
-            symbolizer?.SetFillColor(randomLayerColor);
-            symbolizer?.SetStrokeColor(randomLayerColor);
+            await App.Layers.Add(
+                "wfs-layer", 
+                new WfsLayer.Args(
+                    getFeatureUrl,
+                    title,
+                    folderLayer
+                )
+            );
         }
 
         private UriBuilder CreateLayerGetFeatureUri(string featureType, string sourceUrl, string crs, string geoJsonOutputFormatString)

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8624777396393225214}
   - component: {fileID: 7564383766856121656}
   - component: {fileID: 3861400155399665260}
+  - component: {fileID: 3104802660641940083}
   m_Layer: 5
   m_Name: UIButton
   m_TagString: Untagged
@@ -229,6 +230,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &3104802660641940083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 309393778111507294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Plaatsen op maaiveld
 --- !u!1 &3663558178498436140
 GameObject:
   m_ObjectHideFlags: 0

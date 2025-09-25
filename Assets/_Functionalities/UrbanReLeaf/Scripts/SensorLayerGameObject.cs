@@ -1,62 +1,48 @@
+using System.Collections.Generic;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.Properties;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.UrbanReLeaf
 {
+    [RequireComponent(typeof(SensorProjectionLayer))]
     public class SensorLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels
     {
-        public SensorProjectionLayer SensorProjectionLayer => sensorProjectionLayer;
+        private SensorProjectionLayer SensorProjectionLayer { get; set; }
 
-        public LayerPropertyData PropertyData => urlPropertyData;
-        protected LayerURLPropertyData urlPropertyData = new();
+        public LayerPropertyData PropertyData => URLPropertyData;
 
-        private SensorProjectionLayer sensorProjectionLayer;
+        private LayerURLPropertyData URLPropertyData => LayerData.GetProperty<LayerURLPropertyData>();
 
-        private List<IPropertySectionInstantiator> propertySections = new();
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
+        protected override void OnLayerInitialize()
         {
-            propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
-            return propertySections;
+            SensorProjectionLayer = GetComponent<SensorProjectionLayer>();
+
+            base.OnLayerInitialize();
         }
 
-        protected override void Awake()
+        protected override void OnLayerReady()
         {
-            base.Awake();
-            sensorProjectionLayer = GetComponent<SensorProjectionLayer>();
-        }
-
-        protected override void Start()
-        {
-            base.Start();           
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
         }
 
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+        }
+
         //a higher order means rendering over lower indices
-        public void SetRenderOrder(int order)
+        private void SetRenderOrder(int order)
         {
             //we have to flip the value because a lower layer with a higher index needs a lower render index
             SensorProjectionLayer.RenderIndex = -order;
         }
 
-        public virtual void LoadProperties(List<LayerPropertyData> properties)
-        {
-            var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
-            if (urlProperty != null)
-            {
-                this.urlPropertyData = urlProperty;
-            }
-        }
-
         protected override void OnDestroy()
         {
             base.OnDestroy();
+
             LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
         }
     }

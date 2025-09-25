@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -13,6 +14,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Functionalities.OBJImporter
 {
+    [RequireComponent(typeof(HierarchicalObjectLayerGameObject))]
     public class OBJSpawner : MonoBehaviour, ILayerWithPropertyData
     {
         [Header("Required input")]
@@ -29,17 +31,25 @@ namespace Netherlands3D.Functionalities.OBJImporter
         private Netherlands3D.ObjImporter.ObjImporter importer;
         private GameObject importedObject;
 
-        public bool HasMtl => GetMtlPathFromPropertyData() != string.Empty;
+        private string ObjFilePath => propertyData.ObjFile != null ? AssetUriFactory.GetLocalPath(propertyData.ObjFile) : string.Empty;
+        private string MtlFilePath => propertyData.MtlFile != null ? AssetUriFactory.GetLocalPath(propertyData.MtlFile) : string.Empty;
+
+        public bool HasMtl => MtlFilePath != string.Empty;
         public UnityEvent<bool> MtlImportSuccess = new();
+        private HierarchicalObjectLayerGameObject layerGameObject;
+        private MoveCameraToCoordinate cameraMover;
+        private TransformLayerPropertyData TransformPropertyData => (TransformLayerPropertyData)((ILayerWithPropertyData)layerGameObject).PropertyData;
 
         private void Awake()
         {
+            cameraMover = Camera.main.GetComponent<MoveCameraToCoordinate>();
             gameObject.transform.position = ObjectPlacementUtility.GetSpawnPoint();
+            layerGameObject = GetComponent<HierarchicalObjectLayerGameObject>();
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var propertyData = properties.OfType<OBJPropertyData>().FirstOrDefault();
+            var propertyData = properties.Get<OBJPropertyData>();
             if (propertyData == null) return;
 
             // Property data is set here, and the parsing and loading of the actual data is done
@@ -63,10 +73,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
             importer = Instantiate(importerPrefab);
 
-            var objPath = GetObjPathFromPropertyData();
-            var mtlPath = GetMtlPathFromPropertyData();
-
-            ImportObj(objPath, mtlPath);
+            ImportObj(ObjFilePath, MtlFilePath);
         }
 
         private void ImportObj(string objPath, string mtlPath = "")
@@ -97,98 +104,73 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
         private void OnObjImported(GameObject returnedGameObject)
         {
-            bool isGeoReferenced = !importer.createdGameobjectIsMoveable;
-            var holgo = GetComponent<HierarchicalObjectLayerGameObject>();
+            PositionImportedGameObject(returnedGameObject);
             
-            if (isGeoReferenced)
-                PositionGeoReferencedObj(returnedGameObject, holgo);
-            else
-                PositionNonGeoReferencedObj(returnedGameObject, holgo);
+            ParentImportedGameObject(returnedGameObject);
 
             importedObject = returnedGameObject;
             returnedGameObject.AddComponent<MeshCollider>();
             DisposeImporter();
             
             // Object is loaded / replaced - trigger the application of styling
-            holgo.ApplyStyling();
+            layerGameObject.ApplyStyling();
         }
 
-        private void PositionNonGeoReferencedObj(GameObject returnedGameObject, HierarchicalObjectLayerGameObject holgo)
+        private void PositionImportedGameObject(GameObject returnedGameObject)
         {
-            //if we have saved transform data, we will use that position, otherwise we will use this object's current position.
-            if (holgo.TransformIsSetFromProperty)
+            if (IsGeoReferenced())
             {
-                //apply any transformation if present in the data
-                var transformPropterty = (TransformLayerPropertyData)((ILayerWithPropertyData)holgo).PropertyData;
-                transform.position = transformPropterty.Position.ToUnity();
-                returnedGameObject.transform.SetParent(transform, false); // imported object should move to saved (parent's) position
+                PositionGeoReferencedObj(returnedGameObject, TransformPropertyData.Position);
+                return;
             }
-            else
+
+            // if we have saved transform data, we will use that position, otherwise we will use this object's
+            // current position.
+            if (!layerGameObject.LayerData.IsNew)
             {
-                //no transform property or georeference present, this object should just take on the parent's position
-                returnedGameObject.transform.SetParent(transform, false); // imported object should move to saved (parent's) position
+                transform.position = TransformPropertyData.Position.ToUnity();
             }
         }
 
-        private void PositionGeoReferencedObj(GameObject returnedGameObject, HierarchicalObjectLayerGameObject holgo)
+        private bool IsGeoReferenced()
         {
-            var targetPosition = new Coordinate(returnedGameObject.transform.position); //georeferenced position as coordinate. todo: there is already precision lost in the importer, this should be preserved while parsing, as there is nothing we can do now anymore.
-            
-            if (!holgo.TransformIsSetFromProperty) //move the camera only if this is is a user imported object, not if this is a project import. We know this because a project import has its Transform property set.
+            return !importer.createdGameobjectIsMoveable;
+        }
+
+        private void PositionGeoReferencedObj(GameObject returnedGameObject, Coordinate coordinate)
+        {
+            if (layerGameObject.LayerData.IsNew)
             {
-                var cameraMover = Camera.main.GetComponent<MoveCameraToCoordinate>();
-                cameraMover.LookAtTarget(targetPosition, cameraDistanceFromGeoReferencedObject); //move the camera to the georeferenced position, this also shifts the origin if needed.
-            }
+                // georeferenced position as coordinate. todo: there is already precision lost in the importer, this should
+                // be preserved while parsing, as there is nothing we can do now anymore.
+                coordinate = new Coordinate(returnedGameObject.transform.position);
             
-            holgo.WorldTransform.MoveToCoordinate(targetPosition); //set this object to the georeferenced position, since this is the correct position.
-            returnedGameObject.transform.SetParent(transform, false); // we set the parent and reset its localPosition, since the origin might have changed.
+                // move the camera to the georeferenced position, this also shifts the origin if needed.
+                cameraMover.LookAtTarget(coordinate, cameraDistanceFromGeoReferencedObject); 
+            }
+
+            //set this object to the georeferenced position, since this is the correct position.
+            layerGameObject.WorldTransform.MoveToCoordinate(coordinate); 
+        }
+
+        private void ParentImportedGameObject(GameObject returnedGameObject)
+        {
+            // we set the parent and reset its localPosition, since the origin might have changed.
+            returnedGameObject.transform.SetParent(transform, false);
             returnedGameObject.transform.localPosition = Vector3.zero;
-
-            // imported object should stay where it is initially, and only then apply any user transformations if present.
-            if (holgo.TransformIsSetFromProperty)
-            {
-                var transformPropterty = (TransformLayerPropertyData)((ILayerWithPropertyData)holgo).PropertyData;
-                holgo.WorldTransform.MoveToCoordinate(transformPropterty.Position); //apply saved user changes to position.
-            }
         }
 
         private void DisposeImporter()
         {
-            if (importer != null)
-            {
-                importer.MtlImportSucceeded.RemoveListener(MtlImportSuccess.Invoke);
-                Destroy(importer.gameObject);
-            }
-        }
+            if (importer == null) return;
 
-        public void SetObjPathInPropertyData(string fullPath)
-        {
-            var propertyData = PropertyData as OBJPropertyData;
-            propertyData.ObjFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
+            importer.MtlImportSucceeded.RemoveListener(MtlImportSuccess.Invoke);
+            Destroy(importer.gameObject);
         }
 
         public void SetMtlPathInPropertyData(string fullPath)
         {
-            var propertyData = PropertyData as OBJPropertyData;
             propertyData.MtlFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
-        }
-
-        private string GetObjPathFromPropertyData()
-        {
-            if (propertyData.ObjFile == null)
-                return "";
-
-            var localPath = AssetUriFactory.GetLocalPath(propertyData.ObjFile);
-            return localPath;
-        }
-
-        private string GetMtlPathFromPropertyData()
-        {
-            if (propertyData.MtlFile == null)
-                return "";
-
-            var localPath = AssetUriFactory.GetLocalPath(propertyData.MtlFile);
-            return localPath;
         }
     }
 }
