@@ -278,11 +278,12 @@ namespace Netherlands3D.Twin.Layers.Properties
                     }
                     else
                     {
-                        if(firstSelectedIndex < targetIndex)
-                            for (int i = firstSelectedIndex; i <= targetIndex; i++)
+                        //we use the first selected item to only select the range for mutli select and not the last selected item when some are not selected in between
+                        if (firstIndex < targetIndex)
+                            for (int i = firstIndex; i <= targetIndex; i++)
                                 hiddenObjects[i].SetSelected(addSelection);
-                        else if(lastSelectedIndex > targetIndex)
-                            for (int i = targetIndex; i <= lastSelectedIndex; i++)
+                        else if(firstIndex > targetIndex)
+                            for (int i = targetIndex; i <= firstIndex; i++)
                                 hiddenObjects[i].SetSelected(addSelection);
                     }                    
                 }

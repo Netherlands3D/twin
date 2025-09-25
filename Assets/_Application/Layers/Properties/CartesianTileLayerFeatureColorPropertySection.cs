@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
+using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -17,6 +19,9 @@ namespace Netherlands3D.Twin.Layers.Properties
         private LayerGameObject layer;
         private readonly Dictionary<LayerFeature, ColorSwatch> swatches = new();
         [SerializeField] private ColorPickerPropertySection colorPicker;
+        private int currentButtonIndex = -1;
+        private List<ColorSwatch> selectedItems = new();
+        private ColorSwatch firstSelectedItem;
 
         public override LayerGameObject LayerGameObject
         {
@@ -84,41 +89,48 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void OnClickedOnSwatch(PointerEventData _, ColorSwatch swatch)
         {
-            if (swatch.IsSelected)
-            {
-                DeselectAllSwatches();
-                DeselectSwatch(swatch);
-                return;
-            }
+            //select layer
+            currentButtonIndex = swatches.Values.ToList().IndexOf(swatch);
+            ProcessLayerSelection();
+            UpdateSelection();
 
-            DeselectAllSwatches();
-            SelectSwatch(swatch);
+            //if (swatch.IsSelected)
+            //{
+            //    DeselectAllSwatches();
+            //    DeselectSwatch(swatch);
+            //    return;
+            //}
+
+            //DeselectAllSwatches();
+            //SelectSwatch(swatch);
         }
 
-        private void SelectSwatch(ColorSwatch swatch)
-        {
-            ShowColorPicker();
-            colorPicker.PickColorWithoutNotify(swatch.Color);
+        //private void SelectSwatch(ColorSwatch swatch)
+        //{
+        //    ShowColorPicker();
+        //    colorPicker.PickColorWithoutNotify(swatch.Color);
 
-            swatch.SetSelected(true);
-        }
+        //    swatch.SetSelected(true);
 
-        private void DeselectAllSwatches()
-        {
-            foreach (var (_, swatch) in swatches)
-            {
-                if (swatch.IsSelected) continue;
-                
-                DeselectSwatch(swatch);
-            }
-        }
 
-        private void DeselectSwatch(ColorSwatch swatch)
-        {
-            swatch.SetSelected(false);
-            
-            HideColorPicker();
-        }
+        //}
+
+        //private void DeselectAllSwatches()
+        //{
+        //    foreach (var (_, swatch) in swatches)
+        //    {
+        //        if (swatch.IsSelected) continue;
+
+        //        DeselectSwatch(swatch);
+        //    }
+        //}
+
+        //private void DeselectSwatch(ColorSwatch swatch)
+        //{
+        //    swatch.SetSelected(false);
+
+        //    HideColorPicker();
+        //}
 
         private void OnPickColor(Color color)
         {
@@ -162,6 +174,118 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void HideColorPicker()
         {
             colorPicker.gameObject.SetActive(false);
+        }
+
+        private bool NoModifierKeyPressed()
+        {
+            return !LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed();
+        }
+
+        private void ProcessLayerSelection()
+        {
+            List<ColorSwatch> items = swatches.Values.ToList();
+            if (LayerUI.SequentialSelectionModifierKeyIsPressed())
+            {
+                if (selectedItems.Count > 0)
+                {                   
+                    int firstSelectedIndex = items.IndexOf(selectedItems[0]);
+                    int lastSelectedIndex = items.IndexOf(selectedItems[selectedItems.Count - 1]);
+                    int targetIndex = currentButtonIndex;
+                    int firstIndex = items.IndexOf(firstSelectedItem);
+
+                    bool addSelection = !items[currentButtonIndex].IsSelected;
+                    if (!addSelection)
+                    {
+                        if (firstIndex < targetIndex)
+                            for (int i = targetIndex + 1; i <= lastSelectedIndex; i++)
+                                items[i].SetSelected(addSelection);
+                        else if (firstIndex > targetIndex)
+                            for (int i = 0; i < targetIndex; i++)
+                                items[i].SetSelected(addSelection);
+                        else if (firstIndex == targetIndex)
+                            for (int i = 0; i <= lastSelectedIndex; i++)
+                                if (i != currentButtonIndex)
+                                    items[i].SetSelected(addSelection);
+                    }
+                    else
+                    {
+                        //we use the first selected item to only select the range for mutli select and not the last selected item when some are not selected in between
+                        if (firstIndex < targetIndex)
+                            for (int i = firstIndex; i <= targetIndex; i++)
+                                items[i].SetSelected(addSelection);
+                        else if (firstIndex > targetIndex)
+                            for (int i = targetIndex; i <= firstIndex; i++)
+                                items[i].SetSelected(addSelection);
+                    }
+                }
+                else
+                {
+                    items[currentButtonIndex].SetSelected(true);
+
+                    UpdateSelection();
+                    //cache the first selected item for sequential selection to always know where to start
+                    if (selectedItems.Count == 0 || (selectedItems.Count == 1 && firstSelectedItem != items[currentButtonIndex]))
+                        firstSelectedItem = items[currentButtonIndex];
+
+                    ShowColorPicker();
+                    colorPicker.PickColorWithoutNotify(items[currentButtonIndex].Color);
+                }
+            }
+            else if(LayerUI.AddToSelectionModifierKeyIsPressed())
+            {
+                items[currentButtonIndex].SetSelected(!items[currentButtonIndex].IsSelected);
+                if (items[currentButtonIndex].IsSelected)
+                {
+                    UpdateSelection();
+                    firstSelectedItem = items[currentButtonIndex];
+
+
+                    ShowColorPicker();
+                    colorPicker.PickColorWithoutNotify(items[currentButtonIndex].Color);
+                }
+                else
+                {
+                    UpdateSelection();
+                    if (selectedItems.Count == 0)
+                    {
+                        HideColorPicker();
+                    }
+                }
+            }
+            if (NoModifierKeyPressed())
+            {
+                foreach (var item in items)
+                    item.SetSelected(false);
+
+                //are we toggling the previous selected only item?
+                if (selectedItems.Count == 1 && selectedItems[0] == items[currentButtonIndex])
+                {
+                    UpdateSelection();
+                    HideColorPicker();
+                }
+                else
+                {
+                    items[currentButtonIndex].SetSelected(true);
+
+                    UpdateSelection();
+                    //cache the first selected item for sequential selection to always know where to start
+                    if (selectedItems.Count == 0 || (selectedItems.Count == 1 && firstSelectedItem != items[currentButtonIndex]))
+                        firstSelectedItem = items[currentButtonIndex];
+
+                    ShowColorPicker();
+                    colorPicker.PickColorWithoutNotify(items[currentButtonIndex].Color);
+                }
+            }
+        }
+
+        private void UpdateSelection()
+        {
+            selectedItems.Clear();
+            foreach (ColorSwatch item in swatches.Values.ToList())
+                if (item.IsSelected)
+                    selectedItems.Add(item);
+            if (selectedItems.Count == 0)
+                firstSelectedItem = null;
         }
     }
 }
