@@ -24,11 +24,14 @@ namespace Netherlands3D.Minimap
         [SerializeField] private Vector2 hoverSize;
 
         [SerializeField] private float scrollTimeOut = 0.05f;
-        private float lastScrollTime; 
+        private float lastScrollTime;
 
         [Header("Components")]
         [SerializeField] private RectTransform mapTiles;
         [SerializeField] private RectTransform navigation;
+
+        [Header("Events")]
+        [SerializeField] private UnityEvent<int> OnZoomChanged = new();
 
         /// <summary>
         /// The drag offset when the user starts dragging (position where the user clicked before dragging)
@@ -68,11 +71,13 @@ namespace Netherlands3D.Minimap
             defaultSizeDelta = rectTransform.sizeDelta;
 
             var anchorOffset = rectTransform.pivot * defaultSizeDelta;
-            rectTransform.pivot = new Vector2(0,0);
+            rectTransform.pivot = new Vector2(0, 0);
             rectTransform.anchoredPosition -= anchorOffset;
 
             navigation.gameObject.SetActive(false);
             lastScrollTime = -scrollTimeOut;
+
+            OnZoomChanged.AddListener(wmtsMap.Zoomed);
         }
 
         /// <summary>
@@ -82,9 +87,9 @@ namespace Netherlands3D.Minimap
         /// <returns></returns>
         IEnumerator HoverResize(Vector2 targetScale)
         {
-            while(true)
+            while (true)
             {
-                if(Vector2.Distance(targetScale, rectTransform.sizeDelta) > 0.5f)
+                if (Vector2.Distance(targetScale, rectTransform.sizeDelta) > 0.5f)
                 {
                     //Eaze out to target scale
                     rectTransform.sizeDelta = Vector2.Lerp(rectTransform.sizeDelta, targetScale, hoverResizeSpeed * Time.deltaTime);
@@ -157,7 +162,7 @@ namespace Netherlands3D.Minimap
 
             zoomScale++;
             ZoomTowardsLocation(useMousePosition);
-            wmtsMap.Zoomed((int)zoomScale);
+            OnZoomChanged.Invoke((int)zoomScale);
         }
 
         /// <summary>
@@ -170,7 +175,23 @@ namespace Netherlands3D.Minimap
 
             zoomScale--;
             ZoomTowardsLocation(useMousePosition);
-            wmtsMap.Zoomed((int)zoomScale);
+            OnZoomChanged.Invoke((int)zoomScale);
+        }
+
+        /// <summary>
+        /// Set the zoom of the minimap
+        /// </summary>
+        /// <param name="newZoomScale">Zoom amount</param>
+        public void SetZoom(float newZoomScale)
+        {
+            newZoomScale = Mathf.Clamp(newZoomScale, minZoomScale, maxZoomScale);
+
+            if (zoomScale != newZoomScale)
+            {
+                zoomScale = newZoomScale;
+                ZoomTowardsLocation(false);
+                OnZoomChanged.Invoke((int)zoomScale);
+            }
         }
 
         /// <summary>
@@ -180,7 +201,7 @@ namespace Netherlands3D.Minimap
         private void ZoomTowardsLocation(bool useMouse = true)
         {
             var zoomTarget = Vector3.zero;
-            if(useMouse)
+            if (useMouse)
             {
                 zoomTarget = Mouse.current.position.ReadValue();
             }
@@ -215,15 +236,15 @@ namespace Netherlands3D.Minimap
 
         public void OnScroll(PointerEventData eventData)
         {
-            if(Time.time < lastScrollTime + scrollTimeOut)
+            if (Time.time < lastScrollTime + scrollTimeOut)
                 return;
 
-            if(eventData.scrollDelta.y > 0)
+            if (eventData.scrollDelta.y > 0)
             {
                 ZoomIn();
                 lastScrollTime = Time.time;
             }
-            else if(eventData.scrollDelta.y < 0)
+            else if (eventData.scrollDelta.y < 0)
             {
                 ZoomOut();
                 lastScrollTime = Time.time;
@@ -237,7 +258,7 @@ namespace Netherlands3D.Minimap
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if(!dragging)
+            if (!dragging)
             {
                 StoppedMapInteraction();
             }

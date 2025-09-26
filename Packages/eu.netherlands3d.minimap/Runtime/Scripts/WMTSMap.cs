@@ -217,7 +217,7 @@ namespace Netherlands3D.Minimap
             if (!rdCoordinate.IsValid()) return;
 
             Vector3 unityCoordinate = rdCoordinate.ToUnity();
-            unityCoordinate.y = Camera.main.transform.position.y;
+            unityCoordinate.y = cameraMoveTarget.transform.position.y;
 
             if (moveCameraToClickedLocation && cameraMoveTarget){
 				cameraMoveTarget.transform.position = unityCoordinate;	
@@ -338,7 +338,7 @@ namespace Netherlands3D.Minimap
 			fov.SetAsLastSibling(); //Fov is on top of map
 			pointer.SetAsLastSibling(); //Pointer is on top of fov
 
-			PositionObjectOnMap(pointer, CoordinateConverter.UnitytoRD(Camera.main.transform.position));
+			PositionObjectOnMap(pointer, new Coordinate(cameraMoveTarget.transform.position).Convert(CoordinateSystem.RDNAP).ToVector3RD());
 
 			if(CenterPointerInView)
 			{
@@ -428,5 +428,11 @@ namespace Netherlands3D.Minimap
 				tileList.Remove(tileKey);
 			}
 		}
+
+		/// <summary>
+		/// Sets the camera that needs to be used for the map view.
+		/// </summary>
+		/// <param name="camera"></param>
+		public void SetActiveCamera(Camera camera) => cameraMoveTarget = camera;
 	}
 }

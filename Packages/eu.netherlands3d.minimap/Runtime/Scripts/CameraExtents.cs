@@ -26,6 +26,9 @@ namespace Netherlands3D.Minimap
             new Plane(), //Far
         };
 
+        public static float nearClipDistance = 10;
+        public static float farClipDistance = 10000;
+
         public static Extent GetExtent(Camera camera, float maximumViewDistance = 0)
         {
             if (maximumViewDistance == 0) maximumViewDistance = camera.farClipPlane;
@@ -43,8 +46,8 @@ namespace Netherlands3D.Minimap
             CalculateCornerExtents(camera, maximumViewDistance);
 
             // Convert min and max to WGS84 coordinates
-            var rdMin = CoordinateConverter.UnitytoRD(unityMin);
-            var rdMax = CoordinateConverter.UnitytoRD(unityMax);
+            var rdMin = new Coordinate(unityMin).Convert(CoordinateSystem.RDNAP).ToVector3RD();
+            var rdMax = new Coordinate(unityMax).Convert(CoordinateSystem.RDNAP).ToVector3RD();
 
             // Area that should be loaded
             var extent = new Extent(rdMin.x, rdMin.y, rdMax.x, rdMax.y);
@@ -76,8 +79,8 @@ namespace Netherlands3D.Minimap
         {
             var output = new Vector3();
 
-            var topScreenPointFar = Camera.main.ViewportToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 10000));
-            var topScreenPointNear = Camera.main.ViewportToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 10));
+            var topScreenPointFar = camera.ViewportToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, farClipDistance));
+            var topScreenPointNear = camera.ViewportToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, nearClipDistance));
 
             // Calculate direction vector
             Vector3 direction = topScreenPointNear - topScreenPointFar;

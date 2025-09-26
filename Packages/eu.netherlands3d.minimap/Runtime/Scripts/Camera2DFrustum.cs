@@ -25,10 +25,14 @@ namespace Netherlands3D.Minimap
     {
         private UIQuad uiQuad;
         private WMTSMap wmtsMap;
+		private Camera activeCamera;
+
         void Start()
         {
             uiQuad = GetComponent<UIQuad>();
             wmtsMap = GetComponentInParent<WMTSMap>();
+
+			activeCamera = Camera.main;
         }
 
         void Update()
@@ -39,21 +43,26 @@ namespace Netherlands3D.Minimap
 		private void DrawCameraFrustumOnMap()
 		{
 			//Get corners
-			var mainCamera = Camera.main;
-			CameraExtents.GetRDExtent(mainCamera);
-			var cameraCorners = CameraExtents.GetWorldSpaceCorners(mainCamera);
+			CameraExtents.GetRDExtent(activeCamera);
+			var cameraCorners = CameraExtents.GetWorldSpaceCorners(activeCamera);
 
 			if (cameraCorners != null)
 			{
 				//Align quad with camera extent points
-				uiQuad.QuadVertices[0] = wmtsMap.DeterminePositionOnMap(CoordinateConverter.UnitytoRD(cameraCorners[3]));
-				uiQuad.QuadVertices[1] = wmtsMap.DeterminePositionOnMap(CoordinateConverter.UnitytoRD(cameraCorners[2]));
-				uiQuad.QuadVertices[2] = wmtsMap.DeterminePositionOnMap(CoordinateConverter.UnitytoRD(cameraCorners[1]));
-				uiQuad.QuadVertices[3] = wmtsMap.DeterminePositionOnMap(CoordinateConverter.UnitytoRD(cameraCorners[0]));
+				uiQuad.QuadVertices[0] = wmtsMap.DeterminePositionOnMap(new Coordinate(cameraCorners[3]).Convert(CoordinateSystem.RDNAP).ToVector3RD());
+				uiQuad.QuadVertices[1] = wmtsMap.DeterminePositionOnMap(new Coordinate(cameraCorners[2]).Convert(CoordinateSystem.RDNAP).ToVector3RD());
+				uiQuad.QuadVertices[2] = wmtsMap.DeterminePositionOnMap(new Coordinate(cameraCorners[1]).Convert(CoordinateSystem.RDNAP).ToVector3RD());
+				uiQuad.QuadVertices[3] = wmtsMap.DeterminePositionOnMap(new Coordinate(cameraCorners[0]).Convert(CoordinateSystem.RDNAP).ToVector3RD());
 
 				//Make sure our graphic width/height is set to the max distance of our verts, so culling works properly
 				uiQuad.Redraw();
 			}
 		}
+
+		/// <summary>
+		/// Set the camera that needs to be used for the frustum.
+		/// </summary>
+		/// <param name="camera"></param>
+		public void SetActiveCamera(Camera camera) => activeCamera = camera;
 	}
 }
