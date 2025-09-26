@@ -1,8 +1,8 @@
-# importing a georeferenced dataset
 
-## getting the coordinatesystem for the dataset
+
+# determining the coordinatesystem for a dataset
 to get the data from a dataset into untiy at the correct location we need to know the coordinatesystem of the dataset.
-### coordinatesystem is known
+## coordinatesystem is known
 if the dataset uses a default-coordinatesystem, we set it up, if not we start with an undefined coordinatesystem
 
 ```
@@ -18,14 +18,14 @@ if the dataset contains a field in which the coordinatesystem is declared, we ca
 If a Coordinatesystem is not found, we probably don't support the coordinateSystem, or the name of the coordinatesystem is not correct.
 When we have found a coordinateSystem to work with, we need to do a couple of checks.
 
-#### first: check axiscount  
+### first: check axiscount  
 Many coordinateSystems have 2D- and 3D-variants. not everyone is hyper-aware of this. as a result it is possible that de dataset declares a 2D-coordinatesystem,
 while the dataset contains 3D-coordinates. 
 Because the third dimension of the coordinate will be lost when creating a Coordinate from the package, we have to make sure the coordinatesystem is the one for the 3D-version of the coordinatesystem if the coordinates in the dataset contain 3 dimensions.
 ```
 datasetCoordinateSystem = CoordinateSystems.To3D(datasetCoordinateSystem);
 ```
-#### second: check axisOrder
+### second: check axisOrder
 The axis-order of a coordinatesystem is not always respected. in some cases the second and third axis will be flipped.
 To be able to detect this and flip the axis-order back we can do the following, using a coordinate from the dataset:
 get the values for the 3 axes of a coordinate in the dataset
@@ -49,7 +49,7 @@ if the standardCoordinate is not valid we can check if the second and third axis
 ```
 If the flipped coordinate is valid, we need te remember to flip the second and third axis for all coordaintes from the dataset.
 If the flipped coordinate is also invalid we might want to stop the code and tell the user something is very wrong.
-### coordinatesystem is known
+## coordinatesystem is known
 if the coordinatesystem of the dataset is not known we can check to see which of the supported coordinatesystems it can be, using a coordinate from the dataset.  
 Get the values for the 3 axes of a coordinate in the dataset
 ```
