@@ -31,7 +31,7 @@ namespace Netherlands3D.Minimap
         [SerializeField] private RectTransform navigation;
 
         [Header("Events")]
-        [SerializeField] private UnityEvent<int> OnZoomChanged;
+        [SerializeField] private UnityEvent<int> OnZoomChanged = new UnityEvent<int>();
 
         /// <summary>
         /// The drag offset when the user starts dragging (position where the user clicked before dragging)
