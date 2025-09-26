@@ -44,7 +44,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             Vector3 direction = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
 
-            float calculatedSpeed = viewer.MovementSpeed * (input.SprintAction.IsPressed() ? viewer.MovementModus.runningMultiplier : 1);
+            float calculatedSpeed = viewer.MovementSpeed * (input.SprintAction.IsPressed() ? viewer.MovementModus.speedMultiplier : 1);
 
             transform.Translate(direction * calculatedSpeed * Time.deltaTime, Space.World);
             viewer.GetGroundPosition();

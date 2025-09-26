@@ -10,7 +10,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public float fieldOfView = 60;
         public float speedInKm;
         [Space(20)]
-        public float runningMultiplier;
+        public float speedMultiplier;
         public float jumpHeight;
         public float maxFallingSpeed;
         public float stepHeight = 1;

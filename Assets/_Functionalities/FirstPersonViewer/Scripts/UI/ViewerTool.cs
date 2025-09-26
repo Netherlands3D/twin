@@ -30,8 +30,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public void OnClick()
         {
-            toolbar.OpenWindow(panelPrefab, this);
             OnToolSelected?.Invoke();
+            toolbar.OpenWindow(panelPrefab, this);
         }
 
         private void ViewToolChanged(ViewerTool viewTool)
@@ -39,7 +39,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
             bool isToolSelf = viewTool == this;
             buttonRegular.SetActive(!isToolSelf);
             buttonSelected.SetActive(isToolSelf);
-            OnToolDeselected?.Invoke();
+            
+            if(!isToolSelf) OnToolDeselected?.Invoke();
         }
     }
 }

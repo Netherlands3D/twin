@@ -34,6 +34,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnUpdate()
         {
+            SpeedModifier();
+
             Vector2 moveInput = input.MoveAction.ReadValue<Vector2>();
             MoveVehicle(moveInput);
 
@@ -44,10 +46,12 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         private void MoveVehicle(Vector2 moveInput)
         {
-            float targetSpeed = moveInput.y * viewer.MovementSpeed;
+            float speedMultiplier = input.SprintAction.IsPressed() ? viewer.MovementModus.speedMultiplier : 1;
 
-            if (Mathf.Abs(targetSpeed) > 0.1f && viewer.isGrounded) currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * Time.deltaTime);
-            else currentSpeed = Mathf.MoveTowards(currentSpeed, 0, deceleration * Time.deltaTime);
+            float targetSpeed = moveInput.y * viewer.MovementSpeed * speedMultiplier;
+
+            if (Mathf.Abs(targetSpeed) > 0.1f && viewer.isGrounded) currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * speedMultiplier * Time.deltaTime);
+            else currentSpeed = Mathf.MoveTowards(currentSpeed, 0, deceleration * speedMultiplier * Time.deltaTime);
 
             transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
 
@@ -61,6 +65,14 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             {
                 viewer.GetGroundPosition();
                 ViewerEvents.OnCameraRotation?.Invoke(viewer.FirstPersonCamera.transform.forward);
+            }
+        }
+
+        private void SpeedModifier()
+        {
+            if (input.SprintAction.triggered)
+            {
+
             }
         }
     }

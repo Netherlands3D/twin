@@ -15,7 +15,7 @@ MonoBehaviour:
   viewHeight: 0
   fieldOfView: 60
   speedInKm: 45
-  runningMultiplier: 2.75
+  speedMultiplier: 2.75
   jumpHeight: 0
   maxFallingSpeed: 0
   stepHeight: 1
