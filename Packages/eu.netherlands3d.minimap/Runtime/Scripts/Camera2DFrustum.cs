@@ -42,9 +42,6 @@ namespace Netherlands3D.Minimap
 
 		private void DrawCameraFrustumOnMap()
 		{
-			//Use main camera when camera is null
-			if(activeCamera == null) activeCamera = Camera.main;
-
 			//Get corners
 			CameraExtents.GetRDExtent(activeCamera);
 			var cameraCorners = CameraExtents.GetWorldSpaceCorners(activeCamera);

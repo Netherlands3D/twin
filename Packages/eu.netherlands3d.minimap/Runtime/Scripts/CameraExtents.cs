@@ -26,6 +26,9 @@ namespace Netherlands3D.Minimap
             new Plane(), //Far
         };
 
+        public static float nearClipDistance = 10;
+        public static float farClipDistance = 10000;
+
         public static Extent GetExtent(Camera camera, float maximumViewDistance = 0)
         {
             if (maximumViewDistance == 0) maximumViewDistance = camera.farClipPlane;
@@ -76,8 +79,8 @@ namespace Netherlands3D.Minimap
         {
             var output = new Vector3();
 
-            var topScreenPointFar = camera.ViewportToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 10000));
-            var topScreenPointNear = camera.ViewportToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 10));
+            var topScreenPointFar = camera.ViewportToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, farClipDistance));
+            var topScreenPointNear = camera.ViewportToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, nearClipDistance));
 
             // Calculate direction vector
             Vector3 direction = topScreenPointNear - topScreenPointFar;
