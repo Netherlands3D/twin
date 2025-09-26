@@ -19,10 +19,12 @@ namespace Netherlands3D.FirstPersonViewer.UI
         
         private IEnumerator SetMinimap()
         {
+#if UNITY_EDITOR
             yield return null;
             minimap.SetZoom(zoomScale);
             frustum.SetActiveCamera(FirstPersonViewerData.Instance.FPVCamera);
             wmtsMap.SetActiveCamera(FirstPersonViewerData.Instance.FPVCamera);
+#endif
         }
 
 
