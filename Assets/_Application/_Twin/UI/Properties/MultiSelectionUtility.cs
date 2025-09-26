@@ -1,18 +1,17 @@
 using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.UI
 {
-    public class PanelSelectionService : MonoBehaviour
+    public static class MultiSelectionUtility 
     {
-        private bool NoModifierKeyPressed()
+        private static bool NoModifierKeyPressed()
         {
             return !LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed();
         }
 
-        public void ProcessLayerSelection(IMultiSelectable container, Action<bool> anythingSelected)
+        public static void ProcessLayerSelection(IMultiSelectable container, Action<bool> anythingSelected)
         {
             bool anySelected = false;
             if (LayerUI.SequentialSelectionModifierKeyIsPressed())

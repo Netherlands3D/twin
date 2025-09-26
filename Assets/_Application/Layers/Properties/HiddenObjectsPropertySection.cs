@@ -27,8 +27,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         private LayerGameObject layer;       
         private GameObject selectedGhostObject;
         private UnityAction<IMapping> waitForMappingLoaded;
-
-        public PanelSelectionService MultiSelection => ServiceLocator.GetService<PanelSelectionService>();
+        
         public int SelectedButtonIndex { get; set; } = -1;
         public List<ISelectable> SelectedItems { get; } = new();
         public List<ISelectable> Items { get; set; } = new();
@@ -159,7 +158,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {        
             //select layer
             UpdateSelectedButtonIndex(objectId);
-            MultiSelection.ProcessLayerSelection(this, anythingSelected => 
+            MultiSelectionUtility.ProcessLayerSelection(this, anythingSelected => 
             { 
                 if(anythingSelected)
                     HiddenFeatureSelected(objectId);

@@ -22,7 +22,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         private readonly Dictionary<LayerFeature, ColorSwatch> swatches = new();
         [SerializeField] private ColorPickerPropertySection colorPicker;
 
-        public PanelSelectionService MultiSelection => ServiceLocator.GetService<PanelSelectionService>();
         public int SelectedButtonIndex { get; set; } = -1;
         public List<ISelectable> SelectedItems { get; } = new();
         public List<ISelectable> Items { get; set; } = new();
@@ -97,7 +96,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             //select layer
             SelectedButtonIndex = Items.IndexOf(swatch);
-            MultiSelection.ProcessLayerSelection(this, anySelected =>
+            MultiSelectionUtility.ProcessLayerSelection(this, anySelected =>
             {
                 if(anySelected)
                 {
