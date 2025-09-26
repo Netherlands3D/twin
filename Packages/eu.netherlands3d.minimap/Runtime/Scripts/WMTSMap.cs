@@ -217,7 +217,7 @@ namespace Netherlands3D.Minimap
             if (!rdCoordinate.IsValid()) return;
 
             Vector3 unityCoordinate = rdCoordinate.ToUnity();
-            unityCoordinate.y = Camera.main.transform.position.y;
+            unityCoordinate.y = cameraMoveTarget.transform.position.y;
 
             if (moveCameraToClickedLocation && cameraMoveTarget){
 				cameraMoveTarget.transform.position = unityCoordinate;	
@@ -338,7 +338,7 @@ namespace Netherlands3D.Minimap
 			fov.SetAsLastSibling(); //Fov is on top of map
 			pointer.SetAsLastSibling(); //Pointer is on top of fov
 
-			PositionObjectOnMap(pointer, CoordinateConverter.UnitytoRD(Camera.main.transform.position));
+			PositionObjectOnMap(pointer, CoordinateConverter.UnitytoRD(cameraMoveTarget.transform.position));
 
 			if(CenterPointerInView)
 			{
