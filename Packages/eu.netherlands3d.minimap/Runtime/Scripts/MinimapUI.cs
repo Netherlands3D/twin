@@ -31,7 +31,7 @@ namespace Netherlands3D.Minimap
         [SerializeField] private RectTransform navigation;
 
         [Header("Events")]
-        [SerializeField] private UnityEvent<int> OnZoomChanged = new UnityEvent<int>();
+        [SerializeField] private UnityEvent<int> OnZoomChanged = new();
 
         /// <summary>
         /// The drag offset when the user starts dragging (position where the user clicked before dragging)
@@ -162,7 +162,7 @@ namespace Netherlands3D.Minimap
 
             zoomScale++;
             ZoomTowardsLocation(useMousePosition);
-            OnZoomChanged?.Invoke((int)zoomScale);
+            OnZoomChanged.Invoke((int)zoomScale);
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace Netherlands3D.Minimap
 
             zoomScale--;
             ZoomTowardsLocation(useMousePosition);
-            OnZoomChanged?.Invoke((int)zoomScale);
+            OnZoomChanged.Invoke((int)zoomScale);
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace Netherlands3D.Minimap
             {
                 zoomScale = newZoomScale;
                 ZoomTowardsLocation(false);
-                OnZoomChanged?.Invoke((int)zoomScale);
+                OnZoomChanged.Invoke((int)zoomScale);
             }
         }
 

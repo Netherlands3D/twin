@@ -338,7 +338,7 @@ namespace Netherlands3D.Minimap
 			fov.SetAsLastSibling(); //Fov is on top of map
 			pointer.SetAsLastSibling(); //Pointer is on top of fov
 
-			PositionObjectOnMap(pointer, CoordinateConverter.UnitytoRD(cameraMoveTarget.transform.position));
+			PositionObjectOnMap(pointer, new Coordinate(cameraMoveTarget.transform.position).Convert(CoordinateSystem.RDNAP).ToVector3RD());
 
 			if(CenterPointerInView)
 			{
