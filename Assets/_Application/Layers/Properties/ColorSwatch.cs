@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D
 {
-    public class ColorSwatch : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
+    public class ColorSwatch : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, ISelectable
     {
         public bool IsSelected => isSelected;
         public TMP_InputField InputField => inputField;

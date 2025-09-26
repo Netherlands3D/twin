@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
@@ -7,14 +8,14 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
-using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
+using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class HiddenObjectsPropertySection : PropertySectionWithLayerGameObject
+    public class HiddenObjectsPropertySection : PropertySectionWithLayerGameObject, IMultiSelectable
     {
         [SerializeField] private RectTransform content;
         [SerializeField] private GameObject hiddenItemPrefab;
@@ -22,13 +23,14 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private float cameraDistance = 150f;
         [SerializeField] private Material selectionMaterial;
 
-        private LayerGameObject layer;
-        private List<HiddenObjectsVisibilityItem> hiddenObjects = new();
-        private List<HiddenObjectsVisibilityItem> selectedItems = new();
-        private HiddenObjectsVisibilityItem firstSelectedItem;
-        private GameObject selectedHiddenObject;
+        private LayerGameObject layer;       
+        private GameObject selectedGhostObject;
         private UnityAction<IMapping> waitForMappingLoaded;
-        private int currentButtonIndex = -1; 
+        
+        public int SelectedButtonIndex { get; set; } = -1;
+        public List<ISelectable> SelectedItems { get; } = new();
+        public List<ISelectable> Items { get; set; } = new();
+        public ISelectable FirstSelectedItem { get; set; }
 
         public override LayerGameObject LayerGameObject
         {
@@ -78,7 +80,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void CreateVisibilityItem(string objectID)
         {
-            foreach (HiddenObjectsVisibilityItem obj in hiddenObjects)
+            foreach (HiddenObjectsVisibilityItem obj in Items.OfType<HiddenObjectsVisibilityItem>())
                 if (obj.ObjectId == objectID)
                     return;
 
@@ -89,15 +91,13 @@ namespace Netherlands3D.Twin.Layers.Properties
             item.ToggleVisibility.AddListener(isOn => OnClickToggle(objectID));
             item.ToggleVisibility.AddListener(visible => ToggleVisibilityForSelectedFeatures(objectID, visible));
             item.OnSelectItem.AddListener(OnClickItem);
-            item.OnSelectItem.AddListener(HiddenFeatureSelected);
-            item.OnDeselectItem.AddListener(HiddenFeatureDeselected);
-            hiddenObjects.Add(item);
+            Items.Add(item);
         }
 
         private void UpdateVisibility()
         {
             //update the toggles based on visibility attributes in data
-            foreach (HiddenObjectsVisibilityItem item in hiddenObjects)
+            foreach (HiddenObjectsVisibilityItem item in Items.OfType<HiddenObjectsVisibilityItem>())
             {
                 bool? visibility = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObjectByAttributeTag(item.ObjectId);
                 item.SetToggleState(visibility == true);
@@ -131,7 +131,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void ToggleVisibilityForSelectedFeatures(string objectId, bool visible)
         {
-            foreach (HiddenObjectsVisibilityItem item in selectedItems)
+            foreach (HiddenObjectsVisibilityItem item in SelectedItems.OfType<HiddenObjectsVisibilityItem>())
             {
                 ToggleVisibilityForFeature(item.ObjectId, visible);
             }
@@ -144,11 +144,11 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void UpdateSelectedButtonIndex(string objectId)
         {
-            currentButtonIndex = -1;
-            foreach (HiddenObjectsVisibilityItem item in hiddenObjects)
+            SelectedButtonIndex = -1;
+            foreach (HiddenObjectsVisibilityItem item in Items.OfType<HiddenObjectsVisibilityItem>())
                 if (item.ObjectId == objectId)
                 {
-                    currentButtonIndex = hiddenObjects.IndexOf(item);
+                    SelectedButtonIndex = Items.IndexOf(item);
                     break;
                 }
         }
@@ -157,8 +157,11 @@ namespace Netherlands3D.Twin.Layers.Properties
         {        
             //select layer
             UpdateSelectedButtonIndex(objectId);
-            ProcessLayerSelection();            
-            UpdateSelection();
+            MultiSelectionUtility.ProcessLayerSelection(this, anythingSelected => 
+            { 
+                if(anythingSelected)
+                    HiddenFeatureSelected(objectId);
+            });
         }
 
         private void OnClickToggle(string objectId)
@@ -166,13 +169,18 @@ namespace Netherlands3D.Twin.Layers.Properties
             //if there was already a selection of layers,
             //we should only toggle but not process a new selection of layers
             //but if the selected toggle was outside the selection of layers then process a new selection and select that layer
-            if (selectedItems.Count > 1)
+            UpdateSelectedButtonIndex(objectId);
+            if (SelectedItems.Count > 1)
             {
-                UpdateSelectedButtonIndex(objectId);
-                if (!selectedItems.Contains(hiddenObjects[currentButtonIndex]))
+                if (!SelectedItems.Contains(Items[SelectedButtonIndex]))
                 {
-                    OnClickItem(objectId);                    
+                    OnClickItem(objectId);
                 }
+                return;
+            }
+            //same item selected do nothing
+            if (SelectedItems.Count == 1 && SelectedItems[0] == Items[SelectedButtonIndex])
+            {
                 return;
             }
             //select the new layer
@@ -231,82 +239,13 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void OnMappingRemoved(IMapping mapping)
         {
             if (mapping is not MeshMapping meshMapping) return;
-            if(selectedHiddenObject == null) return;
+            if(selectedGhostObject == null) return;
 
-            string objectId = selectedHiddenObject.name;
+            string objectId = selectedGhostObject.name;
             if(meshMapping.HasItemWithId(objectId))
             {
                 DestroyGhostMesh();
             }
-        }
-
-        private void HiddenFeatureDeselected(string objectId)
-        {
-            //lets not destroy the ghost yet as you can move around while having it in view
-            //DestroyGhostMesh();
-        }
-
-        private bool NoModifierKeyPressed()
-        {
-            return !LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed();
-        }
-
-        private void ProcessLayerSelection()
-        {
-            if (LayerUI.SequentialSelectionModifierKeyIsPressed()) 
-            {               
-                if (selectedItems.Count > 0)
-                {
-                    int firstSelectedIndex = hiddenObjects.IndexOf(selectedItems[0]);
-                    int lastSelectedIndex = hiddenObjects.IndexOf(selectedItems[selectedItems.Count - 1]);                           
-                    int targetIndex = currentButtonIndex;
-                    int firstIndex = hiddenObjects.IndexOf(firstSelectedItem);
-                   
-                    bool addSelection = !hiddenObjects[currentButtonIndex].IsSelected;
-                    if(!addSelection)
-                    {
-                        if (firstIndex < targetIndex)
-                            for (int i = targetIndex + 1; i <= lastSelectedIndex; i++)
-                                hiddenObjects[i].SetSelected(addSelection);
-                        else if(firstIndex > targetIndex)
-                            for (int i = 0; i < targetIndex; i++)
-                                hiddenObjects[i].SetSelected(addSelection);
-                        else if(firstIndex == targetIndex)
-                            for (int i = 0; i <= lastSelectedIndex; i++)
-                                if(i != currentButtonIndex)
-                                    hiddenObjects[i].SetSelected(addSelection);
-                    }
-                    else
-                    {
-                        if(firstSelectedIndex < targetIndex)
-                            for (int i = firstSelectedIndex; i <= targetIndex; i++)
-                                hiddenObjects[i].SetSelected(addSelection);
-                        else if(lastSelectedIndex > targetIndex)
-                            for (int i = targetIndex; i <= lastSelectedIndex; i++)
-                                hiddenObjects[i].SetSelected(addSelection);
-                    }                    
-                }
-            }
-            if (NoModifierKeyPressed())
-            {
-                foreach (var item in hiddenObjects)
-                    item.SetSelected(false);                
-                hiddenObjects[currentButtonIndex].SetSelected(true);
-                UpdateSelection();
-                //cache the first selected item for sequential selection to always know where to start
-                if (selectedItems.Count == 0 || (selectedItems.Count == 1 && firstSelectedItem != hiddenObjects[currentButtonIndex]))
-                    firstSelectedItem = hiddenObjects[currentButtonIndex];
-            }
-        }
-        
-        private void UpdateSelection()
-        {
-            selectedItems.Clear();
-            foreach (HiddenObjectsVisibilityItem item in hiddenObjects)
-                if (item.IsSelected)
-                    selectedItems.Add(item);
-            if (selectedItems.Count == 0)
-                firstSelectedItem = null;
         }
 
         public void ShowGhostMesh(string objectId)
@@ -334,23 +273,23 @@ namespace Netherlands3D.Twin.Layers.Properties
                 if (item == null) continue;
 
                 DestroyGhostMesh();
-                selectedHiddenObject = new GameObject(objectId);
+                selectedGhostObject = new GameObject(objectId);
                 Mesh mesh = MeshMapping.CreateMeshFromMapping(meshMapping.ObjectMapping, item.ObjectMappingItem, out Vector3 localCentroid);
-                MeshFilter mFilter = selectedHiddenObject.AddComponent<MeshFilter>();
+                MeshFilter mFilter = selectedGhostObject.AddComponent<MeshFilter>();
                 mFilter.mesh = mesh;
-                MeshRenderer mRenderer = selectedHiddenObject.AddComponent<MeshRenderer>();
+                MeshRenderer mRenderer = selectedGhostObject.AddComponent<MeshRenderer>();
                 mRenderer.material = selectionMaterial;
-                selectedHiddenObject.transform.position = meshMapping.ObjectMapping.transform.TransformPoint(localCentroid);
+                selectedGhostObject.transform.position = meshMapping.ObjectMapping.transform.TransformPoint(localCentroid);
                 return;
             }
         }
 
         public void DestroyGhostMesh()
         {
-            if (selectedHiddenObject != null)
+            if (selectedGhostObject != null)
             {
-                Destroy(selectedHiddenObject);
-                selectedHiddenObject = null;
+                Destroy(selectedGhostObject);
+                selectedGhostObject = null;
             }
         }
 

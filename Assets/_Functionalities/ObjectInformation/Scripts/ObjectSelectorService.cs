@@ -25,8 +25,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public UnityEvent OnDeselect = new();
         public UnityEvent OnSelectDifferentLayer = new();
 
-
-
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
         private List<IMapping> orderedMappings = new List<IMapping>();

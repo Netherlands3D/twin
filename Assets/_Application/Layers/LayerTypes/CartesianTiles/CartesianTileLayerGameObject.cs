@@ -22,6 +22,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         private Layer layer;
         private TileHandler tileHandler;
 
+        bool debugFeatures = false;
+
         public override IStyler Styler 
         {  
             get 
@@ -87,8 +89,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             }
         }
-
-        bool debugFeatures = false;
+       
+        //a simple debugging method to have x items hidden on startup in the hiddenobjects property panel
         private void OnDebugMapping(IMapping mapping)
         {
             if (debugFeatures)
