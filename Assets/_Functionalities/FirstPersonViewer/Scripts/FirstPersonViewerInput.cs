@@ -98,7 +98,8 @@ namespace Netherlands3D.FirstPersonViewer
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 
-            Destroy(gameObject);
+            //Delay by one frame to prevent error.
+            Destroy(gameObject, Time.deltaTime);
         }
 
         public void AddCameraLockConstrain(MonoBehaviour monoBehaviour) => cameraLocks.Add(monoBehaviour);

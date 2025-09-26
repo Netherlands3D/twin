@@ -14,17 +14,16 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnEnable()
         {
-            StartCoroutine(SetMinimap());
-        }
-        
-        private IEnumerator SetMinimap()
-        {
-#if UNITY_EDITOR
-            yield return null;
-            minimap.SetZoom(zoomScale);
             frustum.SetActiveCamera(FirstPersonViewerData.Instance.FPVCamera);
             wmtsMap.SetActiveCamera(FirstPersonViewerData.Instance.FPVCamera);
-#endif
+            StartCoroutine(SetZoom());
+        }
+        
+        //We need to wait 1 frame to allow the map to load.
+        private IEnumerator SetZoom()
+        {
+            yield return null;
+            minimap.SetZoom(zoomScale);
         }
 
 
