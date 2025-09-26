@@ -7,7 +7,6 @@ using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
@@ -24,7 +23,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         private Layer layer;
         private TileHandler tileHandler;
 
-        bool debugFeatures = true;
+        bool debugFeatures = false;
 
         public override IStyler Styler 
         {  
@@ -90,6 +89,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             }
         }
        
+        //a simple debugging method to have x items hidden on startup in the hiddenobjects property panel
         private void OnDebugMapping(IMapping mapping)
         {
             if (debugFeatures)

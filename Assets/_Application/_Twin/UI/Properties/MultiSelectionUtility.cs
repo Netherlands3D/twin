@@ -1,20 +1,35 @@
-using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.UI
 {
     public static class MultiSelectionUtility 
     {
-        private static bool NoModifierKeyPressed()
+        public static bool AddToSelectionModifierKeyIsPressed()
         {
-            return !LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed();
+            if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX)
+            {
+                return Keyboard.current.leftCommandKey.isPressed || Keyboard.current.rightCommandKey.isPressed;
+            }
+
+            return Keyboard.current.ctrlKey.isPressed;
+        }
+
+        public static bool SequentialSelectionModifierKeyIsPressed()
+        {
+            return Keyboard.current.shiftKey.isPressed;
+        }
+
+        public static bool NoModifierKeyPressed()
+        {
+            return !AddToSelectionModifierKeyIsPressed() && !SequentialSelectionModifierKeyIsPressed();
         }
 
         public static void ProcessLayerSelection(IMultiSelectable container, Action<bool> anythingSelected)
         {
             bool anySelected = false;
-            if (LayerUI.SequentialSelectionModifierKeyIsPressed())
+            if (SequentialSelectionModifierKeyIsPressed())
             {
                 if (container.SelectedItems.Count > 0)
                 {
@@ -54,7 +69,7 @@ namespace Netherlands3D.Twin.UI
                     container.Items[container.SelectedButtonIndex].SetSelected(true);
                 }
             }
-            else if (LayerUI.AddToSelectionModifierKeyIsPressed())
+            else if (AddToSelectionModifierKeyIsPressed())
             {
                 container.Items[container.SelectedButtonIndex].SetSelected(!container.Items[container.SelectedButtonIndex].IsSelected);
                 if (container.Items[container.SelectedButtonIndex].IsSelected)

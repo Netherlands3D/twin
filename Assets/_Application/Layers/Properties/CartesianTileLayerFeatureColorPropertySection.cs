@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Services;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
-using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
