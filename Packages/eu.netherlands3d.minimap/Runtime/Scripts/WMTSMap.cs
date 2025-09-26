@@ -428,5 +428,11 @@ namespace Netherlands3D.Minimap
 				tileList.Remove(tileKey);
 			}
 		}
+
+		/// <summary>
+		/// Sets the camera that needs to be used for the map view.
+		/// </summary>
+		/// <param name="camera"></param>
+		public void SetActiveCamera(Camera camera) => cameraMoveTarget = camera;
 	}
 }

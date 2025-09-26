@@ -76,8 +76,8 @@ namespace Netherlands3D.Minimap
         {
             var output = new Vector3();
 
-            var topScreenPointFar = Camera.main.ViewportToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 10000));
-            var topScreenPointNear = Camera.main.ViewportToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 10));
+            var topScreenPointFar = camera.ViewportToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 10000));
+            var topScreenPointNear = camera.ViewportToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 10));
 
             // Calculate direction vector
             Vector3 direction = topScreenPointNear - topScreenPointFar;

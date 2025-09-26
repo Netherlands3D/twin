@@ -25,10 +25,14 @@ namespace Netherlands3D.Minimap
     {
         private UIQuad uiQuad;
         private WMTSMap wmtsMap;
+		private Camera activeCamera;
+
         void Start()
         {
             uiQuad = GetComponent<UIQuad>();
             wmtsMap = GetComponentInParent<WMTSMap>();
+
+			activeCamera = Camera.main;
         }
 
         void Update()
@@ -38,10 +42,12 @@ namespace Netherlands3D.Minimap
 
 		private void DrawCameraFrustumOnMap()
 		{
+			//Use main camera when camera is null
+			if(activeCamera == null) activeCamera = Camera.main;
+
 			//Get corners
-			var mainCamera = Camera.main;
-			CameraExtents.GetRDExtent(mainCamera);
-			var cameraCorners = CameraExtents.GetWorldSpaceCorners(mainCamera);
+			CameraExtents.GetRDExtent(activeCamera);
+			var cameraCorners = CameraExtents.GetWorldSpaceCorners(activeCamera);
 
 			if (cameraCorners != null)
 			{
@@ -55,5 +61,11 @@ namespace Netherlands3D.Minimap
 				uiQuad.Redraw();
 			}
 		}
+
+		/// <summary>
+		/// Set the camera that needs to be used for the frustum.
+		/// </summary>
+		/// <param name="camera"></param>
+		public void SetActiveCamera(Camera camera) => activeCamera = camera;
 	}
 }

@@ -74,7 +74,7 @@ namespace Netherlands3D.Minimap
             navigation.gameObject.SetActive(false);
             lastScrollTime = -scrollTimeOut;
         }
-
+        
         /// <summary>
         /// For resizing the UI when the mouse enters the minimap UI
         /// </summary>
@@ -170,6 +170,19 @@ namespace Netherlands3D.Minimap
 
             zoomScale--;
             ZoomTowardsLocation(useMousePosition);
+            wmtsMap.Zoomed((int)zoomScale);
+        }
+
+        /// <summary>
+        /// Set the zoom of the minimap
+        /// </summary>
+        /// <param name="newZoomScale">Zoom amount</param>
+        public void SetZoom(float newZoomScale)
+        {
+            if(newZoomScale <= minZoomScale || newZoomScale >= maxZoomScale) return;
+
+            zoomScale = newZoomScale;
+            ZoomTowardsLocation(false);
             wmtsMap.Zoomed((int)zoomScale);
         }
 
