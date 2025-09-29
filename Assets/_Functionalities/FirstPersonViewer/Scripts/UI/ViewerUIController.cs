@@ -17,6 +17,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
             ViewerEvents.OnViewerEntered += EnterViewer;
             ViewerEvents.OnViewerExited += ExitViewer;
+            ViewerEvents.OnHideUI += HideUI;
 
             viewerUI.SetActive(false);
         }
@@ -25,6 +26,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
         {
             ViewerEvents.OnViewerEntered -= EnterViewer;
             ViewerEvents.OnViewerExited -= ExitViewer;
+            ViewerEvents.OnHideUI -= HideUI;
         }
 
         private void EnterViewer()
@@ -43,6 +45,14 @@ namespace Netherlands3D.FirstPersonViewer.UI
         {
             viewerUI?.SetActive(false);
             uiToDisable.ForEach(ui => ui.SetActive(true));
+        }
+
+        /// <summary>
+        /// Temp Function for UI hiding (Will be replaced by the UI Hider)
+        /// </summary>
+        private void HideUI()
+        {
+            viewerUI.SetActive(!viewerUI.activeSelf);
         }
     }
 }

@@ -19,6 +19,7 @@ namespace Netherlands3D.FirstPersonViewer
         public InputAction LookInput { private set; get; }
         public InputAction ExitInput { private set; get; }
         public InputAction LeftClick { private set; get; }
+        public InputAction HideUI { private set; get; }
 
         [Header("Exit")]
         [SerializeField] private float exitDuration = .75f;
@@ -36,6 +37,7 @@ namespace Netherlands3D.FirstPersonViewer
             LookInput = inputActionAsset.FindAction("Look");
             ExitInput = inputActionAsset.FindAction("Exit");
             LeftClick = inputActionAsset.FindAction("LClick");
+            HideUI = inputActionAsset.FindAction("HideUI");
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -83,6 +85,8 @@ namespace Netherlands3D.FirstPersonViewer
                     Cursor.visible = false;
                 }
             }
+
+            if (HideUI.triggered) ViewerEvents.OnHideUI?.Invoke();
 
             if (ExitInput.IsPressed())
             {

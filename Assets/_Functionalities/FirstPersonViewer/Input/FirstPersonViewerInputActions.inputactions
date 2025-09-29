@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "FirstPersonViewerInputActions",
     "maps": [
         {
@@ -72,6 +73,15 @@
                     "name": "LClick",
                     "type": "Button",
                     "id": "35b3a958-36d2-49cd-944e-7f2498b0d27e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "HideUI",
+                    "type": "Button",
+                    "id": "fb304462-8fd8-4f07-90cb-4b4c6350f24f",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -549,6 +559,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "LClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f4f8a4b9-a7e6-48a9-848f-e1ad1dd7c4be",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard & Mouse",
+                    "action": "HideUI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b9ff29b2-4cc6-4373-ba55-9b7f0a457d30",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "HideUI",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
