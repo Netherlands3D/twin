@@ -373,11 +373,11 @@
       "dependencies": {}
     },
     "eu.netherlands3d.event-containers": {
-      "version": "0.1.1",
+      "version": "https://github.com/Netherlands3D/EventContainers.git#feature/introduce-event-invokers",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {},
-      "url": "https://package.openupm.com"
+      "hash": "d48b0264e9afad21eba6ac462442874e79336fc0"
     },
     "eu.netherlands3d.filebrowser": {
       "version": "2.2.1",

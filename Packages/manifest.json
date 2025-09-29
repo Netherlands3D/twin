@@ -19,7 +19,7 @@
     "eu.netherlands3d.cartesiantiles": "1.2.1",
     "eu.netherlands3d.collada": "0.1.1",
     "eu.netherlands3d.coordinates": "2.4.0",
-    "eu.netherlands3d.event-containers": "0.1.1",
+    "eu.netherlands3d.event-containers": "https://github.com/Netherlands3D/EventContainers.git#feature/introduce-event-invokers",
     "eu.netherlands3d.filebrowser": "2.2.1",
     "eu.netherlands3d.geojson": "1.1.1",
     "eu.netherlands3d.json": "1.0.1",
