@@ -22,7 +22,7 @@ namespace Netherlands3D.FirstPersonViewer
         public InputAction HideUI { private set; get; }
 
         [Header("Exit")]
-        [SerializeField] private float exitDuration = .75f;
+        [SerializeField] private float exitDuration = .9f;
         private float exitTimer;
 
         private List<MonoBehaviour> cameraLocks;
@@ -63,37 +63,61 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void Update()
         {
-            if (ExitInput.triggered)
+            HandleCursorLocking();
+
+            HandleExiting();
+            
+            if (HideUI.triggered) ViewerEvents.OnHideUI?.Invoke();
+        }
+
+        private void HandleCursorLocking()
+        {
+            if (ExitInput.WasReleasedThisFrame())
             {
-                if(Cursor.lockState == CursorLockMode.Locked)
+                if (Cursor.lockState == CursorLockMode.Locked)
                 {
                     AddCameraLockConstrain(this);
                     Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = true;
-                } else
-                {
-                    RemoveCameraLockConstrain(this);
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false; 
                 }
-            } else if (LeftClick.triggered)
-            {
-                if(!IsPointerOverUIObject())
+                else
                 {
                     RemoveCameraLockConstrain(this);
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
                 }
             }
+            else if (LeftClick.triggered)
+            {
+                if (!IsPointerOverUIObject())
+                {
+                    RemoveCameraLockConstrain(this);
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                }
+            }
+        }
 
-            if (HideUI.triggered) ViewerEvents.OnHideUI?.Invoke();
-
+        private void HandleExiting()
+        {
             if (ExitInput.IsPressed())
             {
                 exitTimer = Mathf.Max(exitTimer - Time.deltaTime, 0);
 
-                if (exitTimer == 0) ViewerEvents.OnViewerExited?.Invoke();
+                //Wait .15 seconds before showing the progress.
+                if (exitTimer < exitDuration - .15f)
+                {
+                    float percentageTime = Mathf.Clamp01(1f - (exitTimer / exitDuration));
+                    ViewerEvents.ExitDuration?.Invoke(percentageTime);
+                }
+
+                if (exitTimer == 0)
+                {
+                    ViewerEvents.ExitDuration?.Invoke(-1);
+                    ViewerEvents.OnViewerExited?.Invoke();
+                }
             }
+            else if (ExitInput.WasReleasedThisFrame()) ViewerEvents.ExitDuration?.Invoke(-1);
             else exitTimer = exitDuration;
         }
 

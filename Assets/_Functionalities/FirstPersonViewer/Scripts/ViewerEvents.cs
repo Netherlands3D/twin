@@ -20,5 +20,7 @@ namespace Netherlands3D.FirstPersonViewer.Events
         public static Action OnResetToStart;
         public static Action OnSetCameraNorth;
         public static Action OnHideUI;
+
+        public static Action<float> ExitDuration;
     }
 }

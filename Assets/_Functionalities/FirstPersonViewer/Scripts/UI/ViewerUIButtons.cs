@@ -24,14 +24,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnEnable()
         {
-            Camera activeCam = FirstPersonViewerData.Instance.FPVCamera;
-
-            frustum.SetActiveCamera(activeCam);
-            wmtsMap.SetActiveCamera(activeCam);
-
-            snapshotComponent.SetActiveCamera(activeCam);
-
-            StartCoroutine(SetZoom());
+            StartCoroutine(SetupViewer());
         }
 
         private void OnDisable()
@@ -39,11 +32,18 @@ namespace Netherlands3D.FirstPersonViewer.UI
             snapshotComponent.SetActiveCamera(Camera.main);
         }
 
-        //We need to wait 1 frame to allow the map to load.
-        private IEnumerator SetZoom()
+        //We need to wait 1 frame to allow the map to load. Prob a temp FIX.
+        private IEnumerator SetupViewer()
         {
             yield return null;
+            Camera activeCam = FirstPersonViewerData.Instance.FPVCamera;
+            
             minimap.SetZoom(zoomScale);
+
+            frustum.SetActiveCamera(activeCam);
+            wmtsMap.SetActiveCamera(activeCam);
+
+            snapshotComponent.SetActiveCamera(activeCam);
         }
 
 

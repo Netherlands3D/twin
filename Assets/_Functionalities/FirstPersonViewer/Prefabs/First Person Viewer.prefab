@@ -309,7 +309,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputActionAsset: {fileID: -944628639613478452, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
     type: 3}
-  exitDuration: 0.75
+  exitDuration: 0.9
 --- !u!114 &4367215521751458963
 MonoBehaviour:
   m_ObjectHideFlags: 0
