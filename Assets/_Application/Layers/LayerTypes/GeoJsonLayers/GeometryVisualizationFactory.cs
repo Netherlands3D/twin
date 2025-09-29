@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
@@ -19,6 +20,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             foreach (var polygon in geometry.Coordinates)
             {
                 var visualization = CreatePolygonVisualisation(polygon, coordinateSystem, material);
+                if (!visualization) continue;
+
                 visualizations.Add(visualization);
             }
 
@@ -62,7 +65,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 ringList.Add(unityRing);
             }
             PolygonVisualisation polygonVisualisation = CreatePolygonMesh(ringList, 10f, visualizationMaterial);
-            polygonVisualisation.transform.position += centroid;
+            if (polygonVisualisation)
+            {
+                polygonVisualisation.transform.position += centroid;
+            }
 
             return polygonVisualisation;
         }
@@ -135,14 +141,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             float polygonExtrusionHeight, 
             Material polygonMeshMaterial
         ) {
-            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, polygonExtrusionHeight, false, false, false, polygonMeshMaterial);
+            try
+            {
+                var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours,
+                    polygonExtrusionHeight, false, false, false, polygonMeshMaterial);
 
-            //Add the polygon shifter to the polygon visualisation, so it can move with our origin shifts
-            polygonVisualisation.DrawLine = false; //lines will be drawn per layer, but a single mesh will receive clicks to select
-            polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("Projected");
-            polygonVisualisation.gameObject.AddComponent<WorldTransform>(); 
+                //Add the polygon shifter to the polygon visualisation, so it can move with our origin shifts
+                polygonVisualisation.DrawLine =
+                    false; //lines will be drawn per layer, but a single mesh will receive clicks to select
+                polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("Projected");
+                polygonVisualisation.gameObject.AddComponent<WorldTransform>();
 
-            return polygonVisualisation;
+                return polygonVisualisation;
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                return null;
+            }
         }
 
         private static List<Coordinate> ConvertToUnityCoordinates(
