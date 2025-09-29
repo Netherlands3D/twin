@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     [Serializable]
     public partial class GeoJSONPointLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
-        [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
+        [SerializeField] private PointRenderer3D pointRenderer3D;
         public bool IsPolygon => false;
         public override bool IsMaskable => false;
 
@@ -44,7 +44,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // Ensure that PointRenderer3D.Material has a Material Instance to prevent accidental destruction
             // of a material asset when replacing the material - no destroy of the old material must be done because
             // that is an asset and not an instance
-            PointRenderer3D.Material = new Material(PointRenderer3D.Material);
+            PointRenderer3D.PointMaterial = new Material(PointRenderer3D.PointMaterial);
         }
 
         public List<Mesh> GetMeshData(Feature feature)
@@ -74,7 +74,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public float GetSelectionRange()
         {
-            return pointRenderer3D.MeshScale;
+            return pointRenderer3D.PointMeshScale;
         }
 
 
@@ -87,7 +87,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 for (int i = 0; i < vertices.Length; i++)
                 {
                     Vector3 localOffset = vertices[i] - mesh.bounds.center;
-                    pointRenderer3D.SetLineColorClosestToPoint(transform.position + localOffset, color);
+                    pointRenderer3D.SetPointColorClosestToPoint(transform.position + localOffset, color);
                 }
             }
         }
@@ -99,10 +99,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public Color GetRenderColor()
         {
-            return pointRenderer3D.Material.color;
+            return pointRenderer3D.PointMaterial.color;
         }
         
-        public BatchedMeshInstanceRenderer PointRenderer3D
+        public PointRenderer3D PointRenderer3D
         {
             get { return pointRenderer3D; }
             set
@@ -160,7 +160,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private Material GetMaterialInstance(Color color)
         {
-            return new Material(pointRenderer3D.Material)
+            return new Material(pointRenderer3D.PointMaterial)
             {
                 color = color
             };
@@ -186,7 +186,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             foreach (var pointCollection in featureVisualisation.Data)
             {
-                PointRenderer3D.RemoveCollection(pointCollection);
+                PointRenderer3D.RemovePointCollection(pointCollection);
             }
             FeatureRemoved?.Invoke(featureVisualisation.feature); 
             spawnedVisualisations.Remove(featureVisualisation.feature);

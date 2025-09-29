@@ -76,11 +76,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             foreach (var lineString in geometry.Coordinates)
             {
                 var convertedLineString = ConvertToUnityCoordinates(lineString, coordinateSystem);
-                lines.Add(convertedLineString);
+                if(ValidateLine(convertedLineString))
+                    lines.Add(convertedLineString);
             }
-            renderer.AppendLines(lines);
+            renderer.AppendCollections(lines);
 
             return lines;
+        }
+        
+        private static bool ValidateLine(List<Coordinate> line)
+        {
+            if (line.Count < 2)
+            {
+                Debug.LogWarning("A line should have at least 2 points");
+                return false;
+            }
+
+            return true;
         }
 
         public static List<Coordinate> CreateLineVisualization(
@@ -89,7 +101,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             LineRenderer3D renderer
         ) {
             var linePoints = ConvertToUnityCoordinates(geometry, coordinateSystem);
-            renderer.AppendLine(linePoints);
+            if(ValidateLine(linePoints))
+                renderer.AppendCollection(linePoints);
 
             return linePoints;
         }
@@ -97,10 +110,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public static List<Coordinate> CreatePointVisualisation(
             MultiPoint geometry, 
             CoordinateSystem coordinateSystem, 
-            BatchedMeshInstanceRenderer renderer
+            PointRenderer3D renderer
         ) {
             var convertedPoints = ConvertToUnityCoordinates(geometry, coordinateSystem);
-            renderer.AppendCollection(convertedPoints);
+                renderer.AppendCollection(convertedPoints);
 
             return convertedPoints;
         }
@@ -108,7 +121,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public static List<Coordinate> CreatePointVisualization(
             Point geometry, 
             CoordinateSystem coordinateSystem, 
-            BatchedMeshInstanceRenderer renderer
+            PointRenderer3D renderer
         ) {
             var convertedPoint = ConvertToCoordinate(coordinateSystem, geometry.Coordinates);
             var singlePointList = new List<Coordinate>() { convertedPoint };
