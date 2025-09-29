@@ -4,10 +4,10 @@ using System.Linq;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.Catalogs.Catalogs;
+using Netherlands3D.Events.EventInvokers;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Netherlands3D._Application._Twin
 {
@@ -168,7 +168,7 @@ namespace Netherlands3D._Application._Twin
             await App.Layers.Add(layerBuilder);
         }
 
-        public async void Trigger(ProcessItem processItem)
+        public void Trigger(ProcessItem processItem)
         {
             var processAddress = processItem.ProcessAddress;
             if (processAddress?.Scheme == "event")
@@ -176,7 +176,10 @@ namespace Netherlands3D._Application._Twin
                 if (int.TryParse(processAddress.AbsolutePath, out var processId)
                     && scriptableObjectEvents.TryGetValue(processId, out var soEvent))
                 {
-                    // TODO: trigger event, but how?
+                    if (soEvent is IEventInvoker invoker)
+                    {
+                        invoker.Invoke();
+                    }
                 }
             }
         }

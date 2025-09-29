@@ -110,7 +110,7 @@ MonoBehaviour:
       url: 
       prefab: {fileID: 8026439383914201504, guid: 292690ace10994ff5bd502be1f5a5bf2,
         type: 3}
-      scriptableObjectEvent: {fileID: 11400000, guid: 030d68968a84647ae8d3129f06405c26,
+      scriptableObjectEvent: {fileID: 11400000, guid: b5155fbd9251b2b4aa46eaa62d216e09,
         type: 2}
       children: []
     - type: 5
@@ -120,7 +120,7 @@ MonoBehaviour:
       url: 
       prefab: {fileID: 3882040503508280180, guid: b2025624c5bfd4f7a876ee2d9bb84b87,
         type: 3}
-      scriptableObjectEvent: {fileID: 11400000, guid: df2dcc26fa84f5842a74724ed1f7095d,
+      scriptableObjectEvent: {fileID: 11400000, guid: dfa24c60414cf4f479c9de175ea7e4ee,
         type: 2}
       children: []
     - type: 5
@@ -130,7 +130,7 @@ MonoBehaviour:
       url: 
       prefab: {fileID: 4705758047892485819, guid: e0272ce89eb284961a0185f7a4f2ce3f,
         type: 3}
-      scriptableObjectEvent: {fileID: 11400000, guid: d31eb758bf959466ebd75a3f79d86722,
+      scriptableObjectEvent: {fileID: 11400000, guid: 36dd503af2532da40a8c7e8a1a3b8e8f,
         type: 2}
       children: []
   - type: 2
