@@ -10,6 +10,7 @@ namespace Netherlands3D.Twin.Samplers
     {       
         public Coordinate WorldPoint => worldPoint;
 
+        private HeightMap heightMap;
         private OpticalRaycaster opticalRaycaster;
         private Action<Vector3, bool> worldPointCallback;
         private Coordinate worldPoint;
@@ -17,6 +18,7 @@ namespace Netherlands3D.Twin.Samplers
 
         private void Awake()
         {
+            heightMap = GetComponent<HeightMap>();  
             opticalRaycaster = GetComponent<OpticalRaycaster>();
         }
 
@@ -38,6 +40,8 @@ namespace Netherlands3D.Twin.Samplers
         {
             var screenPoint = Pointer.current.position.ReadValue();
             opticalRaycaster.GetWorldPointAsync(screenPoint, worldPointCallback);
+
+            
         }
 
         public void GetPointerWorldPointAsync(Action<Vector3> result)
@@ -74,6 +78,14 @@ namespace Netherlands3D.Twin.Samplers
                 position = screenRay.GetPoint(Mathf.Min(maxDistance, -distance));
             else
                 position = screenRay.GetPoint(Mathf.Min(maxDistance, distance));
+
+
+            Coordinate testCoord = new Coordinate(position);
+            Debug.Log( heightMap.GetHeight(testCoord));
+
+
+
+
             return position;
         }
     }
