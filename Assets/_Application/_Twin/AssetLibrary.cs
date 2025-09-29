@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using Netherlands3D._Application._Twin.AssetLibraryEntries;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.Catalogs.Catalogs;
@@ -25,101 +24,7 @@ namespace Netherlands3D._Application._Twin
     [CreateAssetMenu(menuName = "Netherlands3D/ApplicationCatalog")]
     public class AssetLibrary : ScriptableObject
     {
-        public enum EntryType
-        {
-            Url = 0,
-            Prefab = 1,
-            Process = 4,
-            ScriptableObjectEvent = 5,
-            Folder = 2,
-            DataSet = 3
-        }
-
-        [Serializable]
-        public class Entry
-        {
-            public EntryType type;
-            public string id;
-            public string title;
-            [TextArea] public string description;
-            public string url;
-            public LayerGameObject prefab;
-            public ScriptableObject scriptableObjectEvent;
-            public List<Entry> children = new();
-
-            public ICatalogItem ToCatalogItem()
-            {
-                switch (type)
-                {
-                    case EntryType.Url:
-                        return InMemoryCatalog.CreateRecord(
-                            id,
-                            title,
-                            description,
-                            string.IsNullOrWhiteSpace(url) ? null : new Uri(url, UriKind.Absolute)
-                        );
-
-                    // Experimental feature to support calling processes, which may be scriptable events in our case
-                    case EntryType.Process:
-                        return new ProcessItem(
-                            id, 
-                            title, 
-                            description,
-                            processAddress: string.IsNullOrWhiteSpace(url) ? null : new Uri(url, UriKind.Absolute)
-                        );
-
-                    // Experimental feature to support calling processes, which may be scriptable events in our case
-                    case EntryType.ScriptableObjectEvent:
-                        var resolvedProcess = url;
-                        if (scriptableObjectEvent)
-                        {
-                            resolvedProcess = $"event:///{scriptableObjectEvent.GetInstanceID()}";
-                        }
-
-                        return new ProcessItem(
-                            id, 
-                            title, 
-                            description,
-                            processAddress: string.IsNullOrWhiteSpace(resolvedProcess) 
-                                ? null : new Uri(resolvedProcess, UriKind.Absolute)
-                        );
-
-                    case EntryType.Prefab:
-                        var resolved = url;
-                        if (prefab)
-                        {
-                            resolved = $"prefab-library:///{prefab.PrefabIdentifier}";
-                        }
-
-                        return InMemoryCatalog.CreateRecord(
-                            id,
-                            title,
-                            description,
-                            string.IsNullOrWhiteSpace(resolved) ? null : new Uri(resolved, UriKind.Absolute)
-                        );
-
-                    case EntryType.Folder:
-                        return InMemoryCatalog.CreateFolder(
-                            id,
-                            title,
-                            description,
-                            children.Select(c => c.ToCatalogItem())
-                        );
-
-                    case EntryType.DataSet:
-                        return InMemoryCatalog.CreateDataset(
-                            id,
-                            title,
-                            description,
-                            children.Select(c => c.ToCatalogItem())
-                        );
-
-                    default: throw new ArgumentOutOfRangeException();
-                }
-            }
-        }
-
-        [SerializeField] private List<Entry> items = new();
+        [SerializeField] private List<AssetLibraryEntry> items = new();
         
         // Cached list of scriptable object events that have been registered
         private readonly Dictionary<int, ScriptableObject> scriptableObjectEvents = new();
@@ -141,11 +46,11 @@ namespace Netherlands3D._Application._Twin
             }
         }
 
-        private void RegisterEntry(Entry entry)
+        private void RegisterEntry(AssetLibraryEntry entry)
         {
-            if (entry.type == EntryType.ScriptableObjectEvent)
+            if (entry is ScriptableObjectEventAssetEntry soeae)
             {
-                this.scriptableObjectEvents[entry.scriptableObjectEvent.GetInstanceID()] = entry.scriptableObjectEvent;
+                scriptableObjectEvents[soeae.EventObject.GetInstanceID()] = soeae.EventObject;
             }
             Import(entry.ToCatalogItem());
         }

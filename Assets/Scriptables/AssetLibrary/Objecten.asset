@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9933fa3bab514aeabeac36958097985f, type: 3}
+  m_Name: Objecten
+  m_EditorClassIdentifier: 
+  id: objects
+  title: Objecten
+  description: 
+  children:
+  - {fileID: 11400000, guid: 67522e2df13df494dbf5b5e4dc77bcbd, type: 2}

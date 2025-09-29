@@ -1,0 +1,26 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using Netherlands3D.Catalogs;
+using Netherlands3D.Catalogs.Catalogs;
+using UnityEngine;
+
+namespace Netherlands3D._Application._Twin.AssetLibraryEntries
+{
+    [CreateAssetMenu(menuName = "Netherlands3D/Asset Library/Folder")]
+    public class FolderAssetEntry : AssetLibraryEntry
+    {
+        [SerializeField] private List<AssetLibraryEntry> children = new();
+
+        public override ICatalogItem ToCatalogItem()
+        {
+            return InMemoryCatalog.CreateFolder(
+                Id,
+                Title,
+                Description,
+                children.Where(c => c != null).Select(c => c.ToCatalogItem())
+            );
+        }
+
+        public override IEnumerable<AssetLibraryEntry> GetChildren() => children;
+    }
+}
