@@ -133,5 +133,7 @@ namespace Netherlands3D.Snapshots
 #endif
             return location;
         }
+
+        public void SetActiveCamera(Camera camera) => sourceCamera = camera;
     }
 }
