@@ -1,5 +1,6 @@
 ﻿using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Utility;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Samplers
@@ -8,70 +9,47 @@ namespace Netherlands3D.Twin.Samplers
     {
         [SerializeField] private Texture2D heightMap;
 
-        private double MinLat = 50.75035;     // south
-        private double MaxLat = 53.5171625;   // north
-        private double MinLon = 3.35833;      // west
-        private double MaxLon = 7.22778;      // east
+        private double minX = StandardBoundingBoxes.RD_NetherlandsBounds_Cropped.BottomLeft.easting;
+        private double maxX = StandardBoundingBoxes.RD_NetherlandsBounds_Cropped.TopRight.easting;
+        private double minY = StandardBoundingBoxes.RD_NetherlandsBounds_Cropped.BottomLeft.northing;
+        private double maxY = StandardBoundingBoxes.RD_NetherlandsBounds_Cropped.TopRight.northing;
 
         private const float lowestPoint = -6.76f;
         private const float highestPoint = 322.4f;
+        private const float lowestValue = 0.267f;
+        private const float highestValue = 0.627f;
 
-        private Vector2 pixelBounds;
+        private float totalHeight => highestPoint - lowestPoint;
+        private float totalValue => highestValue - lowestValue;
 
         private void Start()
         {
-            MinLat = StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds_Cropped.BottomLeft.northing;
-            MaxLat = StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds_Cropped.TopRight.northing;
-            MinLon = StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds_Cropped.BottomLeft.easting;
-            MaxLon = StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds_Cropped.TopRight.easting;
-
-            FindPixelBounds();
-
-        }
-
-        private void FindPixelBounds()
-        {
-            Color[] pixels = heightMap.GetPixels();
-            float minValue = float.MaxValue;
-            float maxValue = float.MinValue;
-            Vector2Int minPos = Vector2Int.zero;
-            Vector2Int maxPos = Vector2Int.zero;
-            int width = heightMap.width;
-
-            for(int x = 0; x < heightMap.width; x++)
-                for(int y = 0; y < heightMap.height; y++)
-
-
-
-            for (int i = 0; i < pixels.Length; i++)
-            {
-                float v = pixels[i].r;
-
-                // Skip black (no-data)
-                if (v < 0.1f) continue;
-
-                if (v < minValue)
-                    minValue = v;
-                if (v > maxValue)
-                    maxValue = v;
-            }
-            pixelBounds = new Vector2(minValue, maxValue);
         }
 
         public float GetHeight(Coordinate coordinate)
         {
             if (heightMap == null) return 0f;
 
-            Coordinate wgs84 = coordinate.Convert(CoordinateSystem.WGS84_LatLon);
-            double u = (wgs84.easting - MinLon) / (MaxLon - MinLon);
-            double v = (wgs84.northing - MinLat) / (MaxLat - MinLat);
-            int x = (int)(Mathf.Clamp01((float)u) * heightMap.width);
-            int y = (int)(Mathf.Clamp01((float)v) * heightMap.height);
-            Color pixel = heightMap.GetPixel(x,y);
+            //Coordinate wgs84 = coordinate.Convert(CoordinateSystem.WGS84_LatLon);
+            //double u = (wgs84.easting - MinLon) / (MaxLon - MinLon);
+            //double v = (wgs84.northing - MinLat) / (MaxLat - MinLat);
+            //int x = (int)(Mathf.Clamp01((float)u) * (heightMap.width - 1));
+            //int y = (int)(Mathf.Clamp01((float)v) * (heightMap.height - 1));
+            //Color pixel = heightMap.GetPixel(x, y);
+
+            
+            Coordinate rd = coordinate.Convert(CoordinateSystem.RD);
+
+            double u = (rd.easting - minX) / (maxX - minX); // horizontal
+            double v = (rd.northing - minY) / (maxY - minY); // vertical
+            int px = Mathf.RoundToInt((float)u * (heightMap.width - 1));
+            int py = Mathf.RoundToInt((float)v * (heightMap.height - 1));
+            Color pixel = heightMap.GetPixel(px, py);
             float h = pixel.r;
 
-            // Optionally scale to meters (depends on how you normalized your texture!)
-            // Example: if stored as 0–255 → 0–255 m, or you rescaled to AHN range
+            float floor = h - lowestValue;
+            h = (floor / totalValue) * totalHeight + lowestPoint;
+
             return h;
         }
     }
