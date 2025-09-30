@@ -98,7 +98,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             lineRenderer3D.SetDefaultColors();
             foreach (Mesh mesh in meshes)
             {              
-                Vector3[] vertices = mesh.vertices;                
+                Vector3[] vertices = mesh.vertices; // The meshes are from the world object, not the lineRenderer positions
                 lineRenderer3D.SetLineColorFromPoints(vertices, color);
             }
         }

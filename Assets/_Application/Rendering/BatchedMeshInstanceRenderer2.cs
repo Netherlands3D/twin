@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
@@ -23,7 +22,7 @@ namespace Netherlands3D.Twin.Rendering
 
         [SerializeField] protected float pointMeshScale = 5f;
 
-        protected List<List<Coordinate>> positionCollections;
+        protected List<List<Coordinate>> positionCollections = new();
         protected int pointCount; //cached amount of points in the PositionCollections, so this does not have to be recalculated every matrix update to increase performance.
         protected List<List<Matrix4x4>> pointTransformMatrixCache = new List<List<Matrix4x4>>();
         protected List<MaterialPropertyBlock> pointMaterialPropertyBlockCache = new List<MaterialPropertyBlock>();
@@ -31,7 +30,6 @@ namespace Netherlands3D.Twin.Rendering
 
         protected Camera renderCamera;
         [SerializeField] protected LayerMask layerMask = -1;
-        protected bool cacheReady = false;
 
         public Mesh PointMesh
         {
@@ -108,13 +106,12 @@ namespace Netherlands3D.Twin.Rendering
 
         private void Update()
         {
-            if (cacheReady)
+            if (pointTransformMatrixCache?.Count > 0)
                 Draw();
         }
 
         protected virtual void Draw()
         {
-                Debug.Log("drawing: " + pointCount);
             for (var i = 0; i < pointTransformMatrixCache.Count; i++)
             {
                 var batch = pointTransformMatrixCache[i];
@@ -122,14 +119,13 @@ namespace Netherlands3D.Twin.Rendering
             }
         }
 
-        private void OnDrawGizmos()
+        private void OnDrawGizmos() //todo delete
         {
             for (var i = 0; i < pointTransformMatrixCache.Count; i++)
             {
                 var batch = pointTransformMatrixCache[i];
                 foreach (var point in batch)
                 {
-                    Debug.Log(point.GetPosition());
                     Gizmos.DrawSphere(point.GetPosition(), 1);
                 }
             }
@@ -137,8 +133,6 @@ namespace Netherlands3D.Twin.Rendering
 
         protected virtual void GenerateTransformMatrixCache(int startIndex = -1)
         {
-            if (positionCollections == null || positionCollections.Count < 1) return;
-
             var batchCount = (pointCount / 1023) + 1; //x batches of 1023 + 1 for the remainder
 
             if (startIndex < 0) //reset cache completely
@@ -149,7 +143,7 @@ namespace Netherlands3D.Twin.Rendering
 
             pointTransformMatrixCache.Capacity = batchCount;
 
-            var matrixIndices = GetMatrixIndices(positionCollections, startIndex); //each point in the line is a joint
+            var matrixIndices = GetPointMatrixIndices(startIndex); //each point in the line is a joint
 
             for (var i = startIndex; i < positionCollections.Count; i++)
             {
@@ -168,11 +162,33 @@ namespace Netherlands3D.Twin.Rendering
                 }
             }
 
-            UpdateBuffers();
-
-            cacheReady = true;
+            UpdateColorBuffers();
         }
 
+        protected (int batchIndex, int matrixIndex) GetPointMatrixIndices(int startIndex)
+        {
+            if (startIndex < 0)
+                return (-1, -1);
+            
+            int totalJointsBeforeStartIndex = 0;
+            int currentBatchSize = 1023;
+            
+            // Traverse through collections to calculate the cumulative count directly
+            foreach (var collection in positionCollections)
+            {
+                if (startIndex < collection.Count)
+                {
+                    totalJointsBeforeStartIndex += startIndex;
+                    break;
+                }
+            
+                startIndex -= collection.Count;
+                totalJointsBeforeStartIndex += collection.Count;
+            }
+            
+            return (totalJointsBeforeStartIndex / currentBatchSize, totalJointsBeforeStartIndex % currentBatchSize);
+        }
+        
         protected static void AppendMatrixToBatches(List<List<Matrix4x4>> batchList, ref int arrayIndex, ref int matrixIndex, Matrix4x4 valueToAdd)
         {
             //start a new batch if needed
@@ -196,7 +212,7 @@ namespace Netherlands3D.Twin.Rendering
             matrixIndex++;
         }
 
-        private void UpdateBuffers()
+        protected virtual void UpdateColorBuffers()
         {
             while (pointTransformMatrixCache.Count > pointMaterialPropertyBlockCache.Count)
             {
@@ -209,30 +225,6 @@ namespace Netherlands3D.Twin.Rendering
                 props.SetVectorArray("_SegmentColors", colorCache);
                 pointMaterialPropertyBlockCache.Add(props);
             }
-        }
-
-        protected static (int batchIndex, int matrixIndex) GetMatrixIndices(List<List<Coordinate>> positionCollections, int startIndex)
-        {
-            if (startIndex < 0)
-                return (-1, -1);
-
-            int totalJointsBeforeStartIndex = 0;
-            int currentBatchSize = 1023;
-
-            // Traverse through collections to calculate the cumulative count directly
-            foreach (var collection in positionCollections)
-            {
-                if (startIndex < collection.Count)
-                {
-                    totalJointsBeforeStartIndex += startIndex;
-                    break;
-                }
-
-                startIndex -= collection.Count;
-                totalJointsBeforeStartIndex += collection.Count;
-            }
-
-            return (totalJointsBeforeStartIndex / currentBatchSize, totalJointsBeforeStartIndex % currentBatchSize);
         }
 
         public void SetDefaultColors()
@@ -257,9 +249,8 @@ namespace Netherlands3D.Twin.Rendering
             pointMaterialPropertyBlockCache.Clear();
             pointColorCache.Clear();
             pointTransformMatrixCache = new List<List<Matrix4x4>>();
-            cacheReady = false;
         }
-        
+
         private void RecalculatePointCount()
         {
             pointCount = 0;
@@ -268,12 +259,18 @@ namespace Netherlands3D.Twin.Rendering
                 pointCount += list.Count;
             }
         }
-        
+
         /// <summary>
         /// Set the current list of lines (overwriting any previous list)
         /// </summary>
         public void SetPositionCollections(List<List<Coordinate>> collections)
         {
+            if (collections == null)
+            {
+                Clear();
+                return;
+            }
+            
             positionCollections = collections;
             RecalculatePointCount();
             GenerateTransformMatrixCache();
@@ -284,9 +281,6 @@ namespace Netherlands3D.Twin.Rendering
         /// </summary>
         public void AppendCollection(List<Coordinate> collection)
         {
-            if (positionCollections == null)
-                positionCollections = new List<List<Coordinate>>();
-
             var startIndex = positionCollections.Count;
             positionCollections.Add(collection);
             RecalculatePointCount();
@@ -298,9 +292,6 @@ namespace Netherlands3D.Twin.Rendering
         /// </summary>
         public void AppendCollections(List<List<Coordinate>> collections)
         {
-            if (positionCollections == null)
-                positionCollections = new List<List<Coordinate>>();
-
             var startIndex = positionCollections.Count;
             positionCollections.AddRange(collections);
             RecalculatePointCount();
@@ -319,9 +310,9 @@ namespace Netherlands3D.Twin.Rendering
             RecalculatePointCount();
             GenerateTransformMatrixCache(-1);
         }
-        
-#region MoveToStylerClass //TODO: move this block to a styler class like CartesianLayerStyler
-        
+
+        #region MoveToStylerClass //TODO: move this block to a styler class like CartesianLayerStyler
+
         /// <summary>
         /// Return the batch index and line index as a tuple of the closest point to a given point.
         /// Handy for selecting a line based on a click position.
@@ -334,7 +325,7 @@ namespace Netherlands3D.Twin.Rendering
             for (int i = 0; i < transformCaches.Count; i++)
             {
                 var transformCache = transformCaches[i];
-                for(int j = 0; j < transformCache.Count; j++)
+                for (int j = 0; j < transformCache.Count; j++)
                 {
                     Vector3 linePoint = transformCache[j].GetPosition();
                     var sqrDistance = Vector3.SqrMagnitude(linePoint - point);
@@ -346,6 +337,7 @@ namespace Netherlands3D.Twin.Rendering
                     }
                 }
             }
+
             return (closestBatchIndex, closestLineIndex);
         }
 
@@ -360,7 +352,8 @@ namespace Netherlands3D.Twin.Rendering
                 Debug.LogError($"Index {batchIndex} is out of range");
                 return;
             }
-            UpdateBuffers();            
+
+            UpdateColorBuffers();
             pointColorCache[batchIndex][segmentIndex] = color;
             pointMaterialPropertyBlockCache[batchIndex].SetVectorArray("_SegmentColors", pointColorCache[batchIndex]);
         }
@@ -377,8 +370,9 @@ namespace Netherlands3D.Twin.Rendering
                 return;
             }
 
-            SetPointColorByBatchIndex(indexPosition.batchIndex, indexPosition.instanceIndex, color);            
-        }        
-#endregion
+            SetPointColorByBatchIndex(indexPosition.batchIndex, indexPosition.instanceIndex, color);
+        }
+
+        #endregion
     }
 }
