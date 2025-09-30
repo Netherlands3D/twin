@@ -7040,6 +7040,7 @@ GameObject:
   - component: {fileID: 3881385326626929654}
   - component: {fileID: 2624417542857401217}
   - component: {fileID: 8522041955145402261}
+  - component: {fileID: 1242390320487261523}
   - component: {fileID: 5739680118703757630}
   m_Layer: 5
   m_Name: Exit Timer
@@ -7109,6 +7110,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!225 &1242390320487261523
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8369117716477269085}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &5739680118703757630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7121,6 +7134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3e17ecff04d9124f9a9a052d0e45169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  exitGroup: {fileID: 1242390320487261523}
   timerSlider: {fileID: 2754950877704732621}
 --- !u!1 &8462948391208365613
 GameObject:

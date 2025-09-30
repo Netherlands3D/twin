@@ -179,6 +179,13 @@ namespace Netherlands3D.FirstPersonViewer
             if (fsm.CurrentState.GetType() == typeof(ViewerFlyingState)) transform.position += Vector3.up * 1.5f;  
         }
 
+        //Only way to block input and not include checks in every state.
+        public Vector2 GetMoveInput()
+        {
+            if (input.LockInput) return Vector2.zero;
+            else return input.MoveAction.ReadValue<Vector2>();
+        }
+
         private void ExitViewer()
         {
             mainCam.transform.position = prevCameraPosition;

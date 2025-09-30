@@ -25,7 +25,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnUpdate()
         {
-            Vector2 moveInput = input.MoveAction.ReadValue<Vector2>();
+            Vector2 moveInput = viewer.GetMoveInput();
             if (moveInput.magnitude > 0)
             {
                 MovePlayer(moveInput);
@@ -33,7 +33,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             viewer.SnapToGround();
 
-            Jump();
+            if(!input.LockInput) Jump();
 
             viewer.ApplyGravity();
         }
