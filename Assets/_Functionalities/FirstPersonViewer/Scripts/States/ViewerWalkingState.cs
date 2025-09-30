@@ -8,8 +8,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     {
         public override void OnEnter()
         {
-            if (!viewer.FirstPersonCamera.DidSetup) return; //TEMP FIX SHOULD BE REPLACED WITH A TRANSITION CHECK.
-
             if (viewer.FirstPersonCamera.transform.localPosition.y == 0)
             {
                 viewer.transform.position = viewer.transform.position + Vector3.down * viewer.MovementModus.viewHeight;

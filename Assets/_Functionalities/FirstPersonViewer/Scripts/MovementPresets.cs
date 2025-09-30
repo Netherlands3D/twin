@@ -16,12 +16,17 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public float stepHeight = 1;
         public ViewModus viewModus;
 
+        [Header("Vehicle Settings")]
+        public float acceleration;
+        public float deceleration;
+        public float turnSpeed;
+
         [Header("Visuals")]
         public string viewName;
         public Sprite viewIcon;
         public Mesh viewMesh;
 
-        public Type GetViewerState()
+        public Type GetViewerState() //Not user friendly for edits. (Prob some sort of subscribe system?)
         {
             switch (viewModus)
             {
@@ -34,7 +39,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
                     return typeof(ViewerFlyingState);
             }
         }
-        public enum ViewModus
+        public enum ViewModus //Not user friendly for edits. (Prob some sort of subscribe system?)
         {
             STANDARD = 0,
             VEHICULAR = 1,

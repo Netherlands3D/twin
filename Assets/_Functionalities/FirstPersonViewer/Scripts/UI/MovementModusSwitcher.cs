@@ -3,9 +3,11 @@ using Netherlands3D.FirstPersonViewer.Events;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using System;
 
 namespace Netherlands3D.FirstPersonViewer.UI
 {
+    [Obsolete("Will be removed and moved to ViewerSettings.cs (When the toolbar rework will come.")]
     public class MovementModusSwitcher : MonoBehaviour
     {
         [Header("Input")]
@@ -26,7 +28,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
         private void OnEnable()
         {
             LoadMoveModus(0);
-
         }
 
         private void Start()

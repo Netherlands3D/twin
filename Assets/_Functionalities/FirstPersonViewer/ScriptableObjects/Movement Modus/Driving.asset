@@ -20,6 +20,9 @@ MonoBehaviour:
   maxFallingSpeed: 55
   stepHeight: 1.5
   viewModus: 1
+  acceleration: 10
+  deceleration: 5
+  turnSpeed: 100
   viewName: Auto
   viewIcon: {fileID: 21300000, guid: dca9ce9f8c1f0d0418a06d316e41cabf, type: 3}
   viewMesh: {fileID: -7929139438592967118, guid: e2545f50cc16d8a4e9a15892e614c838,

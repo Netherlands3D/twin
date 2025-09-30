@@ -46,18 +46,19 @@ namespace Netherlands3D.FirstPersonViewer
                 {
                     if (hit)
                     {
-                        ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-                        SubObjectSelector subObjectSelector = objectSelectorService.SubObjectSelector;
+                        //Commentent code not working or changing anything based on the visibilty of the building.
 
-                        string bagID = subObjectSelector.FindSubObjectAtPosition(screenPoint);
-                        IMapping mapping = objectSelectorService.FindObjectMapping();
-                        if (objectSelectorService.IsMappingVisible(mapping, bagID))
-                        {
+                        //ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
+                        //SubObjectSelector subObjectSelector = objectSelectorService.SubObjectSelector;
 
+                        //string bagID = subObjectSelector.FindSubObjectAtPosition(screenPoint);
+                        //IMapping mapping = objectSelectorService.FindObjectMapping();
+                        //if (objectSelectorService.IsMappingVisible(mapping, bagID))
+                        //{
                             Instantiate(firstPersonViewerPrefab, point, Quaternion.identity);
 
                             ViewerEvents.OnViewerEntered?.Invoke();
-                        }
+                        //}
                     }
                 }, snappingCullingMask);
             }           

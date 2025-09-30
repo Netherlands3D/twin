@@ -26,7 +26,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void CompassUpdate(Vector3 direction)
         {
-            float angle = Vector3.SignedAngle(direction, Vector3.forward, Vector3.up); //Mathf.Rad2Deg * Mathf.Atan2(cameraTransform.forward.z, cameraTransform.forward.x) - 90;
+            float angle = Vector3.SignedAngle(direction, Vector3.forward, Vector3.up);
             arrowImage.transform.SetRotationZ(-angle);
             arrowImage.color = Mathf.Abs(angle) < northAngleMargin ? NorthColor : arrowColor;
         }

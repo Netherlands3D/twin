@@ -32,7 +32,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             snapshotComponent.SetActiveCamera(Camera.main);
         }
 
-        //We need to wait 1 frame to allow the map to load. Prob a temp FIX.
+        //We need to wait 1 frame to allow the map to load or we get an unloaded map that's zoomed in.
         private IEnumerator SetupViewer()
         {
             yield return null;

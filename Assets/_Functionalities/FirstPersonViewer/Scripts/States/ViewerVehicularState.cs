@@ -6,11 +6,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
     public class ViewerVehicularState : ViewerState
     {
-        //Should be moved to ScriptableObject
-        [SerializeField] float acceleration = 10f;
-        [SerializeField] float deceleration = 5f;
-        [SerializeField] private float turnSpeed = 100f;
-
         private float currentSpeed;
 
         public override void OnEnter()
@@ -34,8 +29,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnUpdate()
         {
-            SpeedModifier();
-
             Vector2 moveInput = input.MoveAction.ReadValue<Vector2>();
             MoveVehicle(moveInput);
 
@@ -50,14 +43,14 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             float targetSpeed = moveInput.y * viewer.MovementSpeed * speedMultiplier;
 
-            if (Mathf.Abs(targetSpeed) > 0.1f && viewer.isGrounded) currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * speedMultiplier * Time.deltaTime);
-            else currentSpeed = Mathf.MoveTowards(currentSpeed, 0, deceleration * speedMultiplier * Time.deltaTime);
+            if (Mathf.Abs(targetSpeed) > 0.1f && viewer.isGrounded) currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, viewer.MovementModus.acceleration * speedMultiplier * Time.deltaTime);
+            else currentSpeed = Mathf.MoveTowards(currentSpeed, 0, viewer.MovementModus.deceleration * speedMultiplier * Time.deltaTime);
 
             transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
 
             if (Mathf.Abs(currentSpeed) > 0.1f)
             {
-                float turn = moveInput.x * turnSpeed * Time.deltaTime * Mathf.Sign(currentSpeed);
+                float turn = moveInput.x * viewer.MovementModus.turnSpeed * Time.deltaTime * Mathf.Sign(currentSpeed);
                 transform.Rotate(Vector3.up * turn);
             }
 
@@ -65,14 +58,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             {
                 viewer.GetGroundPosition();
                 ViewerEvents.OnCameraRotation?.Invoke(viewer.FirstPersonCamera.transform.forward);
-            }
-        }
-
-        private void SpeedModifier()
-        {
-            if (input.SprintAction.triggered)
-            {
-
             }
         }
     }

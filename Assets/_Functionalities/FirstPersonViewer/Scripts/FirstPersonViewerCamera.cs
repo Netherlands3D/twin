@@ -24,26 +24,20 @@ namespace Netherlands3D.FirstPersonViewer
 
         private Quaternion startRotation;
 
-        //TEMP
-        private bool didSetup;
-        [Obsolete("Will be handled differntly (Prob with some kind of transitionState")] public bool DidSetup => didSetup;
-
-
         private void Awake()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
             currentsensitivity = 3f;
 #endif
 
-            ViewerEvents.OnChangeCameraConstrain += SetCameraConstrain;
-            ViewerEvents.OnViewheightChanged += SetCameraHeight;
-            ViewerEvents.OnFOVChanged += SetCameraFOV;
-            ViewerEvents.OnResetToStart += ResetToStart;
-            ViewerEvents.OnSetCameraNorth += SetCameraNorth;
-
             firstPersonViewerCamera = GetComponent<Camera>();
 
             SetupViewer();
+        }
+
+        private void OnEnable()
+        {
+            input.AddInputLockConstrain(this);
         }
 
         private void OnDestroy()
@@ -67,27 +61,34 @@ namespace Netherlands3D.FirstPersonViewer
             Quaternion targetRot = Quaternion.LookRotation(forward, Vector3.up);
 
             firstPersonViewerCamera.transform.DOLocalMove(Vector3.zero + Vector3.up * cameraHeightOffset, 2f).SetEase(Ease.InOutSine);
-            firstPersonViewerCamera.transform.DORotateQuaternion(targetRot, 2f).SetEase(Ease.InOutSine).OnComplete(() =>
-            {
-                xRotation = transform.localEulerAngles.x;
-                startRotation = transform.rotation;
-                didSetup = true;
-                ViewerEvents.OnCameraRotation.Invoke(firstPersonViewerCamera.transform.forward);
-            });
+            firstPersonViewerCamera.transform.DORotateQuaternion(targetRot, 2f).SetEase(Ease.InOutSine).OnComplete(CameraSetupComplete);
+        }
+
+        //From Setup Viewer
+        private void CameraSetupComplete()
+        {
+            xRotation = transform.localEulerAngles.x;
+            startRotation = transform.rotation;
+            input.RemoveInputLockConstrain(this);
+            ViewerEvents.OnCameraRotation?.Invoke(firstPersonViewerCamera.transform.forward);
+
+            //Setup events when done with animation.
+            ViewerEvents.OnChangeCameraConstrain += SetCameraConstrain;
+            ViewerEvents.OnViewheightChanged += SetCameraHeight;
+            ViewerEvents.OnFOVChanged += SetCameraFOV;
+            ViewerEvents.OnResetToStart += ResetToStart;
+            ViewerEvents.OnSetCameraNorth += SetCameraNorth;
         }
 
         private void Update()
         {
-            if (input.LockCamera) return;
+            if (input.LockInput) return;
 
-            if (didSetup)
+            Vector2 cameraMovement = input.LookInput.ReadValue<Vector2>();
+
+            if (cameraMovement.magnitude > 0)
             {
-                Vector2 cameraMovement = input.LookInput.ReadValue<Vector2>();
-
-                if (cameraMovement.magnitude > 0)
-                {
-                    PointerDelta(cameraMovement);
-                }
+                PointerDelta(cameraMovement);
             }
         }
 
@@ -126,7 +127,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetCameraHeight(float height)
         {
-            if (!didSetup) return;
+            //if (true) return;
 
             cameraHeightOffset = height;
             transform.localPosition = Vector3.up * cameraHeightOffset;
@@ -134,11 +135,11 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetCameraNorth()
         {
-            input.AddCameraLockConstrain(this);
+            input.AddInputLockConstrain(this);
             transform.DORotate(Vector3.zero, .4f).SetEase(Ease.InOutCubic);
-            viewerBase.DORotate(Vector3.zero, .4f).SetEase(Ease.InOutCubic).OnComplete(() => input.RemoveCameraLockConstrain(this));
-            
-            xRotation = 0; 
+            viewerBase.DORotate(Vector3.zero, .4f).SetEase(Ease.InOutCubic).OnComplete(() => input.RemoveInputLockConstrain(this));
+
+            xRotation = 0;
             yRotation = 0;
 
             ViewerEvents.OnCameraRotation.Invoke(Vector3.zero);

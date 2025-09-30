@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer
 {
-    //Not a big fan of this
     public class FirstPersonViewerData : MonoBehaviour
     {
+        //Not a big fan of this
         public static FirstPersonViewerData Instance { private set; get; }
 
         public float ViewHeight { private set; get; }
         public float FOV { private set; get; }
-        public float Speed { private set; get; } 
+        public float Speed { private set; get; }
 
         public Camera FPVCamera { private set; get; }
         private void Awake()

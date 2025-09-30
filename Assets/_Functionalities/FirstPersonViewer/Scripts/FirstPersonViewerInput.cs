@@ -22,11 +22,12 @@ namespace Netherlands3D.FirstPersonViewer
         public InputAction HideUI { private set; get; }
 
         [Header("Exit")]
-        [SerializeField] private float exitDuration = .9f;
+        [SerializeField] private float exitDuration = 1;
+        [SerializeField] private float exitViewDelay = .15f;
         private float exitTimer;
 
-        private List<MonoBehaviour> cameraLocks;
-        public bool LockCamera => cameraLocks.Count > 0;
+        private List<MonoBehaviour> inputLocks;
+        public bool LockInput => inputLocks.Count > 0;
 
         private void Awake()
         {
@@ -39,6 +40,8 @@ namespace Netherlands3D.FirstPersonViewer
             LeftClick = inputActionAsset.FindAction("LClick");
             HideUI = inputActionAsset.FindAction("HideUI");
 
+            inputLocks = new List<MonoBehaviour>();
+
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
@@ -47,7 +50,6 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void OnEnable()
         {
-            cameraLocks = new List<MonoBehaviour>();
             inputActionAsset.Enable();
         }
 
@@ -76,13 +78,13 @@ namespace Netherlands3D.FirstPersonViewer
             {
                 if (Cursor.lockState == CursorLockMode.Locked)
                 {
-                    AddCameraLockConstrain(this);
+                    AddInputLockConstrain(this);
                     Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = true;
                 }
                 else
                 {
-                    RemoveCameraLockConstrain(this);
+                    RemoveInputLockConstrain(this);
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
                 }
@@ -91,7 +93,7 @@ namespace Netherlands3D.FirstPersonViewer
             {
                 if (!IsPointerOverUIObject())
                 {
-                    RemoveCameraLockConstrain(this);
+                    RemoveInputLockConstrain(this);
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
                 }
@@ -104,10 +106,10 @@ namespace Netherlands3D.FirstPersonViewer
             {
                 exitTimer = Mathf.Max(exitTimer - Time.deltaTime, 0);
 
-                //Wait .15 seconds before showing the progress.
-                if (exitTimer < exitDuration - .15f)
+                //Wait .delay x seconds before showing the progress.
+                if (exitTimer < exitDuration - exitViewDelay)
                 {
-                    float percentageTime = Mathf.Clamp01(1f - (exitTimer / exitDuration));
+                    float percentageTime = Mathf.Clamp01(1f - ((exitTimer + exitViewDelay) / exitDuration));
                     ViewerEvents.ExitDuration?.Invoke(percentageTime);
                 }
 
@@ -130,9 +132,9 @@ namespace Netherlands3D.FirstPersonViewer
             Destroy(gameObject, Time.deltaTime);
         }
 
-        public void AddCameraLockConstrain(MonoBehaviour monoBehaviour) => cameraLocks.Add(monoBehaviour);
+        public void AddInputLockConstrain(MonoBehaviour monoBehaviour) => inputLocks.Add(monoBehaviour);
 
-        public void RemoveCameraLockConstrain(MonoBehaviour monoBehaviour) => cameraLocks.Remove(monoBehaviour);
+        public void RemoveInputLockConstrain(MonoBehaviour monoBehaviour) => inputLocks.Remove(monoBehaviour);
 
         //Kinda slow
         public static bool IsPointerOverUIObject()

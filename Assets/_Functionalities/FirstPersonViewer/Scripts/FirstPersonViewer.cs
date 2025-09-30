@@ -24,7 +24,6 @@ namespace Netherlands3D.FirstPersonViewer
         private Quaternion startRotation;
 
         //Raycasting
-        //private OpticalInstantRaycaster test;
         private OpticalRaycaster raycaster;
         private int snappingCullingMask;
 
@@ -41,6 +40,8 @@ namespace Netherlands3D.FirstPersonViewer
         [Header("Main Cam")]
         [SerializeField] private float cameraHeightAboveGround;
         private Camera mainCam;
+
+        //Previouse Main Camera Values
         private Vector3 prevCameraPosition;
         private Quaternion prevCameraRotation;
         private int prevCameraCullingMask;
@@ -49,6 +50,7 @@ namespace Netherlands3D.FirstPersonViewer
         {
             input = GetComponent<FirstPersonViewerInput>();
             meshFilter = GetComponent<MeshFilter>();
+            raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
             SetupFSM();
 
@@ -56,6 +58,7 @@ namespace Netherlands3D.FirstPersonViewer
             ViewerEvents.OnMovementPresetChanged += SetMovementModus;
             ViewerEvents.OnViewerExited += ExitViewer;
             ViewerEvents.OnResetToStart += ResetToStart;
+
         }
 
         private void Start()
@@ -63,9 +66,6 @@ namespace Netherlands3D.FirstPersonViewer
             startPosition = new Coordinate(transform.position);
             startRotation = transform.rotation;
             yPositionTarget = transform.position.y;
-            
-            //test = ServiceLocator.GetService<OpticalInstantRaycaster>();
-            raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
             snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings") | (1 << LayerMask.NameToLayer("Default")));
 
@@ -87,6 +87,7 @@ namespace Netherlands3D.FirstPersonViewer
             fsm = new FirstPersonViewerStateMachine(this, input, null, playerStates);
         }
 
+        //Disable the Main Camera through rendering.
         private void SetupMainCam()
         {
             mainCam = Camera.main;
@@ -105,6 +106,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void Update()
         {
+
             CheckGroundCollision();
 
             fsm.OnUpdate();
@@ -112,17 +114,13 @@ namespace Netherlands3D.FirstPersonViewer
             transform.position += Vector3.up * velocity.y * Time.deltaTime;
 
             //Update Main Cam position
-            Vector3 camPos = transform.position; //CHECK
+            Vector3 camPos = transform.position;
             camPos.y = cameraHeightAboveGround;
             mainCam.transform.position = camPos;
         }
 
         public void GetGroundPosition()
         {
-            //Vector3 point = test.GetWorldPointFromPosition(transform.position + Vector3.up * MovementModus.stepHeight * 5f, Vector3.down);
-            //Debug.Log(point);
-            //yPositionTarget = point.y;
-
             raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * MovementModus.stepHeight, Vector3.down, (point, hit) =>
             {
                 if (hit)
@@ -177,6 +175,7 @@ namespace Netherlands3D.FirstPersonViewer
             yPositionTarget = transform.position.y;
 
             //When in the flying state add 1.5 meter offset
+            //$$ Should prob check if the Camera Control is Both instead of checking the state (Not extendable) Date: 30-09-2025
             if (fsm.CurrentState.GetType() == typeof(ViewerFlyingState)) transform.position += Vector3.up * 1.5f;  
         }
 
