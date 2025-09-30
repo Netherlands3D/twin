@@ -16,4 +16,6 @@ MonoBehaviour:
   title: Tekengebied
   description: 
   children:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 3d2446c8ddf005b47bbeb93472c74219, type: 2}
+  - {fileID: 11400000, guid: 9a96e84a674fb514585e54d2028749c0, type: 2}
+  - {fileID: 11400000, guid: 73f1ad1491ae53e43ab77679bc4c1f28, type: 2}

@@ -5,32 +5,32 @@ using JetBrains.Annotations;
 namespace Netherlands3D.Catalogs.CatalogItems
 {
     /// <summary>
-    /// Describes the catalog item for a process with which an action can be initiated.
+    /// Describes the catalog item for a service or process with which an action can be initiated.
     ///
     /// Warning: this item is experimental and susceptible to change once we add support for more processes.
     /// </summary>
-    public record ProcessItem : BaseCatalogItem
+    public record DataService : BaseCatalogItem
     {
         /// <summary>
         /// May also be a Uri to a locally embedded process using the `event://` scheme, or to a remote process using
         /// a well-formed url.
         /// </summary>
         [CanBeNull]
-        public Uri ProcessAddress { get; private set; }
+        public Uri Endpoint { get; private set; }
 
-        public ProcessItem(
+        public DataService(
             string id, 
             string title, 
             string description = null,
             IDictionary<string, object> metadata = null,
-            [CanBeNull] Uri processAddress = null 
+            [CanBeNull] Uri endpoint = null 
         ) : base(id, title, description, metadata) {
-            WithAddress(processAddress);
+            WithEndpoint(endpoint);
         }
 
-        public void WithAddress(Uri uri)
+        public void WithEndpoint(Uri uri)
         {
-            ProcessAddress = uri;
+            Endpoint = uri;
         }
     }
 }

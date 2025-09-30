@@ -27,7 +27,7 @@ namespace Netherlands3D._Application._Twin.AssetLibraryEntries
             var resolved = $"event:///{scriptableObjectEvent.GetInstanceID()}";
 
             var uri = string.IsNullOrWhiteSpace(resolved) ? null : new Uri(resolved, UriKind.Absolute);
-            return new ProcessItem(Id, Title, Description, processAddress: uri);
+            return new DataService(Id, Title, Description, endpoint: uri);
         }
     }
 }

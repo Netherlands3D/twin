@@ -74,7 +74,7 @@ namespace Netherlands3D._Application._Twin
         {
             var item = await Catalog.GetAsync(id);
             if (item is RecordItem recordItem) Load(recordItem);
-            if (item is ProcessItem processItem) Trigger(processItem);
+            if (item is DataService processItem) Trigger(processItem);
         }
 
         public async void Load(RecordItem recordItem)
@@ -83,9 +83,9 @@ namespace Netherlands3D._Application._Twin
             await App.Layers.Add(layerBuilder);
         }
 
-        public void Trigger(ProcessItem processItem)
+        public void Trigger(DataService dataService)
         {
-            var processAddress = processItem.ProcessAddress;
+            var processAddress = dataService.Endpoint;
             if (processAddress?.Scheme == "event")
             {
                 if (int.TryParse(processAddress.AbsolutePath, out var processId)
