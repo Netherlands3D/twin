@@ -1,8 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Coordinates;
-using Netherlands3D.Services;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -22,8 +19,10 @@ namespace Netherlands3D.Twin.Rendering
         [SerializeField] private float lineDiameter = 1f;
         
         private List<List<Matrix4x4>> lineTransformMatrixCache = new List<List<Matrix4x4>>();
-        private List<MaterialPropertyBlock> segmentPropertyBlockCache = new List<MaterialPropertyBlock>();
-        private List<Vector4[]> segmentColorCache = new List<Vector4[]>();
+        protected List<BatchColor> lineBatchColors = new();
+
+        // private List<MaterialPropertyBlock> segmentPropertyBlockCache = new List<MaterialPropertyBlock>();
+        // private List<Vector4[]> segmentColorCache = new List<Vector4[]>();
 
         private MaterialPropertyBlock selectedSegmentMaterialPropertyBlock;
         private MaterialPropertyBlock selectedJointMaterialPropertyBlock;
@@ -68,53 +67,21 @@ namespace Netherlands3D.Twin.Rendering
 
         protected override void Draw()
         {
-            if (DrawJoints)
-            {
-                base.Draw(); // joints are the same as points.
-            }
-            Debug.Log("drawing lines");
+            UpdateColorBuffers();
 
             for (var i = 0; i < lineTransformMatrixCache.Count; i++)
             {
                 var lineTransforms = lineTransformMatrixCache[i];
-                Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms, segmentPropertyBlockCache[i], ShadowCastingMode.Off, false, layerMask, renderCamera);
+                Graphics.DrawMeshInstanced(LineMesh, 0, LineMaterial, lineTransforms, lineBatchColors[i].MaterialPropertyBlock, ShadowCastingMode.Off, false, layerMask, renderCamera);
             }
-
-            if (selectedLineIndex >= 0)
+            
+            if (!DrawJoints) return;
+            for (var i = 0; i < pointTransformMatrixCache.Count; i++)
             {
-                Graphics.DrawMeshInstanced(LineMesh, 0, lineSelectionMaterial, selectedLineTransforms, selectedSegmentMaterialPropertyBlock, ShadowCastingMode.Off, false, layerMask, renderCamera);
-                if (DrawJoints)
-                    Graphics.DrawMeshInstanced(PointMesh, 0, lineSelectionMaterial, selectedJointTransforms, selectedJointMaterialPropertyBlock, ShadowCastingMode.Off, false, layerMask, renderCamera);
+                var batch = pointTransformMatrixCache[i];
+                Graphics.DrawMeshInstanced(PointMesh, 0, PointMaterial, batch, pointBatchColors[i].MaterialPropertyBlock, ShadowCastingMode.Off, false, layerMask, renderCamera);
             }
         }
-
-        /// <summary>
-        /// Return the batch index and line index as a tuple of the closest point to a given point.
-        /// Handy for selecting a line based on a click position.
-        /// </summary>
-        // public (int batchindex, int jointIndex) GetClosestJointIndex(Vector3 point)
-        // {
-        //     int closestBatchIndex = -1;
-        //     int closestJointIndex = -1;
-        //     float closestDistance = float.MaxValue;
-        //     for (int i = 0; i < pointTransformMatrixCache.Count; i++)
-        //     {
-        //         var jointTransforms = pointTransformMatrixCache[i];
-        //         for (int j = 0; j < jointTransforms.Count; j++)
-        //         {
-        //             Vector3 linePoint = jointTransforms[j].GetColumn(3);
-        //             float distance = Vector3.SqrMagnitude(point - linePoint);
-        //             if (distance < closestDistance * closestDistance)
-        //             {
-        //                 closestDistance = Mathf.Sqrt(distance);
-        //                 closestBatchIndex = i;
-        //                 closestJointIndex = j;
-        //             }
-        //         }
-        //     }
-        //
-        //     return (closestBatchIndex, closestJointIndex);
-        // }
 
         protected override void UpdateColorBuffers()
         {
@@ -123,58 +90,21 @@ namespace Netherlands3D.Twin.Rendering
                 base.UpdateColorBuffers(); // color joints
             }
 
-            while (lineTransformMatrixCache.Count > segmentPropertyBlockCache.Count)
+            while (lineTransformMatrixCache.Count > lineBatchColors.Count)
             {
-                MaterialPropertyBlock props = new MaterialPropertyBlock();
-                Vector4[] colorCache = new Vector4[1023];
-                Color defaultColor = LineMaterial.color;
-                for (int j = 0; j < colorCache.Length; j++)
-                    colorCache[j] = defaultColor;
-                segmentColorCache.Add(colorCache);
-                props.SetVectorArray("_SegmentColors", colorCache);
-                segmentPropertyBlockCache.Add(props);
+                var colorCache = new BatchColor(1023, LineMaterial.color);
+                lineBatchColors.Add(colorCache);
             }
-
-            // while (pointTransformMatrixCache.Count > pointMaterialPropertyBlockCache.Count)
-            // {
-            //     MaterialPropertyBlock props = new MaterialPropertyBlock();
-            //     Vector4[] colorCache = new Vector4[1023];
-            //     Color defaultColor = LineMaterial.color;
-            //     for (int j = 0; j < colorCache.Length; j++)
-            //         colorCache[j] = defaultColor;
-            //     pointColorCache.Add(colorCache);
-            //     props.SetVectorArray("_SegmentColors", colorCache);
-            //     pointMaterialPropertyBlockCache.Add(props);
-            // }
         }
 
-        public void SetDefaultColors()
+        public override void SetDefaultColors()
         {
-            selectedLineIndex = -1;
-            Color defaultColor = LineMaterial.color;
-            for (int batchIndex = 0; batchIndex < lineTransformMatrixCache.Count; batchIndex++)
+            Color defaultLineColor = LineMaterial.color;
+            foreach (var batchColor in lineBatchColors)
             {
-                Vector4[] colors = segmentColorCache[batchIndex];
-                Vector4[] colors2 = pointColorCache[batchIndex];
-                for (int segmentIndex = 0; segmentIndex < colors.Length; segmentIndex++)
-                {
-                    colors[segmentIndex] = defaultColor;
-                }
-
-                for (int segmentIndex = 0; segmentIndex < colors2.Length; segmentIndex++)
-                {
-                    colors2[segmentIndex] = defaultColor;
-                }
-
-                segmentColorCache[batchIndex] = colors;
-                pointColorCache[batchIndex] = colors2;
-                MaterialPropertyBlock props = segmentPropertyBlockCache[batchIndex];
-                props.SetVectorArray("_SegmentColors", colors);
-                segmentPropertyBlockCache[batchIndex] = props;
-                MaterialPropertyBlock props2 = pointMaterialPropertyBlockCache[batchIndex];
-                props2.SetVectorArray("_SegmentColors", colors2);
-                pointMaterialPropertyBlockCache[batchIndex] = props2;
+                batchColor.SetAllColors(defaultLineColor);
             }
+            base.SetDefaultColors(); // at the end since then updateColorBuffers will be called only once
         }
         
         /// <summary>
@@ -239,11 +169,14 @@ namespace Netherlands3D.Twin.Rendering
                 Vector3 vertex = positionCollections[selectedLineIndex][i].ToUnity();
                 if (i < count - 1)
                 {
-                    Matrix4x4 segMatrix = GetClosestLineCentroid(vertex);
+                    var indexPosition = GetIndicesClosestToPoint(lineTransformMatrixCache, vertex);
+                    Matrix4x4 segMatrix = lineTransformMatrixCache[indexPosition.batchIndex][indexPosition.instanceIndex];
                     selectedLineTransforms.Add(segMatrix);
                 }
 
-                Matrix4x4 jntMatrix = GetClosestPoint(vertex);
+                
+                var jointIndexPosition = GetIndicesClosestToPoint(pointTransformMatrixCache, vertex);
+                Matrix4x4 jntMatrix = pointTransformMatrixCache[jointIndexPosition.batchIndex][jointIndexPosition.instanceIndex];
                 selectedJointTransforms.Add(jntMatrix);
             }
 
@@ -257,49 +190,46 @@ namespace Netherlands3D.Twin.Rendering
             var segmentIndices = GetLineMatrixIndices(lineStartIndex);
             for (int i = 0; i < positionCollections[lineStartIndex].Count - 1; i++) //-1 we dont want to color the last segment
             {
-                segmentColorCache[segmentIndices.batchIndex][segmentIndices.matrixIndex + i] = color;
+                lineBatchColors[segmentIndices.batchIndex].SetColor(segmentIndices.matrixIndex + i, color);
             }
 
             var jointIndices = GetPointMatrixIndices(lineStartIndex);
             for (int i = 0; i < positionCollections[lineStartIndex].Count; i++) //we do want to color the last segment
             {
-                pointColorCache[jointIndices.batchIndex][jointIndices.matrixIndex + i] = color;
+                pointBatchColors[jointIndices.batchIndex].SetColor(jointIndices.matrixIndex + i, color);
             }
 
-            segmentPropertyBlockCache[segmentIndices.batchIndex].SetVectorArray("_SegmentColors", segmentColorCache[segmentIndices.batchIndex]);
-            pointMaterialPropertyBlockCache[jointIndices.batchIndex].SetVectorArray("_SegmentColors", pointColorCache[jointIndices.batchIndex]);
+            // segmentPropertyBlockCache[segmentIndices.batchIndex].SetVectorArray("_SegmentColors", segmentColorCache[segmentIndices.batchIndex]);
+            // pointMaterialPropertyBlockCache[jointIndices.batchIndex].SetVectorArray("_SegmentColors", pointColorCache[jointIndices.batchIndex]);
         }
 
         public override void Clear()
         {
             base.Clear();
-            segmentPropertyBlockCache.Clear();
-            segmentColorCache.Clear();
             lineTransformMatrixCache = new List<List<Matrix4x4>>();
+            lineBatchColors.Clear();
         }
 
         protected override void GenerateTransformMatrixCache(int startIndex = -1)
         {
-            base.GenerateTransformMatrixCache(); // get the point matrices as joints
-            
-            if (positionCollections == null || positionCollections.Count < 1) return;
+            // For efficiency, we combine the point and line calculation in a single loop
             
             var segmentCount = pointCount - positionCollections.Count; // each line one more joint than segments, so subtracting the lineCount will result in the total number of segments
 
-            // var jointBatchCount = (pointCount / 1023) + 1; //x batches of 1023 + 1 for the remainder
+            var jointBatchCount = (pointCount / 1023) + 1; //x batches of 1023 + 1 for the remainder
             var segmentBatchCount = (segmentCount / 1023) + 1; //x batches of 1023 + 1 for the remainder
 
             if (startIndex < 0) //reset cache completely
             {
-                // pointTransformMatrixCache = new List<List<Matrix4x4>>(jointBatchCount);
+                pointTransformMatrixCache = new List<List<Matrix4x4>>(jointBatchCount);
                 lineTransformMatrixCache = new List<List<Matrix4x4>>(segmentBatchCount);
                 startIndex = 0;
             }
 
-            // pointTransformMatrixCache.Capacity = jointBatchCount;
+            pointTransformMatrixCache.Capacity = jointBatchCount;
             lineTransformMatrixCache.Capacity = segmentBatchCount;
 
-            // var jointIndices = GetJointMatrixIndices(startIndex); //each point in the line is a joint
+            var jointIndices = GetPointMatrixIndices(startIndex); //each point in the line is a joint
             var segmentIndices = GetLineMatrixIndices(startIndex);
 
             for (var i = startIndex; i < positionCollections.Count; i++)
@@ -332,44 +262,20 @@ namespace Netherlands3D.Twin.Rendering
                     AppendMatrixToBatches(lineTransformMatrixCache, ref segmentIndices.batchIndex, ref segmentIndices.matrixIndex, transformMatrix);
 
                     // Create the joint using a sphere aligned with the cylinder (with matching faces for smooth transition between the two)
-                    // var jointScale = new Vector3(LineDiameter, LineDiameter, LineDiameter);
-                    // Matrix4x4 jointTransformMatrix = Matrix4x4.TRS(currentPoint, rotation, jointScale);
-                    // AppendMatrixToBatches(pointTransformMatrixCache, ref jointIndices.batchIndex, ref jointIndices.matrixIndex, jointTransformMatrix);
+                    var jointScale = new Vector3(LineDiameter, LineDiameter, LineDiameter);
+                    Matrix4x4 jointTransformMatrix = Matrix4x4.TRS(currentPoint, rotation, jointScale);
+                    AppendMatrixToBatches(pointTransformMatrixCache, ref jointIndices.batchIndex, ref jointIndices.matrixIndex, jointTransformMatrix);
 
                     //Add the last joint to cap the line end
-                    // if (j == line.Count - 2)
-                    // {
-                    //     jointTransformMatrix = Matrix4x4.TRS(nextPoint, rotation, jointScale);
-                    //     AppendMatrixToBatches(pointTransformMatrixCache, ref jointIndices.batchIndex, ref jointIndices.matrixIndex, jointTransformMatrix);
-                    // }
+                    if (j == line.Count - 2)
+                    {
+                        jointTransformMatrix = Matrix4x4.TRS(nextPoint, rotation, jointScale);
+                        AppendMatrixToBatches(pointTransformMatrixCache, ref jointIndices.batchIndex, ref jointIndices.matrixIndex, jointTransformMatrix);
+                    }
                 }
             }
-
-            UpdateColorBuffers();
         }
 
-        /// <summary>
-        /// Gets the closest line centroid to a given position
-        /// </summary>
-        /// <param name="position"></param>
-        /// <returns></returns>
-        private Matrix4x4 GetClosestLineCentroid(Vector3 position)
-        {
-            var indexPosition = GetClosestPointIndex(lineTransformMatrixCache, position);
-            return lineTransformMatrixCache[indexPosition.batchIndex][indexPosition.instanceIndex];
-        }
-
-        /// <summary>
-        /// Gets the closest line centroid to a given position
-        /// </summary>
-        /// <param name="position"></param>
-        /// <returns></returns>
-        private Matrix4x4 GetClosestPoint(Vector3 position)
-        {
-            var indexPosition = GetClosestPointIndex(pointTransformMatrixCache, position);
-            return pointTransformMatrixCache[indexPosition.batchIndex][indexPosition.instanceIndex];
-        }
-        
         private (int batchIndex, int matrixIndex) GetLineMatrixIndices(int startIndex)
         {
             if (startIndex < 0)

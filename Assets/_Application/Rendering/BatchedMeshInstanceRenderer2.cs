@@ -7,6 +7,35 @@ using UnityEngine.Rendering;
 
 namespace Netherlands3D.Twin.Rendering
 {
+    public class BatchColor
+    {
+        public Vector4[] Colors;
+        public MaterialPropertyBlock MaterialPropertyBlock;
+
+        public BatchColor(int capacity, Color defaultColor)
+        {
+            Colors = new Vector4[capacity];
+            for (int i = 0; i < capacity; i++)
+                Colors[i] = defaultColor;
+
+            MaterialPropertyBlock = new MaterialPropertyBlock();
+            MaterialPropertyBlock.SetVectorArray("_SegmentColors", Colors);
+        }
+
+        public void SetColor(int index, Color color)
+        {
+            Colors[index] = color;
+            MaterialPropertyBlock.SetVectorArray("_SegmentColors", Colors);
+        }
+
+        public void SetAllColors(Color color)
+        {
+            for (int i = 0; i < Colors.Length; i++)
+                Colors[i] = color;
+            MaterialPropertyBlock.SetVectorArray("_SegmentColors", Colors);
+        }
+    }
+    
     public class BatchedMeshInstanceRenderer2 : MonoBehaviour
     {
         [Tooltip("The mesh to use for the points/joints")] [SerializeField]
@@ -25,8 +54,7 @@ namespace Netherlands3D.Twin.Rendering
         protected List<List<Coordinate>> positionCollections = new();
         protected int pointCount; //cached amount of points in the PositionCollections, so this does not have to be recalculated every matrix update to increase performance.
         protected List<List<Matrix4x4>> pointTransformMatrixCache = new List<List<Matrix4x4>>();
-        protected List<MaterialPropertyBlock> pointMaterialPropertyBlockCache = new List<MaterialPropertyBlock>();
-        protected List<Vector4[]> pointColorCache = new List<Vector4[]>();
+        protected List<BatchColor> pointBatchColors = new();
 
         protected Camera renderCamera;
         [SerializeField] protected LayerMask layerMask = -1;
@@ -112,21 +140,23 @@ namespace Netherlands3D.Twin.Rendering
 
         protected virtual void Draw()
         {
+            UpdateColorBuffers();
             for (var i = 0; i < pointTransformMatrixCache.Count; i++)
             {
                 var batch = pointTransformMatrixCache[i];
-                Graphics.DrawMeshInstanced(pointMesh, 0, pointMaterial, batch, pointMaterialPropertyBlockCache[i], ShadowCastingMode.Off, false, layerMask, renderCamera);
+                Graphics.DrawMeshInstanced(pointMesh, 0, pointMaterial, batch, pointBatchColors[i].MaterialPropertyBlock, ShadowCastingMode.Off, false, layerMask, renderCamera);
             }
         }
 
         private void OnDrawGizmos() //todo delete
         {
+            Gizmos.color = Color.red;
             for (var i = 0; i < pointTransformMatrixCache.Count; i++)
             {
                 var batch = pointTransformMatrixCache[i];
                 foreach (var point in batch)
                 {
-                    Gizmos.DrawSphere(point.GetPosition(), 1);
+                    Gizmos.DrawSphere(point.GetPosition(), 5);
                 }
             }
         }
@@ -161,8 +191,6 @@ namespace Netherlands3D.Twin.Rendering
                     AppendMatrixToBatches(pointTransformMatrixCache, ref matrixIndices.batchIndex, ref matrixIndices.matrixIndex, jointTransformMatrix);
                 }
             }
-
-            UpdateColorBuffers();
         }
 
         protected (int batchIndex, int matrixIndex) GetPointMatrixIndices(int startIndex)
@@ -211,44 +239,13 @@ namespace Netherlands3D.Twin.Rendering
                 batchList[arrayIndex].Add(valueToAdd);
             matrixIndex++;
         }
-
-        protected virtual void UpdateColorBuffers()
-        {
-            while (pointTransformMatrixCache.Count > pointMaterialPropertyBlockCache.Count)
-            {
-                MaterialPropertyBlock props = new MaterialPropertyBlock();
-                Vector4[] colorCache = new Vector4[1023];
-                Color defaultColor = PointMaterial.color;
-                for (int j = 0; j < colorCache.Length; j++)
-                    colorCache[j] = defaultColor;
-                pointColorCache.Add(colorCache);
-                props.SetVectorArray("_SegmentColors", colorCache);
-                pointMaterialPropertyBlockCache.Add(props);
-            }
-        }
-
-        public void SetDefaultColors()
-        {
-            Color defaultColor = PointMaterial.color;
-            for (int batchIndex = 0; batchIndex < pointTransformMatrixCache.Count; batchIndex++)
-            {
-                Vector4[] colors = pointColorCache[batchIndex];
-                for (int segmentIndex = 0; segmentIndex < colors.Length; segmentIndex++)
-                    colors[segmentIndex] = defaultColor;
-                pointColorCache[batchIndex] = colors;
-                MaterialPropertyBlock props = pointMaterialPropertyBlockCache[batchIndex];
-                props.SetVectorArray("_SegmentColors", colors);
-                pointMaterialPropertyBlockCache[batchIndex] = props;
-            }
-        }
-
+        
         public virtual void Clear()
         {
             positionCollections.Clear();
             RecalculatePointCount();
-            pointMaterialPropertyBlockCache.Clear();
-            pointColorCache.Clear();
             pointTransformMatrixCache = new List<List<Matrix4x4>>();
+            pointBatchColors.Clear();
         }
 
         private void RecalculatePointCount()
@@ -310,17 +307,15 @@ namespace Netherlands3D.Twin.Rendering
             RecalculatePointCount();
             GenerateTransformMatrixCache(-1);
         }
-
-        #region MoveToStylerClass //TODO: move this block to a styler class like CartesianLayerStyler
-
+        
         /// <summary>
         /// Return the batch index and line index as a tuple of the closest point to a given point.
         /// Handy for selecting a line based on a click position.
         /// </summary>
-        protected static (int batchIndex, int instanceIndex) GetClosestPointIndex(List<List<Matrix4x4>> transformCaches, Vector3 point)
+        protected static (int batchIndex, int instanceIndex) GetIndicesClosestToPoint(List<List<Matrix4x4>> transformCaches, Vector3 point)
         {
             int closestBatchIndex = -1;
-            int closestLineIndex = -1;
+            int closestInstanceIndex = -1;
             float closestSqrDistance = float.MaxValue;
             for (int i = 0; i < transformCaches.Count; i++)
             {
@@ -333,46 +328,46 @@ namespace Netherlands3D.Twin.Rendering
                     {
                         closestSqrDistance = sqrDistance;
                         closestBatchIndex = i;
-                        closestLineIndex = j;
+                        closestInstanceIndex = j;
                     }
                 }
             }
-
-            return (closestBatchIndex, closestLineIndex);
+            return (closestBatchIndex, closestInstanceIndex);
         }
-
-        /// <summary>
-        /// Set a specific line color by index of the line.
-        /// May be used for 'highlighting' a line, in combination with the ClosestLineToPoint method.
-        /// </summary>
-        public void SetPointColorByBatchIndex(int batchIndex, int segmentIndex, Color color)
+        
+        protected virtual void UpdateColorBuffers()
         {
-            if (batchIndex >= pointMaterialPropertyBlockCache.Count)
+            while (pointTransformMatrixCache.Count > pointBatchColors.Count)
             {
-                Debug.LogError($"Index {batchIndex} is out of range");
-                return;
+                var colorCache = new BatchColor(1023, PointMaterial.color);
+                pointBatchColors.Add(colorCache);
             }
-
-            UpdateColorBuffers();
-            pointColorCache[batchIndex][segmentIndex] = color;
-            pointMaterialPropertyBlockCache[batchIndex].SetVectorArray("_SegmentColors", pointColorCache[batchIndex]);
         }
 
+        public virtual void SetDefaultColors()
+        {
+            Color defaultColor = PointMaterial.color;
+            foreach (var batchColor in pointBatchColors)
+            {
+                batchColor.SetAllColors(defaultColor);
+            }
+            UpdateColorBuffers(); //fill in the missing colors with the default color after resetting the existing colors to avoid setting them twice.
+        }
+        
         /// <summary>
         /// Set specific point color for the point closest to a given point.
         /// </summary>
         public void SetPointColorClosestToPoint(Vector3 point, Color color)
         {
-            var indexPosition = GetClosestPointIndex(pointTransformMatrixCache, point);
-            if (indexPosition.Item1 == -1 || indexPosition.Item2 == -1)
+            Debug.Log(point);
+            var batchIndices = GetIndicesClosestToPoint(pointTransformMatrixCache, point);
+            if (batchIndices.batchIndex == -1 || batchIndices.instanceIndex == -1)
             {
                 Debug.LogError("No point found");
                 return;
             }
-
-            SetPointColorByBatchIndex(indexPosition.batchIndex, indexPosition.instanceIndex, color);
+            UpdateColorBuffers();
+            pointBatchColors[batchIndices.batchIndex].SetColor(batchIndices.instanceIndex, color);
         }
-
-        #endregion
     }
 }
