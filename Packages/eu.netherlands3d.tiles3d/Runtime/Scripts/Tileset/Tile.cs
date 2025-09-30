@@ -334,15 +334,15 @@ namespace Netherlands3D.Tiles3D
                     break;
                 case BoundingVolumeType.Sphere:
                     var sphereRadius = boundingVolume.values[0];
-                    var sphereCentre = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0], boundingVolume.values[1], boundingVolume.values[2]));
-                    var sphereMin = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0]- sphereRadius, boundingVolume.values[1] - sphereRadius, boundingVolume.values[2] - sphereRadius));
-                    var sphereMax = CoordinateConverter.ECEFToUnity(new Vector3ECEF(boundingVolume.values[0]+ sphereRadius, boundingVolume.values[1]+ sphereRadius, boundingVolume.values[2]+ sphereRadius));
+                    var sphereCentre = new Coordinate(tileSet.contentCoordinateSystem, boundingVolume.values[0], boundingVolume.values[1], boundingVolume.values[2]).ToUnity();
+                    var sphereMin = new Coordinate(tileSet.contentCoordinateSystem, boundingVolume.values[0]- sphereRadius, boundingVolume.values[1] - sphereRadius, boundingVolume.values[2] - sphereRadius).ToUnity();
+                    var sphereMax = new Coordinate(tileSet.contentCoordinateSystem,boundingVolume.values[0]+ sphereRadius, boundingVolume.values[1]+ sphereRadius, boundingVolume.values[2]+ sphereRadius).ToUnity();
                     unityBounds.size = Vector3.zero;
                     unityBounds.center = sphereCentre;
                     unityBounds.Encapsulate(sphereMin);
                     unityBounds.Encapsulate(sphereMax);
-                    BottomLeft = new Coordinate(CoordinateSystem.WGS84_ECEF, boundingVolume.values[0] - sphereRadius, boundingVolume.values[1] - sphereRadius, boundingVolume.values[2] - sphereRadius);
-                    TopRight = new Coordinate(CoordinateSystem.WGS84_ECEF, boundingVolume.values[0] + sphereRadius, boundingVolume.values[1] + sphereRadius, boundingVolume.values[2] + sphereRadius);
+                    BottomLeft = new Coordinate(tileSet.contentCoordinateSystem, boundingVolume.values[0] - sphereRadius, boundingVolume.values[1] - sphereRadius, boundingVolume.values[2] - sphereRadius);
+                    TopRight = new Coordinate(tileSet.contentCoordinateSystem, boundingVolume.values[0] + sphereRadius, boundingVolume.values[1] + sphereRadius, boundingVolume.values[2] + sphereRadius);
                     break;
                 case BoundingVolumeType.Region:
                     //Array order: west, south, east, north, minimum height, maximum height
