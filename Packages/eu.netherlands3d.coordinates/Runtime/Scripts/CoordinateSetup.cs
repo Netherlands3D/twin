@@ -14,8 +14,6 @@ public class CoordinateSetup : MonoBehaviour
     {
             CoordinateSystems.connectedCoordinateSystem = coordintesystem;
             CoordinateSystems.SetOrigin(new Coordinate(CoordinateSystem.RDNAP, rdCoordinatesAtUnityCenter.x, rdCoordinatesAtUnityCenter.y, napElevationAtUniytZero));
-            CoordinateConverter.relativeCenterRD = rdCoordinatesAtUnityCenter;
-            CoordinateConverter.zeroGroundLevelY = napElevationAtUniytZero;
 
     }
 }
