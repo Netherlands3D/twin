@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace Netherlands3D._Application._Twin.AssetLibraryEntries
     /// </summary>
     public abstract class AssetLibraryEntry : ScriptableObject
     {
-        [SerializeField] private string id;
+        [SerializeField] private string id = Guid.NewGuid().ToString();
         [SerializeField] private string title;
         [TextArea] [SerializeField] private string description;
 

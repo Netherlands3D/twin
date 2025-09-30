@@ -51,7 +51,6 @@ namespace Netherlands3D._Application._Twin
 
         private void RegisterEntry(AssetLibraryEntry entry)
         {
-            Debug.Log($"Registering {entry.name}");
             foreach (var prefab in entry.CollectPrefabs())
             {
                 prefabs[prefab.PrefabIdentifier] = prefab;
@@ -94,9 +93,7 @@ namespace Netherlands3D._Application._Twin
 
         public void Trigger(DataService dataService)
         {
-            Debug.Log("Triggering data service " + dataService.Id);
             var endpoint = dataService.Endpoint;
-            Debug.Log("with " + endpoint + " endpoint");
             if (endpoint?.Scheme != "event")
             {
                 Debug.LogWarning("Data services other than events are not supported yet");
@@ -110,21 +107,18 @@ namespace Netherlands3D._Application._Twin
                 return;
             }
             
-            Debug.Log("and " + eventId + " event id");
             if (!scriptableObjectEvents.TryGetValue(eventId, out var soEvent))
             {
                 Debug.LogError($"Event with identifier '{eventId}' could not be found");
                 return;
             }
 
-            Debug.Log("which is " + soEvent.name);
             if (soEvent is not IEventInvoker invoker)
             {
                 Debug.LogError($"Event was not of type IEventInvoker, other types are not supported at the moment");
                 return;
             }
 
-            Debug.Log(" and is now invoked");
             invoker.Invoke();
         }
 
