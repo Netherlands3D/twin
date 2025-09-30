@@ -1,7 +1,6 @@
 using UnityEngine.InputSystem;
 using UnityEngine;
 using System;
-using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Coordinates;
 
 namespace Netherlands3D.Twin.Samplers
@@ -17,6 +16,7 @@ namespace Netherlands3D.Twin.Samplers
         private float maxDistance = 10000;
 
         private GameObject testPosition;
+        public bool debugHeightmapPosition = true;
 
         private void Awake()
         {
@@ -26,11 +26,6 @@ namespace Netherlands3D.Twin.Samplers
 
         private void Start()
         {
-            testPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            testPosition.transform.localScale = Vector3.one * 10;
-            testPosition.GetComponent<Renderer>().material.color = Color.green;
-
-
             worldPointCallback = (w,h) =>
             {
                 if (h)
@@ -48,10 +43,20 @@ namespace Netherlands3D.Twin.Samplers
             var screenPoint = Pointer.current.position.ReadValue();
             opticalRaycaster.GetWorldPointAsync(screenPoint, worldPointCallback);
 
-            GetPointerWorldPointAsync(pos =>
+            if(debugHeightmapPosition)
             {
-                testPosition.transform.position = pos;
-            });
+                if(testPosition == null)
+                {
+                    testPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    testPosition.transform.localScale = Vector3.one * 10;
+                    testPosition.GetComponent<Renderer>().material.color = Color.green;
+                }
+                testPosition.transform.position = GetWorldPoint();
+            }
+            else if(testPosition != null)
+            {
+                Destroy(testPosition);
+            }
         }
 
         public void GetPointerWorldPointAsync(Action<Vector3> result)
@@ -59,15 +64,13 @@ namespace Netherlands3D.Twin.Samplers
             var screenPoint = Pointer.current.position.ReadValue();
             opticalRaycaster.GetWorldPointAsync(screenPoint, (point, hit) =>
             {
-                //if (hit)
-                //    result.Invoke(point);
-                //else
-                //{
-                //    Vector3 position = GetWorldPoint();
-                //    result.Invoke(position);
-                //}
-                result.Invoke(GetWorldPoint());
-
+                if (hit)
+                    result.Invoke(point);
+                else
+                {
+                    Vector3 position = GetWorldPoint();
+                    result.Invoke(position);
+                }  
             });
         }
 

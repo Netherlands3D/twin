@@ -1,6 +1,5 @@
 ﻿using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Utility;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Samplers
@@ -22,34 +21,30 @@ namespace Netherlands3D.Twin.Samplers
         private float totalHeight => highestPoint - lowestPoint;
         private float totalValue => highestValue - lowestValue;
 
-        private void Start()
+        public float GetHeight(Coordinate coordinate, bool bilinear = false)
         {
-        }
+            if (heightMap == null)
+            {
+                Debug.LogError("missing heightmap texture");
+                return 0f;
+            }
 
-        public float GetHeight(Coordinate coordinate)
-        {
-            if (heightMap == null) return 0f;
-
-            //Coordinate wgs84 = coordinate.Convert(CoordinateSystem.WGS84_LatLon);
-            //double u = (wgs84.easting - MinLon) / (MaxLon - MinLon);
-            //double v = (wgs84.northing - MinLat) / (MaxLat - MinLat);
-            //int x = (int)(Mathf.Clamp01((float)u) * (heightMap.width - 1));
-            //int y = (int)(Mathf.Clamp01((float)v) * (heightMap.height - 1));
-            //Color pixel = heightMap.GetPixel(x, y);
-
-            
             Coordinate rd = coordinate.Convert(CoordinateSystem.RD);
-
-            double u = (rd.easting - minX) / (maxX - minX); // horizontal
-            double v = (rd.northing - minY) / (maxY - minY); // vertical
-            int px = Mathf.RoundToInt((float)u * (heightMap.width - 1));
-            int py = Mathf.RoundToInt((float)v * (heightMap.height - 1));
-            Color pixel = heightMap.GetPixel(px, py);
+            double u = (rd.easting - minX) / (maxX - minX);
+            double v = (rd.northing - minY) / (maxY - minY);
+            
+            Color pixel;
+            if (bilinear)
+                pixel = heightMap.GetPixelBilinear((float)u, (float)v);
+            else
+            {
+                int px = Mathf.RoundToInt((float)u * (heightMap.width - 1));
+                int py = Mathf.RoundToInt((float)v * (heightMap.height - 1));
+                pixel = heightMap.GetPixel(px, py);
+            }
             float h = pixel.r;
-            //Debug.Log(h);
             float floor = h - lowestValue;
             h = (floor / totalValue) * totalHeight + lowestPoint;
-
             return h;
         }
     }
