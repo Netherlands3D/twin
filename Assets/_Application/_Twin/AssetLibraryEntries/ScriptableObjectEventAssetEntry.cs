@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
 using UnityEngine;
@@ -29,5 +30,11 @@ namespace Netherlands3D._Application._Twin.AssetLibraryEntries
             var uri = string.IsNullOrWhiteSpace(resolved) ? null : new Uri(resolved, UriKind.Absolute);
             return new DataService(Id, Title, Description, endpoint: uri);
         }
+        
+        public override IEnumerable<ScriptableObject> CollectEvents()
+        {
+            yield return scriptableObjectEvent;
+        }
+
     }
 }

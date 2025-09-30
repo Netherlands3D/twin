@@ -28,6 +28,7 @@ namespace Netherlands3D._Application._Twin
         
         // Cached list of scriptable object events that have been registered
         private readonly Dictionary<int, ScriptableObject> scriptableObjectEvents = new();
+        private readonly Dictionary<string, LayerGameObject> prefabs = new();
 
         public InMemoryCatalog Catalog { get; private set; }
 
@@ -40,6 +41,8 @@ namespace Netherlands3D._Application._Twin
                 "Application",
                 "Built from ApplicationCatalog asset"
             );
+            
+            // Register all top-level entries, the entries themselves will ensure their children are registered
             foreach (var entry in items)
             {
                 RegisterEntry(entry);
@@ -48,11 +51,17 @@ namespace Netherlands3D._Application._Twin
 
         private void RegisterEntry(AssetLibraryEntry entry)
         {
-            if (entry is ScriptableObjectEventAssetEntry soeae)
+            Debug.Log($"Registering {entry.name}");
+            foreach (var prefab in entry.CollectPrefabs())
             {
-                scriptableObjectEvents[soeae.EventObject.GetInstanceID()] = soeae.EventObject;
+                prefabs[prefab.PrefabIdentifier] = prefab;
+            }
+            foreach (var @event in entry.CollectEvents())
+            {
+                scriptableObjectEvents[@event.GetInstanceID()] = @event;
             }
 
+            // Convert the entry and its children to catalog items
             var catalogItem = entry.ToCatalogItem();
             if (catalogItem == null)
             {
@@ -85,18 +94,38 @@ namespace Netherlands3D._Application._Twin
 
         public void Trigger(DataService dataService)
         {
-            var processAddress = dataService.Endpoint;
-            if (processAddress?.Scheme == "event")
+            Debug.Log("Triggering data service " + dataService.Id);
+            var endpoint = dataService.Endpoint;
+            Debug.Log("with " + endpoint + " endpoint");
+            if (endpoint?.Scheme != "event")
             {
-                if (int.TryParse(processAddress.AbsolutePath, out var processId)
-                    && scriptableObjectEvents.TryGetValue(processId, out var soEvent))
-                {
-                    if (soEvent is IEventInvoker invoker)
-                    {
-                        invoker.Invoke();
-                    }
-                }
+                Debug.LogWarning("Data services other than events are not supported yet");
+                return;
             }
+
+            var eventIdAsString = endpoint.AbsolutePath.Trim('/');
+            if (!int.TryParse(eventIdAsString, out var eventId))
+            {
+                Debug.LogError("Event identifier was not an integer, found: " + eventIdAsString);
+                return;
+            }
+            
+            Debug.Log("and " + eventId + " event id");
+            if (!scriptableObjectEvents.TryGetValue(eventId, out var soEvent))
+            {
+                Debug.LogError($"Event with identifier '{eventId}' could not be found");
+                return;
+            }
+
+            Debug.Log("which is " + soEvent.name);
+            if (soEvent is not IEventInvoker invoker)
+            {
+                Debug.LogError($"Event was not of type IEventInvoker, other types are not supported at the moment");
+                return;
+            }
+
+            Debug.Log(" and is now invoked");
+            invoker.Invoke();
         }
 
         private ILayerBuilder CreateLayerBuilder(ICatalogItem item)

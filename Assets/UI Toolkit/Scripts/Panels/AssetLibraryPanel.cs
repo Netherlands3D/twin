@@ -97,7 +97,7 @@ namespace Netherlands3D.UI.Panels
                     ShowItemsFromCollection(collection);
                     return;
                 case RecordItem recordItem: assetLibrary.Load(recordItem); break;
-                case DataService processItem: assetLibrary.Trigger(processItem); break;
+                case DataService dataServiceItem: assetLibrary.Trigger(dataServiceItem); break;
                 default: Debug.LogWarning("Attempted to open an unknown type of catalog item"); break;
             }
         }

@@ -2,6 +2,7 @@
 using System.Linq;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.Catalogs;
+using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
 namespace Netherlands3D._Application._Twin.AssetLibraryEntries
@@ -22,5 +23,15 @@ namespace Netherlands3D._Application._Twin.AssetLibraryEntries
         }
 
         public override IEnumerable<AssetLibraryEntry> GetChildren() => children;
+
+        public override IEnumerable<ScriptableObject> CollectEvents()
+        {
+            return children.SelectMany(child => child.CollectEvents());
+        }
+        
+        public override IEnumerable<LayerGameObject> CollectPrefabs()
+        {
+            return children.SelectMany(child => child.CollectPrefabs());
+        }
     }
 }

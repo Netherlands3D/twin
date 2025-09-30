@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Netherlands3D.Catalogs;
+using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
 namespace Netherlands3D._Application._Twin.AssetLibraryEntries
@@ -25,6 +26,19 @@ namespace Netherlands3D._Application._Twin.AssetLibraryEntries
         /// <summary>
         /// For hierarchical entries (Folder/Dataset). Others may return empty.
         /// </summary>
-        public virtual IEnumerable<AssetLibraryEntry> GetChildren() => System.Array.Empty<AssetLibraryEntry>();
+        public virtual IEnumerable<AssetLibraryEntry> GetChildren()
+        {
+            yield break;
+        }
+
+        public virtual IEnumerable<LayerGameObject> CollectPrefabs()
+        {
+            yield break;
+        }
+
+        public virtual IEnumerable<ScriptableObject> CollectEvents()
+        {
+            yield break;
+        }
     }
 }
