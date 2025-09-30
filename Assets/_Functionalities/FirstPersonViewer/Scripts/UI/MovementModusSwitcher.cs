@@ -25,9 +25,9 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private MovementCollection movementPresets;
         private MovementPresets currentMovement;
 
-        private void OnEnable()
+        private void Awake()
         {
-            LoadMoveModus(0);
+            ViewerEvents.OnViewerEntered += ViewerEnterd;
         }
 
         private void Start()
@@ -39,7 +39,16 @@ namespace Netherlands3D.FirstPersonViewer.UI
                 MovementModusButton tempButton = Instantiate(movementButtonPrefab, movementButtonParent);
                 tempButton.SetupButton(preset, this);
             });
+        }
 
+        private void OnDestroy()
+        {
+            ViewerEvents.OnViewerEntered -= ViewerEnterd;
+        }
+
+        private void ViewerEnterd()
+        {
+            LoadMoveModus(0);
         }
 
         private void Update()
