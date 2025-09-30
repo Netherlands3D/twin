@@ -71,14 +71,14 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
                 position.z + tile.tileKey.y + 0.5f * tile.layer.tileSize,
                 0
             );
-            Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.WGS84);
+            Coordinate coord = unityCoordinate.Convert(CoordinateSystem.WGS84);
             return new double[2] { coord.easting, coord.northing };
         }  
         
         public Vector2Int GetTileKeyFromUnityPosition(Vector3 position, int tileSize)
         {
             var unityCoordinate = new Coordinate(position);
-            Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.RD);
+            Coordinate coord = unityCoordinate.Convert(CoordinateSystem.RD);
             Vector2Int key = new Vector2Int(Mathf.RoundToInt(((float)coord.easting - 0.5f * tileSize) / 1000) * 1000, Mathf.RoundToInt(((float)coord.northing - 0.5f * tileSize) / 1000) * 1000);
             return key;
         }
@@ -86,7 +86,7 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
         public Vector2Int GetRDPositionFromUnityPosition(Vector3 position)
         {
             var unityCoordinate = new Coordinate(position);
-            Coordinate coord = CoordinateConverter.ConvertTo(unityCoordinate, CoordinateSystem.RD);
+            Coordinate coord = unityCoordinate.Convert(CoordinateSystem.RD);
             Vector2Int key = new Vector2Int((int)coord.easting, (int)coord.northing);
             return key;
         }
