@@ -232,8 +232,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 }
 
                 mesh.RecalculateBounds();
-                //meshes[i] = mesh;
-
                 subObject.transform.SetParent(visualisationLayer.Transform);
                 subObject.layer = LayerMask.NameToLayer("Projected");
                 subObjects.Add(subObject);
