@@ -52,11 +52,21 @@ namespace Netherlands3D._Application._Twin
             {
                 scriptableObjectEvents[soeae.EventObject.GetInstanceID()] = soeae.EventObject;
             }
-            Import(entry.ToCatalogItem());
+
+            var catalogItem = entry.ToCatalogItem();
+            if (catalogItem == null)
+            {
+                Debug.LogError($"Couldn't find any catalog item for {entry.name} ({entry.Id})");
+                return;
+            }
+
+            Import(catalogItem);
         }
 
         public void Import(ICatalogItem catalogItem)
         {
+            if (catalogItem == null) return;
+
             Catalog.Add(catalogItem);
         }
 
