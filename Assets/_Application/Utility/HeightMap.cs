@@ -16,8 +16,8 @@ namespace Netherlands3D.Twin.Samplers
 
         private const float lowestPoint = -6.76f;
         private const float highestPoint = 322.4f;
-        private const float lowestValue = 0.267f;
-        private const float highestValue = 0.627f;
+        private const float lowestValue = 0.0f;
+        private const float highestValue = 1.0f;
 
         private float totalHeight => highestPoint - lowestPoint;
         private float totalValue => highestValue - lowestValue;
@@ -46,7 +46,7 @@ namespace Netherlands3D.Twin.Samplers
             int py = Mathf.RoundToInt((float)v * (heightMap.height - 1));
             Color pixel = heightMap.GetPixel(px, py);
             float h = pixel.r;
-
+            //Debug.Log(h);
             float floor = h - lowestValue;
             h = (floor / totalValue) * totalHeight + lowestPoint;
 
