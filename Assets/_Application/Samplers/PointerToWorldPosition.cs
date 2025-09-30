@@ -8,6 +8,7 @@ namespace Netherlands3D.Twin.Samplers
     public class PointerToWorldPosition : MonoBehaviour
     {       
         public Coordinate WorldPoint => worldPoint;
+        public bool debugHeightmapPosition = false;
 
         private HeightMap heightMap;
         private OpticalRaycaster opticalRaycaster;
@@ -16,7 +17,7 @@ namespace Netherlands3D.Twin.Samplers
         private float maxDistance = 10000;
 
         private GameObject testPosition;
-        public bool debugHeightmapPosition = true;
+        
 
         private void Awake()
         {
