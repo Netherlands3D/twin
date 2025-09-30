@@ -49,10 +49,10 @@ namespace Netherlands3D.Minimap
 			if (cameraCorners != null)
 			{
 				//Align quad with camera extent points
-				uiQuad.QuadVertices[0] = wmtsMap.DeterminePositionOnMap(new Coordinate(cameraCorners[3]).Convert(CoordinateSystem.RDNAP).ToVector3RD());
-				uiQuad.QuadVertices[1] = wmtsMap.DeterminePositionOnMap(new Coordinate(cameraCorners[2]).Convert(CoordinateSystem.RDNAP).ToVector3RD());
-				uiQuad.QuadVertices[2] = wmtsMap.DeterminePositionOnMap(new Coordinate(cameraCorners[1]).Convert(CoordinateSystem.RDNAP).ToVector3RD());
-				uiQuad.QuadVertices[3] = wmtsMap.DeterminePositionOnMap(new Coordinate(cameraCorners[0]).Convert(CoordinateSystem.RDNAP).ToVector3RD());
+				uiQuad.QuadVertices[0] = wmtsMap.DeterminePositionOnMap(new Coordinate(cameraCorners[3]).Convert(CoordinateSystem.RDNAP));
+				uiQuad.QuadVertices[1] = wmtsMap.DeterminePositionOnMap(new Coordinate(cameraCorners[2]).Convert(CoordinateSystem.RDNAP));
+				uiQuad.QuadVertices[2] = wmtsMap.DeterminePositionOnMap(new Coordinate(cameraCorners[1]).Convert(CoordinateSystem.RDNAP));
+				uiQuad.QuadVertices[3] = wmtsMap.DeterminePositionOnMap(new Coordinate(cameraCorners[0]).Convert(CoordinateSystem.RDNAP));
 
 				//Make sure our graphic width/height is set to the max distance of our verts, so culling works properly
 				uiQuad.Redraw();

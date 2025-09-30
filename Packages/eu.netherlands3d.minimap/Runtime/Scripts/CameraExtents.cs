@@ -46,11 +46,11 @@ namespace Netherlands3D.Minimap
             CalculateCornerExtents(camera, maximumViewDistance);
 
             // Convert min and max to WGS84 coordinates
-            var rdMin = new Coordinate(unityMin).Convert(CoordinateSystem.RDNAP).ToVector3RD();
-            var rdMax = new Coordinate(unityMax).Convert(CoordinateSystem.RDNAP).ToVector3RD();
+            var rdMin = new Coordinate(unityMin).Convert(CoordinateSystem.RDNAP);
+            var rdMax = new Coordinate(unityMax).Convert(CoordinateSystem.RDNAP);
 
             // Area that should be loaded
-            var extent = new Extent(rdMin.x, rdMin.y, rdMax.x, rdMax.y);
+            var extent = new Extent(rdMin.easting, rdMin.northing, rdMax.easting, rdMax.northing);
 
             return extent;
         }
