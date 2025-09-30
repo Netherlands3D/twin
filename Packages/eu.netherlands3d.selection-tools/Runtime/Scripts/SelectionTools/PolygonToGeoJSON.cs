@@ -25,9 +25,9 @@ public class PolygonToGeoJSON : MonoBehaviour
         {
             var position = polygon[i];
             var coordinate = new Coordinate(position);
-            var rdCoordinate = coordinate.Convert(CoordinateSystem.WGS84).ToVector3WGS();
+            var rdCoordinate = coordinate.Convert(CoordinateSystem.WGS84);
 
-            stringBuilder.AppendLine($"[{rdCoordinate.lon},{rdCoordinate.lat}]");
+            stringBuilder.AppendLine($"[{rdCoordinate.easting},{rdCoordinate.northing}]");
             if (i != polygon.Count - 1) stringBuilder.Append(",");
         }
 
