@@ -149,8 +149,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             List<GameObject> subObjects = new List<GameObject>();
             for (int i = 0; i < meshes.Count; i++)
             {
-                Mesh mesh = meshes[i];
-                Vector3[] verts = mesh.vertices;
+                Mesh mesh = new Mesh();
+                Vector3[] verts = meshes[i].vertices;
                 float width = 1f;
                 GameObject subObject = new GameObject(feature.Geometry.ToString() + "_submesh_" + visualisationLayer.Transform.transform.childCount.ToString());
                 subObject.AddComponent<MeshFilter>().mesh = mesh;
@@ -232,8 +232,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 }
 
                 mesh.RecalculateBounds();
-                meshes[i] = mesh;
-
                 subObject.transform.SetParent(visualisationLayer.Transform);
                 subObject.layer = LayerMask.NameToLayer("Projected");
                 subObjects.Add(subObject);
