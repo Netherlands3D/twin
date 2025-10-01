@@ -31,7 +31,7 @@ namespace Netherlands3D.Coordinates
         ETRS89 = 3
 
     }
-    internal enum CoordinateSystemType
+    public enum CoordinateSystemType
     {
         Projected,
         Geographic,
@@ -260,6 +260,12 @@ namespace Netherlands3D.Coordinates
             }
             Debug.LogError("Could not find 3D equivalent of crs: " + crs);
             return crs;
+        }
+
+        public static CoordinateSystemType getCoordinateSystemType(CoordinateSystem crs)
+        {
+            var converter = operators[crs];
+            return converter.GetCoordinateSystemType();
         }
     }
 
