@@ -20,6 +20,7 @@ namespace Netherlands3D.FirstPersonViewer
         public InputAction ExitInput { private set; get; }
         public InputAction LeftClick { private set; get; }
         public InputAction HideUI { private set; get; }
+        public InputAction ResetInput { private set; get; }
 
         [Header("Exit")]
         [SerializeField] private float exitDuration = 1;
@@ -39,6 +40,7 @@ namespace Netherlands3D.FirstPersonViewer
             ExitInput = inputActionAsset.FindAction("Exit");
             LeftClick = inputActionAsset.FindAction("LClick");
             HideUI = inputActionAsset.FindAction("HideUI");
+            ResetInput = inputActionAsset.FindAction("Reset");
 
             inputLocks = new List<MonoBehaviour>();
 

@@ -18,6 +18,7 @@ namespace Netherlands3D.FirstPersonViewer.Events
         public static Action<Vector3> OnCameraRotation;
 
         public static Action OnResetToStart;
+        public static Action OnResetToGround;
         public static Action OnSetCameraNorth;
         public static Action OnHideUI;
 

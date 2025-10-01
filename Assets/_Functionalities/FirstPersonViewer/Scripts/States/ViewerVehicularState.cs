@@ -25,6 +25,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             viewer.GetGroundPosition();
             ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_NONE);
+            ViewerEvents.OnResetToGround += ResetToGround;
         }
 
         public override void OnUpdate()
@@ -35,6 +36,11 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             viewer.SnapToGround();
 
             viewer.ApplyGravity();
+        }
+
+        public override void OnExit()
+        {
+            ViewerEvents.OnResetToGround -= ResetToGround;
         }
 
         private void MoveVehicle(Vector2 moveInput)
@@ -59,6 +65,11 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
                 viewer.GetGroundPosition();
                 ViewerEvents.OnCameraRotation?.Invoke(viewer.FirstPersonCamera.transform.forward);
             }
+        }
+
+        private void ResetToGround()
+        {
+            currentSpeed = 0;
         }
     }
 }

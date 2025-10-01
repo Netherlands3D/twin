@@ -58,6 +58,7 @@ namespace Netherlands3D.FirstPersonViewer
             ViewerEvents.OnMovementPresetChanged += SetMovementModus;
             ViewerEvents.OnViewerExited += ExitViewer;
             ViewerEvents.OnResetToStart += ResetToStart;
+            ViewerEvents.OnResetToGround += ResetToGround;
 
         }
 
@@ -78,6 +79,7 @@ namespace Netherlands3D.FirstPersonViewer
             ViewerEvents.OnMovementPresetChanged -= SetMovementModus;
             ViewerEvents.OnViewerExited -= ExitViewer;
             ViewerEvents.OnResetToStart -= ResetToStart;
+            ViewerEvents.OnResetToGround -= ResetToGround;
         }
 
         private void SetupFSM()
@@ -117,6 +119,8 @@ namespace Netherlands3D.FirstPersonViewer
             Vector3 camPos = transform.position;
             camPos.y = cameraHeightAboveGround;
             mainCam.transform.position = camPos;
+
+            if (input.ResetInput.triggered) ViewerEvents.OnResetToGround?.Invoke();
         }
 
         public void GetGroundPosition()
@@ -184,6 +188,19 @@ namespace Netherlands3D.FirstPersonViewer
         {
             if (input.LockInput) return Vector2.zero;
             else return input.MoveAction.ReadValue<Vector2>();
+        }
+
+        private void ResetToGround()
+        {
+            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * cameraHeightAboveGround, Vector3.down, (point, hit) =>
+            {
+                if (hit)
+                {
+                    SetVelocity(Vector2.zero);
+                    yPositionTarget = point.y;
+                    transform.position = new Vector3(transform.position.x, yPositionTarget, transform.position.z);
+                }
+            }, snappingCullingMask);
         }
 
         private void ExitViewer()
