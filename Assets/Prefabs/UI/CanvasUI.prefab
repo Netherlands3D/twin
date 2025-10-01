@@ -3839,6 +3839,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2138596249708571949, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2163536913614694551, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -6100,7 +6105,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: FirstPersonViewButton
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2422037395318167759, guid: 5d754f91c9971484ab04e373187cdc91, type: 3}
     m_RemovedGameObjects:
     - {fileID: 7869458717022100725, guid: 5d754f91c9971484ab04e373187cdc91, type: 3}
     m_AddedGameObjects: []
