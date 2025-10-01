@@ -146,12 +146,10 @@ namespace Netherlands3D.CityJson.Structure
                 MaxExtent = new Vector3Double(maxX, maxY, maxZ);
             }
             
-            //todo: this is a quick fix for current RD files that don't have a CRS defined but are in RDNAP.
-            //The real fix is to add IsValid functions for all supported CRS options and return a list of the ones that could be valid. The user can then choose which one to use, from the list, or if there is only 1 CRS in the list, default to this one.
             var absoluteCenter = AbsoluteCenter;
-            if (EPSG7415.IsValid(absoluteCenter.x, absoluteCenter.y, absoluteCenter.z, out var _)) 
+            if (CoordinateSystems.TryFindValidCoordinates(absoluteCenter.x, absoluteCenter.y, absoluteCenter.z, out var possibleCoordinates))
             {
-                CoordinateSystem = CoordinateSystem.RDNAP;
+                CoordinateSystem = (CoordinateSystem)possibleCoordinates[0].CoordinateSystem;
             }
 
             //CityObjects
@@ -192,9 +190,6 @@ namespace Netherlands3D.CityJson.Structure
 
             CityObjects = cityObjects.Values.ToList();
 
-            if (TryGetComponent<WorldTransform>(out var worldTransform))
-                MoveToAbsoluteCenter(worldTransform);
-
             foreach (var co in CityObjects)
             {
                 co.OnCityObjectParseCompleted();
@@ -227,14 +222,6 @@ namespace Netherlands3D.CityJson.Structure
 
                 CityJSONFormatter.RemoveExtensionNode(node.Key);
             }
-        }
-
-        // set the relative RD center to avoid floating point issues of GameObject far from the Unity origin
-        private void MoveToAbsoluteCenter(WorldTransform worldTransform)
-        {
-            var absoluteCenter = AbsoluteCenter;
-            var coord = new Coordinate(CoordinateSystem, absoluteCenter.x, absoluteCenter.y, absoluteCenter.z);
-            worldTransform.MoveToCoordinate(coord);
         }
     }
 }

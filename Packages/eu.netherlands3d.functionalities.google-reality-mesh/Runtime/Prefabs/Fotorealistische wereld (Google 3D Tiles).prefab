@@ -378,6 +378,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabIdentifier: 71fff5c85650fcd4d9f59e4e182b5e95
+  thumbnail: {fileID: 0}
+  spawnLocation: -1
   onShow:
     m_PersistentCalls:
       m_Calls: []
