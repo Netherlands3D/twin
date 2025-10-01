@@ -11,6 +11,8 @@ using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Events;
 using Netherlands3D.Twin.Samplers;
+using Netherlands3D.Services;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -248,7 +250,7 @@ namespace Netherlands3D.Twin.Layers
             var crs = CoordinateSystems.To3D(CoordinateSystems.connectedCoordinateSystem);
             Bounds.Convert(crs);
             Coordinate targetCoordinate = Bounds.Center;
-            float height = FindAnyObjectByType<HeightMap>().GetHeight(targetCoordinate);
+            float height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
             targetCoordinate.height = height;
 
             // !IMPORTANT: we deselect the layer, because if we don't do this, the TransformHandles might be connected to this LayerGameObject

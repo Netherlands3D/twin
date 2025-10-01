@@ -2,6 +2,7 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 using System;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Services;
 
 namespace Netherlands3D.Twin.Samplers
 {
@@ -9,8 +10,7 @@ namespace Netherlands3D.Twin.Samplers
     {       
         public Coordinate WorldPoint => worldPoint;
         public bool debugHeightmapPosition = false;
-
-        private HeightMap heightMap;
+        
         private OpticalRaycaster opticalRaycaster;
         private Action<Vector3, bool> worldPointCallback;
         private Coordinate worldPoint;
@@ -18,10 +18,8 @@ namespace Netherlands3D.Twin.Samplers
 
         private GameObject testPosition;
         
-
         private void Awake()
         {
-            heightMap = GetComponent<HeightMap>();  
             opticalRaycaster = GetComponent<OpticalRaycaster>();
         }
 
@@ -81,6 +79,12 @@ namespace Netherlands3D.Twin.Samplers
             return GetWorldPoint(screenPoint);
         }
 
+        public Vector3 GetWorldPointCenterView()
+        {
+            var screenPoint = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+            return GetWorldPoint(screenPoint);
+        }
+
         public Vector3 GetWorldPoint(Vector2 screenPosition)
         {            
             Plane worldPlane = new Plane(Vector3.up, Vector3.zero);
@@ -94,6 +98,7 @@ namespace Netherlands3D.Twin.Samplers
                 position = screenRay.GetPoint(Mathf.Min(maxDistance, distance));
 
             Coordinate testCoord = new Coordinate(position);
+            HeightMap heightMap = ServiceLocator.GetService<HeightMap>();   
             float height = heightMap.GetHeight(testCoord);
             Vector3 origin = Camera.main.transform.position;
             Vector3 dir = screenRay.direction;

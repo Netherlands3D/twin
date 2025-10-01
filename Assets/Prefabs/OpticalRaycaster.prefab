@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 669998098775430263}
   - component: {fileID: 7073721482847640295}
   - component: {fileID: 4123874669779357784}
-  - component: {fileID: 2268920636772732244}
   - component: {fileID: 8803690108360864904}
   m_Layer: 0
   m_Name: OpticalRaycaster
@@ -66,19 +65,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugHeightmapPosition: 0
---- !u!114 &2268920636772732244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5830911274202297391}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e10fb8de731cf8840bd7fb5e202f26d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  heightMap: {fileID: 2800000, guid: ea6e7e149a610284084aafa291ae2625, type: 3}
 --- !u!114 &8803690108360864904
 MonoBehaviour:
   m_ObjectHideFlags: 0
