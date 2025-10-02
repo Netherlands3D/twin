@@ -253,15 +253,8 @@ namespace Netherlands3D.Twin.Rendering
         /// </summary>
         public void SetPositionCollections(List<List<Coordinate>> collections)
         {
-            if (collections == null)
-            {
-                Clear();
-                return;
-            }
-
-            positionCollections = collections;
-            RecalculatePointCount();
-            GenerateTransformMatrixCache();
+            Clear();
+            AppendCollections(collections);
         }
 
         /// <summary>
@@ -269,33 +262,42 @@ namespace Netherlands3D.Twin.Rendering
         /// </summary>
         public void AppendCollection(List<Coordinate> collection)
         {
-            if (collection == null || collection.Count == 0)
-                return;
+            if (!IsValid(collection)) return;
 
             var startIndex = positionCollections.Count;
             positionCollections.Add(collection);
             RecalculatePointCount();
             GenerateTransformMatrixCache(startIndex);
         }
-
+        
         /// <summary>
         /// Append multiple lines to the current list of lines
         /// </summary>
         public void AppendCollections(List<List<Coordinate>> collections)
         {
+            if(collections == null)
+                return;
+            
             var startIndex = positionCollections.Count;
             // Collections.Count can have empty collections that will not be added, so we set the capacity to the current count + the potential added count instead of increasing the capacity by collections.Count.
             // In case this function will be called multiple times, we prevent the capacity by increasing too much.
             positionCollections.Capacity = positionCollections.Count + collections.Count;
             foreach (var collection in collections)
             {
-                if (collection == null || collection.Count == 0)
+                if(!IsValid(collection)) 
                     continue;
                 positionCollections.Add(collection);
             }
 
             RecalculatePointCount();
             GenerateTransformMatrixCache(startIndex);
+        }
+        
+        protected virtual bool IsValid(List<Coordinate> collection)
+        {
+            if (collection == null || collection.Count == 0)
+                return false;
+            return true;
         }
 
         /// <summary>

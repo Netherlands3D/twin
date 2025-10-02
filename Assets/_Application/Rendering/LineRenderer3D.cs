@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Netherlands3D.Coordinates;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -177,6 +178,21 @@ namespace Netherlands3D.Twin.Rendering
                         AppendMatrixToBatches(pointTransformMatrixCache, ref jointIndices.batchIndex, ref jointIndices.matrixIndex, jointTransformMatrix);
                     }
                 }
+            }
+        }
+
+        protected override bool IsValid(List<Coordinate> line)
+        {
+            {
+                if (line == null) 
+                    return false;
+                if (line.Count < 2)
+                {
+                    Debug.LogWarning("A line should have at least 2 points");
+                    return false;
+                }
+
+                return true;
             }
         }
     }
