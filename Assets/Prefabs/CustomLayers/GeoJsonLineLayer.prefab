@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 486974600061382359}
   - component: {fileID: -8140904490283006168}
   - component: {fileID: 373191915858293964}
+  - component: {fileID: 6675735551498236915}
   - component: {fileID: 5447569626426196056}
   - component: {fileID: 2184948650164356377}
   - component: {fileID: 1162024415283335831}
@@ -67,6 +68,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   lineRenderer3D: {fileID: 373191915858293964}
+  selectionLineRenderer3D: {fileID: 6675735551498236915}
 --- !u!114 &373191915858293964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,6 +92,33 @@ MonoBehaviour:
   lineMesh: {fileID: 6475988976120857168, guid: 0ce527cb5805b44468ec8f7dabbf58ca,
     type: 3}
   lineMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
+  lineSelectionMaterial: {fileID: 2100000, guid: cae582fecb8c4c34594b1ebf69514e4e,
+    type: 2}
+  drawJoints: 1
+  lineDiameter: 1
+--- !u!114 &6675735551498236915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764337386758102018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2ab6ad69b9eb134b90d56b3161fba5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  pointMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
+  flattenY: 0
+  offsetY: 1.87
+  pointMeshScale: 1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  lineMesh: {fileID: 6475988976120857168, guid: 0ce527cb5805b44468ec8f7dabbf58ca,
+    type: 3}
+  lineMaterial: {fileID: 2100000, guid: cae582fecb8c4c34594b1ebf69514e4e, type: 2}
   lineSelectionMaterial: {fileID: 2100000, guid: cae582fecb8c4c34594b1ebf69514e4e,
     type: 2}
   drawJoints: 1

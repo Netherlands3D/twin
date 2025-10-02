@@ -12,24 +12,14 @@ namespace Netherlands3D.Twin.Rendering
         private Mesh lineMesh;
 
         [SerializeField] private Material lineMaterial;
-        [SerializeField] private Material lineSelectionMaterial; //todo: move to base
 
         [Header("Settings")] 
         [SerializeField] private bool drawJoints = true;
         [SerializeField] private float lineDiameter = 1f;
         
         private List<List<Matrix4x4>> lineTransformMatrixCache = new List<List<Matrix4x4>>();
-        protected List<BatchColor> lineBatchColors = new();
-
-        // private List<MaterialPropertyBlock> segmentPropertyBlockCache = new List<MaterialPropertyBlock>();
-        // private List<Vector4[]> segmentColorCache = new List<Vector4[]>();
-
-        // private MaterialPropertyBlock selectedSegmentMaterialPropertyBlock;
-        // private MaterialPropertyBlock selectedJointMaterialPropertyBlock;
-        private List<Matrix4x4> selectedLineTransforms = new List<Matrix4x4>();
-        private List<Matrix4x4> selectedJointTransforms = new List<Matrix4x4>();
-        private List<Vector4> selectedLineColorCache = new List<Vector4>();
-        private List<Vector4> selectedJointColorCache = new List<Vector4>();
+        private List<BatchColor> lineBatchColors = new();
+        
         private int selectedLineIndex = -1;
 
         public Mesh LineMesh
@@ -116,89 +106,6 @@ namespace Netherlands3D.Twin.Rendering
             }
             UpdateColorBuffers(); //fill in the missing colors with the default color after resetting the existing colors to avoid setting them twice.
         }
-        
-        /// <summary>
-        /// all vertices of the line mesh are needed as input to solve the issue of other lines having overlapping points
-        /// problem, multiple feature meshes have points at the same position in the segmenttransformmatrixcache
-        /// so we need to do an extra check which centroid of the both closest points are matching with all the points
-        /// </summary>
-        /// <param name="points"></param>
-        /// <param name="color"></param>
-        public void SetLineColorFromPoints(Vector3[] points, Color color)
-        {
-            // We will check if the passed points[] is equal to a stored line by comparing centroids.
-            // TODO: instead of passing a point[], pass the index of the line so we can directly get it from positionCollections
-            var selectionCentroid = CalculateCentroid(points);
-            
-            int lineIndex = -1;
-            float closest = float.MaxValue;
-
-            for (var i = 0; i < positionCollections.Count; i++)
-            {
-                var line = positionCollections[i];
-                if (points.Length == line.Count)
-                {
-                    var lineCentroid = CalculateCentroid(line);
-                    float dist = Vector3.SqrMagnitude(selectionCentroid - lineCentroid);
-                    if (dist < closest)
-                    {
-                        closest = dist;
-                        lineIndex = i;
-                    }
-                }
-            }
-            if (lineIndex < 0) return;
-
-            var flattenedStartIndex = GetFlattenedStartIndex(lineIndex);
-
-            var jointBatchIndices = GetMatrixIndices(flattenedStartIndex);
-            var lineBatchIndices = GetMatrixIndices(flattenedStartIndex - lineIndex);
-
-            for (int i = 0; i < positionCollections[lineIndex].Count; i++)
-            {
-                pointBatchColors[jointBatchIndices.batchIndex].SetColor(jointBatchIndices.matrixIndex, color);
-                lineBatchColors[lineBatchIndices.batchIndex].SetColor(lineBatchIndices.matrixIndex, color);
-                
-                IncrementBatchIndices(ref jointBatchIndices.batchIndex, ref jointBatchIndices.matrixIndex);
-                IncrementBatchIndices(ref lineBatchIndices.batchIndex, ref lineBatchIndices.matrixIndex);
-            }
-        }
-
-        private void IncrementBatchIndices(ref int batchIndex, ref int matrixIndex)
-        {
-            matrixIndex++;
-            if (matrixIndex >= 1023) //matrix index exceeds batch size, so add a new batch and reset the matrix index
-            {
-                batchIndex++;
-                matrixIndex -= 1023; //todo: account for matrixIndex larger than 2046
-            }
-        }
-
-        private static Vector3 CalculateCentroid(Vector3[] line)
-        {
-            if(line == null || line.Length == 0) return Vector3.zero;
-
-            Vector3 selectionCentroid = line[0];
-            for (int i = 1; i < line.Length; i++)
-                selectionCentroid += line[i];
-            
-            selectionCentroid /= line.Length;
-            
-            return selectionCentroid;
-        }
-
-        private static Vector3 CalculateCentroid(List<Coordinate> line)
-        {
-            if(line == null || line.Count == 0) return Vector3.zero;
-            
-            Vector3 lineCentroid = line[0].ToUnity();
-            for (int i = 1; i < line.Count; i++)
-                lineCentroid += line[i].ToUnity();
-            
-            lineCentroid /= line.Count;
-            
-            return lineCentroid;
-        }
 
         public override void Clear()
         {
@@ -210,7 +117,7 @@ namespace Netherlands3D.Twin.Rendering
         protected override void GenerateTransformMatrixCache(int collectionStartIndex = -1)
         {
             // For efficiency, we combine the point and line calculation in a single loop
-
+            
             var jointCount = pointCount; //each point should have a joint
             var segmentCount = jointCount - positionCollections.Count; // each line one more joint than segments, so subtracting the lineCount will result in the total number of segments
 

@@ -5,7 +5,6 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
-using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
@@ -16,11 +15,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     [Serializable]
     public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
-        public bool IsPolygon  => false;
+        public bool IsPolygon => false;
         public override bool IsMaskable => false;
 
         public Transform Transform => transform;
+
         public delegate void GeoJSONLineHandler(Feature feature);
+
         public event GeoJSONLineHandler FeatureRemoved;
 
         private Dictionary<Feature, FeatureLineVisualisations> spawnedVisualisations = new();
@@ -28,9 +29,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
-               
+        [SerializeField] private LineRenderer3D selectionLineRenderer3D;
+
 
         private GeoJsonLineLayerMaterialApplicator applicator;
+
         internal GeoJsonLineLayerMaterialApplicator Applicator
         {
             get
@@ -60,7 +63,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             FeatureLineVisualisations data = spawnedVisualisations[feature];
             List<Mesh> meshes = new List<Mesh>();
-            if(data == null)
+            if (data == null)
             {
                 Debug.LogWarning("visualisation was not spawned for feature" + feature.Id);
                 return meshes;
@@ -75,6 +78,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 {
                     vertices.Add(point.ToUnity());
                 }
+
                 mesh.SetVertices(vertices);
             }
 
@@ -95,17 +99,28 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         //the vertex positions will equal world space
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
         {
-            lineRenderer3D.SetDefaultColors();
+            // lineRenderer3D.SetDefaultColors();
+            var selectionList = new List<List<Coordinate>>();
             foreach (Mesh mesh in meshes)
-            {              
+            {
                 Vector3[] vertices = mesh.vertices; // The meshes are from the world object, not the lineRenderer positions
-                lineRenderer3D.SetLineColorFromPoints(vertices, color);
+                List<Coordinate> line = new List<Coordinate>();
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    var coordinate = new Coordinate(vertices[i]);
+                    line.Add(coordinate);
+                }
+                selectionList.Add(line);
             }
+
+            selectionLineRenderer3D.PointMaterial.color = color;
+            selectionLineRenderer3D.SetPositionCollections(selectionList);
         }
 
         public void SetVisualisationColorToDefault()
         {
-            lineRenderer3D.SetDefaultColors();
+            // lineRenderer3D.SetDefaultColors();
+            selectionLineRenderer3D.Clear();
         }
 
         public Color GetRenderColor()
@@ -133,16 +148,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 var newLines = GeometryVisualizationFactory.CreateLineVisualisation(multiLineString, originalCoordinateSystem, lineRenderer3D);
                 newFeatureVisualisation.Data.AddRange(newLines);
             }
-            
-            if(feature.Geometry is LineString lineString)
+
+            if (feature.Geometry is LineString lineString)
             {
                 var newLine = GeometryVisualizationFactory.CreateLineVisualization(lineString, originalCoordinateSystem, lineRenderer3D);
                 newFeatureVisualisation.Data.Add(newLine);
             }
-            
+
             newFeatureVisualisation.SetBoundsPadding(Vector3.one * GetSelectionRange());
             newFeatureVisualisation.CalculateBounds();
-            
+
             spawnedVisualisations.Add(feature, newFeatureVisualisation);
         }
 
@@ -158,7 +173,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             // Currently we don't apply individual styling per feature
         }
-        
+
         private Material GetMaterialInstance(Color strokeColor)
         {
             return new Material(lineRenderer3D.LineMaterial)
@@ -172,7 +187,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// to remove visualisations that are out of view
         /// </summary>
         public void RemoveFeaturesOutOfView()
-        {         
+        {
             // Remove visualisations that are out of view
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
             foreach (var kvp in spawnedVisualisations.Reverse())
@@ -183,14 +198,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 RemoveFeature(kvp.Value);
             }
         }
-        
+
         private void RemoveFeature(FeatureLineVisualisations featureVisualisation)
         {
             foreach (var line in featureVisualisation.Data)
             {
                 lineRenderer3D.RemovePointCollection(line);
-            }            
-            FeatureRemoved?.Invoke(featureVisualisation.feature); 
+            }
+
+            FeatureRemoved?.Invoke(featureVisualisation.feature);
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }
 
@@ -203,7 +219,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             base.DestroyLayerGameObject();
         }
-        
+
         public BoundingBox GetBoundingBoxOfVisibleFeatures()
         {
             if (spawnedVisualisations.Count == 0)
@@ -220,7 +236,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             return bbox;
         }
-        
+
         private List<IPropertySectionInstantiator> propertySections;
 
         protected List<IPropertySectionInstantiator> PropertySections
