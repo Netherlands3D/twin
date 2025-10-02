@@ -307,6 +307,20 @@ namespace Netherlands3D.Twin.Rendering
             GenerateTransformMatrixCache(-1);
         }
         
+        public void RemovePointCollections(List<List<Coordinate>> points)
+        {
+            foreach (var collection in points)
+            {
+                if (!IsValid(collection))
+                    continue;
+                
+                positionCollections.Remove(collection);
+            }
+
+            RecalculatePointCount();
+            GenerateTransformMatrixCache(-1);
+        }
+        
         protected virtual bool IsValid(List<Coordinate> collection)
         {
             if (collection == null || collection.Count == 0)

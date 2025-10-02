@@ -191,11 +191,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void RemoveFeature(FeaturePointVisualisations featureVisualisation)
         {
-            foreach (var pointCollection in featureVisualisation.Data)
-            {
-                PointRenderer3D.RemovePointCollection(pointCollection);
-            }
-
+            PointRenderer3D.RemovePointCollections(featureVisualisation.Data);
             FeatureRemoved?.Invoke(featureVisualisation.feature);
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }
