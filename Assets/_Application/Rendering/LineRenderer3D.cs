@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using Netherlands3D.Coordinates;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 namespace Netherlands3D.Twin.Rendering
 {
-    public class LineRenderer3D : BatchedMeshInstanceRenderer2
+    public class LineRenderer3D : BatchedMeshInstanceRenderer
     {
         [Header("References")] 
         [Tooltip("The mesh to use for the line segments")] [SerializeField]

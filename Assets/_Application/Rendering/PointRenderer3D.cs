@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Rendering
 {
-    public class PointRenderer3D : BatchedMeshInstanceRenderer2
+    public class PointRenderer3D : BatchedMeshInstanceRenderer
     {
         protected override void GenerateTransformMatrixCache(int collectionStartIndex = -1)
         {

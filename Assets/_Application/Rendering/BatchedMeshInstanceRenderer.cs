@@ -37,7 +37,7 @@ namespace Netherlands3D.Twin.Rendering
         }
     }
 
-    public abstract class BatchedMeshInstanceRenderer2 : MonoBehaviour
+    public abstract class BatchedMeshInstanceRenderer : MonoBehaviour
     {
         [Tooltip("The mesh to use for the points/joints")] [SerializeField]
         private Mesh pointMesh;
