@@ -134,8 +134,7 @@ namespace Netherlands3D.Twin.Rendering
 
         private void Update()
         {
-            if (pointTransformMatrixCache?.Count > 0)
-                Draw();
+            Draw();
         }
 
         protected virtual void Draw()
@@ -148,12 +147,17 @@ namespace Netherlands3D.Twin.Rendering
             }
         }
 
-        private void OnDrawGizmos() //todo delete
+        protected virtual void OnDrawGizmos() //todo delete
         {
             Gizmos.color = Color.red;
-            for (var i = 0; i < pointTransformMatrixCache.Count; i++)
+            DrawGizmos(pointTransformMatrixCache);
+        }
+
+        protected void DrawGizmos(List<List<Matrix4x4>> transformMatrixCache)
+        {
+            for (var i = 0; i < transformMatrixCache.Count; i++)
             {
-                var batch = pointTransformMatrixCache[i];
+                var batch = transformMatrixCache[i];
                 foreach (var point in batch)
                 {
                     Gizmos.DrawSphere(point.GetPosition(), 5);
@@ -161,21 +165,23 @@ namespace Netherlands3D.Twin.Rendering
             }
         }
 
-        protected virtual void GenerateTransformMatrixCache(int startIndex = -1)
+
+        protected virtual void GenerateTransformMatrixCache(int collectionStartIndex = -1)
         {
             var batchCount = (pointCount / 1023) + 1; //x batches of 1023 + 1 for the remainder
 
-            if (startIndex < 0) //reset cache completely
+            if (collectionStartIndex < 0) //reset cache completely
             {
                 pointTransformMatrixCache = new List<List<Matrix4x4>>(batchCount);
-                startIndex = 0;
+                collectionStartIndex = 0;
             }
 
             pointTransformMatrixCache.Capacity = batchCount;
 
-            var matrixIndices = GetPointMatrixIndices(startIndex); //each point in the line is a joint
+            var flattenedStartIndex = GetFlattenedStartIndex(collectionStartIndex);
+            var matrixIndices = GetMatrixIndices(flattenedStartIndex); //each point in the line is a joint
 
-            for (var i = startIndex; i < positionCollections.Count; i++)
+            for (var i = collectionStartIndex; i < positionCollections.Count; i++)
             {
                 var collection = positionCollections[i];
                 for (int j = 0; j < collection.Count; j++)
@@ -193,9 +199,22 @@ namespace Netherlands3D.Twin.Rendering
             }
         }
 
-        protected (int batchIndex, int matrixIndex) GetPointMatrixIndices(int startIndex)
+        protected int GetFlattenedStartIndex(int collectionStartIndex)
         {
-            if (startIndex < 0)
+            if (collectionStartIndex < 0 || collectionStartIndex >= positionCollections.Count)
+                return -1;
+            
+            int flattenedStartIndex = 0;
+            for (int i = 0; i < collectionStartIndex; i++)
+            {
+                flattenedStartIndex += positionCollections[i].Count;
+            }
+            return flattenedStartIndex;
+        }
+        
+        protected (int batchIndex, int matrixIndex) GetMatrixIndices(int flattenedStartIndex)
+        {
+            if (flattenedStartIndex < 0 || flattenedStartIndex >= pointCount)
                 return (-1, -1);
             
             int totalJointsBeforeStartIndex = 0;
@@ -204,13 +223,13 @@ namespace Netherlands3D.Twin.Rendering
             // Traverse through collections to calculate the cumulative count directly
             foreach (var collection in positionCollections)
             {
-                if (startIndex < collection.Count)
+                if (flattenedStartIndex < collection.Count)
                 {
-                    totalJointsBeforeStartIndex += startIndex;
+                    totalJointsBeforeStartIndex += flattenedStartIndex;
                     break;
                 }
             
-                startIndex -= collection.Count;
+                flattenedStartIndex -= collection.Count;
                 totalJointsBeforeStartIndex += collection.Count;
             }
             
@@ -278,6 +297,9 @@ namespace Netherlands3D.Twin.Rendering
         /// </summary>
         public void AppendCollection(List<Coordinate> collection)
         {
+            if (collection == null || collection.Count == 0)
+                return;
+            
             var startIndex = positionCollections.Count;
             positionCollections.Add(collection);
             RecalculatePointCount();
@@ -290,7 +312,12 @@ namespace Netherlands3D.Twin.Rendering
         public void AppendCollections(List<List<Coordinate>> collections)
         {
             var startIndex = positionCollections.Count;
-            positionCollections.AddRange(collections);
+            foreach (var collection in collections)
+            {
+                if (collection == null || collection.Count == 0)
+                    continue;
+                positionCollections.Add(collection);
+            }
             RecalculatePointCount();
             GenerateTransformMatrixCache(startIndex);
         }
