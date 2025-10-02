@@ -5,54 +5,51 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-
-
-## \[3.2.0] - 2025-09-30
+## [3.2.0] - 2025-09-30
 
 ### Changed
 
-stop using depracated functions from Coordinates-package
+* Stop using depracated functions from Coordinates-package
 
-## \[3.1.0] - 2025-09-11
+## [3.1.0] - 2025-09-11
 
 ### Added
 
 * Added support for creating mesh from 3D polygons
 
-## \[3.0.1] - 2025-08-07
+## [3.0.1] - 2025-08-07
 
 ### Fixed
 
 * Fixed new polygon event not being invoked when clicking on first point.
 
-## \[3.0.0] - 2025-07-31
+## [3.0.0] - 2025-07-31
 
 ### Added
 
 * New library to generate topology with nettopologysuite.
 
 
-
-## \[2.9.0] - 2025-07-08
+## [2.9.0] - 2025-07-08
 
 ### Added
 
 * Added property to allow the grid selection to be offset
 
-## \[2.8.0] - 2025-06-02
+## [2.8.0] - 2025-06-02
 
 ### Added
 
 * Made area selection events public
 * Added area select reselect and clear function
 
-## \[2.7.1] - 2025-04-01
+## [2.7.1] - 2025-04-01
 
 ### Fixed
 
 * Removed and changed some old unity coordinate conversions
 
-## \[2.7.0]
+## [2.7.0]
 
 ### Fixed
 
@@ -63,104 +60,103 @@ stop using depracated functions from Coordinates-package
 * Added properties to allow direct access to the mesh and material reference to avoid accidentally duplicating the data
 
 
-
-## \[2.6.1]
+## [2.6.1]
 
 ### Fixed
 
 * Polygons with invalid triangles did not have a mesh as result. Afterwards there was a call to set uv coordinates on a non existing mesh causing an exception.
 
-## \[2.6.0]
+## [2.6.0]
 
 ### Changed
 
 * Input listeners are now added via OnEnable, and removed via OnDisable instead of only adding them in Awake
 
-## \[2.5.0]
+## [2.5.0]
 
 ### Added
 
-* selectionAreaBounds event in AreaSelection that is triggered whenever the selection area is (re)drawn while in the
+- selectionAreaBounds event in AreaSelection that is triggered whenever the selection area is (re)drawn while in the 
   process of selecting an area
 
-## \[2.4.0]
+## [2.4.0]
 
 ### Added
 
-* Added SetCurrentInputPointsWithoutNotify() method to override current list of positions without invoking edit or create events
+- Added SetCurrentInputPointsWithoutNotify() method to override current list of positions without invoking edit or create events
 
-## \[2.3.0]
-
-### Added
-
-* Made some fields and methods extendable, added property to set world plane.
-
-## \[2.2.4]
-
-### Fixed
-
-* Fixed problem where dragging the end point of an open polygon (line) would also move the first point to the end position.
-* When performing the closing action with less than the minimum required points, a point is added at the cursor position to attempt to create a valid shape.
-
-## \[2.2.3]
-
-### Fixed
-
-* Used SetDrawMode when finishing a polygon to update pointer visibility
-
-## \[2.2.2]
-
-### Fixed
-
-* Fixed execution order issue where another system may disable the input action map of this system. By default the input action map will be enabled and no longer disabled to avoid interfering with other systems that may use the same input action map.
-
-## \[2.2.1]
-
-### Fixed
-
-* Auto draw is now disabled in edit mode
-
-## \[2.2.0]
+## [2.3.0]
 
 ### Added
 
-* Added a mode selection to allow only creating or only editing polygons. Doing both at once is still possible with the mode CreateAndEdit
+- Made some fields and methods extendable, added property to set world plane.
 
-## \[2.1.0]
+## [2.2.4]
+
+### Fixed
+
+- Fixed problem where dragging the end point of an open polygon (line) would also move the first point to the end position.
+- When performing the closing action with less than the minimum required points, a point is added at the cursor position to attempt to create a valid shape.
+
+## [2.2.3]
+
+### Fixed
+
+- Used SetDrawMode when finishing a polygon to update pointer visibility
+
+## [2.2.2]
+
+### Fixed
+
+- Fixed execution order issue where another system may disable the input action map of this system. By default the input action map will be enabled and no longer disabled to avoid interfering with other systems that may use the same input action map.
+
+## [2.2.1]
+
+### Fixed
+
+- Auto draw is now disabled in edit mode
+
+## [2.2.0]
 
 ### Added
 
-* New method for returning last hovered GameObject by InputSystem module
-* New method for returning the default UI/Click InputAction of the InputSystem module
+- Added a mode selection to allow only creating or only editing polygons. Doing both at once is still possible with the mode CreateAndEdit
 
-## \[2.0.0]
+## [2.1.0]
+
+### Added
+
+- New method for returning last hovered GameObject by InputSystem module
+- New method for returning the default UI/Click InputAction of the InputSystem module
+
+## [2.0.0]
 
 ### Changed
 
-* UI layer is now blocking the start of an area selection by default
+- UI layer is now blocking the start of an area selection by default
 
-## \[1.0.0]
-
-### Added
-
-* Separated Package from Netherlands 3D. Still has dependency on Netherlands 3D (core and Poly2Mesh) this will be removed in the next update
-
-## \[1.0.1]
-
-### Fixed
-
-* Removed dependency on Netherlands3D.Core. The extension methods used are added in a temporary script that should be removed when possible to avoid double code.
-* Removed depandency on Poly2Mesh embedded package in Netherlands3D, replaced it with a depencancy on the OpenUPM version of this package.
-
-## \[1.1.0]
+## [1.0.0]
 
 ### Added
 
-* Unity functions are now overridable
-* Added overridable function to calculate position to be added.
+- Separated Package from Netherlands 3D. Still has dependency on Netherlands 3D (core and Poly2Mesh) this will be removed in the next update
+
+## [1.0.1]
 
 ### Fixed
 
-* Fixed incorrect function calls with CloseLoop and FinishPolygon.
-* Renamed some variables for clarity
-* MinPointDistance is now calculated based on handle size for spherical handles
+- Removed dependency on Netherlands3D.Core. The extension methods used are added in a temporary script that should be removed when possible to avoid double code.
+- Removed depandency on Poly2Mesh embedded package in Netherlands3D, replaced it with a depencancy on the OpenUPM version of this package.
+
+## [1.1.0]
+
+### Added
+
+- Unity functions are now overridable
+- Added overridable function to calculate position to be added. 
+
+### Fixed
+
+- Fixed incorrect function calls with CloseLoop and FinishPolygon.
+- Renamed some variables for clarity 
+- MinPointDistance is now calculated based on handle size for spherical handles
