@@ -13,20 +13,14 @@ namespace Netherlands3D.UI.Components
         private int CurrentCrumbIndex => crumbs.Count - 1;
         private int PreviousCrumbIndex => CurrentCrumbIndex - 1;
 
-        // ---- CSS / UXML constants ----
-        private const string NoLeadingIconClass = "no-leading-icon";
-        private const string NoBackButtonClass = "no-back-button";
-        private const string LeadingIconClass = "leadingicon";
-        private const string TrailName = "Trail";
-        private const string SeparatorClass = "separator";
-        private const string CrumbLinkClass = "crumb-link";
-        private const string CrumbLabelClass = "crumb-label";
-        private const string CurrentClass = "current";
-
-        // ---- Cached references (set after CloneTree) ----
-        private readonly Icon leadingIcon;
-        private readonly VisualElement trail;
-        private readonly BackButton backButton;
+        private Icon leadingIcon;
+        private Icon LeadingIcon => leadingIcon ??= this.Q<Icon>(className: "leadingicon");
+        
+        private VisualElement trail;
+        private VisualElement Trail => trail ??= this.Q("Trail");
+        
+        private BackButton backButton;
+        private BackButton BackButton => backButton ??= this.Q<BackButton>();
 
         // ---- Visibility toggles (default ON) ----
         private bool showLeadingIcon = true;
@@ -66,13 +60,8 @@ namespace Netherlands3D.UI.Components
         [UxmlAttribute("leading-icon-image")]
         public IconImage LeadingIconImageExposed
         {
-            get => leadingIcon != null ? leadingIcon.Image : default;
-            set
-            {
-                if (leadingIcon == null) return;
-                
-                leadingIcon.Image = value;
-            }
+            get => LeadingIcon.Image;
+            set => LeadingIcon.Image = value;
         }
 
         // ---- Data model ----
@@ -92,11 +81,7 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
 
-            // Cache references now that tree is cloned
-            leadingIcon = this.Q<Icon>(className: LeadingIconClass);
-            backButton = this.Q<BackButton>();
-            backButton.Clicked += GoBack;
-            trail = this.Q(TrailName);
+            BackButton.Clicked += GoBack;
 
             // Ensure defaults are reflected in classes on attach
             RegisterCallback<AttachToPanelEvent>(_ => UpdateClassList());
@@ -151,20 +136,18 @@ namespace Netherlands3D.UI.Components
 
         private void RebuildTrail()
         {
-            if (trail == null) return;
-
-            trail.Clear();
+            Trail.Clear();
             int count = crumbs.Count;
 
             for (int i = 0; i < count; i++)
             {
-                if (i > 0) trail.Add(CreateSeparator(i));
+                if (i > 0) Trail.Add(CreateSeparator(i));
 
                 bool isLast = i == count - 1;
                 var crumb = !isLast
                     ? CreateCrumbButton(crumbs[i].Label, i)
                     : CreateCrumbLabel(crumbs[i].Label, i);
-                trail.Add(crumb);
+                Trail.Add(crumb);
             }
 
             UpdateClassList();
@@ -173,31 +156,33 @@ namespace Netherlands3D.UI.Components
         private VisualElement CreateSeparator(int index)
         {
             var sep = new Icon { name = $"Sep{index}" };
-            sep.AddToClassList(SeparatorClass);
+            sep.AddToClassList("separator");
             return sep;
         }
 
         private VisualElement CreateCrumbButton(string text, int index)
         {
             var btn = new Button { name = $"Crumb{index}" };
-            btn.AddToClassList(CrumbLinkClass);
+            btn.AddToClassList("crumb-link");
             btn.LabelText = text ?? string.Empty;
             btn.clicked += () => GoTo(index);
+            
             return btn;
         }
 
         private VisualElement CreateCrumbLabel(string text, int index)
         {
             var lab = new Label(text ?? string.Empty) { name = $"Crumb{index}" };
-            lab.AddToClassList(CrumbLabelClass);
-            lab.AddToClassList(CurrentClass);
+            lab.AddToClassList("crumb-label");
+            lab.AddToClassList("current");
+            
             return lab;
         }
 
         private void UpdateClassList()
         {
-            EnableInClassList(NoLeadingIconClass, !showLeadingIcon || CurrentCrumbIndex > 0);
-            EnableInClassList(NoBackButtonClass, !showBackButton || CurrentCrumbIndex == 0);
+            EnableInClassList("no-leading-icon", !showLeadingIcon || CurrentCrumbIndex > 0);
+            EnableInClassList("no-back-button", !showBackButton || CurrentCrumbIndex == 0);
         }
     }
 }

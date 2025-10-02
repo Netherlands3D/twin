@@ -33,6 +33,7 @@ namespace Netherlands3D.UI.Panels
 
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
+            Debug.Log("Created AssetLibraryPanel");
             Breadcrumb.CrumbClicked += OnBreadcrumbClicked;
         }
 
@@ -50,7 +51,7 @@ namespace Netherlands3D.UI.Panels
 
         public void Close()
         {
-            EnableInClassList("false", true);
+            EnableInClassList("false", false);
         }
 
         public async void SetAssetLibrary(AssetLibrary assetLibrary)
@@ -77,7 +78,11 @@ namespace Netherlands3D.UI.Panels
 
         private VisualElement MakeListViewItem()
         {
-            return new ListViewItem(new Button { name = "LayerButton" });
+            var button = new Button { name = "LayerButton" };
+            var listViewItem = new ListViewItem(button);
+            button.RegisterCallback<ClickEvent>(_ => OpenAsset(button.userData as ICatalogItem));
+            
+            return listViewItem;
         }
 
         private void BindListViewItem(VisualElement item, int index)
@@ -88,7 +93,7 @@ namespace Netherlands3D.UI.Panels
             ICatalogItem catalogItem = ListView.itemsSource[index] as ICatalogItem;
             button.LabelText = catalogItem.Title;
             button.Image = catalogItem is ICatalogItemCollection ? IconImage.Folder : IconImage.Map;
-            button.RegisterCallback<ClickEvent>(_ => OpenAsset(catalogItem));
+            button.userData = catalogItem;
         }
 
         private void OpenAsset(ICatalogItem catalogItem)
