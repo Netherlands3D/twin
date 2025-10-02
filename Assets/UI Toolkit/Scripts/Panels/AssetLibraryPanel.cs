@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Netherlands3D._Application._Twin;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
@@ -34,7 +32,7 @@ namespace Netherlands3D.UI.Panels
             // Virtualization and selection
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             ListView.selectionType = SelectionType.None;
-            
+
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
             Breadcrumb.CrumbClicked += OnBreadcrumbClicked;

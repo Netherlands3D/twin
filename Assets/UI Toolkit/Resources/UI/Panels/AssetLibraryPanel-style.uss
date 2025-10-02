@@ -1,11 +1,11 @@
-.add-layer-panel {
+.asset-library-panel {
     display: flex;
     flex-wrap: wrap;
     flex-shrink: 0;
     flex-grow: 1;
 }
 
-.add-layer-panel .breadcrumb {
+.asset-library-panel .breadcrumb {
     margin-bottom: 12px;
     width: auto;
     height: auto;
