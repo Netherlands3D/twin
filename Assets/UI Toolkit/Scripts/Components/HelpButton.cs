@@ -1,4 +1,5 @@
-﻿using Netherlands3D.UI;
+﻿using Netherlands3D.UI_Toolkit.Scripts;
+using Netherlands3D.UI;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -6,12 +7,12 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class HelpButton : UnityEngine.UIElements.Button
+    public partial class HelpButton : UnityEngine.UIElements.Button, IComponent
     {
         private Icon Icon => this.Q<Icon>("Icon");
 
         [UxmlAttribute("icon")]
-        public Icon.IconImage Image
+        public IconImage Image
         {
             get => Icon.Image;
             set => Icon.Image = value;
@@ -32,13 +33,8 @@ namespace Netherlands3D.UI.Components
 
         public HelpButton()
         {
-            // Find and load UXML template for this component
-            var asset = Resources.Load<VisualTreeAsset>("UI/" + nameof(HelpButton));
-            asset.CloneTree(this);
-
-            // Find and load USS stylesheet specific for this component (using -style)
-            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(HelpButton) + "-style");
-            styleSheets.Add(styleSheet);
+            this.CloneComponentTree("Components");
+            this.AddComponentStylesheet("Components");
 
             if (string.IsNullOrEmpty(helpUrl))
                 helpUrl = "Link naar documentatie";

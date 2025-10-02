@@ -1,64 +1,32 @@
-﻿using Netherlands3D.UI;
+﻿using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class Icon : VisualElement
+    public partial class Icon : VisualElement, IComponent
     {
-        public enum IconImage
-        {
-            Plus,
-            Map,
-            Folder,
-            Trash,
-            Back,
-            ChevronDown,
-            ChevronRight,
-            Help,
-            Library,
-            LibraryAdd,
-        }
-
-        public enum IconColor
-        {
-            White,
-            Black,
-            Blue50,
-            Blue100,
-            Blue200,
-            Blue300,
-            Blue700,
-            Blue900,
-        }
-
         private IconImage image = IconImage.Map;
         [UxmlAttribute("image")]
-        public IconImage Image
-        {
-            get => image;
-            set => this.SetFieldValueAndReplaceClassName(ref image, value, "image-");
-        }
+        public IconImage Image { get => image; set { image = value; UpdateClassList(); } }
 
-        private IconColor color = IconColor.Black;
+        private ThemeColor color = ThemeColor.Black;
         [UxmlAttribute("color")]
-        public IconColor Color
-        {
-            get => color;
-            set => this.SetFieldValueAndReplaceClassName(ref color, value, "tint-");
-        }
+        public ThemeColor Color { get => color; set { color = value; UpdateClassList(); } }
 
         public Icon()
         {
-            // Find and load UXML template for this component
-            var asset = Resources.Load<VisualTreeAsset>("UI/" + nameof(Icon));
-            asset.CloneTree(this);
-        
-            // Find and load USS stylesheet specific for this component
-            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(Icon) + "-style");
-            styleSheets.Add(styleSheet);
+            this.CloneComponentTree("Components");
+            this.AddComponentStylesheet("Components");
+            
+            RegisterCallback<AttachToPanelEvent>(_ => UpdateClassList());
+        }
+
+        private void UpdateClassList()
+        {
+            this.ReplacePrefixedValueInClassList("image-", image.ToString().ToKebabCase());
+            this.ReplacePrefixedValueInClassList("tint-", color.ToString().ToKebabCase());
         }
     }
 }

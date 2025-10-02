@@ -2,7 +2,10 @@ using System.Linq;
 using Netherlands3D._Application._Twin;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
+using Netherlands3D.UI_Toolkit.Scripts;
+using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
+using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
@@ -11,7 +14,7 @@ using ListView = Netherlands3D.UI.Components.ListView;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    public partial class AssetLibraryPanel : VisualElement
+    public partial class AssetLibraryPanel : BaseInspectorContentPanel
     {
         private AssetLibrary assetLibrary;
         private ListView listView;
@@ -21,13 +24,8 @@ namespace Netherlands3D.UI.Panels
 
         public AssetLibraryPanel()
         {
-            // Find and load UXML template for this component
-            var asset = Resources.Load<VisualTreeAsset>("UI/Panels/" + nameof(AssetLibraryPanel));
-            asset.CloneTree(this);
-
-            // Find and load USS stylesheet specific for this component (using -style)
-            var styleSheet = Resources.Load<StyleSheet>("UI/Panels/" + nameof(AssetLibraryPanel) + "-style");
-            styleSheets.Add(styleSheet);
+            this.CloneComponentTree("Panels");
+            this.AddComponentStylesheet("Panels");
             
             // Virtualization and selection
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
@@ -38,19 +36,21 @@ namespace Netherlands3D.UI.Panels
             Breadcrumb.CrumbClicked += OnBreadcrumbClicked;
         }
 
+        public override string GetTitle() => "Toevoegen";
+        
         private void OnBreadcrumbClicked(int _, Breadcrumb.Crumb crumb)
         {
             ShowItemsFromCollection(crumb.Target as ICatalogItemCollection);
         }
 
-        public void Show()
+        public void Open()
         {
-            style.display = DisplayStyle.Flex;
+            EnableInClassList("active", true);
         }
 
-        public void Hide()
+        public void Close()
         {
-            style.display = DisplayStyle.None;
+            EnableInClassList("false", true);
         }
 
         public async void SetAssetLibrary(AssetLibrary assetLibrary)
@@ -77,13 +77,18 @@ namespace Netherlands3D.UI.Panels
 
         private VisualElement MakeListViewItem()
         {
-            var button = new Button { name = "LayerButton" };
-            button.RegisterCallback<ClickEvent>(_ => OpenAsset(button.userData as ICatalogItem));
-            
-            var listViewItem = new ListViewItem();
-            listViewItem.Add(button);
+            return new ListViewItem(new Button { name = "LayerButton" });
+        }
 
-            return listViewItem;
+        private void BindListViewItem(VisualElement item, int index)
+        {
+            if (item is not ListViewItem listViewItem) return;
+            if (listViewItem.Q<Button>() is not Button button) return;
+            
+            ICatalogItem catalogItem = ListView.itemsSource[index] as ICatalogItem;
+            button.LabelText = catalogItem.Title;
+            button.Image = catalogItem is ICatalogItemCollection ? IconImage.Folder : IconImage.Map;
+            button.RegisterCallback<ClickEvent>(_ => OpenAsset(catalogItem));
         }
 
         private void OpenAsset(ICatalogItem catalogItem)
@@ -98,17 +103,6 @@ namespace Netherlands3D.UI.Panels
                 case DataService dataServiceItem: assetLibrary.Trigger(dataServiceItem); break;
                 default: Debug.LogWarning("Attempted to open an unknown type of catalog item"); break;
             }
-        }
-
-        private void BindListViewItem(VisualElement item, int index)
-        {
-            if (item is not ListViewItem listViewItem) return;
-            if (listViewItem.Q<Button>() is not Button button) return;
-            
-            ICatalogItem catalogItem = ListView.itemsSource[index] as ICatalogItem;
-            button.LabelText = catalogItem.Title;
-            button.Image = catalogItem is ICatalogItemCollection ? Icon.IconImage.Folder : Icon.IconImage.Map;
-            button.userData = catalogItem;
         }
     }
 }

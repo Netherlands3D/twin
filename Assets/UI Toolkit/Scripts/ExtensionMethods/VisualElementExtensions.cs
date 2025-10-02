@@ -1,10 +1,55 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.ExtensionMethods
 {
     public static class VisualElementExtensions
     {
+        public static void CloneComponentTree(this IComponent component, string path = "")
+        {
+            if (component is not VisualElement element)
+            {
+                Debug.LogError($"Component {component} is not a VisualElement");
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(path)) path += "/";
+            
+            var asset = Resources.Load<VisualTreeAsset>($"UI/{path}{element.GetType().Name}");
+            asset.CloneTree(element);
+        }
+        
+        public static void AddComponentStylesheet(this IComponent component, string path = "")
+        {
+            if (component is not VisualElement element)
+            {
+                Debug.LogError($"Component {component} is not a VisualElement");
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(path)) path += "/";
+            
+            var styleSheet = Resources.Load<StyleSheet>($"UI/{path}{element.GetType().Name}-style");
+            element.styleSheets.Add(styleSheet);
+        }
+
+        public static void RemoveFromClassListStartingWith(this VisualElement element, string prefix)
+        {
+            var classNames = element.GetClasses().Where(s => s.StartsWith(prefix)).ToList();
+            foreach(var className in classNames)
+            {
+                element.RemoveFromClassList(className);
+            }
+        }
+
+        public static void ReplacePrefixedValueInClassList(this VisualElement element, string prefix, string value)
+        {
+            element.RemoveFromClassListStartingWith(prefix);
+            element.AddToClassList(prefix + value);
+        }
+
         public static void SetFieldValueAndReplaceClassName<T>(
             this VisualElement visualElement, 
             ref T field, 

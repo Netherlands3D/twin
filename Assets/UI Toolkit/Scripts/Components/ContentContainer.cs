@@ -1,3 +1,4 @@
+using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
@@ -12,10 +13,8 @@ namespace Netherlands3D.UI.Components
     /// Mirrors the Button/Icon pattern.
     /// </summary>
     [UxmlElement]
-    public partial class ContentContainer : Foldout
+    public partial class ContentContainer : Foldout, IComponent
     {
-        private const string RootClass = "contentcontainer";
-
         // Foldout internals
         private VisualElement HeaderInput => this.Q<VisualElement>(className: "unity-toggle__input");
         private Label HeaderLabel => this.Q<Label>(className: "unity-label");
@@ -94,7 +93,7 @@ namespace Netherlands3D.UI.Components
         }
 
         [UxmlAttribute("leading-icon")]
-        public Icon.IconImage LeadingIconImage
+        public IconImage LeadingIconImage
         {
             get => leadingIcon.Image;
             set => leadingIcon.Image = value;
@@ -131,26 +130,20 @@ namespace Netherlands3D.UI.Components
 
         public ContentContainer()
         {
-            // Find and load UXML template for this component
-            var asset = Resources.Load<VisualTreeAsset>("UI/" + nameof(ContentContainer));
-            asset.CloneTree(this);
+            this.CloneComponentTree("Components");
+            this.AddComponentStylesheet("Components");
 
-            // Find and load USS stylesheet specific for this component (using -style)
-            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(ContentContainer) + "-style");
-            styleSheets.Add(styleSheet);
+            if (string.IsNullOrEmpty(text)) text = "Label";
 
-            if (string.IsNullOrEmpty(text))
-                text = "Label";
-
-            // Block collaps when NoFoldout is active (mouse/keyboard/script)
-            this.RegisterCallback<ChangeEvent<bool>>(evt =>
+            // Block collapse when NoFoldout is active (mouse/keyboard/script)
+            RegisterCallback<ChangeEvent<bool>>(evt =>
             {
                 if (containerType == ContainerType.NoFoldout && !evt.newValue)
-                    this.value = true;
+                    value = true;
             });
 
             // Setup after attach (Foldout internals exist)
-            this.RegisterCallback<AttachToPanelEvent>(_ =>
+            RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 ApplyContainerType();
                 ReorderHeaderChildren();

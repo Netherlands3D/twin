@@ -1,20 +1,20 @@
-﻿using UnityEngine;
+﻿using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class ListViewItem : VisualElement
+    public partial class ListViewItem : VisualElement, IComponent
     {
         public ListViewItem()
         {
-            // Find and load UXML template for this component
-            var asset = Resources.Load<VisualTreeAsset>("UI/" + nameof(ListViewItem));
-            asset.CloneTree(this);
+            this.CloneComponentTree("Components");
+            this.AddComponentStylesheet("Components");
+        }
 
-            // Find and load USS stylesheet specific for this component
-            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(ListViewItem) + "-style");
-            styleSheets.Add(styleSheet);
+        public ListViewItem(VisualElement content) : this()
+        {
+            Add(content);
         }
     }
 }

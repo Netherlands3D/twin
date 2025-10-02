@@ -1,15 +1,14 @@
 using System;
+using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class InspectorPanel : VisualElement
+    public partial class InspectorPanel : VisualElement, IContainer
     {
         private Label Header => this.Q<Label>(className: "inspector-header");
-
-        [UxmlAttribute("open")] public bool IsOpen { get; set; } = false;
 
         /// <summary>
         /// Header text pass-through so it can be set from UXML/Inspector.
@@ -39,44 +38,27 @@ namespace Netherlands3D.UI.Components
             }
         }
 
-        /// <summary>
-        /// Optional convenience accessor for the content placeholder.
-        /// </summary>
         public VisualElement Content => this.Q("Content");
 
         public InspectorPanel()
         {
-            // Find and load UXML template for this component
-            var asset = Resources.Load<VisualTreeAsset>("UI/Panels/" + nameof(InspectorPanel));
-            asset.CloneTree(this);
-
-            // Find and load USS stylesheet specific for this component (using -style)
-            var styleSheet = Resources.Load<StyleSheet>("UI/Panels/" + nameof(InspectorPanel) + "-style");
-            styleSheets.Add(styleSheet);
+            this.CloneComponentTree("Panels");
+            this.AddComponentStylesheet("Panels");
 
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
-                // Apply cached toolbar style when child is available
-                if (Toolbar != null) Toolbar.Style = _toolbarStyleCache;
-                ApplyClasses();
+                Toolbar.Style = _toolbarStyleCache;
             });
         }
 
         public void Open()
         {
-            this.IsOpen = true;
-            ApplyClasses();
+            EnableInClassList("active", true);
         }
 
         public void Close()
         {
-            this.IsOpen = false;
-            ApplyClasses();
-        }
-
-        private void ApplyClasses()
-        {
-            EnableInClassList("active", IsOpen);
+            EnableInClassList("active", false);
         }
     }
 }

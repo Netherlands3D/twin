@@ -1,10 +1,10 @@
-using UnityEngine;
+using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class ToolbarInspector : VisualElement
+    public partial class ToolbarInspector : VisualElement, IComponent
     {
         public Toggle OpenLibrary => this.Q<Toggle>("OpenLibrary");
         private Button AddFolder => this.Q<Button>("AddFolder");
@@ -31,22 +31,13 @@ namespace Netherlands3D.UI.Components
         public ToolbarStyle Style
         {
             get => toolbarStyle;
-            set
-            {
-                toolbarStyle = value;
-                ApplyToolbarStyle();
-            }
+            set { toolbarStyle = value; UpdateClassList(); }
         }
 
         public ToolbarInspector()
         {
-            // Find and load UXML template for this component
-            var asset = Resources.Load<VisualTreeAsset>("UI/" + nameof(ToolbarInspector));
-            asset.CloneTree(this);
-
-            // Find and load USS stylesheet specific for this component
-            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(ToolbarInspector) + "-style");
-            styleSheets.Add(styleSheet);
+            this.CloneComponentTree("Components");
+            this.AddComponentStylesheet("Components");
 
             // Register exposed events
             OpenLibrary.RegisterValueChangedCallback(evt => OnOpenLibraryToggled?.Invoke(evt));
@@ -56,14 +47,12 @@ namespace Netherlands3D.UI.Components
             AddLayer.RegisterValueChangedCallback(evt => OnAddLayerToggled?.Invoke(evt));
             
             // Ensure initial style is correctly set
-            RegisterCallback<AttachToPanelEvent>(_ => ApplyToolbarStyle());
+            RegisterCallback<AttachToPanelEvent>(_ => UpdateClassList());
         }
         
-        private void ApplyToolbarStyle()
+        private void UpdateClassList()
         {
-            EnableInClassList("toolbar-style-normal", toolbarStyle == ToolbarStyle.Normal);
-            EnableInClassList("toolbar-style-library", toolbarStyle == ToolbarStyle.Library);
-            EnableInClassList("toolbar-style-add-layer", toolbarStyle == ToolbarStyle.AddLayer);
+            this.ReplacePrefixedValueInClassList("toolbar-style-", toolbarStyle.ToString().ToKebabCase());
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Netherlands3D.UI;
+﻿using Netherlands3D.UI_Toolkit.Scripts;
+using Netherlands3D.UI;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -6,16 +7,8 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class Button : UnityEngine.UIElements.Button
+    public partial class Button : UnityEngine.UIElements.Button, IComponent
     {
-        // Existing elements
-        private Icon Icon => this.Q<Icon>("Icon");
-        private Label Label => this.Q<Label>("Label");
-
-        // New elements provided by UXML (robust class lookup)
-        private VisualElement TypeDivider => this.Q<VisualElement>("Divider") ?? this.Q<VisualElement>(null, "divider");
-        private Label TypeLabelElement => this.Q<Label>("TypeLabel") ?? this.Q<Label>(null, "type-label");
-
         public enum ButtonStyle
         {
             Normal,
@@ -29,13 +22,24 @@ namespace Netherlands3D.UI.Components
             Right
         }
 
-        // Variant / position (unchanged)
+        // Query and cache icon component
+        private Icon icon;
+        private Icon Icon => icon ??= this.Q<Icon>("Icon");
+
+        // Query and cache label component
+        private Label labelField;
+        private Label Label => labelField ??= this.Q<Label>("Label");
+
+        // New elements provided by UXML (robust class lookup)
+        private VisualElement TypeDivider => this.Q<VisualElement>("Divider") ?? this.Q<VisualElement>(null, "divider");
+        private Label TypeLabelElement => this.Q<Label>("TypeLabel") ?? this.Q<Label>(null, "type-label");
+
         private ButtonStyle buttonStyle = ButtonStyle.WithIcon;
         [UxmlAttribute("button-style")]
         public ButtonStyle ShowIcon
         {
             get => buttonStyle;
-            set => this.SetFieldValueAndReplaceClassName(ref buttonStyle, value, "button-style-");
+            set { buttonStyle = value; UpdateClassList(); }
         }
 
         private ButtonIconPosition buttonIconPosition = ButtonIconPosition.Left;
@@ -43,7 +47,7 @@ namespace Netherlands3D.UI.Components
         public ButtonIconPosition IconPosition
         {
             get => buttonIconPosition;
-            set => this.SetFieldValueAndReplaceClassName(ref buttonIconPosition, value, "button-icon-position-");
+            set { buttonIconPosition = value; UpdateClassList(); }
         }
 
         // Type badge config
@@ -60,17 +64,13 @@ namespace Netherlands3D.UI.Components
         public string TypeLabel
         {
             get => typeLabel;
-            set
-            {
-                typeLabel = value;   // kan null/empty zijn
-                ApplyTypeBadge();    // tekst en zichtbaarheid centraal regelen
-            }
+            set { typeLabel = value; ApplyTypeBadge(); }
         }
 
 
         // Pass-throughs
         [UxmlAttribute("icon")]
-        public Icon.IconImage Image
+        public IconImage Image
         {
             get => Icon.Image;
             set => Icon.Image = value;
@@ -85,19 +85,12 @@ namespace Netherlands3D.UI.Components
 
         public Button()
         {
-            // Find and load UXML template for this component
-            var asset = Resources.Load<VisualTreeAsset>("UI/" + nameof(Button));
-            asset.CloneTree(this);
+            this.CloneComponentTree("Components");
+            this.AddComponentStylesheet("Components");
 
-            // Find and load USS stylesheet specific for this component (using -style)
-            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(Button) + "-style");
-            styleSheets.Add(styleSheet);
-
-            // Base class + initial classes before layout
-            AddToClassList("button");
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
-                ApplyCurrentVariantClasses();
+                UpdateClassList();
 
                 // If a type label was provided via UXML attribute, ensure it is reflected on the element
                 if (!string.IsNullOrEmpty(typeLabel) && TypeLabelElement != null)
@@ -107,16 +100,10 @@ namespace Netherlands3D.UI.Components
             });
         }
 
-        private void ApplyCurrentVariantClasses()
+        private void UpdateClassList()
         {
-            // Style variant
-            EnableInClassList("button-style-normal", buttonStyle == ButtonStyle.Normal);
-            EnableInClassList("button-style-with-icon", buttonStyle == ButtonStyle.WithIcon);
-            EnableInClassList("button-style-icon-only", buttonStyle == ButtonStyle.IconOnly);
-
-            // Icon position
-            EnableInClassList("button-icon-position-left", buttonIconPosition == ButtonIconPosition.Left);
-            EnableInClassList("button-icon-position-right", buttonIconPosition == ButtonIconPosition.Right);
+            this.ReplacePrefixedValueInClassList("button-style-", buttonStyle.ToString().ToKebabCase());
+            this.ReplacePrefixedValueInClassList("button-icon-position-", buttonIconPosition.ToString().ToKebabCase());
         }
 
         /// <summary>

@@ -1,6 +1,12 @@
-<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="AssetLibraryPanel" class="asset-library-panel">
-        <nl3d:Breadcrumb />
-        <nl3d:ListView name="ItemListView" virtualization-method="DynamicHeight" />
-    </ui:VisualElement>
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    name="AssetLibraryPanel" 
+    class="asset-library-panel"
+>
+    <nl3d:Breadcrumb />
+    <nl3d:ListView name="ItemListView" virtualization-method="DynamicHeight" />
 </ui:UXML>

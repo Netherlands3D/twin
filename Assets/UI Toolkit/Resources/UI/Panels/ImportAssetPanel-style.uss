@@ -1,0 +1,17 @@
+.import-asset-panel {
+    display: none;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    flex-grow: 1;
+}
+
+.import-asset-panel .contentcontainer {
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.import-asset-panel.active {
+    display: flex;
+}

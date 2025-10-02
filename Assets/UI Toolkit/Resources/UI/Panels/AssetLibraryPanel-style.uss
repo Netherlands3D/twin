@@ -1,5 +1,5 @@
 .asset-library-panel {
-    display: flex;
+    display: none;
     flex-wrap: wrap;
     flex-shrink: 0;
     flex-grow: 1;
@@ -9,4 +9,8 @@
     margin-bottom: 12px;
     width: auto;
     height: auto;
+}
+
+.asset-library-panel.active {
+    display: flex;
 }

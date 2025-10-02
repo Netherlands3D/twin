@@ -12,7 +12,7 @@ namespace Netherlands3D.UI.Components
     /// - Adds a stable root class "scrollview" for styling.
     /// </summary>
     [UxmlElement]
-    public partial class ScrollView : UnityEngine.UIElements.ScrollView
+    public partial class ScrollView : UnityEngine.UIElements.ScrollView, IComponent
     {
         private float itemGap = 8f;
         private int _lastGapChildCount = -1;
@@ -70,19 +70,10 @@ namespace Netherlands3D.UI.Components
 
         public ScrollView()
         {
-            // Find and load UXML template for this component
-            var asset = Resources.Load<VisualTreeAsset>("UI/" + nameof(ScrollView));
-            asset.CloneTree(this);
+            this.CloneComponentTree("Components");
+            this.AddComponentStylesheet("Components");
 
-            // Find and load USS stylesheet specific for this component (using -style)
-            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(ScrollView) + "-style");
-            styleSheets.Add(styleSheet);
-
-            // Load shared Scroller stylesheet
-            var scrollerSheet = Resources.Load<StyleSheet>("UI/Scroller-style");
-            if (scrollerSheet != null) styleSheets.Add(scrollerSheet);
-
-            this.RegisterCallback<AttachToPanelEvent>(_ =>
+            RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 HookGapHandlers();
                 ApplyItemGap(force: true);

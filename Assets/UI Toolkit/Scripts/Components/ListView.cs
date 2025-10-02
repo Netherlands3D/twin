@@ -1,4 +1,5 @@
 ﻿using System;
+using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,7 +15,7 @@ namespace Netherlands3D.UI.Components
     /// - Intercepts bindItem so we can apply inline icon gaps after user binding.
     /// </summary>
     [UxmlElement]
-    public partial class ListView : UnityEngine.UIElements.ListView
+    public partial class ListView : UnityEngine.UIElements.ListView, IComponent
     {
         // Keep user bind so we can call it first.
         private Action<VisualElement, int> _userBind;
@@ -28,10 +29,7 @@ namespace Netherlands3D.UI.Components
             set
             {
                 _userBind = value;
-                base.bindItem = (ve, i) =>
-                {
-                    _userBind?.Invoke(ve, i);
-                };
+                base.bindItem = (ve, i) => _userBind?.Invoke(ve, i);
             }
         }
 
@@ -56,19 +54,8 @@ namespace Netherlands3D.UI.Components
 
         public ListView()
         {
-            // Find and load UXML template for this component
-            var asset = Resources.Load<VisualTreeAsset>("UI/" + nameof(ListView));
-            asset.CloneTree(this);
-
-            // Find and load USS stylesheet specific for this component
-            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(ListView) + "-style");
-            styleSheets.Add(styleSheet);
-
-            // Load shared scroller/scrollview styles for internal parts
-            var scrollerSheet = Resources.Load<StyleSheet>("UI/Scroller-style");
-            styleSheets.Add(scrollerSheet);
-            var scrollViewSheet = Resources.Load<StyleSheet>("UI/ScrollView-style");
-            styleSheets.Add(scrollViewSheet);
+            this.CloneComponentTree("Components");
+            this.AddComponentStylesheet("Components");
 
             // Defaults only if user code did not set factories
             if (makeItem == null) makeItem = CreateDefaultItem;

@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using Netherlands3D._Application._Twin;
+using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
@@ -19,10 +22,17 @@ namespace Netherlands3D.UI.Behaviours
         private InspectorPanel InspectorPanel => inspectorPanel ??= Root?.Q<InspectorPanel>();
     
         private AssetLibraryPanel assetLibraryPanel;
+        private ImportAssetPanel importAssetPanel;
 
         private void Awake()
         {
             appDocument = GetComponent<UIDocument>();
+        }
+
+        private void Start()
+        {
+            assetLibraryPanel ??= new AssetLibraryPanel();
+            InspectorPanel.Content.Add(assetLibraryPanel);
         }
 
         private void OnEnable()
@@ -60,21 +70,18 @@ namespace Netherlands3D.UI.Behaviours
         public void OpenAssetLibrary()
         {
             EnsureInspectorIsOpen();
-            EnsureLibraryPanelExists();
 
-            InspectorPanel.HeaderText = "Toevoegen";
+            InspectorPanel.HeaderText = assetLibraryPanel.GetTitle();
             assetLibraryPanel.SetAssetLibrary(assetLibrary);
-            assetLibraryPanel.Show();
+            assetLibraryPanel.Open();
 
             InspectorPanel.Toolbar.OpenLibrary.SetValueWithoutNotify(true);
         }
 
         public void CloseAssetLibrary()
         {
-            EnsureLibraryPanelExists();
-
             InspectorPanel.HeaderText = "Lagen";
-            assetLibraryPanel.Hide();
+            assetLibraryPanel.Close();
 
             InspectorPanel.Toolbar.OpenLibrary.SetValueWithoutNotify(false);
             
@@ -86,15 +93,6 @@ namespace Netherlands3D.UI.Behaviours
         private void EnsureInspectorIsOpen()
         {
             InspectorPanel.Open();
-        }
-
-        private void EnsureLibraryPanelExists()
-        {
-            assetLibraryPanel ??= new AssetLibraryPanel();
-            if (!InspectorPanel.Content.Contains(assetLibraryPanel))
-            {
-                InspectorPanel.Content.Add(assetLibraryPanel);
-            }
         }
     }
 }

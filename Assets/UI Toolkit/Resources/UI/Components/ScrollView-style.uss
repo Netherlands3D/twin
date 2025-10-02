@@ -1,3 +1,5 @@
+@import url("Scroller-style.uss");
+
 .scrollview {
   --scroll-padding-x: 0px;
   --scroll-padding-y: 0px;

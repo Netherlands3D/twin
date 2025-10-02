@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using Netherlands3D.UI_Toolkit.Scripts;
+using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class Breadcrumb : VisualElement
+    public partial class Breadcrumb : VisualElement, IComponent
     {
         private int CurrentCrumbIndex => crumbs.Count - 1;
         private int PreviousCrumbIndex => CurrentCrumbIndex - 1;
@@ -40,7 +42,7 @@ namespace Netherlands3D.UI.Components
                 if (showLeadingIcon == value) return;
                 
                 showLeadingIcon = value;
-                ApplyVisibility();
+                UpdateClassList();
             }
         }
 
@@ -54,7 +56,7 @@ namespace Netherlands3D.UI.Components
                 if (showBackButton == value) return;
                 
                 showBackButton = value;
-                ApplyVisibility();
+                UpdateClassList();
             }
         }
 
@@ -62,7 +64,7 @@ namespace Netherlands3D.UI.Components
         /// Leading icon override (unset = CSS variable; set = explicit enum image).
         /// </summary>
         [UxmlAttribute("leading-icon-image")]
-        public Icon.IconImage LeadingIconImageExposed
+        public IconImage LeadingIconImageExposed
         {
             get => leadingIcon != null ? leadingIcon.Image : default;
             set
@@ -87,13 +89,8 @@ namespace Netherlands3D.UI.Components
 
         public Breadcrumb()
         {
-            // Find and load UXML template for this component
-            var vta = Resources.Load<VisualTreeAsset>("UI/" + nameof(Breadcrumb));
-            if (vta != null) vta.CloneTree(this);
-
-            // Find and load USS stylesheet specific for this component
-            var ss = Resources.Load<StyleSheet>("UI/" + nameof(Breadcrumb) + "-style");
-            if (ss != null) styleSheets.Add(ss);
+            this.CloneComponentTree("Components");
+            this.AddComponentStylesheet("Components");
 
             // Cache references now that tree is cloned
             leadingIcon = this.Q<Icon>(className: LeadingIconClass);
@@ -102,14 +99,7 @@ namespace Netherlands3D.UI.Components
             trail = this.Q(TrailName);
 
             // Ensure defaults are reflected in classes on attach
-            RegisterCallback<AttachToPanelEvent>(_ => ApplyVisibility());
-        }
-
-        /// <summary>Toggle root classes for visibility based on current booleans.</summary>
-        private void ApplyVisibility()
-        {
-            EnableInClassList(NoLeadingIconClass, !showLeadingIcon || CurrentCrumbIndex > 0);
-            EnableInClassList(NoBackButtonClass, !showBackButton || CurrentCrumbIndex == 0);
+            RegisterCallback<AttachToPanelEvent>(_ => UpdateClassList());
         }
 
         /// <summary>Replace the entire crumb path and rebuild the UI.</summary>
@@ -177,7 +167,7 @@ namespace Netherlands3D.UI.Components
                 trail.Add(crumb);
             }
 
-            ApplyVisibility();
+            UpdateClassList();
         }
 
         private VisualElement CreateSeparator(int index)
@@ -202,6 +192,12 @@ namespace Netherlands3D.UI.Components
             lab.AddToClassList(CrumbLabelClass);
             lab.AddToClassList(CurrentClass);
             return lab;
+        }
+
+        private void UpdateClassList()
+        {
+            EnableInClassList(NoLeadingIconClass, !showLeadingIcon || CurrentCrumbIndex > 0);
+            EnableInClassList(NoBackButtonClass, !showBackButton || CurrentCrumbIndex == 0);
         }
     }
 }
