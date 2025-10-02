@@ -231,10 +231,10 @@ namespace Netherlands3D.Minimap
 		/// </summary>
 		/// <param name="sourceRDPosition">The source RD position</param>
 		/// <returns></returns>
-		public Vector3 DeterminePositionOnMap(Vector3RD sourceRDPosition)
+		public Vector3 DeterminePositionOnMap(Coordinate sourceRDPosition)
 		{
-			var meterX = sourceRDPosition.x - (float)bottomLeft.x;
-			var meterY = sourceRDPosition.y - (float)topRight.y;
+			var meterX = sourceRDPosition.easting - (float)bottomLeft.x;
+			var meterY = sourceRDPosition.northing - (float)topRight.y;
 
 			var pixelX = meterX / startMeterInPixels;
 			var pixelY = meterY / startMeterInPixels;
@@ -248,7 +248,7 @@ namespace Netherlands3D.Minimap
 		/// </summary>
 		/// <param name="targetObject">RectTransform object to be placed</param>
 		/// <param name="targetPosition">RD coordinate to place the object</param>
-		public void PositionObjectOnMap(RectTransform targetObject, Vector3RD targetPosition)
+		public void PositionObjectOnMap(RectTransform targetObject, Coordinate targetPosition)
 		{
 			targetObject.transform.localScale = Vector3.one / mapRectTransform.localScale.x;
 			targetObject.transform.localPosition = DeterminePositionOnMap(targetPosition);
@@ -338,7 +338,7 @@ namespace Netherlands3D.Minimap
 			fov.SetAsLastSibling(); //Fov is on top of map
 			pointer.SetAsLastSibling(); //Pointer is on top of fov
 
-			PositionObjectOnMap(pointer, new Coordinate(cameraMoveTarget.transform.position).Convert(CoordinateSystem.RDNAP).ToVector3RD());
+			PositionObjectOnMap(pointer, new Coordinate(cameraMoveTarget.transform.position).Convert(CoordinateSystem.RDNAP));
 
 			if(CenterPointerInView)
 			{
