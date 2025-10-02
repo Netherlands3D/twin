@@ -30,11 +30,11 @@ namespace Netherlands3D.SelectionTools
         {
             //Convert bounds to RD coordinates on a 2D map
             Coordinate min = new Coordinate(bounds.min);
-            var bottomLeft = min.Convert(CoordinateSystem.RD).ToVector3();
+            var bottomLeft = min.Convert(CoordinateSystem.RD);
             Coordinate max = new Coordinate(bounds.max);
-            var topRight = max.Convert(CoordinateSystem.RD).ToVector3();
+            var topRight = max.Convert(CoordinateSystem.RD);
 
-            boundingBoxRDEvent.Invoke(new double[] { bottomLeft.x, bottomLeft.y, topRight.x, topRight.y });
+            boundingBoxRDEvent.Invoke(new double[] { bottomLeft.easting, bottomLeft.northing, topRight.easting, topRight.northing });
         }
     }
 }
