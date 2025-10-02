@@ -57,7 +57,9 @@ namespace Netherlands3D.Twin.Rendering
 
         protected override void OnDrawGizmos()
         {
-            base.OnDrawGizmos();
+            Gizmos.color = Color.cyan;
+            DrawGizmos(pointTransformMatrixCache);
+            Gizmos.color = Color.blue;
             DrawGizmos(lineTransformMatrixCache);
         }
 
@@ -158,7 +160,6 @@ namespace Netherlands3D.Twin.Rendering
 
                     // Calculate the rotation based on the direction vector
                     var rotation = Quaternion.LookRotation(direction);
-
                     // Calculate the scale based on the distance
                     var scale = new Vector3(LineDiameter, LineDiameter, distance);
 

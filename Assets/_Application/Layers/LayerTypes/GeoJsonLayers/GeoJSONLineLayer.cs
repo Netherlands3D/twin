@@ -110,6 +110,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     var coordinate = new Coordinate(vertices[i]);
                     line.Add(coordinate);
                 }
+
                 selectionList.Add(line);
             }
 
@@ -190,18 +191,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             // Remove visualisations that are out of view
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
+
+            List<List<Coordinate>> visualisationsToRemove = new List<List<Coordinate>>();
             foreach (var kvp in spawnedVisualisations.Reverse())
             {
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
                 if (inCameraFrustum) continue;
 
+                visualisationsToRemove.AddRange(kvp.Value.Data);
                 RemoveFeature(kvp.Value);
             }
+
+            lineRenderer3D.RemovePointCollections(visualisationsToRemove);
         }
 
         private void RemoveFeature(FeatureLineVisualisations featureVisualisation)
         {
-            lineRenderer3D.RemovePointCollections(featureVisualisation.Data);
             FeatureRemoved?.Invoke(featureVisualisation.feature);
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }

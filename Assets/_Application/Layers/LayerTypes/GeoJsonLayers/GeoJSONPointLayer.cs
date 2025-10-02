@@ -180,18 +180,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public void RemoveFeaturesOutOfView()
         {
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
+            
+            List<List<Coordinate>> visualisationsToRemove = new List<List<Coordinate>>();
             foreach (var kvp in spawnedVisualisations.Reverse())
             {
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
                 if (inCameraFrustum) continue;
 
+                visualisationsToRemove.AddRange(kvp.Value.Data);
                 RemoveFeature(kvp.Value);
             }
+            PointRenderer3D.RemovePointCollections(visualisationsToRemove);
         }
 
         private void RemoveFeature(FeaturePointVisualisations featureVisualisation)
         {
-            PointRenderer3D.RemovePointCollections(featureVisualisation.Data);
             FeatureRemoved?.Invoke(featureVisualisation.feature);
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }
