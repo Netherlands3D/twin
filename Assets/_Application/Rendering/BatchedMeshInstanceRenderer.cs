@@ -293,52 +293,25 @@ namespace Netherlands3D.Twin.Rendering
             GenerateTransformMatrixCache(startIndex);
         }
         
-        protected virtual bool IsValid(List<Coordinate> collection)
-        {
-            if (collection == null || collection.Count == 0)
-                return false;
-            return true;
-        }
-
         /// <summary>
         /// Remove a collection of points using list reference
         /// </summary>
         public void RemovePointCollection(List<Coordinate> points)
         {
-            if (positionCollections == null || positionCollections.Count < 1) return;
+            if (!IsValid(points))
+                return;
 
             positionCollections.Remove(points);
 
             RecalculatePointCount();
             GenerateTransformMatrixCache(-1);
         }
-
-        /// <summary>
-        /// Return the batch index and line index as a tuple of the closest point to a given point.
-        /// Handy for selecting a line based on a click position.
-        /// </summary>
-        protected static (int batchIndex, int instanceIndex) GetIndicesClosestToPoint(List<List<Matrix4x4>> transformCaches, Vector3 point)
+        
+        protected virtual bool IsValid(List<Coordinate> collection)
         {
-            int closestBatchIndex = -1;
-            int closestInstanceIndex = -1;
-            float closestSqrDistance = float.MaxValue;
-            for (int i = 0; i < transformCaches.Count; i++)
-            {
-                var transformCache = transformCaches[i];
-                for (int j = 0; j < transformCache.Count; j++)
-                {
-                    Vector3 linePoint = transformCache[j].GetPosition();
-                    var sqrDistance = Vector3.SqrMagnitude(linePoint - point);
-                    if (sqrDistance < closestSqrDistance)
-                    {
-                        closestSqrDistance = sqrDistance;
-                        closestBatchIndex = i;
-                        closestInstanceIndex = j;
-                    }
-                }
-            }
-
-            return (closestBatchIndex, closestInstanceIndex);
+            if (collection == null || collection.Count == 0)
+                return false;
+            return true;
         }
 
         protected virtual void UpdateColorBuffers()
