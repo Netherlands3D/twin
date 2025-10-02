@@ -23,6 +23,9 @@
     padding-bottom: 16px;
 }
 
+.contentcontainer .unity-foldout__content {
+    margin-left: 0;
+}
 .contentcontainer .unity-foldout__toggle {
     margin: 0;
 }
@@ -59,12 +62,16 @@
     margin: 0;
 }
 
-.contentcontainer .divider {
+.divider-header {
+    display: flex;
     flex-grow: 1;
     height: 2px;
     min-height: 2px;
     margin-bottom: 12px;
     background-color: var(--divider-bg-color);
+}
+.contentcontainer.divider-active .divider-header {
+    display: flex;
 }
 
 /* Header icons */

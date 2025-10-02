@@ -24,13 +24,22 @@ namespace Netherlands3D.UI.Components
         // Elements from UXML
         private Icon leadingIcon => this.Q<Icon>("LeadingIcon");
         private HelpButton helpButton => this.Q<HelpButton>("HelpButton");
-        private VisualElement Divider => this.Q<VisualElement>("Divider");
 
-        public enum ContainerType { Foldout, NoFoldout }
+        public enum ContainerType
+        {
+            Foldout,
+            NoFoldout
+        }
+
         private ContainerType containerType = ContainerType.Foldout;
         private const string HideCheckmarkClass = "hide-checkmark";
 
-        public enum ContainerStyle { Normal, WithIcon }
+        public enum ContainerStyle
+        {
+            Normal,
+            WithIcon
+        }
+
         private ContainerStyle containerStyle = ContainerStyle.WithIcon;
 
         [UxmlAttribute("container-type")]
@@ -77,7 +86,11 @@ namespace Netherlands3D.UI.Components
         public bool ShowDivider
         {
             get => showDivider;
-            set { showDivider = value; SetDividerVisibility(); }
+            set
+            {
+                showDivider = value;
+                SetDividerVisibility();
+            }
         }
 
         [UxmlAttribute("leading-icon")]
@@ -93,10 +106,16 @@ namespace Netherlands3D.UI.Components
         public bool ShowHelpIcon
         {
             get => showHelpIcon;
-            set { showHelpIcon = value; UpdateIcons(); ReorderHeaderChildren(); }
+            set
+            {
+                showHelpIcon = value;
+                UpdateIcons();
+                ReorderHeaderChildren();
+            }
         }
 
         private string helpUrl;
+        private VisualElement headerDivider;
 
         [UxmlAttribute("help-url")]
         public string HelpUrl
@@ -149,9 +168,11 @@ namespace Netherlands3D.UI.Components
         /// </summary>
         private void ReorderHeaderChildren()
         {
-            var input = HeaderInput; if (input == null) return;
+            var input = HeaderInput;
+            if (input == null) return;
             var label = HeaderLabel;
-            var check = Checkmark; if (check == null) return;
+            var check = Checkmark;
+            if (check == null) return;
 
             if (leadingIcon != null && leadingIcon.parent != input) input.Add(leadingIcon);
             if (label != null && label.parent != input) input.Add(label);
@@ -176,7 +197,9 @@ namespace Netherlands3D.UI.Components
 
             var input = HeaderInput;
             if (input != null)
-                input.pickingMode = (containerType == ContainerType.NoFoldout) ? PickingMode.Ignore : PickingMode.Position;
+                input.pickingMode = (containerType == ContainerType.NoFoldout)
+                    ? PickingMode.Ignore
+                    : PickingMode.Position;
 
             // Mouse-interaction off when NoFoldout
             var check = Checkmark;
@@ -190,10 +213,16 @@ namespace Netherlands3D.UI.Components
         /// </summary>
         private void EnsureDividerPosition()
         {
-            if (Divider == null) return;
-            var target = contentContainer;
-            if (Divider.parent != target) target.Add(Divider);
-            target.Insert(0, Divider);
+            if (headerDivider == null)
+            {
+                headerDivider = new VisualElement { name = "Divider" };
+                headerDivider.AddToClassList("divider");
+                headerDivider.AddToClassList("divider-header");
+            }
+            if (headerDivider.parent != contentContainer)
+            {
+                contentContainer.Insert(0, headerDivider);
+            }
         }
 
         /// <summary>
@@ -202,8 +231,7 @@ namespace Netherlands3D.UI.Components
         /// </summary>
         private void SetDividerVisibility()
         {
-            if (Divider != null)
-                Divider.style.display = showDivider ? DisplayStyle.Flex : DisplayStyle.None;
+            EnableInClassList("divider-active", showDivider);
         }
 
         private void UpdateIcons()

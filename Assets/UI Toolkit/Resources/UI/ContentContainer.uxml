@@ -9,6 +9,4 @@
   <!-- Header icons -->
   <nl3d:Icon name="LeadingIcon" class="leading-icon" />
   <nl3d:HelpButton name="HelpButton" class="help-button" />
-
-  <ui:VisualElement name="Divider" class="divider" />
 </ui:UXML>
