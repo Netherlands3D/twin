@@ -18,7 +18,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
         {
             var uri = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
 
-            App.Layers.Add(LayerPresetCode, new Obj.Args(localFile.FileName, uri));
+            App.Layers.Add(LayerPresetCode, new ObjPreset.Args(localFile.FileName, uri));
         }
     }
 }

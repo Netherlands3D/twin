@@ -8,7 +8,7 @@ using Netherlands3D.Twin.Layers.Properties;
 namespace Netherlands3D.Functionalities.GeoJSON.LayerPresets
 {
     [LayerPreset("geojson")]
-    public sealed class GeoJSON : ILayerPreset
+    public sealed class GeoJSONPreset : ILayerPreset
     {
         private const string PrefabIdentifier = "e46381d2665c69245b2475c986f6d0c4";
 

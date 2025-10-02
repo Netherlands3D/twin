@@ -6,7 +6,7 @@ using Netherlands3D.Twin.Layers.Properties;
 namespace Netherlands3D.Functionalities.Wms.LayerPresets
 {
     [LayerPreset("wms-layer")]
-    public sealed class WmsLayer : ILayerPreset
+    public sealed class WmsLayerPreset : ILayerPreset
     {
         private const string PrefabIdentifier = "7ddb78a6acbf44d4e84910b5684042b7";
 

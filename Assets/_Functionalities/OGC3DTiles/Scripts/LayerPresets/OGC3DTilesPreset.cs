@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Netherlands3D.Functionalities.OGC3DTiles.LayerPresets
 {
     [LayerPreset("3d-tiles")]
-    public sealed class OGC3DTiles : ILayerPreset
+    public sealed class OGC3DTilesPreset : ILayerPreset
     {
         private const string PrefabIdentifier = "395dd4e52bd3b42cfb24f183f3839bba";
 

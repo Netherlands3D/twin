@@ -52,26 +52,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
         }
         
-        public void Initialize(LayerGameObject originalObject, PolygonSelectionLayer polygon)
+        public void Initialize(ReferencedLayerData data, string previousPrefabId)
         {
-            foreach (var property in originalObject.LayerData.LayerProperties)
-            {
-                LayerData.SetProperty(property); //copy properties to be able to revert
-            }
-
-            InitializeScatterMesh(originalObject.PrefabIdentifier);
-
-            polygonLayer = polygon;
-            
-            var existingScatterProperties = (ScatterGenerationSettingsPropertyData) originalObject.LayerData.LayerProperties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
+            InitializeScatterMesh(previousPrefabId);            
+            polygonLayer = data.ParentLayer as PolygonSelectionLayer;
+            var existingScatterProperties = (ScatterGenerationSettingsPropertyData) data.LayerProperties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
             if(existingScatterProperties == null)
-                InitializeNewScatterProperties(originalObject.PrefabIdentifier, polygon.ShapeType);
+                InitializeNewScatterProperties(previousPrefabId, polygonLayer.ShapeType);
             else
                 LoadScatterProperties(existingScatterProperties);
             
             propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
 
-            LayerData.SetParent(polygon);
+            LayerData.SetParent(polygonLayer);
 
             RecalculatePolygonsAndSamplerTexture();
             AddReScatterListeners();
@@ -317,7 +310,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var newPolygonParent = LayerData.ParentLayer as PolygonSelectionLayer;
             if (newPolygonParent == null) //new parent is not a polygon, so the scatter layer should revert to its original object
             {
-                RevertToHierarchicalObjectLayer();
+                RevertToHierarchicalObjectLayer(this);
                 return;
             }
 
@@ -333,22 +326,54 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
         }
 
-        public void RevertToHierarchicalObjectLayer()
+        public static void RevertToHierarchicalObjectLayer(ObjectScatterLayerGameObject objectLayerGameObject)
         {
-            var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(settings.OriginalPrefabId);
+            ReferencedLayerData data = objectLayerGameObject.LayerData;
+
+            var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(objectLayerGameObject.settings.OriginalPrefabId);
             var revertedLayer = GameObject.Instantiate(prefab) as HierarchicalObjectLayerGameObject;
-            revertedLayer.LoadProperties(LayerData.LayerProperties); //load the saved (transform) properties in this object 
-            revertedLayer.LayerData.ActiveSelf = LayerData.ActiveSelf;
-            revertedLayer.LayerData.SetProperty(settings); //add the scatter settings to the object properties so it can be reloaded if the user decides to turn the scatter on again
 
-            for (var i = LayerData.ChildrenLayers.Count - 1; i >= 0; i--) //go in reverse to avoid a collectionWasModifiedError
-            {
-                var child = LayerData.ChildrenLayers[i];
-                child.SetParent(revertedLayer.LayerData, 0);
-            }
+            data.SetReference(revertedLayer);
 
-            revertedLayer.LayerData.SetParent(LayerData.ParentLayer, LayerData.SiblingIndex);
-            LayerData.DestroyLayer();
+            //revertedLayer.LoadProperties(LayerData.LayerProperties); //load the saved (transform) properties in this object 
+            //revertedLayer.LayerData.ActiveSelf = LayerData.ActiveSelf;
+            data.SetProperty(objectLayerGameObject.settings); //add the scatter settings to the object properties so it can be reloaded if the user decides to turn the scatter on again
+
+            //for (var i = LayerData.ChildrenLayers.Count - 1; i >= 0; i--) //go in reverse to avoid a collectionWasModifiedError
+            //{
+            //    var child = LayerData.ChildrenLayers[i];
+            //    child.SetParent(revertedLayer.LayerData, 0);
+            //}
+
+            //revertedLayer.LayerData.SetParent(LayerData.ParentLayer, LayerData.SiblingIndex);
+            //LayerData.DestroyLayer();
+
+            objectLayerGameObject.DestroyLayerGameObject();
+        }
+
+        public static ObjectScatterLayerGameObject ConvertToScatterLayer(HierarchicalObjectLayerGameObject objectLayerGameObject)
+        {
+            ReferencedLayerData data = objectLayerGameObject.LayerData;
+            string previousPrefabId = data.PrefabIdentifier;
+
+            var scatterPrefab = ProjectData.Current.PrefabLibrary.GetPrefabById(ObjectScatterLayerGameObject.ScatterBasePrefabID);
+            var scatterLayer = Instantiate(scatterPrefab) as ObjectScatterLayerGameObject;
+
+            data.SetReference(scatterLayer);
+
+            scatterLayer.Name = objectLayerGameObject.Name + "_Scatter";
+            scatterLayer.Initialize(data, previousPrefabId);
+
+
+            //for (var i = objectLayerGameObject.LayerData.ChildrenLayers.Count - 1; i >= 0; i--) //go in reverse to avoid a collectionWasModifiedError
+            //{
+            //    var child = objectLayerGameObject.LayerData.ChildrenLayers[i];
+            //    child.SetParent(scatterLayer.LayerData, 0);
+            //}
+
+            //objectLayerGameObject.LayerData.DestroyLayer();
+            objectLayerGameObject.DestroyLayerGameObject();
+            return scatterLayer;
         }
 
         public List<IPropertySectionInstantiator> GetPropertySections()

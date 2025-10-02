@@ -5,7 +5,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
-using static Netherlands3D.Functionalities.GeoJSON.LayerPresets.GeoJSON;
+using static Netherlands3D.Functionalities.GeoJSON.LayerPresets.GeoJSONPreset;
 
 namespace Netherlands3D.Twin.DataTypeAdapters
 {

@@ -6,7 +6,7 @@ using Netherlands3D.Twin.Projects;
 namespace Netherlands3D.Functionalities.GLBImporter.LayerPresets
 {
     [LayerPreset("gltf")]
-    public sealed class Gltf : ILayerPreset
+    public sealed class GltfPreset : ILayerPreset
     {
         private const string PrefabIdentifier = "9c30c9cc071ed4343b05fb7ded7859d2";
 
