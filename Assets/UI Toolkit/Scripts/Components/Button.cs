@@ -125,21 +125,15 @@ namespace Netherlands3D.UI.Components
         /// </summary>
         private void ApplyTypeBadge()
         {
-            var divider = TypeDivider;
             var typeEl = TypeLabelElement;
-            if (divider == null || typeEl == null) return;
-
-            // Alleen tonen in varianten waar de hoofdlabel zichtbaar is
-            bool variantAllowsLabel = ClassListContains("button-style-with-icon") || ClassListContains("button-style-normal");
+            if (typeEl == null) return;
 
             // Default: "type" totdat de Inspector een andere waarde zet
             string textToUse = !string.IsNullOrEmpty(typeLabel) ? typeLabel : "type";
             typeEl.text = textToUse;
 
-            bool shouldShow = showType && variantAllowsLabel;
-
-            divider.style.display = shouldShow ? DisplayStyle.Flex : DisplayStyle.None;
-            typeEl.style.display = shouldShow ? DisplayStyle.Flex : DisplayStyle.None;
+            bool shouldShow = showType;
+            EnableInClassList("show-type", shouldShow);
         }
     }
 }

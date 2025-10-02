@@ -57,14 +57,18 @@
   margin-right: var(--button-type-gap, 8px);
   align-self: center;
 }
+
 .button .type-label {
   white-space: nowrap;
 }
 
-/* Hide type badge in icon-only variant */
-.button.button-style-icon-only .divider,
-.button.button-style-icon-only .type-label {
-  display: none;
+.button .divider,
+.button .type-label {
+    display: none;
+}
+.button.show-type .divider,
+.button.show-type .type-label {
+    display: flex;
 }
 
 /* Hover/active */
