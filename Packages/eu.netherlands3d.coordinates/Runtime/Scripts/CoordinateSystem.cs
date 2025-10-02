@@ -31,7 +31,7 @@ namespace Netherlands3D.Coordinates
         ETRS89 = 3
 
     }
-    internal enum CoordinateSystemType
+    public enum CoordinateSystemType
     {
         Projected,
         Geographic,
@@ -130,7 +130,7 @@ namespace Netherlands3D.Coordinates
 
             // Up-direction in the coordinateSystem at the coordinate
             wgsAtUp = myConverter.LocalUpDirection(_coordinateAtOrigin);
-            EPSG4936.relativeCenter = CoordinateConverter.ConvertTo(coordinateAtUnityOrigin, CoordinateSystem.ETRS89_ECEF).ToVector3ECEF();
+            
 
             /// we want to find out how much we have to rotate to make the localUpDirection align with the orientation of the coordinateSystem
             /// this is the amount we have to rotate the coordinateSystem to align with the UnityAxes.
@@ -164,7 +164,10 @@ namespace Netherlands3D.Coordinates
                 
                 if(kvp.Value.AxisCount() != 3) //we only want 3d coordinate systems 
                     continue;
-                
+                //wgs84 and etrs89 are, in practise, the same so we skip etrs89 to void having to choose when there is effectively no difference
+                if (kvp.Key == CoordinateSystem.ETRS89_LatLonHeight) continue;
+                if (kvp.Key == CoordinateSystem.ETRS89_ECEF) continue;
+
                 var potentialCoordinate = new Coordinate(kvp.Key, value1, value2, value3);
                 if (potentialCoordinate.IsValid())
                 {
@@ -186,7 +189,8 @@ namespace Netherlands3D.Coordinates
                 
                 if(kvp.Value.AxisCount() != 2) //we only want 3d coordinate systems 
                     continue;
-                
+                //wgs84 and etrs89 are, in practise, the same so we skip etrs89 to void having to choose when there is effectively no difference
+                if (kvp.Key == CoordinateSystem.ETRS89_LatLon) continue;
                 var potentialCoordinate = new Coordinate(kvp.Key, value1, value2);
                 if (potentialCoordinate.IsValid())
                 {
@@ -260,6 +264,12 @@ namespace Netherlands3D.Coordinates
             }
             Debug.LogError("Could not find 3D equivalent of crs: " + crs);
             return crs;
+        }
+
+        public static CoordinateSystemType getCoordinateSystemType(CoordinateSystem crs)
+        {
+            var converter = operators[crs];
+            return converter.GetCoordinateSystemType();
         }
     }
 
