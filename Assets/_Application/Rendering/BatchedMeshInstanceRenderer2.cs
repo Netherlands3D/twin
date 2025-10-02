@@ -312,6 +312,9 @@ namespace Netherlands3D.Twin.Rendering
         public void AppendCollections(List<List<Coordinate>> collections)
         {
             var startIndex = positionCollections.Count;
+            // Collections.Count can have empty collections that will not be added, so we set the capacity to the current count + the potential added count instead of increasing the capacity by collections.Count.
+            // In case this function will be called multiple times, we prevent the capacity by increasing too much.
+            positionCollections.Capacity = positionCollections.Count + collections.Count;  
             foreach (var collection in collections)
             {
                 if (collection == null || collection.Count == 0)
