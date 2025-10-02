@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
@@ -35,13 +36,13 @@ namespace Netherlands3D.Twin.Rendering
             MaterialPropertyBlock.SetVectorArray("_SegmentColors", Colors);
         }
     }
-    
+
     public class BatchedMeshInstanceRenderer2 : MonoBehaviour
     {
         [Tooltip("The mesh to use for the points/joints")] [SerializeField]
         private Mesh pointMesh;
 
-        [SerializeField] private Material pointMaterial;
+        [SerializeField] private Material pointMaterial; 
 
         [Tooltip("Force all point Y positions to 0")] [SerializeField]
         protected bool flattenY = false;
@@ -54,6 +55,7 @@ namespace Netherlands3D.Twin.Rendering
         protected List<List<Coordinate>> positionCollections = new();
         protected int pointCount; //cached amount of points in the PositionCollections, so this does not have to be recalculated every matrix update to increase performance.
         protected List<List<Matrix4x4>> pointTransformMatrixCache = new List<List<Matrix4x4>>();
+
         protected List<BatchColor> pointBatchColors = new();
 
         protected Camera renderCamera;
@@ -72,7 +74,9 @@ namespace Netherlands3D.Twin.Rendering
             {
                 pointMaterial = value;
                 if (pointMaterial != null)
+                {
                     SetDefaultColors();
+                }
             }
         }
 
@@ -203,23 +207,24 @@ namespace Netherlands3D.Twin.Rendering
         {
             if (collectionStartIndex < 0 || collectionStartIndex >= positionCollections.Count)
                 return -1;
-            
+
             int flattenedStartIndex = 0;
             for (int i = 0; i < collectionStartIndex; i++)
             {
                 flattenedStartIndex += positionCollections[i].Count;
             }
+
             return flattenedStartIndex;
         }
-        
+
         protected (int batchIndex, int matrixIndex) GetMatrixIndices(int flattenedStartIndex)
         {
             if (flattenedStartIndex < 0 || flattenedStartIndex >= pointCount)
                 return (-1, -1);
-            
+
             int totalJointsBeforeStartIndex = 0;
             int currentBatchSize = 1023;
-            
+
             // Traverse through collections to calculate the cumulative count directly
             foreach (var collection in positionCollections)
             {
@@ -228,14 +233,14 @@ namespace Netherlands3D.Twin.Rendering
                     totalJointsBeforeStartIndex += flattenedStartIndex;
                     break;
                 }
-            
+
                 flattenedStartIndex -= collection.Count;
                 totalJointsBeforeStartIndex += collection.Count;
             }
-            
+
             return (totalJointsBeforeStartIndex / currentBatchSize, totalJointsBeforeStartIndex % currentBatchSize);
         }
-        
+
         protected static void AppendMatrixToBatches(List<List<Matrix4x4>> batchList, ref int arrayIndex, ref int matrixIndex, Matrix4x4 valueToAdd)
         {
             //start a new batch if needed
@@ -258,7 +263,7 @@ namespace Netherlands3D.Twin.Rendering
                 batchList[arrayIndex].Add(valueToAdd);
             matrixIndex++;
         }
-        
+
         public virtual void Clear()
         {
             positionCollections.Clear();
@@ -286,7 +291,7 @@ namespace Netherlands3D.Twin.Rendering
                 Clear();
                 return;
             }
-            
+
             positionCollections = collections;
             RecalculatePointCount();
             GenerateTransformMatrixCache();
@@ -299,7 +304,7 @@ namespace Netherlands3D.Twin.Rendering
         {
             if (collection == null || collection.Count == 0)
                 return;
-            
+
             var startIndex = positionCollections.Count;
             positionCollections.Add(collection);
             RecalculatePointCount();
@@ -314,13 +319,14 @@ namespace Netherlands3D.Twin.Rendering
             var startIndex = positionCollections.Count;
             // Collections.Count can have empty collections that will not be added, so we set the capacity to the current count + the potential added count instead of increasing the capacity by collections.Count.
             // In case this function will be called multiple times, we prevent the capacity by increasing too much.
-            positionCollections.Capacity = positionCollections.Count + collections.Count;  
+            positionCollections.Capacity = positionCollections.Count + collections.Count;
             foreach (var collection in collections)
             {
                 if (collection == null || collection.Count == 0)
                     continue;
                 positionCollections.Add(collection);
             }
+
             RecalculatePointCount();
             GenerateTransformMatrixCache(startIndex);
         }
@@ -337,7 +343,7 @@ namespace Netherlands3D.Twin.Rendering
             RecalculatePointCount();
             GenerateTransformMatrixCache(-1);
         }
-        
+
         /// <summary>
         /// Return the batch index and line index as a tuple of the closest point to a given point.
         /// Handy for selecting a line based on a click position.
@@ -362,9 +368,10 @@ namespace Netherlands3D.Twin.Rendering
                     }
                 }
             }
+
             return (closestBatchIndex, closestInstanceIndex);
         }
-        
+
         protected virtual void UpdateColorBuffers()
         {
             while (pointTransformMatrixCache.Count > pointBatchColors.Count)
@@ -381,23 +388,8 @@ namespace Netherlands3D.Twin.Rendering
             {
                 batchColor.SetAllColors(defaultColor);
             }
+
             UpdateColorBuffers(); //fill in the missing colors with the default color after resetting the existing colors to avoid setting them twice.
-        }
-        
-        /// <summary>
-        /// Set specific point color for the point closest to a given point.
-        /// </summary>
-        public void SetPointColorClosestToPoint(Vector3 point, Color color)
-        {
-            Debug.Log(point);
-            var batchIndices = GetIndicesClosestToPoint(pointTransformMatrixCache, point);
-            if (batchIndices.batchIndex == -1 || batchIndices.instanceIndex == -1)
-            {
-                Debug.LogError("No point found");
-                return;
-            }
-            UpdateColorBuffers();
-            pointBatchColors[batchIndices.batchIndex].SetColor(batchIndices.instanceIndex, color);
         }
     }
 }

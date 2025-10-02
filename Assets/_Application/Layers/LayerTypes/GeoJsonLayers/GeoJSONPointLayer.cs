@@ -18,17 +18,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     public partial class GeoJSONPointLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
         [SerializeField] private PointRenderer3D pointRenderer3D;
+        [SerializeField] private PointRenderer3D selectionPointRenderer3D;
         public bool IsPolygon => false;
         public override bool IsMaskable => false;
 
         public Transform Transform => transform;
+
         public delegate void GeoJSONPointHandler(Feature feature);
+
         public event GeoJSONPointHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
         private GeoJsonPointLayerMaterialApplicator applicator;
+
         internal GeoJsonPointLayerMaterialApplicator Applicator
         {
             get
@@ -87,7 +91,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 for (int i = 0; i < vertices.Length; i++)
                 {
                     Vector3 localOffset = vertices[i] - mesh.bounds.center;
-                    pointRenderer3D.SetPointColorClosestToPoint(transform.position + localOffset, color);
+                    var coordinate = new Coordinate(transform.position + localOffset);
+                    selectionPointRenderer3D.PointMaterial.color = color;
+                    selectionPointRenderer3D.SetPositionCollections(new List<List<Coordinate>>() { new List<Coordinate> { coordinate } });
                 }
             }
         }
@@ -95,13 +101,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public void SetVisualisationColorToDefault()
         {
             PointRenderer3D.SetDefaultColors();
+            selectionPointRenderer3D.Clear();
         }
 
         public Color GetRenderColor()
         {
             return pointRenderer3D.PointMaterial.color;
         }
-        
+
         public PointRenderer3D PointRenderer3D
         {
             get { return pointRenderer3D; }
@@ -179,7 +186,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 if (inCameraFrustum) continue;
 
                 RemoveFeature(kvp.Value);
-            }            
+            }
         }
 
         private void RemoveFeature(FeaturePointVisualisations featureVisualisation)
@@ -188,10 +195,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 PointRenderer3D.RemovePointCollection(pointCollection);
             }
-            FeatureRemoved?.Invoke(featureVisualisation.feature); 
+
+            FeatureRemoved?.Invoke(featureVisualisation.feature);
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }
-        
+
         public override void DestroyLayerGameObject()
         {
             if (Application.isPlaying && PointRenderer3D?.gameObject)
@@ -199,7 +207,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             base.DestroyLayerGameObject();
         }
-        
+
         public BoundingBox GetBoundingBoxOfVisibleFeatures()
         {
             if (spawnedVisualisations.Count == 0)
@@ -216,7 +224,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             return bbox;
         }
-        
+
         private List<IPropertySectionInstantiator> propertySections;
 
         protected List<IPropertySectionInstantiator> PropertySections
