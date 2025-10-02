@@ -110,7 +110,11 @@ namespace Netherlands3D.Twin.Rendering
             {
                 batchColor.SetAllColors(defaultLineColor);
             }
-            base.SetDefaultColors(); // at the end since then updateColorBuffers will be called only once
+            foreach (var batchColor in pointBatchColors)
+            {
+                batchColor.SetAllColors(defaultLineColor);
+            }
+            UpdateColorBuffers(); //fill in the missing colors with the default color after resetting the existing colors to avoid setting them twice.
         }
         
         /// <summary>
@@ -125,7 +129,6 @@ namespace Netherlands3D.Twin.Rendering
             // We will check if the passed points[] is equal to a stored line by comparing centroids.
             // TODO: instead of passing a point[], pass the index of the line so we can directly get it from positionCollections
             var selectionCentroid = CalculateCentroid(points);
-            // Debug.Log("selecting line with point count: " + points.Length);
             
             int lineIndex = -1;
             float closest = float.MaxValue;
