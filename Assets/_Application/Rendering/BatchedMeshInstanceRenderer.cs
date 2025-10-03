@@ -51,7 +51,8 @@ namespace Netherlands3D.Twin.Rendering
         protected float offsetY = 0.0f;
 
         [SerializeField] protected float pointMeshScale = 5f;
-
+        [SerializeField] protected bool isProjected = true;
+        
         protected List<List<Coordinate>> positionCollections = new();
         protected int pointCount; //cached amount of points in the PositionCollections, so this does not have to be recalculated every matrix update to increase performance.
         protected List<List<Matrix4x4>> pointTransformMatrixCache = new List<List<Matrix4x4>>();
@@ -110,6 +111,26 @@ namespace Netherlands3D.Twin.Rendering
             }
         }
 
+        public bool IsProjected
+        {
+            get => isProjected;
+            set
+            {
+                if (value)
+                {
+                    renderCamera = ServiceLocator.GetService<PolygonDecalProjector>().ProjectionCamera;
+                    layerMask = LayerMask.NameToLayer("Projected");
+                }
+                else
+                {
+                    renderCamera = Camera.main;
+                    layerMask = LayerMask.NameToLayer("Default");
+                }
+
+                isProjected = value;
+            }
+        }
+        
 #if UNITY_EDITOR
         private void OnValidate()
         {
@@ -120,21 +141,7 @@ namespace Netherlands3D.Twin.Rendering
         protected abstract void GenerateTransformMatrixCache(int collectionStartIndex = -1);
         protected void Start()
         {
-            SetProjected(true);
-        }
-
-        public void SetProjected(bool projected)
-        {
-            if (projected)
-            {
-                renderCamera = ServiceLocator.GetService<PolygonDecalProjector>().ProjectionCamera;
-                layerMask = LayerMask.NameToLayer("Projected");
-            }
-            else
-            {
-                renderCamera = Camera.main;
-                layerMask = LayerMask.NameToLayer("Default");
-            }
+            IsProjected = isProjected; //initialize layers
         }
 
         private void Update()
