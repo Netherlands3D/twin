@@ -25,5 +25,5 @@ MonoBehaviour:
   turnSpeed: 100
   viewName: Fiets
   viewIcon: {fileID: 21300000, guid: 472b5870cf490104c8d1bfb5dfb76f3b, type: 3}
-  viewMesh: {fileID: -7929139438592967118, guid: e2545f50cc16d8a4e9a15892e614c838,
+  viewMesh: {fileID: 6980123065203451152, guid: c94925a4673455d41ae5655c9cc51a3a,
     type: 3}
