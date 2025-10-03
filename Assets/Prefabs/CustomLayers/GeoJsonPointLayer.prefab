@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3618778040791522139}
   - component: {fileID: 2863126119578024967}
   - component: {fileID: -4723935055048165154}
+  - component: {fileID: 8709008593376177874}
   - component: {fileID: 4062645045739546207}
   - component: {fileID: -2785417149522329819}
   m_Layer: 12
@@ -49,13 +50,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabIdentifier: 267c8f33152cac142b8e40a7bdc54523
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
     m_PersistentCalls:
       m_Calls: []
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStylingApplied:
+    m_PersistentCalls:
+      m_Calls: []
   pointRenderer3D: {fileID: -4723935055048165154}
+  selectionPointRenderer3D: {fileID: 8709008593376177874}
 --- !u!114 &2863126119578024967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82,11 +95,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68015d05aa36d494c94bfdecd9805ff9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mesh: {fileID: 4711208715938537054, guid: 0de12834fe259ec4cbcffaca05de9fc6, type: 3}
-  material: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
+  pointMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  pointMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
   flattenY: 0
   offsetY: 0
-  meshScale: 5
+  pointMeshScale: 5
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &8709008593376177874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764337386758102018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68015d05aa36d494c94bfdecd9805ff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  pointMaterial: {fileID: 2100000, guid: cae582fecb8c4c34594b1ebf69514e4e, type: 2}
+  flattenY: 0
+  offsetY: 0
+  pointMeshScale: 5
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &4062645045739546207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,7 +136,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldTransformShifter: {fileID: 0}
-  referenceCoordinateSystem: 4979
   onPreShift:
     m_PersistentCalls:
       m_Calls: []

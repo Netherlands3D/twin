@@ -92,7 +92,7 @@ namespace Netherlands3D.CityJson.Visualisation
 
         private void OnDisable()
         {
-            cityObject.CityObjectParsed.RemoveAllListeners();
+            cityObject.CityObjectParsed.RemoveListener(Visualize);
         }
 
         //create the meshes
