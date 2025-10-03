@@ -93,6 +93,8 @@ MonoBehaviour:
   intensity: 2.4
   speed: 1.5
   cursorOffset: {x: 0, y: 30}
+  locationSpherePrefab: {fileID: 3873543399355404327, guid: bc5baccad5e03864c86eb74375c48e1e,
+    type: 3}
 --- !u!1 &7856481944185859176
 GameObject:
   m_ObjectHideFlags: 0
