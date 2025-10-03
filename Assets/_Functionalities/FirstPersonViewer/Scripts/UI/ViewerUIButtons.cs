@@ -29,6 +29,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnDisable()
         {
+            frustum.SetActiveCamera(Camera.main);
+            wmtsMap.SetActiveCamera(Camera.main);
             snapshotComponent.SetActiveCamera(Camera.main);
         }
 
