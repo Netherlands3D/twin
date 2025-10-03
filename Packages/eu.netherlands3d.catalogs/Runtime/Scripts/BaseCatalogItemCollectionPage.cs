@@ -24,6 +24,8 @@ namespace Netherlands3D.Catalogs
             this.pagination = pagination ?? new Pagination();
         }
 
+        public abstract Task<ICatalogItem> GetAsync(string id);
+
         public abstract Task<IEnumerable<ICatalogItem>> GetItemsAsync();
         
         public abstract Task<ICatalogItemCollection> SearchAsync(string query, Pagination pagination = null);

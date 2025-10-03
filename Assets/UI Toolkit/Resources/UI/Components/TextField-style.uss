@@ -1,0 +1,50 @@
+.textfield {
+    --textfield-input-bg: var(--color-Blue100);
+    --textfield-input-bg-hover: var(--color-Blue200);
+    --textfield-input-border-color: transparent;
+    --textfield-input-border-width: 2px;
+    --textfield-input-radius: 4px;
+    --textfield-input-padding-x: 8px;
+    --textfield-input-padding-y: 4px;
+    --textfield-icon-size: 24px;
+    --textfield-icon-gap: 12px;
+
+    flex-wrap: wrap;
+    margin: 0;
+}
+
+/* Built-in Unity label is hidden by default; only shown in the WithLabel variant */
+.textfield > .unity-label {
+    display: none;
+    min-width: auto;
+}
+.textfield.textfield-style-WithLabel > .unity-label {
+    display: flex;
+}
+
+/* The actual text input element */
+.textfield .unity-base-text-field__input {
+    flex-wrap: wrap;
+    padding-left: var(--textfield-input-padding-x);
+    padding-right: var(--textfield-input-padding-x);
+    padding-top: var(--textfield-input-padding-y);
+    padding-bottom: var(--textfield-input-padding-y);
+    --unity-selection-color: var(--color-Selection);
+    background-color: var(--textfield-input-bg);
+    border-color: var(--textfield-input-border-color);
+    border-width: var(--textfield-input-border-width);
+    border-radius: var(--textfield-input-radius);
+}
+
+.textfield .unity-base-text-field__input:hover {
+    background-color: var(--textfield-input-bg-hover);
+}
+
+.textfield .unity-base-text-field__input--placeholder {
+    color: var(--color-Blue300);
+}
+
+.textfield TextElement {
+    white-space: normal;
+    padding: 0;
+}

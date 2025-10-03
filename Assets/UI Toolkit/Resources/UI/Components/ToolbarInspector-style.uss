@@ -1,0 +1,37 @@
+.toolbar-inspector {
+    flex-direction: row;
+    background-color: var(--color-Blue50);
+    padding: 24px;
+}
+
+.toolbar-inspector-content {
+    flex-direction: row;
+}
+
+.toolbar-inspector-content.left {
+    flex-direction: row;
+    flex-shrink: 0;
+    flex-grow: 1;
+}
+
+.toolbar-inspector-content.left > * {
+    margin-right: 12px;
+}
+
+.toolbar-inspector-content.right > * {
+  margin-left: 12px;
+}
+
+/* Toolbar styles - by default all buttons invisible, whitelist per style of the toolbar */
+.toolbar-inspector .toolbar-inspector-button { display: none; }
+
+.toolbar-inspector.toolbar-style-library #OpenLibrary { display: flex; }
+
+/* ============================================================================================= */
+/* TODO: remove these overrides as soon as we have implemented the whole inspector               */
+/* These override make sure that the inspector aligns nicely as an overlay to the UGUI inspector */
+.toolbar-inspector {
+    padding: 21px;
+    padding-left: 12px;
+}
+/* ============================================================================================= */

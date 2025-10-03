@@ -1,0 +1,14 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" name="ImportAssetPanel" class="import-asset-panel">
+    <Style src="project://database/Assets/Prefabs/UI%20toolkit/Styles/_Theme.uss?fileID=7433441132597879392&amp;guid=0f24ef838c8e4bf49a89503faf584878&amp;type=3#_Theme" />
+    <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/Panels/ImportAssetPanel-style.uss?fileID=7433441132597879392&amp;guid=2100321d780f4e8782a97abb00d96830&amp;type=3#ImportAssetPanel-style" />
+    <nl3d:ListViewItem>
+        <nl3d:Button icon="Plus" LabelText="Uploaden vanaf deze computer" style="width: auto; align-self: stretch;" />
+    </nl3d:ListViewItem>
+    <nl3d:ContentContainer container-type="NoFoldout" show-divider="true" leading-icon="LibraryAdd" text="Toevoegen vanaf link">
+        <ui:VisualElement name="Row" style="flex-grow: 1; flex-direction: row; flex-shrink: 0; align-content: auto;">
+            <nl3d:Icon />
+            <nl3d:TextField style="flex-grow: 1; margin-left: 8px;" />
+        </ui:VisualElement>
+        <nl3d:Button LabelText="Toevoegen" button-style="Normal" style="align-self: flex-end; padding-top: 8px; padding-bottom: 8px; margin-right: 0; margin-top: 8px;" />
+    </nl3d:ContentContainer>
+</ui:UXML>
