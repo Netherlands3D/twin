@@ -154,7 +154,7 @@ namespace Netherlands3D.CartesianTiles
 			tile.gameObject = new GameObject();
 			tile.gameObject.transform.parent = transform.gameObject.transform;
 			tile.gameObject.layer = tile.gameObject.transform.parent.gameObject.layer;
-			tile.gameObject.transform.position = CoordinateConverter.RDtoUnity(tileKey);
+			tile.gameObject.transform.position = new Coordinate(CoordinateSystem.RD, tileKey.x, tileKey.y).ToUnity();
 
 			return tile;
 		}
@@ -199,7 +199,7 @@ namespace Netherlands3D.CartesianTiles
 				{
 					var centroidX = coordinates[i];
 					var centroidY = coordinates[i + 1];
-					var linePoint = CoordinateConverter.RDtoUnity(new Vector2RD(centroidX, centroidY));
+					var linePoint = new Coordinate(CoordinateSystem.RD, centroidX, centroidY).ToUnity();
 					newLineRenderer.SetPosition(Mathf.FloorToInt(i / 2), linePoint);
 				}
 			}
@@ -248,7 +248,7 @@ namespace Netherlands3D.CartesianTiles
 							{
 								case PositionSourceType.Point:
 									double[] coordinate = customJsonHandler.GetGeometryPoint2DDouble();
-									locationPoint = CoordinateConverter.RDtoUnity(new Vector2RD(coordinate[0], coordinate[1]));
+									locationPoint = new Coordinate(CoordinateSystem.RD, coordinate[0], coordinate[1]).ToUnity();
 									locationPoint.y = textAndSize.offset;
 
 									//Turn the text object so it faces up
@@ -282,7 +282,7 @@ namespace Netherlands3D.CartesianTiles
 									double centerX = minX + ((maxX - minX) / 2);
 									double centerY = minY + ((maxY - minY) / 2);
 
-									locationPoint = CoordinateConverter.RDtoUnity(new Vector2RD(centerX, centerY));
+									locationPoint = new Coordinate(CoordinateSystem.RD, centerX, centerY).ToUnity(); 
 									locationPoint.y = textAndSize.offset;
 									break;
 							}
