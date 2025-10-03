@@ -111,7 +111,7 @@ namespace Netherlands3D.Twin.FloatingOrigin
 #if UNITY_EDITOR
             Coordinate currentOriginInRDNAP = new Coordinate(transform.position).Convert(CoordinateSystem.RDNAP);
             Coordinate originDestinationInRDNAP = originDestination.Convert(CoordinateSystem.RDNAP);
-            if (LogShifts) Debug.Log($"Moving origin from {currentOriginInRDNAP.ToVector3()} (EPSG:7415) to {originDestinationInRDNAP.ToVector3()} (EPSG:7415)");
+            if (LogShifts) Debug.Log($"Moving origin from {currentOriginInRDNAP} (EPSG:7415) to {originDestinationInRDNAP} (EPSG:7415)");
 #endif
 
             onPreShift.Invoke(currentOrigin, originDestination);

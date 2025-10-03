@@ -221,7 +221,7 @@ namespace Netherlands3D.Functionalities.Indicators.Dossiers
 
             // Convert world position to normalised visualisation position
             var targetRDCoordinate = new Coordinate(worldPosition);
-            var rd = CoordinateConverter.ConvertTo(targetRDCoordinate, CoordinateSystem.RD);
+            var rd = targetRDCoordinate.Convert( CoordinateSystem.RD);
 
             // Get the bounds from our dossier
             var bbox = dossier.Data?.bbox;

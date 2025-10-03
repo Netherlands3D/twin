@@ -116,7 +116,7 @@ namespace Netherlands3D.Twin.Configuration
 
         public void UpdateInterfaceToNewOrigin(Coordinate coordinate)
         {
-            var convertedCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RD);
+            var convertedCoordinate = coordinate.Convert(CoordinateSystem.RD);
 
             var roundedEasting = (int)convertedCoordinate.easting;
             var roundedNorthing = (int)convertedCoordinate.northing;

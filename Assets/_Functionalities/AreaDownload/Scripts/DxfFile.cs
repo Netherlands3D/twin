@@ -22,7 +22,7 @@ namespace Netherlands3D.Dxf
             dxfDocument.DrawingVariables.InsUnits = netDxf.Units.DrawingUnits.Meters;
         }
 
-        public void AddLayer(List<Vector3RD> triangleVertices, string layerName, AciColor layerColor)
+        public void AddLayer(List<Vector3Double> triangleVertices, string layerName, AciColor layerColor)
         {
             // TODO 
             // check if there are 3 triangles or less, if that is the case a polyfaceMesh cannot be built, seperate triangles have to be added to the dxf.
@@ -44,7 +44,7 @@ namespace Netherlands3D.Dxf
             return dxfDocument.Save(stream);
         }
 
-        private void AddMesh(List<Vector3RD> triangleVertices, string layerName)
+        private void AddMesh(List<Vector3Double> triangleVertices, string layerName)
         {
             PolyfaceMesh pfm;
             // create Mesh

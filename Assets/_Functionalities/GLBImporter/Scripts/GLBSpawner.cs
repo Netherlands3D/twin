@@ -165,13 +165,15 @@ namespace Netherlands3D.Functionalities.GLBImporter
 
         private bool IsGeoReferenced(double x, double y, double z, out Coordinate rdOrigin)
         {
-            if (EPSG7415.IsValid(new Vector3RD(x, z, y)))
+            rdOrigin = new Coordinate(CoordinateSystem.RDNAP, x, z, 0);
+            if (  rdOrigin.IsValid())
             {
                 rdOrigin = new Coordinate(CoordinateSystem.RDNAP, x, z, 0); //don't offset the height
                 return true;
             }
 
-            if (EPSG7415.IsValid(new Vector3RD(x, y, z)))
+            rdOrigin = new Coordinate(CoordinateSystem.RDNAP, x, y, 0);
+            if (rdOrigin.IsValid())
             {
                 rdOrigin = new Coordinate(CoordinateSystem.RDNAP, x, y, 0); //don't offset the height
                 return true;

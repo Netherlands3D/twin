@@ -51,7 +51,7 @@ namespace Netherlands3D.Twin.Projects
         private void SaveCurrentCameraTransform()
         {
             var cameraCoordinate = new Coordinate(transform.position).Convert(CoordinateSystem.RDNAP);
-            var cameraCoordinateRD = cameraCoordinate.ToVector3RD();
+            var cameraCoordinateRD = new Vector3Double(cameraCoordinate.easting, cameraCoordinate.northing, cameraCoordinate.height);
             var cameraRotation = transform.eulerAngles;
 
             camRDPosition[0] = cameraCoordinateRD.x;

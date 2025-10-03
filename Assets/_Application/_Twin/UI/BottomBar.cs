@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.UI
         {
             //Use coordinate convert to convert camera to rd coordinates
             var cameraCoordinate = new Coordinate(Camera.main.transform.position);
-            var rd = CoordinateConverter.ConvertTo(cameraCoordinate, CoordinateSystem.RDNAP);
+            var rd = cameraCoordinate.Convert(CoordinateSystem.RDNAP);
 
             Vector3Int position = new Vector3Int((int)rd.value1, (int)rd.value2, (int)rd.value3);
             if (lastPosition != position)

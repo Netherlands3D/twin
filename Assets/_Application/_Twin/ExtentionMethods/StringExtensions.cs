@@ -47,14 +47,14 @@ namespace Netherlands3D.Twin.ExtensionMethods
 		/// </summary>
 		/// <param name="filepath">string filepath</param>
 		/// <returns>The Vector3RD coordinate</returns>
-		public static Vector3RD GetRDCoordinate(this string filepath)
+		public static Vector3Double GetRDCoordinate(this string filepath)
 		{
 			var numbers = new Regex(@"(\d{4,6})");
 
 			var matches = numbers.Matches(filepath);
 			if (matches.Count == 2)
 			{
-				return new Vector3RD()
+				return new Vector3Double()
 				{
 					x = double.Parse(matches[0].Value),
 					y = double.Parse(matches[1].Value)
