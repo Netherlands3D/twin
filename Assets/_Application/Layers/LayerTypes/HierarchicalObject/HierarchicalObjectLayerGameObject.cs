@@ -200,6 +200,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                     Coordinate target = new Coordinate(worldPos + Vector3.up * (-HeightExtent - PivotOffset));
                     Target.UpdatePosition(target);
                 }
+                else
+                {
+                    Coordinate target = new Coordinate(PreviousPosition);
+                    HeightMap heightMap = ServiceLocator.GetService<HeightMap>();
+                    float height = heightMap.GetHeight(target);
+                    target.height = height;
+                    Target.UpdatePosition(target);
+                }
             }
         }
 
