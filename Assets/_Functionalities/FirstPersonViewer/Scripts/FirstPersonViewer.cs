@@ -14,6 +14,7 @@ namespace Netherlands3D.FirstPersonViewer
         [field: SerializeField] public FirstPersonViewerCamera FirstPersonCamera;
 
         private MeshFilter meshFilter;
+        private MeshRenderer meshRenderer;
         private FirstPersonViewerInput input;
         private FirstPersonViewerStateMachine fsm;
 
@@ -50,6 +51,7 @@ namespace Netherlands3D.FirstPersonViewer
         {
             input = GetComponent<FirstPersonViewerInput>();
             meshFilter = GetComponent<MeshFilter>();
+            meshRenderer = GetComponent<MeshRenderer>();
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
             SetupFSM();
@@ -164,8 +166,13 @@ namespace Netherlands3D.FirstPersonViewer
         {
             MovementModus = movementPresets;
 
-            if(movementPresets.viewMesh != null) meshFilter.mesh = movementPresets.viewMesh;
+            if (movementPresets.viewMesh != null)
+            {
+                meshFilter.mesh = movementPresets.viewMesh;
+                meshRenderer.materials = movementPresets.meshMaterials;
+            }
             else meshFilter.mesh = null;
+            
 
             fsm.SwitchState(movementPresets.GetViewerState());
         }

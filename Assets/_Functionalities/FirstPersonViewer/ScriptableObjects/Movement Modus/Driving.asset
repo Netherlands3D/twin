@@ -27,3 +27,11 @@ MonoBehaviour:
   viewIcon: {fileID: 21300000, guid: dca9ce9f8c1f0d0418a06d316e41cabf, type: 3}
   viewMesh: {fileID: 1551113389355595217, guid: 1c62f1956ea89e14bbdbc700a0ec3b57,
     type: 3}
+  meshMaterials:
+  - {fileID: 2100000, guid: 3fdc6bb79022af84099b621249a812a1, type: 2}
+  - {fileID: 2100000, guid: 38c7adfc88c799c4eaa626a574e2c8dc, type: 2}
+  - {fileID: 2100000, guid: 40769f491abc32e4b81f2a180127cce2, type: 2}
+  - {fileID: 2100000, guid: 61dabf64058137e4595d6651fe982cee, type: 2}
+  - {fileID: 2100000, guid: 583e3425041289b438114182e5b92b2d, type: 2}
+  - {fileID: 2100000, guid: 583e3425041289b438114182e5b92b2d, type: 2}
+  - {fileID: 2100000, guid: 44f75f8820ffa4e48b031283bf513f10, type: 2}

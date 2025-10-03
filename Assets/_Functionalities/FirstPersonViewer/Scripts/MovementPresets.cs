@@ -25,6 +25,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public string viewName;
         public Sprite viewIcon;
         public Mesh viewMesh;
+        public Material[] meshMaterials;
 
         public Type GetViewerState() //Not user friendly for edits. (Prob some sort of subscribe system?)
         {
