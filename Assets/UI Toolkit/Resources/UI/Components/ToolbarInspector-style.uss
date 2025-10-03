@@ -22,15 +22,10 @@
   margin-left: 12px;
 }
 
-/* Toolbar styles */
-.toolbar-inspector.toolbar-style-normal #AddToLibrary { display: none; }
+/* Toolbar styles - by default all buttons invisible, whitelist per style of the toolbar */
+.toolbar-inspector .toolbar-inspector-button { display: none; }
 
-.toolbar-inspector.toolbar-style-library #AddFolder,
-.toolbar-inspector.toolbar-style-library #AddLayer { display: none; }
-
-.toolbar-inspector.toolbar-style-add-layer #AddFolder,
-.toolbar-inspector.toolbar-style-add-layer #Delete,
-.toolbar-inspector.toolbar-style-add-layer #AddToLibrary { display: none; }
+.toolbar-inspector.toolbar-style-library #OpenLibrary { display: flex; }
 
 /* ============================================================================================= */
 /* TODO: remove these overrides as soon as we have implemented the whole inspector               */

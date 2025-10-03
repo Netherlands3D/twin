@@ -5,7 +5,7 @@
 }
 
 .listview-item > * {
-    width: 100%;
+    align-items: stretch;
 }
 
 .listview-item.unity-list-view__item {

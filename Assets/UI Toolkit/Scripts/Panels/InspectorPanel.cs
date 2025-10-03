@@ -8,7 +8,7 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class InspectorPanel : VisualElement, IContainer
     {
-        private Label Header => this.Q<Label>(className: "inspector-header");
+        private Label Header => this.Q<Label>(className: "inspector-header-title");
 
         /// <summary>
         /// Header text pass-through so it can be set from UXML/Inspector.

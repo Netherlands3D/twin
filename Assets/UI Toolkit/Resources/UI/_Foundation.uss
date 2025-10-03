@@ -1,0 +1,28 @@
+@import url("_Theme.uss");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.text-base {
+    -unity-font-definition: var(--nl3d-default-font);
+    font-size: var(--font-size-M);
+    -unity-font-style: normal;
+    color: var(--color-Text);
+}
+
+.text-header {
+    -unity-font-definition: var(--nl3d-header-font);
+    font-size: var(--font-size-M);
+    -unity-font-style: normal;
+    color: var(--color-Text);
+}
+
+.inspector-header-title {
+    -unity-font-definition: var(--nl3d-inspector-header-font);
+    font-size: var(--font-size-XL);
+    -unity-font-style: normal;
+    color: var(--color-Text);
+}

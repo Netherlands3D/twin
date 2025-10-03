@@ -10,17 +10,34 @@
 }
 
 .inspector .inspector-header {
+    flex-direction: row;
+    align-content: stretch;
+    align-items: center;
     margin-bottom: 16px;
 }
 
-.inspector > #Content {
+.inspector .inspector-header-title {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.inspector .inspector-header-button-close {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    align-items: center;
+    flex-wrap: nowrap;
+    align-content: center;
+}
+
+.inspector .inspector-content {
     margin-bottom: 16px;
     flex-grow: 1;
     flex-shrink: 0;
     padding-left: 24px;
     padding-right: 24px;
 }
-
 
 .inspector.active {
     display: flex;
@@ -33,7 +50,9 @@
     margin-left: 112px;
     width: 488px;
 }
-.inspector > #Content {
+
+.inspector .inspector-content {
     padding-left: 0;
 }
+
 /* ============================================================================================= */

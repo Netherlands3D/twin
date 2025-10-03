@@ -14,7 +14,6 @@
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    align-self: flex-start;
     padding: var(--button-padding);
     background-color: var(--button-bg-color);
     border-color: var(--button-border-color);
@@ -30,10 +29,17 @@
 
 /* Variants */
 .button.button-style-normal > #Icon { display: none; }
-.button.button-style-wide { align-self: stretch; flex-grow: 1; }
+.button.button-style-wide { 
+    align-self: stretch; 
+    flex-grow: 1; 
+}
 
 .button > #Label { white-space: normal; }
 
+.button.button-style-icon-only {
+    align-self: center; 
+    justify-content: center;
+}
 .button.button-style-icon-only > #Label { display: none; }
 
 /* Icon gap (left/right) */

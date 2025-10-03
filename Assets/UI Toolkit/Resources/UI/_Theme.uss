@@ -24,30 +24,14 @@
     --icon-libraryadd: url("project://database/Assets/Sprites/UI/Icons/Type=LibraryAdd,%20Color=white,%20Size=large.png");
     
     --unity-font: "Inter";
+    --nl3d-default-font: url("project://database/Assets/Fonts/Inter-Regular.ttf?fileID=12800000&guid=37ff50315a0d57a48a81f6f17f30a981&type=3#Inter-Regular");
+    --nl3d-default-font-semi-bold: url("project://database/Assets/Fonts/Inter-SemiBold.ttf?fileID=12800000&guid=7a0c5ca272b294044a6d4d543221d076&type=3#Inter-SemiBold");
+    --nl3d-default-font-bold: url("project://database/Assets/Fonts/Inter-Bold.ttf?fileID=12800000&guid=746cabee1610bda42b4d03f49eeb6e09&type=3#Inter-Bold");
+    --nl3d-header-font: var(--nl3d-default-font-semi-bold);
+    --nl3d-inspector-header-font: var(--nl3d-default-font-bold);
     --font-size-XS: 12px;
     --font-size-S: 14px;
     --font-size-M: 16px;
     --font-size-L: 20px;
     --font-size-XL: 36px;
-}
-
-.text-base {
-    -unity-font-definition: url("project://database/Assets/Fonts/Inter-Regular.ttf?fileID=12800000&guid=37ff50315a0d57a48a81f6f17f30a981&type=3#Inter-Regular");
-    font-size: var(--font-size-M);
-    -unity-font-style: normal;
-    color: var(--color-Text);
-}
-
-.text-header {
-    -unity-font-definition: url("project://database/Assets/Fonts/Inter-SemiBold.ttf?fileID=12800000&guid=7a0c5ca272b294044a6d4d543221d076&type=3#Inter-SemiBold");
-    font-size: var(--font-size-M);
-    -unity-font-style: normal;
-    color: var(--color-Text);
-}
-
-.text-inspector-header {
-    -unity-font-definition: url("project://database/Assets/Fonts/Inter-Bold.ttf?fileID=12800000&guid=746cabee1610bda42b4d03f49eeb6e09&type=3#Inter-Bold");
-    font-size: var(--font-size-XL);
-    -unity-font-style: normal;
-    color: var(--color-Text);
 }

@@ -69,6 +69,7 @@ namespace Netherlands3D.UI.Behaviours
             EnsureInspectorIsOpen();
 
             InspectorPanel.HeaderText = assetLibraryPanel.GetTitle();
+            InspectorPanel.ToolbarStyle = ToolbarInspector.ToolbarStyle.Library;
             assetLibraryPanel.SetAssetLibrary(assetLibrary);
             assetLibraryPanel.Open();
 
@@ -78,6 +79,7 @@ namespace Netherlands3D.UI.Behaviours
         public void CloseAssetLibrary()
         {
             InspectorPanel.HeaderText = "Lagen";
+            InspectorPanel.ToolbarStyle = ToolbarInspector.ToolbarStyle.Normal;
             assetLibraryPanel.Close();
 
             InspectorPanel.Toolbar.OpenLibrary.SetValueWithoutNotify(false);
