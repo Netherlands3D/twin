@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.Samplers
         private OpticalRaycaster opticalRaycaster;
         private Action<Vector3, bool> worldPointCallback;
         private Coordinate worldPoint;
-        private float maxDistance = 10000;
+        private float maxDistance = 1000;
 
         private GameObject testPosition;
         
@@ -93,13 +93,20 @@ namespace Netherlands3D.Twin.Samplers
             Vector3 position;
             //when no valid point is found in for the raycast, lets invert the distance so we get a point in the sky
             if (distance < 0)
-                position = screenRay.GetPoint(Mathf.Min(maxDistance, -distance));
+            {
+                float length = Mathf.Min(maxDistance, -distance);
+                position = screenRay.GetPoint(length);
+                return position;
+            }
             else
-                position = screenRay.GetPoint(Mathf.Min(maxDistance, distance));
+            {
+                float length = Mathf.Min(maxDistance, distance);
+                position = screenRay.GetPoint(length);
+            }
 
-            Coordinate testCoord = new Coordinate(position);
+            Coordinate initialCoordinate = new Coordinate(position);
             HeightMap heightMap = ServiceLocator.GetService<HeightMap>();   
-            float height = heightMap.GetHeight(testCoord);
+            float height = heightMap.GetHeight(initialCoordinate);
             Vector3 origin = Camera.main.transform.position;
             Vector3 dir = screenRay.direction;
             float t = (height - origin.y) / dir.y;
