@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee67a7067d471274fb5ee9ab3988bc8f, type: 3}
   m_Name: Driving
   m_EditorClassIdentifier: 
-  viewHeight: 1.5
+  viewHeight: 1.2
   fieldOfView: 80
   speedInKm: 80
-  speedMultiplier: 1.5
+  speedMultiplier: 1.7
   jumpHeight: 0
   maxFallingSpeed: 55
   stepHeight: 1.5
@@ -28,10 +28,9 @@ MonoBehaviour:
   viewMesh: {fileID: 1551113389355595217, guid: 1c62f1956ea89e14bbdbc700a0ec3b57,
     type: 3}
   meshMaterials:
-  - {fileID: 2100000, guid: 3fdc6bb79022af84099b621249a812a1, type: 2}
-  - {fileID: 2100000, guid: 38c7adfc88c799c4eaa626a574e2c8dc, type: 2}
-  - {fileID: 2100000, guid: 40769f491abc32e4b81f2a180127cce2, type: 2}
-  - {fileID: 2100000, guid: 61dabf64058137e4595d6651fe982cee, type: 2}
-  - {fileID: 2100000, guid: 583e3425041289b438114182e5b92b2d, type: 2}
-  - {fileID: 2100000, guid: 583e3425041289b438114182e5b92b2d, type: 2}
-  - {fileID: 2100000, guid: 44f75f8820ffa4e48b031283bf513f10, type: 2}
+  - {fileID: 2100000, guid: b557f42721f6fd44eb669388eb4a5a2c, type: 2}
+  - {fileID: 2100000, guid: 4339c1bd9a4d74043b8521acbd054336, type: 2}
+  - {fileID: 2100000, guid: 7c873745c6da3e3438abf335ae2170e2, type: 2}
+  - {fileID: 2100000, guid: 2097010ff22b90e4ebcb8e640c6ef475, type: 2}
+  - {fileID: 2100000, guid: 59b6a28a97adccf4a8a0791c01235679, type: 2}
+  - {fileID: 2100000, guid: 878239871271be24399705c5da67a316, type: 2}
