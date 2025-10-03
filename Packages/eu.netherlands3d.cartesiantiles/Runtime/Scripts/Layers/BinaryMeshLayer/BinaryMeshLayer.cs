@@ -262,7 +262,7 @@ namespace Netherlands3D.CartesianTiles
             container = new GameObject();
 
             container.name = tileChange.X.ToString() + "-" + tileChange.Y.ToString();
-            container.transform.position = CoordinateConverter.RDtoUnity(new Vector2(tileChange.X + (tileSize / 2), tileChange.Y + (tileSize / 2)));
+            container.transform.position = new Coordinate(CoordinateSystem.RD, tileChange.X + (tileSize / 2), tileChange.Y + (tileSize / 2)).ToUnity(); 
 
             container.SetActive(isEnabled);
 

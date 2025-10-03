@@ -288,12 +288,12 @@ namespace Netherlands3D.CartesianTiles
             else
             {
                 useRadialDistanceCheck = true;
-                var cameraRD = CoordinateConverter.UnitytoRD(Camera.main.transform.position);
+                var cameraRD = new Coordinate(Camera.main.transform.position).Convert(CoordinateSystem.RD); ;
                 cameraExtent = new Extent(
-                    cameraRD.x - groundLevelClipRange,
-                    cameraRD.y - groundLevelClipRange,
-                    cameraRD.x + groundLevelClipRange,
-                    cameraRD.y + groundLevelClipRange
+                    cameraRD.easting - groundLevelClipRange,
+                    cameraRD.northing - groundLevelClipRange,
+                    cameraRD.easting + groundLevelClipRange,
+                    cameraRD.northing + groundLevelClipRange
                 );
             }
 
@@ -308,11 +308,11 @@ namespace Netherlands3D.CartesianTiles
 
         private Vector3Int GetRDCameraPosition()
         {
-            var cameraPositionRD = CoordinateConverter.UnitytoRD(Camera.main.transform.position);
+            var cameraPositionRD = new Coordinate(Camera.main.transform.position).Convert(CoordinateSystem.RDNAP);
             Vector3Int cameraPosition = new Vector3Int();
-            cameraPosition.x = (int)cameraPositionRD.x;
-            cameraPosition.y = (int)cameraPositionRD.y;
-            cameraPosition.z = (int)cameraPositionRD.z;
+            cameraPosition.x = (int)cameraPositionRD.easting;
+            cameraPosition.y = (int)cameraPositionRD.northing;
+            cameraPosition.z = (int)cameraPositionRD.height;
 
             return cameraPosition;
         }
@@ -381,7 +381,7 @@ namespace Netherlands3D.CartesianTiles
                         Vector3Int tileID = new Vector3Int(x, y, tileSize);
                         if (filterByCameraFrustum && !useRadialDistanceCheck)
                         {
-                            tileBounds.SetMinMax(CoordinateConverter.RDtoUnity(new Vector2(x, y)), CoordinateConverter.RDtoUnity(new Vector2(x + tileSize, y + tileSize)));
+                            tileBounds.SetMinMax(new Coordinate(CoordinateSystem.RD, x, y).ToUnity(), new Coordinate(CoordinateSystem.RD,x + tileSize, y + tileSize).ToUnity());
                             if (GeometryUtility.TestPlanesAABB(cameraFrustumPlanes, tileBounds))
                             {
                                 EnsureArraySize(ref tileList, tileListIndex + 1);
@@ -422,7 +422,7 @@ namespace Netherlands3D.CartesianTiles
                     foreach (var tile in tileList)
                     {
                         if(tile != null)
-                            Gizmos.DrawWireCube(CoordinateConverter.RDtoUnity(new Vector3(tile.x + 500, tile.y + 500, 0)), new Vector3(1000, 100, 1000));
+                            Gizmos.DrawWireCube(new Coordinate(CoordinateSystem.RD,tile.x + 500, tile.y + 500, 0).ToUnity(), new Vector3(1000, 100, 1000));
                     }
                 }
             }
