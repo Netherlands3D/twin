@@ -5,11 +5,9 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
-using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
-using RSG;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
@@ -29,6 +27,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public event GeoJSONPointHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
+        private List<List<Coordinate>> visualisationsToRemove = new();
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
         private GeoJsonPointLayerMaterialApplicator applicator;
@@ -98,9 +97,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        public void SetVisualisationColorToDefault()
+        public void SetVisualisationColorToDefault() //todo rename this?
         {
-            PointRenderer3D.SetDefaultColors();
             selectionPointRenderer3D.Clear();
         }
 
@@ -181,7 +179,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
             
-            List<List<Coordinate>> visualisationsToRemove = new List<List<Coordinate>>();
+            visualisationsToRemove.Clear();
             foreach (var kvp in spawnedVisualisations.Reverse())
             {
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);

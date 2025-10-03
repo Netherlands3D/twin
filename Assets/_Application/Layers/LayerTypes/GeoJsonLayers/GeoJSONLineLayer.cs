@@ -25,13 +25,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public event GeoJSONLineHandler FeatureRemoved;
 
         private Dictionary<Feature, FeatureLineVisualisations> spawnedVisualisations = new();
+        private List<List<Coordinate>> visualisationsToRemove = new();
+        private List<List<Coordinate>> selectionList = new();
 
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
         [SerializeField] private LineRenderer3D lineRenderer3D;
         [SerializeField] private LineRenderer3D selectionLineRenderer3D;
-
-
+        
         private GeoJsonLineLayerMaterialApplicator applicator;
 
         internal GeoJsonLineLayerMaterialApplicator Applicator
@@ -99,8 +100,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         //the vertex positions will equal world space
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
         {
-            // lineRenderer3D.SetDefaultColors();
-            var selectionList = new List<List<Coordinate>>();
+            selectionList.Clear();
             foreach (Mesh mesh in meshes)
             {
                 Vector3[] vertices = mesh.vertices; // The meshes are from the world object, not the lineRenderer positions
@@ -118,9 +118,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             selectionLineRenderer3D.SetPositionCollections(selectionList);
         }
 
-        public void SetVisualisationColorToDefault()
+        public void SetVisualisationColorToDefault() //todo rename this?
         {
-            // lineRenderer3D.SetDefaultColors();
             selectionLineRenderer3D.Clear();
         }
 
@@ -192,7 +191,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // Remove visualisations that are out of view
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
 
-            List<List<Coordinate>> visualisationsToRemove = new List<List<Coordinate>>();
+            visualisationsToRemove.Clear();
             foreach (var kvp in spawnedVisualisations.Reverse())
             {
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
