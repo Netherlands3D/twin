@@ -55,7 +55,7 @@ namespace Netherlands3D.Twin.Rendering
             }
         }
 
-        protected override void OnDrawGizmos()
+        protected override void OnDrawGizmos() //todo: delete
         {
             Gizmos.color = Color.cyan;
             DrawGizmos(pointTransformMatrixCache);

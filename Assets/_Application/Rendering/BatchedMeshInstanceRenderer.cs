@@ -16,9 +16,7 @@ namespace Netherlands3D.Twin.Rendering
         public BatchColor(int capacity, Color defaultColor)
         {
             Colors = new Vector4[capacity];
-            for (int i = 0; i < capacity; i++)
-                Colors[i] = defaultColor;
-
+            Array.Fill(Colors, defaultColor);
             MaterialPropertyBlock = new MaterialPropertyBlock();
             MaterialPropertyBlock.SetVectorArray("_SegmentColors", Colors);
         }
@@ -31,8 +29,7 @@ namespace Netherlands3D.Twin.Rendering
 
         public void SetAllColors(Color color)
         {
-            for (int i = 0; i < Colors.Length; i++)
-                Colors[i] = color;
+            Array.Fill(Colors, color);
             MaterialPropertyBlock.SetVectorArray("_SegmentColors", Colors);
         }
     }
