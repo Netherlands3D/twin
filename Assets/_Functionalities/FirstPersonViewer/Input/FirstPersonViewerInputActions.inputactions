@@ -471,6 +471,39 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "Space Up",
+                    "id": "ef0182d1-66ea-423a-8ff1-acf1df16b033",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "VerticalMove",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "fafe1665-316f-4bce-b360-c35ddd00ce2f",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "VerticalMove",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "24a8cd0e-4d95-4c14-a70c-9f09a058eae1",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "VerticalMove",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
                     "name": "ZX",
                     "id": "10595f40-58d3-4e45-8da9-7ad9af7e98a4",
                     "path": "1DAxis",

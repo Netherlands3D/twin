@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-namespace Netherlands3D
+namespace Netherlands3D.FirstPersonViewer.Miscellaneous
 {
     public class CallEventOnKeyPress : MonoBehaviour
     {

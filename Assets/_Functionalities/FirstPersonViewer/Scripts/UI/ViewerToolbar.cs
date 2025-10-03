@@ -33,7 +33,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
         public void OpenWindow(RectTransform windowPrefab, ViewerTool viewTool)
         {
             if (isAnimating) return;
-            isAnimating = true;
+            if(windowPrefab != null) isAnimating = true;
 
             currentSequence?.Kill();
             currentSequence = DOTween.Sequence();
@@ -56,21 +56,23 @@ namespace Netherlands3D.FirstPersonViewer.UI
             //Switch
             if (viewTool != currentTool)
             {
-                currentSequence.AppendCallback(() =>
+                if (windowPrefab != null)
                 {
-                    RectTransform windowPanel = Instantiate(windowPrefab, contentParent);
+                    currentSequence.AppendCallback(() =>
+                    {
+                        RectTransform windowPanel = Instantiate(windowPrefab, contentParent);
 
-                    contentFilterRefresh.RefreshContentFitters(); //TWIN Dependent
+                        contentFilterRefresh.RefreshContentFitters(); //TWIN Dependent
 
-                    windowPanel.anchoredPosition = new Vector2(windowPanel.anchoredPosition.x, -rect.sizeDelta.y);
+                        windowPanel.anchoredPosition = new Vector2(windowPanel.anchoredPosition.x, -rect.sizeDelta.y);
 
-                });
+                    });
 
-                currentSequence.AppendInterval(Time.deltaTime);
-                currentSequence.Append(rect.DOAnchorPosY(56, .5f)).SetEase(Ease.OutSine);
+                    currentSequence.AppendInterval(Time.deltaTime);
+                    currentSequence.Append(rect.DOAnchorPosY(56, .5f)).SetEase(Ease.OutSine);
+                }
 
                 currentTool = viewTool;
-
                 isOpen = true;
             }
             else

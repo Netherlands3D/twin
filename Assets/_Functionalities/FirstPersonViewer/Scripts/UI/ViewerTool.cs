@@ -30,7 +30,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public void OnClick()
         {
-            OnToolSelected?.Invoke();
             toolbar.OpenWindow(panelPrefab, this);
         }
 
@@ -41,6 +40,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             buttonSelected.SetActive(isToolSelf);
             
             if(!isToolSelf) OnToolDeselected?.Invoke();
+            else OnToolSelected?.Invoke();
         }
     }
 }

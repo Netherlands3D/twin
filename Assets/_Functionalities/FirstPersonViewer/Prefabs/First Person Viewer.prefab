@@ -1,5 +1,56 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5098088986211299465
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 866730072138114318}
+  - component: {fileID: 1304552377729334746}
+  m_Layer: 0
+  m_Name: MaskingDomeSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &866730072138114318
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5098088986211299465}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 4.5}
+  m_LocalScale: {x: 6.5, y: 6.5, z: 6.5}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 7278744538935726679}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1304552377729334746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5098088986211299465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 686afdf008c239b499db74d47e9cc1a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxCameraTravelToPlacement: 20
+  margin: 0
+  sphericalMaskFeatureKeyword: _SPHERICAL_MASKING
+  sphericalMaskPositionName: _SphericalMaskPosition
+  sphericalMaskRadiusName: _SphericalMaskRadius
+  resetMaskOnDisable: 1
+  enableDome: {fileID: 11400000, guid: ef51933679f0cce438c649c8d0bf0a45, type: 2}
 --- !u!1 &5493287072129107692
 GameObject:
   m_ObjectHideFlags: 0
@@ -32,7 +83,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 866730072138114318}
   m_Father: {fileID: 2359970039064756521}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &5953575201012568707
@@ -310,6 +362,7 @@ MonoBehaviour:
   inputActionAsset: {fileID: -944628639613478452, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
     type: 3}
   exitDuration: 0.9
+  exitViewDelay: 0.15
 --- !u!114 &4367215521751458963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -346,9 +399,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0456e01045a91a4e8de05a269bf5872, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceleration: 10
-  deceleration: 5
-  turnSpeed: 100
 --- !u!114 &-8547530675755365502
 MonoBehaviour:
   m_ObjectHideFlags: 0
