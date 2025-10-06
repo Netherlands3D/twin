@@ -2,48 +2,55 @@ using System;
 using System.Collections.Generic;
 using Netherlands3D.CityJson.Structure;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Rendering;
 using UnityEngine;
 
 namespace Netherlands3D.CityJson.Visualisation
 {
-    public class MultiPointVisualizer : CityObjectVisualizer
+    [RequireComponent(typeof(CityObject))]
+    [RequireComponent(typeof(PointRenderer3D))]
+    public class MultiPointVisualizer : MonoBehaviour
     {
-        [SerializeField] private GameObject visualizationObject;
+        private CityObject cityObject;
+        private PointRenderer3D  pointRenderer3D;
+        [SerializeField] private Mesh visualizationMesh;
+        [SerializeField] private CityMaterialConverter materialConverter;
 
-        protected override List<BoundaryMeshData> BoundariesToMeshes(CityBoundary boundary, CoordinateSystem coordinateSystem, Vector3Double origin)
+        private void Awake()
         {
-            if (!(boundary is CityMultiPoint))
-                throw new NotSupportedException("Boundary is not of Type MultiPoint, use CityObjectVisualiser instead.");
-
-            return PointsToMeshes(boundary as CityMultiPoint, coordinateSystem, visualizationObject, origin);
+            cityObject = GetComponent<CityObject>();
+            pointRenderer3D = GetComponent<PointRenderer3D>();
         }
 
-        private List<BoundaryMeshData> PointsToMeshes(CityMultiPoint boundary, CoordinateSystem coordinateSystem, GameObject visualizationObject, Vector3Double origin)
+        private void OnEnable()
         {
-            var meshes = new List<BoundaryMeshData>();
-            var verts = GetConvertedPolygonVertices(boundary.Points, coordinateSystem, origin);
-            for (int i = 0; i < boundary.VertexCount; i++)
+            cityObject.CityObjectParsed.AddListener(Visualize);
+        }
+
+        private void OnDisable()
+        {
+            cityObject.CityObjectParsed.RemoveListener(Visualize);
+        }
+
+        private void Visualize()
+        {
+            materialConverter.Initialize(cityObject.Appearance);
+            pointRenderer3D.PointMesh =  visualizationMesh;
+                
+            foreach (var geometry in cityObject.Geometries)
             {
-                CityGeometrySemanticsObject semantics = null;
-                if (boundary.SemanticsObjects.Count > 0)
-                    semantics = boundary.SemanticsObjects[i];
+                if (!(geometry.BoundaryObject is CityMultiPoint multiPoint))
+                    throw new NotSupportedException("Boundary is not of Type MultiPoint, use CityObjectVisualiser instead.");
 
-                var mesh = InstantiateObjectAtPoint(verts[i], coordinateSystem, visualizationObject);
-                // meshes.Add(new BoundaryMeshData(mesh, semantics));
-                throw new NotImplementedException("Due to the separation of triangulation and mesh combination, this class is no longer able to visualize MultiPoint geometries");
+                var coordinates = new List<Coordinate>(multiPoint.VertexCount);
+                foreach (var vert in multiPoint.Points.Vertices)
+                {
+                    var coord = new Coordinate(cityObject.CoordinateSystem, vert.x, vert.y, vert.z);
+                    coordinates.Add(coord);
+                }
+                
+                pointRenderer3D.SetPositionCollections(new List<List<Coordinate>>(){coordinates});
             }
-
-            return meshes;
-        }
-
-        private Mesh InstantiateObjectAtPoint(Vector3 point, CoordinateSystem coordinateSystem, GameObject visualizationObject)
-        {
-            var obj = Instantiate(visualizationObject, point, Quaternion.identity, transform);
-            var meshFilter = obj.GetComponent<MeshFilter>();
-            if (meshFilter)
-                return meshFilter.mesh;
-
-            return null;
         }
     }
 }
