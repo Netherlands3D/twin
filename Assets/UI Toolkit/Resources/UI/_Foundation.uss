@@ -8,21 +8,21 @@
 
 .text-base {
     -unity-font-definition: var(--nl3d-default-font);
-    font-size: var(--font-size-M);
+    font-size: var(--font-size-base);
     -unity-font-style: normal;
-    color: var(--color-Text);
+    color: var(--color-text);
 }
 
 .text-header {
     -unity-font-definition: var(--nl3d-header-font);
-    font-size: var(--font-size-M);
+    font-size: var(--font-size-base);
     -unity-font-style: normal;
-    color: var(--color-Text);
+    color: var(--color-text);
 }
 
 .inspector-header-title {
     -unity-font-definition: var(--nl3d-inspector-header-font);
-    font-size: var(--font-size-XL);
+    font-size: var(--font-size-xl);
     -unity-font-style: normal;
-    color: var(--color-Text);
+    color: var(--color-text);
 }

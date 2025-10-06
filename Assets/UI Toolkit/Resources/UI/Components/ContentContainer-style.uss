@@ -1,12 +1,12 @@
 .contentcontainer {
-    --container-input-padding-x: 12px;
-    --container-input-padding-y: 12px;
-    --container-bg-color: var(--color-White);
-    --divider-bg-color: var(--color-Blue100);
-    --container-border-color: var(--color-Blue200);
+    --container-input-padding-x: var(--spacing-3);
+    --container-input-padding-y: var(--spacing-3);
+    --container-bg-color: var(--color-white);
+    --divider-bg-color: var(--color-blue-100);
+    --container-border-color: var(--color-blue-200);
     --container-border-width: 2px;
     --container-border-radius: 4px;
-    --container-icon-gap: 8px;
+    --container-icon-gap: var(--spacing-2);
 
     padding-top: var(--container-input-padding-y);
     padding-bottom: var(--container-input-padding-y);
@@ -20,7 +20,7 @@
 }
 
 .contentcontainer:checked {
-    padding-bottom: 16px;
+    padding-bottom: var(--spacing-4);
 }
 
 .contentcontainer .unity-foldout__content {
@@ -34,13 +34,13 @@
 }
 
 .contentcontainer:checked .unity-toggle__input {
-    margin-bottom: 12px;
+    margin-bottom: var(--spacing-3);
 }
 
 .contentcontainer .unity-foldout__checkmark {
     background-image: var(--icon-chevronright); 
-    width: 24px;
-    height: 24px;
+    width: var(--spacing-6);
+    height: var(--spacing-6);
     margin: 0;
 }
 
@@ -55,7 +55,7 @@
 .contentcontainer .unity-toggle__input > .unity-label {
     flex-grow: 1;
     margin: 0;
-    color: var(--color-Text);
+    color: var(--color-text);
 }
 
 .contentcontainer.unity-foldout__content {
@@ -65,9 +65,9 @@
 .divider-header {
     display: flex;
     flex-grow: 1;
-    height: 2px;
-    min-height: 2px;
-    margin-bottom: 12px;
+    height: var(--spacing-0_5);
+    min-height: var(--spacing-0_5);
+    margin-bottom: var(--spacing-3);
     background-color: var(--divider-bg-color);
 }
 .contentcontainer.divider-active .divider-header {
@@ -77,8 +77,8 @@
 /* Header icons */
 .contentcontainer .leading-icon,
 .contentcontainer .help-button {
-    width: 24px;
-    height: 24px;
+    width: var(--spacing-6);
+    height: var(--spacing-6);
 }
 
 .contentcontainer .leading-icon { 

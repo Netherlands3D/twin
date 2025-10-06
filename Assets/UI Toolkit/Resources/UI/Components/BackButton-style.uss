@@ -1,7 +1,7 @@
 .backbutton {
     --button-bg-color: transparent;
-    --button-hover-contrast-color: var(--color-Blue300);
-    --button-active-contrast-color: var(--color-Blue700);
+    --button-hover-contrast-color: var(--color-blue-300);
+    --button-active-contrast-color: var(--color-blue-700);
     --button-border-padding: 0px;
     --button-border-color: transparent;
     --button-border-width: 0px;
@@ -22,8 +22,8 @@
 }
 
 .backbutton #Icon {
-    width: 24px;
-    height: 24px;
+    width: var(--spacing-6);
+    height: var(--spacing-6);
     --icon-image: var(--icon-back); 
 }
 

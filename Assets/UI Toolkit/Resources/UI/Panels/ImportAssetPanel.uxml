@@ -5,7 +5,7 @@
     <nl3d:ContentContainer class="import-asset-panel-open-url" container-type="NoFoldout" show-divider="true" leading-icon="LibraryAdd" text="Toevoegen vanaf link">
         <ui:VisualElement name="Row">
             <nl3d:Icon />
-            <nl3d:TextField />
+            <nl3d:TextField style="flex-grow: 1" />
         </ui:VisualElement>
         <nl3d:Button LabelText="Toevoegen" button-style="Normal" />
     </nl3d:ContentContainer>

@@ -28,7 +28,7 @@
 .unity-base-slider__tracker {
   margin: 0;
   padding: 0;
-  background-color: var(--color-Blue100);
+  background-color: var(--color-blue-100);
   border-width: 0;
 }
 
@@ -39,16 +39,16 @@
   left: auto;
   margin: 0;
   padding: 0;
-  background-color: var(--color-Blue300);
-  border-color: var(--color-Blue300);
+  background-color: var(--color-blue-300);
+  border-color: var(--color-blue-300);
   border-width: 2px;
 }
 
 /* Scroller root (vertical) */
 .unity-scroller.unity-scroller--vertical,
 .unity-scroller.vertical {
-  width: 16px;
-  min-width: 16px;
+  width: var(--spacing-4);
+  min-width: var(--spacing-4);
   height: auto;
   min-height: auto;
 }
@@ -56,8 +56,8 @@
 /* Scroller root (horizontal) */
 .unity-scroller.unity-scroller--horizontal,
 .unity-scroller.horizontal {
-  height: 16px;
-  min-height: 16px;
+  height: var(--spacing-4);
+  min-height: var(--spacing-4);
   width: auto;
   min-width: auto;
 }
@@ -66,8 +66,8 @@
 .unity-scroller.unity-scroller--vertical .unity-base-slider__tracker,
 .unity-scroller.vertical .unity-base-slider__tracker,
 .unity-base-slider--vertical .unity-base-slider__tracker {
-  width: 16px;
-  min-width: 16px;
+  width: var(--spacing-4);
+  min-width: var(--spacing-4);
   height: auto;
   min-height: auto;
 }
@@ -76,8 +76,8 @@
 .unity-scroller.unity-scroller--horizontal .unity-base-slider__tracker,
 .unity-scroller.horizontal .unity-base-slider__tracker,
 .unity-base-slider--horizontal .unity-base-slider__tracker {
-  height: 16px;
-  min-height: 16px;
+  height: var(--spacing-4);
+  min-height: var(--spacing-4);
   width: auto;
   min-width: auto;
 }
@@ -86,8 +86,8 @@
 .unity-scroller.unity-scroller--vertical .unity-base-slider__dragger,
 .unity-scroller.vertical .unity-base-slider__dragger,
 .unity-base-slider--vertical .unity-base-slider__dragger {
-  width: 16px;
-  min-width: 16px;
+  width: var(--spacing-4);
+  min-width: var(--spacing-4);
   height: auto;
   min-height: auto;
 }
@@ -96,8 +96,8 @@
 .unity-scroller.unity-scroller--horizontal .unity-base-slider__dragger,
 .unity-scroller.horizontal .unity-base-slider__dragger,
 .unity-base-slider--horizontal .unity-base-slider__dragger {
-  height: 16px;
-  min-height: 16px;
+  height: var(--spacing-4);
+  min-height: var(--spacing-4);
   width: auto;
   min-width: auto;
 }

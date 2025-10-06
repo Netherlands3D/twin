@@ -1,9 +1,9 @@
 .inspector {
     display: none; /* Invisible by default, only shown when the `active` class is present */
     margin-left: 88px;
-    margin-bottom: 44px;
+    margin-bottom: var(--spacing-11);
     background-color: rgb(255, 255, 255);
-    padding-top: 24px;
+    padding-top: var(--spacing-6);
     width: 512px;
     flex-grow: 1;
     justify-content: space-between;
@@ -13,7 +13,7 @@
     flex-direction: row;
     align-content: stretch;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: var(--spacing-4);
 }
 
 .inspector .inspector-header-title {
@@ -24,19 +24,19 @@
 .inspector .inspector-header-button-close {
     flex-grow: 0;
     flex-shrink: 0;
-    width: 32px;
-    height: 32px;
+    width: var(--spacing-8);
+    height: var(--spacing-8);
     align-items: center;
     flex-wrap: nowrap;
     align-content: center;
 }
 
 .inspector .inspector-content {
-    margin-bottom: 16px;
+    margin-bottom: var(--spacing-4);
     flex-grow: 1;
     flex-shrink: 0;
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: var(--spacing-6);
+    padding-right: var(--spacing-6);
 }
 
 .inspector.active {
@@ -47,7 +47,7 @@
 /* TODO: remove these overrides as soon as we have implemented the whole inspector               */
 /* These override make sure that the inspector aligns nicely as an overlay to the UGUI inspector */
 .inspector {
-    margin-left: 112px;
+    margin-left: var(--spacing-28);
     width: 488px;
 }
 

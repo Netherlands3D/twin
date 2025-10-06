@@ -1,13 +1,13 @@
 .textfield {
-    --textfield-input-bg: var(--color-Blue100);
-    --textfield-input-bg-hover: var(--color-Blue200);
+    --textfield-input-bg: var(--color-blue-100);
+    --textfield-input-bg-hover: var(--color-blue-200);
     --textfield-input-border-color: transparent;
-    --textfield-input-border-width: 2px;
-    --textfield-input-radius: 4px;
-    --textfield-input-padding-x: 8px;
-    --textfield-input-padding-y: 4px;
-    --textfield-icon-size: 24px;
-    --textfield-icon-gap: 12px;
+    --textfield-input-border-width: var(--spacing-0_5);
+    --textfield-input-radius: var(--spacing-1);
+    --textfield-input-padding-x: var(--spacing-2);
+    --textfield-input-padding-y: var(--spacing-1);
+    --textfield-icon-size: var(--spacing-6);
+    --textfield-icon-gap: var(--spacing-3);
 
     flex-wrap: wrap;
     margin: 0;
@@ -29,7 +29,7 @@
     padding-right: var(--textfield-input-padding-x);
     padding-top: var(--textfield-input-padding-y);
     padding-bottom: var(--textfield-input-padding-y);
-    --unity-selection-color: var(--color-Selection);
+    --unity-selection-color: var(--color-selection);
     background-color: var(--textfield-input-bg);
     border-color: var(--textfield-input-border-color);
     border-width: var(--textfield-input-border-width);
@@ -41,7 +41,7 @@
 }
 
 .textfield .unity-base-text-field__input--placeholder {
-    color: var(--color-Blue300);
+    color: var(--color-blue-300);
 }
 
 .textfield TextElement {

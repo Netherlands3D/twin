@@ -5,13 +5,13 @@
 }
 
 .breadcrumb .leadingicon {
-    width: 24px;
-    height: 24px;
-    margin-right: 4px;
+    width: var(--spacing-6);
+    height: var(--spacing-6);
+    margin-right: var(--spacing-1);
 }
 
 .breadcrumb .backbutton {
-    margin-right: 8px;
+    margin-right: var(--spacing-2);
 }
 
 .breadcrumb .trail {
@@ -30,15 +30,15 @@
 }
 
 .breadcrumb .crumb-link.button:hover {
-    color: var(--color-Blue300);
+    color: var(--color-blue-300);
 }
 
 .breadcrumb .separator.icon {
-    width: 24px;
-    height: 24px;
+    width: var(--spacing-6);
+    height: var(--spacing-6);
     --icon-image: var(--icon-chevronright);
-    margin-left: 6px;
-    margin-right: 6px;
+    margin-left: var(--spacing-1);
+    margin-right: var(--spacing-1);
 }
 
 .breadcrumb.no-leading-icon .leadingicon {

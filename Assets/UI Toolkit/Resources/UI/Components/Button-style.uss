@@ -1,13 +1,13 @@
 .button {
-    --button-bg-color: var(--color-White);
-    --button-active-color: var(--color-Blue700);
+    --button-bg-color: var(--color-white);
+    --button-active-color: var(--color-blue-700);
     --button-active-contrast-color: var(--button-bg-color);
-    --divider-bg-color: var(--color-Blue100);
-    --button-padding: 12px;
-    --button-border-color: var(--color-Blue200);
+    --divider-bg-color: var(--color-blue-100);
+    --button-padding: var(--spacing-3);
+    --button-border-color: var(--color-blue-200);
     --button-border-width: 2px;
-    --button-border-radius: 8px;
-    --button-icon-gap: 8px;
+    --button-border-radius: var(--spacing-2);
+    --button-icon-gap: var(--spacing-2);
 
     flex-shrink: 0;
     flex-grow: 0;
@@ -23,8 +23,8 @@
 }
 
 .button > #Icon {
-    width: 24px;
-    height: 24px;
+    width: var(--spacing-6);
+    height: var(--spacing-6);
 }
 
 /* Variants */
@@ -55,12 +55,12 @@
 
 /* Type badge (elements now come from UXML) */
 .button .divider {
-  width: 2px;
+  width: var(--spacing-0_5);
   height: auto;
-  min-height: 24px;
+  min-height: var(--spacing-6);
   background-color: var(--divider-bg-color);
-  margin-left: var(--button-type-gap, 8px);
-  margin-right: var(--button-type-gap, 8px);
+  margin-left: var(--button-type-gap, var(--spacing-2));
+  margin-right: var(--button-type-gap, var(--spacing-2));
   align-self: center;
 }
 

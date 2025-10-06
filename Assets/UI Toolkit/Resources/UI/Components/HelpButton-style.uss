@@ -1,6 +1,6 @@
 .helpbutton {
     --button-bg-color: transparent;
-    --button-active-contrast-color: var(--color-Blue700);
+    --button-active-contrast-color: var(--color-blue-700);
     --button-border-padding: 0px;
     --button-border-color: transparent;
     --button-border-width: 0px;

@@ -6,7 +6,7 @@
 }
 
 .asset-library-panel .breadcrumb {
-    margin-bottom: 12px;
+    margin-bottom: var(--spacing-3);
     width: auto;
     height: auto;
 }

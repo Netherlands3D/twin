@@ -1,7 +1,7 @@
 ﻿/* The actual image node */
 .icon {
     --icon-image: var(--icon-map);
-    --icon-tint-color: var(--color-Blue900);
+    --icon-tint-color: var(--color-blue-900);
     
     background-repeat: no-repeat;
     background-position: 50% 50%;
@@ -23,14 +23,14 @@
     padding-left: 0;
 }
 
-.icon.tint-white { --icon-tint-color: var(--color-White); }
-.icon.tint-black { --icon-tint-color: var(--color-Black); }
-.icon.tint-blue-50 { --icon-tint-color: var(--color-Blue50); }
-.icon.tint-blue-100 { --icon-tint-color: var(--color-Blue100); }
-.icon.tint-blue-200 { --icon-tint-color: var(--color-Blue200); }
-.icon.tint-blue-300 { --icon-tint-color: var(--color-Blue300); }
-.icon.tint-blue-700 { --icon-tint-color: var(--color-Blue700); }
-.icon.tint-blue-900 { --icon-tint-color: var(--color-Blue900); }
+.icon.tint-white { --icon-tint-color: var(--color-white); }
+.icon.tint-black { --icon-tint-color: var(--color-black); }
+.icon.tint-blue-50 { --icon-tint-color: var(--color-blue-50); }
+.icon.tint-blue-100 { --icon-tint-color: var(--color-blue-100); }
+.icon.tint-blue-200 { --icon-tint-color: var(--color-blue-200); }
+.icon.tint-blue-300 { --icon-tint-color: var(--color-blue-300); }
+.icon.tint-blue-700 { --icon-tint-color: var(--color-blue-700); }
+.icon.tint-blue-900 { --icon-tint-color: var(--color-blue-900); }
 
 .icon.image-plus { --icon-image: var(--icon-plus); }
 .icon.image-folder { --icon-image: var(--icon-folder); }

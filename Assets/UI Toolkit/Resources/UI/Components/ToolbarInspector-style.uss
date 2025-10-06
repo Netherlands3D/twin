@@ -1,7 +1,7 @@
 .toolbar-inspector {
     flex-direction: row;
-    background-color: var(--color-Blue50);
-    padding: 24px;
+    background-color: var(--color-blue-50);
+    padding: var(--spacing-6);
 }
 
 .toolbar-inspector-content {
@@ -15,11 +15,11 @@
 }
 
 .toolbar-inspector-content.left > * {
-    margin-right: 12px;
+    margin-right: var(--spacing-3);
 }
 
 .toolbar-inspector-content.right > * {
-  margin-left: 12px;
+  margin-left: var(--spacing-3);
 }
 
 /* Toolbar styles - by default all buttons invisible, whitelist per style of the toolbar */
@@ -32,6 +32,6 @@
 /* These override make sure that the inspector aligns nicely as an overlay to the UGUI inspector */
 .toolbar-inspector {
     padding: 21px;
-    padding-left: 12px;
+    padding-left: var(--spacing-3);
 }
 /* ============================================================================================= */

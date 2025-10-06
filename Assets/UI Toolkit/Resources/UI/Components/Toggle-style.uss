@@ -1,12 +1,12 @@
 .toggle {
-    --toggle-bg-color: var(--color-White);
-    --toggle-active-color: var(--color-Blue700);
+    --toggle-bg-color: var(--color-white);
+    --toggle-active-color: var(--color-blue-700);
     --toggle-active-contrast-color: var(--toggle-bg-color);
-    --toggle-padding: 12px;
-    --toggle-border-color: var(--color-Blue200);
-    --toggle-border-width: 2px;
-    --toggle-border-radius: 8px;
-    --toggle-icon-gap: 8px;
+    --toggle-padding: var(--spacing-3);
+    --toggle-border-color: var(--color-blue-200);
+    --toggle-border-width: var(--spacing-0_5);
+    --toggle-border-radius: var(--spacing-2);
+    --toggle-icon-gap: var(--spacing-2);
 
     flex-shrink: 0;
     flex-grow: 0;
@@ -23,8 +23,8 @@
 }
 
 .toggle > #Icon {
-    width: 24px;
-    height: 24px;
+    width: var(--spacing-6);
+    height: var(--spacing-6);
 }
 
 .toggle.toggle-style-normal > #Icon {
@@ -52,7 +52,7 @@
 }
 
 .toggle:hover {
-    border-color: var(--color-Blue700);
+    border-color: var(--color-blue-700);
 }
 
 .toggle:checked {

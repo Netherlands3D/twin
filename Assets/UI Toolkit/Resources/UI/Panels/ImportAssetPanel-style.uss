@@ -6,10 +6,10 @@
 }
 
 .import-asset-panel .contentcontainer {
-    margin-left: 4px;
-    margin-right: 4px;
-    margin-top: 2px;
-    margin-bottom: 2px;
+    margin-left: var(--spacing-1);
+    margin-right: var(--spacing-1);
+    margin-top: var(--spacing-0_5);
+    margin-bottom: var(--spacing-0_5);
 }
 
 .import-asset-panel.active {
@@ -28,15 +28,15 @@
     align-content: auto;
 }
 
-.import-asset-panel-open-url #TextField {
+.import-asset-panel-open-url TextField {
     flex-grow: 1;
-    margin-left: 8px;
+    margin-left: var(--spacing-2);
 }
 
 .import-asset-panel-open-url Button {
     align-self: flex-end;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding-top: var(--spacing-2);
+    padding-bottom: var(--spacing-2);
     margin-right: 0;
-    margin-top: 8px;
+    margin-top: var(--spacing-2);
 }
