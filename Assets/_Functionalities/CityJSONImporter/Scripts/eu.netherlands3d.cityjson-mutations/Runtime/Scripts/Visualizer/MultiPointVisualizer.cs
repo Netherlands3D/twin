@@ -9,7 +9,7 @@ namespace Netherlands3D.CityJson.Visualisation
 {
     [RequireComponent(typeof(CityObject))]
     [RequireComponent(typeof(PointRenderer3D))]
-    public class MultiPointVisualizer : MonoBehaviour, ICityObjectVisualizer
+    public class MultiPointVisualizer : CityObjectVisualizer
     {
         private CityObject cityObject;
         private PointRenderer3D  pointRenderer3D;
@@ -32,7 +32,7 @@ namespace Netherlands3D.CityJson.Visualisation
             cityObject.CityObjectParsed.RemoveListener(Visualize);
         }
 
-        public void Visualize(CityObject cityObject)
+        protected override void Visualize()
         {
             materialConverter.Initialize(cityObject.Appearance);
             pointRenderer3D.PointMesh =  visualizationMesh;
