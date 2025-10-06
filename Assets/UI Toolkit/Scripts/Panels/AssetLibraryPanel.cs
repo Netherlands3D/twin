@@ -66,6 +66,10 @@ namespace Netherlands3D.UI.Panels
         {
             switch (catalogItem)
             {
+                case ICatalog catalog: 
+                    var catalogItemCollection = await Load(async () => await catalog.BrowseAsync());
+                    await OpenFolder(catalog.Title, catalogItemCollection);
+                    return;
                 case ICatalogItemCollection collection: await OpenFolder(catalogItem.Title, collection); return;
                 default: OnOpenCatalogItem?.Invoke(catalogItem); break;
             }
@@ -106,7 +110,13 @@ namespace Netherlands3D.UI.Panels
             
             ICatalogItem catalogItem = ListView.itemsSource[index] as ICatalogItem;
             button.LabelText = catalogItem.Title;
-            button.Image = catalogItem is ICatalogItemCollection ? IconImage.Folder : IconImage.Map;
+            var icon = catalogItem switch
+            {
+                ICatalogItemCollection => IconImage.Folder,
+                ICatalog => IconImage.Library,
+                _ => IconImage.Map
+            };
+            button.Image = icon;
             button.userData = catalogItem;
         }
     }
