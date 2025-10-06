@@ -209,7 +209,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     if (feature.Geometry is Point || feature.Geometry is MultiPoint)
                     {
                         int segments = 12;
-                        float radius = ((GeoJSONPointLayer)VisualisationLayer).PointRenderer3D.MeshScale;
+                        float radius = ((GeoJSONPointLayer)VisualisationLayer).PointRenderer3D.PointMeshScale;
                         subObject.transform.position = verts[0];
                         Vector3 centerVertex = Vector3.zero;
                         Vector3[] vertices = new Vector3[segments + 1];
@@ -227,7 +227,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                         }
                         mesh.vertices = vertices.ToArray();
                         mesh.triangles = triangles.ToArray();
-                        subObject.AddComponent<MeshRenderer>().material = ((GeoJSONPointLayer)VisualisationLayer).PointRenderer3D.Material;
+                        subObject.AddComponent<MeshRenderer>().material = ((GeoJSONPointLayer)VisualisationLayer).PointRenderer3D.PointMaterial;
                     }
                 }
 

@@ -18,15 +18,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             public Material CreateMaterial()
             {
-                var features = layer.CreateFeaturesByType<BatchedMeshInstanceRenderer>();
+                var features = layer.CreateFeaturesByType<PointRenderer3D>();
                 var style = layer.GetStyling(features.FirstOrDefault());
                 var color = style.GetFillColor() ?? Color.white;
 
                 return layer.GetMaterialInstance(color);
             }
 
-            public void SetMaterial(Material material) => layer.PointRenderer3D.Material = material;
-            public Material GetMaterial() => layer.PointRenderer3D.Material;
+            public void SetMaterial(Material material) => layer.PointRenderer3D.PointMaterial = material;
+            public Material GetMaterial() => layer.PointRenderer3D.PointMaterial;
         }
     }
 }
