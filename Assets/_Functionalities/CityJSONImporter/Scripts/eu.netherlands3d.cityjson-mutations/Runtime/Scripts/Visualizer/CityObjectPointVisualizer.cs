@@ -16,22 +16,12 @@ namespace Netherlands3D.CityJson.Visualisation
         [SerializeField] private Mesh visualizationMesh;
         [SerializeField] private CityMaterialConverter materialConverter;
 
-        private void Awake()
+        protected override void Awake()
         {
-            cityObject = GetComponent<CityObject>();
+            base.Awake();
             pointRenderer3D = GetComponent<PointRenderer3D>();
         }
-
-        private void OnEnable()
-        {
-            cityObject.CityObjectParsed.AddListener(Visualize);
-        }
-
-        private void OnDisable()
-        {
-            cityObject.CityObjectParsed.RemoveListener(Visualize);
-        }
-
+        
         protected override void Visualize()
         {
             materialConverter.Initialize(cityObject.Appearance);

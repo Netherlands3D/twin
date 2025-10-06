@@ -84,16 +84,6 @@ namespace Netherlands3D.CityJson.Visualisation
             meshCollider = GetComponent<MeshCollider>();
         }
 
-        private void OnEnable()
-        {
-            cityObject.CityObjectParsed.AddListener(Visualize);
-        }
-
-        private void OnDisable()
-        {
-            cityObject.CityObjectParsed.RemoveListener(Visualize);
-        }
-
         //create the meshes
         protected override void Visualize()
         {

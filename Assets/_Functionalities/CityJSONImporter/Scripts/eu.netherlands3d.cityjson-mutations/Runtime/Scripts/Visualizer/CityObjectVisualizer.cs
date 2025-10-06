@@ -14,6 +14,17 @@ namespace Netherlands3D.CityJson.Visualisation
         {
             cityObject = GetComponent<CityObject>();
         }
+        
+        protected virtual void OnEnable()
+        {
+            cityObject.CityObjectParsed.AddListener(Visualize);
+        }
+
+        protected virtual void OnDisable()
+        {
+            cityObject.CityObjectParsed.RemoveListener(Visualize);
+        }
+        
         protected abstract void Visualize();
     }
 }
