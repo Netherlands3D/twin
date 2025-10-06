@@ -9,7 +9,7 @@ namespace Netherlands3D.CityJson.Visualisation
 {
     [RequireComponent(typeof(CityObject))]
     [RequireComponent(typeof(PointRenderer3D))]
-    public class MultiPointVisualizer : CityObjectVisualizer
+    public class CityObjectPointVisualizer : CityObjectVisualizer
     {
         private CityObject cityObject;
         private PointRenderer3D  pointRenderer3D;
