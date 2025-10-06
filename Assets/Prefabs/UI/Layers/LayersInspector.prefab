@@ -428,10 +428,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5860266419779450609}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Tools.UI.OverlayInstantiator,
-          eu.netherlands3d.twin
-        m_MethodName: InstantiateOverlay
+      - m_Target: {fileID: 11400000, guid: 3584488c63b97ad4faf1f83ee6aacd98, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -448,7 +447,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1930782644329386151}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62b1e01edbedb4752ad91f429fe11682, type: 3}
   m_Name: 

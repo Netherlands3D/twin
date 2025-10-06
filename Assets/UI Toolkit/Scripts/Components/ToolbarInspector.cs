@@ -10,7 +10,7 @@ namespace Netherlands3D.UI.Components
         private Button AddFolder => this.Q<Button>("AddFolder");
         private Button Delete => this.Q<Button>("Delete");
         private Toggle AddToLibrary => this.Q<Toggle>("AddToLibrary");
-        private Toggle AddLayer => this.Q<Toggle>("AddLayer");
+        public Toggle AddLayer => this.Q<Toggle>("AddLayer");
 
         public EventCallback<ChangeEvent<bool>> OnOpenLibraryToggled { get; set; }
         public EventCallback<ClickEvent> OnAddFolderClicked { get; set; }

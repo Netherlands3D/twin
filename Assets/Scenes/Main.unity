@@ -983,9 +983,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1677727758}
   - component: {fileID: 1677727759}
+  - component: {fileID: 1677727762}
   - component: {fileID: 1677727760}
   - component: {fileID: 1677727761}
-  - component: {fileID: 1677727762}
+  - component: {fileID: 1677727763}
   m_Layer: 5
   m_Name: UI v2
   m_TagString: Untagged
@@ -1041,6 +1042,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assetLibrary: {fileID: 11400000, guid: 3bf729bef28e27c42b3fbea257a6a5a4, type: 2}
+  uploadFileEvent: {fileID: 11400000, guid: e22d53683e618894db885d9659d65237, type: 2}
 --- !u!114 &1677727761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1103,6 +1105,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   doc: {fileID: 1677727759}
   factor: 0.75
+--- !u!114 &1677727763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677727757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda199de660f4334b8a50d8e350bdf29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 3584488c63b97ad4faf1f83ee6aacd98, type: 2}
+  onTriggered:
+    m_PersistentCalls:
+      m_Calls: []
+  onTrue:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1677727760}
+        m_TargetAssemblyTypeName: Netherlands3D.UI.Behaviours.InspectorPanelBehaviour,
+          eu.netherlands3d.twin
+        m_MethodName: OpenImportAssetPanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onFalse:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1677727760}
+        m_TargetAssemblyTypeName: Netherlands3D.UI.Behaviours.InspectorPanelBehaviour,
+          eu.netherlands3d.twin
+        m_MethodName: CloseImportAssetPanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2052049205
 GameObject:
   m_ObjectHideFlags: 0
@@ -1557,22 +1607,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.7512772
+      value: 0.20579392
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.6012348
+      value: 0.08769552
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.21253234
+      value: 0.89664197
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.17008613
+      value: -0.38208845
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}

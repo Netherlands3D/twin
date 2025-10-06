@@ -1,12 +1,12 @@
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Netherlands3D._Application._Twin;
 using Netherlands3D.Catalogs;
-using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
 using ListView = Netherlands3D.UI.Components.ListView;
@@ -16,61 +16,75 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class AssetLibraryPanel : BaseInspectorContentPanel
     {
+        public override ToolbarInspector.ToolbarStyle ToolbarStyle => ToolbarInspector.ToolbarStyle.Library;
+        
         private AssetLibrary assetLibrary;
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
         private Breadcrumb breadcrumb;
         private Breadcrumb Breadcrumb => breadcrumb ??= this.Q<Breadcrumb>();
 
+        public Action<ICatalogItem> OnOpenCatalogItem;
+        
         public AssetLibraryPanel()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-            
+
+            OnShow += () => EnableInClassList("active", true);
+            OnHide += () => EnableInClassList("active", false);
+
             // Virtualization and selection
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             ListView.selectionType = SelectionType.None;
 
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
-            Debug.Log("Created AssetLibraryPanel");
             Breadcrumb.CrumbClicked += OnBreadcrumbClicked;
         }
 
         public override string GetTitle() => "Toevoegen";
-        
-        private void OnBreadcrumbClicked(int _, Breadcrumb.Crumb crumb)
-        {
-            ShowItemsFromCollection(crumb.Target as ICatalogItemCollection);
-        }
 
-        public void Open()
+        public async void LoadCatalog(ICatalog catalog)
         {
-            EnableInClassList("active", true);
-        }
-
-        public void Close()
-        {
-            EnableInClassList("false", false);
-        }
-
-        public async void SetAssetLibrary(AssetLibrary assetLibrary)
-        {
-            this.assetLibrary = assetLibrary;
             Breadcrumb.ClearCrumbs();
 
-            // TODO: show loader
-
-            var catalogItemCollection = await assetLibrary.Catalog.BrowseAsync();
-            Breadcrumb.AddCrumb("Bibliotheek", catalogItemCollection);
-            ShowItemsFromCollection(catalogItemCollection);
+            var catalogItemCollection = await Load(async () => await catalog.BrowseAsync());
+            await OpenFolder("Bibliotheek", catalogItemCollection);
         }
 
-        private async void ShowItemsFromCollection(ICatalogItemCollection itemCollectionPage)
+        private async Task<T> Load<T>(Func<Task<T>> callback)
         {
             // TODO: show loader
-            
-            var currentCatalogItems = await itemCollectionPage.GetItemsAsync();
+            var result = await callback();
+            // TODO: Close loader
+
+            return result;
+        }
+
+        private async Task OpenAsset(ICatalogItem catalogItem)
+        {
+            switch (catalogItem)
+            {
+                case ICatalogItemCollection collection: await OpenFolder(catalogItem.Title, collection); return;
+                default: OnOpenCatalogItem?.Invoke(catalogItem); break;
+            }
+        }
+
+        private async Task OpenFolder(string title, ICatalogItemCollection catalogItemCollection)
+        {
+            Breadcrumb.AddCrumb(title, catalogItemCollection);
+            await LoadItemsIntoListView(catalogItemCollection);
+        }
+
+        private async void OnBreadcrumbClicked(int _, Breadcrumb.Crumb crumb)
+        {
+            await LoadItemsIntoListView(crumb.Target as ICatalogItemCollection);
+        }
+
+        private async Task LoadItemsIntoListView(ICatalogItemCollection catalogItemCollection)
+        {
+            var currentCatalogItems = await Load(catalogItemCollection.GetItemsAsync);
 
             ListView.itemsSource = currentCatalogItems.ToList();
             ListView.RefreshItems();
@@ -94,20 +108,6 @@ namespace Netherlands3D.UI.Panels
             button.LabelText = catalogItem.Title;
             button.Image = catalogItem is ICatalogItemCollection ? IconImage.Folder : IconImage.Map;
             button.userData = catalogItem;
-        }
-
-        private void OpenAsset(ICatalogItem catalogItem)
-        {
-            switch (catalogItem)
-            {
-                case ICatalogItemCollection collection:
-                    Breadcrumb.AddCrumb(catalogItem.Title, collection);
-                    ShowItemsFromCollection(collection);
-                    return;
-                case RecordItem recordItem: assetLibrary.Load(recordItem); break;
-                case DataService dataServiceItem: assetLibrary.Trigger(dataServiceItem); break;
-                default: Debug.LogWarning("Attempted to open an unknown type of catalog item"); break;
-            }
         }
     }
 }
