@@ -53,13 +53,19 @@ MonoBehaviour:
   prefabIdentifier: 0ff2a6c5552aa41b394c269af0d25e45
   thumbnail: {fileID: 0}
   spawnLocation: 0
-  OnStylingApplied:
-    m_PersistentCalls:
-      m_Calls: []
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStylingApplied:
     m_PersistentCalls:
       m_Calls: []
   DebugBoundingBox: 0
@@ -159,4 +165,3 @@ MonoBehaviour:
   isCityJSONType:
     m_PersistentCalls:
       m_Calls: []
-  materialTemplate: {fileID: 2100000, guid: 4964f8b7303387145a5d0c6b232294cd, type: 2}

@@ -7,7 +7,6 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.CityJson.Visualisation
 {
@@ -65,7 +64,6 @@ namespace Netherlands3D.CityJson.Visualisation
         public int ActiveLod => activeLOD;
         public Mesh ActiveMesh { get; private set; }
 
-        public UnityEvent<CityObjectMeshVisualizer> cityObjectVisualized;
         [SerializeField] private CityMaterialConverter materialConverter;
 
 #if UNITY_EDITOR
@@ -109,7 +107,7 @@ namespace Netherlands3D.CityJson.Visualisation
             meshesCreatedThisFrame++;
             meshes = CreateMeshes(cityObject);
 
-            var highestLod = meshes.Keys.Max(g => g.Lod);
+            var highestLod = meshes.Count > 0 ? meshes.Keys.Max(g => g.Lod) : -1;
             SetLODActive(highestLod);
 
             cityObjectVisualized?.Invoke(this);
@@ -131,7 +129,8 @@ namespace Netherlands3D.CityJson.Visualisation
         {
             activeLOD = lod;
 
-            var geometry = meshes.Keys.FirstOrDefault(g => g.Lod == lod);
+            var geometry = meshes.Keys.FirstOrDefault(g => g.Lod == lod); // More than one Geometry Object is used to represent several different levels-of-detail (LoDs) for the same object.
+            //TODO: according to the CityJSON specs: "However, the different Geometry Objects of a given City Object do not have to be of different LoDs." In this case we need to change FirstOrDefault with Select, and change SetMesh to accept a collection.
             if (geometry != null)
             {
                 SetMesh(meshes[geometry]);
@@ -163,9 +162,12 @@ namespace Netherlands3D.CityJson.Visualisation
         //create the meshes for the object geometries
         private Dictionary<CityGeometry, MeshWithMaterials> CreateMeshes(CityObject cityObject)
         {
-            meshes = new Dictionary<CityGeometry, MeshWithMaterials>();
+            meshes = new Dictionary<CityGeometry, MeshWithMaterials>(cityObject.Geometries.Count);
             foreach (var geometry in cityObject.Geometries)
             {
+                if(geometry.Type == GeometryType.MultiPoint ||  geometry.Type == GeometryType.MultiLineString)
+                    continue; // MultiPoint/Lines have their own visualizer and don't create meshes
+                
                 Vector3Double origin = new Vector3Double();
                 var cityJsonCoord = GetComponentInParent<WorldTransform>().Coordinate; //todo: this getComponentInParent is a bit hacky
                 var coordinateSystem = cityObject.CoordinateSystem;
@@ -359,9 +361,9 @@ namespace Netherlands3D.CityJson.Visualisation
         private List<BoundaryMeshData> BoundariesToMeshes(CityBoundary boundary, CoordinateSystem coordinateSystem, Vector3Double origin)
         {
             if (boundary is CityMultiPoint)
-                throw new NotSupportedException("Boundary of type " + typeof(CityMultiPoint) + "is not supported by this Visualiser script since it contains no mesh data. Use MultiPointVisualiser instead and assign an object to use as visualization of the points");
-            if (boundary is CityMultiLineString) //todo this boundary type is not supported at all
-                throw new NotSupportedException("Boundary of type " + typeof(CityMultiLineString) + "is currently not supported.");
+                throw new NotSupportedException("Boundary of type " + typeof(CityMultiPoint) + "Cannot create mesh from multipoint boundary, use CityObjectPointVisualizer instead");
+            if (boundary is CityMultiLineString)
+                throw new NotSupportedException("Boundary of type " + typeof(CityMultiLineString) + "Cannot create mesh from multiLineString boundary, use CityObjectLineVisualizer instead"); //todo: multiLine script does not currently exist
             if (boundary is CitySurface)
                 return BoundariesToMeshes(boundary as CitySurface, coordinateSystem, origin);
             if (boundary is CityMultiOrCompositeSurface)

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Netherlands3D.CityJson.Structure;
 using Netherlands3D.Coordinates;
@@ -11,7 +10,6 @@ namespace Netherlands3D.CityJson.Visualisation
     [RequireComponent(typeof(PointRenderer3D))]
     public class CityObjectPointVisualizer : CityObjectVisualizer
     {
-        private CityObject cityObject;
         private PointRenderer3D  pointRenderer3D;
         [SerializeField] private Mesh visualizationMesh;
         [SerializeField] private CityMaterialConverter materialConverter;
@@ -30,7 +28,7 @@ namespace Netherlands3D.CityJson.Visualisation
             foreach (var geometry in cityObject.Geometries)
             {
                 if (!(geometry.BoundaryObject is CityMultiPoint multiPoint))
-                    throw new NotSupportedException("Boundary is not of Type MultiPoint, use CityObjectVisualiser instead.");
+                    continue; // other types have their own visualizer and don't create meshes
 
                 var coordinates = new List<Coordinate>(multiPoint.VertexCount);
                 foreach (var vert in multiPoint.Points.Vertices)
