@@ -50,7 +50,7 @@ namespace Netherlands3D.CityJson.Visualisation
     [RequireComponent(typeof(CityObject))]
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(MeshRenderer))]
-    public class CityObjectVisualizer : MonoBehaviour
+    public class CityObjectVisualizer : MonoBehaviour, ICityObjectVisualizer
     {
         private static int meshesCreatedThisFrame = 0;
         private const int maxMeshesPerFrame = 20;
@@ -96,7 +96,7 @@ namespace Netherlands3D.CityJson.Visualisation
         }
 
         //create the meshes
-        private void Visualize()
+        public void Visualize(CityObject cityObject)
         {
             transform.localPosition = SetLocalPosition(cityObject); //set position first so the CityObject's transformationMatrix can be used to position the mesh.
             materialConverter.Initialize(cityObject.Appearance);
@@ -199,7 +199,7 @@ namespace Netherlands3D.CityJson.Visualisation
             return meshes;
         }
 
-        public MeshWithMaterials CreateMeshFromGeometry(CityGeometry geometry, CoordinateSystem coordinateSystem, Vector3Double vertexOffset, Vector3 objectOffset)
+        private MeshWithMaterials CreateMeshFromGeometry(CityGeometry geometry, CoordinateSystem coordinateSystem, Vector3Double vertexOffset, Vector3 objectOffset)
         {
             var boundaryMeshData = BoundariesToMeshes(geometry.BoundaryObject, coordinateSystem, vertexOffset);
             List<Mesh> subMeshes = new List<Mesh>();
@@ -227,7 +227,7 @@ namespace Netherlands3D.CityJson.Visualisation
             return new MeshWithMaterials(mesh, materials.ToArray());
         }
 
-        public static Dictionary<SurfaceSemanticType, List<BoundaryMeshData>> SortBoundaryMeshDataBySemanticObject(List<BoundaryMeshData> boundaryMeshData)
+        private static Dictionary<SurfaceSemanticType, List<BoundaryMeshData>> SortBoundaryMeshDataBySemanticObject(List<BoundaryMeshData> boundaryMeshData)
         {
             var dictionary = new Dictionary<SurfaceSemanticType, List<BoundaryMeshData>>();
             while (boundaryMeshData.Count > 0)
@@ -253,7 +253,7 @@ namespace Netherlands3D.CityJson.Visualisation
             return dictionary;
         }
 
-        public static List<Mesh> CombineBoundaryMeshesWithTheSameSemanticObject(List<BoundaryMeshData> boundaryMeshData, Vector3 offset, out List<SurfaceSemanticType> types)
+        private static List<Mesh> CombineBoundaryMeshesWithTheSameSemanticObject(List<BoundaryMeshData> boundaryMeshData, Vector3 offset, out List<SurfaceSemanticType> types)
         {
             List<Mesh> combinedMeshes = new List<Mesh>(boundaryMeshData.Count);
             types = new List<SurfaceSemanticType>(boundaryMeshData.Count);
@@ -286,7 +286,7 @@ namespace Netherlands3D.CityJson.Visualisation
             return combinedMeshes;
         }
 
-        public static List<Mesh> CombineBoundaryMeshesWithTheSameMaterial(List<BoundaryMeshData> boundaryMeshData, Vector3 offset, int themeIndex, out List<int> materialIndices)
+        private static List<Mesh> CombineBoundaryMeshesWithTheSameMaterial(List<BoundaryMeshData> boundaryMeshData, Vector3 offset, int themeIndex, out List<int> materialIndices)
         {
             List<Mesh> combinedMeshes = new List<Mesh>(boundaryMeshData.Count);
             List<GeometryTriangulationData> meshDataToCombine = new List<GeometryTriangulationData>(boundaryMeshData.Count);
@@ -335,7 +335,7 @@ namespace Netherlands3D.CityJson.Visualisation
             return combinedMeshes;
         }
 
-        public static List<Mesh> CombineBoundaryMeshes(List<BoundaryMeshData> boundaryMeshData, Vector3 offset)
+        private static List<Mesh> CombineBoundaryMeshes(List<BoundaryMeshData> boundaryMeshData, Vector3 offset)
         {
             //combine all mesh datas without checking for submesh separations
             List<GeometryTriangulationData> meshDataToCombine = new List<GeometryTriangulationData>(boundaryMeshData.Count);
@@ -349,7 +349,7 @@ namespace Netherlands3D.CityJson.Visualisation
             return new List<Mesh>() { combinedMesh };
         }
 
-        public static Mesh CombineMeshes(List<Mesh> meshes, Matrix4x4 transformationMatrix, bool mergeSubMeshes)
+        private static Mesh CombineMeshes(List<Mesh> meshes, Matrix4x4 transformationMatrix, bool mergeSubMeshes)
         {
             CombineInstance[] combine = new CombineInstance[meshes.Count];
 
@@ -367,7 +367,7 @@ namespace Netherlands3D.CityJson.Visualisation
         }
 
         //Different boundary objects need to be parsed into meshes in different ways because of the different depths of the boundary arrays. We need to go as deep as needed to create meshes from surfaces.
-        protected virtual List<BoundaryMeshData> BoundariesToMeshes(CityBoundary boundary, CoordinateSystem coordinateSystem, Vector3Double origin)
+        private List<BoundaryMeshData> BoundariesToMeshes(CityBoundary boundary, CoordinateSystem coordinateSystem, Vector3Double origin)
         {
             if (boundary is CityMultiPoint)
                 throw new NotSupportedException("Boundary of type " + typeof(CityMultiPoint) + "is not supported by this Visualiser script since it contains no mesh data. Use MultiPointVisualiser instead and assign an object to use as visualization of the points");
@@ -450,7 +450,7 @@ namespace Netherlands3D.CityJson.Visualisation
         }
 
         // convert the list of Vector3Doubles to a list of Vector3s and convert the coordinates to unity in the process.
-        public static List<Vector3> GetConvertedPolygonVertices(CityPolygon polygon, CoordinateSystem coordinateSystem, Vector3Double origin)
+        private static List<Vector3> GetConvertedPolygonVertices(CityPolygon polygon, CoordinateSystem coordinateSystem, Vector3Double origin)
         {
             List<Vector3> convertedPolygon = new List<Vector3>(polygon.Vertices.Length);
             foreach (var vert in polygon.Vertices)
