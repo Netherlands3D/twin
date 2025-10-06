@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D._Application._Twin;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.Events;
+using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
@@ -51,7 +54,8 @@ namespace Netherlands3D.UI.Behaviours
 
             ImportAssetPanel.OnShow += OnShowAssetLibrary;
             ImportAssetPanel.OnHide += OnHideAssetLibrary;
-            ImportAssetPanel.UploadStarted += OnUploadStarted;
+            ImportAssetPanel.FileUploadStarted += OnUploadStarted;
+            ImportAssetPanel.UriImportStarted += OnUriImportStarted;
         }
 
         private void OnDisable()
@@ -64,7 +68,8 @@ namespace Netherlands3D.UI.Behaviours
 
             ImportAssetPanel.OnShow -= OnShowImportAssetPanel;
             ImportAssetPanel.OnHide -= OnHideImportAssetPanel;
-            ImportAssetPanel.UploadStarted -= OnUploadStarted;
+            ImportAssetPanel.FileUploadStarted -= OnUploadStarted;
+            ImportAssetPanel.UriImportStarted -= OnUriImportStarted;
         }
 
         public void Open()
@@ -174,6 +179,13 @@ namespace Netherlands3D.UI.Behaviours
         private void OnUploadStarted(ClickEvent evt)
         {
             uploadFileEvent.InvokeStarted();
+            
+            Close();
+        }
+
+        private void OnUriImportStarted(Uri uri)
+        {
+            App.Layers.Add(LayerBuilder.Create().FromUrl(uri));
             
             Close();
         }

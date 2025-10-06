@@ -16,24 +16,24 @@
     display: flex;
 }
 
-.import-asset-panel-button-upload {
+.import-asset-panel__button-upload {
     width: auto;
     align-self: stretch;
 }
 
-.import-asset-panel-open-url #Row {
+.import-asset-panel__open-url #Row {
     flex-grow: 1;
     flex-direction: row;
     flex-shrink: 0;
     align-content: auto;
 }
 
-.import-asset-panel-open-url TextField {
+.import-asset-panel__open-url-field {
     flex-grow: 1;
     margin-left: var(--spacing-2);
 }
 
-.import-asset-panel-open-url Button {
+.import-asset-panel__open-url-button {
     align-self: flex-end;
     padding-top: var(--spacing-2);
     padding-bottom: var(--spacing-2);

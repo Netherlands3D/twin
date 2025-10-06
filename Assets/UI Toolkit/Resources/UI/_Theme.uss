@@ -26,6 +26,8 @@
     --spacing-32: 128px;
     --spacing-36: 144px;
     --spacing-40: 160px;
+    
+    /* 12-column Grid spacing / widths */
     --spacing-1_12: 8.333333%;
     --spacing-2_12: 16.666667%;
     --spacing-3_12: 25%;
