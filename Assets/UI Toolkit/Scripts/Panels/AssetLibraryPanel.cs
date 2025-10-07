@@ -49,7 +49,10 @@ namespace Netherlands3D.UI.Panels
         {
             Breadcrumb.ClearCrumbs();
 
-            var catalogItemCollection = await Load(async () => await catalog.BrowseAsync());
+            // TODO: Until we officially support pagination - set the page limit to the max of 1000
+            var pagination = new Pagination(0, 1000);
+            
+            var catalogItemCollection = await Load(async () => await catalog.BrowseAsync(pagination));
             await OpenFolder("Bibliotheek", catalogItemCollection);
         }
 
