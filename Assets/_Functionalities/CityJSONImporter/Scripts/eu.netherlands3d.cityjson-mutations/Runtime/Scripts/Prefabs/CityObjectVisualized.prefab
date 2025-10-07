@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 5302617482703819505}
   - component: {fileID: -4129343486682630258}
   - component: {fileID: 5745111386722685267}
+  - component: {fileID: -7440030570826187743}
+  - component: {fileID: 2833494591177261922}
   m_Layer: 0
   m_Name: CityObjectVisualized
   m_TagString: Untagged
@@ -148,7 +150,8 @@ MonoBehaviour:
   cityObjectVisualized:
     m_PersistentCalls:
       m_Calls: []
-  visualizationMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  geometryType: 0
+  batchedMeshInstanceRenderer: {fileID: 5745111386722685267}
   materialConverter:
     semanticMaterials:
     - Type: 0
@@ -185,3 +188,61 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &-7440030570826187743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807838613596807431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 530c352fd8b21486c828dcf1f770a016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cityObjectVisualized:
+    m_PersistentCalls:
+      m_Calls: []
+  geometryType: 10
+  batchedMeshInstanceRenderer: {fileID: 2833494591177261922}
+  materialConverter:
+    semanticMaterials:
+    - Type: 0
+      Material: {fileID: 2100000, guid: 1813c5b85524d4d9e842442713b84434, type: 2}
+    - Type: 1000
+      Material: {fileID: 2100000, guid: c19c85780cd7f450db02b55167f2b676, type: 2}
+    - Type: 1001
+      Material: {fileID: 2100000, guid: d0472e7df0c374cae9817021ec00f255, type: 2}
+    - Type: 1002
+      Material: {fileID: 2100000, guid: c2fe9701b3ad2444c9e146e5f28e983c, type: 2}
+    - Type: 1006
+      Material: {fileID: 2100000, guid: 35f607d55fd3a41df90eb90aa27d4c59, type: 2}
+    - Type: 1007
+      Material: {fileID: 2100000, guid: d27b4b3d1ad2a41de8bcf446eb52600f, type: 2}
+    cachedMaterials: []
+--- !u!114 &2833494591177261922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807838613596807431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2ab6ad69b9eb134b90d56b3161fba5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  pointMaterial: {fileID: 2100000, guid: 1813c5b85524d4d9e842442713b84434, type: 2}
+  flattenY: 0
+  offsetY: 0
+  pointMeshScale: 3
+  isProjected: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  lineMesh: {fileID: 6475988976120857168, guid: 0ce527cb5805b44468ec8f7dabbf58ca,
+    type: 3}
+  lineMaterial: {fileID: 2100000, guid: 1813c5b85524d4d9e842442713b84434, type: 2}
+  drawJoints: 1
+  lineDiameter: 3
