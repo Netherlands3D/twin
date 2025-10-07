@@ -249,7 +249,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             selectedGameObjects = CreateFeatureGameObjects();
             if (selectedGameObjects.Count == 0) return; 
 
-            Color selectionColor = Color.blue;
+            Color selectionColor = Color.blue;           
             visualisationLayer.SetVisualisationColor(selectedGameObjects[0].transform, meshes, selectionColor);
             foreach (Mesh mesh in meshes)
             {

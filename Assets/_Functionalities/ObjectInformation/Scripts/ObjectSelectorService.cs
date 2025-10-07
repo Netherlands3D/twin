@@ -327,8 +327,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
             if (!clickedSamePosition || refreshSelection)
             {
+                //when a geojson point is located on top of a feature in an objectmapping,
+                //we need to find the blocked objectmapping and find the hitpoint to find the geojson feature position beneath it
                 if (subObjectSelector.Object != null)
                     featureSelector.SetBlockingObjectMapping(subObjectSelector.Object.ObjectMapping, lastWorldClickedPosition);
+                //the blocking objectmapping should be cleared when trying to select the next feature
+                else
+                    featureSelector.SetBlockingObjectMapping(null, Vector3.zero);
 
                 //no features are imported yet if mappingTreeInstance is null
                 if (mappingTreeInstance != null)
@@ -351,7 +356,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                                 else
                                     continue;
                             }
-
                             mappings.TryAdd(feature, feature.VisualisationParent.LayerData.RootIndex);
                         }
                     }
@@ -365,9 +369,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                             mappings.TryAdd(subObjectSelector.Object, subObjectParent.LayerData.RootIndex);
                     }
                 }
-
                 orderedMappings = mappings.OrderBy(entry => entry.Value).Select(entry => entry.Key).ToList();
-
                 currentSelectedMappingIndex = 0;
             }
             else
@@ -379,8 +381,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
 
             if (orderedMappings.Count == 0) return null;
-
-            //Debug.Log(orderedMappings[currentSelectedMappingIndex]);
 
             IMapping selection = orderedMappings[currentSelectedMappingIndex];
             return selection;
