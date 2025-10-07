@@ -104,16 +104,15 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
 
         public override bool TryParseFeature(Feature feature, out ICatalogItem catalogItem)
         {
-            foreach (var strategy in strategies)
+            var strategy = strategies.FirstOrDefault(s => s.CanHandle(feature));
+            if (strategy == null)
             {
-                if (!strategy.CanHandle(feature)) continue;
-
-                catalogItem = strategy.ParseFeature(feature);
-                return true;
+                catalogItem = null;
+                return false;                
             }
-
-            catalogItem = null;
-            return false;
+            
+            catalogItem = strategy.ParseFeature(feature);
+            return true;
         }
     }
 }
