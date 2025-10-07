@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 
 namespace Netherlands3D.OgcApi
 {
+    [JsonObject]
     public record ConformanceDeclaration
     {
         [JsonProperty("conformsTo", Required = Required.Always)]
