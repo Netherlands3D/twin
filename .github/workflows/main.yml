@@ -45,23 +45,6 @@ jobs:
           restore-keys: |
             Library-
 
-      - name: 'Cache Unity Package Manager downloads'
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/unity3d
-            ~/.local/share/unity3d
-          key: upm-${{ runner.os }}-${{ hashFiles('Packages/manifest.json', 'Packages/packages-lock.json') }}
-
-      - name: 'Purge volatile Unity caches from Library'
-        shell: bash
-        run: |
-          rm -rf Library/VirtualArtifacts \
-                 Library/BuildCache \
-                 Library/Bee \
-                 Library/il2cpp_cache \
-                 Temp obj
-
       - name: 'Build Unity project to WebGL'
         id: buildUnity # used when building the docker container to get the version number from
         # See https://game.ci/docs/github/getting-started
@@ -112,23 +95,6 @@ jobs:
           key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
             Library-
-
-      - name: 'Cache Unity Package Manager downloads'
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/unity3d
-            ~/.local/share/unity3d
-          key: upm-${{ runner.os }}-${{ hashFiles('Packages/manifest.json', 'Packages/packages-lock.json') }}
-
-      - name: 'Purge volatile Unity caches from Library'
-        shell: bash
-        run: |
-          rm -rf Library/VirtualArtifacts \
-                 Library/BuildCache \
-                 Library/Bee \
-                 Library/il2cpp_cache \
-                 Temp obj
 
       - name: 'Build Unity project to WebGL'
         # See https://game.ci/docs/github/getting-started
