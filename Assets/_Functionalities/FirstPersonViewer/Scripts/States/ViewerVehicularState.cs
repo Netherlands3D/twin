@@ -58,6 +58,10 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             {
                 float turn = moveInput.x * viewer.MovementModus.turnSpeed * Time.deltaTime * Mathf.Sign(currentSpeed);
                 transform.Rotate(Vector3.up * turn);
+            } else
+            {
+                float turn = moveInput.x * viewer.MovementModus.turnSpeed * .2f * Time.deltaTime;
+                transform.Rotate(Vector3.up * turn);
             }
 
             if (currentSpeed > 0)
