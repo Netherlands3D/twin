@@ -282,7 +282,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
 
         private void UpdatePositionFields(Coordinate coordinate)
         {
-            var rdCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RDNAP);
+            var rdCoordinate = coordinate.Convert( CoordinateSystem.RDNAP);
             
             position.xField.SetTextWithoutNotify($"{rdCoordinate.easting.ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
             position.yField.SetTextWithoutNotify($"{rdCoordinate.northing.ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
