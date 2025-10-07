@@ -13,11 +13,9 @@ namespace Netherlands3D.CityJson.Visualisation
     {
         [SerializeField] private GeometryType geometryType;
         [SerializeField] private BatchedMeshInstanceRenderer batchedMeshInstanceRenderer;
-        [SerializeField] private CityMaterialConverter materialConverter;
 
         protected override void Visualize()
         {
-            materialConverter.Initialize(cityObject.Appearance);
             foreach (var geometry in cityObject.Geometries)
             {
                 if (geometry.Type != geometryType)
