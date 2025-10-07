@@ -6,8 +6,8 @@ namespace Netherlands3D.FirstPersonViewer.Miscellaneous
 {
     public class DisableOnFirstPersonView : MonoBehaviour
     {
-        [SerializeField] private UnityEvent onViewerEnterd;
-        [SerializeField] private UnityEvent onViewerExited;
+        [SerializeField] private UnityEvent onViewerEnterd = new UnityEvent();
+        [SerializeField] private UnityEvent onViewerExited = new UnityEvent();
 
         private void Start()
         {
@@ -21,7 +21,7 @@ namespace Netherlands3D.FirstPersonViewer.Miscellaneous
             ViewerEvents.OnViewerExited -= ViewerExited;
         }
 
-        private void ViewerEnterd() => onViewerEnterd?.Invoke();
-        private void ViewerExited() => onViewerExited?.Invoke();
+        private void ViewerEnterd() => onViewerEnterd.Invoke();
+        private void ViewerExited() => onViewerExited.Invoke();
     }
 }

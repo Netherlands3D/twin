@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee67a7067d471274fb5ee9ab3988bc8f, type: 3}
   m_Name: Cycling
   m_EditorClassIdentifier: 
-  viewHeight: 1.5
+  viewHeight: 1.6
   fieldOfView: 60
   speedInKm: 40
   speedMultiplier: 1.5

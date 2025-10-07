@@ -12,11 +12,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
         private CanvasGroup viewerGroup;
         [SerializeField] private List<GameObject> uiToDisable;
 
-
         private PointerToWorldPosition pointerToWorld;
-
-
-
 
         private void Start()
         {

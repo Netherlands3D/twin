@@ -537,7 +537,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "./",
+                    "name": "'\\",
                     "id": "df09a00b-bbba-4c9b-83e3-db1bd6b88b6c",
                     "path": "1DAxis",
                     "interactions": "",
@@ -550,7 +550,7 @@
                 {
                     "name": "negative",
                     "id": "c36761ac-4252-4d56-a1b8-b7ab1bbf4db9",
-                    "path": "<Keyboard>/period",
+                    "path": "<Keyboard>/quote",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard & Mouse",
@@ -561,7 +561,7 @@
                 {
                     "name": "positive",
                     "id": "a659546a-b2f6-4f63-a6fd-1dd98c33b99d",
-                    "path": "<Keyboard>/slash",
+                    "path": "<Keyboard>/backslash",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard & Mouse",
