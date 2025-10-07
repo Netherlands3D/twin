@@ -1,6 +1,6 @@
 .asset-library-panel {
     display: none;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     flex-shrink: 0;
     flex-grow: 1;
 }
