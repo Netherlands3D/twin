@@ -361,9 +361,9 @@ namespace Netherlands3D.CityJson.Visualisation
         private List<BoundaryMeshData> BoundariesToMeshes(CityBoundary boundary, CoordinateSystem coordinateSystem, Vector3Double origin)
         {
             if (boundary is CityMultiPoint)
-                throw new NotSupportedException("Boundary of type " + typeof(CityMultiPoint) + "Cannot create mesh from multipoint boundary, use CityObjectPointVisualizer instead");
+                throw new NotSupportedException("Boundary of type " + typeof(CityMultiPoint) + "Cannot create mesh from multipoint boundary, use CityObjectPointAndLineVisualizer with a PointRenderer3D instead");
             if (boundary is CityMultiLineString)
-                throw new NotSupportedException("Boundary of type " + typeof(CityMultiLineString) + "Cannot create mesh from multiLineString boundary, use CityObjectLineVisualizer instead"); //todo: multiLine script does not currently exist
+                throw new NotSupportedException("Boundary of type " + typeof(CityMultiLineString) + "Cannot create mesh from multiLineString boundary, use CityObjectPointAndLineVisualizer with a LineRenderer3D instead");
             if (boundary is CitySurface)
                 return BoundariesToMeshes(boundary as CitySurface, coordinateSystem, origin);
             if (boundary is CityMultiOrCompositeSurface)
