@@ -70,6 +70,7 @@ namespace Netherlands3D.Tiles3D
             var parsedGltf = new ParsedGltf()
             {
                 gltfImport = gltf,
+                gltfJsonData = data // Store the original GLTF JSON data for metadata parsing
                 //rtcCenter = rtcCenter,
             };
             await parsedGltf.SpawnGltfScenes(containerTransform);
@@ -81,7 +82,7 @@ namespace Netherlands3D.Tiles3D
                 Content content = containerTransform.GetComponent<Content>();
                 if (content != null)
                 {
-                    // parsedGltf.ParseAssetMetaData(content);
+                    parsedGltf.ParseAssetMetaData(content);
                 }
 
             }

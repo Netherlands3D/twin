@@ -23,6 +23,7 @@ namespace Netherlands3D.Tiles3D
     {
         public GltfImport gltfImport;
         public byte[] glbBuffer;
+        public byte[] gltfJsonData; // For standalone GLTF files
         public double[] rtcCenter = null;
         public CoordinateSystem coordinatesystem;
 
@@ -243,12 +244,63 @@ namespace Netherlands3D.Tiles3D
         }
         public void ParseAssetMetaData(Content content)
         {
-            //Extract json from glb
-            var gltfAndBin = ExtractJsonAndBinary(glbBuffer);
-            var gltfJsonText = gltfAndBin.Item1;
+            string gltfJsonText = null;
+            
+            if (glbBuffer != null)
+            {
+                // Extract JSON from GLB binary format
+                var gltfAndBin = ExtractJsonAndBinary(glbBuffer);
+                gltfJsonText = gltfAndBin.Item1;
+              //  Debug.Log($"Extracted GLTF JSON from GLB, length: {gltfJsonText?.Length ?? 0}");
+            }
+            else if (gltfJsonData != null)
+            {
+                // Convert byte array to string for standalone GLTF files
+                gltfJsonText = System.Text.Encoding.UTF8.GetString(gltfJsonData);
+           //     Debug.Log($"Got GLTF JSON from data, length: {gltfJsonText?.Length ?? 0}");
+            }
+            else if (gltfImport != null)
+            {
+                // Try to get JSON from the GLTF import directly
+                // This is for standalone GLTF files (not GLB)
+                var sourceJson = gltfImport.GetSourceRoot()?.ToString();
+                if (!string.IsNullOrEmpty(sourceJson))
+                {
+                    gltfJsonText = sourceJson;
+                  //  Debug.Log($"Got GLTF JSON from import, length: {gltfJsonText?.Length ?? 0}");
+                }
+                else
+                {
+                    Debug.LogWarning("Could not get source JSON from GLTF import");
+                    return;
+                }
+            }
+            else
+            {
+                Debug.LogError("No GLTF data source available - cannot extract metadata");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(gltfJsonText))
+            {
+                Debug.LogError("Could not extract GLTF JSON text");
+                return;
+            }
 
             //Deserialize json using JSON.net instead of Unity's JsonUtility ( gave silent error )
             var gltfRoot = JsonConvert.DeserializeObject<GltfMeshFeatures.GltfRootObject>(gltfJsonText);
+            
+            if (gltfRoot?.asset != null)
+            {
+                //Debug.Log($"Asset found - Copyright: {gltfRoot.asset.copyright}");
+                //Debug.Log($"Asset found - Generator: {gltfRoot.asset.generator}");
+                //Debug.Log($"Asset found - Version: {gltfRoot.asset.version}");
+            }
+            else
+            {
+                Debug.LogWarning("No asset data found in GLTF");
+            }
+            
             var metadata = content.gameObject.AddComponent<ContentMetadata>();
             metadata.asset = gltfRoot.asset;
 

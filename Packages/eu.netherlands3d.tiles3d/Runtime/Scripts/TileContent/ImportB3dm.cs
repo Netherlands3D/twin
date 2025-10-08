@@ -20,6 +20,9 @@ namespace Netherlands3D.Tiles3D
             var memoryStream = new System.IO.MemoryStream(data);
             var b3dm = B3dmReader.ReadB3dm(memoryStream);
             
+            byte[] originalGlbData = new byte[b3dm.GlbData.Length];
+            Array.Copy(b3dm.GlbData, originalGlbData, b3dm.GlbData.Length);
+            
             double[] rtcCenter = GetRTCCenterFromB3dm(b3dm);
 
             RemoveCesiumRtcFromRequieredExtentions(ref b3dm);
@@ -56,9 +59,7 @@ namespace Netherlands3D.Tiles3D
             {
                 gltfImport = gltf,
                 rtcCenter = rtcCenter,
-#if SUBOBJECT
-                glbBuffer = b3dm.GlbData //Store the glb buffer for access in subobjects
-#endif
+                glbBuffer = originalGlbData 
             };
             await parsedGltf.SpawnGltfScenes(containerTransform);
 
@@ -69,7 +70,7 @@ namespace Netherlands3D.Tiles3D
                 Content content = containerTransform.GetComponent<Content>();
                 if (content!=null)
                 {
-                   // parsedGltf.ParseAssetMetaData(content);
+                    parsedGltf.ParseAssetMetaData(content);
                 }
                 
             }
