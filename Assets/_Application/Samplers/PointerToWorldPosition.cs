@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.Samplers
         private OpticalRaycaster opticalRaycaster;
         private Action<Vector3, bool> worldPointCallback;
         private Coordinate worldPoint;
-        private float maxDistance = 1000;
+        private float maxDistance = 10000;
 
         private GameObject testPosition;
         
