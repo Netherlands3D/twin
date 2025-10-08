@@ -235,23 +235,26 @@ namespace Netherlands3D.Twin.Layers
 
         protected virtual void OnDoubleClick(LayerData layer)
         {
-            CenterInView(layer);
+            CenterInView();
         }
         
-        public void CenterInView(LayerData layer)
+        public void CenterInView()
         {
             if (Bounds == null)
             {
                 Debug.LogError("Bounds object is null, no bounds specified to center to.");
                 return;
             }
-
-            var crs = CoordinateSystems.To3D(CoordinateSystems.connectedCoordinateSystem);
-            Bounds.Convert(crs);
+            
             Coordinate targetCoordinate = Bounds.Center;
-            float height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
-            targetCoordinate.height = height;
-
+            if (targetCoordinate.PointsLength == 2) //2D CRS, use the heigtmap to estimate the height.
+            {
+                var crs = CoordinateSystems.To3D(Bounds.CoordinateSystem);
+                targetCoordinate = targetCoordinate.Convert(crs);
+                float height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
+                targetCoordinate.height = height;
+            }
+            
             // !IMPORTANT: we deselect the layer, because if we don't do this, the TransformHandles might be connected to this LayerGameObject
             // This causes conflicts between the transformHandles and the Origin Shifter system, because the Transform handles will try to move the gameObject to the old (pre-shift) position.
             LayerData.DeselectLayer(); 

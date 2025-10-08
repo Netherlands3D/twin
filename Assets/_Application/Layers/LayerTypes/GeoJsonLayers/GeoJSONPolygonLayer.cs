@@ -312,7 +312,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 else
                     bbox.Encapsulate(vis.trueBounds);
             }
-
+            var crs2D = CoordinateSystems.To2D(bbox.CoordinateSystem);
+            bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
         }
     }
