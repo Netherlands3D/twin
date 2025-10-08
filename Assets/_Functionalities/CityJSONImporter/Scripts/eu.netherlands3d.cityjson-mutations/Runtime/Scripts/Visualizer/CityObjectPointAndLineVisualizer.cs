@@ -14,6 +14,15 @@ namespace Netherlands3D.CityJson.Visualisation
         [SerializeField] private GeometryType geometryType;
         [SerializeField] private BatchedMeshInstanceRenderer batchedMeshInstanceRenderer;
 
+        protected override void Awake()
+        {
+            base.Awake();
+            if (!batchedMeshInstanceRenderer)
+            {
+                batchedMeshInstanceRenderer = GetComponent<BatchedMeshInstanceRenderer>();
+            }
+        }
+
         protected override void Visualize()
         {
             foreach (var geometry in cityObject.Geometries)
@@ -24,6 +33,8 @@ namespace Netherlands3D.CityJson.Visualisation
                 var collections = GetPositionCollections(geometry.BoundaryObject, cityObject.CoordinateSystem);
                 batchedMeshInstanceRenderer.SetPositionCollections(collections);
             }
+
+            cityObjectVisualized?.Invoke(this);
         }
 
         private static List<List<Coordinate>> GetPositionCollections(CityBoundary boundary, CoordinateSystem coordinateSystem)

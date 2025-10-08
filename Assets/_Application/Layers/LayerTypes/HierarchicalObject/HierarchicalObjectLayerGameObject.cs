@@ -11,6 +11,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
@@ -344,14 +345,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override void ApplyStyling()
         {
-            // Dynamically create a list of Layer features because a different set of renderers could be present after
-            // an import or replacement.
-            var features = CreateFeaturesByType<MeshRenderer>();
-            
-            // Apply style to the features that was discovered
-            foreach (var feature in features)
+            foreach (var meshRenderer in GetComponentsInChildren<MeshRenderer>())
             {
-                HierarchicalObjectTileLayerStyler.Apply(this, GetStyling(feature), feature);
+                ApplyStylingToRenderer(meshRenderer);
+            }
+
+            foreach (var batchedRenderer in GetComponentsInChildren<BatchedMeshInstanceRenderer>())
+            {
+                ApplyStylingToRenderer(batchedRenderer);
             }
             
             base.ApplyStyling();
@@ -365,6 +366,30 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             int bitMask = GetBitMask();
             UpdateBitMaskForMaterials(bitMask, renderer.materials);
             OnStylingApplied.Invoke(); // TODO: this might be called to often now
+        }
+
+        public void ApplyStylingToRenderer(BatchedMeshInstanceRenderer renderer)
+        {
+            if (!renderer) return;
+
+            var feature = CreateFeature(renderer);
+            HierarchicalObjectTileLayerStyler.Apply(this, GetStyling(feature), feature);
+
+            int bitMask = GetBitMask();
+            UpdateBitMaskForMaterials(bitMask, GetMaterialsFor(renderer));
+            OnStylingApplied.Invoke(); // TODO: this might be called too often now
+        }
+
+        private static IEnumerable<Material> GetMaterialsFor(BatchedMeshInstanceRenderer renderer)
+        {
+            if (renderer is LineRenderer3D lineRenderer)
+            {
+                if (lineRenderer.LineMaterial) yield return lineRenderer.LineMaterial;
+                if (lineRenderer.PointMaterial) yield return lineRenderer.PointMaterial;
+                yield break;
+            }
+
+            if (renderer.PointMaterial) yield return renderer.PointMaterial;
         }
     }
 }

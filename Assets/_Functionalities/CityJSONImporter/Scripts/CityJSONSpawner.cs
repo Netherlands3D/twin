@@ -9,6 +9,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Rendering;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.CityJSON
@@ -67,7 +68,10 @@ namespace Netherlands3D.Functionalities.CityJSON
 
             foreach (var co in cityJson.CityObjects)
             {
-                co.GetComponent<CityObjectVisualizer>().cityObjectVisualized.AddListener(OnCityObjectVisualized);
+                foreach (var visualizer in co.GetComponents<CityObjectVisualizer>())
+                {
+                    visualizer.cityObjectVisualized.AddListener(OnCityObjectVisualized);
+                }
             }
 
             SetCityJSONPosition(cityJson);
@@ -92,13 +96,25 @@ namespace Netherlands3D.Functionalities.CityJSON
 
         private void OnCityObjectVisualized(CityObjectVisualizer visualizer)
         {
-            if (addMeshCollidersToCityObjects)
+            if (addMeshCollidersToCityObjects && visualizer.TryGetComponent<MeshFilter>(out _) &&
+                !visualizer.TryGetComponent<MeshCollider>(out _))
             {
                 visualizer.gameObject.AddComponent<MeshCollider>();
             }
 
             // Object is loaded / replaced - trigger the application of styling
-            layerGameObject.ApplyStylingToRenderer(visualizer.GetComponent<Renderer>()); //todo: make this work for BatchedMeshRenderer
+            var renderer = visualizer.GetComponent<Renderer>();
+            if (renderer)
+            {
+                layerGameObject.ApplyStylingToRenderer(renderer);
+                return;
+            }
+
+            var batchedRenderer = visualizer.GetComponent<BatchedMeshInstanceRenderer>();
+            if (batchedRenderer)
+            {
+                layerGameObject.ApplyStylingToRenderer(batchedRenderer);
+            }
         }
 
         private void PositionGeoReferencedCityJson(Coordinate origin)

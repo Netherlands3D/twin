@@ -1,5 +1,7 @@
-﻿using Netherlands3D.LayerStyles;
+﻿using System;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
+using Netherlands3D.Twin.Rendering;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
@@ -48,8 +50,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         /// </summary>
         public static void Apply(HierarchicalObjectLayerGameObject layer, Symbolizer styling, LayerFeature layerFeature)
         {
-            if (layerFeature.Geometry is not MeshRenderer meshRenderer) return;
+            switch (layerFeature.Geometry)
+            {
+                case MeshRenderer meshRenderer:
+                    ApplyToMeshRenderer(layer, styling, meshRenderer);
+                    break;
+                case LineRenderer3D lineRenderer:
+                    ApplyToLineRenderer(layer, styling, lineRenderer);
+                    break;
+                case PointRenderer3D pointRenderer:
+                    ApplyToPointRenderer(layer, styling, pointRenderer);
+                    break;
+                case BatchedMeshInstanceRenderer batchedRenderer:
+                    ApplyToBatchedRenderer(layer, styling, batchedRenderer);
+                    break;
+            }
+        }
 
+        private static void ApplyToMeshRenderer(HierarchicalObjectLayerGameObject layer, Symbolizer styling, MeshRenderer meshRenderer)
+        {
             var fillColor = styling.GetFillColor();
 
             // Keep the original material color if fill color is not set (null)
@@ -57,6 +76,72 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             layer.LayerData.Color = fillColor.Value;
             SetUrpLitColorOptimized(meshRenderer, fillColor.Value);
+        }
+
+        private static void ApplyToPointRenderer(HierarchicalObjectLayerGameObject layer, Symbolizer styling, PointRenderer3D renderer)
+        {
+            var fillColor = styling.GetFillColor();
+            if (!fillColor.HasValue) return;
+
+            layer.LayerData.Color = fillColor.Value;
+
+            var material = EnsureMaterialInstance(renderer.PointMaterial, m => renderer.PointMaterial = m);
+            if (!material) return;
+
+            material.color = fillColor.Value;
+            renderer.SetDefaultColors();
+        }
+
+        private static void ApplyToLineRenderer(HierarchicalObjectLayerGameObject layer, Symbolizer styling, LineRenderer3D renderer)
+        {
+            var strokeColor = styling.GetStrokeColor() ?? styling.GetFillColor();
+            if (!strokeColor.HasValue) return;
+
+            layer.LayerData.Color = strokeColor.Value;
+
+            var lineMaterial = EnsureMaterialInstance(renderer.LineMaterial, m => renderer.LineMaterial = m);
+            if (lineMaterial)
+            {
+                lineMaterial.color = strokeColor.Value;
+            }
+
+            var pointMaterial = EnsureMaterialInstance(renderer.PointMaterial, m => renderer.PointMaterial = m);
+            if (pointMaterial)
+            {
+                pointMaterial.color = strokeColor.Value;
+            }
+
+            renderer.SetDefaultColors();
+        }
+
+        private static void ApplyToBatchedRenderer(HierarchicalObjectLayerGameObject layer, Symbolizer styling, BatchedMeshInstanceRenderer renderer)
+        {
+            var fillColor = styling.GetFillColor();
+            if (!fillColor.HasValue) return;
+
+            layer.LayerData.Color = fillColor.Value;
+
+            var material = EnsureMaterialInstance(renderer.PointMaterial, m => renderer.PointMaterial = m);
+            if (!material) return;
+
+            material.color = fillColor.Value;
+            renderer.SetDefaultColors();
+        }
+
+        private static Material EnsureMaterialInstance(Material material, Action<Material> setter)
+        {
+            if (!material) return null;
+
+            if (material.name.EndsWith("(Instance)", StringComparison.Ordinal)) return material;
+
+            var source = material;
+            var instance = new Material(source)
+            {
+                name = $"{source.name} (Instance)"
+            };
+            setter(instance);
+
+            return instance;
         }
 
         private static void SetUrpLitColorOptimized(MeshRenderer renderer, Color color, int? materialIndex = null)
