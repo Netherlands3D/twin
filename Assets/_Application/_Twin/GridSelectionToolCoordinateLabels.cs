@@ -65,11 +65,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             var minUnityPosition = new Vector3(bounds.min.x, bounds.center.y, bounds.min.z);
             var min = new Coordinate(minUnityPosition);
-            var southWest = CoordinateConverter.ConvertTo(min, displayCrs);
+            var southWest = min.Convert(displayCrs);
 
             var maxUnityPosition = new Vector3(bounds.max.x, bounds.center.y, bounds.max.z);
             var max = new Coordinate(maxUnityPosition);
-            var northEast = CoordinateConverter.ConvertTo(max, displayCrs);
+            var northEast = max.Convert(displayCrs);
 
             return (southWest, northEast);
         }

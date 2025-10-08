@@ -5,11 +5,9 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
-using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
-using RSG;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
@@ -17,18 +15,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     [Serializable]
     public partial class GeoJSONPointLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
-        [SerializeField] private BatchedMeshInstanceRenderer pointRenderer3D;
+        [SerializeField] private PointRenderer3D pointRenderer3D;
+        [SerializeField] private PointRenderer3D selectionPointRenderer3D;
         public bool IsPolygon => false;
         public override bool IsMaskable => false;
 
         public Transform Transform => transform;
+
         public delegate void GeoJSONPointHandler(Feature feature);
+
         public event GeoJSONPointHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
+        private List<List<Coordinate>> visualisationsToRemove = new();
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
 
         private GeoJsonPointLayerMaterialApplicator applicator;
+
         internal GeoJsonPointLayerMaterialApplicator Applicator
         {
             get
@@ -44,7 +47,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // Ensure that PointRenderer3D.Material has a Material Instance to prevent accidental destruction
             // of a material asset when replacing the material - no destroy of the old material must be done because
             // that is an asset and not an instance
-            PointRenderer3D.Material = new Material(PointRenderer3D.Material);
+            PointRenderer3D.PointMaterial = new Material(PointRenderer3D.PointMaterial);
         }
 
         public List<Mesh> GetMeshData(Feature feature)
@@ -74,11 +77,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public float GetSelectionRange()
         {
-            return pointRenderer3D.MeshScale;
+            return pointRenderer3D.PointMeshScale;
         }
 
 
         //here we have to local offset the vertices with the position of the transform because the transform gets shifted
+        //also we are using the actual feature geometry to find the vertices in the targeted buffers
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
         {
             foreach (Mesh mesh in meshes)
@@ -87,22 +91,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 for (int i = 0; i < vertices.Length; i++)
                 {
                     Vector3 localOffset = vertices[i] - mesh.bounds.center;
-                    pointRenderer3D.SetLineColorClosestToPoint(transform.position + localOffset, color);
+                    var coordinate = new Coordinate(transform.position + localOffset);
+                    selectionPointRenderer3D.PointMaterial.color = color;
+                    selectionPointRenderer3D.SetPositionCollections(new List<List<Coordinate>>() { new List<Coordinate> { coordinate } });
                 }
             }
         }
 
-        public void SetVisualisationColorToDefault()
+        public void SetVisualisationColorToDefault() //todo rename this?
         {
-            PointRenderer3D.SetDefaultColors();
+            selectionPointRenderer3D.Clear();
         }
 
         public Color GetRenderColor()
         {
-            return pointRenderer3D.Material.color;
+            return pointRenderer3D.PointMaterial.color;
         }
-        
-        public BatchedMeshInstanceRenderer PointRenderer3D
+
+        public PointRenderer3D PointRenderer3D
         {
             get { return pointRenderer3D; }
             set
@@ -160,7 +166,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private Material GetMaterialInstance(Color color)
         {
-            return new Material(pointRenderer3D.Material)
+            return new Material(pointRenderer3D.PointMaterial)
             {
                 color = color
             };
@@ -173,25 +179,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public void RemoveFeaturesOutOfView()
         {
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
+            
+            visualisationsToRemove.Clear();
             foreach (var kvp in spawnedVisualisations.Reverse())
             {
                 var inCameraFrustum = GeometryUtility.TestPlanesAABB(frustumPlanes, kvp.Value.tiledBounds);
                 if (inCameraFrustum) continue;
 
+                visualisationsToRemove.AddRange(kvp.Value.Data);
                 RemoveFeature(kvp.Value);
-            }            
+            }
+            PointRenderer3D.RemovePointCollections(visualisationsToRemove);
         }
 
         private void RemoveFeature(FeaturePointVisualisations featureVisualisation)
         {
-            foreach (var pointCollection in featureVisualisation.Data)
-            {
-                PointRenderer3D.RemoveCollection(pointCollection);
-            }
-            FeatureRemoved?.Invoke(featureVisualisation.feature); 
+            FeatureRemoved?.Invoke(featureVisualisation.feature);
             spawnedVisualisations.Remove(featureVisualisation.feature);
         }
-        
+
         public override void DestroyLayerGameObject()
         {
             if (Application.isPlaying && PointRenderer3D?.gameObject)
@@ -199,7 +205,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             base.DestroyLayerGameObject();
         }
-        
+
         public BoundingBox GetBoundingBoxOfVisibleFeatures()
         {
             if (spawnedVisualisations.Count == 0)
@@ -216,7 +222,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             return bbox;
         }
-        
+
         private List<IPropertySectionInstantiator> propertySections;
 
         protected List<IPropertySectionInstantiator> PropertySections
