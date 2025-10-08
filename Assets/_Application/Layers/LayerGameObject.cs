@@ -249,8 +249,7 @@ namespace Netherlands3D.Twin.Layers
             Coordinate targetCoordinate = Bounds.Center;
             if (targetCoordinate.PointsLength == 2) //2D CRS, use the heigtmap to estimate the height.
             {
-                var crs = CoordinateSystems.To3D(Bounds.CoordinateSystem);
-                targetCoordinate = targetCoordinate.Convert(crs);
+                targetCoordinate = targetCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
                 float height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
                 targetCoordinate.height = height;
             }
