@@ -1416,7 +1416,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2815446548211640551
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2052,8 +2052,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7235885774582464260}
   - {fileID: 8786143100138227346}
+  - {fileID: 7235885774582464260}
   m_Father: {fileID: 9052660540256076878}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2341,7 +2341,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1029548560168416919
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2389,7 +2389,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f907dc528beea65479401ce3b75a196b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9a6423610c8df584db01f10a3fe71622, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2644,7 +2644,7 @@ GameObject:
   - component: {fileID: 1474269759341308784}
   - component: {fileID: 5599331511777983950}
   m_Layer: 5
-  m_Name: Hide UI Button
+  m_Name: Snap to maaiveld button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2700,7 +2700,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipText: Toggle UI verbergen modus
+  tooltipText: Snap to maaiveld
 --- !u!114 &5599331511777983950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2744,20 +2744,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5695520526871410670}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 474986964326212686}
-        m_TargetAssemblyTypeName: Netherlands3D.FirstPersonViewer.UI.ViewerUIButtons,
-          eu.netherlands3d.twin
-        m_MethodName: HideUI
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &3807300336220634552
 GameObject:
   m_ObjectHideFlags: 0
@@ -2858,6 +2845,7 @@ RectTransform:
   m_Children:
   - {fileID: 8440998852324857446}
   - {fileID: 6341075373502081645}
+  - {fileID: 3640375761372532312}
   - {fileID: 7203067224783940340}
   - {fileID: 6151074720974636489}
   m_Father: {fileID: 4997419578823107694}
@@ -4783,8 +4771,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4283446575
+  m_fontColor: {r: 0.18431373, g: 0.20784314, b: 0.3137255, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -6353,7 +6341,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f907dc528beea65479401ce3b75a196b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9a6423610c8df584db01f10a3fe71622, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9161,6 +9149,145 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1454944208025901076, guid: 795bd620b2a206741a74b37b48005c7d,
     type: 3}
   m_PrefabInstance: {fileID: 5490176536511574649}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7300380363794719361
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8335112322699570573}
+    m_Modifications:
+    - target: {fileID: 340110762903980639, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_Name
+      value: ButtonSmall_UI_Hider
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9064220470025580993, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 474986964326212686}
+    - target: {fileID: 9064220470025580993, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HideUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 9064220470025580993, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.FirstPersonViewer.UI.ViewerUIButtons, eu.netherlands3d.twin
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 461aee81d187748439f6b71800ac6b60, type: 3}
+--- !u!224 &3640375761372532312 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
+    type: 3}
+  m_PrefabInstance: {fileID: 7300380363794719361}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8304182847274448637
 PrefabInstance:
