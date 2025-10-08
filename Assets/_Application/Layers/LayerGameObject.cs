@@ -253,12 +253,16 @@ namespace Netherlands3D.Twin.Layers
                 float height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
                 targetCoordinate.height = height;
             }
-            
+
+            var convertedBounds = new BoundingBox(Bounds.BottomLeft, Bounds.TopRight);
+            convertedBounds.Convert(CoordinateSystems.connectedCoordinateSystem); //convert the bounds so to the connected 
+            var targetDistance = convertedBounds.GetSizeMagnitude();
+
             // !IMPORTANT: we deselect the layer, because if we don't do this, the TransformHandles might be connected to this LayerGameObject
             // This causes conflicts between the transformHandles and the Origin Shifter system, because the Transform handles will try to move the gameObject to the old (pre-shift) position.
-            LayerData.DeselectLayer(); 
+            LayerData.DeselectLayer();
             //move the camera to the center of the bounds, and move it back by the size of the bounds (2x the extents)
-            Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(targetCoordinate, Bounds.GetSizeMagnitude());//sizeMagnitude returns 2x the extents
+            Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(targetCoordinate, targetDistance); //sizeMagnitude returns 2x the extents
         }
 
 #region Styling
