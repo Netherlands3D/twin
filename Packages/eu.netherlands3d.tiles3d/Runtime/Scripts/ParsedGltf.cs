@@ -23,7 +23,7 @@ namespace Netherlands3D.Tiles3D
     {
         public GltfImport gltfImport;
         public byte[] glbBuffer;
-        public byte[] gltfJsonData; // For standalone GLTF files
+        public byte[] gltfJsonData;
         public double[] rtcCenter = null;
         public CoordinateSystem coordinatesystem;
 
@@ -251,13 +251,11 @@ namespace Netherlands3D.Tiles3D
                 // Extract JSON from GLB binary format
                 var gltfAndBin = ExtractJsonAndBinary(glbBuffer);
                 gltfJsonText = gltfAndBin.Item1;
-              //  Debug.Log($"Extracted GLTF JSON from GLB, length: {gltfJsonText?.Length ?? 0}");
             }
             else if (gltfJsonData != null)
             {
                 // Convert byte array to string for standalone GLTF files
                 gltfJsonText = System.Text.Encoding.UTF8.GetString(gltfJsonData);
-           //     Debug.Log($"Got GLTF JSON from data, length: {gltfJsonText?.Length ?? 0}");
             }
             else if (gltfImport != null)
             {
@@ -267,7 +265,6 @@ namespace Netherlands3D.Tiles3D
                 if (!string.IsNullOrEmpty(sourceJson))
                 {
                     gltfJsonText = sourceJson;
-                  //  Debug.Log($"Got GLTF JSON from import, length: {gltfJsonText?.Length ?? 0}");
                 }
                 else
                 {
@@ -289,17 +286,6 @@ namespace Netherlands3D.Tiles3D
 
             //Deserialize json using JSON.net instead of Unity's JsonUtility ( gave silent error )
             var gltfRoot = JsonConvert.DeserializeObject<GltfMeshFeatures.GltfRootObject>(gltfJsonText);
-            
-            if (gltfRoot?.asset != null)
-            {
-                //Debug.Log($"Asset found - Copyright: {gltfRoot.asset.copyright}");
-                //Debug.Log($"Asset found - Generator: {gltfRoot.asset.generator}");
-                //Debug.Log($"Asset found - Version: {gltfRoot.asset.version}");
-            }
-            else
-            {
-                Debug.LogWarning("No asset data found in GLTF");
-            }
             
             var metadata = content.gameObject.AddComponent<ContentMetadata>();
             metadata.asset = gltfRoot.asset;
@@ -339,7 +325,6 @@ namespace Netherlands3D.Tiles3D
             var featureAccessor = gltfFeatures.accessors[featureIdBufferViewIndex];
             var targetBufferView = gltfFeatures.bufferViews[featureAccessor.bufferView];
 
-            // var compressed = gltfFeatures.extensionsRequired.Contains("EXT_meshopt_compression"); //Needs testing
             var compressed = false;
 
             var featureIdBuffer = GetFeatureBuffer(gltfFeatures.buffers, targetBufferView, binaryBlob, compressed);

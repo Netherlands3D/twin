@@ -5,6 +5,9 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.3.1] - 8-10-2025
+- Reimplemented Metadata parsing
+
 ## [2.3.0] - 30-09-2025
 - changed deprecated use of coordinates-packages to using new functions in tile.cs
 

@@ -75,20 +75,10 @@ namespace Netherlands3D.Tiles3D
                 
             }
 
-            //Check if mesh features addon is used to define subobjects
-#if SUBOBJECT
-            if (parseSubObjects)
-            {
-               // parsedGltf.ParseSubObjects(containerTransform);
-            }
-#endif
-
             if (overrideMaterial != null)
             {
                 parsedGltf.OverrideAllMaterials(overrideMaterial);
             }
-
-
 
             succesCallback.Invoke(true);
         }
@@ -213,57 +203,6 @@ namespace Netherlands3D.Tiles3D
             }
             
             return;
-            //string ExtentionsRequiredString = "\"extensionsRequired\"";
-            //int extentionsStart = jsonstring.IndexOf(ExtentionsRequiredString);
-            //if (extentionsStart < 0)
-            //{
-            //    return;
-            //}
-            //int extentionstringEnd = extentionsStart + ExtentionsRequiredString.Length;
-
-            //int arrayEnd = jsonstring.IndexOf("]", extentionstringEnd);
-            //string cesiumString = "\"CESIUM_RTC\"";
-            //int cesiumstringStart = jsonstring.IndexOf(cesiumString, extentionstringEnd);
-            //if (cesiumstringStart < 0)
-            //{
-            //    Debug.Log("no cesium_rtc required");
-            //    return;
-            //}
-            //Debug.Log("cesium_rtc required");
-            //int cesiumstringEnd = cesiumstringStart + cesiumString.Length;
-            //int seperatorPosition = jsonstring.IndexOf(",", extentionstringEnd);
-
-
-            //int removalStart = cesiumstringStart;
-            //int removalEnd = cesiumstringEnd;
-            //if (seperatorPosition > arrayEnd)
-            //{
-            //    removalStart = extentionsStart - 1;
-            //    removalEnd = arrayEnd + 1;
-            //}
-            //else
-            //{
-            //    if (seperatorPosition < cesiumstringStart)
-            //    {
-            //        removalStart = seperatorPosition;
-            //    }
-            //    if (seperatorPosition > cesiumstringEnd)
-            //    {
-            //        removalEnd = seperatorPosition;
-            //    }
-            //}
-
-            //for (int i = removalStart; i < removalEnd; i++)
-            //{
-            //    b3dm.GlbData[i + jsonstart] = 0x20;
-            //}
-
-
-
-
-
-
-
 
         }
     }

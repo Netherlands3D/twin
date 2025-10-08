@@ -30,32 +30,10 @@ namespace Netherlands3D.Tiles3D
                 uri = new Uri(sourcePath);
             }
             
-
-            //remove the ?-part from material-uri's to test with local dataset
-            //string jsonstring = Encoding.UTF8.GetString(binaryData);
-            //JSONNode root = JSON.Parse(jsonstring);
-            //JSONNode imagesNode = root["images"];
-            //if (imagesNode != null)
-            //{
-            //    for (int i = 0; i < imagesNode.Count; i++)
-            //    {
-            //        JSONNode urinode = imagesNode[i]["uri"];
-            //        if (urinode!=null)
-            //        {
-            //            urinode.Value = urinode.Value.Split("?")[0];
-            //        }
-            //    }
-            //}
-
-           //binaryData = Encoding.UTF8.GetBytes(root.ToString());
-
-            //RemoveCesiumRtcFromRequieredExtentions(ref data);
-
             if(verbose)
                 Debug.Log("starting gltfLoad");
     
             success = await gltf.Load(uri);
-            //success = await gltf.LoadGltfBinary(data, uri, importSettings);
 
             if(verbose)
                 Debug.Log("gltfLoad has finished");
@@ -66,12 +44,10 @@ namespace Netherlands3D.Tiles3D
                 succesCallback.Invoke(false);
                 return;
             }
-            //double[] rtcCenter = GetRTCCenterFromGlb(data);
             var parsedGltf = new ParsedGltf()
             {
                 gltfImport = gltf,
-                gltfJsonData = data // Store the original GLTF JSON data for metadata parsing
-                //rtcCenter = rtcCenter,
+                gltfJsonData = data 
             };
             await parsedGltf.SpawnGltfScenes(containerTransform);
 
@@ -86,14 +62,6 @@ namespace Netherlands3D.Tiles3D
                 }
 
             }
-
-            //Check if mesh features addon is used to define subobjects
-#if SUBOBJECT
-            if (parseSubObjects)
-            {
-                // parsedGltf.ParseSubObjects(containerTransform);
-            }
-#endif
 
             if (overrideMaterial != null)
             {
@@ -214,57 +182,7 @@ namespace Netherlands3D.Tiles3D
             }
 
             return;
-            //string ExtentionsRequiredString = "\"extensionsRequired\"";
-            //int extentionsStart = jsonstring.IndexOf(ExtentionsRequiredString);
-            //if (extentionsStart < 0)
-            //{
-            //    return;
-            //}
-            //int extentionstringEnd = extentionsStart + ExtentionsRequiredString.Length;
-
-            //int arrayEnd = jsonstring.IndexOf("]", extentionstringEnd);
-            //string cesiumString = "\"CESIUM_RTC\"";
-            //int cesiumstringStart = jsonstring.IndexOf(cesiumString, extentionstringEnd);
-            //if (cesiumstringStart < 0)
-            //{
-            //    Debug.Log("no cesium_rtc required");
-            //    return;
-            //}
-            //Debug.Log("cesium_rtc required");
-            //int cesiumstringEnd = cesiumstringStart + cesiumString.Length;
-            //int seperatorPosition = jsonstring.IndexOf(",", extentionstringEnd);
-
-
-            //int removalStart = cesiumstringStart;
-            //int removalEnd = cesiumstringEnd;
-            //if (seperatorPosition > arrayEnd)
-            //{
-            //    removalStart = extentionsStart - 1;
-            //    removalEnd = arrayEnd + 1;
-            //}
-            //else
-            //{
-            //    if (seperatorPosition < cesiumstringStart)
-            //    {
-            //        removalStart = seperatorPosition;
-            //    }
-            //    if (seperatorPosition > cesiumstringEnd)
-            //    {
-            //        removalEnd = seperatorPosition;
-            //    }
-            //}
-
-            //for (int i = removalStart; i < removalEnd; i++)
-            //{
-            //    b3dm.GlbData[i + jsonstart] = 0x20;
-            //}
-
-
-
-
-
-
-
+           
 
         }
     }
