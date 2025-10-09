@@ -26,10 +26,6 @@ namespace Netherlands3D.Tiles3D
                 uri = new Uri(sourcePath);
             }
             
-            // Keep original data for metadata parsing before modifications
-            byte[] originalData = new byte[data.Length];
-            Array.Copy(data, originalData, data.Length);
-            
             RemoveCesiumRtcFromRequieredExtentions(ref data);
 
             if(verbose)
@@ -51,7 +47,7 @@ namespace Netherlands3D.Tiles3D
             {
                 gltfImport = gltf,
                 rtcCenter = rtcCenter,
-                glbBuffer = originalData //Store the original glb buffer for access in metadata
+                glbBuffer = data
             };
             await parsedGltf.SpawnGltfScenes(containerTransform);
 
