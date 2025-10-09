@@ -137,7 +137,7 @@ namespace Netherlands3D.FirstPersonViewer
         {
             GameObject selected = EventSystem.current.currentSelectedGameObject;
 
-
+            if (selected == null) return false;
 
             return selected.GetComponent<TMP_InputField>() != null;
         }

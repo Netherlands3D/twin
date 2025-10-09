@@ -263,6 +263,17 @@
                 },
                 {
                     "name": "",
+                    "id": "b84853a5-e348-4987-8159-04f8ff36683f",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Exit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "c0202c82-c970-4db8-af85-1859916a949a",
                     "path": "<Mouse>/delta",
                     "interactions": "",

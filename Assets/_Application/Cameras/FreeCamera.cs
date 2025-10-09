@@ -1,5 +1,6 @@
 using Netherlands3D.Coordinates;
 using Netherlands3D.Events;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
@@ -458,10 +459,9 @@ namespace Netherlands3D.Twin.Cameras
             }
 
             //ease the curve to slow it down nearing ground
-            Vector3 pos = worldTransform.Coordinate.ToUnity();
-
-            //TODO the y should be replaced with the distance between the wolrdtransform position and the maaiveld height from texture feature
-            float y = Mathf.Max(1f, Mathf.Abs(pos.y));
+            Vector3 pos = worldTransform.Coordinate.ToUnity();            
+            float distanceToGround = pos.y - ServiceLocator.GetService<HeightMap>().GetHeight(worldTransform.Coordinate);
+            float y = Mathf.Max(1f, Mathf.Abs(distanceToGround));
             float t = Mathf.Clamp01(y / maxCameraHeight);
             float v = Mathf.Lerp(1f, maxCameraHeight, t * t);
             zoomVector += signedAmount * v * zoomSpeed;
