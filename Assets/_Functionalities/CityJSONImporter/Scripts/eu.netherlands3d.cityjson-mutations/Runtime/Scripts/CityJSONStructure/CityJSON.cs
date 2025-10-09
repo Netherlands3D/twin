@@ -190,9 +190,6 @@ namespace Netherlands3D.CityJson.Structure
 
             CityObjects = cityObjects.Values.ToList();
 
-            if (TryGetComponent<WorldTransform>(out var worldTransform))
-                MoveToAbsoluteCenter(worldTransform);
-
             foreach (var co in CityObjects)
             {
                 co.OnCityObjectParseCompleted();
@@ -225,14 +222,6 @@ namespace Netherlands3D.CityJson.Structure
 
                 CityJSONFormatter.RemoveExtensionNode(node.Key);
             }
-        }
-
-        // set the relative RD center to avoid floating point issues of GameObject far from the Unity origin
-        private void MoveToAbsoluteCenter(WorldTransform worldTransform)
-        {
-            var absoluteCenter = AbsoluteCenter;
-            var coord = new Coordinate(CoordinateSystem, absoluteCenter.x, absoluteCenter.y, absoluteCenter.z);
-            worldTransform.MoveToCoordinate(coord);
         }
     }
 }

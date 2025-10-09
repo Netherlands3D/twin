@@ -149,8 +149,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             List<GameObject> subObjects = new List<GameObject>();
             for (int i = 0; i < meshes.Count; i++)
             {
-                Mesh mesh = meshes[i];
-                Vector3[] verts = mesh.vertices;
+                Mesh mesh = new Mesh();
+                Vector3[] verts = meshes[i].vertices;
                 float width = 1f;
                 GameObject subObject = new GameObject(feature.Geometry.ToString() + "_submesh_" + visualisationLayer.Transform.transform.childCount.ToString());
                 subObject.AddComponent<MeshFilter>().mesh = mesh;
@@ -209,7 +209,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     if (feature.Geometry is Point || feature.Geometry is MultiPoint)
                     {
                         int segments = 12;
-                        float radius = ((GeoJSONPointLayer)VisualisationLayer).PointRenderer3D.MeshScale;
+                        float radius = ((GeoJSONPointLayer)VisualisationLayer).PointRenderer3D.PointMeshScale;
                         subObject.transform.position = verts[0];
                         Vector3 centerVertex = Vector3.zero;
                         Vector3[] vertices = new Vector3[segments + 1];
@@ -227,13 +227,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                         }
                         mesh.vertices = vertices.ToArray();
                         mesh.triangles = triangles.ToArray();
-                        subObject.AddComponent<MeshRenderer>().material = ((GeoJSONPointLayer)VisualisationLayer).PointRenderer3D.Material;
+                        subObject.AddComponent<MeshRenderer>().material = ((GeoJSONPointLayer)VisualisationLayer).PointRenderer3D.PointMaterial;
                     }
                 }
 
                 mesh.RecalculateBounds();
-                meshes[i] = mesh;
-
                 subObject.transform.SetParent(visualisationLayer.Transform);
                 subObject.layer = LayerMask.NameToLayer("Projected");
                 subObjects.Add(subObject);
@@ -251,7 +249,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             selectedGameObjects = CreateFeatureGameObjects();
             if (selectedGameObjects.Count == 0) return; 
 
-            Color selectionColor = Color.blue;
+            Color selectionColor = Color.blue;           
             visualisationLayer.SetVisualisationColor(selectedGameObjects[0].transform, meshes, selectionColor);
             foreach (Mesh mesh in meshes)
             {

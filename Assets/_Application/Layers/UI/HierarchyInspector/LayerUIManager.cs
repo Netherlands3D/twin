@@ -4,6 +4,7 @@ using System.Linq;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -143,7 +144,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (!LayerUI.AddToSelectionModifierKeyIsPressed() && !LayerUI.SequentialSelectionModifierKeyIsPressed())
+            if (MultiSelectionUtility.NoModifierKeyPressed())
                 ProjectData.Current.RootLayer.DeselectAllLayers();
         }
 

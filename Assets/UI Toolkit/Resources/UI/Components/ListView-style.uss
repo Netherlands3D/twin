@@ -1,6 +1,1 @@
 @import url("ScrollView-style.uss");
-
-.listview {
-  flex-grow: 1;
-  flex-shrink: 0;
-}
