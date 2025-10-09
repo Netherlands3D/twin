@@ -24,16 +24,12 @@ namespace Netherlands3D.Functionalities.GoogleRealityMesh
         }
 
         private void OnLoadAssetMetaData(ContentMetadata assetMetadata)
-        {
-            Debug.Log("OnLoadAssetMetaData called");
-            
+        {   
             if (assetMetadata?.asset == null)
             {
                 Debug.LogWarning("Received metadata but asset is null");
                 return;
             }
-            
-            Debug.Log($"Received asset metadata - Copyright: {assetMetadata.asset.copyright}");
 
             assetMetadata.OnDestroyed.AddListener(RemoveMetadata);
 
@@ -55,9 +51,7 @@ namespace Netherlands3D.Functionalities.GoogleRealityMesh
         /// Filter all metadata for unique copyrights (Google seperates multiple coprights in rootJson.asset.copyright using ; character)
         /// </summary>
         private void FilterChangedMetadata()
-        {
-            //Debug.Log($"FilterChangedMetadata called with {allMetadata.Count} metadata items");
-            
+        {            
             string combinedCopyrightOutput = "";
 
             //Sort allMetadata by most copyright occurances
@@ -68,7 +62,6 @@ namespace Netherlands3D.Functionalities.GoogleRealityMesh
             {
                 if (!string.IsNullOrEmpty(metadata.asset?.copyright))
                 {
-                  //  Debug.Log($"Processing copyright: {metadata.asset.copyright}");
                     var split = metadata.asset.copyright.Split(SplitCopyrightCharacter);
                     foreach (var copyright in split)
                     {
@@ -88,7 +81,6 @@ namespace Netherlands3D.Functionalities.GoogleRealityMesh
                     combinedCopyrightOutput += SplitCopyrightCharacter;
             }
 
-        //    Debug.Log($"Final combined copyright output: {combinedCopyrightOutput}");
             onReadCopyright.Invoke(combinedCopyrightOutput);
         }
     }
