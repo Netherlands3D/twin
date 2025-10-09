@@ -82,6 +82,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
 
         //here we have to local offset the vertices with the position of the transform because the transform gets shifted
+        //also we are using the actual feature geometry to find the vertices in the targeted buffers
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
         {
             foreach (Mesh mesh in meshes)
@@ -218,7 +219,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 else
                     bbox.Encapsulate(vis.trueBounds);
             }
-
+            var crs2D = CoordinateSystems.To2D(bbox.CoordinateSystem);
+            bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
         }
 
