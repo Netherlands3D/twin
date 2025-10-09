@@ -27,6 +27,9 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public Mesh viewMesh;
         public Material[] meshMaterials;
 
+        [Header("Other")]
+        public float groundResetHeightOffset;
+
         public Type GetViewerState() //Not user friendly for edits. (Prob some sort of subscribe system?)
         {
             switch (viewModus)

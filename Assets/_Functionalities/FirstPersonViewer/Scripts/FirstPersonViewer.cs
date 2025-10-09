@@ -185,9 +185,7 @@ namespace Netherlands3D.FirstPersonViewer
             transform.rotation = startRotation;
             yPositionTarget = transform.position.y;
 
-            //When in the flying state add 1.5 meter offset
-            //$$ Should prob check if the Camera Control is Both instead of checking the state (Not extendable) Date: 30-09-2025
-            if (fsm.CurrentState.GetType() == typeof(ViewerFlyingState)) transform.position += Vector3.up * 1.5f;  
+            transform.position += Vector3.up * MovementModus.groundResetHeightOffset;
         }
 
         //Only way to block input and not include checks in every state.
@@ -205,7 +203,7 @@ namespace Netherlands3D.FirstPersonViewer
                 {
                     SetVelocity(Vector2.zero);
                     yPositionTarget = point.y;
-                    transform.position = new Vector3(transform.position.x, yPositionTarget, transform.position.z);
+                    transform.position = new Vector3(transform.position.x, yPositionTarget + MovementModus.groundResetHeightOffset, transform.position.z);
                 }
             }, snappingCullingMask);
         }
