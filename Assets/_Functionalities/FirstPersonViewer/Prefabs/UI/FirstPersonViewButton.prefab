@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 7305257123730082385}
   - component: {fileID: 8802908946163850391}
   - component: {fileID: 7405588508785012638}
-  - component: {fileID: 2874863619629549852}
   - component: {fileID: 3318322403466313813}
   - component: {fileID: 5500154690065946649}
   m_Layer: 5
@@ -242,21 +241,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tooltipText: Sleep naar first person kijkpunt
---- !u!114 &2874863619629549852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1628915473884744433}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfc55ea4025bb6b40a4041961a78a388, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  arrowImage: {fileID: 1024982966354276422}
-  NorthColor: {r: 0.18039216, g: 0.20784315, b: 0.30980393, a: 1}
-  arrowColor: {r: 0.2, g: 0.4, b: 0.8, a: 1}
 --- !u!114 &3318322403466313813
 MonoBehaviour:
   m_ObjectHideFlags: 0

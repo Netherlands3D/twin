@@ -12,6 +12,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
         private RectTransform rect;
         private ContentFitterRefresh contentFilterRefresh; //TWIN Dependent
 
+        [SerializeField] private RectTransform underBar;
+        private float underBarYSize;
         [SerializeField] private RectTransform contentParent;
 
         private bool isOpen;
@@ -26,6 +28,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
         {
             rect = GetComponent<RectTransform>();
             contentFilterRefresh = GetComponent<ContentFitterRefresh>(); //TWIN Dependent
+
+            underBarYSize = underBar.sizeDelta.y;
 
             ViewerEvents.OnViewerExited += ViewerExited;
         }
@@ -65,11 +69,12 @@ namespace Netherlands3D.FirstPersonViewer.UI
                         contentFilterRefresh.RefreshContentFitters(); //TWIN Dependent
 
                         windowPanel.anchoredPosition = new Vector2(windowPanel.anchoredPosition.x, -rect.sizeDelta.y);
-
                     });
 
+                    underBar.DOAnchorPosY(0, .4f).SetEase(Ease.OutSine);
+
                     currentSequence.AppendInterval(Time.deltaTime);
-                    currentSequence.Append(rect.DOAnchorPosY(56, .5f)).SetEase(Ease.OutSine);
+                    currentSequence.Append(rect.DOAnchorPosY(65, .5f)).SetEase(Ease.OutSine);
                 }
 
                 currentTool = viewTool;
@@ -79,6 +84,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             {
                 isOpen = false;
                 currentTool = null;
+                underBar.DOAnchorPosY(-underBarYSize, .5f).SetEase(Ease.InSine);
             }
 
             OnViewerToolChanged?.Invoke(currentTool);

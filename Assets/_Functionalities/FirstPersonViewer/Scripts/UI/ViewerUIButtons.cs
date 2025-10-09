@@ -51,6 +51,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public void ExitViewer() => ViewerEvents.OnViewerExited?.Invoke();
         public void ResetToStart() => ViewerEvents.OnResetToStart?.Invoke();
+        public void SnapToGround() => ViewerEvents.OnResetToGround?.Invoke();
         public void HideUI() => ViewerEvents.OnHideUI?.Invoke();
     }
 }
