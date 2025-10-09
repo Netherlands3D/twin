@@ -12,10 +12,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     public static class GeometryVisualizationFactory
     {
         public static List<PolygonVisualisation> CreatePolygonVisualization(
-            MultiPolygon geometry, 
-            CoordinateSystem coordinateSystem, 
+            MultiPolygon geometry,
+            CoordinateSystem coordinateSystem,
             Material material
-        ) {
+        )
+        {
             var visualizations = new List<PolygonVisualisation>(geometry.Coordinates.Count);
             foreach (var polygon in geometry.Coordinates)
             {
@@ -36,10 +37,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// <param name="visualizationMaterial"></param>
         /// <returns></returns>
         public static PolygonVisualisation CreatePolygonVisualisation(
-            Polygon polygon, 
-            CoordinateSystem originalCoordinateSystem, 
+            Polygon polygon,
+            CoordinateSystem originalCoordinateSystem,
             Material visualizationMaterial
-        ) {
+        )
+        {
             var ringList = new List<List<Vector3>>(polygon.Coordinates.Count);
             Vector3 centroid = Vector3.zero;
             foreach (var lineString in polygon.Coordinates)
@@ -51,6 +53,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     centroid += coord.ToUnity() / ringCount;
                 }
             }
+
             centroid /= polygon.Coordinates.Count;
 
             foreach (var lineString in polygon.Coordinates)
@@ -62,8 +65,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     Vector3 c = coord.ToUnity() - centroid;
                     unityRing.Add(c);
                 }
+
                 ringList.Add(unityRing);
             }
+
             PolygonVisualisation polygonVisualisation = CreatePolygonMesh(ringList, 10f, visualizationMaterial);
             if (polygonVisualisation)
             {
@@ -74,37 +79,41 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         }
 
         public static List<List<Coordinate>> CreateLineVisualisation(
-            MultiLineString geometry, 
-            CoordinateSystem coordinateSystem, 
+            MultiLineString geometry,
+            CoordinateSystem coordinateSystem,
             LineRenderer3D renderer
-        ) {
+        )
+        {
             var lines = new List<List<Coordinate>>(geometry.Coordinates.Count);
             foreach (var lineString in geometry.Coordinates)
             {
                 var convertedLineString = ConvertToUnityCoordinates(lineString, coordinateSystem);
                 lines.Add(convertedLineString);
             }
-            renderer.AppendLines(lines);
+
+            renderer.AppendCollections(lines);
 
             return lines;
         }
 
         public static List<Coordinate> CreateLineVisualization(
-            LineString geometry, 
-            CoordinateSystem coordinateSystem, 
+            LineString geometry,
+            CoordinateSystem coordinateSystem,
             LineRenderer3D renderer
-        ) {
+        )
+        {
             var linePoints = ConvertToUnityCoordinates(geometry, coordinateSystem);
-            renderer.AppendLine(linePoints);
+            renderer.AppendCollection(linePoints);
 
             return linePoints;
         }
 
         public static List<Coordinate> CreatePointVisualisation(
-            MultiPoint geometry, 
-            CoordinateSystem coordinateSystem, 
-            BatchedMeshInstanceRenderer renderer
-        ) {
+            MultiPoint geometry,
+            CoordinateSystem coordinateSystem,
+            PointRenderer3D renderer
+        )
+        {
             var convertedPoints = ConvertToUnityCoordinates(geometry, coordinateSystem);
             renderer.AppendCollection(convertedPoints);
 
@@ -112,10 +121,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         }
 
         public static List<Coordinate> CreatePointVisualization(
-            Point geometry, 
-            CoordinateSystem coordinateSystem, 
-            BatchedMeshInstanceRenderer renderer
-        ) {
+            Point geometry,
+            CoordinateSystem coordinateSystem,
+            PointRenderer3D renderer
+        )
+        {
             var convertedPoint = ConvertToCoordinate(coordinateSystem, geometry.Coordinates);
             var singlePointList = new List<Coordinate>() { convertedPoint };
             renderer.AppendCollection(singlePointList);
@@ -124,10 +134,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         }
 
         private static PolygonVisualisation CreatePolygonMesh(
-            List<List<Vector3>> contours, 
-            float polygonExtrusionHeight, 
+            List<List<Vector3>> contours,
+            float polygonExtrusionHeight,
             Material polygonMeshMaterial
-        ) {
+        )
+        {
             try
             {
                 var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours,
@@ -149,10 +160,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         }
 
         private static List<Coordinate> ConvertToUnityCoordinates(
-            LineString lineString, 
-            CoordinateSystem originalCoordinateSystem, 
+            LineString lineString,
+            CoordinateSystem originalCoordinateSystem,
             float defaultNAPHeight = 0
-        ) {
+        )
+        {
             var convertedCoordinates = new List<Coordinate>(lineString.Coordinates.Count);
 
             for (var i = 0; i < lineString.Coordinates.Count; i++)
@@ -164,12 +176,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             return convertedCoordinates;
         }
-        
+
         private static List<Coordinate> ConvertToUnityCoordinates(
-            MultiPoint multiPoint, 
-            CoordinateSystem originalCoordinateSystem, 
+            MultiPoint multiPoint,
+            CoordinateSystem originalCoordinateSystem,
             float defaultNAPHeight = 0
-        ) {
+        )
+        {
             var convertedCoordinates = new List<Coordinate>(multiPoint.Coordinates.Count);
 
             for (var i = 0; i < multiPoint.Coordinates.Count; i++)
@@ -183,10 +196,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         }
 
         private static Coordinate ConvertToCoordinate(
-            CoordinateSystem originalCoordinateSystem, 
+            CoordinateSystem originalCoordinateSystem,
             IPosition point,
             float defaultNAPHeight = 0
-        ) {
+        )
+        {
             var lat = point.Latitude;
             var lon = point.Longitude;
             var alt = point.Altitude;
