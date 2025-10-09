@@ -23,6 +23,7 @@ namespace Netherlands3D.Tiles3D
     {
         public GltfImport gltfImport;
         public byte[] glbBuffer;
+        public byte[] gltfJsonData;
         public double[] rtcCenter = null;
         public CoordinateSystem coordinatesystem;
 
@@ -243,12 +244,49 @@ namespace Netherlands3D.Tiles3D
         }
         public void ParseAssetMetaData(Content content)
         {
-            //Extract json from glb
-            var gltfAndBin = ExtractJsonAndBinary(glbBuffer);
-            var gltfJsonText = gltfAndBin.Item1;
+            string gltfJsonText = null;
+            
+            if (glbBuffer != null)
+            {
+                // Extract JSON from GLB binary format
+                var gltfAndBin = ExtractJsonAndBinary(glbBuffer);
+                gltfJsonText = gltfAndBin.Item1;
+            }
+            else if (gltfJsonData != null)
+            {
+                // Convert byte array to string for standalone GLTF files
+                gltfJsonText = System.Text.Encoding.UTF8.GetString(gltfJsonData);
+            }
+            else if (gltfImport != null)
+            {
+                // Try to get JSON from the GLTF import directly
+                // This is for standalone GLTF files (not GLB)
+                var sourceJson = gltfImport.GetSourceRoot()?.ToString();
+                if (!string.IsNullOrEmpty(sourceJson))
+                {
+                    gltfJsonText = sourceJson;
+                }
+                else
+                {
+                    Debug.LogWarning("Could not get source JSON from GLTF import");
+                    return;
+                }
+            }
+            else
+            {
+                Debug.LogError("No GLTF data source available - cannot extract metadata");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(gltfJsonText))
+            {
+                Debug.LogError("Could not extract GLTF JSON text");
+                return;
+            }
 
             //Deserialize json using JSON.net instead of Unity's JsonUtility ( gave silent error )
             var gltfRoot = JsonConvert.DeserializeObject<GltfMeshFeatures.GltfRootObject>(gltfJsonText);
+            
             var metadata = content.gameObject.AddComponent<ContentMetadata>();
             metadata.asset = gltfRoot.asset;
 
@@ -287,7 +325,6 @@ namespace Netherlands3D.Tiles3D
             var featureAccessor = gltfFeatures.accessors[featureIdBufferViewIndex];
             var targetBufferView = gltfFeatures.bufferViews[featureAccessor.bufferView];
 
-            // var compressed = gltfFeatures.extensionsRequired.Contains("EXT_meshopt_compression"); //Needs testing
             var compressed = false;
 
             var featureIdBuffer = GetFeatureBuffer(gltfFeatures.buffers, targetBufferView, binaryBlob, compressed);
