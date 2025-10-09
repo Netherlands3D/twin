@@ -64,6 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa0ac9a7cb99d4277a6e2c306626dfbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugHeightmapPosition: 0
 --- !u!114 &8803690108360864904
 MonoBehaviour:
   m_ObjectHideFlags: 0
