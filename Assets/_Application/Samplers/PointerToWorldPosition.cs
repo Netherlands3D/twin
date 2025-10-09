@@ -1,20 +1,23 @@
 using UnityEngine.InputSystem;
 using UnityEngine;
 using System;
-using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Services;
 
 namespace Netherlands3D.Twin.Samplers
 {
     public class PointerToWorldPosition : MonoBehaviour
     {       
         public Coordinate WorldPoint => worldPoint;
-
+        public bool debugHeightmapPosition = false;
+        
         private OpticalRaycaster opticalRaycaster;
         private Action<Vector3, bool> worldPointCallback;
         private Coordinate worldPoint;
         private float maxDistance = 10000;
 
+        private GameObject testPosition;
+        
         private void Awake()
         {
             opticalRaycaster = GetComponent<OpticalRaycaster>();
@@ -38,6 +41,21 @@ namespace Netherlands3D.Twin.Samplers
         {
             var screenPoint = Pointer.current.position.ReadValue();
             opticalRaycaster.GetWorldPointAsync(screenPoint, worldPointCallback);
+
+            if(debugHeightmapPosition)
+            {
+                if(testPosition == null)
+                {
+                    testPosition = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    testPosition.transform.localScale = Vector3.one * 10;
+                    testPosition.GetComponent<Renderer>().material.color = Color.green;
+                }
+                testPosition.transform.position = GetWorldPoint();
+            }
+            else if(testPosition != null)
+            {
+                Destroy(testPosition);
+            }
         }
 
         public void GetPointerWorldPointAsync(Action<Vector3> result)
@@ -51,8 +69,7 @@ namespace Netherlands3D.Twin.Samplers
                 {
                     Vector3 position = GetWorldPoint();
                     result.Invoke(position);
-                }
-
+                }  
             });
         }
 
@@ -62,7 +79,12 @@ namespace Netherlands3D.Twin.Samplers
             return GetWorldPoint(screenPoint);
         }
 
-        //TODO this method should be expanded on with the new texture maaiveld height feature (current should be a fallback?)
+        public Vector3 GetWorldPointCenterView()
+        {
+            var screenPoint = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+            return GetWorldPoint(screenPoint);
+        }
+
         public Vector3 GetWorldPoint(Vector2 screenPosition)
         {            
             Plane worldPlane = new Plane(Vector3.up, Vector3.zero);
@@ -71,10 +93,25 @@ namespace Netherlands3D.Twin.Samplers
             Vector3 position;
             //when no valid point is found in for the raycast, lets invert the distance so we get a point in the sky
             if (distance < 0)
-                position = screenRay.GetPoint(Mathf.Min(maxDistance, -distance));
+            {
+                float length = Mathf.Min(maxDistance, -distance);
+                position = screenRay.GetPoint(length);
+                return position;
+            }
             else
-                position = screenRay.GetPoint(Mathf.Min(maxDistance, distance));
-            return position;
+            {
+                float length = Mathf.Min(maxDistance, distance);
+                position = screenRay.GetPoint(length);
+            }
+
+            Coordinate initialCoordinate = new Coordinate(position);
+            HeightMap heightMap = ServiceLocator.GetService<HeightMap>();   
+            float height = heightMap.GetHeight(initialCoordinate);
+            Vector3 origin = Camera.main.transform.position;
+            Vector3 dir = screenRay.direction;
+            float t = (height - origin.y) / dir.y;
+            Vector3 intersection = origin + dir * t;
+            return intersection;
         }
     }
 }

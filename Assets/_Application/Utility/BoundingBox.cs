@@ -134,6 +134,7 @@ namespace Netherlands3D.Twin.Utility
         
         public void Encapsulate(Coordinate coordinate)
         {
+            coordinate = coordinate.Convert(CoordinateSystem);
             var blv1 = Min(coordinate.value1, BottomLeft.value1);
             var blv2 = Min(coordinate.value2, BottomLeft.value2);
             var trv1 = Max(coordinate.value1, TopRight.value1);
