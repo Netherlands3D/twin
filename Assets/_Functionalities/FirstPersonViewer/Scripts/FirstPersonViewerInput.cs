@@ -1,5 +1,6 @@
 using Netherlands3D.FirstPersonViewer.Events;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -27,6 +28,7 @@ namespace Netherlands3D.FirstPersonViewer
         [SerializeField] private float exitViewDelay = .15f;
         private float exitTimer;
 
+        private bool isEditingInputfield;
         private List<MonoBehaviour> inputLocks;
         public bool LockInput => inputLocks.Count > 0;
 
@@ -76,7 +78,13 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void HandleCursorLocking()
         {
-            if (ExitInput.WasReleasedThisFrame())
+            if (ExitInput.triggered)
+            {
+                isEditingInputfield = IsInputfieldSelected();
+                if (isEditingInputfield) return;
+            }
+
+            if (ExitInput.WasReleasedThisFrame() && !isEditingInputfield)
             {
                 if (Cursor.lockState == CursorLockMode.Locked)
                 {
@@ -104,7 +112,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void HandleExiting()
         {
-            if (ExitInput.IsPressed())
+            if (ExitInput.IsPressed() && !isEditingInputfield)
             {
                 exitTimer = Mathf.Max(exitTimer - Time.deltaTime, 0);
 
@@ -123,6 +131,15 @@ namespace Netherlands3D.FirstPersonViewer
             }
             else if (ExitInput.WasReleasedThisFrame()) ViewerEvents.ExitDuration?.Invoke(-1);
             else exitTimer = exitDuration;
+        }
+
+        private bool IsInputfieldSelected()
+        {
+            GameObject selected = EventSystem.current.currentSelectedGameObject;
+
+
+
+            return selected.GetComponent<TMP_InputField>() != null;
         }
 
         private void ViewerExited()

@@ -241,6 +241,17 @@
                 },
                 {
                     "name": "",
+                    "id": "11eee94d-ea83-42c9-8cb5-3d1d01dfe8e4",
+                    "path": "<Keyboard>/backspace",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Exit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ca74db43-1e8c-4224-abba-3659a604278a",
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
