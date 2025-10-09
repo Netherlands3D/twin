@@ -4001,7 +4001,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dc151b7ec278c1478071b9dd78f32a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panelPrefab: {fileID: 766479281542820589, guid: c917a5f78a8bda54ab5f591f82ecb585,
+  panelPrefab: {fileID: 6201001179734163089, guid: c3e9e2eb8bd4aed42ab26e64f19ae92b,
     type: 3}
   toolbar: {fileID: 5605894596699867571}
   buttonRegular: {fileID: 6096530079640359785}
@@ -4438,7 +4438,7 @@ MonoBehaviour:
   minimap: {fileID: 5807535839906888666}
   zoomScale: 7
   frustum: {fileID: 5807535840269500478}
-  wmtsMap: {fileID: 0}
+  wmtsMap: {fileID: 5807535839578935270}
 --- !u!1 &5095550009212007317
 GameObject:
   m_ObjectHideFlags: 0
@@ -9588,6 +9588,18 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1575309850873778875}
   m_SourcePrefab: {fileID: 100100000, guid: 316af653f2625134ab367f8e339c26b9, type: 3}
+--- !u!114 &5807535839578935270 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2568988434724862235, guid: 316af653f2625134ab367f8e339c26b9,
+    type: 3}
+  m_PrefabInstance: {fileID: 8304182847274448637}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37416bb9184abff40ab7052315f64a00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5807535839906888641 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2568988435537759548, guid: 316af653f2625134ab367f8e339c26b9,
