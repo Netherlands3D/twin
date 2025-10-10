@@ -19,7 +19,7 @@ namespace Netherlands3D.Catalogs.Catalogs
         /// Catalogs have a static factory method to create them as async information may be needed to populate
         /// their basic properties.
         /// </summary>
-        public static async Task<PdokOgcApiCatalog> CreateAsync()
+        public static async Task<PdokOgcApiCatalog> CreateAsync(string title = null)
         {
             var ogcApi = new OgcApi.OgcApi("https://api.pdok.nl/catalogus/v1-demo/");
             var conformance = await ogcApi.Conformance();
@@ -37,7 +37,7 @@ namespace Netherlands3D.Catalogs.Catalogs
             }); 
 
             var id = await ogcApi.Id();
-            var title = await ogcApi.Title();
+            title ??= await ogcApi.Title();
             var description = await ogcApi.Description();
             
             return new PdokOgcApiCatalog(ogcApi, recordsStrategy)
