@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,15 +9,16 @@ namespace Netherlands3D.Twin.Configuration.Settings
     public class FPSToggle : MonoBehaviour
     {
         private Toggle toggle;
+        private List<FPSCounter> fpsCounters;
 
         private void Awake()
         {
             toggle = GetComponent<Toggle>();
 
-            FPSCounter counter = FindObjectOfType<FPSCounter>(true);
-            if (counter != null)
+            fpsCounters = FindObjectsByType<FPSCounter>(FindObjectsInactive.Include, FindObjectsSortMode.None).ToList();
+            if (fpsCounters != null)
             {
-                toggle.isOn = counter.gameObject.activeSelf;
+                toggle.isOn = fpsCounters[0].gameObject.activeSelf;
                 return;
             }
 
@@ -25,11 +28,12 @@ namespace Netherlands3D.Twin.Configuration.Settings
 
         public void ToggleFPSCounter(bool isOn)
         {
-            FPSCounter counter = FindObjectOfType<FPSCounter>(true);
-            if (counter != null)
+            if (fpsCounters != null)
             {
-                if(isOn != counter.gameObject.activeSelf) 
-                    counter.gameObject.SetActive(isOn);
+                fpsCounters.ForEach(fps =>
+                {
+                    fps.gameObject.SetActive(isOn);
+                });
             }
         }
     }
