@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9933fa3bab514aeabeac36958097985f, type: 3}
+  m_Name: Objecten
+  m_EditorClassIdentifier: 
+  id: objects
+  title: Objecten
+  description: 
+  children:
+  - {fileID: 11400000, guid: 87604092abd366441a4d92ae1a6095f1, type: 2}
+  - {fileID: 11400000, guid: ae5638d194986bd42b0ebbfea32e316c, type: 2}
+  - {fileID: 11400000, guid: c0814f2e74790be4785e294a6b6676c8, type: 2}
+  - {fileID: 11400000, guid: 67522e2df13df494dbf5b5e4dc77bcbd, type: 2}
+  - {fileID: 11400000, guid: cce0e070aefe61f49967894610ec0e28, type: 2}
+  - {fileID: 11400000, guid: cf4a665e19fcaae4aa1f07dea597d0a0, type: 2}
+  - {fileID: 11400000, guid: 85e88ea6b4fb8294ea42db16ed34f4a5, type: 2}
+  - {fileID: 11400000, guid: a633bc7463762854884883a7b185179f, type: 2}

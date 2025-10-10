@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -39,4 +38,3 @@ namespace Netherlands3D.Twin.Editor
         }
     }
 }
-#endif

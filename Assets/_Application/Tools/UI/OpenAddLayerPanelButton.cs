@@ -1,3 +1,4 @@
+using Netherlands3D.Events;
 using Netherlands3D.Twin.Layers.UI.AddLayer;
 using Netherlands3D.Twin.Tools.UI;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace Netherlands3D.Twin.Tools
         [SerializeField] private Tool layersTool;
         [SerializeField] private ToolButton layersButton;
         private Button button;
+        [SerializeField] private BoolEvent toggleImportPanel;
 
         private void Awake()
         {
@@ -18,10 +20,11 @@ namespace Netherlands3D.Twin.Tools
         
         public void OpenAddLayerPanel()
         {
-            if(!layersTool.Open)
+            if (!layersTool.Open)
+            {
                 layersButton.Toggle(); //open the panel if it's not open yet
-            
-            FindAnyObjectByType<AddLayerPanel>().TogglePanel(true); //ugly, but easy way to open the add layer panel. 
+            } 
+            toggleImportPanel.InvokeStarted(layersTool.Open);
         }
     }
 }

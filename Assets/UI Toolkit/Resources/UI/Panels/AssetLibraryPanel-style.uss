@@ -1,0 +1,16 @@
+.asset-library-panel {
+    display: none;
+    flex-wrap: nowrap;
+    flex-shrink: 1;
+    flex-grow: 1;
+}
+
+.asset-library-panel .breadcrumb {
+    margin-bottom: var(--spacing-3);
+    width: auto;
+    height: auto;
+}
+
+.asset-library-panel.active {
+    display: flex;
+}
