@@ -5,7 +5,7 @@ using Netherlands3D.Catalogs.Catalogs;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
-namespace Netherlands3D._Application._Twin.AssetLibraryEntries
+namespace Netherlands3D.Twin.AssetLibraryEntries
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Asset Library/Folder")]
     public class FolderAssetEntry : AssetLibraryEntry

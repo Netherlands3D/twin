@@ -4,7 +4,7 @@ using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
 using UnityEngine;
 
-namespace Netherlands3D._Application._Twin.AssetLibraryEntries
+namespace Netherlands3D.Twin.AssetLibraryEntries
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Asset Library/ScriptableObject Event")]
     public class ScriptableObjectEventAssetEntry : AssetLibraryEntry
