@@ -12,7 +12,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
     {
         [Header("Input")]
         [SerializeField] private InputActionAsset inputMap;
-        private InputAction cycleModusAction;
+        private InputAction cycleNextAction;
+        private InputAction cyclePreviousAction;
 
         [Header("UI")]
         [SerializeField] private Image currentMovemodeImage;
@@ -32,7 +33,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void Start()
         {
-            cycleModusAction = inputMap.FindAction("MovementModusSwitch");
+            cycleNextAction = inputMap.FindAction("NavigateModusNext");
+            cyclePreviousAction = inputMap.FindAction("NavigateModusPrevious");
 
             movementPresets.presets.ForEach(preset =>
             {
@@ -53,16 +55,14 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void Update()
         {
-            if (cycleModusAction.triggered)
-            {
-                float cycleModusInput = cycleModusAction.ReadValue<float>();
-
-                if (Mathf.Abs(cycleModusInput) > .1f) ChangeViewerModus(Mathf.FloorToInt(cycleModusInput));
-            }
+            if (cyclePreviousAction.triggered) ChangeViewerModus(-1);
+            else if (cycleNextAction.triggered) ChangeViewerModus(1);        
         }
 
         public void ChangeViewerModus(int switchDirection)
         {
+            if (FirstPersonViewerInput.IsInputfieldSelected()) return;
+
             int currentIndex = movementPresets.presets.IndexOf(currentMovement) + switchDirection;
 
             if (currentIndex < 0) currentIndex = movementPresets.presets.Count - 1;

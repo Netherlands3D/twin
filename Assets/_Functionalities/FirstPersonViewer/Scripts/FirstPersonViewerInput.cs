@@ -133,15 +133,6 @@ namespace Netherlands3D.FirstPersonViewer
             else exitTimer = exitDuration;
         }
 
-        private bool IsInputfieldSelected()
-        {
-            GameObject selected = EventSystem.current.currentSelectedGameObject;
-
-            if (selected == null) return false;
-
-            return selected.GetComponent<TMP_InputField>() != null;
-        }
-
         private void ViewerExited()
         {
             Cursor.lockState = CursorLockMode.None;
@@ -154,6 +145,15 @@ namespace Netherlands3D.FirstPersonViewer
         public void AddInputLockConstrain(MonoBehaviour monoBehaviour) => inputLocks.Add(monoBehaviour);
 
         public void RemoveInputLockConstrain(MonoBehaviour monoBehaviour) => inputLocks.Remove(monoBehaviour);
+
+        public static bool IsInputfieldSelected()
+        {
+            GameObject selected = EventSystem.current.currentSelectedGameObject;
+
+            if (selected == null) return false;
+
+            return selected.GetComponent<TMP_InputField>() != null;
+        }
 
         //Kinda slow
         public static bool IsPointerOverUIObject()
