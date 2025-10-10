@@ -78,14 +78,14 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
         ) : base(conformance)
         {
             // initialise the default strategies when no strategies are provided
-            if (strategies == null)
+            strategies ??= new List<OgcApiRecordsStrategy>
             {
-                strategies = new List<OgcApiRecordsStrategy>
-                {
-                    new PyCswOgcApiRecordsStrategy(conformance),
-                    new FallbackOgcApiRecordsStrategy(conformance)
-                };
-            }
+                // PDOK also defines some of their features as OGC api features with "download" link, so we have an extra
+                // strategy for PDOK until we know whether this is PyCSW specific
+                new PdokOgcApiRecordsStrategy(conformance),
+                new PyCswOgcApiRecordsStrategy(conformance),
+                new FallbackOgcApiRecordsStrategy(conformance)
+            };
 
             this.strategies = strategies.ToList();
         }
