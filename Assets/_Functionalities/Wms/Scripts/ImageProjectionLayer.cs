@@ -51,8 +51,18 @@ namespace Netherlands3D.Functionalities.Wms
         private float lastUpdatedInterval = 1f;
         private WaitForSeconds wfs = new WaitForSeconds(0.5f);
 
-        public BoundingBox BoundingBox { get; set; }
+        private BoundingBox boundingBox;
 
+        public BoundingBox BoundingBox
+        {
+            get => boundingBox;
+            set
+            {
+                boundingBox = value;
+                var crs2D = CoordinateSystems.To2D(value.CoordinateSystem);
+                boundingBox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
+            }
+        }
         private bool IsInExtents(BoundingBox tileBox)
         {
             if (BoundingBox == null) //no bounds set, so we don't know the extents and always need to load the tile
