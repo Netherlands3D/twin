@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
@@ -31,13 +32,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 PolygonVisualisation = CreatePolygonMesh(polygon3D, extrusionHeight, PolygonMeshMaterial);
                 PolygonVisualisation.transform.SetParent(transform);
-                polygonBounds = new(PolygonVisualisation.GetComponent<Renderer>().bounds);
             }
             else
             {
                 PolygonVisualisation.UpdateVisualisation(polygon3D);
-                polygonBounds = new(PolygonVisualisation.GetComponent<Renderer>().bounds);
             }
+            
+            polygonBounds = new(PolygonVisualisation.GetComponent<Renderer>().bounds);
+            var crs2D = CoordinateSystems.To2D(polygonBounds.CoordinateSystem);
+            polygonBounds.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
 
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
         }

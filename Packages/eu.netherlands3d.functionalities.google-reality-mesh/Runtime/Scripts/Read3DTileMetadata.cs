@@ -24,7 +24,13 @@ namespace Netherlands3D.Functionalities.GoogleRealityMesh
         }
 
         private void OnLoadAssetMetaData(ContentMetadata assetMetadata)
-        {
+        {   
+            if (assetMetadata?.asset == null)
+            {
+                Debug.LogWarning("Received metadata but asset is null");
+                return;
+            }
+
             assetMetadata.OnDestroyed.AddListener(RemoveMetadata);
 
             if(!allMetadata.Contains(assetMetadata))
@@ -45,7 +51,7 @@ namespace Netherlands3D.Functionalities.GoogleRealityMesh
         /// Filter all metadata for unique copyrights (Google seperates multiple coprights in rootJson.asset.copyright using ; character)
         /// </summary>
         private void FilterChangedMetadata()
-        {
+        {            
             string combinedCopyrightOutput = "";
 
             //Sort allMetadata by most copyright occurances
@@ -62,6 +68,10 @@ namespace Netherlands3D.Functionalities.GoogleRealityMesh
                         if (!uniqueCopyrights.Contains(copyright))
                             uniqueCopyrights.Add(copyright);
                     }
+                }
+                else
+                {
+                    Debug.LogWarning("Metadata asset has no copyright information");
                 }
             }              
             for (int i = 0; i < uniqueCopyrights.Count; i++)
