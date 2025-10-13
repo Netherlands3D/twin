@@ -80,6 +80,8 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
             // initialise the default strategies when no strategies are provided
             strategies ??= new List<OgcApiRecordsStrategy>
             {
+                // For Testbed 2 of GeoNovum - we use a shape that may or may not be codified later
+                new TestbedDcatApNlOgcApiRecordsStrategy(conformance),
                 // PDOK also defines some of their features as OGC api features with "download" link, so we have an extra
                 // strategy for PDOK until we know whether this is PyCSW specific
                 new PdokOgcApiRecordsStrategy(conformance),
