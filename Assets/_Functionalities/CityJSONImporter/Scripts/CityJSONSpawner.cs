@@ -69,7 +69,7 @@ namespace Netherlands3D.Functionalities.CityJSON
                 var visualizers = co.GetComponents<CityObjectVisualizer>();
                 foreach (var visualizer in visualizers)
                 {
-                    visualizer.cityObjectVisualized.AddListener(OnCityObjectVisualized);
+                    layerGameObject.AddFeature(visualizer);
                 }
             }
 
@@ -91,12 +91,6 @@ namespace Netherlands3D.Functionalities.CityJSON
                     PositionGeoReferencedCityJson(origin);
                 }
             }
-        }
-
-        private void OnCityObjectVisualized(CityObjectVisualizer visualizer)
-        {
-            // Object is loaded / replaced - trigger the application of styling
-            layerGameObject.AddFeature(visualizer);
         }
 
         private void PositionGeoReferencedCityJson(Coordinate origin)

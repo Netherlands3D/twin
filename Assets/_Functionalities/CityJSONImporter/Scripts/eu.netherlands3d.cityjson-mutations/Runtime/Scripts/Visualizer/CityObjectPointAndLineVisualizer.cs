@@ -18,13 +18,14 @@ namespace Netherlands3D.CityJson.Visualisation
 
         protected override void Visualize()
         {
+            batchedMeshInstanceRenderer.Clear();
             foreach (var geometry in cityObject.Geometries)
             {
                 if (geometry.Type != geometryType)
                     continue; // other types have their own visualizer and don't create meshes
 
                 var collections = GetPositionCollections(geometry.BoundaryObject, cityObject.CoordinateSystem);
-                batchedMeshInstanceRenderer.SetPositionCollections(collections);
+                batchedMeshInstanceRenderer.AppendCollections(collections);
             }
             cityObjectVisualized?.Invoke(this);
         }
@@ -66,14 +67,12 @@ namespace Netherlands3D.CityJson.Visualisation
         
         public override void SetFillColor(Color color)
         {
-            print("setting fill color: " + color);
             batchedMeshInstanceRenderer.PointMaterial.color = color;
             batchedMeshInstanceRenderer.SetDefaultColors();
         }
 
         public override void SetLineColor(Color color)
         {
-            print("setting line color: " + color);
             if (batchedMeshInstanceRenderer is LineRenderer3D lineRenderer)
             {
                 lineRenderer.LineMaterial.color = color;
