@@ -30,6 +30,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles.LayerPresets
                 throw new ArgumentException($"Expected {nameof(Args)} for preset 3d-tiles.");
 
             return builder
+                .NamedAs(tiles3dArgs.Url.ToString())
                 .OfType(PrefabIdentifier)
                 .AddProperty(new Tile3DLayerPropertyData(tiles3dArgs.Url.ToString()));
         }
