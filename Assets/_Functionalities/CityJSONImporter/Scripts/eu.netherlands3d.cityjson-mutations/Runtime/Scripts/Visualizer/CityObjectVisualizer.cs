@@ -9,6 +9,7 @@ namespace Netherlands3D.CityJson.Visualisation
     {
         public UnityEvent<CityObjectVisualizer> cityObjectVisualized;
         protected CityObject cityObject;
+        public abstract Material[] Materials { get; }
 
         protected virtual void Awake()
         {
@@ -26,5 +27,7 @@ namespace Netherlands3D.CityJson.Visualisation
         }
         
         protected abstract void Visualize();
+        public abstract void SetFillColor(Color color);
+        public abstract void SetLineColor(Color color);
     }
 }

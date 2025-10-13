@@ -66,6 +66,8 @@ namespace Netherlands3D.CityJson.Visualisation
 
         [SerializeField] private CityMaterialConverter materialConverter;
 
+        public override Material[] Materials => meshRenderer.materials;
+
 #if UNITY_EDITOR
         // allow to change the visible LOD from the inspector during runtime
         private void OnValidate()
@@ -165,9 +167,9 @@ namespace Netherlands3D.CityJson.Visualisation
             meshes = new Dictionary<CityGeometry, MeshWithMaterials>(cityObject.Geometries.Count);
             foreach (var geometry in cityObject.Geometries)
             {
-                if(geometry.Type == GeometryType.MultiPoint ||  geometry.Type == GeometryType.MultiLineString)
+                if (geometry.Type == GeometryType.MultiPoint || geometry.Type == GeometryType.MultiLineString)
                     continue; // MultiPoint/Lines have their own visualizer and don't create meshes
-                
+
                 Vector3Double origin = new Vector3Double();
                 var cityJsonCoord = GetComponentInParent<WorldTransform>().Coordinate; //todo: this getComponentInParent is a bit hacky
                 var coordinateSystem = cityObject.CoordinateSystem;
@@ -213,7 +215,7 @@ namespace Netherlands3D.CityJson.Visualisation
                     materials.AddRange(materialConverter.GetMaterials(materialIndices, semanticTypeKVP.Key));
                 }
             }
-            
+
             var mesh = CombineMeshes(subMeshes, Matrix4x4.identity, false); //use identity matrix because we already transformed the submeshes
             return new MeshWithMaterials(mesh, materials.ToArray());
         }
@@ -234,7 +236,7 @@ namespace Netherlands3D.CityJson.Visualisation
                         boundaryMeshData.Remove(boundaryMesh);
                     }
                 }
-                
+
                 if (activeSemanticsObject != null)
                     dictionary.Add(activeSemanticsObject.SurfaceType, list);
                 else
@@ -461,6 +463,18 @@ namespace Netherlands3D.CityJson.Visualisation
 
             convertedPolygon.Reverse();
             return convertedPolygon;
+        }
+
+        public override void SetFillColor(Color color)
+        {
+            foreach (var material in meshRenderer.materials)
+            {
+                material.color = color;
+            }
+        }
+
+        public override void SetLineColor(Color color)
+        {
         }
     }
 }
