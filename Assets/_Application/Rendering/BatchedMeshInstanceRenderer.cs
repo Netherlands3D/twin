@@ -154,6 +154,11 @@ namespace Netherlands3D.Twin.Rendering
             pointMaterial = new Material(materialTemplate); //make material instance to work with styling
         }
 
+        public void RecalculateMatrices()
+        {
+            GenerateTransformMatrixCache(-1);
+        }
+
         private void Update()
         {
             Draw();

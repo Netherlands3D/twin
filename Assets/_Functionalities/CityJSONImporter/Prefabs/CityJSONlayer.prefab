@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4013969559654378043}
   - component: {fileID: 4033951798068751712}
   - component: {fileID: 1646213389209705716}
-  - component: {fileID: 8128677453936289607}
+  - component: {fileID: -7506931798047145048}
   - component: {fileID: 2362124063262672280}
   - component: {fileID: -8031406265216150104}
   - component: {fileID: -5290351893147975871}
@@ -84,14 +84,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldTransformShifter: {fileID: 8128677453936289607}
+  worldTransformShifter: {fileID: 0}
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
   onPostShift:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &8128677453936289607
+--- !u!114 &-7506931798047145048
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9204913902124509902}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50fab43e07a540b89d245bd4ec8e4887, type: 3}
+  m_Script: {fileID: 11500000, guid: 512c87952c34d4e5aa3c6f45f74c8731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &2362124063262672280
@@ -144,7 +144,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraDistanceFromGeoReferencedObject: 150
-  addMeshCollidersToCityObjects: 1
 --- !u!114 &5482031777458148174
 MonoBehaviour:
   m_ObjectHideFlags: 0
