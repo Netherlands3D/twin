@@ -7121,7 +7121,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -10, y: -10}
+  m_SizeDelta: {x: -24, y: -24}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8053657984947872173
 CanvasRenderer:
@@ -7138,7 +7138,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8053657984947872170}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -7173,6 +7173,7 @@ GameObject:
   - component: {fileID: 2529764690130341874}
   - component: {fileID: 1793199188413680326}
   - component: {fileID: 7547941113711315723}
+  - component: {fileID: 2081981703256247104}
   - component: {fileID: 3148859753528631159}
   m_Layer: 5
   m_Name: ToolbarButton_Layers
@@ -7254,14 +7255,15 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 8053657983337849800}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7547941113711315723}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.ToolButton, Assembly-CSharp
-        m_MethodName: Toggle
+      - m_Target: {fileID: 2081981703256247104}
+        m_TargetAssemblyTypeName: Netherlands3D.FirstPersonViewer.UI.ViewerTool,
+          eu.netherlands3d.twin
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7287,6 +7289,29 @@ MonoBehaviour:
   toolbar: {fileID: 0}
   enabledObjects: {fileID: 6772898291776607984}
   disabledObjects: {fileID: 8716025839353148231}
+--- !u!114 &2081981703256247104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8053657985104781169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dc151b7ec278c1478071b9dd78f32a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelPrefab: {fileID: 8593895042517081137, guid: b3f082719cb76d1499c6291ca6d193fb,
+    type: 3}
+  toolbar: {fileID: 5605894596699867571}
+  buttonRegular: {fileID: 8716025839353148231}
+  buttonSelected: {fileID: 6772898291776607984}
+  OnToolSelected:
+    m_PersistentCalls:
+      m_Calls: []
+  OnToolDeselected:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3148859753528631159
 MonoBehaviour:
   m_ObjectHideFlags: 0
