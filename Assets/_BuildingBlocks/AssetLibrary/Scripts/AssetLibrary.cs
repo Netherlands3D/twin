@@ -3,7 +3,7 @@ using Netherlands3D.AssetLibrary.Entries;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.Catalogs.Catalogs;
-using Netherlands3D.Events.EventInvokers;
+using Netherlands3D.Events;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
@@ -113,13 +113,13 @@ namespace Netherlands3D.AssetLibrary
                 return;
             }
 
-            if (soEvent is not IEventInvoker invoker)
+            if (soEvent is not TriggerEvent invoker)
             {
-                Debug.LogError($"Event was not of type IEventInvoker, other types are not supported at the moment");
+                Debug.LogError($"Event was not of type TriggerEvent, other types are not supported at the moment");
                 return;
             }
 
-            invoker.Invoke();
+            invoker.InvokeStarted();
         }
 
         private ILayerBuilder CreateLayerBuilder(ICatalogItem item)

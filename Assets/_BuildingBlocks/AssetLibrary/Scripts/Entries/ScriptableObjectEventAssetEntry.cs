@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
+using Netherlands3D.Events;
 using UnityEngine;
 
 namespace Netherlands3D.AssetLibrary.Entries
@@ -10,12 +11,7 @@ namespace Netherlands3D.AssetLibrary.Entries
     public class ScriptableObjectEventAssetEntry : AssetLibraryEntry
     {
         [Tooltip("If set, uses event:///[InstanceID]")]
-        [SerializeField] private ScriptableObject scriptableObjectEvent;
-
-        /// <summary>
-        /// Exposed so the AssetLibrary can pre-register instance IDs like before.
-        /// </summary>
-        public ScriptableObject EventObject => scriptableObjectEvent;
+        [SerializeField] private TriggerEvent scriptableObjectEvent;
 
         public override ICatalogItem ToCatalogItem()
         {
