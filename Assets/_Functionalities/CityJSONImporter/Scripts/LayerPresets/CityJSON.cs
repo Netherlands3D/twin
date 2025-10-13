@@ -7,7 +7,7 @@ namespace Netherlands3D.Functionalities.CityJSON.LayerPresets
     [LayerPreset("cityjson")]
     public sealed class CityJSON : ILayerPreset
     {
-        private const string PrefabIdentifier = "0ff2a6c5552aa41b394c269af0d25e45";
+        private const string PrefabIdentifier = "72d5fc36c601a427dac350e2b1146f0f";
 
         public sealed class Args : LayerPresetArgs
         {

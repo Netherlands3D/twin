@@ -98,7 +98,8 @@ namespace Netherlands3D.Functionalities.CityJSON
             }
 
             // Object is loaded / replaced - trigger the application of styling
-            layerGameObject.ApplyStylingToRenderer(visualizer.GetComponent<Renderer>()); //todo: make this work for BatchedMeshRenderer
+            // layerGameObject.ApplyStylingToRenderer(visualizer.GetComponent<Renderer>()); //todo: make this work for BatchedMeshRenderer
+            // layerGameObject.AddFeature(visualizer);
         }
 
         private void PositionGeoReferencedCityJson(Coordinate origin)
