@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.DataTypeAdapters;
@@ -10,7 +9,6 @@ using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Netherlands3D.Twin.Services
 {
@@ -26,9 +24,9 @@ namespace Netherlands3D.Twin.Services
             spawner = new LayerSpawner(prefabLibrary);
         }
 
-        public async Task<ReferencedLayerData> Add(string preset, LayerPresetArgs args)
+        public async Task<ReferencedLayerData> Add(LayerPresetArgs args)
         {
-            return await Add(LayerBuilder.Create(preset, args));
+            return await Add(LayerBuilder.Create(args));
         }
 
         public async Task<ReferencedLayerData> Add(ILayerBuilder builder)
