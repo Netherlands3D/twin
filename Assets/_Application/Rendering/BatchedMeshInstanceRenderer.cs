@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.Rendering
     {
         [Tooltip("The mesh to use for the points/joints")] 
         [SerializeField] private Mesh pointMesh;
-        [SerializeField] private Material pointMaterial; 
+        [SerializeField] protected Material materialTemplate; 
 
         [Tooltip("Force all point Y positions to 0")] 
         [SerializeField] protected bool flattenY = false;
@@ -66,6 +66,7 @@ namespace Netherlands3D.Twin.Rendering
             set => pointMesh = value;
         }
 
+        private Material pointMaterial;
         public Material PointMaterial
         {
             get => pointMaterial;
@@ -74,7 +75,7 @@ namespace Netherlands3D.Twin.Rendering
                 pointMaterial = value;
                 if (pointMaterial != null)
                 {
-                    SetDefaultColors();
+                    SetAllColors(pointMaterial.color);
                 }
             }
         }
@@ -137,9 +138,20 @@ namespace Netherlands3D.Twin.Rendering
 #endif
 
         protected abstract void GenerateTransformMatrixCache(int collectionStartIndex = -1);
-        protected void Start()
+
+        private void Awake()
+        {
+            MakeMaterialInstances();
+        }
+
+        private void Start()
         {
             IsProjected = isProjected; //initialize layers
+        }
+
+        protected virtual void MakeMaterialInstances()
+        {
+            pointMaterial = new Material(materialTemplate); //make material instance to work with styling
         }
 
         private void Update()
@@ -342,12 +354,12 @@ namespace Netherlands3D.Twin.Rendering
             }
         }
 
-        public virtual void SetDefaultColors()
+        public virtual void SetAllColors(Color color)
         {
-            Color defaultColor = PointMaterial.color;
+            PointMaterial.color = color;
             foreach (var batchColor in pointBatchColors)
             {
-                batchColor.SetAllColors(defaultColor);
+                batchColor.SetAllColors(color);
             }
 
             UpdateColorBuffers(); //fill in the missing colors with the default color after resetting the existing colors to avoid setting them twice.
