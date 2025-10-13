@@ -13,13 +13,13 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.CityJSON
 {
-    [RequireComponent(typeof(HierarchicalObjectLayerGameObject))]
+    [RequireComponent(typeof(CityJSONLayerGameObject))]
     public class CityJSONSpawner : MonoBehaviour, ILayerWithPropertyData
     {
         [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
         [SerializeField] private bool addMeshCollidersToCityObjects = true;
         private CityJSONPropertyData propertyData = new();
-        private HierarchicalObjectLayerGameObject layerGameObject;
+        private CityJSONLayerGameObject layerGameObject;
         public LayerPropertyData PropertyData => propertyData;
 
         private TransformLayerPropertyData TransformLayerPropertyData =>
@@ -39,7 +39,7 @@ namespace Netherlands3D.Functionalities.CityJSON
 
         private void Awake()
         {
-            layerGameObject = GetComponent<HierarchicalObjectLayerGameObject>();
+            layerGameObject = GetComponent<CityJSONLayerGameObject>();
         }
 
         private void Start()
@@ -67,7 +67,11 @@ namespace Netherlands3D.Functionalities.CityJSON
 
             foreach (var co in cityJson.CityObjects)
             {
-                co.GetComponent<CityObjectVisualizer>().cityObjectVisualized.AddListener(OnCityObjectVisualized);
+                var visualizers = co.GetComponents<CityObjectVisualizer>();
+                foreach (var visualizer in visualizers)
+                {
+                    visualizer.cityObjectVisualized.AddListener(OnCityObjectVisualized);
+                }
             }
 
             SetCityJSONPosition(cityJson);
@@ -98,8 +102,7 @@ namespace Netherlands3D.Functionalities.CityJSON
             }
 
             // Object is loaded / replaced - trigger the application of styling
-            // layerGameObject.ApplyStylingToRenderer(visualizer.GetComponent<Renderer>()); //todo: make this work for BatchedMeshRenderer
-            // layerGameObject.AddFeature(visualizer);
+            layerGameObject.AddFeature(visualizer);
         }
 
         private void PositionGeoReferencedCityJson(Coordinate origin)

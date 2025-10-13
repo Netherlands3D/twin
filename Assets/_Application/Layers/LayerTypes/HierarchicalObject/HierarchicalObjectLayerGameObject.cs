@@ -364,15 +364,5 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             
             base.ApplyStyling();
         }
-
-        // public void ApplyStylingToRenderer(Renderer renderer)
-        // {
-        //     var feature = CreateFeature(renderer);
-        //     HierarchicalObjectLayerStyler.Apply(this, GetStyling(feature), feature);
-        //     
-        //     int bitMask = GetBitMask();
-        //     UpdateBitMaskForMaterials(bitMask, renderer.materials);
-        //     OnStylingApplied.Invoke(); // TODO: this might be called to often now
-        // }
     }
 }
