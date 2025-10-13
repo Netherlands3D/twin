@@ -92,7 +92,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             currentSequence.Play();
         }
 
-        private void ViewerExited()
+        private void ViewerExited(bool modified)
         {
             OpenWindow(null, currentTool);
         }

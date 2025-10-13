@@ -47,7 +47,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             pointerToWorld.SetActiveCamera(FirstPersonViewerData.Instance.FPVCamera);
         }
 
-        private void ExitViewer()
+        private void ExitViewer(bool modified)
         {
             viewerUI?.SetActive(false);
             uiToDisable.ForEach(ui => ui.SetActive(true));

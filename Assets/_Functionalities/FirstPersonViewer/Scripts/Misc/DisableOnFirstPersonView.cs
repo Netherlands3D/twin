@@ -22,6 +22,6 @@ namespace Netherlands3D.FirstPersonViewer.Miscellaneous
         }
 
         private void ViewerEnterd() => onViewerEnterd.Invoke();
-        private void ViewerExited() => onViewerExited.Invoke();
+        private void ViewerExited(bool modified) => onViewerExited.Invoke();
     }
 }

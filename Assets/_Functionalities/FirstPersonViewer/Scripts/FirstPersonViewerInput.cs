@@ -23,6 +23,8 @@ namespace Netherlands3D.FirstPersonViewer
         public InputAction HideUI { private set; get; }
         public InputAction ResetInput { private set; get; }
 
+        private InputAction exitModifier;
+
         [Header("Exit")]
         [SerializeField] private float exitDuration = 1;
         [SerializeField] private float exitViewDelay = .15f;
@@ -43,6 +45,7 @@ namespace Netherlands3D.FirstPersonViewer
             LeftClick = inputActionAsset.FindAction("LClick");
             HideUI = inputActionAsset.FindAction("HideUI");
             ResetInput = inputActionAsset.FindAction("Reset");
+            exitModifier = inputActionAsset.FindAction("ExitModifier");
 
             inputLocks = new List<MonoBehaviour>();
 
@@ -126,14 +129,14 @@ namespace Netherlands3D.FirstPersonViewer
                 if (exitTimer == 0)
                 {
                     ViewerEvents.ExitDuration?.Invoke(-1);
-                    ViewerEvents.OnViewerExited?.Invoke();
+                    ViewerEvents.OnViewerExited?.Invoke(exitModifier.IsPressed());
                 }
             }
             else if (ExitInput.WasReleasedThisFrame()) ViewerEvents.ExitDuration?.Invoke(-1);
             else exitTimer = exitDuration;
         }
 
-        private void ViewerExited()
+        private void ViewerExited(bool modified)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
