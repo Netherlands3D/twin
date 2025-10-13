@@ -117,56 +117,57 @@ namespace Netherlands3D.Catalogs.Catalogs
         private class CollectionPage : BaseCatalogItemCollectionPage<Collection>
         {
             private readonly ConformanceDeclaration conformance;
-            private readonly FeatureCollection items;
+            private FeatureCollection items = new();
+            private readonly Func<Task<FeatureCollection>> itemsCallback;
             private readonly OgcApiRecordsStrategy recordsStrategy;
             protected override int MaxNumberOfItems => (int)items.NumberMatched;
 
             private CollectionPage(
                 OgcApiRecordsStrategy recordsStrategy, 
                 Collection source, 
-                FeatureCollection items, 
+                Func<Task<FeatureCollection>> itemsCallback,
                 Pagination pagination = null
             ) : base(source, pagination)
             {
-                this.items = items;
+                this.itemsCallback = itemsCallback;
                 this.recordsStrategy = recordsStrategy;
             }
 
-            public static async Task<CollectionPage> CreateAsync(
+            public static Task<CollectionPage> CreateAsync(
                 Collection source, 
                 Pagination pagination,
                 OgcApiRecordsStrategy recordsStrategy
             ) {
-                return new CollectionPage(
+                return Task.FromResult(new CollectionPage(
                     recordsStrategy,
                     source, 
-                    await source.FetchItems(pagination.Limit, pagination.Offset), 
+                    () => source.FetchItems(pagination.Limit, pagination.Offset), 
                     pagination
-                );
+                ));
             }
 
-            public override async Task<ICatalogItemCollection> SearchAsync(string keyword, Pagination pagination = null)
+            public override Task<ICatalogItemCollection> SearchAsync(string keyword, Pagination pagination = null)
             {
                 pagination ??= new Pagination();
 
-                return new CollectionPage(
+                return Task.FromResult<ICatalogItemCollection>(new CollectionPage(
                     recordsStrategy, 
                     source, 
-                    await recordsStrategy.SearchAsync(source, keyword, pagination), 
+                    () => recordsStrategy.SearchAsync(source, keyword, pagination), 
                     pagination
-                );
+                ));
             }
 
-            public override async Task<ICatalogItemCollection> SearchAsync(Expression expression, Pagination pagination = null)
+            public override Task<ICatalogItemCollection> SearchAsync(Expression expression, Pagination pagination = null)
             {
                 pagination ??= new Pagination();
 
-                return new CollectionPage(
+                return Task.FromResult<ICatalogItemCollection>(new CollectionPage(
                     recordsStrategy, 
-                    source, 
-                    await recordsStrategy.SearchAsync(source, expression, pagination), 
+                    source,
+                    () => recordsStrategy.SearchAsync(source, expression, pagination), 
                     pagination
-                );
+                ));
             }
 
             public override Task<ICatalogItem> GetAsync(string id)
@@ -174,8 +175,11 @@ namespace Netherlands3D.Catalogs.Catalogs
                 throw new NotImplementedException();
             }
 
-            public override Task<IEnumerable<ICatalogItem>> GetItemsAsync() 
-                => Task.FromResult(items.Features.Select(recordsStrategy.ParseFeature));
+            public override async Task<IEnumerable<ICatalogItem>> GetItemsAsync()
+            {
+                items = await itemsCallback();
+                return items.Features.Select(recordsStrategy.ParseFeature);
+            }
 
             protected override async Task<BaseCatalogItemCollectionPage<Collection>> CreatePageAsyncInternal(Collection src, Pagination p)
                 => await CreateAsync(src, p, recordsStrategy);
