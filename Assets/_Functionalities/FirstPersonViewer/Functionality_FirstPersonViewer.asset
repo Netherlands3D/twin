@@ -24,8 +24,8 @@ MonoBehaviour:
     in te gaan.\r\n\nGebruik in de first-person viewer de muis om je camera te draaien.
     Gebruik de pijltjestoetsen of \u2018W\u2019,\u2019A\u2019,\u2019S\u2019,\u2019D\u2019
     om te bewegen.\r\n\nOm de muis weer los te laten, klik twee keer op Escape.\r\nVoor
-    uitgebreide informatie over het gebruik van de first-person viewer, <a href=\"https://netherlands3d.eu/docs/handleiding/3D-viewer/first-person-viewer\">kijk in de documentatie</a>.\r\n\n<i>Let
-    op; deze functionaliteit is nog in ontwikkeling.</i>"
+    uitgebreide informatie over het gebruik van de first-person viewer, <a href=\"https://netherlands3d.eu/docs/handleiding/first-person-viewer\">kijk
+    in de documentatie</a>.\r\n\n<i>Let op; deze functionaliteit is nog in ontwikkeling.</i>"
   configuration: {fileID: 0}
   OnEnable:
     m_PersistentCalls:
