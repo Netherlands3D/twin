@@ -5,16 +5,16 @@ using Netherlands3D.Catalogs.Catalogs;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
-namespace Netherlands3D._Application._Twin.AssetLibraryEntries
+namespace Netherlands3D.AssetLibrary.Entries
 {
-    [CreateAssetMenu(menuName = "Netherlands3D/Asset Library/Folder")]
-    public class FolderAssetEntry : AssetLibraryEntry
+    [CreateAssetMenu(menuName = "Netherlands3D/Asset Library/Dataset")]
+    public class DatasetAssetEntry : AssetLibraryEntry
     {
         [SerializeField] private List<AssetLibraryEntry> children = new();
 
         public override ICatalogItem ToCatalogItem()
         {
-            return InMemoryCatalog.CreateFolder(
+            return InMemoryCatalog.CreateDataset(
                 Id,
                 Title,
                 Description,
@@ -28,7 +28,7 @@ namespace Netherlands3D._Application._Twin.AssetLibraryEntries
         {
             return children.SelectMany(child => child.CollectEvents());
         }
-
+        
         public override IEnumerable<LayerGameObject> CollectPrefabs()
         {
             return children.SelectMany(child => child.CollectPrefabs());

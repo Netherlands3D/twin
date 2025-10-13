@@ -15,5 +15,5 @@ MonoBehaviour:
   id: planning-area-line
   title: Lijn
   description: 
-  scriptableObjectEvent: {fileID: 11400000, guid: dfa24c60414cf4f479c9de175ea7e4ee,
+  scriptableObjectEvent: {fileID: 11400000, guid: 44b770b681b65f34d9a14c6bfd441176,
     type: 2}

@@ -20,20 +20,35 @@ namespace Netherlands3D.Functionalities.Wfs
         private const CoordinateSystem DefaultEpsgCoordinateSystem = CoordinateSystem.RD;
         private Netherlands3D.CartesianTiles.TileHandler tileHandler;
         private Config requestConfig { get; set; } = Config.Default();
-        
-        public BoundingBox BoundingBox { get; set; }
-        
+
+        private BoundingBox boundingBox;
+
+        public BoundingBox BoundingBox
+        {
+            get => boundingBox;
+            set
+            {
+                boundingBox = value;
+                var crs2D = CoordinateSystems.To2D(value.CoordinateSystem);
+                boundingBox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
+            }
+        }
+
         private string wfsUrl = "";
-        public string WfsUrl { 
-            get => wfsUrl; 
-            set {
+
+        public string WfsUrl
+        {
+            get => wfsUrl;
+            set
+            {
                 wfsUrl = value;
-                if(!wfsUrl.Contains("{0}"))
+                if (!wfsUrl.Contains("{0}"))
                     Debug.LogError("WFS URL does not contain a '{0}' placeholder for the bounding box.", gameObject);
             }
         }
 
         private GeoJsonLayerGameObject wfsGeoJSONLayer;
+
         public GeoJsonLayerGameObject WFSGeoJSONLayer
         {
             get => wfsGeoJSONLayer;
@@ -46,6 +61,7 @@ namespace Netherlands3D.Functionalities.Wfs
                 wfsGeoJSONLayer.LayerData.LayerDestroyed.AddListener(OnGeoJSONLayerDestroyed);
             }
         }
+
         private void Awake()
         {
             //Make sure Datasets at least has one item
@@ -107,6 +123,7 @@ namespace Netherlands3D.Functionalities.Wfs
                     {
                         callback?.Invoke(tileChange); //nothing to download, call this to continue loading tiles
                     }
+
                     break;
                 case TileAction.Upgrade:
                     tiles[tileKey].unityLOD++;
@@ -151,7 +168,7 @@ namespace Netherlands3D.Functionalities.Wfs
         private BoundingBox DetermineBoundingBox(TileChange tileChange, CoordinateSystem system)
         {
             var bottomLeft = new Coordinate(CoordinateSystem.RD, tileChange.X, tileChange.Y, 0);
-            var topRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);            
+            var topRight = new Coordinate(CoordinateSystem.RD, tileChange.X + tileSize, tileChange.Y + tileSize, 0);
 
             var boundingBox = new BoundingBox(bottomLeft, topRight);
             boundingBox.Convert(system);
@@ -172,7 +189,7 @@ namespace Netherlands3D.Functionalities.Wfs
             }
 
             var boundingBox = DetermineBoundingBox(tileChange, system);
-            
+
             string url = wfsUrl.Replace("{0}", boundingBox.ToString());
 
             // we need to add the coordinate system value to the bbox as 5th value according to the ogc standards
@@ -184,10 +201,9 @@ namespace Netherlands3D.Functionalities.Wfs
             string jsonString = null;
             var geoJsonRequest = Uxios.DefaultInstance.Get<string>(new Uri(url), requestConfig);
             geoJsonRequest.Then(response => jsonString = response.Data as string);
-            geoJsonRequest.Catch(
-                exception => Debug.LogWarning($"Request to {url} failed with message {exception.Message}")
+            geoJsonRequest.Catch(exception => Debug.LogWarning($"Request to {url} failed with message {exception.Message}")
             );
-            
+
             yield return Uxios.WaitForRequest(geoJsonRequest);
 
             if (string.IsNullOrEmpty(jsonString) == false)
@@ -197,12 +213,13 @@ namespace Netherlands3D.Functionalities.Wfs
                 string emptyCheckString = jsonString.Substring(0, minLength).Replace(" ", "");
                 bool emptyCollection = emptyCheckString.Contains("\"totalFeatures\":0");
                 if (!emptyCollection)
-                {                    
+                {
                     var parser = new GeoJSONParser(0.01f);
                     parser.OnFeatureParsed.AddListener(wfsGeoJSONLayer.AddFeatureVisualisation);
                     yield return parser.ParseJSONString(jsonString);
                 }
             }
+
             callback?.Invoke(tileChange);
         }
 

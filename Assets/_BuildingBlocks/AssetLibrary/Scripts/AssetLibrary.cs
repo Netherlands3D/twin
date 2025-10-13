@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
-using Netherlands3D._Application._Twin.AssetLibraryEntries;
+using Netherlands3D.AssetLibrary.Entries;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.Catalogs.Catalogs;
-using Netherlands3D.Events.EventInvokers;
+using Netherlands3D.Events;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
-namespace Netherlands3D._Application._Twin
+namespace Netherlands3D.AssetLibrary
 {
     /// <summary>
     /// This scriptable object is the basis for our application catalog and is, intentionally, a wrapper
@@ -113,13 +113,13 @@ namespace Netherlands3D._Application._Twin
                 return;
             }
 
-            if (soEvent is not IEventInvoker invoker)
+            if (soEvent is not TriggerEvent invoker)
             {
-                Debug.LogError($"Event was not of type IEventInvoker, other types are not supported at the moment");
+                Debug.LogError($"Event was not of type TriggerEvent, other types are not supported at the moment");
                 return;
             }
 
-            invoker.Invoke();
+            invoker.InvokeStarted();
         }
 
         private ILayerBuilder CreateLayerBuilder(ICatalogItem item)

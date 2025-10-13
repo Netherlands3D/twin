@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Netherlands3D._Application._Twin;
 using Netherlands3D.Catalogs;
+using Netherlands3D.Twin;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
@@ -18,7 +18,7 @@ namespace Netherlands3D.UI.Panels
     {
         public override ToolbarInspector.ToolbarStyle ToolbarStyle => ToolbarInspector.ToolbarStyle.Library;
         
-        private AssetLibrary assetLibrary;
+        private AssetLibrary.AssetLibrary assetLibrary;
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
         private Breadcrumb breadcrumb;

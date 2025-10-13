@@ -289,7 +289,7 @@
     },
     "com.unity.textmeshpro": {
       "version": "5.0.0",
-      "depth": 1,
+      "depth": 0,
       "source": "builtin",
       "dependencies": {
         "com.unity.ugui": "2.0.0"
@@ -373,11 +373,11 @@
       "dependencies": {}
     },
     "eu.netherlands3d.event-containers": {
-      "version": "https://github.com/Netherlands3D/EventContainers.git#feature/introduce-event-invokers",
+      "version": "0.1.1",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {},
-      "hash": "d48b0264e9afad21eba6ac462442874e79336fc0"
+      "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.filebrowser": {
       "version": "2.2.1",
@@ -538,7 +538,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "2.3.0",
+      "version": "2.3.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
