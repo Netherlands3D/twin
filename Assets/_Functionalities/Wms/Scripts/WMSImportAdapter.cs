@@ -108,7 +108,7 @@ namespace Netherlands3D.Functionalities.Wms
         {
             await App.Layers.Add(
                 "wms-layer", 
-                new WmsLayer.Args(url, mapFilters, folderLayer, defaultEnabled)
+                new WmsLayerPreset.Args(url, mapFilters, folderLayer, defaultEnabled)
             );
         }
     }

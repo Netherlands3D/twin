@@ -5,7 +5,7 @@ using Netherlands3D.Twin.Layers.LayerPresets;
 namespace Netherlands3D.Functionalities.CityJSON.LayerPresets
 {
     [LayerPreset("cityjson")]
-    public sealed class CityJSON : ILayerPreset
+    public sealed class CityJSONPreset : ILayerPreset
     {
         private const string PrefabIdentifier = "0ff2a6c5552aa41b394c269af0d25e45";
 

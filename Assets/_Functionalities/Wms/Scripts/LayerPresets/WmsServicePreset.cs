@@ -7,7 +7,7 @@ using Netherlands3D.Twin.Projects;
 namespace Netherlands3D.Functionalities.Wms.LayerPresets
 {
     [LayerPreset("wms")]
-    public sealed class Wms : ILayerPreset
+    public sealed class WmsServicePreset : ILayerPreset
     {
         public sealed class Args : LayerPresetArgs
         {
