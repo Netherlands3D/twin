@@ -335,7 +335,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.cartesiantiles": {
-      "version": "1.2.1",
+      "version": "1.2.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -360,7 +360,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.coordinates": {
-      "version": "2.4.0",
+      "version": "3.0.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -450,7 +450,7 @@
       "hash": "2aaa164964ae67ceaa3f4ae4708b5573bb0a37bc"
     },
     "eu.netherlands3d.minimap": {
-      "version": "1.1.8",
+      "version": "1.2.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -459,7 +459,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.obj-importer": {
-      "version": "1.2.3",
+      "version": "1.3.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -489,7 +489,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.selection-tools": {
-      "version": "3.1.0",
+      "version": "3.2.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -512,7 +512,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.snapshots": {
-      "version": "2.0.0",
+      "version": "2.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -538,7 +538,7 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "2.2.1",
+      "version": "2.3.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {

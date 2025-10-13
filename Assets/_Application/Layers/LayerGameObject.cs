@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Cameras;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Events;
+using Netherlands3D.Twin.Samplers;
+using Netherlands3D.Services;
+
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -232,27 +235,34 @@ namespace Netherlands3D.Twin.Layers
 
         protected virtual void OnDoubleClick(LayerData layer)
         {
-            CenterInView(layer);
+            CenterInView();
         }
         
-        public void CenterInView(LayerData layer)
+        public void CenterInView()
         {
             if (Bounds == null)
             {
                 Debug.LogError("Bounds object is null, no bounds specified to center to.");
                 return;
             }
-
-            if(Bounds.BottomLeft.PointsLength > 2)
-                Bounds.Convert(CoordinateSystem.RDNAP); //todo: make this CRS independent
-            else
-                Bounds.Convert(CoordinateSystem.RD);
             
+            Coordinate targetCoordinate = Bounds.Center;
+            if (targetCoordinate.PointsLength == 2) //2D CRS, use the heigtmap to estimate the height.
+            {
+                targetCoordinate = targetCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+                float height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
+                targetCoordinate.height = height;
+            }
+
+            var convertedBounds = new BoundingBox(Bounds.BottomLeft, Bounds.TopRight);
+            convertedBounds.Convert(CoordinateSystems.connectedCoordinateSystem); //convert the bounds so to the connected 
+            var targetDistance = convertedBounds.GetSizeMagnitude();
+
             // !IMPORTANT: we deselect the layer, because if we don't do this, the TransformHandles might be connected to this LayerGameObject
             // This causes conflicts between the transformHandles and the Origin Shifter system, because the Transform handles will try to move the gameObject to the old (pre-shift) position.
-            LayerData.DeselectLayer(); 
+            LayerData.DeselectLayer();
             //move the camera to the center of the bounds, and move it back by the size of the bounds (2x the extents)
-            Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(Bounds.Center, Bounds.GetSizeMagnitude());//sizeMagnitude returns 2x the extents
+            Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(targetCoordinate, targetDistance); //sizeMagnitude returns 2x the extents
         }
 
 #region Styling

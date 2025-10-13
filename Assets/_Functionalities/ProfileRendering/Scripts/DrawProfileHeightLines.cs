@@ -28,7 +28,7 @@ namespace Netherlands3D.Functionalities.ProfileRendering
             for (int i = 0; i < childLines; i++)
             {
                 var childText = transform.GetChild(i).GetComponentInChildren<TextMeshProUGUI>();
-                var heightText = (lineHeight + CoordinateConverter.zeroGroundLevelY).ToString("F0");
+                var heightText = (lineHeight + CoordinateSystems.CoordinateAtUnityOrigin.height).ToString("F0");
                 childText.text = (heightText=="0") ? "NAP": heightText+"m";
 
                 lineHeight -= stepSize;

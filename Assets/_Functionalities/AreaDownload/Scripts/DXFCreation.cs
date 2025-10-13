@@ -28,14 +28,14 @@ namespace Netherlands3D.Dxf
 
             var objects = GetExportData(includedLayers, selectedAreaBounds, minClipBoundsHeight);
 
-            var vertsRD = new List<Vector3RD>();
+            var vertsRD = new List<Vector3Double>();
             foreach (var obj in objects)
             {
                 foreach (var v in obj.Vertices)
                 {
                     var coord = new Coordinate(v);
                     coord = coord.Convert(CoordinateSystem.RDNAP);
-                    vertsRD.Add(coord.ToVector3RD());
+                    vertsRD.Add(new Vector3Double(coord.easting,coord.northing,coord.height));
                 }
 
                 dxfFile.AddLayer(vertsRD, obj.Name, GetColor(obj.Material));

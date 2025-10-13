@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 165216703415087138}
   - component: {fileID: 1510941251509425647}
   - component: {fileID: -4748215367151907052}
+  - component: {fileID: 6333243416051982979}
   m_Layer: 0
   m_Name: MultiPointVisualized
   m_TagString: Untagged
@@ -27,13 +28,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1807838613596807431}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7053336849273707868
 MonoBehaviour:
@@ -72,6 +73,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -109,9 +113,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 530c352fd8b21486c828dcf1f770a016, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeLOD: 0
-  jsonVisualized: {fileID: 11400000, guid: 75872d7a7b4094523810f7573daf726c, type: 2}
-  materials:
-  - Type: 0
-    Material: {fileID: 2100000, guid: 1813c5b85524d4d9e842442713b84434, type: 2}
-  visualizationObject: {fileID: 3263211972765732073, guid: 5cfcdf7d2fec747fdaf97b0444c77edc, type: 3}
+  visualizationMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  materialConverter:
+    semanticMaterials:
+    - Type: 0
+      Material: {fileID: 2100000, guid: 1813c5b85524d4d9e842442713b84434, type: 2}
+    - Type: 1000
+      Material: {fileID: 2100000, guid: c19c85780cd7f450db02b55167f2b676, type: 2}
+    - Type: 1001
+      Material: {fileID: 2100000, guid: d0472e7df0c374cae9817021ec00f255, type: 2}
+    - Type: 1002
+      Material: {fileID: 2100000, guid: c2fe9701b3ad2444c9e146e5f28e983c, type: 2}
+    - Type: 1006
+      Material: {fileID: 2100000, guid: 35f607d55fd3a41df90eb90aa27d4c59, type: 2}
+    - Type: 1007
+      Material: {fileID: 2100000, guid: d27b4b3d1ad2a41de8bcf446eb52600f, type: 2}
+    cachedMaterials: []
+--- !u!114 &6333243416051982979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807838613596807431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68015d05aa36d494c94bfdecd9805ff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  pointMaterial: {fileID: 2100000, guid: 1813c5b85524d4d9e842442713b84434, type: 2}
+  flattenY: 0
+  offsetY: 0
+  pointMeshScale: 5
+  isProjected: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
