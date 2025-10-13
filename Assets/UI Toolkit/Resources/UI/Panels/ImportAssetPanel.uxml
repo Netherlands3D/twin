@@ -2,6 +2,11 @@
     <nl3d:ListViewItem>
         <nl3d:Button class="import-asset-panel__button-upload" name="FileUploadButton" icon="Plus" LabelText="Uploaden vanaf deze computer" />
     </nl3d:ListViewItem>
+    <!-- Start: TODO: Remove once we have fixed the copy/paste and credential flow in UI Toolkit -->
+    <nl3d:ListViewItem>
+        <nl3d:Button class="import-asset-panel__button-open-url" name="FileImportFromUrlButton" icon="LibraryAdd" LabelText="Toevoegen vanaf link" />
+    </nl3d:ListViewItem>
+    <!-- End: Remove once we have fixed the copy/paste and credential flow in UI Toolkit -->
     <nl3d:ContentContainer class="import-asset-panel__open-url" container-type="NoFoldout" show-divider="true" leading-icon="LibraryAdd" text="Toevoegen vanaf link">
         <ui:VisualElement name="Row">
             <nl3d:Icon />

@@ -40,3 +40,15 @@
     margin-right: 0;
     margin-top: var(--spacing-2);
 }
+
+/* ================================================================================== */
+/* TODO: Remove as soon as we have fixed copy/paste and credential flow in UI Toolkit */
+.import-asset-panel__button-open-url {
+    width: auto;
+    align-self: stretch;
+}
+
+.import-asset-panel__open-url {
+    display: none
+}
+/* ================================================================================== */

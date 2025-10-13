@@ -10,6 +10,7 @@ using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.Panels;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Behaviours
@@ -34,6 +35,10 @@ namespace Netherlands3D.UI.Behaviours
 
         private readonly HashSet<BaseInspectorContentPanel> panels = new();
         private BaseInspectorContentPanel activePanel;
+        
+        [SerializeField] 
+        [Obsolete("Replaced by the OnUriImportStarted event as soon as copy/paste and credential support is added")]
+        private UnityEvent OpenLegacyFileImportContentPanel;
 
         private void Awake()
         {
@@ -55,6 +60,9 @@ namespace Netherlands3D.UI.Behaviours
             ImportAssetPanel.OnHide += OnHideAssetLibrary;
             ImportAssetPanel.FileUploadStarted += OnUploadStarted;
             ImportAssetPanel.UriImportStarted += OnUriImportStarted;
+            
+            // TODO: Remove once we have fixed the copy/paste and credential flow in UI Toolkit
+            ImportAssetPanel.FileImportFromUrlStarted += OnFileImportFromUrlStarted;
         }
 
         private void OnDisable()
@@ -69,6 +77,9 @@ namespace Netherlands3D.UI.Behaviours
             ImportAssetPanel.OnHide -= OnHideImportAssetPanel;
             ImportAssetPanel.FileUploadStarted -= OnUploadStarted;
             ImportAssetPanel.UriImportStarted -= OnUriImportStarted;
+
+            // TODO: Remove once we have fixed the copy/paste and credential flow in UI Toolkit
+            ImportAssetPanel.FileImportFromUrlStarted -= OnFileImportFromUrlStarted;
         }
 
         public void Open()
@@ -186,6 +197,13 @@ namespace Netherlands3D.UI.Behaviours
         {
             App.Layers.Add(LayerBuilder.Create().FromUrl(uri));
             
+            Close();
+        }
+        
+        [Obsolete("Replaced by the OnUriImportStarted event as soon as copy/paste and credential support is added")]
+        private void OnFileImportFromUrlStarted(ClickEvent evt)
+        {
+            OpenLegacyFileImportContentPanel.Invoke();
             Close();
         }
 

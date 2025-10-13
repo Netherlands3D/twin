@@ -14,11 +14,18 @@ namespace Netherlands3D.UI.Panels
     {
         private Button uploadButton;
         private Button UploadButton => uploadButton ??= this.Q<Button>("FileUploadButton");
+        private Button importFromUrlButton;
+        
+        // TODO: Remove once we have fixed the copy/paste and credential flow in UI Toolkit
+        private Button ImportFromUrlButton => importFromUrlButton ??= this.Q<Button>("FileImportFromUrlButton");
         private TextField importUriField;
+        // End: Remove once we have fixed the copy/paste and credential flow in UI Toolkit
+        
         private TextField ImportUriField => importUriField ??= this.Q<TextField>("ImportUriField");
         private Button importUriButton;
         private Button ImportUriButton => importUriButton ??= this.Q<Button>("ImportUriButton");
 
+        public EventCallback<ClickEvent> FileImportFromUrlStarted { get; set; }
         public EventCallback<ClickEvent> FileUploadStarted { get; set; }
         public Action<Uri> UriImportStarted { get; set; }
 
@@ -33,9 +40,17 @@ namespace Netherlands3D.UI.Panels
             OnHide += () => EnableInClassList("active", false);
             UploadButton.RegisterCallback<ClickEvent>(OnUploadStarted);
             ImportUriButton.RegisterCallback<ClickEvent>(OnImportUri);
+            
+            // TODO: Remove once we have fixed the copy/paste and credential flow in UI Toolkit
+            ImportFromUrlButton.RegisterCallback<ClickEvent>(OnFileImportFromUrlStarted);
         }
 
         public override string GetTitle() => "Importeren";
+
+        private void OnFileImportFromUrlStarted(ClickEvent evt)
+        {
+            FileImportFromUrlStarted?.Invoke(evt);
+        }
 
         private void OnUploadStarted(ClickEvent evt)
         {
