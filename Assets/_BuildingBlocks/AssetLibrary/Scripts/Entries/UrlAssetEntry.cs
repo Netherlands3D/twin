@@ -3,7 +3,7 @@ using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.Catalogs;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.AssetLibraryEntries
+namespace Netherlands3D.AssetLibrary.Entries
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Asset Library/URL Record")]
     public class UrlAssetEntry : AssetLibraryEntry

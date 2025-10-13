@@ -18,7 +18,7 @@ namespace Netherlands3D.UI.Behaviours
     public class InspectorPanelBehaviour : MonoBehaviour
     {
         private UIDocument appDocument;
-        [SerializeField] private AssetLibrary assetLibrary;
+        [SerializeField] private AssetLibrary.AssetLibrary assetLibrary;
         [SerializeField] private TriggerEvent uploadFileEvent;
     
         private VisualElement root;

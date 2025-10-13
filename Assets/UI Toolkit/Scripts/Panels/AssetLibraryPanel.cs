@@ -18,7 +18,7 @@ namespace Netherlands3D.UI.Panels
     {
         public override ToolbarInspector.ToolbarStyle ToolbarStyle => ToolbarInspector.ToolbarStyle.Library;
         
-        private AssetLibrary assetLibrary;
+        private AssetLibrary.AssetLibrary assetLibrary;
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
         private Breadcrumb breadcrumb;

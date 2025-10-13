@@ -4,7 +4,7 @@ using Netherlands3D.Catalogs;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.AssetLibraryEntries
+namespace Netherlands3D.AssetLibrary.Entries
 {
     /// <summary>
     /// Base ScriptableObject for all Asset Library entries.

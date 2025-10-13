@@ -5,7 +5,7 @@ using Netherlands3D.Catalogs.Catalogs;
 using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
-namespace Netherlands3D.Twin.AssetLibraryEntries
+namespace Netherlands3D.AssetLibrary.Entries
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Asset Library/Dataset")]
     public class DatasetAssetEntry : AssetLibraryEntry
