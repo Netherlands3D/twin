@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fddfbbba63d843f7aa1423a98f516ffc, type: 3}
+  m_Script: {fileID: 11500000, guid: 82f328a3b0832b641bb6be0a57ec68a9, type: 3}
   m_Name: OpenAssetLibrary
   m_EditorClassIdentifier: 
-  eventContainer: {fileID: 11400000, guid: 6e1951c1f4825a64e8bd337dc0a50df3, type: 2}
-  value: 1
+  eventName: 
+  description: 

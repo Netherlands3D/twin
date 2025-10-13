@@ -1,8 +1,7 @@
 ﻿using System.IO;
-using Netherlands3D._Application._Twin;
 using Netherlands3D.Catalogs.Catalogs;
 using Netherlands3D.DataTypeAdapters;
-using Netherlands3D.Events.EventInvokers;
+using Netherlands3D.Events;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Functionalities.Catalogs
@@ -14,8 +13,8 @@ namespace Netherlands3D.Twin.Functionalities.Catalogs
     )]
     public class OgcApiCatalogImportAdapter : ScriptableObject, IDataTypeAdapter
     {
-        [SerializeField] private AssetLibrary assetLibrary;
-        [SerializeField] private BoolEventInvoker openAssetLibrary;
+        [SerializeField] private AssetLibrary.AssetLibrary assetLibrary;
+        [SerializeField] private TriggerEvent openAssetLibrary;
 
         public bool Supports(LocalFile localFile)
         {
