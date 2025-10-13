@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Netherlands3D.Events;
 using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.Twin.Samplers;
 using System.Collections.Generic;
@@ -13,6 +14,10 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private List<GameObject> uiToDisable;
 
         private PointerToWorldPosition pointerToWorld;
+
+        [Header("Snackbar")]
+        [SerializeField] private StringEvent snackbarEvent;
+        [SerializeField] private string fpvExitText;
 
         private void Start()
         {
@@ -41,7 +46,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             {
                 viewerGroup.alpha = 0;
                 viewerUI.SetActive(false);
-                viewerGroup.DOFade(1, 1f).SetDelay(1);
+                viewerGroup.DOFade(1, 1f).SetDelay(1).OnComplete(() => snackbarEvent.InvokeStarted(fpvExitText));
             } viewerUI.SetActive(true);
 
             pointerToWorld.SetActiveCamera(FirstPersonViewerData.Instance.FPVCamera);

@@ -71,7 +71,6 @@ RectTransform:
   - {fileID: 6179855092710363725}
   - {fileID: 8678117808838486090}
   - {fileID: 5409119171398518906}
-  - {fileID: 6812583157226635354}
   - {fileID: 8366566189958740547}
   m_Father: {fileID: 1176397698053281051}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -180,6 +179,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6812583157226635354}
   - {fileID: 2402550916508898924}
   - {fileID: 6525221885046130635}
   - {fileID: 3229244832660347942}
@@ -320,6 +320,8 @@ MonoBehaviour:
   viewerUI: {fileID: 3197146948557692697}
   uiToDisable:
   - {fileID: 2545373001619641188}
+  snackbarEvent: {fileID: 11400000, guid: 882c7f2cbbcbc4ae68cd7ae166c6a838, type: 2}
+  fpvExitText: Houd <b>backspace</b> ingedrukt om de fpv te verlaten.
 --- !u!1 &5631424678328310606
 GameObject:
   m_ObjectHideFlags: 0
@@ -3636,7 +3638,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2402550916508898924}
+    m_TransformParent: {fileID: 1176397698053281051}
     m_Modifications:
     - target: {fileID: 180296258793536150, guid: c29cb0a38866248d5bc0fd698030e4ed,
         type: 3}
@@ -3746,7 +3748,7 @@ PrefabInstance:
     - target: {fileID: 5245771590174106226, guid: c29cb0a38866248d5bc0fd698030e4ed,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 36.28
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5613,6 +5615,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8316526119478757988, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 46.28
+      objectReference: {fileID: 0}
     - target: {fileID: 8335112322699570573, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -5641,6 +5648,11 @@ PrefabInstance:
     - target: {fileID: 8462948391208365614, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8909020318087539435, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
+        type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9052660540256076878, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
