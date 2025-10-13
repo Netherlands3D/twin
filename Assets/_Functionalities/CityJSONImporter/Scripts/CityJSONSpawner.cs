@@ -17,7 +17,6 @@ namespace Netherlands3D.Functionalities.CityJSON
     public class CityJSONSpawner : MonoBehaviour, ILayerWithPropertyData
     {
         [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
-        [SerializeField] private bool addMeshCollidersToCityObjects = true;
         private CityJSONPropertyData propertyData = new();
         private CityJSONLayerGameObject layerGameObject;
         public LayerPropertyData PropertyData => propertyData;
@@ -96,11 +95,6 @@ namespace Netherlands3D.Functionalities.CityJSON
 
         private void OnCityObjectVisualized(CityObjectVisualizer visualizer)
         {
-            if (addMeshCollidersToCityObjects)
-            {
-                visualizer.gameObject.AddComponent<MeshCollider>();
-            }
-
             // Object is loaded / replaced - trigger the application of styling
             layerGameObject.AddFeature(visualizer);
         }

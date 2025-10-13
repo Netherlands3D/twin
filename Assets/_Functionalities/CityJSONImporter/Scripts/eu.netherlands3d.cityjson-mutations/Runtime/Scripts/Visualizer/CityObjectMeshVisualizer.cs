@@ -64,6 +64,7 @@ namespace Netherlands3D.CityJson.Visualisation
         public int ActiveLod => activeLOD;
         public Mesh ActiveMesh { get; private set; }
 
+        [SerializeField] private bool addMeshCollider = true;
         [SerializeField] private CityMaterialConverter materialConverter;
 
         public override Material[] Materials => meshRenderer.materials;
@@ -112,6 +113,9 @@ namespace Netherlands3D.CityJson.Visualisation
             var highestLod = meshes.Count > 0 ? meshes.Keys.Max(g => g.Lod) : -1;
             SetLODActive(highestLod);
 
+            if(addMeshCollider && meshes.Count > 0)
+                gameObject.AddComponent<MeshCollider>();
+            
             cityObjectVisualized?.Invoke(this);
         }
 

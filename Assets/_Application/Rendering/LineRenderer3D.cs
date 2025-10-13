@@ -55,6 +55,8 @@ namespace Netherlands3D.Twin.Rendering
             }
         }
 
+        public override Material[] Materials => new Material[]{ PointMaterial, LineMaterial };
+
         protected override void OnDrawGizmos() //todo: delete
         {
             Gizmos.color = Color.cyan;

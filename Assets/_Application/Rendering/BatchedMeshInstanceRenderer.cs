@@ -36,17 +36,16 @@ namespace Netherlands3D.Twin.Rendering
 
     public abstract class BatchedMeshInstanceRenderer : MonoBehaviour
     {
-        [Tooltip("The mesh to use for the points/joints")] [SerializeField]
-        private Mesh pointMesh;
-
+        [Tooltip("The mesh to use for the points/joints")] 
+        [SerializeField] private Mesh pointMesh;
         [SerializeField] private Material pointMaterial; 
 
-        [Tooltip("Force all point Y positions to 0")] [SerializeField]
-        protected bool flattenY = false;
+        [Tooltip("Force all point Y positions to 0")] 
+        [SerializeField] protected bool flattenY = false;
 
-        [Tooltip("Offset the Y position of the points")] [SerializeField]
-        protected float offsetY = 0.0f;
-
+        [Tooltip("Offset the Y position of the points")] 
+        [SerializeField] protected float offsetY = 0.0f;
+        
         [SerializeField] protected float pointMeshScale = 5f;
         [SerializeField] protected bool isProjected = true;
         
@@ -58,6 +57,8 @@ namespace Netherlands3D.Twin.Rendering
 
         protected Camera renderCamera;
         [SerializeField] protected LayerMask layerMask = -1;
+
+        public abstract Material[] Materials { get; }
 
         public Mesh PointMesh
         {

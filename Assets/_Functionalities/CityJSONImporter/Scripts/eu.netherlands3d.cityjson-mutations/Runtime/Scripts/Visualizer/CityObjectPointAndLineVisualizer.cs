@@ -14,17 +14,7 @@ namespace Netherlands3D.CityJson.Visualisation
         [SerializeField] private GeometryType geometryType;
         [SerializeField] private BatchedMeshInstanceRenderer batchedMeshInstanceRenderer;
 
-        public override Material[] Materials
-        {
-            get
-            {
-                var materials = new List<Material>();
-                materials.Add(batchedMeshInstanceRenderer.PointMaterial);
-                if (batchedMeshInstanceRenderer is LineRenderer3D lineRenderer)
-                    materials.Add(lineRenderer.LineMaterial);
-                return materials.ToArray();
-            }
-        }
+        public override Material[] Materials => batchedMeshInstanceRenderer.Materials;
 
         protected override void Visualize()
         {
@@ -36,6 +26,7 @@ namespace Netherlands3D.CityJson.Visualisation
                 var collections = GetPositionCollections(geometry.BoundaryObject, cityObject.CoordinateSystem);
                 batchedMeshInstanceRenderer.SetPositionCollections(collections);
             }
+            cityObjectVisualized?.Invoke(this);
         }
 
         private static List<List<Coordinate>> GetPositionCollections(CityBoundary boundary, CoordinateSystem coordinateSystem)
@@ -75,13 +66,19 @@ namespace Netherlands3D.CityJson.Visualisation
         
         public override void SetFillColor(Color color)
         {
+            print("setting fill color: " + color);
             batchedMeshInstanceRenderer.PointMaterial.color = color;
+            batchedMeshInstanceRenderer.SetDefaultColors();
         }
 
         public override void SetLineColor(Color color)
         {
-            if(batchedMeshInstanceRenderer is LineRenderer3D lineRenderer)
+            print("setting line color: " + color);
+            if (batchedMeshInstanceRenderer is LineRenderer3D lineRenderer)
+            {
                 lineRenderer.LineMaterial.color = color;
+                lineRenderer.SetDefaultColors();
+            }
         }
     }
 }
