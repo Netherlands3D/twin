@@ -2,11 +2,11 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Netherlands3D.Catalogs;
-using Netherlands3D.Twin;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI_Toolkit.Scripts.Panels;
 using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
+using Netherlands3D.UI.Manipulators;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
 using ListView = Netherlands3D.UI.Components.ListView;
@@ -95,9 +95,14 @@ namespace Netherlands3D.UI.Panels
 
         private VisualElement MakeListViewItem()
         {
-            var button = new Button { name = "LayerButton" };
-            var listViewItem = new ListViewItem(button);
-            button.RegisterCallback<ClickEvent>(_ => OpenAsset(button.userData as ICatalogItem));
+            var listViewItem = CreateListViewItemVisualElement();
+            listViewItem.AddManipulator(
+                new DragToWorldManipulator(
+                    this.panel.visualTree, 
+                    CreateGhost, 
+                    (target, _) => OpenAsset(target.userData as ICatalogItem)
+                )
+            );
             
             return listViewItem;
         }
@@ -105,12 +110,33 @@ namespace Netherlands3D.UI.Panels
         private void BindListViewItem(VisualElement item, int index)
         {
             if (item is not ListViewItem listViewItem) return;
-            if (listViewItem.Q<Button>() is not Button button) return;
             
             ICatalogItem catalogItem = ListView.itemsSource[index] as ICatalogItem;
+            listViewItem.userData = catalogItem;
+            
+            UpdateListViewItem(listViewItem);
+        }
+
+        private static ListViewItem CreateListViewItemVisualElement()
+        {
+            return new ListViewItem(new Button { name = "LayerButton" });
+        }
+
+        private static ListViewItem CreateGhost(VisualElement target)
+        {
+            var visualElement = CreateListViewItemVisualElement();
+            visualElement.userData = target.userData;
+            UpdateListViewItem(visualElement);
+            return visualElement;
+        }
+
+        private static void UpdateListViewItem(ListViewItem listViewItem)
+        {
+            if (listViewItem.Q<Button>() is not Button button) return;
+            if (listViewItem.userData is not ICatalogItem catalogItem) return;
+            
             button.LabelText = catalogItem.Title;
             button.Image = catalogItem is ICatalogItemCollection ? IconImage.Folder : IconImage.Map;
-            button.userData = catalogItem;
         }
     }
 }
