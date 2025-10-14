@@ -14,12 +14,12 @@ namespace Netherlands3D.Catalogs.Catalogs
     {
         private readonly OgcApi.OgcApi ogcApi;
         private readonly OgcApiRecordsStrategy recordsStrategy;
-        public string Id { get; protected set; }
-        public string Title { get; protected set; }
-        public string Description { get; protected set; }
+        public string Id { get; private set; }
+        public string Title { get; private set; }
+        public string Description { get; private set; }
         public IDictionary<string, object> Metadata { get; } = new Dictionary<string, object>();
 
-        protected OgcApiCatalog(OgcApi.OgcApi ogcApi, OgcApiRecordsStrategy recordsStrategy)
+        private OgcApiCatalog(OgcApi.OgcApi ogcApi, OgcApiRecordsStrategy recordsStrategy)
         {
             this.ogcApi = ogcApi;
             this.recordsStrategy = recordsStrategy;
