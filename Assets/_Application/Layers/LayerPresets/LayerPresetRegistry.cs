@@ -1,51 +1,83 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Netherlands3D.Twin.Layers.LayerPresets
 {
     public static class LayerPresetRegistry
     {
-        private static bool isInitialized = false;
-        private static readonly Dictionary<string, ILayerPreset> Presets = new();
+        private static bool initialized;
+        private static readonly Dictionary<string, Type> IdToPresetType = new();
+        private static readonly Dictionary<Type, ILayerPreset> PresetTypeToInstance = new();
+        private static readonly Dictionary<Type, Type> ArgsTypeToPresetType = new();
 
-        public static void Register(string kind, ILayerPreset preset) => Presets[kind] = preset;
-
-        public static ILayerBuilder Create(string kind, LayerPresetArgs args)
+        public static void Register(string kind, ILayerPreset preset)
         {
-            if (!isInitialized)
-            {
-                AutoRegisterFromAssemblies();
-            }
+            var presetType = preset.GetType();
 
-            var layerBuilder = new LayerBuilder();
+            IdToPresetType[kind] = presetType;
+            PresetTypeToInstance[presetType] = preset;
 
-            if (!Presets.TryGetValue(kind, out var preset)) return layerBuilder;
-            
-            return preset.Apply(layerBuilder, args);
+            var argsType = presetType.GetInterfaces()
+                .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ILayerPreset<>))
+                .Select(i => i.GetGenericArguments()[0])
+                .FirstOrDefault();
+
+            if (argsType != null)
+                ArgsTypeToPresetType[argsType] = presetType;
+        }
+
+        public static ILayerBuilder Create<TPreset>(LayerPresetArgs<TPreset> args) where TPreset : ILayerPreset
+        {
+            EnsureInit();
+            var builder = new LayerBuilder();
+
+            if (!PresetTypeToInstance.TryGetValue(typeof(TPreset), out var preset))
+                return builder;
+
+            return preset.Apply(builder, args);
+        }
+
+        public static ILayerBuilder Create(LayerPresetArgs args)
+        {
+            EnsureInit();
+            var builder = new LayerBuilder();
+
+            if (!ArgsTypeToPresetType.TryGetValue(args.GetType(), out var presetType))
+                return builder;
+
+            return PresetTypeToInstance[presetType].Apply(builder, args);
         }
 
         public static void AutoRegisterFromAssemblies(params Assembly[] assemblies)
         {
-            if (assemblies is not { Length: not 0 })
-            {
+            if (assemblies is not { Length: > 0 })
                 assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            }
 
             foreach (var asm in assemblies)
             {
                 foreach (var type in asm.GetTypes())
                 {
+                    if (type.IsAbstract) continue;
+                    if (!typeof(ILayerPreset).IsAssignableFrom(type)) continue;
+
                     var attr = type.GetCustomAttribute<LayerPresetAttribute>();
                     if (attr == null) continue;
 
                     if (Activator.CreateInstance(type) is not ILayerPreset preset) continue;
-                    
+
                     Register(attr.Kind, preset);
                 }
             }
-            
-            isInitialized = true;
+
+            initialized = true;
+        }
+
+        private static void EnsureInit()
+        {
+            if (initialized) return;
+            AutoRegisterFromAssemblies();
         }
     }
 }

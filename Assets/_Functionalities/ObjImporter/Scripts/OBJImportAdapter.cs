@@ -10,7 +10,6 @@ namespace Netherlands3D.Functionalities.OBJImporter
     public class OBJImportAdapter : ScriptableObject, IDataTypeAdapter
     {
         private const string SupportedFileExtension = "obj";
-        private const string LayerPresetCode = "obj";
 
         public bool Supports(LocalFile localFile) => localFile.LocalFilePath.EndsWith($".{SupportedFileExtension}");
 
@@ -18,7 +17,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
         {
             var uri = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
 
-            App.Layers.Add(LayerPresetCode, new ObjPreset.Args(localFile.FileName, uri));
+            App.Layers.Add(new ObjPreset.Args(localFile.FileName, uri));
         }
     }
 }
