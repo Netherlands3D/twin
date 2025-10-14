@@ -13,6 +13,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             {
                 ApplyStylingToFeature(feature);
             }
+            OnStylingApplied.Invoke();
         }
         
         private void ApplyStylingToFeature(LayerFeature feature)
