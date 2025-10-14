@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Netherlands3D.CityJson.Visualisation;
-using Netherlands3D.Twin.Layers.Properties;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
