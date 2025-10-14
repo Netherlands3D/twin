@@ -1,0 +1,103 @@
+/* Scroller base */
+.unity-scroller {
+  margin: 0;
+  padding: 0;
+  width: auto;
+  height: auto;
+  min-width: auto;
+  min-height: auto;
+}
+
+/* Arrows off */
+.unity-scroller__low-button { display: none; }
+.unity-scroller__high-button { display: none; }
+
+/* Slider */
+.unity-slider {
+  margin: 0;
+  padding: 0;
+  width: auto;
+  height: auto;
+  min-width: auto;
+  min-height: auto;
+}
+
+.unity-base-slider__drag-container { margin: 0; padding: 0; }
+
+/* Track */
+.unity-base-slider__tracker {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-blue-100);
+  border-width: 0;
+}
+
+/* Thumb */
+.unity-base-slider__dragger-border { margin: 0; padding: 0; }
+.unity-base-slider__dragger {
+  top: auto;
+  left: auto;
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-blue-300);
+  border-color: var(--color-blue-300);
+  border-width: 2px;
+}
+
+/* Scroller root (vertical) */
+.unity-scroller.unity-scroller--vertical,
+.unity-scroller.vertical {
+  width: var(--spacing-4);
+  min-width: var(--spacing-4);
+  height: auto;
+  min-height: auto;
+}
+
+/* Scroller root (horizontal) */
+.unity-scroller.unity-scroller--horizontal,
+.unity-scroller.horizontal {
+  height: var(--spacing-4);
+  min-height: var(--spacing-4);
+  width: auto;
+  min-width: auto;
+}
+
+/* Track and thumb (vertical) */
+.unity-scroller.unity-scroller--vertical .unity-base-slider__tracker,
+.unity-scroller.vertical .unity-base-slider__tracker,
+.unity-base-slider--vertical .unity-base-slider__tracker {
+  width: var(--spacing-4);
+  min-width: var(--spacing-4);
+  height: auto;
+  min-height: auto;
+}
+
+/* Track en thumb (horizontal) */
+.unity-scroller.unity-scroller--horizontal .unity-base-slider__tracker,
+.unity-scroller.horizontal .unity-base-slider__tracker,
+.unity-base-slider--horizontal .unity-base-slider__tracker {
+  height: var(--spacing-4);
+  min-height: var(--spacing-4);
+  width: auto;
+  min-width: auto;
+}
+
+/* Dragger (vertical) */
+.unity-scroller.unity-scroller--vertical .unity-base-slider__dragger,
+.unity-scroller.vertical .unity-base-slider__dragger,
+.unity-base-slider--vertical .unity-base-slider__dragger {
+  width: var(--spacing-4);
+  min-width: var(--spacing-4);
+  height: auto;
+  min-height: auto;
+}
+
+/* Dragger (horizontal) */
+.unity-scroller.unity-scroller--horizontal .unity-base-slider__dragger,
+.unity-scroller.horizontal .unity-base-slider__dragger,
+.unity-base-slider--horizontal .unity-base-slider__dragger {
+  height: var(--spacing-4);
+  min-height: var(--spacing-4);
+  width: auto;
+  min-width: auto;
+}
