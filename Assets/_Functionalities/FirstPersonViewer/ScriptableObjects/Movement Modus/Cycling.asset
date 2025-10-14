@@ -31,3 +31,9 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 242af74a17f9a9a46a6d8b7aac54573d, type: 2}
   - {fileID: 2100000, guid: 3d0118e0b2da2144ca01a6fea846a58a, type: 2}
   - {fileID: 2100000, guid: 5e8dbebefb1a88040bb31b2cf79998e2, type: 2}
+  groundResetHeightOffset: 0
+  editableSettings:
+    list: []
+  references:
+    version: 2
+    RefIds: []

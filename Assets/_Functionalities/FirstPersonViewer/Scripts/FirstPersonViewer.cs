@@ -56,12 +56,11 @@ namespace Netherlands3D.FirstPersonViewer
 
             SetupFSM();
 
-            ViewerEvents.OnSpeedChanged += SetMovementSpeed;
+            //ViewerEvents.OnSpeedChanged += SetMovementSpeed;
             ViewerEvents.OnMovementPresetChanged += SetMovementModus;
             ViewerEvents.OnViewerExited += ExitViewer;
             ViewerEvents.OnResetToStart += ResetToStart;
             ViewerEvents.OnResetToGround += ResetToGround;
-
         }
 
         private void Start()
@@ -77,7 +76,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void OnDestroy()
         {
-            ViewerEvents.OnSpeedChanged -= SetMovementSpeed;
+            //ViewerEvents.OnSpeedChanged -= SetMovementSpeed;
             ViewerEvents.OnMovementPresetChanged -= SetMovementModus;
             ViewerEvents.OnViewerExited -= ExitViewer;
             ViewerEvents.OnResetToStart -= ResetToStart;

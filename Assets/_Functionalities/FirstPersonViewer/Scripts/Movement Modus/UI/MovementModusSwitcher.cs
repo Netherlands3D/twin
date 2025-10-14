@@ -90,9 +90,9 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
             //Send events
             ViewerEvents.OnMovementPresetChanged?.Invoke(currentMovement);
-            ViewerEvents.OnViewheightChanged?.Invoke(currentMovement.viewHeight);
-            ViewerEvents.OnFOVChanged?.Invoke(currentMovement.fieldOfView);
-            ViewerEvents.OnSpeedChanged?.Invoke(currentMovement.speedInKm);
+            //ViewerEvents.OnViewheightChanged?.Invoke(currentMovement.viewHeight);
+            //ViewerEvents.OnFOVChanged?.Invoke(currentMovement.fieldOfView);
+            //ViewerEvents.OnSpeedChanged?.Invoke(currentMovement.speedInKm);
         }
 
         public void LoadMoveModus(MovementPresets movePresets) => LoadMoveModus(movementPresets.presets.IndexOf(movePresets));

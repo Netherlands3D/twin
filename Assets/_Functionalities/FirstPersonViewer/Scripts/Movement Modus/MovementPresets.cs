@@ -1,3 +1,4 @@
+using Netherlands3D.FirstPersonViewer.Temp;
 using System;
 using UnityEngine;
 namespace Netherlands3D.FirstPersonViewer.ViewModus
@@ -29,6 +30,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         [Header("Other")]
         public float groundResetHeightOffset;
+
+        public ReorderableViewerSettingsList editableSettings = new ReorderableViewerSettingsList();
 
         public Type GetViewerState() //Not user friendly for edits. (Prob some sort of subscribe system?)
         {

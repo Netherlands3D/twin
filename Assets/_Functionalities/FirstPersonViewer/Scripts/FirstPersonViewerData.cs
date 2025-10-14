@@ -1,5 +1,6 @@
 using Netherlands3D.FirstPersonViewer.Events;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer
@@ -9,9 +10,7 @@ namespace Netherlands3D.FirstPersonViewer
         //Not a big fan of this
         public static FirstPersonViewerData Instance { private set; get; }
 
-        public float ViewHeight { private set; get; }
-        public float FOV { private set; get; }
-        public float Speed { private set; get; }
+        public Dictionary<string, object> ViewerSetting { get; private set; }
 
         public Camera FPVCamera { private set; get; }
         private void Awake()
@@ -23,23 +22,26 @@ namespace Netherlands3D.FirstPersonViewer
         private void OnEnable()
         {
             FPVCamera = GetComponentInChildren<Camera>();
+            ViewerSetting = new Dictionary<string, object>();
 
-            ViewerEvents.OnViewheightChanged += OnViewHeightChanged;
-            ViewerEvents.OnFOVChanged += OnFOVChanged;
-            ViewerEvents.OnSpeedChanged += OnSpeedChanged;
+            ViewerEvents.onSettingChanged += SettingsChanged;
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
-            ViewerEvents.OnViewheightChanged -= OnViewHeightChanged;
-            ViewerEvents.OnFOVChanged -= OnFOVChanged;
-            ViewerEvents.OnSpeedChanged -= OnSpeedChanged;
+            ViewerEvents.onSettingChanged -= SettingsChanged;
         }
 
-        private void OnViewHeightChanged(float height) => ViewHeight = height;
+        private void SettingsChanged(string setting, object value)
+        {
+            if(ViewerSetting.ContainsKey(setting)) ViewerSetting[setting] = value;
+            else ViewerSetting.Add(setting, value);
+        }
 
-        private void OnFOVChanged(float FOV) => this.FOV = FOV;
-
-        private void OnSpeedChanged(float speed) => Speed = speed;
+        public object GetSettingValue(string setting)
+        {
+            if (ViewerSetting.ContainsKey(setting)) return ViewerSetting[setting];
+            else return null;
+        }
     }
 }

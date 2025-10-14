@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Netherlands3D.FirstPersonViewer.ViewModus;
+using System.Collections.Generic;
 
 namespace Netherlands3D.FirstPersonViewer.Events
 {
@@ -11,9 +12,9 @@ namespace Netherlands3D.FirstPersonViewer.Events
 
         public static Action<MovementPresets> OnMovementPresetChanged;
         public static Action<CameraConstrain> OnChangeCameraConstrain;
-        public static Action<float> OnViewheightChanged;
-        public static Action<float> OnFOVChanged;
-        public static Action<float> OnSpeedChanged;
+
+        public static Action<string, object> onSettingChanged;
+        public static Dictionary<string, Action<object>> onSetting;
 
         public static Action<Vector3> OnCameraRotation;
 

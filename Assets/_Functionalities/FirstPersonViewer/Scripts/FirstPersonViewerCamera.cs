@@ -43,8 +43,8 @@ namespace Netherlands3D.FirstPersonViewer
         private void OnDestroy()
         {
             ViewerEvents.OnChangeCameraConstrain -= SetCameraConstrain;
-            ViewerEvents.OnViewheightChanged -= SetCameraHeight;
-            ViewerEvents.OnFOVChanged -= SetCameraFOV;
+            //ViewerEvents.OnViewheightChanged -= SetCameraHeight;
+            //ViewerEvents.OnFOVChanged -= SetCameraFOV;
             ViewerEvents.OnResetToStart -= ResetToStart;
             ViewerEvents.OnSetCameraNorth -= SetCameraNorth;
         }
@@ -74,8 +74,8 @@ namespace Netherlands3D.FirstPersonViewer
 
             //Setup events when done with animation.
             ViewerEvents.OnChangeCameraConstrain += SetCameraConstrain;
-            ViewerEvents.OnViewheightChanged += SetCameraHeight;
-            ViewerEvents.OnFOVChanged += SetCameraFOV;
+            //ViewerEvents.OnViewheightChanged += SetCameraHeight;
+            //ViewerEvents.OnFOVChanged += SetCameraFOV;
             ViewerEvents.OnResetToStart += ResetToStart;
             ViewerEvents.OnSetCameraNorth += SetCameraNorth;
         }
