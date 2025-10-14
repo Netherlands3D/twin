@@ -77,6 +77,11 @@ namespace Netherlands3D.Catalogs.Catalogs
                 items = source.Items;
             }
 
+            public override Task<ICatalogItem> GetAsync(string id)
+            {
+                throw new NotImplementedException();
+            }
+
             public override async Task<IEnumerable<ICatalogItem>> GetItemsAsync()
             {
                 var result = new List<ICatalogItem>();
@@ -162,6 +167,11 @@ namespace Netherlands3D.Catalogs.Catalogs
                     await recordsStrategy.SearchAsync(source, expression, pagination), 
                     pagination
                 );
+            }
+
+            public override Task<ICatalogItem> GetAsync(string id)
+            {
+                throw new NotImplementedException();
             }
 
             public override Task<IEnumerable<ICatalogItem>> GetItemsAsync() 

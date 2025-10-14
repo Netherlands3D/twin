@@ -21,6 +21,11 @@ namespace Netherlands3D.Twin.Tools.UI
             Instance = this;
         }
 
+        public void ShowSingleOverlay(OverlayInspector overlay)
+        {
+            ShowOverlay(overlay, true);
+        }
+
         public OverlayInspector ShowOverlay(OverlayInspector overlay, bool clear)
         {
             if(clear)
