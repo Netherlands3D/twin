@@ -224,6 +224,7 @@ GameObject:
   - component: {fileID: -7202614291581304945}
   - component: {fileID: -8443884779799250748}
   - component: {fileID: -8547530675755365502}
+  - component: {fileID: 276568021394205261}
   m_Layer: 2
   m_Name: First Person Viewer
   m_TagString: Untagged
@@ -343,7 +344,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b283f1e59e3075444aa23b5cf9a685a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FirstPersonCamera: {fileID: 2754359901435342932}
+  <FirstPersonCamera>k__BackingField: {fileID: 2754359901435342932}
+  snappingCullingMask:
+    serializedVersion: 2
+    m_Bits: 193
   groundDistance: 0.2
   isGrounded: 0
   cameraHeightAboveGround: 500
@@ -375,6 +379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e10c10a46849464a833d90432a74b70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <FPVCamera>k__BackingField: {fileID: 5953575201012568707}
 --- !u!114 &-7202614291581304945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -411,3 +416,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37748b16695f8464b998fdbfd9bdcddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &276568021394205261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8111522683061574636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  service: {fileID: 4367215521751458963}

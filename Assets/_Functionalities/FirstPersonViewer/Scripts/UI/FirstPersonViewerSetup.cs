@@ -1,5 +1,7 @@
 using Netherlands3D.FirstPersonViewer;
+using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.Minimap;
+using Netherlands3D.Services;
 using System.Collections;
 using UnityEngine;
 
@@ -16,37 +18,29 @@ namespace Netherlands3D
         [SerializeField] private Camera2DFrustum frustum;
         [SerializeField] private WMTSMap wmtsMap;
 
-        private SnapshotComponent snapshotComponent;
-
-        private void Awake()
-        {
-            snapshotComponent = FindAnyObjectByType<SnapshotComponent>();
-        }
 
         private void OnEnable()
         {
-            StartCoroutine(SetupViewer());
+            SetupViewer();
         }
 
         private void OnDisable()
         {
             frustum.SetActiveCamera(Camera.main);
             wmtsMap.SetActiveCamera(Camera.main);
-            snapshotComponent.SetActiveCamera(Camera.main);
+            ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(Camera.main);
         }
 
-        //We need to wait 1 frame to allow the map to load or we get an unloaded map that's zoomed in.
-        private IEnumerator SetupViewer()
+        private void SetupViewer()
         {
-            yield return null;
-            Camera activeCam = FirstPersonViewerData.Instance.FPVCamera;
+            Camera activeCam = ServiceLocator.GetService<FirstPersonViewerData>().FPVCamera;
 
             minimap.SetZoom(zoomScale);
 
             frustum.SetActiveCamera(activeCam);
             wmtsMap.SetActiveCamera(activeCam);
 
-            snapshotComponent.SetActiveCamera(activeCam);
+            ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(activeCam);
         }
     }
 }

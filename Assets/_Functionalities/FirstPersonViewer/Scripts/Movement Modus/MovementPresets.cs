@@ -14,7 +14,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public float jumpHeight;
         public float maxFallingSpeed;
         public float stepHeight = 1;
-        public ViewModus viewModus;
+        public string viewModus;
 
         [Header("Vehicle Settings")]
         public float acceleration;
@@ -29,26 +29,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         [Header("Other")]
         public float groundResetHeightOffset;
-
-        public Type GetViewerState() //Not user friendly for edits. (Prob some sort of subscribe system?)
-        {
-            switch (viewModus)
-            {
-                default:
-                case ViewModus.STANDARD:
-                    return typeof(ViewerWalkingState);
-                case ViewModus.VEHICULAR:
-                    return typeof(ViewerVehicularState);
-                case ViewModus.FREECAM:
-                    return typeof(ViewerFlyingState);
-            }
-        }
-        public enum ViewModus //Not user friendly for edits. (Prob some sort of subscribe system?)
-        {
-            STANDARD = 0,
-            VEHICULAR = 1,
-            FREECAM = 2
-        }
     }
 }
 

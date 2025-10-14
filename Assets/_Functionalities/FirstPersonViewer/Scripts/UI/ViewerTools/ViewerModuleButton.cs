@@ -5,10 +5,10 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.FirstPersonViewer.UI
 {
-    public class ViewerTool : MonoBehaviour
+    public class ViewerModuleButton : MonoBehaviour
     {
         [SerializeField] private RectTransform panelPrefab;
-        [SerializeField] private ViewerToolbar toolbar;
+        [SerializeField] private ViewerModulebar toolbar;
 
         [Header("Button")]
         [SerializeField] private GameObject buttonRegular;
@@ -33,7 +33,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             toolbar.OpenWindow(panelPrefab, this);
         }
 
-        private void ViewToolChanged(ViewerTool viewTool)
+        private void ViewToolChanged(ViewerModuleButton viewTool)
         {
             bool isToolSelf = viewTool == this;
             buttonRegular.SetActive(!isToolSelf);

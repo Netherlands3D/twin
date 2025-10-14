@@ -18,16 +18,16 @@ namespace Netherlands3D.FirstPersonViewer
         [SerializeField] private GameObject locationSpherePrefab;
         private GameObject locationSphere;
         private OpticalRaycaster raycaster;
-        private int snappingCullingMask = 0;
+        [SerializeField] private LayerMask snappingCullingMask = 0;
+        private float distanceMultiplier = 0.015f;
 
-        private void Awake()
+        private void Start()
         {
-            locationSphere = Instantiate(locationSpherePrefab);
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
-            snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings") | (1 << LayerMask.NameToLayer("Default")));
 
-            float cameraDistance = Mathf.Abs(1 - Camera.main.transform.position.y) * .015f;
-
+            float cameraDistance = Mathf.Abs(1 - Camera.main.transform.position.y) * distanceMultiplier;
+            
+            locationSphere = Instantiate(locationSpherePrefab);
             locationSphere.transform.localScale = Vector3.one * cameraDistance;
         }
 

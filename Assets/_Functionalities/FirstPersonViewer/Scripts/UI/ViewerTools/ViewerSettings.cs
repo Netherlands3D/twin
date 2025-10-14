@@ -1,4 +1,5 @@
 using Netherlands3D.FirstPersonViewer.Events;
+using Netherlands3D.Services;
 using TMPro;
 using UnityEngine;
 
@@ -19,10 +20,12 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void Start()
         {
+            FirstPersonViewerData viewerData = ServiceLocator.GetService<FirstPersonViewerData>();
+
             //Not a big fan of this
-            viewheightInput.text = FirstPersonViewerData.Instance.ViewHeight.ToString();
-            fieldOfViewInput.text = FirstPersonViewerData.Instance.FOV.ToString();
-            speedInput.text = FirstPersonViewerData.Instance.Speed.ToString();
+            viewheightInput.text = viewerData.ViewHeight.ToString();
+            fieldOfViewInput.text = viewerData.FOV.ToString();
+            speedInput.text = viewerData.Speed.ToString();
         }
 
         private void OnDisable()
@@ -32,11 +35,27 @@ namespace Netherlands3D.FirstPersonViewer.UI
             ViewerEvents.OnSpeedChanged -= OnSpeedChanged;
         }
 
-        public void ViewHeighEdited(string height) => ViewerEvents.OnViewheightChanged?.Invoke(float.Parse(height));
-        
-        public void FOVEdited(string fov) => ViewerEvents.OnFOVChanged?.Invoke(float.Parse(fov));
-        
-        public void SpeedEdited(string speed) => ViewerEvents.OnSpeedChanged?.Invoke(float.Parse(speed));
+        //Doesn't reset the previous value, but won't fix this because I'm already working on a better settings menu.
+        public void ViewHeighEdited(string height)
+        {
+            if (!float.TryParse(height, out float value)) return;
+
+            ViewerEvents.OnViewheightChanged?.Invoke(value);
+        }
+
+        public void FOVEdited(string fov)
+        {
+            if(!float.TryParse(fov, out float value)) return; 
+
+            ViewerEvents.OnFOVChanged?.Invoke(value);
+        }
+
+        public void SpeedEdited(string speed)
+        {
+            if(!float.TryParse(speed, out float value)) return;
+
+            ViewerEvents.OnSpeedChanged?.Invoke(value);
+        }
 
         private void OnViewHeightChanged(float newHeight) => viewheightInput.text = newHeight.ToString();
 

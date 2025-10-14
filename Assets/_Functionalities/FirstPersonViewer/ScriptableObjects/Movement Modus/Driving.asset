@@ -19,7 +19,7 @@ MonoBehaviour:
   jumpHeight: 0
   maxFallingSpeed: 55
   stepHeight: 1.5
-  viewModus: 1
+  viewModus: ViewerVehicularState
   acceleration: 10
   deceleration: 5
   turnSpeed: 100
@@ -34,3 +34,4 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 2097010ff22b90e4ebcb8e640c6ef475, type: 2}
   - {fileID: 2100000, guid: 59b6a28a97adccf4a8a0791c01235679, type: 2}
   - {fileID: 2100000, guid: 878239871271be24399705c5da67a316, type: 2}
+  groundResetHeightOffset: 0

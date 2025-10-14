@@ -6,7 +6,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
     public class FirstPersonViewerStateMachine
     {
-        private Dictionary<Type, ViewerState> stateDictionary = new Dictionary<Type, ViewerState>();
+        private Dictionary<string, ViewerState> stateDictionary = new Dictionary<string, ViewerState>();
         public ViewerState CurrentState { private set; get; }
 
         public FirstPersonViewerStateMachine(FirstPersonViewer player, FirstPersonViewerInput input, Type startState, params ViewerState[] states)
@@ -14,10 +14,11 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             foreach (ViewerState state in states)
             {
                 state.Initialize(this, player, input);
-                stateDictionary.Add(state.GetType(), state);
+                string stateName = state.GetType().Name;
+                if (!stateDictionary.ContainsKey(stateName)) stateDictionary.Add(stateName, state);
             }
 
-            if(startState != null) SwitchState(startState);
+            if(startState != null) SwitchState(startState.Name);
         }
 
         public void OnUpdate()
@@ -25,7 +26,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             CurrentState?.OnUpdate();
         }
 
-        public void SwitchState(Type newStateType)
+        public void SwitchState(string newStateType)
         {
             if (!stateDictionary.ContainsKey(newStateType))
             {
@@ -36,5 +37,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             CurrentState = stateDictionary[newStateType];
             CurrentState?.OnEnter();
         }
+
+        public void SwitchState(ViewerState state) => SwitchState(state.name);
     }
 }

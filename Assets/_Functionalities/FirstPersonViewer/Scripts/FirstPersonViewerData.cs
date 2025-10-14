@@ -6,24 +6,14 @@ namespace Netherlands3D.FirstPersonViewer
 {
     public class FirstPersonViewerData : MonoBehaviour
     {
-        //Not a big fan of this
-        public static FirstPersonViewerData Instance { private set; get; }
-
         public float ViewHeight { private set; get; }
         public float FOV { private set; get; }
         public float Speed { private set; get; }
 
-        public Camera FPVCamera { private set; get; }
-        private void Awake()
-        {
-            if (Instance == null) Instance = this;
-            else Destroy(this);
-        }
+        [field:SerializeField] public Camera FPVCamera { private set; get; }
 
         private void OnEnable()
         {
-            FPVCamera = GetComponentInChildren<Camera>();
-
             ViewerEvents.OnViewheightChanged += OnViewHeightChanged;
             ViewerEvents.OnFOVChanged += OnFOVChanged;
             ViewerEvents.OnSpeedChanged += OnSpeedChanged;

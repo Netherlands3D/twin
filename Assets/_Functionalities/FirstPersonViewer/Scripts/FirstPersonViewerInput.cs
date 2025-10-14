@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using Netherlands3D.SelectionTools;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -78,12 +79,14 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void HandleCursorLocking()
         {
+            //When editing an inputfield just block this function.
             if (ExitInput.triggered)
             {
                 isEditingInputfield = IsInputfieldSelected();
                 if (isEditingInputfield) return;
             }
 
+            //When key is released release/lock mouse
             if (ExitInput.WasReleasedThisFrame() && !isEditingInputfield)
             {
                 if (Cursor.lockState == CursorLockMode.Locked)
@@ -99,9 +102,10 @@ namespace Netherlands3D.FirstPersonViewer
                     Cursor.visible = false;
                 }
             }
-            else if (LeftClick.triggered)
+            else if (LeftClick.triggered) 
             {
-                if (!IsPointerOverUIObject())
+                //When no UI object is detected lock the mouse to screen again.
+                if (!Interface.PointerIsOverUI())
                 {
                     RemoveInputLockConstrain(this);
                     Cursor.lockState = CursorLockMode.Locked;
@@ -110,13 +114,14 @@ namespace Netherlands3D.FirstPersonViewer
             }
         }
 
+        //When holding the exit key and not editing any inputfield. Start the exiting proceidure. 
         private void HandleExiting()
         {
             if (ExitInput.IsPressed() && !isEditingInputfield)
             {
                 exitTimer = Mathf.Max(exitTimer - Time.deltaTime, 0);
 
-                //Wait .delay x seconds before showing the progress.
+                //Delay x seconds before showing the progress. So the UI component isn't flickering
                 if (exitTimer < exitDuration - exitViewDelay)
                 {
                     float percentageTime = Mathf.Clamp01(1f - ((exitTimer + exitViewDelay) / exitDuration));
@@ -129,7 +134,7 @@ namespace Netherlands3D.FirstPersonViewer
                     ViewerEvents.OnViewerExited?.Invoke();
                 }
             }
-            else if (ExitInput.WasReleasedThisFrame()) ViewerEvents.ExitDuration?.Invoke(-1);
+            else if (ExitInput.WasReleasedThisFrame()) ViewerEvents.ExitDuration?.Invoke(-1); //Reset the visual
             else exitTimer = exitDuration;
         }
 
@@ -138,8 +143,7 @@ namespace Netherlands3D.FirstPersonViewer
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 
-            //Delay by one frame to prevent error.
-            Destroy(gameObject, Time.deltaTime);
+            Destroy(gameObject);
         }
 
         public void AddInputLockConstrain(MonoBehaviour monoBehaviour) => inputLocks.Add(monoBehaviour);
@@ -153,16 +157,6 @@ namespace Netherlands3D.FirstPersonViewer
             if (selected == null) return false;
 
             return selected.GetComponent<TMP_InputField>() != null;
-        }
-
-        //Kinda slow
-        public static bool IsPointerOverUIObject()
-        {
-            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
-            eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            List<RaycastResult> results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
-            return results.Count > 1; //Idk there seems to be an invisble ui element somewhere.
         }
     }
 }

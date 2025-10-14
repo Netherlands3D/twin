@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.FirstPersonViewer.UI
 {
-    public class ViewerToolbar : MonoBehaviour
+    public class ViewerModulebar : MonoBehaviour
     {
         private RectTransform rect;
         private ContentFitterRefresh contentFilterRefresh; //TWIN Dependent
@@ -19,10 +19,10 @@ namespace Netherlands3D.FirstPersonViewer.UI
         private bool isOpen;
         private bool isAnimating;
         private Sequence currentSequence;
-        private ViewerTool currentTool;
+        private ViewerModuleButton currentTool;
 
 
-        public event Action<ViewerTool> OnViewerToolChanged;
+        public event Action<ViewerModuleButton> OnViewerToolChanged;
 
         private void Start()
         {
@@ -34,7 +34,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             ViewerEvents.OnViewerExited += ViewerExited;
         }
 
-        public void OpenWindow(RectTransform windowPrefab, ViewerTool viewTool)
+        public void OpenWindow(RectTransform windowPrefab, ViewerModuleButton viewTool)
         {
             if (isAnimating) return;
             if(windowPrefab != null) isAnimating = true;
