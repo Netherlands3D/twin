@@ -1,7 +1,9 @@
 using Netherlands3D.FirstPersonViewer;
+using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.Minimap;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 using SnapshotComponent = Netherlands3D.Snapshots.Snapshots;
 
@@ -18,6 +20,10 @@ namespace Netherlands3D
 
         private SnapshotComponent snapshotComponent;
 
+
+        [Header("Animation")]
+        [SerializeField] private Sprite[] unlockCircleSprites;
+        [SerializeField] private Image unlockCircleImage;
         private void Awake()
         {
             snapshotComponent = FindAnyObjectByType<SnapshotComponent>();
@@ -26,6 +32,8 @@ namespace Netherlands3D
         private void OnEnable()
         {
             StartCoroutine(SetupViewer());
+
+            ViewerEvents.OnMouseStateChanged += PlayUnlockCircleAnimation;
         }
 
         private void OnDisable()
@@ -33,6 +41,8 @@ namespace Netherlands3D
             frustum.SetActiveCamera(Camera.main);
             wmtsMap.SetActiveCamera(Camera.main);
             snapshotComponent.SetActiveCamera(Camera.main);
+
+            ViewerEvents.OnMouseStateChanged -= PlayUnlockCircleAnimation;
         }
 
         //We need to wait 1 frame to allow the map to load or we get an unloaded map that's zoomed in.
@@ -47,6 +57,23 @@ namespace Netherlands3D
             wmtsMap.SetActiveCamera(activeCam);
 
             snapshotComponent.SetActiveCamera(activeCam);
+        }
+
+        private void PlayUnlockCircleAnimation(CursorLockMode lockMode)
+        {
+            if (lockMode == CursorLockMode.None) StartCoroutine(UnlockCircleSequence());
+        }
+
+        private IEnumerator UnlockCircleSequence()
+        {
+            unlockCircleImage.gameObject.SetActive(true);
+            foreach (Sprite sprite in unlockCircleSprites)
+            {
+                unlockCircleImage.sprite = sprite;
+                unlockCircleImage.rectTransform.sizeDelta = sprite.textureRect.size;
+                yield return new WaitForSeconds(0.03f);
+            }
+            unlockCircleImage.gameObject.SetActive(false);
         }
     }
 }

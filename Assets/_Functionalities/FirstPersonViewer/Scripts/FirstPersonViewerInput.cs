@@ -98,6 +98,8 @@ namespace Netherlands3D.FirstPersonViewer
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
                 }
+
+                ViewerEvents.OnMouseStateChanged?.Invoke(Cursor.lockState);
             }
             else if (LeftClick.triggered)
             {
@@ -106,6 +108,7 @@ namespace Netherlands3D.FirstPersonViewer
                     RemoveInputLockConstrain(this);
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
+                    ViewerEvents.OnMouseStateChanged?.Invoke(Cursor.lockState);
                 }
             }
         }

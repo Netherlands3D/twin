@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Netherlands3D.FirstPersonViewer.ViewModus;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D.FirstPersonViewer.Events
 {
@@ -8,6 +9,8 @@ namespace Netherlands3D.FirstPersonViewer.Events
     {
         public static Action OnViewerEntered;
         public static Action OnViewerExited;
+
+        public static Action<CursorLockMode> OnMouseStateChanged;
 
         public static Action<MovementPresets> OnMovementPresetChanged;
         public static Action<CameraConstrain> OnChangeCameraConstrain;
