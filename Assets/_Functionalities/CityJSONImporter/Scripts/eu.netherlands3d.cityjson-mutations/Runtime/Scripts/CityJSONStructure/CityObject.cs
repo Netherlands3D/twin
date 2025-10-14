@@ -62,7 +62,7 @@ namespace Netherlands3D.CityJson.Structure
         public CityObject[] CityChildren => cityChildren.ToArray();
         public CityObject[] CityParents { get; private set; } = new CityObject[0];
 
-        public UnityEvent CityObjectParsed { get; private set; } = new UnityEvent();
+        public UnityEvent CityObjectParsed { get; private set; } = new();
 
         private bool includeInExport;
         public bool IncludeInExport

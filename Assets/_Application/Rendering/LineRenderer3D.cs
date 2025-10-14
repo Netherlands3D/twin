@@ -11,7 +11,6 @@ namespace Netherlands3D.Twin.Rendering
         [Tooltip("The mesh to use for the line segments")] [SerializeField]
         private Mesh lineMesh;
 
-        [SerializeField] private Material lineMaterial;
 
         [Header("Settings")] 
         [SerializeField] private bool drawJoints = true;
@@ -28,6 +27,7 @@ namespace Netherlands3D.Twin.Rendering
             set => lineMesh = value;
         }
 
+        private Material lineMaterial;
         public Material LineMaterial
         {
             get => lineMaterial;
@@ -35,7 +35,7 @@ namespace Netherlands3D.Twin.Rendering
             {
                 lineMaterial = value;
                 if (lineMaterial != null)
-                    SetDefaultColors();
+                    SetAllColors(lineMaterial.color);
             }
         }
 
@@ -55,12 +55,12 @@ namespace Netherlands3D.Twin.Rendering
             }
         }
 
-        protected override void OnDrawGizmos() //todo: delete
+        public override Material[] Materials => new Material[]{ PointMaterial, LineMaterial };
+
+        protected override void MakeMaterialInstances()
         {
-            Gizmos.color = Color.cyan;
-            DrawGizmos(pointTransformMatrixCache);
-            Gizmos.color = Color.blue;
-            DrawGizmos(lineTransformMatrixCache);
+            base.MakeMaterialInstances();
+            lineMaterial = new Material(materialTemplate); //make material instance to work with styling
         }
         
         protected override void Draw()
@@ -95,17 +95,20 @@ namespace Netherlands3D.Twin.Rendering
             }
         }
 
-        public override void SetDefaultColors()
+        public override void SetAllColors(Color color)
         {
-            Color defaultLineColor = LineMaterial.color;
+            PointMaterial.color = color;
+            LineMaterial.color = color;
+            
             foreach (var batchColor in lineBatchColors)
             {
-                batchColor.SetAllColors(defaultLineColor);
+                batchColor.SetAllColors(color);
             }
             foreach (var batchColor in pointBatchColors)
             {
-                batchColor.SetAllColors(defaultLineColor);
+                batchColor.SetAllColors(color);
             }
+            
             UpdateColorBuffers(); //fill in the missing colors with the default color after resetting the existing colors to avoid setting them twice.
         }
 
