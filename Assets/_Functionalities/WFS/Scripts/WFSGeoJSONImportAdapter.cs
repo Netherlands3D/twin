@@ -150,7 +150,7 @@ namespace Netherlands3D.Functionalities.Wfs
 
             await App.Layers.Add(
                 "wfs-layer", 
-                new WfsLayer.Args(
+                new WfsLayerPreset.Args(
                     getFeatureUrl,
                     title,
                     folderLayer

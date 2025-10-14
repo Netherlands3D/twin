@@ -1,0 +1,17 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" name="ImportAssetPanel" class="import-asset-panel">
+    <nl3d:ListViewItem>
+        <nl3d:Button class="import-asset-panel__button-upload" name="FileUploadButton" icon="Plus" LabelText="Uploaden vanaf deze computer" />
+    </nl3d:ListViewItem>
+    <!-- Start: TODO: Remove once we have fixed the copy/paste and credential flow in UI Toolkit -->
+    <nl3d:ListViewItem>
+        <nl3d:Button class="import-asset-panel__button-open-url" name="FileImportFromUrlButton" icon="LibraryAdd" LabelText="Toevoegen vanaf link" />
+    </nl3d:ListViewItem>
+    <!-- End: Remove once we have fixed the copy/paste and credential flow in UI Toolkit -->
+    <nl3d:ContentContainer class="import-asset-panel__open-url" container-type="NoFoldout" show-divider="true" leading-icon="LibraryAdd" text="Toevoegen vanaf link">
+        <ui:VisualElement name="Row">
+            <nl3d:Icon />
+            <nl3d:TextField class="import-asset-panel__open-url-field" name="ImportUriField" />
+        </ui:VisualElement>
+        <nl3d:Button LabelText="Toevoegen" button-style="Normal" class="import-asset-panel__open-url-button" name="ImportUriButton" />
+    </nl3d:ContentContainer>
+</ui:UXML>

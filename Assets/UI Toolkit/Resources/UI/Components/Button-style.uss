@@ -1,0 +1,93 @@
+.button {
+    --button-bg-color: var(--color-white);
+    --button-active-color: var(--color-blue-700);
+    --button-active-contrast-color: var(--button-bg-color);
+    --divider-bg-color: var(--color-blue-100);
+    --button-padding: var(--spacing-3);
+    --button-border-color: var(--color-blue-200);
+    --button-border-width: 2px;
+    --button-border-radius: var(--spacing-2);
+    --button-icon-gap: var(--spacing-2);
+
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: var(--button-padding);
+    background-color: var(--button-bg-color);
+    border-color: var(--button-border-color);
+    border-width: var(--button-border-width);
+    border-radius: var(--button-border-radius);
+    flex-basis: auto;
+}
+
+.button > #Icon {
+    width: var(--spacing-6);
+    height: var(--spacing-6);
+}
+
+/* Variants */
+.button.button-style-normal > #Icon { display: none; }
+.button.button-style-wide { 
+    align-self: stretch; 
+    flex-grow: 1; 
+}
+
+.button > #Label { white-space: normal; }
+
+.button.button-style-icon-only {
+    align-self: center; 
+    justify-content: center;
+}
+.button.button-style-icon-only > #Label { display: none; }
+
+/* Icon gap (left/right) */
+.button.button-style-with-icon.button-icon-position-left > #Icon {
+    margin-right: var(--button-icon-gap);
+}
+.button.button-style-with-icon.button-icon-position-right {
+    flex-direction: row-reverse;
+}
+.button.button-style-with-icon.button-icon-position-right > #Icon {
+    margin-left: var(--button-icon-gap);
+}
+
+/* Type badge (elements now come from UXML) */
+.button .divider {
+  width: var(--spacing-0_5);
+  height: auto;
+  min-height: var(--spacing-6);
+  background-color: var(--divider-bg-color);
+  margin-left: var(--button-type-gap, var(--spacing-2));
+  margin-right: var(--button-type-gap, var(--spacing-2));
+  align-self: center;
+}
+
+.button .type-label {
+  white-space: nowrap;
+}
+
+.button .divider,
+.button .type-label {
+    display: none;
+}
+.button.show-type .divider,
+.button.show-type .type-label {
+    display: flex;
+}
+
+/* Hover/active */
+.button:hover {
+    border-color: var(--button-active-color);
+}
+.button:active {
+    background-color: var(--button-active-color);
+    border-color: var(--button-active-color);
+}
+.button:active .unity-label {
+    color: var(--button-active-contrast-color);
+}
+.button:active > #Icon {
+    -unity-background-image-tint-color: var(--button-active-contrast-color);
+}
