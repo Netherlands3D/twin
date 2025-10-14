@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.SelectionTools;
@@ -26,6 +28,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     {
         public override BoundingBox Bounds => new (polygonBounds);
         public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
+        private const string ScatterSuffix = "_Scatter";
 
         private Mesh mesh;
         private Material material;
@@ -51,7 +54,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
             propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
         }
-        
+
         public void Initialize(ReferencedLayerData data, string previousPrefabId)
         {
             InitializeScatterMesh(previousPrefabId);            
@@ -60,15 +63,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if(existingScatterProperties == null)
                 InitializeNewScatterProperties(previousPrefabId, polygonLayer.ShapeType);
             else
-                LoadScatterProperties(existingScatterProperties);
-            
-            propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
+                settings = existingScatterProperties;
 
-            LayerData.SetParent(polygonLayer);
+            FinishInitialization();
+        }
 
+        private void FinishInitialization()
+        {
             RecalculatePolygonsAndSamplerTexture();
             AddReScatterListeners();
-            
+
             completedInitialization = true;
         }
         
@@ -100,25 +104,31 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var scatterSettings = (ScatterGenerationSettingsPropertyData)properties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
             if (scatterSettings != null)
             {
-                LoadScatterProperties(scatterSettings);
+                settings = scatterSettings;
+                if (LayerData.ParentLayer is PolygonSelectionLayer p)
+                {
+                    polygonLayer = p;
+                    if (p.PolygonVisualisation == null)
+                    {
+                        p.OnReferenceChanged.AddListener(OnPolygonParentInitialized);
+                    }
+                }
             }
         }
 
-        private void LoadScatterProperties(ScatterGenerationSettingsPropertyData scatterProperties)
+        private void OnPolygonParentInitialized()
         {
-            settings = scatterProperties;
-            InitializeScatterMesh(scatterProperties.OriginalPrefabId);
-            ProjectData.Current.OnDataChanged.AddListener(OnProjectCompletedLoading); //listen to the project to finish loading, this is needed because the hierarchy is still being loaded, so we do not yet have access to our parent polygon layer
+            StartCoroutine(WaitSeconds(() => {
+                Initialize(LayerData, settings.OriginalPrefabId);
+            }));
+
+            polygonLayer?.OnReferenceChanged.RemoveListener(OnPolygonParentInitialized);
         }
-        
-        private void OnProjectCompletedLoading(ProjectData data) //complete initialization after loading fully completes and we can get out parent polygon
+
+        private IEnumerator WaitSeconds(Action onComplete)
         {
-            polygonLayer = LayerData.ParentLayer as PolygonSelectionLayer;
-            RecalculatePolygonsAndSamplerTexture();
-            AddReScatterListeners();
-            
-            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectCompletedLoading);
-            completedInitialization = true;
+            yield return new WaitForSeconds(3f);
+            onComplete.Invoke();
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
@@ -334,19 +344,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var revertedLayer = GameObject.Instantiate(prefab) as HierarchicalObjectLayerGameObject;
 
             data.SetReference(revertedLayer);
-
-            //revertedLayer.LoadProperties(LayerData.LayerProperties); //load the saved (transform) properties in this object 
-            //revertedLayer.LayerData.ActiveSelf = LayerData.ActiveSelf;
-            data.SetProperty(objectLayerGameObject.settings); //add the scatter settings to the object properties so it can be reloaded if the user decides to turn the scatter on again
-
-            //for (var i = LayerData.ChildrenLayers.Count - 1; i >= 0; i--) //go in reverse to avoid a collectionWasModifiedError
-            //{
-            //    var child = LayerData.ChildrenLayers[i];
-            //    child.SetParent(revertedLayer.LayerData, 0);
-            //}
-
-            //revertedLayer.LayerData.SetParent(LayerData.ParentLayer, LayerData.SiblingIndex);
-            //LayerData.DestroyLayer();
+            //revertedLayer.LoadProperties(data.LayerProperties);
+            
+            if (revertedLayer.Name.EndsWith(ScatterSuffix))
+                revertedLayer.Name = revertedLayer.Name.Substring(0, revertedLayer.Name.Length - ScatterSuffix.Length);
 
             objectLayerGameObject.DestroyLayerGameObject();
         }
@@ -361,17 +362,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             data.SetReference(scatterLayer);
 
-            scatterLayer.Name = objectLayerGameObject.Name + "_Scatter";
+            if(!scatterLayer.Name.EndsWith(ScatterSuffix))
+                scatterLayer.Name = objectLayerGameObject.Name + ScatterSuffix;
             scatterLayer.Initialize(data, previousPrefabId);
-
-
-            //for (var i = objectLayerGameObject.LayerData.ChildrenLayers.Count - 1; i >= 0; i--) //go in reverse to avoid a collectionWasModifiedError
-            //{
-            //    var child = objectLayerGameObject.LayerData.ChildrenLayers[i];
-            //    child.SetParent(scatterLayer.LayerData, 0);
-            //}
-
-            //objectLayerGameObject.LayerData.DestroyLayer();
+            data.SetProperty(scatterLayer.settings);
+            
             objectLayerGameObject.DestroyLayerGameObject();
             return scatterLayer;
         }
