@@ -7,7 +7,7 @@ using Netherlands3D.Twin.Projects;
 namespace Netherlands3D.Functionalities.Wfs.LayerPresets
 {
     [LayerPreset("wfs")]
-    public sealed class Wfs : ILayerPreset
+    public sealed class WfsServicePreset : ILayerPreset
     {
         public sealed class Args : LayerPresetArgs
         {

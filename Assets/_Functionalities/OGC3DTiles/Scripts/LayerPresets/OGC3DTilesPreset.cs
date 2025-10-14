@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Netherlands3D.Functionalities.OGC3DTiles.LayerPresets
 {
     [LayerPreset("3d-tiles")]
-    public sealed class OGC3DTiles : ILayerPreset
+    public sealed class OGC3DTilesPreset : ILayerPreset
     {
         private const string PrefabIdentifier = "395dd4e52bd3b42cfb24f183f3839bba";
 
@@ -30,6 +30,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles.LayerPresets
                 throw new ArgumentException($"Expected {nameof(Args)} for preset 3d-tiles.");
 
             return builder
+                .NamedAs(tiles3dArgs.Url.ToString())
                 .OfType(PrefabIdentifier)
                 .AddProperty(new Tile3DLayerPropertyData(tiles3dArgs.Url.ToString()));
         }

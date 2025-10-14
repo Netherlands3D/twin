@@ -6,7 +6,7 @@ using Netherlands3D.Twin.Layers.LayerPresets;
 namespace Netherlands3D.Functionalities.OBJImporter.LayerPresets
 {
     [LayerPreset("obj")]
-    public sealed class Obj : ILayerPreset
+    public sealed class ObjPreset : ILayerPreset
     {
         private const string PrefabIdentifier = "34882a73ff6122243a0e3e9811473e20";
 

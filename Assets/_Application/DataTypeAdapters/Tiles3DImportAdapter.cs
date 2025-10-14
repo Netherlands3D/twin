@@ -88,7 +88,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
         public async void Execute(LocalFile localFile)
         {
-            await App.Layers.Add("3d-tiles", new OGC3DTiles.Args(localFile.SourceUrl));
+            await App.Layers.Add("3d-tiles", new OGC3DTilesPreset.Args(localFile.SourceUrl));
         }
     }
 }

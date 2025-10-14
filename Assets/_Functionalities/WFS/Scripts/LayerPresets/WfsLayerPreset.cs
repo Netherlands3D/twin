@@ -8,7 +8,7 @@ using Netherlands3D.Twin.Layers.Properties;
 namespace Netherlands3D.Functionalities.Wfs.LayerPresets
 {
     [LayerPreset("wfs-layer")]
-    public sealed class WfsLayer : ILayerPreset
+    public sealed class WfsLayerPreset : ILayerPreset
     {
         private const string PrefabIdentifier = "b1bd3a7a50cb3bd4bb3236aadf5c32b6";
 
