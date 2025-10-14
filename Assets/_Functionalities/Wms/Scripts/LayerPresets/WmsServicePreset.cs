@@ -7,9 +7,9 @@ using Netherlands3D.Twin.Projects;
 namespace Netherlands3D.Functionalities.Wms.LayerPresets
 {
     [LayerPreset("wms")]
-    public sealed class WmsServicePreset : ILayerPreset
+    public sealed class WmsServicePreset : ILayerPreset<WmsServicePreset.Args>
     {
-        public sealed class Args : LayerPresetArgs
+        public sealed class Args : LayerPresetArgs<WmsServicePreset>
         {
             public Uri CapabilitiesUrl { get; }
 
@@ -19,18 +19,15 @@ namespace Netherlands3D.Functionalities.Wms.LayerPresets
             }
         }
 
-        public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args)
+        public ILayerBuilder Apply(ILayerBuilder builder, Args args)
         {
-            if (args is not Args wmsArgs)
-            {
-                throw new ArgumentException($"Expected {nameof(Args)} for preset wms.");
-            }
-
-            var uri = AssetUriFactory.CreateRemoteAssetUri(wmsArgs.CapabilitiesUrl.ToString());
+            var uri = AssetUriFactory.CreateRemoteAssetUri(args.CapabilitiesUrl.ToString());
 
             return builder
                 .OfType("url")
                 .AddProperty(new LayerURLPropertyData(uri));
         }
+
+        public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args) => Apply(builder, (Args)args);
     }
 }

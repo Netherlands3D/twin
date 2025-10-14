@@ -1,16 +1,15 @@
 ﻿using System;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerPresets;
-using UnityEngine;
 
 namespace Netherlands3D.Functionalities.OGC3DTiles.LayerPresets
 {
     [LayerPreset("3d-tiles")]
-    public sealed class OGC3DTilesPreset : ILayerPreset
+    public sealed class OGC3DTilesPreset : ILayerPreset<OGC3DTilesPreset.Args>
     {
         private const string PrefabIdentifier = "395dd4e52bd3b42cfb24f183f3839bba";
 
-        public sealed class Args : LayerPresetArgs
+        public sealed class Args : LayerPresetArgs<OGC3DTilesPreset>
         {
             public Uri Url { get; }
 
@@ -24,15 +23,14 @@ namespace Netherlands3D.Functionalities.OGC3DTiles.LayerPresets
             }
         }
 
-        public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args)
+        public ILayerBuilder Apply(ILayerBuilder builder, Args args)
         {
-            if (args is not Args tiles3dArgs)
-                throw new ArgumentException($"Expected {nameof(Args)} for preset 3d-tiles.");
-
             return builder
-                .NamedAs(tiles3dArgs.Url.ToString())
+                .NamedAs(args.Url.ToString())
                 .OfType(PrefabIdentifier)
-                .AddProperty(new Tile3DLayerPropertyData(tiles3dArgs.Url.ToString()));
+                .AddProperty(new Tile3DLayerPropertyData(args.Url.ToString()));
         }
+        
+        public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args) => Apply(builder, (Args)args);
     }
 }

@@ -1,21 +1,15 @@
-using System.IO;
-using UnityEngine;
 using System;
-using Netherlands3D.Web;
-using KindMen.Uxios;
-using Netherlands3D.DataTypeAdapters;
-using Netherlands3D.OgcWebServices.Shared;
-using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
 using System.Collections.Generic;
+using System.IO;
+using KindMen.Uxios;
 using KindMen.Uxios.Http;
+using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.Wfs.LayerPresets;
-using Netherlands3D.LayerStyles;
+using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerPresets;
-using Netherlands3D.Twin.Services;
+using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Web;
+using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wfs
 {
@@ -149,7 +143,6 @@ namespace Netherlands3D.Functionalities.Wfs
             Debug.Log($"Adding WFS layer '{featureType}' with url '{getFeatureUrl}'");
 
             await App.Layers.Add(
-                "wfs-layer", 
                 new WfsLayerPreset.Args(
                     getFeatureUrl,
                     title,
