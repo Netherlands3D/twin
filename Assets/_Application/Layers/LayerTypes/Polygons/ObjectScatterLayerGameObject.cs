@@ -60,8 +60,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             InitializeScatterMesh(previousPrefabId);            
             polygonLayer = data.ParentLayer as PolygonSelectionLayer;
             var existingScatterProperties = (ScatterGenerationSettingsPropertyData) data.LayerProperties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
-            if(existingScatterProperties == null)
+            if (existingScatterProperties == null)
+            {
                 InitializeNewScatterProperties(previousPrefabId, polygonLayer.ShapeType);
+                data.SetProperty(settings);
+            }
             else
                 settings = existingScatterProperties;
 
@@ -110,7 +113,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     polygonLayer = p;
                     if (p.PolygonVisualisation == null)
                     {
-                        p.OnReferenceChanged.AddListener(OnPolygonParentInitialized);
+                        //TODO find a way to measure when all tiles encapsulating the polygon are loaded to regerenate the sample texture, waiting seconds is not a valid option
+                        try
+                        {
+                            p.OnReferenceChanged.AddListener(OnPolygonParentInitialized);
+                        }
+                        catch(Exception e)
+                        {
+                            Debug.LogException(e);
+                        }
                     }
                 }
             }
@@ -344,8 +355,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var revertedLayer = GameObject.Instantiate(prefab) as HierarchicalObjectLayerGameObject;
 
             data.SetReference(revertedLayer);
-            //revertedLayer.LoadProperties(data.LayerProperties);
-            
+
             if (revertedLayer.Name.EndsWith(ScatterSuffix))
                 revertedLayer.Name = revertedLayer.Name.Substring(0, revertedLayer.Name.Length - ScatterSuffix.Length);
 
@@ -365,8 +375,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if(!scatterLayer.Name.EndsWith(ScatterSuffix))
                 scatterLayer.Name = objectLayerGameObject.Name + ScatterSuffix;
             scatterLayer.Initialize(data, previousPrefabId);
-            data.SetProperty(scatterLayer.settings);
-            
+
             objectLayerGameObject.DestroyLayerGameObject();
             return scatterLayer;
         }
