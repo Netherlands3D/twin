@@ -1,4 +1,6 @@
+using Netherlands3D.Events;
 using Netherlands3D.FirstPersonViewer.Events;
+using Netherlands3D.Services;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +8,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
     public class ViewerWalkingState : ViewerState
     {
+        private float jumpForce;
+
         public override void OnEnter()
         {
             if (viewer.FirstPersonCamera.transform.localPosition.y == 0)
@@ -21,6 +25,10 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             viewer.GetGroundPosition();
             ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_Y);
+
+            if(viewerData.ViewerSetting.ContainsKey("JumpForce")) jumpForce = (float)viewerData.ViewerSetting["JumpForce"];
+
+            ViewerSettingsEvents<float>.AddListener("JumpForce", SetJumpForce);
         }
 
         public override void OnUpdate()
@@ -38,6 +46,11 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             viewer.ApplyGravity();
         }
 
+        public override void OnExit()
+        {
+            ViewerSettingsEvents<float>.RemoveListener("JumpForce", SetJumpForce);
+        }
+
         private void MovePlayer(Vector2 moveInput)
         {
             Vector3 direction = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
@@ -52,9 +65,11 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             if (input.JumpAction.triggered && viewer.isGrounded)
             {
-                viewer.SetVelocity(new Vector2(viewer.Velocity.x, viewer.MovementModus.jumpHeight));
+                viewer.SetVelocity(new Vector2(viewer.Velocity.x, jumpForce));
                 viewer.isGrounded = false;
             }
         }
+
+        private void SetJumpForce(float force) => jumpForce = force;
     }
 }

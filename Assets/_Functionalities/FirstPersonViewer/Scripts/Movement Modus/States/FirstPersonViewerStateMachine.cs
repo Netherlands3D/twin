@@ -9,15 +9,13 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         private Dictionary<Type, ViewerState> stateDictionary = new Dictionary<Type, ViewerState>();
         public ViewerState CurrentState { private set; get; }
 
-        public FirstPersonViewerStateMachine(FirstPersonViewer player, FirstPersonViewerInput input, Type startState, params ViewerState[] states)
+        public FirstPersonViewerStateMachine(FirstPersonViewer player, FirstPersonViewerInput input, params ViewerState[] states)
         {
             foreach (ViewerState state in states)
             {
                 state.Initialize(this, player, input);
                 stateDictionary.Add(state.GetType(), state);
             }
-
-            if(startState != null) SwitchState(startState);
         }
 
         public void OnUpdate()

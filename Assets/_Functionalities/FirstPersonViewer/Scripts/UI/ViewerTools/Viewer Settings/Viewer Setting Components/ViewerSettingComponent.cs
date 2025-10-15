@@ -1,3 +1,4 @@
+using Netherlands3D.Events;
 using Netherlands3D.FirstPersonViewer.Temp;
 using TMPro;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Netherlands3D
 
         protected ViewerSetting setting;
 
-        public void Init(ViewerSetting setting)
+        public virtual void Init(ViewerSetting setting)
         {
             this.setting = setting;
 
@@ -20,6 +21,7 @@ namespace Netherlands3D
             if (setting.units == null) settingUnitText.gameObject.SetActive(false);
             else settingUnitText.text = setting.units;
 
+            //ViewerSettingsEvents<>
             setting.OnValueChanged += SetValue;
 
             SetValue(setting.GetValue());

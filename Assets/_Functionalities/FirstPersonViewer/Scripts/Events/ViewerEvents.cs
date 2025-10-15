@@ -10,11 +10,12 @@ namespace Netherlands3D.FirstPersonViewer.Events
         public static Action OnViewerEntered;
         public static Action OnViewerExited;
 
+        public static Action OnViewerSetupComplete;
+
         public static Action<MovementPresets> OnMovementPresetChanged;
         public static Action<CameraConstrain> OnChangeCameraConstrain;
 
         public static Action<string, object> onSettingChanged;
-        public static Dictionary<string, Action<object>> onSetting;
 
         public static Action<Vector3> OnCameraRotation;
 

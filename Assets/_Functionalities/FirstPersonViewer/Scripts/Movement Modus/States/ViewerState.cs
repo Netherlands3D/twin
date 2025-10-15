@@ -1,3 +1,4 @@
+using Netherlands3D.Services;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.ViewModus
@@ -9,6 +10,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         protected FirstPersonViewer viewer;
 
         protected Transform transform;
+        protected FirstPersonViewerData viewerData;
 
         public void Initialize(FirstPersonViewerStateMachine owner, FirstPersonViewer viewer, FirstPersonViewerInput input)
         {
@@ -17,6 +19,9 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             this.viewer = viewer;
 
             transform = viewer.transform;
+
+            viewerData = FirstPersonViewerData.Instance; //ServiceLocator.GetService<FirstPersonViewerData>();
+
         }
 
         public virtual void OnEnter() { }

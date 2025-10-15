@@ -51,7 +51,7 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
         asm: eu.netherlands3d.twin}
       data:
-        settingName: View Height
+        settingName: ViewHeight
         displayName: Kijkhoogte
         isVisible: 0
         units: m

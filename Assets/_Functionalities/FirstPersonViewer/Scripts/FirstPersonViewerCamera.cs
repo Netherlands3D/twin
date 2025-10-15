@@ -1,5 +1,7 @@
 using DG.Tweening;
+using Netherlands3D.Events;
 using Netherlands3D.FirstPersonViewer.Events;
+using Netherlands3D.FirstPersonViewer.Temp;
 using System;
 using UnityEngine;
 
@@ -42,9 +44,10 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void OnDestroy()
         {
+            ViewerSettingsEvents<float>.RemoveListener("FOV", SetCameraFOV);
+            ViewerSettingsEvents<float>.RemoveListener("ViewHeight", SetCameraHeight);
+
             ViewerEvents.OnChangeCameraConstrain -= SetCameraConstrain;
-            //ViewerEvents.OnViewheightChanged -= SetCameraHeight;
-            //ViewerEvents.OnFOVChanged -= SetCameraFOV;
             ViewerEvents.OnResetToStart -= ResetToStart;
             ViewerEvents.OnSetCameraNorth -= SetCameraNorth;
         }
@@ -73,11 +76,14 @@ namespace Netherlands3D.FirstPersonViewer
             ViewerEvents.OnCameraRotation?.Invoke(firstPersonViewerCamera.transform.forward);
 
             //Setup events when done with animation.
+            ViewerSettingsEvents<float>.AddListener("FOV", SetCameraFOV);
+            ViewerSettingsEvents<float>.AddListener("ViewHeight", SetCameraHeight);
+
             ViewerEvents.OnChangeCameraConstrain += SetCameraConstrain;
-            //ViewerEvents.OnViewheightChanged += SetCameraHeight;
-            //ViewerEvents.OnFOVChanged += SetCameraFOV;
             ViewerEvents.OnResetToStart += ResetToStart;
             ViewerEvents.OnSetCameraNorth += SetCameraNorth;
+
+            ViewerEvents.OnViewerSetupComplete?.Invoke();
         }
 
         private void Update()

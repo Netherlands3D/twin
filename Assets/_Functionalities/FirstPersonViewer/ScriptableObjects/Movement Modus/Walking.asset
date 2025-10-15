@@ -26,3 +26,58 @@ MonoBehaviour:
   viewName: Lopen
   viewIcon: {fileID: 21300000, guid: 4fabccc9e43961d48b9ce2684e3bc712, type: 3}
   viewMesh: {fileID: 0}
+  meshMaterials: []
+  groundResetHeightOffset: 0
+  editableSettings:
+    list:
+    - rid: 5560708935661650026
+    - rid: 5560708935661650027
+    - rid: 5560708935661650028
+    - rid: 5560708939449630826
+  references:
+    version: 2
+    RefIds:
+    - rid: 5560708935661650026
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+        asm: eu.netherlands3d.twin}
+      data:
+        settingName: ViewHeight
+        displayName: Kijkhoogte
+        isVisible: 1
+        units: m
+        defaultValue: 1.75
+        minValue: -20
+        maxValue: 20
+    - rid: 5560708935661650027
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+        asm: eu.netherlands3d.twin}
+      data:
+        settingName: FOV
+        displayName: Gezichtsveld
+        isVisible: 1
+        units: "\xB0"
+        defaultValue: 60
+        minValue: 10
+        maxValue: 140
+    - rid: 5560708935661650028
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+        asm: eu.netherlands3d.twin}
+      data:
+        settingName: MaxSpeed
+        displayName: Snelheid
+        isVisible: 1
+        units: km/u
+        defaultValue: 15
+        minValue: 1
+        maxValue: 500
+    - rid: 5560708939449630826
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+        asm: eu.netherlands3d.twin}
+      data:
+        settingName: JumpForce
+        displayName: Sprong Kracht
+        isVisible: 1
+        units: 
+        defaultValue: 7
+        minValue: 1
+        maxValue: 500

@@ -1,3 +1,4 @@
+using Netherlands3D.Events;
 using Netherlands3D.FirstPersonViewer.Temp;
 using TMPro;
 using UnityEngine;
@@ -8,8 +9,11 @@ namespace Netherlands3D
     {
         [SerializeField] private TMP_InputField valueInput;
 
+        private string prevValue;
+
         public override void SetValue(object value)
         {
+            prevValue = value.ToString();
             valueInput.text = value.ToString();
         }
 
@@ -21,8 +25,9 @@ namespace Netherlands3D
             {
                 newValue = Mathf.Clamp(newValue, input.minValue, input.maxValue);
 
-                setting.OnValueChanged?.Invoke(value);
-            }
+                ViewerSettingsEvents<float>.Invoke(setting.settingName, newValue);
+                setting.OnValueChanged?.Invoke(newValue);
+            } else valueInput.text = prevValue;
         }
     }
 }

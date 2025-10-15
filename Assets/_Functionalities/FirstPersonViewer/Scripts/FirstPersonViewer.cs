@@ -1,4 +1,5 @@
 using Netherlands3D.Coordinates;
+using Netherlands3D.Events;
 using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
@@ -54,9 +55,10 @@ namespace Netherlands3D.FirstPersonViewer
             meshRenderer = GetComponent<MeshRenderer>();
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
-            SetupFSM();
 
             //ViewerEvents.OnSpeedChanged += SetMovementSpeed;
+            ViewerSettingsEvents<float>.AddListener("MaxSpeed", SetMovementSpeed);
+
             ViewerEvents.OnMovementPresetChanged += SetMovementModus;
             ViewerEvents.OnViewerExited += ExitViewer;
             ViewerEvents.OnResetToStart += ResetToStart;
@@ -71,12 +73,14 @@ namespace Netherlands3D.FirstPersonViewer
 
             snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings") | (1 << LayerMask.NameToLayer("Default")));
 
+            SetupFSM();
             SetupMainCam();
         }
 
         private void OnDestroy()
         {
-            //ViewerEvents.OnSpeedChanged -= SetMovementSpeed;
+            ViewerSettingsEvents<float>.RemoveListener("MaxSpeed", SetMovementSpeed);
+
             ViewerEvents.OnMovementPresetChanged -= SetMovementModus;
             ViewerEvents.OnViewerExited -= ExitViewer;
             ViewerEvents.OnResetToStart -= ResetToStart;
@@ -87,7 +91,7 @@ namespace Netherlands3D.FirstPersonViewer
         {
             ViewerState[] playerStates = GetComponents<ViewerState>();
 
-            fsm = new FirstPersonViewerStateMachine(this, input, null, playerStates);
+            fsm = new FirstPersonViewerStateMachine(this, input, playerStates);
         }
 
         //Disable the Main Camera through rendering.

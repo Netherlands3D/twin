@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using System;
+using Netherlands3D.FirstPersonViewer.Temp;
+using Netherlands3D.Events;
 
 namespace Netherlands3D.FirstPersonViewer.UI
 {
@@ -28,24 +30,18 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void Awake()
         {
-            ViewerEvents.OnViewerEntered += ViewerEnterd;
+            ViewerEvents.OnViewerSetupComplete += ViewerEnterd;
         }
 
         private void Start()
         {
             cycleNextAction = inputMap.FindAction("NavigateModusNext");
             cyclePreviousAction = inputMap.FindAction("NavigateModusPrevious");
-
-            movementPresets.presets.ForEach(preset =>
-            {
-                MovementModusButton tempButton = Instantiate(movementButtonPrefab, movementButtonParent);
-                tempButton.SetupButton(preset, this);
-            });
         }
 
         private void OnDestroy()
         {
-            ViewerEvents.OnViewerEntered -= ViewerEnterd;
+            ViewerEvents.OnViewerSetupComplete -= ViewerEnterd;
         }
 
         private void ViewerEnterd()
@@ -90,9 +86,12 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
             //Send events
             ViewerEvents.OnMovementPresetChanged?.Invoke(currentMovement);
-            //ViewerEvents.OnViewheightChanged?.Invoke(currentMovement.viewHeight);
-            //ViewerEvents.OnFOVChanged?.Invoke(currentMovement.fieldOfView);
-            //ViewerEvents.OnSpeedChanged?.Invoke(currentMovement.speedInKm);
+
+            //$$ Only supports floats for now should be revisited
+            foreach (ViewerSetting setting in currentMovement.editableSettings.list)
+            {
+                ViewerSettingsEvents<float>.Invoke(setting.settingName, (float)setting.GetValue());
+            }
         }
 
         public void LoadMoveModus(MovementPresets movePresets) => LoadMoveModus(movementPresets.presets.IndexOf(movePresets));
