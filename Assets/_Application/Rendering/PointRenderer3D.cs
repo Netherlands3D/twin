@@ -5,6 +5,8 @@ namespace Netherlands3D.Twin.Rendering
 {
     public class PointRenderer3D : BatchedMeshInstanceRenderer
     {
+        public override Material[] Materials => new Material[] { PointMaterial };
+
         protected override void GenerateTransformMatrixCache(int collectionStartIndex = -1)
         {
             var batchCount = (pointCount / 1023) + 1; //x batches of 1023 + 1 for the remainder
