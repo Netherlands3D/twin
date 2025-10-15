@@ -51,6 +51,7 @@ namespace Netherlands3D.FirstPersonViewer
             {
                 if (hit)
                 {
+                    //When the async call returns: If the object is destroyed. We don't need a position update.
                     if (locationSphere == null) return;
                     locationSphere.transform.position = point;
                 }

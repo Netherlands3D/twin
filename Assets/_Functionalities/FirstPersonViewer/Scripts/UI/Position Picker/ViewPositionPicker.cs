@@ -44,6 +44,7 @@ namespace Netherlands3D.FirstPersonViewer
                     Debug.Log(hit);
                     if (hit)
                     {
+                        //$$ TO-DO
                         //Commentent code not working or changing anything based on the visibilty of the building.
 
                         //ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();

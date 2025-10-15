@@ -10,7 +10,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private CanvasGroup exitGroup;
         [SerializeField] private Slider timerSlider;
 
-        private void Awake()
+        private void Start()
         {
             ViewerEvents.ExitDuration += UpdateTimer;
             gameObject.SetActive(false);
