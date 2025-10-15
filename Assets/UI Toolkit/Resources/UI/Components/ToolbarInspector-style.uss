@@ -23,9 +23,14 @@
 }
 
 /* Toolbar styles - by default all buttons invisible, whitelist per style of the toolbar */
-.toolbar-inspector .toolbar-inspector-button { display: none; }
+.toolbar-inspector .toolbar-inspector-button {
+    --toggle-border-radius: var(--spacing-1);
+
+    display: none; 
+}
 
 .toolbar-inspector.toolbar-style-library #OpenLibrary { display: flex; }
+.toolbar-inspector.toolbar-style-add-layer #AddLayer { display: flex; }
 
 /* ============================================================================================= */
 /* TODO: remove these overrides as soon as we have implemented the whole inspector               */
