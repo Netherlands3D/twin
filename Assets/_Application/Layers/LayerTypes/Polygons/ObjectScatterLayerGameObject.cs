@@ -32,6 +32,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public override BoundingBox Bounds => new (polygonBounds);
         public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
         private const string ScatterSuffix = "_Scatter";
+        private const string LayerAreaIdentifier = "Maaiveld";
 
         private Mesh mesh;
         private Material material;
@@ -46,8 +47,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private Bounds polygonBounds = new();
         private SampleTexture sampleTexture;
-
-        private WorldTransform worldTransform;
 
         private bool completedInitialization;
         public LayerPropertyData PropertyData => settings;
@@ -395,6 +394,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             BoundingBox polygonBoundingBox = polygonLayer.PolygonVisualisation.Bounds;
             polygonBoundingBox.Convert(CoordinateSystem.RD);
 
+            //check or wait if the maaiveld reference data is loaded
             RefreshAreaReferenceData(() =>
             {
                 BinaryMeshLayer bml = ((CartesianTileLayerGameObject)areaReferenceData.Reference).Layer as BinaryMeshLayer;
@@ -409,9 +409,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 }
                 else
                 {
+                    //TODO if a tile is missing for some reason maybe we should do nothing here?
+                    //not all tiles are loaded yet to encapsulate the polygon
                     bml.OnTileObjectCreated.AddListener(tile =>
-                    {
-                        Debug.Log("tilekey" + tile.tileKey + " go" + tile.gameObject);
+                    {                        
                         tileBoundingBoxes.Add(GetBoundingBoxForTile(tile));
                         if (IsAreaLoadedForBoundingBox(tileBoundingBoxes, polygonBoundingBox, tile.layer.tileSize))
                         {
@@ -432,12 +433,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 if (l is ReferencedLayerData refData)
                 {
-                    if (refData.Reference.Name.Contains("Maaiveld"))
+                    if (refData.Reference.Name.Contains(LayerAreaIdentifier))
                         areaReferenceData = refData;
                 }
             }
             if (areaReferenceData != null)
             {
+                //for some reason this rarily happens depending on the speed of loading and needs to be checked
                 if (areaReferenceData.Reference is PlaceholderLayerGameObject)
                 {
                     areaReferenceData.OnReferenceChanged.AddListener(() =>
