@@ -19,6 +19,7 @@ namespace Netherlands3D.CartesianTiles
         public Dictionary<Vector2Int, ObjectMapping> Mappings = new Dictionary<Vector2Int, ObjectMapping>();
         public UnityEvent<ObjectMapping> OnMappingCreated = new();
         public UnityEvent<ObjectMapping> OnMappingRemoved = new();
+        public UnityEvent<Tile> OnTileObjectCreated = new();
 
 #if SUBOBJECT
         public bool hasMetaData = false;
@@ -103,10 +104,10 @@ namespace Netherlands3D.CartesianTiles
         private void RemoveMapping(Vector2Int tileKey)
         {
             if (!Mappings.ContainsKey(tileKey)) return;
-            
+
             ObjectMapping mapping = Mappings[tileKey];
             Mappings.Remove(tileKey);
-            OnMappingRemoved.Invoke(mapping);            
+            OnMappingRemoved.Invoke(mapping);
         }
 
         private IEnumerator DownloadBinaryMesh(TileChange tileChange, System.Action<TileChange> callback = null)
@@ -161,6 +162,8 @@ namespace Netherlands3D.CartesianTiles
                 if (tile.gameObject) RemoveGameObject(tileKey);
 
                 tile.gameObject = newGameobject;
+
+                OnTileObjectCreated.Invoke(tile);
 
 #if SUBOBJECT
                 if (hasMetaData)
@@ -262,7 +265,7 @@ namespace Netherlands3D.CartesianTiles
             container = new GameObject();
 
             container.name = tileChange.X.ToString() + "-" + tileChange.Y.ToString();
-            container.transform.position = new Coordinate(CoordinateSystem.RD, tileChange.X + (tileSize / 2), tileChange.Y + (tileSize / 2)).ToUnity(); 
+            container.transform.position = new Coordinate(CoordinateSystem.RD, tileChange.X + (tileSize / 2), tileChange.Y + (tileSize / 2)).ToUnity();
 
             container.SetActive(isEnabled);
 
