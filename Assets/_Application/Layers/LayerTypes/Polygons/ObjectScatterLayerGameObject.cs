@@ -2,10 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.CartesianTiles;
+using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -49,11 +52,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private bool completedInitialization;
         public LayerPropertyData PropertyData => settings;
 
+        private ReferencedLayerData areaReferenceData;
+
         protected override void OnLayerInitialize()
         {
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
             propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
-        }
+        } 
 
         public void Initialize(ReferencedLayerData data, string previousPrefabId)
         {
@@ -100,46 +105,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             settings.MinScale = new Vector3(3, 3, 3);
             settings.MaxScale = new Vector3(6, 6, 6);
-        }
-        
-        public void LoadProperties(List<LayerPropertyData> properties)
-        {
-            var scatterSettings = (ScatterGenerationSettingsPropertyData)properties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
-            if (scatterSettings != null)
-            {
-                settings = scatterSettings;
-                if (LayerData.ParentLayer is PolygonSelectionLayer p)
-                {
-                    polygonLayer = p;
-                    if (p.PolygonVisualisation == null)
-                    {
-                        //TODO find a way to measure when all tiles encapsulating the polygon are loaded to regerenate the sample texture, waiting seconds is not a valid option
-                        try
-                        {
-                            p.OnReferenceChanged.AddListener(OnPolygonParentInitialized);
-                        }
-                        catch(Exception e)
-                        {
-                            Debug.LogException(e);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void OnPolygonParentInitialized()
-        {
-            StartCoroutine(WaitSeconds(() => {
-                Initialize(LayerData, settings.OriginalPrefabId);
-            }));
-
-            polygonLayer?.OnReferenceChanged.RemoveListener(OnPolygonParentInitialized);
-        }
-
-        private IEnumerator WaitSeconds(Action onComplete)
-        {
-            yield return new WaitForSeconds(3f);
-            onComplete.Invoke();
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
@@ -389,6 +354,135 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             var propertySection = Instantiate(ScatterMap.Instance.scatterProptertiesPrefab, properties);
             propertySection.Settings = settings;
+        }
+
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            var scatterSettings = (ScatterGenerationSettingsPropertyData)properties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
+            if (scatterSettings != null)
+            {
+                settings = scatterSettings;
+                if (LayerData.ParentLayer is PolygonSelectionLayer p)
+                {
+                    polygonLayer = p;
+                    if (p.PolygonVisualisation == null)
+                    {
+                        p.OnReferenceChanged.AddListener(OnPolygonParentInitialized);
+                    }
+                    else
+                    {
+                        OnPolygonParentInitialized();
+                    }
+                }
+            }
+        }
+
+        private void OnPolygonParentInitialized()
+        {
+            if(polygonLayer.PolygonVisualisation.Bounds == null)
+            {
+                polygonLayer.PolygonVisualisation.OnPolygonVisualisationUpdated.AddListener(OnPolygonVisualisationUpdated);
+            }
+            else
+            {
+                OnPolygonVisualisationUpdated();
+            }            
+            polygonLayer?.OnReferenceChanged.RemoveListener(OnPolygonParentInitialized);
+        }
+
+        private void OnPolygonVisualisationUpdated()
+        {          
+            BoundingBox polygonBoundingBox = polygonLayer.PolygonVisualisation.Bounds;
+            polygonBoundingBox.Convert(CoordinateSystem.RD);
+
+            RefreshAreaReferenceData(() =>
+            {
+                BinaryMeshLayer bml = ((CartesianTileLayerGameObject)areaReferenceData.Reference).Layer as BinaryMeshLayer;
+                Dictionary<Vector2Int, Tile> activeTiles = bml.tiles;
+                List<BoundingBox> tileBoundingBoxes = new List<BoundingBox>();
+                foreach (Tile tile in activeTiles.Values)
+                    tileBoundingBoxes.Add(GetBoundingBoxForTile(tile));
+
+                if (tileBoundingBoxes.Count > 0 && IsAreaLoadedForBoundingBox(tileBoundingBoxes, polygonBoundingBox, activeTiles.Values.First().layer.tileSize))
+                {
+                    Initialize(LayerData, settings.OriginalPrefabId);
+                }
+                else
+                {
+                    bml.OnTileObjectCreated.AddListener(tile =>
+                    {
+                        Debug.Log("tilekey" + tile.tileKey + " go" + tile.gameObject);
+                        tileBoundingBoxes.Add(GetBoundingBoxForTile(tile));
+                        if (IsAreaLoadedForBoundingBox(tileBoundingBoxes, polygonBoundingBox, tile.layer.tileSize))
+                        {
+                            Initialize(LayerData, settings.OriginalPrefabId);
+                        }
+                    });
+                }
+            });
+
+            polygonLayer.PolygonVisualisation.OnPolygonVisualisationUpdated.RemoveListener(OnPolygonVisualisationUpdated);
+        }
+
+        private void RefreshAreaReferenceData(Action onReferenceDataInitialized)
+        {
+            areaReferenceData = null;
+            List<LayerData> mainLayers = ProjectData.Current.RootLayer.ChildrenLayers;
+            foreach (LayerData l in mainLayers)
+            {
+                if (l is ReferencedLayerData refData)
+                {
+                    if (refData.Reference.Name.Contains("Maaiveld"))
+                        areaReferenceData = refData;
+                }
+            }
+            if (areaReferenceData != null)
+            {
+                if (areaReferenceData.Reference is PlaceholderLayerGameObject)
+                {
+                    areaReferenceData.OnReferenceChanged.AddListener(() =>
+                    {
+                        onReferenceDataInitialized.Invoke();
+                    });
+                }
+                else
+                {
+                    onReferenceDataInitialized.Invoke();
+                }
+            }
+        }
+
+        private readonly HashSet<(int x, int y)> occupied = new HashSet<(int x, int y)>();
+        private bool IsAreaLoadedForBoundingBox(List<BoundingBox> area, BoundingBox boundingBox, int tileSize)
+        {
+            double eps = 1e-9;
+            int minX = (int)Math.Floor(boundingBox.BottomLeft.easting / tileSize);
+            int minY = (int)Math.Floor(boundingBox.BottomLeft.northing / tileSize);
+            int maxX = (int)Math.Floor((boundingBox.TopRight.easting - eps) / tileSize); 
+            int maxY = (int)Math.Floor((boundingBox.TopRight.northing - eps) / tileSize);
+
+            //the cell positions equal the bottomleft xy
+            occupied.Clear();
+            foreach (BoundingBox bb in area)
+            {
+                int x = (int)Math.Floor(bb.BottomLeft.easting / tileSize);
+                int y = (int)Math.Floor(bb.BottomLeft.northing / tileSize);
+                occupied.Add((x, y));
+            }
+
+            //are all cells occupied in the target overlaying grid
+            for (int x = minX; x <= maxX; x++)
+                for (int y = minY; y <= maxY; y++)
+                    if (!occupied.Contains((x, y)))
+                        return false; //cell not present
+            return true;
+        }
+
+        private BoundingBox GetBoundingBoxForTile(Tile tile)
+        {
+            int size = tile.layer.tileSize;
+            BoundingBox boundingBox = new BoundingBox(new Coordinate(CoordinateSystem.RD, tile.tileKey.x, tile.tileKey.y), new Coordinate(CoordinateSystem.RD, tile.tileKey.x + size, tile.tileKey.y + size));
+            return boundingBox;
         }
 
         private static Mesh CombineHierarchicalMeshes(Transform transform)
