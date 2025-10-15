@@ -61,22 +61,6 @@ namespace Netherlands3D.DataTypeAdapters
             return false;
         }
 
-        public static bool JsonContainsTopLevelFieldWithValueNew(
-            StreamReader reader,
-            string fieldName,
-            Func<string, bool> predicate
-        ) {
-            if (reader == null || string.IsNullOrEmpty(fieldName) || predicate == null) return false;
-
-            using var jr = JsonStreamScan.CreateReader(reader);
-
-            if (!JsonStreamScan.TryEnterObject(jr)) return false;
-            if (!JsonStreamScan.TryAdvanceToProperty(jr, fieldName)) return false;
-
-            // We're positioned on the value of the property; for this helper we require a string
-            return JsonStreamScan.TryGetCurrentString(jr, out var s) && predicate(s);
-        }
-
         /// <summary>
         /// Returns true if the JSON contains a "links" section at top level, 
         /// and that section contains a link object with "rel": "conformance".
