@@ -10,7 +10,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
     /// Hierarchical Object layers can be styled by changing the color for a material - or set of layer features. This
     /// class can provide helpers to ensure a consistent set of styling rules is made, and to manage them.  
     /// </summary>
-    public static class HierarchicalObjectTileLayerStyler
+    public static class HierarchicalObjectLayerStyler
     {
         /// <summary>
         /// Sets a custom color for all layer features matching the material index of the given layer feature.
