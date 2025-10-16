@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6b0aa719bec47ca8ce315e36c5b5c3c, type: 3}
+  m_Name: Canadapopulier
+  m_EditorClassIdentifier: 
+  id: objects-canada-populier
+  title: Canadapopulier
+  description: 
+  prefab: {fileID: -5293961980780918241, guid: e78ad354330e64902b24d08795d54efb, type: 3}

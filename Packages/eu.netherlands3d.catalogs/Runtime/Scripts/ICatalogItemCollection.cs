@@ -22,6 +22,8 @@ namespace Netherlands3D.Catalogs
     /// ```
     public interface ICatalogItemCollection : ISearchable
     {
+        public Task<ICatalogItem> GetAsync(string id);
+
         public Task<IEnumerable<ICatalogItem>> GetItemsAsync();
 
         /// <summary>

@@ -12,7 +12,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnEnter()
         {
-            if (viewer.FirstPersonCamera.transform.localPosition.y == 0)
+            //Prevents the skipping of the entry animation
+            if(!input.LockInput)
             {
                 viewer.transform.position = viewer.transform.position + Vector3.down * viewer.MovementModus.viewHeight;
                 viewer.FirstPersonCamera.transform.localPosition = Vector3.up * viewer.MovementModus.viewHeight;

@@ -10,11 +10,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnEnter()
         {
-            if (viewer.FirstPersonCamera.transform.localPosition.y == 0)
-            {
-                viewer.transform.position = viewer.transform.position + Vector3.down * viewer.MovementModus.viewHeight;
-                viewer.FirstPersonCamera.transform.localPosition = Vector3.up * viewer.MovementModus.viewHeight;
-            }
+            viewer.transform.position = viewer.transform.position + Vector3.down * viewer.MovementModus.viewHeight;
+            viewer.FirstPersonCamera.transform.localPosition = Vector3.up * viewer.MovementModus.viewHeight;
 
             //Get Rotation this depends on the current Camera Constrain
             Vector3 euler = viewer.FirstPersonCamera.GetEulerRotation();
@@ -58,7 +55,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             {
                 float turn = moveInput.x * viewer.MovementModus.turnSpeed * Time.deltaTime * Mathf.Sign(currentSpeed);
                 transform.Rotate(Vector3.up * turn);
-            } else
+            }
+            else
             {
                 float turn = moveInput.x * viewer.MovementModus.turnSpeed * .2f * Time.deltaTime;
                 transform.Rotate(Vector3.up * turn);

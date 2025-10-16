@@ -34,12 +34,8 @@ namespace Netherlands3D.FirstPersonViewer
 
             firstPersonViewerCamera = GetComponent<Camera>();
 
-            SetupViewer();
-        }
-
-        private void OnEnable()
-        {
             input.AddInputLockConstrain(this);
+            SetupViewer();
         }
 
         private void OnDestroy()
@@ -94,11 +90,12 @@ namespace Netherlands3D.FirstPersonViewer
 
             if (cameraMovement.magnitude > 0)
             {
-                PointerDelta(cameraMovement);
+                RotateCamera(cameraMovement);
             }
         }
 
-        private void PointerDelta(Vector2 pointerDelta)
+        //Sets the rotation of the camera or the viewerBase based on the current Camera Constrain.
+        private void RotateCamera(Vector2 pointerDelta)
         {
             Vector2 mouseLook = pointerDelta * currentsensitivity * Time.deltaTime;
 
@@ -133,8 +130,6 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetCameraHeight(float height)
         {
-            //if (true) return;
-
             cameraHeightOffset = height;
             transform.localPosition = Vector3.up * cameraHeightOffset;
         }

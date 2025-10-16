@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
-    public class ViewerState : MonoBehaviour
+    public abstract class ViewerState : MonoBehaviour
     {
         protected FirstPersonViewerStateMachine owner;
         protected FirstPersonViewerInput input;
@@ -20,8 +20,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             transform = viewer.transform;
 
-            viewerData = FirstPersonViewerData.Instance; //ServiceLocator.GetService<FirstPersonViewerData>();
-
+            viewerData = ServiceLocator.GetService<FirstPersonViewerData>();
         }
 
         public virtual void OnEnter() { }

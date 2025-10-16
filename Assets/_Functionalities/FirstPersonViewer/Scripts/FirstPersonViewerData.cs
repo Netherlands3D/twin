@@ -7,17 +7,9 @@ namespace Netherlands3D.FirstPersonViewer
 {
     public class FirstPersonViewerData : MonoBehaviour
     {
-        //Not a big fan of this
-        public static FirstPersonViewerData Instance { private set; get; }
-
         public Dictionary<string, object> ViewerSetting { get; private set; }
 
-        public Camera FPVCamera { private set; get; }
-        private void Awake()
-        {
-            if (Instance == null) Instance = this;
-            else Destroy(this);
-        }
+        [field:SerializeField] public Camera FPVCamera { private set; get; }
 
         private void OnEnable()
         {

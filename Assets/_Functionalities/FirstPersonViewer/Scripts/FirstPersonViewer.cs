@@ -12,7 +12,7 @@ namespace Netherlands3D.FirstPersonViewer
     public class FirstPersonViewer : MonoBehaviour
     {
         [Header("Camera")]
-        [field: SerializeField] public FirstPersonViewerCamera FirstPersonCamera;
+        [field: SerializeField] public FirstPersonViewerCamera FirstPersonCamera { private set; get; }
 
         private MeshFilter meshFilter;
         private MeshRenderer meshRenderer;
@@ -25,9 +25,9 @@ namespace Netherlands3D.FirstPersonViewer
         private Coordinate startPosition;
         private Quaternion startRotation;
 
-        //Raycasting
+        [Header("Raycasting")]
+        [SerializeField] private LayerMask snappingCullingMask;
         private OpticalRaycaster raycaster;
-        private int snappingCullingMask;
 
         //Falling
         [Header("Ground")]
@@ -69,8 +69,6 @@ namespace Netherlands3D.FirstPersonViewer
             startRotation = transform.rotation;
             yPositionTarget = transform.position.y;
 
-            snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings") | (1 << LayerMask.NameToLayer("Default")));
-
             SetupFSM();
             SetupMainCam();
         }
@@ -101,7 +99,7 @@ namespace Netherlands3D.FirstPersonViewer
             prevCameraRotation = mainCam.transform.rotation;
             prevCameraCullingMask = mainCam.cullingMask;
 
-            mainCam.transform.position = transform.position + Vector3.up * 20;
+            mainCam.transform.position = transform.position + Vector3.up * cameraHeightAboveGround;
             mainCam.transform.rotation = Quaternion.Euler(90, 0, 0);
             mainCam.cullingMask = 0;
 
@@ -175,7 +173,7 @@ namespace Netherlands3D.FirstPersonViewer
             else meshFilter.mesh = null;
             
 
-            fsm.SwitchState(movementPresets.GetViewerState());
+            fsm.SwitchState(movementPresets.viewModus);
         }
 
         private void SetMovementSpeed(float speed) => MovementSpeed = speed / 3.6f;

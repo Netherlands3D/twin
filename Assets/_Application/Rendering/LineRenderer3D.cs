@@ -62,7 +62,7 @@ namespace Netherlands3D.Twin.Rendering
             Gizmos.color = Color.blue;
             DrawGizmos(lineTransformMatrixCache);
         }
-
+        
         protected override void Draw()
         {
             UpdateColorBuffers();
@@ -158,6 +158,16 @@ namespace Netherlands3D.Twin.Rendering
 
                     direction.Normalize();
 
+                    if (direction == Vector3.zero)
+                    {
+                        // If 2 consecutive points are the same, the line has a length of 0 and should not be rendered.
+                        // However, we must still add a transform matrix to preserve the indices of the joints and lines to match the input lines, and querying the indices remains possible.
+                        // Adding an end cap joint is not needed if this is the last line, since the end cap will be the same as the previous line's joint in this case
+                        AppendMatrixToBatches(lineTransformMatrixCache, ref lineIndices.batchIndex, ref lineIndices.matrixIndex, Matrix4x4.zero);
+                        AppendMatrixToBatches(pointTransformMatrixCache, ref jointIndices.batchIndex, ref jointIndices.matrixIndex, Matrix4x4.zero);
+                        continue;
+                    }
+                    
                     // Calculate the rotation based on the direction vector
                     var rotation = Quaternion.LookRotation(direction);
                     // Calculate the scale based on the distance
@@ -181,7 +191,7 @@ namespace Netherlands3D.Twin.Rendering
                 }
             }
         }
-
+        
         protected override bool IsValid(List<Coordinate> line)
         {
             {

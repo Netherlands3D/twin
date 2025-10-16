@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Netherlands3D.FirstPersonViewer.Events;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Samplers;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,12 +14,13 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private List<GameObject> uiToDisable;
 
         private PointerToWorldPosition pointerToWorld;
+        private FirstPersonViewerData viewerData;
 
         private void Start()
         {
             pointerToWorld = FindFirstObjectByType<PointerToWorldPosition>();
             viewerGroup = viewerUI.GetComponent<CanvasGroup>();
-
+            
             ViewerEvents.OnViewerEntered += EnterViewer;
             ViewerEvents.OnViewerExited += ExitViewer;
             ViewerEvents.OnHideUI += HideUI;
@@ -44,7 +46,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
                 viewerGroup.DOFade(1, 1f).SetDelay(1);
             } viewerUI.SetActive(true);
 
-            pointerToWorld.SetActiveCamera(FirstPersonViewerData.Instance.FPVCamera);
+            pointerToWorld.SetActiveCamera(ServiceLocator.GetService<FirstPersonViewerData>().FPVCamera);
         }
 
         private void ExitViewer()

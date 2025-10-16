@@ -1,5 +1,6 @@
 using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
@@ -17,21 +18,17 @@ namespace Netherlands3D.FirstPersonViewer
         private ViewPositionPickerIcon picker;
         [SerializeField] private ViewPositionPickerIcon pickerPrefab;
         [SerializeField] private GameObject firstPersonViewerPrefab;
-        private int snappingCullingMask = 0;
-
-        private void Start()
-        {
-            snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings") | (1 << LayerMask.NameToLayer("Default")));
-        }
+        [SerializeField] private LayerMask snappingCullingMask = 0;
 
         public void PointerDown()
         {
             isPointerDown = true;
-            picker = Instantiate(pickerPrefab, transform.root); // <-- $$ Change Root to propper location. 
+            picker = Instantiate(pickerPrefab, transform.root);
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
+            Debug.Log("Pointer Up");
             if (isPointerDown)
             {
                 Destroy(picker.gameObject);
@@ -40,12 +37,14 @@ namespace Netherlands3D.FirstPersonViewer
 
                 Vector2 screenPoint = Pointer.current.position.ReadValue();
 
-                if (FirstPersonViewerInput.IsPointerOverUIObject()) return;
+                if (Interface.PointerIsOverUI()) return;
 
                 raycaster.GetWorldPointAsync(screenPoint, (point, hit) =>
                 {
+                    Debug.Log(hit);
                     if (hit)
                     {
+                        //$$ TO-DO
                         //Commentent code not working or changing anything based on the visibilty of the building.
 
                         //ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();

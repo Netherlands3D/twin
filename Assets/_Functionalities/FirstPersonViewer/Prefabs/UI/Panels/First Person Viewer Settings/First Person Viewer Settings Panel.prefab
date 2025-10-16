@@ -733,7 +733,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8272253268121075952}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2aef3f3a8daf57d4080f0657b28a87a7, type: 3}
+  m_Script: {fileID: 11500000, guid: e836f638899b78f41a1c1b5038770694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   contentFitterRefresh: {fileID: 363397338669215778}
@@ -741,8 +741,6 @@ MonoBehaviour:
   - className: ViewerSettingValue
     prefab: {fileID: 5244323761953340163, guid: f38b307865f9c3e47a01341f297ab4fe,
       type: 3}
-  - className: ViewerSettingLabel
-    prefab: {fileID: 0}
   settingParent: {fileID: 245325743934915806}
   movementPresets: {fileID: 11400000, guid: c6b5d13074e849a4b9f70302d95adabd, type: 2}
   movementModusButtonPrefab: {fileID: 463382143704097879, guid: 53f22b1e4ad9f154e8f2890cc863be25,

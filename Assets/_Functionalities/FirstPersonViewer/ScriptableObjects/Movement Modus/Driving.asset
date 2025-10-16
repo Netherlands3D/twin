@@ -19,7 +19,7 @@ MonoBehaviour:
   jumpHeight: 0
   maxFallingSpeed: 55
   stepHeight: 1.5
-  viewModus: 1
+  viewModus: ViewerVehicularState
   acceleration: 10
   deceleration: 5
   turnSpeed: 100
@@ -93,10 +93,10 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
         asm: eu.netherlands3d.twin}
       data:
-        settingName: Decel
-        displayName: 
+        settingName: Deceleration
+        displayName: Deceleratie
         isVisible: 1
         units: 
-        defaultValue: 0
-        minValue: 0
-        maxValue: 0
+        defaultValue: 5
+        minValue: 2
+        maxValue: 25
