@@ -10,6 +10,7 @@ namespace Netherlands3D.FirstPersonViewer
         public Dictionary<string, object> ViewerSetting { get; private set; }
 
         [field:SerializeField] public Camera FPVCamera { private set; get; }
+        [field:SerializeField] public MovementModusSwitcher ModusSwitcher { private set; get; } 
 
         private void OnEnable()
         {

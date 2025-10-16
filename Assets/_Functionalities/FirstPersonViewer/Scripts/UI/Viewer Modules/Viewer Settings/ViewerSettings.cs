@@ -2,6 +2,7 @@ using GG.Extensions;
 using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.FirstPersonViewer.Temp;
 using Netherlands3D.FirstPersonViewer.ViewModus;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,22 +22,18 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private Transform settingParent;
 
         [Header("Movement Button")]
-        [SerializeField] private MovementCollection movementPresets;
         [SerializeField] private MovementModusButton movementModusButtonPrefab;
         [SerializeField] private Transform movementParent;
 
-
-        [Header("Temp")]
-        [SerializeField] private MovementPresets tempMovement;
-
-        private void Start()
-        {
-            CreateMovementPresetButtons(movementPresets);
-        }
+        private MovementModusSwitcher modusSwitcher; 
 
         private void OnEnable()
         {
-            RefreshSettings(tempMovement);
+            modusSwitcher = ServiceLocator.GetService<FirstPersonViewerData>().ModusSwitcher;
+
+            CreateMovementPresetButtons(modusSwitcher.MovementPresets, modusSwitcher.CurrentMovement);
+            RefreshSettings(modusSwitcher.CurrentMovement);
+
             ViewerEvents.OnMovementPresetChanged += RefreshSettings;
         }
 
@@ -45,12 +42,18 @@ namespace Netherlands3D.FirstPersonViewer.UI
             ViewerEvents.OnMovementPresetChanged -= RefreshSettings;
         }
 
-        private void CreateMovementPresetButtons(MovementCollection movements)
+        private void CreateMovementPresetButtons(List<MovementPresets> movementPresets, MovementPresets activePreset)
         {
-            foreach (MovementPresets preset in movements.presets)
+            foreach (Transform child in settingParent)
+            {
+                Destroy(child.gameObject);
+            }
+
+            foreach (MovementPresets preset in movementPresets)
             {
                 MovementModusButton moveButtonObj = Instantiate(movementModusButtonPrefab, movementParent);
                 moveButtonObj.Init(preset, this);
+                if (activePreset == preset) moveButtonObj.SetSelected(true);
             }
         }
 
@@ -71,12 +74,16 @@ namespace Netherlands3D.FirstPersonViewer.UI
                 settingObject.Init(setting);
             }
 
-            StartCoroutine(Test());
+            StartCoroutine(UpdateCanvas());
         }
 
-        private IEnumerator Test()
+        public void ModusButtonPressed(MovementPresets preset)
         {
-            //yield return null;
+            modusSwitcher.LoadMovementPreset(preset);
+        }
+
+        private IEnumerator UpdateCanvas()
+        {
             Canvas.ForceUpdateCanvases();
             contentFitterRefresh.RefreshContentFitters();
             yield return null;

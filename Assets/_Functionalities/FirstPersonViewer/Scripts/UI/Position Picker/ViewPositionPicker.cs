@@ -28,7 +28,6 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            Debug.Log("Pointer Up");
             if (isPointerDown)
             {
                 Destroy(picker.gameObject);
@@ -41,7 +40,6 @@ namespace Netherlands3D.FirstPersonViewer
 
                 raycaster.GetWorldPointAsync(screenPoint, (point, hit) =>
                 {
-                    Debug.Log(hit);
                     if (hit)
                     {
                         //$$ TO-DO

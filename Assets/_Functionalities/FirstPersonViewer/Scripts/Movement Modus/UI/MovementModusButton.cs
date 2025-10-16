@@ -50,8 +50,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public void ButtonClicked()
         {
-            //movementSwitcher.LoadMoveModus(movementPreset);
-            //movementSwitcher.SetMovementVisible();
+            viewerSettings.ModusButtonPressed(movementPreset);
         }
     }
 }

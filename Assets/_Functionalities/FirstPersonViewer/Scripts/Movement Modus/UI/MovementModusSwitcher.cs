@@ -6,30 +6,23 @@ using UnityEngine.UI;
 using System;
 using Netherlands3D.FirstPersonViewer.Temp;
 using Netherlands3D.Events;
+using System.Collections.Generic;
 
-namespace Netherlands3D.FirstPersonViewer.UI
+namespace Netherlands3D.FirstPersonViewer
 {
-    [Obsolete("Will be removed and moved to ViewerSettings.cs (When the toolbar rework will come.")]
     public class MovementModusSwitcher : MonoBehaviour
     {
-        [Header("Input")]
-        [SerializeField] private InputActionAsset inputMap;
-        private InputAction cycleNextAction;
-        private InputAction cyclePreviousAction;
+        private FirstPersonViewerInput input;
 
         [Header("Movement")]
-        [SerializeField] private MovementCollection movementPresets;
-        private MovementPresets currentMovement;
+        [field: SerializeField] public List<MovementPresets> MovementPresets { private set; get; }
+        public MovementPresets CurrentMovement { private set; get; }
 
         private void Awake()
         {
+            input = GetComponent<FirstPersonViewerInput>();
+            
             ViewerEvents.OnViewerSetupComplete += ViewerEnterd;
-        }
-
-        private void Start()
-        {
-            cycleNextAction = inputMap.FindAction("NavigateModusNext");
-            cyclePreviousAction = inputMap.FindAction("NavigateModusPrevious");
         }
 
         private void OnDestroy()
@@ -39,53 +32,54 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void ViewerEnterd()
         {
-            LoadMoveModus(0);
+            LoadMovementPreset(MovementPresets[0]);
         }
 
         private void Update()
         {
-            if (cyclePreviousAction.triggered) ChangeViewerModus(-1);
-            else if (cycleNextAction.triggered) ChangeViewerModus(1);        
+            if (input.CyclePreviousModus.triggered) ChangeViewerModus(-1);
+            else if (input.CycleNextModus.triggered) ChangeViewerModus(1);        
         }
 
         public void ChangeViewerModus(int switchDirection)
         {
             if (FirstPersonViewerInput.IsInputfieldSelected()) return;
 
-            int currentIndex = movementPresets.presets.IndexOf(currentMovement) + switchDirection;
+            int currentIndex = MovementPresets.IndexOf(CurrentMovement) + switchDirection;
 
-            if (currentIndex < 0) currentIndex = movementPresets.presets.Count - 1;
-            else if (currentIndex >= movementPresets.presets.Count) currentIndex = 0;
+            if (currentIndex < 0) currentIndex = MovementPresets.Count - 1;
+            else if (currentIndex >= MovementPresets.Count) currentIndex = 0;
 
-            LoadMoveModus(currentIndex);
+            LoadMovementPreset(MovementPresets[currentIndex]);
         }
 
-        private void LoadMoveModus(int index)
+        public void LoadMovementPreset(MovementPresets movePresets)
         {
-            if (index >= movementPresets.presets.Count || index < 0) return;
-
-            currentMovement = movementPresets.presets[index];
-
-            int nextIndex = index + 1;
-            if (nextIndex >= movementPresets.presets.Count) nextIndex = 0;
-
-
-
-            int prevIndex = index - 1;
-            if (prevIndex < 0) prevIndex = movementPresets.presets.Count - 1;
-
-            
+            CurrentMovement = movePresets;
 
             //Send events
-            ViewerEvents.OnMovementPresetChanged?.Invoke(currentMovement);
+            ViewerEvents.OnMovementPresetChanged?.Invoke(CurrentMovement);
 
             //$$ Only supports floats for now should be revisited
-            foreach (ViewerSetting setting in currentMovement.editableSettings.list)
+            foreach (ViewerSetting setting in CurrentMovement.editableSettings.list)
             {
                 ViewerSettingsEvents<float>.Invoke(setting.settingName, (float)setting.GetValue());
             }
         }
 
-        public void LoadMoveModus(MovementPresets movePresets) => LoadMoveModus(movementPresets.presets.IndexOf(movePresets));
+        private void LoadMoveModus(int index)
+        {
+            if (index >= MovementPresets.Count || index < 0) return;
+
+            CurrentMovement = MovementPresets[index];
+
+            //int nextIndex = index + 1;
+            //if (nextIndex >= movementPresets.Count) nextIndex = 0;
+
+
+
+            //int prevIndex = index - 1;
+            //if (prevIndex < 0) prevIndex = movementPresets.Count - 1;
+        }
     }
 }
