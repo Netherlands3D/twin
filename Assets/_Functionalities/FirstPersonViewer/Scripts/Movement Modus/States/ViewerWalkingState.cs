@@ -12,8 +12,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnEnter()
         {
-            //Prevents the skipping of the entry animation
-            if(!input.LockInput)
+            //Prevents the up teleportation when switching to flying state and back.
+            if (viewer.FirstPersonCamera.transform.localPosition.y == 0)
             {
                 viewer.transform.position = viewer.transform.position + Vector3.down * viewer.MovementModus.viewHeight;
                 viewer.FirstPersonCamera.transform.localPosition = Vector3.up * viewer.MovementModus.viewHeight;
