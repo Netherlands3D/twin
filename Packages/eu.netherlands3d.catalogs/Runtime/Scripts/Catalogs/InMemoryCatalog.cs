@@ -113,7 +113,7 @@ namespace Netherlands3D.Catalogs.Catalogs
 
         public void Clear() => allRecords.Clear();
 
-        public static RecordItem CreateRecord(string id, string title, string description, Uri uri = null)
+        public static RecordItem CreateRecord(string id, string title, string description = "", Uri uri = null)
         {
             return new RecordItem(id, title, description, url: uri);
         }
