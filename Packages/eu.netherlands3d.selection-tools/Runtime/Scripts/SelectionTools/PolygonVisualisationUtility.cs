@@ -140,7 +140,7 @@ namespace Netherlands3D.SelectionTools
             return new GeometryTriangulationData(triangulated, origin, u, v /*, normal*/);
         }
 
-        public static Mesh CreatePolygonMesh(List<GeometryTriangulationData> datas, Vector3 offset)
+        public static Mesh CreatePolygonMesh(List<GeometryTriangulationData> datas, Vector3 offset, bool invertTriangles = false)
         {
             // STEP 4: Build Unity Mesh in 3D
             List<Vector3> verts = new List<Vector3>();
@@ -169,8 +169,13 @@ namespace Netherlands3D.SelectionTools
             }
 
             Mesh mesh = new Mesh();
+            int[] triArray = tris.ToArray();
+            if (invertTriangles)
+            {
+                Array.Reverse(triArray);
+            }
             mesh.vertices = verts.ToArray();
-            mesh.triangles = tris.ToArray();
+            mesh.triangles = triArray;
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
 
@@ -180,7 +185,7 @@ namespace Netherlands3D.SelectionTools
         public static Mesh CreatePolygonMesh(List<List<Vector3>> contours, bool invertWindingOrder = false)
         {
             var triangulationData = CreatePolygonGeometryTriangulationData(contours, invertWindingOrder);
-            return CreatePolygonMesh(new List<GeometryTriangulationData>() { triangulationData }, Vector3.zero);
+            return CreatePolygonMesh(new List<GeometryTriangulationData>() { triangulationData }, Vector3.zero, !invertWindingOrder);
         }
 
         private static Coordinate[] ConvertToCoordinateArray(List<Vector3> points, Vector3 origin, Vector3 u, Vector3 v, bool shouldBeCCW)

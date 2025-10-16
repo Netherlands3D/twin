@@ -478,7 +478,7 @@ namespace Netherlands3D.SelectionTools
             AddPoint(currentWorldCoordinate);
         }
 
-        private void ClearPolygon(bool redraw = false)
+        public void ClearPolygon(bool redraw = false)
         {
             polygonFinished = false;
             ClearHandles();
