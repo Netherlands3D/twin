@@ -34,3 +34,69 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 2097010ff22b90e4ebcb8e640c6ef475, type: 2}
   - {fileID: 2100000, guid: 59b6a28a97adccf4a8a0791c01235679, type: 2}
   - {fileID: 2100000, guid: 878239871271be24399705c5da67a316, type: 2}
+  groundResetHeightOffset: 0
+  editableSettings:
+    list:
+    - rid: 3281392767919718506
+    - rid: 3281392767919718507
+    - rid: 3281392767919718510
+    - rid: 3281392767919718512
+    - rid: 3281392767919718513
+  references:
+    version: 2
+    RefIds:
+    - rid: 3281392767919718506
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+        asm: eu.netherlands3d.twin}
+      data:
+        settingName: ViewHeight
+        displayName: Kijkhoogte
+        isVisible: 0
+        units: m
+        defaultValue: 1.2
+        minValue: -20
+        maxValue: 20
+    - rid: 3281392767919718507
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+        asm: eu.netherlands3d.twin}
+      data:
+        settingName: FOV
+        displayName: Gezichtsveld
+        isVisible: 0
+        units: "\xB0"
+        defaultValue: 80
+        minValue: 10
+        maxValue: 140
+    - rid: 3281392767919718510
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+        asm: eu.netherlands3d.twin}
+      data:
+        settingName: MaxSpeed
+        displayName: Snelheid
+        isVisible: 1
+        units: km/u
+        defaultValue: 80
+        minValue: 1
+        maxValue: 500
+    - rid: 3281392767919718512
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+        asm: eu.netherlands3d.twin}
+      data:
+        settingName: Acceleration
+        displayName: Acceleratie
+        isVisible: 1
+        units: 
+        defaultValue: 10
+        minValue: 5
+        maxValue: 25
+    - rid: 3281392767919718513
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+        asm: eu.netherlands3d.twin}
+      data:
+        settingName: Decel
+        displayName: 
+        isVisible: 1
+        units: 
+        defaultValue: 0
+        minValue: 0
+        maxValue: 0

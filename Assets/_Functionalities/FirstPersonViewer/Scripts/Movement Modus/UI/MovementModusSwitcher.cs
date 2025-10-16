@@ -17,13 +17,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
         private InputAction cycleNextAction;
         private InputAction cyclePreviousAction;
 
-        [Header("UI")]
-        [SerializeField] private Image currentMovemodeImage;
-        [SerializeField] private Image nextMovemodeImage;
-        [SerializeField] private Image prevMovemodeImage;
-        [SerializeField] private MovementModusButton movementButtonPrefab;
-        [SerializeField] private Transform movementButtonParent;
-
         [Header("Movement")]
         [SerializeField] private MovementCollection movementPresets;
         private MovementPresets currentMovement;
@@ -72,17 +65,16 @@ namespace Netherlands3D.FirstPersonViewer.UI
             if (index >= movementPresets.presets.Count || index < 0) return;
 
             currentMovement = movementPresets.presets[index];
-            currentMovemodeImage.sprite = currentMovement.viewIcon;
 
             int nextIndex = index + 1;
             if (nextIndex >= movementPresets.presets.Count) nextIndex = 0;
 
-            nextMovemodeImage.sprite = movementPresets.presets[nextIndex].viewIcon;
+
 
             int prevIndex = index - 1;
             if (prevIndex < 0) prevIndex = movementPresets.presets.Count - 1;
 
-            prevMovemodeImage.sprite = movementPresets.presets[prevIndex].viewIcon;
+            
 
             //Send events
             ViewerEvents.OnMovementPresetChanged?.Invoke(currentMovement);
@@ -95,10 +87,5 @@ namespace Netherlands3D.FirstPersonViewer.UI
         }
 
         public void LoadMoveModus(MovementPresets movePresets) => LoadMoveModus(movementPresets.presets.IndexOf(movePresets));
-
-        public void SetMovementVisible()
-        {
-            movementButtonParent.gameObject.SetActive(!movementButtonParent.gameObject.activeSelf);
-        }
     }
 }

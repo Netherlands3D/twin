@@ -55,8 +55,6 @@ namespace Netherlands3D.FirstPersonViewer
             meshRenderer = GetComponent<MeshRenderer>();
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
-
-            //ViewerEvents.OnSpeedChanged += SetMovementSpeed;
             ViewerSettingsEvents<float>.AddListener("MaxSpeed", SetMovementSpeed);
 
             ViewerEvents.OnMovementPresetChanged += SetMovementModus;

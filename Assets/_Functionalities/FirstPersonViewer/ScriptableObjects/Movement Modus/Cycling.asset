@@ -33,7 +33,43 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 5e8dbebefb1a88040bb31b2cf79998e2, type: 2}
   groundResetHeightOffset: 0
   editableSettings:
-    list: []
+    list:
+    - rid: 3281392767919718508
+    - rid: 3281392767919718509
+    - rid: 3281392767919718511
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 3281392767919718508
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+        asm: eu.netherlands3d.twin}
+      data:
+        settingName: ViewHeight
+        displayName: Kijkhoogte
+        isVisible: 0
+        units: m
+        defaultValue: 1.6
+        minValue: -20
+        maxValue: 20
+    - rid: 3281392767919718509
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+        asm: eu.netherlands3d.twin}
+      data:
+        settingName: FOV
+        displayName: Gezichtsveld
+        isVisible: 1
+        units: "\xB0"
+        defaultValue: 60
+        minValue: 10
+        maxValue: 140
+    - rid: 3281392767919718511
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+        asm: eu.netherlands3d.twin}
+      data:
+        settingName: MaxSpeed
+        displayName: Snelheid
+        isVisible: 1
+        units: km/u
+        defaultValue: 15
+        minValue: 1
+        maxValue: 500
