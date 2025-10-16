@@ -1,11 +1,11 @@
 using System;
 using System.IO;
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Functionalities.GeoJSON.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
-using static Netherlands3D.Functionalities.GeoJSON.LayerPresets.GeoJSONPreset;
 
 namespace Netherlands3D.Twin.DataTypeAdapters
 {
@@ -37,7 +37,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             var layerName = CreateName(localFile);
             var url = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
 
-            var layerData = await App.Layers.Add("geojson", new Args(layerName, url));
+            var layerData = await App.Layers.Add(new GeoJSONPreset.Args(layerName, url));
 
             GeoJsonLayerGameObject newLayer = layerData.Reference as GeoJsonLayerGameObject;
             newLayer.Parser.OnParseError.AddListener(displayErrorMessageEvent.Invoke);

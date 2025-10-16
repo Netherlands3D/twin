@@ -36,17 +36,16 @@ namespace Netherlands3D.Twin.Rendering
 
     public abstract class BatchedMeshInstanceRenderer : MonoBehaviour
     {
-        [Tooltip("The mesh to use for the points/joints")] [SerializeField]
-        private Mesh pointMesh;
+        [Tooltip("The mesh to use for the points/joints")] 
+        [SerializeField] private Mesh pointMesh;
+        [SerializeField] protected Material materialTemplate; 
 
-        [SerializeField] private Material pointMaterial; 
+        [Tooltip("Force all point Y positions to 0")] 
+        [SerializeField] protected bool flattenY = false;
 
-        [Tooltip("Force all point Y positions to 0")] [SerializeField]
-        protected bool flattenY = false;
-
-        [Tooltip("Offset the Y position of the points")] [SerializeField]
-        protected float offsetY = 0.0f;
-
+        [Tooltip("Offset the Y position of the points")] 
+        [SerializeField] protected float offsetY = 0.0f;
+        
         [SerializeField] protected float pointMeshScale = 5f;
         [SerializeField] protected bool isProjected = true;
         
@@ -59,12 +58,15 @@ namespace Netherlands3D.Twin.Rendering
         protected Camera renderCamera;
         [SerializeField] protected LayerMask layerMask = -1;
 
+        public abstract Material[] Materials { get; }
+
         public Mesh PointMesh
         {
             get => pointMesh;
             set => pointMesh = value;
         }
 
+        private Material pointMaterial;
         public Material PointMaterial
         {
             get => pointMaterial;
@@ -73,7 +75,7 @@ namespace Netherlands3D.Twin.Rendering
                 pointMaterial = value;
                 if (pointMaterial != null)
                 {
-                    SetDefaultColors();
+                    SetAllColors(pointMaterial.color);
                 }
             }
         }
@@ -136,9 +138,25 @@ namespace Netherlands3D.Twin.Rendering
 #endif
 
         protected abstract void GenerateTransformMatrixCache(int collectionStartIndex = -1);
-        protected void Start()
+
+        private void Awake()
+        {
+            MakeMaterialInstances();
+        }
+
+        private void Start()
         {
             IsProjected = isProjected; //initialize layers
+        }
+
+        protected virtual void MakeMaterialInstances()
+        {
+            pointMaterial = new Material(materialTemplate); //make material instance to work with styling
+        }
+
+        public void RecalculateMatrices()
+        {
+            GenerateTransformMatrixCache(-1);
         }
 
         private void Update()
@@ -341,12 +359,12 @@ namespace Netherlands3D.Twin.Rendering
             }
         }
 
-        public virtual void SetDefaultColors()
+        public virtual void SetAllColors(Color color)
         {
-            Color defaultColor = PointMaterial.color;
+            PointMaterial.color = color;
             foreach (var batchColor in pointBatchColors)
             {
-                batchColor.SetAllColors(defaultColor);
+                batchColor.SetAllColors(color);
             }
 
             UpdateColorBuffers(); //fill in the missing colors with the default color after resetting the existing colors to avoid setting them twice.

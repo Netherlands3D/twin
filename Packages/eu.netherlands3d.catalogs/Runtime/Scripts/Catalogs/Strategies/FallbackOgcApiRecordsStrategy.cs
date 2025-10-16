@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using Netherlands3D.Catalogs.CatalogItems;
-using Netherlands3D.OgcApi;
+﻿using Netherlands3D.OgcApi;
 using Netherlands3D.OgcApi.Features;
 
 namespace Netherlands3D.Catalogs.Catalogs.Strategies

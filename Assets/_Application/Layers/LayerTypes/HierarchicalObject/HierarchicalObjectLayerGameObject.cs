@@ -342,20 +342,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             // Apply style to the features that was discovered
             foreach (var feature in features)
             {
-                HierarchicalObjectTileLayerStyler.Apply(this, GetStyling(feature), feature);
+                HierarchicalObjectLayerStyler.Apply(this, GetStyling(feature), feature);
             }
             
             base.ApplyStyling();
-        }
-
-        public void ApplyStylingToRenderer(Renderer renderer)
-        {
-            var feature = CreateFeature(renderer);
-            HierarchicalObjectTileLayerStyler.Apply(this, GetStyling(feature), feature);
-            
-            int bitMask = GetBitMask();
-            UpdateBitMaskForMaterials(bitMask, renderer.materials);
-            OnStylingApplied.Invoke(); // TODO: this might be called to often now
         }
     }
 }
