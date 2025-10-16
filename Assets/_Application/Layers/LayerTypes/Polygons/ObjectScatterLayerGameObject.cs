@@ -31,6 +31,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     {
         public override BoundingBox Bounds => new (polygonBounds);
         public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
+        public const string AreaPrefabID = "2e71ce721dd3e41c194c6fb05ad10520"; //todo: not hardcode this
         public override string Suffix => "_Scatter";
         private const string LayerAreaIdentifier = "Maaiveld";
 
@@ -331,7 +332,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var scatterSettings = (ScatterGenerationSettingsPropertyData)properties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
+            var scatterSettings = properties.Get<ScatterGenerationSettingsPropertyData>();
             if (scatterSettings != null)
             {
                 settings = scatterSettings;
@@ -364,67 +365,51 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         }
 
         private void OnPolygonVisualisationUpdated()
-        {          
-            BoundingBox polygonBoundingBox = polygonLayer.PolygonVisualisation.Bounds;
-            polygonBoundingBox.Convert(CoordinateSystem.RD);
-
+        {
             //check or wait if the maaiveld reference data is loaded
-            RefreshAreaReferenceData(() =>
+            areaReferenceData = ProjectData.Current.RootLayer.GetFirstLayerByLayerMask(LayerMask.NameToLayer("Terrain"));
+            if (areaReferenceData == null) return;
+
+            //for some reason this rarily happens depending on the speed of loading and needs to be checked
+            if (areaReferenceData.Reference is PlaceholderLayerGameObject)
             {
-                BinaryMeshLayer bml = ((CartesianTileLayerGameObject)areaReferenceData.Reference).Layer as BinaryMeshLayer;
-                Dictionary<Vector2Int, Tile> activeTiles = bml.tiles;
-                List<BoundingBox> tileBoundingBoxes = new List<BoundingBox>();
-                foreach (Tile tile in activeTiles.Values)
-                    tileBoundingBoxes.Add(GetBoundingBoxForTile(tile));
-
-                if (tileBoundingBoxes.Count > 0 && IsAreaLoadedForBoundingBox(tileBoundingBoxes, polygonBoundingBox, activeTiles.Values.First().layer.tileSize))
-                {
-                    Initialize(LayerData, settings.OriginalPrefabId);
-                }
-                else
-                {
-                    //TODO if a tile is missing for some reason maybe we should do nothing here?
-                    //not all tiles are loaded yet to encapsulate the polygon
-                    bml.OnTileObjectCreated.AddListener(tile =>
-                    {                        
-                        tileBoundingBoxes.Add(GetBoundingBoxForTile(tile));
-                        if (IsAreaLoadedForBoundingBox(tileBoundingBoxes, polygonBoundingBox, tile.layer.tileSize))
-                        {
-                            Initialize(LayerData, settings.OriginalPrefabId);
-                        }
-                    });
-                }
-            });
-
+                areaReferenceData.OnReferenceChanged.AddListener(InitializeScatterArea);
+            }
+            else
+            {
+                InitializeScatterArea();
+            }
             polygonLayer.PolygonVisualisation.OnPolygonVisualisationUpdated.RemoveListener(OnPolygonVisualisationUpdated);
         }
 
-        private void RefreshAreaReferenceData(Action onReferenceDataInitialized)
+        private void InitializeScatterArea()
         {
-            areaReferenceData = null;
-            List<LayerData> mainLayers = ProjectData.Current.RootLayer.ChildrenLayers;
-            foreach (LayerData l in mainLayers)
+            areaReferenceData.OnReferenceChanged.RemoveListener(InitializeScatterArea);
+
+            BoundingBox polygonBoundingBox = polygonLayer.PolygonVisualisation.Bounds;
+            polygonBoundingBox.Convert(CoordinateSystem.RD);
+            BinaryMeshLayer bml = ((CartesianTileLayerGameObject)areaReferenceData.Reference).Layer as BinaryMeshLayer;
+            Dictionary<Vector2Int, Tile> activeTiles = bml.tiles;
+            List<BoundingBox> tileBoundingBoxes = new List<BoundingBox>();
+            foreach (Tile tile in activeTiles.Values)
+                tileBoundingBoxes.Add(GetBoundingBoxForTile(tile));
+
+            if (tileBoundingBoxes.Count > 0 && IsAreaLoadedForBoundingBox(tileBoundingBoxes, polygonBoundingBox, activeTiles.Values.First().layer.tileSize))
             {
-                if (l is ReferencedLayerData refData)
-                {
-                    if (refData.Reference.Name.Contains(LayerAreaIdentifier))
-                        areaReferenceData = refData;
-                }
+                Initialize(LayerData, settings.OriginalPrefabId);
             }
-            if (areaReferenceData != null)
+            else
             {
-                //for some reason this rarily happens depending on the speed of loading and needs to be checked
-                if (areaReferenceData.Reference is PlaceholderLayerGameObject)
+                //TODO if a tile is missing for some reason maybe we should do nothing here?
+                //not all tiles are loaded yet to encapsulate the polygon
+                bml.OnTileObjectCreated.AddListener(tile =>
                 {
-                    areaReferenceData.OnReferenceChanged.AddListener(() =>
+                    tileBoundingBoxes.Add(GetBoundingBoxForTile(tile));
+                    if (IsAreaLoadedForBoundingBox(tileBoundingBoxes, polygonBoundingBox, tile.layer.tileSize))
                     {
-                        onReferenceDataInitialized.Invoke();
-                    });
-                }
-                else
-                {
-                    onReferenceDataInitialized.Invoke();
-                }
+                        Initialize(LayerData, settings.OriginalPrefabId);
+                    }
+                });
             }
         }
 

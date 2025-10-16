@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes
@@ -123,6 +124,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             }
         }
         
+        public ReferencedLayerData GetFirstLayerByLayerMask(LayerMask mask)
+        {
+            foreach (LayerData data in ChildrenLayers)
+            {
+                if (data is ReferencedLayerData refData)
+                {
+                    if (refData.Reference.gameObject.layer == mask)
+                    {
+                        return refData;
+                    }
+                }
+            }
+            return null;
+        }
+
         public List<LayerData> GetFlatHierarchy()
         {
             var list = new List<LayerData>();
