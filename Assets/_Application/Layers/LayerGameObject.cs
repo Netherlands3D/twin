@@ -41,7 +41,8 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual IStyler Styler => styler;
         protected IStyler styler;
-        
+
+        public virtual string Suffix => string.Empty;
 
         public string Name
         {
@@ -193,6 +194,10 @@ namespace Netherlands3D.Twin.Layers
         {
             //don't unsubscribe in OnDisable, because we still want to be able to center to a 
             LayerData.LayerDoubleClicked.RemoveListener(OnDoubleClick);
+        }
+
+        public virtual void OnConvert(LayerGameObject previous)
+        {
         }
 
         public virtual void OnSelect()

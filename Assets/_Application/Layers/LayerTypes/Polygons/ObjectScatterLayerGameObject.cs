@@ -31,11 +31,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     {
         public override BoundingBox Bounds => new (polygonBounds);
         public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
-        private const string ScatterSuffix = "_Scatter";
+        public override string Suffix => "_Scatter";
         private const string LayerAreaIdentifier = "Maaiveld";
 
         private Mesh mesh;
         private Material material;
+
+        public ScatterGenerationSettingsPropertyData Settings => settings;
 
         [SerializeField] private ScatterGenerationSettingsPropertyData settings = new();
 
@@ -294,8 +296,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             var newPolygonParent = LayerData.ParentLayer as PolygonSelectionLayer;
             if (newPolygonParent == null) //new parent is not a polygon, so the scatter layer should revert to its original object
-            {
-                RevertToHierarchicalObjectLayer(this);
+            {               
+                LayerConverter.ConvertToLayer(this, settings.OriginalPrefabId);
                 return;
             }
 
@@ -311,37 +313,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
         }
 
-        public static void RevertToHierarchicalObjectLayer(ObjectScatterLayerGameObject objectLayerGameObject)
+        public override void OnConvert(LayerGameObject previous)
         {
-            ReferencedLayerData data = objectLayerGameObject.LayerData;
-
-            var prefab = ProjectData.Current.PrefabLibrary.GetPrefabById(objectLayerGameObject.settings.OriginalPrefabId);
-            var revertedLayer = GameObject.Instantiate(prefab) as HierarchicalObjectLayerGameObject;
-
-            data.SetReference(revertedLayer);
-
-            if (revertedLayer.Name.EndsWith(ScatterSuffix))
-                revertedLayer.Name = revertedLayer.Name.Substring(0, revertedLayer.Name.Length - ScatterSuffix.Length);
-
-            objectLayerGameObject.DestroyLayerGameObject();
-        }
-
-        public static ObjectScatterLayerGameObject ConvertToScatterLayer(HierarchicalObjectLayerGameObject objectLayerGameObject)
-        {
-            ReferencedLayerData data = objectLayerGameObject.LayerData;
-            string previousPrefabId = data.PrefabIdentifier;
-
-            var scatterPrefab = ProjectData.Current.PrefabLibrary.GetPrefabById(ObjectScatterLayerGameObject.ScatterBasePrefabID);
-            var scatterLayer = Instantiate(scatterPrefab) as ObjectScatterLayerGameObject;
-
-            data.SetReference(scatterLayer);
-
-            if(!scatterLayer.Name.EndsWith(ScatterSuffix))
-                scatterLayer.Name = objectLayerGameObject.Name + ScatterSuffix;
-            scatterLayer.Initialize(data, previousPrefabId);
-
-            objectLayerGameObject.DestroyLayerGameObject();
-            return scatterLayer;
+            Initialize(LayerData, previous.PrefabIdentifier);
         }
 
         public List<IPropertySectionInstantiator> GetPropertySections()
