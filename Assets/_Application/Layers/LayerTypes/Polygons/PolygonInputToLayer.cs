@@ -88,15 +88,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void ProcessPolygonSelection(PolygonSelectionLayer layer)
         {
-            //we don't reselect immediately in case of a grid, but we already register the active layer
-            if (layer?.ShapeType == ShapeType.Grid)
-            {
-                ClearSelection();
-                ActiveLayer = layer; 
-                // do not call the ReselectLayerPolygon function yet, because we need to wait until the user selects edit mode in the UI
-                return;
-            }
-
             //Do not allow selecting a new polygon if we are still creating one
             if (polygonInput.Mode == PolygonInput.DrawMode.Create || lineInput.Mode == PolygonInput.DrawMode.Create)
                 return;
@@ -161,8 +152,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             //Clear inputs if no layer is selected by default
             var emptyList = new List<Vector3>();
-            polygonInput.ReselectPolygon(emptyList);
-            lineInput.ReselectPolygon(emptyList);
+            lineInput.ClearPolygon(true);
+            polygonInput.ClearPolygon(true);            
             gridInput.ClearSelection();
         }
 
@@ -195,10 +186,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     layers.Add(layer.PolygonVisualisation, layer);
                     layer.polygonSelected.AddListener(ProcessPolygonSelection);
                     polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
-                    ProcessPolygonSelection(layer);
                 }
-            );
-            
+            );            
         }
 
         private void UpdateLayer(List<Vector3> editedPolygon)
@@ -220,7 +209,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     layers.Add(polygonSelectionLayer.PolygonVisualisation, polygonSelectionLayer);
                     polygonSelectionLayer.polygonSelected.AddListener(ProcessPolygonSelection);
                     lineInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
-                    ProcessPolygonSelection(polygonSelectionLayer);
+                    ProcessPolygonSelection(polygonSelectionLayer); //TODO is this still needed?
                 }
             );
         }
@@ -250,7 +239,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
                     layers.Add(layer.PolygonVisualisation, layer);
                     layer.polygonSelected.AddListener(ProcessPolygonSelection);
-                    ProcessPolygonSelection(layer);
                 }
             );
         }

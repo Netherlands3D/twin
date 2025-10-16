@@ -8,7 +8,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     {
         public static List<PolygonSelectionLayer> Layers = new();
         private PointerToWorldPosition pointerToWorldPosition;
-        private static bool polygonAddedThisFrame;
 
         private void Awake()
         {
@@ -34,7 +33,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
 
             Layers.Add(layer);
-            polygonAddedThisFrame = true;
         }
 
         public static void UnregisterPolygon(PolygonSelectionLayer layer)
@@ -45,12 +43,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void ProcessClick()
         {
-            if (polygonAddedThisFrame) //don't immediately deselect a just created polygon
-            {
-                polygonAddedThisFrame = false;
-                return;
-            }
-
             var camera = Camera.main;
             Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(camera);
             var worldPoint = pointerToWorldPosition.WorldPoint.ToUnity();
