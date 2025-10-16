@@ -3627,7 +3627,7 @@ PrefabInstance:
     - target: {fileID: 4613295430413550333, guid: c29cb0a38866248d5bc0fd698030e4ed,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4613295430413550333, guid: c29cb0a38866248d5bc0fd698030e4ed,
         type: 3}
@@ -3702,6 +3702,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2160824944966974701}
+    - targetCorrespondingSourceObject: {fileID: 180296258793536150, guid: c29cb0a38866248d5bc0fd698030e4ed,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3474134684210662252}
   m_SourcePrefab: {fileID: 100100000, guid: c29cb0a38866248d5bc0fd698030e4ed, type: 3}
 --- !u!1 &2021577424332814385 stripped
 GameObject:
@@ -3728,6 +3732,34 @@ MonoBehaviour:
       - m_Target: {fileID: 3615452253716338041}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.Snackbar, Assembly-CSharp
         m_MethodName: DisplayMessage
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &3474134684210662252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2021577424332814385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42e0c5bc301d6444a8cc7d3da9ce4b50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 4d73fc8257f515a4a82a6c22000509ab, type: 2}
+  trigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3615452253716338041}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.UI.Snackbar, eu.netherlands3d.twin
+        m_MethodName: DisplayError
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

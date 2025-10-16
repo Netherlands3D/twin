@@ -10,6 +10,8 @@ namespace Netherlands3D.Twin.UI
         [SerializeField] private float waitTime = 5f;
         [SerializeField] private Slider slider;
         [SerializeField] private TextMeshProUGUI text;
+        [SerializeField] private Color infoColor = Color.black;
+        [SerializeField] private Color errorColor = Color.red;
 
         private Coroutine activeCoroutine;
 
@@ -40,16 +42,23 @@ namespace Netherlands3D.Twin.UI
         {
             DisableSnackbar();
             text.text = newText;
-            RecalculateHeight();    
+            text.color = infoColor;
             gameObject.SetActive(true);
+            StartCoroutine(RebuildLayout());
         }
 
-        private void RecalculateHeight()
+        private IEnumerator RebuildLayout()
         {
-            var rectTransform = GetComponent<RectTransform>();
-            var margin = text.GetComponent<RectTransform>().anchoredPosition.y;
-            margin = Mathf.Abs(margin);
-            rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, text.preferredHeight + 2 * margin);
+            // Wait a frame
+            yield return null;
+            
+            LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
+        }
+
+        public void DisplayError(string newText)
+        {
+            DisplayMessage(newText);
+            text.color = errorColor;
         }
 
         private IEnumerator StartTimer()

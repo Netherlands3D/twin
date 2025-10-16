@@ -84,13 +84,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             // TODO: In the future this should be refactored out of this class - it is now needed because
             // deserialisation of the project data and reconstitution of the visualisation classes is not
             // separated but this would be an awesome future step
-            await App.Layers.Add(this);
+            await App.Layers.Visualize(this);
             RegisterEventListeners();
         }
 
         private async void AddToProject(Action<ReferencedLayerData> onComplete = null)
         {
-            await App.Layers.Add(this);
+            await App.Layers.Visualize(this);
             
             // AddDefaultLayer should be after setting the reference so the reference is assigned when
             // the NewLayer event is called
