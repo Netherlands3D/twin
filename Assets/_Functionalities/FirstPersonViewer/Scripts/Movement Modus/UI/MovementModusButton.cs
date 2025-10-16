@@ -1,11 +1,7 @@
 using Netherlands3D.FirstPersonViewer.Events;
-using Netherlands3D.FirstPersonViewer.UI;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Twin.UI.Tooltips;
-using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 

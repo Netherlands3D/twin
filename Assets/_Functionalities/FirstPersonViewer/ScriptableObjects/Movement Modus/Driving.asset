@@ -42,6 +42,7 @@ MonoBehaviour:
     - rid: 3281392767919718510
     - rid: 3281392767919718512
     - rid: 3281392767919718513
+    - rid: 3281392767919718550
   references:
     version: 2
     RefIds:
@@ -100,3 +101,14 @@ MonoBehaviour:
         defaultValue: 5
         minValue: 2
         maxValue: 25
+    - rid: 3281392767919718550
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+        asm: eu.netherlands3d.twin}
+      data:
+        settingName: TurnSpeed
+        displayName: Draaisnelheid
+        isVisible: 1
+        units: 
+        defaultValue: 100
+        minValue: 50
+        maxValue: 200

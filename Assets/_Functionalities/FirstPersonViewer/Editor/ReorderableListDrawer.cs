@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using UnityEngine;
 using UnityEditor;
 using System;
@@ -170,3 +172,4 @@ namespace Netherlands3D.FirstPersonViewer.Temp
 
     }
 }
+#endif

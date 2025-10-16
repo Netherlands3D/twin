@@ -70,6 +70,6 @@ MonoBehaviour:
         displayName: Snelheid
         isVisible: 1
         units: km/u
-        defaultValue: 15
+        defaultValue: 40
         minValue: 1
         maxValue: 500
