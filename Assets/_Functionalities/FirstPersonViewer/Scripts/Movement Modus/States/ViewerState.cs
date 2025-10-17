@@ -1,3 +1,4 @@
+using Netherlands3D.FirstPersonViewer.Temp;
 using Netherlands3D.Services;
 using UnityEngine;
 
@@ -12,7 +13,12 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         protected Transform transform;
         protected FirstPersonViewerData viewerData;
 
-        //[Header("Settings")]
+        [field:Header("Settings")]
+        [field:SerializeField] protected float SpeedMultiplier { private set; get; }
+        [field: SerializeField] public float GroundResetHeightOffset { private set; get; }
+
+        [Header("Viewer Settings")]
+        [SerializeField] protected MovementLabel viewHeightSettomg;
 
         public void Initialize(FirstPersonViewerStateMachine owner, FirstPersonViewer viewer, FirstPersonViewerInput input)
         {
@@ -25,13 +31,27 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             viewerData = ServiceLocator.GetService<FirstPersonViewerData>();
         }
 
-        public virtual void OnEnter() { }
+        public virtual void OnEnter()
+        {
+            //Prevents the up teleportation when switching to flying state and back.
+            if (viewer.FirstPersonCamera.transform.localPosition.y == 0)
+            {
+                if (viewerData.ViewerSetting.TryGetValue(viewHeightSettomg.settingName, out object value) && value is float height)
+                {
+                    viewer.transform.position = viewer.transform.position + Vector3.down * height;
+                    viewer.FirstPersonCamera.transform.localPosition = Vector3.up * height;
+                }
+            }
+
+            //Get Rotation this depends on the current Camera Constrain
+            Vector3 euler = viewer.FirstPersonCamera.GetEulerRotation();
+            viewer.transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
+            viewer.FirstPersonCamera.transform.localRotation = Quaternion.Euler(euler.x, 0f, 0f);
+
+            viewer.GetGroundPosition();
+        }
+
         public virtual void OnExit() { }
         public virtual void OnUpdate() { }
-
-        public virtual void ResetToGround()
-        {
-
-        }
     }
 }

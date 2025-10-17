@@ -63,7 +63,8 @@ namespace Netherlands3D.FirstPersonViewer
             //$$ Only supports floats for now should be revisited
             foreach (ViewerSetting setting in CurrentMovement.editableSettings.list)
             {
-                ViewerSettingsEvents<float>.Invoke(setting.settingsLabel.settingName, (float)setting.GetValue());
+                ViewerSettingsEvents<float>.Invoke(setting.settingsLabel, (float)setting.GetValue());
+                ViewerEvents.onSettingChanged?.Invoke(setting.settingsLabel.settingName, setting.GetValue());
             }
         }
 

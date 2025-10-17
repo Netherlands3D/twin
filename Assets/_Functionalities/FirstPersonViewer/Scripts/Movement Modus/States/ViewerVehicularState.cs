@@ -14,25 +14,23 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         private float deceleration;
         private float turnSpeed;
 
+        [SerializeField] private MovementLabel accelerationSetting;
+        [SerializeField] private MovementLabel decelerationSetting;
+        [SerializeField] private MovementLabel turnSpeedSetting;
+
+
         public override void OnEnter()
         {
-            viewer.transform.position = viewer.transform.position + Vector3.down * viewer.MovementModus.viewHeight;
-            viewer.FirstPersonCamera.transform.localPosition = Vector3.up * viewer.MovementModus.viewHeight;
-
-            //Get Rotation this depends on the current Camera Constrain
-            Vector3 euler = viewer.FirstPersonCamera.GetEulerRotation();
-            viewer.transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
-            viewer.FirstPersonCamera.transform.localRotation = Quaternion.Euler(euler.x, 0f, 0f);
+            base.OnEnter();
 
             currentSpeed = 0;
 
-            viewer.GetGroundPosition();
             ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_NONE);
             ViewerEvents.OnResetToGround += ResetToGround;
 
-            ViewerSettingsEvents<float>.AddListener("Acceleration", SetAcceleration);
-            ViewerSettingsEvents<float>.AddListener("Deceleration", SetDeceleration);
-            ViewerSettingsEvents<float>.AddListener("TurnSpeed", SetTurnSpeed);
+            ViewerSettingsEvents<float>.AddListener(accelerationSetting, SetAcceleration);
+            ViewerSettingsEvents<float>.AddListener(decelerationSetting, SetDeceleration);
+            ViewerSettingsEvents<float>.AddListener(turnSpeedSetting, SetTurnSpeed);
         }
 
         public override void OnUpdate()
@@ -49,19 +47,19 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             ViewerEvents.OnResetToGround -= ResetToGround;
 
-            ViewerSettingsEvents<float>.RemoveListener("Acceleration", SetAcceleration);
-            ViewerSettingsEvents<float>.RemoveListener("Deceleration", SetDeceleration);
-            ViewerSettingsEvents<float>.RemoveListener("TurnSpeed", SetTurnSpeed);
+            ViewerSettingsEvents<float>.RemoveListener(accelerationSetting, SetAcceleration);
+            ViewerSettingsEvents<float>.RemoveListener(decelerationSetting, SetDeceleration);
+            ViewerSettingsEvents<float>.RemoveListener(turnSpeedSetting, SetTurnSpeed);
         }
 
         private void MoveVehicle(Vector2 moveInput)
         {
-            float speedMultiplier = input.SprintAction.IsPressed() ? viewer.MovementModus.speedMultiplier : 1;
+            float currentMultiplier = input.SprintAction.IsPressed() ? SpeedMultiplier : 1;
 
-            float targetSpeed = moveInput.y * viewer.MovementSpeed * speedMultiplier;
+            float targetSpeed = moveInput.y * viewer.MovementSpeed * currentMultiplier;
 
-            if (Mathf.Abs(targetSpeed) > 0.1f && viewer.isGrounded) currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * speedMultiplier * Time.deltaTime);
-            else currentSpeed = Mathf.MoveTowards(currentSpeed, 0, deceleration * speedMultiplier * Time.deltaTime);
+            if (Mathf.Abs(targetSpeed) > 0.1f && viewer.isGrounded) currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * currentMultiplier * Time.deltaTime);
+            else currentSpeed = Mathf.MoveTowards(currentSpeed, 0, deceleration * currentMultiplier * Time.deltaTime);
 
             transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
 

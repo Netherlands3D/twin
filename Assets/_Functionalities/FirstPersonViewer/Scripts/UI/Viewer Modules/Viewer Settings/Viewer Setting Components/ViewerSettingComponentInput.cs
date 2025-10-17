@@ -25,7 +25,7 @@ namespace Netherlands3D
             {
                 newValue = Mathf.Clamp(newValue, input.minValue, input.maxValue);
 
-                ViewerSettingsEvents<float>.Invoke(setting.settingsLabel.settingName, newValue);
+                ViewerSettingsEvents<float>.Invoke(setting.settingsLabel, newValue);
                 setting.OnValueChanged?.Invoke(newValue);
             } else valueInput.text = prevValue;
         }

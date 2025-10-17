@@ -9,14 +9,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public ViewerState viewerState;
 
         [Header("Movement")]
-        public float viewHeight;
-        public float fieldOfView = 60;
-        public float speedInKm;
-        [Space(20)]
-        public float speedMultiplier;
         public float maxFallingSpeed;
         public float stepHeight = 1;
-        public string viewModus;
 
         [Header("Visuals")]
         public string viewName;
@@ -24,9 +18,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public Mesh viewMesh;
         public Material[] meshMaterials;
 
-        [Header("Other")]
-        public float groundResetHeightOffset;
-
+        [Header("Editable Settings")]
         public ReorderableViewerSettingsList editableSettings = new ReorderableViewerSettingsList();
     }
 }

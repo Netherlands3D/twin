@@ -23,7 +23,6 @@ namespace Netherlands3D.FirstPersonViewer
         private FirstPersonViewerData viewerData;
 
         //Movement
-        public MovementPresets MovementModus { private set; get; }
         public float MovementSpeed { private set; get; }
         private Coordinate startPosition;
         private Quaternion startRotation;
@@ -43,7 +42,8 @@ namespace Netherlands3D.FirstPersonViewer
         public bool isGrounded;
 
         [Header("Settings")]
-
+        [SerializeField] private float stepHeight = 1.5f;
+        [SerializeField] private MovementLabel maxSpeedSetting;
 
         [Header("Main Cam")]
         [SerializeField] private float cameraHeightAboveGround;
@@ -63,7 +63,7 @@ namespace Netherlands3D.FirstPersonViewer
             meshRenderer = GetComponent<MeshRenderer>();
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
-            ViewerSettingsEvents<float>.AddListener("MaxSpeed", SetMovementSpeed);
+            ViewerSettingsEvents<float>.AddListener(maxSpeedSetting, SetMovementSpeed);
 
             ViewerEvents.OnMovementPresetChanged += SetMovementModus;
             ViewerEvents.OnViewerExited += ExitViewer;
@@ -83,7 +83,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void OnDestroy()
         {
-            ViewerSettingsEvents<float>.RemoveListener("MaxSpeed", SetMovementSpeed);
+            ViewerSettingsEvents<float>.RemoveListener(maxSpeedSetting, SetMovementSpeed);
 
             ViewerEvents.OnMovementPresetChanged -= SetMovementModus;
             ViewerEvents.OnViewerExited -= ExitViewer;
@@ -134,7 +134,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void GetGroundPosition()
         {
-            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * MovementModus.stepHeight, Vector3.down, (point, hit) =>
+            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * stepHeight, Vector3.down, (point, hit) =>
             {
                 if (hit)
                 {
@@ -167,24 +167,19 @@ namespace Netherlands3D.FirstPersonViewer
             }
         }
 
-        public void SetVelocity(Vector2 velocity) => this.velocity = velocity;
 
         private void SetMovementModus(MovementPresets movementPresets)
         {
-            MovementModus = movementPresets;
-
             if (movementPresets.viewMesh != null)
             {
                 meshFilter.mesh = movementPresets.viewMesh;
                 meshRenderer.materials = movementPresets.meshMaterials;
             }
             else meshFilter.mesh = null;
-            
 
-            fsm.SwitchState(movementPresets.viewModus);
+
+            fsm.SwitchState(movementPresets.viewerState);
         }
-
-        private void SetMovementSpeed(float speed) => MovementSpeed = speed / 3.6f;
 
         private void ResetToStart()
         {
@@ -192,7 +187,7 @@ namespace Netherlands3D.FirstPersonViewer
             transform.rotation = startRotation;
             yPositionTarget = transform.position.y;
 
-            transform.position += Vector3.up * MovementModus.groundResetHeightOffset;
+            transform.position += Vector3.up * fsm.CurrentState.GroundResetHeightOffset;
         }
 
         //Only way to block input and not include checks in every state.
@@ -210,8 +205,7 @@ namespace Netherlands3D.FirstPersonViewer
                 {
                     SetVelocity(Vector2.zero);
                     yPositionTarget = point.y;
-                    //fsm.CurrentState.ResetToGround();
-                    transform.position = new Vector3(transform.position.x, yPositionTarget + MovementModus.groundResetHeightOffset, transform.position.z);
+                    transform.position = new Vector3(transform.position.x, yPositionTarget + fsm.CurrentState.GroundResetHeightOffset, transform.position.z);
                 }
             }, snappingCullingMask);
         }
@@ -224,5 +218,8 @@ namespace Netherlands3D.FirstPersonViewer
             mainCam.orthographic = false;
             mainCam.targetDisplay = 0;
         }
+
+        public void SetVelocity(Vector2 velocity) => this.velocity = velocity;
+        private void SetMovementSpeed(float speed) => MovementSpeed = speed / 3.6f;
     }
 }

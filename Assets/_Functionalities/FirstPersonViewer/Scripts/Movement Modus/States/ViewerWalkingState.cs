@@ -11,26 +11,17 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     {
         private float jumpForce;
 
+        [SerializeField] private MovementLabel jumpFoceSetting;
+
         public override void OnEnter()
         {
-            //Prevents the up teleportation when switching to flying state and back.
-            if (viewer.FirstPersonCamera.transform.localPosition.y == 0)
-            {
-                viewer.transform.position = viewer.transform.position + Vector3.down * viewer.MovementModus.viewHeight;
-                viewer.FirstPersonCamera.transform.localPosition = Vector3.up * viewer.MovementModus.viewHeight;
-            }
+            base.OnEnter();
 
-            //Get Rotation this depends on the current Camera Constrain
-            Vector3 euler = viewer.FirstPersonCamera.GetEulerRotation();
-            viewer.transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
-            viewer.FirstPersonCamera.transform.localRotation = Quaternion.Euler(euler.x, 0f, 0f);
-
-            viewer.GetGroundPosition();
             ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_Y);
 
             //if(viewerData.ViewerSetting.ContainsKey("JumpForce")) jumpForce = (float)viewerData.ViewerSetting["JumpForce"];
 
-            ViewerSettingsEvents<float>.AddListener("JumpForce", SetJumpForce);
+            ViewerSettingsEvents<float>.AddListener(jumpFoceSetting, SetJumpForce);
         }
 
         public override void OnUpdate()
@@ -50,14 +41,14 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnExit()
         {
-            ViewerSettingsEvents<float>.RemoveListener("JumpForce", SetJumpForce);
+            ViewerSettingsEvents<float>.RemoveListener(jumpFoceSetting, SetJumpForce);
         }
 
         private void MovePlayer(Vector2 moveInput)
         {
             Vector3 direction = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
 
-            float calculatedSpeed = viewer.MovementSpeed * (input.SprintAction.IsPressed() ? viewer.MovementModus.speedMultiplier : 1);
+            float calculatedSpeed = viewer.MovementSpeed * (input.SprintAction.IsPressed() ? SpeedMultiplier : 1);
 
             transform.Translate(direction * calculatedSpeed * Time.deltaTime, Space.World);
             viewer.GetGroundPosition();

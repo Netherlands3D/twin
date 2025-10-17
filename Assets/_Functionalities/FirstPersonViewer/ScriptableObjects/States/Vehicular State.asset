@@ -12,3 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0456e01045a91a4e8de05a269bf5872, type: 3}
   m_Name: Vehicular State
   m_EditorClassIdentifier: 
+  <SpeedMultiplier>k__BackingField: 1.6
+  <GroundResetHeightOffset>k__BackingField: 0
+  viewHeightSettomg: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1, type: 2}
+  accelerationSetting: {fileID: 11400000, guid: c4f8a72cac8f9aa47bbdb5b748071e8f,
+    type: 2}
+  decelerationSetting: {fileID: 11400000, guid: 1c976e08a2553c844a59589187355643,
+    type: 2}
+  turnSpeedSetting: {fileID: 11400000, guid: bc1c13591b767444ebb45aab45fefde0, type: 2}

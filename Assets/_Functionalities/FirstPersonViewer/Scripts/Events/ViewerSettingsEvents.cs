@@ -1,3 +1,4 @@
+using Netherlands3D.FirstPersonViewer.ViewModus;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,9 +6,9 @@ namespace Netherlands3D.Events
 {
     public static class ViewerSettingsEvents<T>
     {
-        private static Dictionary<string, System.Action<T>> m_AllEventReactions = new Dictionary<string, System.Action<T>>();
+        private static Dictionary<MovementLabel, System.Action<T>> m_AllEventReactions = new Dictionary<MovementLabel, System.Action<T>>();
 
-        public static void Invoke(string settingsType, T arg)
+        public static void Invoke(MovementLabel settingsType, T arg)
         {
             if (!m_AllEventReactions.ContainsKey(settingsType))
             {
@@ -18,7 +19,7 @@ namespace Netherlands3D.Events
             m_AllEventReactions[settingsType]?.Invoke(arg);
         }
 
-        public static void AddListener(string settingsType, System.Action<T> function)
+        public static void AddListener(MovementLabel settingsType, System.Action<T> function)
         {
             if (!m_AllEventReactions.ContainsKey(settingsType))
             {
@@ -28,7 +29,7 @@ namespace Netherlands3D.Events
             m_AllEventReactions[settingsType] += function;
         }
 
-        public static void RemoveListener(string settingsType, System.Action<T> function)
+        public static void RemoveListener(MovementLabel settingsType, System.Action<T> function)
         {
             if (!m_AllEventReactions.ContainsKey(settingsType))
             {
