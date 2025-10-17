@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee67a7067d471274fb5ee9ab3988bc8f, type: 3}
   m_Name: Cycling
   m_EditorClassIdentifier: 
+  viewerState: {fileID: 11400000, guid: 130c7cf512e492a4fa526f2b64dc26f5, type: 2}
   viewHeight: 1.6
   fieldOfView: 60
   speedInKm: 40
@@ -42,10 +43,7 @@ MonoBehaviour:
       data:
         settingsLabel: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1,
           type: 2}
-        settingName: ViewHeight
-        displayName: Kijkhoogte
         isVisible: 0
-        units: m
         defaultValue: 1.6
         minValue: -20
         maxValue: 20
@@ -55,10 +53,7 @@ MonoBehaviour:
       data:
         settingsLabel: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225,
           type: 2}
-        settingName: FOV
-        displayName: Gezichtsveld
         isVisible: 1
-        units: "\xB0"
         defaultValue: 60
         minValue: 10
         maxValue: 140
@@ -68,10 +63,7 @@ MonoBehaviour:
       data:
         settingsLabel: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad,
           type: 2}
-        settingName: MaxSpeed
-        displayName: Snelheid
         isVisible: 1
-        units: km/u
         defaultValue: 40
         minValue: 1
         maxValue: 500

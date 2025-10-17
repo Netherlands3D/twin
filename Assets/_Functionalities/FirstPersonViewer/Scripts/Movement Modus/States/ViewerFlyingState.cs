@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
+    [CreateAssetMenu(fileName = "Flying State", menuName = "ScriptableObjects/FirstPersonViewer/States/Flying State")]
     public class ViewerFlyingState : ViewerState
     {
         public override void OnEnter()

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee67a7067d471274fb5ee9ab3988bc8f, type: 3}
   m_Name: Driving
   m_EditorClassIdentifier: 
+  viewerState: {fileID: 11400000, guid: 130c7cf512e492a4fa526f2b64dc26f5, type: 2}
   viewHeight: 1.2
   fieldOfView: 80
   speedInKm: 80
@@ -48,10 +49,7 @@ MonoBehaviour:
       data:
         settingsLabel: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1,
           type: 2}
-        settingName: ViewHeight
-        displayName: Kijkhoogte
         isVisible: 0
-        units: m
         defaultValue: 1.2
         minValue: -20
         maxValue: 20
@@ -61,10 +59,7 @@ MonoBehaviour:
       data:
         settingsLabel: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225,
           type: 2}
-        settingName: FOV
-        displayName: Gezichtsveld
         isVisible: 0
-        units: "\xB0"
         defaultValue: 80
         minValue: 10
         maxValue: 140
@@ -74,10 +69,7 @@ MonoBehaviour:
       data:
         settingsLabel: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad,
           type: 2}
-        settingName: MaxSpeed
-        displayName: Snelheid
         isVisible: 1
-        units: km/u
         defaultValue: 80
         minValue: 1
         maxValue: 500
@@ -87,10 +79,7 @@ MonoBehaviour:
       data:
         settingsLabel: {fileID: 11400000, guid: c4f8a72cac8f9aa47bbdb5b748071e8f,
           type: 2}
-        settingName: Acceleration
-        displayName: Acceleratie
         isVisible: 1
-        units: 
         defaultValue: 10
         minValue: 5
         maxValue: 25
@@ -100,10 +89,7 @@ MonoBehaviour:
       data:
         settingsLabel: {fileID: 11400000, guid: 1c976e08a2553c844a59589187355643,
           type: 2}
-        settingName: Deceleration
-        displayName: Deceleratie
         isVisible: 1
-        units: 
         defaultValue: 5
         minValue: 2
         maxValue: 25
@@ -113,10 +99,7 @@ MonoBehaviour:
       data:
         settingsLabel: {fileID: 11400000, guid: bc1c13591b767444ebb45aab45fefde0,
           type: 2}
-        settingName: TurnSpeed
-        displayName: Draaisnelheid
         isVisible: 1
-        units: 
         defaultValue: 100
         minValue: 50
         maxValue: 200

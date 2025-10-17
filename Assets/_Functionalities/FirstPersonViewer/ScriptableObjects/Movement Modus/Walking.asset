@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee67a7067d471274fb5ee9ab3988bc8f, type: 3}
   m_Name: Walking
   m_EditorClassIdentifier: 
+  viewerState: {fileID: 11400000, guid: bc41cb17aeb0e9e4dad0bc62ddaa02ea, type: 2}
   viewHeight: 1.75
   fieldOfView: 60
   speedInKm: 15
@@ -39,10 +40,7 @@ MonoBehaviour:
       data:
         settingsLabel: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1,
           type: 2}
-        settingName: ViewHeight
-        displayName: Kijkhoogte
         isVisible: 1
-        units: m
         defaultValue: 1.75
         minValue: -20
         maxValue: 20
@@ -52,10 +50,7 @@ MonoBehaviour:
       data:
         settingsLabel: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225,
           type: 2}
-        settingName: FOV
-        displayName: Gezichtsveld
         isVisible: 1
-        units: "\xB0"
         defaultValue: 60
         minValue: 10
         maxValue: 140
@@ -65,10 +60,7 @@ MonoBehaviour:
       data:
         settingsLabel: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad,
           type: 2}
-        settingName: MaxSpeed
-        displayName: Snelheid
         isVisible: 1
-        units: km/u
         defaultValue: 15
         minValue: 1
         maxValue: 500
@@ -78,10 +70,7 @@ MonoBehaviour:
       data:
         settingsLabel: {fileID: 11400000, guid: 3757be2fd3d1b52418f2f04fcfb09852,
           type: 2}
-        settingName: JumpForce
-        displayName: Sprong Kracht
         isVisible: 1
-        units: 
         defaultValue: 7
         minValue: 1
         maxValue: 500

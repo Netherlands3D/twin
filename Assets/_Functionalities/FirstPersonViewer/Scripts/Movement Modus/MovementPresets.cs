@@ -6,6 +6,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     [CreateAssetMenu(fileName = "Movement Presets", menuName = "ScriptableObjects/FirstPersonViewer/Movement Presets")]
     public class MovementPresets : ScriptableObject
     {
+        public ViewerState viewerState;
+
         [Header("Movement")]
         public float viewHeight;
         public float fieldOfView = 60;

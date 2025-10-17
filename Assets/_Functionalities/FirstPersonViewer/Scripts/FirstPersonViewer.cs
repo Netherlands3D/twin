@@ -4,6 +4,8 @@ using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Samplers;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer
@@ -18,6 +20,7 @@ namespace Netherlands3D.FirstPersonViewer
         private MeshRenderer meshRenderer;
         private FirstPersonViewerInput input;
         private FirstPersonViewerStateMachine fsm;
+        private FirstPersonViewerData viewerData;
 
         //Movement
         public MovementPresets MovementModus { private set; get; }
@@ -54,6 +57,8 @@ namespace Netherlands3D.FirstPersonViewer
         private void Awake()
         {
             input = GetComponent<FirstPersonViewerInput>();
+            viewerData = GetComponent<FirstPersonViewerData>();
+
             meshFilter = GetComponent<MeshFilter>();
             meshRenderer = GetComponent<MeshRenderer>();
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
@@ -88,7 +93,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetupFSM()
         {
-            ViewerState[] playerStates = GetComponents<ViewerState>();
+            ViewerState[] playerStates = viewerData.ModusSwitcher.MovementPresets.Select(preset => preset.viewerState).Distinct().ToArray();
 
             fsm = new FirstPersonViewerStateMachine(this, input, playerStates);
         }

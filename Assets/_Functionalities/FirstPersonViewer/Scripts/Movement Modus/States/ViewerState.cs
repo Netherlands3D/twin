@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
-    public abstract class ViewerState : MonoBehaviour
+    public abstract class ViewerState : ScriptableObject
     {
         protected FirstPersonViewerStateMachine owner;
         protected FirstPersonViewerInput input;

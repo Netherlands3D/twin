@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
+    [CreateAssetMenu(fileName = "Walking State", menuName = "ScriptableObjects/FirstPersonViewer/States/Walking State")]
     public class ViewerWalkingState : ViewerState
     {
         private float jumpForce;

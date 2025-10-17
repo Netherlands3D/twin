@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
+    [CreateAssetMenu(fileName = "Vehicular State", menuName = "ScriptableObjects/FirstPersonViewer/States/Vehicular State")]
     public class ViewerVehicularState : ViewerState
     {
         private float currentSpeed;

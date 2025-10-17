@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee67a7067d471274fb5ee9ab3988bc8f, type: 3}
   m_Name: Flying
   m_EditorClassIdentifier: 
+  viewerState: {fileID: 11400000, guid: 594defc4112e8534f9cc9c41b8492119, type: 2}
   viewHeight: 0
   fieldOfView: 60
   speedInKm: 45
@@ -38,10 +39,7 @@ MonoBehaviour:
       data:
         settingsLabel: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225,
           type: 2}
-        settingName: FOV
-        displayName: Gezichtsveld
         isVisible: 1
-        units: "\xB0"
         defaultValue: 60
         minValue: 10
         maxValue: 140
@@ -51,10 +49,7 @@ MonoBehaviour:
       data:
         settingsLabel: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1,
           type: 2}
-        settingName: ViewHeight
-        displayName: Kijkhoogte
         isVisible: 0
-        units: m
         defaultValue: 0
         minValue: 0
         maxValue: 0
@@ -64,10 +59,7 @@ MonoBehaviour:
       data:
         settingsLabel: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad,
           type: 2}
-        settingName: MaxSpeed
-        displayName: Snelheid
         isVisible: 1
-        units: km/u
         defaultValue: 45
         minValue: 1
         maxValue: 500
