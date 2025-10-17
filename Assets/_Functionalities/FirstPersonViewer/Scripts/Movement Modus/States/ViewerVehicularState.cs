@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Netherlands3D.Events;
 using Netherlands3D.FirstPersonViewer.Events;
 using UnityEngine;
 
@@ -7,6 +8,10 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     public class ViewerVehicularState : ViewerState
     {
         private float currentSpeed;
+
+        private float acceleration;
+        private float deceleration;
+        private float turnSpeed;
 
         public override void OnEnter()
         {
@@ -23,6 +28,10 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             viewer.GetGroundPosition();
             ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_NONE);
             ViewerEvents.OnResetToGround += ResetToGround;
+
+            ViewerSettingsEvents<float>.AddListener("Acceleration", SetAcceleration);
+            ViewerSettingsEvents<float>.AddListener("Deceleration", SetDeceleration);
+            ViewerSettingsEvents<float>.AddListener("TurnSpeed", SetTurnSpeed);
         }
 
         public override void OnUpdate()
@@ -38,6 +47,10 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public override void OnExit()
         {
             ViewerEvents.OnResetToGround -= ResetToGround;
+
+            ViewerSettingsEvents<float>.RemoveListener("Acceleration", SetAcceleration);
+            ViewerSettingsEvents<float>.RemoveListener("Deceleration", SetDeceleration);
+            ViewerSettingsEvents<float>.RemoveListener("TurnSpeed", SetTurnSpeed);
         }
 
         private void MoveVehicle(Vector2 moveInput)
@@ -46,19 +59,19 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             float targetSpeed = moveInput.y * viewer.MovementSpeed * speedMultiplier;
 
-            if (Mathf.Abs(targetSpeed) > 0.1f && viewer.isGrounded) currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, viewer.MovementModus.acceleration * speedMultiplier * Time.deltaTime);
-            else currentSpeed = Mathf.MoveTowards(currentSpeed, 0, viewer.MovementModus.deceleration * speedMultiplier * Time.deltaTime);
+            if (Mathf.Abs(targetSpeed) > 0.1f && viewer.isGrounded) currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * speedMultiplier * Time.deltaTime);
+            else currentSpeed = Mathf.MoveTowards(currentSpeed, 0, deceleration * speedMultiplier * Time.deltaTime);
 
             transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
 
             if (Mathf.Abs(currentSpeed) > 0.1f)
             {
-                float turn = moveInput.x * viewer.MovementModus.turnSpeed * Time.deltaTime * Mathf.Sign(currentSpeed);
+                float turn = moveInput.x * turnSpeed * Time.deltaTime * Mathf.Sign(currentSpeed);
                 transform.Rotate(Vector3.up * turn);
             }
             else
             {
-                float turn = moveInput.x * viewer.MovementModus.turnSpeed * .2f * Time.deltaTime;
+                float turn = moveInput.x * turnSpeed * .2f * Time.deltaTime;
                 transform.Rotate(Vector3.up * turn);
             }
 
@@ -73,5 +86,9 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             currentSpeed = 0;
         }
+
+        private void SetAcceleration(float acceleration) => this.acceleration = acceleration;
+        private void SetDeceleration(float deceleration) => this.deceleration = deceleration;
+        private void SetTurnSpeed(float turnSpeed) => this.turnSpeed = turnSpeed;
     }
 }

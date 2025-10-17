@@ -16,10 +16,10 @@ namespace Netherlands3D
         {
             this.setting = setting;
 
-            settingNameText.text = setting.displayName;
+            settingNameText.text = setting.settingsLabel.displayName;
 
-            if (setting.units == null) settingUnitText.gameObject.SetActive(false);
-            else settingUnitText.text = setting.units;
+            if (setting.settingsLabel.units == null) settingUnitText.gameObject.SetActive(false);
+            else settingUnitText.text = setting.settingsLabel.units;
 
             //ViewerSettingsEvents<>
             setting.OnValueChanged += SetValue;

@@ -12,6 +12,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         protected Transform transform;
         protected FirstPersonViewerData viewerData;
 
+        //[Header("Settings")]
+
         public void Initialize(FirstPersonViewerStateMachine owner, FirstPersonViewer viewer, FirstPersonViewerInput input)
         {
             this.owner = owner;
@@ -26,5 +28,10 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public virtual void OnEnter() { }
         public virtual void OnExit() { }
         public virtual void OnUpdate() { }
+
+        public virtual void ResetToGround()
+        {
+
+        }
     }
 }

@@ -12,15 +12,9 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public float speedInKm;
         [Space(20)]
         public float speedMultiplier;
-        public float jumpHeight;
         public float maxFallingSpeed;
         public float stepHeight = 1;
         public string viewModus;
-
-        [Header("Vehicle Settings")]
-        public float acceleration;
-        public float deceleration;
-        public float turnSpeed;
 
         [Header("Visuals")]
         public string viewName;

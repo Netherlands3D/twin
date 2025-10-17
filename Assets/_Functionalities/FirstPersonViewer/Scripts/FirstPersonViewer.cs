@@ -39,6 +39,9 @@ namespace Netherlands3D.FirstPersonViewer
         private float yPositionTarget;
         public bool isGrounded;
 
+        [Header("Settings")]
+
+
         [Header("Main Cam")]
         [SerializeField] private float cameraHeightAboveGround;
         private Camera mainCam;
@@ -202,6 +205,7 @@ namespace Netherlands3D.FirstPersonViewer
                 {
                     SetVelocity(Vector2.zero);
                     yPositionTarget = point.y;
+                    //fsm.CurrentState.ResetToGround();
                     transform.position = new Vector3(transform.position.x, yPositionTarget + MovementModus.groundResetHeightOffset, transform.position.z);
                 }
             }, snappingCullingMask);

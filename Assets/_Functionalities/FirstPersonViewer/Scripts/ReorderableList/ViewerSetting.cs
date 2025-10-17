@@ -1,3 +1,4 @@
+using Netherlands3D.FirstPersonViewer.ViewModus;
 using System;
 using UnityEngine;
 
@@ -6,14 +7,12 @@ namespace Netherlands3D.FirstPersonViewer.Temp
     [System.Serializable]
     public abstract class ViewerSetting
     {
-        [HideInInspector] public string name => settingName;
+        [HideInInspector] public string name => settingsLabel.name;
+
 
         [Header("Defaults")]
-        public string settingName;
-        public string displayName;
-        [Space()]
+        public MovementLabel settingsLabel;
         public bool isVisible = true;
-        public string units;
 
         public abstract object GetValue();
 

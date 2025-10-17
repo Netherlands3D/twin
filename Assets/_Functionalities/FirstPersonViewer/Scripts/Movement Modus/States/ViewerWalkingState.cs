@@ -27,7 +27,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             viewer.GetGroundPosition();
             ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_Y);
 
-            if(viewerData.ViewerSetting.ContainsKey("JumpForce")) jumpForce = (float)viewerData.ViewerSetting["JumpForce"];
+            //if(viewerData.ViewerSetting.ContainsKey("JumpForce")) jumpForce = (float)viewerData.ViewerSetting["JumpForce"];
 
             ViewerSettingsEvents<float>.AddListener("JumpForce", SetJumpForce);
         }

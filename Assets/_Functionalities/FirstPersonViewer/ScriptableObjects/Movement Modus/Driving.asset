@@ -16,13 +16,9 @@ MonoBehaviour:
   fieldOfView: 80
   speedInKm: 80
   speedMultiplier: 1.7
-  jumpHeight: 0
   maxFallingSpeed: 55
   stepHeight: 1.5
   viewModus: ViewerVehicularState
-  acceleration: 10
-  deceleration: 5
-  turnSpeed: 100
   viewName: Auto
   viewIcon: {fileID: 21300000, guid: dca9ce9f8c1f0d0418a06d316e41cabf, type: 3}
   viewMesh: {fileID: 1551113389355595217, guid: 1c62f1956ea89e14bbdbc700a0ec3b57,
@@ -50,6 +46,8 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
         asm: eu.netherlands3d.twin}
       data:
+        settingsLabel: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1,
+          type: 2}
         settingName: ViewHeight
         displayName: Kijkhoogte
         isVisible: 0
@@ -61,6 +59,8 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
         asm: eu.netherlands3d.twin}
       data:
+        settingsLabel: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225,
+          type: 2}
         settingName: FOV
         displayName: Gezichtsveld
         isVisible: 0
@@ -72,6 +72,8 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
         asm: eu.netherlands3d.twin}
       data:
+        settingsLabel: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad,
+          type: 2}
         settingName: MaxSpeed
         displayName: Snelheid
         isVisible: 1
@@ -83,6 +85,8 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
         asm: eu.netherlands3d.twin}
       data:
+        settingsLabel: {fileID: 11400000, guid: c4f8a72cac8f9aa47bbdb5b748071e8f,
+          type: 2}
         settingName: Acceleration
         displayName: Acceleratie
         isVisible: 1
@@ -94,6 +98,8 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
         asm: eu.netherlands3d.twin}
       data:
+        settingsLabel: {fileID: 11400000, guid: 1c976e08a2553c844a59589187355643,
+          type: 2}
         settingName: Deceleration
         displayName: Deceleratie
         isVisible: 1
@@ -105,6 +111,8 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
         asm: eu.netherlands3d.twin}
       data:
+        settingsLabel: {fileID: 11400000, guid: bc1c13591b767444ebb45aab45fefde0,
+          type: 2}
         settingName: TurnSpeed
         displayName: Draaisnelheid
         isVisible: 1

@@ -16,13 +16,9 @@ MonoBehaviour:
   fieldOfView: 60
   speedInKm: 45
   speedMultiplier: 2.75
-  jumpHeight: 0
   maxFallingSpeed: 0
   stepHeight: 1
   viewModus: ViewerFlyingState
-  acceleration: 0
-  deceleration: 0
-  turnSpeed: 0
   viewName: Vliegen
   viewIcon: {fileID: 21300000, guid: 12c7f6d079de49b439e74d7ee2d18f90, type: 3}
   viewMesh: {fileID: 174012050967936489, guid: aa52c616a7592714fa3409c656abb4ae, type: 3}
@@ -40,6 +36,8 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
         asm: eu.netherlands3d.twin}
       data:
+        settingsLabel: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225,
+          type: 2}
         settingName: FOV
         displayName: Gezichtsveld
         isVisible: 1
@@ -51,6 +49,8 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
         asm: eu.netherlands3d.twin}
       data:
+        settingsLabel: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1,
+          type: 2}
         settingName: ViewHeight
         displayName: Kijkhoogte
         isVisible: 0
@@ -62,6 +62,8 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
         asm: eu.netherlands3d.twin}
       data:
+        settingsLabel: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad,
+          type: 2}
         settingName: MaxSpeed
         displayName: Snelheid
         isVisible: 1

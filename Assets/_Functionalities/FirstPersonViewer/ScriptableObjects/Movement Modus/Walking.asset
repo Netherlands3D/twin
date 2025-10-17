@@ -16,13 +16,9 @@ MonoBehaviour:
   fieldOfView: 60
   speedInKm: 15
   speedMultiplier: 2
-  jumpHeight: 7
   maxFallingSpeed: 55
   stepHeight: 1.5
   viewModus: ViewerWalkingState
-  acceleration: 0
-  deceleration: 0
-  turnSpeed: 0
   viewName: Lopen
   viewIcon: {fileID: 21300000, guid: 4fabccc9e43961d48b9ce2684e3bc712, type: 3}
   viewMesh: {fileID: 0}
@@ -41,6 +37,8 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
         asm: eu.netherlands3d.twin}
       data:
+        settingsLabel: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1,
+          type: 2}
         settingName: ViewHeight
         displayName: Kijkhoogte
         isVisible: 1
@@ -52,6 +50,8 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
         asm: eu.netherlands3d.twin}
       data:
+        settingsLabel: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225,
+          type: 2}
         settingName: FOV
         displayName: Gezichtsveld
         isVisible: 1
@@ -63,6 +63,8 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
         asm: eu.netherlands3d.twin}
       data:
+        settingsLabel: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad,
+          type: 2}
         settingName: MaxSpeed
         displayName: Snelheid
         isVisible: 1
@@ -74,6 +76,8 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
         asm: eu.netherlands3d.twin}
       data:
+        settingsLabel: {fileID: 11400000, guid: 3757be2fd3d1b52418f2f04fcfb09852,
+          type: 2}
         settingName: JumpForce
         displayName: Sprong Kracht
         isVisible: 1
