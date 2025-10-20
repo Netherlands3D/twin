@@ -241,7 +241,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return cameraInputSystemProvider.OverLockingObject == false;
         }
 
-        private bool IsMappingVisible(IMapping mapping, string bagId)
+        public bool IsMappingVisible(IMapping mapping, string bagId)
         {
             if (mapping is MeshMapping map)
             {
