@@ -1,9 +1,8 @@
-using Netherlands3D.Events;
-using Netherlands3D.FirstPersonViewer.Temp;
+using Netherlands3D.FirstPersonViewer.ViewModus;
 using TMPro;
 using UnityEngine;
 
-namespace Netherlands3D
+namespace Netherlands3D.FirstPersonViewer.UI
 {
     public abstract class ViewerSettingComponent : MonoBehaviour
     {
@@ -21,7 +20,6 @@ namespace Netherlands3D
             if (setting.settingsLabel.units == null) settingUnitText.gameObject.SetActive(false);
             else settingUnitText.text = setting.settingsLabel.units;
 
-            //ViewerSettingsEvents<>
             setting.OnValueChanged += SetValue;
 
             SetValue(setting.GetValue());

@@ -1,10 +1,9 @@
-using Netherlands3D.FirstPersonViewer.ViewModus;
 using System;
 using UnityEngine;
 
-namespace Netherlands3D.FirstPersonViewer.Temp
+namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
-    [System.Serializable]
+    [Serializable]
     public abstract class ViewerSetting
     {
         [HideInInspector] public string name => settingsLabel.name;
@@ -19,7 +18,7 @@ namespace Netherlands3D.FirstPersonViewer.Temp
         public Action<object> OnValueChanged;
     }
 
-    [System.Serializable]
+    [Serializable]
     public class ViewerSettingValue : ViewerSetting
     {
         [Header("Settings")]
@@ -35,16 +34,6 @@ namespace Netherlands3D.FirstPersonViewer.Temp
     [Serializable]
     public class ViewerSettingLabel : ViewerSetting
     {
-        [Header("Settings")]
-        public ViewerReplaceLabel[] replaceLabel;
-
-        public override object GetValue() => replaceLabel;
-    }
-
-    [System.Serializable]
-    public struct ViewerReplaceLabel
-    {
-        public string replaceLabel;
-        public string replaceValue;
+        public override object GetValue() => 0f;
     }
 }

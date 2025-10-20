@@ -20,3 +20,4 @@ MonoBehaviour:
   decelerationSetting: {fileID: 11400000, guid: 1c976e08a2553c844a59589187355643,
     type: 2}
   turnSpeedSetting: {fileID: 11400000, guid: bc1c13591b767444ebb45aab45fefde0, type: 2}
+  currentSpeedLabel: {fileID: 11400000, guid: 4e273118145672a4caa8726c61b635f5, type: 2}

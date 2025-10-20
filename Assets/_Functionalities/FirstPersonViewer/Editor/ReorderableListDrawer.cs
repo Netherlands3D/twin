@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEditorInternal;
 
-namespace Netherlands3D.FirstPersonViewer.Temp
+namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
 
     // Custom property drawer for the dropdown

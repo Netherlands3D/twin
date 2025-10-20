@@ -1,15 +1,11 @@
-using GG.Extensions;
 using Netherlands3D.FirstPersonViewer.Events;
-using Netherlands3D.FirstPersonViewer.Temp;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Netherlands3D.FirstPersonViewer.UI
 {

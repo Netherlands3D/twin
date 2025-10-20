@@ -1,11 +1,6 @@
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.FirstPersonViewer.Events;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
-using System;
-using Netherlands3D.FirstPersonViewer.Temp;
-using Netherlands3D.Events;
 using System.Collections.Generic;
 
 namespace Netherlands3D.FirstPersonViewer

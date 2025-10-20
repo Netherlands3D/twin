@@ -18,6 +18,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         [SerializeField] private MovementLabel decelerationSetting;
         [SerializeField] private MovementLabel turnSpeedSetting;
 
+        [Header("Viewer Labels")]
+        [SerializeField] private MovementLabel currentSpeedLabel;
 
         public override void OnEnter()
         {
@@ -55,6 +57,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         private void MoveVehicle(Vector2 moveInput)
         {
             float currentMultiplier = input.SprintAction.IsPressed() ? SpeedMultiplier : 1;
+            bool isGoingBackwards = moveInput.y < 0;
+            currentMultiplier *= (isGoingBackwards ? .3f : 1);
 
             float targetSpeed = moveInput.y * viewer.MovementSpeed * currentMultiplier;
 
@@ -74,10 +78,14 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
                 transform.Rotate(Vector3.up * turn);
             }
 
-            if (currentSpeed > 0)
+            if (Mathf.Abs(currentSpeed) > 0)
             {
                 viewer.GetGroundPosition();
                 ViewerEvents.OnCameraRotation?.Invoke(viewer.FirstPersonCamera.transform.forward);
+
+                int speedInKilometers = Mathf.RoundToInt(currentSpeed * 3.6f);
+
+                ViewerSettingsEvents<string>.Invoke(currentSpeedLabel, speedInKilometers.ToString());
             }
         }
 

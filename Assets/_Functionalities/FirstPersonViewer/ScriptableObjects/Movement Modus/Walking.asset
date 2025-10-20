@@ -13,29 +13,21 @@ MonoBehaviour:
   m_Name: Walking
   m_EditorClassIdentifier: 
   viewerState: {fileID: 11400000, guid: bc41cb17aeb0e9e4dad0bc62ddaa02ea, type: 2}
-  viewHeight: 1.75
-  fieldOfView: 60
-  speedInKm: 15
-  speedMultiplier: 2
-  maxFallingSpeed: 55
-  stepHeight: 1.5
-  viewModus: ViewerWalkingState
   viewName: Lopen
   viewIcon: {fileID: 21300000, guid: 4fabccc9e43961d48b9ce2684e3bc712, type: 3}
   viewMesh: {fileID: 0}
   meshMaterials: []
-  groundResetHeightOffset: 0
   editableSettings:
     list:
-    - rid: 5560708935661650026
-    - rid: 5560708935661650027
-    - rid: 5560708935661650028
-    - rid: 5560708939449630826
+    - rid: 3281392858440663167
+    - rid: 3281392858440663168
+    - rid: 3281392858440663169
+    - rid: 3281392858440663170
   references:
     version: 2
     RefIds:
-    - rid: 5560708935661650026
-      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+    - rid: 3281392858440663167
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
         asm: eu.netherlands3d.twin}
       data:
         settingsLabel: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1,
@@ -44,18 +36,18 @@ MonoBehaviour:
         defaultValue: 1.75
         minValue: -20
         maxValue: 20
-    - rid: 5560708935661650027
-      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+    - rid: 3281392858440663168
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
         asm: eu.netherlands3d.twin}
       data:
         settingsLabel: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225,
           type: 2}
         isVisible: 1
         defaultValue: 60
-        minValue: 10
+        minValue: 1
         maxValue: 140
-    - rid: 5560708935661650028
-      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+    - rid: 3281392858440663169
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
         asm: eu.netherlands3d.twin}
       data:
         settingsLabel: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad,
@@ -64,8 +56,8 @@ MonoBehaviour:
         defaultValue: 15
         minValue: 1
         maxValue: 500
-    - rid: 5560708939449630826
-      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.Temp,
+    - rid: 3281392858440663170
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
         asm: eu.netherlands3d.twin}
       data:
         settingsLabel: {fileID: 11400000, guid: 3757be2fd3d1b52418f2f04fcfb09852,
@@ -73,4 +65,4 @@ MonoBehaviour:
         isVisible: 1
         defaultValue: 7
         minValue: 1
-        maxValue: 500
+        maxValue: 10

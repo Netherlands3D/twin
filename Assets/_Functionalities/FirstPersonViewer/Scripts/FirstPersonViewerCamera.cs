@@ -1,9 +1,6 @@
 using DG.Tweening;
-using Netherlands3D.Events;
 using Netherlands3D.FirstPersonViewer.Events;
-using Netherlands3D.FirstPersonViewer.Temp;
 using Netherlands3D.FirstPersonViewer.ViewModus;
-using System;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer

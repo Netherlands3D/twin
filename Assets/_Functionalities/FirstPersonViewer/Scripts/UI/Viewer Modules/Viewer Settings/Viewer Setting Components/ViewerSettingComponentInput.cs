@@ -1,9 +1,9 @@
-using Netherlands3D.Events;
-using Netherlands3D.FirstPersonViewer.Temp;
+using Netherlands3D.FirstPersonViewer.Events;
+using Netherlands3D.FirstPersonViewer.ViewModus;
 using TMPro;
 using UnityEngine;
 
-namespace Netherlands3D
+namespace Netherlands3D.FirstPersonViewer.UI
 {
     public class ViewerSettingComponentInput : ViewerSettingComponent
     {

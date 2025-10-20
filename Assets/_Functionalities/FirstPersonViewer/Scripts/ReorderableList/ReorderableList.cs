@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Netherlands3D.FirstPersonViewer.Temp
+namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
     [System.Serializable]
     public class ReorderableList<T>

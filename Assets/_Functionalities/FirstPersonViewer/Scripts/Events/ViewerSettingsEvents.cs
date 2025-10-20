@@ -2,7 +2,7 @@ using Netherlands3D.FirstPersonViewer.ViewModus;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Netherlands3D.Events
+namespace Netherlands3D.FirstPersonViewer.Events
 {
     public static class ViewerSettingsEvents<T>
     {

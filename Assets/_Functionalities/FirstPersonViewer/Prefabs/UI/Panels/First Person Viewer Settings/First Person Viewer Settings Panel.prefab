@@ -741,12 +741,13 @@ MonoBehaviour:
   - className: ViewerSettingValue
     prefab: {fileID: 5244323761953340163, guid: f38b307865f9c3e47a01341f297ab4fe,
       type: 3}
+  - className: ViewerSettingLabel
+    prefab: {fileID: 8854216575236322387, guid: f38aab42851dd5a429316da08cc64fc1,
+      type: 3}
   settingParent: {fileID: 245325743934915806}
-  movementPresets: {fileID: 11400000, guid: c6b5d13074e849a4b9f70302d95adabd, type: 2}
   movementModusButtonPrefab: {fileID: 463382143704097879, guid: 53f22b1e4ad9f154e8f2890cc863be25,
     type: 3}
   movementParent: {fileID: 2338016715334179219}
-  tempMovement: {fileID: 11400000, guid: 6b26168bc00d5ff4e8b4e234367924ba, type: 2}
 --- !u!114 &363397338669215778
 MonoBehaviour:
   m_ObjectHideFlags: 0
