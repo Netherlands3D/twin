@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3216191505279735774}
   - component: {fileID: 861377520161091016}
   - component: {fileID: 5252014452909758690}
+  - component: {fileID: 8173019711013435412}
   m_Layer: 5
   m_Name: Snackbar
   m_TagString: Untagged
@@ -139,6 +140,21 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &8173019711013435412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 180296258793536150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 0, y: -4}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1582814073741995884
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,7 +191,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 220.5, y: -35.364998}
-  m_SizeDelta: {x: 400, y: 0}
+  m_SizeDelta: {x: 400, y: 38.73}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7077711954579197089
 CanvasRenderer:
@@ -215,7 +231,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
+    rgba: 4283775282
   m_fontColor: {r: 0.19607843, g: 0.22352941, b: 0.33333334, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -413,7 +429,7 @@ RectTransform:
   m_Father: {fileID: 7387065595424433097}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
