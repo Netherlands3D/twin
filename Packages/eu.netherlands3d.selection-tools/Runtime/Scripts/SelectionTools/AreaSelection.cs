@@ -20,16 +20,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 namespace Netherlands3D.SelectionTools
 {
-    public class AreaSelection : MonoBehaviour
+    public class AreaSelection : PolygonInput
     {
-        [Header("Input")]
-        [SerializeField] private InputActionAsset inputActionAsset;
-        private InputActionMap areaSelectionActionMap;
         private MeshRenderer boundsMeshRenderer;
 
         [Header("Invoke")]
@@ -43,29 +39,15 @@ namespace Netherlands3D.SelectionTools
         [Header("Settings")]
         [SerializeField] private float gridSize = 100;
         [SerializeField] private float multiplyHighlightScale = 5.0f;
-        [SerializeField] private float maxSelectionDistanceFromCamera = 10000;
         [SerializeField] private bool useWorldSpace = false;
         [SerializeField] private bool blockSelectinStartByUI = true;
-
-        private InputAction pointerAction;
-        private InputAction tapAction;
-        private InputAction clickAction;
-        private InputAction modifierAction;
-
-        private Action<InputAction.CallbackContext> tapActionPerformed;
-        private Action<InputAction.CallbackContext> clickActionPerformed;
-        private Action<InputAction.CallbackContext> clickActionCanceled;
-
-        private Vector3 selectionStartPosition;
-
-        private Plane worldPlane;
 
         [SerializeField] private GameObject gridHighlight;
         [SerializeField] private GameObject selectionBlock;
         [SerializeField] private Material triplanarGridMaterial;
 
         private bool drawingArea = false;
-        
+
         public float GridSize => gridSize;
 
         private Vector3 gridOffset;
@@ -78,18 +60,14 @@ namespace Netherlands3D.SelectionTools
             set
             {
                 gridOffset = value;
-                if(triplanarGridMaterial)
+                if (triplanarGridMaterial)
                     triplanarGridMaterial.SetVector("_TriplanarGridOffset", value);
             }
         }
 
-        void Awake()
+        protected override void Awake()
         {
-            if(!inputActionAsset)
-            {
-                Debug.LogWarning("No input asset set. Please add the reference in the inspector.", this.gameObject);
-                return;
-            }
+            base.Awake();
             if (!selectionBlock)
             {
                 Debug.LogWarning("The selection block reference is not set in the inspector. Please make sure to set the reference.", this.gameObject);
@@ -98,19 +76,10 @@ namespace Netherlands3D.SelectionTools
             boundsMeshRenderer = selectionBlock.GetComponent<MeshRenderer>();
             selectionBlock.SetActive(false);
 
-            areaSelectionActionMap = inputActionAsset.FindActionMap("AreaSelection");
-            tapAction = areaSelectionActionMap.FindAction("Tap");
-            clickAction = areaSelectionActionMap.FindAction("Click");
-            pointerAction = areaSelectionActionMap.FindAction("Point");
-            modifierAction = areaSelectionActionMap.FindAction("Modifier");
-
-            tapActionPerformed = context => Tap();
-            clickActionPerformed = context => StartClick();
-            clickActionCanceled = context => Release();
-
             worldPlane = (useWorldSpace) ? new Plane(Vector3.up, Vector3.zero) : new Plane(this.transform.up, this.transform.position);
         }
 
+#if UNITY_EDITOR
         private void OnValidate()
         {
             if(selectionBlock)
@@ -122,38 +91,25 @@ namespace Netherlands3D.SelectionTools
             if(triplanarGridMaterial)
                triplanarGridMaterial.SetFloat("GridSize", 1.0f / gridSize);
         }
+#endif       
 
-        private void OnEnable()
+        protected override void OnDisable()
         {
-            areaSelectionActionMap.Enable();
-
-            tapAction.performed += tapActionPerformed;
-            clickAction.performed += clickActionPerformed;
-            clickAction.canceled += clickActionCanceled;
-        }
-
-        private void OnDisable()
-        {
+            base.OnDisable();
             drawingArea = false;
             selectionBlock.SetActive(false);
-            blockCameraDragging.Invoke(false);
-            areaSelectionActionMap.Disable();
-
-            tapAction.performed -= tapActionPerformed;
-            clickAction.performed -= clickActionPerformed;
-            clickAction.canceled -= clickActionCanceled;
         }
 
-        private void Update()
+        protected override void Update()
         {
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
             var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
             var currentWorldCoordinate = GetGridPosition(worldPosition);
             gridHighlight.transform.position = currentWorldCoordinate;
 
-            if (!drawingArea && clickAction.IsPressed() && modifierAction.IsPressed() )
+            if (!drawingArea && clickAction.IsPressed() && modifierAction.IsPressed())
             {
-                if(blockSelectinStartByUI && Interface.PointerIsOverUI())
+                if (blockSelectinStartByUI && Interface.PointerIsOverUI())
                     return;
 
                 drawingArea = true;
@@ -170,10 +126,10 @@ namespace Netherlands3D.SelectionTools
                 DrawSelectionArea(selectionStartPosition, currentWorldCoordinate);
             }
         }
-        
-        private void Tap()
+
+        protected override void Tap()
         {
-            if(blockSelectinStartByUI && Interface.PointerIsOverUI())
+            if (blockSelectinStartByUI && Interface.PointerIsOverUI())
                 return;
 
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
@@ -183,9 +139,9 @@ namespace Netherlands3D.SelectionTools
             MakeSelection();
         }
 
-        private void StartClick()
+        protected override void StartClick()
         {
-            if(Interface.PointerIsOverUI())
+            if (Interface.PointerIsOverUI())
                 return;
 
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
@@ -193,7 +149,7 @@ namespace Netherlands3D.SelectionTools
             selectionStartPosition = GetGridPosition(worldPosition);
         }
 
-        private void Release()
+        protected override void Release()
         {
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
             var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
@@ -258,7 +214,7 @@ namespace Netherlands3D.SelectionTools
                     (currentWorldCoordinate.x - startWorldCoordinate.x) + ((xDifference < 0) ? -gridSize : gridSize),
                     gridSize,
                     (currentWorldCoordinate.z - startWorldCoordinate.z) + ((zDifference < 0) ? -gridSize : gridSize));
-            
+
             var bounds = boundsMeshRenderer.bounds;
             whenDrawingArea.Invoke(bounds);
         }
@@ -270,7 +226,7 @@ namespace Netherlands3D.SelectionTools
 
         public void ReselectAreaFromPolygon(List<Vector3> points)
         {
-            Bounds bounds = new Bounds(points[0],Vector3.zero);
+            Bounds bounds = new Bounds(points[0], Vector3.zero);
             for (var i = 1; i < points.Count; i++)
             {
                 bounds.Encapsulate(points[i]);
@@ -279,8 +235,13 @@ namespace Netherlands3D.SelectionTools
             bounds.Expand(-0.01f * Vector3.one); // inset the bounds slightly to avoid issues with reselecting the exact edge 
             selectionStartPosition = GetGridPosition(bounds.min);
             var selectionEndPosition = GetGridPosition(bounds.max);
-            
+
             DrawSelectionArea(selectionStartPosition, selectionEndPosition);
+        }
+
+        public override void SetDrawMode(DrawMode mode)
+        {
+            this.mode = mode;
         }
     }
 }

@@ -43,15 +43,15 @@ namespace Netherlands3D.SelectionTools
             Edit
         }
 
-        [Header("Input")] 
+        [Header("Input")]
         [SerializeField] private InputActionAsset inputActionAsset;
         private InputActionMap polygonSelectionActionMap;
 
-        [Header("Settings")] 
+        [Header("Settings")]
         [SerializeField] Color lineColor = Color.red;
         [SerializeField] Color closedLoopLineColor = Color.red;
         [SerializeField] private float lineWidthMultiplier = 10.0f;
-        [SerializeField] private float maxSelectionDistanceFromCamera = 10000;
+        [SerializeField] protected float maxSelectionDistanceFromCamera = 10000;
         [SerializeField] private bool snapToStart = true;
         [SerializeField, Tooltip("Closing a polygon shape is required. If set to false, you can output lines.")] private bool requireClosedPolygon = true;
         [SerializeField, Tooltip("If you click close to the starting point the loop will finish")] private bool closeLoopAtStartPoint = true;
@@ -67,7 +67,7 @@ namespace Netherlands3D.SelectionTools
         [SerializeField] private bool displayLineUntilRedraw = true;
         [SerializeField] private bool clearOnEnable = false;
         [SerializeField] private LayerMask lockInputLayers = 32; //UI layer 5th bit is a 1
-        [SerializeField] private DrawMode mode = DrawMode.CreateAndEdit;
+        [SerializeField] protected DrawMode mode = DrawMode.CreateAndEdit;
         public DrawMode Mode => mode;
 
         protected InputAction pointerAction;
@@ -114,11 +114,11 @@ namespace Netherlands3D.SelectionTools
         [SerializeField] private PolygonDragHandle handleTemplate;
         private List<PolygonDragHandle> handles = new List<PolygonDragHandle>();
 
-        [Header("Invoke")] 
+        [Header("Invoke")]
         public UnityEvent<bool> blockCameraDrag;
         public UnityEvent<List<Vector3>> createdNewPolygonArea;
-        
-        [Header("Optional Invoke")] 
+
+        [Header("Optional Invoke")]
         public UnityEvent<List<Vector3>> editedPolygonArea;
 
         [Tooltip("Contains the list of points the line is made of")]
@@ -444,7 +444,7 @@ namespace Netherlands3D.SelectionTools
             FinishPolygon(isNewPolygon);
         }
 
-        private void Tap()
+        protected virtual void Tap()
         {
             if (mode == DrawMode.Edit)
             {
@@ -668,13 +668,13 @@ namespace Netherlands3D.SelectionTools
             }
         }
 
-        private void StartClick()
+        protected virtual void StartClick()
         {
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
             selectionStartPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
         }
 
-        private void Release()
+        protected virtual void Release()
         {
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
             var selectionEndPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
@@ -712,7 +712,7 @@ namespace Netherlands3D.SelectionTools
             polygonFinished = true;
         }
 
-        public void SetDrawMode(DrawMode mode)
+        public virtual void SetDrawMode(DrawMode mode)
         {
             this.mode = mode;
 
