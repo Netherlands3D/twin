@@ -31,13 +31,6 @@ namespace Netherlands3D.Twin.UI
                 StopCoroutine(activeCoroutine);
         }
 
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            DisplayMessage(text.text);
-        }
-#endif
-
         public void DisplayMessage(string newText)
         {
             DisableSnackbar();
