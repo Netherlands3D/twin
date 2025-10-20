@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <SpeedMultiplier>k__BackingField: 2.75
   <GroundResetHeightOffset>k__BackingField: 1.5
-  viewHeightSettomg: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1, type: 2}
+  viewHeightSetting: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1, type: 2}

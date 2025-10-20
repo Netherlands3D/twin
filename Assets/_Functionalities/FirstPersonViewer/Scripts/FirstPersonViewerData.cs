@@ -7,7 +7,8 @@ namespace Netherlands3D.FirstPersonViewer
 {
     public class FirstPersonViewerData : MonoBehaviour
     {
-        public Dictionary<string, object> ViewerSetting { get; private set; }
+        //Maybe move the settings data to the ScriptableObject instead of having a string based 
+        private Dictionary<string, object> viewerSetting;
 
         [field:SerializeField] public Camera FPVCamera { private set; get; }
         [field:SerializeField] public MovementModusSwitcher ModusSwitcher { private set; get; } 
@@ -15,7 +16,7 @@ namespace Netherlands3D.FirstPersonViewer
         private void OnEnable()
         {
             FPVCamera = GetComponentInChildren<Camera>();
-            ViewerSetting = new Dictionary<string, object>();
+            viewerSetting = new Dictionary<string, object>();
 
             ViewerEvents.onSettingChanged += SettingsChanged;
         }
@@ -27,14 +28,19 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SettingsChanged(string setting, object value)
         {
-            if(ViewerSetting.ContainsKey(setting)) ViewerSetting[setting] = value;
-            else ViewerSetting.Add(setting, value);
+            if(viewerSetting.ContainsKey(setting)) viewerSetting[setting] = value;
+            else viewerSetting.Add(setting, value);
         }
 
         public object GetSettingValue(string setting)
         {
-            if (ViewerSetting.ContainsKey(setting)) return ViewerSetting[setting];
+            if (viewerSetting.ContainsKey(setting)) return viewerSetting[setting];
             else return null;
+        }
+
+        public bool TryGetValue(string setting, out object value)
+        {
+            return viewerSetting.TryGetValue(setting, out value);
         }
     }
 }

@@ -14,8 +14,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public bool isVisible = true;
 
         public abstract object GetValue();
-
-        public Action<object> OnValueChanged;
     }
 
     [Serializable]

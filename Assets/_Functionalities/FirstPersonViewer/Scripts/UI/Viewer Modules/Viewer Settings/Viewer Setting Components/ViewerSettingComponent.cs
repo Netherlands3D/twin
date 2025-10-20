@@ -20,14 +20,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             if (setting.settingsLabel.units == null) settingUnitText.gameObject.SetActive(false);
             else settingUnitText.text = setting.settingsLabel.units;
 
-            setting.OnValueChanged += SetValue;
-
             SetValue(setting.GetValue());
-        }
-
-        private void OnDestroy()
-        {
-            setting.OnValueChanged -= SetValue;
         }
 
         public abstract void SetValue(object value);

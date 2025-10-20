@@ -12,12 +12,12 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         protected Transform transform;
         protected FirstPersonViewerData viewerData;
 
-        [field:Header("Settings")]
-        [field:SerializeField] protected float SpeedMultiplier { private set; get; }
+        [field: Header("Settings")]
+        [field: SerializeField] protected float SpeedMultiplier { private set; get; }
         [field: SerializeField] public float GroundResetHeightOffset { private set; get; }
 
         [Header("Viewer Settings")]
-        [SerializeField] protected MovementLabel viewHeightSettomg;
+        [SerializeField] protected MovementLabel viewHeightSetting;
 
         public void Initialize(FirstPersonViewerStateMachine owner, FirstPersonViewer viewer, FirstPersonViewerInput input)
         {
@@ -32,14 +32,10 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public virtual void OnEnter()
         {
-            //Prevents the up teleportation when switching to flying state and back.
-            if (viewer.FirstPersonCamera.transform.localPosition.y == 0)
+            if (viewerData.TryGetValue(viewHeightSetting.settingName, out object value) && value is float height)
             {
-                if (viewerData.ViewerSetting.TryGetValue(viewHeightSettomg.settingName, out object value) && value is float height)
-                {
-                    viewer.transform.position = viewer.transform.position + Vector3.down * height;
-                    viewer.FirstPersonCamera.transform.localPosition = Vector3.up * height;
-                }
+                viewer.transform.position += Vector3.down * height;
+                viewer.FirstPersonCamera.transform.localPosition = Vector3.up * height;
             }
 
             //Get Rotation this depends on the current Camera Constrain

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <SpeedMultiplier>k__BackingField: 1.6
   <GroundResetHeightOffset>k__BackingField: 0
-  viewHeightSettomg: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1, type: 2}
+  viewHeightSetting: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1, type: 2}
   accelerationSetting: {fileID: 11400000, guid: c4f8a72cac8f9aa47bbdb5b748071e8f,
     type: 2}
   decelerationSetting: {fileID: 11400000, guid: 1c976e08a2553c844a59589187355643,

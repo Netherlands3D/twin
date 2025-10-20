@@ -21,12 +21,13 @@ namespace Netherlands3D.FirstPersonViewer.UI
         {
             ViewerSettingValue input = setting as ViewerSettingValue;
 
+            //We assume that the value is a float value. That's prob not a nice thing to do :/
             if (float.TryParse(value, out float newValue))
             {
                 newValue = Mathf.Clamp(newValue, input.minValue, input.maxValue);
 
                 ViewerSettingsEvents<float>.Invoke(setting.settingsLabel, newValue);
-                setting.OnValueChanged?.Invoke(newValue);
+                SetValue(newValue);
             } else valueInput.text = prevValue;
         }
     }
