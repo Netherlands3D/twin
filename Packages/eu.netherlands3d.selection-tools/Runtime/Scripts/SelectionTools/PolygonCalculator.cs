@@ -111,15 +111,16 @@ namespace Netherlands3D.SelectionTools
         /// </summary>
         /// <param name="points"></param>
         /// <returns>true if the polygon is clockwise; false if the polygon is counter-clockwise</returns>
-        public static bool PolygonIsClockwise(IList<Vector2> points) //todo: make input parameter 2D since y component is not used
+        public static bool PolygonIsClockwise(IList<Vector2> points)
         {
             double sum = 0;
-            for (int i = 0; i < points.Count - 1; i++)
+            int n = points.Count;
+            for (int i = 0; i < n; i++)
             {
-                sum += (points[i + 1].x - points[i].x) * (points[i + 1].y + points[i].y);
+                int j = (i + 1) % n; // wrap to first vertex
+                sum += (points[j].x - points[i].x) * (points[j].y + points[i].y);
             }
-            bool isClockwise = (sum > 0) ? true : false;
-            return isClockwise;
+            return sum > 0;
         }
 
         /// <summary>
