@@ -48,7 +48,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var worldPoint = pointerToWorldPosition.WorldPoint.ToUnity();
 
             foreach (var layer in Layers)
-            {
+            {               
                 bool wasSelected = ProcessPolygonSelection(layer, camera, frustumPlanes, worldPoint);
                 if (wasSelected)
                 {
