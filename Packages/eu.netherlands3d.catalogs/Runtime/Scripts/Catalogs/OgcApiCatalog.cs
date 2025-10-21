@@ -74,7 +74,8 @@ namespace Netherlands3D.Catalogs.Catalogs
             ) : base(source, pagination)
             {
                 this.recordsStrategy = recordsStrategy;
-                items = source.Items;
+                // TODO: Support Local Resource Catalogs - meaning we should also support collections with ItemType "feature"
+                items = source.Items.Where(collection => collection.ItemType == "record").ToArray();
             }
 
             public override Task<ICatalogItem> GetAsync(string id)
