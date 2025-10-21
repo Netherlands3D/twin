@@ -40,10 +40,10 @@ namespace Netherlands3D.FirstPersonViewer
         {
             if (FirstPersonViewerInput.IsInputfieldSelected()) return;
 
-            int currentIndex = MovementPresets.IndexOf(CurrentMovement) + switchDirection;
+            int currentIndex = MovementPresets.IndexOf(CurrentMovement);
 
-            if (currentIndex < 0) currentIndex = MovementPresets.Count - 1;
-            else if (currentIndex >= MovementPresets.Count) currentIndex = 0;
+            currentIndex += switchDirection % MovementPresets.Count + MovementPresets.Count;
+            currentIndex %= MovementPresets.Count;
 
             LoadMovementPreset(MovementPresets[currentIndex]);
         }
@@ -59,7 +59,6 @@ namespace Netherlands3D.FirstPersonViewer
             foreach (ViewerSetting setting in CurrentMovement.editableSettings.list)
             {
                 ViewerSettingsEvents<float>.Invoke(setting.settingsLabel, (float)setting.GetValue());
-                ViewerEvents.onSettingChanged?.Invoke(setting.settingsLabel.settingName, setting.GetValue());
             }
         }
     }

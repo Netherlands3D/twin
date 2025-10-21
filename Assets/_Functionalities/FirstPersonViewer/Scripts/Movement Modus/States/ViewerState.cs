@@ -32,11 +32,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public virtual void OnEnter()
         {
-            if (viewerData.TryGetValue(viewHeightSetting.settingName, out object value) && value is float height)
-            {
-                viewer.transform.position += Vector3.down * height;
-                viewer.FirstPersonCamera.transform.localPosition = Vector3.up * height;
-            }
+            viewer.transform.position += Vector3.down * viewer.FirstPersonCamera.CameraHeightOffset;
+            viewer.FirstPersonCamera.transform.localPosition = Vector3.up * viewer.FirstPersonCamera.CameraHeightOffset;
 
             //Get Rotation this depends on the current Camera Constrain
             Vector3 euler = viewer.FirstPersonCamera.GetEulerRotation();

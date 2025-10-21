@@ -13,7 +13,7 @@ namespace Netherlands3D.FirstPersonViewer
         [SerializeField] private FirstPersonViewerInput input;
         private Camera firstPersonViewerCamera;
 
-        private float cameraHeightOffset = 1.75f;
+        public float CameraHeightOffset { private set; get; } = 1.75f;
         private float currentsensitivity = 10f;
 
         [Header("Viewer")]
@@ -61,7 +61,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             Quaternion targetRot = Quaternion.LookRotation(forward, Vector3.up);
 
-            firstPersonViewerCamera.transform.DOLocalMove(Vector3.zero + Vector3.up * cameraHeightOffset, 2f).SetEase(Ease.InOutSine);
+            firstPersonViewerCamera.transform.DOLocalMove(Vector3.zero + Vector3.up * CameraHeightOffset, 2f).SetEase(Ease.InOutSine);
             firstPersonViewerCamera.transform.DORotateQuaternion(targetRot, 2f).SetEase(Ease.InOutSine).OnComplete(CameraSetupComplete);
         }
 
@@ -132,8 +132,8 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetCameraHeight(float height)
         {
-            cameraHeightOffset = height;
-            transform.localPosition = Vector3.up * cameraHeightOffset;
+            CameraHeightOffset = height;
+            transform.localPosition = Vector3.up * CameraHeightOffset;
         }
 
         private void SetCameraNorth()

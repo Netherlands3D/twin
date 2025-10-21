@@ -15,8 +15,6 @@ namespace Netherlands3D.FirstPersonViewer.Events
         public static Action<MovementPresets> OnMovementPresetChanged;
         public static Action<CameraConstrain> OnChangeCameraConstrain;
 
-        public static Action<string, object> onSettingChanged;
-
         public static Action<Vector3> OnCameraRotation;
 
         public static Action OnResetToStart;
