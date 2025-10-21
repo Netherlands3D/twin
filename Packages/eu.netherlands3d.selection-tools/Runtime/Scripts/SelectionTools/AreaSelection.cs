@@ -221,6 +221,11 @@ namespace Netherlands3D.SelectionTools
             whenDrawingArea.Invoke(bounds);
         }
 
+        public void ClearSelection()
+        {
+            SetSelectionVisualEnabled(false);
+        }
+
         public void SetSelectionVisualEnabled(bool enabled)
         {
             selectionBlock.gameObject.SetActive(enabled);
