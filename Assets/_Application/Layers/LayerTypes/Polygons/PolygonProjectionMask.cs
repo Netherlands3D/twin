@@ -13,6 +13,7 @@ namespace Netherlands3D
         [SerializeField] private string extentsProperty = "_MaskBBoxExtents";
         [SerializeField] private string maskTextureProperty = "_MaskTexture";
         [SerializeField] private string enableInvertMasksProperty = "_EnableInvertMasks";
+        [SerializeField] private string usedMaskChannelsProperty = "_UsedMaskChannels";
         
         [SerializeField] private Camera maskCamera;
 
@@ -54,14 +55,39 @@ namespace Netherlands3D
             forceUpdate = true;
         }
 
-        public static void AddInvertedMask(GameObject invertedMask)
+        public static int usedInvertedMasks = 0;
+        public static void AddInvertedMask(GameObject invertedMask, int maskBitIndex)
         {
+            usedInvertedMasks |= 1 << maskBitIndex;
             invertedMasks.Add(invertedMask);
+            Debug.Log("used masks: " + usedInvertedMasks);
+            Shader.SetGlobalInt("_UsedMaskChannels", usedInvertedMasks); //todo
         }
 
-        public static void RemoveInvertedMask(GameObject invertedMask)
+        public static void RemoveInvertedMask(GameObject invertedMask, int maskBitIndex)
         {
+            usedInvertedMasks &= ~(1 << maskBitIndex);
             invertedMasks.Remove(invertedMask);
+            Debug.Log("used inv masks: " + usedInvertedMasks);
+            Shader.SetGlobalInt("_UsedMaskChannels", usedInvertedMasks); //todo
+        }
+
+        public static void UpdateActiveMaskChannels(List<int> availableMaskChannels)
+        {
+            // var bitmask = GetUsedMaskChannelsBitmask(availableMaskChannels);
+            // Debug.Log("used masks: " + bitmask);
+            // Shader.SetGlobalInt("_UsedMaskChannels", bitmask); //todo
+        }
+        
+        private static int GetUsedMaskChannelsBitmask(List<int> unusedMaskChannels)
+        {
+            int bitmask = 0xFFFFFF; // Start with all bits set
+            foreach (int index in unusedMaskChannels)
+            {
+                bitmask &= ~(1 << index); // Clear the bit if the number is in the list
+            }
+
+            return bitmask & 0x7FFFFF; // Ensure only 23 bits are used
         }
     }
 }

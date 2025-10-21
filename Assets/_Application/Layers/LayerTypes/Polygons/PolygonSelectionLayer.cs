@@ -98,7 +98,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             RegisterListeners();
             availableMaskChannels.Remove(MaskBitIndex);
+            PolygonProjectionMask.UpdateActiveMaskChannels(availableMaskChannels);
         }
+
 
         public PolygonSelectionLayer(string name,
             string prefabId,
@@ -152,6 +154,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if (MaskBitIndex < 0) return;
             
             availableMaskChannels.Add(MaskBitIndex);
+            PolygonProjectionMask.UpdateActiveMaskChannels(availableMaskChannels);
             MaskDestroyed.Invoke(MaskBitIndex);
         }
 
@@ -269,7 +272,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             PolygonSelectionCalculator.UnregisterPolygon(this);
             base.DestroyLayer();
-            PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject);
+            PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject, MaskBitIndex);
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
             
             UnregisterListeners();
@@ -290,12 +293,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if (!isMask && MaskBitIndex != -1)
             {
                 availableMaskChannels.Add(MaskBitIndex);
+                PolygonProjectionMask.UpdateActiveMaskChannels(availableMaskChannels);
                 MaskBitIndex = -1;
+
             }
             else if (isMask && MaskBitIndex == -1)
             {
                 MaskBitIndex = availableMaskChannels.Last();
                 availableMaskChannels.Remove(MaskBitIndex);
+                PolygonProjectionMask.UpdateActiveMaskChannels(availableMaskChannels);
             }
             
             PolygonVisualisation.SetMaterial(isMask, MaskBitIndex, InvertMask);
@@ -313,11 +319,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             if (layer == LayerMask.NameToLayer("PolygonMask") && invert)
             {
-                PolygonProjectionMask.AddInvertedMask(PolygonVisualisation.gameObject);
+                PolygonProjectionMask.AddInvertedMask(PolygonVisualisation.gameObject, MaskBitIndex);
             }
             else
             {
-                PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject);
+                PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject, MaskBitIndex);
             }
 
             foreach (Transform t in PolygonVisualisation.gameObject.transform)
