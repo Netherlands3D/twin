@@ -333,23 +333,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             toggleScatterPropertySectionInstantiator.PropertySection.TogglePropertyToggle();
         }
 
-        public static ObjectScatterLayerGameObject ConvertToScatterLayer(HierarchicalObjectLayerGameObject objectLayerGameObject)
-        {
-            // TODO: Use LayerSpawner or App.Layers to replace the gameobject
-            var scatterPrefab = ProjectData.Current.PrefabLibrary.GetPrefabById(ObjectScatterLayerGameObject.ScatterBasePrefabID);
-            var scatterLayer = Instantiate(scatterPrefab) as ObjectScatterLayerGameObject;
-            scatterLayer.Name = objectLayerGameObject.Name + "_Scatter";
-            scatterLayer.Initialize(objectLayerGameObject, objectLayerGameObject.LayerData.ParentLayer as PolygonSelectionLayer);
-            for (var i = objectLayerGameObject.LayerData.ChildrenLayers.Count - 1; i >= 0; i--) //go in reverse to avoid a collectionWasModifiedError
-            {
-                var child = objectLayerGameObject.LayerData.ChildrenLayers[i];
-                child.SetParent(scatterLayer.LayerData, 0);
-            }
-
-            objectLayerGameObject.LayerData.DestroyLayer();
-            return scatterLayer;
-        }
-
         public override void ApplyStyling()
         {
             // Dynamically create a list of Layer features because a different set of renderers could be present after
