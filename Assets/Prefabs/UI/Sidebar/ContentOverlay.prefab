@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5318077133647845710}
   - component: {fileID: 435358712348402267}
   - component: {fileID: 8010570490677286114}
+  - component: {fileID: 8794918657291245423}
   m_Layer: 5
   m_Name: ContentOverlay
   m_TagString: Untagged
@@ -116,6 +117,49 @@ MonoBehaviour:
             type: 3}
           m_ObjectArgumentAssemblyTypeName: Netherlands3D.Twin.Tools.UI.OverlayInspector,
             eu.netherlands3d.twin
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &8794918657291245423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7237871980639567033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75b7e70441345c14ab89bfbaf4f57f18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 5ccf347bb83810047b8a973a1980a858, type: 2}
+  trigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 435358712348402267}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Tools.UI.ContentOverlayContainer,
+          eu.netherlands3d.twin
+        m_MethodName: ShowSingleOverlay
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2605067482200781903, guid: 0ee8a393c825643898749725405ccb9b,
+            type: 3}
+          m_ObjectArgumentAssemblyTypeName: Netherlands3D.Twin.Tools.UI.OverlayInspector,
+            eu.netherlands3d.twin
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11400000, guid: 6e1951c1f4825a64e8bd337dc0a50df3, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
