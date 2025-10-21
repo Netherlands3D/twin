@@ -57,7 +57,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             else if (IsObjectLayer())
             {
                 var objectLayer = LayerGameObject as HierarchicalObjectLayerGameObject;
-                LayerConverter.ConvertToLayer(objectLayer, ObjectScatterLayerGameObject.ScatterBasePrefabID, true);
+                LayerConverter.ConvertToLayer(objectLayer, ObjectScatterLayerGameObject.ScatterBasePrefabID);
             }
         }
 

@@ -126,17 +126,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         
         public ReferencedLayerData GetFirstLayerByLayerMask(LayerMask mask)
         {
-            foreach (LayerData data in ChildrenLayers)
-            {
-                if (data is ReferencedLayerData refData)
-                {
-                    if (refData.Reference.gameObject.layer == mask)
-                    {
-                        return refData;
-                    }
-                }
-            }
-            return null;
+            return ChildrenLayers.OfType<ReferencedLayerData>().FirstOrDefault(refData => refData.Reference.gameObject.layer == mask);
         }
 
         public List<LayerData> GetFlatHierarchy()

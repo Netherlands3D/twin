@@ -31,10 +31,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     {
         public override BoundingBox Bounds => new (polygonBounds);
         public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
-        public const string AreaPrefabID = "2e71ce721dd3e41c194c6fb05ad10520"; //todo: not hardcode this
-        public override string Suffix => "_Scatter";
-        private const string LayerAreaIdentifier = "Maaiveld";
-
+        
         private Mesh mesh;
         private Material material;
 
@@ -385,58 +382,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void InitializeScatterArea()
         {
             areaReferenceData.OnReferenceChanged.RemoveListener(InitializeScatterArea);
+            RecalculatePolygonsAndSamplerTexture();
 
             BoundingBox polygonBoundingBox = polygonLayer.PolygonVisualisation.Bounds;
             polygonBoundingBox.Convert(CoordinateSystem.RD);
             BinaryMeshLayer bml = ((CartesianTileLayerGameObject)areaReferenceData.Reference).Layer as BinaryMeshLayer;
-            Dictionary<Vector2Int, Tile> activeTiles = bml.tiles;
-            List<BoundingBox> tileBoundingBoxes = new List<BoundingBox>();
-            foreach (Tile tile in activeTiles.Values)
-                tileBoundingBoxes.Add(GetBoundingBoxForTile(tile));
-
-            if (tileBoundingBoxes.Count > 0 && IsAreaLoadedForBoundingBox(tileBoundingBoxes, polygonBoundingBox, activeTiles.Values.First().layer.tileSize))
+            Initialize(LayerData, settings.OriginalPrefabId);
+            bml.OnTileObjectCreated.AddListener(tile =>
             {
-                Initialize(LayerData, settings.OriginalPrefabId);
-            }
-            else
-            {
-                //TODO if a tile is missing for some reason maybe we should do nothing here?
-                //not all tiles are loaded yet to encapsulate the polygon
-                bml.OnTileObjectCreated.AddListener(tile =>
+                BoundingBox tileBox = GetBoundingBoxForTile(tile);
+                //is a tile being loaded intersecting with the polygon then regenerate the sampler texture
+                if (tileBox.Intersects(polygonBoundingBox))
                 {
-                    tileBoundingBoxes.Add(GetBoundingBoxForTile(tile));
-                    if (IsAreaLoadedForBoundingBox(tileBoundingBoxes, polygonBoundingBox, tile.layer.tileSize))
-                    {
-                        Initialize(LayerData, settings.OriginalPrefabId);
-                    }
-                });
-            }
-        }
-
-        private readonly HashSet<(int x, int y)> occupied = new HashSet<(int x, int y)>();
-        private bool IsAreaLoadedForBoundingBox(List<BoundingBox> area, BoundingBox boundingBox, int tileSize)
-        {
-            double eps = 1e-9;
-            int minX = (int)Math.Floor(boundingBox.BottomLeft.easting / tileSize);
-            int minY = (int)Math.Floor(boundingBox.BottomLeft.northing / tileSize);
-            int maxX = (int)Math.Floor((boundingBox.TopRight.easting - eps) / tileSize); 
-            int maxY = (int)Math.Floor((boundingBox.TopRight.northing - eps) / tileSize);
-
-            //the cell positions equal the bottomleft xy
-            occupied.Clear();
-            foreach (BoundingBox bb in area)
-            {
-                int x = (int)Math.Floor(bb.BottomLeft.easting / tileSize);
-                int y = (int)Math.Floor(bb.BottomLeft.northing / tileSize);
-                occupied.Add((x, y));
-            }
-
-            //are all cells occupied in the target overlaying grid
-            for (int x = minX; x <= maxX; x++)
-                for (int y = minY; y <= maxY; y++)
-                    if (!occupied.Contains((x, y)))
-                        return false; //cell not present
-            return true;
+                    RecalculatePolygonsAndSamplerTexture();
+                }
+            });
         }
 
         private BoundingBox GetBoundingBoxForTile(Tile tile)
