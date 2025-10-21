@@ -538,15 +538,15 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "2.3.1",
+      "version": "https://github.com/Netherlands3D/3DTiles.git#memorytest",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {
         "eu.netherlands3d.coordinates": "2.2.0",
         "com.unity.cloud.gltfast": "6.12.1",
         "com.unity.meshopt.decompress": "0.1.0-preview.5"
       },
-      "url": "https://package.openupm.com"
+      "hash": "462538a757e39c052af6a9076f8228e972a47228"
     },
     "eu.netherlands3d.transform-handles": {
       "version": "1.1.2",
