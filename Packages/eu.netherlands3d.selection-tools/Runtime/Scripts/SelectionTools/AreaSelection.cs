@@ -40,7 +40,6 @@ namespace Netherlands3D.SelectionTools
         [SerializeField] private float gridSize = 100;
         [SerializeField] private float multiplyHighlightScale = 5.0f;
         [SerializeField] private bool useWorldSpace = false;
-        [SerializeField] private bool blockSelectinStartByUI = true;
 
         [SerializeField] private GameObject gridHighlight;
         [SerializeField] private GameObject selectionBlock;
@@ -74,7 +73,7 @@ namespace Netherlands3D.SelectionTools
                 return;
             }
             boundsMeshRenderer = selectionBlock.GetComponent<MeshRenderer>();
-            selectionBlock.SetActive(false);
+            SetSelectionVisualEnabled(false);
 
             worldPlane = (useWorldSpace) ? new Plane(Vector3.up, Vector3.zero) : new Plane(this.transform.up, this.transform.position);
         }
@@ -97,7 +96,7 @@ namespace Netherlands3D.SelectionTools
         {
             base.OnDisable();
             drawingArea = false;
-            selectionBlock.SetActive(false);
+            SetSelectionVisualEnabled(false);
         }
 
         protected override void Update()
@@ -109,10 +108,10 @@ namespace Netherlands3D.SelectionTools
 
             if (!drawingArea && clickAction.IsPressed() && modifierAction.IsPressed())
             {
-                if (blockSelectinStartByUI && Interface.PointerIsOverUI())
-                    return;
+                if (Interface.PointerIsOverUI()) return;
 
                 drawingArea = true;
+                SetSelectionVisualEnabled(true);
                 blockCameraDragging.Invoke(true);
             }
             else if (drawingArea && !clickAction.IsPressed())
@@ -129,7 +128,7 @@ namespace Netherlands3D.SelectionTools
 
         protected override void Tap()
         {
-            if (blockSelectinStartByUI && Interface.PointerIsOverUI())
+            if (Interface.PointerIsOverUI())
                 return;
 
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
@@ -151,6 +150,9 @@ namespace Netherlands3D.SelectionTools
 
         protected override void Release()
         {
+            if (Interface.PointerIsOverUI())
+                return;
+
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
             var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
             var selectionEndPosition = GetGridPosition(worldPosition);
@@ -164,6 +166,8 @@ namespace Netherlands3D.SelectionTools
 
         private void MakeSelection()
         {
+            if (mode == DrawMode.Selected) return;
+
             var bounds = boundsMeshRenderer.bounds;
             whenAreaIsSelected.Invoke(bounds);
         }
@@ -203,8 +207,6 @@ namespace Netherlands3D.SelectionTools
         /// <param name="currentWorldCoordinate">Current pointer position in world</param>
         private void DrawSelectionArea(Vector3 startWorldCoordinate, Vector3 currentWorldCoordinate)
         {
-            selectionBlock.SetActive(true);
-
             var xDifference = (currentWorldCoordinate.x - startWorldCoordinate.x);
             var zDifference = (currentWorldCoordinate.z - startWorldCoordinate.z);
 
@@ -219,9 +221,9 @@ namespace Netherlands3D.SelectionTools
             whenDrawingArea.Invoke(bounds);
         }
 
-        public void ClearSelection()
+        public void SetSelectionVisualEnabled(bool enabled)
         {
-            selectionBlock.SetActive(false);
+            selectionBlock.gameObject.SetActive(enabled);
         }
 
         public void ReselectAreaFromPolygon(List<Vector3> points)
@@ -242,6 +244,9 @@ namespace Netherlands3D.SelectionTools
         public override void SetDrawMode(DrawMode mode)
         {
             this.mode = mode;
+
+            gridHighlight.gameObject.SetActive(mode != DrawMode.Selected);
+
         }
     }
 }

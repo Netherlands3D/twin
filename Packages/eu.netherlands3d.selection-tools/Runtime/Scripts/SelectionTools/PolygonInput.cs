@@ -40,7 +40,8 @@ namespace Netherlands3D.SelectionTools
         {
             CreateAndEdit,
             Create,
-            Edit
+            Edit,
+            Selected
         }
 
         [Header("Input")]
