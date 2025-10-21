@@ -141,7 +141,7 @@ namespace Netherlands3D.Catalogs.Catalogs
                 return Task.FromResult(new CollectionPage(
                     recordsStrategy,
                     source, 
-                    () => source.FetchItems(pagination.Limit, pagination.Offset), 
+                    async () => await source.FetchItems(pagination.Limit, pagination.Offset), 
                     pagination
                 ));
             }
@@ -153,7 +153,7 @@ namespace Netherlands3D.Catalogs.Catalogs
                 return Task.FromResult<ICatalogItemCollection>(new CollectionPage(
                     recordsStrategy, 
                     source, 
-                    () => recordsStrategy.SearchAsync(source, keyword, pagination), 
+                    async () => await recordsStrategy.SearchAsync(source, keyword, pagination), 
                     pagination
                 ));
             }
@@ -165,7 +165,7 @@ namespace Netherlands3D.Catalogs.Catalogs
                 return Task.FromResult<ICatalogItemCollection>(new CollectionPage(
                     recordsStrategy, 
                     source,
-                    () => recordsStrategy.SearchAsync(source, expression, pagination), 
+                    async () => await recordsStrategy.SearchAsync(source, expression, pagination), 
                     pagination
                 ));
             }
