@@ -15,7 +15,6 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void OnEnable()
         {
-            FPVCamera = GetComponentInChildren<Camera>();
             viewerSetting = new Dictionary<string, object>();
 
             ViewerEvents.onSettingChanged += SettingsChanged;

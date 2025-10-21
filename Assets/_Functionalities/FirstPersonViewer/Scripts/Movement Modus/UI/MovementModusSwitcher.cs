@@ -55,27 +55,12 @@ namespace Netherlands3D.FirstPersonViewer
             //Send events
             ViewerEvents.OnMovementPresetChanged?.Invoke(CurrentMovement);
 
-            //$$ Only supports floats for now should be revisited
+            //$$ TODO Only supports floats for now should be revisited
             foreach (ViewerSetting setting in CurrentMovement.editableSettings.list)
             {
                 ViewerSettingsEvents<float>.Invoke(setting.settingsLabel, (float)setting.GetValue());
                 ViewerEvents.onSettingChanged?.Invoke(setting.settingsLabel.settingName, setting.GetValue());
             }
-        }
-
-        private void LoadMoveModus(int index)
-        {
-            if (index >= MovementPresets.Count || index < 0) return;
-
-            CurrentMovement = MovementPresets[index];
-
-            //int nextIndex = index + 1;
-            //if (nextIndex >= movementPresets.Count) nextIndex = 0;
-
-
-
-            //int prevIndex = index - 1;
-            //if (prevIndex < 0) prevIndex = movementPresets.Count - 1;
         }
     }
 }

@@ -1,4 +1,5 @@
 using Netherlands3D.FirstPersonViewer.ViewModus;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,44 +7,44 @@ namespace Netherlands3D.FirstPersonViewer.Events
 {
     public static class ViewerSettingsEvents<T>
     {
-        private static Dictionary<MovementLabel, System.Action<T>> m_AllEventReactions = new Dictionary<MovementLabel, System.Action<T>>();
+        private static Dictionary<MovementLabel, Action<T>> allEventReactions = new Dictionary<MovementLabel, Action<T>>();
 
         public static void Invoke(MovementLabel settingsType, T arg)
         {
-            if (!m_AllEventReactions.ContainsKey(settingsType))
+            if (!allEventReactions.ContainsKey(settingsType))
             {
                 Debug.LogWarning($"Event reactions does not contain: {settingsType}");
                 return;
             }
 
-            m_AllEventReactions[settingsType]?.Invoke(arg);
+            allEventReactions[settingsType]?.Invoke(arg);
         }
 
-        public static void AddListener(MovementLabel settingsType, System.Action<T> function)
+        public static void AddListener(MovementLabel settingsType, Action<T> function)
         {
-            if (!m_AllEventReactions.ContainsKey(settingsType))
+            if (!allEventReactions.ContainsKey(settingsType))
             {
-                m_AllEventReactions.Add(settingsType, null);
+                allEventReactions.Add(settingsType, null);
             }
 
-            m_AllEventReactions[settingsType] += function;
+            allEventReactions[settingsType] += function;
         }
 
-        public static void RemoveListener(MovementLabel settingsType, System.Action<T> function)
+        public static void RemoveListener(MovementLabel settingsType, Action<T> function)
         {
-            if (!m_AllEventReactions.ContainsKey(settingsType))
+            if (!allEventReactions.ContainsKey(settingsType))
             {
                 Debug.LogWarning($"Event reactions does not contain: {settingsType}");
                 return;
             }
 
-            if (m_AllEventReactions[settingsType] == null)
+            if (allEventReactions[settingsType] == null)
             {
                 Debug.LogWarning($"This game event type is null: {settingsType}");
                 return;
             }
 
-            m_AllEventReactions[settingsType] -= function;
+            allEventReactions[settingsType] -= function;
         }
     }
 }
