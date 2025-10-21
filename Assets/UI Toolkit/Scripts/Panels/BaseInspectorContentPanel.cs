@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI_Toolkit.Scripts.Panels
 {
-    public abstract class BaseInspectorContentPanel : VisualElement, IContainer
+    public abstract class BaseInspectorContentPanel : VisualElement
     {
         public Action OnShow;
         public Action OnHide;
