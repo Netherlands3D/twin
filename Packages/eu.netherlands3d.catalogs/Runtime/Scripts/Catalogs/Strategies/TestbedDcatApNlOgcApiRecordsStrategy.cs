@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.OgcApi;
@@ -43,12 +44,12 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
 
         private bool IsDcatApNlDatasetLink(Link link) => link.Rel == "describes";
 
-        public override bool TryParseFeature(Feature feature, out ICatalogItem catalogItem)
+        public override async Task<ICatalogItem> ParseFeature(Feature feature)
         {
-            if (!base.TryParseFeature(feature, out catalogItem)) return false;
+            var result = await base.ParseFeature(feature);
 
             // if it is not a record, we don't need to do anything else
-            if (catalogItem is not RecordItem recordItem) return true;
+            if (result is not RecordItem recordItem) return result;
 
             var endpoint = FindEndpointLink(feature);
             var type = DetermineLinkMediaType(endpoint);
@@ -59,7 +60,7 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
                 endpoint?.Type
             );
 
-            return true;
+            return recordItem;
         }
 
         [CanBeNull]

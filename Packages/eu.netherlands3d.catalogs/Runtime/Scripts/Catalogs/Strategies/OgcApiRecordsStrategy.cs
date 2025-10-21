@@ -99,31 +99,19 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
 
         public abstract bool CanHandle(Feature feature);
 
-        public virtual ICatalogItem ParseFeature(Feature feature)
+        public virtual Task<ICatalogItem> ParseFeature(Feature feature)
         {
-            if (TryParseFeature(feature, out var catalogItem)) return catalogItem;
-
-            throw new InvalidOperationException(
-                $"Unable to parse feature {feature.Id}, it was not recognized as an OGC API Records/PyCSW feature"
-            );
-        }
-
-        public virtual bool TryParseFeature(Feature feature, out ICatalogItem catalogItem)
-        {
-            catalogItem = null;
-            if (!CanHandle(feature)) return false;
+            if (!CanHandle(feature)) return Task.FromException<ICatalogItem>(new Exception("Unsupported feature type"));
 
             feature.Properties.TryGetValue("title", out var title);
             feature.Properties.TryGetValue("description", out var description);
 
-            catalogItem = new RecordItem(
+            return Task.FromResult<ICatalogItem>(new RecordItem(
                 feature.Id,
                 title as string,
                 description as string,
                 feature.Properties.ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
-            );
-
-            return true;
+            ));
         }
     }
 }

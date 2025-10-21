@@ -178,7 +178,13 @@ namespace Netherlands3D.Catalogs.Catalogs
             public override async Task<IEnumerable<ICatalogItem>> GetItemsAsync()
             {
                 items = await itemsCallback();
-                return items.Features.Select(recordsStrategy.ParseFeature);
+                var itemsList = new List<ICatalogItem>();
+                foreach (var feature in items.Features)
+                {
+                    itemsList.Add(await recordsStrategy.ParseFeature(feature));
+                }
+                
+                return itemsList;
             }
 
             protected override async Task<BaseCatalogItemCollectionPage<Collection>> CreatePageAsyncInternal(Collection src, Pagination p)
