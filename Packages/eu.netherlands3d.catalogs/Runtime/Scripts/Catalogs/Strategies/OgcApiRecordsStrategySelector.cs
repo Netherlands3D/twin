@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Netherlands3D.OgcApi;
 using Netherlands3D.OgcApi.Features;
 
@@ -97,24 +98,15 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
             return strategies.Any(s => s.CanHandle(feature));
         }
 
-        public override ICatalogItem ParseFeature(Feature feature)
-        {
-            if (TryParseFeature(feature, out var catalogItem)) return catalogItem;
-
-            throw new InvalidOperationException("No registered strategy could parse this feature.");
-        }
-
-        public override bool TryParseFeature(Feature feature, out ICatalogItem catalogItem)
+        public override async Task<ICatalogItem> ParseFeature(Feature feature)
         {
             var strategy = strategies.FirstOrDefault(s => s.CanHandle(feature));
             if (strategy == null)
             {
-                catalogItem = null;
-                return false;                
+                throw new Exception("No registered strategy could parse this feature.");                
             }
             
-            catalogItem = strategy.ParseFeature(feature);
-            return true;
+            return await strategy.ParseFeature(feature);
         }
     }
 }

@@ -57,7 +57,7 @@ namespace Netherlands3D.Catalogs.Catalogs
                         var foundItem = await collection.GetAsync(id);
                         if (foundItem != null) return foundItem;
                     }
-                    catch (NotImplementedException _)
+                    catch (NotImplementedException)
                     {
                         Debug.LogWarning(
                             "Collection " + collection + " does not support retrieving items by their id"

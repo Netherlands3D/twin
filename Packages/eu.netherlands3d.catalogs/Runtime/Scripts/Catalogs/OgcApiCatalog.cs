@@ -74,7 +74,8 @@ namespace Netherlands3D.Catalogs.Catalogs
             ) : base(source, pagination)
             {
                 this.recordsStrategy = recordsStrategy;
-                items = source.Items;
+                // TODO: Support Local Resource Catalogs - meaning we should also support collections with ItemType "feature"
+                items = source.Items.Where(collection => collection.ItemType == "record").ToArray();
             }
 
             public override Task<ICatalogItem> GetAsync(string id)
@@ -178,7 +179,13 @@ namespace Netherlands3D.Catalogs.Catalogs
             public override async Task<IEnumerable<ICatalogItem>> GetItemsAsync()
             {
                 items = await itemsCallback();
-                return items.Features.Select(recordsStrategy.ParseFeature);
+                var itemsList = new List<ICatalogItem>();
+                foreach (var feature in items.Features)
+                {
+                    itemsList.Add(await recordsStrategy.ParseFeature(feature));
+                }
+                
+                return itemsList;
             }
 
             protected override async Task<BaseCatalogItemCollectionPage<Collection>> CreatePageAsyncInternal(Collection src, Pagination p)

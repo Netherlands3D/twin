@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.OgcApi;
 using Netherlands3D.OgcApi.Features;
-using Newtonsoft.Json.Linq;
 
 namespace Netherlands3D.Catalogs.Catalogs.Strategies
 {
@@ -45,12 +45,12 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
                && (((string)protocolObj)?.StartsWith("OGC:", StringComparison.OrdinalIgnoreCase) ?? false);
         }
 
-        public override bool TryParseFeature(Feature feature, out ICatalogItem catalogItem)
+        public override async Task<ICatalogItem> ParseFeature(Feature feature)
         {
-            if (!base.TryParseFeature(feature, out catalogItem)) return false;
+            var catalogItem = await base.ParseFeature(feature);
 
             // if it is not a record, we don't need to do anything else
-            if (catalogItem is not RecordItem recordItem) return true;
+            if (catalogItem is not RecordItem recordItem) return catalogItem;
 
             var endpoint = FindEndpointLink(feature);
             var type = DetermineLinkMediaType(endpoint);
@@ -61,7 +61,7 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
                 endpoint?.GetExtensionData<string>("protocol")
             );
 
-            return true;
+            return recordItem;
         }
 
         [CanBeNull]

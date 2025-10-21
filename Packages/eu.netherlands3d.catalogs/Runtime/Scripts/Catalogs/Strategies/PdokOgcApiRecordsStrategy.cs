@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.OgcApi;
 using Netherlands3D.OgcApi.Features;
+using UnityEngine;
 
 namespace Netherlands3D.Catalogs.Catalogs.Strategies
 {
@@ -36,12 +38,6 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
 
         private static bool IsPdokOgcApiFeaturesServiceLink(Link link)
         {
-            // Doesn't have a rel attribute, then this is not what we are looking for
-            if (link.Rel == null) return false;
-            
-            // Doesn't have a download rel, then this is not what we are looking for
-            if (!link.Rel.Equals("download", StringComparison.OrdinalIgnoreCase)) return false;
-
             // Doesn't have a protocol attribute, then this is not what we are looking for
             if (!link.ExtensionData.TryGetValue("protocol", out var protocolObj)) return false;
             
@@ -52,23 +48,13 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
             return protocol.Equals("OGC:API features", StringComparison.OrdinalIgnoreCase);
         }
 
-        public override bool TryParseFeature(Feature feature, out ICatalogItem catalogItem)
+        public override async Task<ICatalogItem> ParseFeature(Feature feature)
         {
-            if (!base.TryParseFeature(feature, out catalogItem)) return false;
-            
-            // if it is not a record, we don't need to do anything else
-            if (catalogItem is not RecordItem recordItem) return true;
-
+            // This strategy deals with API Features as supplied by PDOK - as such we do not bother with the
+            // base implementation of Parse Feature but directly return a catalog link
             var endpoint = FindEndpointLink(feature);
-            var type= DetermineLinkMediaType(endpoint);
-
-            recordItem.WithEndpoint(
-                endpoint != null ? new Uri(endpoint.Href) : null,
-                type,
-                endpoint?.GetExtensionData<string>("protocol")
-            );
             
-            return true;
+            return await OgcApiCatalog.CreateAsync(endpoint.Href);
         }
 
         private static Link FindEndpointLink(Feature item)
