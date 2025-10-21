@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class ToolbarInspector : VisualElement, IComponent
+    public partial class ToolbarInspector : VisualElement
     {
         public Toggle OpenLibrary => this.Q<Toggle>("OpenLibrary");
         private Button AddFolder => this.Q<Button>("AddFolder");

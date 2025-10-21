@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class HelpButton : UnityEngine.UIElements.Button, IComponent
+    public partial class HelpButton : UnityEngine.UIElements.Button
     {
         private Icon Icon => this.Q<Icon>("Icon");
 

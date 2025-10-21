@@ -7,32 +7,20 @@ namespace Netherlands3D.UI.ExtensionMethods
 {
     public static class VisualElementExtensions
     {
-        public static void CloneComponentTree(this IComponent component, string path = "")
+        public static void CloneComponentTree(this VisualElement component, string path = "")
         {
-            if (component is not VisualElement element)
-            {
-                Debug.LogError($"Component {component} is not a VisualElement");
-                return;
-            }
-
             if (!string.IsNullOrEmpty(path)) path += "/";
             
-            var asset = Resources.Load<VisualTreeAsset>($"UI/{path}{element.GetType().Name}");
-            asset.CloneTree(element);
+            var asset = Resources.Load<VisualTreeAsset>($"UI/{path}{component.GetType().Name}");
+            asset.CloneTree(component);
         }
         
-        public static void AddComponentStylesheet(this IComponent component, string path = "")
+        public static void AddComponentStylesheet(this VisualElement component, string path = "")
         {
-            if (component is not VisualElement element)
-            {
-                Debug.LogError($"Component {component} is not a VisualElement");
-                return;
-            }
-
             if (!string.IsNullOrEmpty(path)) path += "/";
             
-            var styleSheet = Resources.Load<StyleSheet>($"UI/{path}{element.GetType().Name}-style");
-            element.styleSheets.Add(styleSheet);
+            var styleSheet = Resources.Load<StyleSheet>($"UI/{path}{component.GetType().Name}-style");
+            component.styleSheets.Add(styleSheet);
         }
 
         public static void RemoveFromClassListStartingWith(this VisualElement element, string prefix)
