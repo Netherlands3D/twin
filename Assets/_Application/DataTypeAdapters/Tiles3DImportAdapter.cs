@@ -40,6 +40,10 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             // dus alleen schema-validatie gebruiken als strikte structuurcontrole gewenst is.
 
             using var reader = new StreamReader(localFile.LocalFilePath);
+            
+            // If it ain't JSON, don't bother
+            if (!ContentMatches.JsonObject(reader)) return false;
+            
             try
             {
                 using var jsonReader = new JsonTextReader(reader);
@@ -81,7 +85,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             }
             catch (Exception e)
             {
-                Debug.Log(e.Message);
+                Debug.LogException(e);
                 return false;
             }
         }
