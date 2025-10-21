@@ -59,7 +59,8 @@ namespace Netherlands3D.UI.Behaviours
 
             ImportAssetPanel.OnShow += OnShowImportAssetPanel;
             ImportAssetPanel.OnHide += OnHideImportAssetPanel;
-            ImportAssetPanel.FileUploadStarted += OnUploadStarted;
+            ImportAssetPanel.OpenAssetLibrary += OpenAssetLibraryClick;
+            ImportAssetPanel.FileUploadStarted += OnUploadStartedClick;
             ImportAssetPanel.UriImportStarted += OnUriImportStarted;
             
             // TODO: Remove once we have fixed the copy/paste and credential flow in UI Toolkit
@@ -78,7 +79,8 @@ namespace Netherlands3D.UI.Behaviours
 
             ImportAssetPanel.OnShow -= OnShowImportAssetPanel;
             ImportAssetPanel.OnHide -= OnHideImportAssetPanel;
-            ImportAssetPanel.FileUploadStarted -= OnUploadStarted;
+            ImportAssetPanel.OpenAssetLibrary -= OpenAssetLibraryClick;
+            ImportAssetPanel.FileUploadStarted -= OnUploadStartedClick;
             ImportAssetPanel.UriImportStarted -= OnUriImportStarted;
 
             // TODO: Remove once we have fixed the copy/paste and credential flow in UI Toolkit
@@ -192,7 +194,12 @@ namespace Netherlands3D.UI.Behaviours
             OpenAssetLibrary();
         }
 
-        private void OnUploadStarted(ClickEvent evt)
+        private void OpenAssetLibraryClick(ClickEvent evt)
+        {
+            OpenAssetLibrary();
+        }
+
+        private void OnUploadStartedClick(ClickEvent evt)
         {
             uploadFileEvent.InvokeStarted();
             
