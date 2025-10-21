@@ -8,11 +8,11 @@ using Netherlands3D.Twin.Layers.Properties;
 namespace Netherlands3D.Functionalities.Wfs.LayerPresets
 {
     [LayerPreset("wfs-layer")]
-    public sealed class WfsLayer : ILayerPreset
+    public sealed class WfsLayerPreset : ILayerPreset<WfsLayerPreset.Args>
     {
         private const string PrefabIdentifier = "b1bd3a7a50cb3bd4bb3236aadf5c32b6";
 
-        public sealed class Args : LayerPresetArgs
+        public sealed class Args : LayerPresetArgs<WfsLayerPreset>
         {
             public Uri FeatureUrl { get; }
             public string Title { get; }
@@ -30,11 +30,8 @@ namespace Netherlands3D.Functionalities.Wfs.LayerPresets
             }
         }
 
-        public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args)
+        public ILayerBuilder Apply(ILayerBuilder builder, Args args)
         {
-            if (args is not Args wfsArgs)
-                throw new ArgumentException($"Expected {nameof(Args)} for preset wfs-layer.");
-
             var color = LayerColor.Random();
 
             var styling = new Symbolizer();
@@ -43,11 +40,13 @@ namespace Netherlands3D.Functionalities.Wfs.LayerPresets
 
             return builder
                 .OfType(PrefabIdentifier)
-                .NamedAs(wfsArgs.Title)
-                .ChildOf(wfsArgs.Parent)
+                .NamedAs(args.Title)
+                .ChildOf(args.Parent)
                 .WithColor(color)
                 .SetDefaultStyling(styling)
-                .AddProperty(new LayerURLPropertyData(wfsArgs.FeatureUrl));
+                .AddProperty(new LayerURLPropertyData(args.FeatureUrl));
         }
+
+        public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args) => Apply(builder, (Args)args);
     }
 }

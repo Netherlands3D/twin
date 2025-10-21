@@ -6,11 +6,11 @@ using Netherlands3D.Twin.Projects;
 namespace Netherlands3D.Functionalities.GLBImporter.LayerPresets
 {
     [LayerPreset("gltf")]
-    public sealed class Gltf : ILayerPreset
+    public sealed class GltfPreset : ILayerPreset<GltfPreset.Args>
     {
         private const string PrefabIdentifier = "9c30c9cc071ed4343b05fb7ded7859d2";
 
-        public sealed class Args : LayerPresetArgs
+        public sealed class Args : LayerPresetArgs<GltfPreset>
         {
             public string Name { get; }
             public Uri Url { get; }
@@ -22,20 +22,17 @@ namespace Netherlands3D.Functionalities.GLBImporter.LayerPresets
             }
         }
 
-        public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args)
+        public ILayerBuilder Apply(ILayerBuilder builder, Args args)
         {
-            if (args is not Args gltfArgs)
-            {
-                throw new ArgumentException($"Expected {nameof(Args)} for preset gltf.");
-            }
-
             return builder
-                .NamedAs(gltfArgs.Name)
+                .NamedAs(args.Name)
                 .OfType(PrefabIdentifier)
                 .AddProperty(new GLBPropertyData
                 {
-                    GlbFile = AssetUriFactory.CreateProjectAssetUri(gltfArgs.Url.ToString())
+                    GlbFile = AssetUriFactory.CreateProjectAssetUri(args.Url.ToString())
                 });
         }
+
+        public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args) => Apply(builder, (Args)args);
     }
 }

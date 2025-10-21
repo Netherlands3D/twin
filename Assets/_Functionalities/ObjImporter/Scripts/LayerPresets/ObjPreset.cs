@@ -6,11 +6,11 @@ using Netherlands3D.Twin.Layers.LayerPresets;
 namespace Netherlands3D.Functionalities.OBJImporter.LayerPresets
 {
     [LayerPreset("obj")]
-    public sealed class Obj : ILayerPreset
+    public sealed class ObjPreset : ILayerPreset<ObjPreset.Args>
     {
         private const string PrefabIdentifier = "34882a73ff6122243a0e3e9811473e20";
 
-        public sealed class Args : LayerPresetArgs
+        public sealed class Args : LayerPresetArgs<ObjPreset>
         {
             public string Name { get; }
             public Uri Url { get; }
@@ -24,23 +24,20 @@ namespace Netherlands3D.Functionalities.OBJImporter.LayerPresets
             }
         }
 
-        public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args)
+        public ILayerBuilder Apply(ILayerBuilder builder, Args args)
         {
-            if (args is not Args objArgs)
+            var layerPropertyData = new OBJPropertyData { ObjFile = args.Url };
+            if (args.MtlUrl != null)
             {
-                throw new ArgumentException($"Expected {nameof(Args)} for preset obj.");
-            }
-
-            var layerPropertyData = new OBJPropertyData { ObjFile = objArgs.Url };
-            if (objArgs.MtlUrl != null)
-            {
-                layerPropertyData.MtlFile = objArgs.MtlUrl;
+                layerPropertyData.MtlFile = args.MtlUrl;
             }
 
             return builder
-                .NamedAs(objArgs.Name)
+                .NamedAs(args.Name)
                 .OfType(PrefabIdentifier)
                 .AddProperty(layerPropertyData);
         }
+
+        public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args) => Apply(builder, (Args)args);
     }
 }

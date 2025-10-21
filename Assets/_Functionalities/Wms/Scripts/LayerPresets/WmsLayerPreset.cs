@@ -6,11 +6,11 @@ using Netherlands3D.Twin.Layers.Properties;
 namespace Netherlands3D.Functionalities.Wms.LayerPresets
 {
     [LayerPreset("wms-layer")]
-    public sealed class WmsLayer : ILayerPreset
+    public sealed class WmsLayerPreset : ILayerPreset<WmsLayerPreset.Args>
     {
         private const string PrefabIdentifier = "7ddb78a6acbf44d4e84910b5684042b7";
 
-        public sealed class Args : LayerPresetArgs
+        public sealed class Args : LayerPresetArgs<WmsLayerPreset>
         {
             public Uri Url { get; }
             public MapFilters Filters { get; }
@@ -30,19 +30,16 @@ namespace Netherlands3D.Functionalities.Wms.LayerPresets
             }
         }
 
-        public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args)
+        public ILayerBuilder Apply(ILayerBuilder builder, Args args)
         {
-            if (args is not Args wmsLayerArgs)
-            {
-                throw new ArgumentException($"Expected {nameof(Args)} for preset wms-layer.");
-            }
-            
             return builder
                 .OfType(PrefabIdentifier)
-                .NamedAs(wmsLayerArgs.Filters.name)
-                .ChildOf(wmsLayerArgs.Parent)
-                .AddProperty(new LayerURLPropertyData(wmsLayerArgs.Filters.ToUrlBasedOn(wmsLayerArgs.Url)))
-                .WhenBuilt(layerData => layerData.ActiveSelf = wmsLayerArgs.DefaultEnabled);
+                .NamedAs(args.Filters.name)
+                .ChildOf(args.Parent)
+                .AddProperty(new LayerURLPropertyData(args.Filters.ToUrlBasedOn(args.Url)))
+                .WhenBuilt(layerData => layerData.ActiveSelf = args.DefaultEnabled);
         }
+
+        public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args) => Apply(builder, (Args)args);
     }
 }

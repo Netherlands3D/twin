@@ -2,7 +2,7 @@
     flex-direction: row;
     flex-shrink: 0;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .breadcrumb .leadingicon {
@@ -19,6 +19,8 @@
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
+    flex-grow: 1;
+    flex-shrink: 0;
 }
 
 .breadcrumb .crumb-link.button {

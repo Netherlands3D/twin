@@ -31,8 +31,7 @@ namespace Netherlands3D.Twin.Layers
 
         public static ILayerBuilder Create() => new LayerBuilder();
 
-        public static ILayerBuilder Create(string preset, LayerPresetArgs args) 
-            => LayerPresetRegistry.Create(preset, args);
+        public static ILayerBuilder Create(LayerPresetArgs args) => LayerPresetRegistry.Create(args);
 
         public ILayerBuilder FromUrl(Uri url) => OfType("url").At(url).WithCredentials(new Public(url));
 

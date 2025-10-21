@@ -8,11 +8,11 @@ using Netherlands3D.Twin.Layers.Properties;
 namespace Netherlands3D.Functionalities.GeoJSON.LayerPresets
 {
     [LayerPreset("geojson")]
-    public sealed class GeoJSON : ILayerPreset
+    public sealed class GeoJSONPreset : ILayerPreset<GeoJSONPreset.Args>
     {
         private const string PrefabIdentifier = "e46381d2665c69245b2475c986f6d0c4";
 
-        public sealed class Args : LayerPresetArgs
+        public sealed class Args : LayerPresetArgs<GeoJSONPreset>
         {
             public string Name { get; }
             public Uri Url { get; }
@@ -24,13 +24,8 @@ namespace Netherlands3D.Functionalities.GeoJSON.LayerPresets
             }
         }
 
-        public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args)
+        public ILayerBuilder Apply(ILayerBuilder builder, Args geoJsonArgs)
         {
-            if (args is not Args geoJsonArgs)
-            {
-                throw new ArgumentException($"Expected {nameof(Args)} for preset geojson.");
-            }
-
             var color = LayerColor.Random();
 
             var styling = new Symbolizer();
@@ -44,5 +39,8 @@ namespace Netherlands3D.Functionalities.GeoJSON.LayerPresets
                 .SetDefaultStyling(styling)
                 .AddProperty(new LayerURLPropertyData { Data = geoJsonArgs.Url });
         }
+
+        public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args)
+            => Apply(builder, (Args)args);
     }
 }

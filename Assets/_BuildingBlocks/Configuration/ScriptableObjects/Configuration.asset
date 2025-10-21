@@ -36,7 +36,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: db8c80d7396a1c04fa85faf2b38afc2f, type: 2}
   - {fileID: 11400000, guid: dbd04a92726eed247b22c8dc9eb160d8, type: 2}
   - {fileID: 11400000, guid: 553d210113cda99448fd1ca5b78512a6, type: 2}
-  - {fileID: 11400000, guid: 73566e5fce73b5440b33ed107ed5be94, type: 2}
+  - {fileID: 11400000, guid: 77c433a944001411a9376d15fb427d17, type: 2}
   corsProxyUrl: 
   OnAllowUserSettingsChanged:
     m_PersistentCalls:
