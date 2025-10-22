@@ -27,6 +27,13 @@ namespace Netherlands3D.Twin.Layers
             return await SpawnUsingLayerGameObject(layerData, prefab);
         }
 
+        public async Task<LayerGameObject> Spawn(string prefabId)
+        {
+            var prefab = prefabLibrary.GetPrefabById(prefabId);
+
+            return await SpawnObject(prefab);
+        }
+
         public async Task<LayerGameObject> Spawn(
             ReferencedLayerData layerData,
             Vector3 position,
@@ -128,6 +135,14 @@ namespace Netherlands3D.Twin.Layers
             
             var layerGameObjects = await Object.InstantiateAsync(prefab, placeholder.transform);
 
+            return layerGameObjects.FirstOrDefault();
+        }
+
+        private async Task<LayerGameObject> SpawnObject(           
+            LayerGameObject prefab
+        )
+        {
+            var layerGameObjects = await Object.InstantiateAsync(prefab);
             return layerGameObjects.FirstOrDefault();
         }
 

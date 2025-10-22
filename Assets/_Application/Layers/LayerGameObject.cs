@@ -194,7 +194,7 @@ namespace Netherlands3D.Twin.Layers
             LayerData.LayerDoubleClicked.RemoveListener(OnDoubleClick);
         }
 
-        public virtual void OnConvert(LayerGameObject previous)
+        public virtual void OnConvert(string previousId)
         {
         }
 

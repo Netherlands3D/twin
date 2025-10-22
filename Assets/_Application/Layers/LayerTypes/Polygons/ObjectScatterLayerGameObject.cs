@@ -295,7 +295,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var newPolygonParent = LayerData.ParentLayer as PolygonSelectionLayer;
             if (newPolygonParent == null) //new parent is not a polygon, so the scatter layer should revert to its original object
             {               
-                LayerConverter.ConvertToLayer(this, settings.OriginalPrefabId);
+                App.Layers.Convert(LayerData, settings.OriginalPrefabId);
                 return;
             }
 
@@ -311,9 +311,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
         }
 
-        public override void OnConvert(LayerGameObject previous)
+        public override void OnConvert(string previousId)
         {
-            Initialize(LayerData, previous.PrefabIdentifier);
+            Initialize(LayerData, previousId);
         }
 
         public List<IPropertySectionInstantiator> GetPropertySections()
