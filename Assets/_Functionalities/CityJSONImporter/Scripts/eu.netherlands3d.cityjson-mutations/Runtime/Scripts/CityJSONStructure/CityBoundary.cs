@@ -120,7 +120,6 @@ namespace Netherlands3D.CityJson.Structure
             Polygons = new List<CityPolygon>();
             foreach (var polygonNode in boundariesNode)
             {
-                //CityPolygon polygon = new CityPolygon();
                 var polygon = CityPolygon.FomJsonNode(polygonNode.Value.AsArray, combinedVertices);
                 Polygons.Add(polygon);
             }

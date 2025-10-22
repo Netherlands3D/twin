@@ -29,6 +29,9 @@ namespace Netherlands3D.Catalogs.Catalogs
             public const string OpenAPI = "OAS"; 
             public const string LandingPage = "landingpage"; 
             public const string Unknown = "UKST"; 
+            
+            // Unofficial codes
+            public const string Ogc3dTiles = "3d-tiles"; 
         }
 
         public static class Scope
@@ -53,10 +56,11 @@ namespace Netherlands3D.Catalogs.Catalogs
             
             return protocol switch
             {
-                Protocol.Wms => "application/vnd.ogc.se_xml",
+                Protocol.Wms => "application/vnd.ogc.wms_xml",
                 Protocol.Wfs => "application/vnd.ogc.wfs_xml",
                 Protocol.Wcs => "application/vnd.ogc.wcs_xml",
-                Protocol.ApiFeatures => "application/json",
+                Protocol.ApiFeatures => "application/geo+json",
+                Protocol.Ogc3dTiles => "application/json",
                 _ => null
             };
         }

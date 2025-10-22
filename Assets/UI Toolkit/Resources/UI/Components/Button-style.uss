@@ -12,7 +12,7 @@
     flex-shrink: 0;
     flex-grow: 0;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     padding: var(--button-padding);
     background-color: var(--button-bg-color);

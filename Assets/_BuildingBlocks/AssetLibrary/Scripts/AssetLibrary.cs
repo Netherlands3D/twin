@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Netherlands3D.AssetLibrary.Entries;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
@@ -25,17 +27,16 @@ namespace Netherlands3D.AssetLibrary
     public class AssetLibrary : ScriptableObject
     {
         [SerializeField] private List<AssetLibraryEntry> items = new();
+        [SerializeField] private List<string> extraCatalogs = new();
         
         // Cached list of scriptable object events that have been registered
         private readonly Dictionary<int, ScriptableObject> scriptableObjectEvents = new();
         private readonly Dictionary<string, LayerGameObject> prefabs = new();
 
-        public InMemoryCatalog Catalog { get; private set; }
+        [field:NonSerialized] public InMemoryCatalog Catalog { get; private set; }
 
-        private void OnEnable()
+        public async Task Initialize()
         {
-            // By design - the entire catalog is rebuilt every time the asset is loaded. It is the entries in this
-            // Scriptable Object that are persisted so that the catalog can be populated from the Unity editor
             Catalog = new InMemoryCatalog(
                 "application",
                 "Application",
@@ -46,6 +47,14 @@ namespace Netherlands3D.AssetLibrary
             foreach (var entry in items)
             {
                 RegisterEntry(entry);
+            }
+            
+            // Register extra catalogs as OGC API catalogs
+            // TODO: when we introduce extra types of remote Catalogs - make a service that detects the type of catalog
+            // and use the correct object construction
+            foreach (var extraCatalog in extraCatalogs)
+            {
+                Import(await OgcApiCatalog.CreateAsync(extraCatalog));
             }
         }
 

@@ -70,7 +70,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             if (layer is HierarchicalObjectLayerGameObject hierarchicalObjectLayerGameObject)
             {
-                var color = HierarchicalObjectTileLayerStyler.GetColor(hierarchicalObjectLayerGameObject);
+                var color = HierarchicalObjectLayerStyler.GetColor(hierarchicalObjectLayerGameObject);
                 this.PickColorWithoutNotify(color.HasValue ? color.Value : defaultColor);
             }
         }
@@ -85,7 +85,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             if (layer is HierarchicalObjectLayerGameObject hierarchicalObjectLayerGameObject)
             {
-                HierarchicalObjectTileLayerStyler.SetColor(hierarchicalObjectLayerGameObject, color);
+                HierarchicalObjectLayerStyler.SetColor(hierarchicalObjectLayerGameObject, color);
             }
         }
     }

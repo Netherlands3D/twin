@@ -25,7 +25,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
             path = path.TrimEnd(',');
 
             // When importing an MTL - we want to reset the coloring of the object
-            HierarchicalObjectTileLayerStyler.ResetColoring(layer);
+            HierarchicalObjectLayerStyler.ResetColoring(layer);
 
             ObjSpawner.SetMtlPathInPropertyData(path);
             ObjSpawner.StartImport();

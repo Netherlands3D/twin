@@ -3,6 +3,7 @@
     flex-wrap: wrap;
     flex-shrink: 0;
     flex-grow: 1;
+    opacity: 0;
 }
 
 .import-asset-panel .contentcontainer {
@@ -14,6 +15,9 @@
 
 .import-asset-panel.active {
     display: flex;
+    transition-property: opacity;
+    transition-duration: 0.3s;
+    opacity: 1;
 }
 
 .import-asset-panel__button-upload {

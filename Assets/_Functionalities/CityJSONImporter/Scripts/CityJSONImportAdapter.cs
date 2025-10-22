@@ -25,8 +25,7 @@ namespace Netherlands3D.Functionalities.CityJSON
         public async void Execute(LocalFile localFile)
         {
             await App.Layers.Add(
-                "cityjson", 
-                new LayerPresets.CityJSON.Args(
+                new LayerPresets.CityJSONPreset.Args(
                     CreateName(localFile), 
                     AssetUriFactory.ConvertLocalFileToAssetUri(localFile)
                 )

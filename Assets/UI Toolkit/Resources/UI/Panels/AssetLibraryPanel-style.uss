@@ -3,6 +3,7 @@
     flex-wrap: nowrap;
     flex-shrink: 1;
     flex-grow: 1;
+    opacity: 0;
 }
 
 .asset-library-panel .breadcrumb {
@@ -13,4 +14,7 @@
 
 .asset-library-panel.active {
     display: flex;
+    transition-property: opacity;
+    transition-duration: 0.3s;
+    opacity: 1;
 }
