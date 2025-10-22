@@ -295,7 +295,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var newPolygonParent = LayerData.ParentLayer as PolygonSelectionLayer;
             if (newPolygonParent == null) //new parent is not a polygon, so the scatter layer should revert to its original object
             {               
-                App.Layers.Convert(LayerData, settings.OriginalPrefabId);
+                App.Layers.ReplaceReference(LayerData, settings.OriginalPrefabId);
                 return;
             }
 

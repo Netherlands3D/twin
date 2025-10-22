@@ -52,12 +52,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             if (IsScatterLayer())
             {
                 var scatterLayer = LayerGameObject as ObjectScatterLayerGameObject;
-                App.Layers.Convert(scatterLayer.LayerData, scatterLayer.Settings.OriginalPrefabId);
+                App.Layers.ReplaceReference(scatterLayer.LayerData, scatterLayer.Settings.OriginalPrefabId);
             }
             else if (IsObjectLayer())
             {
                 var objectLayer = LayerGameObject as HierarchicalObjectLayerGameObject;
-                App.Layers.Convert(objectLayer.LayerData, ObjectScatterLayerGameObject.ScatterBasePrefabID);
+                App.Layers.ReplaceReference(objectLayer.LayerData, ObjectScatterLayerGameObject.ScatterBasePrefabID);
             }
         }
 

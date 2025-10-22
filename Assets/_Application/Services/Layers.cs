@@ -93,7 +93,7 @@ namespace Netherlands3D.Twin.Services
             return layerData;
         }
 
-        public async Task<LayerGameObject> Convert(ReferencedLayerData layerData, string prefabId)
+        public async Task<LayerGameObject> ReplaceReference(ReferencedLayerData layerData, string prefabId)
         {
             var layerGameObject = await spawner.Spawn(prefabId);
             string previousId = layerData.Reference.PrefabIdentifier;

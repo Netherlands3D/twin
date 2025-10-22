@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin.Services
         public Task<ReferencedLayerData> Add(ILayerBuilder layerBuilder);
         public Task<ReferencedLayerData> Add(ReferencedLayerData layerData);
         public Task<ReferencedLayerData> Add(ReferencedLayerData layerData, Vector3 position, Quaternion? rotation = null);
-        public Task<LayerGameObject> Convert(ReferencedLayerData layerData, string prefabId);
+        public Task<LayerGameObject> ReplaceReference(ReferencedLayerData layerData, string prefabId);
         public Task Remove(ReferencedLayerData layerData);
     }
 }
