@@ -35,7 +35,7 @@ namespace Netherlands3D
         {
             //We need to wait 1 frame to allow the map to load or we get an unloaded map that's zoomed in. (That will never load)
             yield return null;
-            Camera activeCam = ServiceLocator.GetService<FirstPersonViewerData>().FPVCamera;
+            Camera activeCam = FirstPersonViewerCamera.FPVCamera;
 
             minimap.SetZoom(zoomScale);
 

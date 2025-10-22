@@ -10,7 +10,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         protected FirstPersonViewer viewer;
 
         protected Transform transform;
-        protected FirstPersonViewerData viewerData;
 
         [field: Header("Settings")]
         [field: SerializeField] protected float SpeedMultiplier { private set; get; }
@@ -26,8 +25,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             this.viewer = viewer;
 
             transform = viewer.transform;
-
-            viewerData = ServiceLocator.GetService<FirstPersonViewerData>();
         }
 
         public virtual void OnEnter()

@@ -20,7 +20,7 @@ namespace Netherlands3D.FirstPersonViewer
         private MeshRenderer meshRenderer;
         private FirstPersonViewerInput input;
         private FirstPersonViewerStateMachine fsm;
-        private FirstPersonViewerData viewerData;
+        private MovementModusSwitcher movementSwitcher;
 
         //Movement
         public float MovementSpeed { private set; get; }
@@ -57,7 +57,7 @@ namespace Netherlands3D.FirstPersonViewer
         private void Awake()
         {
             input = GetComponent<FirstPersonViewerInput>();
-            viewerData = GetComponent<FirstPersonViewerData>();
+            movementSwitcher = GetComponent<MovementModusSwitcher>();
 
             meshFilter = GetComponent<MeshFilter>();
             meshRenderer = GetComponent<MeshRenderer>();
@@ -93,7 +93,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetupFSM()
         {
-            ViewerState[] playerStates = viewerData.ModusSwitcher.MovementPresets.Select(preset => preset.viewerState).Distinct().ToArray();
+            ViewerState[] playerStates = movementSwitcher.MovementPresets.Select(preset => preset.viewerState).Distinct().ToArray();
 
             fsm = new FirstPersonViewerStateMachine(this, input, playerStates);
         }

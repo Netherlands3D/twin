@@ -25,7 +25,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnEnable()
         {
-            modusSwitcher = ServiceLocator.GetService<FirstPersonViewerData>().ModusSwitcher;
+            modusSwitcher = ServiceLocator.GetService<MovementModusSwitcher>();
 
             CreateMovementPresetButtons(modusSwitcher.MovementPresets, modusSwitcher.CurrentMovement);
             RefreshSettings(modusSwitcher.CurrentMovement);

@@ -12,6 +12,7 @@ namespace Netherlands3D.FirstPersonViewer
         [Header("Input")]
         [SerializeField] private FirstPersonViewerInput input;
         private Camera firstPersonViewerCamera;
+        public static Camera FPVCamera;
 
         public float CameraHeightOffset { private set; get; } = 1.75f;
         private float currentsensitivity = 10f;
@@ -35,6 +36,7 @@ namespace Netherlands3D.FirstPersonViewer
 #endif
 
             firstPersonViewerCamera = GetComponent<Camera>();
+            FPVCamera = firstPersonViewerCamera;
 
             input.AddInputLockConstrain(this);
             SetupViewer();
