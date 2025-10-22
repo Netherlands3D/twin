@@ -14,6 +14,10 @@ namespace Netherlands3D.UI.Panels
     {
         private Button uploadButton;
         private Button UploadButton => uploadButton ??= this.Q<Button>("FileUploadButton");
+        
+        private Button goToAssetLibraryButton;
+        private Button GoToAssetLibraryButton => goToAssetLibraryButton ??= this.Q<Button>("GoToAssetLibraryButton");
+
         private Button importFromUrlButton;
         
         // TODO: Remove once we have fixed the copy/paste and credential flow in UI Toolkit
@@ -25,6 +29,7 @@ namespace Netherlands3D.UI.Panels
         private Button importUriButton;
         private Button ImportUriButton => importUriButton ??= this.Q<Button>("ImportUriButton");
 
+        public EventCallback<ClickEvent> OpenAssetLibrary { get; set; }
         public EventCallback<ClickEvent> FileImportFromUrlStarted { get; set; }
         public EventCallback<ClickEvent> FileUploadStarted { get; set; }
         public Action<Uri> UriImportStarted { get; set; }
@@ -38,6 +43,7 @@ namespace Netherlands3D.UI.Panels
 
             OnShow += () => EnableInClassList("active", true);
             OnHide += () => EnableInClassList("active", false);
+            GoToAssetLibraryButton.RegisterCallback<ClickEvent>(OnOpenAssetLibrary);
             UploadButton.RegisterCallback<ClickEvent>(OnUploadStarted);
             ImportUriButton.RegisterCallback<ClickEvent>(OnImportUri);
             
@@ -47,15 +53,9 @@ namespace Netherlands3D.UI.Panels
 
         public override string GetTitle() => "Importeren";
 
-        private void OnFileImportFromUrlStarted(ClickEvent evt)
-        {
-            FileImportFromUrlStarted?.Invoke(evt);
-        }
-
-        private void OnUploadStarted(ClickEvent evt)
-        {
-            FileUploadStarted?.Invoke(evt);
-        }
+        private void OnOpenAssetLibrary(ClickEvent evt) => OpenAssetLibrary?.Invoke(evt);
+        private void OnFileImportFromUrlStarted(ClickEvent evt) => FileImportFromUrlStarted?.Invoke(evt);
+        private void OnUploadStarted(ClickEvent evt) => FileUploadStarted?.Invoke(evt);
 
         private void OnImportUri(ClickEvent evt)
         {

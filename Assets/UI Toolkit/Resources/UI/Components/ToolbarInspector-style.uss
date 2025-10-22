@@ -31,8 +31,14 @@
     display: none; 
 }
 
-.toolbar-inspector.toolbar-style-library #OpenLibrary { display: flex; }
-.toolbar-inspector.toolbar-style-add-layer #AddLayer { display: flex; }
+.toolbar-inspector.toolbar-style-add-layer #OpenLibrary,
+.toolbar-inspector.toolbar-style-library #OpenLibrary { 
+    display: flex; 
+}
+.toolbar-inspector.toolbar-style-add-layer #AddLayer,
+.toolbar-inspector.toolbar-style-library #AddLayer {
+    display: flex; 
+}
 
 /* ============================================================================================= */
 /* TODO: remove these overrides as soon as we have implemented the whole inspector               */
