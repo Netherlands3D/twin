@@ -1,0 +1,22 @@
+{
+    "name": "eu.netherlands3d.webgl-copy-paste.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.textmeshpro",
+            "expression": "",
+            "define": "WEBGL_COPY_AND_PASTE_SUPPORT_TEXTMESH_PRO"
+        }
+    ],
+    "noEngineReferences": false
+}
