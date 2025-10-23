@@ -373,11 +373,10 @@
       "dependencies": {}
     },
     "eu.netherlands3d.event-containers": {
-      "version": "0.1.1",
+      "version": "file:eu.netherlands3d.event-containers",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.filebrowser": {
       "version": "2.2.1",

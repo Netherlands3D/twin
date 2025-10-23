@@ -1,0 +1,21 @@
+{
+  "name": "eu.netherlands3d.event-containers",
+  "version": "0.1.1",
+  "displayName": "Netherlands3D - Event Containers",
+  "description": "Simple data payload Event Containers",
+  "unity": "2022.2",
+  "documentationUrl": "https://netherlands3d.eu/docs",
+  "changelogUrl": "https://raw.githubusercontent.com/Netherlands3D/{REPOSITORY_NAME}/main/CHANGELOG.md",
+  "licensesUrl": "https://raw.githubusercontent.com/Netherlands3D/{REPOSITORY_NAME}/main/LICENSE.txt",
+  "keywords": [
+    "digital-twin",
+    "events",
+    "containers"
+  ],
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://www.netherlands3d.eu"
+  },
+  "dependencies": {
+  }
+}
