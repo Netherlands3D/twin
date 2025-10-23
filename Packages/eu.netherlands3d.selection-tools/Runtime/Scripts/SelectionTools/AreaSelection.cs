@@ -169,6 +169,7 @@ namespace Netherlands3D.SelectionTools
             if (mode == DrawMode.Selected) return;
 
             var bounds = boundsMeshRenderer.bounds;
+            SetSelectionVisualEnabled(true);
             whenAreaIsSelected.Invoke(bounds);
         }
 
