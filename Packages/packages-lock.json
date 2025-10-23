@@ -489,14 +489,13 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.selection-tools": {
-      "version": "3.2.1",
+      "version": "file:eu.netherlands3d.selection-tools",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
       "dependencies": {
         "com.unity.inputsystem": "1.5.1",
         "eu.netherlands3d.coordinates": "2.0.0"
-      },
-      "url": "https://package.openupm.com"
+      }
     },
     "eu.netherlands3d.serializable-gis-expressions": {
       "version": "file:eu.netherlands3d.serializable-gis-expressions",
