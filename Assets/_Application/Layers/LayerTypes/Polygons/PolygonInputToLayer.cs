@@ -248,7 +248,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
                     layers.Add(layer.PolygonVisualisation, layer);
                     layer.polygonSelected.AddListener(ProcessPolygonSelection);
-                    gridInput.SetDrawMode(PolygonInput.DrawMode.Selected);
+                    gridInput.SetDrawMode(PolygonInput.DrawMode.Edit);
                 }
             );
         }

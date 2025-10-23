@@ -108,7 +108,7 @@ namespace Netherlands3D.SelectionTools
 
             if (!drawingArea && clickAction.IsPressed() && modifierAction.IsPressed())
             {
-                if (Interface.PointerIsOverUI()) return;
+                if (Interface.PointerIsOverUI() || mode == DrawMode.Selected) return;
 
                 drawingArea = true;
                 SetSelectionVisualEnabled(true);
