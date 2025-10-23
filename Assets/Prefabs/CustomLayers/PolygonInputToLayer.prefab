@@ -1995,16 +1995,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7443215433914948042, guid: edf49d0620627654f98c961dc4935c4d,
-        type: 3}
-      propertyPath: blockCameraDragging.m_PersistentCalls.m_Calls.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7443215433914948042, guid: edf49d0620627654f98c961dc4935c4d,
-        type: 3}
-      propertyPath: blockCameraDragging.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

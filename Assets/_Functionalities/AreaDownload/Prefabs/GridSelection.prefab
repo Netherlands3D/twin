@@ -97,17 +97,67 @@ MonoBehaviour:
       m_Calls: []
   blockCameraDragging:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 007cc40d489e1ef44857ad3377a33220, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   whenDrawingArea:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: e64696f66bdcc5343ad26d8c620d845a, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Functionalities.AreaDownload.AreaSelection,
+          eu.netherlands3d.twin
+        m_MethodName: SetDuringSelectionAreaBounds
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   whenAreaIsSelected:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 9063200552640050939}
+        m_TargetAssemblyTypeName: Netherlands3D.SelectionTools.BoundsToRDBoundingBox,
+          eu.netherlands3d.selection-tools.Runtime
+        m_MethodName: ConvertToRD
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11400000, guid: e64696f66bdcc5343ad26d8c620d845a, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Functionalities.AreaDownload.AreaSelection,
+          eu.netherlands3d.twin
+        m_MethodName: SetSelectionAreaBounds
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   gridSize: 100
   multiplyHighlightScale: 5
   useWorldSpace: 0
-  blockSelectinStartByUI: 1
   gridHighlight: {fileID: 4919248220237845915}
   selectionBlock: {fileID: 3304082224464378568}
   triplanarGridMaterial: {fileID: 2100000, guid: 1d25d945d920ea0419c29537e77199ce,
