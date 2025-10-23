@@ -443,11 +443,10 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.meshclipper": {
-      "version": "https://github.com/Netherlands3D/MeshClipper.git",
+      "version": "file:eu.netherlands3d.meshclipper",
       "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "2aaa164964ae67ceaa3f4ae4708b5573bb0a37bc"
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.minimap": {
       "version": "1.2.0",
