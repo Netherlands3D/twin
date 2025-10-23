@@ -335,14 +335,13 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.cartesiantiles": {
-      "version": "1.2.2",
+      "version": "file:eu.netherlands3d.cartesiantiles",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
       "dependencies": {
         "eu.netherlands3d.coordinates": "1.2.0",
         "com.unity.textmeshpro": "3.0.6"
-      },
-      "url": "https://package.openupm.com"
+      }
     },
     "eu.netherlands3d.catalogs": {
       "version": "file:eu.netherlands3d.catalogs",
