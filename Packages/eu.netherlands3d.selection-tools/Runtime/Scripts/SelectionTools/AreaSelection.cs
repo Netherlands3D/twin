@@ -134,6 +134,7 @@ namespace Netherlands3D.SelectionTools
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
             var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
             var tappedPosition = GetGridPosition(worldPosition);
+            Debug.Log("Tapped position: " + tappedPosition);
             DrawSelectionArea(tappedPosition, tappedPosition);
             MakeSelection();
         }
@@ -185,8 +186,12 @@ namespace Netherlands3D.SelectionTools
             float z = samplePosition.z - GridOffset.z;
 
             // Floor to get the cell that contains the samplePosition
-            x = Mathf.Floor(Mathf.Floor(x / gridSize) * gridSize + GridOffset.x + (gridSize * 0.5f));
-            z = Mathf.Floor(Mathf.Floor(z / gridSize) * gridSize + GridOffset.z + (gridSize * 0.5f));
+            x = Mathf.Floor(x / gridSize) * gridSize;
+            z = Mathf.Floor(z / gridSize) * gridSize;
+
+            // Apply the offset back to re-align with world
+            x += GridOffset.x + (gridSize * 0.5f);
+            z += GridOffset.z + (gridSize * 0.5f);
 
             Vector3Int roundedPosition = new Vector3Int
             {
@@ -206,14 +211,12 @@ namespace Netherlands3D.SelectionTools
         {
             var xDifference = (currentWorldCoordinate.x - startWorldCoordinate.x);
             var zDifference = (currentWorldCoordinate.z - startWorldCoordinate.z);
-
             selectionBlock.transform.position = startWorldCoordinate;
-            selectionBlock.transform.Translate(xDifference / 2.0f, 0, zDifference / 2.0f);
-            selectionBlock.transform.localScale = new Vector3(
-                    (currentWorldCoordinate.x - startWorldCoordinate.x) + ((xDifference < 0) ? -gridSize : gridSize),
-                    gridSize,
-                    (currentWorldCoordinate.z - startWorldCoordinate.z) + ((zDifference < 0) ? -gridSize : gridSize));
-
+            selectionBlock.transform.Translate(xDifference * 0.5f, 0, zDifference * 0.5f);
+            float x = Mathf.Abs(currentWorldCoordinate.x - startWorldCoordinate.x) + gridSize;
+            float y = gridSize;
+            float z = Mathf.Abs(currentWorldCoordinate.z - startWorldCoordinate.z) + gridSize;
+            selectionBlock.transform.localScale = new Vector3(x, y, z);
             var bounds = boundsMeshRenderer.bounds;
             whenDrawingArea.Invoke(bounds);
         }
@@ -235,10 +238,11 @@ namespace Netherlands3D.SelectionTools
             {
                 bounds.Encapsulate(points[i]);
             }
-
-            bounds.Expand(-0.01f * Vector3.one); // inset the bounds slightly to avoid issues with reselecting the exact edge 
-            selectionStartPosition = GetGridPosition(bounds.min);
-            var selectionEndPosition = GetGridPosition(bounds.max);
+            //we need to inset the bounds by half a grid size so that the selection aligns with the grid properly
+            //when selection is drawn the size of the selection will be increased by one gridsize
+            Vector3 insetHalfGridSize = new Vector3(0.5f * gridSize, 0, 0.5f * gridSize);
+            selectionStartPosition = GetGridPosition(bounds.min + insetHalfGridSize);
+            var selectionEndPosition = GetGridPosition(bounds.max - insetHalfGridSize);
 
             DrawSelectionArea(selectionStartPosition, selectionEndPosition);
         }

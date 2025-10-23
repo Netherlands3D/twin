@@ -93,7 +93,7 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         }
 
         private IEnumerator WaitFrameToRenderThumbnail(Bounds selectedArea)
-        {
+        {            
             //wait a frame to ensure that the previous area is not rendered in the thumbnail
             yield return null; 
             renderedThumbnail.RenderThumbnail(selectedArea);
