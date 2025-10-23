@@ -8,7 +8,7 @@ namespace Netherlands3D.UI.Components
     /// Loads UXML/USS from Resources/UI and exposes UXML attributes.
     /// </summary>
     [UxmlElement]
-    public partial class TextField : UnityEngine.UIElements.TextField, IComponent
+    public partial class TextField : UnityEngine.UIElements.TextField
     {
         public enum TextFieldStyle
         {

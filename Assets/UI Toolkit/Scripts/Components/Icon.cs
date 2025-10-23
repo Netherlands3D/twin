@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class Icon : VisualElement, IComponent
+    public partial class Icon : VisualElement
     {
         private IconImage image = IconImage.Map;
         [UxmlAttribute("image")]

@@ -1,0 +1,21 @@
+{
+  "name": "eu.netherlands3d.selection-tools",
+  "version": "3.3.0",
+  "displayName": "Netherlands3D - Selection Tools",
+  "description": "Tool to draw areas, and make selections",
+  "unity": "2022.2",
+  "documentationUrl": "https://netherlands3d.eu/docs",
+  "changelogUrl": "https://raw.githubusercontent.com/Netherlands3D/SelectionTools/main/CHANGELOG.md",
+  "licensesUrl": "https://raw.githubusercontent.com/Netherlands3D/SelectionTools/main/LICENSE.txt",
+  "keywords": [
+    "digital-twin"
+  ],
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://www.netherlands3d.eu"
+  },
+  "dependencies": {
+    "com.unity.inputsystem": "1.5.1",
+    "eu.netherlands3d.coordinates": "2.0.0"
+  }
+}
