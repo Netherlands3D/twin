@@ -406,5 +406,63 @@ namespace Netherlands3D.Twin.Layers
 
             return cache;
         }
+
+        public void SetData(ReferencedLayerData referencedLayerData, bool keepPrefabIdentifier = false)
+        {
+            string previousPrefabId = null;
+            if (keepPrefabIdentifier && !string.IsNullOrEmpty(referencedLayerData.PrefabIdentifier))
+            {
+                previousPrefabId = referencedLayerData.PrefabIdentifier;
+            }
+            if (!referencedLayerData.Reference)
+            {
+                ReplaceReference(referencedLayerData, keepPrefabIdentifier, previousPrefabId);
+                return;
+            }
+
+            bool reselect = false;
+            if (referencedLayerData.IsSelected)
+            {
+                referencedLayerData.DeselectLayer();
+                reselect = true;
+            }
+
+            ReplaceReference(referencedLayerData, keepPrefabIdentifier, previousPrefabId);
+
+            referencedLayerData.OnReferenceChanged.Invoke();
+
+            if (reselect)
+            {
+                referencedLayerData.SelectLayer();
+            }
+        }
+
+        // TODO: Where this is called in ReferencedLayerData -> can we use SetData and merge this method in there?
+        // TODO: Am I wrong or do I see unnecessary / duplicate code between here and above?
+        public void ReplaceReference(ReferencedLayerData layerData, bool keepPrefabIdentifier, string previousPrefabId)
+        {
+            var value = this;
+            if (layerData.Reference == value) return;
+
+            var reference = layerData.Reference;
+            if (reference)
+            {
+                reference.DestroyLayerGameObject();
+            }
+
+            reference = value;
+            if (!reference) return;
+
+            reference.gameObject.name = Name;
+            // TODO: How to get rid of this internal meddling
+            layerData.PrefabIdentifier = reference.PrefabIdentifier;
+            reference.LayerData = layerData;
+            
+            if (keepPrefabIdentifier && !string.IsNullOrEmpty(previousPrefabId))
+            {
+                // TODO: How to get rid of this internal meddling
+                layerData.PrefabIdentifier = previousPrefabId;
+            }
+        }
     }
 }

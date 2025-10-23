@@ -102,7 +102,8 @@ namespace Netherlands3D.Twin.Services
         /// </summary>
         public async Task<ReferencedLayerData> Visualize(ReferencedLayerData layerData)
         {
-            layerData.SetReference(SpawnPlaceholder(layerData), true);
+            var layerGameObject = SpawnPlaceholder(layerData);
+            layerGameObject.SetData(layerData, true);
 
             await spawner.Spawn(layerData);
             
@@ -118,7 +119,8 @@ namespace Netherlands3D.Twin.Services
         /// </summary>
         public async Task<ReferencedLayerData> Visualize(ReferencedLayerData layerData, Vector3 position, Quaternion? rotation = null)
         {
-            layerData.SetReference(SpawnPlaceholder(layerData), true);
+            var layerGameObject = SpawnPlaceholder(layerData);
+            layerGameObject.SetData(layerData, true);
             
             await spawner.Spawn(layerData, position, rotation ?? Quaternion.identity);
             
@@ -159,6 +161,8 @@ namespace Netherlands3D.Twin.Services
 
         private LayerGameObject SpawnPlaceholder(ReferencedLayerData layerData)
         {
+            // This is the exception to the InstantiateAsync rule as the placeholder _must_ be an internal layergameobject
+            // to make all other InstantiateAsync stuff happen
             return prefabLibrary.placeholderPrefab.Instantiate(layerData);
         }
 

@@ -155,10 +155,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             MaskDestroyed.Invoke(MaskBitIndex);
         }
 
-        public override void SetReference(LayerGameObject layerGameObject, bool keepPrefabIdentifier = false)
+        public void TODOSetReference(LayerGameObject layerGameObject, bool keepPrefabIdentifier = false)
         {
-            base.SetReference(layerGameObject, keepPrefabIdentifier);
-
+            // TODO: this is a leftover that is never called anymore - how to get refactor the code below to the
+            // right location
             if (PolygonVisualisation)
             {
                 var vertices = CoordinatesToVertices(OriginalPolygon);

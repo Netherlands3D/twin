@@ -12,37 +12,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
     public class ReferencedLayerData : LayerData
     {
         [DataMember] private string prefabId;
-        public string PrefabIdentifier => prefabId;
+        public string PrefabIdentifier
+        {
+            get => prefabId;
+            set => prefabId = value;
+        }
 
+        // TODO: Can we refactor this away? So that each caller does not try to get to the LayerGameObject through LayerData
+        //   to get a uni-directional flow?
         [JsonIgnore] private LayerGameObject reference;
         [JsonIgnore]
-        public LayerGameObject Reference
-        {
-            get => reference;
-            private set
-            {
-                if (reference == value) return;
-
-                if (reference)
-                {
-                    reference.DestroyLayerGameObject();
-                }
-
-                reference = value;
-                if (!reference) return;
-
-                reference.gameObject.name = Name;
-                prefabId = reference.PrefabIdentifier;
-                reference.LayerData = this;
-            }
-        }
+        public LayerGameObject Reference => reference;
 
         [JsonIgnore] public bool KeepReferenceOnDestroy { get; set; } = false;
         [JsonIgnore] public UnityEvent OnReferenceChanged = new();
 
+        // TODO: Can we refactor the constructors away and invert it? That the layerGameObject has the data set?
         public ReferencedLayerData(string name, LayerGameObject reference) : base(name)
         {
-            Reference = reference;
+            reference.ReplaceReference(this, false, null);
 
             // AddDefaultLayer should be after setting the reference so the reference is assigned
             // when the NewLayer event is called
@@ -122,44 +110,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             ChildrenChanged.RemoveListener(OnChildrenChanged);
             ParentOrSiblingIndexChanged.RemoveListener(OnSiblingIndexOrParentChanged);
             LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
-        }
-
-        public virtual void SetReference(LayerGameObject layerGameObject, bool keepPrefabIdentifier = false)
-        {
-            string previousPrefabId = null;
-            if (keepPrefabIdentifier && !string.IsNullOrEmpty(prefabId))
-            {
-                previousPrefabId = prefabId;
-            }
-            if (!reference)
-            {
-                Reference = layerGameObject;
-                if (keepPrefabIdentifier && !string.IsNullOrEmpty(previousPrefabId))
-                {
-                    prefabId = previousPrefabId;
-                }
-                return;
-            }
-
-            bool reselect = false;
-            if (IsSelected)
-            {
-                DeselectLayer();
-                reselect = true;
-            }
-
-            Reference = layerGameObject;
-            if (keepPrefabIdentifier && !string.IsNullOrEmpty(previousPrefabId))
-            {
-                prefabId = previousPrefabId;
-            }
-
-            OnReferenceChanged.Invoke();
-
-            if (reselect)
-            {
-                SelectLayer();
-            }
         }
 
         public override void DestroyLayer()
