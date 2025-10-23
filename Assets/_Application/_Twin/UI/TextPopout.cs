@@ -1,3 +1,4 @@
+using GG.Extensions;
 using Netherlands3D.Coordinates;
 using TMPro;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace Netherlands3D.Twin.UI
         [SerializeField] private TMP_InputField textField;
         [SerializeField] private float disappearDistance = 2000f;
         [SerializeField] private float doubleClickThreshold = 0.5f;
+        [SerializeField] private RectTransform pointTransform;
         private float lastClickTime = -0.5f;
         private float originalSelectionColorAlpha;
 
@@ -48,6 +50,7 @@ namespace Netherlands3D.Twin.UI
         {
             mainCamera = Camera.main;
             rectTransform = GetComponent<RectTransform>();
+            rectTransform.
             gameObject.SetActive(false);
             originalSelectionColorAlpha = textField.selectionColor.a;
         }
@@ -58,6 +61,13 @@ namespace Netherlands3D.Twin.UI
             textField.onEndEdit.AddListener(OnEndEdit.Invoke);
             textField.onSelect.AddListener(OnTextFieldSelect);
             textField.onDeselect.AddListener(OnTextFieldDeselect);
+
+            pointTransform.pivot = rectTransform.pivot;
+            pointTransform.anchorMin = rectTransform.pivot;
+            pointTransform.anchorMax = rectTransform.pivot;
+            float half = Mathf.Sign(rectTransform.pivot.x - 0.5f) * 0.5f;
+            float childPosX = pointTransform.rect.width * half;
+            pointTransform.anchoredPosition = new Vector2(childPosX * pointTransform.localScale.x, 0);
         }
 
         private void OnTextFieldSelect(string text)
@@ -167,6 +177,11 @@ namespace Netherlands3D.Twin.UI
         public static bool NewLineModifierKeyIsPressed()
         {
             return Keyboard.current.shiftKey.isPressed;
+        }
+
+        private void OnTransformParentChanged()
+        {
+            
         }
     }
 }
