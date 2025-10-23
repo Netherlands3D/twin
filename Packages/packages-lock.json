@@ -512,13 +512,12 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.snapshots": {
-      "version": "2.0.1",
+      "version": "file:eu.netherlands3d.snapshots",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
       "dependencies": {
         "eu.netherlands3d.filebrowser": "2.1.0"
-      },
-      "url": "https://package.openupm.com"
+      }
     },
     "eu.netherlands3d.subobjects": {
       "version": "1.4.1",
