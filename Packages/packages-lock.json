@@ -418,13 +418,12 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.json": {
-      "version": "1.0.1",
+      "version": "file:eu.netherlands3d.json",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.0"
-      },
-      "url": "https://package.openupm.com"
+      }
     },
     "eu.netherlands3d.layer-styles": {
       "version": "file:eu.netherlands3d.layer-styles",

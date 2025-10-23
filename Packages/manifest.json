@@ -22,7 +22,6 @@
     "eu.netherlands3d.event-containers": "0.1.1",
     "eu.netherlands3d.filebrowser": "2.2.1",
     "eu.netherlands3d.geojson": "1.1.1",
-    "eu.netherlands3d.json": "1.0.1",
     "eu.netherlands3d.masking": "2.0.1",
     "eu.netherlands3d.meshclipper": "https://github.com/Netherlands3D/MeshClipper.git",
     "eu.netherlands3d.minimap": "1.2.0",
