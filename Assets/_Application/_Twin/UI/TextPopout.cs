@@ -12,6 +12,7 @@ namespace Netherlands3D.Twin.UI
         [SerializeField] private TMP_InputField textField;
         [SerializeField] private float disappearDistance = 2000f;
         [SerializeField] private float doubleClickThreshold = 0.5f;
+        [SerializeField] private RectTransform pointTransform;
         private float lastClickTime = -0.5f;
         private float originalSelectionColorAlpha;
 
@@ -58,6 +59,14 @@ namespace Netherlands3D.Twin.UI
             textField.onEndEdit.AddListener(OnEndEdit.Invoke);
             textField.onSelect.AddListener(OnTextFieldSelect);
             textField.onDeselect.AddListener(OnTextFieldDeselect);
+
+            //the snapping pivot point is given to the parent, so lets inherit this so we can adjust the target point accordingly
+            pointTransform.pivot = rectTransform.pivot;
+            pointTransform.anchorMin = rectTransform.pivot;
+            pointTransform.anchorMax = rectTransform.pivot;
+            float half = Mathf.Sign(rectTransform.pivot.x - 0.5f) * 0.5f;
+            float childPosX = pointTransform.rect.width * half;
+            pointTransform.anchoredPosition = new Vector2(childPosX * pointTransform.localScale.x, 0);
         }
 
         private void OnTextFieldSelect(string text)

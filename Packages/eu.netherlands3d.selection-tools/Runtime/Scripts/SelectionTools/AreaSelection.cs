@@ -108,7 +108,7 @@ namespace Netherlands3D.SelectionTools
 
             if (!drawingArea && clickAction.IsPressed() && modifierAction.IsPressed())
             {
-                if (Interface.PointerIsOverUI()) return;
+                if (Interface.PointerIsOverUI() || mode == DrawMode.Selected) return;
 
                 drawingArea = true;
                 SetSelectionVisualEnabled(true);
@@ -169,6 +169,7 @@ namespace Netherlands3D.SelectionTools
             if (mode == DrawMode.Selected) return;
 
             var bounds = boundsMeshRenderer.bounds;
+            SetSelectionVisualEnabled(true);
             whenAreaIsSelected.Invoke(bounds);
         }
 
@@ -209,14 +210,12 @@ namespace Netherlands3D.SelectionTools
         {
             var xDifference = (currentWorldCoordinate.x - startWorldCoordinate.x);
             var zDifference = (currentWorldCoordinate.z - startWorldCoordinate.z);
-
             selectionBlock.transform.position = startWorldCoordinate;
-            selectionBlock.transform.Translate(xDifference / 2.0f, 0, zDifference / 2.0f);
-            selectionBlock.transform.localScale = new Vector3(
-                    (currentWorldCoordinate.x - startWorldCoordinate.x) + ((xDifference < 0) ? -gridSize : gridSize),
-                    gridSize,
-                    (currentWorldCoordinate.z - startWorldCoordinate.z) + ((zDifference < 0) ? -gridSize : gridSize));
-
+            selectionBlock.transform.Translate(xDifference * 0.5f, 0, zDifference * 0.5f);
+            float x = Mathf.Abs(currentWorldCoordinate.x - startWorldCoordinate.x) + gridSize;
+            float y = gridSize;
+            float z = Mathf.Abs(currentWorldCoordinate.z - startWorldCoordinate.z) + gridSize;
+            selectionBlock.transform.localScale = new Vector3(x, y, z);
             var bounds = boundsMeshRenderer.bounds;
             whenDrawingArea.Invoke(bounds);
         }
@@ -238,10 +237,11 @@ namespace Netherlands3D.SelectionTools
             {
                 bounds.Encapsulate(points[i]);
             }
-
-            bounds.Expand(-0.01f * Vector3.one); // inset the bounds slightly to avoid issues with reselecting the exact edge 
-            selectionStartPosition = GetGridPosition(bounds.min);
-            var selectionEndPosition = GetGridPosition(bounds.max);
+            //we need to inset the bounds by half a grid size so that the selection aligns with the grid properly
+            //when selection is drawn the size of the selection will be increased by one gridsize
+            Vector3 insetHalfGridSize = new Vector3(0.5f * gridSize, 0, 0.5f * gridSize);
+            selectionStartPosition = GetGridPosition(bounds.min + insetHalfGridSize);
+            var selectionEndPosition = GetGridPosition(bounds.max - insetHalfGridSize);
 
             DrawSelectionArea(selectionStartPosition, selectionEndPosition);
         }

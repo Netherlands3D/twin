@@ -29,7 +29,7 @@ namespace Netherlands3D.Functionalities.AreaDownload
 
         public override void PrepareToShift(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
         {
-            areaSelection.ClearSelection();
+            areaSelection.SetSelectionVisualEnabled(false);
         }
 
         public override void ShiftTo(WorldTransform worldTransform, Coordinate fromOrigin, Coordinate toOrigin)
