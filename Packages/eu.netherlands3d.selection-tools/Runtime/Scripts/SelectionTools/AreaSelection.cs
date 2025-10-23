@@ -134,7 +134,6 @@ namespace Netherlands3D.SelectionTools
             var currentPointerPosition = pointerAction.ReadValue<Vector2>();
             var worldPosition = Camera.main.GetCoordinateInWorld(currentPointerPosition, worldPlane, maxSelectionDistanceFromCamera);
             var tappedPosition = GetGridPosition(worldPosition);
-            Debug.Log("Tapped position: " + tappedPosition);
             DrawSelectionArea(tappedPosition, tappedPosition);
             MakeSelection();
         }
