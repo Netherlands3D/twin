@@ -185,12 +185,8 @@ namespace Netherlands3D.SelectionTools
             float z = samplePosition.z - GridOffset.z;
 
             // Floor to get the cell that contains the samplePosition
-            x = Mathf.Floor(x / gridSize) * gridSize;
-            z = Mathf.Floor(z / gridSize) * gridSize;
-
-            // Apply the offset back to re-align with world
-            x += GridOffset.x + (gridSize * 0.5f);
-            z += GridOffset.z + (gridSize * 0.5f);
+            x = Mathf.Floor(Mathf.Floor(x / gridSize) * gridSize + GridOffset.x + (gridSize * 0.5f));
+            z = Mathf.Floor(Mathf.Floor(z / gridSize) * gridSize + GridOffset.z + (gridSize * 0.5f));
 
             Vector3Int roundedPosition = new Vector3Int
             {
