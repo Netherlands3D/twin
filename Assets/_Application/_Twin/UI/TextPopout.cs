@@ -1,4 +1,3 @@
-using GG.Extensions;
 using Netherlands3D.Coordinates;
 using TMPro;
 using UnityEngine;
@@ -50,7 +49,6 @@ namespace Netherlands3D.Twin.UI
         {
             mainCamera = Camera.main;
             rectTransform = GetComponent<RectTransform>();
-            rectTransform.
             gameObject.SetActive(false);
             originalSelectionColorAlpha = textField.selectionColor.a;
         }
@@ -62,6 +60,7 @@ namespace Netherlands3D.Twin.UI
             textField.onSelect.AddListener(OnTextFieldSelect);
             textField.onDeselect.AddListener(OnTextFieldDeselect);
 
+            //the snapping pivot point is given to the parent, so lets inherit this so we can adjust the target point accordingly
             pointTransform.pivot = rectTransform.pivot;
             pointTransform.anchorMin = rectTransform.pivot;
             pointTransform.anchorMax = rectTransform.pivot;
@@ -177,11 +176,6 @@ namespace Netherlands3D.Twin.UI
         public static bool NewLineModifierKeyIsPressed()
         {
             return Keyboard.current.shiftKey.isPressed;
-        }
-
-        private void OnTransformParentChanged()
-        {
-            
         }
     }
 }
