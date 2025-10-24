@@ -504,11 +504,10 @@
       "dependencies": {}
     },
     "eu.netherlands3d.simplejson": {
-      "version": "1.0.0",
+      "version": "file:eu.netherlands3d.simplejson",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.snapshots": {
       "version": "2.0.1",
