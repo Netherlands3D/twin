@@ -1,0 +1,26 @@
+{
+  "name": "eu.netherlands3d.sun",
+  "displayName": "Netherlands3D - Sun, Time of Day and Shadows",
+  "version": "1.4.1",
+  "unity": "2022.2",
+  "type": "library",
+  "keywords": [
+    "sun",
+    "shadows",
+    "lighting",
+    "time-of-day",
+    "netherlands3d"
+  ],
+  "license": "EUPL-1.2",
+  "documentationUrl": "https://github.com/Netherlands3D/Sun/blob/main/README.md",
+  "licensesUrl": "https://github.com/Netherlands3D/Sun/blob/main/LICENSE.txt",
+  "changelogURL": "https://github.com/Netherlands3D/Sun/blob/main/CHANGELOG.md",
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://netherlands3d.eu"
+  },
+  "dependencies": {
+    "eu.netherlands3d.coordinates": "1.1.0",
+    "eu.netherlands3d.geotimezone": "1.1.0"
+  }
+}
