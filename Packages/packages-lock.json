@@ -326,13 +326,12 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.address-search": {
-      "version": "2.1.0",
+      "version": "file:eu.netherlands3d.address-search",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
       "dependencies": {
         "eu.netherlands3d.coordinates": "2.0.0"
-      },
-      "url": "https://package.openupm.com"
+      }
     },
     "eu.netherlands3d.cartesiantiles": {
       "version": "file:eu.netherlands3d.cartesiantiles",
@@ -358,11 +357,10 @@
       }
     },
     "eu.netherlands3d.coordinates": {
-      "version": "3.0.0",
+      "version": "file:eu.netherlands3d.coordinates",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.e2e-testing": {
       "version": "file:eu.netherlands3d.e2e-testing",
@@ -412,13 +410,12 @@
       "dependencies": {}
     },
     "eu.netherlands3d.json": {
-      "version": "1.0.1",
+      "version": "file:eu.netherlands3d.json",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.0"
-      },
-      "url": "https://package.openupm.com"
+      }
     },
     "eu.netherlands3d.layer-styles": {
       "version": "file:eu.netherlands3d.layer-styles",
@@ -450,13 +447,12 @@
       }
     },
     "eu.netherlands3d.obj-importer": {
-      "version": "1.3.0",
+      "version": "file:eu.netherlands3d.obj-importer",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
       "dependencies": {
         "eu.netherlands3d.coordinates": "1.1.0"
-      },
-      "url": "https://package.openupm.com"
+      }
     },
     "eu.netherlands3d.ogc-api": {
       "version": "file:eu.netherlands3d.ogc-api",
@@ -494,11 +490,10 @@
       "dependencies": {}
     },
     "eu.netherlands3d.simplejson": {
-      "version": "1.0.0",
+      "version": "file:eu.netherlands3d.simplejson",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.snapshots": {
       "version": "file:eu.netherlands3d.snapshots",
@@ -509,11 +504,10 @@
       }
     },
     "eu.netherlands3d.subobjects": {
-      "version": "1.4.1",
+      "version": "file:eu.netherlands3d.subobjects",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.sun": {
       "version": "file:eu.netherlands3d.sun",
