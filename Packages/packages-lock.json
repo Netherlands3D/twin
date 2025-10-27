@@ -524,14 +524,13 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.sun": {
-      "version": "1.4.1",
+      "version": "file:eu.netherlands3d.sun",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
       "dependencies": {
         "eu.netherlands3d.coordinates": "1.1.0",
         "eu.netherlands3d.geotimezone": "1.1.0"
-      },
-      "url": "https://package.openupm.com"
+      }
     },
     "eu.netherlands3d.tiles3d": {
       "version": "2.3.1",
