@@ -125,6 +125,15 @@ namespace Netherlands3D.Twin.Services
             return layerData;
         }
 
+        public async Task<LayerGameObject> ReplaceVisualisation(ReferencedLayerData layerData, string prefabId)
+        {
+            var layerGameObject = await spawner.Spawn(prefabId);
+            string previousId = layerData.Reference.PrefabIdentifier;
+            layerData.SetReference(layerGameObject, false);
+            layerGameObject.OnConvert(previousId);
+            return layerGameObject;
+        }
+
         /// <summary>
         /// Removes the layer from the current project and ensures the visualisation is removed as well.
         /// </summary>
