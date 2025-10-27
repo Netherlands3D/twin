@@ -326,13 +326,12 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.address-search": {
-      "version": "2.1.0",
+      "version": "file:eu.netherlands3d.address-search",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
       "dependencies": {
         "eu.netherlands3d.coordinates": "2.0.0"
-      },
-      "url": "https://package.openupm.com"
+      }
     },
     "eu.netherlands3d.cartesiantiles": {
       "version": "file:eu.netherlands3d.cartesiantiles",

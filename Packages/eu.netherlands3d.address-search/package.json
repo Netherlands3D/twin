@@ -1,0 +1,25 @@
+{
+  "name": "eu.netherlands3d.address-search",
+  "displayName": "Netherlands3D - Address Search",
+  "version": "2.1.0",
+  "unity": "2021.1",
+  "description": "An auto-completing dropdown that can find and select Dutch addresses and locations",
+  "type": "library",
+  "keywords": [
+    "netherlands3d",
+    "address",
+    "pdok"
+  ],
+  "license": "EUPL-1.2",
+  "documentationUrl": "https://github.com/Netherlands3D/AddressSearch/blob/main/README.md",
+  "licensesUrl": "https://github.com/Netherlands3D/AddressSearch/blob/main/LICENSE.txt",
+  "changelogURL": "https://github.com/Netherlands3D/AddressSearch/blob/main/CHANGELOG.md",
+  "hideInEditor": false,
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://netherlands3d.eu"
+  },
+  "dependencies": {
+    "eu.netherlands3d.coordinates": "2.0.0"
+  }
+}
