@@ -409,11 +409,10 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.geotimezone": {
-      "version": "1.1.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "version": "file:eu.netherlands3d.geotimezone",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.json": {
       "version": "1.0.1",
