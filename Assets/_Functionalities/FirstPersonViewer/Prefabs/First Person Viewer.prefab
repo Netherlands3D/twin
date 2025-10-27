@@ -222,7 +222,6 @@ GameObject:
   - component: {fileID: 1775169427224426892}
   - component: {fileID: 3034395081720571745}
   - component: {fileID: 6660788825186363282}
-  - component: {fileID: 4367215521751458963}
   - component: {fileID: 276568021394205261}
   - component: {fileID: 6417052032803972631}
   - component: {fileID: 4604978584422325480}
@@ -370,20 +369,6 @@ MonoBehaviour:
     type: 3}
   exitDuration: 0.9
   exitViewDelay: 0.15
---- !u!114 &4367215521751458963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8111522683061574636}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e10c10a46849464a833d90432a74b70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <FPVCamera>k__BackingField: {fileID: 5953575201012568707}
-  <ModusSwitcher>k__BackingField: {fileID: 6417052032803972631}
 --- !u!114 &276568021394205261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,7 +381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  service: {fileID: 4367215521751458963}
+  service: {fileID: 0}
 --- !u!114 &6417052032803972631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -412,6 +397,8 @@ MonoBehaviour:
   <MovementPresets>k__BackingField:
   - {fileID: 11400000, guid: 6b26168bc00d5ff4e8b4e234367924ba, type: 2}
   - {fileID: 11400000, guid: 4178ebf82880dd94d9b957892de62efe, type: 2}
+  - {fileID: 11400000, guid: c78e05ef5690e0c4bb0ccd8789422dc8, type: 2}
+  - {fileID: 11400000, guid: 2410f7fccd6dd0f41a083c16f2c5648c, type: 2}
 --- !u!114 &4604978584422325480
 MonoBehaviour:
   m_ObjectHideFlags: 0
