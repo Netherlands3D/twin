@@ -7,6 +7,7 @@ using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
@@ -61,17 +62,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             foreach (var layer in newData.RootLayer.ChildrenLayers)
             {
                 if (layer is not PolygonSelectionLayer polygon) continue;
-                // TODO: Why did I need to add this to stop a project from crashing?
-                if (!polygon.PolygonVisualisation) continue;
 
                 polygon.polygonSelected.AddListener(ProcessPolygonSelection);
-                layers.Add(polygon.PolygonVisualisation, polygon);
-                    
-                // Disable the visualisations when loading a project, because the layer panel is not opened.
-                // If it is a mask it should not be disabled because we need to render it to get the desired masking effect even if the layer panel is not opened.
-                if (polygon.IsMask) continue;
+                UnityAction referenceListener = null;
+                referenceListener = () =>
+                {
+                    layers.Add(polygon.PolygonVisualisation, polygon);
 
-                polygon.SetVisualisationActive(enabled);
+                    if (!polygon.IsMask)
+                        polygon.SetVisualisationActive(enabled);
+
+                    polygon.OnReferenceChanged.RemoveListener(referenceListener);
+                };
+                polygon.OnReferenceChanged.AddListener(referenceListener);
             }
         }
 
@@ -272,6 +275,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public void SetGridInputModeToCreate(bool active)
         {
             ActiveLayer?.DeselectLayer();
+
             gridInput.SetDrawMode(active ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Selected);
         }
 
