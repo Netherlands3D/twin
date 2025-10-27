@@ -1,0 +1,28 @@
+{
+  "name": "eu.netherlands3d.cartesiantiles",
+  "version": "1.2.3",
+  "displayName": "Netherlands3D - Cartesian Tiles",
+  "description": "Loads and unloads datasets in a cartesian coordinateSystem",
+  "unity": "2022.2",
+  "documentationUrl": "https://netherlands3d.eu/docs",
+  "changelogUrl": "https://raw.githubusercontent.com/Netherlands3D/CartesianTiles/main/CHANGELOG.md",
+  "licensesUrl": "https://raw.githubusercontent.com/Netherlands3D/CartesianTiles/main/LICENSE.txt",
+  "keywords": [
+    "digital-twin"
+  ],
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://www.netherlands3d.eu"
+  },
+  "dependencies": {
+    "eu.netherlands3d.coordinates": "1.2.0",
+    "com.unity.textmeshpro": "3.0.6"
+  },
+  "samples": [
+    {
+      "displayName": "usage CartesianTiles",
+      "description": "using Cartesian Tiles,simple setup",
+      "path": "Samples~/CartesianTileHandler"
+    }
+  ]
+}
