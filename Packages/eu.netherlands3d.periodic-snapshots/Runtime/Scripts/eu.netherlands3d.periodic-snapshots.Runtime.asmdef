@@ -1,0 +1,18 @@
+{
+    "name": "eu.netherlands3d.periodic-snapshots.Runtime",
+    "rootNamespace": "Netherlands3D.Snapshots",
+    "references": [
+        "eu.netherlands3d.snapshots.Runtime",
+        "eu.netherlands3d.filebrowser.Runtime",
+        "eu.netherlands3d.sun.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
