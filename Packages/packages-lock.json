@@ -507,11 +507,10 @@
       }
     },
     "eu.netherlands3d.subobjects": {
-      "version": "1.4.1",
+      "version": "file:eu.netherlands3d.subobjects",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.sun": {
       "version": "file:eu.netherlands3d.sun",
