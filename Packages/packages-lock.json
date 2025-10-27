@@ -358,11 +358,10 @@
       }
     },
     "eu.netherlands3d.coordinates": {
-      "version": "3.0.0",
+      "version": "file:eu.netherlands3d.coordinates",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.e2e-testing": {
       "version": "file:eu.netherlands3d.e2e-testing",
@@ -396,16 +395,15 @@
       "dependencies": {}
     },
     "eu.netherlands3d.geojson": {
-      "version": "1.1.1",
+      "version": "file:eu.netherlands3d.geojson",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
       "dependencies": {
         "com.unity.modules.unitywebrequest": "1.0.0",
         "com.unity.nuget.newtonsoft-json": "3.2.0",
         "com.virgis.geojson.net": "1.2.17",
         "eu.netherlands3d.coordinates": "2.0.0"
-      },
-      "url": "https://package.openupm.com"
+      }
     },
     "eu.netherlands3d.geotimezone": {
       "version": "file:eu.netherlands3d.geotimezone",
@@ -495,20 +493,18 @@
       "dependencies": {}
     },
     "eu.netherlands3d.simplejson": {
-      "version": "1.0.0",
+      "version": "file:eu.netherlands3d.simplejson",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.snapshots": {
-      "version": "2.0.1",
+      "version": "file:eu.netherlands3d.snapshots",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
       "dependencies": {
         "eu.netherlands3d.filebrowser": "2.1.0"
-      },
-      "url": "https://package.openupm.com"
+      }
     },
     "eu.netherlands3d.subobjects": {
       "version": "1.4.1",
