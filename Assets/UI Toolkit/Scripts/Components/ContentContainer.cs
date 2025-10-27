@@ -13,7 +13,7 @@ namespace Netherlands3D.UI.Components
     /// Mirrors the Button/Icon pattern.
     /// </summary>
     [UxmlElement]
-    public partial class ContentContainer : Foldout, IComponent
+    public partial class ContentContainer : Foldout
     {
         // Foldout internals
         private VisualElement HeaderInput => this.Q<VisualElement>(className: "unity-toggle__input");

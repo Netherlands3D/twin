@@ -1,0 +1,24 @@
+{
+  "name": "eu.netherlands3d.collada",
+  "version": "0.1.1",
+  "displayName": "Netherlands3D - Collada Export",
+  "description": "StreamWrite a Collada .DAE file export",
+  "unity": "2022.2",
+  "documentationUrl": "https://netherlands3d.eu/docs",
+  "changelogUrl": "https://raw.githubusercontent.com/Netherlands3D/ColladaExport/main/CHANGELOG.md",
+  "licensesUrl": "https://raw.githubusercontent.com/Netherlands3D/ColladaExport/main/LICENSE.txt",
+  "keywords": [
+    "digital-twin",
+    "collada",
+    "dae",
+    "export",
+    "netherlands3d"
+  ],
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://www.netherlands3d.eu"
+  },
+  "dependencies": {
+    "eu.netherlands3d.filebrowser": "1.3.1"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "eu.netherlands3d.web-cursors",
+  "version": "2.0.0",
+  "displayName": "Netherlands3D - Web Cursors",
+  "description": "MonoBehaviour and plugin allowing to change system cursor on WebGL applications using jslib plugin",
+  "unity": "2022.2",
+  "documentationUrl": "https://netherlands3d.eu/docs",
+  "changelogUrl": "https://raw.githubusercontent.com/Netherlands3D/WebCursors/main/CHANGELOG.md",
+  "licensesUrl": "https://raw.githubusercontent.com/Netherlands3D/WebCursors/main/LICENSE.txt",
+  "keywords": [
+    "digital-twin",
+	"web",
+	"cursor",
+	"style",
+	"css"
+  ],
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://www.netherlands3d.eu"
+  },
+  "dependencies": {
+  }
+}

@@ -1,0 +1,169 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3021768553629858417
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6674828541780874650}
+  - component: {fileID: 8904300747281206635}
+  - component: {fileID: 1444499676158243795}
+  - component: {fileID: 3718959840950271752}
+  m_Layer: 0
+  m_Name: Netherlands3D SDK
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6674828541780874650
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3021768553629858417}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8904300747281206635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3021768553629858417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47224adf747a413a86057f38957337f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabLibrary: {fileID: 11400000, guid: 03a0c2ac495a64c08b5dd612c9507bd7, type: 2}
+  fromFileImporter: {fileID: 11400000, guid: 6558aaaeb70ee44688f49da028828a19, type: 2}
+  fromUrlImporter: {fileID: 1444499676158243795}
+  layerAdded:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 882c7f2cbbcbc4ae68cd7ae166c6a838, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.StringEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Laag successvol toegevoegd
+          m_BoolArgument: 0
+        m_CallState: 2
+  layerRemoved:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 882c7f2cbbcbc4ae68cd7ae166c6a838, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.StringEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Laag verwijderd
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1444499676158243795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3021768553629858417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b258de7d0c67bb438bcc70b871ecf0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugLog: 0
+  dataTypeAdapters:
+  - {fileID: 11400000, guid: 7ced692139442654998e5e20d4f711a2, type: 2}
+  - {fileID: 11400000, guid: d871bbbfa65952f479a5bec4788aac0c, type: 2}
+  - {fileID: 11400000, guid: 4ba05b8b9d9de4889b11a1d074708458, type: 2}
+  - {fileID: 11400000, guid: d5040145c2c0c440fa6e9c5a760263fa, type: 2}
+  - {fileID: 11400000, guid: 026e6f320af008042bbfcd161fc66506, type: 2}
+  - {fileID: 11400000, guid: 1ce9afcbf38aa49ed86909b54a357f70, type: 2}
+  - {fileID: 11400000, guid: 2b584bc293847214094f7a465dce2d00, type: 2}
+  - {fileID: 11400000, guid: 6e1704cdf27264f12b6666fa18971ba2, type: 2}
+  - {fileID: 11400000, guid: 88768754e3348f846a9dbe83309eddc8, type: 2}
+  - {fileID: 11400000, guid: f96e9f956c2024f139d92b4db6418a40, type: 2}
+  OnAdapterFound:
+    m_PersistentCalls:
+      m_Calls: []
+  CouldNotFindAdapter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 4d73fc8257f515a4a82a6c22000509ab, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.StringEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Dit type brondata wordt niet ondersteund, probeer een
+            andere.
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnDownloadFailed:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 4d73fc8257f515a4a82a6c22000509ab, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.StringEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Er is iets mis gegaan bij het downloaden van deze bron,
+            probeer het opnieuw of controleer de CORS instellingen.
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnLocalCacheFailed:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 4d73fc8257f515a4a82a6c22000509ab, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.StringEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Er is een leeg bestand ontvangen tijdens het downloaden
+            van deze bron, probeer het opnieuw of controleer de CORS instellingen.
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &3718959840950271752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3021768553629858417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  service: {fileID: 8904300747281206635}

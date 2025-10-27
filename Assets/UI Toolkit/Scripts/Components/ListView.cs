@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class ListView : UnityEngine.UIElements.ListView, IComponent
+    public partial class ListView : UnityEngine.UIElements.ListView
     {
         // Keep user bind so we can call it first.
         private Action<VisualElement, int> _userBind;

@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class ListViewItem : VisualElement, IComponent
+    public partial class ListViewItem : VisualElement
     {
         public ListViewItem()
         {

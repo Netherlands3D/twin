@@ -6,24 +6,12 @@ namespace Netherlands3D.Twin.Debugging
 	public class Memory : MonoBehaviour
 	{
 		[SerializeField] private TextMeshProUGUI memoryOutputText;
-		[SerializeField] private string requiredQueryParameter = "memorystats";
 
 		private void Awake()
 		{
 			if(!memoryOutputText)
 				memoryOutputText = GetComponent<TextMeshProUGUI>();
 		}
-
-#if !UNITY_EDITOR && UNITY_WEBGL
-		private void Start()
-		{
-			if (requiredQueryParameter.Length > 0 && !Application.absoluteURL.ToLower().Contains(requiredQueryParameter))
-			{
-				gameObject.SetActive(false);
-				return;
-			}
-		}
-#endif 
 
 		private void OnEnable()
 		{
