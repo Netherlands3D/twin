@@ -357,11 +357,10 @@
       }
     },
     "eu.netherlands3d.coordinates": {
-      "version": "3.0.0",
+      "version": "file:eu.netherlands3d.coordinates",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.e2e-testing": {
       "version": "file:eu.netherlands3d.e2e-testing",
@@ -494,11 +493,10 @@
       "dependencies": {}
     },
     "eu.netherlands3d.simplejson": {
-      "version": "1.0.0",
+      "version": "file:eu.netherlands3d.simplejson",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.snapshots": {
       "version": "file:eu.netherlands3d.snapshots",
