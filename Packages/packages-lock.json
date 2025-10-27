@@ -449,13 +449,12 @@
       }
     },
     "eu.netherlands3d.obj-importer": {
-      "version": "1.3.0",
+      "version": "file:eu.netherlands3d.obj-importer",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
       "dependencies": {
         "eu.netherlands3d.coordinates": "1.1.0"
-      },
-      "url": "https://package.openupm.com"
+      }
     },
     "eu.netherlands3d.ogc-api": {
       "version": "file:eu.netherlands3d.ogc-api",
