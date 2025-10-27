@@ -14,7 +14,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public Material[] meshMaterials;
 
         [Header("Editable Settings")]
-        public ReorderableViewerSettingsList editableSettings = new ReorderableViewerSettingsList();
+        public SerializableViewerSettingsList editableSettings = new SerializableViewerSettingsList();
     }
 }
 

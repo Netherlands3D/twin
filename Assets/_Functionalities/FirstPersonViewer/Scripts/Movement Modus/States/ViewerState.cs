@@ -16,7 +16,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         [field: SerializeField] public float GroundResetHeightOffset { private set; get; }
 
         [Header("Viewer Settings")]
-        [SerializeField] protected MovementLabel viewHeightSetting;
+        [SerializeField] protected MovementFloatSetting viewHeightSetting;
 
         public void Initialize(FirstPersonViewerStateMachine owner, FirstPersonViewer viewer, FirstPersonViewerInput input)
         {

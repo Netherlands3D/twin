@@ -5,14 +5,14 @@ using UnityEngine;
 namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
     [System.Serializable]
-    public class ReorderableList<T>
+    public class SerializableBaseTypeList<T>
     {
         [SerializeReference] 
         public List<T> list = new List<T>();
     }
 
     [System.Serializable]
-    public class ReorderableViewerSettingsList : ReorderableList<ViewerSetting>
+    public class SerializableViewerSettingsList : SerializableBaseTypeList<ViewerSetting>
     {
     }
 }

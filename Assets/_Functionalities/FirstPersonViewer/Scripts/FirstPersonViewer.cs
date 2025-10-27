@@ -43,7 +43,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         [Header("Settings")]
         [SerializeField] private float stepHeight = 1.5f;
-        [SerializeField] private MovementLabel maxSpeedSetting;
+        [SerializeField] private MovementFloatSetting maxSpeedSetting;
 
         [Header("Main Cam")]
         [SerializeField] private float cameraHeightAboveGround;
@@ -63,7 +63,7 @@ namespace Netherlands3D.FirstPersonViewer
             meshRenderer = GetComponent<MeshRenderer>();
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
-            ViewerSettingsEvents<float>.AddListener(maxSpeedSetting, SetMovementSpeed);
+            maxSpeedSetting.OnValueChanged.AddListener(SetMovementSpeed);
 
             ViewerEvents.OnMovementPresetChanged += SetMovementModus;
             ViewerEvents.OnViewerExited += ExitViewer;
@@ -83,7 +83,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void OnDestroy()
         {
-            ViewerSettingsEvents<float>.RemoveListener(maxSpeedSetting, SetMovementSpeed);
+            maxSpeedSetting.OnValueChanged.RemoveListener(SetMovementSpeed);
 
             ViewerEvents.OnMovementPresetChanged -= SetMovementModus;
             ViewerEvents.OnViewerExited -= ExitViewer;

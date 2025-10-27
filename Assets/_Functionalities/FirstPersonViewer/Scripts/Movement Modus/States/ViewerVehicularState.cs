@@ -1,5 +1,3 @@
-using DG.Tweening;
-using Netherlands3D.Events;
 using Netherlands3D.FirstPersonViewer.Events;
 using UnityEngine;
 
@@ -14,12 +12,12 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         private float deceleration;
         private float turnSpeed;
 
-        [SerializeField] private MovementLabel accelerationSetting;
-        [SerializeField] private MovementLabel decelerationSetting;
-        [SerializeField] private MovementLabel turnSpeedSetting;
+        [SerializeField] private MovementFloatSetting accelerationSetting;
+        [SerializeField] private MovementFloatSetting decelerationSetting;
+        [SerializeField] private MovementFloatSetting turnSpeedSetting;
 
         [Header("Viewer Labels")]
-        [SerializeField] private MovementLabel currentSpeedLabel;
+        [SerializeField] private MovementLabelSetting currentSpeedLabel;
 
         public override void OnEnter()
         {
@@ -30,9 +28,9 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_NONE);
             ViewerEvents.OnResetToGround += ResetToGround;
 
-            ViewerSettingsEvents<float>.AddListener(accelerationSetting, SetAcceleration);
-            ViewerSettingsEvents<float>.AddListener(decelerationSetting, SetDeceleration);
-            ViewerSettingsEvents<float>.AddListener(turnSpeedSetting, SetTurnSpeed);
+            accelerationSetting.OnValueChanged.AddListener(SetAcceleration);
+            decelerationSetting.OnValueChanged.AddListener(SetDeceleration);
+            turnSpeedSetting.OnValueChanged.AddListener(SetTurnSpeed);
         }
 
         public override void OnUpdate()
@@ -49,9 +47,9 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             ViewerEvents.OnResetToGround -= ResetToGround;
 
-            ViewerSettingsEvents<float>.RemoveListener(accelerationSetting, SetAcceleration);
-            ViewerSettingsEvents<float>.RemoveListener(decelerationSetting, SetDeceleration);
-            ViewerSettingsEvents<float>.RemoveListener(turnSpeedSetting, SetTurnSpeed);
+            accelerationSetting.OnValueChanged.RemoveListener(SetAcceleration);
+            decelerationSetting.OnValueChanged.RemoveListener(SetDeceleration);
+            turnSpeedSetting.OnValueChanged.RemoveListener(SetTurnSpeed);
         }
 
         private void MoveVehicle(Vector2 moveInput)
@@ -85,7 +83,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
                 int speedInKilometers = Mathf.RoundToInt(currentSpeed * 3.6f);
 
-                ViewerSettingsEvents<string>.Invoke(currentSpeedLabel, speedInKilometers.ToString());
+                currentSpeedLabel.OnValueChanged.Invoke(speedInKilometers.ToString());
             }
         }
 
