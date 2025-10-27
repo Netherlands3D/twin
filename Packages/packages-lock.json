@@ -430,14 +430,13 @@
       "dependencies": {}
     },
     "eu.netherlands3d.masking": {
-      "version": "2.0.1",
+      "version": "file:eu.netherlands3d.masking",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
       "dependencies": {
         "eu.netherlands3d.web-cursors": "1.0.2",
         "com.unity.inputsystem": "1.5.1"
-      },
-      "url": "https://package.openupm.com"
+      }
     },
     "eu.netherlands3d.meshclipper": {
       "version": "https://github.com/Netherlands3D/MeshClipper.git",
