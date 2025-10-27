@@ -543,11 +543,10 @@
       "url": "https://package.openupm.com"
     },
     "eu.netherlands3d.transform-handles": {
-      "version": "1.1.2",
+      "version": "file:eu.netherlands3d.transform-handles",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.twin.functionalities": {
       "version": "file:eu.netherlands3d.twin.functionalities",
