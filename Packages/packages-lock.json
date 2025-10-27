@@ -558,11 +558,10 @@
       "dependencies": {}
     },
     "eu.netherlands3d.web-cursors": {
-      "version": "2.0.0",
+      "version": "file:eu.netherlands3d.web-cursors",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "source": "embedded",
+      "dependencies": {}
     },
     "eu.netherlands3d.webgl-copy-paste": {
       "version": "file:eu.netherlands3d.webglcopypaste",
