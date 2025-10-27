@@ -17,6 +17,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnEnable()
         {
+            //OnEnable happens before the Initialize so check if it's not null.
             if (setting != null)  ViewerSettingsEvents<string>.AddListener(setting.settingsLabel, SetValue);
         }
 

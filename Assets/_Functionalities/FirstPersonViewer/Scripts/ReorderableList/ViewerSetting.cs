@@ -13,7 +13,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public MovementLabel settingsLabel;
         public bool isVisible = true;
 
-        public abstract object GetValue();
+        //We use floats for now.
+        public abstract float GetValue();
     }
 
     [Serializable]
@@ -26,12 +27,12 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public float minValue;
         public float maxValue;
 
-        public override object GetValue() => defaultValue;
+        public override float GetValue() => defaultValue;
     }
 
     [Serializable]
     public class ViewerSettingLabel : ViewerSetting
     {
-        public override object GetValue() => 0f;
+        public override float GetValue() => 0f;
     }
 }

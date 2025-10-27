@@ -10,7 +10,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
     public class MovementModusButton : MonoBehaviour
     {
         private MovementPresets movementPreset;
-        private ViewerSettings viewerSettings;
+        private ViewerSettingsInterface viewerSettings;
 
         [SerializeField] private List<Image> movementIcons;
 
@@ -18,7 +18,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private GameObject regular;
         [SerializeField] private GameObject selected;
 
-        public void Init(MovementPresets preset, ViewerSettings viewerSettings)
+        public void Init(MovementPresets preset, ViewerSettingsInterface viewerSettings)
         {
             movementPreset = preset;
             this.viewerSettings = viewerSettings;

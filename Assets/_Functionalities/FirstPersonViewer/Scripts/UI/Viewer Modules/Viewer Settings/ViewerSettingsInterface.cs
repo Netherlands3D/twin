@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.UI
 {
-    public class ViewerSettings : MonoBehaviour
+    public class ViewerSettingsInterface : MonoBehaviour
     {
         [SerializeField] private ContentFitterRefresh contentFitterRefresh;
 
@@ -64,9 +64,10 @@ namespace Netherlands3D.FirstPersonViewer.UI
             {
                 if (!setting.isVisible) continue;
 
-                ViewerSettingComponent Componentprefab = settingPrefabs.First(s => s.className == setting.GetType().Name).prefab;
+                //Gets a prefab based on the settings class name.
+                ViewerSettingComponent componentprefab = settingPrefabs.First(s => s.className == setting.GetType().Name).prefab;
 
-                ViewerSettingComponent settingObject = Instantiate(Componentprefab, settingParent);
+                ViewerSettingComponent settingObject = Instantiate(componentprefab, settingParent);
                 settingObject.Init(setting);
             }
 
