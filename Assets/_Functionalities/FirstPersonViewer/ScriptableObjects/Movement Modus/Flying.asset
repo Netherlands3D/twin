@@ -22,6 +22,7 @@ MonoBehaviour:
     - rid: 3281392858440663166
     - rid: 3281392858440663164
     - rid: 3281392858440663165
+    - rid: 5560709212561735784
   references:
     version: 2
     RefIds:
@@ -29,9 +30,9 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
         asm: eu.netherlands3d.twin}
       data:
-        settingsLabel: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad,
-          type: 2}
         isVisible: 1
+        movementSetting: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad,
+          type: 2}
         defaultValue: 45
         minValue: 1
         maxValue: 500
@@ -39,19 +40,29 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
         asm: eu.netherlands3d.twin}
       data:
-        settingsLabel: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225,
-          type: 2}
         isVisible: 1
+        movementSetting: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225,
+          type: 2}
         defaultValue: 60
-        minValue: 1
+        minValue: 10
         maxValue: 140
     - rid: 3281392858440663166
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
         asm: eu.netherlands3d.twin}
       data:
-        settingsLabel: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1,
-          type: 2}
         isVisible: 0
+        movementSetting: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1,
+          type: 2}
         defaultValue: 0
+        minValue: 0
+        maxValue: 0
+    - rid: 5560709212561735784
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        isVisible: 0
+        movementSetting: {fileID: 11400000, guid: 238246fd8535293479b916db1ac470bc,
+          type: 2}
+        defaultValue: 2.75
         minValue: 0
         maxValue: 0

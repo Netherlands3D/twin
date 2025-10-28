@@ -26,8 +26,8 @@ namespace Netherlands3D.FirstPersonViewer
         private Quaternion startRotation;
 
         [Header("Settings")]
-        [SerializeField] private MovementLabel fovSetting;
-        [SerializeField] private MovementLabel viewHeightSetting;
+        [SerializeField] private MovementFloatSetting fovSetting;
+        [SerializeField] private MovementFloatSetting viewHeightSetting;
 
         private void Awake()
         {
@@ -44,8 +44,8 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void OnDestroy()
         {
-            ViewerSettingsEvents<float>.RemoveListener(fovSetting, SetCameraFOV);
-            ViewerSettingsEvents<float>.RemoveListener(viewHeightSetting, SetCameraHeight);
+            fovSetting.OnValueChanged.RemoveListener(SetCameraFOV);
+            viewHeightSetting.OnValueChanged.RemoveListener(SetCameraHeight);
 
             ViewerEvents.OnChangeCameraConstrain -= SetCameraConstrain;
             ViewerEvents.OnResetToStart -= ResetToStart;
@@ -76,8 +76,8 @@ namespace Netherlands3D.FirstPersonViewer
             ViewerEvents.OnCameraRotation?.Invoke(firstPersonViewerCamera.transform.forward);
 
             //Setup events when done with animation.
-            ViewerSettingsEvents<float>.AddListener(fovSetting, SetCameraFOV);
-            ViewerSettingsEvents<float>.AddListener(viewHeightSetting, SetCameraHeight);
+            fovSetting.OnValueChanged.AddListener(SetCameraFOV);
+            viewHeightSetting.OnValueChanged.AddListener(SetCameraHeight);
 
             ViewerEvents.OnChangeCameraConstrain += SetCameraConstrain;
             ViewerEvents.OnResetToStart += ResetToStart;

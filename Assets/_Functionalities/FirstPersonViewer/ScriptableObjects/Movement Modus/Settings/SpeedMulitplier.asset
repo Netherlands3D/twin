@@ -9,9 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f82047ed04c5884d81fc2716936a8b8, type: 3}
-  m_Name: CurrentSpeed
+  m_Script: {fileID: 11500000, guid: 08c9137168ccbc04cb7597bf177babca, type: 3}
+  m_Name: SpeedMulitplier
   m_EditorClassIdentifier: 
-  settingName: CurrentSpeed
-  displayName: Snelheid
+  settingName: SpeedMultiplier
+  displayName: Snelheids Vermenigvuldiger
   units: 
+  OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []

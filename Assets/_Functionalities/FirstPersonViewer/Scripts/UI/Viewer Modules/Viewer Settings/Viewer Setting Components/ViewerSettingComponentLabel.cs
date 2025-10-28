@@ -8,22 +8,25 @@ namespace Netherlands3D.FirstPersonViewer.UI
     public class ViewerSettingComponentLabel : ViewerSettingComponent
     {
         [SerializeField] private TextMeshProUGUI valueLabelText;
+        private ViewerSettingLabel settingLabel;
 
         public override void Init(ViewerSetting setting)
         {
             base.Init(setting);
-            ViewerSettingsEvents<string>.AddListener(setting.settingsLabel, SetValue);
+
+            settingLabel = setting as ViewerSettingLabel;
+            settingLabel.movementSetting.OnValueChanged.AddListener(SetValue);
         }
 
         private void OnEnable()
         {
             //OnEnable happens before the Initialize so check if it's not null.
-            if (setting != null)  ViewerSettingsEvents<string>.AddListener(setting.settingsLabel, SetValue);
+            if (settingLabel != null) settingLabel.movementSetting.OnValueChanged.AddListener(SetValue);
         }
 
         private void OnDisable()
         {
-            ViewerSettingsEvents<string>.RemoveListener(setting.settingsLabel, SetValue);
+            settingLabel.movementSetting.OnValueChanged.RemoveListener(SetValue);
         }
 
         public void SetValue(string value)

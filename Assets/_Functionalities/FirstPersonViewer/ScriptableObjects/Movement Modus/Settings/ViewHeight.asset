@@ -9,9 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 963eb9b26aaae7d4d8d4cac877879da3, type: 3}
+  m_Script: {fileID: 11500000, guid: 08c9137168ccbc04cb7597bf177babca, type: 3}
   m_Name: ViewHeight
   m_EditorClassIdentifier: 
   settingName: ViewHeight
   displayName: Kijkhoogte
   units: m
+  OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []

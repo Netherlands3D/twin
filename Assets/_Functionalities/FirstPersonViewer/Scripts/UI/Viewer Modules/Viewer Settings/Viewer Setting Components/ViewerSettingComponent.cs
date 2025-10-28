@@ -15,10 +15,10 @@ namespace Netherlands3D.FirstPersonViewer.UI
         {
             this.setting = setting;
 
-            settingNameText.text = setting.settingsLabel.displayName;
+            settingNameText.text = setting.GetDisplayName();
 
-            if (setting.settingsLabel.units == null) settingUnitText.gameObject.SetActive(false);
-            else settingUnitText.text = setting.settingsLabel.units;
+            if (setting.GetDisplayUnits() == null) settingUnitText.gameObject.SetActive(false);
+            else settingUnitText.text = setting.GetDisplayUnits();
 
             SetValue(setting.GetValue());
         }

@@ -26,7 +26,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
             {
                 newValue = Mathf.Clamp(newValue, input.minValue, input.maxValue);
 
-                ViewerSettingsEvents<float>.Invoke(setting.settingsLabel, newValue);
+                setting.InvokeOnValueChanged(newValue);
+                
                 SetValue(newValue);
             } else valueInput.text = prevValue;
         }

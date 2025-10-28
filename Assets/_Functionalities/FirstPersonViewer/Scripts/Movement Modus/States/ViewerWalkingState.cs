@@ -11,7 +11,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     {
         private float jumpForce;
 
-        [SerializeField] private MovementLabel jumpFoceSetting;
+        [SerializeField] private MovementFloatSetting jumpFoceSetting;
 
         public override void OnEnter()
         {
@@ -19,7 +19,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_Y);
 
-            ViewerSettingsEvents<float>.AddListener(jumpFoceSetting, SetJumpForce);
+            jumpFoceSetting.OnValueChanged.AddListener(SetJumpForce);
         }
 
         public override void OnUpdate()
@@ -39,7 +39,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnExit()
         {
-            ViewerSettingsEvents<float>.RemoveListener(jumpFoceSetting, SetJumpForce);
+            jumpFoceSetting.OnValueChanged.RemoveListener(SetJumpForce);
         }
 
         private void MovePlayer(Vector2 moveInput)
