@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class BackButton : VisualElement, IComponent
+    public partial class BackButton : VisualElement
     {
         /// <summary>Raised when the back button is activated.</summary>
         public event Action Clicked;

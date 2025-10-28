@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class Toggle : UnityEngine.UIElements.Toggle, IComponent
+    public partial class Toggle : UnityEngine.UIElements.Toggle
     {
         public enum ToggleStyle
         {

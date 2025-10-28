@@ -102,6 +102,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2b584bc293847214094f7a465dce2d00, type: 2}
   - {fileID: 11400000, guid: 6e1704cdf27264f12b6666fa18971ba2, type: 2}
   - {fileID: 11400000, guid: 88768754e3348f846a9dbe83309eddc8, type: 2}
+  - {fileID: 11400000, guid: f96e9f956c2024f139d92b4db6418a40, type: 2}
   OnAdapterFound:
     m_PersistentCalls:
       m_Calls: []
