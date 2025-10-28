@@ -388,7 +388,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             polygonBoundingBox.Convert(CoordinateSystem.RD);
             BinaryMeshLayer bml = ((CartesianTileLayerGameObject)areaReferenceData.Reference).Layer as BinaryMeshLayer;
             Initialize(LayerData, settings.OriginalPrefabId);
-            bml.OnTileObjectCreated.AddListener(tile =>
+            bml?.OnTileObjectCreated.AddListener(tile =>
             {
                 BoundingBox tileBox = GetBoundingBoxForTile(tile);
                 //is a tile being loaded intersecting with the polygon then regenerate the sampler texture
