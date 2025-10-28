@@ -27,48 +27,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 
         public void TogglePropertyToggle()
         {
-            if (IsScatterLayer())
+            switch (LayerGameObject)
             {
-                gameObject.SetActive(true);
-                convertToggle.SetIsOnWithoutNotify(true);
-                return;
-            }
-            
-            if (IsObjectLayer())
-            {
-                if (LayerGameObject.LayerData.ParentLayer is PolygonSelectionLayer)
-                {
+                case ObjectScatterLayerGameObject:
+                    gameObject.SetActive(true);
+                    convertToggle.SetIsOnWithoutNotify(true);
+                    return;
+                case HierarchicalObjectLayerGameObject objectLayer when objectLayer.LayerData.ParentLayer is PolygonSelectionLayer:
                     gameObject.SetActive(true);
                     convertToggle.SetIsOnWithoutNotify(false);
                     return;
-                }
+                default:
+                    gameObject.SetActive(false);
+                    break;
             }
-
-            gameObject.SetActive(false);
         }
 
         private void ToggleScatter(bool isOn)
         {
-            if (IsScatterLayer())
+            switch (LayerGameObject)
             {
-                var scatterLayer = LayerGameObject as ObjectScatterLayerGameObject;
-                App.Layers.ReplaceVisualisation(scatterLayer.LayerData, scatterLayer.Settings.OriginalPrefabId);
+                case ObjectScatterLayerGameObject scatterLayer:
+                    App.Layers.VisualizeAs(scatterLayer.LayerData, scatterLayer.Settings.OriginalPrefabId);
+                    return;
+                case HierarchicalObjectLayerGameObject objectLayer:
+                    App.Layers.VisualizeAs(objectLayer.LayerData, ObjectScatterLayerGameObject.ScatterBasePrefabID);
+                    return;
             }
-            else if (IsObjectLayer())
-            {
-                var objectLayer = LayerGameObject as HierarchicalObjectLayerGameObject;
-                App.Layers.ReplaceVisualisation(objectLayer.LayerData, ObjectScatterLayerGameObject.ScatterBasePrefabID);
-            }
-        }
-
-        public bool IsObjectLayer()
-        {
-            return LayerGameObject is HierarchicalObjectLayerGameObject;
-        }
-
-        public bool IsScatterLayer()
-        {
-            return LayerGameObject is ObjectScatterLayerGameObject;
         }
     }
 }

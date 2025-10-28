@@ -27,11 +27,13 @@ namespace Netherlands3D.Twin.Layers
             return await SpawnUsingLayerGameObject(layerData, prefab);
         }
 
-        public async Task<LayerGameObject> Spawn(string prefabId)
-        {
+        public async Task<LayerGameObject> Spawn(
+            ReferencedLayerData layerData, 
+            string prefabId
+        ) {
             var prefab = prefabLibrary.GetPrefabById(prefabId);
 
-            return await SpawnObject(prefab);
+            return await SpawnObject(layerData, prefab);
         }
 
         public async Task<LayerGameObject> Spawn(

@@ -125,13 +125,21 @@ namespace Netherlands3D.Twin.Services
             return layerData;
         }
 
-        public async Task<LayerGameObject> ReplaceVisualisation(ReferencedLayerData layerData, string prefabId)
+        /// <summary>
+        /// Force a LayerData object to be visualized as a specific prefab.
+        ///
+        /// Warning: this code does not check if the given prefab is compatible with this LayerData, make sure you know what you are doing.
+        /// </summary>
+        public async Task<ReferencedLayerData> VisualizeAs(ReferencedLayerData layerData, string prefabIdentifier)
         {
-            var layerGameObject = await spawner.Spawn(prefabId);
-            string previousId = layerData.Reference.PrefabIdentifier;
-            layerData.SetReference(layerGameObject, false);
-            layerGameObject.OnConvert(previousId);
-            return layerGameObject;
+            string previousId = layerData.PrefabIdentifier;
+            layerData.SetReference(SpawnPlaceholder(layerData), true);
+            
+            var layerGameObject = await spawner.Spawn(layerData, prefabIdentifier);
+            
+            if (previousId != prefabIdentifier) layerGameObject.OnConvert(previousId);
+
+            return layerData;
         }
 
         /// <summary>
