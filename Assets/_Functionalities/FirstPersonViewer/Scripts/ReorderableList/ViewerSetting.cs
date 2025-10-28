@@ -17,7 +17,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public abstract void InvokeOnValueChanged(object value);
     }
 
-    public abstract class ViewerSettingGeneric<T> : ViewerSetting
+    public abstract class ViewerSettingGeneric<T> : ViewerSetting // we unfortunately need this class since a generic class can not be drawn with the PropertyDrawer
     {
         public MovementSetting<T> movementSetting;
         public override string GetDisplayName() => movementSetting.displayName;
@@ -28,6 +28,10 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             if (value is T typeValue)
             {
                 movementSetting.OnValueChanged.Invoke(typeValue);
+            }
+            else
+            {
+                throw new InvalidCastException("value is not of type " + typeof(T));
             }
         }
     }
