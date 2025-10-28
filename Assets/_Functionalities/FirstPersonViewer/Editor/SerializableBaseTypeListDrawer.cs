@@ -12,7 +12,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
     // Custom property drawer for the dropdown
     [CustomPropertyDrawer(typeof(SerializableBaseTypeList<>), useForChildren: true)]
-    public class ReorderableListDrawer : PropertyDrawer
+    public class SerializableBaseTypeListDrawer : PropertyDrawer
     {
         private const string fieldName = "list";
         private const float padding = 2f;
