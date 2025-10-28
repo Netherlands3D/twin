@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -8,17 +8,13 @@ namespace Netherlands3D.UI.Components
     {
         public ListViewItem()
         {
-            // Find and load UXML template for this component
-            var asset = Resources.Load<VisualTreeAsset>("UI/" + nameof(ListViewItem));
-            asset.CloneTree(this);
+            this.CloneComponentTree("Components");
+            this.AddComponentStylesheet("Components");
+        }
 
-            // Find and load USS stylesheet specific for this component
-            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(ListViewItem) + "-style");
-            styleSheets.Add(styleSheet);
-
-            // Stable hooks for selectors
-            AddToClassList("listview-item");
-            if (string.IsNullOrEmpty(name)) name = nameof(ListViewItem);
+        public ListViewItem(VisualElement content) : this()
+        {
+            Add(content);
         }
     }
 }

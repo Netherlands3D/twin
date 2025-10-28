@@ -1,6 +1,5 @@
-using Netherlands3D.UI;
+using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -8,9 +7,6 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class Toggle : UnityEngine.UIElements.Toggle
     {
-        private Icon Icon => this.Q<Icon>("Icon");
-        private Label Label => this.Q<Label>("Label");
-
         public enum ToggleStyle
         {
             Normal,
@@ -24,12 +20,20 @@ namespace Netherlands3D.UI.Components
             Right
         }
 
+        // Query and cache icon component
+        private Icon icon;
+        private Icon Icon => icon ??= this.Q<Icon>("Icon");
+
+        // Query and cache label component
+        private Label labelField;
+        private Label Label => labelField ??= this.Q<Label>("Label");
+
         private ToggleStyle toggleStyle = ToggleStyle.WithIcon;
         [UxmlAttribute("toggle-style")]
         public ToggleStyle ShowIcon
         {
             get => toggleStyle;
-            set => this.SetFieldValueAndReplaceClassName(ref toggleStyle, value, "toggle-style-");
+            set { toggleStyle = value; UpdateClassList(); }
         }
 
         private ToggleIconPosition toggleIconPosition = ToggleIconPosition.Left;
@@ -37,11 +41,11 @@ namespace Netherlands3D.UI.Components
         public ToggleIconPosition IconPosition
         {
             get => toggleIconPosition;
-            set => this.SetFieldValueAndReplaceClassName(ref toggleIconPosition, value, "toggle-icon-position-");
+            set { toggleIconPosition = value; UpdateClassList(); }
         }
 
         [UxmlAttribute("icon")]
-        public Icon.IconImage Image
+        public IconImage Image
         {
             get => Icon.Image;
             set => Icon.Image = value;
@@ -56,30 +60,16 @@ namespace Netherlands3D.UI.Components
 
         public Toggle()
         {
-            // Find and load UXML template for this component
-            var asset = Resources.Load<VisualTreeAsset>("UI/" + nameof(Toggle));
-            asset.CloneTree(this);
+            this.CloneComponentTree("Components");
+            this.AddComponentStylesheet("Components");
 
-            // Find and load USS stylesheet specific for this component
-            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(Toggle) + "-style");
-            styleSheets.Add(styleSheet);
-
-            AddToClassList("toggle");
-            RegisterCallback<AttachToPanelEvent>(_ =>
-            {
-                ApplyCurrentVariantClasses();
-            });
+            RegisterCallback<AttachToPanelEvent>(_ => UpdateClassList());
         }
 
-        private void ApplyCurrentVariantClasses()
+        private void UpdateClassList()
         {
-            EnableInClassList("toggle-style-normal", toggleStyle == ToggleStyle.Normal);
-            EnableInClassList("toggle-style-with-icon", toggleStyle == ToggleStyle.WithIcon);
-            EnableInClassList("toggle-style-icon-only", toggleStyle == ToggleStyle.IconOnly);
-
-            EnableInClassList("toggle-icon-position-left", toggleIconPosition == ToggleIconPosition.Left);
-            EnableInClassList("toggle-icon-position-right", toggleIconPosition == ToggleIconPosition.Right);
+            this.ReplacePrefixedValueInClassList("toggle-style-", toggleStyle.ToString().ToKebabCase());
+            this.ReplacePrefixedValueInClassList("toggle-icon-position-", toggleIconPosition.ToString().ToKebabCase());
         }
-
     }
 }

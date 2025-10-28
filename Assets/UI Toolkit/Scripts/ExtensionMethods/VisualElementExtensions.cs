@@ -1,25 +1,57 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.ExtensionMethods
 {
     public static class VisualElementExtensions
     {
+        public static void CloneComponentTree(this VisualElement component, string path = "")
+        {
+            if (!string.IsNullOrEmpty(path)) path += "/";
+            
+            var asset = Resources.Load<VisualTreeAsset>($"UI/{path}{component.GetType().Name}");
+            asset.CloneTree(component);
+        }
+        
+        public static void AddComponentStylesheet(this VisualElement component, string path = "")
+        {
+            if (!string.IsNullOrEmpty(path)) path += "/";
+            
+            var styleSheet = Resources.Load<StyleSheet>($"UI/{path}{component.GetType().Name}-style");
+            component.styleSheets.Add(styleSheet);
+        }
+
+        public static void RemoveFromClassListStartingWith(this VisualElement element, string prefix)
+        {
+            var classNames = element.GetClasses().Where(s => s.StartsWith(prefix)).ToList();
+            foreach(var className in classNames)
+            {
+                element.RemoveFromClassList(className);
+            }
+        }
+
+        public static void ReplacePrefixedValueInClassList(this VisualElement element, string prefix, string value)
+        {
+            element.RemoveFromClassListStartingWith(prefix);
+            element.AddToClassList(prefix + value);
+        }
+
         public static void SetFieldValueAndReplaceClassName<T>(
             this VisualElement visualElement, 
             ref T field, 
             T newValue, 
             string prefix = ""
         ) {
-            visualElement.RemoveFromClassList(prefix + ToKebabCase(visualElement, field.ToString()));
+            visualElement.RemoveFromClassList(prefix + field.ToString().ToKebabCase());
             field = newValue;
-            visualElement.AddToClassList(prefix + ToKebabCase(visualElement,field.ToString()));
+            visualElement.AddToClassList(prefix + field.ToString().ToKebabCase());
         }
     
-        public static string ToKebabCase(this VisualElement _, string input)
+        public static string ToKebabCase(this string input)
         {
-            if (string.IsNullOrWhiteSpace(input))
-                return string.Empty;
+            if (string.IsNullOrWhiteSpace(input)) return string.Empty;
 
             var sb = new StringBuilder();
             char? prev = null;

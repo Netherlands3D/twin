@@ -134,6 +134,7 @@ namespace Netherlands3D.Twin.Utility
         
         public void Encapsulate(Coordinate coordinate)
         {
+            coordinate = coordinate.Convert(CoordinateSystem);
             var blv1 = Min(coordinate.value1, BottomLeft.value1);
             var blv2 = Min(coordinate.value2, BottomLeft.value2);
             var trv1 = Max(coordinate.value1, TopRight.value1);
@@ -165,21 +166,46 @@ namespace Netherlands3D.Twin.Utility
         {
             return lhs > rhs ? lhs : rhs;
         }
-        
+
+        public bool Equals(BoundingBox other)
+        {
+            if (other == null) return false;
+            if (other.CoordinateSystem != CoordinateSystem)
+                other.Convert(CoordinateSystem);
+
+            return BottomLeft.Equals(other.BottomLeft) && TopRight.Equals(other.TopRight);
+        }
+
         public void Debug(Color color)
         {
-            float height = 100;
             Vector3 unityBottomLeft = BottomLeft.ToUnity();
-            unityBottomLeft.y = height;
             Vector3 unityTopRight = TopRight.ToUnity();
-            unityTopRight.y = height;
-            Vector3 unityBottomRight = new Vector3(unityTopRight.x, height, unityBottomLeft.z);
-            Vector3 unityTopLeft = new Vector3(unityBottomLeft.x, height, unityTopRight.z);
+            float down = Mathf.Min(unityBottomLeft.y, unityTopRight.y);
+            float up = Mathf.Max(unityBottomLeft.y, unityTopRight.y);
+            Vector3 unityBottomRightDown = new Vector3(unityTopRight.x, down, unityBottomLeft.z);
+            Vector3 unityTopLeftDown = new Vector3(unityBottomLeft.x, down, unityTopRight.z);
+            Vector3 unityBottomLeftDown = new Vector3(unityBottomLeft.x, down, unityBottomLeft.z);
+            Vector3 unityTopRightDown = new Vector3(unityTopRight.x, down, unityTopRight.z);
 
-            UnityEngine.Debug.DrawLine(unityBottomLeft, unityBottomRight, color);
-            UnityEngine.Debug.DrawLine(unityBottomRight, unityTopRight, color);
-            UnityEngine.Debug.DrawLine(unityTopRight, unityTopLeft, color);
-            UnityEngine.Debug.DrawLine(unityTopLeft, unityBottomLeft, color);
+            Vector3 unityBottomRightUp = new Vector3(unityTopRight.x, up, unityBottomLeft.z);
+            Vector3 unityTopLeftUp = new Vector3(unityBottomLeft.x, up, unityTopRight.z);
+            Vector3 unityBottomLeftUp = new Vector3(unityBottomLeft.x, up, unityBottomLeft.z);
+            Vector3 unityTopRightUp = new Vector3(unityTopRight.x, up, unityTopRight.z);
+
+            UnityEngine.Debug.DrawLine(unityBottomLeftDown, unityBottomRightDown, color);
+            UnityEngine.Debug.DrawLine(unityBottomRightDown, unityTopRightDown, color);
+            UnityEngine.Debug.DrawLine(unityTopRightDown, unityTopLeftDown, color);
+            UnityEngine.Debug.DrawLine(unityTopLeftDown, unityBottomLeftDown, color);
+
+            UnityEngine.Debug.DrawLine(unityBottomLeftDown, unityBottomLeftUp, color);
+            UnityEngine.Debug.DrawLine(unityBottomRightDown, unityBottomRightUp, color);
+            UnityEngine.Debug.DrawLine(unityTopRightDown, unityTopRightUp, color);
+            UnityEngine.Debug.DrawLine(unityTopLeftDown, unityTopLeftUp, color);
+
+            UnityEngine.Debug.DrawLine(unityBottomLeftUp, unityBottomRightUp, color);
+            UnityEngine.Debug.DrawLine(unityBottomRightUp, unityTopRightUp, color);
+            UnityEngine.Debug.DrawLine(unityTopRightUp, unityTopLeftUp, color);
+            UnityEngine.Debug.DrawLine(unityTopLeftUp, unityBottomLeftUp, color);
         }
     }
 }

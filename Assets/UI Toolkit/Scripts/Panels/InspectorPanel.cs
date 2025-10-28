@@ -1,4 +1,4 @@
-using UnityEngine;
+using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -6,7 +6,10 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class InspectorPanel : VisualElement
     {
-        private Label Header => this.Q<Label>(className: "inspector-header");
+        private Label header;
+        private Label Header => header ??= this.Q<Label>(className: "inspector-header-title");
+        private Button inspectorHeaderCloseButton;
+        public Button InspectorHeaderCloseButton => inspectorHeaderCloseButton ??= this.Q<Button>("InspectorHeaderCloseButton");
 
         /// <summary>
         /// Header text pass-through so it can be set from UXML/Inspector.
@@ -18,7 +21,8 @@ namespace Netherlands3D.UI.Components
             set { if (Header != null) Header.text = value; }
         }
 
-        private ToolbarInspector Toolbar => this.Q<ToolbarInspector>();
+        private ToolbarInspector toolbar;
+        public ToolbarInspector Toolbar => toolbar ??= this.Q<ToolbarInspector>();
         private ToolbarInspector.ToolbarStyle _toolbarStyleCache = ToolbarInspector.ToolbarStyle.Normal;
 
         /// <summary>
@@ -35,26 +39,27 @@ namespace Netherlands3D.UI.Components
             }
         }
 
-        /// <summary>
-        /// Optional convenience accessor for the content placeholder.
-        /// </summary>
         public VisualElement Content => this.Q("Content");
 
         public InspectorPanel()
         {
-            // Find and load UXML template for this component
-            var asset = Resources.Load<VisualTreeAsset>("UI/Panels/" + nameof(InspectorPanel));
-            asset.CloneTree(this);
-
-            // Find and load USS stylesheet specific for this component (using -style)
-            var styleSheet = Resources.Load<StyleSheet>("UI/Panels/" + nameof(InspectorPanel) + "-style");
-            styleSheets.Add(styleSheet);
+            this.CloneComponentTree("Panels");
+            this.AddComponentStylesheet("Panels");
 
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
-                // Apply cached toolbar style when child is available
-                if (Toolbar != null) Toolbar.Style = _toolbarStyleCache;
+                Toolbar.Style = _toolbarStyleCache;
             });
+        }
+
+        public void Open()
+        {
+            EnableInClassList("active", true);
+        }
+
+        public void Close()
+        {
+            EnableInClassList("active", false);
         }
     }
 }

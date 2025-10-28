@@ -1,13 +1,15 @@
-using System.IO;
-using UnityEngine;
 using System;
-using Netherlands3D.Web;
+using System.Collections.Generic;
+using System.IO;
 using KindMen.Uxios;
+using KindMen.Uxios.Http;
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Functionalities.Wfs.LayerPresets;
 using Netherlands3D.OgcWebServices.Shared;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
+using Netherlands3D.Web;
+using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wfs
 {
@@ -102,11 +104,26 @@ namespace Netherlands3D.Functionalities.Wfs
             if (isWfsGetFeature)
             {
                 var queryParameters = QueryString.Decode(sourceUrl);
-                var featureType = queryParameters.Single(WfsGetCapabilities.ParameterNameOfTypeNameBasedOnVersion(wfsVersion));
-
-                if (string.IsNullOrEmpty(featureType) == false)
+                var paramName = WfsGetCapabilities.ParameterNameOfTypeNameBasedOnVersion(OgcWebServicesUtility.GetVersionFromUrl(url));
+                string featureType = null;
+                string crs = null;
+                foreach (KeyValuePair<string, QueryParameter> kv in queryParameters)
                 {
-                    string crs = queryParameters.Single("srsname");
+                    if(string.Equals(kv.Key, paramName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        string val = kv.Value.ToString();
+                        int equalsIndex = val.IndexOf('=');
+                        featureType = equalsIndex >= 0 && equalsIndex < val.Length - 1 ? val.Substring(equalsIndex + 1) : val;                        
+                    }
+                    if(string.Equals(kv.Key, "srsname", StringComparison.OrdinalIgnoreCase))
+                    {
+                        string val = kv.Value.ToString();
+                        int equalsIndex = val.IndexOf('=');
+                        crs = equalsIndex >= 0 && equalsIndex < val.Length - 1 ? val.Substring(equalsIndex + 1) : val;
+                    }
+                }
+                if (string.IsNullOrEmpty(featureType) == false)
+                {                     
                     // Can't deduct a human-readable title at the moment, we should add that we always query for the
                     // capabilities; this also helps with things like outputFormat and CRS
                     AddWFSLayer(featureType, sourceUrl, crs, wfsFolder, featureType, geoJsonOutputFormatString);
@@ -117,30 +134,21 @@ namespace Netherlands3D.Functionalities.Wfs
             Debug.LogError("Unrecognized WFS request type: " + url);
         }
 
-        private void AddWFSLayer(string featureType, string sourceUrl, string crsType, FolderLayer folderLayer, string title, string geoJsonOutputFormatString)
+        private async void AddWFSLayer(string featureType, string sourceUrl, string crsType, FolderLayer folderLayer, string title, string geoJsonOutputFormatString)
         {
             // Create a GetFeature URL for the specific featureType
             UriBuilder uriBuilder = CreateLayerGetFeatureUri(featureType, sourceUrl, crsType, geoJsonOutputFormatString);
-            var getFeatureUrl = uriBuilder.Uri.ToString();
+            var getFeatureUrl = uriBuilder.Uri;
 
             Debug.Log($"Adding WFS layer '{featureType}' with url '{getFeatureUrl}'");
 
-            //Spawn a new WFS GeoJSON layer
-            WFSGeoJsonLayerGameObject newLayer = Instantiate(layerPrefab);
-            newLayer.LayerData.SetParent(folderLayer);
-            newLayer.Name = title;
-
-            var propertyData = newLayer.PropertyData as LayerURLPropertyData;
-            propertyData.Data = AssetUriFactory.CreateRemoteAssetUri(getFeatureUrl);
-
-            //GeoJSON layer+visual colors are set to random colors until user can pick colors in UI
-            var randomLayerColor = Color.HSVToRGB(UnityEngine.Random.value, UnityEngine.Random.Range(0.5f, 1f), 1);
-            randomLayerColor.a = 0.5f;
-            newLayer.LayerData.Color = randomLayerColor;
-
-            var symbolizer = newLayer.LayerData.DefaultSymbolizer;
-            symbolizer?.SetFillColor(randomLayerColor);
-            symbolizer?.SetStrokeColor(randomLayerColor);
+            await App.Layers.Add(
+                new WfsLayerPreset.Args(
+                    getFeatureUrl,
+                    title,
+                    folderLayer
+                )
+            );
         }
 
         private UriBuilder CreateLayerGetFeatureUri(string featureType, string sourceUrl, string crs, string geoJsonOutputFormatString)

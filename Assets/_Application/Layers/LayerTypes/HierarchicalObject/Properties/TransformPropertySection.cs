@@ -143,7 +143,62 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             }
         }
 
-        private void OnPositionChanged(string axisValue)
+        public void SetPositionX(int value)
+        {
+            position.xField.Text = value.ToString();
+            OnPositionChanged(string.Empty);
+        }
+
+        public void SetPositionY(int value)
+        {
+            position.yField.Text = value.ToString();
+            OnPositionChanged(string.Empty);
+        }
+
+        public void SetPositionZ(int value)
+        {
+            position.zField.Text = value.ToString();
+            OnPositionChanged(string.Empty);
+        }
+
+        public void SetRotationX(int value)
+        {
+            rotation.xField.Text = value.ToString();
+            OnRotationChanged(string.Empty);
+        }
+
+        public void SetRotationY(int value)
+        {
+            rotation.yField.Text = value.ToString();
+            OnRotationChanged(string.Empty);
+        }
+
+        public void SetRotationZ(int value)
+        {
+            rotation.zField.Text = value.ToString();
+            OnRotationChanged(string.Empty);
+        }
+
+        public void SetScaleX(int value)
+        {
+            scale.xField.Text = value.ToString();
+            OnScaleChanged(string.Empty);
+        }
+
+        public void SetScaleY(int value)
+        {
+            scale.yField.Text = value.ToString();
+            OnScaleChanged(string.Empty);
+        }
+
+        public void SetScaleZ(int value)
+        {
+            scale.zField.Text = value.ToString();
+            OnScaleChanged(string.Empty);
+        }
+
+        //the param is doing nothing to match signature
+        public void OnPositionChanged(string axisValue)
         {
             var numberFormat = new NumberFormatInfo
             {
@@ -171,7 +226,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             TransformPropertyData.Position = rdCoordinate;
         }
 
-        private void OnRotationChanged(string axisValue)
+        //the param is doing nothing to match signature
+        public void OnRotationChanged(string axisValue)
         {
             var numberFormat = new NumberFormatInfo
             {
@@ -197,7 +253,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             TransformPropertyData.EulerRotation = new Vector3(x, y, z);
         }
 
-        private void OnScaleChanged(string axisValue)
+        //the param is doing nothing to match signature
+        public void OnScaleChanged(string axisValue)
         {
             var numberFormat = new NumberFormatInfo
             {
@@ -225,7 +282,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
 
         private void UpdatePositionFields(Coordinate coordinate)
         {
-            var rdCoordinate = CoordinateConverter.ConvertTo(coordinate, CoordinateSystem.RDNAP);
+            var rdCoordinate = coordinate.Convert( CoordinateSystem.RDNAP);
             
             position.xField.SetTextWithoutNotify($"{rdCoordinate.easting.ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");
             position.yField.SetTextWithoutNotify($"{rdCoordinate.northing.ToString(formatString, CultureInfo.InvariantCulture)}{positionUnitCharacter}");

@@ -42,10 +42,9 @@ namespace Netherlands3D.Functionalities.Wfs
         public string GetVersion()
         {
             //try to get version from the url
-            var urlLower = Url.ToString().ToLower();
-            var versionQueryKey = "version=";
-            if (urlLower.Contains(versionQueryKey))
-                return urlLower.Split(versionQueryKey)[1].Split("&")[0];
+            string version = OgcWebServicesUtility.GetVersionFromUrl(Url);
+            if (version != null)
+                return version;
 
             //try to get the version from the body, or return the default
             var versionInXml = xmlDocument.DocumentElement.GetAttribute("version");

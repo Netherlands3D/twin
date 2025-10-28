@@ -1,3 +1,4 @@
+using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
@@ -14,8 +15,6 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ContentContainer : Foldout
     {
-        private const string RootClass = "contentcontainer";
-
         // Foldout internals
         private VisualElement HeaderInput => this.Q<VisualElement>(className: "unity-toggle__input");
         private Label HeaderLabel => this.Q<Label>(className: "unity-label");
@@ -24,13 +23,22 @@ namespace Netherlands3D.UI.Components
         // Elements from UXML
         private Icon leadingIcon => this.Q<Icon>("LeadingIcon");
         private HelpButton helpButton => this.Q<HelpButton>("HelpButton");
-        private VisualElement Divider => this.Q<VisualElement>("Divider");
 
-        public enum ContainerType { Foldout, NoFoldout }
+        public enum ContainerType
+        {
+            Foldout,
+            NoFoldout
+        }
+
         private ContainerType containerType = ContainerType.Foldout;
         private const string HideCheckmarkClass = "hide-checkmark";
 
-        public enum ContainerStyle { Normal, WithIcon }
+        public enum ContainerStyle
+        {
+            Normal,
+            WithIcon
+        }
+
         private ContainerStyle containerStyle = ContainerStyle.WithIcon;
 
         [UxmlAttribute("container-type")]
@@ -77,11 +85,15 @@ namespace Netherlands3D.UI.Components
         public bool ShowDivider
         {
             get => showDivider;
-            set { showDivider = value; SetDividerVisibility(); }
+            set
+            {
+                showDivider = value;
+                SetDividerVisibility();
+            }
         }
 
         [UxmlAttribute("leading-icon")]
-        public Icon.IconImage LeadingIconImage
+        public IconImage LeadingIconImage
         {
             get => leadingIcon.Image;
             set => leadingIcon.Image = value;
@@ -93,10 +105,16 @@ namespace Netherlands3D.UI.Components
         public bool ShowHelpIcon
         {
             get => showHelpIcon;
-            set { showHelpIcon = value; UpdateIcons(); ReorderHeaderChildren(); }
+            set
+            {
+                showHelpIcon = value;
+                UpdateIcons();
+                ReorderHeaderChildren();
+            }
         }
 
         private string helpUrl;
+        private VisualElement headerDivider;
 
         [UxmlAttribute("help-url")]
         public string HelpUrl
@@ -112,26 +130,20 @@ namespace Netherlands3D.UI.Components
 
         public ContentContainer()
         {
-            // Find and load UXML template for this component
-            var asset = Resources.Load<VisualTreeAsset>("UI/" + nameof(ContentContainer));
-            asset.CloneTree(this);
+            this.CloneComponentTree("Components");
+            this.AddComponentStylesheet("Components");
 
-            // Find and load USS stylesheet specific for this component (using -style)
-            var styleSheet = Resources.Load<StyleSheet>("UI/" + nameof(ContentContainer) + "-style");
-            styleSheets.Add(styleSheet);
+            if (string.IsNullOrEmpty(text)) text = "Label";
 
-            if (string.IsNullOrEmpty(text))
-                text = "Label";
-
-            // Block collaps when NoFoldout is active (mouse/keyboard/script)
-            this.RegisterCallback<ChangeEvent<bool>>(evt =>
+            // Block collapse when NoFoldout is active (mouse/keyboard/script)
+            RegisterCallback<ChangeEvent<bool>>(evt =>
             {
                 if (containerType == ContainerType.NoFoldout && !evt.newValue)
-                    this.value = true;
+                    value = true;
             });
 
             // Setup after attach (Foldout internals exist)
-            this.RegisterCallback<AttachToPanelEvent>(_ =>
+            RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 ApplyContainerType();
                 ReorderHeaderChildren();
@@ -149,9 +161,11 @@ namespace Netherlands3D.UI.Components
         /// </summary>
         private void ReorderHeaderChildren()
         {
-            var input = HeaderInput; if (input == null) return;
+            var input = HeaderInput;
+            if (input == null) return;
             var label = HeaderLabel;
-            var check = Checkmark; if (check == null) return;
+            var check = Checkmark;
+            if (check == null) return;
 
             if (leadingIcon != null && leadingIcon.parent != input) input.Add(leadingIcon);
             if (label != null && label.parent != input) input.Add(label);
@@ -176,7 +190,9 @@ namespace Netherlands3D.UI.Components
 
             var input = HeaderInput;
             if (input != null)
-                input.pickingMode = (containerType == ContainerType.NoFoldout) ? PickingMode.Ignore : PickingMode.Position;
+                input.pickingMode = (containerType == ContainerType.NoFoldout)
+                    ? PickingMode.Ignore
+                    : PickingMode.Position;
 
             // Mouse-interaction off when NoFoldout
             var check = Checkmark;
@@ -190,10 +206,16 @@ namespace Netherlands3D.UI.Components
         /// </summary>
         private void EnsureDividerPosition()
         {
-            if (Divider == null) return;
-            var target = contentContainer;
-            if (Divider.parent != target) target.Add(Divider);
-            target.Insert(0, Divider);
+            if (headerDivider == null)
+            {
+                headerDivider = new VisualElement { name = "Divider" };
+                headerDivider.AddToClassList("divider");
+                headerDivider.AddToClassList("divider-header");
+            }
+            if (headerDivider.parent != contentContainer)
+            {
+                contentContainer.Insert(0, headerDivider);
+            }
         }
 
         /// <summary>
@@ -202,8 +224,7 @@ namespace Netherlands3D.UI.Components
         /// </summary>
         private void SetDividerVisibility()
         {
-            if (Divider != null)
-                Divider.style.display = showDivider ? DisplayStyle.Flex : DisplayStyle.None;
+            EnableInClassList("divider-active", showDivider);
         }
 
         private void UpdateIcons()

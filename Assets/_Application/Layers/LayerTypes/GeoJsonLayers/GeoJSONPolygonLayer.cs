@@ -29,6 +29,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
         public bool IsPolygon => true;
+        public override bool IsMaskable => false;
         public Transform Transform { get => transform; }
         public delegate void GeoJSONPointHandler(Feature feature);
         public event GeoJSONPointHandler FeatureRemoved;
@@ -311,7 +312,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 else
                     bbox.Encapsulate(vis.trueBounds);
             }
-
+            var crs2D = CoordinateSystems.To2D(bbox.CoordinateSystem);
+            bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
         }
     }

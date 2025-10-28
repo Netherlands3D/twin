@@ -4,11 +4,15 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Events;
+using Netherlands3D.Twin.Samplers;
+using Netherlands3D.Services;
+
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -17,58 +21,60 @@ namespace Netherlands3D.Twin.Layers
 {
     public enum SpawnLocation
     {
-        OpticalCenter, //Center of the screen calculated through the optical Raycaster, keep the prefab rotation
-        CameraPosition, //Position and rotation of the main camera
-        PrefabPosition //keep the original prefab position and rotation
+        Auto = -1, // Do not pass a spawn location - similar to Instantiate without position and rotation properties
+        OpticalCenter = 0, //Center of the screen calculated through the optical Raycaster, keep the prefab rotation
+        CameraPosition = 1, //Position and rotation of the main camera
+        PrefabPosition = 2 //keep the original prefab position and rotation
     }
     
     public abstract class LayerGameObject : MonoBehaviour, IStylable
     {
+        public const int DEFAULT_MASK_BIT_MASK = 16777215; //(2^24)-1; 
+        
         [SerializeField] private string prefabIdentifier;
         [SerializeField] private SpriteState thumbnail;
         [SerializeField] private SpawnLocation spawnLocation;
         public string PrefabIdentifier => prefabIdentifier;
         public SpriteState Thumbnail => thumbnail;
         public SpawnLocation SpawnLocation => spawnLocation;
+        public virtual bool IsMaskable => true; // Can we mask this layer? Usually yes, but not in case of projections
+
+        public virtual IStyler Styler => styler;
+        protected IStyler styler;
         
+
         public string Name
         {
             get => LayerData.Name;
             set => LayerData.Name = value;
         }
 
-        public bool HasLayerData => layerData != null;
-        
-        private ReferencedLayerData layerData;
+        public bool HasLayerData => LayerData != null;
 
+        private ReferencedLayerData layerData;
         public ReferencedLayerData LayerData
         {
-            get
-            {
-                if (layerData == null)
-                {
-                    CreateProxy();
-                }
-
-                return layerData;
-            }
+            get => layerData;
             set
             {
-                layerData = value;
+                // Make idempotent - only continue if layerData actually changes
+                if (value == layerData) return;
 
-                foreach (var layer in GetComponents<ILayerWithPropertyData>())
-                {
-                    layer.LoadProperties(layerData.LayerProperties); //initial load
-                }
+                layerData = value;
+                OnLayerInitialize();
+                onLayerInitialized.Invoke();
             }
         }
 
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
-        public UnityEvent OnStylingApplied = new();
         Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;
 
-        [Space] public UnityEvent onShow = new();
+        [Space] 
+        public UnityEvent onShow = new();
         public UnityEvent onHide = new();
+        public UnityEvent onLayerInitialized = new();
+        public UnityEvent onLayerReady = new();
+        public UnityEvent OnStylingApplied = new();
 
         public abstract BoundingBox Bounds { get; }
 
@@ -88,41 +94,105 @@ namespace Netherlands3D.Twin.Layers
         }
 #endif
 
-        protected virtual void Start()
+        [Obsolete("Do not use Awake in subclasses, use OnLayerInitialize instead", true)]
+        private void Awake()
         {
+            // Technically not possible, but is a safeguard.
+            if (LayerData != null) return;
+            
+            // No parent, definitely no placeholder to replace
+            if (!transform.parent) return;
+            
+            // Immediately return if there is no Placeholder as parent - no action needed
+            if (transform.parent.GetComponent<PlaceholderLayerGameObject>() is not { } placeholder) return;
+
+            // Replacing the placeholder will change the Reference property of the LayerData,
+            // and that will trigger the LayerData property of this LayerGameObject to be set.
+            // Since the LayerData is responsible for initializing the Layer, it will trigger the
+            // real OnLayerInitialize method below
+            // By doing it this way, we could directly instantiate LayerGameObjects and defer their
+            // initialisation until a LayerData is present, as is done in the PlaceholderLayerGameObject.
+            placeholder.ReplaceWith(this);
+        }
+
+        /// <summary>
+        /// Called when the Layer needs to be (re)initialised once a new LayerData is provided.
+        ///
+        /// As soon as a LayerData property is assigned to this LayerGameObject, this method is called to initialize
+        /// this layer game object. Keep in mind that this could be called from the Awake function, it is recommended
+        /// to use this as little as possible.
+        ///
+        /// When using the LayerSpawner, the OnLayerReady will be called once after this method is fired the first time.
+        /// When you have a custom instantiation flow this is not guaranteed.
+        /// </summary>
+        protected virtual void OnLayerInitialize()
+        {
+            // Intentionally left blank as it is a template method and child classes should not have to
+            // call `base.OnLayerInitialize` (and possibly forget to do that)
+        }
+
+        [Obsolete("Do not use Awake in subclasses, use OnLayerReady instead", true)]
+        private void Start()
+        {
+            // Call a template method that children are free to play with - this way we can avoid using
+            // the start method directly and prevent forgetting to call the base.Start() from children
+            LoadPropertiesInVisualisations();
+            OnLayerReady();
+            // Event invocation is separate from template method on purpose to ensure child classes complete their
+            // readiness before external classes get to act - it also prevents forgetting calling the base method
+            // when overriding OnLayerReady
+            onLayerReady.Invoke();
             InitializeVisualisation();
+        }
+
+        protected virtual void OnLayerReady()
+        {
+            // Intentionally left blank as it is a template method and child classes should not have to
+            // call `base.OnLayerReady` (and possibly forget to do that)
         }
 
         //Use this function to initialize anything that has to be done after either:
         // 1. Instantiating prefab -> creating new LayerData, or
         // 2. Creating LayerData (from project), Instantiating prefab, coupling that LayerData to this LayerGameObject
         protected virtual void InitializeVisualisation()
-        {
+        {            
             LayerData.LayerDoubleClicked.AddListener(OnDoubleClick);
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 
             ApplyStyling();
         }
 
-        private void CreateProxy()
+        private void LoadPropertiesInVisualisations()
         {
-            ProjectData.AddReferenceLayer(this);
+            foreach (var visualisation in GetComponents<ILayerWithPropertyData>())
+            {
+                visualisation.LoadProperties(LayerData.LayerProperties);
+            }
         }
 
         protected virtual void OnEnable()
         {
             onShow.Invoke();
+            if(IsMaskable)
+                PolygonSelectionLayer.MaskDestroyed.AddListener(ResetMask);
         }
 
         protected virtual void OnDisable()
         {
             onHide.Invoke();
+            if(IsMaskable)
+                PolygonSelectionLayer.MaskDestroyed.RemoveListener(ResetMask);
         }
 
+        private void ResetMask(int maskBitIndex)
+        {
+            SetMaskBit(maskBitIndex, true); //reset accepting masks
+        }
+        
         protected virtual void OnDestroy()
         {
             //don't unsubscribe in OnDisable, because we still want to be able to center to a 
-            layerData.LayerDoubleClicked.RemoveListener(OnDoubleClick);
+            LayerData.LayerDoubleClicked.RemoveListener(OnDoubleClick);
         }
 
         public virtual void OnSelect()
@@ -135,7 +205,7 @@ namespace Netherlands3D.Twin.Layers
 
         public void DestroyLayer()
         {
-            layerData.DestroyLayer();
+            LayerData.DestroyLayer();
         }
 
         public virtual void DestroyLayerGameObject()
@@ -165,27 +235,34 @@ namespace Netherlands3D.Twin.Layers
 
         protected virtual void OnDoubleClick(LayerData layer)
         {
-            CenterInView(layer);
+            CenterInView();
         }
         
-        private void CenterInView(LayerData layer)
+        public void CenterInView()
         {
             if (Bounds == null)
             {
                 Debug.LogError("Bounds object is null, no bounds specified to center to.");
                 return;
             }
-
-            if(Bounds.BottomLeft.PointsLength > 2)
-                Bounds.Convert(CoordinateSystem.RDNAP); //todo: make this CRS independent
-            else
-                Bounds.Convert(CoordinateSystem.RD);
             
+            Coordinate targetCoordinate = Bounds.Center;
+            if (targetCoordinate.PointsLength == 2) //2D CRS, use the heigtmap to estimate the height.
+            {
+                targetCoordinate = targetCoordinate.Convert(CoordinateSystems.connectedCoordinateSystem);
+                float height = ServiceLocator.GetService<HeightMap>().GetHeight(targetCoordinate);
+                targetCoordinate.height = height;
+            }
+
+            var convertedBounds = new BoundingBox(Bounds.BottomLeft, Bounds.TopRight);
+            convertedBounds.Convert(CoordinateSystems.connectedCoordinateSystem); //convert the bounds so to the connected 
+            var targetDistance = convertedBounds.GetSizeMagnitude();
+
             // !IMPORTANT: we deselect the layer, because if we don't do this, the TransformHandles might be connected to this LayerGameObject
             // This causes conflicts between the transformHandles and the Origin Shifter system, because the Transform handles will try to move the gameObject to the old (pre-shift) position.
-            LayerData.DeselectLayer(); 
+            LayerData.DeselectLayer();
             //move the camera to the center of the bounds, and move it back by the size of the bounds (2x the extents)
-            Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(Bounds.Center, Bounds.GetSizeMagnitude());//sizeMagnitude returns 2x the extents
+            Camera.main.GetComponent<MoveCameraToCoordinate>().LookAtTarget(targetCoordinate, targetDistance); //sizeMagnitude returns 2x the extents
         }
 
 #region Styling
@@ -196,8 +273,74 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void ApplyStyling()
         {
+            var bitMask = GetBitMask();
+            UpdateMaskBitMask(bitMask);
+            // var mask = LayerStyler.GetMaskLayerMask(this); todo?
             //initialize the layer's style and emit an event for other services and/or UI to update
             OnStylingApplied.Invoke();
+        }
+
+        protected int GetBitMask()
+        {
+            int? bitMask = LayerData.DefaultSymbolizer.GetMaskLayerMask();
+            if (bitMask == null)
+                bitMask = DEFAULT_MASK_BIT_MASK;
+            
+            return bitMask.Value;
+        }
+
+        public virtual void UpdateMaskBitMask(int bitmask)
+        {
+            foreach (var r in GetComponentsInChildren<Renderer>())
+            {
+                UpdateBitMaskForMaterials(bitmask, r.materials);
+            }
+        }
+
+        protected void UpdateBitMaskForMaterials(int bitmask, IEnumerable<Material> materials)
+        {
+            foreach (var m in materials)
+            {
+                m.SetFloat("_MaskingChannelBitmask", bitmask);
+            }
+        }
+
+        /// <summary>
+        /// Sets a bitmask to the layer to determine which masks affect the provided LayerGameObject
+        /// </summary>
+        public void SetMaskLayerMask(int bitMask)
+        {
+            LayerData.DefaultStyle.AnyFeature.Symbolizer.SetMaskLayerMask(bitMask);
+            ApplyStyling();
+        }
+
+        public void SetMaskBit(int bitIndex, bool enableBit)
+        {
+            var currentLayerMask = GetMaskLayerMask();
+            int maskBitToSet = 1 << bitIndex;
+                
+            if (enableBit)
+            {
+                currentLayerMask |= maskBitToSet; // set bit to 1
+            }
+            else
+            {
+                currentLayerMask &= ~maskBitToSet; // set bit to 0
+            }
+
+            SetMaskLayerMask(currentLayerMask);
+        }
+
+        /// <summary>
+        /// Retrieves the bitmask for masking of the LayerGameObject.
+        /// </summary>
+        public int GetMaskLayerMask()
+        {
+            int? bitMask = LayerData.DefaultStyle.AnyFeature.Symbolizer.GetMaskLayerMask();
+            if (bitMask == null)
+                bitMask = LayerGameObject.DEFAULT_MASK_BIT_MASK;
+
+            return bitMask.Value;
         }
 #endregion
 
@@ -252,5 +395,16 @@ namespace Netherlands3D.Twin.Layers
             return feature;
         }
         #endregion
+        
+        protected T GetAndCacheComponent<T>(ref T cache) where T : class
+        {
+            // 'is' works both on interfaces and Unity's lifecycle check because is is overridden
+            if (cache is null)
+            {
+                cache = GetComponent<T>();
+            }
+
+            return cache;
+        }
     }
 }

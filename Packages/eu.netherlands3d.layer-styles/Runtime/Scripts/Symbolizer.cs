@@ -1,12 +1,30 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Netherlands3D.Twin.Layers;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Netherlands3D.LayerStyles
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling", Name = "Symbolizer")]
-    public class Symbolizer
-    {
+    public sealed class Symbolizer
+    {       
+        //Constants for property keys
+        private const string FillColorProperty = "fill-color";
+        private const string StrokeColorProperty = "stroke-color";
+        private const string VisibilityProperty = "visibility";
+        private const string MaskLayerMaskProperty = "mask-layer-mask";
+
+        //Constants for property values
+        private const string VisibilityVisible = "visible";
+        private const string VisibilityNone = "none";
+
+        //Constants for custom properties
+        private const string CustomPropertyPrefix = "--";
+
+
+
         /// <summary>
         /// Store each property as a string, and use specific getters and setting to convert from and to string.
         ///
@@ -16,36 +34,101 @@ namespace Netherlands3D.LayerStyles
         ///
         /// As such: we simply use `dictionary with string,string` and use getters and setters to transform properties.
         /// </summary>
-        [DataMember(Name = "properties")] 
-        private Dictionary<string, string> properties = new();
+        [DataMember(Name = "properties")] private Dictionary<string, string> properties = new();
 
         #region Styles
-        /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-fill-color"/>
-        public void SetFillColor(Color color) => SetAndNormalizeColor("fill-color", color);
 
         /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-fill-color"/>
-        public Color? GetFillColor() => GetAndNormalizeColor("fill-color");
+        public void SetFillColor(Color color) => SetAndNormalizeColor(FillColorProperty, color);
 
-        public void ClearFillColor() => ClearProperty("fill-color");
+        /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-fill-color"/>
+        public Color? GetFillColor() => GetAndNormalizeColor(FillColorProperty);
 
-        /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-color"/>
-        /// <remarks>
-        /// Originally, the implementation was based on OGC CartoSym, which uses the term "stroke-color"; because the
-        /// mapbox implementation is easier to read, we refer to that now but for backwards-compatibility we still use
-        /// the term Stroke Color instead of Mapbox' Line Color.
-        /// </remarks>
-        public void SetStrokeColor(Color color) => SetAndNormalizeColor("stroke-color", color);
+        public void ClearFillColor() => ClearProperty(FillColorProperty);
 
-        /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-color"/>
-        /// <remarks>
-        /// Originally, the implementation was based on OGC CartoSym, which uses the term "stroke-color"; because the
-        /// mapbox implementation is easier to read, we refer to that now but for backwards-compatibility we still use
-        /// the term Stroke Color instead of Mapbox' Line Color.
-        /// </remarks>
-        public Color? GetStrokeColor() => GetAndNormalizeColor("stroke-color");
+        public void SetMaskLayerMask(int maskLayerMask) => SetProperty(MaskLayerMaskProperty, Convert.ToString(maskLayerMask, 2));
 
-        public void ClearStrokeColor() => ClearProperty("stroke-color");
+        public int? GetMaskLayerMask()
+        {
+            var json = GetProperty(MaskLayerMaskProperty);
+            if(json == null || string.IsNullOrEmpty((string)json))
+                return null;
+            
+            var bitMaskString = (string)json;
+            return StringToBitmask(bitMaskString);
+        }
+
+        private static int StringToBitmask(string bitString)
+        {
+            if (string.IsNullOrEmpty(bitString))
+                throw new ArgumentException("Input string cannot be null or empty.", nameof(bitString));
+
+            return Convert.ToInt32(bitString, 2);
+        }
         
+        public void ClearMaskLayerMask() => ClearProperty(MaskLayerMaskProperty);
+
+        /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-color"/>
+        /// <remarks>
+        /// Originally, the implementation was based on OGC CartoSym, which uses the term "stroke-color"; because the
+        /// mapbox implementation is easier to read, we refer to that now but for backwards-compatibility we still use
+        /// the term Stroke Color instead of Mapbox' Line Color.
+        /// </remarks>
+        public void SetStrokeColor(Color color) => SetAndNormalizeColor(StrokeColorProperty, color);
+
+        /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-color"/>
+        /// <remarks>
+        /// Originally, the implementation was based on OGC CartoSym, which uses the term "stroke-color"; because the
+        /// mapbox implementation is easier to read, we refer to that now but for backwards-compatibility we still use
+        /// the term Stroke Color instead of Mapbox' Line Color.
+        /// </remarks>
+        public Color? GetStrokeColor() => GetAndNormalizeColor(StrokeColorProperty);
+
+        public void ClearStrokeColor() => ClearProperty(StrokeColorProperty);
+
+        public void SetVisibility(bool visible) => SetProperty(VisibilityProperty, visible ? VisibilityVisible : VisibilityNone);
+
+        public bool? GetVisibility()
+        {         
+            if (GetProperty(VisibilityProperty) is not string property) return null;
+
+            if (property == VisibilityVisible) return true;
+
+            return false;            
+        }
+
+        public void ClearVisibility() => ClearProperty(VisibilityProperty);
+        
+        public void SetCustomProperty(string key, object value)
+        {
+            string prefix = CustomPropertyPrefix;
+            if (!key.StartsWith(prefix))
+            {
+                key = prefix + key;
+            }
+            SetProperty(key, JsonConvert.SerializeObject(value));
+        }
+
+        public T GetCustomProperty<T>(string key)
+        {
+            string prefix = CustomPropertyPrefix;
+            if(!key.StartsWith(prefix))
+            {
+                key = prefix + key;
+            }
+            return JsonConvert.DeserializeObject<T>(GetProperty(key));
+        }
+
+        public void ClearCustomProperty(string key)
+        {
+            string prefix = CustomPropertyPrefix;
+            if (!key.StartsWith(prefix))
+            {
+                key = prefix + key;
+            }
+            ClearProperty(key);
+        }
+
         #endregion
 
         /// <summary>
@@ -100,7 +183,7 @@ namespace Netherlands3D.LayerStyles
             return color;
         }
 
-        private object GetProperty(string key)
+        private string GetProperty(string key)
         {
             // explicitly return null when value is not present, so that caller knows it should ignore using this field 
             return properties.ContainsKey(key) ? properties[key] : null;

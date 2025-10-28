@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
+using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class CartesianTileLayerFeatureColorPropertySection : PropertySectionWithLayerGameObject
+    public class CartesianTileLayerFeatureColorPropertySection : PropertySectionWithLayerGameObject, IMultiSelectable
     {  
         [SerializeField] private RectTransform content;
         [SerializeField] private GameObject colorSwatchPrefab;
@@ -18,11 +20,16 @@ namespace Netherlands3D.Twin.Layers.Properties
         private readonly Dictionary<LayerFeature, ColorSwatch> swatches = new();
         [SerializeField] private ColorPickerPropertySection colorPicker;
 
+        public int SelectedButtonIndex { get; set; } = -1;
+        public List<ISelectable> SelectedItems { get; } = new();
+        public List<ISelectable> Items { get; set; } = new();
+        public ISelectable FirstSelectedItem { get; set; }
+
         public override LayerGameObject LayerGameObject
         {
             get => layer;
             set => Initialize(value);
-        }
+        }       
 
         private void Initialize(LayerGameObject layer)
         {
@@ -64,6 +71,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 swatches[layerFeature] = CreateSwatch(layerFeature);
                 SetSwatchColorFromFeature(layerFeature);
             }
+            Items = swatches.Values.OfType<ISelectable>().ToList();
         }
 
         private ColorSwatch CreateSwatch(LayerFeature layerFeature)
@@ -84,40 +92,20 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void OnClickedOnSwatch(PointerEventData _, ColorSwatch swatch)
         {
-            if (swatch.IsSelected)
+            //select layer
+            SelectedButtonIndex = Items.IndexOf(swatch);
+            MultiSelectionUtility.ProcessLayerSelection(this, anySelected =>
             {
-                DeselectAllSwatches();
-                DeselectSwatch(swatch);
-                return;
-            }
-
-            DeselectAllSwatches();
-            SelectSwatch(swatch);
-        }
-
-        private void SelectSwatch(ColorSwatch swatch)
-        {
-            ShowColorPicker();
-            colorPicker.PickColorWithoutNotify(swatch.Color);
-
-            swatch.SetSelected(true);
-        }
-
-        private void DeselectAllSwatches()
-        {
-            foreach (var (_, swatch) in swatches)
-            {
-                if (swatch.IsSelected) continue;
-                
-                DeselectSwatch(swatch);
-            }
-        }
-
-        private void DeselectSwatch(ColorSwatch swatch)
-        {
-            swatch.SetSelected(false);
-            
-            HideColorPicker();
+                if(anySelected)
+                {
+                    ShowColorPicker();
+                    colorPicker.PickColorWithoutNotify(((ColorSwatch)Items[SelectedButtonIndex]).Color);
+                }
+                else
+                {
+                    HideColorPicker();
+                }
+            });
         }
 
         private void OnPickColor(Color color)
@@ -133,7 +121,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void SetColorizationStylingRule(LayerFeature layerFeature, Color color)
         {
-            CartesianTileLayerStyler.SetColor(layer, layerFeature, color);
+            (layer.Styler as CartesianTileLayerStyler).SetColor(layerFeature, color);
         }
 
         private void UpdateSwatches()
@@ -148,8 +136,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             // if there is no swatch matching this layer feature, we can skip this update
             if (!swatches.TryGetValue(layerFeature, out var swatch)) return;
-
-            var color = CartesianTileLayerStyler.GetColor(layer, layerFeature);
+            
+            var color = (layer.Styler as CartesianTileLayerStyler).GetColor(layerFeature);
 
             swatch.SetColor(color.GetValueOrDefault(Color.white));
         }

@@ -1,0 +1,34 @@
+{
+  "name": "eu.netherlands3d.tiles3d",
+  "displayName": "Netherlands 3D - 3DTiles",
+  "version": "2.3.1",
+  "unity": "2022.2",
+  "type": "library",
+  "keywords": [
+    "netherlands3d",
+    "digital twin",
+    "3DTiles"
+  ],
+  "license": "EUPL-1.2",
+  "documentationUrl": "https://github.com/Netherlands3D/3DTiles/blob/main/README.md",
+  "licensesUrl": "https://github.com/Netherlands3D/3DTiles/blob/main/LICENSE.txt",
+  "changelogURL": "https://github.com/Netherlands3D/3DTiles/blob/main/CHANGELOG.md",
+  "hideInEditor": false,
+  "author": {
+    "name": "Netherlands3D",
+    "url": "https://www.netherlands3d.eu"
+  },
+  "dependencies": {
+    "eu.netherlands3d.coordinates": "2.2.0",
+    "com.unity.cloud.gltfast": "6.12.1",
+    "com.unity.meshopt.decompress": "0.1.0-preview.5"
+  },
+  "description": "enables the use of 3DTilesets",
+  "samples": [
+    {
+      "displayName": "load 3DTileset",
+      "description": "loading google-earth tileset",
+      "path": "Samples~/GoogleEarth"
+    }
+  ]
+}

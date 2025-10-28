@@ -51,5 +51,14 @@ namespace Netherlands3D.OgcWebServices.Shared
             var queryParameters = QueryString.Decode(query);
             return queryParameters.Single(parameter);
         }
+
+        public static string GetVersionFromUrl(Uri url)
+        {
+            var urlLower = url.ToString().ToLower();
+            var versionQueryKey = "version=";
+            if (urlLower.Contains(versionQueryKey))
+                return urlLower.Split(versionQueryKey)[1].Split("&")[0];
+            return null;
+        }
     }
 }

@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.UI;
@@ -16,8 +15,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         [SerializeField] private TextPopout popoutPrefab;
         [SerializeField] private Tool layerTool;
 
+        public override bool IsMaskable => false;
         private TextPopout annotation;
-        private AnnotationPropertyData annotationPropertyData => (AnnotationPropertyData)transformPropertyData;
+        private AnnotationPropertyData annotationPropertyData => (AnnotationPropertyData)TransformPropertyData;
         private enum EditMode
         {
             Disabled, // Neither move the annotation, nor edit the text
@@ -29,9 +29,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
         public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one), new Coordinate(transform.position + 5 * Vector3.one));
 
-        protected override void Awake()
+        protected override void OnLayerInitialize()
         {
-            base.Awake();
+            base.OnLayerInitialize();
+
             CreateTextPopup();
             annotationPropertyData.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
             WorldInteractionBlocker.ClickedOnBlocker.AddListener(OnBlockerClicked);
@@ -43,9 +44,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 SetEditMode(EditMode.Move);
         }
 
-        protected override TransformLayerPropertyData InitializePropertyData()
+        protected override void InitializePropertyData()
         {
-            return new AnnotationPropertyData(new Coordinate(transform.position), transform.eulerAngles, transform.localScale, "");
+            LayerData.SetProperty(
+                new AnnotationPropertyData(
+                    new Coordinate(transform.position), 
+                    transform.eulerAngles, 
+                    transform.localScale, 
+                    ""
+                )
+            );
         }
 
         private void CreateTextPopup()
@@ -147,20 +155,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             base.LoadProperties(properties);
     
-            var annotationProperty = (AnnotationPropertyData)properties.FirstOrDefault(p => p is AnnotationPropertyData);
-            if (annotationProperty != null)
+            var annotationProperty = properties.Get<AnnotationPropertyData>();
+            if (annotationProperty == null) return;
+            if (annotationPropertyData != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
             {
-                if (annotationPropertyData != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
-                {
-                    annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
-                }
-
-                transformPropertyData = annotationProperty; //take existing TransformProperty to overwrite the unlinked one of this class
-
-                UpdateAnnotation(this.annotationPropertyData.AnnotationText);
-
-                annotationPropertyData.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
+                annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
             }
+
+            LayerData.SetProperty(annotationProperty); 
+
+            UpdateAnnotation(annotationProperty.AnnotationText);
+
+            annotationProperty.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
         }
 
         private void UpdateAnnotation(string newText)

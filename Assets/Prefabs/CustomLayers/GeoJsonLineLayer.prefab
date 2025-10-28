@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 486974600061382359}
   - component: {fileID: -8140904490283006168}
-  - component: {fileID: 373191915858293964}
+  - component: {fileID: 6675735551498236915}
+  - component: {fileID: -7264917015996542302}
   - component: {fileID: 5447569626426196056}
   - component: {fileID: 2184948650164356377}
   - component: {fileID: 1162024415283335831}
@@ -49,14 +50,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabIdentifier: 1efd25daf167bd74bafd6eea4aeda576
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
     m_PersistentCalls:
       m_Calls: []
-  lineRenderer3D: {fileID: 373191915858293964}
---- !u!114 &373191915858293964
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStylingApplied:
+    m_PersistentCalls:
+      m_Calls: []
+  lineRenderer3D: {fileID: 6675735551498236915}
+  selectionLineRenderer3D: {fileID: -7264917015996542302}
+--- !u!114 &6675735551498236915
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -68,19 +81,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2ab6ad69b9eb134b90d56b3161fba5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineMesh: {fileID: 6475988976120857168, guid: 0ce527cb5805b44468ec8f7dabbf58ca,
-    type: 3}
-  jointMesh: {fileID: 4711208715938537054, guid: 0de12834fe259ec4cbcffaca05de9fc6,
-    type: 3}
-  lineMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
-  jointMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
-  lineSelectionMaterial: {fileID: 2100000, guid: cae582fecb8c4c34594b1ebf69514e4e,
-    type: 2}
-  jointSelectionMaterial: {fileID: 2100000, guid: cae582fecb8c4c34594b1ebf69514e4e,
-    type: 2}
-  drawJoints: 1
+  pointMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  materialTemplate: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
   flattenY: 0
   offsetY: 1.87
+  pointMeshScale: 1
+  isProjected: 1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  lineMesh: {fileID: 6475988976120857168, guid: 0ce527cb5805b44468ec8f7dabbf58ca,
+    type: 3}
+  drawJoints: 1
+  lineDiameter: 1
+--- !u!114 &-7264917015996542302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764337386758102018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2ab6ad69b9eb134b90d56b3161fba5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  materialTemplate: {fileID: 2100000, guid: cae582fecb8c4c34594b1ebf69514e4e, type: 2}
+  flattenY: 0
+  offsetY: 1.87
+  pointMeshScale: 1
+  isProjected: 1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  lineMesh: {fileID: 6475988976120857168, guid: 0ce527cb5805b44468ec8f7dabbf58ca,
+    type: 3}
+  drawJoints: 1
   lineDiameter: 1
 --- !u!114 &5447569626426196056
 MonoBehaviour:
@@ -95,21 +132,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldTransformShifter: {fileID: 0}
-  referenceCoordinateSystem: 4979
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
   onPostShift:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 373191915858293964}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.LineRenderer3D, Assembly-CSharp
-        m_MethodName: GenerateTransformMatrixCache
-        m_Mode: 3
+      - m_Target: {fileID: 6675735551498236915}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Rendering.LineRenderer3D, eu.netherlands3d.twin
+        m_MethodName: RecalculateMatrices
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: -1
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

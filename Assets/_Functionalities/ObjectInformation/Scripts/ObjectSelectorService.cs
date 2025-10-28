@@ -3,6 +3,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Tools;
@@ -17,6 +18,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class ObjectSelectorService : MonoBehaviour
     {
+        public SubObjectSelector SubObjectSelector => subObjectSelector;
+
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
         public UnityEvent OnDeselect = new();
@@ -45,7 +48,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 if (mappingTreeInstance == null)
                 {
                     BoundingBox bbox = StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds;
-                    MappingTree tree = new MappingTree(bbox, 4, 12);
+                    MappingTree tree = new MappingTree(bbox, 4, 12);                    
                     mappingTreeInstance = tree;
                 }
                 return mappingTreeInstance;
@@ -125,6 +128,45 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
+        public LayerGameObject GetLayerGameObjectFromMapping(IMapping mapping)
+        {
+            if (mapping is FeatureMapping featureMapping)
+            {
+                return featureMapping.VisualisationParent;
+            }
+
+            if (mapping is MeshMapping meshMapping)
+            {
+                MeshMapping map = meshMapping;
+                if (meshMapping.ObjectMapping == null)                    
+                {
+                    //when tile is replacing lod the objectmapping can be missing
+                    map = GetReplacedMapping(meshMapping);
+                }
+                if (map == null) return null;
+                
+                Transform parent = map.ObjectMapping.gameObject.transform.parent;
+                LayerGameObject layerGameObject = parent.GetComponent<LayerGameObject>();
+                return layerGameObject;
+            }
+            return null;
+        }
+
+        public T GetReplacedMapping<T>(T mapping) where T : IMapping
+        {
+            List<IMapping> mappings = MappingTree.QueryMappingsContainingNode<T>(mapping.BoundingBox.Center);
+            if (mappings.Count == 0)
+                return default;
+
+            foreach (IMapping map in mappings)
+            {
+                if (map.MappingObject == null || map.Id != mapping.Id) continue;
+
+                return (T)map;
+            }
+            return default;
+        }
+
         private bool IsAnyToolActive()
         {
             foreach (Tool tool in activeForTools)
@@ -143,15 +185,19 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     //the following method calls need to run in order!
                     string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
                     IMapping mapping = FindObjectMapping();
-                    if (mapping == null && lastSelectedMappingLayerData != null)
+                    bool mappingVisible = IsMappingVisible(mapping, bagId);
+                    if ((mapping == null || !mappingVisible) && lastSelectedMappingLayerData != null)
                     {
                         //when nothing is selected but there was something selected, deselect the current active layer
                         lastSelectedMappingLayerData.DeselectLayer();
                         lastSelectedMappingLayerData = null;
                     }
                     if (mapping is MeshMapping map)
-                    {                      
+                    {
                         LayerData layerData = subObjectSelector.GetLayerDataForSubObject(map.ObjectMapping);
+                        if (!mappingVisible)
+                            return;
+
                         layerData.SelectLayer(true);
                         lastSelectedMappingLayerData = layerData;
                         SelectBagId(bagId);
@@ -195,9 +241,24 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return cameraInputSystemProvider.OverLockingObject == false;
         }
 
+        private bool IsMappingVisible(IMapping mapping, string bagId)
+        {
+            if (mapping is MeshMapping map)
+            {
+                //TODO maybe to the best place here to have a dependency to the cartesianlayerstyler, needs a better implementation
+                LayerFeature feature = GetLayerFeatureFromBagID(bagId, map, out LayerGameObject layer);
+                if (feature != null)
+                {
+                    bool? v = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(feature);
+                    if (v != true) return false;
+                }
+            }
+            return true;
+        }
+
         private void OnAddObjectMapping(ObjectMapping mapping)
         {
-            MeshMapping objectMapping = new MeshMapping();
+            MeshMapping objectMapping = new MeshMapping(mapping.name);
             objectMapping.SetMeshObject(mapping);
             objectMapping.UpdateBoundingBox();
             MappingTree.RootInsert(objectMapping);
@@ -234,22 +295,45 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             featureSelector.Select(feature);
         }
 
+        public ObjectMappingItem GetMappingItemForBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
+        {
+            layer = null;
+            if (selectedMapping is not MeshMapping mapping) return null;
+
+            layer = GetLayerGameObjectFromMapping(selectedMapping);
+            return mapping.ObjectMapping.items.FirstOrDefault(item => bagID == item.objectID);
+        }
+
+        public LayerFeature GetLayerFeatureFromBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
+        {
+            ObjectMappingItem item = GetMappingItemForBagID(bagID, selectedMapping, out layer);
+            if (layer == null || !layer.LayerFeatures.ContainsKey(item))
+                return null;
+            
+            return layer.LayerFeatures[item]; 
+        }
+
         /// <summary>
         /// Finds a Mapping in the world by the current optical raycaster worldposition
         /// </summary>
         /// <returns></returns>
         public IMapping FindObjectMapping()
         {
-            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.WorldPoint) < minClickDistance;
-            lastWorldClickedPosition = pointerToWorldPosition.WorldPoint;
+            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.WorldPoint.ToUnity()) < minClickDistance;
+            lastWorldClickedPosition = pointerToWorldPosition.WorldPoint.ToUnity();
 
             bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
             lastTimeClicked = Time.time;
 
             if (!clickedSamePosition || refreshSelection)
             {
+                //when a geojson point is located on top of a feature in an objectmapping,
+                //we need to find the blocked objectmapping and find the hitpoint to find the geojson feature position beneath it
                 if (subObjectSelector.Object != null)
                     featureSelector.SetBlockingObjectMapping(subObjectSelector.Object.ObjectMapping, lastWorldClickedPosition);
+                //the blocking objectmapping should be cleared when trying to select the next feature
+                else
+                    featureSelector.SetBlockingObjectMapping(null, Vector3.zero);
 
                 //no features are imported yet if mappingTreeInstance is null
                 if (mappingTreeInstance != null)
@@ -272,7 +356,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                                 else
                                     continue;
                             }
-
                             mappings.TryAdd(feature, feature.VisualisationParent.LayerData.RootIndex);
                         }
                     }
@@ -286,9 +369,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                             mappings.TryAdd(subObjectSelector.Object, subObjectParent.LayerData.RootIndex);
                     }
                 }
-
                 orderedMappings = mappings.OrderBy(entry => entry.Value).Select(entry => entry.Key).ToList();
-
                 currentSelectedMappingIndex = 0;
             }
             else
@@ -300,8 +381,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
 
             if (orderedMappings.Count == 0) return null;
-
-            //Debug.Log(orderedMappings[currentSelectedMappingIndex]);
 
             IMapping selection = orderedMappings[currentSelectedMappingIndex];
             return selection;

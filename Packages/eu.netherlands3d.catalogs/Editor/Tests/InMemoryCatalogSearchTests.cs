@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Netherlands3D.Catalogs.CatalogItems;
+using Netherlands3D.Catalogs.Catalogs;
 using NUnit.Framework;
 
 namespace Netherlands3D.Catalogs

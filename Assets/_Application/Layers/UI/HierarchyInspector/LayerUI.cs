@@ -12,6 +12,7 @@ using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using UnityEngine.Serialization;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.UI;
 
 namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 {
@@ -47,7 +48,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         [SerializeField] private float indentWidth = 40f;
         [Tooltip("Buttons ignore the layout group, this is an added right margin for the button group")]
         [SerializeField] private float buttonGroupWidth = 23 + 23;
-
+        
         [Header("Identification")]
         [SerializeField] private Image layerTypeImage;
         [SerializeField] private TMP_Text layerNameText;
@@ -64,6 +65,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         [SerializeField] private Sprite[] visibilitySprites;
         [SerializeField] private Sprite[] foldoutSprites;
         [SerializeField] private Sprite[] backgroundSprites;
+        [SerializeField] private LayerTypeSpriteLibrary layerTypeSpriteLibrary;
 
         [Header("Layout elements")]
         [SerializeField] private TMP_Text debugIndexText;
@@ -173,6 +175,11 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             Layer.ParentOrSiblingIndexChanged.AddListener(OnParentOrSiblingIndexChanged);
             Layer.LayerDestroyed.AddListener(DestroyUI);
 
+            if (Layer is ReferencedLayerData referencedLayerData)
+            {
+                referencedLayerData.OnReferenceChanged.AddListener(UpdateReference);
+            }
+            
             MarkLayerUIAsDirty();
 
             //Match initial layer states
@@ -391,7 +398,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void SetLayerTypeImage()
         {
-            var sprite = layerUIManager.GetLayerTypeSprite(Layer);
+            var sprite = layerTypeSpriteLibrary.GetLayerTypeSprite(Layer);
             layerTypeImage.sprite = sprite;
         }
 
@@ -506,7 +513,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void ProcessLayerSelection()
         {
-            if (SequentialSelectionModifierKeyIsPressed() && Layer.Root.SelectedLayers.Count > 0) //if no layers are selected, there will be no reference layer to add to
+            if (MultiSelectionUtility.SequentialSelectionModifierKeyIsPressed() && Layer.Root.SelectedLayers.Count > 0) //if no layers are selected, there will be no reference layer to add to
             {
                 // add all layers between the currently selected layer and the reference layer
                 var referenceLayer = Layer.Root.SelectedLayers.Last(); //last element is always the last selected layer
@@ -541,7 +548,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 }
             }
 
-            if (!AddToSelectionModifierKeyIsPressed() && !SequentialSelectionModifierKeyIsPressed())
+            if (MultiSelectionUtility.NoModifierKeyPressed())
                 Layer.Root.DeselectAllLayers();
 
             if (Layer.IsSelected)
@@ -731,20 +738,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             return lastLayer; //below last
         }
 
-        public static bool AddToSelectionModifierKeyIsPressed()
-        {
-            if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX)
-            {
-                return Keyboard.current.leftCommandKey.isPressed || Keyboard.current.rightCommandKey.isPressed;
-            }
-
-            return Keyboard.current.ctrlKey.isPressed;
-        }
-
-        public static bool SequentialSelectionModifierKeyIsPressed()
-        {
-            return Keyboard.current.shiftKey.isPressed;
-        }
+        
 
         private void OnDestroy()
         {
@@ -756,12 +750,24 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             Layer.ChildrenChanged.RemoveListener(OnLayerChildrenChanged);
             Layer.ParentOrSiblingIndexChanged.RemoveListener(OnParentOrSiblingIndexChanged);
             Layer.LayerDestroyed.RemoveListener(DestroyUI);
+            
+            if (Layer is ReferencedLayerData referencedLayerData)
+            {
+                referencedLayerData.OnReferenceChanged.RemoveListener(UpdateReference);
+            }
+        }
+        
+        private void UpdateReference()
+        {
+            MarkLayerUIAsDirty();
+            RegisterWithPropertiesPanel(ServiceLocator.GetService<Properties.Properties>());
+            propertyToggle.isOn = false;
         }
 
         private void RegisterWithPropertiesPanel(Properties.Properties propertiesPanel)
         {
             var layerWithProperties = Properties.Properties.TryFindProperties(Layer);
-            var hasProperties = layerWithProperties != null && layerWithProperties.GetPropertySections().Count > 0;
+            var hasProperties = layerWithProperties is { HasPropertySections: true };
             propertyToggle.gameObject.SetActive(hasProperties);
 
             if (!hasProperties)

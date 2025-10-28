@@ -8,7 +8,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Functionalities.OGC3DTiles
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "3DTiles")]
-    public class Tile3DLayerPropertyData : LayerPropertyData
+    public class Tile3DLayerPropertyData : LayerPropertyData, ILayerPropertyDataWithCRS
     {
         [DataMember] private string url;
 
@@ -39,7 +39,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         [JsonIgnore] public readonly UnityEvent<Uri> OnUrlChanged = new();
         [JsonIgnore] public readonly UnityEvent<int> OnCRSChanged = new();
         [JsonConstructor]
-        public Tile3DLayerPropertyData(string url, int contentCRS)
+        public Tile3DLayerPropertyData(string url, int contentCRS = (int)CoordinateSystem.WGS84_ECEF)
         {
             this.url = url;
             this.contentCRS = contentCRS;

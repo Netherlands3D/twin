@@ -1,0 +1,93 @@
+:root {
+    /* Default spacing, taken from https://v2.tailwindcss.com/docs/customizing-spacing#default-spacing-scale */
+    --spacing-0_5: 2px;
+    --spacing-1: 4px;
+    --spacing-2: 8px;
+    --spacing-3: 12px;
+    --spacing-3_5: 14px;
+    --spacing-4: 16px;
+    --spacing-4_5: 18px;
+    --spacing-5: 20px;
+    --spacing-6: 24px;
+    --spacing-7: 28px;
+    --spacing-7_5: 30px;
+    --spacing-8: 32px;
+    --spacing-9: 36px;
+    --spacing-10: 40px;
+    --spacing-11: 44px;
+    --spacing-12: 48px;
+    --spacing-14: 56px;
+    --spacing-15: 60px;
+    --spacing-16: 64px;
+    --spacing-18: 72px;
+    --spacing-20: 80px;
+    --spacing-24: 96px;
+    --spacing-28: 112px;
+    --spacing-32: 128px;
+    --spacing-36: 144px;
+    --spacing-40: 160px;
+    
+    /* 12-column Grid spacing / widths */
+    --spacing-1_12: 8.333333%;
+    --spacing-2_12: 16.666667%;
+    --spacing-3_12: 25%;
+    --spacing-4_12: 33.333333%;
+    --spacing-5_12: 41.666667%;
+    --spacing-6_12: 50%;
+    --spacing-7_12: 58.333333%;
+    --spacing-8_12: 66.666667%;
+    --spacing-9_12: 75%;
+    --spacing-10_12: 83.333333%;
+    --spacing-11_12: 91.666667%;
+    --spacing-auto: auto;
+    --spacing-full: 100%;
+
+    /* Default font sizes, Inspired by https://v2.tailwindcss.com/docs/font-size */
+    --font-size-xs: var(--spacing-3);
+    --font-size-sm: var(--spacing-3_5);
+    --font-size-base: var(--spacing-4);
+    --font-size-lg: var(--spacing-5);
+    --font-size-xl: var(--spacing-9);
+    --font-size-2xl: var(--spacing-12);
+    --font-size-3xl: var(--spacing-15);
+    --font-size-4xl: var(--spacing-18);
+    --font-size-5xl: var(--spacing-24);
+    --font-size-6xl: var(--spacing-32);
+    --font-size-7xl: var(--spacing-40);
+
+    /* Color palette, inspired by https://tailwindcss.com/docs/colors#default-color-palette-reference */
+    --color-white: rgb(255, 255, 255);
+    --color-black: rgb(0, 0, 0);
+    --color-blue-50: rgb(243, 247, 251);
+    --color-blue-100: rgb(223, 232, 242);
+    --color-blue-200: rgb(204, 215, 228);
+    --color-blue-300: rgb(113, 130, 150);
+    --color-blue-700: rgb(0, 70, 153);
+    --color-blue-900: rgb(47, 53, 80);
+    
+    /* Specific colors */
+    --color-text: rgb(50, 57, 85);
+    --color-selection: rgba(0, 120, 250, 0.2);
+    --color-link-text: rgb(51, 102, 204);
+    --color-warning: rgb(227, 86, 86);
+    
+    /* List of all known icons */
+    --icon-plus: url("project://database/Assets/Sprites/UI/Icons/Type=Plus,%20Color=white,%20Size=large.png");
+    --icon-map: url("project://database/Assets/Sprites/UI/Icons/Type=Map,%20Color=white,%20Size=large.png");
+    --icon-folder: url("project://database/Assets/Sprites/UI/Icons/Type=Folder,%20Color=white,%20Size=large.png");
+    --icon-trash: url("project://database/Assets/Sprites/UI/Icons/Type=Trash,%20Color=white,%20Size=large.png");
+    --icon-back: url("project://database/Assets/Sprites/UI/Icons/Type=Back,%20Color=white,%20Size=large.png");
+    --icon-chevrondown: url("project://database/Assets/Sprites/UI/Icons/Type=ChevronDown,%20Color=white,%20Size=large.png");
+    --icon-chevronright: url("project://database/Assets/Sprites/UI/Icons/Type=ChevronRight,%20Color=white,%20Size=large.png");
+    --icon-help: url("project://database/Assets/Sprites/UI/Icons/Type=Help,%20Color=white,%20Size=large.png");
+    --icon-library: url("project://database/Assets/Sprites/UI/Icons/Type=Library,%20Color=white,%20Size=large.png");
+    --icon-libraryadd: url("project://database/Assets/Sprites/UI/Icons/Type=LibraryAdd,%20Color=white,%20Size=large.png");
+    --icon-close: url("project://database/Assets/Sprites/UI/Icons/Type=Cross,%20Color=white,%20Size=large.png");
+    
+    --unity-font: "Inter";
+    --nl3d-default-font: url("project://database/Assets/Fonts/Inter-Regular.ttf?fileID=12800000&guid=37ff50315a0d57a48a81f6f17f30a981&type=3#Inter-Regular");
+    --nl3d-default-font-semi-bold: url("project://database/Assets/Fonts/Inter-SemiBold.ttf?fileID=12800000&guid=7a0c5ca272b294044a6d4d543221d076&type=3#Inter-SemiBold");
+    --nl3d-default-font-bold: url("project://database/Assets/Fonts/Inter-Bold.ttf?fileID=12800000&guid=746cabee1610bda42b4d03f49eeb6e09&type=3#Inter-Bold");
+    --nl3d-header-font: var(--nl3d-default-font-semi-bold);
+    --nl3d-inspector-header-font: var(--nl3d-default-font-bold);
+}

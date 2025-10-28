@@ -17,9 +17,11 @@ namespace Netherlands3D.Twin.Samplers
         private Stack<MultiPointCallback> requestMultipointPool = new Stack<MultiPointCallback>();
 
         private const int maxRequests = 3;
+        private const int defaultRaycastLayers = ~((1 << 2) + (1 << 12) + (1 << 13) + (1 << 14)); // all layers except IgnoreRaycast, Projected, PolygonMask, PolygonMaskInverted
 
+        public const float MinimumDepth = 0.0001f;
 
-        public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, int cullingMask = ~0)
+        public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, int cullingMask = defaultRaycastLayers)
         {
             if (activeRequests.Count > maxRequests)
             {
@@ -61,6 +63,24 @@ namespace Netherlands3D.Twin.Samplers
             }
         }
 
+        public void GetWorldPointFromDirectionAsync(Vector3 worldPosition, Vector3 direction, Action<Vector3, bool> callback, int cullingMask = defaultRaycastLayers)
+        {
+            if (activeRequests.Count > maxRequests)
+            {
+                callback.Invoke(Vector3.zero, false);
+                return;
+            }
+
+            OpticalRequest opticalRequest = GetRequest();
+            opticalRequest.SetCullingMask(cullingMask);
+            opticalRequest.SetScreenPoint(worldPosition);
+            opticalRequest.AlignCameraFromDirection(direction);
+            opticalRequest.UpdateShaders();
+            opticalRequest.SetResultCallback(callback);
+            opticalRequest.framesActive = 0;
+            activeRequests.Add(opticalRequest);
+        }
+
         private void Update()
         {
             if (activeRequests.Count == 0) return;
@@ -90,16 +110,26 @@ namespace Netherlands3D.Twin.Samplers
             try
             {
                 var worldPosData = opticalRequest.request.GetData<Vector4>();
+                if(worldPosData == null ||  worldPosData.Length == 0)
+                {
+                    opticalRequest.hasHit = false;
+                    opticalRequest.resultCallback.Invoke(Vector3.zero, false);
+                    Debug.LogError("readback has invalid data");
+                    return;
+                }
                 float worldPosX = worldPosData[0].x;
                 float worldPosY = worldPosData[0].y;
                 float worldPosZ = worldPosData[0].z;
                 Vector3 worldPos = new Vector3(worldPosX, worldPosY, worldPosZ);
+                
                 opticalRequest.hasHit = worldPosData[0].w > 0;
                 opticalRequest.resultCallback.Invoke(worldPos, opticalRequest.hasHit);
             }
             catch (Exception e)
             {
-                Debug.LogError($"Exception in optical request: {e}");
+                Debug.LogError($"Exception in optical request: {e.StackTrace}");
+
+                Debug.LogException(e);
             }
             finally
             {
@@ -197,6 +227,7 @@ namespace Netherlands3D.Twin.Samplers
                 this.positionMaterial = new Material(positionMaterial);
                 this.renderTexture = rt;
                 this.depthCamera = Instantiate(prefab);
+                depthCamera.nearClipPlane = MinimumDepth;
                 depthCamera.clearFlags = CameraClearFlags.SolidColor;
                 depthCamera.backgroundColor = Color.clear;
                 depthCamera.depthTextureMode = DepthTextureMode.Depth;
@@ -248,6 +279,12 @@ namespace Netherlands3D.Twin.Samplers
                     Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, Camera.main.nearClipPlane));
                     depthCamera.transform.LookAt(worldPoint);
                 }
+            }
+
+            public void AlignCameraFromDirection(Vector3 direction)
+            {
+                depthCamera.transform.position = screenPoint;
+                depthCamera.transform.LookAt(screenPoint + direction.normalized);
             }
 
             public void UpdateShaders()

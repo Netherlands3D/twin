@@ -1,8 +1,7 @@
-using System;
+using System.Threading.Tasks;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.UI;
-using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +10,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
     [RequireComponent(typeof(Button))]
     public class ObjectLibraryButton : MonoBehaviour
     {
-        protected Button button;
+        private Button button;
         [SerializeField] protected LayerGameObject prefab;
 
         private void Awake()
@@ -29,7 +28,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             button.onClick.RemoveListener(CreateObject);
         }
 
-        //for when this component is created at runtime
+        // For when this component is created at runtime
         public void Initialize(LayerGameObject layerGameObject)
         {
             this.prefab = layerGameObject;
@@ -39,50 +38,24 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
                 image.SpriteState = layerGameObject.Thumbnail;
         }
 
-        private void SpawnObject(Vector3 opticalSpawnPoint, bool hasHit)
+        private void CreateObject()
         {
-            if(hasHit)
-                SpawnObject(opticalSpawnPoint, prefab.transform.rotation);
+            // Discard task and fire and forget async task because the event listener cannot cleanly handle it
+            _ = CreateLayer();
         }
         
-        private void SpawnObject(Vector3 opticalSpawnPoint, Quaternion rotation)
+        /// <summary>
+        /// Provide an extension point where we can capture the LayerData, and thus the LayerGameObject, so that
+        /// subclasses can manipulate the instantiated LayerGameObject.
+        /// </summary>
+        protected virtual async Task<LayerData> CreateLayer(ILayerBuilder layerBuilder = null)
         {
-            var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
-            if (opticalSpawnPoint != Vector3.zero)
-            {
-                spawnPoint = opticalSpawnPoint;
-            }
+            layerBuilder ??= LayerBuilder.Create();
 
-            var layerComponent = Instantiate(prefab, spawnPoint, rotation);
-            layerComponent.Name = prefab.name;
-        }
-
-        protected virtual void CreateObject()
-        {
-            switch (prefab.SpawnLocation)
-            {
-                case SpawnLocation.OpticalCenter:
-                    SpawnAtOpticalPosition();
-                    break;
-                case SpawnLocation.CameraPosition:
-                    SpawnObject(Camera.main.transform.position, Camera.main.transform.rotation);
-                    break;
-                case SpawnLocation.PrefabPosition:
-                    SpawnObject(prefab.transform.position, true);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private void SpawnAtOpticalPosition()
-        {
-            var opticalRaycaster = FindAnyObjectByType<OpticalRaycaster>();
-            if (opticalRaycaster)
-            {
-                var centerOfViewport = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);
-                opticalRaycaster.GetWorldPointAsync(centerOfViewport, SpawnObject);
-            }
+            // TODO: Replace PrefabIdentifier with type - but this requires a change in all buttons
+            var layer = layerBuilder.OfType(prefab.PrefabIdentifier).NamedAs(prefab.name);
+            
+            return await App.Layers.Add(layer);
         }
     }
 }

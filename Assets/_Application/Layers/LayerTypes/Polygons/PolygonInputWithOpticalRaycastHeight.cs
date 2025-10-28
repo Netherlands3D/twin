@@ -16,7 +16,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         protected override void UpdateCurrentWorldCoordinate()
         {
-            var point = pointerToWorldPosition.WorldPoint;
+            var point = pointerToWorldPosition.WorldPoint.ToUnity();
 
             if (point != Vector3.zero)
                 currentWorldCoordinate = point;

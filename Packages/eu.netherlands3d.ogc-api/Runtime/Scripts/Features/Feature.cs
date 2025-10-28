@@ -48,6 +48,7 @@ namespace Netherlands3D.OgcApi.Features
         
         #region OGC API Features Extension
         
+        [JsonProperty(PropertyName = "links", Required = Required.Always)]
         public Link[] Links { get; set; }
         
         #endregion

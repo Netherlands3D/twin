@@ -21,15 +21,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             set { transform.SetSiblingIndex(value); }
         }
 
+        public override bool IsMaskable => false;
         public ColorSetLayer ColorSetLayer { get; private set; } = new(0, new());
         private CartesianTileSubObjectColorPropertyData propertyData = new();
         public LayerPropertyData PropertyData => propertyData;
 
         public UnityEvent<float> progressEvent = new();
 
-        protected override void Start()
+        protected override void OnLayerReady()
         {
-            base.Start();
             RecalculateColorPriorities();
             StartCoroutine(ReadAsync(propertyData.Data, 100));
         }
@@ -62,9 +62,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             GeometryColorizer.RecalculatePrioritizedColors();
         }
 
-        protected void OnDestroy()
+        protected override void OnDestroy()
         {
             RemoveCustomColorSet();
+            base.OnDestroy();
         }
 
         public void RemoveCustomColorSet()

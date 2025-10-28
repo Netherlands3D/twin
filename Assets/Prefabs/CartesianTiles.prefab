@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1530003142245436815}
   - component: {fileID: 6305319091844356863}
   - component: {fileID: 796894349102775833}
+  - component: {fileID: 6462720614605559555}
   m_Layer: 0
   m_Name: CartesianTiles
   m_TagString: Untagged
@@ -91,6 +92,19 @@ MonoBehaviour:
     functionality: {fileID: 11400000, guid: 028a24369ee97184fa88b9716c686d0d, type: 2}
     spawnedObject: {fileID: 2907779477277976049, guid: ba974bcd30ea6407f8cbbc1779e309b4,
       type: 3}
+--- !u!114 &6462720614605559555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 615420215414367251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  service: {fileID: 6305319091844356863}
 --- !u!1001 &2062171435073524500
 PrefabInstance:
   m_ObjectHideFlags: 0

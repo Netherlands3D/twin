@@ -8,6 +8,7 @@ using Netherlands3D.OgcApi.Features;
 using Netherlands3D.OgcApi.JsonConverters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 namespace Netherlands3D.OgcApi
 {
@@ -47,23 +48,84 @@ namespace Netherlands3D.OgcApi
 
         public async Task<FeatureCollection> FetchItems(int? limit = null, int? offset = null)
         {
-            var uri = GetItemsUriBuilder().Uri;
+            try
+            {
+                var uri = GetItemsUriBuilder().Uri;
 
-            var resource = new Resource<FeatureCollection>(uri);
-            if (offset != null) resource.With("offset", offset.ToString());
-            if (limit != null) resource.With("limit", limit.ToString());
+                var resource = new Resource<FeatureCollection>(uri);
+                if (offset != null) resource.With("offset", offset.ToString());
+                if (limit != null) resource.With("limit", limit.ToString());
 
-            return await resource.Value;
+                return await resource.Value;
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+
+            return new FeatureCollection();
         }
 
         public async Task<Feature> FetchItemById(string itemId)
         {
-            var itemUri = GetItemUriBuilder(itemId).Uri;
-            var resource = new Resource<Feature>(itemUri);
+            try
+            {
+                var itemUri = GetItemUriBuilder(itemId).Uri;
+                var resource = new Resource<Feature>(itemUri);
 
-            return await resource.Value;
+                return await resource.Value;
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+
+            return null;
         }
 
+        public async Task<FeatureCollection> SearchUsingKeyword(string keyword, int? limit = null, int? offset = null)
+        {
+            try 
+            {
+                var uri = GetItemsUriBuilder().Uri;
+
+                var resource = new Resource<FeatureCollection>(uri);
+                if (offset != null) resource.With("offset", offset.ToString());
+                if (limit != null) resource.With("limit", limit.ToString());
+                if (limit != null) resource.With("q", keyword);
+
+                return await resource.Value;
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+
+            return new FeatureCollection();
+        }
+
+        public async Task<FeatureCollection> SearchUsingCql(string queryAsJson, int? limit = null, int? offset = null)
+        {
+            try 
+            {
+                var uri = GetItemsUriBuilder().Uri;
+
+                var resource = new Resource<FeatureCollection>(uri);
+                if (offset != null) resource.With("offset", offset.ToString());
+                if (limit != null) resource.With("limit", limit.ToString());
+                if (limit != null) resource.With("filter", queryAsJson);
+                if (limit != null) resource.With("filter-lang", "cql-json");
+
+                return await resource.Value;
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+
+            return new FeatureCollection();
+        }
+        
         private UriBuilder GetItemsUriBuilder()
         {
             var itemsLink = Links.FirstBy(RelationTypes.items, Formats.geojson)?.Href;

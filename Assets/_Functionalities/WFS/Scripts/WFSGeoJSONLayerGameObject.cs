@@ -7,21 +7,27 @@ using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Utility;
+using Netherlands3D.Twin.Layers.LayerTypes;
 
 namespace Netherlands3D.Functionalities.Wfs
 {
     /// <summary>
     /// Extention of GeoJSONLayerGameObject that injects a 'streaming' dataprovider WFSGeoJSONTileDataLayer
     /// </summary>
-    public class WFSGeoJsonLayerGameObject : GeoJsonLayerGameObject
+    public class WFSGeoJsonLayerGameObject : GeoJsonLayerGameObject, ILayerWithPropertyPanels
     {
+        public override bool IsMaskable => false;
+
         [SerializeField] private WFSGeoJSONTileDataLayer cartesianTileWFSLayer;
         public override BoundingBox Bounds => cartesianTileWFSLayer?.BoundingBox;
 
         public WFSGeoJSONTileDataLayer CartesianTileWFSLayer => cartesianTileWFSLayer;
-        
-        protected void Awake()
+        private List<IPropertySectionInstantiator> propertySections = new();
+
+        protected override void OnLayerInitialize()
         {
+            base.OnLayerInitialize();
+            propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             CartesianTileWFSLayer.WFSGeoJSONLayer = this;
         }
 
@@ -89,6 +95,11 @@ namespace Netherlands3D.Functionalities.Wfs
         {
             if (cartesianTileWFSLayer.isEnabled != isActive)
                 cartesianTileWFSLayer.isEnabled = isActive;
+        }
+
+        public List<IPropertySectionInstantiator> GetPropertySections()
+        {
+            return propertySections;
         }
     }
 }
