@@ -285,9 +285,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (count == 0)
                 return;
 
+            //this check is possibly not needed but safe to use at a small cost
             if (count > TempBuffer.Length)
                 Array.Resize(ref TempBuffer, count * 2); 
 
+            //we need to use a shallow copy with a buffer to prevent gc allocations
             Array.Copy(node.Mappings, TempBuffer, count);
             Array.Clear(node.Mappings, 0, count);
             node.MappingCount = 0;
