@@ -78,14 +78,16 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
         ) : base(conformance)
         {
             // initialise the default strategies when no strategies are provided
-            if (strategies == null)
+            strategies ??= new List<OgcApiRecordsStrategy>
             {
-                strategies = new List<OgcApiRecordsStrategy>
-                {
-                    new PyCswOgcApiRecordsStrategy(conformance),
-                    new FallbackOgcApiRecordsStrategy(conformance)
-                };
-            }
+                // For Testbed 2 of GeoNovum - we use a shape that may or may not be codified later
+                new TestbedDcatApNlOgcApiRecordsStrategy(conformance),
+                // PDOK also defines some of their features as OGC api features with "download" link, so we have an extra
+                // strategy for PDOK until we know whether this is PyCSW specific
+                new PdokOgcApiRecordsStrategy(conformance),
+                new PyCswOgcApiRecordsStrategy(conformance),
+                new FallbackOgcApiRecordsStrategy(conformance)
+            };
 
             this.strategies = strategies.ToList();
         }
@@ -104,16 +106,15 @@ namespace Netherlands3D.Catalogs.Catalogs.Strategies
 
         public override bool TryParseFeature(Feature feature, out ICatalogItem catalogItem)
         {
-            foreach (var strategy in strategies)
+            var strategy = strategies.FirstOrDefault(s => s.CanHandle(feature));
+            if (strategy == null)
             {
-                if (!strategy.CanHandle(feature)) continue;
-
-                catalogItem = strategy.ParseFeature(feature);
-                return true;
+                catalogItem = null;
+                return false;                
             }
-
-            catalogItem = null;
-            return false;
+            
+            catalogItem = strategy.ParseFeature(feature);
+            return true;
         }
     }
 }

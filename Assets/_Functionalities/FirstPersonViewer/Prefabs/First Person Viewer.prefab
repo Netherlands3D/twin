@@ -205,6 +205,8 @@ MonoBehaviour:
   input: {fileID: 6660788825186363282}
   viewerBase: {fileID: 2359970039064756521}
   cameraConstrain: 0
+  fovSetting: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225, type: 2}
+  viewHeightSetting: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1, type: 2}
 --- !u!1 &8111522683061574636
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,11 +222,8 @@ GameObject:
   - component: {fileID: 1775169427224426892}
   - component: {fileID: 3034395081720571745}
   - component: {fileID: 6660788825186363282}
-  - component: {fileID: 4367215521751458963}
-  - component: {fileID: -7202614291581304945}
-  - component: {fileID: -8443884779799250748}
-  - component: {fileID: -8547530675755365502}
-  - component: {fileID: 276568021394205261}
+  - component: {fileID: 6417052032803972631}
+  - component: {fileID: 4604978584422325480}
   m_Layer: 2
   m_Name: First Person Viewer
   m_TagString: Untagged
@@ -271,7 +270,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3c52076c88b711a41bc9fdeaa9a881e8, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -350,6 +349,8 @@ MonoBehaviour:
     m_Bits: 193
   groundDistance: 0.2
   isGrounded: 0
+  stepHeight: 1.5
+  maxSpeedSetting: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad, type: 2}
   cameraHeightAboveGround: 500
 --- !u!114 &6660788825186363282
 MonoBehaviour:
@@ -367,7 +368,7 @@ MonoBehaviour:
     type: 3}
   exitDuration: 0.9
   exitViewDelay: 0.15
---- !u!114 &4367215521751458963
+--- !u!114 &6417052032803972631
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -376,47 +377,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8111522683061574636}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e10c10a46849464a833d90432a74b70, type: 3}
+  m_Script: {fileID: 11500000, guid: 81b9524fc1cc5d94d9026224aa20d3ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <FPVCamera>k__BackingField: {fileID: 5953575201012568707}
---- !u!114 &-7202614291581304945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8111522683061574636}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0e4186aed324b142b4be93f81deb807, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-8443884779799250748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8111522683061574636}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0456e01045a91a4e8de05a269bf5872, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-8547530675755365502
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8111522683061574636}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37748b16695f8464b998fdbfd9bdcddf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &276568021394205261
+  <MovementPresets>k__BackingField:
+  - {fileID: 11400000, guid: 6b26168bc00d5ff4e8b4e234367924ba, type: 2}
+  - {fileID: 11400000, guid: 4178ebf82880dd94d9b957892de62efe, type: 2}
+--- !u!114 &4604978584422325480
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -428,4 +395,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  service: {fileID: 4367215521751458963}
+  service: {fileID: 6417052032803972631}

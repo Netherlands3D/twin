@@ -24,6 +24,9 @@ namespace Netherlands3D.FirstPersonViewer
         public InputAction HideUI { private set; get; }
         public InputAction ResetInput { private set; get; }
 
+        public InputAction CycleNextModus { private set; get; }
+        public InputAction CyclePreviousModus { private set; get; }
+
         [Header("Exit")]
         [SerializeField] private float exitDuration = 1;
         [SerializeField] private float exitViewDelay = .15f;
@@ -44,6 +47,8 @@ namespace Netherlands3D.FirstPersonViewer
             LeftClick = inputActionAsset.FindAction("LClick");
             HideUI = inputActionAsset.FindAction("HideUI");
             ResetInput = inputActionAsset.FindAction("Reset");
+            CycleNextModus = inputActionAsset.FindAction("NavigateModusNext");
+            CyclePreviousModus = inputActionAsset.FindAction("NavigateModusPrevious");
 
             inputLocks = new List<MonoBehaviour>();
 

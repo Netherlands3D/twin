@@ -3,10 +3,13 @@ using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
+    [CreateAssetMenu(fileName = "Flying State", menuName = "ScriptableObjects/FirstPersonViewer/States/Flying State")]
     public class ViewerFlyingState : ViewerState
     {
         public override void OnEnter()
         {
+            base.OnEnter();
+
             Vector3 camPosition = viewer.FirstPersonCamera.transform.position;
             viewer.transform.position = camPosition;
             viewer.FirstPersonCamera.transform.localPosition = Vector3.zero;
@@ -35,7 +38,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             Vector3 direction = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
 
-            float calculatedSpeed = viewer.MovementSpeed * (input.SprintAction.IsPressed() ? viewer.MovementModus.speedMultiplier : 1);
+            float calculatedSpeed = viewer.MovementSpeed * (input.SprintAction.IsPressed() ? SpeedMultiplier : 1);
 
             transform.Translate(direction * calculatedSpeed * Time.deltaTime, Space.World);
         }
@@ -44,7 +47,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             if (verticalInput == 0) return;
 
-            float calculatedSpeed = viewer.MovementSpeed * (input.SprintAction.IsPressed() ? viewer.MovementModus.speedMultiplier : 1);
+            float calculatedSpeed = viewer.MovementSpeed * (input.SprintAction.IsPressed() ? SpeedMultiplier : 1);
 
             transform.Translate(Vector3.up * verticalInput * calculatedSpeed * Time.deltaTime, Space.World);
         }

@@ -1,8 +1,11 @@
 using Netherlands3D.Coordinates;
+using Netherlands3D.Events;
 using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Samplers;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer
@@ -17,9 +20,9 @@ namespace Netherlands3D.FirstPersonViewer
         private MeshRenderer meshRenderer;
         private FirstPersonViewerInput input;
         private FirstPersonViewerStateMachine fsm;
+        private MovementModusSwitcher movementSwitcher;
 
         //Movement
-        public MovementPresets MovementModus { private set; get; }
         public float MovementSpeed { private set; get; }
         private Coordinate startPosition;
         private Quaternion startRotation;
@@ -38,6 +41,10 @@ namespace Netherlands3D.FirstPersonViewer
         private float yPositionTarget;
         public bool isGrounded;
 
+        [Header("Settings")]
+        [SerializeField] private float stepHeight = 1.5f;
+        [SerializeField] private MovementFloatSetting maxSpeedSetting;
+
         [Header("Main Cam")]
         [SerializeField] private float cameraHeightAboveGround;
         private Camera mainCam;
@@ -50,18 +57,18 @@ namespace Netherlands3D.FirstPersonViewer
         private void Awake()
         {
             input = GetComponent<FirstPersonViewerInput>();
+            movementSwitcher = GetComponent<MovementModusSwitcher>();
+
             meshFilter = GetComponent<MeshFilter>();
             meshRenderer = GetComponent<MeshRenderer>();
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
 
-            SetupFSM();
+            maxSpeedSetting.OnValueChanged.AddListener(SetMovementSpeed);
 
-            ViewerEvents.OnSpeedChanged += SetMovementSpeed;
             ViewerEvents.OnMovementPresetChanged += SetMovementModus;
             ViewerEvents.OnViewerExited += ExitViewer;
             ViewerEvents.OnResetToStart += ResetToStart;
             ViewerEvents.OnResetToGround += ResetToGround;
-
         }
 
         private void Start()
@@ -70,12 +77,14 @@ namespace Netherlands3D.FirstPersonViewer
             startRotation = transform.rotation;
             yPositionTarget = transform.position.y;
 
+            SetupFSM();
             SetupMainCam();
         }
 
         private void OnDestroy()
         {
-            ViewerEvents.OnSpeedChanged -= SetMovementSpeed;
+            maxSpeedSetting.OnValueChanged.RemoveListener(SetMovementSpeed);
+
             ViewerEvents.OnMovementPresetChanged -= SetMovementModus;
             ViewerEvents.OnViewerExited -= ExitViewer;
             ViewerEvents.OnResetToStart -= ResetToStart;
@@ -84,9 +93,9 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetupFSM()
         {
-            ViewerState[] playerStates = GetComponents<ViewerState>();
+            ViewerState[] playerStates = movementSwitcher.MovementPresets.Select(preset => preset.viewerState).Distinct().ToArray();
 
-            fsm = new FirstPersonViewerStateMachine(this, input, null, playerStates);
+            fsm = new FirstPersonViewerStateMachine(this, input, playerStates);
         }
 
         //Disable the Main Camera through rendering.
@@ -125,7 +134,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void GetGroundPosition()
         {
-            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * MovementModus.stepHeight, Vector3.down, (point, hit) =>
+            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * stepHeight, Vector3.down, (point, hit) =>
             {
                 if (hit)
                 {
@@ -158,24 +167,19 @@ namespace Netherlands3D.FirstPersonViewer
             }
         }
 
-        public void SetVelocity(Vector2 velocity) => this.velocity = velocity;
 
         private void SetMovementModus(MovementPresets movementPresets)
         {
-            MovementModus = movementPresets;
-
             if (movementPresets.viewMesh != null)
             {
                 meshFilter.mesh = movementPresets.viewMesh;
                 meshRenderer.materials = movementPresets.meshMaterials;
             }
             else meshFilter.mesh = null;
-            
 
-            fsm.SwitchState(movementPresets.viewModus);
+
+            fsm.SwitchState(movementPresets.viewerState);
         }
-
-        private void SetMovementSpeed(float speed) => MovementSpeed = speed / 3.6f;
 
         private void ResetToStart()
         {
@@ -183,7 +187,7 @@ namespace Netherlands3D.FirstPersonViewer
             transform.rotation = startRotation;
             yPositionTarget = transform.position.y;
 
-            transform.position += Vector3.up * MovementModus.groundResetHeightOffset;
+            transform.position += Vector3.up * fsm.CurrentState.GroundResetHeightOffset;
         }
 
         //Only way to block input and not include checks in every state.
@@ -201,7 +205,7 @@ namespace Netherlands3D.FirstPersonViewer
                 {
                     SetVelocity(Vector2.zero);
                     yPositionTarget = point.y;
-                    transform.position = new Vector3(transform.position.x, yPositionTarget + MovementModus.groundResetHeightOffset, transform.position.z);
+                    transform.position = new Vector3(transform.position.x, yPositionTarget + fsm.CurrentState.GroundResetHeightOffset, transform.position.z);
                 }
             }, snappingCullingMask);
         }
@@ -214,5 +218,8 @@ namespace Netherlands3D.FirstPersonViewer
             mainCam.orthographic = false;
             mainCam.targetDisplay = 0;
         }
+
+        public void SetVelocity(Vector2 velocity) => this.velocity = velocity;
+        private void SetMovementSpeed(float speed) => MovementSpeed = speed / 3.6f;
     }
 }

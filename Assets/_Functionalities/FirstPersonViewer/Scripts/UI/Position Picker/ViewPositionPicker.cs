@@ -28,7 +28,6 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            Debug.Log("Pointer Up");
             if (isPointerDown)
             {
                 Destroy(picker.gameObject);
@@ -41,10 +40,9 @@ namespace Netherlands3D.FirstPersonViewer
 
                 raycaster.GetWorldPointAsync(screenPoint, (point, hit) =>
                 {
-                    Debug.Log(hit);
                     if (hit)
                     {
-                        //$$ TO-DO
+                        //$$ TODO Fix being able to walk on invicible buildings.
                         //Commentent code not working or changing anything based on the visibilty of the building.
 
                         //ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
@@ -54,7 +52,7 @@ namespace Netherlands3D.FirstPersonViewer
                         //IMapping mapping = objectSelectorService.FindObjectMapping();
                         //if (objectSelectorService.IsMappingVisible(mapping, bagID))
                         //{
-                            Instantiate(firstPersonViewerPrefab, point, Quaternion.identity);
+                        Instantiate(firstPersonViewerPrefab, point, Quaternion.identity);
 
                             ViewerEvents.OnViewerEntered?.Invoke();
                         //}

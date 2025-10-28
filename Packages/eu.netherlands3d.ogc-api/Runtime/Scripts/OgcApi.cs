@@ -13,6 +13,7 @@ namespace Netherlands3D.OgcApi
 
         public OgcApi(string baseUrl)
         {
+            baseUrl = baseUrl.TrimEnd('/');
             landingPageResource = new Resource<LandingPage>(new Uri($"{baseUrl}"));
             collectionsResource = new Resource<Collections>(new Uri($"{baseUrl}/collections"));
             conformanceResource = new Resource<ConformanceDeclaration>(new Uri($"{baseUrl}/conformance"));

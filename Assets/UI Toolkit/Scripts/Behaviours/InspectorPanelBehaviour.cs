@@ -51,13 +51,14 @@ namespace Netherlands3D.UI.Behaviours
         {
             InspectorPanel.Toolbar.OnAddLayerToggled += OnAddLayerToggled;
             InspectorPanel.Toolbar.OnOpenLibraryToggled += OnOpenLibraryToggled;
+            InspectorPanel.InspectorHeaderCloseButton.clicked += HidePanel;
             
             AssetLibraryPanel.OnShow += OnShowAssetLibrary;
             AssetLibraryPanel.OnHide += OnHideAssetLibrary;
             AssetLibraryPanel.OnOpenCatalogItem += OnOpenCatalogItem;
 
-            ImportAssetPanel.OnShow += OnShowAssetLibrary;
-            ImportAssetPanel.OnHide += OnHideAssetLibrary;
+            ImportAssetPanel.OnShow += OnShowImportAssetPanel;
+            ImportAssetPanel.OnHide += OnHideImportAssetPanel;
             ImportAssetPanel.FileUploadStarted += OnUploadStarted;
             ImportAssetPanel.UriImportStarted += OnUriImportStarted;
             
@@ -69,6 +70,8 @@ namespace Netherlands3D.UI.Behaviours
         {
             InspectorPanel.Toolbar.OnAddLayerToggled -= OnAddLayerToggled;
             InspectorPanel.Toolbar.OnOpenLibraryToggled -= OnOpenLibraryToggled;
+            InspectorPanel.InspectorHeaderCloseButton.clicked -= HidePanel;
+
             AssetLibraryPanel.OnShow -= OnShowAssetLibrary;
             AssetLibraryPanel.OnHide -= OnHideAssetLibrary;
             AssetLibraryPanel.OnOpenCatalogItem -= OnOpenCatalogItem;
@@ -161,8 +164,11 @@ namespace Netherlands3D.UI.Behaviours
         private void OnHideImportAssetPanel()
         {
             InspectorPanel.Toolbar.AddLayer.SetValueWithoutNotify(false);
+
+            // TODO: At the moment - the InspectorPanel is only available for the Asset Library; once we add more
+            // onto this panel, remove this line as it shouldn't auto-close yet
+            Close();
         }
-        
 
         private void OnAddLayerToggled(ChangeEvent<bool> evt)
         {

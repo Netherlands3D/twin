@@ -1,6 +1,7 @@
-using Netherlands3D.FirstPersonViewer.UI;
+using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.FirstPersonViewer.ViewModus;
-using TMPro;
+using Netherlands3D.Twin.UI.Tooltips;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,23 +10,47 @@ namespace Netherlands3D.FirstPersonViewer.UI
     public class MovementModusButton : MonoBehaviour
     {
         private MovementPresets movementPreset;
-        private MovementModusSwitcher movementSwitcher;
+        private ViewerSettingsInterface viewerSettings;
 
-        [SerializeField] private Image movementIcon;
-        [SerializeField] private TextMeshProUGUI movementText;
+        [SerializeField] private List<Image> movementIcons;
 
-        public void SetupButton(MovementPresets preset, MovementModusSwitcher switcher)
+        [Header("Button State")]
+        [SerializeField] private GameObject regular;
+        [SerializeField] private GameObject selected;
+
+        public void Init(MovementPresets preset, ViewerSettingsInterface viewerSettings)
         {
             movementPreset = preset;
-            movementSwitcher = switcher;
-            movementIcon.sprite = preset.viewIcon;
-            movementText.text = preset.viewName;
+            this.viewerSettings = viewerSettings;
+
+            movementIcons.ForEach(i => i.sprite = preset.viewIcon);
+
+            GetComponent<TooltipTrigger>().TooltipText = preset.viewName;
+        }
+
+        private void OnEnable()
+        {
+            ViewerEvents.OnMovementPresetChanged += MovementChanged;
+        }
+
+        private void OnDisable()
+        {
+            ViewerEvents.OnMovementPresetChanged -= MovementChanged;    
+        }
+        private void MovementChanged(MovementPresets presets)
+        {
+            SetSelected(presets == movementPreset);
+        }
+
+        public void SetSelected(bool enabled)
+        {
+            regular.SetActive(!enabled);
+            selected.SetActive(enabled);
         }
 
         public void ButtonClicked()
         {
-            movementSwitcher.LoadMoveModus(movementPreset);
-            movementSwitcher.SetMovementVisible();
+            viewerSettings.ModusButtonPressed(movementPreset);
         }
     }
 }

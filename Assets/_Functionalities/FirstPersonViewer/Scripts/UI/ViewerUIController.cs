@@ -14,7 +14,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private List<GameObject> uiToDisable;
 
         private PointerToWorldPosition pointerToWorld;
-        private FirstPersonViewerData viewerData;
 
         private void Start()
         {
@@ -46,7 +45,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
                 viewerGroup.DOFade(1, 1f).SetDelay(1);
             } viewerUI.SetActive(true);
 
-            pointerToWorld.SetActiveCamera(ServiceLocator.GetService<FirstPersonViewerData>().FPVCamera);
+            pointerToWorld.SetActiveCamera(FirstPersonViewerCamera.FPVCamera);
         }
 
         private void ExitViewer()
