@@ -62,11 +62,12 @@ namespace Netherlands3D.Twin.Layers
             toggle.onValueChanged.RemoveListener(OnValueChanged);
         }
 
-        private void OnValueChanged(bool acceptMask)
+        private void OnValueChanged(bool isOn)
         {
+            var acceptMask = !isOn;
             if (layerData is ReferencedLayerData referencedLayerData)
             {
-                referencedLayerData.Reference.SetMaskBit(MaskLayer.MaskBitIndex, !acceptMask);
+                referencedLayerData.Reference.SetMaskBit(MaskLayer.MaskBitIndex, acceptMask);
             }
         }
     }
