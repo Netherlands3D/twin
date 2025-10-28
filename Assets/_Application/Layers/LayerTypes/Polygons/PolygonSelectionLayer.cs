@@ -98,7 +98,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             RegisterListeners();
             availableMaskChannels.Remove(MaskBitIndex);
-            PolygonProjectionMask.UpdateActiveMaskChannels(availableMaskChannels);
         }
 
 
@@ -154,7 +153,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if (MaskBitIndex < 0) return;
             
             availableMaskChannels.Add(MaskBitIndex);
-            PolygonProjectionMask.UpdateActiveMaskChannels(availableMaskChannels);
             MaskDestroyed.Invoke(MaskBitIndex);
         }
 
@@ -293,7 +291,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if (!isMask && MaskBitIndex != -1)
             {
                 availableMaskChannels.Add(MaskBitIndex);
-                PolygonProjectionMask.UpdateActiveMaskChannels(availableMaskChannels);
                 MaskBitIndex = -1;
 
             }
@@ -301,7 +298,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 MaskBitIndex = availableMaskChannels.Last();
                 availableMaskChannels.Remove(MaskBitIndex);
-                PolygonProjectionMask.UpdateActiveMaskChannels(availableMaskChannels);
             }
             
             PolygonVisualisation.SetMaterial(isMask, MaskBitIndex, InvertMask);

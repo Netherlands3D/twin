@@ -12,18 +12,18 @@ namespace Netherlands3D
 
         [SerializeField] private string extentsProperty = "_MaskBBoxExtents";
         [SerializeField] private string maskTextureProperty = "_MaskTexture";
-        [SerializeField] private string enableInvertMasksProperty = "_EnableInvertMasks"; //todo: delete
         [SerializeField] private string usedMaskChannelsProperty = "_UsedMaskChannels";
         
         [SerializeField] private Camera maskCamera;
 
         private static bool forceUpdate;
         private static readonly HashSet<GameObject> invertedMasks = new(); // when there are 0 inverted masks, all geometry should be visible, so we should change the output texture to alpha=1 on all pixels.
+        private static int usedMasks = 0;
 
         private IEnumerator Start()
         {
             Shader.SetGlobalTexture(maskTextureProperty, maskCamera.targetTexture);
-            Shader.SetGlobalInt("_UsedMaskChannels", usedInvertedMasks); //initialize the correct value
+            Shader.SetGlobalInt("_UsedMaskChannels", usedMasks); //initialize the correct value
 
             yield return null;
             ForceUpdateVectorsAtEndOfFrame();
@@ -35,7 +35,6 @@ namespace Netherlands3D
             {
                 SetShaderMaskVectors();
                 // when there are 0 inverted masks, all geometry should be visible, so we should change the shader to output alpha=1 on all pixels without an inverted mask, otherwise we need to set alpha=0 so the environment is masked away
-                Shader.SetGlobalInteger(enableInvertMasksProperty,  invertedMasks.Count > 0 ? 1 : 0);
                 maskCamera.Render(); //force a render so the texture is ready to be sampled by the regular pipeline
                 transform.hasChanged = false;
                 forceUpdate = false;
@@ -56,39 +55,18 @@ namespace Netherlands3D
             forceUpdate = true;
         }
 
-        public static int usedInvertedMasks = 0;
         public static void AddInvertedMask(GameObject invertedMask, int maskBitIndex)
         {
-            usedInvertedMasks |= 1 << maskBitIndex;
+            usedMasks |= 1 << maskBitIndex;
             invertedMasks.Add(invertedMask);
-            Debug.Log("used masks: " + usedInvertedMasks);
-            Shader.SetGlobalInt("_UsedMaskChannels", usedInvertedMasks); //todo
+            Shader.SetGlobalInt("_UsedMaskChannels", usedMasks);
         }
 
         public static void RemoveInvertedMask(GameObject invertedMask, int maskBitIndex)
         {
-            usedInvertedMasks &= ~(1 << maskBitIndex);
+            usedMasks &= ~(1 << maskBitIndex);
             invertedMasks.Remove(invertedMask);
-            Debug.Log("used inv masks: " + usedInvertedMasks);
-            Shader.SetGlobalInt("_UsedMaskChannels", usedInvertedMasks); //todo
-        }
-
-        public static void UpdateActiveMaskChannels(List<int> availableMaskChannels)
-        {
-            // var bitmask = GetUsedMaskChannelsBitmask(availableMaskChannels);
-            // Debug.Log("used masks: " + bitmask);
-            // Shader.SetGlobalInt("_UsedMaskChannels", bitmask); //todo
-        }
-        
-        private static int GetUsedMaskChannelsBitmask(List<int> unusedMaskChannels)
-        {
-            int bitmask = 0xFFFFFF; // Start with all bits set
-            foreach (int index in unusedMaskChannels)
-            {
-                bitmask &= ~(1 << index); // Clear the bit if the number is in the list
-            }
-
-            return bitmask & 0x7FFFFF; // Ensure only 23 bits are used
+            Shader.SetGlobalInt("_UsedMaskChannels", usedMasks);
         }
     }
 }
