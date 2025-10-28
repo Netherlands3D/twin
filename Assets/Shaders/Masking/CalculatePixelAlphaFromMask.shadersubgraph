@@ -75,7 +75,20 @@
             "m_Id": "5a2528ef2ca14fb5b211cb42097954e8"
         }
     ],
-    "m_StickyNoteDatas": [],
+    "m_StickyNoteDatas": [
+        {
+            "m_Id": "ac91d3bc8f744f5fb82248e785905cc4"
+        },
+        {
+            "m_Id": "8d30e08081974ce7b7858f44acdbb55c"
+        },
+        {
+            "m_Id": "979d60fb1e574d52990074838b77d2e0"
+        },
+        {
+            "m_Id": "89345928f595422cb2f5d191d2e2a53b"
+        }
+    ],
     "m_Edges": [
         {
             "m_OutputSlot": {
@@ -548,9 +561,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 1448.9998779296875,
-            "y": -109.99998474121094,
-            "width": 208.0001220703125,
+            "x": 1148.0,
+            "y": -94.9999771118164,
+            "width": 208.0,
             "height": 278.0
         }
     },
@@ -759,8 +772,8 @@
     "m_ObjectId": "5a2528ef2ca14fb5b211cb42097954e8",
     "m_Title": "Masking",
     "m_Position": {
-        "x": -870.0000610351563,
-        "y": -477.0000305175781
+        "x": -869.9999389648438,
+        "y": -476.9999694824219
     }
 }
 
@@ -998,6 +1011,26 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.StickyNoteData",
+    "m_ObjectId": "89345928f595422cb2f5d191d2e2a53b",
+    "m_Title": "Texture sampling",
+    "m_Content": "The texture is a top down render of the masks within the camera frustum (with a reduced far clip plane to avoid too much pixelation). Since this is a float formatted texture (int format is not possible in shader graph) we use a maximum of 23 channels, since 2^23 is the max value we can store in a float without rounding errors when converted to ints. The color value represents if there is a mask on a certain channel or not. This is bitmasked to determine if a pixel should be masked or not.",
+    "m_TextSize": 0,
+    "m_Theme": 0,
+    "m_Position": {
+        "serializedVersion": "2",
+        "x": -692.0,
+        "y": -408.0,
+        "width": 200.0,
+        "height": 255.0
+    },
+    "m_Group": {
+        "m_Id": "5a2528ef2ca14fb5b211cb42097954e8"
+    }
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "8ce9a9c229f740d69756809bae502857",
     "m_Id": 1,
@@ -1017,6 +1050,26 @@
         "y": 0.0,
         "z": 0.0,
         "w": 0.0
+    }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.StickyNoteData",
+    "m_ObjectId": "8d30e08081974ce7b7858f44acdbb55c",
+    "m_Title": "Inverted masks",
+    "m_Content": "Green channel is for inverted masks: first we need to invert the texture pixel: a pixel value of 0 means we should compare the bitmask, so we need to know which value to use the bitmask against. The used Mask channels are the color value the black pixel \"should\" be. We then apply a bitmask similar to the regular masks.",
+    "m_TextSize": 0,
+    "m_Theme": 0,
+    "m_Position": {
+        "serializedVersion": "2",
+        "x": -233.0,
+        "y": -325.0,
+        "width": 199.62344360351563,
+        "height": 188.99522399902345
+    },
+    "m_Group": {
+        "m_Id": "5a2528ef2ca14fb5b211cb42097954e8"
     }
 }
 
@@ -1087,6 +1140,26 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.StickyNoteData",
+    "m_ObjectId": "979d60fb1e574d52990074838b77d2e0",
+    "m_Title": "Combine masks",
+    "m_Content": "The output of the two options is added together, and OneMinussed, to get the final alpha the pixel should be",
+    "m_TextSize": 0,
+    "m_Theme": 0,
+    "m_Position": {
+        "serializedVersion": "2",
+        "x": 1105.0,
+        "y": -339.0,
+        "width": 200.0,
+        "height": 189.0
+    },
+    "m_Group": {
+        "m_Id": "5a2528ef2ca14fb5b211cb42097954e8"
+    }
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.AddNode",
     "m_ObjectId": "990fcc2cabe84f379cec50d7a4b315a3",
     "m_Group": {
@@ -1097,10 +1170,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 1142.9998779296875,
-            "y": -89.00000762939453,
-            "width": 126.0,
-            "height": 118.00001525878906
+            "x": 973.9999389648438,
+            "y": -94.9999771118164,
+            "width": 126.00006103515625,
+            "height": 117.99999237060547
         }
     },
     "m_Slots": [
@@ -1174,6 +1247,26 @@
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.StickyNoteData",
+    "m_ObjectId": "ac91d3bc8f744f5fb82248e785905cc4",
+    "m_Title": "Regular masks",
+    "m_Content": "Red channel is for regular masks: compare the bitmask with the texture value and output 1 alpha if it matches.",
+    "m_TextSize": 0,
+    "m_Theme": 0,
+    "m_Position": {
+        "serializedVersion": "2",
+        "x": 124.0,
+        "y": 171.0,
+        "width": 200.0,
+        "height": 160.0
+    },
+    "m_Group": {
+        "m_Id": "5a2528ef2ca14fb5b211cb42097954e8"
+    }
 }
 
 {
@@ -1362,10 +1455,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 1888.000244140625,
-            "y": -138.00003051757813,
-            "width": 106.999755859375,
-            "height": 76.99998474121094
+            "x": 1412.0,
+            "y": -94.9999771118164,
+            "width": 107.0,
+            "height": 76.99999237060547
         }
     },
     "m_Slots": [
