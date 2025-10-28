@@ -20,6 +20,9 @@ namespace Netherlands3D.Twin.Layers
             this.prefabLibrary = prefabLibrary;
         }
 
+        /// <summary>
+        /// Spawn a visualisation for the given LayerData.
+        /// </summary>
         public async Task<LayerGameObject> Spawn(ReferencedLayerData layerData)
         {
             var prefab = prefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
@@ -27,6 +30,9 @@ namespace Netherlands3D.Twin.Layers
             return await SpawnUsingLayerGameObject(layerData, prefab);
         }
 
+        /// <summary>
+        /// Spawn a visualisation for the given LayerData at a specific location.
+        /// </summary>
         public async Task<LayerGameObject> Spawn(
             ReferencedLayerData layerData,
             Vector3 position,
@@ -35,6 +41,18 @@ namespace Netherlands3D.Twin.Layers
             var prefab = prefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
 
             return await SpawnObject(layerData, prefab, position, rotation);
+        }
+
+        /// <summary>
+        /// Spawn a visualisation for the given LayerData but use a specific visualisation based on a given prefab identifier.
+        /// </summary>
+        public async Task<LayerGameObject> Spawn(
+            ReferencedLayerData layerData, 
+            string prefabId
+        ) {
+            var prefab = prefabLibrary.GetPrefabById(prefabId);
+
+            return await SpawnObject(layerData, prefab);
         }
 
         private async Task<LayerGameObject> SpawnUsingLayerGameObject(ReferencedLayerData layerData, LayerGameObject prefab)
