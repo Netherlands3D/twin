@@ -126,8 +126,10 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetCameraConstrain(CameraConstrain state)
         {
-            if (state == CameraConstrain.CONTROL_BOTH) yRotation = transform.eulerAngles.y;
-            else yRotation = transform.localEulerAngles.y;
+            if (state == CameraConstrain.CONTROL_BOTH)
+                yRotation = transform.eulerAngles.y;
+            else
+                yRotation = transform.localEulerAngles.y;
 
             cameraConstrain = state;
         }

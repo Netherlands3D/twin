@@ -5,7 +5,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
     public abstract class ViewerState : ScriptableObject
     {
-        protected FirstPersonViewerStateMachine owner;
         protected FirstPersonViewerInput input;
         protected FirstPersonViewer viewer;
 
@@ -18,9 +17,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         [SerializeField] protected MovementFloatSetting speedMultiplierSetting;
         [SerializeField] protected MovementFloatSetting groundResetHeightOffsetSetting;
 
-        public void Initialize(FirstPersonViewerStateMachine owner, FirstPersonViewer viewer, FirstPersonViewerInput input)
+        public void Initialize(FirstPersonViewer viewer, FirstPersonViewerInput input)
         {
-            this.owner = owner;
             this.input = input;
             this.viewer = viewer;
 

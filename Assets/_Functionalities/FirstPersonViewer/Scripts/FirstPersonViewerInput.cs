@@ -85,38 +85,49 @@ namespace Netherlands3D.FirstPersonViewer
         private void HandleCursorLocking()
         {
             //When editing an inputfield just block this function.
-            if (ExitInput.triggered)
-            {
-                isEditingInputfield = IsInputfieldSelected();
-                if (isEditingInputfield) return;
-            }
+            if (ShouldSkipCursorLocking()) return;
 
             //When key is released release/lock mouse
             if (ExitInput.WasReleasedThisFrame() && !isEditingInputfield)
             {
-                if (Cursor.lockState == CursorLockMode.Locked)
-                {
-                    AddInputLockConstrain(this);
-                    Cursor.lockState = CursorLockMode.None;
-                    Cursor.visible = true;
-                }
-                else
-                {
-                    RemoveInputLockConstrain(this);
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false;
-                }
+                ToggleCursorLock();
             }
-            else if (LeftClick.triggered) 
+            else if (LeftClick.triggered && !Interface.PointerIsOverUI()) 
             {
                 //When no UI object is detected lock the mouse to screen again.
-                if (!Interface.PointerIsOverUI())
-                {
-                    RemoveInputLockConstrain(this);
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false;
-                }
+                LockCursor();
             }
+        }
+
+        private bool ShouldSkipCursorLocking()
+        {
+            if (!ExitInput.triggered) return false;
+
+            isEditingInputfield = IsInputfieldSelected();
+            return isEditingInputfield;
+        }
+
+        private void ToggleCursorLock()
+        {
+            if (Cursor.lockState == CursorLockMode.Locked)
+            {
+                AddInputLockConstrain(this);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                RemoveInputLockConstrain(this);
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+        }
+
+        private void LockCursor()
+        {
+            RemoveInputLockConstrain(this);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
         //When holding the exit key and not editing any inputfield. Start the exiting proceidure. 

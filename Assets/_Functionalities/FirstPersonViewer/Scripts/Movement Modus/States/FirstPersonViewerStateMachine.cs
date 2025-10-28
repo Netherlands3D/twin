@@ -12,7 +12,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             foreach (ViewerState state in states)
             {
-                state.Initialize(this, player, input);
+                state.Initialize(player, input);
             }
         }
 
