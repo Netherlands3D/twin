@@ -8,6 +8,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     {
         public override void OnEnter()
         {
+            base.OnEnter();
+
             Vector3 camPosition = viewer.FirstPersonCamera.transform.position;
             viewer.transform.position = camPosition;
             viewer.FirstPersonCamera.transform.localPosition = Vector3.zero;

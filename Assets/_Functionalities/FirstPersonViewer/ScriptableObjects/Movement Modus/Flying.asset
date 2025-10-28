@@ -23,6 +23,7 @@ MonoBehaviour:
     - rid: 3281392858440663164
     - rid: 3281392858440663165
     - rid: 5560709212561735784
+    - rid: 3281393039499591788
   references:
     version: 2
     RefIds:
@@ -54,6 +55,16 @@ MonoBehaviour:
         movementSetting: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1,
           type: 2}
         defaultValue: 0
+        minValue: 0
+        maxValue: 0
+    - rid: 3281393039499591788
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        isVisible: 1
+        movementSetting: {fileID: 11400000, guid: 4c40903bf39dba84f8368fc1996e6354,
+          type: 2}
+        defaultValue: 1.75
         minValue: 0
         maxValue: 0
     - rid: 5560709212561735784

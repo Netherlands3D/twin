@@ -23,6 +23,16 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             base.OnEnter();
 
+            viewer.transform.position += Vector3.down * viewer.FirstPersonCamera.CameraHeightOffset;
+            viewer.FirstPersonCamera.transform.localPosition = Vector3.up * viewer.FirstPersonCamera.CameraHeightOffset;
+
+            //Get Rotation this depends on the current Camera Constrain
+            Vector3 euler = viewer.FirstPersonCamera.GetEulerRotation();
+            viewer.transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
+            viewer.FirstPersonCamera.transform.localRotation = Quaternion.Euler(euler.x, 0f, 0f);
+
+            viewer.GetGroundPosition();
+
             currentSpeed = 0;
 
             ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_NONE);

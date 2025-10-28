@@ -12,11 +12,12 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         protected Transform transform;
 
         [field: Header("Settings")]
-        [field: SerializeField] protected float SpeedMultiplier { private set; get; }
-        [field: SerializeField] public float GroundResetHeightOffset { private set; get; }
+        protected float SpeedMultiplier { private set; get; }
+        public float GroundResetHeightOffset { private set; get; }
 
         [Header("Viewer Settings")]
-        [SerializeField] protected MovementFloatSetting viewHeightSetting;
+        [SerializeField] protected MovementFloatSetting speedMultiplierSetting;
+        [SerializeField] protected MovementFloatSetting groundResetHeightOffsetSetting;
 
         public void Initialize(FirstPersonViewerStateMachine owner, FirstPersonViewer viewer, FirstPersonViewerInput input)
         {
@@ -29,18 +30,19 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public virtual void OnEnter()
         {
-            viewer.transform.position += Vector3.down * viewer.FirstPersonCamera.CameraHeightOffset;
-            viewer.FirstPersonCamera.transform.localPosition = Vector3.up * viewer.FirstPersonCamera.CameraHeightOffset;
-
-            //Get Rotation this depends on the current Camera Constrain
-            Vector3 euler = viewer.FirstPersonCamera.GetEulerRotation();
-            viewer.transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
-            viewer.FirstPersonCamera.transform.localRotation = Quaternion.Euler(euler.x, 0f, 0f);
-
-            viewer.GetGroundPosition();
+            speedMultiplierSetting.OnValueChanged.AddListener(SetMultiplierSpeed);
+            groundResetHeightOffsetSetting.OnValueChanged.AddListener(SetResetHeightOffset);
         }
 
-        public virtual void OnExit() { }
+        public virtual void OnExit()
+        {
+            speedMultiplierSetting.OnValueChanged.RemoveListener(SetMultiplierSpeed);
+            groundResetHeightOffsetSetting.OnValueChanged.RemoveListener(SetResetHeightOffset);
+        }
+
         public virtual void OnUpdate() { }
+
+        private void SetMultiplierSpeed(float speed) => SpeedMultiplier = speed;
+        private void SetResetHeightOffset(float heightOffset) => GroundResetHeightOffset = heightOffset;
     }
 }

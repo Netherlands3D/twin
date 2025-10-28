@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Netherlands3D
 {
-    [CreateAssetMenu(fileName = "MovementLabelSetting", menuName = "Scriptable Objects/MovementLabelSetting")]
+    [CreateAssetMenu(fileName = "Movement Label Setting", menuName = "ScriptableObjects/FirstPersonViewer/Movement Setting/Label Setting")]
     public class MovementLabelSetting : MovementSetting<string>
     {
     

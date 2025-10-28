@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e4186aed324b142b4be93f81deb807, type: 3}
   m_Name: Walking State
   m_EditorClassIdentifier: 
-  <SpeedMultiplier>k__BackingField: 2
-  <GroundResetHeightOffset>k__BackingField: 0
-  viewHeightSetting: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1, type: 2}
+  speedMultiplierSetting: {fileID: 11400000, guid: 238246fd8535293479b916db1ac470bc,
+    type: 2}
+  groundResetHeightOffsetSetting: {fileID: 11400000, guid: 4c40903bf39dba84f8368fc1996e6354,
+    type: 2}
   jumpFoceSetting: {fileID: 11400000, guid: 3757be2fd3d1b52418f2f04fcfb09852, type: 2}
