@@ -46,7 +46,7 @@ namespace Netherlands3D.Twin.Layers
                 var currentLayerMask = referencedLayerData.Reference.GetMaskLayerMask();
                 int maskBitToCheck = 1 << MaskLayer.MaskBitIndex;
                 bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
-                toggle.SetIsOnWithoutNotify(isBitSet);
+                toggle.SetIsOnWithoutNotify(!isBitSet);
             }
 
             layerIconImage.sprite = layerTypeSpriteLibrary.GetLayerTypeSprite(layer);
@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin.Layers
         {
             if (layerData is ReferencedLayerData referencedLayerData)
             {
-                referencedLayerData.Reference.SetMaskBit(MaskLayer.MaskBitIndex, acceptMask);
+                referencedLayerData.Reference.SetMaskBit(MaskLayer.MaskBitIndex, !acceptMask);
             }
         }
     }
