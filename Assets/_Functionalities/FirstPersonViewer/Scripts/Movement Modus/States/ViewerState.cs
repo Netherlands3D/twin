@@ -11,7 +11,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         protected Transform transform;
 
-        [field: Header("Settings")]
         protected float SpeedMultiplier { private set; get; }
         public float GroundResetHeightOffset { private set; get; }
 

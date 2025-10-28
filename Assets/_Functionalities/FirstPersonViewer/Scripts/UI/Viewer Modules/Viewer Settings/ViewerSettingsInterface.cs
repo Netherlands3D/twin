@@ -79,6 +79,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             modusSwitcher.LoadMovementPreset(preset);
         }
 
+        //TODO Use Vertical/Horizontal Layout group instead of content size fitters
         private IEnumerator UpdateCanvas()
         {
             Canvas.ForceUpdateCanvases();
