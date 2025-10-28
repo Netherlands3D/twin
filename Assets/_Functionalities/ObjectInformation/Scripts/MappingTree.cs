@@ -1,5 +1,6 @@
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Utility;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private class Node
         {
             public BoundingBox Bounds;
-            public List<IMapping> Mappings = new();
+            public IMapping[] Mappings = new IMapping[8];
+            public int MappingCount;
             public Node[] Children;
             public bool IsLeaf => Children == null;
 
@@ -23,6 +25,28 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             {
                 Bounds = bounds;
                 Children = null;
+            }
+
+            public void Add(IMapping mapping)
+            {
+                if (MappingCount == Mappings.Length)
+                    Array.Resize(ref Mappings, Mappings.Length * 2);
+                Mappings[MappingCount++] = mapping;
+            }
+
+            public bool Remove(IMapping mapping)
+            {
+                for (int i = 0; i < MappingCount; i++)
+                {
+                    if (Mappings[i] == mapping)
+                    {
+                        MappingCount--;
+                        Mappings[i] = Mappings[MappingCount]; //last to removed index
+                        Mappings[MappingCount] = null;
+                        return true;
+                    }
+                }
+                return false;
             }
         }
 
@@ -50,9 +74,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
             if (node.IsLeaf)
             {
-                node.Mappings.Add(obj);
+                node.Add(obj);
                 //does the cell contain more than the preferred amount of objects and is still a cell less than max subdivision depth and also fits in a child then subdivide
-                if (node.Mappings.Count > maxMappings && depth < maxDepth && CouldFitInChild(node, obj))
+                if (node.MappingCount > maxMappings && depth < maxDepth && CouldFitInChild(node, obj))
                 {
                     Subdivide(node);                   
                     ReinsertObjects(node); 
@@ -73,7 +97,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
                 //no child fits so up 1 level
                 if (!inserted)
-                    node.Mappings.Add(obj);
+                    node.Add(obj);
             }
         }
 
@@ -88,7 +112,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             if (!node.Bounds.Contains(obj.BoundingBox)) return false;
 
-            if (node.Mappings.Remove(obj))
+            if (node.Remove(obj))
                 return true;
 
             if (!node.IsLeaf)
@@ -117,7 +141,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 if (!child.IsLeaf)
                     return;
 
-                totalMappings += child.Mappings.Count;
+                totalMappings += child.MappingCount;
 
             }
 
@@ -254,12 +278,22 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             topRight = new BoundingBox(center, tr);
         }
 
+        private static IMapping[] TempBuffer = new IMapping[64];
         private void ReinsertObjects(Node node)
         {
-            var objs = node.Mappings;
-            node.Mappings = new List<IMapping>();
-            foreach (var obj in objs)
-                RootInsert(obj);
+            int count = node.MappingCount;
+            if (count == 0)
+                return;
+
+            if (count > TempBuffer.Length)
+                Array.Resize(ref TempBuffer, count * 2); 
+
+            Array.Copy(node.Mappings, TempBuffer, count);
+            Array.Clear(node.Mappings, 0, count);
+            node.MappingCount = 0;
+
+            for (int i = 0; i < count; i++)
+                RootInsert(TempBuffer[i]);
         }
 
         public void DebugTree()
@@ -270,8 +304,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void DebugNode(Node node, bool recursive)
         {
             node.Bounds.Debug(Color.green);
-            foreach (IMapping mapping in node.Mappings)
+            for(int i = 0; i < node.MappingCount; i++)
             {
+                IMapping mapping = node.Mappings[i];                
                 Vector3 bl = mapping.BoundingBox.BottomLeft.ToUnity();
                 Vector3 nbl = node.Bounds.BottomLeft.ToUnity();
                 bl.y = 100;
@@ -283,7 +318,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
 
 
-            foreach (IMapping mapping in node.Mappings)
+            for (int i = 0; i < node.MappingCount; i++)
+            {
+                IMapping mapping = node.Mappings[i];
                 if (mapping is FeatureMapping)
                     mapping.BoundingBox.Debug(Color.magenta);
                 else if (mapping is MeshMapping)
@@ -291,7 +328,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     mapping.BoundingBox.Debug(Color.cyan);
                     ((MeshMapping)mapping).DebugBounds(Color.blue);
                 }
-                
+            }
 
             if (recursive && !node.IsLeaf)
                 foreach (Node child in node.Children)
