@@ -17,10 +17,10 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public abstract void InvokeOnValueChanged(object value);
     }
 
-    public abstract class ViewerSettingTest<T> : ViewerSetting
+    public abstract class ViewerSettingGeneric<T> : ViewerSetting
     {
         public MovementSetting<T> movementSetting;
-        public override string GetDisplayName() => movementSetting.name;
+        public override string GetDisplayName() => movementSetting.displayName;
         public override string GetDisplayUnits() => movementSetting.units;
 
         public override void InvokeOnValueChanged(object value)
@@ -33,7 +33,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     }
 
     [Serializable]
-    public class ViewerSettingValue : ViewerSettingTest<float>
+    public class ViewerSettingValue : ViewerSettingGeneric<float>
     {
         [Header("Settings")]
         public float defaultValue;
@@ -46,7 +46,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     }
 
     [Serializable]
-    public class ViewerSettingLabel : ViewerSettingTest<string>
+    public class ViewerSettingLabel : ViewerSettingGeneric<string>
     {
         public override float GetValue() => 0f;
     }
