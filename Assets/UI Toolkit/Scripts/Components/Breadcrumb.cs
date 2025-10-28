@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class Breadcrumb : VisualElement, IComponent
+    public partial class Breadcrumb : VisualElement
     {
         private int CurrentCrumbIndex => crumbs.Count - 1;
         private int PreviousCrumbIndex => CurrentCrumbIndex - 1;

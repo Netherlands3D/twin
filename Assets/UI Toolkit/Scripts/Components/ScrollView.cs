@@ -12,7 +12,7 @@ namespace Netherlands3D.UI.Components
     /// - Adds a stable root class "scrollview" for styling.
     /// </summary>
     [UxmlElement]
-    public partial class ScrollView : UnityEngine.UIElements.ScrollView, IComponent
+    public partial class ScrollView : UnityEngine.UIElements.ScrollView
     {
         private float itemGap = 8f;
         private int _lastGapChildCount = -1;
