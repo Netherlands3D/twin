@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
@@ -63,6 +62,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 if (layer is not PolygonSelectionLayer polygon) continue;
 
+                //TODO after refactoring the layersystem and onreferencechanged this should also be refactored! 
                 polygon.polygonSelected.AddListener(ProcessPolygonSelection);
                 UnityAction referenceListener = null;
                 referenceListener = () =>
