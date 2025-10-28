@@ -12,7 +12,7 @@ namespace Netherlands3D
 
         [SerializeField] private string extentsProperty = "_MaskBBoxExtents";
         [SerializeField] private string maskTextureProperty = "_MaskTexture";
-        [SerializeField] private string enableInvertMasksProperty = "_EnableInvertMasks";
+        [SerializeField] private string enableInvertMasksProperty = "_EnableInvertMasks"; //todo: delete
         [SerializeField] private string usedMaskChannelsProperty = "_UsedMaskChannels";
         
         [SerializeField] private Camera maskCamera;
@@ -23,6 +23,7 @@ namespace Netherlands3D
         private IEnumerator Start()
         {
             Shader.SetGlobalTexture(maskTextureProperty, maskCamera.targetTexture);
+            Shader.SetGlobalInt("_UsedMaskChannels", usedInvertedMasks); //initialize the correct value
 
             yield return null;
             ForceUpdateVectorsAtEndOfFrame();
