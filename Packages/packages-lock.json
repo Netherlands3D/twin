@@ -519,15 +519,14 @@
       }
     },
     "eu.netherlands3d.tiles3d": {
-      "version": "2.3.1",
+      "version": "file:eu.netherlands3d.tiles3d",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
       "dependencies": {
         "eu.netherlands3d.coordinates": "2.2.0",
         "com.unity.cloud.gltfast": "6.12.1",
         "com.unity.meshopt.decompress": "0.1.0-preview.5"
-      },
-      "url": "https://package.openupm.com"
+      }
     },
     "eu.netherlands3d.transform-handles": {
       "version": "file:eu.netherlands3d.transform-handles",
