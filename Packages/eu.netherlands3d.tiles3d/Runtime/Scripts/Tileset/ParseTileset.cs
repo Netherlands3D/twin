@@ -144,10 +144,15 @@ namespace Netherlands3D.Tiles3D
                 }
             }
             JSONNode contentNode = node["content"];
+            tile.contentType = tileContentType.none;
             if (contentNode != null)
             {
                 tile.hascontent = true;
-                tile.contentUri = contentNode["uri"].Value;
+                string contentUri = contentNode["uri"].Value;
+                if (contentUri.Contains(".json")) tile.contentType = tileContentType.tileset;
+                else if (contentUri.Contains(".subtree")) tile.contentType = tileContentType.subtree;
+                else tile.contentType = tileContentType.geometry;
+                tile.contentID = tile.tileSet.contentURIContainer.setContentURI(contentUri);
             }
 
             return tile;

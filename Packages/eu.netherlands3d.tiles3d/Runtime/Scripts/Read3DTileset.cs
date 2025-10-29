@@ -23,6 +23,7 @@ namespace Netherlands3D.Tiles3D
     public class Read3DTileset : MonoBehaviour
     {
         public string tilesetUrl = "https://storage.googleapis.com/ahp-research/maquette/kadaster/3dbasisvoorziening/test/landuse_1_1/tileset.json";
+        int tilesetID = 0;
         public CoordinateSystem contentCoordinateSystem = CoordinateSystem.WGS84_ECEF;
        
         [Header("API Key (Optional)")]
@@ -39,6 +40,8 @@ namespace Netherlands3D.Tiles3D
         private NameValueCollection queryParameters;
 
         [Header("Tileset")]
+
+        public ContentURIContainer contentURIContainer;
         public Tile root;
         public double[] transformValues;
 
@@ -136,6 +139,7 @@ namespace Netherlands3D.Tiles3D
 
         void Start()
         {
+            SetupContentURIContainer();
             RefreshTiles();
         }
 
@@ -289,8 +293,22 @@ namespace Netherlands3D.Tiles3D
             this.tilesetUrl = tilesetUrl;
             this.maximumScreenSpaceError = maximumScreenSpaceError;
             this.contentCoordinateSystem = contentCoordinateystem;
+            SetupContentURIContainer();
             SetTilePrioritiser(tilePrioritiser);
             RefreshTiles();
+        }
+
+        void SetupContentURIContainer()
+        {
+            int tilesetcount = 0;
+            Read3DTileset[] alltilesets = FindObjectsByType<Read3DTileset>(FindObjectsSortMode.None);
+            foreach (var ts in alltilesets)
+            {
+                if (ts.tilesetID > tilesetcount) tilesetcount = ts.tilesetID;
+            }
+            tilesetID = tilesetcount++;
+            if (contentURIContainer == null) contentURIContainer = new OnetilePerFile();
+            contentURIContainer.setup(tilesetID);
         }
 
         /// <summary>
@@ -569,16 +587,16 @@ namespace Netherlands3D.Tiles3D
                 return;
             }
 
-            if (tile.isLoading == false && tile.children.Count == 0 && tile.contentUri.Contains(".json"))
+            if (tile.isLoading == false && tile.children.Count == 0 && tile.contentType == tileContentType.tileset)
             {
                 tile.isLoading = true;
                 StartCoroutine(LoadNestedTileset(tile));
                 return;
             }
 
-            if (tile.isLoading == false && tile.children.Count == 0 && tile.contentUri.Contains(".subtree"))
+            if (tile.isLoading == false && tile.children.Count == 0 && tile.contentType == tileContentType.subtree)
             {
-                UnityEngine.Debug.Log(tile.contentUri);
+                
                 ReadSubtree subtreeReader = GetComponent<ReadSubtree>();
                 if (subtreeReader.isbusy)
                 {
@@ -596,7 +614,7 @@ namespace Netherlands3D.Tiles3D
             var closestPointOnBounds = tile.ContentBounds.ClosestPoint(currentCamera.transform.position); //Returns original point when inside the bounds
             CalculateTileScreenSpaceError(tile, currentCamera, closestPointOnBounds);
             var enoughDetail = tile.screenSpaceError < maximumScreenSpaceError;
-            var Has3DContent = tile.contentUri.Length > 0 && !tile.contentUri.Contains(".json") && !tile.contentUri.Contains(".subtree");
+            var Has3DContent = tile.contentType == tileContentType.geometry;
             if (enoughDetail == false)  
             {
                 if (tile.refine == "ADD" && Has3DContent)
@@ -649,7 +667,7 @@ namespace Netherlands3D.Tiles3D
         {
             if (tilingMethod == TilingMethod.ExplicitTiling)
             {
-                if (tile.contentUri.Contains(".json") && !tile.nestedTilesLoaded)
+                if (tile.contentType==tileContentType.tileset && !tile.nestedTilesLoaded)
                 {
                     string nestedJsonPath = GetFullContentUri(tile);
                     UnityWebRequest www = UnityWebRequest.Get(nestedJsonPath);
@@ -686,12 +704,12 @@ namespace Netherlands3D.Tiles3D
 
         private string GetFullContentUri(Tile tile)
         {
-            var relativeContentUrl = tile.contentUri;
+            var relativeContentUrl = contentURIContainer.getContentURIString(tile.contentID);
 
             //RD amsterdam specific temp fix.
             relativeContentUrl = relativeContentUrl.Replace("../", "");
 
-            var fullPath = (tile.contentUri.StartsWith("/")) ? rootPath + relativeContentUrl : absolutePath + relativeContentUrl;
+            var fullPath = (relativeContentUrl.StartsWith("/")) ? rootPath + relativeContentUrl : absolutePath + relativeContentUrl;
 
             //Combine query to pass on session id and API key (Google Maps 3DTiles API style)
             UriBuilder uriBuilder = new(fullPath);

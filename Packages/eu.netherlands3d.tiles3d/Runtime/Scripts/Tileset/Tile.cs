@@ -5,6 +5,13 @@ using UnityEngine;
 
 namespace Netherlands3D.Tiles3D
 {
+    public enum tileContentType
+    {
+        none,
+        geometry,
+        tileset,
+        subtree
+    }
    [System.Serializable]
     public class Tile : IDisposable
     {
@@ -15,6 +22,9 @@ namespace Netherlands3D.Tiles3D
         public int X;
         public int Y;
         public bool hascontent;
+        public tileContentType contentType;
+
+        public uint contentID;
         public Read3DTileset tileSet;
         //webtileprioritizer properties
         public int priority = 0;
