@@ -16,9 +16,6 @@
             "m_Id": "de7cb66294a44e88a6c1e697d5291d18"
         },
         {
-            "m_Id": "81e8da20202248d983a173aa7088ab70"
-        },
-        {
             "m_Id": "e0c4b54fab09480da96bdab18d777455"
         }
     ],
@@ -772,8 +769,8 @@
     "m_ObjectId": "5a2528ef2ca14fb5b211cb42097954e8",
     "m_Title": "Masking",
     "m_Position": {
-        "x": -869.9999389648438,
-        "y": -476.9999694824219
+        "x": -870.0,
+        "y": -476.5
     }
 }
 
@@ -928,34 +925,6 @@
         "y": 0.0
     },
     "m_Labels": []
-}
-
-{
-    "m_SGVersion": 1,
-    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
-    "m_ObjectId": "81e8da20202248d983a173aa7088ab70",
-    "m_Guid": {
-        "m_GuidSerialized": "b7c1d460-6dfd-4349-a699-c79549bc6818"
-    },
-    "m_Name": "EnableInvertMasks",
-    "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "EnableInvertMasks",
-    "m_DefaultReferenceName": "_EnableInvertMasks",
-    "m_OverrideReferenceName": "",
-    "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
-    "m_DismissedVersion": 0,
-    "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
-    "m_Hidden": false,
-    "m_Value": 0.0,
-    "m_FloatType": 0,
-    "m_RangeValues": {
-        "x": 0.0,
-        "y": 1.0
-    }
 }
 
 {
@@ -1286,9 +1255,6 @@
         },
         {
             "m_Id": "de7cb66294a44e88a6c1e697d5291d18"
-        },
-        {
-            "m_Id": "81e8da20202248d983a173aa7088ab70"
         },
         {
             "m_Id": "e0c4b54fab09480da96bdab18d777455"
