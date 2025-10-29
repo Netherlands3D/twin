@@ -16,7 +16,7 @@ MonoBehaviour:
   SavedTimestamp: 20241008130521
   UUID: 6a9f1798-d710-4956-96da-f109deb1487c
   CameraRotation:
-  - 60.000003814697266
+  - 59.999996185302734
   - 0
   - 0
   UseCurrentTime: 0
@@ -57,4 +57,8 @@ MonoBehaviour:
     IsEnabled: 1
   - Id: urbanreleaf
     IsEnabled: 1
+  - Id: debug-info
+    IsEnabled: 0
+  - Id: profilerendering
+    IsEnabled: 0
   PrefabLibrary: {fileID: 11400000, guid: 03a0c2ac495a64c08b5dd612c9507bd7, type: 2}
