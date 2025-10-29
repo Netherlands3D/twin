@@ -7,6 +7,7 @@ using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
@@ -20,6 +21,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public Material PolygonMeshMaterial;
         [SerializeField] private Material polygonMaskMaterial;
         private bool isMask;
+
+        public UnityEvent OnPolygonVisualisationUpdated = new();
 
         /// <summary>
         /// Create or update PolygonVisualisation
@@ -43,6 +46,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             polygonBounds.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
 
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
+
+            OnPolygonVisualisationUpdated.Invoke();
         }
 
         private PolygonVisualisation CreatePolygonMesh(List<Vector3> polygon, float polygonExtrusionHeight, Material polygonMeshMaterial)

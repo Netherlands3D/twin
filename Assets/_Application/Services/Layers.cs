@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.DataTypeAdapters;
 using Netherlands3D.Twin.Layers;
@@ -9,6 +10,7 @@ using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Services
 {
@@ -18,17 +20,27 @@ namespace Netherlands3D.Twin.Services
         [SerializeField] private FileTypeAdapter fromFileImporter;
         [SerializeField] private DataTypeChain fromUrlImporter;
         private LayerSpawner spawner;
+        
+        public UnityEvent<ReferencedLayerData> layerAdded = new();
+        public UnityEvent<ReferencedLayerData> layerRemoved = new();
 
         private void Awake()
         {
             spawner = new LayerSpawner(prefabLibrary);
         }
 
+        /// <summary>
+        /// Adds a new layer to the current project using the given preset.
+        /// </summary>
         public async Task<ReferencedLayerData> Add(LayerPresetArgs args)
         {
             return await Add(LayerBuilder.Create(args));
         }
 
+        /// <summary>
+        /// Adds a new layer to the current project using the given builder.
+        /// </summary>
+        [ItemCanBeNull]
         public async Task<ReferencedLayerData> Add(ILayerBuilder builder)
         {
             if (builder is not LayerBuilder layerBuilder)
@@ -36,46 +48,59 @@ namespace Netherlands3D.Twin.Services
                 throw new NotSupportedException("Unsupported layer builder type: " + builder.GetType().Name);
             }
             
-            LayerGameObject layerGameObject = null;
             switch (layerBuilder.Type)
             {
-                case "url":
-                {
-                    var url = RetrieveUrlForLayer(layerBuilder);
-                    if (url.Scheme == "prefab-library")
-                    {
-                        // This is a stored prefab identifier from the prefab library, so let's try it again but
-                        // then as a direct build
-                        return await Add(layerBuilder.OfType(url.AbsolutePath.Trim('/')));
-                    }
-                    
-                    fromUrlImporter.DetermineAdapter(url, layerBuilder.Credentials);
-                
-                    // TODO: Capture created LayerData and return it
-                    return null;
-                }
-                case "file":
-                {
-                    var url = RetrieveUrlForLayer(layerBuilder);
-                    fromFileImporter.ProcessFile(url.ToString());
-
-                    // TODO: Capture created LayerData and return it
-                    return null;
-                }
-                default:
-                    layerGameObject = await SpawnLayer(layerBuilder);
-                    break;
+                case "url": return await ImportFromUrl(layerBuilder);
+                case "file": return ImportFromFile(layerBuilder);
             }
-
+            
+            var layerGameObject = await SpawnLayer(layerBuilder);
             if (layerGameObject == null)
             {
                 throw new Exception($"Could not find layer of type: {layerBuilder.Type}");
             }
 
-            return layerGameObject.LayerData;
+            var layerData = layerGameObject.LayerData;
+            layerAdded.Invoke(layerData);
+
+            return layerData;
         }
 
-        public async Task<ReferencedLayerData> Add(ReferencedLayerData layerData)
+        private ReferencedLayerData ImportFromFile(LayerBuilder layerBuilder)
+        {
+            var url = RetrieveUrlForLayer(layerBuilder);
+            fromFileImporter.ProcessFile(url.ToString());
+
+            // Return null to indicate that adding this flow does not directly result in a Layer, it may do so
+            // indirectly (DataTypeAdapters call this Layer service again).
+            return null;
+        }
+
+        private async Task<ReferencedLayerData> ImportFromUrl(LayerBuilder layerBuilder)
+        {
+            var url = RetrieveUrlForLayer(layerBuilder);
+            if (url.Scheme == "prefab-library")
+            {
+                // This is a stored prefab identifier from the prefab library, so let's try it again but
+                // then as a direct build
+                return await Add(layerBuilder.OfType(url.AbsolutePath.Trim('/')));
+            }
+                    
+            fromUrlImporter.DetermineAdapter(url, layerBuilder.Credentials);
+                
+            // Return null to indicate that adding this flow does not directly result in a Layer, it may do so
+            // indirectly (DataTypeAdapters call this Layer service again).
+            return null;
+        }
+
+        /// <summary>
+        /// Visualizes an existing layer's data by spawning a placeholder and after that the actual visualisation
+        /// (LayerGameObject).
+        ///
+        /// Usually used when loading a project file as this will restore the layer's data but the visualisation needs
+        /// to be spawned. 
+        /// </summary>
+        public async Task<ReferencedLayerData> Visualize(ReferencedLayerData layerData)
         {
             layerData.SetReference(SpawnPlaceholder(layerData), true);
 
@@ -84,7 +109,14 @@ namespace Netherlands3D.Twin.Services
             return layerData;
         }
 
-        public async Task<ReferencedLayerData> Add(ReferencedLayerData layerData, Vector3 position, Quaternion? rotation = null)
+        /// <summary>
+        /// Visualizes an existing layer's data by spawning a placeholder and after that the actual visualisation
+        /// (LayerGameObject).
+        ///
+        /// Usually used when loading a project file as this will restore the layer's data but the visualisation needs
+        /// to be spawned. 
+        /// </summary>
+        public async Task<ReferencedLayerData> Visualize(ReferencedLayerData layerData, Vector3 position, Quaternion? rotation = null)
         {
             layerData.SetReference(SpawnPlaceholder(layerData), true);
             
@@ -93,10 +125,31 @@ namespace Netherlands3D.Twin.Services
             return layerData;
         }
 
+        /// <summary>
+        /// Force a LayerData object to be visualized as a specific prefab.
+        ///
+        /// Warning: this code does not check if the given prefab is compatible with this LayerData, make sure you know what you are doing.
+        /// </summary>
+        public async Task<ReferencedLayerData> VisualizeAs(ReferencedLayerData layerData, string prefabIdentifier)
+        {
+            string previousId = layerData.PrefabIdentifier;
+            layerData.SetReference(SpawnPlaceholder(layerData), true);
+            
+            var layerGameObject = await spawner.Spawn(layerData, prefabIdentifier);
+            
+            if (previousId != prefabIdentifier) layerGameObject.OnConvert(previousId);
+
+            return layerData;
+        }
+
+        /// <summary>
+        /// Removes the layer from the current project and ensures the visualisation is removed as well.
+        /// </summary>
         public Task Remove(ReferencedLayerData layerData)
         {
             layerData.DestroyLayer();
             
+            layerRemoved.Invoke(layerData);
             return Task.CompletedTask;
         }
 

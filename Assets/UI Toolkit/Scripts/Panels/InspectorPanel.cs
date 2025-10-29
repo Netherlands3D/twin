@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class InspectorPanel : VisualElement, IContainer
+    public partial class InspectorPanel : VisualElement
     {
         private Label header;
         private Label Header => header ??= this.Q<Label>(className: "inspector-header-title");
