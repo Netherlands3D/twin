@@ -61,7 +61,7 @@ MonoBehaviour:
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
         asm: eu.netherlands3d.twin}
       data:
-        isVisible: 1
+        isVisible: 0
         movementSetting: {fileID: 11400000, guid: 4c40903bf39dba84f8368fc1996e6354,
           type: 2}
         defaultValue: 1.75
