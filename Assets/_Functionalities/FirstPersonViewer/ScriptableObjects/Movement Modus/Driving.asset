@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewerState: {fileID: 11400000, guid: 130c7cf512e492a4fa526f2b64dc26f5, type: 2}
   viewName: Auto
-  viewIcon: {fileID: 21300000, guid: dca9ce9f8c1f0d0418a06d316e41cabf, type: 3}
+  viewIcon: {fileID: 21300000, guid: 3edea80a8439cc5479ed6682ad352b7d, type: 3}
   viewMesh: {fileID: 1551113389355595217, guid: 1c62f1956ea89e14bbdbc700a0ec3b57,
     type: 3}
   meshMaterials:

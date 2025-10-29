@@ -1695,10 +1695,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1250230210988726293}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -10, y: -10}
+  m_SizeDelta: {x: 32, y: 43.875}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5806279157548525797
 CanvasRenderer:
@@ -1728,7 +1728,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f907dc528beea65479401ce3b75a196b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bb12026ffbf280b4898ad4b67b2e9e98, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -2742,10 +2742,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3835946825550307213}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -10, y: -10}
+  m_SizeDelta: {x: 32, y: 43.875}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5651714732716534251
 CanvasRenderer:
@@ -2775,7 +2775,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f907dc528beea65479401ce3b75a196b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bb12026ffbf280b4898ad4b67b2e9e98, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -4387,7 +4387,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8786143100138227346
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5676,7 +5676,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7235885774582464260
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5724,7 +5724,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9a6423610c8df584db01f10a3fe71622, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1ae82d7237a6a894f8d4d82472f6a80d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
