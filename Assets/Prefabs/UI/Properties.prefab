@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2002606693735210281}
   - component: {fileID: 4886931328279182371}
   - component: {fileID: 7224589752149693780}
+  - component: {fileID: 1571877449309054137}
   m_Layer: 5
   m_Name: Properties
   m_TagString: Untagged
@@ -79,6 +80,47 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   service: {fileID: 2002606693735210281}
+--- !u!114 &1571877449309054137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2093818850592775062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb9690ba894e6704296ba4295371d145, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  side: 1
+  pinned: 0
+  offscreenMargin: 24
+  slideTime: 0.3
+  ease:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2.6666667
+      outSlope: 2.6666667
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.0875
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  pinToggle: {fileID: 0}
 --- !u!1 &3343504015431018353
 GameObject:
   m_ObjectHideFlags: 0

@@ -68,3 +68,7 @@ MonoBehaviour:
     - {fileID: 4977096601700651112, guid: d128af3d82c1ec74ca2915dca7794e65, type: 3}
     - {fileID: 3472074814285716244, guid: 01cef4f031ccfda4aa53cc81dc95674a, type: 3}
     - {fileID: 4476188689757322987, guid: a3423cc30b04fd74caa657b5830b8985, type: 3}
+  - groupName: REALLOCATE
+    autoPopulateUI: 0
+    prefabs:
+    - {fileID: 7790514285968459039, guid: 40d678ce8332c5d4eb379502763dd0f6, type: 3}
