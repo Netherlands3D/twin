@@ -20,7 +20,8 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void PointerDown()
         {
-            picker = Instantiate(pickerPrefab, transform.root);
+            Vector2 screenPoint = Pointer.current.position.ReadValue();
+            picker = Instantiate(pickerPrefab, screenPoint, Quaternion.identity, transform.root);
         }
 
         public void OnPointerUp(PointerEventData eventData)
