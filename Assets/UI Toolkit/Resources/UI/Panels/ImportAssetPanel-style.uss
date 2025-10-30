@@ -20,7 +20,8 @@
     opacity: 1;
 }
 
-.import-asset-panel__button-upload {
+.import-asset-panel__button-upload,
+.import-asset-panel__button-asset-library {
     width: auto;
     align-self: stretch;
 }
