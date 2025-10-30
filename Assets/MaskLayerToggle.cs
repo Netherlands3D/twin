@@ -49,7 +49,7 @@ namespace Netherlands3D.Twin.Layers
                 toggle.SetIsOnWithoutNotify(!isBitSet);
             }
 
-            layerIconImage.sprite = layerTypeSpriteLibrary.GetLayerTypeSprite(layer);
+            layerIconImage.sprite = layerTypeSpriteLibrary.GetLayerTypeSprite(layer).PrimarySprite;
         }
         
         private void OnEnable()
