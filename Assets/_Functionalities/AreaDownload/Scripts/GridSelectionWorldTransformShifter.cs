@@ -42,7 +42,7 @@ namespace Netherlands3D.Functionalities.AreaDownload
             UpdateGridOffset();
         }
 
-        private void UpdateGridOffset(ProjectData data = null)
+        private void UpdateGridOffset()
         {
             areaSelection.GridOffset = CalculateOffset(Origin.current.Coordinate.easting, Origin.current.Coordinate.northing);
         }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
@@ -219,8 +220,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     if (layer is not PolygonSelectionLayer polygonSelectionLayer) return;
                     layers.Add(polygonSelectionLayer.PolygonVisualisation, polygonSelectionLayer);
                     polygonSelectionLayer.polygonSelected.AddListener(ProcessPolygonSelection);
-                    lineInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
-                    ProcessPolygonSelection(polygonSelectionLayer); //TODO is this still needed?
+                    lineInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work                   
                 }
             );
         }
