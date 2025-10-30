@@ -1,8 +1,5 @@
-using System;
-using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
-using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +24,7 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private Toggle toggle;
         [SerializeField] private TextMeshProUGUI layerNameLabel;
         [SerializeField] private Image layerIconImage;
+        [SerializeField] private Image maskIconImage;
         [SerializeField] private LayerTypeSpriteLibrary layerTypeSpriteLibrary;
         
         private void Awake()
@@ -47,6 +45,8 @@ namespace Netherlands3D.Twin.Layers
                 int maskBitToCheck = 1 << MaskLayer.MaskBitIndex;
                 bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
                 toggle.SetIsOnWithoutNotify(!isBitSet);
+                maskIconImage.gameObject.SetActive(isBitSet);
+
             }
 
             layerIconImage.sprite = layerTypeSpriteLibrary.GetLayerTypeSprite(layer).PrimarySprite;
@@ -65,6 +65,7 @@ namespace Netherlands3D.Twin.Layers
         private void OnValueChanged(bool isOn)
         {
             var acceptMask = !isOn;
+            maskIconImage.gameObject.SetActive(acceptMask);
             if (layerData is ReferencedLayerData referencedLayerData)
             {
                 referencedLayerData.Reference.SetMaskBit(MaskLayer.MaskBitIndex, acceptMask);
