@@ -7,6 +7,7 @@ using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
@@ -61,17 +62,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             foreach (var layer in newData.RootLayer.ChildrenLayers)
             {
                 if (layer is not PolygonSelectionLayer polygon) continue;
-                // TODO: Why did I need to add this to stop a project from crashing?
-                if (!polygon.PolygonVisualisation) continue;
 
+                //TODO after refactoring the layersystem and onreferencechanged this should also be refactored! 
                 polygon.polygonSelected.AddListener(ProcessPolygonSelection);
-                layers.Add(polygon.PolygonVisualisation, polygon);
-                    
-                // Disable the visualisations when loading a project, because the layer panel is not opened.
-                // If it is a mask it should not be disabled because we need to render it to get the desired masking effect even if the layer panel is not opened.
-                if (polygon.IsMask) continue;
+                UnityAction referenceListener = null;
+                referenceListener = () =>
+                {
+                    layers.Add(polygon.PolygonVisualisation, polygon);
 
-                polygon.SetVisualisationActive(enabled);
+                    if (!polygon.IsMask)
+                        polygon.SetVisualisationActive(enabled);
+
+                    polygon.OnReferenceChanged.RemoveListener(referenceListener);
+                };
+                polygon.OnReferenceChanged.AddListener(referenceListener);
             }
         }
 
@@ -91,9 +95,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             //we don't reselect immediately in case of a grid, but we already register the active layer
             if (layer?.ShapeType == ShapeType.Grid)
             {
-                ClearSelection();
-                ActiveLayer = layer; 
-                // do not call the ReselectLayerPolygon function yet, because we need to wait until the user selects edit mode in the UI
+                ActiveLayer = layer;
+                ReselectInputByType(layer);
+                gridInput.SetSelectionVisualEnabled(true);
                 return;
             }
 
@@ -115,7 +119,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 polygonInput.gameObject.SetActive(false);
                 lineInput.gameObject.SetActive(false);
                 gridInput.gameObject.SetActive(false);
-
                 return;
             }
 
@@ -161,9 +164,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             //Clear inputs if no layer is selected by default
             var emptyList = new List<Vector3>();
-            polygonInput.ReselectPolygon(emptyList);
-            lineInput.ReselectPolygon(emptyList);
-            gridInput.ClearSelection();
+            lineInput.ClearPolygon(true);
+            polygonInput.ClearPolygon(true);
+            gridInput.SetSelectionVisualEnabled(false);
         }
 
         public void ShowPolygonVisualisations(bool enabled)
@@ -195,10 +198,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     layers.Add(layer.PolygonVisualisation, layer);
                     layer.polygonSelected.AddListener(ProcessPolygonSelection);
                     polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
-                    ProcessPolygonSelection(layer);
                 }
-            );
-            
+            );            
         }
 
         private void UpdateLayer(List<Vector3> editedPolygon)
@@ -219,8 +220,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     if (layer is not PolygonSelectionLayer polygonSelectionLayer) return;
                     layers.Add(polygonSelectionLayer.PolygonVisualisation, polygonSelectionLayer);
                     polygonSelectionLayer.polygonSelected.AddListener(ProcessPolygonSelection);
-                    lineInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
-                    ProcessPolygonSelection(polygonSelectionLayer);
+                    lineInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work                   
                 }
             );
         }
@@ -233,12 +233,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             Vector3 topRight = new Vector3(bounds.max.x, 0, bounds.max.z);
             Vector3 bottomRight = new Vector3(bounds.max.x, 0, bounds.min.z);
 
-            if (ActiveLayer?.ShapeType == ShapeType.Grid)
+            //is the current selected layer already a grid and the current input mode is not selected, then we can adjust the polygon
+            if (ActiveLayer?.ShapeType == ShapeType.Grid && gridInput.Mode != PolygonInput.DrawMode.Selected)
             {
                 ActiveLayer.SetShape(new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(topLeft), new Coordinate(topRight), new Coordinate(bottomRight) });
                 return;
             }
-            
+
             _ = new PolygonSelectionLayer(
                 "Grid", 
                 polygonSelectionVisualisationPrefab.PrefabIdentifier, 
@@ -250,7 +251,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
                     layers.Add(layer.PolygonVisualisation, layer);
                     layer.polygonSelected.AddListener(ProcessPolygonSelection);
-                    ProcessPolygonSelection(layer);
+                    gridInput.SetDrawMode(PolygonInput.DrawMode.Edit);
                 }
             );
         }
@@ -274,20 +275,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public void SetGridInputModeToCreate(bool active)
         {
             ActiveLayer?.DeselectLayer();
-            ActiveLayer = null;
 
-            if (active)
-                EnablePolygonInputByType(ShapeType.Grid);
-            else
-                gridInput.gameObject.SetActive(false);
+            gridInput.SetDrawMode(active ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Selected);
         }
 
         public void SetGridInputModeToEdit(bool active)
         {
-            if (active)
-                EnablePolygonInputByType(ShapeType.Grid);
-            else
-                gridInput.gameObject.SetActive(false);
+            gridInput.SetDrawMode(active ? PolygonInput.DrawMode.Edit : PolygonInput.DrawMode.Selected);
         }
     }
 }
