@@ -100,6 +100,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             availableMaskChannels.Remove(MaskBitIndex);
         }
 
+
         public PolygonSelectionLayer(string name,
             string prefabId,
             List<Vector3> polygonUnityInput,
@@ -271,7 +272,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             PolygonSelectionCalculator.UnregisterPolygon(this);
             base.DestroyLayer();
-            PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject);
+            PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject, MaskBitIndex);
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
             
             UnregisterListeners();
@@ -293,6 +294,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 availableMaskChannels.Add(MaskBitIndex);
                 MaskBitIndex = -1;
+
             }
             else if (isMask && MaskBitIndex == -1)
             {
@@ -315,11 +317,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             if (layer == LayerMask.NameToLayer("PolygonMask") && invert)
             {
-                PolygonProjectionMask.AddInvertedMask(PolygonVisualisation.gameObject);
+                PolygonProjectionMask.AddInvertedMask(PolygonVisualisation.gameObject, MaskBitIndex);
             }
             else
             {
-                PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject);
+                PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject, MaskBitIndex);
             }
 
             foreach (Transform t in PolygonVisualisation.gameObject.transform)
