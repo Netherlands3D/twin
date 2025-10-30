@@ -171,11 +171,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             //Silent update of the polygon shape, so the visualisation is updated without notifying the listeners
             RecalculatePolygon();
-            polygonMoved.Invoke();
-            if (IsSelected)
+            if (PolygonVisualisation)
             {
-                polygonSelected.Invoke(this);
+                var vertices = CoordinatesToVertices(OriginalPolygon);
+                PolygonVisualisation.UpdateVisualisation(vertices, PolygonPropertyData.ExtrusionHeight);
+                SetMasking();
             }
+            polygonMoved.Invoke();
         }
 
         /// <summary>
