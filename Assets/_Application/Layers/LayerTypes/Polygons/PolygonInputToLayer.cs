@@ -276,6 +276,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             ActiveLayer?.DeselectLayer();
 
+            EnablePolygonInputByType(ShapeType.Grid);
             gridInput.SetDrawMode(active ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Selected);
         }
 
