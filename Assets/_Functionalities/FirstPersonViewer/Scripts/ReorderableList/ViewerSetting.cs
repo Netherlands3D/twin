@@ -9,7 +9,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         [Header("Defaults")]
         public bool isVisible = true;
 
-        //We use floats for now.
         public abstract object GetValue();
         public abstract string GetDisplayName();
         public abstract string GetDisplayUnits();
@@ -17,7 +16,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public abstract void InvokeOnValueChanged(object value);
     }
 
-    public abstract class ViewerSettingGeneric<T> : ViewerSetting // we unfortunately need this class since a generic class can not be drawn with the PropertyDrawer
+    // We unfortunately need this class since a generic class can not be drawn with the PropertyDrawer
+    public abstract class ViewerSettingGeneric<T> : ViewerSetting 
     {
         public MovementSetting<T> movementSetting;
         public override string GetDisplayName() => movementSetting.displayName;
@@ -27,7 +27,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             if (value is T typeValue)
             {
-                movementSetting.OnValueChanged.Invoke(typeValue);
+                movementSetting.Value = typeValue;
             }
             else
             {

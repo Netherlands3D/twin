@@ -10,6 +10,17 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public string displayName;
         public string units;
 
+        private T value;
+        public T Value
+        {
+            set
+            {
+                this.value = value;
+                OnValueChanged.Invoke(value);
+            }
+            get => value;
+        }
+
         public UnityEvent<T> OnValueChanged = new();
     }
 }

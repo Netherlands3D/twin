@@ -10,13 +10,9 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             base.OnEnter();
 
             Vector3 camPosition = viewer.FirstPersonCamera.transform.position;
-            viewer.transform.position = camPosition;
-            viewer.FirstPersonCamera.transform.localPosition = Vector3.zero;
-
             //Get Rotation this depends on the current Camera Constrain
             Vector3 eulerRotation = viewer.FirstPersonCamera.GetEulerRotation();
-            viewer.transform.eulerAngles = eulerRotation;
-            viewer.FirstPersonCamera.transform.localEulerAngles = Vector3.zero;
+            viewer.SetupState(camPosition, eulerRotation, Vector3.zero, 0);
 
             viewer.SetVelocity(Vector2.zero);
         }
@@ -36,7 +32,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             Vector3 direction = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
 
-            float calculatedSpeed = viewer.MovementSpeed * (input.SprintAction.IsPressed() ? SpeedMultiplier : 1);
+            float calculatedSpeed = MovementSpeed * (input.SprintAction.IsPressed() ? speedMultiplierSetting.Value : 1);
 
             transform.Translate(direction * calculatedSpeed * Time.deltaTime, Space.World);
         }
@@ -45,7 +41,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             if (verticalInput == 0) return;
 
-            float calculatedSpeed = viewer.MovementSpeed * (input.SprintAction.IsPressed() ? SpeedMultiplier : 1);
+            float calculatedSpeed = MovementSpeed * (input.SprintAction.IsPressed() ? speedMultiplierSetting.Value : 1);
 
             transform.Translate(Vector3.up * verticalInput * calculatedSpeed * Time.deltaTime, Space.World);
         }

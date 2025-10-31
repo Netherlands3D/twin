@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Vehicular State
   m_EditorClassIdentifier: 
   <CameraConstrain>k__BackingField: 2
+  maxSpeedSetting: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad, type: 2}
   speedMultiplierSetting: {fileID: 11400000, guid: 238246fd8535293479b916db1ac470bc,
     type: 2}
   groundResetHeightOffsetSetting: {fileID: 11400000, guid: 4c40903bf39dba84f8368fc1996e6354,

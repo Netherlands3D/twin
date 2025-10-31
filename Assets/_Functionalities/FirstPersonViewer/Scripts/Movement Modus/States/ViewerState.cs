@@ -9,12 +9,11 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         protected FirstPersonViewer viewer;
         protected Transform transform;
 
-        [field:SerializeField] public CameraConstrain CameraConstrain { private set; get; }
-
-        protected float SpeedMultiplier { private set; get; }
-        public float GroundResetHeightOffset { private set; get; }
+        [field: SerializeField] public CameraConstrain CameraConstrain { private set; get; }
+        protected float MovementSpeed { private set; get; }
 
         [Header("Viewer Settings")]
+        [SerializeField] private MovementFloatSetting maxSpeedSetting;
         [SerializeField] protected MovementFloatSetting speedMultiplierSetting;
         [SerializeField] protected MovementFloatSetting groundResetHeightOffsetSetting;
 
@@ -28,19 +27,19 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public virtual void OnEnter()
         {
-            speedMultiplierSetting.OnValueChanged.AddListener(SetMultiplierSpeed);
-            groundResetHeightOffsetSetting.OnValueChanged.AddListener(SetResetHeightOffset);
+            maxSpeedSetting.OnValueChanged.AddListener(SetMaxSpeed);
         }
 
         public virtual void OnExit()
         {
-            speedMultiplierSetting.OnValueChanged.RemoveListener(SetMultiplierSpeed);
-            groundResetHeightOffsetSetting.OnValueChanged.RemoveListener(SetResetHeightOffset);
+            maxSpeedSetting.OnValueChanged.RemoveListener(SetMaxSpeed);
         }
 
         public virtual void OnUpdate() { }
 
-        private void SetMultiplierSpeed(float speed) => SpeedMultiplier = speed;
-        private void SetResetHeightOffset(float heightOffset) => GroundResetHeightOffset = heightOffset;
+        public float GetGroundHeightOffset() => groundResetHeightOffsetSetting.Value;
+        
+        //We need to calculate the speed from Km/h to m/s
+        private void SetMaxSpeed(float speed) => MovementSpeed = speed / 3.6f;
     }
 }
