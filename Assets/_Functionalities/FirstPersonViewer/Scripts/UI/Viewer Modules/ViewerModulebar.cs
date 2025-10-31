@@ -1,9 +1,7 @@
 using DG.Tweening;
-using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.Twin.UI;
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Netherlands3D.FirstPersonViewer.UI
 {
@@ -31,7 +29,12 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
             underBarYSize = underBar.sizeDelta.y;
 
-            ViewerEvents.OnViewerExited += ViewerExited;
+            FirstPersonViewer.OnViewerExited += ViewerExited;
+        }
+
+        private void OnDestroy()
+        {
+            FirstPersonViewer.OnViewerExited -= ViewerExited;
         }
 
         public void OpenWindow(RectTransform windowPrefab, ViewerModuleButton viewTool)

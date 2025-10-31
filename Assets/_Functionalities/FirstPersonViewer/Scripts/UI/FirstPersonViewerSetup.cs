@@ -1,5 +1,4 @@
 using Netherlands3D.FirstPersonViewer;
-using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.Minimap;
 using Netherlands3D.Services;
 using System.Collections;

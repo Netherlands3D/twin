@@ -1,5 +1,4 @@
 using DG.Tweening;
-using Netherlands3D.FirstPersonViewer.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,13 +11,13 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void Start()
         {
-            ViewerEvents.ExitDuration += UpdateTimer;
+            FirstPersonViewerInput.ExitDuration += UpdateTimer;
             gameObject.SetActive(false);
         }
 
         private void OnDestroy()
         {
-            ViewerEvents.ExitDuration -= UpdateTimer;
+            FirstPersonViewerInput.ExitDuration -= UpdateTimer;
         }
 
         private void UpdateTimer(float percentage)

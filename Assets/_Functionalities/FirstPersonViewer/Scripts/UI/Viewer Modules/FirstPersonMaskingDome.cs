@@ -1,6 +1,4 @@
 using Netherlands3D.Events;
-using Netherlands3D.FirstPersonViewer.Events;
-using System.Collections;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.Components

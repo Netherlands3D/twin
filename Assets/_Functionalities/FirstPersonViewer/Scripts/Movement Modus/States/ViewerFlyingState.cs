@@ -1,4 +1,3 @@
-using Netherlands3D.FirstPersonViewer.Events;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.ViewModus
@@ -20,7 +19,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             viewer.FirstPersonCamera.transform.localEulerAngles = Vector3.zero;
 
             viewer.SetVelocity(Vector2.zero);
-            ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_BOTH);
         }
 
         public override void OnUpdate()

@@ -1,9 +1,8 @@
 using DG.Tweening;
-using Netherlands3D.FirstPersonViewer.Events;
-using Netherlands3D.Services;
 using Netherlands3D.Twin.Samplers;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D.FirstPersonViewer.UI
 {
@@ -15,23 +14,26 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private PointerToWorldPosition pointerToWorld;
 
+        [Space(5)]
+        [SerializeField] private InputActionReference hideButton;
+
         private void Start()
         {
             pointerToWorld = FindFirstObjectByType<PointerToWorldPosition>();
             viewerGroup = viewerUI.GetComponent<CanvasGroup>();
-            
-            ViewerEvents.OnViewerEntered += EnterViewer;
-            ViewerEvents.OnViewerExited += ExitViewer;
-            ViewerEvents.OnHideUI += HideUI;
+
+            FirstPersonViewer.OnViewerEntered += EnterViewer;
+            FirstPersonViewer.OnViewerExited += ExitViewer;
+            hideButton.action.performed += OnHideUIPressed;
 
             viewerUI.SetActive(false);
         }
 
         private void OnDestroy()
         {
-            ViewerEvents.OnViewerEntered -= EnterViewer;
-            ViewerEvents.OnViewerExited -= ExitViewer;
-            ViewerEvents.OnHideUI -= HideUI;
+            FirstPersonViewer.OnViewerEntered -= EnterViewer;
+            FirstPersonViewer.OnViewerExited -= ExitViewer;
+            hideButton.action.performed -= OnHideUIPressed;
         }
 
         private void EnterViewer()
@@ -59,9 +61,11 @@ namespace Netherlands3D.FirstPersonViewer.UI
         /// <summary>
         /// Temp Function for UI hiding (Will be replaced by the UI Hider)
         /// </summary>
-        private void HideUI()
+        public void HideUI()
         {
             viewerUI.SetActive(!viewerUI.activeSelf);
         }
+
+        private void OnHideUIPressed(InputAction.CallbackContext context) => HideUI();
     }
 }

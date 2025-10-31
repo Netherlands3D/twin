@@ -1,10 +1,6 @@
-using Netherlands3D.FirstPersonViewer.Events;
-using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -50,7 +46,7 @@ namespace Netherlands3D.FirstPersonViewer
                     //{
                     Instantiate(firstPersonViewerPrefab, point, Quaternion.identity);
 
-                    ViewerEvents.OnViewerEntered?.Invoke();
+                    FirstPersonViewer.OnViewerEntered?.Invoke();
                     //}
                 }
             }, snappingCullingMask);

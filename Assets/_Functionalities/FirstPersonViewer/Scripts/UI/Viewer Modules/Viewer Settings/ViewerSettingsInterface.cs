@@ -1,4 +1,3 @@
-using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.UI;
@@ -30,12 +29,12 @@ namespace Netherlands3D.FirstPersonViewer.UI
             CreateMovementPresetButtons(modusSwitcher.MovementPresets, modusSwitcher.CurrentMovement);
             RefreshSettings(modusSwitcher.CurrentMovement);
 
-            ViewerEvents.OnMovementPresetChanged += RefreshSettings;
+            ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged += RefreshSettings;
         }
 
         private void OnDisable()
         {
-            ViewerEvents.OnMovementPresetChanged -= RefreshSettings;
+            ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged -= RefreshSettings;
         }
 
         private void CreateMovementPresetButtons(List<MovementPresets> movementPresets, MovementPresets activePreset)

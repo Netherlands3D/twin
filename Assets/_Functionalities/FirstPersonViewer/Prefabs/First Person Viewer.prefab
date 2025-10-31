@@ -203,10 +203,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   input: {fileID: 6660788825186363282}
+  viewer: {fileID: 3034395081720571745}
   viewerBase: {fileID: 2359970039064756521}
   cameraConstrain: 0
   fovSetting: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225, type: 2}
   viewHeightSetting: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1, type: 2}
+  cameraHeightAboveGround: 500
 --- !u!1 &8111522683061574636
 GameObject:
   m_ObjectHideFlags: 0
@@ -221,6 +223,7 @@ GameObject:
   - component: {fileID: 5494620854880697425}
   - component: {fileID: 1775169427224426892}
   - component: {fileID: 3034395081720571745}
+  - component: {fileID: 1609831314963826710}
   - component: {fileID: 6660788825186363282}
   - component: {fileID: 6417052032803972631}
   - component: {fileID: 4604978584422325480}
@@ -351,7 +354,19 @@ MonoBehaviour:
   isGrounded: 0
   stepHeight: 1.5
   maxSpeedSetting: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad, type: 2}
-  cameraHeightAboveGround: 500
+--- !u!114 &1609831314963826710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8111522683061574636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  service: {fileID: 3034395081720571745}
 --- !u!114 &6660788825186363282
 MonoBehaviour:
   m_ObjectHideFlags: 0

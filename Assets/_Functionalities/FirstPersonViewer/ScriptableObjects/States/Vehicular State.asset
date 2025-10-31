@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0456e01045a91a4e8de05a269bf5872, type: 3}
   m_Name: Vehicular State
   m_EditorClassIdentifier: 
+  <CameraConstrain>k__BackingField: 2
   speedMultiplierSetting: {fileID: 11400000, guid: 238246fd8535293479b916db1ac470bc,
     type: 2}
   groundResetHeightOffsetSetting: {fileID: 11400000, guid: 4c40903bf39dba84f8368fc1996e6354,

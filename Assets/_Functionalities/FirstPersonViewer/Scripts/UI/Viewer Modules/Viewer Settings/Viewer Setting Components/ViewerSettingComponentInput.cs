@@ -1,4 +1,3 @@
-using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using TMPro;
 using UnityEngine;

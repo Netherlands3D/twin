@@ -1,10 +1,10 @@
-using Netherlands3D.FirstPersonViewer.Events;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Netherlands3D.SelectionTools;
+using System;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -21,7 +21,6 @@ namespace Netherlands3D.FirstPersonViewer
         public InputAction LookInput { private set; get; }
         public InputAction ExitInput { private set; get; }
         public InputAction LeftClick { private set; get; }
-        public InputAction HideUI { private set; get; }
         public InputAction ResetInput { private set; get; }
 
         public InputAction CycleNextModus { private set; get; }
@@ -36,6 +35,9 @@ namespace Netherlands3D.FirstPersonViewer
         private List<MonoBehaviour> inputLocks;
         public bool LockInput => inputLocks.Count > 0;
 
+        //Events
+        public static event Action<float> ExitDuration;
+
         private void Awake()
         {
             MoveAction = inputActionAsset.FindAction("Move");
@@ -45,7 +47,6 @@ namespace Netherlands3D.FirstPersonViewer
             LookInput = inputActionAsset.FindAction("Look");
             ExitInput = inputActionAsset.FindAction("Exit");
             LeftClick = inputActionAsset.FindAction("LClick");
-            HideUI = inputActionAsset.FindAction("HideUI");
             ResetInput = inputActionAsset.FindAction("Reset");
             CycleNextModus = inputActionAsset.FindAction("NavigateModusNext");
             CyclePreviousModus = inputActionAsset.FindAction("NavigateModusPrevious");
@@ -55,7 +56,7 @@ namespace Netherlands3D.FirstPersonViewer
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
-            ViewerEvents.OnViewerExited += ViewerExited;
+            FirstPersonViewer.OnViewerExited += ViewerExited;
         }
 
         private void OnEnable()
@@ -70,7 +71,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void OnDestroy()
         {
-            ViewerEvents.OnViewerExited -= ViewerExited;
+            FirstPersonViewer.OnViewerExited -= ViewerExited;
         }
 
         private void Update()
@@ -78,8 +79,6 @@ namespace Netherlands3D.FirstPersonViewer
             HandleCursorLocking();
 
             HandleExiting();
-            
-            if (HideUI.triggered) ViewerEvents.OnHideUI?.Invoke();
         }
 
         private void HandleCursorLocking()
@@ -141,21 +140,22 @@ namespace Netherlands3D.FirstPersonViewer
                 if (exitTimer < exitDuration - exitViewDelay)
                 {
                     float percentageTime = Mathf.Clamp01(1f - ((exitTimer + exitViewDelay) / exitDuration));
-                    ViewerEvents.ExitDuration?.Invoke(percentageTime);
+                    ExitDuration?.Invoke(percentageTime);
                 }
 
                 if (exitTimer == 0)
                 {
-                    ViewerEvents.ExitDuration?.Invoke(-1);
-                    ViewerEvents.OnViewerExited?.Invoke();
+                    ExitDuration?.Invoke(-1);
+                    FirstPersonViewer.OnViewerExited?.Invoke();
                 }
             }
-            else if (ExitInput.WasReleasedThisFrame()) ViewerEvents.ExitDuration?.Invoke(-1); //Reset the visual
+            else if (ExitInput.WasReleasedThisFrame()) ExitDuration?.Invoke(-1); //Reset the visual
             else exitTimer = exitDuration;
         }
 
         private void ViewerExited()
         {
+            //TODO Move this to a application wide cursor manager.
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 

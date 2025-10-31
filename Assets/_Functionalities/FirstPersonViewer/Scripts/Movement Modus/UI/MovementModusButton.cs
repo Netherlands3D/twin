@@ -1,5 +1,5 @@
-using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.FirstPersonViewer.ViewModus;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.UI.Tooltips;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,12 +30,12 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnEnable()
         {
-            ViewerEvents.OnMovementPresetChanged += MovementChanged;
+            ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged += MovementChanged;
         }
 
         private void OnDisable()
         {
-            ViewerEvents.OnMovementPresetChanged -= MovementChanged;    
+            ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged -= MovementChanged;    
         }
         private void MovementChanged(MovementPresets presets)
         {

@@ -1,8 +1,4 @@
-using Netherlands3D.Events;
-using Netherlands3D.FirstPersonViewer.Events;
-using Netherlands3D.Services;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
@@ -26,9 +22,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             viewer.FirstPersonCamera.transform.localRotation = Quaternion.Euler(euler.x, 0f, 0f);
 
             viewer.GetGroundPosition();
-
-
-            ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_Y);
 
             jumpFoceSetting.OnValueChanged.AddListener(SetJumpForce);
         }

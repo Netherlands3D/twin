@@ -1,4 +1,3 @@
-using Netherlands3D.FirstPersonViewer.Events;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.ViewModus
@@ -35,8 +34,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             currentSpeed = 0;
 
-            ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_NONE);
-            ViewerEvents.OnResetToGround += ResetToGround;
+            viewer.OnResetToGround += ResetToGround;
 
             accelerationSetting.OnValueChanged.AddListener(SetAcceleration);
             decelerationSetting.OnValueChanged.AddListener(SetDeceleration);
@@ -55,7 +53,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnExit()
         {
-            ViewerEvents.OnResetToGround -= ResetToGround;
+            viewer.OnResetToGround -= ResetToGround;
 
             accelerationSetting.OnValueChanged.RemoveListener(SetAcceleration);
             decelerationSetting.OnValueChanged.RemoveListener(SetDeceleration);
@@ -89,7 +87,6 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             if (Mathf.Abs(currentSpeed) > 0)
             {
                 viewer.GetGroundPosition();
-                ViewerEvents.OnCameraRotation?.Invoke(viewer.FirstPersonCamera.transform.forward);
 
                 int speedInKilometers = Mathf.RoundToInt(currentSpeed * 3.6f);
 

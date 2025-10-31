@@ -1,7 +1,7 @@
 using Netherlands3D.FirstPersonViewer.ViewModus;
-using Netherlands3D.FirstPersonViewer.Events;
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -13,21 +13,11 @@ namespace Netherlands3D.FirstPersonViewer
         [field: SerializeField] public List<MovementPresets> MovementPresets { private set; get; }
         public MovementPresets CurrentMovement { private set; get; }
 
+        public event Action<MovementPresets> OnMovementPresetChanged;
+
         private void Awake()
         {
             input = GetComponent<FirstPersonViewerInput>();
-            
-            ViewerEvents.OnViewerSetupComplete += ViewerEnterd;
-        }
-
-        private void OnDestroy()
-        {
-            ViewerEvents.OnViewerSetupComplete -= ViewerEnterd;
-        }
-
-        private void ViewerEnterd()
-        {
-            LoadMovementPreset(MovementPresets[0]);
         }
 
         private void Update()
@@ -53,7 +43,7 @@ namespace Netherlands3D.FirstPersonViewer
             CurrentMovement = movePresets;
 
             //Send events
-            ViewerEvents.OnMovementPresetChanged?.Invoke(CurrentMovement);
+            OnMovementPresetChanged?.Invoke(CurrentMovement);
 
             //$$ TODO Only supports floats for now should be revisited
             foreach (ViewerSetting setting in CurrentMovement.editableSettings.list)
@@ -61,5 +51,7 @@ namespace Netherlands3D.FirstPersonViewer
                 setting.InvokeOnValueChanged(setting.GetValue());
             }
         }
+
+        public void LoadMovementPreset(int index) => LoadMovementPreset(MovementPresets[index]);
     }
 }
