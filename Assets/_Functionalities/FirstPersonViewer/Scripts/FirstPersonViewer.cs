@@ -153,7 +153,6 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void SetupState(Vector3 cameraPosition, Vector3 playerEuler, Vector3 cameraEuler, float cameraHeightOffset)
         {
-            Debug.Log(FirstPersonCamera.CameraHeightOffset);
             transform.position = cameraPosition + Vector3.down * cameraHeightOffset;
             FirstPersonCamera.transform.localPosition = Vector3.up * cameraHeightOffset;
 
