@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37748b16695f8464b998fdbfd9bdcddf, type: 3}
+  m_Name: Flying State
+  m_EditorClassIdentifier: 
+  <CameraConstrain>k__BackingField: 1
+  maxSpeedSetting: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad, type: 2}
+  speedMultiplierSetting: {fileID: 11400000, guid: 238246fd8535293479b916db1ac470bc,
+    type: 2}
+  groundResetHeightOffsetSetting: {fileID: 11400000, guid: 4c40903bf39dba84f8368fc1996e6354,
+    type: 2}
