@@ -250,15 +250,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             SetVisualisationActive(activeInHierarchy);
-            if (IsMask && InvertMask)
-            {
-                if (activeInHierarchy)
-                    PolygonProjectionMask.AddInvertedMask(PolygonVisualisation.gameObject, MaskBitIndex);
-                else
-                    PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject, MaskBitIndex);
-            }
+            // if (IsMask && InvertMask)
+            // {
+            //     if (activeInHierarchy)
+            //         PolygonProjectionMask.AddInvertedMask(PolygonVisualisation.gameObject, MaskBitIndex);
+            //     else
+            //         PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject, MaskBitIndex);
+            // }
+            UpdateInvertedMaskBit(activeInHierarchy);
 
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
+        }
+
+        private void UpdateInvertedMaskBit(bool activeInHierarchy)
+        {
+            var active = IsMask && InvertMask && activeInHierarchy;
+            PolygonProjectionMask.UpdateInvertedMaskBit(MaskBitIndex, active);
         }
 
         public void SetVisualisationActive(bool active)
@@ -282,7 +289,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             PolygonSelectionCalculator.UnregisterPolygon(this);
             base.DestroyLayer();
-            PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject, MaskBitIndex);
+            UpdateInvertedMaskBit(false);
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
             
             UnregisterListeners();
@@ -311,6 +318,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 MaskBitIndex = availableMaskChannels.Last();
                 availableMaskChannels.Remove(MaskBitIndex);
             }
+            UpdateInvertedMaskBit(ActiveInHierarchy);
             
             PolygonVisualisation.SetMaterial(isMask, MaskBitIndex, InvertMask);
         }
@@ -319,21 +327,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             var layer = GetLayer(IsMask);
             SetPolygonLayer(layer, invert);
+            UpdateInvertedMaskBit(ActiveInHierarchy);
             PolygonVisualisation.SetMaterial(IsMask, MaskBitIndex, invert);
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
         }
 
         private void SetPolygonLayer(LayerMask layer, bool invert)
         {
-            if (layer == LayerMask.NameToLayer("PolygonMask") && invert)
-            {
-                PolygonProjectionMask.AddInvertedMask(PolygonVisualisation.gameObject, MaskBitIndex);
-            }
-            else
-            {
-                PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject, MaskBitIndex);
-            }
-
             foreach (Transform t in PolygonVisualisation.gameObject.transform)
             {
                 t.gameObject.gameObject.layer = layer;

@@ -55,18 +55,26 @@ namespace Netherlands3D
             forceUpdate = true;
         }
 
-        public static void AddInvertedMask(GameObject invertedMask, int maskBitIndex)
+        private static void AddInvertedMask(GameObject invertedMask, int maskBitIndex)
         {
             usedInvertedMasks |= 1 << maskBitIndex;
-            invertedMasks.Add(invertedMask);
+            // invertedMasks.Add(invertedMask);
             Shader.SetGlobalInt(usedInvertedMaskChannelsProperty, usedInvertedMasks);
         }
 
-        public static void RemoveInvertedMask(GameObject invertedMask, int maskBitIndex)
+        private static void RemoveInvertedMask(GameObject invertedMask, int maskBitIndex)
         {
             usedInvertedMasks &= ~(1 << maskBitIndex);
-            invertedMasks.Remove(invertedMask);
+            // invertedMasks.Remove(invertedMask);
             Shader.SetGlobalInt(usedInvertedMaskChannelsProperty, usedInvertedMasks);
+        }
+
+        public static void UpdateInvertedMaskBit(int maskBitIndex, bool setActive)
+        {
+            if(setActive)
+                AddInvertedMask(null, maskBitIndex);
+            else
+                RemoveInvertedMask(null, maskBitIndex);
         }
     }
 }
