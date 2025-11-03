@@ -178,6 +178,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 PolygonVisualisation.UpdateVisualisation(vertices, PolygonPropertyData.ExtrusionHeight);
                 SetMasking();
             }
+
             polygonMoved.Invoke();
         }
 
@@ -189,7 +190,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OriginalPolygon = coordinates;
             RecalculatePolygon();
 
-            if (PolygonVisualisation) {
+            if (PolygonVisualisation)
+            {
                 var vertices = CoordinatesToVertices(coordinates);
                 PolygonVisualisation.UpdateVisualisation(vertices, PolygonPropertyData.ExtrusionHeight);
                 SetMasking();
@@ -248,6 +250,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             SetVisualisationActive(activeInHierarchy);
+            if (IsMask && InvertMask)
+            {
+                if (activeInHierarchy)
+                    PolygonProjectionMask.AddInvertedMask(PolygonVisualisation.gameObject, MaskBitIndex);
+                else
+                    PolygonProjectionMask.RemoveInvertedMask(PolygonVisualisation.gameObject, MaskBitIndex);
+            }
+
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
         }
 
