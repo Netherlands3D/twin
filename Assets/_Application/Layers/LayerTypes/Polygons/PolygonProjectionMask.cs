@@ -17,7 +17,6 @@ namespace Netherlands3D
         [SerializeField] private Camera maskCamera;
 
         private static bool forceUpdate;
-        private static readonly HashSet<GameObject> invertedMasks = new(); // when there are 0 inverted masks, all geometry should be visible, so we should change the output texture to alpha=1 on all pixels.
         private static int usedInvertedMasks = 0;
 
         private IEnumerator Start()
@@ -58,14 +57,12 @@ namespace Netherlands3D
         private static void AddInvertedMask(GameObject invertedMask, int maskBitIndex)
         {
             usedInvertedMasks |= 1 << maskBitIndex;
-            // invertedMasks.Add(invertedMask);
             Shader.SetGlobalInt(usedInvertedMaskChannelsProperty, usedInvertedMasks);
         }
 
         private static void RemoveInvertedMask(GameObject invertedMask, int maskBitIndex)
         {
             usedInvertedMasks &= ~(1 << maskBitIndex);
-            // invertedMasks.Remove(invertedMask);
             Shader.SetGlobalInt(usedInvertedMaskChannelsProperty, usedInvertedMasks);
         }
 
