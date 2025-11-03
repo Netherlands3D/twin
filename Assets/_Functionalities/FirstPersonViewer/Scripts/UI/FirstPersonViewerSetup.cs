@@ -1,6 +1,6 @@
 using Netherlands3D.FirstPersonViewer;
-using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.Minimap;
+using Netherlands3D.Services;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,45 +18,36 @@ namespace Netherlands3D
         [SerializeField] private Camera2DFrustum frustum;
         [SerializeField] private WMTSMap wmtsMap;
 
-        private SnapshotComponent snapshotComponent;
 
 
         [Header("Animation")]
         [SerializeField] private Sprite[] unlockCircleSprites;
         [SerializeField] private Image unlockCircleImage;
-        private void Awake()
-        {
-            snapshotComponent = FindAnyObjectByType<SnapshotComponent>();
-        }
 
         private void OnEnable()
         {
             StartCoroutine(SetupViewer());
-
-            ViewerEvents.OnMouseStateChanged += PlayUnlockCircleAnimation;
         }
 
         private void OnDisable()
         {
             frustum.SetActiveCamera(Camera.main);
             wmtsMap.SetActiveCamera(Camera.main);
-            snapshotComponent.SetActiveCamera(Camera.main);
-
-            ViewerEvents.OnMouseStateChanged -= PlayUnlockCircleAnimation;
+            ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(Camera.main);
         }
 
-        //We need to wait 1 frame to allow the map to load or we get an unloaded map that's zoomed in.
         private IEnumerator SetupViewer()
         {
+            //We need to wait 1 frame to allow the map to load or we get an unloaded map that's zoomed in. (That will never load)
             yield return null;
-            Camera activeCam = FirstPersonViewerData.Instance.FPVCamera;
+            Camera activeCam = FirstPersonViewerCamera.FPVCamera;
 
             minimap.SetZoom(zoomScale);
 
             frustum.SetActiveCamera(activeCam);
             wmtsMap.SetActiveCamera(activeCam);
 
-            snapshotComponent.SetActiveCamera(activeCam);
+            ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(activeCam);
         }
 
         private void PlayUnlockCircleAnimation(CursorLockMode lockMode)

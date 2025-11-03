@@ -1,56 +1,47 @@
-using Netherlands3D.FirstPersonViewer.Events;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
+    [CreateAssetMenu(fileName = "Flying State", menuName = "ScriptableObjects/FirstPersonViewer/States/Flying State")]
     public class ViewerFlyingState : ViewerState
     {
         public override void OnEnter()
         {
-            //When viewheight is the same don't change it.
-            if (viewer.FirstPersonCamera.transform.localPosition.y != viewer.MovementModus.viewHeight)
-            {
-                Vector3 camPosition = viewer.FirstPersonCamera.transform.position;
-                viewer.transform.position = camPosition;
-                viewer.FirstPersonCamera.transform.localPosition = Vector3.zero;
-            }
+            base.OnEnter();
 
+            Vector3 camPosition = viewer.FirstPersonCamera.transform.position;
             //Get Rotation this depends on the current Camera Constrain
             Vector3 eulerRotation = viewer.FirstPersonCamera.GetEulerRotation();
-            viewer.transform.eulerAngles = eulerRotation;
-            viewer.FirstPersonCamera.transform.localEulerAngles = Vector3.zero;
+            viewer.SetupState(camPosition, eulerRotation, Vector3.zero, 0);
 
             viewer.SetVelocity(Vector2.zero);
-            ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_BOTH);
         }
 
         public override void OnUpdate()
         {
             Vector2 moveInput = viewer.GetMoveInput();
-            if (moveInput.magnitude > 0)
-            {
-                MoveFreeCam(moveInput);
-            }
+            MoveFreeCam(moveInput);
 
             float verticalInput = input.VerticalMoveAction.ReadValue<float>();
-            if (verticalInput != 0)
-            {
-                MoveVertical(verticalInput);
-            }
+            MoveVertical(verticalInput);
         }
 
         private void MoveFreeCam(Vector2 moveInput)
         {
+            if (moveInput.magnitude <= 0) return;
+
             Vector3 direction = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
 
-            float calculatedSpeed = viewer.MovementSpeed * (input.SprintAction.IsPressed() ? viewer.MovementModus.speedMultiplier : 1);
+            float calculatedSpeed = MovementSpeed * (input.SprintAction.IsPressed() ? speedMultiplierSetting.Value : 1);
 
             transform.Translate(direction * calculatedSpeed * Time.deltaTime, Space.World);
         }
 
         private void MoveVertical(float verticalInput)
         {
-            float calculatedSpeed = viewer.MovementSpeed * (input.SprintAction.IsPressed() ? viewer.MovementModus.speedMultiplier : 1);
+            if (verticalInput == 0) return;
+
+            float calculatedSpeed = MovementSpeed * (input.SprintAction.IsPressed() ? speedMultiplierSetting.Value : 1);
 
             transform.Translate(Vector3.up * verticalInput * calculatedSpeed * Time.deltaTime, Space.World);
         }

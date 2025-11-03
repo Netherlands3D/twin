@@ -1,27 +1,27 @@
 using UnityEngine;
-using DG.Tweening;
 using GG.Extensions;
 using UnityEngine.UI;
-using Netherlands3D.FirstPersonViewer.Events;
+using Netherlands3D.Services;
 
 
 namespace Netherlands3D.FirstPersonViewer.UI
 {
     public class FirstPersonCompass : MonoBehaviour
     {
+        [SerializeField] private Transform objectTransform;
+
         [SerializeField] private Image arrowImage;
         [SerializeField] private Color NorthColor;
         private const float northAngleMargin = 1.0f;
         [SerializeField] private Color arrowColor;
 
-        private void OnEnable()
+        private void Update()
         {
-            ViewerEvents.OnCameraRotation += CompassUpdate;
-        }
-
-        private void OnDisable()
-        {
-            ViewerEvents.OnCameraRotation -= CompassUpdate;
+            //TEMP IF Check
+            if (objectTransform != null)
+            {
+                CompassUpdate(objectTransform.forward);
+            }
         }
 
         private void CompassUpdate(Vector3 direction)
@@ -33,7 +33,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public void OnCompassClick()
         {
-            ViewerEvents.OnSetCameraNorth?.Invoke();
+            ServiceLocator.GetService<FirstPersonViewer>().OnSetCameraNorth?.Invoke();
         }
     }
 }

@@ -1,4 +1,4 @@
-using Netherlands3D.FirstPersonViewer.Events;
+using Netherlands3D.Services;
 using UnityEngine;
 
 
@@ -6,9 +6,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
 {
     public class ViewerUIButtons : MonoBehaviour
     {
-        public void ExitViewer() => ViewerEvents.OnViewerExited?.Invoke();
-        public void ResetToStart() => ViewerEvents.OnResetToStart?.Invoke();
-        public void SnapToGround() => ViewerEvents.OnResetToGround?.Invoke();
-        public void HideUI() => ViewerEvents.OnHideUI?.Invoke();
+        public void ExitViewer() => FirstPersonViewer.OnViewerExited?.Invoke();
+        public void ResetToStart() => ServiceLocator.GetService<FirstPersonViewer>().OnResetToGround?.Invoke();
+        public void SnapToGround() => ServiceLocator.GetService<FirstPersonViewer>().OnResetToGround?.Invoke();
     }
-}
+} 

@@ -1,9 +1,10 @@
-using Netherlands3D.FirstPersonViewer.Events;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using Netherlands3D.SelectionTools;
+using System;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -20,8 +21,10 @@ namespace Netherlands3D.FirstPersonViewer
         public InputAction LookInput { private set; get; }
         public InputAction ExitInput { private set; get; }
         public InputAction LeftClick { private set; get; }
-        public InputAction HideUI { private set; get; }
         public InputAction ResetInput { private set; get; }
+
+        public InputAction CycleNextModus { private set; get; }
+        public InputAction CyclePreviousModus { private set; get; }
 
         [Header("Exit")]
         [SerializeField] private float exitDuration = 1;
@@ -32,6 +35,9 @@ namespace Netherlands3D.FirstPersonViewer
         private List<MonoBehaviour> inputLocks;
         public bool LockInput => inputLocks.Count > 0;
 
+        //Events
+        public static event Action<float> ExitDuration;
+
         private void Awake()
         {
             MoveAction = inputActionAsset.FindAction("Move");
@@ -41,15 +47,16 @@ namespace Netherlands3D.FirstPersonViewer
             LookInput = inputActionAsset.FindAction("Look");
             ExitInput = inputActionAsset.FindAction("Exit");
             LeftClick = inputActionAsset.FindAction("LClick");
-            HideUI = inputActionAsset.FindAction("HideUI");
             ResetInput = inputActionAsset.FindAction("Reset");
+            CycleNextModus = inputActionAsset.FindAction("NavigateModusNext");
+            CyclePreviousModus = inputActionAsset.FindAction("NavigateModusPrevious");
 
             inputLocks = new List<MonoBehaviour>();
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
-            ViewerEvents.OnViewerExited += ViewerExited;
+            FirstPersonViewer.OnViewerExited += ViewerExited;
         }
 
         private void OnEnable()
@@ -64,7 +71,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void OnDestroy()
         {
-            ViewerEvents.OnViewerExited -= ViewerExited;
+            FirstPersonViewer.OnViewerExited -= ViewerExited;
         }
 
         private void Update()
@@ -72,77 +79,87 @@ namespace Netherlands3D.FirstPersonViewer
             HandleCursorLocking();
 
             HandleExiting();
-            
-            if (HideUI.triggered) ViewerEvents.OnHideUI?.Invoke();
         }
 
         private void HandleCursorLocking()
         {
-            if (ExitInput.triggered)
-            {
-                isEditingInputfield = IsInputfieldSelected();
-                if (isEditingInputfield) return;
-            }
+            //When editing an inputfield just block this function.
+            if (ShouldSkipCursorLocking()) return;
 
+            //When key is released release/lock mouse
             if (ExitInput.WasReleasedThisFrame() && !isEditingInputfield)
             {
-                if (Cursor.lockState == CursorLockMode.Locked)
-                {
-                    AddInputLockConstrain(this);
-                    Cursor.lockState = CursorLockMode.None;
-                    Cursor.visible = true;
-                }
-                else
-                {
-                    RemoveInputLockConstrain(this);
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false;
-                }
-
-                ViewerEvents.OnMouseStateChanged?.Invoke(Cursor.lockState);
+                ToggleCursorLock();
             }
-            else if (LeftClick.triggered)
+            else if (LeftClick.triggered && !Interface.PointerIsOverUI()) 
             {
-                if (!IsPointerOverUIObject())
-                {
-                    RemoveInputLockConstrain(this);
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false;
-                    ViewerEvents.OnMouseStateChanged?.Invoke(Cursor.lockState);
-                }
+                //When no UI object is detected lock the mouse to screen again.
+                LockCursor();
             }
         }
 
+        private bool ShouldSkipCursorLocking()
+        {
+            if (!ExitInput.triggered) return false;
+
+            isEditingInputfield = IsInputfieldSelected();
+            return isEditingInputfield;
+        }
+
+        private void ToggleCursorLock()
+        {
+            if (Cursor.lockState == CursorLockMode.Locked)
+            {
+                AddInputLockConstrain(this);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                RemoveInputLockConstrain(this);
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+        }
+
+        private void LockCursor()
+        {
+            RemoveInputLockConstrain(this);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
+        //When holding the exit key and not editing any inputfield. Start the exiting proceidure. 
         private void HandleExiting()
         {
             if (ExitInput.IsPressed() && !isEditingInputfield)
             {
                 exitTimer = Mathf.Max(exitTimer - Time.deltaTime, 0);
 
-                //Wait .delay x seconds before showing the progress.
+                //Delay x seconds before showing the progress. So the UI component isn't flickering
                 if (exitTimer < exitDuration - exitViewDelay)
                 {
                     float percentageTime = Mathf.Clamp01(1f - ((exitTimer + exitViewDelay) / exitDuration));
-                    ViewerEvents.ExitDuration?.Invoke(percentageTime);
+                    ExitDuration?.Invoke(percentageTime);
                 }
 
                 if (exitTimer == 0)
                 {
-                    ViewerEvents.ExitDuration?.Invoke(-1);
-                    ViewerEvents.OnViewerExited?.Invoke();
+                    ExitDuration?.Invoke(-1);
+                    FirstPersonViewer.OnViewerExited?.Invoke();
                 }
             }
-            else if (ExitInput.WasReleasedThisFrame()) ViewerEvents.ExitDuration?.Invoke(-1);
+            else if (ExitInput.WasReleasedThisFrame()) ExitDuration?.Invoke(-1); //Reset the visual
             else exitTimer = exitDuration;
         }
 
         private void ViewerExited()
         {
+            //TODO Move this to a application wide cursor manager.
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 
-            //Delay by one frame to prevent error.
-            Destroy(gameObject, Time.deltaTime);
+            Destroy(gameObject);
         }
 
         public void AddInputLockConstrain(MonoBehaviour monoBehaviour) => inputLocks.Add(monoBehaviour);
@@ -156,16 +173,6 @@ namespace Netherlands3D.FirstPersonViewer
             if (selected == null) return false;
 
             return selected.GetComponent<TMP_InputField>() != null;
-        }
-
-        //Kinda slow
-        public static bool IsPointerOverUIObject()
-        {
-            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
-            eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            List<RaycastResult> results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
-            return results.Count > 1; //Idk there seems to be an invisble ui element somewhere.
         }
     }
 }

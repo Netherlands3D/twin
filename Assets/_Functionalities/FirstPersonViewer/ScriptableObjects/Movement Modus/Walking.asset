@@ -12,17 +12,68 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee67a7067d471274fb5ee9ab3988bc8f, type: 3}
   m_Name: Walking
   m_EditorClassIdentifier: 
-  viewHeight: 1.75
-  fieldOfView: 60
-  speedInKm: 15
-  speedMultiplier: 2
-  jumpHeight: 7
-  maxFallingSpeed: 55
-  stepHeight: 1.5
-  viewModus: 0
-  acceleration: 0
-  deceleration: 0
-  turnSpeed: 0
+  viewerState: {fileID: 11400000, guid: bc41cb17aeb0e9e4dad0bc62ddaa02ea, type: 2}
   viewName: Lopen
-  viewIcon: {fileID: 21300000, guid: 4fabccc9e43961d48b9ce2684e3bc712, type: 3}
+  viewIcon: {fileID: 21300000, guid: 9d1a13bddeede7a44899be4cf66f6e96, type: 3}
   viewMesh: {fileID: 0}
+  meshMaterials: []
+  editableSettings:
+    list:
+    - rid: 3281392858440663167
+    - rid: 3281392858440663168
+    - rid: 3281392858440663169
+    - rid: 3281392858440663170
+    - rid: 5560709212561735783
+  references:
+    version: 2
+    RefIds:
+    - rid: 3281392858440663167
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        isVisible: 1
+        movementSetting: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1,
+          type: 2}
+        defaultValue: 1.75
+        minValue: -20
+        maxValue: 20
+    - rid: 3281392858440663168
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        isVisible: 1
+        movementSetting: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225,
+          type: 2}
+        defaultValue: 60
+        minValue: 10
+        maxValue: 140
+    - rid: 3281392858440663169
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        isVisible: 1
+        movementSetting: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad,
+          type: 2}
+        defaultValue: 15
+        minValue: 1
+        maxValue: 500
+    - rid: 3281392858440663170
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        isVisible: 1
+        movementSetting: {fileID: 11400000, guid: 3757be2fd3d1b52418f2f04fcfb09852,
+          type: 2}
+        defaultValue: 7
+        minValue: 2
+        maxValue: 15
+    - rid: 5560709212561735783
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        isVisible: 0
+        movementSetting: {fileID: 11400000, guid: 238246fd8535293479b916db1ac470bc,
+          type: 2}
+        defaultValue: 2
+        minValue: 0
+        maxValue: 0

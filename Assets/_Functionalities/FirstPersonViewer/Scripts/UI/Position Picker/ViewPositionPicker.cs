@@ -1,9 +1,6 @@
-using Netherlands3D.FirstPersonViewer.Events;
-using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -12,56 +9,47 @@ namespace Netherlands3D.FirstPersonViewer
 {
     public class ViewPositionPicker : MonoBehaviour, IPointerUpHandler
     {
-        private bool isPointerDown;
-
         private ViewPositionPickerIcon picker;
         [SerializeField] private ViewPositionPickerIcon pickerPrefab;
         [SerializeField] private GameObject firstPersonViewerPrefab;
-        private int snappingCullingMask = 0;
-
-        private void Start()
-        {
-            snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings") | (1 << LayerMask.NameToLayer("Default")));
-        }
+        [SerializeField] private LayerMask snappingCullingMask = 0;
 
         public void PointerDown()
         {
-            isPointerDown = true;
-            picker = Instantiate(pickerPrefab, transform.root); // <-- $$ Change Root to propper location. 
+            Vector2 screenPoint = Pointer.current.position.ReadValue();
+            picker = Instantiate(pickerPrefab, screenPoint, Quaternion.identity, transform.root);
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            if (isPointerDown)
+            Destroy(picker.gameObject);
+
+            OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
+
+            Vector2 screenPoint = Pointer.current.position.ReadValue();
+
+            if (Interface.PointerIsOverUI()) return;
+
+            raycaster.GetWorldPointAsync(screenPoint, (point, hit) =>
             {
-                Destroy(picker.gameObject);
-
-                OpticalRaycaster raycaster = ServiceLocator.GetService<OpticalRaycaster>();
-
-                Vector2 screenPoint = Pointer.current.position.ReadValue();
-
-                if (FirstPersonViewerInput.IsPointerOverUIObject()) return;
-
-                raycaster.GetWorldPointAsync(screenPoint, (point, hit) =>
+                if (hit)
                 {
-                    if (hit)
-                    {
-                        //Commentent code not working or changing anything based on the visibilty of the building.
+                    //$$ TODO Fix being able to walk on invicible buildings.
+                    //Commentent code not working or changing anything based on the visibilty of the building.
 
-                        //ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-                        //SubObjectSelector subObjectSelector = objectSelectorService.SubObjectSelector;
+                    //ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
+                    //SubObjectSelector subObjectSelector = objectSelectorService.SubObjectSelector;
 
-                        //string bagID = subObjectSelector.FindSubObjectAtPosition(screenPoint);
-                        //IMapping mapping = objectSelectorService.FindObjectMapping();
-                        //if (objectSelectorService.IsMappingVisible(mapping, bagID))
-                        //{
-                            Instantiate(firstPersonViewerPrefab, point, Quaternion.identity);
+                    //string bagID = subObjectSelector.FindSubObjectAtPosition(screenPoint);
+                    //IMapping mapping = objectSelectorService.FindObjectMapping();
+                    //if (objectSelectorService.IsMappingVisible(mapping, bagID))
+                    //{
+                    Instantiate(firstPersonViewerPrefab, point, Quaternion.identity);
 
-                            ViewerEvents.OnViewerEntered?.Invoke();
-                        //}
-                    }
-                }, snappingCullingMask);
-            }           
+                    FirstPersonViewer.OnViewerEntered?.Invoke();
+                    //}
+                }
+            }, snappingCullingMask);
         }
     }
 }

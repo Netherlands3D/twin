@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data:
     Id: first-person-viewer
-    IsEnabled: 1
+    IsEnabled: 0
   Title: First Person Viewer
   Caption: BETA
   Header: First Person Viewer

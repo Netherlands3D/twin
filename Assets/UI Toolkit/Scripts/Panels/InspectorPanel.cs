@@ -1,14 +1,15 @@
-using System;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class InspectorPanel : VisualElement, IContainer
+    public partial class InspectorPanel : VisualElement
     {
-        private Label Header => this.Q<Label>(className: "inspector-header-title");
+        private Label header;
+        private Label Header => header ??= this.Q<Label>(className: "inspector-header-title");
+        private Button inspectorHeaderCloseButton;
+        public Button InspectorHeaderCloseButton => inspectorHeaderCloseButton ??= this.Q<Button>("InspectorHeaderCloseButton");
 
         /// <summary>
         /// Header text pass-through so it can be set from UXML/Inspector.

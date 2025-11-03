@@ -12,19 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee67a7067d471274fb5ee9ab3988bc8f, type: 3}
   m_Name: Driving
   m_EditorClassIdentifier: 
-  viewHeight: 1.2
-  fieldOfView: 80
-  speedInKm: 80
-  speedMultiplier: 1.7
-  jumpHeight: 0
-  maxFallingSpeed: 55
-  stepHeight: 1.5
-  viewModus: 1
-  acceleration: 10
-  deceleration: 5
-  turnSpeed: 100
+  viewerState: {fileID: 11400000, guid: 130c7cf512e492a4fa526f2b64dc26f5, type: 2}
   viewName: Auto
-  viewIcon: {fileID: 21300000, guid: dca9ce9f8c1f0d0418a06d316e41cabf, type: 3}
+  viewIcon: {fileID: 21300000, guid: 3edea80a8439cc5479ed6682ad352b7d, type: 3}
   viewMesh: {fileID: 1551113389355595217, guid: 1c62f1956ea89e14bbdbc700a0ec3b57,
     type: 3}
   meshMaterials:
@@ -34,3 +24,93 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 2097010ff22b90e4ebcb8e640c6ef475, type: 2}
   - {fileID: 2100000, guid: 59b6a28a97adccf4a8a0791c01235679, type: 2}
   - {fileID: 2100000, guid: 878239871271be24399705c5da67a316, type: 2}
+  editableSettings:
+    list:
+    - rid: 3281392858440663156
+    - rid: 3281392858440663158
+    - rid: 3281392858440663159
+    - rid: 3281392858440663160
+    - rid: 3281392858440663161
+    - rid: 3281392858440663162
+    - rid: 3281392858440663163
+    - rid: 5560709212561735785
+  references:
+    version: 2
+    RefIds:
+    - rid: 3281392858440663156
+      type: {class: ViewerSettingLabel, ns: Netherlands3D.FirstPersonViewer.ViewModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        isVisible: 1
+        movementSetting: {fileID: 11400000, guid: 4e273118145672a4caa8726c61b635f5,
+          type: 2}
+    - rid: 3281392858440663158
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        isVisible: 1
+        movementSetting: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad,
+          type: 2}
+        defaultValue: 70
+        minValue: 1
+        maxValue: 500
+    - rid: 3281392858440663159
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        isVisible: 0
+        movementSetting: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1,
+          type: 2}
+        defaultValue: 1.25
+        minValue: -20
+        maxValue: 20
+    - rid: 3281392858440663160
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        isVisible: 0
+        movementSetting: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225,
+          type: 2}
+        defaultValue: 80
+        minValue: 10
+        maxValue: 150
+    - rid: 3281392858440663161
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        isVisible: 1
+        movementSetting: {fileID: 11400000, guid: c4f8a72cac8f9aa47bbdb5b748071e8f,
+          type: 2}
+        defaultValue: 10
+        minValue: 5
+        maxValue: 25
+    - rid: 3281392858440663162
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        isVisible: 1
+        movementSetting: {fileID: 11400000, guid: 1c976e08a2553c844a59589187355643,
+          type: 2}
+        defaultValue: 5
+        minValue: 2
+        maxValue: 25
+    - rid: 3281392858440663163
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        isVisible: 1
+        movementSetting: {fileID: 11400000, guid: bc1c13591b767444ebb45aab45fefde0,
+          type: 2}
+        defaultValue: 100
+        minValue: 50
+        maxValue: 200
+    - rid: 5560709212561735785
+      type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        isVisible: 0
+        movementSetting: {fileID: 11400000, guid: 238246fd8535293479b916db1ac470bc,
+          type: 2}
+        defaultValue: 1.7
+        minValue: 0
+        maxValue: 0
