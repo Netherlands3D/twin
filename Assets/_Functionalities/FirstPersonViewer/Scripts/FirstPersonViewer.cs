@@ -86,7 +86,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetupFSM()
         {
-            ViewerState[] playerStates = movementSwitcher.MovementPresets.Select(preset => preset.viewerState).Distinct().ToArray();
+            ViewerState[] playerStates = movementSwitcher.MovementPresets.ToArray();
 
             fsm = new FirstPersonViewerStateMachine(this, input, playerStates);
         }
@@ -137,7 +137,7 @@ namespace Netherlands3D.FirstPersonViewer
             }
         }
 
-        private void SetMovementModus(MovementPresets movementPresets)
+        private void SetMovementModus(ViewerState movementPresets)
         {
             if (movementPresets.viewMesh != null)
             {
@@ -146,9 +146,9 @@ namespace Netherlands3D.FirstPersonViewer
             }
             else meshFilter.mesh = null;
 
-            FirstPersonCamera.SetCameraConstrain(movementPresets.viewerState.CameraConstrain);
+            FirstPersonCamera.SetCameraConstrain(movementPresets.CameraConstrain);
 
-            fsm.SwitchState(movementPresets.viewerState);
+            fsm.SwitchState(movementPresets);
         }
 
         public void SetupState(Vector3 cameraPosition, Vector3 playerEuler, Vector3 cameraEuler, float cameraHeightOffset)

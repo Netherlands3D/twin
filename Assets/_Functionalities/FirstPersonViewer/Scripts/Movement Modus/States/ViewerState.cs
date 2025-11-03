@@ -12,6 +12,15 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         [field: SerializeField] public CameraConstrain CameraConstrain { private set; get; }
         protected float MovementSpeed { private set; get; }
 
+        [Header("Visuals")]
+        public string viewName;
+        public Sprite viewIcon;
+        public Mesh viewMesh;
+        public Material[] meshMaterials;
+
+        [Header("Editable Settings")]
+        public SerializableViewerSettingsList editableSettings = new SerializableViewerSettingsList();
+
         [Header("Viewer Settings")]
         [SerializeField] private MovementFloatSetting maxSpeedSetting;
         [SerializeField] protected MovementFloatSetting speedMultiplierSetting;

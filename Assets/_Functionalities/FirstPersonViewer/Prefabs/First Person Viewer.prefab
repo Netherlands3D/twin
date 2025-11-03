@@ -353,7 +353,6 @@ MonoBehaviour:
   groundDistance: 0.2
   isGrounded: 0
   stepHeight: 1.5
-  maxSpeedSetting: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad, type: 2}
 --- !u!114 &1609831314963826710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,8 +395,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <MovementPresets>k__BackingField:
-  - {fileID: 11400000, guid: 6b26168bc00d5ff4e8b4e234367924ba, type: 2}
-  - {fileID: 11400000, guid: 4178ebf82880dd94d9b957892de62efe, type: 2}
+  - {fileID: 11400000, guid: bc41cb17aeb0e9e4dad0bc62ddaa02ea, type: 2}
+  - {fileID: 11400000, guid: 594defc4112e8534f9cc9c41b8492119, type: 2}
 --- !u!114 &4604978584422325480
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,10 +10,10 @@ namespace Netherlands3D.FirstPersonViewer
         private FirstPersonViewerInput input;
 
         [Header("Movement")]
-        [field: SerializeField] public List<MovementPresets> MovementPresets { private set; get; }
-        public MovementPresets CurrentMovement { private set; get; }
+        [field: SerializeField] public List<ViewerState> MovementPresets { private set; get; }
+        public ViewerState CurrentMovement { private set; get; }
 
-        public event Action<MovementPresets> OnMovementPresetChanged;
+        public event Action<ViewerState> OnMovementPresetChanged;
 
         private void Awake()
         {
@@ -38,9 +38,9 @@ namespace Netherlands3D.FirstPersonViewer
             LoadMovementPreset(MovementPresets[currentIndex]);
         }
 
-        public void LoadMovementPreset(MovementPresets movePresets)
+        public void LoadMovementPreset(ViewerState viewerState)
         {
-            CurrentMovement = movePresets;
+            CurrentMovement = viewerState;
 
             //Send events
             OnMovementPresetChanged?.Invoke(CurrentMovement);
