@@ -1,4 +1,3 @@
-using Netherlands3D.FirstPersonViewer.Events;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,14 +10,14 @@ namespace Netherlands3D.FirstPersonViewer.Miscellaneous
 
         private void Start()
         {
-            ViewerEvents.OnViewerEntered += ViewerEnterd;
-            ViewerEvents.OnViewerExited += ViewerExited;
+            FirstPersonViewer.OnViewerEntered += ViewerEnterd;
+            FirstPersonViewer.OnViewerExited += ViewerExited;
         }
 
         private void OnDestroy()
         {
-            ViewerEvents.OnViewerEntered -= ViewerEnterd;
-            ViewerEvents.OnViewerExited -= ViewerExited;
+            FirstPersonViewer.OnViewerEntered -= ViewerEnterd;
+            FirstPersonViewer.OnViewerExited -= ViewerExited;
         }
 
         private void ViewerEnterd() => onViewerEnterd.Invoke();

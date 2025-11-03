@@ -1,9 +1,9 @@
 using DG.Tweening;
 using Netherlands3D.Events;
-using Netherlands3D.FirstPersonViewer.Events;
 using Netherlands3D.Twin.Samplers;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D.FirstPersonViewer.UI
 {
@@ -15,41 +15,47 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private PointerToWorldPosition pointerToWorld;
 
+        [Space(5)]
+        [SerializeField] private InputActionReference hideButton;
+
         [Header("Snackbar")]
         [SerializeField] private StringEvent snackbarEvent;
         [SerializeField] private string fpvExitText;
+        [SerializeField] private string uiHideText;
+
 
         private void Start()
         {
             pointerToWorld = FindFirstObjectByType<PointerToWorldPosition>();
             viewerGroup = viewerUI.GetComponent<CanvasGroup>();
 
-            ViewerEvents.OnViewerEntered += EnterViewer;
-            ViewerEvents.OnViewerExited += ExitViewer;
-            ViewerEvents.OnHideUI += HideUI;
+            FirstPersonViewer.OnViewerEntered += EnterViewer;
+            FirstPersonViewer.OnViewerExited += ExitViewer;
+            hideButton.action.performed += OnHideUIPressed;
 
             viewerUI.SetActive(false);
         }
 
         private void OnDestroy()
         {
-            ViewerEvents.OnViewerEntered -= EnterViewer;
-            ViewerEvents.OnViewerExited -= ExitViewer;
-            ViewerEvents.OnHideUI -= HideUI;
+            FirstPersonViewer.OnViewerEntered -= EnterViewer;
+            FirstPersonViewer.OnViewerExited -= ExitViewer;
+            hideButton.action.performed -= OnHideUIPressed;
         }
 
         private void EnterViewer()
         {
             uiToDisable.ForEach(ui => ui.SetActive(false));
 
-            if(viewerGroup != null)
+            if (viewerGroup != null)
             {
                 viewerGroup.alpha = 0;
                 viewerUI.SetActive(false);
                 viewerGroup.DOFade(1, 1f).SetDelay(1).OnComplete(() => snackbarEvent.InvokeStarted(fpvExitText));
-            } viewerUI.SetActive(true);
+            }
+            viewerUI.SetActive(true);
 
-            pointerToWorld.SetActiveCamera(FirstPersonViewerData.Instance.FPVCamera);
+            pointerToWorld.SetActiveCamera(FirstPersonViewerCamera.FPVCamera);
         }
 
         private void ExitViewer(bool modified)
@@ -63,9 +69,12 @@ namespace Netherlands3D.FirstPersonViewer.UI
         /// <summary>
         /// Temp Function for UI hiding (Will be replaced by the UI Hider)
         /// </summary>
-        private void HideUI()
+        public void HideUI()
         {
             viewerUI.SetActive(!viewerUI.activeSelf);
+            if (!viewerUI.activeSelf) snackbarEvent.InvokeStarted(uiHideText);
         }
+
+        private void OnHideUIPressed(InputAction.CallbackContext context) => HideUI();
     }
 }

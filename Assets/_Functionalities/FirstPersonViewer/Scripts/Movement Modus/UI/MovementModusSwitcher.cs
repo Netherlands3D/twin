@@ -1,105 +1,57 @@
 using Netherlands3D.FirstPersonViewer.ViewModus;
-using Netherlands3D.FirstPersonViewer.Events;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
+using System.Collections.Generic;
 using System;
 
-namespace Netherlands3D.FirstPersonViewer.UI
+namespace Netherlands3D.FirstPersonViewer
 {
-    [Obsolete("Will be removed and moved to ViewerSettings.cs (When the toolbar rework will come.")]
     public class MovementModusSwitcher : MonoBehaviour
     {
-        [Header("Input")]
-        [SerializeField] private InputActionAsset inputMap;
-        private InputAction cycleNextAction;
-        private InputAction cyclePreviousAction;
-
-        [Header("UI")]
-        [SerializeField] private Image currentMovemodeImage;
-        [SerializeField] private Image nextMovemodeImage;
-        [SerializeField] private Image prevMovemodeImage;
-        [SerializeField] private MovementModusButton movementButtonPrefab;
-        [SerializeField] private Transform movementButtonParent;
+        private FirstPersonViewerInput input;
 
         [Header("Movement")]
-        [SerializeField] private MovementCollection movementPresets;
-        private MovementPresets currentMovement;
+        [field: SerializeField] public List<ViewerState> MovementPresets { private set; get; }
+        public ViewerState CurrentMovement { private set; get; }
+
+        public event Action<ViewerState> OnMovementPresetChanged;
 
         private void Awake()
         {
-            ViewerEvents.OnViewerEntered += ViewerEnterd;
-        }
-
-        private void Start()
-        {
-            cycleNextAction = inputMap.FindAction("NavigateModusNext");
-            cyclePreviousAction = inputMap.FindAction("NavigateModusPrevious");
-
-            movementPresets.presets.ForEach(preset =>
-            {
-                MovementModusButton tempButton = Instantiate(movementButtonPrefab, movementButtonParent);
-                tempButton.SetupButton(preset, this);
-            });
-        }
-
-        private void OnDestroy()
-        {
-            ViewerEvents.OnViewerEntered -= ViewerEnterd;
-        }
-
-        private void ViewerEnterd()
-        {
-            LoadMoveModus(0);
+            input = GetComponent<FirstPersonViewerInput>();
         }
 
         private void Update()
         {
-            if (cyclePreviousAction.triggered) ChangeViewerModus(-1);
-            else if (cycleNextAction.triggered) ChangeViewerModus(1);        
+            if (input.CyclePreviousModus.triggered) ChangeViewerModus(-1);
+            else if (input.CycleNextModus.triggered) ChangeViewerModus(1);        
         }
 
         public void ChangeViewerModus(int switchDirection)
         {
             if (FirstPersonViewerInput.IsInputfieldSelected()) return;
 
-            int currentIndex = movementPresets.presets.IndexOf(currentMovement) + switchDirection;
+            int currentIndex = MovementPresets.IndexOf(CurrentMovement);
 
-            if (currentIndex < 0) currentIndex = movementPresets.presets.Count - 1;
-            else if (currentIndex >= movementPresets.presets.Count) currentIndex = 0;
+            currentIndex += switchDirection % MovementPresets.Count + MovementPresets.Count;
+            currentIndex %= MovementPresets.Count;
 
-            LoadMoveModus(currentIndex);
+            LoadMovementPreset(MovementPresets[currentIndex]);
         }
 
-        private void LoadMoveModus(int index)
+        public void LoadMovementPreset(ViewerState viewerState)
         {
-            if (index >= movementPresets.presets.Count || index < 0) return;
-
-            currentMovement = movementPresets.presets[index];
-            currentMovemodeImage.sprite = currentMovement.viewIcon;
-
-            int nextIndex = index + 1;
-            if (nextIndex >= movementPresets.presets.Count) nextIndex = 0;
-
-            nextMovemodeImage.sprite = movementPresets.presets[nextIndex].viewIcon;
-
-            int prevIndex = index - 1;
-            if (prevIndex < 0) prevIndex = movementPresets.presets.Count - 1;
-
-            prevMovemodeImage.sprite = movementPresets.presets[prevIndex].viewIcon;
+            CurrentMovement = viewerState;
 
             //Send events
-            ViewerEvents.OnMovementPresetChanged?.Invoke(currentMovement);
-            ViewerEvents.OnViewheightChanged?.Invoke(currentMovement.viewHeight);
-            ViewerEvents.OnFOVChanged?.Invoke(currentMovement.fieldOfView);
-            ViewerEvents.OnSpeedChanged?.Invoke(currentMovement.speedInKm);
+            OnMovementPresetChanged?.Invoke(CurrentMovement);
+
+            //$$ TODO Only supports floats for now should be revisited
+            foreach (ViewerSetting setting in CurrentMovement.editableSettings.list)
+            {
+                setting.InvokeOnValueChanged(setting.GetValue());
+            }
         }
 
-        public void LoadMoveModus(MovementPresets movePresets) => LoadMoveModus(movementPresets.presets.IndexOf(movePresets));
-
-        public void SetMovementVisible()
-        {
-            movementButtonParent.gameObject.SetActive(!movementButtonParent.gameObject.activeSelf);
-        }
+        public void LoadMovementPreset(int index) => LoadMovementPreset(MovementPresets[index]);
     }
 }

@@ -1,26 +1,21 @@
-using Netherlands3D.FirstPersonViewer.Events;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
+    [CreateAssetMenu(fileName = "Walking State", menuName = "ScriptableObjects/FirstPersonViewer/States/Walking State")]
     public class ViewerWalkingState : ViewerState
     {
+        [SerializeField] private MovementFloatSetting jumpFoceSetting;
+
         public override void OnEnter()
         {
-            if (viewer.FirstPersonCamera.transform.localPosition.y == 0)
-            {
-                viewer.transform.position = viewer.transform.position + Vector3.down * viewer.MovementModus.viewHeight;
-                viewer.FirstPersonCamera.transform.localPosition = Vector3.up * viewer.MovementModus.viewHeight;
-            }
+            base.OnEnter();
 
             //Get Rotation this depends on the current Camera Constrain
             Vector3 euler = viewer.FirstPersonCamera.GetEulerRotation();
-            viewer.transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
-            viewer.FirstPersonCamera.transform.localRotation = Quaternion.Euler(euler.x, 0f, 0f);
+            viewer.SetupState(transform.position, new Vector3(0f, euler.y, 0f), new Vector3(euler.x, 0f, 0f), viewer.FirstPersonCamera.CameraHeightOffset);
 
             viewer.GetGroundPosition();
-            ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_Y);
         }
 
         public override void OnUpdate()
@@ -42,7 +37,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             Vector3 direction = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
 
-            float calculatedSpeed = viewer.MovementSpeed * (input.SprintAction.IsPressed() ? viewer.MovementModus.speedMultiplier : 1);
+            float calculatedSpeed = MovementSpeed * (input.SprintAction.IsPressed() ? speedMultiplierSetting.Value : 1);
 
             transform.Translate(direction * calculatedSpeed * Time.deltaTime, Space.World);
             viewer.GetGroundPosition();
@@ -52,7 +47,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             if (input.JumpAction.triggered && viewer.isGrounded)
             {
-                viewer.SetVelocity(new Vector2(viewer.Velocity.x, viewer.MovementModus.jumpHeight));
+                viewer.SetVelocity(new Vector2(viewer.Velocity.x, jumpFoceSetting.Value));
                 viewer.isGrounded = false;
             }
         }

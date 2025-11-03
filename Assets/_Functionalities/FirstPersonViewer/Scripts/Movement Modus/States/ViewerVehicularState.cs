@@ -1,31 +1,32 @@
-using DG.Tweening;
-using Netherlands3D.FirstPersonViewer.Events;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.ViewModus
 {
+    [CreateAssetMenu(fileName = "Vehicular State", menuName = "ScriptableObjects/FirstPersonViewer/States/Vehicular State")]
     public class ViewerVehicularState : ViewerState
     {
         private float currentSpeed;
 
+        [SerializeField] private MovementFloatSetting accelerationSetting;
+        [SerializeField] private MovementFloatSetting decelerationSetting;
+        [SerializeField] private MovementFloatSetting turnSpeedSetting;
+
+        [Header("Viewer Labels")]
+        [SerializeField] private MovementLabelSetting currentSpeedLabel;
+
         public override void OnEnter()
         {
-            if (viewer.FirstPersonCamera.transform.localPosition.y == 0)
-            {
-                viewer.transform.position = viewer.transform.position + Vector3.down * viewer.MovementModus.viewHeight;
-                viewer.FirstPersonCamera.transform.localPosition = Vector3.up * viewer.MovementModus.viewHeight;
-            }
+            base.OnEnter();
 
             //Get Rotation this depends on the current Camera Constrain
             Vector3 euler = viewer.FirstPersonCamera.GetEulerRotation();
-            viewer.transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
-            viewer.FirstPersonCamera.transform.localRotation = Quaternion.Euler(euler.x, 0f, 0f);
+            viewer.SetupState(transform.position, new Vector3(0f, euler.y, 0f), new Vector3(euler.x, 0f, 0f), viewer.FirstPersonCamera.CameraHeightOffset);
+
+            viewer.GetGroundPosition();
 
             currentSpeed = 0;
 
-            viewer.GetGroundPosition();
-            ViewerEvents.OnChangeCameraConstrain?.Invoke(CameraConstrain.CONTROL_NONE);
-            ViewerEvents.OnResetToGround += ResetToGround;
+            viewer.OnResetToGround += ResetToGround;
         }
 
         public override void OnUpdate()
@@ -40,34 +41,40 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnExit()
         {
-            ViewerEvents.OnResetToGround -= ResetToGround;
+            viewer.OnResetToGround -= ResetToGround;
         }
 
         private void MoveVehicle(Vector2 moveInput)
         {
-            float speedMultiplier = input.SprintAction.IsPressed() ? viewer.MovementModus.speedMultiplier : 1;
+            float currentMultiplier = input.SprintAction.IsPressed() ? speedMultiplierSetting.Value : 1;
+            bool isGoingBackwards = moveInput.y < 0;
+            currentMultiplier *= (isGoingBackwards ? .3f : 1);
 
-            float targetSpeed = moveInput.y * viewer.MovementSpeed * speedMultiplier;
+            float targetSpeed = moveInput.y * MovementSpeed * currentMultiplier;
 
-            if (Mathf.Abs(targetSpeed) > 0.1f && viewer.isGrounded) currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, viewer.MovementModus.acceleration * speedMultiplier * Time.deltaTime);
-            else currentSpeed = Mathf.MoveTowards(currentSpeed, 0, viewer.MovementModus.deceleration * speedMultiplier * Time.deltaTime);
+            if (Mathf.Abs(targetSpeed) > 0.1f && viewer.isGrounded) currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, accelerationSetting.Value * currentMultiplier * Time.deltaTime);
+            else currentSpeed = Mathf.MoveTowards(currentSpeed, 0, decelerationSetting.Value * currentMultiplier * Time.deltaTime);
 
             transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
 
             if (Mathf.Abs(currentSpeed) > 0.1f)
             {
-                float turn = moveInput.x * viewer.MovementModus.turnSpeed * Time.deltaTime * Mathf.Sign(currentSpeed);
+                float turn = moveInput.x * turnSpeedSetting.Value * Time.deltaTime * Mathf.Sign(currentSpeed);
                 transform.Rotate(Vector3.up * turn);
-            } else
+            }
+            else
             {
-                float turn = moveInput.x * viewer.MovementModus.turnSpeed * .2f * Time.deltaTime;
+                float turn = moveInput.x * turnSpeedSetting.Value * .2f * Time.deltaTime;
                 transform.Rotate(Vector3.up * turn);
             }
 
-            if (currentSpeed > 0)
+            if (Mathf.Abs(currentSpeed) > 0)
             {
                 viewer.GetGroundPosition();
-                ViewerEvents.OnCameraRotation?.Invoke(viewer.FirstPersonCamera.transform.forward);
+
+                int speedInKilometers = Mathf.RoundToInt(currentSpeed * 3.6f);
+
+                currentSpeedLabel.Value = speedInKilometers.ToString();
             }
         }
 

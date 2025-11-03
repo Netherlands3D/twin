@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5be2493fce847d3bf08c9085136a4a7, type: 3}
+  m_Name: AssetLibrary
+  m_EditorClassIdentifier: 
+  items:
+  - {fileID: 11400000, guid: 747aa4d25b7845c42a08a90c5d5c61d5, type: 2}
+  - {fileID: 11400000, guid: 7fac0e552d802a9408006011f10eb283, type: 2}
+  - {fileID: 11400000, guid: 4a01a207411f9e5489b6b9a0a254eb53, type: 2}
+  - {fileID: 11400000, guid: dac490082de5a5543aaaa1f0fdec8571, type: 2}
+  - {fileID: 11400000, guid: b9cba862339fcf449af87b0021460428, type: 2}
+  - {fileID: 11400000, guid: 14ff96655589ec94884b28aecde5b79b, type: 2}
+  extraCatalogs:
+  - https://api.pdok.nl/catalogus/v1-demo/

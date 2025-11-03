@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Netherlands3D.Catalogs.CatalogItems;
 using Netherlands3D.SerializableGisExpressions;
+using UnityEngine;
 using ExpressionEvaluator = Netherlands3D.SerializableGisExpressions.ExpressionEvaluator;
 
 namespace Netherlands3D.Catalogs.Catalogs
@@ -35,6 +36,37 @@ namespace Netherlands3D.Catalogs.Catalogs
             var page = new CatalogItemCollectionPage(allRecords, pagination);
 
             return Task.FromResult<ICatalogItemCollection>(page);
+        }
+        
+        public async Task<ICatalogItem> GetAsync(string id)
+        {
+            // Recursively scan for items by their id
+            foreach (var item in allRecords)
+            {
+                if (item is RecordItem recordItem && recordItem.Id == id)
+                {
+                    return recordItem;
+                }
+
+                if (item is ICatalogItemCollection collection)
+                {
+                    // Allow for collections to refuse to implement this method as it may be computationally expensive
+                    // or because it still needs to be made
+                    try
+                    {
+                        var foundItem = await collection.GetAsync(id);
+                        if (foundItem != null) return foundItem;
+                    }
+                    catch (NotImplementedException _)
+                    {
+                        Debug.LogWarning(
+                            "Collection " + collection + " does not support retrieving items by their id"
+                        );
+                    }
+                }
+            }
+            
+            return null;
         }
 
         public Task<ICatalogItemCollection> SearchAsync(string query, Pagination pagination = null)
@@ -81,7 +113,7 @@ namespace Netherlands3D.Catalogs.Catalogs
 
         public void Clear() => allRecords.Clear();
 
-        public static RecordItem CreateRecord(string id, string title, string description, Uri uri = null)
+        public static RecordItem CreateRecord(string id, string title, string description = "", Uri uri = null)
         {
             return new RecordItem(id, title, description, url: uri);
         }
@@ -152,6 +184,11 @@ namespace Netherlands3D.Catalogs.Catalogs
                     .Skip(this.pagination.Offset)
                     .Take(this.pagination.Limit)
                     .ToList();
+            }
+
+            public override Task<ICatalogItem> GetAsync(string id)
+            {
+                return Task.FromResult(items.FirstOrDefault(item => item.Id == id));
             }
 
             public override Task<IEnumerable<ICatalogItem>> GetItemsAsync()

@@ -41,7 +41,7 @@ namespace Netherlands3D.Functionalities.GLBImporter
         {            
             var uri = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
 
-            App.Layers.Add("gltf", new Gltf.Args(localFile.FileName, uri));
+            App.Layers.Add(new GltfPreset.Args(localFile.FileName, uri));
         }
     }
 }

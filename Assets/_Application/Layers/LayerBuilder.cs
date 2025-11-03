@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin.Layers
         internal string Type { get; private set; }
         internal Vector3? Position { get; private set; }
         internal Quaternion? Rotation { get; private set; }
-        private Uri Url { get; set;}
+        internal Uri Url { get; private set; }
         private string Name { get; set; }
         private Color? Color { get; set; }
         private LayerData Parent { get; set; }
@@ -31,8 +31,7 @@ namespace Netherlands3D.Twin.Layers
 
         public static ILayerBuilder Create() => new LayerBuilder();
 
-        public static ILayerBuilder Create(string preset, LayerPresetArgs args) 
-            => LayerPresetRegistry.Create(preset, args);
+        public static ILayerBuilder Create(LayerPresetArgs args) => LayerPresetRegistry.Create(args);
 
         public ILayerBuilder FromUrl(Uri url) => OfType("url").At(url).WithCredentials(new Public(url));
 

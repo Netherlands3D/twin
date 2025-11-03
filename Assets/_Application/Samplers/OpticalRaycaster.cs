@@ -35,13 +35,13 @@ namespace Netherlands3D.Twin.Samplers
             }
 
             OpticalRequest opticalRequest = GetRequest();
+            opticalRequest.SetActiveCamera(camera); 
             opticalRequest.SetCullingMask(cullingMask);
             opticalRequest.SetScreenPoint(screenPoint);
             opticalRequest.AlignWithCamera();
             opticalRequest.UpdateShaders();
             opticalRequest.SetResultCallback(callback);
             opticalRequest.framesActive = 0;
-            opticalRequest.SetActiveCamera(camera); 
             activeRequests.Add(opticalRequest);
         }
 

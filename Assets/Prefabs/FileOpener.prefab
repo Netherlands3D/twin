@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1470089695843067273}
   - component: {fileID: 1748615501916967598}
+  - component: {fileID: 2624745901488078463}
   m_Layer: 0
   m_Name: FileOpener
   m_TagString: Untagged
@@ -53,6 +54,34 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: Netherlands3D.Twin.FileTypeAdapter, Assembly-CSharp
         m_MethodName: ProcessFile
         m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2624745901488078463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2388221261345448311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75b7e70441345c14ab89bfbaf4f57f18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: e22d53683e618894db885d9659d65237, type: 2}
+  trigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1748615501916967598}
+        m_TargetAssemblyTypeName: FileOpen, eu.netherlands3d.filebrowser.Runtime
+        m_MethodName: OpenFile
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

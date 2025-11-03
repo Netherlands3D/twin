@@ -11,7 +11,6 @@ namespace Netherlands3D.Twin.Rendering
         [Tooltip("The mesh to use for the line segments")] [SerializeField]
         private Mesh lineMesh;
 
-        [SerializeField] private Material lineMaterial;
 
         [Header("Settings")] 
         [SerializeField] private bool drawJoints = true;
@@ -28,6 +27,7 @@ namespace Netherlands3D.Twin.Rendering
             set => lineMesh = value;
         }
 
+        private Material lineMaterial;
         public Material LineMaterial
         {
             get => lineMaterial;
@@ -35,7 +35,7 @@ namespace Netherlands3D.Twin.Rendering
             {
                 lineMaterial = value;
                 if (lineMaterial != null)
-                    SetDefaultColors();
+                    SetAllColors(lineMaterial.color);
             }
         }
 
@@ -55,14 +55,14 @@ namespace Netherlands3D.Twin.Rendering
             }
         }
 
-        protected override void OnDrawGizmos() //todo: delete
-        {
-            Gizmos.color = Color.cyan;
-            DrawGizmos(pointTransformMatrixCache);
-            Gizmos.color = Color.blue;
-            DrawGizmos(lineTransformMatrixCache);
-        }
+        public override Material[] Materials => new Material[]{ PointMaterial, LineMaterial };
 
+        protected override void MakeMaterialInstances()
+        {
+            base.MakeMaterialInstances();
+            lineMaterial = new Material(materialTemplate); //make material instance to work with styling
+        }
+        
         protected override void Draw()
         {
             UpdateColorBuffers();
@@ -95,17 +95,20 @@ namespace Netherlands3D.Twin.Rendering
             }
         }
 
-        public override void SetDefaultColors()
+        public override void SetAllColors(Color color)
         {
-            Color defaultLineColor = LineMaterial.color;
+            PointMaterial.color = color;
+            LineMaterial.color = color;
+            
             foreach (var batchColor in lineBatchColors)
             {
-                batchColor.SetAllColors(defaultLineColor);
+                batchColor.SetAllColors(color);
             }
             foreach (var batchColor in pointBatchColors)
             {
-                batchColor.SetAllColors(defaultLineColor);
+                batchColor.SetAllColors(color);
             }
+            
             UpdateColorBuffers(); //fill in the missing colors with the default color after resetting the existing colors to avoid setting them twice.
         }
 
@@ -158,6 +161,16 @@ namespace Netherlands3D.Twin.Rendering
 
                     direction.Normalize();
 
+                    if (direction == Vector3.zero)
+                    {
+                        // If 2 consecutive points are the same, the line has a length of 0 and should not be rendered.
+                        // However, we must still add a transform matrix to preserve the indices of the joints and lines to match the input lines, and querying the indices remains possible.
+                        // Adding an end cap joint is not needed if this is the last line, since the end cap will be the same as the previous line's joint in this case
+                        AppendMatrixToBatches(lineTransformMatrixCache, ref lineIndices.batchIndex, ref lineIndices.matrixIndex, Matrix4x4.zero);
+                        AppendMatrixToBatches(pointTransformMatrixCache, ref jointIndices.batchIndex, ref jointIndices.matrixIndex, Matrix4x4.zero);
+                        continue;
+                    }
+                    
                     // Calculate the rotation based on the direction vector
                     var rotation = Quaternion.LookRotation(direction);
                     // Calculate the scale based on the distance
@@ -181,7 +194,7 @@ namespace Netherlands3D.Twin.Rendering
                 }
             }
         }
-
+        
         protected override bool IsValid(List<Coordinate> line)
         {
             {

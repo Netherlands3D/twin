@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3618778040791522139}
   - component: {fileID: 2863126119578024967}
   - component: {fileID: -4723935055048165154}
-  - component: {fileID: 8709008593376177874}
+  - component: {fileID: -5733166687025956999}
   - component: {fileID: 4062645045739546207}
   - component: {fileID: -2785417149522329819}
   m_Layer: 12
@@ -68,7 +68,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   pointRenderer3D: {fileID: -4723935055048165154}
-  selectionPointRenderer3D: {fileID: 8709008593376177874}
+  selectionPointRenderer3D: {fileID: -5733166687025956999}
 --- !u!114 &2863126119578024967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,14 +96,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
-  pointMaterial: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
+  materialTemplate: {fileID: 2100000, guid: 1637ae82e9e4dbc4593baaee1ef959a2, type: 2}
   flattenY: 0
   offsetY: 0
   pointMeshScale: 5
+  isProjected: 1
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &8709008593376177874
+--- !u!114 &-5733166687025956999
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116,10 +117,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
-  pointMaterial: {fileID: 2100000, guid: cae582fecb8c4c34594b1ebf69514e4e, type: 2}
+  materialTemplate: {fileID: 2100000, guid: c8a5ac8f61e049f428ed0069b973e2be, type: 2}
   flattenY: 0
   offsetY: 0
   pointMeshScale: 5
+  isProjected: 1
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -143,10 +145,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: -4723935055048165154}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.BatchedMeshInstanceRenderer,
-          Assembly-CSharp
-        m_MethodName: GenerateTransformMatrixCache
-        m_Mode: 3
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Rendering.PointRenderer3D, eu.netherlands3d.twin
+        m_MethodName: RecalculateMatrices
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
