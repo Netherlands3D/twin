@@ -4,6 +4,7 @@ using System;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using UnityEngine.Events;
+using Netherlands3D.Twin.Services;
 
 namespace Netherlands3D.Twin.Functionalities
 {
@@ -53,21 +54,22 @@ namespace Netherlands3D.Twin.Functionalities
             }
         }
 
-        public async void Spawn(GameObject layer)
+        public async void Spawn(GameObject prefab)
         {
-            var layerGameObject = layer.GetComponent<LayerGameObject>();
+            var layerGameObject = prefab.GetComponent<LayerGameObject>();
             if (layerGameObject)
             {
                 var layerBuilder = LayerBuilder.Create()
                     .OfType(layerGameObject.PrefabIdentifier)
-                    .NamedAs(layer.name)
-                    .WhenBuilt(data => ((ReferencedLayerData)data).Reference.transform.parent = transform);
-                await App.Layers.Add(layerBuilder);
+                    .NamedAs(prefab.name);
+                    //.WhenBuilt(data => ((ReferencedLayerData)data).Reference.transform.parent = transform);
+                Layer layer = await App.Layers.Add(layerBuilder);
+                layer.LayerGameObject.transform.parent = transform;
                 return;
             }
 
-            var newLayer = Instantiate(layer, transform);
-            newLayer.name = layer.name;
+            var newLayer = Instantiate(prefab, transform);
+            newLayer.name = prefab.name;
         }
     }
 }

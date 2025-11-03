@@ -367,15 +367,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             areaReferenceData = ProjectData.Current.RootLayer.GetFirstLayerByLayerMask(LayerMask.NameToLayer("Terrain"));
             if (areaReferenceData == null) return;
 
-            //for some reason this rarily happens depending on the speed of loading and needs to be checked
-            if (areaReferenceData.Reference is PlaceholderLayerGameObject)
-            {
-                areaReferenceData.OnReferenceChanged.AddListener(InitializeScatterArea);
-            }
-            else
-            {
-                InitializeScatterArea();
-            }
+            InitializeScatterArea();
             polygonLayer.PolygonVisualisation.OnPolygonVisualisationUpdated.RemoveListener(OnPolygonVisualisationUpdated);
         }
 
@@ -386,7 +378,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             BoundingBox polygonBoundingBox = polygonLayer.PolygonVisualisation.Bounds;
             polygonBoundingBox.Convert(CoordinateSystem.RD);
-            BinaryMeshLayer bml = ((CartesianTileLayerGameObject)areaReferenceData.Reference).Layer as BinaryMeshLayer;
+            BinaryMeshLayer bml = ((CartesianTileLayerGameObject)areaReferenceData.RequestVisualization()).Layer as BinaryMeshLayer;
             Initialize(LayerData, settings.OriginalPrefabId);
             bml?.OnTileObjectCreated.AddListener(tile =>
             {

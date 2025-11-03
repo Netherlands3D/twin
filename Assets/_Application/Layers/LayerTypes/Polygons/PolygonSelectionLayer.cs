@@ -81,7 +81,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public static int MaxAvailableMasks => 22;
         public static UnityEvent<int> MaskDestroyed = new();
 
-        [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
+        [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => RequestVisualization() as PolygonSelectionVisualisation;
 
         [JsonConstructor]
         public PolygonSelectionLayer(

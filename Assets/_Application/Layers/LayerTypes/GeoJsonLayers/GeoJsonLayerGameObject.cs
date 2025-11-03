@@ -184,7 +184,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             foreach (var child in childrenInLayerData)
             {
                 if (child is not ReferencedLayerData referencedLayerData) continue;
-                if (referencedLayerData.Reference is not GeoJSONPolygonLayer polygonLayer) continue;
+                if (referencedLayerData.RequestVisualization() is not GeoJSONPolygonLayer polygonLayer) continue;
 
                 return polygonLayer;
             }
@@ -208,7 +208,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             foreach (var child in childrenInLayerData)
             {
                 if (child is not ReferencedLayerData referencedLayerData) continue;
-                if (referencedLayerData.Reference is not GeoJSONLineLayer lineLayer) continue;
+                if (referencedLayerData.RequestVisualization() is not GeoJSONLineLayer lineLayer) continue;
 
                 return lineLayer;
             }
@@ -232,7 +232,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             foreach (var child in childrenInLayerData)
             {
                 if (child is not ReferencedLayerData referencedLayerData) continue;
-                if (referencedLayerData.Reference is not GeoJSONPointLayer pointLayer) continue;
+                if (referencedLayerData.RequestVisualization() is not GeoJSONPointLayer pointLayer) continue;
 
                 return pointLayer;
             }

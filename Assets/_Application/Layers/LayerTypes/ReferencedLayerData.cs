@@ -37,11 +37,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         //    }
         //}
 
-        private LayerGameObject reference;
-        public LayerGameObject Reference => reference;
+        //private LayerGameObject reference;
+        //public LayerGameObject Reference => reference;
 
 
-        [JsonIgnore] public bool KeepReferenceOnDestroy { get; set; } = false;
+       // [JsonIgnore] public bool KeepReferenceOnDestroy { get; set; } = false;
         [JsonIgnore] public UnityEvent OnReferenceChanged = new();
 
         public ReferencedLayerData(string name, LayerGameObject reference) : base(name)
@@ -51,7 +51,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             // AddDefaultLayer should be after setting the reference so the reference is assigned
             // when the NewLayer event is called
             ProjectData.Current.AddStandardLayer(this);
-            RegisterEventListeners();
+            //RegisterEventListeners();
         }
 
         public ReferencedLayerData(string name, string prefabId, LayerGameObject reference) : this(name, reference)
@@ -89,7 +89,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             // deserialisation of the project data and reconstitution of the visualisation classes is not
             // separated but this would be an awesome future step
             await App.Layers.SpawnLayer(this);
-            RegisterEventListeners();
+            //RegisterEventListeners();
         }
 
         private async void AddToProject(Action<ReferencedLayerData> onComplete = null)
@@ -99,7 +99,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             // AddDefaultLayer should be after setting the reference so the reference is assigned when
             // the NewLayer event is called
             ProjectData.Current.AddStandardLayer(this);
-            RegisterEventListeners();
+            //RegisterEventListeners();
 
             if (onComplete != null)
             {
@@ -107,26 +107,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             }
         }
 
-        ~ReferencedLayerData()
-        {
-            UnregisterEventListeners();
-        }
+        //~ReferencedLayerData()
+        //{
+        //    UnregisterEventListeners();
+        //}
 
-        private void RegisterEventListeners()
-        {
-            ParentChanged.AddListener(OnParentChanged);
-            ChildrenChanged.AddListener(OnChildrenChanged);
-            ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
-            LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
-        }
+        //private void RegisterEventListeners()
+        //{
+        //    ParentChanged.AddListener(OnParentChanged);
+        //    ChildrenChanged.AddListener(OnChildrenChanged);
+        //    ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
+        //    LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+        //}
 
-        private void UnregisterEventListeners()
-        {
-            ParentChanged.RemoveListener(OnParentChanged);
-            ChildrenChanged.RemoveListener(OnChildrenChanged);
-            ParentOrSiblingIndexChanged.RemoveListener(OnSiblingIndexOrParentChanged);
-            LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
-        }
+        //private void UnregisterEventListeners()
+        //{
+        //    ParentChanged.RemoveListener(OnParentChanged);
+        //    ChildrenChanged.RemoveListener(OnChildrenChanged);
+        //    ParentOrSiblingIndexChanged.RemoveListener(OnSiblingIndexOrParentChanged);
+        //    LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
+        //}
 
         //public virtual void SetReference(LayerGameObject layerGameObject, bool keepPrefabIdentifier = false)
         //{
@@ -169,40 +169,39 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         public override void DestroyLayer()
         {
             base.DestroyLayer();
-            if (!KeepReferenceOnDestroy && Reference)
-                Reference.DestroyLayerGameObject();
+            RequestVisualization()?.DestroyLayerGameObject();
         }
 
         public override void SelectLayer(bool deselectOthers = false)
         {
             base.SelectLayer(deselectOthers);
-            Reference.OnSelect();
+            RequestVisualization()?.OnSelect();
         }
 
         public override void DeselectLayer()
         {
             base.DeselectLayer();
-            Reference.OnDeselect();
+            RequestVisualization()?.OnDeselect();
         }
 
-        private void OnChildrenChanged()
-        {
-            Reference.OnProxyTransformChildrenChanged();
-        }
+        //private void OnChildrenChanged()
+        //{
+        //    Reference.OnProxyTransformChildrenChanged();
+        //}
 
-        private void OnParentChanged()
-        {
-            Reference.OnProxyTransformParentChanged();
-        }
+        //private void OnParentChanged()
+        //{
+        //    Reference.OnProxyTransformParentChanged();
+        //}
 
-        private void OnSiblingIndexOrParentChanged(int newSiblingIndex)
-        {
-            Reference.OnSiblingIndexOrParentChanged(newSiblingIndex);
-        }
+        //private void OnSiblingIndexOrParentChanged(int newSiblingIndex)
+        //{
+        //    Reference.OnSiblingIndexOrParentChanged(newSiblingIndex);
+        //}
 
-        private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
-        {
-            Reference.OnLayerActiveInHierarchyChanged(activeInHierarchy);
-        }
+        //private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        //{
+        //    Reference.OnLayerActiveInHierarchyChanged(activeInHierarchy);
+        //}
     }
 }

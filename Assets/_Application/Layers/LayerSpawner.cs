@@ -139,7 +139,7 @@ namespace Netherlands3D.Twin.Layers
             ReferencedLayerData layerData,
             LayerGameObject prefab
         ) {
-            var placeholder = layerData.Reference;
+            var placeholder = layerData.RequestVisualization();
             
             var layerGameObjects = await Object.InstantiateAsync(prefab, placeholder.transform);
 
@@ -175,7 +175,7 @@ namespace Netherlands3D.Twin.Layers
             Vector3 position,
             Quaternion rotation
         ) {
-            var placeholder = layerData.Reference;
+            var placeholder = layerData.RequestVisualization();
             
             var layerGameObjects = await Object.InstantiateAsync(
                 prefab,

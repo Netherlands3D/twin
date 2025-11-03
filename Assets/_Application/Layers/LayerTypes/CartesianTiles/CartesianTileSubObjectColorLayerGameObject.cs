@@ -112,7 +112,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             if (layer is ReferencedLayerData proxyLayer)
             {
-                if (proxyLayer.Reference is CartesianTileSubObjectColorLayerGameObject datasetLayer)
+                if (proxyLayer.RequestVisualization() is CartesianTileSubObjectColorLayerGameObject datasetLayer)
                 {
                     list.Add(datasetLayer);
                 }

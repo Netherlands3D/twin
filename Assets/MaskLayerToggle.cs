@@ -68,7 +68,8 @@ namespace Netherlands3D.Twin.Layers
         {
             if (layerData is ReferencedLayerData referencedLayerData)
             {
-                referencedLayerData.Reference.SetMaskBit(MaskLayer.MaskBitIndex, acceptMask);
+                var visualization = layerData.RequestVisualization();
+                visualization.SetMaskBit(MaskLayer.MaskBitIndex, acceptMask);
             }
         }
     }

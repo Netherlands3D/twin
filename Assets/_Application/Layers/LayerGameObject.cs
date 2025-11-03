@@ -118,14 +118,23 @@ namespace Netherlands3D.Twin.Layers
         public void SetData(LayerData layerData)
         {
             if (LayerData == layerData) return;
-
-            UnregisterEventListeners();
+            //if(layerData != null)
+            //    UnregisterEventListeners();
 
             this.layerData = layerData as ReferencedLayerData; //TODO referencedlayerdata will be removed later
             
             RegisterEventListeners();
             OnLayerInitialize();
             onLayerInitialized.Invoke();
+            // Call a template method that children are free to play with - this way we can avoid using
+            // the start method directly and prevent forgetting to call the base.Start() from children
+            LoadPropertiesInVisualisations();
+            OnLayerReady();
+            // Event invocation is separate from template method on purpose to ensure child classes complete their
+            // readiness before external classes get to act - it also prevents forgetting calling the base method
+            // when overriding OnLayerReady
+            onLayerReady.Invoke();
+            InitializeVisualisation();
         }
 
         private LayerGameObject Object() => this;
@@ -137,12 +146,7 @@ namespace Netherlands3D.Twin.Layers
             layerData.ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
             layerData.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
             layerData.OnVisualizationRequested += Object;
-
-        }
-
-        protected virtual void UpdateForVisualisation(LayerGameObject layerGameObject)
-        {
-         
+            layerData.LayerDoubleClicked.AddListener(OnDoubleClick);
         }
 
         private void UnregisterEventListeners()
@@ -152,6 +156,7 @@ namespace Netherlands3D.Twin.Layers
             layerData.ParentOrSiblingIndexChanged.RemoveListener(OnSiblingIndexOrParentChanged);
             layerData.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
             layerData.OnVisualizationRequested -= Object;
+            layerData.LayerDoubleClicked.RemoveListener(OnDoubleClick);
         }
 
         /// <summary>
@@ -173,15 +178,7 @@ namespace Netherlands3D.Twin.Layers
         [Obsolete("Do not use Awake in subclasses, use OnLayerReady instead", true)]
         private void Start()
         {
-            // Call a template method that children are free to play with - this way we can avoid using
-            // the start method directly and prevent forgetting to call the base.Start() from children
-            LoadPropertiesInVisualisations();
-            OnLayerReady();
-            // Event invocation is separate from template method on purpose to ensure child classes complete their
-            // readiness before external classes get to act - it also prevents forgetting calling the base method
-            // when overriding OnLayerReady
-            onLayerReady.Invoke();
-            InitializeVisualisation();
+           
         }
 
         protected virtual void OnLayerReady()
@@ -195,7 +192,6 @@ namespace Netherlands3D.Twin.Layers
         // 2. Creating LayerData (from project), Instantiating prefab, coupling that LayerData to this LayerGameObject
         protected virtual void InitializeVisualisation()
         {            
-            LayerData.LayerDoubleClicked.AddListener(OnDoubleClick);
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 
             ApplyStyling();
@@ -231,7 +227,7 @@ namespace Netherlands3D.Twin.Layers
         protected virtual void OnDestroy()
         {
             //don't unsubscribe in OnDisable, because we still want to be able to center to a 
-            LayerData.LayerDoubleClicked.RemoveListener(OnDoubleClick);
+          
             UnregisterEventListeners();
         }
 
