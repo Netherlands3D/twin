@@ -14,15 +14,15 @@ namespace Netherlands3D.Tilekit
         public static TilekitEventSystem current { get; set; }
 
         // Events
-        public UnityEvent<ITileMapper> UpdateTriggered { get; private set; } = new ();
-        public UnityEvent<ITileMapper, TileSet> TileSetLoaded { get; private set; } = new ();
-        public UnityEvent<ITileMapper, Plane[]> FrustumChanged { get; private set; } = new ();
-        public UnityEvent<ITileMapper, Tiles> TilesSelected { get; private set; } = new ();
-        public UnityEvent<ITileMapper, List<Change>> TransitionCreated { get; private set; } = new ();
-        public UnityEvent<ITileMapper, Change> ChangeScheduleRequested { get; private set; } = new ();
-        public UnityEvent<ITileMapper, List<Change>> ChangesScheduled { get; private set; } = new ();
-        public UnityEvent<ITileMapper, Change> ChangeApply { get; private set; } = new ();
-        public UnityEvent<ITileMapper, TileBehaviour> TileSpawned { get; private set; } = new ();
+        [field:SerializeField] public UnityEvent<ITileMapper> UpdateTriggered { get; private set; } = new ();
+        [field:SerializeField] public UnityEvent<ITileMapper, TileSet> TileSetLoaded { get; private set; } = new ();
+        [field:SerializeField] public UnityEvent<ITileMapper, Plane[]> FrustumChanged { get; private set; } = new ();
+        [field:SerializeField] public UnityEvent<ITileMapper, Tiles> TilesSelected { get; private set; } = new ();
+        [field:SerializeField] public UnityEvent<ITileMapper, List<Change>> TransitionCreated { get; private set; } = new ();
+        [field:SerializeField] public UnityEvent<ITileMapper, Change> ChangeScheduleRequested { get; private set; } = new ();
+        [field:SerializeField] public UnityEvent<ITileMapper, List<Change>> ChangesScheduled { get; private set; } = new ();
+        [field:SerializeField] public UnityEvent<ITileMapper, Change> ChangeApply { get; private set; } = new ();
+        [field:SerializeField] public UnityEvent<ITileMapper, TileBehaviour> TileSpawned { get; private set; } = new ();
 
         private void Awake()
         {

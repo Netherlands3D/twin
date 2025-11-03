@@ -4,7 +4,6 @@ using Netherlands3D.Tilekit.Changes;
 using Netherlands3D.Tilekit.ExtensionMethods;
 using Netherlands3D.Tilekit.TileSelectors;
 using Netherlands3D.Tilekit.TileSets;
-using Netherlands3D.Tilekit.TileSets.BoundingVolumes;
 using Netherlands3D.Twin.Tilekit;
 using RSG;
 using UnityEngine;
@@ -14,7 +13,6 @@ namespace Netherlands3D.Tilekit
 {
     public class TileMapper : BaseTileMapper
     {
-        
         private TileSet tileSetConfiguration;
         public Tile[] TilesInView => tilesInView.ToArray();
 
