@@ -770,7 +770,7 @@
     "m_Title": "Masking",
     "m_Position": {
         "x": -870.0,
-        "y": -476.5
+        "y": -477.0
     }
 }
 
@@ -1027,7 +1027,7 @@
     "m_Type": "UnityEditor.ShaderGraph.StickyNoteData",
     "m_ObjectId": "8d30e08081974ce7b7858f44acdbb55c",
     "m_Title": "Inverted masks",
-    "m_Content": "Green channel is for inverted masks: first we need to invert the texture pixel: a pixel value of 0 means we should compare the bitmask, so we need to know which value to use the bitmask against. The used Mask channels are the color value the black pixel \"should\" be. We then apply a bitmask similar to the regular masks.",
+    "m_Content": "Green channel is for inverted masks: first we need to invert the texture pixel: a pixel value of 0 means we should compare the bitmask, so we need to know which value to use the bitmask against. The used Inverted Mask channels are the color value the black pixel \"should\" be. We then apply a bitmask similar to the regular masks.",
     "m_TextSize": 0,
     "m_Theme": 0,
     "m_Position": {
@@ -1478,10 +1478,10 @@
     "m_Guid": {
         "m_GuidSerialized": "d02cd9d9-b80f-4d43-9a39-a5ae23792a63"
     },
-    "m_Name": "UsedMaskChannels",
+    "m_Name": "UsedInvertedMaskChannels",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "UsedMaskChannels",
-    "m_DefaultReferenceName": "_UsedMaskChannels",
+    "m_RefNameGeneratedByDisplayName": "UsedInvertedMaskChannels",
+    "m_DefaultReferenceName": "_UsedInvertedMaskChannels",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -1651,7 +1651,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "f89342c513a04675aead4fe229e77d4f",
     "m_Id": 0,
-    "m_DisplayName": "UsedMaskChannels",
+    "m_DisplayName": "UsedInvertedMaskChannels",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",

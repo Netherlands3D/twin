@@ -1295,10 +1295,10 @@
     "m_Guid": {
         "m_GuidSerialized": "4c91a15e-a830-459c-b49e-d4978a57128b"
     },
-    "m_Name": "UsedMaskChannels",
+    "m_Name": "UsedInvertedMaskChannels",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "UsedMaskChannels",
-    "m_DefaultReferenceName": "_UsedMaskChannels",
+    "m_RefNameGeneratedByDisplayName": "UsedInvertedMaskChannels",
+    "m_DefaultReferenceName": "_UsedInvertedMaskChannels",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": false,
     "m_UseCustomSlotLabel": false,
@@ -3549,10 +3549,10 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "55d6d003ddd14d65a5012722236fc3b0",
     "m_Id": 1356865903,
-    "m_DisplayName": "UsedMaskChannels",
+    "m_DisplayName": "UsedInvertedMaskChannels",
     "m_SlotType": 0,
     "m_Hidden": false,
-    "m_ShaderOutputName": "_UsedMaskChannels",
+    "m_ShaderOutputName": "_UsedInvertedMaskChannels",
     "m_StageCapability": 2,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
@@ -5495,7 +5495,7 @@
     "m_Title": "Reflections",
     "m_Position": {
         "x": -345.0,
-        "y": 1038.5
+        "y": 1038.0
     }
 }
 
@@ -6028,7 +6028,7 @@
     "m_Title": "Spherical masking",
     "m_Position": {
         "x": -405.0,
-        "y": 173.5
+        "y": 173.0
     }
 }
 
@@ -6189,7 +6189,7 @@
     "m_Title": "World space water waves",
     "m_Position": {
         "x": -3046.0,
-        "y": -604.5
+        "y": -605.0
     }
 }
 
@@ -6547,7 +6547,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "d1fd11b9b5d643a19574659dd250dd5d",
     "m_Id": 0,
-    "m_DisplayName": "UsedMaskChannels",
+    "m_DisplayName": "UsedInvertedMaskChannels",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",

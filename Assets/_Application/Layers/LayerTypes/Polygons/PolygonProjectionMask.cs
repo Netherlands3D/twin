@@ -12,18 +12,18 @@ namespace Netherlands3D
 
         [SerializeField] private string extentsProperty = "_MaskBBoxExtents";
         [SerializeField] private string maskTextureProperty = "_MaskTexture";
-        [SerializeField] private string usedMaskChannelsProperty = "_UsedMaskChannels";
+        private static string usedInvertedMaskChannelsProperty = "_UsedInvertedMaskChannels";
         
         [SerializeField] private Camera maskCamera;
 
         private static bool forceUpdate;
         private static readonly HashSet<GameObject> invertedMasks = new(); // when there are 0 inverted masks, all geometry should be visible, so we should change the output texture to alpha=1 on all pixels.
-        private static int usedMasks = 0;
+        private static int usedInvertedMasks = 0;
 
         private IEnumerator Start()
         {
             Shader.SetGlobalTexture(maskTextureProperty, maskCamera.targetTexture);
-            Shader.SetGlobalInt("_UsedMaskChannels", usedMasks); //initialize the correct value
+            Shader.SetGlobalInt(usedInvertedMaskChannelsProperty, usedInvertedMasks); //initialize the correct value
 
             yield return null;
             ForceUpdateVectorsAtEndOfFrame();
@@ -57,16 +57,16 @@ namespace Netherlands3D
 
         public static void AddInvertedMask(GameObject invertedMask, int maskBitIndex)
         {
-            usedMasks |= 1 << maskBitIndex;
+            usedInvertedMasks |= 1 << maskBitIndex;
             invertedMasks.Add(invertedMask);
-            Shader.SetGlobalInt("_UsedMaskChannels", usedMasks);
+            Shader.SetGlobalInt(usedInvertedMaskChannelsProperty, usedInvertedMasks);
         }
 
         public static void RemoveInvertedMask(GameObject invertedMask, int maskBitIndex)
         {
-            usedMasks &= ~(1 << maskBitIndex);
+            usedInvertedMasks &= ~(1 << maskBitIndex);
             invertedMasks.Remove(invertedMask);
-            Shader.SetGlobalInt("_UsedMaskChannels", usedMasks);
+            Shader.SetGlobalInt(usedInvertedMaskChannelsProperty, usedInvertedMasks);
         }
     }
 }

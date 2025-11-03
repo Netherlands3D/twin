@@ -532,7 +532,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "044990e0a96141e4b00c71a499420705",
     "m_Id": 0,
-    "m_DisplayName": "UsedMaskChannels",
+    "m_DisplayName": "UsedInvertedMaskChannels",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -649,7 +649,7 @@
     "m_Title": "Spherical masking",
     "m_Position": {
         "x": -1331.0,
-        "y": 864.5000610351563
+        "y": 864.0
     }
 }
 
@@ -1061,8 +1061,8 @@
     "m_ObjectId": "2f048a80be0e44a69f6a493de996b375",
     "m_Title": "Change color torwards night ( Main light pointing down )",
     "m_Position": {
-        "x": -1504.0001220703125,
-        "y": -83.5001449584961
+        "x": -1504.0,
+        "y": -84.0
     }
 }
 
@@ -2190,10 +2190,10 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "9408537708b9477ebcf893a9a464d072",
     "m_Id": 1356865903,
-    "m_DisplayName": "UsedMaskChannels",
+    "m_DisplayName": "UsedInvertedMaskChannels",
     "m_SlotType": 0,
     "m_Hidden": false,
-    "m_ShaderOutputName": "_UsedMaskChannels",
+    "m_ShaderOutputName": "_UsedInvertedMaskChannels",
     "m_StageCapability": 2,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
@@ -3275,10 +3275,10 @@
     "m_Guid": {
         "m_GuidSerialized": "f76bca6a-4744-43a5-ae31-3851d37e7a11"
     },
-    "m_Name": "UsedMaskChannels",
+    "m_Name": "UsedInvertedMaskChannels",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "UsedMaskChannels",
-    "m_DefaultReferenceName": "_UsedMaskChannels",
+    "m_RefNameGeneratedByDisplayName": "UsedInvertedMaskChannels",
+    "m_DefaultReferenceName": "_UsedInvertedMaskChannels",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": false,
     "m_UseCustomSlotLabel": false,

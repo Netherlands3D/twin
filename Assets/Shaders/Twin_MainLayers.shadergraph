@@ -1726,8 +1726,8 @@
     "m_ObjectId": "37ccc1d943aa40c2ba5805a819a6f5f8",
     "m_Title": "Masking",
     "m_Position": {
-        "x": -2612.499755859375,
-        "y": 1055.5
+        "x": -2612.0,
+        "y": 1055.0
     }
 }
 
@@ -2675,8 +2675,8 @@
     "m_ObjectId": "6a4885ff20ed48ab95666d9dc9d3a68b",
     "m_Title": "Coloring mode",
     "m_Position": {
-        "x": -1962.999755859375,
-        "y": -586.4998779296875
+        "x": -1963.0,
+        "y": -587.0
     }
 }
 
@@ -3159,8 +3159,8 @@
     "m_ObjectId": "7edafca82e2e41458cafaf9391535f23",
     "m_Title": "Special vertex color ID's",
     "m_Position": {
-        "x": -2939.999755859375,
-        "y": -265.4999694824219
+        "x": -2940.0,
+        "y": -266.0
     }
 }
 
@@ -3925,7 +3925,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "ac25c7adab054ce891aaf171382fb957",
     "m_Id": 0,
-    "m_DisplayName": "UsedMaskChannels",
+    "m_DisplayName": "UsedInvertedMaskChannels",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -4520,10 +4520,10 @@
     "m_Guid": {
         "m_GuidSerialized": "c2c8d80e-a1b2-4698-af26-aedb819375bd"
     },
-    "m_Name": "UsedMaskChannels",
+    "m_Name": "UsedInvertedMaskChannels",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "UsedMaskChannels",
-    "m_DefaultReferenceName": "_UsedMaskChannels",
+    "m_RefNameGeneratedByDisplayName": "UsedInvertedMaskChannels",
+    "m_DefaultReferenceName": "_UsedInvertedMaskChannels",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": false,
     "m_UseCustomSlotLabel": false,
@@ -5196,10 +5196,10 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "ffa052d2b24343b3874cb9103ec18cee",
     "m_Id": 1356865903,
-    "m_DisplayName": "UsedMaskChannels",
+    "m_DisplayName": "UsedInvertedMaskChannels",
     "m_SlotType": 0,
     "m_Hidden": false,
-    "m_ShaderOutputName": "_UsedMaskChannels",
+    "m_ShaderOutputName": "_UsedInvertedMaskChannels",
     "m_StageCapability": 2,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,

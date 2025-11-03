@@ -2021,8 +2021,8 @@
     "m_ObjectId": "3f12d23c49154059a1111b7b74dbdc8b",
     "m_Title": "Masking",
     "m_Position": {
-        "x": -2669.999755859375,
-        "y": 638.5
+        "x": -2670.0,
+        "y": 638.0
     }
 }
 
@@ -2848,7 +2848,7 @@
     "m_Title": "Coloring mode",
     "m_Position": {
         "x": -1963.0,
-        "y": -586.5
+        "y": -587.0
     }
 }
 
@@ -3314,7 +3314,7 @@
     "m_Title": "Special vertex color ID's",
     "m_Position": {
         "x": -2940.0,
-        "y": -265.5
+        "y": -266.0
     }
 }
 
@@ -4389,10 +4389,10 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "c237de6b7893467b9eaeb32ae6c02d07",
     "m_Id": 1356865903,
-    "m_DisplayName": "UsedMaskChannels",
+    "m_DisplayName": "UsedInvertedMaskChannels",
     "m_SlotType": 0,
     "m_Hidden": false,
-    "m_ShaderOutputName": "_UsedMaskChannels",
+    "m_ShaderOutputName": "_UsedInvertedMaskChannels",
     "m_StageCapability": 2,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
@@ -4862,10 +4862,10 @@
     "m_Guid": {
         "m_GuidSerialized": "3d45da6f-f24a-43fb-9117-c8e074fa2f0e"
     },
-    "m_Name": "UsedMaskChannels",
+    "m_Name": "UsedInvertedMaskChannels",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "UsedMaskChannels",
-    "m_DefaultReferenceName": "_UsedMaskChannels",
+    "m_RefNameGeneratedByDisplayName": "UsedInvertedMaskChannels",
+    "m_DefaultReferenceName": "_UsedInvertedMaskChannels",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": false,
     "m_UseCustomSlotLabel": false,
@@ -5314,7 +5314,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "f233c6ba86ad46559dbf76ea5af9132f",
     "m_Id": 0,
-    "m_DisplayName": "UsedMaskChannels",
+    "m_DisplayName": "UsedInvertedMaskChannels",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
