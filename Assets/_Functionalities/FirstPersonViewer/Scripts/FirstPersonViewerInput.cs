@@ -37,6 +37,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         //Events
         public static event Action<float> ExitDuration;
+        public static event Action<CursorLockMode> OnLockStateChanged;
 
         private void Awake()
         {
@@ -91,11 +92,12 @@ namespace Netherlands3D.FirstPersonViewer
             {
                 ToggleCursorLock();
             }
-            else if (LeftClick.triggered && !Interface.PointerIsOverUI()) 
+            else if (LeftClick.triggered && !Interface.PointerIsOverUI())
             {
                 //When no UI object is detected lock the mouse to screen again.
                 LockCursor();
             }
+
         }
 
         private bool ShouldSkipCursorLocking()
@@ -114,12 +116,9 @@ namespace Netherlands3D.FirstPersonViewer
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
-            else
-            {
-                RemoveInputLockConstrain(this);
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
+            else LockCursor();
+
+            OnLockStateChanged.Invoke(Cursor.lockState);
         }
 
         private void LockCursor()
