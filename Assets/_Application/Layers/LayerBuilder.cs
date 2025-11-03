@@ -130,11 +130,39 @@ namespace Netherlands3D.Twin.Layers
             return this;
         }
 
-        public LayerData Build(LayerGameObject ontoReference)
-        {
-            var layerData = new ReferencedLayerData(Name, Type, ontoReference);
-            ontoReference.LayerData = layerData;
+        //public LayerData Build(LayerGameObject ontoReference)
+        //{
+        //    var layerData = new ReferencedLayerData(Name, Type, ontoReference);
+        //    ontoReference.SetData(layerData);
             
+        //    if (!string.IsNullOrEmpty(Name)) layerData.Name = Name;
+        //    if (Color.HasValue) layerData.Color = Color.Value;
+        //    if (Parent != null) layerData.SetParent(Parent);
+
+        //    foreach (var property in Properties)
+        //    {
+        //        layerData.SetProperty(property);
+        //    }
+
+        //    if (DefaultSymbolizer != null)
+        //    {
+        //        layerData.DefaultStyle.AnyFeature.Symbolizer = DefaultSymbolizer;
+        //    }
+            
+        //    foreach (var style in Styles)
+        //    {
+        //        layerData.AddStyle(style);
+        //    }
+
+        //    whenBuilt?.Invoke(layerData);
+
+        //    return layerData;
+        //}
+
+        public LayerData Build()
+        {            
+            LayerData layerData = new LayerData(Name);
+
             if (!string.IsNullOrEmpty(Name)) layerData.Name = Name;
             if (Color.HasValue) layerData.Color = Color.Value;
             if (Parent != null) layerData.SetParent(Parent);
@@ -148,7 +176,7 @@ namespace Netherlands3D.Twin.Layers
             {
                 layerData.DefaultStyle.AnyFeature.Symbolizer = DefaultSymbolizer;
             }
-            
+
             foreach (var style in Styles)
             {
                 layerData.AddStyle(style);

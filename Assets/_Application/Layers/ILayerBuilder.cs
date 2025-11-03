@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin.Layers
         ILayerBuilder Rotated(Quaternion rotation);
         ILayerBuilder SetDefaultStyling(Symbolizer symbolizer);
         ILayerBuilder AddStyle(LayerStyle style);
-        LayerData Build(LayerGameObject ontoReference);
+        LayerData Build();
         ILayerBuilder WhenBuilt(Action<LayerData> callback);
     }
 }

@@ -95,7 +95,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             SetShape(originalPolygon); 
             PolygonSelectionCalculator.RegisterPolygon(this);
-
+            UpdatePolygonVisualisation(OriginalPolygon);
             RegisterListeners();
             availableMaskChannels.Remove(MaskBitIndex);
         }
@@ -119,7 +119,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             SetShape(polygonUnityInput.ToCoordinates().ToList());
             PolygonSelectionCalculator.RegisterPolygon(this);
-
+            UpdatePolygonVisualisation(OriginalPolygon);
             RegisterListeners();
         }
 
@@ -155,28 +155,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             MaskDestroyed.Invoke(MaskBitIndex);
         }
 
-        public override void SetReference(LayerGameObject layerGameObject, bool keepPrefabIdentifier = false)
-        {
-            base.SetReference(layerGameObject, keepPrefabIdentifier);
-
-            if (PolygonVisualisation)
-            {
-                var vertices = CoordinatesToVertices(OriginalPolygon);
-                PolygonVisualisation.UpdateVisualisation(vertices, PolygonPropertyData.ExtrusionHeight);
-                SetMasking();
-            }
-        }
-
         private void ShiftedPolygon(Coordinate fromOrigin, Coordinate toOrigin)
         {
             //Silent update of the polygon shape, so the visualisation is updated without notifying the listeners
             RecalculatePolygon();
-            if (PolygonVisualisation)
-            {
-                var vertices = CoordinatesToVertices(OriginalPolygon);
-                PolygonVisualisation.UpdateVisualisation(vertices, PolygonPropertyData.ExtrusionHeight);
-                SetMasking();
-            }
+            UpdatePolygonVisualisation(OriginalPolygon);
             polygonMoved.Invoke();
         }
 
@@ -187,14 +170,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             OriginalPolygon = coordinates;
             RecalculatePolygon();
+            UpdatePolygonVisualisation(coordinates);
+            polygonChanged.Invoke();
+        }
 
-            if (PolygonVisualisation) {
-                var vertices = CoordinatesToVertices(coordinates);
+        private void UpdatePolygonVisualisation(List<Coordinate> polygon)
+        {
+            if (PolygonVisualisation)
+            {
+                var vertices = CoordinatesToVertices(polygon);
                 PolygonVisualisation.UpdateVisualisation(vertices, PolygonPropertyData.ExtrusionHeight);
                 SetMasking();
             }
-
-            polygonChanged.Invoke();
         }
 
         private void RecalculatePolygon()

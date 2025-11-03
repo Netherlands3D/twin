@@ -100,7 +100,7 @@ namespace Netherlands3D.Twin.Projects
             var referenceName = referencedLayer.name.Replace("(Clone)", "").Trim();
 
             var proxyLayer = new ReferencedLayerData(referenceName, referencedLayer);
-            referencedLayer.LayerData = proxyLayer;
+            referencedLayer.SetData(proxyLayer);
 
             // Add properties to the new layerData
             var layersWithPropertyData = referencedLayer.GetComponents<ILayerWithPropertyData>();

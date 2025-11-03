@@ -43,7 +43,7 @@ namespace Netherlands3D.Twin.Layers
 
             if (layerData is ReferencedLayerData referencedLayerData)
             {
-                var currentLayerMask = referencedLayerData.Reference.GetMaskLayerMask();
+                var currentLayerMask = visualization.GetMaskLayerMask();
                 int maskBitToCheck = 1 << MaskLayer.MaskBitIndex;
                 bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
                 toggle.SetIsOnWithoutNotify(isBitSet);

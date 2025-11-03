@@ -37,9 +37,8 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             var layerName = CreateName(localFile);
             var url = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
 
-            var layerData = await App.Layers.Add(new GeoJSONPreset.Args(layerName, url));
-
-            GeoJsonLayerGameObject newLayer = layerData.Reference as GeoJsonLayerGameObject;
+            var layer = await App.Layers.Add(new GeoJSONPreset.Args(layerName, url));
+            GeoJsonLayerGameObject newLayer = layer.LayerGameObject as GeoJsonLayerGameObject;
             newLayer.Parser.OnParseError.AddListener(displayErrorMessageEvent.Invoke);
         }
 

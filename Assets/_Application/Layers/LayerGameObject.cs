@@ -51,19 +51,20 @@ namespace Netherlands3D.Twin.Layers
         public bool HasLayerData => LayerData != null;
 
         private ReferencedLayerData layerData;
-        public ReferencedLayerData LayerData
-        {
-            get => layerData;
-            set
-            {
-                // Make idempotent - only continue if layerData actually changes
-                if (value == layerData) return;
+        public ReferencedLayerData LayerData => layerData;
+        //public ReferencedLayerData LayerData
+        //{
+        //    get => layerData;
+        //    set
+        //    {
+        //        // Make idempotent - only continue if layerData actually changes
+        //        if (value == layerData) return;
 
-                layerData = value;
-                OnLayerInitialize();
-                onLayerInitialized.Invoke();
-            }
-        }
+        //        layerData = value;
+        //        OnLayerInitialize();
+        //        onLayerInitialized.Invoke();
+        //    }
+        //}
 
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
         Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;
@@ -112,6 +113,42 @@ namespace Netherlands3D.Twin.Layers
             // By doing it this way, we could directly instantiate LayerGameObjects and defer their
             // initialisation until a LayerData is present, as is done in the PlaceholderLayerGameObject.
             placeholder.ReplaceWith(this);
+        }
+
+        public void SetData(LayerData layerData)
+        {
+            if (LayerData == layerData) return;
+
+            UnregisterEventListeners();
+
+            this.layerData = layerData as ReferencedLayerData; //TODO referencedlayerdata will be removed later
+            
+            RegisterEventListeners();
+            OnLayerInitialize();
+            onLayerInitialized.Invoke();
+        }
+
+        private void RegisterEventListeners()
+        {
+            layerData.ParentChanged.AddListener(OnProxyTransformParentChanged);
+            layerData.ChildrenChanged.AddListener(OnProxyTransformChildrenChanged);
+            layerData.ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
+            layerData.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+
+           
+        }
+
+        protected virtual void UpdateForVisualisation(LayerGameObject layerGameObject)
+        {
+         
+        }
+
+        private void UnregisterEventListeners()
+        {
+            layerData.ParentChanged.RemoveListener(OnProxyTransformParentChanged);
+            layerData.ChildrenChanged.RemoveListener(OnProxyTransformChildrenChanged);
+            layerData.ParentOrSiblingIndexChanged.RemoveListener(OnSiblingIndexOrParentChanged);
+            layerData.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
         }
 
         /// <summary>
@@ -192,6 +229,7 @@ namespace Netherlands3D.Twin.Layers
         {
             //don't unsubscribe in OnDisable, because we still want to be able to center to a 
             LayerData.LayerDoubleClicked.RemoveListener(OnDoubleClick);
+            UnregisterEventListeners();
         }
 
         public virtual void OnConvert(string previousId)

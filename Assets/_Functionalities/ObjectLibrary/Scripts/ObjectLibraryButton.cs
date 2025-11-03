@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Services;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,10 +46,10 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         }
         
         /// <summary>
-        /// Provide an extension point where we can capture the LayerData, and thus the LayerGameObject, so that
+        /// Provide an extension point where we can capture the LayerGameObject, and thus the LayerData, so that
         /// subclasses can manipulate the instantiated LayerGameObject.
         /// </summary>
-        protected virtual async Task<LayerData> CreateLayer(ILayerBuilder layerBuilder = null)
+        protected virtual async Task<Layer> CreateLayer(ILayerBuilder layerBuilder = null)
         {
             layerBuilder ??= LayerBuilder.Create();
 

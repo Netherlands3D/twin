@@ -21,8 +21,8 @@ namespace Netherlands3D.Twin.Services
         [SerializeField] private DataTypeChain fromUrlImporter;
         private LayerSpawner spawner;
         
-        public UnityEvent<ReferencedLayerData> layerAdded = new();
-        public UnityEvent<ReferencedLayerData> layerRemoved = new();
+        public UnityEvent<Layer> layerAdded = new();
+        public UnityEvent<Layer> layerRemoved = new();
 
         private void Awake()
         {
@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.Services
         /// <summary>
         /// Adds a new layer to the current project using the given preset.
         /// </summary>
-        public async Task<ReferencedLayerData> Add(LayerPresetArgs args)
+        public async Task<Layer> Add(LayerPresetArgs args)
         {
             return await Add(LayerBuilder.Create(args));
         }
@@ -41,7 +41,7 @@ namespace Netherlands3D.Twin.Services
         /// Adds a new layer to the current project using the given builder.
         /// </summary>
         [ItemCanBeNull]
-        public async Task<ReferencedLayerData> Add(ILayerBuilder builder)
+        public async Task<Layer> Add(ILayerBuilder builder)
         {
             if (builder is not LayerBuilder layerBuilder)
             {
@@ -53,20 +53,21 @@ namespace Netherlands3D.Twin.Services
                 case "url": return await ImportFromUrl(layerBuilder);
                 case "file": return ImportFromFile(layerBuilder);
             }
-            
-            var layerGameObject = await SpawnLayer(layerBuilder);
+
+            var layerData = builder.Build();            
+            var layerGameObject = await SpawnVisualization(layerData);
             if (layerGameObject == null)
             {
                 throw new Exception($"Could not find layer of type: {layerBuilder.Type}");
             }
+            Layer layer = new Layer(layerData);
+            layer.SetVisualization(layerGameObject);
+            layerAdded.Invoke(layer);
 
-            var layerData = layerGameObject.LayerData;
-            layerAdded.Invoke(layerData);
-
-            return layerData;
+            return layer;
         }
 
-        private ReferencedLayerData ImportFromFile(LayerBuilder layerBuilder)
+        private Layer ImportFromFile(LayerBuilder layerBuilder)
         {
             var url = RetrieveUrlForLayer(layerBuilder);
             fromFileImporter.ProcessFile(url.ToString());
@@ -76,7 +77,7 @@ namespace Netherlands3D.Twin.Services
             return null;
         }
 
-        private async Task<ReferencedLayerData> ImportFromUrl(LayerBuilder layerBuilder)
+        private async Task<Layer> ImportFromUrl(LayerBuilder layerBuilder)
         {
             var url = RetrieveUrlForLayer(layerBuilder);
             if (url.Scheme == "prefab-library")
@@ -100,13 +101,20 @@ namespace Netherlands3D.Twin.Services
         /// Usually used when loading a project file as this will restore the layer's data but the visualisation needs
         /// to be spawned. 
         /// </summary>
-        public async Task<ReferencedLayerData> Visualize(ReferencedLayerData layerData)
+        public async Task<Layer> SpawnLayer(LayerData layerData)
         {
-            layerData.SetReference(SpawnPlaceholder(layerData), true);
+            //TODO we need to remove the as ReferencedLayerData cast and make this work for all LayerData types
+            if (layerData is not ReferencedLayerData)
+            {
+                throw new NotSupportedException("Only ReferencedLayerData visualization is supported currently.");
+            }
 
-            await spawner.Spawn(layerData);
-            
-            return layerData;
+            Layer layer = new Layer(layerData);
+            LayerGameObject placeHolder = SpawnPlaceholder(layerData as ReferencedLayerData);
+            layer.SetVisualization(placeHolder);
+            LayerGameObject visualization = await spawner.Spawn(layerData as ReferencedLayerData);
+            layer.SetVisualization(visualization);
+            return layer;
         }
 
         /// <summary>
@@ -116,13 +124,21 @@ namespace Netherlands3D.Twin.Services
         /// Usually used when loading a project file as this will restore the layer's data but the visualisation needs
         /// to be spawned. 
         /// </summary>
-        public async Task<ReferencedLayerData> Visualize(ReferencedLayerData layerData, Vector3 position, Quaternion? rotation = null)
-        {
-            layerData.SetReference(SpawnPlaceholder(layerData), true);
-            
-            await spawner.Spawn(layerData, position, rotation ?? Quaternion.identity);
-            
-            return layerData;
+        public async Task<Layer> SpawnLayer(LayerData layerData, Vector3 position, Quaternion? rotation = null)
+        {   
+            //TODO we need to remove the as ReferencedLayerData cast and make this work for all LayerData types
+            if (layerData is not ReferencedLayerData)
+            {
+                throw new NotSupportedException("Only ReferencedLayerData visualization is supported currently.");
+            }
+
+            Layer layer = new Layer(layerData);
+            LayerGameObject placeHolder = SpawnPlaceholder(layerData as ReferencedLayerData);
+
+            layer.SetVisualization(placeHolder);
+            LayerGameObject visualization = await spawner.Spawn(layerData as ReferencedLayerData, position, rotation ?? Quaternion.identity);
+            layer.SetVisualization(visualization);
+            return layer;
         }
 
         /// <summary>
@@ -130,47 +146,39 @@ namespace Netherlands3D.Twin.Services
         ///
         /// Warning: this code does not check if the given prefab is compatible with this LayerData, make sure you know what you are doing.
         /// </summary>
-        public async Task<ReferencedLayerData> VisualizeAs(ReferencedLayerData layerData, string prefabIdentifier)
-        {
-            string previousId = layerData.PrefabIdentifier;
-            layerData.SetReference(SpawnPlaceholder(layerData), true);
-            
-            var layerGameObject = await spawner.Spawn(layerData, prefabIdentifier);
-            
-            if (previousId != prefabIdentifier) layerGameObject.OnConvert(previousId);
+        public async Task<Layer> VisualizeAs(LayerData layerData, string prefabIdentifier)
+        {        
+            //TODO we need to remove the as ReferencedLayerData cast and make this work for all LayerData types
+            if (layerData is not ReferencedLayerData referencedLayerData)
+            {
+                throw new NotSupportedException("Only ReferencedLayerData visualization is supported currently.");
+            }
+            string previousId = referencedLayerData.PrefabIdentifier;
 
-            return layerData;
+            Layer layer = new Layer(layerData);          
+            LayerGameObject visualization = await spawner.Spawn(layerData as ReferencedLayerData, prefabIdentifier);
+            layer.SetVisualization(visualization);
+            if (previousId != prefabIdentifier) visualization.OnConvert(previousId);
+            return layer;
         }
 
         /// <summary>
         /// Removes the layer from the current project and ensures the visualisation is removed as well.
         /// </summary>
-        public Task Remove(ReferencedLayerData layerData)
+        public void Remove(Layer layer)
         {
-            layerData.DestroyLayer();
-            
-            layerRemoved.Invoke(layerData);
-            return Task.CompletedTask;
+            layer.LayerData.DestroyLayer();            
+            layerRemoved.Invoke(layer);
         }
 
-        private async Task<LayerGameObject> SpawnLayer(LayerBuilder layerBuilder)
+        private async Task<LayerGameObject> SpawnVisualization(LayerData layerData)
         {
-            var layerGameObject = SpawnPlaceholder(null);
-            var layerData = layerBuilder.Build(layerGameObject);
             if (layerData is not ReferencedLayerData referencedLayerData)
             {
                 throw new Exception("Cannot add layer");
             }
-
-            if (!layerBuilder.Position.HasValue)
-            {
-                return await spawner.Spawn(referencedLayerData);
-            }
-
             return await spawner.Spawn(
-                referencedLayerData,
-                layerBuilder.Position.Value,
-                layerBuilder.Rotation ?? Quaternion.identity
+                referencedLayerData
             );
         }
 

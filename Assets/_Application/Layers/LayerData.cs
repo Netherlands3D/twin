@@ -14,7 +14,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public abstract class LayerData : IEquatable<LayerData>
+    public class LayerData : IEquatable<LayerData>
     {
         private const string NameOfDefaultStyle = "default";
 
@@ -178,7 +178,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleAdded = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleRemoved = new();
-        [JsonIgnore] public readonly UnityEvent<bool> HasValidCredentialsChanged = new();
+        [JsonIgnore] public readonly UnityEvent<bool> HasValidCredentialsChanged = new();        
 
         /// <summary>
         /// Track whether this data object is new, in other words instantiated during this session, or whether it comes

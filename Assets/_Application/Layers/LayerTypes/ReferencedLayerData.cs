@@ -14,35 +14,39 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         [DataMember] private string prefabId;
         public string PrefabIdentifier => prefabId;
 
-        [JsonIgnore] private LayerGameObject reference;
-        [JsonIgnore]
-        public LayerGameObject Reference
-        {
-            get => reference;
-            private set
-            {
-                if (reference == value) return;
+        //[JsonIgnore] private LayerGameObject reference;
+        //[JsonIgnore]
+        //public LayerGameObject Reference
+        //{
+        //    get => reference;
+        //    private set
+        //    {
+        //        if (reference == value) return;
 
-                if (reference)
-                {
-                    reference.DestroyLayerGameObject();
-                }
+        //        if (reference)
+        //        {
+        //            reference.DestroyLayerGameObject();
+        //        }
 
-                reference = value;
-                if (!reference) return;
+        //        reference = value;
+        //        if (!reference) return;
 
-                reference.gameObject.name = Name;
-                prefabId = reference.PrefabIdentifier;
-                reference.LayerData = this;
-            }
-        }
+        //        reference.gameObject.name = Name;
+        //        prefabId = reference.PrefabIdentifier;
+        //        reference.LayerData = this;
+        //    }
+        //}
+
+        private LayerGameObject reference;
+        public LayerGameObject Reference => reference;
+
 
         [JsonIgnore] public bool KeepReferenceOnDestroy { get; set; } = false;
         [JsonIgnore] public UnityEvent OnReferenceChanged = new();
 
         public ReferencedLayerData(string name, LayerGameObject reference) : base(name)
         {
-            Reference = reference;
+            //Reference = reference;
 
             // AddDefaultLayer should be after setting the reference so the reference is assigned
             // when the NewLayer event is called
@@ -84,13 +88,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             // TODO: In the future this should be refactored out of this class - it is now needed because
             // deserialisation of the project data and reconstitution of the visualisation classes is not
             // separated but this would be an awesome future step
-            await App.Layers.Visualize(this);
+            await App.Layers.SpawnLayer(this);
             RegisterEventListeners();
         }
 
         private async void AddToProject(Action<ReferencedLayerData> onComplete = null)
         {
-            await App.Layers.Visualize(this);
+            await App.Layers.SpawnLayer(this);
             
             // AddDefaultLayer should be after setting the reference so the reference is assigned when
             // the NewLayer event is called
@@ -124,43 +128,43 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
         }
 
-        public virtual void SetReference(LayerGameObject layerGameObject, bool keepPrefabIdentifier = false)
-        {
-            string previousPrefabId = null;
-            if (keepPrefabIdentifier && !string.IsNullOrEmpty(prefabId))
-            {
-                previousPrefabId = prefabId;
-            }
-            if (!reference)
-            {
-                Reference = layerGameObject;
-                if (keepPrefabIdentifier && !string.IsNullOrEmpty(previousPrefabId))
-                {
-                    prefabId = previousPrefabId;
-                }
-                return;
-            }
+        //public virtual void SetReference(LayerGameObject layerGameObject, bool keepPrefabIdentifier = false)
+        //{
+        //    string previousPrefabId = null;
+        //    if (keepPrefabIdentifier && !string.IsNullOrEmpty(prefabId))
+        //    {
+        //        previousPrefabId = prefabId;
+        //    }
+        //    if (!reference)
+        //    {
+        //        Reference = layerGameObject;
+        //        if (keepPrefabIdentifier && !string.IsNullOrEmpty(previousPrefabId))
+        //        {
+        //            prefabId = previousPrefabId;
+        //        }
+        //        return;
+        //    }
 
-            bool reselect = false;
-            if (IsSelected)
-            {
-                DeselectLayer();
-                reselect = true;
-            }
+        //    bool reselect = false;
+        //    if (IsSelected)
+        //    {
+        //        DeselectLayer();
+        //        reselect = true;
+        //    }
 
-            Reference = layerGameObject;
-            if (keepPrefabIdentifier && !string.IsNullOrEmpty(previousPrefabId))
-            {
-                prefabId = previousPrefabId;
-            }
+        //    Reference = layerGameObject;
+        //    if (keepPrefabIdentifier && !string.IsNullOrEmpty(previousPrefabId))
+        //    {
+        //        prefabId = previousPrefabId;
+        //    }
 
-            OnReferenceChanged.Invoke();
+        //    OnReferenceChanged.Invoke();
 
-            if (reselect)
-            {
-                SelectLayer();
-            }
-        }
+        //    if (reselect)
+        //    {
+        //        SelectLayer();
+        //    }
+        //}
 
         public override void DestroyLayer()
         {

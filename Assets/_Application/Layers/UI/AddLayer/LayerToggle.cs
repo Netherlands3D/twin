@@ -1,6 +1,7 @@
 using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Services;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
@@ -8,6 +9,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.UI.AddLayer
 {
+    [Obsolete("This class is probably not needed anymore, please check and delete!!")]
     [RequireComponent(typeof(Toggle))]
     public class LayerToggle : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
@@ -19,6 +21,8 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
         [SerializeField] protected GameObject binImage;
         [SerializeField] protected Sprite hoverSprite;
         protected Sprite defaultSprite;
+
+        private Layer layer;
 
         protected virtual void Awake()
         {
@@ -55,7 +59,7 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
             }
         }
 
-        private async void CreateOrDestroyObject(bool isOn)
+        private void CreateOrDestroyObject(bool isOn)
         {
             if (isOn)
             {
@@ -63,19 +67,19 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
                 return;
             }
 
-            await App.Layers.Remove(layerGameObject.LayerData);
+            App.Layers.Remove(layer);
             layerGameObject = null;
         }
 
         private async void CreateObject()
         {
-            var layerData = await App.Layers.Add(
+            var layer = await App.Layers.Add(
                 LayerBuilder.Create()
                     .OfType(prefab.PrefabIdentifier)
                     .NamedAs(prefab.name)
             );
             
-            layerGameObject = layerData.Reference;
+            layerGameObject = layer.LayerGameObject;
         }
 
         public virtual void OnPointerEnter(PointerEventData eventData)

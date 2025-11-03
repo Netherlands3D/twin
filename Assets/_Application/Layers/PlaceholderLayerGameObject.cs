@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.Layers
             // Because a placeholder doesn't have a placeholder and this is a synchronous call - Awake does nothing and
             // we can set LayerData as the next call, which will trigger the OnLayerInitialize
             var layerGameObject = Instantiate(this);
-            layerGameObject.LayerData = layerData;
+            layerGameObject.SetData(layerData);
 
             return layerGameObject;
         }
@@ -42,8 +42,7 @@ namespace Netherlands3D.Twin.Layers
             // it should be before doing the switcheroo
             layerGameObject.transform.SetParent(transform.parent, true);
             
-            // Does the whole switcheroo, including transplanting the LayerData and destroying the placeholder
-            layerData.SetReference(layerGameObject);
+            layerGameObject.SetData(layerData);
         }
     }
 }
