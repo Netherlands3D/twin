@@ -34,22 +34,24 @@ namespace Netherlands3D.Twin.Layers
             toggle.interactable = false;
         }
 
-        public void Initialize(PolygonSelectionLayer mask, LayerData layer)
+        public void Initialize(PolygonSelectionLayer mask, LayerData layerData)
         {
             MaskLayer = mask;
-            LayerData = layer;
+            LayerData = layerData;
 
             layerNameLabel.text = LayerData.Name;
 
-            if (layerData is ReferencedLayerData referencedLayerData)
+            if (this.layerData is ReferencedLayerData referencedLayerData)
             {
+                var visualization = layerData.RequestVisualization();
                 var currentLayerMask = visualization.GetMaskLayerMask();
                 int maskBitToCheck = 1 << MaskLayer.MaskBitIndex;
                 bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
                 toggle.SetIsOnWithoutNotify(isBitSet);
+
             }
 
-            layerIconImage.sprite = layerTypeSpriteLibrary.GetLayerTypeSprite(layer);
+            layerIconImage.sprite = layerTypeSpriteLibrary.GetLayerTypeSprite(layerData);
         }
         
         private void OnEnable()

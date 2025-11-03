@@ -178,7 +178,13 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleAdded = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleRemoved = new();
-        [JsonIgnore] public readonly UnityEvent<bool> HasValidCredentialsChanged = new();        
+        [JsonIgnore] public readonly UnityEvent<bool> HasValidCredentialsChanged = new();
+        [JsonIgnore] public Func<LayerGameObject> OnVisualizationRequested;
+        
+        public LayerGameObject RequestVisualization()
+        {
+            return OnVisualizationRequested?.Invoke();
+        }
 
         /// <summary>
         /// Track whether this data object is new, in other words instantiated during this session, or whether it comes

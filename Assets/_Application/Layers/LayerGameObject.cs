@@ -128,14 +128,16 @@ namespace Netherlands3D.Twin.Layers
             onLayerInitialized.Invoke();
         }
 
+        private LayerGameObject Object() => this;
+
         private void RegisterEventListeners()
         {
             layerData.ParentChanged.AddListener(OnProxyTransformParentChanged);
             layerData.ChildrenChanged.AddListener(OnProxyTransformChildrenChanged);
             layerData.ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
             layerData.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+            layerData.OnVisualizationRequested += Object;
 
-           
         }
 
         protected virtual void UpdateForVisualisation(LayerGameObject layerGameObject)
@@ -149,6 +151,7 @@ namespace Netherlands3D.Twin.Layers
             layerData.ChildrenChanged.RemoveListener(OnProxyTransformChildrenChanged);
             layerData.ParentOrSiblingIndexChanged.RemoveListener(OnSiblingIndexOrParentChanged);
             layerData.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
+            layerData.OnVisualizationRequested -= Object;
         }
 
         /// <summary>
