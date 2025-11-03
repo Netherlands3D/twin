@@ -284,7 +284,7 @@ MonoBehaviour:
     type: 3}
   snackbarEvent: {fileID: 11400000, guid: 882c7f2cbbcbc4ae68cd7ae166c6a838, type: 2}
   fpvExitText: Druk op 'backspace' om je muis te ontgrendelen.
-  uiHideText: Druk op 'H' om de interfaces weer zichtbaar te maken.
+  uiHideText: Druk op 'H' om de interfaces weer te tonen.
 --- !u!1 &5631424678328310606
 GameObject:
   m_ObjectHideFlags: 0

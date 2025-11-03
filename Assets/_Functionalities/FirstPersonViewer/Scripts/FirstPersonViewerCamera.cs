@@ -1,6 +1,7 @@
 using DG.Tweening;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer
@@ -32,6 +33,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         [Header("Main Cam")]
         [SerializeField] private float cameraHeightAboveGround;
+        [SerializeField] private float returnFocusDistance = 150;
         private Camera mainCam;
         private Vector3 prevCameraPosition;
         private Quaternion prevCameraRotation;
@@ -60,8 +62,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             viewer.OnResetToStart -= ResetToStart;
             viewer.OnSetCameraNorth -= SetCameraNorth;
-
-            ExitViewer();
+            FirstPersonViewer.OnViewerExited -= ExitViewer;
         }
 
         private void SetupViewer()
@@ -92,6 +93,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             viewer.OnResetToStart += ResetToStart;
             viewer.OnSetCameraNorth += SetCameraNorth;
+            FirstPersonViewer.OnViewerExited += ExitViewer;
 
             SetupMainCam();
             ServiceLocator.GetService<MovementModusSwitcher>().LoadMovementPreset(0);
@@ -199,13 +201,20 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void ResetToStart() => transform.rotation = startRotation;
 
-        private void ExitViewer()
+        private void ExitViewer(bool modified)
         {
-            mainCam.transform.position = prevCameraPosition;
-            mainCam.transform.rotation = prevCameraRotation;
             mainCam.cullingMask = prevCameraCullingMask;
             mainCam.orthographic = false;
             mainCam.targetDisplay = 0;
+            if (modified)
+            {
+                mainCam.transform.position = prevCameraPosition;
+                mainCam.transform.rotation = prevCameraRotation;
+            }
+            else
+            {
+                mainCam.GetComponent<FreeCamera>().FocusOnPoint(transform.position, returnFocusDistance);
+            }
         }
     }
 }
