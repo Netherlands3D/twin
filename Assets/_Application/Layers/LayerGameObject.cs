@@ -117,9 +117,11 @@ namespace Netherlands3D.Twin.Layers
 
         public void SetData(LayerData layerData)
         {
-            if (LayerData == layerData) return;
-            //if(layerData != null)
-            //    UnregisterEventListeners();
+            if (this.LayerData == layerData) return;
+
+            //remove the old listeners from previous layerdata
+            if (this.layerData != null)
+                UnregisterEventListeners();
 
             this.layerData = layerData as ReferencedLayerData; //TODO referencedlayerdata will be removed later
             
