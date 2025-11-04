@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Services;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -123,6 +125,34 @@ namespace Netherlands3D.Twin.Projects
             current.functionalities = new();
         }
 
+        public void LoadVisualizations()
+        {
+            List<ReferencedLayerData> referencedLayers = rootLayer.GetVisualisations();
+            Services.Layers layers = App.Layers as Services.Layers;
+            layers.StartCoroutine(VisualisationLoading(referencedLayers));
+        }
+
+        private IEnumerator<Task<Layer>> VisualisationLoading(List<ReferencedLayerData> referencedLayers)
+        {
+            foreach (var layer in referencedLayers)
+            {
+                var task = App.Layers.SpawnLayer(layer); // Task<Layer>
+                while (!task.IsCompleted)
+                    yield return null;
+
+                if (task.IsFaulted)
+                {
+                    Debug.LogError(task.Exception);
+                    continue;
+                }
+
+                Layer spawnedLayer = task.Result;
+
+                // Optional: yield to let Unity render a frame
+                yield return null;
+            }
+        }
+        
         /// <summary>
         /// Recursively collect all assets from each of the property data elements of every layer for loading and
         /// saving purposes. 

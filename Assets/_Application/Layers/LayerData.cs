@@ -214,12 +214,14 @@ namespace Netherlands3D.Twin.Layers
 
             Root.AddLayerToSelection(this);
             LayerSelected.Invoke(this);
+            Visualization?.OnSelect();
         }
 
         public virtual void DeselectLayer()
         {
             Root.RemoveLayerFromSelection(this);
             LayerDeselected.Invoke(this);
+            Visualization?.OnDeselect();
         }
 
         public virtual void DoubleClickLayer()
@@ -321,6 +323,8 @@ namespace Netherlands3D.Twin.Layers
             ParentOrSiblingIndexChanged.RemoveListener(Root.UpdateLayerTreeOrder);
             ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
+            
+            Visualization?.DestroyLayerGameObject();
         }
 
         public bool HasProperty<T>() where T : LayerPropertyData

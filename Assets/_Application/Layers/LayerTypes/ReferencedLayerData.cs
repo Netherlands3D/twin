@@ -88,7 +88,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             // TODO: In the future this should be refactored out of this class - it is now needed because
             // deserialisation of the project data and reconstitution of the visualisation classes is not
             // separated but this would be an awesome future step
-            await App.Layers.SpawnLayer(this);
+            //await App.Layers.SpawnLayer(this);
             //RegisterEventListeners();
         }
 
@@ -166,23 +166,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         //    }
         //}
 
-        public override void DestroyLayer()
-        {
-            base.DestroyLayer();
-            Visualization?.DestroyLayerGameObject();
-        }
-
-        public override void SelectLayer(bool deselectOthers = false)
-        {
-            base.SelectLayer(deselectOthers);
-            Visualization?.OnSelect();
-        }
-
-        public override void DeselectLayer()
-        {
-            base.DeselectLayer();
-            Visualization?.OnDeselect();
-        }
+        // public override void DestroyLayer()
+        // {
+        //     base.DestroyLayer();
+        //     
+        // }
+        //
+        // public override void SelectLayer(bool deselectOthers = false)
+        // {
+        //     base.SelectLayer(deselectOthers);
+        //
+        // }
+        //
+        // public override void DeselectLayer()
+        // {
+        //     base.DeselectLayer();
+        // }
 
         //private void OnChildrenChanged()
         //{

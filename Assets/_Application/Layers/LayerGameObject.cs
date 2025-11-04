@@ -137,6 +137,8 @@ namespace Netherlands3D.Twin.Layers
             // when overriding OnLayerReady
             onLayerReady.Invoke();
             InitializeVisualisation();
+            
+            Debug.Log("something");
         }
 
         private LayerGameObject Object() => this;

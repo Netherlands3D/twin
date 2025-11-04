@@ -14,6 +14,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
     {
         [SerializeField] private List<Sprite> layerTypeSprites;
 
+        //TODO the data.Visualisation reference needs to be refactored with the ui toolkit integration
         public Sprite GetLayerTypeSprite(LayerData layer)
         {
             switch (layer)
