@@ -109,7 +109,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             ClearMaskLayerPanel();
             foreach (var layer in ProjectData.Current.RootLayer.GetFlatHierarchy())
             {
-                if (layer is ReferencedLayerData data && data.RequestVisualization().IsMaskable)
+                if (layer is ReferencedLayerData data && data.Visualization.IsMaskable)
                 {
                     var toggle = Instantiate(maskTogglePrefab, maskToggleParent);
                     toggle.Initialize(polygonLayer, layer);

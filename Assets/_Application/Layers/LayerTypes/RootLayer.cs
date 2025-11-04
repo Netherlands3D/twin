@@ -82,10 +82,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             var sortedChildLayers = childLayers
                 .OrderBy(l =>
                     l is ReferencedLayerData r &&
-                    r.RequestVisualization() is CartesianTileLayerGameObject)
+                    r.Visualization is CartesianTileLayerGameObject)
                 .ThenBy(l =>
                     l is ReferencedLayerData r &&
-                    r.RequestVisualization() is CartesianTileLayerGameObject ct
+                    r.Visualization is CartesianTileLayerGameObject ct
                         ? ct.TileHandlerLayerIndex
                         : l.RootIndex)
                 .ThenBy(l => l.RootIndex);
@@ -137,7 +137,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         
         public ReferencedLayerData GetFirstLayerByLayerMask(LayerMask mask)
         {
-            return ChildrenLayers.OfType<ReferencedLayerData>().FirstOrDefault(refData => refData.RequestVisualization().gameObject.layer == mask); //TODO maybe we should cache this in layerdata
+            return ChildrenLayers.OfType<ReferencedLayerData>().FirstOrDefault(refData => refData.Visualization.gameObject.layer == mask); //TODO maybe we should cache this in layerdata
         }
 
         public List<LayerData> GetFlatHierarchy()

@@ -378,7 +378,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             BoundingBox polygonBoundingBox = polygonLayer.PolygonVisualisation.Bounds;
             polygonBoundingBox.Convert(CoordinateSystem.RD);
-            BinaryMeshLayer bml = ((CartesianTileLayerGameObject)areaReferenceData.RequestVisualization()).Layer as BinaryMeshLayer;
+            BinaryMeshLayer bml = ((CartesianTileLayerGameObject)areaReferenceData.Visualization).Layer as BinaryMeshLayer;
             Initialize(LayerData, settings.OriginalPrefabId);
             bml?.OnTileObjectCreated.AddListener(tile =>
             {

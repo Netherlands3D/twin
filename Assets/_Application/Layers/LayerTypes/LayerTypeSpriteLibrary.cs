@@ -25,7 +25,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                         return layerTypeSprites[12];
                     return layerTypeSprites[6];
                 case ReferencedLayerData data:
-                    var reference = data.RequestVisualization();
+                    var reference = data.Visualization;
                     return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);
                 case FolderLayer _:
                     return layerTypeSprites[2];

@@ -43,7 +43,7 @@ namespace Netherlands3D.Twin.Layers
 
             if (this.layerData is ReferencedLayerData referencedLayerData)
             {
-                var visualization = layerData.RequestVisualization();
+                var visualization = layerData.Visualization;
                 var currentLayerMask = visualization.GetMaskLayerMask();
                 int maskBitToCheck = 1 << MaskLayer.MaskBitIndex;
                 bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
@@ -68,7 +68,7 @@ namespace Netherlands3D.Twin.Layers
         {
             if (layerData is ReferencedLayerData referencedLayerData)
             {
-                var visualization = layerData.RequestVisualization();
+                var visualization = layerData.Visualization;
                 visualization.SetMaskBit(MaskLayer.MaskBitIndex, acceptMask);
             }
         }

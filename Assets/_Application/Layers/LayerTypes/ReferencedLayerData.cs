@@ -169,19 +169,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         public override void DestroyLayer()
         {
             base.DestroyLayer();
-            RequestVisualization()?.DestroyLayerGameObject();
+            Visualization?.DestroyLayerGameObject();
         }
 
         public override void SelectLayer(bool deselectOthers = false)
         {
             base.SelectLayer(deselectOthers);
-            RequestVisualization()?.OnSelect();
+            Visualization?.OnSelect();
         }
 
         public override void DeselectLayer()
         {
             base.DeselectLayer();
-            RequestVisualization()?.OnDeselect();
+            Visualization?.OnDeselect();
         }
 
         //private void OnChildrenChanged()
