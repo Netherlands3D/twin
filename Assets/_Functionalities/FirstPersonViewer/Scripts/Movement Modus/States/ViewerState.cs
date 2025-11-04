@@ -50,5 +50,11 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         
         //We need to calculate the speed from Km/h to m/s
         private void SetMaxSpeed(float speed) => MovementSpeed = speed / 3.6f;
+
+        protected Vector2 GetMoveInput()
+        {
+            if (input.LockInput) return Vector2.zero;
+            else return input.MoveAction.ReadValue<Vector2>();
+        }
     }
 }

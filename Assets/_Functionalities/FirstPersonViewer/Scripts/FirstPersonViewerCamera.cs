@@ -47,13 +47,17 @@ namespace Netherlands3D.FirstPersonViewer
             FPVCamera = firstPersonViewerCamera;
         }
 
-        private void Start()
+        private void OnEnable()
         {
-            input.AddInputLockConstrain(this);
             SetupViewer();
         }
 
-        private void OnDestroy()
+        private void OnDisable()
+        {
+            ExitViewer();
+        }
+
+        private void ExitViewer()
         {
             fovSetting.OnValueChanged.RemoveListener(SetCameraFOV);
             viewHeightSetting.OnValueChanged.RemoveListener(SetCameraHeight);
@@ -61,22 +65,30 @@ namespace Netherlands3D.FirstPersonViewer
             viewer.OnResetToStart -= ResetToStart;
             viewer.OnSetCameraNorth -= SetCameraNorth;
 
-            ExitViewer();
+            mainCam.transform.position = prevCameraPosition;
+            mainCam.transform.rotation = prevCameraRotation;
+            mainCam.cullingMask = prevCameraCullingMask;
+            mainCam.orthographic = false;
+            mainCam.targetDisplay = 0;
         }
 
         private void SetupViewer()
         {
-            firstPersonViewerCamera.transform.position = Camera.main.transform.position;
-            firstPersonViewerCamera.transform.rotation = Camera.main.transform.rotation;
+            mainCam = Camera.main;
 
-            Vector3 forward = Camera.main.transform.forward;
+            input.AddInputLockConstrain(this);
+            transform.position = mainCam.transform.position;
+            transform.rotation = mainCam.transform.rotation;
+
+            Vector3 forward = mainCam.transform.forward;
             forward.y = 0;
             forward.Normalize();
 
+            SetupMainCam();
             Quaternion targetRot = Quaternion.LookRotation(forward, Vector3.up);
 
-            firstPersonViewerCamera.transform.DOLocalMove(Vector3.zero + Vector3.up * CameraHeightOffset, 2f).SetEase(Ease.InOutSine);
-            firstPersonViewerCamera.transform.DORotateQuaternion(targetRot, 2f).SetEase(Ease.InOutSine).OnComplete(CameraSetupComplete);
+            transform.DOLocalMove(Vector3.zero + Vector3.up * CameraHeightOffset, 2f).SetEase(Ease.InOutSine);
+            transform.DORotateQuaternion(targetRot, 2f).SetEase(Ease.InOutSine).OnComplete(CameraSetupComplete);
         }
 
         //From Setup Viewer
@@ -84,7 +96,6 @@ namespace Netherlands3D.FirstPersonViewer
         {
             xRotation = transform.localEulerAngles.x;
             startRotation = transform.rotation;
-            input.RemoveInputLockConstrain(this);
 
             //Setup events when done with animation.
             fovSetting.OnValueChanged.AddListener(SetCameraFOV);
@@ -93,15 +104,13 @@ namespace Netherlands3D.FirstPersonViewer
             viewer.OnResetToStart += ResetToStart;
             viewer.OnSetCameraNorth += SetCameraNorth;
 
-            SetupMainCam();
             ServiceLocator.GetService<MovementModusSwitcher>().LoadMovementPreset(0);
+            input.RemoveInputLockConstrain(this);
         }
 
         //Disable the Main Camera through rendering.
         private void SetupMainCam()
         {
-            mainCam = Camera.main;
-
             prevCameraPosition = mainCam.transform.position;
             prevCameraRotation = mainCam.transform.rotation;
             prevCameraCullingMask = mainCam.cullingMask;
@@ -198,14 +207,5 @@ namespace Netherlands3D.FirstPersonViewer
         }
 
         private void ResetToStart() => transform.rotation = startRotation;
-
-        private void ExitViewer()
-        {
-            mainCam.transform.position = prevCameraPosition;
-            mainCam.transform.rotation = prevCameraRotation;
-            mainCam.cullingMask = prevCameraCullingMask;
-            mainCam.orthographic = false;
-            mainCam.targetDisplay = 0;
-        }
     }
 }

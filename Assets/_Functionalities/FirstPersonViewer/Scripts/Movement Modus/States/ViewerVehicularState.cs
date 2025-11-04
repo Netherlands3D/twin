@@ -31,7 +31,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnUpdate()
         {
-            Vector2 moveInput = viewer.GetMoveInput();
+            Vector2 moveInput = GetMoveInput();
             MoveVehicle(moveInput);
 
             viewer.SnapToGround();
