@@ -62,14 +62,9 @@ namespace Netherlands3D.Twin.Functionalities
                 var layerBuilder = LayerBuilder.Create()
                     .OfType(layerGameObject.PrefabIdentifier)
                     .NamedAs(prefab.name);
-                    //.WhenBuilt(data => ((ReferencedLayerData)data).Reference.transform.parent = transform);
                 Layer layer = await App.Layers.Add(layerBuilder);
-                layer.LayerGameObject.transform.parent = transform;
                 return;
             }
-
-            var newLayer = Instantiate(prefab, transform);
-            newLayer.name = prefab.name;
         }
     }
 }
