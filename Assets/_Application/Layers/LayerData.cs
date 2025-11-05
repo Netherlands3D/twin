@@ -153,6 +153,22 @@ namespace Netherlands3D.Twin.Layers
 
         [JsonIgnore] public Dictionary<string, LayerStyle> Styles => styles;
         
+        [DataMember] protected string prefabId;
+
+        public string PrefabIdentifier //todo: this being settable is now very error sensitive. Will be refactored in ticket 3/4
+        {
+            get
+            {
+                return prefabId;
+            }
+            set
+            {
+                prefabId = value;
+                OnPrefabIdChanged.Invoke();
+            }
+        }
+        public UnityEvent OnPrefabIdChanged = new();
+
         /// <summary>
         /// Every layer has a default style, this is a style that applies to all objects and features in this
         /// layer without any conditions.

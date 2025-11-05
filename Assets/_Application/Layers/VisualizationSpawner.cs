@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin.Layers
         /// <summary>
         /// Spawn a visualisation for the given LayerData.
         /// </summary>
-        public async Task<LayerGameObject> Spawn(ReferencedLayerData layerData)
+        public async Task<LayerGameObject> Spawn(LayerData layerData)
         {
             var prefab = prefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
             return await SpawnUsingPrefab(layerData, prefab);
@@ -33,7 +33,7 @@ namespace Netherlands3D.Twin.Layers
         /// Spawn a visualisation for the given LayerData at a specific location.
         /// </summary>
         public async Task<LayerGameObject> Spawn(
-            ReferencedLayerData layerData,
+            LayerData layerData,
             Vector3 position,
             Quaternion rotation
         ) {
@@ -52,7 +52,7 @@ namespace Netherlands3D.Twin.Layers
         //     return await SpawnObject(prefab);
         // }
 
-        private async Task<LayerGameObject> SpawnUsingPrefab(ReferencedLayerData layerData, LayerGameObject prefab)
+        private async Task<LayerGameObject> SpawnUsingPrefab(LayerData layerData, LayerGameObject prefab)
         {
             var property = layerData.GetProperty<TransformLayerPropertyData>();
             if (property != null)

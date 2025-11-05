@@ -101,10 +101,10 @@ namespace Netherlands3D.Twin.Services
         public async Task<Layer> SpawnLayer(LayerData layerData)
         {
             //TODO we need to remove the as ReferencedLayerData cast and make this work for all LayerData types
-            if (layerData is not ReferencedLayerData)
-            {
-                throw new NotSupportedException("Only ReferencedLayerData visualization is supported currently.");
-            }
+            // if (layerData is not ReferencedLayerData)
+            // {
+            //     throw new NotSupportedException("Only ReferencedLayerData visualization is supported currently.");
+            // }
             ProjectData.Current.AddStandardLayer(layerData);
             Layer layer = await VisualizeData(layerData);
             return layer;
@@ -181,7 +181,7 @@ namespace Netherlands3D.Twin.Services
         private async Task<Layer> VisualizeData(LayerData layerData)
         {
             Layer layer = new Layer(layerData);
-            LayerGameObject visualization = await spawner.Spawn(layerData as ReferencedLayerData);
+            LayerGameObject visualization = await spawner.Spawn(layerData);
             layer.SetVisualization(visualization);
             visualization.SetData(layer.LayerData);
             return layer;
