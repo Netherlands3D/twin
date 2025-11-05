@@ -27,6 +27,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: e7979601d49c52246b7563d2e7337e8f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Material.001
     second: {fileID: 2100000, guid: 93036f93bc4e9d54f91dc1a0d6afadd4, type: 2}
   - first:
@@ -34,6 +39,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Schermpje grijs
     second: {fileID: 2100000, guid: a6cdfc1f517e1fb4eaed9cee9636fbbc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Skin
+    second: {fileID: 2100000, guid: 8f680e2baec72644b9fc2cadd33e1999, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

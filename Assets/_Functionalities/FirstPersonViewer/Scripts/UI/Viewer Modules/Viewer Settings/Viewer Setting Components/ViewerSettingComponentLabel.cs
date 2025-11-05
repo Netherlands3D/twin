@@ -9,6 +9,13 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private TextMeshProUGUI valueLabelText;
         private ViewerSettingLabel settingLabel;
 
+        [SerializeField] private MovementLabelSetting baseSetting;
+
+        private void Start()
+        {
+            if(baseSetting != null) baseSetting.OnValueChanged.AddListener(SetValue);
+        }
+
         public override void Init(ViewerSetting setting)
         {
             base.Init(setting);

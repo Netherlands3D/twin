@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: cbd6bba397f2c9d4fa9d2974e7f39736
+guid: e30e874e69cc688488a0d0f85cdcb8ca
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,68 +7,23 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Chairs
-    second: {fileID: 2100000, guid: 5bc9ef64459d1544b8f542b62fd72add, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Grey
-    second: {fileID: 2100000, guid: e93f3a6c50ace6349aab712983176612, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: INterior
-    second: {fileID: 2100000, guid: a66cafdb49deb0245995a188653e5751, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Logo
-    second: {fileID: 2100000, guid: ed9488cc6ebc45f44abbdd2d8e0ca55a, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.001
-    second: {fileID: 2100000, guid: 7014b8a213b97844b80bd0ca2677da32, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.002
-    second: {fileID: 2100000, guid: 3b1883d670cca9247904abffd9513c84, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Metal
-    second: {fileID: 2100000, guid: 05a835bf126c19440a52f00d22efda71, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Mirrorglass
-    second: {fileID: 2100000, guid: c53f08c6d89f60a459be2919d827bd1a, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Mirrors
-    second: {fileID: 2100000, guid: 26c47f57d0d223148b813dabd33dd5ce, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: NewInterior
-    second: {fileID: 2100000, guid: 81ebc33a45ef1ba4cb48ce347fbe7004, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Roofing
-    second: {fileID: 2100000, guid: c14e42e4ac854354f9e140c736d3e84b, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
       name: Skin
-    second: {fileID: 2100000, guid: f89c1a28811b44745b4d7eafc99224f4, type: 2}
+    second: {fileID: 2100000, guid: db0d7c22493b5d64fa9d18f593442836, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Window
-    second: {fileID: 2100000, guid: f9909fe8f1e5d154d9b545394727f172, type: 2}
+      name: Transp Skin2
+    second: {fileID: 2100000, guid: 7fab8edc76d16ee47a93be5af88b933a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Transp Skin3
+    second: {fileID: 2100000, guid: 2f44d7513db35e64b939ab119daf129a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Transparent skin
+    second: {fileID: 2100000, guid: 02ce0e006a7edf843ba8081bc2242a28, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
