@@ -9,7 +9,7 @@ namespace Netherlands3D.Functionalities.LASImporter.LayerPresets
     public sealed class LasPreset : ILayerPreset<LasPreset.Args>
     {
         // change this to the guid/id of the prefab you make for the LAS layer
-        private const string PrefabIdentifier = "34882a73ff6122243a0e3e9811473e20";
+        private const string PrefabIdentifier = "be43ba7e04da77048b5f1dfd754f6238";
 
         public sealed class Args : LayerPresetArgs<LasPreset>
         {

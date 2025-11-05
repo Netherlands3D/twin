@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 2302507610021416155}
   - component: {fileID: 284254616408615734}
   - component: {fileID: 8265727308599614120}
+  - component: {fileID: 8003728092722776754}
+  - component: {fileID: -1673147980992280621}
   m_Layer: 0
   m_Name: LASLayer
   m_TagString: Untagged
@@ -116,3 +118,56 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointMaterial: {fileID: 2100000, guid: c79270b1ac00a904da2a953d61582b76, type: 2}
   recenter: 1
+--- !u!114 &8003728092722776754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8689871552523927041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldTransformShifter: {fileID: 0}
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &-1673147980992280621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8689871552523927041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92795e992dcbe4b3c8ada171c5551674, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabIdentifier: 
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStylingApplied:
+    m_PersistentCalls:
+      m_Calls: []
+  DebugBoundingBox: 0
+  objectCreated:
+    m_PersistentCalls:
+      m_Calls: []
