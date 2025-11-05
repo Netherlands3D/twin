@@ -31,7 +31,7 @@
 
             struct v2f
             {
-                float4 pos   : SV_POSITION;
+                float4 pos : SV_POSITION;
                 fixed4 color : COLOR;
             };
 
@@ -41,20 +41,19 @@
                 o.pos = UnityObjectToClipPos(v.vertex);
                 o.color = v.color * _Tint;
 
-                // WebGL / GL path → set point size
                 #if defined(SHADER_API_GLES) || defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)
                     gl_PointSize = _PointSize;
                 #endif
 
-                    return o;
-                }
-
-                fixed4 frag(v2f i) : SV_Target
-                {
-                    return i.color;
-                }
-                ENDCG
+                return o;
             }
+
+            fixed4 frag(v2f i) : SV_Target
+            {
+                return i.color;
+            }
+            ENDCG
+        }
     }
         FallBack Off
 }
