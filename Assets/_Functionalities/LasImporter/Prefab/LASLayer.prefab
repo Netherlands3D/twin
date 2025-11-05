@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2302507610021416155}
   - component: {fileID: 284254616408615734}
   - component: {fileID: 8265727308599614120}
+  - component: {fileID: 1673795904277505171}
   - component: {fileID: 8003728092722776754}
   - component: {fileID: -1673147980992280621}
   m_Layer: 0
@@ -31,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 8689871552523927041}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -267.54596, y: -126.26906, z: -540.26105}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -116,8 +117,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f871759fb14e2a48a271bb40a04de67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointMaterial: {fileID: 2100000, guid: c79270b1ac00a904da2a953d61582b76, type: 2}
+  pointMaterial: {fileID: 2100000, guid: 6ac091cbb9567334b9a12d11b6c7df22, type: 2}
   recenter: 1
+--- !u!114 &1673795904277505171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8689871552523927041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45bb8b2545447484f9b2846bad9a1f0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetCamera: {fileID: 0}
+  baseSize: 300
+  minSize: 2
+  maxSize: 18
 --- !u!114 &8003728092722776754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92795e992dcbe4b3c8ada171c5551674, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabIdentifier: 
+  prefabIdentifier: be43ba7e04da77048b5f1dfd754f6238
   thumbnail: {fileID: 0}
   spawnLocation: 0
   onShow:
