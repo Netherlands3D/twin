@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2302507610021416155}
   - component: {fileID: 284254616408615734}
   - component: {fileID: 8265727308599614120}
-  - component: {fileID: 1673795904277505171}
   - component: {fileID: 8003728092722776754}
   - component: {fileID: -1673147980992280621}
   m_Layer: 0
@@ -119,22 +118,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointMaterial: {fileID: 2100000, guid: 6ac091cbb9567334b9a12d11b6c7df22, type: 2}
   recenter: 1
---- !u!114 &1673795904277505171
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8689871552523927041}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45bb8b2545447484f9b2846bad9a1f0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetCamera: {fileID: 0}
-  baseSize: 300
-  minSize: 2
-  maxSize: 18
 --- !u!114 &8003728092722776754
 MonoBehaviour:
   m_ObjectHideFlags: 0
