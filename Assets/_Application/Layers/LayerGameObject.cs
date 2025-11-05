@@ -122,8 +122,6 @@ namespace Netherlands3D.Twin.Layers
             // when overriding OnLayerReady
             onLayerReady.Invoke();
             InitializeVisualisation();
-            
-            Debug.Log("something");
         }
 
         private LayerGameObject Object() => this;
@@ -136,6 +134,7 @@ namespace Netherlands3D.Twin.Layers
             layerData.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
             layerData.OnVisualizationRequested += Object;
             layerData.LayerDoubleClicked.AddListener(OnDoubleClick);
+            layerData.OnPrefabIdChanged.AddListener(DestroyLayerGameObject);
         }
 
         private void UnregisterEventListeners()
@@ -146,6 +145,8 @@ namespace Netherlands3D.Twin.Layers
             layerData.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
             layerData.OnVisualizationRequested -= Object;
             layerData.LayerDoubleClicked.RemoveListener(OnDoubleClick);
+            layerData.OnPrefabIdChanged.RemoveListener(DestroyLayerGameObject);
+            
         }
 
         /// <summary>

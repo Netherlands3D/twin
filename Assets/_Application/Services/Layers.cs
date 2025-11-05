@@ -55,6 +55,7 @@ namespace Netherlands3D.Twin.Services
             }
 
             var layerData = builder.Build();
+            ProjectData.Current.AddStandardLayer(layerData);
             Layer layer = await SpawnLayer(layerData);
             layerAdded.Invoke(layer);
             return layer;
@@ -68,6 +69,7 @@ namespace Netherlands3D.Twin.Services
 
             // Return null to indicate that adding this flow does not directly result in a Layer, it may do so
             // indirectly (DataTypeAdapters call this Layer service again).
+            Debug.LogWarning("the fileTypeAdapter currently does not return anything, the returned object is null. This should be refactored in the future"); //todo: the fileTypeAdapter should be refactored to return the resulting objects
             return null;
         }
 
@@ -85,6 +87,7 @@ namespace Netherlands3D.Twin.Services
                 
             // Return null to indicate that adding this flow does not directly result in a Layer, it may do so
             // indirectly (DataTypeAdapters call this Layer service again).
+            Debug.LogWarning("the urlImportAdapter currently does not return anything, the returned object is null. This should be refactored in the future"); //todo: the DataTypeChain should be refactored to return the resulting objects
             return null;
         }
 
@@ -114,20 +117,20 @@ namespace Netherlands3D.Twin.Services
         /// Usually used when loading a project file as this will restore the layer's data but the visualisation needs
         /// to be spawned. 
         /// </summary>
-        public async Task<Layer> SpawnLayer(LayerData layerData, Vector3 position, Quaternion? rotation = null)
-        {   
-            //TODO we need to remove the as ReferencedLayerData cast and make this work for all LayerData types
-            if (layerData is not ReferencedLayerData)
-            {
-                throw new NotSupportedException("Only ReferencedLayerData visualization is supported currently.");
-            }
-
-            Layer layer = new Layer(layerData);           
-            LayerGameObject visualization = await spawner.Spawn(layerData as ReferencedLayerData, position, rotation ?? Quaternion.identity);
-            layer.SetVisualization(visualization);
-            visualization.SetData(layerData);
-            return layer;
-        }
+        // public async Task<Layer> SpawnLayer(LayerData layerData, Vector3 position, Quaternion? rotation = null)
+        // {   
+        //     //TODO we need to remove the as ReferencedLayerData cast and make this work for all LayerData types
+        //     if (layerData is not ReferencedLayerData)
+        //     {
+        //         throw new NotSupportedException("Only ReferencedLayerData visualization is supported currently.");
+        //     }
+        //
+        //     Layer layer = new Layer(layerData);           
+        //     LayerGameObject visualization = await spawner.Spawn(layerData as ReferencedLayerData, position, rotation ?? Quaternion.identity);
+        //     layer.SetVisualization(visualization);
+        //     visualization.SetData(layerData);
+        //     return layer;
+        // }
 
         /// <summary>
         /// Force a LayerData object to be visualized as a specific prefab.
@@ -142,12 +145,9 @@ namespace Netherlands3D.Twin.Services
                 throw new NotSupportedException("Only ReferencedLayerData visualization is supported currently.");
             }
             string previousId = referencedLayerData.PrefabIdentifier;
-
-            Layer layer = new Layer(layerData);          
-            LayerGameObject visualization = await spawner.Spawn(layerData as ReferencedLayerData, prefabIdentifier);
-            layer.SetVisualization(visualization);
-            visualization.SetData(layerData);
-            if (previousId != prefabIdentifier) visualization.OnConvert(previousId);
+            referencedLayerData.PrefabIdentifier = prefabIdentifier;
+            var layer = await VisualizeData(layerData);
+            if (previousId != prefabIdentifier) layer.LayerGameObject.OnConvert(previousId); //todo: this should not be done here but in the future VisualizationPropertyData (ticket 3/4)
             return layer;
         }
 
@@ -159,7 +159,6 @@ namespace Netherlands3D.Twin.Services
             layer.LayerData.DestroyLayer();            
             layerRemoved.Invoke(layer);
         }
-
 
         private Uri RetrieveUrlForLayer(LayerBuilder layerBuilder)
         {

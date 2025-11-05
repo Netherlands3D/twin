@@ -12,8 +12,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
     public class ReferencedLayerData : LayerData
     {
         [DataMember] private string prefabId;
-        public string PrefabIdentifier => prefabId;
 
+        public string PrefabIdentifier //todo: this being settable is now very error sensitive. Will be refactored in ticket 3/4
+        {
+            get
+            {
+                return prefabId;
+            }
+            set
+            {
+                prefabId = value;
+                OnPrefabIdChanged.Invoke();
+            }
+        }
+
+        public UnityEvent OnPrefabIdChanged = new();
+        
         //[JsonIgnore] private LayerGameObject reference;
         //[JsonIgnore]
         //public LayerGameObject Reference
