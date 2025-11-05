@@ -8,6 +8,7 @@ using Netherlands3D.Twin.Services;
 
 namespace Netherlands3D.Twin.Functionalities
 {
+    //TODO will be removed and the app.layers api will be connect directly to the functionalities
     public class PrefabSpawner : MonoBehaviour
     {
         [Serializable]

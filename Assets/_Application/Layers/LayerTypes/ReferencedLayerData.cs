@@ -79,7 +79,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             // TODO: In the future this should be refactored out of this class - it is now needed because
             // deserialisation of the project data and reconstitution of the visualisation classes is not
             // separated but this would be an awesome future step
-            AddToProject(onSpawn);
+            //AddToProject(onSpawn);
         }
 
         [OnDeserialized]
@@ -92,20 +92,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             //RegisterEventListeners();
         }
 
-        private async void AddToProject(Action<ReferencedLayerData> onComplete = null)
-        {
-            await App.Layers.SpawnLayer(this);
+        //private async void AddToProject(Action<ReferencedLayerData> onComplete = null)
+        //{
+        //    await App.Layers.SpawnLayer(this);
             
-            // AddDefaultLayer should be after setting the reference so the reference is assigned when
-            // the NewLayer event is called
-            ProjectData.Current.AddStandardLayer(this);
-            //RegisterEventListeners();
+        //    // AddDefaultLayer should be after setting the reference so the reference is assigned when
+        //    // the NewLayer event is called
+        //    //ProjectData.Current.AddStandardLayer(this);
+        //    //RegisterEventListeners();
 
-            if (onComplete != null)
-            {
-                onComplete(this);
-            }
-        }
+        //    if (onComplete != null)
+        //    {
+        //        onComplete(this);
+        //    }
+        //}
 
         //~ReferencedLayerData()
         //{

@@ -61,9 +61,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                 case GeoJSONLineLayer _:
                     return layerTypeSprites[7];                
                 case GeoJSONPointLayer _:
-                    return layerTypeSprites[9];
-                case PlaceholderLayerGameObject _:
-                    return layerTypeSprites[0];
+                    return layerTypeSprites[9];               
                 default:
                     Debug.LogError($"layer type of {layer.GetType()} is not specified");
                     return layerTypeSprites[0];

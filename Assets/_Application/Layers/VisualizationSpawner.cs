@@ -11,11 +11,11 @@ using Object = UnityEngine.Object;
 
 namespace Netherlands3D.Twin.Layers
 {
-    public class LayerSpawner : ILayerSpawner
+    public class VisualizationSpawner : ILayerSpawner
     {
         private readonly PrefabLibrary prefabLibrary;
 
-        public LayerSpawner(PrefabLibrary prefabLibrary)
+        public VisualizationSpawner(PrefabLibrary prefabLibrary)
         {
             this.prefabLibrary = prefabLibrary;
         }
@@ -138,11 +138,8 @@ namespace Netherlands3D.Twin.Layers
         private async Task<LayerGameObject> SpawnObject(
             ReferencedLayerData layerData,
             LayerGameObject prefab
-        ) {
-            var placeholder = layerData.Visualization;
-            
-            var layerGameObjects = await Object.InstantiateAsync(prefab, placeholder.transform);
-
+        ) {           
+            var layerGameObjects = await Object.InstantiateAsync(prefab);
             return layerGameObjects.FirstOrDefault();
         }
 

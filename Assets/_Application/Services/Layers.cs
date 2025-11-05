@@ -19,14 +19,14 @@ namespace Netherlands3D.Twin.Services
         [SerializeField] private PrefabLibrary prefabLibrary;
         [SerializeField] private FileTypeAdapter fromFileImporter;
         [SerializeField] private DataTypeChain fromUrlImporter;
-        private LayerSpawner spawner;
+        private VisualizationSpawner spawner;
         
         public UnityEvent<Layer> layerAdded = new();
         public UnityEvent<Layer> layerRemoved = new();
 
         private void Awake()
         {
-            spawner = new LayerSpawner(prefabLibrary);
+            spawner = new VisualizationSpawner(prefabLibrary);
         }
 
         /// <summary>
@@ -54,18 +54,12 @@ namespace Netherlands3D.Twin.Services
                 case "file": return ImportFromFile(layerBuilder);
             }
 
-            var layerData = builder.Build();            
-            var layerGameObject = await SpawnVisualization(layerData);
-            if (layerGameObject == null)
-            {
-                throw new Exception($"Could not find layer of type: {layerBuilder.Type}");
-            }
-            Layer layer = new Layer(layerData);
-            layer.SetVisualization(layerGameObject);
+            var layerData = builder.Build();
+            Layer layer = await SpawnLayer(layerData);
             layerAdded.Invoke(layer);
-
             return layer;
         }
+
 
         private Layer ImportFromFile(LayerBuilder layerBuilder)
         {
@@ -108,12 +102,8 @@ namespace Netherlands3D.Twin.Services
             {
                 throw new NotSupportedException("Only ReferencedLayerData visualization is supported currently.");
             }
-
-            Layer layer = new Layer(layerData);
-            LayerGameObject placeHolder = SpawnPlaceholder(layerData as ReferencedLayerData);
-            layer.SetVisualization(placeHolder);
-            LayerGameObject visualization = await spawner.Spawn(layerData as ReferencedLayerData);
-            layer.SetVisualization(visualization);
+            ProjectData.Current.AddStandardLayer(layerData);
+            Layer layer = await VisualizeData(layerData);
             return layer;
         }
 
@@ -132,12 +122,10 @@ namespace Netherlands3D.Twin.Services
                 throw new NotSupportedException("Only ReferencedLayerData visualization is supported currently.");
             }
 
-            Layer layer = new Layer(layerData);
-            LayerGameObject placeHolder = SpawnPlaceholder(layerData as ReferencedLayerData);
-
-            layer.SetVisualization(placeHolder);
+            Layer layer = new Layer(layerData);           
             LayerGameObject visualization = await spawner.Spawn(layerData as ReferencedLayerData, position, rotation ?? Quaternion.identity);
             layer.SetVisualization(visualization);
+            visualization.SetData(layerData);
             return layer;
         }
 
@@ -158,6 +146,7 @@ namespace Netherlands3D.Twin.Services
             Layer layer = new Layer(layerData);          
             LayerGameObject visualization = await spawner.Spawn(layerData as ReferencedLayerData, prefabIdentifier);
             layer.SetVisualization(visualization);
+            visualization.SetData(layerData);
             if (previousId != prefabIdentifier) visualization.OnConvert(previousId);
             return layer;
         }
@@ -171,21 +160,6 @@ namespace Netherlands3D.Twin.Services
             layerRemoved.Invoke(layer);
         }
 
-        private async Task<LayerGameObject> SpawnVisualization(LayerData layerData)
-        {
-            if (layerData is not ReferencedLayerData referencedLayerData)
-            {
-                throw new Exception("Cannot add layer");
-            }
-            return await spawner.Spawn(
-                referencedLayerData
-            );
-        }
-
-        private LayerGameObject SpawnPlaceholder(ReferencedLayerData layerData)
-        {
-            return prefabLibrary.placeholderPrefab.Instantiate(layerData);
-        }
 
         private Uri RetrieveUrlForLayer(LayerBuilder layerBuilder)
         {
@@ -203,6 +177,15 @@ namespace Netherlands3D.Twin.Services
             }
 
             return urlPropertyData.Data;
+        }
+
+        private async Task<Layer> VisualizeData(LayerData layerData)
+        {
+            Layer layer = new Layer(layerData);
+            LayerGameObject visualization = await spawner.Spawn(layerData as ReferencedLayerData);
+            layer.SetVisualization(visualization);
+            visualization.SetData(layer.LayerData);
+            return layer;
         }
     }
 }

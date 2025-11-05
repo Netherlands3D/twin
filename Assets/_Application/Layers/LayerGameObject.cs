@@ -97,22 +97,7 @@ namespace Netherlands3D.Twin.Layers
         [Obsolete("Do not use Awake in subclasses, use OnLayerInitialize instead", true)]
         private void Awake()
         {
-            // Technically not possible, but is a safeguard.
-            if (LayerData != null) return;
-            
-            // No parent, definitely no placeholder to replace
-            if (!transform.parent) return;
-            
-            // Immediately return if there is no Placeholder as parent - no action needed
-            if (transform.parent.GetComponent<PlaceholderLayerGameObject>() is not { } placeholder) return;
-
-            // Replacing the placeholder will change the Reference property of the LayerData,
-            // and that will trigger the LayerData property of this LayerGameObject to be set.
-            // Since the LayerData is responsible for initializing the Layer, it will trigger the
-            // real OnLayerInitialize method below
-            // By doing it this way, we could directly instantiate LayerGameObjects and defer their
-            // initialisation until a LayerData is present, as is done in the PlaceholderLayerGameObject.
-            placeholder.ReplaceWith(this);
+           
         }
 
         public void SetData(LayerData layerData)
