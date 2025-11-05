@@ -13,6 +13,7 @@ namespace Netherlands3D.Functionalities.LASImporter
     /// <summary>
     /// Debug-friendly LAS spawner.
     /// Logs every step so we can see if the layer system actually sent us LASPropertyData.
+    /// Also normalizes the points to the first point so we can SEE them in WebGL.
     /// </summary>
     [RequireComponent(typeof(HierarchicalObjectLayerGameObject))]
     public class LASSpawner : MonoBehaviour, ILayerWithPropertyData
@@ -24,6 +25,11 @@ namespace Netherlands3D.Functionalities.LASImporter
         private LASPropertyData propertyData = null;
         private bool gotProperties = false;
 
+        // new: for normalization + debug
+        private bool haveOrigin = false;
+        private Vector3 origin = Vector3.zero;
+        private bool debugSpawned = false;
+
         public LayerPropertyData PropertyData => propertyData;
 
         private void Awake()
@@ -34,22 +40,15 @@ namespace Netherlands3D.Functionalities.LASImporter
         private void Start()
         {
             Debug.Log($"[LASSpawner] Start on {name}. gotProperties={gotProperties}");
-            // we don’t try to load immediately here, because sometimes Start is called
-            // before the layer system injected properties. So we start a small routine.
             StartCoroutine(TryStartLoading());
         }
 
-        /// <summary>
-        /// Called by the layer system with all properties that were attached
-        /// in the LayerPreset (LasPreset).
-        /// </summary>
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             Debug.Log($"[LASSpawner] LoadProperties called on {name}. properties.Count={properties?.Count}");
 
             if (properties != null)
             {
-                // log what we actually got
                 for (int i = 0; i < properties.Count; i++)
                 {
                     var p = properties[i];
@@ -74,12 +73,8 @@ namespace Netherlands3D.Functionalities.LASImporter
             }
         }
 
-        /// <summary>
-        /// We wait a few frames to give the layer system time to call LoadProperties.
-        /// </summary>
         private IEnumerator TryStartLoading()
         {
-            // wait up to 30 frames (~0.5 s) for properties to arrive
             const int maxFrames = 30;
             int frames = 0;
 
@@ -109,7 +104,6 @@ namespace Netherlands3D.Functionalities.LASImporter
                 yield break;
             }
 
-            // turn URI into local path
             string localPath = AssetUriFactory.GetLocalPath(propertyData.LasFile);
             Debug.Log($"[LASSpawner] Resolved URI '{propertyData.LasFile}' to local path '{localPath}'");
 
@@ -132,7 +126,50 @@ namespace Netherlands3D.Functionalities.LASImporter
             while (!parser.Finished)
             {
                 var chunk = parser.ReadNextPoints(pointsPerFrame);
+
+                // NEW: normalize to the first point we ever got
+                if (!haveOrigin && chunk.Count > 0)
+                {
+                    origin = chunk[0].position;
+                    haveOrigin = true;
+                    Debug.Log($"[LASSpawner] Normalizing all points to origin {origin}");
+
+                    // move camera to see 0,0,0
+                    var cam = Camera.main;
+                    if (cam != null)
+                    {
+                        cam.transform.position = new Vector3(0, 50, -120);
+                        cam.transform.LookAt(Vector3.zero);
+                    }
+                }
+
+                if (haveOrigin)
+                {
+                    for (int i = 0; i < chunk.Count; i++)
+                    {
+                        var p = chunk[i];
+                        p.position = p.position - origin;
+                        chunk[i] = p;
+                    }
+                }
+
+                // feed to point cloud (make sure pointCloud.recenter is OFF now)
                 pointCloud.AddPoints(chunk);
+
+                // NEW: spawn a few cubes so we can see something even if points don't render
+                if (!debugSpawned && chunk.Count > 0)
+                {
+                    int dbg = Mathf.Min(15, chunk.Count);
+                    for (int i = 0; i < dbg; i++)
+                    {
+                        var c = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        c.transform.position = chunk[i].position; // already normalized
+                        c.transform.localScale = Vector3.one * 2f;
+                        c.name = "LAS_DEBUG_" + i;
+                    }
+                    debugSpawned = true;
+                }
+
                 Debug.Log($"[LASSpawner] streamed {chunk.Count} points. totalRead={parser.PointsRead}");
                 yield return null;
             }
