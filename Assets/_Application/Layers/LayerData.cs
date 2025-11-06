@@ -188,8 +188,8 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent LayerDestroyed = new();
         [JsonIgnore] public readonly UnityEvent<int> LayerOrderChanged = new();
 
-        [JsonIgnore] public readonly UnityEvent<LayerData> LayerSelected = new();
-        [JsonIgnore] public readonly UnityEvent<LayerData> LayerDeselected = new();
+        [JsonIgnore] public readonly UnityEvent LayerSelected = new();
+        [JsonIgnore] public readonly UnityEvent LayerDeselected = new();
         [JsonIgnore] public UnityEvent<LayerData> LayerDoubleClicked = new();
 
         [JsonIgnore] public readonly UnityEvent ParentChanged = new();
@@ -230,15 +230,13 @@ namespace Netherlands3D.Twin.Layers
                 Root.DeselectAllLayers();
 
             Root.AddLayerToSelection(this);
-            LayerSelected.Invoke(this);
-            Visualization?.OnSelect();
+            LayerSelected.Invoke();
         }
 
         public virtual void DeselectLayer()
         {
             Root.RemoveLayerFromSelection(this);
-            LayerDeselected.Invoke(this);
-            Visualization?.OnDeselect();
+            LayerDeselected.Invoke();
         }
 
         public virtual void DoubleClickLayer()
@@ -348,8 +346,6 @@ namespace Netherlands3D.Twin.Layers
             ParentOrSiblingIndexChanged.RemoveListener(Root.UpdateLayerTreeOrder);
             ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
-            
-            Visualization?.DestroyLayerGameObject();
         }
 
         public bool HasProperty<T>() where T : LayerPropertyData

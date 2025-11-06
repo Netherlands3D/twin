@@ -135,6 +135,9 @@ namespace Netherlands3D.Twin.Layers
             layerData.OnVisualizationRequested += Object;
             layerData.LayerDoubleClicked.AddListener(OnDoubleClick);
             layerData.OnPrefabIdChanged.AddListener(DestroyLayerGameObject);
+            layerData.LayerSelected.AddListener(OnSelect);
+            layerData.LayerDeselected.AddListener(OnDeselect);
+            layerData.LayerDestroyed.AddListener(DestroyLayerGameObject);
         }
 
         private void UnregisterEventListeners()
@@ -146,7 +149,9 @@ namespace Netherlands3D.Twin.Layers
             layerData.OnVisualizationRequested -= Object;
             layerData.LayerDoubleClicked.RemoveListener(OnDoubleClick);
             layerData.OnPrefabIdChanged.RemoveListener(DestroyLayerGameObject);
-            
+            layerData.LayerSelected.RemoveListener(OnSelect);
+            layerData.LayerDeselected.RemoveListener(OnDeselect);
+            layerData.LayerDestroyed.RemoveListener(DestroyLayerGameObject);
         }
 
         /// <summary>

@@ -207,12 +207,12 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             colorButton.targetGraphic.color = opaqueColor;
         }
 
-        private void OnLayerSelected(LayerData layer)
+        private void OnLayerSelected()
         {
             SelectUI();
         }
 
-        private void OnLayerDeselected(LayerData layer)
+        private void OnLayerDeselected()
         {
             DeselectUI();
         }
