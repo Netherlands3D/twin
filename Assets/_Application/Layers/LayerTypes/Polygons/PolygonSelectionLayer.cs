@@ -134,26 +134,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             PolygonPropertyData.OnInvertMaskChanged.AddListener(OnInvertMaskChanged);
         }
 
-        private void SetMasking()
-        {
-            OnIsMaskChanged(IsMask);
-            OnInvertMaskChanged(InvertMask);
-        }
-
         private void UnregisterListeners()
         {
             LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
             Origin.current.onPostShift.RemoveListener(ShiftedPolygon);
             PolygonPropertyData.OnIsMaskChanged.RemoveListener(OnIsMaskChanged);
             PolygonPropertyData.OnInvertMaskChanged.RemoveListener(OnInvertMaskChanged);
-        }
-
-        private void CleanupMasking()
-        {
-            if (MaskBitIndex < 0) return;
-            
-            availableMaskChannels.Add(MaskBitIndex);
-            MaskDestroyed.Invoke(MaskBitIndex);
         }
 
         public override void SetReference(LayerGameObject layerGameObject, bool keepPrefabIdentifier = false)
@@ -164,7 +150,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 var vertices = CoordinatesToVertices(OriginalPolygon);
                 PolygonVisualisation.UpdateVisualisation(vertices, PolygonPropertyData.ExtrusionHeight);
-                SetMasking();
+                OnIsMaskChanged(IsMask); //The reference changed, so we need to treat it as if we make a new mask
             }
         }
 
@@ -176,7 +162,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 var vertices = CoordinatesToVertices(OriginalPolygon);
                 PolygonVisualisation.UpdateVisualisation(vertices, PolygonPropertyData.ExtrusionHeight);
-                SetMasking();
+                PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
             }
 
             polygonMoved.Invoke();
@@ -194,7 +180,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 var vertices = CoordinatesToVertices(coordinates);
                 PolygonVisualisation.UpdateVisualisation(vertices, PolygonPropertyData.ExtrusionHeight);
-                SetMasking();
+                PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
             }
 
             polygonChanged.Invoke();
@@ -250,12 +236,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
         {
             SetVisualisationActive(activeInHierarchy);
-            UpdateInvertedMaskBit(activeInHierarchy);
+            UpdateInvertedMaskBitInShaders(IsMask, InvertMask, activeInHierarchy);
         }
 
-        private void UpdateInvertedMaskBit(bool activeInHierarchy)
+        private void UpdateInvertedMaskBitInShaders(bool isMask, bool invertMask, bool activeInHierarchy)
         {
-            var active = IsMask && InvertMask && activeInHierarchy;
+            var active = isMask && invertMask && activeInHierarchy;
             PolygonProjectionMask.UpdateInvertedMaskBit(MaskBitIndex, active);
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
         }
@@ -280,11 +266,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public override void DestroyLayer()
         {
             PolygonSelectionCalculator.UnregisterPolygon(this);
-            base.DestroyLayer();
-            UpdateInvertedMaskBit(false);
-            
-            UnregisterListeners();
             CleanupMasking();
+            base.DestroyLayer();
+            UnregisterListeners();
+        }
+
+        private void CleanupMasking()
+        {
+            // first clear shader properties with the existing mask bit index
+            UpdateInvertedMaskBitInShaders(false, false, false);
+            //now that the shader properties are cleared, we can free up the mask bit
+            SetMaskBitIndex(false, false);
         }
 
         private void OnIsMaskChanged(bool isMask)
@@ -293,32 +285,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 Debug.LogError("No more masking channels available");
                 IsMask = false;
+                return;
             }
 
-            var layer = GetLayer(isMask);
-            SetPolygonLayer(layer);
+            SetMaskBitIndex(isMask, InvertMask);
+        }
 
+        private void SetMaskBitIndex(bool isMask, bool invertMask)
+        {
             if (!isMask && MaskBitIndex != -1)
             {
+                OnInvertMaskChanged(invertMask); //clear the inverted mask property before clearing the bit index
                 availableMaskChannels.Add(MaskBitIndex);
                 MaskBitIndex = -1;
-
             }
             else if (isMask && MaskBitIndex == -1)
             {
                 MaskBitIndex = availableMaskChannels.Last();
                 availableMaskChannels.Remove(MaskBitIndex);
+                OnInvertMaskChanged(invertMask); //set the inverted mask property after assigning the bit index
             }
-            UpdateInvertedMaskBit(ActiveInHierarchy);
-            
-            PolygonVisualisation.SetMaterial(isMask, MaskBitIndex, InvertMask);
         }
 
         private void OnInvertMaskChanged(bool invert)
         {
             var layer = GetLayer(IsMask);
             SetPolygonLayer(layer);
-            UpdateInvertedMaskBit(ActiveInHierarchy);
+            UpdateInvertedMaskBitInShaders(IsMask, invert, ActiveInHierarchy);
             PolygonVisualisation.SetMaterial(IsMask, MaskBitIndex, invert);
         }
 
