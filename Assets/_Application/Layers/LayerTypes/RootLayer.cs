@@ -137,8 +137,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         
         public LayerData GetFirstLayerByLayerMask(LayerMask mask)
         {
-            //TODO we need to identify if these layerdatas have a visualization
-            return ChildrenLayers.FirstOrDefault(refData => refData.Visualization.gameObject.layer == mask); //TODO maybe we should cache this in layerdata
+            foreach(LayerData data in ChildrenLayers)
+            {
+                LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(data.PrefabIdentifier);
+                if (template != null && template.gameObject.layer == mask)
+                {
+                    return data;
+                }
+            }
+            return null;
         }
 
         public List<LayerData> GetFlatHierarchy()

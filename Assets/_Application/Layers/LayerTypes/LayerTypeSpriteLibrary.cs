@@ -6,6 +6,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -24,9 +25,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         [SerializeField] private List<LayerSpriteCollection> layerTypeSprites;
         public LayerSpriteCollection GetLayerTypeSprite(LayerData layer)
         {
-            if (layer.Visualization != null)
+            LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier);
+            if (template != null)
             {
-                return GetProxyLayerSprite(layer.Visualization);
+                return GetProxyLayerSprite(template);
             }
 
             switch (layer)
