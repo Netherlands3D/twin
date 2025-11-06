@@ -134,11 +134,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                 children[i].RootIndex = i;
             }
         }
-
-        public List<ReferencedLayerData> GetVisualisations()
-        {
-            return ChildrenLayers.OfType<ReferencedLayerData>().ToList();
-        }
         
         public ReferencedLayerData GetFirstLayerByLayerMask(LayerMask mask)
         {

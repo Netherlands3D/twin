@@ -56,11 +56,11 @@ namespace Netherlands3D.Twin.Services
 
             var layerData = builder.Build();
             ProjectData.Current.AddStandardLayer(layerData);
-            Layer layer = await SpawnLayer(layerData);
+            Layer layer = await VisualizeData(layerData);
             layerAdded.Invoke(layer);
             return layer;
         }
-
+        
 
         private Layer ImportFromFile(LayerBuilder layerBuilder)
         {
@@ -91,24 +91,7 @@ namespace Netherlands3D.Twin.Services
             return null;
         }
 
-        /// <summary>
-        /// Visualizes an existing layer's data by spawning a placeholder and after that the actual visualisation
-        /// (LayerGameObject).
-        ///
-        /// Usually used when loading a project file as this will restore the layer's data but the visualisation needs
-        /// to be spawned. 
-        /// </summary>
-        public async Task<Layer> SpawnLayer(LayerData layerData)
-        {
-            //TODO we need to remove the as ReferencedLayerData cast and make this work for all LayerData types
-            // if (layerData is not ReferencedLayerData)
-            // {
-            //     throw new NotSupportedException("Only ReferencedLayerData visualization is supported currently.");
-            // }
-            ProjectData.Current.AddStandardLayer(layerData);
-            Layer layer = await VisualizeData(layerData);
-            return layer;
-        }
+       
 
         /// <summary>
         /// Visualizes an existing layer's data by spawning a placeholder and after that the actual visualisation
@@ -178,7 +161,7 @@ namespace Netherlands3D.Twin.Services
             return urlPropertyData.Data;
         }
 
-        private async Task<Layer> VisualizeData(LayerData layerData)
+        public async Task<Layer> VisualizeData(LayerData layerData)
         {
             Layer layer = new Layer(layerData);
             LayerGameObject visualization = await spawner.Spawn(layerData);

@@ -10,7 +10,8 @@ namespace Netherlands3D.Twin.Services
     {
         public Task<Layer> Add(LayerPresetArgs layerBuilder);
         public Task<Layer> Add(ILayerBuilder layerBuilder);
-        public Task<Layer> SpawnLayer(LayerData layerData);
+        public Task<Layer> VisualizeData(LayerData layerData);
+        //public Task<Layer> SpawnLayer(LayerData layerData);
         // public Task<Layer> SpawnLayer(LayerData layerData, Vector3 position, Quaternion rotation = default);
         public Task<Layer> VisualizeAs(LayerData layerData, string prefabIdentifier);
         public void Remove(Layer layer);

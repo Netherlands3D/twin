@@ -47,13 +47,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
             // AddDefaultLayer should be after setting the reference so the reference is assigned
             // when the NewLayer event is called
-            ProjectData.Current.AddStandardLayer(this);
+            //ProjectData.Current.AddStandardLayer(this);
             //RegisterEventListeners();
         }
 
         public ReferencedLayerData(string name, string prefabId, LayerGameObject reference) : this(name, reference)
         {
-            this.prefabId = prefabId;
+            //this.prefabId = prefabId;
         }
 
         [JsonConstructor]

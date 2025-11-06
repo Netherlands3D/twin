@@ -110,12 +110,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         private void AddLayersRecursive(LayerData layer, List<CartesianTileSubObjectColorLayerGameObject> list)
         {
-            if (layer is ReferencedLayerData proxyLayer)
+            if (layer.Visualization is CartesianTileSubObjectColorLayerGameObject datasetLayer)
             {
-                if (proxyLayer.Visualization is CartesianTileSubObjectColorLayerGameObject datasetLayer)
-                {
-                    list.Add(datasetLayer);
-                }
+                list.Add(datasetLayer);
             }
 
             foreach (var child in layer.ChildrenLayers)

@@ -126,30 +126,15 @@ namespace Netherlands3D.Twin.Projects
         }
 
         public void LoadVisualizations()
-        {
-            List<ReferencedLayerData> referencedLayers = rootLayer.GetVisualisations();
-            Services.Layers layers = App.Layers as Services.Layers;
-            layers.StartCoroutine(VisualisationLoading(referencedLayers));
+        {            
+            VisualisationLoading(rootLayer.ChildrenLayers);
         }
 
-        private IEnumerator<Task<Layer>> VisualisationLoading(List<ReferencedLayerData> referencedLayers)
+        private async void VisualisationLoading(List<LayerData> layers)
         {
-            foreach (var layer in referencedLayers)
+            foreach (var layer in layers)
             {
-                var task = App.Layers.SpawnLayer(layer); // Task<Layer>
-                while (!task.IsCompleted)
-                    yield return null;
-
-                if (task.IsFaulted)
-                {
-                    Debug.LogError(task.Exception);
-                    continue;
-                }
-
-                Layer spawnedLayer = task.Result;
-
-                // Optional: yield to let Unity render a frame
-                yield return null;
+                var task = await App.Layers.VisualizeData(layer);
             }
         }
         

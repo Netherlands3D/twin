@@ -50,8 +50,8 @@ namespace Netherlands3D.Twin.Layers
 
         public bool HasLayerData => LayerData != null;
 
-        private ReferencedLayerData layerData;
-        public ReferencedLayerData LayerData => layerData;
+        private LayerData layerData;
+        public LayerData LayerData => layerData;
         //public ReferencedLayerData LayerData
         //{
         //    get => layerData;
@@ -108,7 +108,7 @@ namespace Netherlands3D.Twin.Layers
             if (this.layerData != null)
                 UnregisterEventListeners();
 
-            this.layerData = layerData as ReferencedLayerData; //TODO referencedlayerdata will be removed later
+            this.layerData = layerData;
             
             RegisterEventListeners();
             OnLayerInitialize();

@@ -59,7 +59,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
         } 
 
-        public void Initialize(ReferencedLayerData data, string previousPrefabId)
+        public void Initialize(LayerData data, string previousPrefabId)
         {
             InitializeScatterMesh(previousPrefabId);            
             polygonLayer = data.ParentLayer as PolygonSelectionLayer;
