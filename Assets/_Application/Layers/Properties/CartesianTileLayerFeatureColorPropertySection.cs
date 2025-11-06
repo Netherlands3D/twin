@@ -36,14 +36,14 @@ namespace Netherlands3D.Twin.Layers.Properties
             this.layer = layer;
             CreateSwatches();
 
-            layer.OnStylingApplied.AddListener(UpdateSwatches);
+            layer.LayerData.OnStylingApplied.AddListener(UpdateSwatches);
 
             StartCoroutine(OnPropertySectionsLoaded()); 
         }
 
         private void OnDestroy()
         {
-            layer.OnStylingApplied.RemoveListener(UpdateSwatches);
+            layer.LayerData.OnStylingApplied.RemoveListener(UpdateSwatches);
             colorPicker.PickedColor.RemoveListener(OnPickColor);
         }
 
