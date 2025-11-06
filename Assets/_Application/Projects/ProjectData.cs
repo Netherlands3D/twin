@@ -97,20 +97,20 @@ namespace Netherlands3D.Twin.Projects
             LayerAdded.Invoke(layer);           
         }
 
-        public static void CreateAndAttachReferenceLayerTo(LayerGameObject referencedLayer)
-        {
-            var referenceName = referencedLayer.name.Replace("(Clone)", "").Trim();
+        //public static void CreateAndAttachReferenceLayerTo(LayerGameObject referencedLayer)
+        //{
+        //    var referenceName = referencedLayer.name.Replace("(Clone)", "").Trim();
 
-            var proxyLayer = new ReferencedLayerData(referenceName, referencedLayer);
-            referencedLayer.SetData(proxyLayer);
+        //    var proxyLayer = new ReferencedLayerData(referenceName, referencedLayer);
+        //    referencedLayer.SetData(proxyLayer);
 
-            // Add properties to the new layerData
-            var layersWithPropertyData = referencedLayer.GetComponents<ILayerWithPropertyData>();
-            foreach (var layerWithPropertyData in layersWithPropertyData)
-            {
-                referencedLayer.LayerData.SetProperty(layerWithPropertyData.PropertyData);
-            }
-        }
+        //    // Add properties to the new layerData
+        //    var layersWithPropertyData = referencedLayer.GetComponents<ILayerWithPropertyData>();
+        //    foreach (var layerWithPropertyData in layersWithPropertyData)
+        //    {
+        //        referencedLayer.LayerData.SetProperty(layerWithPropertyData.PropertyData);
+        //    }
+        //}
 
         public void RemoveLayer(LayerData layer)
         {
@@ -125,17 +125,12 @@ namespace Netherlands3D.Twin.Projects
             current.functionalities = new();
         }
 
-        public void LoadVisualizations()
-        {            
-            VisualisationLoading(rootLayer.ChildrenLayers);
-        }
-
-        private async void VisualisationLoading(List<LayerData> layers)
-        {
-            foreach (var layer in layers)
+        public async void LoadVisualizations()
+        {    
+            foreach (var layer in rootLayer.ChildrenLayers)
             {
-                if (layer is RootLayer) continue;                
-                    
+                if (layer is RootLayer) continue;
+
                 var task = await App.Layers.VisualizeData(layer);
             }
         }

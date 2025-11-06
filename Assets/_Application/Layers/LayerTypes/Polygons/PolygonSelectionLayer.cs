@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     }
 
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "PolygonSelection")]
-    public class PolygonSelectionLayer : ReferencedLayerData
+    public class PolygonSelectionLayer : LayerData
     {
         [DataMember] public List<Coordinate> OriginalPolygon { get; private set; }
         [DataMember] private ShapeType shapeType;
@@ -90,7 +90,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             List<LayerPropertyData> layerProperties, 
             List<Coordinate> originalPolygon, 
             ShapeType shapeType
-        ) : base(name, prefabId, layerProperties) {
+        ) : base(name, prefabId) {
             this.shapeType = shapeType;
 
             SetShape(originalPolygon); 
@@ -105,18 +105,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             List<Vector3> polygonUnityInput,
             ShapeType shapeType,
             float defaultLineWidth = 10f, 
-            Action<ReferencedLayerData> onSpawn = null
+            Action<LayerData> onSpawn = null
         ) : base(
             name, 
-            prefabId, 
-            new List<LayerPropertyData>
+            prefabId
+        ) {
+            onSpawn?.Invoke(this);
+            this.shapeType = shapeType;
+            this.layerProperties = layerProperties ?? new List<LayerPropertyData>
             {
                 new PolygonSelectionLayerPropertyData() { LineWidth = defaultLineWidth }
-            },
-            onSpawn
-        ) {
-            this.shapeType = shapeType;
-
+            };
             SetShape(polygonUnityInput.ToCoordinates().ToList());
             PolygonSelectionCalculator.RegisterPolygon(this);
             UpdatePolygonVisualisation(OriginalPolygon);

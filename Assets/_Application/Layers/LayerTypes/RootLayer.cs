@@ -61,7 +61,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             // use ToList to make a copy and avoid a CollectionWasModified error
             var childLayers = ChildrenLayers.ToList();
 
-            // FIXME: (S3DA-1666) Due to a bug in the TileHandler, we need to ensure that the CartesianTileHandlers are
+            // TODO (S3DA-1666) Due to a bug in the TileHandler, we need to ensure that the CartesianTileHandlers are
             // ordered based on the index in the TileHandler's "layers" property. The TileHandler's RemoveLayer() method
             // doesn't properly remove all pending or running changes. When the layers are not removed in order
             // of the layers field, the application crashes because a pending change will try to access a layer that
@@ -81,11 +81,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
             var sortedChildLayers = childLayers
                 .OrderBy(l =>
-                    l is ReferencedLayerData r &&
-                    r.Visualization is CartesianTileLayerGameObject)
+                    l.Visualization != null &&
+                    l.Visualization is CartesianTileLayerGameObject)
                 .ThenBy(l =>
-                    l is ReferencedLayerData r &&
-                    r.Visualization is CartesianTileLayerGameObject ct
+                    l .Visualization != null &&
+                    l.Visualization is CartesianTileLayerGameObject ct
                         ? ct.TileHandlerLayerIndex
                         : l.RootIndex)
                 .ThenBy(l => l.RootIndex);
@@ -135,9 +135,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             }
         }
         
-        public ReferencedLayerData GetFirstLayerByLayerMask(LayerMask mask)
+        public LayerData GetFirstLayerByLayerMask(LayerMask mask)
         {
-            return ChildrenLayers.OfType<ReferencedLayerData>().FirstOrDefault(refData => refData.Visualization.gameObject.layer == mask); //TODO maybe we should cache this in layerdata
+            //TODO we need to identify if these layerdatas have a visualization
+            return ChildrenLayers.FirstOrDefault(refData => refData.Visualization.gameObject.layer == mask); //TODO maybe we should cache this in layerdata
         }
 
         public List<LayerData> GetFlatHierarchy()

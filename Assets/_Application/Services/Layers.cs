@@ -121,14 +121,9 @@ namespace Netherlands3D.Twin.Services
         /// Warning: this code does not check if the given prefab is compatible with this LayerData, make sure you know what you are doing.
         /// </summary>
         public async Task<Layer> VisualizeAs(LayerData layerData, string prefabIdentifier)
-        {        
-            //TODO we need to remove the as ReferencedLayerData cast and make this work for all LayerData types
-            if (layerData is not ReferencedLayerData referencedLayerData)
-            {
-                throw new NotSupportedException("Only ReferencedLayerData visualization is supported currently.");
-            }
-            string previousId = referencedLayerData.PrefabIdentifier;
-            referencedLayerData.PrefabIdentifier = prefabIdentifier;
+        {
+            string previousId = layerData.PrefabIdentifier;
+            layerData.PrefabIdentifier = prefabIdentifier;
             var layer = await VisualizeData(layerData);
             if (previousId != prefabIdentifier) layer.LayerGameObject.OnConvert(previousId); //todo: this should not be done here but in the future VisualizationPropertyData (ticket 3/4)
             return layer;

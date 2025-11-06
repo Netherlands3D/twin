@@ -17,7 +17,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
             Layer layer = await base.CreateLayer(layerBuilder);
 
-            if (layer.LayerData is not ReferencedLayerData newLayer)
+            if (layer.LayerData.Visualization == null)
             {
                 Debug.LogError(
                     "Expected layer created by the Tile3DLayerButton to be ReferencedLayerData, but received a null"

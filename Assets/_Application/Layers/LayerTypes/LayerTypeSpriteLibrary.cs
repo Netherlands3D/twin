@@ -17,6 +17,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         //TODO the data.Visualisation reference needs to be refactored with the ui toolkit integration
         public Sprite GetLayerTypeSprite(LayerData layer)
         {
+            if(layer.Visualization != null)
+            {
+                return GetProxyLayerSprite(layer.Visualization);
+            }
+
             switch (layer)
             {
                 case PolygonSelectionLayer selectionLayer:
@@ -24,10 +29,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                         return layerTypeSprites[7];
                     else if (selectionLayer.ShapeType == ShapeType.Grid)
                         return layerTypeSprites[12];
-                    return layerTypeSprites[6];
-                case ReferencedLayerData data:
-                    var reference = data.Visualization;
-                    return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);
+                    return layerTypeSprites[6];               
                 case FolderLayer _:
                     return layerTypeSprites[2];
                 default:

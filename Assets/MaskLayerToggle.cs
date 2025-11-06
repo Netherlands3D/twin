@@ -20,7 +20,7 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 layerData = value;
-                toggle.interactable = value is ReferencedLayerData;
+                toggle.interactable = value.Visualization != null;
             }
         }
 
@@ -41,7 +41,7 @@ namespace Netherlands3D.Twin.Layers
 
             layerNameLabel.text = LayerData.Name;
 
-            if (this.layerData is ReferencedLayerData referencedLayerData)
+            if (this.layerData.Visualization != null)
             {
                 var visualization = layerData.Visualization;
                 var currentLayerMask = visualization.GetMaskLayerMask();
@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin.Layers
 
         private void OnValueChanged(bool acceptMask)
         {
-            if (layerData is ReferencedLayerData referencedLayerData)
+            if (layerData.Visualization != null)
             {
                 var visualization = layerData.Visualization;
                 visualization.SetMaskBit(MaskLayer.MaskBitIndex, acceptMask);

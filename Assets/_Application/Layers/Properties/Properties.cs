@@ -45,9 +45,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         public static ILayerWithPropertyPanels TryFindProperties(LayerData layer)
         {
-            var layerProxy = layer as ReferencedLayerData;
-
-            return (layerProxy == null) ? layer as ILayerWithPropertyPanels : layerProxy.Visualization as ILayerWithPropertyPanels;
+            return (layer.Visualization == null) ? layer as ILayerWithPropertyPanels : layer.Visualization as ILayerWithPropertyPanels;
         }
     }
 }

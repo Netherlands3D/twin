@@ -14,6 +14,8 @@ using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
+using System.Threading.Tasks;
+using Netherlands3D.Twin.Services;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
@@ -178,20 +180,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             ObjectSelectorService.MappingTree.RootInsert(objectMapping);
         }
 
-        private GeoJSONPolygonLayer CreateOrGetPolygonLayer()
+        private async Task<GeoJSONPolygonLayer> CreateOrGetPolygonLayer()
         {
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
-            {
-                if (child is not ReferencedLayerData referencedLayerData) continue;
-                if (referencedLayerData.Visualization is not GeoJSONPolygonLayer polygonLayer) continue;
+            {                
+                if (child.Visualization is not GeoJSONPolygonLayer polygonLayer) continue;
 
                 return polygonLayer;
             }
 
-            // TODO: Should use LayerSpawner? This is a temporary layer?
-            GeoJSONPolygonLayer newPolygonLayerGameObject = Instantiate(polygonLayerPrefab);
-            ProjectData.CreateAndAttachReferenceLayerTo(newPolygonLayerGameObject);
+            //// TODO: Should use LayerSpawner? This is a temporary layer?
+            //GeoJSONPolygonLayer newPolygonLayerGameObject = Instantiate(polygonLayerPrefab);
+            //ProjectData.CreateAndAttachReferenceLayerTo(newPolygonLayerGameObject);
+
+            ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(polygonLayerPrefab.PrefabIdentifier).NamedAs(polygonLayerPrefab.name);
+            Layer layer = await App.Layers.Add(layerBuilder);
+            GeoJSONPolygonLayer newPolygonLayerGameObject = layer.LayerGameObject as GeoJSONPolygonLayer;
+
             newPolygonLayerGameObject.LayerData.Color = LayerData.Color;
 
             // Replace default style with the parent's default style
@@ -202,20 +208,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return newPolygonLayerGameObject;
         }
 
-        private GeoJSONLineLayer CreateOrGetLineLayer()
+        private async Task<GeoJSONLineLayer> CreateOrGetLineLayer()
         {
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
-            {
-                if (child is not ReferencedLayerData referencedLayerData) continue;
-                if (referencedLayerData.Visualization is not GeoJSONLineLayer lineLayer) continue;
+            {                
+                if (child.Visualization is not GeoJSONLineLayer lineLayer) continue;
 
                 return lineLayer;
             }
 
             // TODO: Should use LayerSpawner? This is a temporary layer?
-            GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
-            ProjectData.CreateAndAttachReferenceLayerTo(newLineLayerGameObject);
+            //GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
+            //ProjectData.CreateAndAttachReferenceLayerTo(newLineLayerGameObject);
+
+            ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(lineLayerPrefab.PrefabIdentifier).NamedAs(lineLayerPrefab.name);
+            Layer layer = await App.Layers.Add(layerBuilder);
+            GeoJSONLineLayer newLineLayerGameObject = layer.LayerGameObject as GeoJSONLineLayer;
+
             newLineLayerGameObject.LayerData.Color = LayerData.Color;
 
             // Replace default style with the parent's default style
@@ -226,20 +236,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return newLineLayerGameObject;
         }
 
-        private GeoJSONPointLayer CreateOrGetPointLayer()
+        private async Task<GeoJSONPointLayer> CreateOrGetPointLayer()
         {
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
-            {
-                if (child is not ReferencedLayerData referencedLayerData) continue;
-                if (referencedLayerData.Visualization is not GeoJSONPointLayer pointLayer) continue;
+            {              
+                if (child.Visualization is not GeoJSONPointLayer pointLayer) continue;
 
                 return pointLayer;
             }
 
             // TODO: Should use LayerSpawner? This is a temporary layer?
-            GeoJSONPointLayer newPointLayerGameObject = Instantiate(pointLayerPrefab);
-            ProjectData.CreateAndAttachReferenceLayerTo(newPointLayerGameObject);
+            //GeoJSONPointLayer newPointLayerGameObject = Instantiate(pointLayerPrefab);
+            //ProjectData.CreateAndAttachReferenceLayerTo(newPointLayerGameObject);
+
+            ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(pointLayerPrefab.PrefabIdentifier).NamedAs(pointLayerPrefab.name);
+            Layer layer = await App.Layers.Add(layerBuilder);
+            GeoJSONPointLayer newPointLayerGameObject = layer.LayerGameObject as GeoJSONPointLayer;
+
             newPointLayerGameObject.LayerData.Color = LayerData.Color;
 
             // Replace default style with the parent's default style
@@ -278,50 +292,50 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        private void AddPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        private async void AddPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (pointFeaturesLayer == null)
-                pointFeaturesLayer = CreateOrGetPointLayer();
+                pointFeaturesLayer = await CreateOrGetPointLayer();
 
             pointFeaturesLayer.AddAndVisualizeFeature<Point>(feature, originalCoordinateSystem);
         }
 
-        private void AddMultiPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        private async void AddMultiPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (pointFeaturesLayer == null)
-                pointFeaturesLayer = CreateOrGetPointLayer();
+                pointFeaturesLayer = await CreateOrGetPointLayer();
 
             pointFeaturesLayer.AddAndVisualizeFeature<MultiPoint>(feature, originalCoordinateSystem);
         }
 
-        private void AddLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        private async void AddLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (lineFeaturesLayer == null)
-                lineFeaturesLayer = CreateOrGetLineLayer();
+                lineFeaturesLayer = await CreateOrGetLineLayer();
 
             lineFeaturesLayer.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
         }
 
-        private void AddMultiLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        private async void AddMultiLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (lineFeaturesLayer == null)
-                lineFeaturesLayer = CreateOrGetLineLayer();
+                lineFeaturesLayer = await CreateOrGetLineLayer();
 
             lineFeaturesLayer.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
         }
 
-        private void AddPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        private async void AddPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (polygonFeaturesLayer == null)
-                polygonFeaturesLayer = CreateOrGetPolygonLayer();
+                polygonFeaturesLayer = await CreateOrGetPolygonLayer();
 
             polygonFeaturesLayer.AddAndVisualizeFeature<Polygon>(feature, originalCoordinateSystem);
         }
 
-        private void AddMultiPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        private async void AddMultiPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (polygonFeaturesLayer == null)
-                polygonFeaturesLayer = CreateOrGetPolygonLayer();
+                polygonFeaturesLayer = await CreateOrGetPolygonLayer();
 
             polygonFeaturesLayer.AddAndVisualizeFeature<MultiPolygon>(feature, originalCoordinateSystem);
         }

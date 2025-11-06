@@ -51,7 +51,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private bool completedInitialization;
         public LayerPropertyData PropertyData => settings;
 
-        private ReferencedLayerData areaReferenceData;
+        private LayerData areaReferenceData;
 
         protected override void OnLayerInitialize()
         {
@@ -338,7 +338,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     polygonLayer = p;
                     if (p.PolygonVisualisation == null)
                     {
-                        p.OnReferenceChanged.AddListener(OnPolygonParentInitialized);
+                        p.OnPrefabIdChanged.AddListener(OnPolygonParentInitialized);
                     }
                     else
                     {
@@ -358,7 +358,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 OnPolygonVisualisationUpdated();
             }            
-            polygonLayer?.OnReferenceChanged.RemoveListener(OnPolygonParentInitialized);
+            polygonLayer?.OnPrefabIdChanged.RemoveListener(OnPolygonParentInitialized);
         }
 
         private void OnPolygonVisualisationUpdated()
@@ -373,7 +373,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void InitializeScatterArea()
         {
-            areaReferenceData.OnReferenceChanged.RemoveListener(InitializeScatterArea);
+            areaReferenceData.OnPrefabIdChanged.RemoveListener(InitializeScatterArea);
             RecalculatePolygonsAndSamplerTexture();
 
             BoundingBox polygonBoundingBox = polygonLayer.PolygonVisualisation.Bounds;

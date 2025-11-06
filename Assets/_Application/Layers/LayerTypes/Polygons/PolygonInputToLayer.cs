@@ -73,9 +73,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     if (!polygon.IsMask)
                         polygon.SetVisualisationActive(enabled);
 
-                    polygon.OnReferenceChanged.RemoveListener(referenceListener);
+                    polygon.OnPrefabIdChanged.RemoveListener(referenceListener);
                 };
-                polygon.OnReferenceChanged.AddListener(referenceListener);
+                polygon.OnPrefabIdChanged.AddListener(referenceListener);
             }
         }
 
