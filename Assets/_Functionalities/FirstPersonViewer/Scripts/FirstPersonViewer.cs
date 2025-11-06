@@ -2,6 +2,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Events;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
 using System;
@@ -72,7 +73,6 @@ namespace Netherlands3D.FirstPersonViewer
             ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged += SetMovementModus;
 
             SetupFSM();
-
             gameObject.SetActive(false);
         }
 
@@ -84,14 +84,20 @@ namespace Netherlands3D.FirstPersonViewer
 
             worldTransform.MoveToCoordinate(startPosition);
             input.OnFPVEnter();
+            FirstPersonCamera.SetupViewer();
 
-            gameObject.SetActive(true);
+            ServiceLocator.GetService<CameraSwitcher>().SwitchCamera(this);
         }     
 
         private void OnDestroy()
         {
             ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged -= SetMovementModus;
-            OnViewerEntered -= ViewerEnterd;
+            OnViewerEntered = null;
+            OnResetToStart = null;
+            OnResetToGround = null;
+            OnSetCameraNorth = null;
+            OnViewerEntered = null;
+            OnViewerExited = null;
         }
 
         private void SetupFSM()
@@ -203,7 +209,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             input.ViewerExited();
 
-            gameObject.SetActive(false);
+            ServiceLocator.GetService<CameraSwitcher>().SwitchToPreviousCamera();
         }
 
         public void SetVelocity(Vector2 velocity) => this.velocity = velocity;

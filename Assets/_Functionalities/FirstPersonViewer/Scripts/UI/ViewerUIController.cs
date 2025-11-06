@@ -24,9 +24,11 @@ namespace Netherlands3D.FirstPersonViewer.UI
             pointerToWorld = FindFirstObjectByType<PointerToWorldPosition>();
             viewerGroup = viewerUI.GetComponent<CanvasGroup>();
 
+            //Events get cleared in First Person Viewer code.
             firstPersonViewer = ServiceLocator.GetService<FirstPersonViewer>();
             firstPersonViewer.OnViewerEntered += EnterViewer;
             firstPersonViewer.OnViewerExited += ExitViewer;
+
             hideButton.action.performed += OnHideUIPressed;
 
             viewerUI.SetActive(false);
@@ -34,8 +36,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnDestroy()
         {
-            firstPersonViewer.OnViewerEntered -= EnterViewer;
-            firstPersonViewer.OnViewerExited -= ExitViewer;
             hideButton.action.performed -= OnHideUIPressed;
         }
 

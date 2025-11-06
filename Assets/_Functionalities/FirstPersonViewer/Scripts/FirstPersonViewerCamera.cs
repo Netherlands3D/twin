@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer
 {
-    public enum CameraConstrain { CONTROL_Y, CONTROL_BOTH, CONTROL_NONE }
+    public enum CameraConstrain { CONTROL_Y, CONTROL_BOTH, CONTROL_NONE, CONTROL_MY_HEAD }
 
     public class FirstPersonViewerCamera : MonoBehaviour
     {
@@ -47,11 +47,6 @@ namespace Netherlands3D.FirstPersonViewer
             FPVCamera = firstPersonViewerCamera;
         }
 
-        private void OnEnable()
-        {
-            SetupViewer();
-        }
-
         private void OnDisable()
         {
             ExitViewer();
@@ -65,14 +60,17 @@ namespace Netherlands3D.FirstPersonViewer
             viewer.OnResetToStart -= ResetToStart;
             viewer.OnSetCameraNorth -= SetCameraNorth;
 
-            mainCam.transform.position = prevCameraPosition;
-            mainCam.transform.rotation = prevCameraRotation;
-            mainCam.cullingMask = prevCameraCullingMask;
-            mainCam.orthographic = false;
-            mainCam.targetDisplay = 0;
+            if (mainCam != null)
+            {
+                mainCam.transform.position = prevCameraPosition;
+                mainCam.transform.rotation = prevCameraRotation;
+                mainCam.cullingMask = prevCameraCullingMask;
+                mainCam.orthographic = false;
+                mainCam.targetDisplay = 0;
+            }
         }
 
-        private void SetupViewer()
+        public void SetupViewer()
         {
             mainCam = Camera.main;
 

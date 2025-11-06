@@ -14,4 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingName: CurrentSpeed
   displayName: Snelheid
-  units: 
+  units: km/u
+  OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
