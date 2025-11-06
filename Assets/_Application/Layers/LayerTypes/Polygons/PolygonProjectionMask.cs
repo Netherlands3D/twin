@@ -54,13 +54,13 @@ namespace Netherlands3D
             forceUpdate = true;
         }
 
-        private static void AddInvertedMask(GameObject invertedMask, int maskBitIndex)
+        private static void AddInvertedMask(int maskBitIndex)
         {
             usedInvertedMasks |= 1 << maskBitIndex;
             Shader.SetGlobalInt(usedInvertedMaskChannelsProperty, usedInvertedMasks);
         }
 
-        private static void RemoveInvertedMask(GameObject invertedMask, int maskBitIndex)
+        private static void RemoveInvertedMask(int maskBitIndex)
         {
             usedInvertedMasks &= ~(1 << maskBitIndex);
             Shader.SetGlobalInt(usedInvertedMaskChannelsProperty, usedInvertedMasks);
@@ -69,9 +69,9 @@ namespace Netherlands3D
         public static void UpdateInvertedMaskBit(int maskBitIndex, bool setActive)
         {
             if(setActive)
-                AddInvertedMask(null, maskBitIndex);
+                AddInvertedMask(maskBitIndex);
             else
-                RemoveInvertedMask(null, maskBitIndex);
+                RemoveInvertedMask(maskBitIndex);
         }
     }
 }
