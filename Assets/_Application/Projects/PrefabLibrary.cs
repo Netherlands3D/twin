@@ -38,6 +38,11 @@ namespace Netherlands3D.Twin.Projects
             return fallbackPrefab;
         }
 
+        public bool IsPrefabOfType<T>(string id) where T : LayerGameObject
+        {           
+            return ProjectData.Current.PrefabLibrary.GetPrefabById(id) is T;
+        }
+
         public void AddPrefabRuntimeGroup(string groupName)
         {
             prefabRuntimeGroups.Add(

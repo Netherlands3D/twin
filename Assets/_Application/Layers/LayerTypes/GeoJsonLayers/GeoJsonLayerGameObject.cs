@@ -16,6 +16,7 @@ using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
 using System.Threading.Tasks;
 using Netherlands3D.Twin.Services;
+using UnityEngine.Analytics;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
@@ -210,12 +211,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private async Task<GeoJSONLineLayer> CreateOrGetLineLayer()
         {
-            var childrenInLayerData = LayerData.ChildrenLayers;
+            var childrenInLayerData = LayerData.ChildrenLayers;            
             foreach (var child in childrenInLayerData)
-            {                
-                if (child.Visualization is not GeoJSONLineLayer lineLayer) continue;
+            {
+                if (!ProjectData.Current.PrefabLibrary.IsPrefabOfType<GeoJSONLineLayer>(child.PrefabIdentifier)) continue;
 
-                return lineLayer;
+                //TODO we need to get the visualisation here to properly return the object. if we dont want to get it from data, we need think of another way.. Do we need to find it from children anyways??
+                return null;
             }
 
             // TODO: Should use LayerSpawner? This is a temporary layer?

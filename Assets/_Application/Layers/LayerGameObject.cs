@@ -52,19 +52,6 @@ namespace Netherlands3D.Twin.Layers
 
         private LayerData layerData;
         public LayerData LayerData => layerData;
-        //public ReferencedLayerData LayerData
-        //{
-        //    get => layerData;
-        //    set
-        //    {
-        //        // Make idempotent - only continue if layerData actually changes
-        //        if (value == layerData) return;
-
-        //        layerData = value;
-        //        OnLayerInitialize();
-        //        onLayerInitialized.Invoke();
-        //    }
-        //}
 
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
         Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;

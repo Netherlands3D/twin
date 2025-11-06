@@ -1,5 +1,6 @@
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.Twin.Projects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +18,7 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 layerData = value;
-                toggle.interactable = layerData.Visualization != null;
+                toggle.interactable = ProjectData.Current.PrefabLibrary.GetPrefabById(layerData.PrefabIdentifier) != null;
             }
         }
 
@@ -44,9 +45,10 @@ namespace Netherlands3D.Twin.Layers
             var layerTypeSpriteCollection = layerTypeSpriteLibrary.GetLayerTypeSprite(layer);
             layerIconImage.sprite = layerTypeSpriteCollection.PrimarySprite; //initialize the sprite correctly in case it is not a ReferencedLayerData
 
-            if (layerData.Visualization != null)
+            LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
+            if (template != null)
             {
-                var currentLayerMask = layerData.Visualization.GetMaskLayerMask();
+                var currentLayerMask = template.GetMaskLayerMask(); //TODO check if this is global or instance unique?
                 int maskBitToCheck = 1 << MaskLayer.MaskBitIndex;
                 bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
                 toggle.SetIsOnWithoutNotify(!isBitSet);
