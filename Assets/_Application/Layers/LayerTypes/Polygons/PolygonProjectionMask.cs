@@ -12,7 +12,7 @@ namespace Netherlands3D
 
         [SerializeField] private string extentsProperty = "_MaskBBoxExtents";
         [SerializeField] private string maskTextureProperty = "_MaskTexture";
-        private static string usedInvertedMaskChannelsProperty = "_UsedInvertedMaskChannels";
+        private const string usedInvertedMaskChannelsProperty = "_UsedInvertedMaskChannels";
         
         [SerializeField] private Camera maskCamera;
 
