@@ -24,6 +24,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         [SerializeField] private List<LayerSpriteCollection> layerTypeSprites;
         public LayerSpriteCollection GetLayerTypeSprite(LayerData layer)
         {
+            if (layer.Visualization != null)
+            {
+                return GetProxyLayerSprite(layer.Visualization);
+            }
+
             switch (layer)
             {
                 case PolygonSelectionLayer selectionLayer:
@@ -31,10 +36,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                         return layerTypeSprites[7];
                     else if (selectionLayer.ShapeType == ShapeType.Grid)
                         return layerTypeSprites[12];
-                    return layerTypeSprites[6];
-                case ReferencedLayerData data:
-                    var reference = data.Reference;
-                    return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);
+                    return layerTypeSprites[6];               
                 case FolderLayer _:
                     return layerTypeSprites[2];
                 default:
@@ -69,8 +71,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return layerTypeSprites[7];                
                 case GeoJSONPointLayer _:
                     return layerTypeSprites[9];
-                case PlaceholderLayerGameObject _:
-                    return layerTypeSprites[0];
                 default:
                     Debug.LogError($"layer type of {layer.GetType()} is not specified");
                     return layerTypeSprites[0];

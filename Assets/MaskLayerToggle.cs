@@ -1,8 +1,5 @@
-using System;
-using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
-using Netherlands3D.Twin.Layers.UI.HierarchyInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,57 +17,66 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 layerData = value;
-                toggle.interactable = value.Visualization != null;
+                toggle.interactable = layerData.Visualization != null;
             }
         }
 
         [SerializeField] private Toggle toggle;
         [SerializeField] private TextMeshProUGUI layerNameLabel;
         [SerializeField] private Image layerIconImage;
+        [SerializeField] private Image maskIconImage;
         [SerializeField] private LayerTypeSpriteLibrary layerTypeSpriteLibrary;
-        
+        [SerializeField] private Color acceptMaskTextColor = new Color(204f / 255f, 215 / 255f, 228f / 255f);
+        [SerializeField] private Color ignoreMaskTextColor = new Color(47f / 255f, 53f / 255f, 80f / 255f);
+
         private void Awake()
         {
             toggle.interactable = false;
         }
 
-        public void Initialize(PolygonSelectionLayer mask, LayerData layerData)
+        public void Initialize(PolygonSelectionLayer mask, LayerData layer)
         {
             MaskLayer = mask;
-            LayerData = layerData;
+            LayerData = layer;
 
             layerNameLabel.text = LayerData.Name;
 
-            if (this.layerData.Visualization != null)
+            var layerTypeSpriteCollection = layerTypeSpriteLibrary.GetLayerTypeSprite(layer);
+            layerIconImage.sprite = layerTypeSpriteCollection.PrimarySprite; //initialize the sprite correctly in case it is not a ReferencedLayerData
+
+            if (layerData.Visualization != null)
             {
-                var visualization = layerData.Visualization;
-                var currentLayerMask = visualization.GetMaskLayerMask();
+                var currentLayerMask = layerData.Visualization.GetMaskLayerMask();
                 int maskBitToCheck = 1 << MaskLayer.MaskBitIndex;
                 bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
-                toggle.SetIsOnWithoutNotify(isBitSet);
-
+                toggle.SetIsOnWithoutNotify(!isBitSet);
+                UpdateUIAppearance(isBitSet);
             }
-
-            layerIconImage.sprite = layerTypeSpriteLibrary.GetLayerTypeSprite(layerData);
         }
-        
+
         private void OnEnable()
         {
             toggle.onValueChanged.AddListener(OnValueChanged);
         }
-        
+
         private void OnDisable()
         {
             toggle.onValueChanged.RemoveListener(OnValueChanged);
         }
 
-        private void OnValueChanged(bool acceptMask)
+        private void OnValueChanged(bool isOn)
         {
-            if (layerData.Visualization != null)
-            {
-                var visualization = layerData.Visualization;
-                visualization.SetMaskBit(MaskLayer.MaskBitIndex, acceptMask);
-            }
+            var acceptMask = !isOn;
+            layerData.Visualization?.SetMaskBit(MaskLayer.MaskBitIndex, acceptMask);
+            UpdateUIAppearance(acceptMask);
+        }
+
+        private void UpdateUIAppearance(bool acceptMask)
+        {
+            maskIconImage.gameObject.SetActive(acceptMask);
+            var layerTypeSpriteCollection = layerTypeSpriteLibrary.GetLayerTypeSprite(layerData);
+            layerIconImage.sprite = acceptMask ? layerTypeSpriteCollection.SecondarySprite : layerTypeSpriteCollection.PrimarySprite;
+            layerNameLabel.color = acceptMask ? acceptMaskTextColor : ignoreMaskTextColor;
         }
     }
 }
