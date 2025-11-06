@@ -2,6 +2,7 @@ using System;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {

@@ -245,6 +245,14 @@ namespace Netherlands3D.Twin.Layers
             LayerDoubleClicked.Invoke(this);
         }
 
+        public LayerData(string name, string prefabId) //TODO this should be refactored back in 3/4 of the layer stories
+        {
+            PrefabIdentifier = prefabId;
+            Name = name;
+            if (this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
+                InitializeParent();
+        }
+
         public LayerData(string name) //initialize without layer properties, needed when creating an object at runtime.
         {
             Name = name;

@@ -161,7 +161,7 @@ namespace Netherlands3D.Twin.Layers
 
         public LayerData Build()
         {            
-            LayerData layerData = new LayerData(Name);
+            LayerData layerData = new LayerData(Name, Type);
 
             if (!string.IsNullOrEmpty(Name)) layerData.Name = Name;
             if (Color.HasValue) layerData.Color = Color.Value;

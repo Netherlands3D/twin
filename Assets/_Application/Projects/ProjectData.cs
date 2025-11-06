@@ -134,6 +134,8 @@ namespace Netherlands3D.Twin.Projects
         {
             foreach (var layer in layers)
             {
+                if (layer is RootLayer) continue;                
+                    
                 var task = await App.Layers.VisualizeData(layer);
             }
         }
