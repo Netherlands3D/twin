@@ -61,7 +61,7 @@ namespace Netherlands3D.Twin.Layers
         public UnityEvent onHide = new();
         public UnityEvent onLayerInitialized = new();
         public UnityEvent onLayerReady = new();
-        public UnityEvent OnStylingApplied = new();
+        
 
         public abstract BoundingBox Bounds { get; }
 
@@ -125,6 +125,7 @@ namespace Netherlands3D.Twin.Layers
             layerData.LayerSelected.AddListener(OnSelect);
             layerData.LayerDeselected.AddListener(OnDeselect);
             layerData.LayerDestroyed.AddListener(DestroyLayerGameObject);
+            layerData.OnStylingApplied.AddListener(ApplyStyling);
         }
 
         private void UnregisterEventListeners()
@@ -139,6 +140,7 @@ namespace Netherlands3D.Twin.Layers
             layerData.LayerSelected.RemoveListener(OnSelect);
             layerData.LayerDeselected.RemoveListener(OnDeselect);
             layerData.LayerDestroyed.RemoveListener(DestroyLayerGameObject);
+            layerData.OnStylingApplied.RemoveListener(ApplyStyling);
         }
 
         /// <summary>
@@ -176,7 +178,7 @@ namespace Netherlands3D.Twin.Layers
         {            
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 
-            ApplyStyling();
+            LayerData.OnStylingApplied.Invoke(); //apply the styling once at initialization
         }
 
         private void LoadPropertiesInVisualisations()
@@ -203,7 +205,7 @@ namespace Netherlands3D.Twin.Layers
 
         private void ResetMask(int maskBitIndex)
         {
-            SetMaskBit(maskBitIndex, true); //reset accepting masks
+            SetMaskBit(maskBitIndex, true, layerData); //reset accepting masks
         }
         
         protected virtual void OnDestroy()
@@ -299,7 +301,7 @@ namespace Netherlands3D.Twin.Layers
             UpdateMaskBitMask(bitMask);
             // var mask = LayerStyler.GetMaskLayerMask(this); todo?
             //initialize the layer's style and emit an event for other services and/or UI to update
-            OnStylingApplied.Invoke();
+            //layerData.OnStylingApplied.Invoke();
         }
 
         protected int GetBitMask()
@@ -330,15 +332,15 @@ namespace Netherlands3D.Twin.Layers
         /// <summary>
         /// Sets a bitmask to the layer to determine which masks affect the provided LayerGameObject
         /// </summary>
-        public void SetMaskLayerMask(int bitMask)
+        public void SetMaskLayerMask(int bitMask, LayerData data)
         {
-            LayerData.DefaultStyle.AnyFeature.Symbolizer.SetMaskLayerMask(bitMask);
-            ApplyStyling();
+            data.DefaultStyle.AnyFeature.Symbolizer.SetMaskLayerMask(bitMask);
+            data.OnStylingApplied.Invoke();
         }
 
-        public void SetMaskBit(int bitIndex, bool enableBit)
+        public void SetMaskBit(int bitIndex, bool enableBit, LayerData data)
         {
-            var currentLayerMask = GetMaskLayerMask();
+            var currentLayerMask = GetMaskLayerMask(data);
             int maskBitToSet = 1 << bitIndex;
                 
             if (enableBit)
@@ -350,15 +352,15 @@ namespace Netherlands3D.Twin.Layers
                 currentLayerMask &= ~maskBitToSet; // set bit to 0
             }
 
-            SetMaskLayerMask(currentLayerMask);
+            SetMaskLayerMask(currentLayerMask, data);
         }
 
         /// <summary>
         /// Retrieves the bitmask for masking of the LayerGameObject.
         /// </summary>
-        public int GetMaskLayerMask()
+        public int GetMaskLayerMask(LayerData data)
         {
-            int? bitMask = LayerData.DefaultStyle.AnyFeature.Symbolizer.GetMaskLayerMask();
+            int? bitMask = data.DefaultStyle.AnyFeature.Symbolizer.GetMaskLayerMask();
             if (bitMask == null)
                 bitMask = LayerGameObject.DEFAULT_MASK_BIT_MASK;
 

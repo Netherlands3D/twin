@@ -52,8 +52,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     return;
                 }
                 polygonVisualizationMaterialInstance = new Material(value);
-                
-                ApplyStyling();
+
+                LayerData.OnStylingApplied.Invoke();
             }
         }
         

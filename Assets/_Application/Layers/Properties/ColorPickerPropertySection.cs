@@ -33,13 +33,13 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void OnEnable()
         {
             colorPicker.colorChanged.AddListener(OnPickedColor);
-            if (layer) layer.OnStylingApplied.AddListener(UpdateColorFromLayer);
+            if (layer) layer.LayerData.OnStylingApplied.AddListener(UpdateColorFromLayer);
         }
 
         private void OnDisable()
         {
             colorPicker.colorChanged.RemoveListener(OnPickedColor);
-            if (layer) layer.OnStylingApplied.RemoveListener(UpdateColorFromLayer);
+            if (layer) layer.LayerData.OnStylingApplied.RemoveListener(UpdateColorFromLayer);
         }
 
         public void PickColorWithoutNotify(Color color)
@@ -53,9 +53,9 @@ namespace Netherlands3D.Twin.Layers.Properties
         /// </summary>
         private void ChangeLayerTo(LayerGameObject value)
         {
-            if (layer && enabled) layer.OnStylingApplied.RemoveListener(UpdateColorFromLayer);
+            if (layer && enabled) layer.LayerData.OnStylingApplied.RemoveListener(UpdateColorFromLayer);
             layer = value;
-            if (layer && enabled) layer.OnStylingApplied.AddListener(UpdateColorFromLayer);
+            if (layer && enabled) layer.LayerData.OnStylingApplied.AddListener(UpdateColorFromLayer);
 
             UpdateColorFromLayer();
         }
@@ -63,7 +63,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void OnPickedColor(Color color)
         {
             PickedColor.Invoke(color);
-            layer.ApplyStyling();
+            layer.LayerData.OnStylingApplied.Invoke();
         }
 
         private void UpdateColorFromLayer()

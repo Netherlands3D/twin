@@ -48,7 +48,7 @@ namespace Netherlands3D.Twin.Layers
             LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
             if (template != null)
             {
-                var currentLayerMask = template.GetMaskLayerMask(); //TODO check if this is global or instance unique?
+                var currentLayerMask = template.GetMaskLayerMask(layer); //TODO this should be written more logically, perhaps in layerdata itself or helper method
                 int maskBitToCheck = 1 << MaskLayer.MaskBitIndex;
                 bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
                 toggle.SetIsOnWithoutNotify(!isBitSet);
@@ -69,7 +69,9 @@ namespace Netherlands3D.Twin.Layers
         private void OnValueChanged(bool isOn)
         {
             var acceptMask = !isOn;
-            layerData.Visualization?.SetMaskBit(MaskLayer.MaskBitIndex, acceptMask);
+
+            LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
+            template.SetMaskBit(MaskLayer.MaskBitIndex, acceptMask, layerData);//TODO this should be written more logically, perhaps in layerdata itself or helper method
             UpdateUIAppearance(acceptMask);
         }
 

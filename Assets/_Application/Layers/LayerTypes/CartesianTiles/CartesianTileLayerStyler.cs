@@ -52,7 +52,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             stylingRule.Symbolizer.SetFillColor(color);
 
             layer.LayerData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
-            layer.ApplyStyling();
+            layer.LayerData.OnStylingApplied.Invoke();
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             
 
             layer.LayerData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
-            layer.ApplyStyling();
+            layer.LayerData.OnStylingApplied.Invoke();
         }
 
         public bool? GetVisibilityForSubObject(LayerFeature layerFeature)

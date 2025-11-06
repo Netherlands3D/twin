@@ -111,9 +111,10 @@ namespace Netherlands3D.Functionalities.OBJImporter
             importedObject = returnedGameObject;
             returnedGameObject.AddComponent<MeshCollider>();
             DisposeImporter();
-            
+
             // Object is loaded / replaced - trigger the application of styling
-            layerGameObject.ApplyStyling();
+            //layerGameObject.ApplyStyling();
+            layerGameObject.LayerData.OnStylingApplied.Invoke();
         }
 
         private void PositionImportedGameObject(GameObject returnedGameObject)

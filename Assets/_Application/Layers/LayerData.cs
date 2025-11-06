@@ -200,6 +200,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleAdded = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleRemoved = new();
         [JsonIgnore] public readonly UnityEvent<bool> HasValidCredentialsChanged = new();
+        [JsonIgnore] public readonly UnityEvent OnStylingApplied = new();
         [JsonIgnore] public Func<LayerGameObject> OnVisualizationRequested;
 
         /// <summary>
