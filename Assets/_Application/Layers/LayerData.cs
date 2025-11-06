@@ -14,6 +14,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "Prefab")] //todo: this should not be named Prefab
     public class LayerData : IEquatable<LayerData>
     {
         private const string NameOfDefaultStyle = "default";
