@@ -59,9 +59,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         [SerializeField] private GeoJSONPolygonLayer polygonLayerPrefab;
         [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
         [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
-        // private GeoJSONPointLayer pointVisualisation;
-        // private GeoJSONLineLayer lineVisualisation;
-        // private GeoJSONPolygonLayer polygonVisualisation;
+        private GeoJSONPointLayer pointVisualisation;
+        private GeoJSONLineLayer lineVisualisation;
+        private GeoJSONPolygonLayer polygonVisualisation;
         
         
         [Space] protected LayerURLPropertyData urlPropertyData = new();
@@ -187,6 +187,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private async Task<GeoJSONPolygonLayer> CreateOrGetPolygonLayer()
         {
+            if (polygonVisualisation != null) 
+                return polygonVisualisation;
+            
             // TODO: Should use LayerSpawner? This is a temporary layer?
             //GeoJSONPolygonLayer newPolygonLayerGameObject = Instantiate(polygonLayerPrefab);
             //ProjectData.CreateAndAttachReferenceLayerTo(newPolygonLayerGameObject);
@@ -202,20 +205,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             
             ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(polygonLayerPrefab.PrefabIdentifier).NamedAs(polygonLayerPrefab.name);
             Layer layer = await App.Layers.Add(layerBuilder);
-            GeoJSONPolygonLayer newPolygonLayerGameObject = layer.LayerGameObject as GeoJSONPolygonLayer;
+            polygonVisualisation = layer.LayerGameObject as GeoJSONPolygonLayer;
 
-            newPolygonLayerGameObject.LayerData.Color = LayerData.Color;
+            polygonVisualisation.LayerData.Color = LayerData.Color;
 
             // Replace default style with the parent's default style
-            newPolygonLayerGameObject.LayerData.RemoveStyle(newPolygonLayerGameObject.LayerData.DefaultStyle);
-            newPolygonLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-            newPolygonLayerGameObject.LayerData.SetParent(LayerData);
-            newPolygonLayerGameObject.FeatureRemoved += OnFeatureRemoved;
-            return newPolygonLayerGameObject;
+            polygonVisualisation.LayerData.RemoveStyle(polygonVisualisation.LayerData.DefaultStyle);
+            polygonVisualisation.LayerData.AddStyle(LayerData.DefaultStyle);
+            polygonVisualisation.LayerData.SetParent(LayerData);
+            polygonVisualisation.FeatureRemoved += OnFeatureRemoved;
+            return polygonVisualisation;
         }
 
         private async Task<GeoJSONLineLayer> CreateOrGetLineLayer()
         {
+            if (lineVisualisation != null) 
+                return lineVisualisation;
+            
             // TODO: Should use LayerSpawner? This is a temporary layer?
             //GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
             //ProjectData.CreateAndAttachReferenceLayerTo(newLineLayerGameObject);
@@ -232,20 +238,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             
             ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(lineLayerPrefab.PrefabIdentifier).NamedAs(lineLayerPrefab.name);
             Layer layer = await App.Layers.Add(layerBuilder);
-            GeoJSONLineLayer newLineLayerGameObject = layer.LayerGameObject as GeoJSONLineLayer;
+            lineVisualisation = layer.LayerGameObject as GeoJSONLineLayer;
 
-            newLineLayerGameObject.LayerData.Color = LayerData.Color;
+            lineVisualisation.LayerData.Color = LayerData.Color;
 
             // Replace default style with the parent's default style
-            newLineLayerGameObject.LayerData.RemoveStyle(newLineLayerGameObject.LayerData.DefaultStyle);
-            newLineLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-            newLineLayerGameObject.LayerData.SetParent(LayerData);
-            newLineLayerGameObject.FeatureRemoved += OnFeatureRemoved;
-            return newLineLayerGameObject;
+            lineVisualisation.LayerData.RemoveStyle(lineVisualisation.LayerData.DefaultStyle);
+            lineVisualisation.LayerData.AddStyle(LayerData.DefaultStyle);
+            lineVisualisation.LayerData.SetParent(LayerData);
+            lineVisualisation.FeatureRemoved += OnFeatureRemoved;
+            return lineVisualisation;
         }
 
         private async Task<GeoJSONPointLayer> CreateOrGetPointLayer()
         {
+            if (pointVisualisation != null) 
+                return pointVisualisation;
+            
             // TODO: Should use LayerSpawner? This is a temporary layer?
             //GeoJSONPointLayer newPointLayerGameObject = Instantiate(pointLayerPrefab);
             //ProjectData.CreateAndAttachReferenceLayerTo(newPointLayerGameObject);
@@ -262,16 +271,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             
             ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(pointLayerPrefab.PrefabIdentifier).NamedAs(pointLayerPrefab.name);
             Layer layer = await App.Layers.Add(layerBuilder);
-            GeoJSONPointLayer newPointLayerGameObject = layer.LayerGameObject as GeoJSONPointLayer;
+            pointVisualisation = layer.LayerGameObject as GeoJSONPointLayer;
 
-            newPointLayerGameObject.LayerData.Color = LayerData.Color;
+            pointVisualisation.LayerData.Color = LayerData.Color;
 
             // Replace default style with the parent's default style
-            newPointLayerGameObject.LayerData.RemoveStyle(newPointLayerGameObject.LayerData.DefaultStyle);
-            newPointLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-            newPointLayerGameObject.LayerData.SetParent(LayerData);
-            newPointLayerGameObject.FeatureRemoved += OnFeatureRemoved;
-            return newPointLayerGameObject;
+            pointVisualisation.LayerData.RemoveStyle(pointVisualisation.LayerData.DefaultStyle);
+            pointVisualisation.LayerData.AddStyle(LayerData.DefaultStyle);
+            pointVisualisation.LayerData.SetParent(LayerData);
+            pointVisualisation.FeatureRemoved += OnFeatureRemoved;
+            return pointVisualisation;
         }
 
         private void VisualizeFeature(Feature feature)
