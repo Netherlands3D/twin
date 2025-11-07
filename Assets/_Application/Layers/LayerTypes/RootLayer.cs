@@ -60,37 +60,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         {
             // use ToList to make a copy and avoid a CollectionWasModified error
             var childLayers = ChildrenLayers.ToList();
-
-            // TODO (S3DA-1666) Due to a bug in the TileHandler, we need to ensure that the CartesianTileHandlers are
-            // ordered based on the index in the TileHandler's "layers" property. The TileHandler's RemoveLayer() method
-            // doesn't properly remove all pending or running changes. When the layers are not removed in order
-            // of the layers field, the application crashes because a pending change will try to access a layer that
-            // doesn't exist anymore.
-            // This ordering can be removed as soon as we have our new tiling system, but for now it is needed.
-            //var sortedChildLayers = childLayers
-            //    // Create 2 buckets of layers - one with all types except CartesianTileLayers, and
-            //    // one with only CartesianTileLayers. First order the first bucket, and then the second
-            //    .OrderBy(l => l is ReferencedLayerData { Reference : CartesianTileLayerGameObject })
-            //    // Within each bucket, pick the right key:
-            //    .ThenBy(l =>
-            //        l is ReferencedLayerData { Reference: CartesianTileLayerGameObject ct }
-            //            ? ct.TileHandlerLayerIndex
-            //            : l.RootIndex)
-            //    // Optional deterministic tie-breakers:
-            //    .ThenBy(l => l.RootIndex);
-
-            var sortedChildLayers = childLayers
-                .OrderBy(l =>
-                    l.Visualization != null &&
-                    l.Visualization is CartesianTileLayerGameObject)
-                .ThenBy(l =>
-                    l .Visualization != null &&
-                    l.Visualization is CartesianTileLayerGameObject ct
-                        ? ct.TileHandlerLayerIndex
-                        : l.RootIndex)
-                .ThenBy(l => l.RootIndex);
-
-            foreach (var child in sortedChildLayers) 
+            foreach (var child in childLayers) 
             {
                 child.DestroyLayer();
             }

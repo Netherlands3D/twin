@@ -160,10 +160,33 @@ namespace Netherlands3D.CartesianTiles
                     tileChange.layerIndex = layerIndex;
                     tileChange.priorityScore = CalculatePriorityScore(layer.layerPriority, 0, tileDistance.z, TileAction.Remove);
                     AddTileChange(tileChange, layerIndex);
-
                 }
             }
+
             InstantlyStartRemoveChanges();
+            //since we want to remove a layer, we now need to update the layer indices of all pending and active changes to reflect the new indices. this is not ideal, but is a fix until we rewrite the TileKit
+            for (var index = 0; index < pendingTileChanges.Count; index++)
+            {
+                var oldChange = pendingTileChanges[index];
+                if (oldChange.layerIndex > layerIndex) //only these changes need their index updated.
+                {
+                    var newChange = oldChange;
+                    newChange.layerIndex = oldChange.layerIndex - 1; //this change needs their index decremented by 1
+                    Debug.Log("decrementing pending change with index " + oldChange.layerIndex + " to " + newChange.layerIndex);
+                    pendingTileChanges[index] = newChange;
+                }
+            }
+
+            foreach (var kvp in activeTileChanges)
+            {
+                var oldChange = kvp.Value;
+                var newChange = oldChange;
+                newChange.layerIndex = oldChange.layerIndex - 1; //this change needs their index decremented by 1
+                Debug.Log("decrementing active change with index " + oldChange.layerIndex + " to " + newChange.layerIndex);
+
+                activeTileChanges[kvp.Key] = newChange;
+            }
+
             layers.Remove(layer);
         }
 
@@ -226,19 +249,18 @@ namespace Netherlands3D.CartesianTiles
         }
 
         private void InstantlyStartRemoveChanges()
-        {            
-            for (int i = 0; i < pendingTileChanges.Count; i++)
+        {
+            var removeChanges = pendingTileChanges.Where(change => change.action == TileAction.Remove);
+            //since we are modifying the collection, just take the first one and process it untill the collection is empty
+            while (removeChanges.Any())
             {
-                if (pendingTileChanges[i].action == TileAction.Remove)
-                {
-                    var removeChange = pendingTileChanges[i];
-                    layers[removeChange.layerIndex].HandleTile(removeChange);
-                    pendingTileChanges.RemoveAt(i);
+                var removeChange = pendingTileChanges[0]; 
+                layers[removeChange.layerIndex].HandleTile(removeChange);
+                pendingTileChanges.RemoveAt(0);
 
-                    //Abort all tilechanges with the same key
-                    AbortSimilarTileChanges(removeChange);
-                    AbortPendingSimilarTileChanges(removeChange);
-                }
+                //Abort all tilechanges with the same key
+                AbortSimilarTileChanges(removeChange);
+                AbortPendingSimilarTileChanges(removeChange);
             }
         }
 
