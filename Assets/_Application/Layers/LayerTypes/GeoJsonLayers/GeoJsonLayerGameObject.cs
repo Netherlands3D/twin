@@ -59,7 +59,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         [SerializeField] private GeoJSONPolygonLayer polygonLayerPrefab;
         [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
         [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
-
+        // private GeoJSONPointLayer pointVisualisation;
+        // private GeoJSONLineLayer lineVisualisation;
+        // private GeoJSONPolygonLayer polygonVisualisation;
+        
+        
         [Space] protected LayerURLPropertyData urlPropertyData = new();
 
         public LayerPropertyData PropertyData => urlPropertyData;
@@ -183,18 +187,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private async Task<GeoJSONPolygonLayer> CreateOrGetPolygonLayer()
         {
-            var childrenInLayerData = LayerData.ChildrenLayers;
-            foreach (var child in childrenInLayerData)
-            {                
-                if (child.Visualization is not GeoJSONPolygonLayer polygonLayer) continue;
-
-                return polygonLayer;
-            }
-
-            //// TODO: Should use LayerSpawner? This is a temporary layer?
+            // TODO: Should use LayerSpawner? This is a temporary layer?
             //GeoJSONPolygonLayer newPolygonLayerGameObject = Instantiate(polygonLayerPrefab);
             //ProjectData.CreateAndAttachReferenceLayerTo(newPolygonLayerGameObject);
-
+            var childrenInLayerData = LayerData.ChildrenLayers;
+            foreach (var child in childrenInLayerData)
+            {
+                if (child.PrefabIdentifier == polygonLayerPrefab.PrefabIdentifier)
+                {
+                    //todo: check if the async visualisation spawning has issues with destroying the layerData before the visualisation is loaded
+                    child.DestroyLayer(); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
+                }
+            }
+            
             ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(polygonLayerPrefab.PrefabIdentifier).NamedAs(polygonLayerPrefab.name);
             Layer layer = await App.Layers.Add(layerBuilder);
             GeoJSONPolygonLayer newPolygonLayerGameObject = layer.LayerGameObject as GeoJSONPolygonLayer;
@@ -211,19 +216,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private async Task<GeoJSONLineLayer> CreateOrGetLineLayer()
         {
-            var childrenInLayerData = LayerData.ChildrenLayers;            
-            foreach (var child in childrenInLayerData)
-            {
-                if (!ProjectData.Current.PrefabLibrary.IsPrefabOfType<GeoJSONLineLayer>(child.PrefabIdentifier)) continue;
-
-                //TODO we need to get the visualisation here to properly return the object. if we dont want to get it from data, we need think of another way.. Do we need to find it from children anyways??
-                return null;
-            }
-
             // TODO: Should use LayerSpawner? This is a temporary layer?
             //GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
             //ProjectData.CreateAndAttachReferenceLayerTo(newLineLayerGameObject);
-
+            
+            var childrenInLayerData = LayerData.ChildrenLayers;
+            foreach (var child in childrenInLayerData)
+            {
+                if (child.PrefabIdentifier == lineLayerPrefab.PrefabIdentifier)
+                {
+                    //todo: check if the async visualisation spawning has issues with destroying the layerData before the visualisation is loaded
+                    child.DestroyLayer(); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
+                }
+            }
+            
             ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(lineLayerPrefab.PrefabIdentifier).NamedAs(lineLayerPrefab.name);
             Layer layer = await App.Layers.Add(layerBuilder);
             GeoJSONLineLayer newLineLayerGameObject = layer.LayerGameObject as GeoJSONLineLayer;
@@ -240,18 +246,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private async Task<GeoJSONPointLayer> CreateOrGetPointLayer()
         {
-            var childrenInLayerData = LayerData.ChildrenLayers;
-            foreach (var child in childrenInLayerData)
-            {              
-                if (child.Visualization is not GeoJSONPointLayer pointLayer) continue;
-
-                return pointLayer;
-            }
-
             // TODO: Should use LayerSpawner? This is a temporary layer?
             //GeoJSONPointLayer newPointLayerGameObject = Instantiate(pointLayerPrefab);
             //ProjectData.CreateAndAttachReferenceLayerTo(newPointLayerGameObject);
 
+            var childrenInLayerData = LayerData.ChildrenLayers;
+            foreach (var child in childrenInLayerData)
+            {
+                if (child.PrefabIdentifier == pointLayerPrefab.PrefabIdentifier)
+                {
+                    //todo: check if the async visualisation spawning has issues with destroying the layerData before the visualisation is loaded
+                    child.DestroyLayer(); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
+                }
+            }
+            
             ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(pointLayerPrefab.PrefabIdentifier).NamedAs(pointLayerPrefab.name);
             Layer layer = await App.Layers.Add(layerBuilder);
             GeoJSONPointLayer newPointLayerGameObject = layer.LayerGameObject as GeoJSONPointLayer;

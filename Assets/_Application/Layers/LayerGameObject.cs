@@ -95,6 +95,7 @@ namespace Netherlands3D.Twin.Layers
             if (this.layerData != null)
                 UnregisterEventListeners();
 
+            //todo: what if layerData is null? e.g. because it was destroyed before the visualisation was loaded
             this.layerData = layerData;
             
             RegisterEventListeners();
