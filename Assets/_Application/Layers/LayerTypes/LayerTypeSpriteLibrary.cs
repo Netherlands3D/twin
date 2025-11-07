@@ -25,6 +25,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         [SerializeField] private List<LayerSpriteCollection> layerTypeSprites;
         public LayerSpriteCollection GetLayerTypeSprite(LayerData layer)
         {
+            if(layer.PrefabIdentifier == "folder")
+                return layerTypeSprites[2];
+            
             LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier);
             if (template != null)
             {
@@ -39,8 +42,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     else if (selectionLayer.ShapeType == ShapeType.Grid)
                         return layerTypeSprites[12];
                     return layerTypeSprites[6];               
-                case FolderLayer _:
-                    return layerTypeSprites[2];
+                // case FolderLayer _:
+                //     return layerTypeSprites[2];
                 default:
                     Debug.LogError("layer type of " + layer.Name + " is not specified");
                     return layerTypeSprites[0];

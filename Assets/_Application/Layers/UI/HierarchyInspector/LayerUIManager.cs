@@ -148,34 +148,11 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 ProjectData.Current.RootLayer.DeselectAllLayers();
         }
 
-        public FolderLayer CreateFolderLayer()
-        {
-            var folder = new FolderLayer("Folder");
-            return folder;
-        }
-
         private void Update()
         {
             if (Keyboard.current.deleteKey.wasPressedThisFrame && !EventSystem.current.currentSelectedGameObject)
             {
                 DeleteSelectedLayers();
-            }
-        }
-
-        public void GroupSelectedLayers()
-        {
-            if (ProjectData.Current.RootLayer.SelectedLayers.Count == 0) 
-                return;
-            
-            var layersToGroup = new List<LayerData>(ProjectData.Current.RootLayer.SelectedLayers); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
-
-            var newGroup = CreateFolderLayer();
-            var referenceLayer = ProjectData.Current.RootLayer.SelectedLayers.Last();
-            newGroup.SetParent(referenceLayer.ParentLayer, referenceLayer.SiblingIndex);
-            SortSelectedLayers(layersToGroup);
-            foreach (var selectedLayer in layersToGroup)
-            {
-                selectedLayer.SetParent(newGroup);
             }
         }
 
@@ -230,6 +207,13 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             var ui = GetLayerUI(layer);
             ui.SetHighlight(layerState);
             ui.MarkLayerUIAsDirty();
+        }
+
+        public List<LayerData> GetLayersSortedByUI()
+        {
+            var layersToGroup = new List<LayerData>(ProjectData.Current.RootLayer.SelectedLayers); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
+            SortSelectedLayers(layersToGroup);
+            return layersToGroup;
         }
     }
 }

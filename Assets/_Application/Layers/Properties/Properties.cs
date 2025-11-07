@@ -46,7 +46,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         public static ILayerWithPropertyPanels TryFindProperties(LayerData layer)
         {
-            LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier);
+            LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier); //todo: this now gives an error if the prefabID is not in the library (e.g. folderLayers)
             return (template == null) ? layer as ILayerWithPropertyPanels : template as ILayerWithPropertyPanels;
         }
     }

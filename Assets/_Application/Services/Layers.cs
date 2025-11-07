@@ -52,6 +52,7 @@ namespace Netherlands3D.Twin.Services
             {
                 case "url": return await ImportFromUrl(layerBuilder);
                 case "file": return ImportFromFile(layerBuilder);
+                case "folder": return AddFolderLayer(layerBuilder);
             }
 
             var layerData = builder.Build();
@@ -60,7 +61,15 @@ namespace Netherlands3D.Twin.Services
             layerAdded.Invoke(layer);
             return layer;
         }
-        
+
+        private Layer AddFolderLayer(LayerBuilder layerBuilder)
+        {
+            var folderLayer = layerBuilder.Build();
+            ProjectData.Current.AddStandardLayer(folderLayer);
+            var folder = new Layer(folderLayer);
+            layerAdded.Invoke(folder);
+            return folder;
+        }
 
         private Layer ImportFromFile(LayerBuilder layerBuilder)
         {
