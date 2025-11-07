@@ -51,7 +51,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private bool completedInitialization;
         public LayerPropertyData PropertyData => settings;
 
-        private LayerData areaReferenceData;
+        private CartesianTileLayerGameObject areaReference;
 
         protected override void OnLayerInitialize()
         {
@@ -364,8 +364,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void OnPolygonVisualisationUpdated()
         {
             //check or wait if the maaiveld reference data is loaded
-            areaReferenceData = ProjectData.Current.RootLayer.GetFirstLayerByLayerMask(LayerMask.NameToLayer("Terrain"));
-            if (areaReferenceData == null) return;
+            areaReference = FindObjectsByType<CartesianTileLayerGameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None).FirstOrDefault( cl => cl.gameObject.layer == LayerMask.NameToLayer("Terrain"));
+            if (areaReference == null) return;
 
             InitializeScatterArea();
             polygonLayer.PolygonVisualisation.OnPolygonVisualisationUpdated.RemoveListener(OnPolygonVisualisationUpdated);
@@ -373,12 +373,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void InitializeScatterArea()
         {
-            areaReferenceData.OnPrefabIdChanged.RemoveListener(InitializeScatterArea);
+            areaReference.LayerData.OnPrefabIdChanged.RemoveListener(InitializeScatterArea);
             RecalculatePolygonsAndSamplerTexture();
 
             BoundingBox polygonBoundingBox = polygonLayer.PolygonVisualisation.Bounds;
             polygonBoundingBox.Convert(CoordinateSystem.RD);
-            BinaryMeshLayer bml = ((CartesianTileLayerGameObject)areaReferenceData.Visualization).Layer as BinaryMeshLayer;
+            BinaryMeshLayer bml = areaReference.Layer as BinaryMeshLayer;
             Initialize(LayerData, settings.OriginalPrefabId);
             bml?.OnTileObjectCreated.AddListener(tile =>
             {

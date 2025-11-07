@@ -104,19 +104,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                 children[i].RootIndex = i;
             }
         }
-        
-        public LayerData GetFirstLayerByLayerMask(LayerMask mask)
-        {
-            foreach(LayerData data in ChildrenLayers)
-            {
-                LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(data.PrefabIdentifier);
-                if (template != null && template.gameObject.layer == mask)
-                {
-                    return data;
-                }
-            }
-            return null;
-        }
 
         public List<LayerData> GetFlatHierarchy()
         {
