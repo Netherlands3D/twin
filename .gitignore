@@ -37,6 +37,9 @@
 # Jetbrains ide directory
 .idea/
 
+# macOS Finder
+.DS_Store
+
 # Gradle cache directory
 .gradle/
 
