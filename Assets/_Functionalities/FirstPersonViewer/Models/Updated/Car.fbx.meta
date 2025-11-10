@@ -8,22 +8,22 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Chairs
-    second: {fileID: 2100000, guid: 5bc9ef64459d1544b8f542b62fd72add, type: 2}
+    second: {fileID: 2100000, guid: 3b1883d670cca9247904abffd9513c84, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Grey
-    second: {fileID: 2100000, guid: e93f3a6c50ace6349aab712983176612, type: 2}
+    second: {fileID: 2100000, guid: 40d0ec952cf30e44c8e397b24450b6f4, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: INterior
-    second: {fileID: 2100000, guid: a66cafdb49deb0245995a188653e5751, type: 2}
+    second: {fileID: 2100000, guid: 8a7a674d1f923eb41af22455ac12ebd9, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Logo
-    second: {fileID: 2100000, guid: ed9488cc6ebc45f44abbdd2d8e0ca55a, type: 2}
+    second: {fileID: 2100000, guid: 8028538d35215164d8e156d22334b67d, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -38,12 +38,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Metal
-    second: {fileID: 2100000, guid: 05a835bf126c19440a52f00d22efda71, type: 2}
+    second: {fileID: 2100000, guid: 945e1b68c8a0a4541a42f44f680d8d9e, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Mirrorglass
-    second: {fileID: 2100000, guid: c53f08c6d89f60a459be2919d827bd1a, type: 2}
+    second: {fileID: 2100000, guid: 2f66b96ed64d2a14c99ff59a8fa3599f, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
