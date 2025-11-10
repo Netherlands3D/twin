@@ -10,7 +10,7 @@ namespace Netherlands3D.Tilekit
         public double3 Center { get; private set; }
         public double3 Size { get; private set; }
 
-        public double3 Extents => Size * 0.5;
+        public double3 Extents => Size * 0.5d;
 
         public double3 Min => Center - Extents;
         public double3 Max => Center + Extents;
@@ -108,6 +108,14 @@ namespace Netherlands3D.Tilekit
             return new BoundsDouble(
                 new double3(unityBounds.center.x, unityBounds.center.y, unityBounds.center.z), 
                 new double3(unityBounds.size.x, unityBounds.size.y, unityBounds.size.z)
+            );
+        }
+
+        public static BoundsDouble FromMinAndMax(double3 min, double3 max)
+        {
+            return new BoundsDouble(
+                (min + max) * 0.5d, 
+                math.abs(max - min)
             );
         }
     }
