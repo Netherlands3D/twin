@@ -135,7 +135,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public void AddFeatureVisualisation(Feature feature)
         {
-            VisualizeFeature(feature);
+            var originalCoordinateSystem = GeoJSONParser.GetCoordinateSystem(feature.CRS);
+            VisualizeFeature(feature, originalCoordinateSystem);
             ProcessFeatureMapping(feature);
         }
 
@@ -197,252 +198,94 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             objectMapping.SetGeoJsonLayerParent(this);
             objectMapping.UpdateBoundingBox();
             ObjectSelectorService.MappingTree.RootInsert(objectMapping);
-        }
+        }    
 
-        private void CreatePolygonLayer()
+        private void SetVisualization(LayerGameObject layerGameObject)
         {
-            var childrenInLayerData = LayerData.ChildrenLayers;
-            foreach (var child in childrenInLayerData)
+            switch (layerGameObject)
             {
-                if (child.PrefabIdentifier == polygonLayerPrefab.PrefabIdentifier)
-                {
-                    //todo: check if the async visualisation spawning has issues with destroying the layerData before the visualisation is loaded
-                    child.DestroyLayer(); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
-                }
+                case GeoJSONPolygonLayer layer:
+                    polygonFeaturesLayer = layer;
+                    SetVisualization(polygonFeaturesLayer, pendingPolygonFeatures);
+                    break;
+                case GeoJSONLineLayer layer:
+                    lineFeaturesLayer = layer;
+                    SetVisualization(lineFeaturesLayer, pendingLineFeatures);
+                    break;
+                case GeoJSONPointLayer layer:
+                    pointFeaturesLayer = layer;
+                    SetVisualization(pointFeaturesLayer, pendingPointFeatures);
+                    break;
             }
-
-            ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(polygonLayerPrefab.PrefabIdentifier).NamedAs(polygonLayerPrefab.name);
-            App.Layers.Add(layerBuilder, SetPolygonVisualisation);
         }
 
-        private void SetPolygonVisualisation(LayerGameObject layerGameObject)
+        private void SetVisualization(IGeoJsonVisualisationLayer layer, List<PendingFeature> pendingFeatures)
         {
-            polygonFeaturesLayer = layerGameObject as GeoJSONPolygonLayer;
-
-            polygonFeaturesLayer.LayerData.Color = LayerData.Color;
+            layer.LayerData.Color = LayerData.Color;
 
             // Replace default style with the parent's default style
-            polygonFeaturesLayer.LayerData.RemoveStyle(polygonFeaturesLayer.LayerData.DefaultStyle);
-            polygonFeaturesLayer.LayerData.AddStyle(LayerData.DefaultStyle);
-            polygonFeaturesLayer.LayerData.SetParent(LayerData);
-            polygonFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
+            layer.LayerData.RemoveStyle(layer.LayerData.DefaultStyle);
+            layer.LayerData.AddStyle(LayerData.DefaultStyle);
+            layer.LayerData.SetParent(LayerData);
+            layer.FeatureRemoved += OnFeatureRemoved;
 
-            foreach (var pendingFeature in pendingPolygonFeatures)
+            foreach (var pendingFeature in pendingFeatures)
             {
-                switch (pendingFeature.Feature.Geometry)
-                {
-                    case Polygon:
-                        AddPolygonFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
-                        break;
-                    case MultiPolygon:
-                        AddMultiPolygonFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
-                        break;
-                }
+               VisualizeFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
             }
-
-            pendingPolygonFeatures.Clear();
+            pendingFeatures.Clear();
         }
 
-        private void CreateLineLayer()
-        {
-            var childrenInLayerData = LayerData.ChildrenLayers;
-            foreach (var child in childrenInLayerData)
-            {
-                if (child.PrefabIdentifier == lineLayerPrefab.PrefabIdentifier)
-                {
-                    //todo: check if the async visualisation spawning has issues with destroying the layerData before the visualisation is loaded
-                    child.DestroyLayer(); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
-                }
-            }
-
-            ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(lineLayerPrefab.PrefabIdentifier).NamedAs(lineLayerPrefab.name);
-            App.Layers.Add(layerBuilder, SetLineVisualisation);
-        }
-
-        private void SetLineVisualisation(LayerGameObject layerGameObject)
-        {
-            lineFeaturesLayer = layerGameObject as GeoJSONLineLayer;
-
-            lineFeaturesLayer.LayerData.Color = LayerData.Color;
-
-            // Replace default style with the parent's default style
-            lineFeaturesLayer.LayerData.RemoveStyle(lineFeaturesLayer.LayerData.DefaultStyle);
-            lineFeaturesLayer.LayerData.AddStyle(LayerData.DefaultStyle);
-            lineFeaturesLayer.LayerData.SetParent(LayerData);
-            lineFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
-
-            foreach (var pendingFeature in pendingLineFeatures)
-            {
-                switch (pendingFeature.Feature.Geometry)
-                {
-                    case LineString:
-                        AddLineStringFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
-                        break;
-                    case MultiLineString:
-                        AddMultiLineStringFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
-                        break;
-                }
-            }
-
-            pendingLineFeatures.Clear();
-        }
-
-        private void CreatePointLayer()
-        {
-            var childrenInLayerData = LayerData.ChildrenLayers;
-            foreach (var child in childrenInLayerData)
-            {
-                if (child.PrefabIdentifier == pointLayerPrefab.PrefabIdentifier)
-                {
-                    //todo: check if the async visualisation spawning has issues with destroying the layerData before the visualisation is loaded
-                    child.DestroyLayer(); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
-                }
-            }
-
-            ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(pointLayerPrefab.PrefabIdentifier).NamedAs(pointLayerPrefab.name);
-            App.Layers.Add(layerBuilder, SetPointVisualization);
-        }
-
-        private void SetPointVisualization(LayerGameObject layerGameObject)
-        {
-            pointFeaturesLayer = layerGameObject as GeoJSONPointLayer;
-
-            pointFeaturesLayer.LayerData.Color = LayerData.Color;
-
-            // Replace default style with the parent's default style
-            pointFeaturesLayer.LayerData.RemoveStyle(pointFeaturesLayer.LayerData.DefaultStyle);
-            pointFeaturesLayer.LayerData.AddStyle(LayerData.DefaultStyle);
-            pointFeaturesLayer.LayerData.SetParent(LayerData);
-            pointFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
-
-            foreach (var pendingFeature in pendingPointFeatures)
-            {
-                switch (pendingFeature.Feature.Geometry)
-                {
-                    case Point:
-                        AddPointFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
-                        break;
-                    case MultiPoint:
-                        AddMultiPointFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
-                        break;
-                }
-            }
-
-            pendingPointFeatures.Clear();
-        }
-
-        private void VisualizeFeature(Feature feature)
-        {
-            var originalCoordinateSystem = GeoJSONParser.GetCoordinateSystem(feature.CRS);
+        private void VisualizeFeature(Feature feature, CoordinateSystem crs)
+        {            
             switch (feature.Geometry.Type)
             {
-                case GeoJSONObjectType.MultiPolygon:
-                    AddMultiPolygonFeature(feature, originalCoordinateSystem);
-                    return;
+                case GeoJSONObjectType.MultiPolygon:                    
                 case GeoJSONObjectType.Polygon:
-                    AddPolygonFeature(feature, originalCoordinateSystem);
+                    AddFeature(feature, crs, polygonFeaturesLayer, pendingPolygonFeatures, polygonLayerPrefab, SetVisualization);
                     return;
-                case GeoJSONObjectType.MultiLineString:
-                    AddMultiLineStringFeature(feature, originalCoordinateSystem);
-                    return;
+                case GeoJSONObjectType.MultiLineString:                    
                 case GeoJSONObjectType.LineString:
-                    AddLineStringFeature(feature, originalCoordinateSystem);
+                    AddFeature(feature, crs, lineFeaturesLayer, pendingLineFeatures, lineLayerPrefab, SetVisualization);
                     return;
-                case GeoJSONObjectType.MultiPoint:
-                    AddMultiPointFeature(feature, originalCoordinateSystem);
-                    return;
+                case GeoJSONObjectType.MultiPoint:                   
                 case GeoJSONObjectType.Point:
-                    AddPointFeature(feature, originalCoordinateSystem);
+                    AddFeature(feature, crs, pointFeaturesLayer, pendingPointFeatures, pointLayerPrefab, SetVisualization);
                     return;
                 default:
                     throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization");
             }
         }
 
-        private void AddPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        private void AddFeature(Feature feature, CoordinateSystem originalCoordinateSystem, IGeoJsonVisualisationLayer layer, List<PendingFeature> pendingFeatures, LayerGameObject prefab, UnityAction<LayerGameObject> callBack)
         {
-            if (pointFeaturesLayer == null)
+            if (layer == null)
             {
-                if(pendingPointFeatures.Count == 0)
-                    CreatePointLayer(); 
-                
-                pendingPointFeatures.Add(new PendingFeature(feature, originalCoordinateSystem));
-                return;
-            }
+                if (pendingFeatures.Count == 0)
+                    CreateLayer(prefab, callBack);
 
-            pointFeaturesLayer.AddAndVisualizeFeature<Point>(feature, originalCoordinateSystem);
-        }
-
-        private void AddMultiPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
-        {
-            if (pointFeaturesLayer == null)
-            {
-                if(pendingPointFeatures.Count == 0)
-                    CreatePointLayer();
-                
-                pendingPointFeatures.Add(new PendingFeature(feature, originalCoordinateSystem));
-                return;
-            }
-
-            pointFeaturesLayer.AddAndVisualizeFeature<MultiPoint>(feature, originalCoordinateSystem);
-        }
-
-        private void AddLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
-        {
-            if (lineFeaturesLayer == null)
-            {
-                if(pendingLineFeatures.Count == 0)
-                    CreateLineLayer();
-                
-                pendingLineFeatures.Add(new PendingFeature(feature, originalCoordinateSystem));
-                return;
-            }
-            
-            lineFeaturesLayer.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
-        }
-
-        private void AddMultiLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
-        {
-            if (lineFeaturesLayer == null)
-            {
-                if(pendingLineFeatures.Count == 0)
-                    CreateLineLayer();
-    
-                pendingLineFeatures.Add(new PendingFeature(feature, originalCoordinateSystem));
-                return;
-            }
-
-            lineFeaturesLayer.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
-        }
-
-
-        private void AddPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
-        {
-            if (polygonFeaturesLayer == null)
-            {
-                if(pendingPolygonFeatures.Count == 0)
-                    CreatePolygonLayer();
-                
-                pendingPolygonFeatures.Add(new PendingFeature(feature, originalCoordinateSystem));
-                return;
-            }
-
-            polygonFeaturesLayer.AddAndVisualizeFeature<Polygon>(feature, originalCoordinateSystem);
-        }
-
-        private void AddMultiPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
-        {
-            if (polygonFeaturesLayer == null)
-            {
-                if(pendingPolygonFeatures.Count == 0)
-                    CreatePolygonLayer();
-    
                 var pendingFeature = new PendingFeature(feature, originalCoordinateSystem);
-                pendingPolygonFeatures.Add(pendingFeature);
+                pendingFeatures.Add(pendingFeature);
                 return;
             }
 
-            polygonFeaturesLayer.AddAndVisualizeFeature<MultiPolygon>(feature, originalCoordinateSystem);
+            layer.AddAndVisualizeFeature(feature, originalCoordinateSystem);
+        }
+
+        private void CreateLayer(LayerGameObject prefab, UnityAction<LayerGameObject> callBack)
+        {
+            var childrenInLayerData = LayerData.ChildrenLayers;
+            foreach (var child in childrenInLayerData)
+            {
+                if (child.PrefabIdentifier == prefab.PrefabIdentifier)
+                {
+                    //todo: check if the async visualisation spawning has issues with destroying the layerData before the visualisation is loaded
+                    child.DestroyLayer(); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
+                }
+            }
+
+            ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs(prefab.name);
+            App.Layers.Add(layerBuilder, callBack);
         }
 
         protected virtual void OnFeatureRemoved(Feature feature)
