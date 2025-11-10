@@ -3962,7 +3962,6 @@ GameObject:
   - component: {fileID: 297942020326514440}
   - component: {fileID: 898963798061876152}
   - component: {fileID: 790557086420049307}
-  - component: {fileID: 474986964326212686}
   - component: {fileID: 901389181492682019}
   m_Layer: 5
   m_Name: FPV Panel
@@ -4046,18 +4045,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &474986964326212686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5031786889156781905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 082ee06cfed3ba24c82368651a321939, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &901389181492682019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7807,11 +7794,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6740410228911076946, guid: b9565e5e6806aa84fa4bee3688c5cb46,
         type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 474986964326212686}
-    - target: {fileID: 6740410228911076946, guid: b9565e5e6806aa84fa4bee3688c5cb46,
-        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
@@ -8484,7 +8466,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 474986964326212686}
+      objectReference: {fileID: 0}
     - target: {fileID: 9064220470025580993, guid: 461aee81d187748439f6b71800ac6b60,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -8569,6 +8551,11 @@ PrefabInstance:
         type: 3}
       propertyPath: maxZoomScale
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2568988435537759527, guid: 316af653f2625134ab367f8e339c26b9,
+        type: 3}
+      propertyPath: allowClicking
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2568988435537759544, guid: 316af653f2625134ab367f8e339c26b9,
         type: 3}

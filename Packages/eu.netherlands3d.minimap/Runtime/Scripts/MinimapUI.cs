@@ -22,6 +22,8 @@ namespace Netherlands3D.Minimap
         [SerializeField] private float hoverResizeSpeed = 10.0f;
         [Tooltip("The new rect delta size when hovered")]
         [SerializeField] private Vector2 hoverSize;
+        [Tooltip("Allow clicking on the minimap")]
+        [SerializeField] private bool allowClicking = true;
 
         [SerializeField] private float scrollTimeOut = 0.05f;
         private float lastScrollTime;
@@ -266,7 +268,7 @@ namespace Netherlands3D.Minimap
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (dragging) return;
+            if (dragging || !allowClicking) return;
 
             Debug.Log("Clicked on minimap");
             wmtsMap.ClickedMap(eventData);
