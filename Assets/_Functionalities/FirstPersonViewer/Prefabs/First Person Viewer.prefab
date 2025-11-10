@@ -226,7 +226,6 @@ GameObject:
   - component: {fileID: 1609831314963826710}
   - component: {fileID: 6660788825186363282}
   - component: {fileID: 6417052032803972631}
-  - component: {fileID: 4604978584422325480}
   m_Layer: 2
   m_Name: First Person Viewer
   m_TagString: Untagged
@@ -397,16 +396,3 @@ MonoBehaviour:
   <MovementPresets>k__BackingField:
   - {fileID: 11400000, guid: bc41cb17aeb0e9e4dad0bc62ddaa02ea, type: 2}
   - {fileID: 11400000, guid: 594defc4112e8534f9cc9c41b8492119, type: 2}
---- !u!114 &4604978584422325480
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8111522683061574636}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  service: {fileID: 6417052032803972631}

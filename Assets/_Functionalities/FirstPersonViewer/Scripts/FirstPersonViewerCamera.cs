@@ -102,7 +102,7 @@ namespace Netherlands3D.FirstPersonViewer
             viewer.OnResetToStart += ResetToStart;
             viewer.OnSetCameraNorth += SetCameraNorth;
 
-            ServiceLocator.GetService<MovementModusSwitcher>().LoadMovementPreset(0);
+            viewer.MovementSwitcher.LoadMovementPreset(0);
             input.RemoveInputLockConstrain(this);
         }
 

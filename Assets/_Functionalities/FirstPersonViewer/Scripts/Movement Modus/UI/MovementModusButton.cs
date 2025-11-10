@@ -30,12 +30,12 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnEnable()
         {
-            ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged += MovementChanged;
+            ServiceLocator.GetService<FirstPersonViewer>().MovementSwitcher.OnMovementPresetChanged += MovementChanged;
         }
 
         private void OnDisable()
         {
-            ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged -= MovementChanged;    
+            ServiceLocator.GetService<FirstPersonViewer>().MovementSwitcher.OnMovementPresetChanged -= MovementChanged;    
         }
         private void MovementChanged(ViewerState presets)
         {

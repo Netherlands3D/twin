@@ -36,7 +36,7 @@ namespace Netherlands3D.FirstPersonViewer
         public bool LockInput => inputLocks.Count > 0;
 
         //Events
-        public static event Action<float> ExitDuration;
+        public event Action<float> ExitDuration;
         private event Action<bool> OnInputExit;
 
         private void Awake()
@@ -164,7 +164,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void SetExitCallback(Action<bool> callback) => OnInputExit = callback;
 
-        public static bool IsInputfieldSelected()
+        public bool IsInputfieldSelected()
         {
             GameObject selected = EventSystem.current.currentSelectedGameObject;
 

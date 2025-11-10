@@ -24,17 +24,17 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnEnable()
         {
-            modusSwitcher = ServiceLocator.GetService<MovementModusSwitcher>();
+            modusSwitcher = ServiceLocator.GetService<FirstPersonViewer>().MovementSwitcher;
 
             CreateMovementPresetButtons(modusSwitcher.MovementPresets, modusSwitcher.CurrentMovement);
             RefreshSettings(modusSwitcher.CurrentMovement);
 
-            ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged += RefreshSettings;
+            ServiceLocator.GetService<FirstPersonViewer>().MovementSwitcher.OnMovementPresetChanged += RefreshSettings;
         }
 
         private void OnDisable()
         {
-            ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged -= RefreshSettings;
+            ServiceLocator.GetService<FirstPersonViewer>().MovementSwitcher.OnMovementPresetChanged -= RefreshSettings;
         }
 
         private void CreateMovementPresetButtons(List<ViewerState> viewerStates, ViewerState activeState)

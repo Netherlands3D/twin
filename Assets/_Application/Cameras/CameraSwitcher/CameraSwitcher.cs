@@ -3,8 +3,6 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Cameras
 {
-    public enum SwitchMode { Script, Object }
-
     public class CameraSwitcher : MonoBehaviour
     {
         [SerializeField] private List<MonoBehaviour> cameraObjects;
