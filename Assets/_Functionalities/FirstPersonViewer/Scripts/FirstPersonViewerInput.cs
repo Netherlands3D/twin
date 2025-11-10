@@ -34,6 +34,7 @@ namespace Netherlands3D.FirstPersonViewer
         private bool isEditingInputfield;
         private List<MonoBehaviour> inputLocks;
         public bool LockInput => inputLocks.Count > 0;
+        public bool MouseLocked;
 
         //Events
         public static event Action<float> ExitDuration;
@@ -53,7 +54,6 @@ namespace Netherlands3D.FirstPersonViewer
             CyclePreviousModus = inputActionAsset.FindAction("NavigateModusPrevious");
 
             inputLocks = new List<MonoBehaviour>();
-
         }
 
         private void OnEnable()
@@ -63,8 +63,8 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void OnFPVEnter()
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.visible = false;
         }
 
         private void OnDisable()
@@ -81,19 +81,33 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void HandleCursorLocking()
         {
-            //When editing an inputfield just block this function.
-            if (ShouldSkipCursorLocking()) return;
+            if (LeftClick.triggered && !MouseLocked)
+            {
+                //When editing an inputfield just block this function.
+                if (ShouldSkipCursorLocking()) return;
+                if (Interface.PointerIsOverUI()) return;
 
-            //When key is released release/lock mouse
-            if (ExitInput.WasReleasedThisFrame() && !isEditingInputfield)
-            {
-                ToggleCursorLock();
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                MouseLocked = true;
             }
-            else if (LeftClick.triggered && !Interface.PointerIsOverUI()) 
+            else if (LeftClick.WasReleasedThisFrame() && MouseLocked)
             {
-                //When no UI object is detected lock the mouse to screen again.
-                LockCursor();
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                MouseLocked = false;
             }
+
+            ////When key is released release/lock mouse
+            //if (ExitInput.WasReleasedThisFrame() && !isEditingInputfield)
+            //{
+            //    ToggleCursorLock();
+            //}
+            //else if (LeftClick.triggered && !Interface.PointerIsOverUI()) 
+            //{
+            //    //When no UI object is detected lock the mouse to screen again.
+            //    LockCursor();
+            //}
         }
 
         private bool ShouldSkipCursorLocking()
