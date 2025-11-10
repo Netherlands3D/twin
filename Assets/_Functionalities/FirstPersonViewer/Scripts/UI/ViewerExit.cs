@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Netherlands3D.Services;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,16 +12,16 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void Start()
         {
-            FirstPersonViewerInput.ExitDuration += UpdateTimer;
+            ServiceLocator.GetService<FirstPersonViewer>().Input.ExitDuration += UpdateTimer;
             gameObject.SetActive(false);
         }
 
         private void OnDestroy()
         {
-            FirstPersonViewerInput.ExitDuration -= UpdateTimer;
+            ServiceLocator.GetService<FirstPersonViewer>().Input.ExitDuration -= UpdateTimer;
         }
 
-        private void UpdateTimer(float percentage)
+        public void UpdateTimer(float percentage)
         {
             if (percentage == -1)
             {

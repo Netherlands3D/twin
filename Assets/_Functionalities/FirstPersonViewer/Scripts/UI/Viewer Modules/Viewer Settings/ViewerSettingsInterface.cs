@@ -24,42 +24,42 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnEnable()
         {
-            modusSwitcher = ServiceLocator.GetService<MovementModusSwitcher>();
+            modusSwitcher = ServiceLocator.GetService<FirstPersonViewer>().MovementSwitcher;
 
             CreateMovementPresetButtons(modusSwitcher.MovementPresets, modusSwitcher.CurrentMovement);
             RefreshSettings(modusSwitcher.CurrentMovement);
 
-            ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged += RefreshSettings;
+            ServiceLocator.GetService<FirstPersonViewer>().MovementSwitcher.OnMovementPresetChanged += RefreshSettings;
         }
 
         private void OnDisable()
         {
-            ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged -= RefreshSettings;
+            ServiceLocator.GetService<FirstPersonViewer>().MovementSwitcher.OnMovementPresetChanged -= RefreshSettings;
         }
 
-        private void CreateMovementPresetButtons(List<MovementPresets> movementPresets, MovementPresets activePreset)
+        private void CreateMovementPresetButtons(List<ViewerState> viewerStates, ViewerState activeState)
         {
             foreach (Transform child in settingParent)
             {
                 Destroy(child.gameObject);
             }
 
-            foreach (MovementPresets preset in movementPresets)
+            foreach (ViewerState state in viewerStates)
             {
                 MovementModusButton moveButtonObj = Instantiate(movementModusButtonPrefab, movementParent);
-                moveButtonObj.Init(preset, this);
-                if (activePreset == preset) moveButtonObj.SetSelected(true);
+                moveButtonObj.Init(state, this);
+                if (activeState == state) moveButtonObj.SetSelected(true);
             }
         }
 
-        private void RefreshSettings(MovementPresets movementPreset)
+        private void RefreshSettings(ViewerState viewerState)
         {
             foreach(Transform child in settingParent)
             {
                 Destroy(child.gameObject);
             }
 
-            foreach (ViewerSetting setting in movementPreset.editableSettings.list)
+            foreach (ViewerSetting setting in viewerState.editableSettings.list)
             {
                 if (!setting.isVisible) continue;
 
@@ -73,7 +73,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             StartCoroutine(UpdateCanvas());
         }
 
-        public void ModusButtonPressed(MovementPresets preset)
+        public void ModusButtonPressed(ViewerState preset)
         {
             modusSwitcher.LoadMovementPreset(preset);
         }

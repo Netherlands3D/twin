@@ -31,7 +31,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnUpdate()
         {
-            Vector2 moveInput = viewer.GetMoveInput();
+            Vector2 moveInput = GetMoveInput();
             MoveVehicle(moveInput);
 
             viewer.SnapToGround();
@@ -47,7 +47,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         private void MoveVehicle(Vector2 moveInput)
         {
             float currentMultiplier = input.SprintAction.IsPressed() ? speedMultiplierSetting.Value : 1;
-            bool isGoingBackwards = moveInput.y < 0;
+            bool isGoingBackwards = moveInput.y < 0 && currentSpeed <= 0;
             currentMultiplier *= (isGoingBackwards ? .3f : 1);
 
             float targetSpeed = moveInput.y * MovementSpeed * currentMultiplier;

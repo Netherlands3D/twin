@@ -150,6 +150,10 @@ namespace Netherlands3D.SelectionTools
             {
                 var data = datas[i];
 
+                //TODO we maybe want to check here why the geometry is invalid here,
+                //but this causes application to crash or severe performance impact
+                if (data == null) continue; 
+
                 for (int j = 0; j < data.geometry.NumGeometries; j++)
                 {
                     var tri = data.geometry.GetGeometryN(j);

@@ -2460,20 +2460,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5695520526871410670}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 474986964326212686}
-        m_TargetAssemblyTypeName: Netherlands3D.FirstPersonViewer.UI.ViewerUIButtons,
-          eu.netherlands3d.twin
-        m_MethodName: SnapToGround
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &3830592937773682161
 GameObject:
   m_ObjectHideFlags: 0
@@ -3047,19 +3034,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7556582124257035795}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 474986964326212686}
-        m_TargetAssemblyTypeName: Netherlands3D.ViewerUIButtons, eu.netherlands3d.twin
-        m_MethodName: ResetToStart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &4600470270349734180
 GameObject:
   m_ObjectHideFlags: 0
@@ -7823,7 +7798,7 @@ PrefabInstance:
     - target: {fileID: 6740410228911076946, guid: b9565e5e6806aa84fa4bee3688c5cb46,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6740410228911076946, guid: b9565e5e6806aa84fa4bee3688c5cb46,
         type: 3}

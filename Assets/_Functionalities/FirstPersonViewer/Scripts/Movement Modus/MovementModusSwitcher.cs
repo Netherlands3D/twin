@@ -10,25 +10,25 @@ namespace Netherlands3D.FirstPersonViewer
         private FirstPersonViewerInput input;
 
         [Header("Movement")]
-        [field: SerializeField] public List<MovementPresets> MovementPresets { private set; get; }
-        public MovementPresets CurrentMovement { private set; get; }
+        [field: SerializeField] public List<ViewerState> MovementPresets { private set; get; }
+        public ViewerState CurrentMovement { private set; get; }
 
-        public event Action<MovementPresets> OnMovementPresetChanged;
+        public event Action<ViewerState> OnMovementPresetChanged;
 
-        private void Awake()
+        public void SetViewerInput(FirstPersonViewerInput input)
         {
-            input = GetComponent<FirstPersonViewerInput>();
+            this.input = input;
         }
 
         private void Update()
         {
             if (input.CyclePreviousModus.triggered) ChangeViewerModus(-1);
-            else if (input.CycleNextModus.triggered) ChangeViewerModus(1);        
+            else if (input.CycleNextModus.triggered) ChangeViewerModus(1);
         }
 
         public void ChangeViewerModus(int switchDirection)
         {
-            if (FirstPersonViewerInput.IsInputfieldSelected()) return;
+            if (input.IsInputfieldSelected()) return;
 
             int currentIndex = MovementPresets.IndexOf(CurrentMovement);
 
@@ -38,9 +38,9 @@ namespace Netherlands3D.FirstPersonViewer
             LoadMovementPreset(MovementPresets[currentIndex]);
         }
 
-        public void LoadMovementPreset(MovementPresets movePresets)
+        public void LoadMovementPreset(ViewerState viewerState)
         {
-            CurrentMovement = movePresets;
+            CurrentMovement = viewerState;
 
             //Send events
             OnMovementPresetChanged?.Invoke(CurrentMovement);

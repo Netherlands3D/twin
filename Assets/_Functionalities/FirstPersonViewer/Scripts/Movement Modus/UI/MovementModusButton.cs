@@ -9,7 +9,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 {
     public class MovementModusButton : MonoBehaviour
     {
-        private MovementPresets movementPreset;
+        private ViewerState viewerState;
         private ViewerSettingsInterface viewerSettings;
 
         [SerializeField] private List<Image> movementIcons;
@@ -18,9 +18,9 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private GameObject regular;
         [SerializeField] private GameObject selected;
 
-        public void Init(MovementPresets preset, ViewerSettingsInterface viewerSettings)
+        public void Init(ViewerState preset, ViewerSettingsInterface viewerSettings)
         {
-            movementPreset = preset;
+            viewerState = preset;
             this.viewerSettings = viewerSettings;
 
             movementIcons.ForEach(i => i.sprite = preset.viewIcon);
@@ -30,16 +30,16 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnEnable()
         {
-            ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged += MovementChanged;
+            ServiceLocator.GetService<FirstPersonViewer>().MovementSwitcher.OnMovementPresetChanged += MovementChanged;
         }
 
         private void OnDisable()
         {
-            ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged -= MovementChanged;    
+            ServiceLocator.GetService<FirstPersonViewer>().MovementSwitcher.OnMovementPresetChanged -= MovementChanged;    
         }
-        private void MovementChanged(MovementPresets presets)
+        private void MovementChanged(ViewerState presets)
         {
-            SetSelected(presets == movementPreset);
+            SetSelected(presets == viewerState);
         }
 
         public void SetSelected(bool enabled)
@@ -50,7 +50,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public void ButtonClicked()
         {
-            viewerSettings.ModusButtonPressed(movementPreset);
+            viewerSettings.ModusButtonPressed(viewerState);
         }
     }
 }

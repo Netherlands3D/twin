@@ -19,7 +19,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnUpdate()
         {
-            Vector2 moveInput = viewer.GetMoveInput();
+            Vector2 moveInput = GetMoveInput();
             MoveFreeCam(moveInput);
 
             float verticalInput = input.VerticalMoveAction.ReadValue<float>();
