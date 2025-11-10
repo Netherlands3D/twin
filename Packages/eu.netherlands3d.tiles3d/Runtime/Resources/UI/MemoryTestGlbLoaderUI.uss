@@ -1,0 +1,88 @@
+.ui-root {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    /* margin-left: 40px; */
+    margin-right: 40px;
+    /* margin-top: 20px; */
+    margin-bottom: 20px;
+    /* padding-left: 40px; */
+    /* padding-right: 40px; */
+    padding-top: 10px;
+    /* padding-bottom: 20px; */
+    width: 100%;
+}
+
+.memory-graph {
+    flex-grow: 1;
+    flex-basis: 0;
+    min-height: 200px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.35);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.info-panel {
+    flex-grow: 1;
+    flex-basis: 0;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.35);
+    border-radius: 8px;
+    padding: 12px;
+    color: white;
+    /* margin-left: 16px; */
+}
+
+.title {
+    font-size: 16px;
+    unity-font-style-and-weight: bold;
+}
+
+.info-line {
+    font-size: 13px;
+}
+
+.api-key-field {
+    margin-top: 4px;
+}
+
+.api-key-field .unity-text-field__label {
+    color: #d0d0d0;
+}
+
+.api-key-field .unity-text-field__input {
+    color: #000000;
+}
+
+.button-row {
+    flex-direction: row;
+    margin-top: 6px;
+}
+
+.button-row > Button {
+    flex-grow: 1;
+    min-width: 120px;
+}
+
+.primary-button {
+    background-color: #2E7DD7;
+    color: white;
+}
+
+.memory-legend {
+    flex-direction: column;
+    margin-top: 4px;
+}
+
+#allocated-label{
+    color: #f07c2e;
+}
+
+#reserved-label{
+   color: #5fcc64;
+}
+
+#mono-label{
+    color: #2196F3;
+}

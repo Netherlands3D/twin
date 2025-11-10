@@ -1,0 +1,25 @@
+<ns0:UXML xmlns:ns0="UnityEngine.UIElements" xmlns:ns1="Netherlands3D.Tiles3D">
+    <ns0:Style src="MemoryTestGlbLoaderUI.uss" />
+    <ns0:VisualElement class="ui-root">
+        <ns1:MemoryStatsGraph name="memory-graph" class="memory-graph" sample-interval="0.5" max-samples="0" style="height: 100%" />
+        <ns0:VisualElement class="info-panel">
+
+            <ns0:Label name="csv-label" class="info-line" />
+            <ns0:TextField name="api-key-field" class="api-key-field" label="Google API key" visible="false" />
+            <ns0:Label name="status-label" class="info-line" />
+            <ns0:Label name="progress-label" class="info-line" />
+
+            <ns0:VisualElement class="memory-legend">
+                <ns0:Label name="allocated-label" class="info-line" />
+                <ns0:Label name="reserved-label" class="info-line" />
+                <ns0:Label name="mono-label" class="info-line" />
+            </ns0:VisualElement>
+
+            <ns0:VisualElement class="button-row">
+                <ns0:Button name="start-button" class="primary-button" text="Start Test" />
+                <ns0:Button name="stop-button" text="Stop" />
+            </ns0:VisualElement>
+
+        </ns0:VisualElement>
+    </ns0:VisualElement>
+</ns0:UXML>
