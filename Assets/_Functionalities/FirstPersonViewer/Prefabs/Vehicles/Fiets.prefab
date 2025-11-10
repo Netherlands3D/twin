@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 1189905228538632114}
   - component: {fileID: 3036509888443315953}
   - component: {fileID: 363222712813521403}
-  m_Layer: 0
+  - component: {fileID: 5439330778326533808}
+  m_Layer: 2
   m_Name: CurrentspeedCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,6 +104,22 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &5439330778326533808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5165415735511489771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a81d2a9e3d331bf46b82a44e12206e4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  settingNameText: {fileID: 0}
+  settingUnitText: {fileID: 1807682604945960015}
+  valueLabelText: {fileID: 1338959361780472609}
+  baseSetting: {fileID: 11400000, guid: 4e273118145672a4caa8726c61b635f5, type: 2}
 --- !u!1 &8140757472282406359
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,7 +131,7 @@ GameObject:
   - component: {fileID: 645054554016667274}
   - component: {fileID: 8766617102976483060}
   - component: {fileID: 1338959361780472609}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CurrentspeedText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -251,8 +268,8 @@ GameObject:
   - component: {fileID: 2973224601464660562}
   - component: {fileID: 3092886366392757762}
   - component: {fileID: 1807682604945960015}
-  m_Layer: 0
-  m_Name: CurrentspeedText (1)
+  m_Layer: 2
+  m_Name: Unit Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -435,10 +452,50 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7790053049677266695, guid: 22c1349d5b99d9f4a8265a2fd1a72afe,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -4164056633546998675, guid: 22c1349d5b99d9f4a8265a2fd1a72afe,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -2706057020418065076, guid: 22c1349d5b99d9f4a8265a2fd1a72afe,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1276105071862734891, guid: 22c1349d5b99d9f4a8265a2fd1a72afe,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 22c1349d5b99d9f4a8265a2fd1a72afe,
         type: 3}
       propertyPath: m_Name
-      value: bike_low_poly
+      value: Fiets
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 22c1349d5b99d9f4a8265a2fd1a72afe,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2610964011219226881, guid: 22c1349d5b99d9f4a8265a2fd1a72afe,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5924279947753686045, guid: 22c1349d5b99d9f4a8265a2fd1a72afe,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509048731733423726, guid: 22c1349d5b99d9f4a8265a2fd1a72afe,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

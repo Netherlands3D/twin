@@ -46,6 +46,8 @@ namespace Netherlands3D.FirstPersonViewer
         [Header("Settings")]
         [SerializeField] private float stepHeight = 1.5f;
 
+        private GameObject viewObject;
+
         //Events
         public Action OnResetToStart;
         public Action OnResetToGround;
@@ -156,12 +158,12 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetMovementModus(ViewerState viewerState)
         {
-            if (viewerState.viewMesh != null)
+            if (viewObject != null) Destroy(viewObject);
+
+            if (viewerState.viewPrefab != null)
             {
-                meshFilter.mesh = viewerState.viewMesh;
-                meshRenderer.materials = viewerState.meshMaterials;
+                viewObject = Instantiate(viewerState.viewPrefab, transform);
             }
-            else meshFilter.mesh = null;
 
             FirstPersonCamera.SetCameraConstrain(viewerState.CameraConstrain);
 

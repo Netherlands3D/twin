@@ -15,8 +15,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         [Header("Visuals")]
         public string viewName;
         public Sprite viewIcon;
-        public Mesh viewMesh;
-        public Material[] meshMaterials;
+        public GameObject viewPrefab;
 
         [Header("Editable Settings")]
         public SerializableViewerSettingsList editableSettings = new SerializableViewerSettingsList();

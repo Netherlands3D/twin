@@ -15,6 +15,8 @@ MonoBehaviour:
   <CameraConstrain>k__BackingField: 2
   viewName: Auto
   viewIcon: {fileID: 21300000, guid: 3edea80a8439cc5479ed6682ad352b7d, type: 3}
+  viewPrefab: {fileID: 3189998725335213987, guid: ce174108b6f2e8240b51ba1908ee93e6,
+    type: 3}
   viewMesh: {fileID: 1551113389355595217, guid: 1c62f1956ea89e14bbdbc700a0ec3b57,
     type: 3}
   meshMaterials:
