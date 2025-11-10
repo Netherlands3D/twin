@@ -17,18 +17,6 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
-    public struct PendingFeature
-    {
-        public Feature Feature;
-        public CoordinateSystem CoordinateSystem;
-
-        public PendingFeature(Feature feature, CoordinateSystem coordinateSystem)
-        {
-            Feature = feature;
-            CoordinateSystem = coordinateSystem;
-        }
-    }
-
     [RequireComponent(typeof(ICredentialHandler))]
     public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
@@ -70,6 +58,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private GeoJSONPolygonLayer polygonFeaturesLayer;
         private GeoJSONLineLayer lineFeaturesLayer;
         private GeoJSONPointLayer pointFeaturesLayer;
+
+        public struct PendingFeature
+        {
+            public Feature Feature;
+            public CoordinateSystem CoordinateSystem;
+
+            public PendingFeature(Feature feature, CoordinateSystem coordinateSystem)
+            {
+                Feature = feature;
+                CoordinateSystem = coordinateSystem;
+            }
+        }
 
         List<PendingFeature> pendingPolygonFeatures = new();
         List<PendingFeature> pendingLineFeatures = new();
@@ -158,34 +158,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// </summary>
         public void RemoveFeaturesOutOfView()
         {
-            if (polygonFeaturesLayer != null)
-                polygonFeaturesLayer.RemoveFeaturesOutOfView();
-
-            if (lineFeaturesLayer != null)
-                lineFeaturesLayer.RemoveFeaturesOutOfView();
-
-            if (pointFeaturesLayer != null)
-                pointFeaturesLayer.RemoveFeaturesOutOfView();
+            polygonFeaturesLayer?.RemoveFeaturesOutOfView();            
+            lineFeaturesLayer?.RemoveFeaturesOutOfView();
+            pointFeaturesLayer?.RemoveFeaturesOutOfView();
         }
 
         private void ProcessFeatureMapping(Feature feature)
         {
-            var polygonData = polygonFeaturesLayer?.GetMeshData(feature);
-            if (polygonData != null)
-            {
-                CreateFeatureMappings(polygonFeaturesLayer, feature, polygonData);
-            }
+            CreateFeatureMappingsForFeature(feature, polygonFeaturesLayer);
+            CreateFeatureMappingsForFeature(feature, lineFeaturesLayer);
+            CreateFeatureMappingsForFeature(feature, pointFeaturesLayer);
+        }
 
-            var lineData = lineFeaturesLayer?.GetMeshData(feature);
-            if (lineData != null)
+        private void CreateFeatureMappingsForFeature(Feature feature, IGeoJsonVisualisationLayer layer)
+        {
+            var meshData = layer?.GetMeshData(feature);
+            if (meshData != null)
             {
-                CreateFeatureMappings(lineFeaturesLayer, feature, lineData);
-            }
-
-            var pointData = pointFeaturesLayer?.GetMeshData(feature);
-            if (pointData != null)
-            {
-                CreateFeatureMappings(pointFeaturesLayer, feature, pointData);
+                CreateFeatureMappings(layer, feature, meshData);
             }
         }
 
@@ -307,20 +297,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public IGeoJsonVisualisationLayer GetVisualisationLayerForFeature(Feature feature)
         {
-            if (feature.Geometry is MultiLineString || feature.Geometry is LineString)
+            switch (feature.Geometry.Type)
             {
-                return lineFeaturesLayer;
+                case GeoJSONObjectType.MultiPolygon:
+                case GeoJSONObjectType.Polygon:
+                   return polygonFeaturesLayer;
+                case GeoJSONObjectType.MultiLineString:
+                case GeoJSONObjectType.LineString:
+                    return lineFeaturesLayer;
+                case GeoJSONObjectType.MultiPoint:
+                case GeoJSONObjectType.Point:
+                    return pointFeaturesLayer;
+                default:
+                    throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization layer");
             }
-            else if (feature.Geometry is MultiPolygon || feature.Geometry is Polygon)
-            {
-                return polygonFeaturesLayer;
-            }
-            else if (feature.Geometry is Point || feature.Geometry is MultiPoint)
-            {
-                return pointFeaturesLayer;
-            }
-
-            return null;
         }
     }
 }
