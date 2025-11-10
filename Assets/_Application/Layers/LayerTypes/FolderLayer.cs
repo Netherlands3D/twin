@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes
 {
-    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "Folder")]
+    //[DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "Folder")]
     public class FolderLayer : LayerData
     {
         public FolderLayer(string name) : base(name)
