@@ -19,10 +19,10 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
             GroupSelectedLayers();
         }
         
-        private async Task<LayerData> CreateFolderLayer()
+        private LayerData CreateFolderLayer()
         {
-            var builder = new LayerBuilder().OfType("folder").NamedAs("Folder");
-            var folder = await App.Layers.Add(builder);
+            var builder = new LayerBuilder().OfType("folder").NamedAs("Folder"); //todo: make preset?
+            var folder = App.Layers.Add(builder);
             return folder.LayerData;
         }
         
@@ -31,7 +31,7 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
             if (ProjectData.Current.RootLayer.SelectedLayers.Count == 0) 
                 return;
             
-            var newGroup = await CreateFolderLayer();
+            var newGroup = CreateFolderLayer();
             var referenceLayer = ProjectData.Current.RootLayer.SelectedLayers.Last();
             newGroup.SetParent(referenceLayer.ParentLayer, referenceLayer.SiblingIndex);
             var layersToGroup = layerUIManager.GetLayersSortedByUI();

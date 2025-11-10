@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using GeoJSON.Net;
 using GeoJSON.Net.Feature;
@@ -14,12 +13,22 @@ using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
-using System.Threading.Tasks;
-using Netherlands3D.Twin.Services;
-using UnityEngine.Analytics;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
+    public struct PendingFeature
+    {
+        public Feature Feature;
+        public CoordinateSystem CoordinateSystem;
+
+        public PendingFeature(Feature feature, CoordinateSystem coordinateSystem)
+        {
+            Feature = feature;
+            CoordinateSystem = coordinateSystem;
+        }
+    }
+
     [RequireComponent(typeof(ICredentialHandler))]
     public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
     {
@@ -50,20 +59,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private GeoJSONParser parser = new GeoJSONParser(0.01f);
         public GeoJSONParser Parser => parser;
+        
+        [SerializeField] private UnityEvent<string> onParseError = new();
+        
+        [Header("Visualizer settings")]
+        [SerializeField] private GeoJSONPolygonLayer polygonLayerPrefab;
+        [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
+        [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
 
         private GeoJSONPolygonLayer polygonFeaturesLayer;
         private GeoJSONLineLayer lineFeaturesLayer;
         private GeoJSONPointLayer pointFeaturesLayer;
 
-        [Header("Visualizer settings")]
-        [SerializeField] private GeoJSONPolygonLayer polygonLayerPrefab;
-        [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
-        [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
-        private GeoJSONPointLayer pointVisualisation;
-        private GeoJSONLineLayer lineVisualisation;
-        private GeoJSONPolygonLayer polygonVisualisation;
-        
-        
+        List<PendingFeature> pendingPolygonFeatures = new();
+        List<PendingFeature> pendingLineFeatures = new();
+        List<PendingFeature> pendingPointFeatures = new();
+
         [Space] protected LayerURLPropertyData urlPropertyData = new();
 
         public LayerPropertyData PropertyData => urlPropertyData;
@@ -71,6 +82,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         protected override void OnLayerInitialize()
         {
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
+            parser.OnParseError.AddListener(onParseError.Invoke);
         }
 
         protected override void OnLayerReady()
@@ -101,12 +113,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         protected virtual void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
-            if(auth is FailedOrUnsupported)
+            if (auth is FailedOrUnsupported)
             {
-                    LayerData.HasValidCredentials = false;
-                    return;
+                LayerData.HasValidCredentials = false;
+                return;
             }
-            
+
             LayerData.HasValidCredentials = true;
             StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
         }
@@ -114,6 +126,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         protected override void OnDestroy()
         {
             parser.OnFeatureParsed.RemoveListener(AddFeatureVisualisation);
+            parser.OnParseError.RemoveListener(onParseError.Invoke);
+
             var credentialHandler = GetComponent<ICredentialHandler>();
             credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
             base.OnDestroy();
@@ -185,14 +199,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             ObjectSelectorService.MappingTree.RootInsert(objectMapping);
         }
 
-        private async Task<GeoJSONPolygonLayer> CreateOrGetPolygonLayer()
+        private void CreatePolygonLayer()
         {
-            if (polygonVisualisation != null) 
-                return polygonVisualisation;
-            
-            // TODO: Should use LayerSpawner? This is a temporary layer?
-            //GeoJSONPolygonLayer newPolygonLayerGameObject = Instantiate(polygonLayerPrefab);
-            //ProjectData.CreateAndAttachReferenceLayerTo(newPolygonLayerGameObject);
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
@@ -202,30 +210,41 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     child.DestroyLayer(); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
                 }
             }
-            
+
             ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(polygonLayerPrefab.PrefabIdentifier).NamedAs(polygonLayerPrefab.name);
-            Layer layer = await App.Layers.Add(layerBuilder);
-            polygonVisualisation = layer.LayerGameObject as GeoJSONPolygonLayer;
-
-            polygonVisualisation.LayerData.Color = LayerData.Color;
-
-            // Replace default style with the parent's default style
-            polygonVisualisation.LayerData.RemoveStyle(polygonVisualisation.LayerData.DefaultStyle);
-            polygonVisualisation.LayerData.AddStyle(LayerData.DefaultStyle);
-            polygonVisualisation.LayerData.SetParent(LayerData);
-            polygonVisualisation.FeatureRemoved += OnFeatureRemoved;
-            return polygonVisualisation;
+            App.Layers.Add(layerBuilder, SetPolygonVisualisation);
         }
 
-        private async Task<GeoJSONLineLayer> CreateOrGetLineLayer()
+        private void SetPolygonVisualisation(LayerGameObject layerGameObject)
         {
-            if (lineVisualisation != null) 
-                return lineVisualisation;
-            
-            // TODO: Should use LayerSpawner? This is a temporary layer?
-            //GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
-            //ProjectData.CreateAndAttachReferenceLayerTo(newLineLayerGameObject);
-            
+            polygonFeaturesLayer = layerGameObject as GeoJSONPolygonLayer;
+
+            polygonFeaturesLayer.LayerData.Color = LayerData.Color;
+
+            // Replace default style with the parent's default style
+            polygonFeaturesLayer.LayerData.RemoveStyle(polygonFeaturesLayer.LayerData.DefaultStyle);
+            polygonFeaturesLayer.LayerData.AddStyle(LayerData.DefaultStyle);
+            polygonFeaturesLayer.LayerData.SetParent(LayerData);
+            polygonFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
+
+            foreach (var pendingFeature in pendingPolygonFeatures)
+            {
+                switch (pendingFeature.Feature.Geometry)
+                {
+                    case Polygon:
+                        AddPolygonFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
+                        break;
+                    case MultiPolygon:
+                        AddMultiPolygonFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
+                        break;
+                }
+            }
+
+            pendingPolygonFeatures.Clear();
+        }
+
+        private void CreateLineLayer()
+        {
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
@@ -235,30 +254,41 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     child.DestroyLayer(); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
                 }
             }
-            
+
             ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(lineLayerPrefab.PrefabIdentifier).NamedAs(lineLayerPrefab.name);
-            Layer layer = await App.Layers.Add(layerBuilder);
-            lineVisualisation = layer.LayerGameObject as GeoJSONLineLayer;
-
-            lineVisualisation.LayerData.Color = LayerData.Color;
-
-            // Replace default style with the parent's default style
-            lineVisualisation.LayerData.RemoveStyle(lineVisualisation.LayerData.DefaultStyle);
-            lineVisualisation.LayerData.AddStyle(LayerData.DefaultStyle);
-            lineVisualisation.LayerData.SetParent(LayerData);
-            lineVisualisation.FeatureRemoved += OnFeatureRemoved;
-            return lineVisualisation;
+            App.Layers.Add(layerBuilder, SetLineVisualisation);
         }
 
-        private async Task<GeoJSONPointLayer> CreateOrGetPointLayer()
+        private void SetLineVisualisation(LayerGameObject layerGameObject)
         {
-            if (pointVisualisation != null) 
-                return pointVisualisation;
-            
-            // TODO: Should use LayerSpawner? This is a temporary layer?
-            //GeoJSONPointLayer newPointLayerGameObject = Instantiate(pointLayerPrefab);
-            //ProjectData.CreateAndAttachReferenceLayerTo(newPointLayerGameObject);
+            lineFeaturesLayer = layerGameObject as GeoJSONLineLayer;
 
+            lineFeaturesLayer.LayerData.Color = LayerData.Color;
+
+            // Replace default style with the parent's default style
+            lineFeaturesLayer.LayerData.RemoveStyle(lineFeaturesLayer.LayerData.DefaultStyle);
+            lineFeaturesLayer.LayerData.AddStyle(LayerData.DefaultStyle);
+            lineFeaturesLayer.LayerData.SetParent(LayerData);
+            lineFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
+
+            foreach (var pendingFeature in pendingLineFeatures)
+            {
+                switch (pendingFeature.Feature.Geometry)
+                {
+                    case LineString:
+                        AddLineStringFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
+                        break;
+                    case MultiLineString:
+                        AddMultiLineStringFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
+                        break;
+                }
+            }
+
+            pendingLineFeatures.Clear();
+        }
+
+        private void CreatePointLayer()
+        {
             var childrenInLayerData = LayerData.ChildrenLayers;
             foreach (var child in childrenInLayerData)
             {
@@ -268,19 +298,37 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     child.DestroyLayer(); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
                 }
             }
-            
-            ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(pointLayerPrefab.PrefabIdentifier).NamedAs(pointLayerPrefab.name);
-            Layer layer = await App.Layers.Add(layerBuilder);
-            pointVisualisation = layer.LayerGameObject as GeoJSONPointLayer;
 
-            pointVisualisation.LayerData.Color = LayerData.Color;
+            ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(pointLayerPrefab.PrefabIdentifier).NamedAs(pointLayerPrefab.name);
+            App.Layers.Add(layerBuilder, SetPointVisualization);
+        }
+
+        private void SetPointVisualization(LayerGameObject layerGameObject)
+        {
+            pointFeaturesLayer = layerGameObject as GeoJSONPointLayer;
+
+            pointFeaturesLayer.LayerData.Color = LayerData.Color;
 
             // Replace default style with the parent's default style
-            pointVisualisation.LayerData.RemoveStyle(pointVisualisation.LayerData.DefaultStyle);
-            pointVisualisation.LayerData.AddStyle(LayerData.DefaultStyle);
-            pointVisualisation.LayerData.SetParent(LayerData);
-            pointVisualisation.FeatureRemoved += OnFeatureRemoved;
-            return pointVisualisation;
+            pointFeaturesLayer.LayerData.RemoveStyle(pointFeaturesLayer.LayerData.DefaultStyle);
+            pointFeaturesLayer.LayerData.AddStyle(LayerData.DefaultStyle);
+            pointFeaturesLayer.LayerData.SetParent(LayerData);
+            pointFeaturesLayer.FeatureRemoved += OnFeatureRemoved;
+
+            foreach (var pendingFeature in pendingPointFeatures)
+            {
+                switch (pendingFeature.Feature.Geometry)
+                {
+                    case Point:
+                        AddPointFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
+                        break;
+                    case MultiPoint:
+                        AddMultiPointFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
+                        break;
+                }
+            }
+
+            pendingPointFeatures.Clear();
         }
 
         private void VisualizeFeature(Feature feature)
@@ -311,50 +359,88 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        private async void AddPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        private void AddPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (pointFeaturesLayer == null)
-                pointFeaturesLayer = await CreateOrGetPointLayer();
+            {
+                if(pendingPointFeatures.Count == 0)
+                    CreatePointLayer(); 
+                
+                pendingPointFeatures.Add(new PendingFeature(feature, originalCoordinateSystem));
+                return;
+            }
 
             pointFeaturesLayer.AddAndVisualizeFeature<Point>(feature, originalCoordinateSystem);
         }
 
-        private async void AddMultiPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        private void AddMultiPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (pointFeaturesLayer == null)
-                pointFeaturesLayer = await CreateOrGetPointLayer();
+            {
+                if(pendingPointFeatures.Count == 0)
+                    CreatePointLayer();
+                
+                pendingPointFeatures.Add(new PendingFeature(feature, originalCoordinateSystem));
+                return;
+            }
 
             pointFeaturesLayer.AddAndVisualizeFeature<MultiPoint>(feature, originalCoordinateSystem);
         }
 
-        private async void AddLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        private void AddLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (lineFeaturesLayer == null)
-                lineFeaturesLayer = await CreateOrGetLineLayer();
+            {
+                if(pendingLineFeatures.Count == 0)
+                    CreateLineLayer();
+                
+                pendingLineFeatures.Add(new PendingFeature(feature, originalCoordinateSystem));
+                return;
+            }
+            
+            lineFeaturesLayer.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
+        }
+
+        private void AddMultiLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        {
+            if (lineFeaturesLayer == null)
+            {
+                if(pendingLineFeatures.Count == 0)
+                    CreateLineLayer();
+    
+                pendingLineFeatures.Add(new PendingFeature(feature, originalCoordinateSystem));
+                return;
+            }
 
             lineFeaturesLayer.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
         }
 
-        private async void AddMultiLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
-        {
-            if (lineFeaturesLayer == null)
-                lineFeaturesLayer = await CreateOrGetLineLayer();
 
-            lineFeaturesLayer.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
-        }
-
-        private async void AddPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        private void AddPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (polygonFeaturesLayer == null)
-                polygonFeaturesLayer = await CreateOrGetPolygonLayer();
+            {
+                if(pendingPolygonFeatures.Count == 0)
+                    CreatePolygonLayer();
+                
+                pendingPolygonFeatures.Add(new PendingFeature(feature, originalCoordinateSystem));
+                return;
+            }
 
             polygonFeaturesLayer.AddAndVisualizeFeature<Polygon>(feature, originalCoordinateSystem);
         }
 
-        private async void AddMultiPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        private void AddMultiPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             if (polygonFeaturesLayer == null)
-                polygonFeaturesLayer = await CreateOrGetPolygonLayer();
+            {
+                if(pendingPolygonFeatures.Count == 0)
+                    CreatePolygonLayer();
+    
+                var pendingFeature = new PendingFeature(feature, originalCoordinateSystem);
+                pendingPolygonFeatures.Add(pendingFeature);
+                return;
+            }
 
             polygonFeaturesLayer.AddAndVisualizeFeature<MultiPolygon>(feature, originalCoordinateSystem);
         }

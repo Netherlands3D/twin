@@ -35,19 +35,20 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
             toggle.isOn = layerGameObject != null;
             ShowBin(false);
 
-            ProjectData.Current.LayerDeleted.AddListener(OnLayerDeleted);
+            App.Layers.LayerRemoved.AddListener(OnLayerDeleted);
             toggle.onValueChanged.AddListener(CreateOrDestroyObject);
         }
 
 
         protected virtual void OnDisable()
         {
-            ProjectData.Current.LayerDeleted.RemoveListener(OnLayerDeleted);
+            App.Layers.LayerRemoved.RemoveListener(OnLayerDeleted);
             toggle.onValueChanged.RemoveListener(CreateOrDestroyObject);
         }
 
-        private void OnLayerDeleted(LayerData deletedLayer)
+        private void OnLayerDeleted(Layer layer)
         {
+            var deletedLayer = layer.LayerData;
             if (!toggle.isOn)
                 return;
 
@@ -73,13 +74,13 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
 
         private async void CreateObject()
         {
-            var layer = await App.Layers.Add(
-                LayerBuilder.Create()
-                    .OfType(prefab.PrefabIdentifier)
-                    .NamedAs(prefab.name)
-            );
+            var builder = LayerBuilder.Create()
+                .OfType(prefab.PrefabIdentifier)
+                .NamedAs(prefab.name);
+
+            var layer = App.Layers.Add(builder);
             
-            layerGameObject = layer.LayerGameObject;
+            layerGameObject = layer.LayerGameObject; //todo this is now not reliable, but this class will be deleted anyway
         }
 
         public virtual void OnPointerEnter(PointerEventData eventData)

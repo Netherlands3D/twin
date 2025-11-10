@@ -4,6 +4,7 @@ using System.Linq;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Services;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -79,7 +80,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private void OnEnable()
         {
             ReconstructHierarchyUIs();
-            ProjectData.Current.LayerAdded.AddListener(CreateNewUI);
+            App.Layers.LayerAdded.AddListener(CreateNewUI);
             ProjectData.Current.LayerDeleted.AddListener(OnLayerDeleted);
             ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
         }
@@ -87,7 +88,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private void OnDisable()
         {
             ProjectData.Current.RootLayer.DeselectAllLayers();
-            ProjectData.Current.LayerAdded.RemoveListener(CreateNewUI);
+            App.Layers.LayerAdded.RemoveListener(CreateNewUI);
             ProjectData.Current.LayerDeleted.RemoveListener(OnLayerDeleted);
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
         }
@@ -97,15 +98,15 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             ReconstructHierarchyUIs(); //ensure a clean ui hierarchy after a project is loaded 
         }
 
-        private void CreateNewUI(LayerData layer)
+        private void CreateNewUI(Layer layer)
         {
-            var layerUI = InstantiateLayerItem(layer, layer.ParentLayer);
+            var layerUI = InstantiateLayerItem(layer.LayerData, layer.LayerData.ParentLayer);
             RecalculateLayersVisibleInInspector();
             
             if(layerToSelectAtEndOfFrame == null)
                 StartCoroutine(SelectLayerAtEndOfFrame());
     
-            layerToSelectAtEndOfFrame = layer;
+            layerToSelectAtEndOfFrame = layer.LayerData;
         }
 
         private IEnumerator SelectLayerAtEndOfFrame()
