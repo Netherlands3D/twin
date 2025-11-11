@@ -7,12 +7,17 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.Tiles3D
 {
     public class MemoryTestGlbLoader : MonoBehaviour
     {
-        private const string DefaultCsvResourcePath = "TestData/3dtiles_transforms";
+        private const string TestDataResourceRoot = "TestData";
+        private const string DefaultCsvFileStem = "3dtiles_transforms";
+
+        [Tooltip("Naam van het CSV-bestand in TestData (zonder pad, extensie optioneel).")]
+        public string csvFileName = DefaultCsvFileStem;
 
         [Header("Settings")]
         [Tooltip("Maximum aantal GLB bestanden om tegelijk te laden")]
@@ -40,18 +45,18 @@ namespace Netherlands3D.Tiles3D
         public bool isLoading = false;
 
         [Header("Automated Test")]
-        [Tooltip("Hoe lang geladen GLB's zichtbaar blijven voordat ze worden ontladen (seconden)")]
-        public float loadPhaseDurationSeconds = 4f;
-        [Tooltip("Hoe lang wordt gewacht tussen het ontladen en opnieuw laden (seconden)")]
-        public float unloadPhaseDurationSeconds = 4f;
+        [Tooltip("Hoe lang wordt gewacht na het ontladen voordat opnieuw wordt geladen (seconden)")]
+        [FormerlySerializedAs("unloadPhaseDurationSeconds")]
+        public float reloadDelaySeconds = 4f;
 
-        public string CsvSourceDescription => $"Resources/{DefaultCsvResourcePath}.csv";
+        public string CsvSourceDescription => $"Resources/{CsvResourcePath}.csv";
         
         private string currentSessionId = "";
         private Coroutine automatedTestRoutine;
         private Coroutine manualLoadCoroutine;
         private bool automatedTestActive;
         private bool clearSceneAfterTestStops;
+        private string CsvResourcePath => $"{TestDataResourceRoot}/{SanitizeCsvFileStem(csvFileName)}";
         
         public bool IsAutomatedTestRunning => automatedTestRoutine != null;
         public bool HasActiveContent => parentTransform != null && parentTransform.childCount > 0;
@@ -194,12 +199,12 @@ namespace Netherlands3D.Tiles3D
             {
                 yield return LoadGLBFilesRoutine();
 
-                if (!automatedTestActive)
+                if (!automatedTestActive && !clearSceneAfterTestStops)
                 {
                     break;
                 }
 
-                yield return WaitWhileActive(loadPhaseDurationSeconds);
+                yield return WaitUntilAllTilesLoaded();
 
                 if (!automatedTestActive && !clearSceneAfterTestStops)
                 {
@@ -213,7 +218,7 @@ namespace Netherlands3D.Tiles3D
                     break;
                 }
 
-                yield return WaitWhileActive(unloadPhaseDurationSeconds);
+                yield return WaitWhileActive(reloadDelaySeconds);
             }
 
             if (clearSceneAfterTestStops)
@@ -248,6 +253,24 @@ namespace Netherlands3D.Tiles3D
                 yield return null;
             }
         }
+
+        private IEnumerator WaitUntilAllTilesLoaded()
+        {
+            if (totalFiles == 0)
+            {
+                yield break;
+            }
+
+            while (automatedTestActive || clearSceneAfterTestStops)
+            {
+                if (!isLoading && loadedFiles >= totalFiles)
+                {
+                    yield break;
+                }
+
+                yield return null;
+            }
+        }
         
         private IEnumerator LoadGLBFilesRoutine()
         {
@@ -257,10 +280,10 @@ namespace Netherlands3D.Tiles3D
             
             string[] lines;
             
-            TextAsset csvAsset = Resources.Load<TextAsset>(DefaultCsvResourcePath);
+            TextAsset csvAsset = Resources.Load<TextAsset>(CsvResourcePath);
             if (csvAsset == null)
             {
-                Debug.LogError($"Embedded CSV resource not found at Resources/{DefaultCsvResourcePath}.csv");
+                Debug.LogError($"Embedded CSV resource not found at Resources/{CsvResourcePath}.csv");
                 isLoading = false;
                 yield break;
             }
@@ -603,6 +626,34 @@ namespace Netherlands3D.Tiles3D
                 NumberStyles.Float | NumberStyles.AllowThousands,
                 CultureInfo.InvariantCulture,
                 out result);
+        }
+
+        private static string SanitizeCsvFileStem(string raw)
+        {
+            string trimmed = raw?.Trim();
+            if (string.IsNullOrEmpty(trimmed))
+            {
+                return DefaultCsvFileStem;
+            }
+
+            trimmed = trimmed.Replace('\\', '/');
+            int slashIndex = trimmed.LastIndexOf('/');
+            if (slashIndex >= 0 && slashIndex < trimmed.Length - 1)
+            {
+                trimmed = trimmed.Substring(slashIndex + 1);
+            }
+
+            if (trimmed.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
+            {
+                trimmed = trimmed.Substring(0, trimmed.Length - 4);
+            }
+
+            if (string.IsNullOrEmpty(trimmed))
+            {
+                return DefaultCsvFileStem;
+            }
+
+            return trimmed;
         }
         
     }

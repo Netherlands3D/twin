@@ -493,7 +493,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08811f55bfad043d39ede2550ddd8a39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxConcurrentLoads: 5
+  csvFileName: capture1.csv
+  maxConcurrentLoads: 6
   parentTransform: {fileID: 0}
   centerUsingBounds: 1
   applyCsvTransforms: 1
@@ -502,8 +503,7 @@ MonoBehaviour:
   totalFiles: 0
   loadedFiles: 0
   isLoading: 0
-  loadPhaseDurationSeconds: 4
-  unloadPhaseDurationSeconds: 4
+  reloadDelaySeconds: 4
 --- !u!4 &1051919835
 Transform:
   m_ObjectHideFlags: 0
