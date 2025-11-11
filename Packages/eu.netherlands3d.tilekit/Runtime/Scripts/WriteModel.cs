@@ -86,6 +86,32 @@ namespace Netherlands3D.Tilekit.Optimized
         {
             throw new NotImplementedException();
         }
+
+        public (BoxBoundingVolume tl, BoxBoundingVolume tr, BoxBoundingVolume br, BoxBoundingVolume bl) Subdivide2D()
+        {
+            var min = TopLeft;
+            var max = BottomRight;
+
+            var midX = (min.x + max.x) * 0.5;
+            var midY = (min.y + max.y) * 0.5;
+
+            var zMin = min.z;
+            var zMax = max.z;
+
+            // tl: x[min, midX], y[min, midY]
+            var tl = FromTopLeftAndBottomRight(new double3(min.x, min.y, zMin), new double3(midX, midY, zMax));
+
+            // tr: x[midX, max], y[min, midY]
+            var tr = FromTopLeftAndBottomRight(new double3(midX, min.y, zMin), new double3(max.x, midY, zMax));
+
+            // br: x[midX, max], y[midY, max]
+            var br = FromTopLeftAndBottomRight(new double3(midX, midY, zMin), new double3(max.x, max.y, zMax));
+
+            // bl: x[min, midX], y[midY, max]
+            var bl = FromTopLeftAndBottomRight(new double3(min.x, midY, zMin), new double3(midX, max.y, zMax));
+
+            return (tl, tr, br, bl);
+        }
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -137,6 +163,7 @@ namespace Netherlands3D.Tilekit.Optimized
 
         public void Alloc(int initialSize, Allocator alloc = Allocator.Persistent)
         {
+            BoundingVolumeRefs = new NativeArray<BoundingVolumeRef>(initialSize, alloc);
             Boxes = new NativeArray<BoxBoundingVolume>(initialSize, alloc);
             Regions = new NativeArray<RegionBoundingVolume>(initialSize, alloc);
             Spheres = new NativeArray<SphereBoundingVolume>(initialSize, alloc);
@@ -437,12 +464,12 @@ namespace Netherlands3D.Tilekit.Optimized.TileSets
         public int AddTile(
             in BoxBoundingVolume boundingVolume,
             double geometricError,
-            MethodOfRefinement refine,
-            SubdivisionScheme subdivision,
-            in float4x4 transform,
-            ReadOnlySpan<int> children,
-            ReadOnlySpan<TileContentData> contents)
-        {
+            ReadOnlySpan<TileContentData> contents,
+            ReadOnlySpan<int> children = default,
+            MethodOfRefinement refine = MethodOfRefinement.Replace,
+            SubdivisionScheme subdivision = SubdivisionScheme.None,
+            in float4x4 transform = default
+        ) {
             // Take any of the arrays whose length matches the number of tiles in this storage and use it's length
             // as the new id as this is last id + 1
             int id = GeometricError.Length;

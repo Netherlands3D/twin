@@ -32,11 +32,11 @@ namespace Netherlands3D.Tilekit.Optimized
             return tiles.AddTile(
                 boundingVolume,
                 geometricError,
+                contents,
+                children,
                 refine, 
                 subdivision,
-                transform,
-                children,
-                contents
+                transform
             );
         }
 
