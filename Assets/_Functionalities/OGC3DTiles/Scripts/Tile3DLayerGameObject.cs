@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Services;
@@ -52,6 +53,10 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             if (tile3DPropertyData == null)
             {
                 LayerData.SetProperty(new Tile3DLayerPropertyData(TileSet.tilesetUrl));
+            }
+            if(tile3DPropertyData.ContentCRS == (int)CoordinateSystem.Undefined)
+            {
+                tile3DPropertyData.SetDefaultCrs();
             }
             CredentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             
