@@ -32,7 +32,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnDisable()
         {
-            settingLabel.movementSetting.OnValueChanged.RemoveListener(SetValue);
+            if (baseSetting != null) baseSetting.OnValueChanged.RemoveListener(SetValue);
+            else settingLabel.movementSetting.OnValueChanged.RemoveListener(SetValue);
         }
 
         public void SetValue(string value)

@@ -388,17 +388,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: cbd6bba397f2c9d4fa9d2974e7f39736,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.494247
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cbd6bba397f2c9d4fa9d2974e7f39736,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.000000059604645
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cbd6bba397f2c9d4fa9d2974e7f39736,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -108.27447
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cbd6bba397f2c9d4fa9d2974e7f39736,
         type: 3}
@@ -528,6 +528,10 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7777005107646021545}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cbd6bba397f2c9d4fa9d2974e7f39736,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3430108012395509898}
     - targetCorrespondingSourceObject: {fileID: -5452868772401385362, guid: cbd6bba397f2c9d4fa9d2974e7f39736,
         type: 3}
       insertIndex: -1
@@ -555,9 +559,36 @@ MonoBehaviour:
   settingUnitText: {fileID: 6588705894141115578}
   valueLabelText: {fileID: 72526263530728258}
   baseSetting: {fileID: 11400000, guid: 4e273118145672a4caa8726c61b635f5, type: 2}
+--- !u!1 &3189998725335213987 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: cbd6bba397f2c9d4fa9d2974e7f39736,
+    type: 3}
+  m_PrefabInstance: {fileID: 2343084711934483186}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3430108012395509898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3189998725335213987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a9bd840ae7cf2a48a2b3305d6b96706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  steerTransform: {fileID: 7011772402181716157}
+  steeringSpeed: 5
+  maxSteerAngle: 130
 --- !u!4 &3508695727046700818 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8055485023143561760, guid: cbd6bba397f2c9d4fa9d2974e7f39736,
+    type: 3}
+  m_PrefabInstance: {fileID: 2343084711934483186}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7011772402181716157 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4740776346025550415, guid: cbd6bba397f2c9d4fa9d2974e7f39736,
     type: 3}
   m_PrefabInstance: {fileID: 2343084711934483186}
   m_PrefabAsset: {fileID: 0}

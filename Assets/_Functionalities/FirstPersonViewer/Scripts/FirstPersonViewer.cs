@@ -20,8 +20,6 @@ namespace Netherlands3D.FirstPersonViewer
         public FirstPersonViewerInput Input { private set; get; }
         public MovementModusSwitcher MovementSwitcher { private set; get; }
 
-        private MeshFilter meshFilter;
-        private MeshRenderer meshRenderer;
         private FirstPersonViewerStateMachine fsm;
         private WorldTransform worldTransform;
 
@@ -61,8 +59,6 @@ namespace Netherlands3D.FirstPersonViewer
             Input = GetComponent<FirstPersonViewerInput>();
             MovementSwitcher = GetComponent<MovementModusSwitcher>();
 
-            meshFilter = GetComponent<MeshFilter>();
-            meshRenderer = GetComponent<MeshRenderer>();
             worldTransform = GetComponent<WorldTransform>();
 
             OnViewerEntered += ViewerEnterd;
@@ -90,7 +86,7 @@ namespace Netherlands3D.FirstPersonViewer
             FirstPersonCamera.SetupViewer();
 
             ServiceLocator.GetService<CameraSwitcher>().SwitchCamera(this);
-        }     
+        }
 
         private void OnDestroy()
         {
@@ -158,11 +154,16 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetMovementModus(ViewerState viewerState)
         {
-            if (viewObject != null) Destroy(viewObject);
+            if (viewObject != null)
+            {
+                Destroy(viewObject);
+            }
 
             if (viewerState.viewPrefab != null)
             {
                 viewObject = Instantiate(viewerState.viewPrefab, transform);
+                MovementVisualController movementVisualController = viewObject.GetComponent<MovementVisualController>();
+                viewerState.movementVisualController = movementVisualController;
             }
 
             FirstPersonCamera.SetCameraConstrain(viewerState.CameraConstrain);

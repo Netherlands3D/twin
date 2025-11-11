@@ -57,16 +57,19 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
 
+            float turn = 0;
             if (Mathf.Abs(currentSpeed) > 0.1f)
             {
-                float turn = moveInput.x * turnSpeedSetting.Value * Time.deltaTime * Mathf.Sign(currentSpeed);
+                turn = moveInput.x * turnSpeedSetting.Value * Time.deltaTime * Mathf.Sign(currentSpeed);
                 transform.Rotate(Vector3.up * turn);
             }
             else
             {
-                float turn = moveInput.x * turnSpeedSetting.Value * .2f * Time.deltaTime;
+                turn = moveInput.x * turnSpeedSetting.Value * .2f * Time.deltaTime;
                 transform.Rotate(Vector3.up * turn);
             }
+
+            movementVisualController.SetSteeringWheelRotation(turn * 30 * (isGoingBackwards ? -1 : 1));
 
             if (Mathf.Abs(currentSpeed) > 0)
             {

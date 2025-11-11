@@ -8,6 +8,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         protected FirstPersonViewerInput input;
         protected FirstPersonViewer viewer;
         protected Transform transform;
+        public MovementVisualController movementVisualController;
 
         [field: SerializeField] public CameraConstrain CameraConstrain { private set; get; }
         protected float MovementSpeed { private set; get; }
