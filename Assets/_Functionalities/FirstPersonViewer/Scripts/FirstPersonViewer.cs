@@ -2,6 +2,8 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Events;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
 using System;
 using System.Collections.Generic;
@@ -10,17 +12,18 @@ using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer
 {
-    [RequireComponent(typeof(FirstPersonViewerInput))]
+    [RequireComponent(typeof(FirstPersonViewerInput), typeof(MovementModusSwitcher))]
     public class FirstPersonViewer : MonoBehaviour
     {
         [Header("Camera")]
         [field: SerializeField] public FirstPersonViewerCamera FirstPersonCamera { private set; get; }
+        public FirstPersonViewerInput Input { private set; get; }
+        public MovementModusSwitcher MovementSwitcher { private set; get; }
 
         private MeshFilter meshFilter;
         private MeshRenderer meshRenderer;
-        private FirstPersonViewerInput input;
         private FirstPersonViewerStateMachine fsm;
-        private MovementModusSwitcher movementSwitcher;
+        private WorldTransform worldTransform;
 
         //Movement
         private Coordinate startPosition;
@@ -47,48 +50,62 @@ namespace Netherlands3D.FirstPersonViewer
         public Action OnResetToStart;
         public Action OnResetToGround;
         public Action OnSetCameraNorth;
-        public static Action<Vector3> OnCameraRotation; //Temp static because of 
 
-
-        public static Action OnViewerEntered;
-        public static Action OnViewerExited;
+        public Action OnViewerEntered;
+        public Action OnViewerExited;
 
         private void Awake()
         {
-            input = GetComponent<FirstPersonViewerInput>();
-            movementSwitcher = GetComponent<MovementModusSwitcher>();
+            Input = GetComponent<FirstPersonViewerInput>();
+            MovementSwitcher = GetComponent<MovementModusSwitcher>();
 
             meshFilter = GetComponent<MeshFilter>();
             meshRenderer = GetComponent<MeshRenderer>();
-            raycaster = ServiceLocator.GetService<OpticalRaycaster>();
+            worldTransform = GetComponent<WorldTransform>();
 
-            OnResetToStart += ResetToStart;
-            OnResetToGround += ResetToGround;
+            OnViewerEntered += ViewerEnterd;
+            Input.SetExitCallback(ExitViewer);
         }
 
         private void Start()
+        {
+            raycaster = ServiceLocator.GetService<OpticalRaycaster>();
+            MovementSwitcher.SetViewerInput(Input);
+            MovementSwitcher.OnMovementPresetChanged += SetMovementModus;
+
+            SetupFSM();
+            gameObject.SetActive(false);
+        }
+
+        private void ViewerEnterd()
         {
             startPosition = new Coordinate(transform.position);
             startRotation = transform.rotation;
             yPositionTarget = transform.position.y;
 
-            ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged += SetMovementModus;
+            worldTransform.MoveToCoordinate(startPosition);
+            Input.OnFPVEnter();
+            FirstPersonCamera.SetupViewer();
 
-            SetupFSM();
-        }
+            ServiceLocator.GetService<CameraSwitcher>().SwitchCamera(this);
+        }     
 
         private void OnDestroy()
         {
-            ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged -= SetMovementModus;
-            OnResetToStart -= ResetToStart;
-            OnResetToGround -= ResetToGround;
+            MovementSwitcher.OnMovementPresetChanged -= SetMovementModus;
+            OnViewerEntered = null;
+            OnResetToStart = null;
+            OnResetToGround = null;
+            OnSetCameraNorth = null;
+            OnViewerEntered = null;
+            OnViewerExited = null;
         }
 
         private void SetupFSM()
         {
-            ViewerState[] playerStates = movementSwitcher.MovementPresets.ToArray();
+            ViewerState[] playerStates = MovementSwitcher.MovementPresets.ToArray();
 
-            fsm = new FirstPersonViewerStateMachine(this, input, playerStates);
+            fsm = new FirstPersonViewerStateMachine(this, Input, playerStates);
         }
 
         private void Update()
@@ -99,7 +116,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             transform.position += Vector3.up * velocity.y * Time.deltaTime;
 
-            if (input.ResetInput.triggered) OnResetToGround?.Invoke();
+            if (Input.ResetInput.triggered) ResetToGround();
         }
 
         public void GetGroundPosition()
@@ -137,18 +154,18 @@ namespace Netherlands3D.FirstPersonViewer
             }
         }
 
-        private void SetMovementModus(ViewerState movementPresets)
+        private void SetMovementModus(ViewerState viewerState)
         {
-            if (movementPresets.viewMesh != null)
+            if (viewerState.viewMesh != null)
             {
-                meshFilter.mesh = movementPresets.viewMesh;
-                meshRenderer.materials = movementPresets.meshMaterials;
+                meshFilter.mesh = viewerState.viewMesh;
+                meshRenderer.materials = viewerState.meshMaterials;
             }
             else meshFilter.mesh = null;
 
-            FirstPersonCamera.SetCameraConstrain(movementPresets.CameraConstrain);
+            FirstPersonCamera.SetCameraConstrain(viewerState.CameraConstrain);
 
-            fsm.SwitchState(movementPresets);
+            fsm.SwitchState(viewerState);
         }
 
         public void SetupState(Vector3 cameraPosition, Vector3 playerEuler, Vector3 cameraEuler, float cameraHeightOffset)
@@ -160,23 +177,18 @@ namespace Netherlands3D.FirstPersonViewer
             FirstPersonCamera.transform.localRotation = Quaternion.Euler(cameraEuler);
         }
 
-        private void ResetToStart()
+        public void ResetToStart()
         {
             transform.position = startPosition.ToUnity();
             transform.rotation = startRotation;
             yPositionTarget = transform.position.y;
 
             transform.position += Vector3.up * fsm.CurrentState.GetGroundHeightOffset();
+
+            OnResetToStart?.Invoke();
         }
 
-        //Only way to block input and not include checks in every state.
-        public Vector2 GetMoveInput()
-        {
-            if (input.LockInput) return Vector2.zero;
-            else return input.MoveAction.ReadValue<Vector2>();
-        }
-
-        private void ResetToGround()
+        public void ResetToGround()
         {
             raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * 100, Vector3.down, (point, hit) =>
             {
@@ -185,8 +197,20 @@ namespace Netherlands3D.FirstPersonViewer
                     SetVelocity(Vector2.zero);
                     yPositionTarget = point.y;
                     transform.position = new Vector3(transform.position.x, yPositionTarget + fsm.CurrentState.GetGroundHeightOffset(), transform.position.z);
+
+                    OnResetToGround?.Invoke();
                 }
             }, snappingCullingMask);
+        }
+
+        //Bool is needed for another branch to prevent another scene update in the future (The branch where it's used is already ready) | WHEN USED PLEASE REMOVE COMMENT :)
+        public void ExitViewer(bool exitOriginalPosition)
+        {
+            OnViewerExited?.Invoke();
+
+            Input.ViewerExited();
+
+            ServiceLocator.GetService<CameraSwitcher>().SwitchToPreviousCamera();
         }
 
         public void SetVelocity(Vector2 velocity) => this.velocity = velocity;

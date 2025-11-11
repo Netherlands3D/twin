@@ -15,20 +15,20 @@ namespace Netherlands3D.FirstPersonViewer
 
         public event Action<ViewerState> OnMovementPresetChanged;
 
-        private void Awake()
+        public void SetViewerInput(FirstPersonViewerInput input)
         {
-            input = GetComponent<FirstPersonViewerInput>();
+            this.input = input;
         }
 
         private void Update()
         {
             if (input.CyclePreviousModus.triggered) ChangeViewerModus(-1);
-            else if (input.CycleNextModus.triggered) ChangeViewerModus(1);        
+            else if (input.CycleNextModus.triggered) ChangeViewerModus(1);
         }
 
         public void ChangeViewerModus(int switchDirection)
         {
-            if (FirstPersonViewerInput.IsInputfieldSelected()) return;
+            if (input.IsInputfieldSelected()) return;
 
             int currentIndex = MovementPresets.IndexOf(CurrentMovement);
 
