@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
@@ -12,14 +13,22 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
+    public enum ShapeType
+    {
+        Undefined = 0,
+        Polygon = 1,
+        Line = 2,
+        Grid = 3
+    }
+
     public class PolygonInputToLayer : MonoBehaviour
     {
         [SerializeField] private PolygonSelectionVisualisation polygonSelectionVisualisationPrefab;
         private Dictionary<PolygonSelectionVisualisation, PolygonSelectionLayer> layers = new();
 
-        private PolygonSelectionLayer activeLayer;
+        private LayerData activeLayer;
 
-        private PolygonSelectionLayer ActiveLayer
+        private LayerData ActiveLayer
         {
             get { return activeLayer; }
             set { activeLayer = value; }
@@ -193,7 +202,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 polygonSelectionVisualisationPrefab.PrefabIdentifier, 
                 unityPolygon, 
                 ShapeType.Polygon                
-            );            
+            );
+
             // Layer layer = App.Layers.VisualizeData(data);
             layers.Add(data.PolygonVisualisation, data);
             data.polygonSelected.AddListener(ProcessPolygonSelection);
@@ -214,7 +224,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 ShapeType.Line, 
                 defaultLineWidth,
                 layer =>
-                {
+                {                  
                     if (layer is not PolygonSelectionLayer polygonSelectionLayer) return;
                     layers.Add(polygonSelectionLayer.PolygonVisualisation, polygonSelectionLayer);
                     polygonSelectionLayer.polygonSelected.AddListener(ProcessPolygonSelection);
@@ -244,7 +254,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 new List<Vector3>() { bottomLeft, topLeft, topRight, bottomRight }, 
                 ShapeType.Grid,
                 onSpawn: data =>
-                {
+                {                   
                     if (data is not PolygonSelectionLayer layer) return;
 
                     layers.Add(layer.PolygonVisualisation, layer);

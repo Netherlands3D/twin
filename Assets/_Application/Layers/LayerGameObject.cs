@@ -87,7 +87,7 @@ namespace Netherlands3D.Twin.Layers
            
         }
 
-        public void SetData(LayerData layerData)
+        public virtual void SetData(LayerData layerData)
         {
             if (this.LayerData == layerData) return;
 
@@ -114,7 +114,7 @@ namespace Netherlands3D.Twin.Layers
 
         private LayerGameObject Object() => this;
 
-        private void RegisterEventListeners()
+        protected virtual void RegisterEventListeners()
         {
             layerData.ParentChanged.AddListener(OnProxyTransformParentChanged);
             layerData.ChildrenChanged.AddListener(OnProxyTransformChildrenChanged);
@@ -129,7 +129,7 @@ namespace Netherlands3D.Twin.Layers
             layerData.OnStylingApplied.AddListener(ApplyStyling);
         }
 
-        private void UnregisterEventListeners()
+        protected virtual void UnregisterEventListeners()
         {
             layerData.ParentChanged.RemoveListener(OnProxyTransformParentChanged);
             layerData.ChildrenChanged.RemoveListener(OnProxyTransformChildrenChanged);
@@ -194,14 +194,14 @@ namespace Netherlands3D.Twin.Layers
         {
             onShow.Invoke();
             if(IsMaskable)
-                PolygonSelectionLayer.MaskDestroyed.AddListener(ResetMask);
+                PolygonSelectionVisualisation.MaskDestroyed.AddListener(ResetMask);
         }
 
         protected virtual void OnDisable()
         {
             onHide.Invoke();
             if(IsMaskable)
-                PolygonSelectionLayer.MaskDestroyed.RemoveListener(ResetMask);
+                PolygonSelectionVisualisation.MaskDestroyed.RemoveListener(ResetMask);
         }
 
         private void ResetMask(int maskBitIndex)
@@ -224,7 +224,7 @@ namespace Netherlands3D.Twin.Layers
         {
         }
 
-        public void DestroyLayer()
+        public virtual void DestroyLayer()
         {
             LayerData.DestroyLayer();
         }

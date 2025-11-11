@@ -4,6 +4,9 @@ using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.ExtensionMethods;
+using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -21,8 +24,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public Material PolygonMeshMaterial;
         [SerializeField] private Material polygonMaskMaterial;
         private bool isMask;
+        private static List<int> availableMaskChannels = new List<int>() { 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+        public static int NumAvailableMasks => availableMaskChannels.Count;
+        public static int MaxAvailableMasks => 22;
+        public static UnityEvent<int> MaskDestroyed = new();
 
         public UnityEvent OnPolygonVisualisationUpdated = new();
+
+        public CompoundPolygon Polygon { get; set; }
+        public UnityEvent<LayerData> polygonSelected = new();
 
         /// <summary>
         /// Create or update PolygonVisualisation
@@ -102,6 +112,239 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             PolygonVisualisation.VisualisationMaterial.SetVector("_MaskBitMask", bitMask);
             
             this.isMask = true;
+        }
+
+        public override void SetData(LayerData layerData)
+        {
+            LayerData previousData = LayerData;
+            if(previousData != null && previousData != layerData)
+            {
+                PolygonSelectionCalculator.UnregisterPolygon(LayerData);
+            }
+            base.SetData(layerData);
+            UpdatePolygon();
+            PolygonSelectionCalculator.RegisterPolygon(LayerData);   
+            availableMaskChannels.Remove(MaskBitIndex);
+        }
+
+        protected override void RegisterEventListeners()
+        {
+            base.RegisterEventListeners();
+            //Add shifter that manipulates the polygon if the world origin is shifted
+            Origin.current.onPostShift.AddListener(ShiftedPolygon);
+            
+            LayerData.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+            LayerData.OnPrefabIdChanged.AddListener(OnSwitchVisualisation);
+
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            data.OnIsMaskChanged.AddListener(OnIsMaskChanged);
+            data.OnInvertMaskChanged.AddListener(OnInvertMaskChanged); 
+            
+            data.OnPolygonSetShape.AddListener(RecalculatePolygon);
+            data.OnPolygonSetShape.AddListener(UpdatePolygonVisualisation);
+        }
+
+        protected override void UnregisterEventListeners()
+        {
+            base.UnregisterEventListeners();
+            Origin.current.onPostShift.RemoveListener(ShiftedPolygon);
+
+            LayerData.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
+            LayerData.OnPrefabIdChanged.RemoveListener(OnSwitchVisualisation);
+
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            data.OnIsMaskChanged.RemoveListener(OnIsMaskChanged);
+            data.OnInvertMaskChanged.RemoveListener(OnInvertMaskChanged);
+            
+        }
+
+        private void OnSwitchVisualisation()
+        {
+            OnIsMaskChanged(IsMask); //The reference changed, so we need to treat it as if we make a new mask
+        }
+
+        private void CleanupMasking()
+        {
+            // first clear shader properties with the existing mask bit index
+            UpdateInvertedMaskBitInShaders(false, false, false);
+            //now that the shader properties are cleared, we can free up the mask bit
+            SetMaskBitIndex(false, false);
+        }
+
+        private void ShiftedPolygon(Coordinate fromOrigin, Coordinate toOrigin)
+        {
+            //Silent update of the polygon shape, so the visualisation is updated without notifying the listeners
+            UpdatePolygon();
+            polygonMoved.Invoke();
+        }
+
+        public void SetShape(List<Coordinate> coordinates)
+        {
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            data.OriginalPolygon = coordinates;            
+            polygonChanged.Invoke();
+        }
+
+        private void UpdatePolygon()
+        {
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            SetShape(data.originalPolygon);
+        }
+
+        private void UpdatePolygonVisualisation()
+        {
+            if (PolygonVisualisation)
+            {
+                PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+                var vertices = CoordinatesToVertices(data.OriginalPolygon);                
+                PolygonVisualisation.UpdateVisualisation(vertices, data.ExtrusionHeight);
+                PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
+            }
+        }
+
+        private void RecalculatePolygon()
+        {
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            var vertices = CoordinatesToVertices(data.OriginalPolygon);
+            Polygon = new CompoundPolygon(vertices);
+        }
+
+        public override void OnLayerActiveInHierarchyChanged(bool activeInHierarchy)
+        {
+            base.OnLayerActiveInHierarchyChanged(activeInHierarchy);
+            SetVisualisationActive(activeInHierarchy);
+            UpdateInvertedMaskBitInShaders(IsMask, InvertMask, activeInHierarchy);
+        }
+
+        private Vector2[] CoordinatesToVertices(List<Coordinate> coordinates)
+        {
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+
+            var positions = coordinates.ToUnityPositions().ToList();
+            var vertices = PolygonCalculator.FlattenPolygon(positions, new Plane(Vector3.up, 0));
+            if (vertices.Length == 2)
+            {
+                vertices = LineToPolygon(vertices, data.LineWidth);
+            }
+
+            return vertices;
+        }
+
+        private static Vector2[] LineToPolygon(Vector2[] vertices, float width)
+        {
+            if (vertices.Length != 2)
+            {
+                Debug.LogError("cannot create rectangle because position list contains more than 2 entries");
+                return null;
+            }
+
+            var dir = vertices[1] - vertices[0];
+            var normal = new Vector2(-dir.y, dir.x).normalized;
+
+            var dist = normal * width / 2;
+
+            var point1 = vertices[0] + new Vector2(dist.x, dist.y);
+            var point4 = vertices[1] + new Vector2(dist.x, dist.y);
+            var point3 = vertices[1] - new Vector2(dist.x, dist.y);
+            var point2 = vertices[0] - new Vector2(dist.x, dist.y);
+
+            var polygon = new Vector2[]
+            {
+                point1,
+                point2,
+                point3,
+                point4
+            };
+
+            return polygon;
+        }
+
+        private void UpdateInvertedMaskBitInShaders(bool isMask, bool invertMask, bool activeInHierarchy)
+        {
+            var active = isMask && invertMask && activeInHierarchy;
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            PolygonProjectionMask.UpdateInvertedMaskBit(data.MaskBitIndex, active);
+            PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
+        }
+
+        private void OnIsMaskChanged(bool isMask)
+        {
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            if (isMask && data.MaskBitIndex == -1 && availableMaskChannels.Count == 0)
+            {
+                Debug.LogError("No more masking channels available");
+                data.IsMask = false;
+                return;
+            }
+
+            SetMaskBitIndex(isMask, data.InvertMask);
+        }
+
+        private void SetMaskBitIndex(bool isMask, bool invertMask)
+        {
+            if (!isMask && MaskBitIndex != -1)
+            {
+                OnInvertMaskChanged(invertMask); //clear the inverted mask property before clearing the bit index
+                availableMaskChannels.Add(MaskBitIndex);
+                MaskBitIndex = -1;
+            }
+            else if (isMask && MaskBitIndex == -1)
+            {
+                MaskBitIndex = availableMaskChannels.Last();
+                availableMaskChannels.Remove(MaskBitIndex);
+                OnInvertMaskChanged(invertMask); //set the inverted mask property after assigning the bit index
+            }
+        }
+
+        private void OnInvertMaskChanged(bool invert)
+        {
+            var layer = GetLayer(IsMask);
+            SetPolygonLayer(layer);
+            UpdateInvertedMaskBitInShaders(IsMask, invert, ActiveInHierarchy);
+            PolygonVisualisation.SetMaterial(IsMask, MaskBitIndex, invert);
+        }
+
+        private void SetPolygonLayer(LayerMask layer)
+        {
+            foreach (Transform t in PolygonVisualisation.gameObject.transform)
+            {
+                t.gameObject.gameObject.layer = layer;
+            }
+
+            PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
+        }
+
+        private LayerMask GetLayer(bool isMask)
+        {
+            var layer = LayerMask.NameToLayer("Projected");
+            if (!isMask) return layer;
+
+            return LayerMask.NameToLayer("PolygonMask");
+        }
+
+        public void SetVisualisationActive(bool active)
+        {
+            PolygonVisualisation.gameObject.SetActive(active);
+        }
+
+        public override void OnSelect()
+        {
+            base.OnSelect();
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            polygonSelected.Invoke(LayerData);
+        }
+
+        public override void OnDeselect()
+        {
+            base.OnDeselect();
+            polygonSelected.Invoke(null);
+        }
+
+        public override void DestroyLayer()
+        {
+            base.DestroyLayer();
+            PolygonSelectionCalculator.UnregisterPolygon(LayerData);
+            CleanupMasking();            
         }
     }
 }
