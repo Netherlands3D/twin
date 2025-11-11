@@ -33,10 +33,12 @@ namespace Netherlands3D.FirstPersonViewer
         [Header("Main Cam")]
         [SerializeField] private float cameraHeightAboveGround;
         [SerializeField] private float returnFocusDistance = 150;
+
         private Camera mainCam;
         private Vector3 prevCameraPosition;
         private Quaternion prevCameraRotation;
         private int prevCameraCullingMask;
+        private bool prevCameraOrthographic;
 
         private void Awake()
         {
@@ -54,6 +56,7 @@ namespace Netherlands3D.FirstPersonViewer
             prevCameraPosition = mainCam.transform.position;
             prevCameraRotation = mainCam.transform.rotation;
             prevCameraCullingMask = mainCam.cullingMask;
+            prevCameraOrthographic = mainCam.orthographic;
 
             input.AddInputLockConstrain(this);
             viewer.OnViewerExited += ExitViewer;
@@ -106,9 +109,8 @@ namespace Netherlands3D.FirstPersonViewer
             transform.DOKill();
 
             mainCam.cullingMask = prevCameraCullingMask;
-            mainCam.orthographic = false;
+            mainCam.orthographic = prevCameraOrthographic;
             mainCam.targetDisplay = 0;
-            
 
             fovSetting.OnValueChanged.RemoveListener(SetCameraFOV);
             viewHeightSetting.OnValueChanged.RemoveListener(SetCameraHeight);
