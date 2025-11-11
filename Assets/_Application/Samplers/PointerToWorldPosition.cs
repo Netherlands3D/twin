@@ -17,10 +17,12 @@ namespace Netherlands3D.Twin.Samplers
         private float maxDistance = 10000;
 
         private GameObject testPosition;
-        
+        private Camera activeCamera;
+
         private void Awake()
         {
             opticalRaycaster = GetComponent<OpticalRaycaster>();
+            activeCamera = Camera.main;
         }
 
         private void Start()
@@ -40,7 +42,7 @@ namespace Netherlands3D.Twin.Samplers
         private void Update()
         {
             var screenPoint = Pointer.current.position.ReadValue();
-            opticalRaycaster.GetWorldPointAsync(screenPoint, worldPointCallback);
+            opticalRaycaster.GetWorldPointAsync(screenPoint, worldPointCallback, activeCamera);
 
             if(debugHeightmapPosition)
             {
@@ -76,19 +78,24 @@ namespace Netherlands3D.Twin.Samplers
         public Vector3 GetWorldPoint()
         {
             var screenPoint = Pointer.current.position.ReadValue();
-            return GetWorldPoint(screenPoint);
+            return GetWorldPoint(screenPoint, activeCamera);
+        }
+
+        public Vector3 GetWorldPoint(Vector2 screenPosition)
+        {
+           return GetWorldPoint(screenPosition, activeCamera);
         }
 
         public Vector3 GetWorldPointCenterView()
         {
             var screenPoint = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
-            return GetWorldPoint(screenPoint);
+            return GetWorldPoint(screenPoint, activeCamera);
         }
 
-        public Vector3 GetWorldPoint(Vector2 screenPosition)
+        public Vector3 GetWorldPoint(Vector2 screenPosition, Camera camera)
         {            
             Plane worldPlane = new Plane(Vector3.up, Vector3.zero);
-            var screenRay = Camera.main.ScreenPointToRay(screenPosition);
+            var screenRay = camera.ScreenPointToRay(screenPosition);
             worldPlane.Raycast(screenRay, out float distance);
             Vector3 position;
             //when no valid point is found in for the raycast, lets invert the distance so we get a point in the sky
@@ -113,5 +120,7 @@ namespace Netherlands3D.Twin.Samplers
             Vector3 intersection = origin + dir * t;
             return intersection;
         }
+
+        public void SetActiveCamera(Camera camera) => activeCamera = camera;
     }
 }
