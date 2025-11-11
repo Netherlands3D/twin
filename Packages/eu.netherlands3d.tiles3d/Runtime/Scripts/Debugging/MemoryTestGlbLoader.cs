@@ -13,11 +13,18 @@ namespace Netherlands3D.Tiles3D
 {
     public class MemoryTestGlbLoader : MonoBehaviour
     {
-        private const string TestDataResourceRoot = "TestData";
+        internal const string TestDataResourceRoot = "TestData";
+        internal const string TestDataDirectoryRelativePath = "Packages/eu.netherlands3d.tiles3d/TestData";
         private const string DefaultCsvFileStem = "3dtiles_transforms";
 
         [Tooltip("Naam van het CSV-bestand in TestData (zonder pad, extensie optioneel).")]
-        public string csvFileName = DefaultCsvFileStem;
+        private string csvFileName = DefaultCsvFileStem;
+
+        public string CsvFileName
+        {
+            get => csvFileName;
+            set => csvFileName = SanitizeCsvFileStem(value);
+        }
 
         [Header("Settings")]
         [Tooltip("Maximum aantal GLB bestanden om tegelijk te laden")]
@@ -31,6 +38,20 @@ namespace Netherlands3D.Tiles3D
         
         [Tooltip("Gebruik positie/rotatie/schaal uit het CSV bestand voor het plaatsen van GLB's")]
         public bool applyCsvTransforms = true;
+        
+        [Header("Camera Auto Positioning")]
+        [Tooltip("Verplaats camera automatisch naar het midden van de CSV dataset")]
+        public bool autoPositionCamera = true;
+        [Tooltip("Specifieke camera om te verplaatsen; leeg laat het systeem Camera.main gebruiken")]
+        public Transform cameraTransform;
+        [Tooltip("Extra hoogte boven het middelpunt")]
+        public float cameraHeightOffset = 70f;
+        [Tooltip("Hoeveelheid vooruit bewegen ten opzichte van het middelpunt (als fractie)")]
+        public float cameraForwardFactor = 0.65f;
+        [Tooltip("Minimale afstand die van het middelpunt wordt afgetrokken op de Z-as")]
+        public float cameraMinForwardDistance = 450f;
+        [Tooltip("Pitch (in graden) voor de auto-gepositioneerde camera")]
+        public float cameraPitchDegrees = 15f;
         
         [Header("Google Photorealistic 3D Tiles")]
         [Tooltip("Root tileset url used to request a session id before downloading GLB tiles")]
@@ -56,6 +77,7 @@ namespace Netherlands3D.Tiles3D
         private Coroutine manualLoadCoroutine;
         private bool automatedTestActive;
         private bool clearSceneAfterTestStops;
+        private bool cancelRequested;
         private string CsvResourcePath => $"{TestDataResourceRoot}/{SanitizeCsvFileStem(csvFileName)}";
         
         public bool IsAutomatedTestRunning => automatedTestRoutine != null;
@@ -81,6 +103,7 @@ namespace Netherlands3D.Tiles3D
         {
             EnsureParentTransform();
             ApplyApiKeyFromUrl();
+            EnsureCameraReference();
         }
 
         private void ApplyApiKeyFromUrl()
@@ -159,6 +182,16 @@ namespace Netherlands3D.Tiles3D
             manualLoadCoroutine = null;
         }
 
+        public void CancelLoading()
+        {
+            if (!isLoading)
+            {
+                return;
+            }
+
+            ForceStopLoading(clearScene: true);
+        }
+
         public void StartAutomatedTest()
         {
             if (IsAutomatedTestRunning)
@@ -189,8 +222,7 @@ namespace Netherlands3D.Tiles3D
                 return;
             }
 
-            clearSceneAfterTestStops = clearWhenStopped;
-            automatedTestActive = false;
+            ForceStopLoading(clearWhenStopped);
         }
 
         private IEnumerator AutomatedTestRoutine()
@@ -277,6 +309,7 @@ namespace Netherlands3D.Tiles3D
             EnsureParentTransform();
             isLoading = true;
             loadedFiles = 0;
+            cancelRequested = false;
             
             string[] lines;
             
@@ -365,6 +398,15 @@ namespace Netherlands3D.Tiles3D
             totalFiles = loadDataList.Count;
             Debug.Log($"Found {totalFiles} GLB files to load");
             
+            if (totalFiles > 0)
+            {
+                var averagePosition = CalculateAveragePosition(loadDataList);
+                if (averagePosition.HasValue)
+                {
+                    AutoPositionCamera(averagePosition.Value);
+                }
+            }
+            
             if (totalFiles == 0)
             {
                 isLoading = false;
@@ -379,6 +421,11 @@ namespace Netherlands3D.Tiles3D
             
             foreach (var loadData in loadDataList)
             {
+                if (cancelRequested)
+                {
+                    break;
+                }
+
                 yield return Loader.LoadGlb(loadData.url, loadData.position, loadData.rotation, loadData.scale, success =>
                 {
                     if (success)
@@ -389,7 +436,43 @@ namespace Netherlands3D.Tiles3D
             }
             
             isLoading = false;
-            Debug.Log($"Finished loading {loadedFiles}/{totalFiles} GLB files");
+
+            if (cancelRequested)
+            {
+                Debug.Log("Loading cancelled by user.");
+                ClearSceneContents();
+                cancelRequested = false;
+            }
+            else
+            {
+                Debug.Log($"Finished loading {loadedFiles}/{totalFiles} GLB files");
+            }
+        }
+
+        private void ForceStopLoading(bool clearScene)
+        {
+            cancelRequested = false;
+
+            if (manualLoadCoroutine != null)
+            {
+                StopCoroutine(manualLoadCoroutine);
+                manualLoadCoroutine = null;
+            }
+
+            if (automatedTestRoutine != null)
+            {
+                StopCoroutine(automatedTestRoutine);
+                automatedTestRoutine = null;
+            }
+
+            automatedTestActive = false;
+            clearSceneAfterTestStops = false;
+            isLoading = false;
+
+            if (clearScene)
+            {
+                ClearSceneContents();
+            }
         }
         
 
@@ -411,6 +494,20 @@ namespace Netherlands3D.Tiles3D
             Loader.UnloadGlb();
             loadedFiles = 0;
             totalFiles = 0;
+        }
+
+        private void EnsureCameraReference()
+        {
+            if (!autoPositionCamera || cameraTransform != null)
+            {
+                return;
+            }
+
+            Camera mainCamera = Camera.main;
+            if (mainCamera != null)
+            {
+                cameraTransform = mainCamera.transform;
+            }
         }
 
         private IEnumerator FetchSessionId()
@@ -535,6 +632,60 @@ namespace Netherlands3D.Tiles3D
             return builder.Uri.ToString();
         }
 
+        private Vector3? CalculateAveragePosition(List<GLBLoadData> loadDataList)
+        {
+            if (loadDataList == null || loadDataList.Count == 0)
+            {
+                return null;
+            }
+
+            Vector3 sum = Vector3.zero;
+            int count = 0;
+
+            foreach (var data in loadDataList)
+            {
+                sum += data.position;
+                count++;
+            }
+
+            if (count == 0)
+            {
+                return null;
+            }
+
+            return sum / count;
+        }
+
+        private void AutoPositionCamera(Vector3 focusPoint)
+        {
+            if (!autoPositionCamera)
+            {
+                return;
+            }
+
+            Transform targetCamera = cameraTransform;
+            if (targetCamera == null)
+            {
+                EnsureCameraReference();
+                targetCamera = cameraTransform;
+            }
+
+            if (targetCamera == null)
+            {
+                Debug.LogWarning("MemoryTestGlbLoader: Geen camera gevonden om te positioneren.");
+                return;
+            }
+
+            float forwardOffset = Mathf.Max(cameraMinForwardDistance, Mathf.Abs(focusPoint.z) * cameraForwardFactor);
+            Vector3 cameraPosition = new Vector3(
+                focusPoint.x,
+                focusPoint.y + cameraHeightOffset,
+                focusPoint.z - forwardOffset);
+
+            targetCamera.position = cameraPosition;
+            targetCamera.rotation = Quaternion.Euler(cameraPitchDegrees, 0f, 0f);
+        }
+
         private Dictionary<string, string> ParseQuery(string query)
         {
             Dictionary<string, string> result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -628,7 +779,7 @@ namespace Netherlands3D.Tiles3D
                 out result);
         }
 
-        private static string SanitizeCsvFileStem(string raw)
+        internal static string SanitizeCsvFileStem(string raw)
         {
             string trimmed = raw?.Trim();
             if (string.IsNullOrEmpty(trimmed))
@@ -655,6 +806,25 @@ namespace Netherlands3D.Tiles3D
 
             return trimmed;
         }
+
+#if UNITY_EDITOR
+        internal static string GetAbsoluteTestDataDirectory()
+        {
+            string assetsPath = Application.dataPath;
+            if (string.IsNullOrEmpty(assetsPath))
+            {
+                return null;
+            }
+
+            string projectRoot = Directory.GetParent(assetsPath)?.FullName;
+            if (string.IsNullOrEmpty(projectRoot))
+            {
+                return null;
+            }
+
+            return Path.GetFullPath(Path.Combine(projectRoot, TestDataDirectoryRelativePath.Replace('/', Path.DirectorySeparatorChar)));
+        }
+#endif
         
     }
 }

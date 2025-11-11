@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Profiling;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.Tiles3D
@@ -41,9 +40,8 @@ namespace Netherlands3D.Tiles3D
             }
         }
 
-        readonly List<float> allocatedSamples = new List<float>();
-        readonly List<float> reservedSamples = new List<float>();
-        readonly List<float> monoSamples = new List<float>();
+        readonly List<float> heapSizeSamples = new List<float>();
+        readonly List<float> gcHeapSamples = new List<float>();
         readonly Label hardLimitLabel;
         readonly float hardLimitMB = 2048f;
         float referenceMB = 1f;
@@ -52,9 +50,8 @@ namespace Netherlands3D.Tiles3D
         float sampleInterval = 0.5f;
         int maxSamples;
 
-        public float LatestAllocatedMB { get; private set; }
-        public float LatestReservedMB { get; private set; }
-        public float LatestMonoUsedMB { get; private set; }
+        public float LatestHeapSizeMB { get; private set; }
+        public float LatestGcHeapMB { get; private set; }
 
         public event Action<MemoryStatsGraph> SamplesUpdated;
 
@@ -127,16 +124,25 @@ namespace Netherlands3D.Tiles3D
 
         void Sample()
         {
-            LatestAllocatedMB = BytesToMegabytes(Profiler.GetTotalAllocatedMemoryLong());
-            LatestReservedMB = BytesToMegabytes(Profiler.GetTotalReservedMemoryLong());
-            LatestMonoUsedMB = BytesToMegabytes(Profiler.GetMonoUsedSizeLong());
+            LatestHeapSizeMB = SystemInfo.systemMemorySize;
+            LatestGcHeapMB = BytesToMegabytes(System.GC.GetTotalMemory(false));
 
-            AddSample(allocatedSamples, LatestAllocatedMB);
-            AddSample(reservedSamples, LatestReservedMB);
-            AddSample(monoSamples, LatestMonoUsedMB);
+            AddSample(heapSizeSamples, LatestHeapSizeMB);
+            AddSample(gcHeapSamples, LatestGcHeapMB);
 
-            float dataMax = Mathf.Max(FindMax(allocatedSamples), FindMax(reservedSamples), FindMax(monoSamples), 1f);
-            referenceMB = Mathf.Max(dataMax, hardLimitMB > 0f ? hardLimitMB : 0f, 1f);
+            float dataMax = Mathf.Max(
+                FindMax(heapSizeSamples),
+                FindMax(gcHeapSamples),
+                1f);
+
+            if (hardLimitMB > 0f)
+            {
+                referenceMB = hardLimitMB;
+            }
+            else
+            {
+                referenceMB = Mathf.Max(dataMax, 1f);
+            }
 
             MarkDirtyRepaint();
             SamplesUpdated?.Invoke(this);
@@ -177,9 +183,8 @@ namespace Netherlands3D.Tiles3D
 
             float reference = Mathf.Max(referenceMB, 1f);
 
-            DrawSeries(painter, rect, allocatedSamples, new Color32(80, 200, 255, 255), reference);
-            DrawSeries(painter, rect, reservedSamples, new Color32(255, 128, 0, 255), reference);
-            DrawSeries(painter, rect, monoSamples, new Color32(120, 255, 120, 255), reference);
+            DrawSeries(painter, rect, heapSizeSamples, new Color32(255, 220, 64, 255), reference);
+            DrawSeries(painter, rect, gcHeapSamples, new Color32(120, 255, 120, 255), reference);
 
             DrawHardLimit(painter, rect, reference);
         }
@@ -249,7 +254,7 @@ namespace Netherlands3D.Tiles3D
             }
             hardLimitLabel.visible = true;
 
-            float clampedRef = Mathf.Max(reference, 1f);
+            float clampedRef = Mathf.Max(reference, hardLimitMB, 1f);
             float t = Mathf.Clamp01(hardLimitMB / clampedRef);
             float y = Mathf.Lerp(rect.yMax, rect.yMin, t);
 

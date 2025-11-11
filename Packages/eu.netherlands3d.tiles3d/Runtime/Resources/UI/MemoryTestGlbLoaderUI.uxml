@@ -4,15 +4,14 @@
         <ns1:MemoryStatsGraph name="memory-graph" class="memory-graph" sample-interval="0.5" max-samples="0" style="height: 100%" />
         <ns0:VisualElement class="info-panel">
 
-            <ns0:Label name="csv-label" class="info-line" />
+            <ns0:DropdownField name="csv-dropdown" class="csv-dropdown" label="Capture file" />
             <ns0:TextField name="api-key-field" class="api-key-field" label="Google API key" visible="false" />
             <ns0:Label name="status-label" class="info-line" />
             <ns0:Label name="progress-label" class="info-line" />
 
             <ns0:VisualElement class="memory-legend">
-                <ns0:Label name="allocated-label" class="info-line" />
-                <ns0:Label name="reserved-label" class="info-line" />
-                <ns0:Label name="mono-label" class="info-line" />
+                <ns0:Label name="heap-label" class="info-line" />
+                <ns0:Label name="gc-label" class="info-line" />
             </ns0:VisualElement>
 
             <ns0:VisualElement class="button-row">

@@ -75,14 +75,22 @@
     margin-top: 4px;
 }
 
-#allocated-label{
-    color: #f07c2e;
+.csv-dropdown {
+    margin-bottom: 4px;
 }
 
-#reserved-label{
-   color: #5fcc64;
+.csv-dropdown .unity-base-field__input {
+    color: #000000;
 }
 
-#mono-label{
-    color: #2196F3;
+.csv-dropdown .unity-base-field__label {
+    color: #d0d0d0;
+}
+
+#heap-label{
+    color: #ffd200;
+}
+
+#gc-label{
+    color: #78ff78;
 }

@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using GLTFast;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Netherlands3D.Tiles3D
 {
@@ -62,7 +64,7 @@ namespace Netherlands3D.Tiles3D
                 Task<bool> loadTask = null;
                 string requestUrl = url;
 
-                if (url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                if (IsRemoteUrl(url))
                 {
                     requestUrl = resolveUrl(url);
                     if (string.IsNullOrEmpty(requestUrl))
@@ -71,7 +73,32 @@ namespace Netherlands3D.Tiles3D
                         yield break;
                     }
 
-                    loadTask = gltf.Load(requestUrl);
+                    if (IsB3dmPath(requestUrl))
+                    {
+                        byte[] remoteBytes = null;
+                        using (UnityWebRequest webRequest = UnityWebRequest.Get(requestUrl))
+                        {
+                            yield return webRequest.SendWebRequest();
+                            if (webRequest.result != UnityWebRequest.Result.Success)
+                            {
+                                Debug.LogError($"GlbLoader: Failed to download {requestUrl}: {webRequest.error}");
+                                yield break;
+                            }
+                            remoteBytes = webRequest.downloadHandler.data;
+                        }
+
+                        if (!TryExtractGlbFromB3dmBytes(remoteBytes, out var glbBytes))
+                        {
+                            Debug.LogError($"GlbLoader: Could not convert B3DM from {requestUrl}");
+                            yield break;
+                        }
+
+                        loadTask = gltf.LoadGltfBinary(glbBytes);
+                    }
+                    else
+                    {
+                        loadTask = gltf.Load(requestUrl);
+                    }
                 }
                 else
                 {
@@ -90,6 +117,15 @@ namespace Netherlands3D.Tiles3D
                     {
                         Debug.LogError($"GlbLoader: Failed to read {url}: {ex.Message}");
                         yield break;
+                    }
+
+                    if (IsB3dmPath(url))
+                    {
+                        if (!TryExtractGlbFromB3dmBytes(data, out data))
+                        {
+                            Debug.LogError($"GlbLoader: Could not convert local B3DM {url}");
+                            yield break;
+                        }
                     }
 
                     loadTask = gltf.LoadGltfBinary(data);
@@ -218,6 +254,129 @@ namespace Netherlands3D.Tiles3D
             }
 
             return false;
+        }
+
+        private static bool IsRemoteUrl(string path)
+        {
+            return !string.IsNullOrEmpty(path) && path.StartsWith("http", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsB3dmPath(string path)
+        {
+            return !string.IsNullOrEmpty(path) && path.EndsWith(".b3dm", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool TryExtractGlbFromB3dmBytes(byte[] sourceBytes, out byte[] glbBytes)
+        {
+            glbBytes = null;
+            if (sourceBytes == null || sourceBytes.Length < 4)
+            {
+                return false;
+            }
+
+            string magic = Encoding.UTF8.GetString(sourceBytes, 0, Math.Min(4, sourceBytes.Length));
+            if (!magic.Equals("b3dm", StringComparison.OrdinalIgnoreCase))
+            {
+                glbBytes = sourceBytes;
+                return true;
+            }
+
+            try
+            {
+                using (var memoryStream = new MemoryStream(sourceBytes))
+                {
+                    var b3dm = B3dmReader.ReadB3dm(memoryStream);
+                    var glbData = b3dm.GlbData;
+                    RemoveCesiumRtcFromRequiredExtensions(glbData);
+                    glbBytes = glbData;
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"GlbLoader: Failed to process B3DM bytes: {ex.Message}");
+                return false;
+            }
+        }
+
+        private static void RemoveCesiumRtcFromRequiredExtensions(byte[] glbData)
+        {
+            if (glbData == null || glbData.Length <= 20)
+            {
+                return;
+            }
+
+            int jsonStart = 20;
+            int jsonLength = GetJsonChunkLength(glbData);
+            if (jsonLength <= 0 || jsonStart + jsonLength > glbData.Length)
+            {
+                return;
+            }
+
+            string jsonString = Encoding.UTF8.GetString(glbData, jsonStart, jsonLength);
+            const string extensionsToken = "\"extensionsRequired\"";
+            const string cesiumToken = "\"CESIUM_RTC\"";
+
+            int extensionsIndex = jsonString.IndexOf(extensionsToken, StringComparison.Ordinal);
+            if (extensionsIndex < 0)
+            {
+                return;
+            }
+
+            int afterToken = extensionsIndex + extensionsToken.Length;
+            int arrayEnd = jsonString.IndexOf("]", afterToken, StringComparison.Ordinal);
+            if (arrayEnd < 0)
+            {
+                return;
+            }
+
+            int cesiumIndex = jsonString.IndexOf(cesiumToken, afterToken, StringComparison.Ordinal);
+            if (cesiumIndex < 0)
+            {
+                return;
+            }
+
+            int cesiumEnd = cesiumIndex + cesiumToken.Length;
+            int commaIndex = jsonString.IndexOf(",", afterToken, StringComparison.Ordinal);
+
+            int removalStart = cesiumIndex;
+            int removalEnd = cesiumEnd;
+
+            if (commaIndex < 0 || commaIndex > arrayEnd)
+            {
+                removalStart = Math.Max(extensionsIndex - 1, 0);
+                removalEnd = arrayEnd + 1;
+            }
+            else
+            {
+                if (commaIndex < cesiumIndex)
+                {
+                    removalStart = Math.Max(commaIndex, extensionsIndex);
+                }
+                if (commaIndex > cesiumEnd)
+                {
+                    removalEnd = Math.Min(commaIndex, jsonString.Length);
+                }
+            }
+
+            for (int i = removalStart; i < removalEnd; i++)
+            {
+                int glbIndex = jsonStart + i;
+                if (glbIndex >= 0 && glbIndex < glbData.Length)
+                {
+                    glbData[glbIndex] = 0x20;
+                }
+            }
+        }
+
+        private static int GetJsonChunkLength(byte[] glbData)
+        {
+            if (glbData == null || glbData.Length < 16)
+            {
+                return 0;
+            }
+
+            return BitConverter.ToInt32(glbData, 12);
         }
 
         private static void ApplyCsvTransform(Transform root, Vector3 position, Quaternion rotation, Vector3 scale)
