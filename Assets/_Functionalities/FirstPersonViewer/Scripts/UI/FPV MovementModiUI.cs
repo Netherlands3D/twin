@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-namespace Netherlands3D
+namespace Netherlands3D.FirstPersonViewer.UI
 {
     public class FPVMovementModiUI : MonoBehaviour
     {
@@ -21,7 +21,7 @@ namespace Netherlands3D
 
         private void OnEnable()
         {
-            switcher = ServiceLocator.GetService<MovementModusSwitcher>();
+            switcher = ServiceLocator.GetService<FirstPersonViewer>().MovementSwitcher;
             if (switcher != null) switcher.OnMovementPresetChanged += SwitchModeUI;
         }
 
@@ -33,7 +33,7 @@ namespace Netherlands3D
         private void SwitchModeUI(ViewerState state)
         {
             currentMovemodeImage.sprite = state.viewIcon;
-
+            Debug.Log(state.name);
             uiSequence?.Kill();
             uiSequence = DOTween.Sequence();
             uiSequence.AppendCallback(() => currentMovemodeImage.color = new Color(1,1,1,0));
