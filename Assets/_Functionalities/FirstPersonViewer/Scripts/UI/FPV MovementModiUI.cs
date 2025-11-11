@@ -16,7 +16,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private float fadeOutLength;
 
         private MovementModusSwitcher switcher;
-
         private Sequence uiSequence;
 
         private void OnEnable()
@@ -33,7 +32,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
         private void SwitchModeUI(ViewerState state)
         {
             currentMovemodeImage.sprite = state.viewIcon;
-            Debug.Log(state.name);
+
+            //Kill previous UI Sequence and start a new one.
             uiSequence?.Kill();
             uiSequence = DOTween.Sequence();
             uiSequence.AppendCallback(() => currentMovemodeImage.color = new Color(1,1,1,0));
