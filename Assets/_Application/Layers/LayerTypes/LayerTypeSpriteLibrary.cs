@@ -6,6 +6,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -34,20 +35,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                 return GetProxyLayerSprite(template);
             }
 
-            switch (layer)
-            {
-                case PolygonSelectionLayer selectionLayer:
-                    if (selectionLayer.ShapeType == ShapeType.Line)
-                        return layerTypeSprites[7];
-                    else if (selectionLayer.ShapeType == ShapeType.Grid)
-                        return layerTypeSprites[12];
-                    return layerTypeSprites[6];               
-                // case FolderLayer _:
-                //     return layerTypeSprites[2];
-                default:
-                    Debug.LogError("layer type of " + layer.Name + " is not specified");
-                    return layerTypeSprites[0];
-            }
+            Debug.LogError("layer type of " + layer.Name + " is not specified");
+            return layerTypeSprites[0];
+
         }
 
         private LayerSpriteCollection GetProxyLayerSprite(LayerGameObject layer)
@@ -76,6 +66,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return layerTypeSprites[7];                
                 case GeoJSONPointLayer _:
                     return layerTypeSprites[9];
+                case PolygonSelectionVisualisation _:
+                    {
+                        PolygonSelectionLayerPropertyData data = layer.LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+                        if (data.ShapeType == ShapeType.Line)
+                            return layerTypeSprites[7];
+                        else if (data.ShapeType == ShapeType.Grid)
+                            return layerTypeSprites[12];
+                        return layerTypeSprites[6];
+                    }
                 default:
                     Debug.LogError($"layer type of {layer.GetType()} is not specified");
                     return layerTypeSprites[0];

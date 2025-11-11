@@ -34,7 +34,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
                     gameObject.SetActive(true);
                     convertToggle.SetIsOnWithoutNotify(true);
                     return;
-                case HierarchicalObjectLayerGameObject objectLayer when objectLayer.LayerData.ParentLayer is PolygonSelectionLayer:
+                case HierarchicalObjectLayerGameObject objectLayer when objectLayer.LayerData.ParentLayer.GetProperty<PolygonSelectionLayerPropertyData>() != null:
                     gameObject.SetActive(true);
                     convertToggle.SetIsOnWithoutNotify(false);
                     return;

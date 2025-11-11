@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public UnityEvent OnPolygonVisualisationUpdated = new();
 
         public CompoundPolygon Polygon { get; set; }
-        public UnityEvent<LayerData> polygonSelected = new();
+       
 
         /// <summary>
         /// Create or update PolygonVisualisation
@@ -123,8 +123,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
             base.SetData(layerData);
             UpdatePolygon();
-            PolygonSelectionCalculator.RegisterPolygon(LayerData);   
-            availableMaskChannels.Remove(MaskBitIndex);
+            PolygonSelectionCalculator.RegisterPolygon(LayerData);
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            availableMaskChannels.Remove(data.MaskBitIndex);
         }
 
         protected override void RegisterEventListeners()
@@ -160,7 +161,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void OnSwitchVisualisation()
         {
-            OnIsMaskChanged(IsMask); //The reference changed, so we need to treat it as if we make a new mask
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            OnIsMaskChanged(data.IsMask); //The reference changed, so we need to treat it as if we make a new mask
         }
 
         private void CleanupMasking()
@@ -175,14 +177,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             //Silent update of the polygon shape, so the visualisation is updated without notifying the listeners
             UpdatePolygon();
-            polygonMoved.Invoke();
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            data.polygonMoved.Invoke();
         }
 
         public void SetShape(List<Coordinate> coordinates)
         {
             PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
             data.OriginalPolygon = coordinates;            
-            polygonChanged.Invoke();
+            data.polygonChanged.Invoke();
         }
 
         private void UpdatePolygon()
@@ -197,7 +200,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
                 var vertices = CoordinatesToVertices(data.OriginalPolygon);                
-                PolygonVisualisation.UpdateVisualisation(vertices, data.ExtrusionHeight);
+                UpdateVisualisation(vertices, data.ExtrusionHeight);
                 PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
             }
         }
@@ -213,7 +216,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             base.OnLayerActiveInHierarchyChanged(activeInHierarchy);
             SetVisualisationActive(activeInHierarchy);
-            UpdateInvertedMaskBitInShaders(IsMask, InvertMask, activeInHierarchy);
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            UpdateInvertedMaskBitInShaders(data.IsMask, data.InvertMask, activeInHierarchy);
         }
 
         private Vector2[] CoordinatesToVertices(List<Coordinate> coordinates)
@@ -282,26 +286,28 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void SetMaskBitIndex(bool isMask, bool invertMask)
         {
-            if (!isMask && MaskBitIndex != -1)
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            if (!isMask && data.MaskBitIndex != -1)
             {
                 OnInvertMaskChanged(invertMask); //clear the inverted mask property before clearing the bit index
-                availableMaskChannels.Add(MaskBitIndex);
-                MaskBitIndex = -1;
+                availableMaskChannels.Add(data.MaskBitIndex);
+                data.MaskBitIndex = -1;
             }
-            else if (isMask && MaskBitIndex == -1)
+            else if (isMask && data.MaskBitIndex == -1)
             {
-                MaskBitIndex = availableMaskChannels.Last();
-                availableMaskChannels.Remove(MaskBitIndex);
+                data.MaskBitIndex = availableMaskChannels.Last();
+                availableMaskChannels.Remove(data.MaskBitIndex);
                 OnInvertMaskChanged(invertMask); //set the inverted mask property after assigning the bit index
             }
         }
 
         private void OnInvertMaskChanged(bool invert)
         {
-            var layer = GetLayer(IsMask);
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            var layer = GetLayer(data.IsMask);
             SetPolygonLayer(layer);
-            UpdateInvertedMaskBitInShaders(IsMask, invert, ActiveInHierarchy);
-            PolygonVisualisation.SetMaterial(IsMask, MaskBitIndex, invert);
+            UpdateInvertedMaskBitInShaders(data.IsMask, invert, LayerData.ActiveInHierarchy);
+            SetMaterial(data.IsMask, data.MaskBitIndex, invert);
         }
 
         private void SetPolygonLayer(LayerMask layer)
@@ -331,13 +337,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             base.OnSelect();
             PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            polygonSelected.Invoke(LayerData);
+            data.polygonSelected.Invoke(LayerData);
         }
 
         public override void OnDeselect()
         {
             base.OnDeselect();
-            polygonSelected.Invoke(null);
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            data.polygonSelected.Invoke(null);
         }
 
         public override void DestroyLayer()

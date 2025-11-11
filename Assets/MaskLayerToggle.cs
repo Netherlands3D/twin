@@ -1,5 +1,6 @@
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
 using TMPro;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace Netherlands3D.Twin.Layers
 {
     public class MaskLayerToggle : MonoBehaviour
     {
-        public PolygonSelectionLayer MaskLayer { get; set; }
+        public LayerData MaskLayer { get; set; }
 
         private LayerData layerData;
         public LayerData LayerData
@@ -35,7 +36,7 @@ namespace Netherlands3D.Twin.Layers
             toggle.interactable = false;
         }
 
-        public void Initialize(PolygonSelectionLayer mask, LayerData layer)
+        public void Initialize(LayerData mask, LayerData layer)
         {
             MaskLayer = mask;
             LayerData = layer;
@@ -48,8 +49,9 @@ namespace Netherlands3D.Twin.Layers
             LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
             if (template != null)
             {
+                PolygonSelectionLayerPropertyData data = MaskLayer.GetProperty<PolygonSelectionLayerPropertyData>();
                 var currentLayerMask = template.GetMaskLayerMask(layer); //TODO this should be written more logically, perhaps in layerdata itself or helper method
-                int maskBitToCheck = 1 << MaskLayer.MaskBitIndex;
+                int maskBitToCheck = 1 << data.MaskBitIndex;
                 bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
                 toggle.SetIsOnWithoutNotify(!isBitSet);
                 UpdateUIAppearance(isBitSet);
@@ -69,9 +71,9 @@ namespace Netherlands3D.Twin.Layers
         private void OnValueChanged(bool isOn)
         {
             var acceptMask = !isOn;
-
+            PolygonSelectionLayerPropertyData data = MaskLayer.GetProperty<PolygonSelectionLayerPropertyData>();
             LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
-            template.SetMaskBit(MaskLayer.MaskBitIndex, acceptMask, layerData);//TODO this should be written more logically, perhaps in layerdata itself or helper method
+            template.SetMaskBit(data.MaskBitIndex, acceptMask, layerData);//TODO this should be written more logically, perhaps in layerdata itself or helper method
             UpdateUIAppearance(acceptMask);
         }
 
