@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Netherlands3D.Services;
 using Netherlands3D.Events;
 using Netherlands3D.Twin.Samplers;
 using System.Collections.Generic;
@@ -9,11 +10,9 @@ namespace Netherlands3D.FirstPersonViewer.UI
 {
     public class ViewerUIController : MonoBehaviour
     {
-        [SerializeField] private GameObject viewerUI;
         private CanvasGroup viewerGroup;
+        [SerializeField] private GameObject viewerUI;
         [SerializeField] private List<GameObject> uiToDisable;
-
-        private PointerToWorldPosition pointerToWorld;
 
         [Space(5)]
         [SerializeField] private InputActionReference hideButton;
@@ -23,14 +22,19 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private string fpvExitText;
         [SerializeField] private string uiHideText;
 
+        private PointerToWorldPosition pointerToWorld;
+        private FirstPersonViewer firstPersonViewer;
 
         private void Start()
         {
             pointerToWorld = FindFirstObjectByType<PointerToWorldPosition>();
             viewerGroup = viewerUI.GetComponent<CanvasGroup>();
 
-            FirstPersonViewer.OnViewerEntered += EnterViewer;
-            FirstPersonViewer.OnViewerExited += ExitViewer;
+            //Events get cleared in First Person Viewer code.
+            firstPersonViewer = ServiceLocator.GetService<FirstPersonViewer>();
+            firstPersonViewer.OnViewerEntered += EnterViewer;
+            firstPersonViewer.OnViewerExited += ExitViewer;
+
             hideButton.action.performed += OnHideUIPressed;
 
             viewerUI.SetActive(false);
@@ -38,8 +42,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnDestroy()
         {
-            FirstPersonViewer.OnViewerEntered -= EnterViewer;
-            FirstPersonViewer.OnViewerExited -= ExitViewer;
             hideButton.action.performed -= OnHideUIPressed;
         }
 

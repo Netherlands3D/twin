@@ -158,6 +158,8 @@ namespace Netherlands3D.SelectionTools
                 Debug.LogWarning("polygonSelectionActionMap was not enabled, but assigned as the input action map. Enabling the input action map", this);
                 polygonSelectionActionMap.Enable();
             }
+
+            SetDrawMode(DrawMode.Edit);
         }
 
 #if UNITY_EDITOR

@@ -38,7 +38,8 @@ namespace Netherlands3D.FirstPersonViewer
         public bool LockInput => inputLocks.Count > 0;
 
         //Events
-        public static event Action<float> ExitDuration;
+        public event Action<float> ExitDuration;
+        private event Action<bool> OnInputExit;
 
         private void Awake()
         {
@@ -56,10 +57,6 @@ namespace Netherlands3D.FirstPersonViewer
 
             inputLocks = new List<MonoBehaviour>();
 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-
-            FirstPersonViewer.OnViewerExited += ViewerExited;
         }
 
         private void OnEnable()
@@ -67,14 +64,15 @@ namespace Netherlands3D.FirstPersonViewer
             inputActionAsset.Enable();
         }
 
+        public void OnFPVEnter()
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
         private void OnDisable()
         {
             inputActionAsset.Disable();
-        }
-
-        private void OnDestroy()
-        {
-            FirstPersonViewer.OnViewerExited -= ViewerExited;
         }
 
         private void Update()
@@ -149,27 +147,27 @@ namespace Netherlands3D.FirstPersonViewer
                 if (exitTimer == 0)
                 {
                     ExitDuration?.Invoke(-1);
-                    FirstPersonViewer.OnViewerExited?.Invoke(exitModifier.IsPressed());
+                    OnInputExit?.Invoke(exitModifier.IsPressed());
                 }
             }
             else if (ExitInput.WasReleasedThisFrame()) ExitDuration?.Invoke(-1); //Reset the visual
             else exitTimer = exitDuration;
         }
 
-        private void ViewerExited(bool modified)
+        public void ViewerExited()
         {
             //TODO Move this to a application wide cursor manager.
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-
-            Destroy(gameObject);
         }
 
         public void AddInputLockConstrain(MonoBehaviour monoBehaviour) => inputLocks.Add(monoBehaviour);
 
         public void RemoveInputLockConstrain(MonoBehaviour monoBehaviour) => inputLocks.Remove(monoBehaviour);
 
-        public static bool IsInputfieldSelected()
+        public void SetExitCallback(Action<bool> callback) => OnInputExit = callback;
+
+        public bool IsInputfieldSelected()
         {
             GameObject selected = EventSystem.current.currentSelectedGameObject;
 

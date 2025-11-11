@@ -11,7 +11,6 @@ namespace Netherlands3D.FirstPersonViewer
     {
         private ViewPositionPickerIcon picker;
         [SerializeField] private ViewPositionPickerIcon pickerPrefab;
-        [SerializeField] private GameObject firstPersonViewerPrefab;
         [SerializeField] private LayerMask snappingCullingMask = 0;
 
         public void PointerDown()
@@ -35,7 +34,7 @@ namespace Netherlands3D.FirstPersonViewer
                 if (hit)
                 {
                     //$$ TODO Fix being able to walk on invicible buildings.
-                    //Commentent code not working or changing anything based on the visibilty of the building.
+                    //Commentent code not working or changing anythings based on the visibilty of the building.
 
                     //ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
                     //SubObjectSelector subObjectSelector = objectSelectorService.SubObjectSelector;
@@ -44,9 +43,10 @@ namespace Netherlands3D.FirstPersonViewer
                     //IMapping mapping = objectSelectorService.FindObjectMapping();
                     //if (objectSelectorService.IsMappingVisible(mapping, bagID))
                     //{
-                    Instantiate(firstPersonViewerPrefab, point, Quaternion.identity);
+                    FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer>();
+                    fpv.transform.position = point;
+                    fpv.OnViewerEntered?.Invoke();
 
-                    FirstPersonViewer.OnViewerEntered?.Invoke();
                     //}
                 }
             }, snappingCullingMask);
