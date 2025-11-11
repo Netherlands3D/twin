@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 714e859e1c414d479484fe937804ce24, type: 3}
+  m_Name: Functionality_FirstPersonViewer
+  m_EditorClassIdentifier: 
+  data:
+    Id: first-person-viewer
+    IsEnabled: 0
+  Title: First Person Viewer
+  Caption: BETA
+  Header: First Person Viewer
+  Description: "Loop en vlieg door Nederland met de first person viewer!\r\n\nDeze
+    beta functionaliteit bevat op dit de bewegings-modi lopen en vliegen. Sleep vanuit
+    het blokje naast de kaart het poppetje in het scherm om de first-person viewer
+    in te gaan.\r\n\nGebruik in de first-person viewer de muis om je camera te draaien.
+    Gebruik de pijltjestoetsen of \u2018W\u2019,\u2019A\u2019,\u2019S\u2019,\u2019D\u2019
+    om te bewegen.\r\n\nOm de muis weer los te laten, klik twee keer op Escape.\r\nVoor
+    uitgebreide informatie over het gebruik van de first-person viewer, <a href=\"https://netherlands3d.eu/docs/handleiding/first-person-viewer\">kijk
+    in de documentatie</a>.\r\n\n<i>Let op; deze functionaliteit is nog in ontwikkeling.</i>"
+  configuration: {fileID: 0}
+  OnEnable:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisable:
+    m_PersistentCalls:
+      m_Calls: []

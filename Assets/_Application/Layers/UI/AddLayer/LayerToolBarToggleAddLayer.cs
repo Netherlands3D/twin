@@ -5,11 +5,8 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
 {
     public class LayerToolBarToggleAddLayer : LayerToolBarToggleBase
     {
-        [SerializeField] private AddLayerPanel addLayerPanel;
         public override void ToggleAction(bool isOn)
         {
-            // layerManager.EnableContextMenu(true, transform.position);
-            addLayerPanel.TogglePanel(isOn);
             if (!isOn)
                 EventSystem.current.SetSelectedGameObject(null);
         }
