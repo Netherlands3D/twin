@@ -216,10 +216,6 @@ namespace Netherlands3D.Twin.Layers
             UnregisterEventListeners();
         }
 
-        public virtual void OnConvert(string previousId)
-        {
-        }
-
         public virtual void OnSelect()
         {
         }

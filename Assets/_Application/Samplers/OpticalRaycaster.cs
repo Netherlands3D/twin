@@ -23,6 +23,11 @@ namespace Netherlands3D.Twin.Samplers
 
         public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, int cullingMask = defaultRaycastLayers)
         {
+            GetWorldPointAsync(screenPoint, callback, Camera.main, cullingMask);
+        }
+
+        public void GetWorldPointAsync(Vector3 screenPoint, Action<Vector3, bool> callback, Camera camera, int cullingMask = defaultRaycastLayers)
+        {
             if (activeRequests.Count > maxRequests)
             {
                 callback.Invoke(Vector3.zero, false);
@@ -30,9 +35,10 @@ namespace Netherlands3D.Twin.Samplers
             }
 
             OpticalRequest opticalRequest = GetRequest();
+            opticalRequest.SetActiveCamera(camera); 
             opticalRequest.SetCullingMask(cullingMask);
             opticalRequest.SetScreenPoint(screenPoint);
-            opticalRequest.AlignWithMainCamera();
+            opticalRequest.AlignWithCamera();
             opticalRequest.UpdateShaders();
             opticalRequest.SetResultCallback(callback);
             opticalRequest.framesActive = 0;
@@ -55,7 +61,7 @@ namespace Netherlands3D.Twin.Samplers
                 OpticalRequest opticalRequest = GetRequest();
                 opticalRequest.SetCullingMask(cullingMask);
                 opticalRequest.SetScreenPoint(screenPoints[i]);
-                opticalRequest.AlignWithMainCamera();
+                opticalRequest.AlignWithCamera();
                 opticalRequest.UpdateShaders();
                 opticalRequest.SetResultCallback(multipointCallback.pointCallbacks[i]);
                 opticalRequest.framesActive = 0;
@@ -221,6 +227,8 @@ namespace Netherlands3D.Twin.Samplers
             public int resultCount = 0;
             public bool hasHit = false;
 
+            private Camera activeCamera; 
+
             public OpticalRequest(Material depthMaterial, Material positionMaterial, RenderTexture rt, Camera prefab)
             {
                 this.depthMaterial = new Material(depthMaterial);
@@ -265,18 +273,25 @@ namespace Netherlands3D.Twin.Samplers
                 depthCamera.cullingMask = mask;
             }
 
-            public void AlignWithMainCamera()
+            public void SetActiveCamera(Camera camera)
             {
-                depthCamera.transform.position = Camera.main.transform.position;
-                if (Camera.main.orthographic)
+                activeCamera = camera;
+            }
+
+            public void AlignWithCamera()
+            {
+                if (activeCamera == null) activeCamera = Camera.main;
+
+                depthCamera.transform.position = activeCamera.transform.position;
+                if (activeCamera.orthographic)
                 {
-                    Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, Camera.main.nearClipPlane));
-                    depthCamera.transform.position = worldPoint - Camera.main.transform.forward * 10f; //needing a temp offset position to simulate a depth offset, because ortho cameras ignore dpeth
+                    Vector3 worldPoint = activeCamera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, activeCamera.nearClipPlane)); 
+                    depthCamera.transform.position = worldPoint - activeCamera.transform.forward * 10f; //needing a temp offset position to simulate a depth offset, because ortho cameras ignore dpeth
                     depthCamera.transform.LookAt(worldPoint);
                 }
                 else
                 {
-                    Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, Camera.main.nearClipPlane));
+                    Vector3 worldPoint = activeCamera.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, activeCamera.nearClipPlane));
                     depthCamera.transform.LookAt(worldPoint);
                 }
             }

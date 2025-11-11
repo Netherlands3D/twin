@@ -1,5 +1,6 @@
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
@@ -45,13 +46,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 
         private void ToggleScatter(bool isOn)
         {
+            string oldPrefabId = LayerGameObject.LayerData.PrefabIdentifier;
             switch (LayerGameObject)
-            {
+            { 
                 case ObjectScatterLayerGameObject scatterLayer:
                     App.Layers.VisualizeAs(scatterLayer.LayerData, scatterLayer.Settings.OriginalPrefabId);
                     return;
                 case HierarchicalObjectLayerGameObject objectLayer:
-                    App.Layers.VisualizeAs(objectLayer.LayerData, ObjectScatterLayerGameObject.ScatterBasePrefabID);
+                    App.Layers.VisualizeAs(objectLayer.LayerData, ObjectScatterLayerGameObject.ScatterBasePrefabID, convertedVisualization => //todo: not make lambda to reduce allocations
+                    {
+                        ((ObjectScatterLayerGameObject)convertedVisualization).Initialize(oldPrefabId);
+                    });
                     return;
             }
         }

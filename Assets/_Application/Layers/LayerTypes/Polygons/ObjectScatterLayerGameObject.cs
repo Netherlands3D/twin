@@ -59,15 +59,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
         } 
 
-        public void Initialize(LayerData data, string previousPrefabId)
+        public void Initialize(string previousPrefabId)
         {
             InitializeScatterMesh(previousPrefabId);            
-            polygonLayer = data.ParentLayer as PolygonSelectionLayer;
-            var existingScatterProperties = (ScatterGenerationSettingsPropertyData) data.LayerProperties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
+            polygonLayer = LayerData.ParentLayer as PolygonSelectionLayer;
+            var existingScatterProperties = (ScatterGenerationSettingsPropertyData) LayerData.LayerProperties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
             if (existingScatterProperties == null)
             {
                 InitializeNewScatterProperties(previousPrefabId, polygonLayer.ShapeType);
-                data.SetProperty(settings);
+                LayerData.SetProperty(settings);
             }
             else
                 settings = existingScatterProperties;
@@ -311,11 +311,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
         }
 
-        public override void OnConvert(string previousId)
-        {
-            Initialize(LayerData, previousId);
-        }
-
         public List<IPropertySectionInstantiator> GetPropertySections()
         {
             return propertySections;
@@ -379,7 +374,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             BoundingBox polygonBoundingBox = polygonLayer.PolygonVisualisation.Bounds;
             polygonBoundingBox.Convert(CoordinateSystem.RD);
             BinaryMeshLayer bml = areaReference.Layer as BinaryMeshLayer;
-            Initialize(LayerData, settings.OriginalPrefabId);
+            Initialize(settings.OriginalPrefabId);
             bml?.OnTileObjectCreated.AddListener(tile =>
             {
                 BoundingBox tileBox = GetBoundingBoxForTile(tile);

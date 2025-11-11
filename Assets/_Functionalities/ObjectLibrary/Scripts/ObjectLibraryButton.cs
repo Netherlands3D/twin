@@ -41,22 +41,21 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
 
         private void CreateObject()
         {
-            // Discard task and fire and forget async task because the event listener cannot cleanly handle it
-            _ = CreateLayer();
+            CreateLayer();
         }
         
         /// <summary>
         /// Provide an extension point where we can capture the LayerGameObject, and thus the LayerData, so that
         /// subclasses can manipulate the instantiated LayerGameObject.
         /// </summary>
-        protected virtual async Task<Layer> CreateLayer(ILayerBuilder layerBuilder = null)
+        protected virtual Layer CreateLayer(ILayerBuilder layerBuilder = null)
         {
             layerBuilder ??= LayerBuilder.Create();
 
             // TODO: Replace PrefabIdentifier with type - but this requires a change in all buttons
             var layer = layerBuilder.OfType(prefab.PrefabIdentifier).NamedAs(prefab.name);
             
-            return await App.Layers.Add(layer);
+            return App.Layers.Add(layer);
         }
     }
 }

@@ -115,7 +115,10 @@ namespace Netherlands3D.Twin.Cameras
 
             pointer = FindAnyObjectByType<PointerToWorldPosition>();
             orthographicSwitcher = orthographicSwitcher ? orthographicSwitcher : GetComponent<OrthographicSwitcher>();            
+        }
 
+        private void OnEnable()
+        {
             horizontalInput.AddListenerStarted(MoveHorizontally);
             verticalInput.AddListenerStarted(MoveForwardBackwards);
             upDownInput.AddListenerStarted(MoveUpDown);
@@ -134,7 +137,28 @@ namespace Netherlands3D.Twin.Cameras
             if (ortographicEnabled) ortographicEnabled.AddListenerStarted(EnableOrtographic);
             if (focusOnObject) focusOnObject.AddListenerStarted(FocusOnObject);
         }
-                
+
+        private void OnDisable()
+        {
+            horizontalInput.RemoveListenerStarted(MoveHorizontally);
+            verticalInput.RemoveListenerStarted(MoveForwardBackwards);
+            upDownInput.RemoveListenerStarted(MoveUpDown);
+            lookInput.RemoveListenerStarted(PointerDelta);
+            flyInput.RemoveListenerStarted(FreeFly);
+            rotateInput.RemoveListenerStarted(RotateAroundOwnAxis);
+
+            zoomToPointerInput.RemoveListenerStarted(ZoomToPointer);
+            pointerPosition.RemoveListenerStarted(SetPointerPosition);
+
+            dragModifier.RemoveListenerStarted(Drag);
+            rotateModifier.RemoveListenerStarted(Rotate);
+            firstPersonModifier.RemoveListenerStarted(RotateFirstPerson);
+
+            if (blockCameraDrag) blockCameraDrag.RemoveListenerStarted(LockDragging);
+            if (ortographicEnabled) ortographicEnabled.RemoveListenerStarted(EnableOrtographic);
+            if (focusOnObject) focusOnObject.RemoveListenerStarted(FocusOnObject);
+        }
+
         /// <summary>
         /// Switch camera to ortographic mode and limit its controls
         /// </summary>

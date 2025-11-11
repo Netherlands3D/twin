@@ -187,13 +187,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private async void CreatePolygonLayer(List<Vector3> unityPolygon)
         {
-            PolygonSelectionLayer data = new PolygonSelectionLayer(
+            //todo: this is now broken, needs to be fixed
+            PolygonSelectionLayer data = new PolygonSelectionLayer( 
                 "Polygon", 
                 polygonSelectionVisualisationPrefab.PrefabIdentifier, 
                 unityPolygon, 
                 ShapeType.Polygon                
             );            
-            Layer layer = await App.Layers.VisualizeData(data);
+            // Layer layer = App.Layers.VisualizeData(data);
             layers.Add(data.PolygonVisualisation, data);
             data.polygonSelected.AddListener(ProcessPolygonSelection);
             polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work

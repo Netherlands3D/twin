@@ -55,16 +55,15 @@ namespace Netherlands3D.Twin.Functionalities
             }
         }
 
-        public async void Spawn(GameObject prefab)
+        public void Spawn(GameObject prefab)
         {
             var layerGameObject = prefab.GetComponent<LayerGameObject>();
             if (layerGameObject)
             {
                 var layerBuilder = LayerBuilder.Create()
                     .OfType(layerGameObject.PrefabIdentifier)
-                    .NamedAs(prefab.name);
-                Layer layer = await App.Layers.Add(layerBuilder);
-                return;
+                    .NamedAs(prefab.name); 
+                App.Layers.Add(layerBuilder);
             }
         }
     }

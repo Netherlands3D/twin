@@ -69,7 +69,7 @@ namespace Netherlands3D.Twin.Projects
         [NonSerialized] public UnityEvent<DateTime> OnCurrentDateTimeChanged = new();
         [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
         [NonSerialized] public UnityEvent<Coordinate> OnCameraPositionChanged = new();
-        [NonSerialized] public UnityEvent<LayerData> LayerAdded = new();
+        // [NonSerialized] public UnityEvent<LayerData> LayerAdded = new();
         [NonSerialized] public UnityEvent<LayerData> LayerDeleted = new();
 
         public void RefreshUUID()
@@ -94,7 +94,7 @@ namespace Netherlands3D.Twin.Projects
         public void AddStandardLayer(LayerData layer)
         {
             RootLayer.AddChild(layer, 0);
-            LayerAdded.Invoke(layer);           
+            // LayerAdded.Invoke(layer);           
         }
 
         //public static void CreateAndAttachReferenceLayerTo(LayerGameObject referencedLayer)
@@ -125,13 +125,12 @@ namespace Netherlands3D.Twin.Projects
             current.functionalities = new();
         }
 
-        public async void LoadVisualizations()
+        public void LoadVisualizations()
         {    
             foreach (var layer in rootLayer.ChildrenLayers)
             {
                 if (layer is RootLayer) continue;
-
-                var task = await App.Layers.VisualizeData(layer);
+                App.Layers.VisualizeData(layer);
             }
         }
         
