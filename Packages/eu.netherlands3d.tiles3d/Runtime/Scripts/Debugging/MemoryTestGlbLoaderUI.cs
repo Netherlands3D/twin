@@ -180,9 +180,28 @@ namespace Netherlands3D.Tiles3D
             RefreshCsvChoices();
             csvSelectionChangedHandler = evt =>
             {
-                if (loader != null && !string.IsNullOrEmpty(evt.newValue))
+                if (loader == null || string.IsNullOrEmpty(evt.newValue))
                 {
-                    loader.CsvFileName = GetValueFromDisplay(evt.newValue);
+                    return;
+                }
+
+                string newFile = GetValueFromDisplay(evt.newValue);
+                if (string.IsNullOrEmpty(newFile) || string.Equals(loader.CsvFileName, newFile, StringComparison.OrdinalIgnoreCase))
+                {
+                    return;
+                }
+
+                bool restart = loader.isLoading || loader.HasActiveContent;
+                if (restart)
+                {
+                    loader.CancelLoading();
+                }
+
+                loader.CsvFileName = newFile;
+
+                if (restart)
+                {
+                    loader.LoadGLBFiles();
                 }
             };
             csvDropdown.RegisterValueChangedCallback(csvSelectionChangedHandler);

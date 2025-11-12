@@ -577,17 +577,34 @@ namespace Netherlands3D.Tiles3D
 
             Dictionary<string, string> parameters = ParseQuery(builder.Query);
 
-            parameters.Remove("key");
-            parameters.Remove("session");
+            bool isGoogleTilesUrl = builder.Host.IndexOf("tile.googleapis.com", StringComparison.OrdinalIgnoreCase) >= 0;
+            bool hasKey = !string.IsNullOrEmpty(googleApiKey);
+            bool hasSession = !string.IsNullOrEmpty(currentSessionId);
 
-            if (!string.IsNullOrEmpty(googleApiKey))
+            if (isGoogleTilesUrl)
             {
-                parameters["key"] = googleApiKey;
+                if (hasKey)
+                {
+                    parameters["key"] = googleApiKey;
+                }
+                else
+                {
+                    parameters.Remove("key");
+                }
+
+                if (hasSession)
+                {
+                    parameters["session"] = currentSessionId;
+                }
+                else
+                {
+                    parameters.Remove("session");
+                }
             }
-
-            if (!string.IsNullOrEmpty(currentSessionId))
+            else
             {
-                parameters["session"] = currentSessionId;
+                parameters.Remove("key");
+                parameters.Remove("session");
             }
 
             builder.Query = BuildQueryString(parameters);
