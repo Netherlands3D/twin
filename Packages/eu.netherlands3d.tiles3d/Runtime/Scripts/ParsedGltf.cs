@@ -269,6 +269,9 @@ namespace Netherlands3D.Tiles3D
 
         private static bool TryCaptureGlbUrlAndPosition(Transform scene, Vector3 scale, Tile tile)
         {
+#if UNITY_EDITOR
+            captureEnabled = GetCapturePreference();
+#endif
             if (!captureEnabled || !IsCaptureEnvironmentAllowed())
             {
                 return true;
@@ -301,6 +304,14 @@ namespace Netherlands3D.Tiles3D
 
         private static bool TryWriteTransformCapture(string csvLine)
         {
+#if UNITY_EDITOR
+            captureEnabled = GetCapturePreference();
+#endif
+            if (!captureEnabled || !IsCaptureEnvironmentAllowed())
+            {
+                return true;
+            }
+
             if (!TryEnsureTestDataDirectory(out string directory))
             {
                 return false;
@@ -390,6 +401,7 @@ namespace Netherlands3D.Tiles3D
             EditorPrefs.SetBool("Netherlands3D.Tiles3D.EnableTransformCapture", false);
 #endif
             captureEnabled = false;
+            activeCaptureFilePath = null;
         }
 
         private static void EnsureCaptureIndexInitialized(string directory)
