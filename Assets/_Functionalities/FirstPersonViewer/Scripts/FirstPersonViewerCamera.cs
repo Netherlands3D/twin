@@ -166,6 +166,8 @@ namespace Netherlands3D.FirstPersonViewer
                     viewerBase.rotation = Quaternion.Euler(xRotation, yRotation, 0);
                     break;
                 case CameraConstrain.CONTROL_NONE:
+                    xRotation = Mathf.Clamp(xRotation, -45, 45);
+                    yRotation = Mathf.Clamp(yRotation, -90, 90);
                     transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
                     break;
             }
