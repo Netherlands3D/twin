@@ -27,7 +27,11 @@ namespace Netherlands3D.Twin.Cameras
 
         public void SwitchCamera(MonoBehaviour cameraObject, bool scriptOnly = false)
         {
-            if (cameraObject == null) return;
+            if (cameraObject == null)
+            {
+                Debug.LogError("CameraSwitcher: cameraObject is null!");
+                return;
+            }
 
             //Disable current
             if (current.Camera != null)
@@ -46,10 +50,7 @@ namespace Netherlands3D.Twin.Cameras
 
         public void SwitchCamera(int index, bool scriptOnly = false)
         {
-            if (cameraObjects != null && index >= 0 && index < cameraObjects.Count)
-            {
-                SwitchCamera(cameraObjects[index], scriptOnly);
-            }
+            SwitchCamera(cameraObjects[index], scriptOnly);
         }
 
         public void SwitchToPreviousCamera()
