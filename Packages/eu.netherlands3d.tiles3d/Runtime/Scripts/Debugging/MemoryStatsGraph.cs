@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.Tiles3D
@@ -124,7 +125,7 @@ namespace Netherlands3D.Tiles3D
 
         void Sample()
         {
-            LatestHeapSizeMB = SystemInfo.systemMemorySize;
+            LatestHeapSizeMB = GetHeapSizeInMegabytes();
             LatestGcHeapMB = BytesToMegabytes(System.GC.GetTotalMemory(false));
 
             AddSample(heapSizeSamples, LatestHeapSizeMB);
@@ -270,6 +271,15 @@ namespace Netherlands3D.Tiles3D
         }
 
         static float BytesToMegabytes(long bytes) => bytes / (1024f * 1024f);
+
+        static float GetHeapSizeInMegabytes()
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            return SystemInfo.systemMemorySize;
+#else
+            return BytesToMegabytes(Profiler.GetTotalReservedMemoryLong());
+#endif
+        }
         static string FormatMemory(float megabytes)
         {
             if (megabytes >= 1024f)
