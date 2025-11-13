@@ -8549,6 +8549,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2568988435537759527, guid: 316af653f2625134ab367f8e339c26b9,
         type: 3}
+      propertyPath: isClickable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2568988435537759527, guid: 316af653f2625134ab367f8e339c26b9,
+        type: 3}
       propertyPath: maxZoomScale
       value: 10
       objectReference: {fileID: 0}
