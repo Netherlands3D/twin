@@ -336,18 +336,13 @@ namespace Netherlands3D.Twin.Layers
             return false;
         }
 
-        public void Dispose()
-        {
-            DestroyLayer();
-        }
-        
-        public virtual void DestroyLayer()
+        public virtual void Dispose()
         {
             DeselectLayer();
 
             foreach (var child in ChildrenLayers.ToList()) //use ToList to make a copy and avoid a CollectionWasModified error
             {
-                child.DestroyLayer();
+                child.Dispose();
             }
 
             ParentLayer.ChildrenLayers.Remove(this);

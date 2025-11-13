@@ -224,9 +224,9 @@ namespace Netherlands3D.Twin.Layers
         {
         }
 
-        public virtual void DestroyLayer()
+        public virtual void DestroyLayer() //todo: remove this function?
         {
-            LayerData.DestroyLayer();
+            App.Layers.Remove(LayerData);
         }
 
         public virtual void DestroyLayerGameObject()

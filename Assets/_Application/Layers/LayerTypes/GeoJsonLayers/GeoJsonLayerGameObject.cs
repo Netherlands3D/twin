@@ -270,7 +270,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 if (child.PrefabIdentifier == prefab.PrefabIdentifier)
                 {
                     //todo: check if the async visualisation spawning has issues with destroying the layerData before the visualisation is loaded
-                    child.DestroyLayer(); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
+                    App.Layers.Remove(child); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
                 }
             }
 

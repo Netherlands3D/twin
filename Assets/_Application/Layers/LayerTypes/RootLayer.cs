@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes
@@ -14,7 +12,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
     {
         [JsonIgnore] public List<LayerData> SelectedLayers { get; private set; } = new();
 
-        [JsonIgnore] private UnityAction<ProjectData> projectDataListener;
+        // [JsonIgnore] private UnityAction<ProjectData> projectDataListener;
 
         public UnityEvent<LayerData> AddedSelectedLayer = new();
         public UnityEvent<LayerData> RemovedSelectedLayer = new();
@@ -49,17 +47,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             }
         }
 
-        public override void DestroyLayer()
+        public override void Dispose()
         {
             foreach (var child in ChildrenLayers.ToList()) //use ToList to make a copy and avoid a CollectionWasModified error
             {
-                child.DestroyLayer();
+                child.Dispose();
             }
 
             // ParentLayer.ChildrenLayers.Remove(this);
             // parent.ChildrenChanged.Invoke(); //call event on old parent
             // ParentOrSiblingIndexChanged.RemoveListener(Root.UpdateLayerTreeOrder);
-            // ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
         }
 

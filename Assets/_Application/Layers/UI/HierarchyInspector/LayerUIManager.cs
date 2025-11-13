@@ -176,7 +176,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         {
             foreach (var layer in ProjectData.Current.RootLayer.SelectedLayers.ToList()) //to list makes a copy and avoids a collectionmodified error
             {
-                layer.DestroyLayer();
+                App.Layers.Remove(layer);
             }
         }
 

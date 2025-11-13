@@ -148,7 +148,7 @@ namespace Netherlands3D.Twin.Services
         /// </summary>
         public void Remove(LayerData layerData)
         {
-            layerData.DestroyLayer();  
+            layerData.Dispose();  
             LayerRemoved.Invoke(layerData);
         }
 

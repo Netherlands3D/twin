@@ -41,7 +41,7 @@ namespace Netherlands3D.Twin.Projects
 
         public void LoadFromFile(string filePath)
         {
-            ProjectData.Current.RootLayer.DestroyLayer();
+            App.Layers.Remove(ProjectData.Current.RootLayer);
             ProjectData.Current.ClearFunctionalityData();
             
             Resources.UnloadUnusedAssets();
