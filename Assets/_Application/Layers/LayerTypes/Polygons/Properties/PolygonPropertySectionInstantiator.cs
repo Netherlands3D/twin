@@ -10,7 +10,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             if (!PolygonInputToLayer.PolygonPropertySectionPrefab) return;
 
             var settings = Instantiate(PolygonInputToLayer.PolygonPropertySectionPrefab, properties);
-            settings.PolygonLayer = GetComponent<PolygonSelectionVisualisation>().LayerData as PolygonSelectionLayer;
+            settings.PolygonLayer = GetComponent<PolygonSelectionVisualisation>().LayerData;
         }
     }
 }

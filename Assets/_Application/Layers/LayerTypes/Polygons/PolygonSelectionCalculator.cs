@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 
@@ -6,7 +8,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
     public class PolygonSelectionCalculator : MonoBehaviour
     {
-        public static List<PolygonSelectionLayer> Layers = new();
+        public static List<LayerData> Layers = new();
         private PointerToWorldPosition pointerToWorldPosition;
 
         private void Awake()
@@ -24,7 +26,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             ClickNothingPlane.ClickedOnNothing.RemoveListener(ProcessClick);
         }
 
-        public static void RegisterPolygon(PolygonSelectionLayer layer)
+        public static void RegisterPolygon(LayerData layer)
         {
             if (Layers.Contains(layer))
             {
@@ -35,7 +37,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             Layers.Add(layer);
         }
 
-        public static void UnregisterPolygon(PolygonSelectionLayer layer)
+        public static void UnregisterPolygon(LayerData layer)
         {
             if (!Layers.Remove(layer))
                 Debug.LogError("layer " + layer + " is not registered");
@@ -62,11 +64,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
         }
 
-        private bool ProcessPolygonSelection(PolygonSelectionLayer layer, Camera camera, Plane[] frustumPlanes, Vector3 worldPoint)
+        private bool ProcessPolygonSelection(LayerData layer, Camera camera, Plane[] frustumPlanes, Vector3 worldPoint)
         {
             //since we use a visual projection of the polygon, we need to calculate if a user clicks on the polygon manually
             //if this polygon is out of view of the camera, it can't be clicked on.
-            var bounds = layer.Polygon.Bounds;
+
+            //TODO is this the right way to get the polygon visualisation layergameobject?
+            var match = FindObjectsByType<PolygonSelectionVisualisation>(FindObjectsSortMode.None).ToList()
+            .FirstOrDefault(v => v.LayerData == layer);
+
+            var bounds = match.Polygon.Bounds;
             if (!IsBoundsInView(bounds, frustumPlanes))
                 return false;
 
@@ -76,7 +83,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 return false;
 
             //check if the click was in the polygon bounds
-            return CompoundPolygon.IsPointInPolygon(point2d, layer.Polygon);
+            return CompoundPolygon.IsPointInPolygon(point2d, match.Polygon);
         }
 
         public static bool IsBoundsInView(Bounds bounds, Plane[] frustumPlanes)

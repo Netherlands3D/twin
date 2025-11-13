@@ -21,10 +21,10 @@ namespace Netherlands3D.Twin.Services
         // public Task<Layer> SpawnLayer(LayerData layerData, Vector3 position, Quaternion rotation = default);
         public void VisualizeData(LayerData layerData, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null);
         public Layer VisualizeAs(LayerData layerData, string prefabIdentifier, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null);
-        public void Remove(Layer layer);
+        public void Remove(LayerData layer);
         
         public UnityEvent<Layer> LayerAdded { get; }
-        public UnityEvent<Layer> LayerRemoved { get; }
+        public UnityEvent<LayerData> LayerRemoved { get; }
     }
 
     public record Layer

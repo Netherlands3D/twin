@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
@@ -13,12 +16,42 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [DataMember] private bool isMask;
         [DataMember] private bool invertMask;
         [DataMember] private int maskBitIndex = -1;
-        
+
+        [DataMember] public List<Coordinate> originalPolygon { get; private set; }        
+        [DataMember] private ShapeType shapeType;
+
         [JsonIgnore] public readonly UnityEvent<float> OnLineWidthChanged = new();
         [JsonIgnore] public readonly UnityEvent<float> OnExtrusionHeightChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> OnIsMaskChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> OnInvertMaskChanged = new();
         [JsonIgnore] public readonly UnityEvent<int> OnMaskBitIndexChanged = new();
+       
+        [JsonIgnore] public UnityEvent polygonMoved = new();
+        [JsonIgnore] public UnityEvent polygonChanged = new();
+        [JsonIgnore] public UnityEvent OnPolygonSetShape = new();
+        [JsonIgnore] public UnityEvent<LayerData> polygonSelected = new();
+
+        [JsonIgnore]
+        public ShapeType ShapeType
+        {
+            get => shapeType;
+            set
+            {
+                shapeType = value;
+                OnPolygonSetShape.Invoke();
+            }
+        }
+
+        [JsonIgnore]
+        public List<Coordinate> OriginalPolygon
+        {
+            get => originalPolygon;
+            set
+            {
+                originalPolygon = value;
+                OnPolygonSetShape.Invoke();
+            }
+        }
 
         [JsonIgnore]
         public float LineWidth
@@ -27,6 +60,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             set
             {
                 lineWidth = value;
+                OnPolygonSetShape.Invoke();
                 OnLineWidthChanged.Invoke(lineWidth);
             }
         }
@@ -74,5 +108,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
                 OnMaskBitIndexChanged.Invoke(maskBitIndex);
             }
         }
+               
+        
     }
 }

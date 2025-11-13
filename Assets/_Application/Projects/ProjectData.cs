@@ -69,8 +69,6 @@ namespace Netherlands3D.Twin.Projects
         [NonSerialized] public UnityEvent<DateTime> OnCurrentDateTimeChanged = new();
         [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
         [NonSerialized] public UnityEvent<Coordinate> OnCameraPositionChanged = new();
-        // [NonSerialized] public UnityEvent<LayerData> LayerAdded = new();
-        [NonSerialized] public UnityEvent<LayerData> LayerDeleted = new();
 
         public void RefreshUUID()
         {
@@ -90,32 +88,6 @@ namespace Netherlands3D.Twin.Projects
         }
 
 #endif
-
-        public void AddStandardLayer(LayerData layer)
-        {
-            RootLayer.AddChild(layer, 0);
-            // LayerAdded.Invoke(layer);           
-        }
-
-        //public static void CreateAndAttachReferenceLayerTo(LayerGameObject referencedLayer)
-        //{
-        //    var referenceName = referencedLayer.name.Replace("(Clone)", "").Trim();
-
-        //    var proxyLayer = new ReferencedLayerData(referenceName, referencedLayer);
-        //    referencedLayer.SetData(proxyLayer);
-
-        //    // Add properties to the new layerData
-        //    var layersWithPropertyData = referencedLayer.GetComponents<ILayerWithPropertyData>();
-        //    foreach (var layerWithPropertyData in layersWithPropertyData)
-        //    {
-        //        referencedLayer.LayerData.SetProperty(layerWithPropertyData.PropertyData);
-        //    }
-        //}
-
-        public void RemoveLayer(LayerData layer)
-        {
-            LayerDeleted.Invoke(layer);            
-        }
 
         public static void SetCurrentProject(ProjectData initialProjectTemplate)
         {
