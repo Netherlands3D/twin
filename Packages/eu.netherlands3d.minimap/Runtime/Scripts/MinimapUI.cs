@@ -112,7 +112,7 @@ namespace Netherlands3D.Minimap
         private void StartedMapInteraction()
         {
             navigation.gameObject.SetActive(true);
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
+            if(isClickable) ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
 
             StopAllCoroutines();
             if (hoverResize)
