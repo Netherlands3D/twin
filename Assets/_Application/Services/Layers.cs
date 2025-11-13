@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin.Services
         private VisualizationSpawner spawner;
         
         public UnityEvent<Layer> LayerAdded { get; } = new();
-        public UnityEvent<Layer> LayerRemoved { get; } = new();
+        public UnityEvent<LayerData> LayerRemoved { get; } = new();
 
         private void Awake()
         {
@@ -146,10 +146,11 @@ namespace Netherlands3D.Twin.Services
         /// <summary>
         /// Removes the layer from the current project and ensures the visualisation is removed as well.
         /// </summary>
-        public void Remove(Layer layer)
+        public void Remove(LayerData layerData)
         {
-            layer.LayerData.DestroyLayer();            
-            LayerRemoved.Invoke(layer);
+            layerData.DestroyLayer();  
+            ProjectData.Current.RemoveLayer(layerData);
+            LayerRemoved.Invoke(layerData);
         }
 
         private Uri RetrieveUrlForLayer(LayerBuilder layerBuilder)

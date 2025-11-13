@@ -51,19 +51,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
         public override void DestroyLayer()
         {
-            Clear();
-            ProjectData.Current.RemoveLayer(this);
-            LayerDestroyed.Invoke();
-        }
-
-        public void Clear()
-        {
-            // use ToList to make a copy and avoid a CollectionWasModified error
-            var childLayers = ChildrenLayers.ToList();
-            foreach (var child in childLayers) 
+            foreach (var child in ChildrenLayers.ToList()) //use ToList to make a copy and avoid a CollectionWasModified error
             {
                 child.DestroyLayer();
             }
+
+            // ParentLayer.ChildrenLayers.Remove(this);
+            // parent.ChildrenChanged.Invoke(); //call event on old parent
+            // ParentOrSiblingIndexChanged.RemoveListener(Root.UpdateLayerTreeOrder);
+            // ProjectData.Current.RemoveLayer(this);
+            LayerDestroyed.Invoke();
         }
 
         public void ReconstructParentsRecursive()
