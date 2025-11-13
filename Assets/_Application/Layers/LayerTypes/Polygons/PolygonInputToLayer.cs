@@ -6,6 +6,7 @@ using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Services;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -73,9 +74,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     if (!polygon.IsMask)
                         polygon.SetVisualisationActive(enabled);
 
-                    polygon.OnReferenceChanged.RemoveListener(referenceListener);
+                    polygon.OnPrefabIdChanged.RemoveListener(referenceListener);
                 };
-                polygon.OnReferenceChanged.AddListener(referenceListener);
+                polygon.OnPrefabIdChanged.AddListener(referenceListener);
             }
         }
 
@@ -184,22 +185,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             selectionCalculator.gameObject.SetActive(enabled);
         }
 
-        private void CreatePolygonLayer(List<Vector3> unityPolygon)
+        private async void CreatePolygonLayer(List<Vector3> unityPolygon)
         {
-            _ = new PolygonSelectionLayer(
+            //todo: this is now broken, needs to be fixed
+            PolygonSelectionLayer data = new PolygonSelectionLayer( 
                 "Polygon", 
                 polygonSelectionVisualisationPrefab.PrefabIdentifier, 
                 unityPolygon, 
-                ShapeType.Polygon,
-                onSpawn: data =>
-                {
-                    if (data is not PolygonSelectionLayer layer) return;
-
-                    layers.Add(layer.PolygonVisualisation, layer);
-                    layer.polygonSelected.AddListener(ProcessPolygonSelection);
-                    polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
-                }
+                ShapeType.Polygon                
             );            
+            // Layer layer = App.Layers.VisualizeData(data);
+            layers.Add(data.PolygonVisualisation, data);
+            data.polygonSelected.AddListener(ProcessPolygonSelection);
+            polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
         }
 
         private void UpdateLayer(List<Vector3> editedPolygon)

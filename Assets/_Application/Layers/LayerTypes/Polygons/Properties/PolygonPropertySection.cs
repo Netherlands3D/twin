@@ -109,7 +109,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             ClearMaskLayerPanel();
             foreach (var layer in ProjectData.Current.RootLayer.GetFlatHierarchy())
             {
-                if (layer is ReferencedLayerData data && data.Reference.IsMaskable)
+                LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier);
+                if (template != null && template.IsMaskable)
                 {
                     var toggle = Instantiate(maskTogglePrefab, maskToggleParent);
                     toggle.Initialize(polygonLayer, layer);

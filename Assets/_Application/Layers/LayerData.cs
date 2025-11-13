@@ -14,7 +14,8 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public abstract class LayerData : IEquatable<LayerData>
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "Prefab")] //todo: this should not be named Prefab
+    public class LayerData : IEquatable<LayerData>
     {
         private const string NameOfDefaultStyle = "default";
 
@@ -58,7 +59,11 @@ namespace Netherlands3D.Twin.Layers
 
         [JsonIgnore] public List<LayerData> ChildrenLayers => children;
         [JsonIgnore] public bool IsSelected => Root.SelectedLayers.Contains(this);
-        
+
+
+        [JsonIgnore] public LayerGameObject Visualization => OnVisualizationRequested?.Invoke();
+
+
         [JsonIgnore]
         public string Name
         {
@@ -149,6 +154,22 @@ namespace Netherlands3D.Twin.Layers
 
         [JsonIgnore] public Dictionary<string, LayerStyle> Styles => styles;
         
+        [DataMember] protected string prefabId;
+
+        public string PrefabIdentifier //todo: this being settable is now very error sensitive. Will be refactored in ticket 3/4
+        {
+            get
+            {
+                return prefabId;
+            }
+            set
+            {
+                prefabId = value;
+                OnPrefabIdChanged.Invoke();
+            }
+        }
+        public UnityEvent OnPrefabIdChanged = new();
+
         /// <summary>
         /// Every layer has a default style, this is a style that applies to all objects and features in this
         /// layer without any conditions.
@@ -167,8 +188,8 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent LayerDestroyed = new();
         [JsonIgnore] public readonly UnityEvent<int> LayerOrderChanged = new();
 
-        [JsonIgnore] public readonly UnityEvent<LayerData> LayerSelected = new();
-        [JsonIgnore] public readonly UnityEvent<LayerData> LayerDeselected = new();
+        [JsonIgnore] public readonly UnityEvent LayerSelected = new();
+        [JsonIgnore] public readonly UnityEvent LayerDeselected = new();
         [JsonIgnore] public UnityEvent<LayerData> LayerDoubleClicked = new();
 
         [JsonIgnore] public readonly UnityEvent ParentChanged = new();
@@ -179,6 +200,8 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleAdded = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleRemoved = new();
         [JsonIgnore] public readonly UnityEvent<bool> HasValidCredentialsChanged = new();
+        [JsonIgnore] public readonly UnityEvent OnStylingApplied = new();
+        [JsonIgnore] public Func<LayerGameObject> OnVisualizationRequested;
 
         /// <summary>
         /// Track whether this data object is new, in other words instantiated during this session, or whether it comes
@@ -208,18 +231,29 @@ namespace Netherlands3D.Twin.Layers
                 Root.DeselectAllLayers();
 
             Root.AddLayerToSelection(this);
-            LayerSelected.Invoke(this);
+            LayerSelected.Invoke();
         }
 
         public virtual void DeselectLayer()
         {
             Root.RemoveLayerFromSelection(this);
-            LayerDeselected.Invoke(this);
+            LayerDeselected.Invoke();
         }
 
         public virtual void DoubleClickLayer()
         {
             LayerDoubleClicked.Invoke(this);
+        }
+
+        public LayerData(string name, string prefabId) //TODO this should be refactored back in 3/4 of the layer stories
+        {
+            PrefabIdentifier = prefabId;
+            Name = name;
+            if (this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
+            {
+                InitializeParent();
+                ProjectData.Current.RootLayer.AddChild(this, 0); //todo: this should not depend on projectData here, but we must set the new layer as child of the rootLayer.
+            }
         }
 
         public LayerData(string name) //initialize without layer properties, needed when creating an object at runtime.

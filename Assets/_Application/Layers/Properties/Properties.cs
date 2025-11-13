@@ -1,5 +1,6 @@
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
@@ -45,9 +46,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         public static ILayerWithPropertyPanels TryFindProperties(LayerData layer)
         {
-            var layerProxy = layer as ReferencedLayerData;
-
-            return (layerProxy == null) ? layer as ILayerWithPropertyPanels : layerProxy.Reference as ILayerWithPropertyPanels;
+            LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier); //todo: this now gives an error if the prefabID is not in the library (e.g. folderLayers)
+            return (template == null) ? layer as ILayerWithPropertyPanels : template as ILayerWithPropertyPanels;
         }
     }
 }

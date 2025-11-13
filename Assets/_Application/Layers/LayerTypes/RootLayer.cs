@@ -104,11 +104,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                 children[i].RootIndex = i;
             }
         }
-        
-        public ReferencedLayerData GetFirstLayerByLayerMask(LayerMask mask)
-        {
-            return ChildrenLayers.OfType<ReferencedLayerData>().FirstOrDefault(refData => refData.Reference.gameObject.layer == mask);
-        }
 
         public List<LayerData> GetFlatHierarchy()
         {

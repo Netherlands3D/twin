@@ -174,12 +174,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             Layer.ChildrenChanged.AddListener(OnLayerChildrenChanged);
             Layer.ParentOrSiblingIndexChanged.AddListener(OnParentOrSiblingIndexChanged);
             Layer.LayerDestroyed.AddListener(DestroyUI);
+            Layer.OnPrefabIdChanged.AddListener(UpdateReference);
 
-            if (Layer is ReferencedLayerData referencedLayerData)
-            {
-                referencedLayerData.OnReferenceChanged.AddListener(UpdateReference);
-            }
-            
             MarkLayerUIAsDirty();
 
             //Match initial layer states
@@ -211,12 +207,12 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             colorButton.targetGraphic.color = opaqueColor;
         }
 
-        private void OnLayerSelected(LayerData layer)
+        private void OnLayerSelected()
         {
             SelectUI();
         }
 
-        private void OnLayerDeselected(LayerData layer)
+        private void OnLayerDeselected()
         {
             DeselectUI();
         }
@@ -750,11 +746,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             Layer.ChildrenChanged.RemoveListener(OnLayerChildrenChanged);
             Layer.ParentOrSiblingIndexChanged.RemoveListener(OnParentOrSiblingIndexChanged);
             Layer.LayerDestroyed.RemoveListener(DestroyUI);
-            
-            if (Layer is ReferencedLayerData referencedLayerData)
-            {
-                referencedLayerData.OnReferenceChanged.RemoveListener(UpdateReference);
-            }
+            Layer.OnPrefabIdChanged.RemoveListener(UpdateReference);
         }
         
         private void UpdateReference()

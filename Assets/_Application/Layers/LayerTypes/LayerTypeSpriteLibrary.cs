@@ -6,6 +6,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -24,6 +25,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         [SerializeField] private List<LayerSpriteCollection> layerTypeSprites;
         public LayerSpriteCollection GetLayerTypeSprite(LayerData layer)
         {
+            if(layer.PrefabIdentifier == "folder")
+                return layerTypeSprites[2];
+            
+            LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier);
+            if (template != null)
+            {
+                return GetProxyLayerSprite(template);
+            }
+
             switch (layer)
             {
                 case PolygonSelectionLayer selectionLayer:
@@ -31,12 +41,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                         return layerTypeSprites[7];
                     else if (selectionLayer.ShapeType == ShapeType.Grid)
                         return layerTypeSprites[12];
-                    return layerTypeSprites[6];
-                case ReferencedLayerData data:
-                    var reference = data.Reference;
-                    return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);
-                case FolderLayer _:
-                    return layerTypeSprites[2];
+                    return layerTypeSprites[6];               
+                // case FolderLayer _:
+                //     return layerTypeSprites[2];
                 default:
                     Debug.LogError("layer type of " + layer.Name + " is not specified");
                     return layerTypeSprites[0];
@@ -69,8 +76,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return layerTypeSprites[7];                
                 case GeoJSONPointLayer _:
                     return layerTypeSprites[9];
-                case PlaceholderLayerGameObject _:
-                    return layerTypeSprites[0];
                 default:
                     Debug.LogError($"layer type of {layer.GetType()} is not specified");
                     return layerTypeSprites[0];

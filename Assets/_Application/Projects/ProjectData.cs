@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Functionalities;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Services;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -67,7 +69,7 @@ namespace Netherlands3D.Twin.Projects
         [NonSerialized] public UnityEvent<DateTime> OnCurrentDateTimeChanged = new();
         [NonSerialized] public UnityEvent<ProjectData> OnDataChanged = new();
         [NonSerialized] public UnityEvent<Coordinate> OnCameraPositionChanged = new();
-        [NonSerialized] public UnityEvent<LayerData> LayerAdded = new();
+        // [NonSerialized] public UnityEvent<LayerData> LayerAdded = new();
         [NonSerialized] public UnityEvent<LayerData> LayerDeleted = new();
 
         public void RefreshUUID()
@@ -92,23 +94,23 @@ namespace Netherlands3D.Twin.Projects
         public void AddStandardLayer(LayerData layer)
         {
             RootLayer.AddChild(layer, 0);
-            LayerAdded.Invoke(layer);           
+            // LayerAdded.Invoke(layer);           
         }
 
-        public static void CreateAndAttachReferenceLayerTo(LayerGameObject referencedLayer)
-        {
-            var referenceName = referencedLayer.name.Replace("(Clone)", "").Trim();
+        //public static void CreateAndAttachReferenceLayerTo(LayerGameObject referencedLayer)
+        //{
+        //    var referenceName = referencedLayer.name.Replace("(Clone)", "").Trim();
 
-            var proxyLayer = new ReferencedLayerData(referenceName, referencedLayer);
-            referencedLayer.LayerData = proxyLayer;
+        //    var proxyLayer = new ReferencedLayerData(referenceName, referencedLayer);
+        //    referencedLayer.SetData(proxyLayer);
 
-            // Add properties to the new layerData
-            var layersWithPropertyData = referencedLayer.GetComponents<ILayerWithPropertyData>();
-            foreach (var layerWithPropertyData in layersWithPropertyData)
-            {
-                referencedLayer.LayerData.SetProperty(layerWithPropertyData.PropertyData);
-            }
-        }
+        //    // Add properties to the new layerData
+        //    var layersWithPropertyData = referencedLayer.GetComponents<ILayerWithPropertyData>();
+        //    foreach (var layerWithPropertyData in layersWithPropertyData)
+        //    {
+        //        referencedLayer.LayerData.SetProperty(layerWithPropertyData.PropertyData);
+        //    }
+        //}
 
         public void RemoveLayer(LayerData layer)
         {
@@ -123,6 +125,15 @@ namespace Netherlands3D.Twin.Projects
             current.functionalities = new();
         }
 
+        public void LoadVisualizations()
+        {    
+            foreach (var layer in rootLayer.ChildrenLayers)
+            {
+                if (layer is RootLayer) continue;
+                App.Layers.VisualizeData(layer);
+            }
+        }
+        
         /// <summary>
         /// Recursively collect all assets from each of the property data elements of every layer for loading and
         /// saving purposes. 

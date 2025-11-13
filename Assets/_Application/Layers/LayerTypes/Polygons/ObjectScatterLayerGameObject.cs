@@ -51,7 +51,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private bool completedInitialization;
         public LayerPropertyData PropertyData => settings;
 
-        private ReferencedLayerData areaReferenceData;
+        private CartesianTileLayerGameObject areaReference;
 
         protected override void OnLayerInitialize()
         {
@@ -59,15 +59,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
         } 
 
-        public void Initialize(ReferencedLayerData data, string previousPrefabId)
+        public void Initialize(string previousPrefabId)
         {
             InitializeScatterMesh(previousPrefabId);            
-            polygonLayer = data.ParentLayer as PolygonSelectionLayer;
-            var existingScatterProperties = (ScatterGenerationSettingsPropertyData) data.LayerProperties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
+            polygonLayer = LayerData.ParentLayer as PolygonSelectionLayer;
+            var existingScatterProperties = (ScatterGenerationSettingsPropertyData) LayerData.LayerProperties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
             if (existingScatterProperties == null)
             {
                 InitializeNewScatterProperties(previousPrefabId, polygonLayer.ShapeType);
-                data.SetProperty(settings);
+                LayerData.SetProperty(settings);
             }
             else
                 settings = existingScatterProperties;
@@ -311,11 +311,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
         }
 
-        public override void OnConvert(string previousId)
-        {
-            Initialize(LayerData, previousId);
-        }
-
         public List<IPropertySectionInstantiator> GetPropertySections()
         {
             return propertySections;
@@ -338,7 +333,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     polygonLayer = p;
                     if (p.PolygonVisualisation == null)
                     {
-                        p.OnReferenceChanged.AddListener(OnPolygonParentInitialized);
+                        p.OnPrefabIdChanged.AddListener(OnPolygonParentInitialized);
                     }
                     else
                     {
@@ -358,36 +353,28 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 OnPolygonVisualisationUpdated();
             }            
-            polygonLayer?.OnReferenceChanged.RemoveListener(OnPolygonParentInitialized);
+            polygonLayer?.OnPrefabIdChanged.RemoveListener(OnPolygonParentInitialized);
         }
 
         private void OnPolygonVisualisationUpdated()
         {
             //check or wait if the maaiveld reference data is loaded
-            areaReferenceData = ProjectData.Current.RootLayer.GetFirstLayerByLayerMask(LayerMask.NameToLayer("Terrain"));
-            if (areaReferenceData == null) return;
+            areaReference = FindObjectsByType<CartesianTileLayerGameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None).FirstOrDefault( cl => cl.gameObject.layer == LayerMask.NameToLayer("Terrain"));
+            if (areaReference == null) return;
 
-            //for some reason this rarily happens depending on the speed of loading and needs to be checked
-            if (areaReferenceData.Reference is PlaceholderLayerGameObject)
-            {
-                areaReferenceData.OnReferenceChanged.AddListener(InitializeScatterArea);
-            }
-            else
-            {
-                InitializeScatterArea();
-            }
+            InitializeScatterArea();
             polygonLayer.PolygonVisualisation.OnPolygonVisualisationUpdated.RemoveListener(OnPolygonVisualisationUpdated);
         }
 
         private void InitializeScatterArea()
         {
-            areaReferenceData.OnReferenceChanged.RemoveListener(InitializeScatterArea);
+            areaReference.LayerData.OnPrefabIdChanged.RemoveListener(InitializeScatterArea);
             RecalculatePolygonsAndSamplerTexture();
 
             BoundingBox polygonBoundingBox = polygonLayer.PolygonVisualisation.Bounds;
             polygonBoundingBox.Convert(CoordinateSystem.RD);
-            BinaryMeshLayer bml = ((CartesianTileLayerGameObject)areaReferenceData.Reference).Layer as BinaryMeshLayer;
-            Initialize(LayerData, settings.OriginalPrefabId);
+            BinaryMeshLayer bml = areaReference.Layer as BinaryMeshLayer;
+            Initialize(settings.OriginalPrefabId);
             bml?.OnTileObjectCreated.AddListener(tile =>
             {
                 BoundingBox tileBox = GetBoundingBoxForTile(tile);

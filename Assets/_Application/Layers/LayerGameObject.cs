@@ -50,20 +50,8 @@ namespace Netherlands3D.Twin.Layers
 
         public bool HasLayerData => LayerData != null;
 
-        private ReferencedLayerData layerData;
-        public ReferencedLayerData LayerData
-        {
-            get => layerData;
-            set
-            {
-                // Make idempotent - only continue if layerData actually changes
-                if (value == layerData) return;
-
-                layerData = value;
-                OnLayerInitialize();
-                onLayerInitialized.Invoke();
-            }
-        }
+        private LayerData layerData;
+        public LayerData LayerData => layerData;
 
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
         Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;
@@ -73,7 +61,7 @@ namespace Netherlands3D.Twin.Layers
         public UnityEvent onHide = new();
         public UnityEvent onLayerInitialized = new();
         public UnityEvent onLayerReady = new();
-        public UnityEvent OnStylingApplied = new();
+        
 
         public abstract BoundingBox Bounds { get; }
 
@@ -96,22 +84,64 @@ namespace Netherlands3D.Twin.Layers
         [Obsolete("Do not use Awake in subclasses, use OnLayerInitialize instead", true)]
         private void Awake()
         {
-            // Technically not possible, but is a safeguard.
-            if (LayerData != null) return;
-            
-            // No parent, definitely no placeholder to replace
-            if (!transform.parent) return;
-            
-            // Immediately return if there is no Placeholder as parent - no action needed
-            if (transform.parent.GetComponent<PlaceholderLayerGameObject>() is not { } placeholder) return;
+           
+        }
 
-            // Replacing the placeholder will change the Reference property of the LayerData,
-            // and that will trigger the LayerData property of this LayerGameObject to be set.
-            // Since the LayerData is responsible for initializing the Layer, it will trigger the
-            // real OnLayerInitialize method below
-            // By doing it this way, we could directly instantiate LayerGameObjects and defer their
-            // initialisation until a LayerData is present, as is done in the PlaceholderLayerGameObject.
-            placeholder.ReplaceWith(this);
+        public void SetData(LayerData layerData)
+        {
+            if (this.LayerData == layerData) return;
+
+            //remove the old listeners from previous layerdata
+            if (this.layerData != null)
+                UnregisterEventListeners();
+
+            //todo: what if layerData is null? e.g. because it was destroyed before the visualisation was loaded
+            this.layerData = layerData;
+            
+            RegisterEventListeners();
+            OnLayerInitialize();
+            onLayerInitialized.Invoke();
+            // Call a template method that children are free to play with - this way we can avoid using
+            // the start method directly and prevent forgetting to call the base.Start() from children
+            LoadPropertiesInVisualisations();
+            OnLayerReady();
+            // Event invocation is separate from template method on purpose to ensure child classes complete their
+            // readiness before external classes get to act - it also prevents forgetting calling the base method
+            // when overriding OnLayerReady
+            onLayerReady.Invoke();
+            InitializeVisualisation();
+        }
+
+        private LayerGameObject Object() => this;
+
+        private void RegisterEventListeners()
+        {
+            layerData.ParentChanged.AddListener(OnProxyTransformParentChanged);
+            layerData.ChildrenChanged.AddListener(OnProxyTransformChildrenChanged);
+            layerData.ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
+            layerData.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
+            layerData.OnVisualizationRequested += Object;
+            layerData.LayerDoubleClicked.AddListener(OnDoubleClick);
+            layerData.OnPrefabIdChanged.AddListener(DestroyLayerGameObject);
+            layerData.LayerSelected.AddListener(OnSelect);
+            layerData.LayerDeselected.AddListener(OnDeselect);
+            layerData.LayerDestroyed.AddListener(DestroyLayerGameObject);
+            layerData.OnStylingApplied.AddListener(ApplyStyling);
+        }
+
+        private void UnregisterEventListeners()
+        {
+            layerData.ParentChanged.RemoveListener(OnProxyTransformParentChanged);
+            layerData.ChildrenChanged.RemoveListener(OnProxyTransformChildrenChanged);
+            layerData.ParentOrSiblingIndexChanged.RemoveListener(OnSiblingIndexOrParentChanged);
+            layerData.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
+            layerData.OnVisualizationRequested -= Object;
+            layerData.LayerDoubleClicked.RemoveListener(OnDoubleClick);
+            layerData.OnPrefabIdChanged.RemoveListener(DestroyLayerGameObject);
+            layerData.LayerSelected.RemoveListener(OnSelect);
+            layerData.LayerDeselected.RemoveListener(OnDeselect);
+            layerData.LayerDestroyed.RemoveListener(DestroyLayerGameObject);
+            layerData.OnStylingApplied.RemoveListener(ApplyStyling);
         }
 
         /// <summary>
@@ -133,15 +163,7 @@ namespace Netherlands3D.Twin.Layers
         [Obsolete("Do not use Awake in subclasses, use OnLayerReady instead", true)]
         private void Start()
         {
-            // Call a template method that children are free to play with - this way we can avoid using
-            // the start method directly and prevent forgetting to call the base.Start() from children
-            LoadPropertiesInVisualisations();
-            OnLayerReady();
-            // Event invocation is separate from template method on purpose to ensure child classes complete their
-            // readiness before external classes get to act - it also prevents forgetting calling the base method
-            // when overriding OnLayerReady
-            onLayerReady.Invoke();
-            InitializeVisualisation();
+           
         }
 
         protected virtual void OnLayerReady()
@@ -155,10 +177,9 @@ namespace Netherlands3D.Twin.Layers
         // 2. Creating LayerData (from project), Instantiating prefab, coupling that LayerData to this LayerGameObject
         protected virtual void InitializeVisualisation()
         {            
-            LayerData.LayerDoubleClicked.AddListener(OnDoubleClick);
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 
-            ApplyStyling();
+            LayerData.OnStylingApplied.Invoke(); //apply the styling once at initialization
         }
 
         private void LoadPropertiesInVisualisations()
@@ -185,17 +206,14 @@ namespace Netherlands3D.Twin.Layers
 
         private void ResetMask(int maskBitIndex)
         {
-            SetMaskBit(maskBitIndex, true); //reset accepting masks
+            SetMaskBit(maskBitIndex, true, layerData); //reset accepting masks
         }
         
         protected virtual void OnDestroy()
         {
             //don't unsubscribe in OnDisable, because we still want to be able to center to a 
-            LayerData.LayerDoubleClicked.RemoveListener(OnDoubleClick);
-        }
-
-        public virtual void OnConvert(string previousId)
-        {
+          
+            UnregisterEventListeners();
         }
 
         public virtual void OnSelect()
@@ -280,7 +298,7 @@ namespace Netherlands3D.Twin.Layers
             UpdateMaskBitMask(bitMask);
             // var mask = LayerStyler.GetMaskLayerMask(this); todo?
             //initialize the layer's style and emit an event for other services and/or UI to update
-            OnStylingApplied.Invoke();
+            //layerData.OnStylingApplied.Invoke();
         }
 
         protected int GetBitMask()
@@ -311,15 +329,15 @@ namespace Netherlands3D.Twin.Layers
         /// <summary>
         /// Sets a bitmask to the layer to determine which masks affect the provided LayerGameObject
         /// </summary>
-        public void SetMaskLayerMask(int bitMask)
+        public void SetMaskLayerMask(int bitMask, LayerData data)
         {
-            LayerData.DefaultStyle.AnyFeature.Symbolizer.SetMaskLayerMask(bitMask);
-            ApplyStyling();
+            data.DefaultStyle.AnyFeature.Symbolizer.SetMaskLayerMask(bitMask);
+            data.OnStylingApplied.Invoke();
         }
 
-        public void SetMaskBit(int bitIndex, bool enableBit)
+        public void SetMaskBit(int bitIndex, bool enableBit, LayerData data)
         {
-            var currentLayerMask = GetMaskLayerMask();
+            var currentLayerMask = GetMaskLayerMask(data);
             int maskBitToSet = 1 << bitIndex;
                 
             if (enableBit)
@@ -331,15 +349,15 @@ namespace Netherlands3D.Twin.Layers
                 currentLayerMask &= ~maskBitToSet; // set bit to 0
             }
 
-            SetMaskLayerMask(currentLayerMask);
+            SetMaskLayerMask(currentLayerMask, data);
         }
 
         /// <summary>
         /// Retrieves the bitmask for masking of the LayerGameObject.
         /// </summary>
-        public int GetMaskLayerMask()
+        public int GetMaskLayerMask(LayerData data)
         {
-            int? bitMask = LayerData.DefaultStyle.AnyFeature.Symbolizer.GetMaskLayerMask();
+            int? bitMask = data.DefaultStyle.AnyFeature.Symbolizer.GetMaskLayerMask();
             if (bitMask == null)
                 bitMask = LayerGameObject.DEFAULT_MASK_BIT_MASK;
 

@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     }
 
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "PolygonSelection")]
-    public class PolygonSelectionLayer : ReferencedLayerData
+    public class PolygonSelectionLayer : LayerData
     {
         [DataMember] public List<Coordinate> OriginalPolygon { get; private set; }
         [DataMember] private ShapeType shapeType;
@@ -81,7 +81,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public static int MaxAvailableMasks => 22;
         public static UnityEvent<int> MaskDestroyed = new();
 
-        [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Reference as PolygonSelectionVisualisation;
+        [JsonIgnore] public PolygonSelectionVisualisation PolygonVisualisation => Visualization as PolygonSelectionVisualisation;
 
         [JsonConstructor]
         public PolygonSelectionLayer(
@@ -90,38 +90,37 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             List<LayerPropertyData> layerProperties, 
             List<Coordinate> originalPolygon, 
             ShapeType shapeType
-        ) : base(name, prefabId, layerProperties) {
-            this.shapeType = shapeType;
-
+        ) : base(name, prefabId) {
+            this.shapeType = shapeType;            
             SetShape(originalPolygon); 
             PolygonSelectionCalculator.RegisterPolygon(this);
-
+            UpdatePolygonVisualisation(OriginalPolygon);
             RegisterListeners();
             availableMaskChannels.Remove(MaskBitIndex);
         }
-
 
         public PolygonSelectionLayer(string name,
             string prefabId,
             List<Vector3> polygonUnityInput,
             ShapeType shapeType,
             float defaultLineWidth = 10f, 
-            Action<ReferencedLayerData> onSpawn = null
+            Action<LayerData> onSpawn = null
         ) : base(
             name, 
-            prefabId, 
-            new List<LayerPropertyData>
+            prefabId
+        ) {
+            onSpawn?.Invoke(this);
+            this.shapeType = shapeType;
+            this.layerProperties = new List<LayerPropertyData>
             {
                 new PolygonSelectionLayerPropertyData() { LineWidth = defaultLineWidth }
-            },
-            onSpawn
-        ) {
-            this.shapeType = shapeType;
-
+            };
             SetShape(polygonUnityInput.ToCoordinates().ToList());
             PolygonSelectionCalculator.RegisterPolygon(this);
-
+            UpdatePolygonVisualisation(OriginalPolygon);
             RegisterListeners();
+
+            //availableMaskChannels.Remove(MaskBitIndex);
         }
 
         private void RegisterListeners()
@@ -132,6 +131,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
             PolygonPropertyData.OnIsMaskChanged.AddListener(OnIsMaskChanged);
             PolygonPropertyData.OnInvertMaskChanged.AddListener(OnInvertMaskChanged);
+            OnPrefabIdChanged.AddListener(OnSwitchVisualisation);
         }
 
         private void UnregisterListeners()
@@ -140,31 +140,27 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             Origin.current.onPostShift.RemoveListener(ShiftedPolygon);
             PolygonPropertyData.OnIsMaskChanged.RemoveListener(OnIsMaskChanged);
             PolygonPropertyData.OnInvertMaskChanged.RemoveListener(OnInvertMaskChanged);
+            OnPrefabIdChanged.RemoveListener(OnSwitchVisualisation);
         }
 
-        public override void SetReference(LayerGameObject layerGameObject, bool keepPrefabIdentifier = false)
+        private void OnSwitchVisualisation()
         {
-            base.SetReference(layerGameObject, keepPrefabIdentifier);
+            OnIsMaskChanged(IsMask); //The reference changed, so we need to treat it as if we make a new mask
+        }
 
-            if (PolygonVisualisation)
-            {
-                var vertices = CoordinatesToVertices(OriginalPolygon);
-                PolygonVisualisation.UpdateVisualisation(vertices, PolygonPropertyData.ExtrusionHeight);
-                OnIsMaskChanged(IsMask); //The reference changed, so we need to treat it as if we make a new mask
-            }
+        private void CleanupMasking()
+        {
+            // first clear shader properties with the existing mask bit index
+            UpdateInvertedMaskBitInShaders(false, false, false);
+            //now that the shader properties are cleared, we can free up the mask bit
+            SetMaskBitIndex(false, false);
         }
 
         private void ShiftedPolygon(Coordinate fromOrigin, Coordinate toOrigin)
         {
             //Silent update of the polygon shape, so the visualisation is updated without notifying the listeners
             RecalculatePolygon();
-            if (PolygonVisualisation)
-            {
-                var vertices = CoordinatesToVertices(OriginalPolygon);
-                PolygonVisualisation.UpdateVisualisation(vertices, PolygonPropertyData.ExtrusionHeight);
-                PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
-            }
-
+            UpdatePolygonVisualisation(OriginalPolygon);
             polygonMoved.Invoke();
         }
 
@@ -175,15 +171,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             OriginalPolygon = coordinates;
             RecalculatePolygon();
+            UpdatePolygonVisualisation(coordinates);
+            polygonChanged.Invoke();
+        }
 
+        private void UpdatePolygonVisualisation(List<Coordinate> polygon)
+        {
             if (PolygonVisualisation)
             {
-                var vertices = CoordinatesToVertices(coordinates);
+                var vertices = CoordinatesToVertices(polygon);
                 PolygonVisualisation.UpdateVisualisation(vertices, PolygonPropertyData.ExtrusionHeight);
                 PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
             }
-
-            polygonChanged.Invoke();
         }
 
         private void RecalculatePolygon()
@@ -269,14 +268,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             CleanupMasking();
             base.DestroyLayer();
             UnregisterListeners();
-        }
-
-        private void CleanupMasking()
-        {
-            // first clear shader properties with the existing mask bit index
-            UpdateInvertedMaskBitInShaders(false, false, false);
-            //now that the shader properties are cleared, we can free up the mask bit
-            SetMaskBitIndex(false, false);
         }
 
         private void OnIsMaskChanged(bool isMask)
