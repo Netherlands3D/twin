@@ -81,7 +81,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         {
             ReconstructHierarchyUIs();
             App.Layers.LayerAdded.AddListener(CreateNewUI);
-            ProjectData.Current.LayerDeleted.AddListener(OnLayerDeleted);
+            App.Layers.LayerRemoved.AddListener(OnLayerDeleted);
             ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
         }
 
@@ -89,7 +89,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         {
             ProjectData.Current.RootLayer.DeselectAllLayers();
             App.Layers.LayerAdded.RemoveListener(CreateNewUI);
-            ProjectData.Current.LayerDeleted.RemoveListener(OnLayerDeleted);
+            App.Layers.LayerRemoved.RemoveListener(OnLayerDeleted);
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
         }
 

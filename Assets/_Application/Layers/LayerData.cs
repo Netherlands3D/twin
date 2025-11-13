@@ -353,7 +353,6 @@ namespace Netherlands3D.Twin.Layers
             ParentLayer.ChildrenLayers.Remove(this);
             parent.ChildrenChanged.Invoke(); //call event on old parent
             ParentOrSiblingIndexChanged.RemoveListener(Root.UpdateLayerTreeOrder);
-            // ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
         }
 

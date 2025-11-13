@@ -149,7 +149,6 @@ namespace Netherlands3D.Twin.Services
         public void Remove(LayerData layerData)
         {
             layerData.DestroyLayer();  
-            ProjectData.Current.RemoveLayer(layerData);
             LayerRemoved.Invoke(layerData);
         }
 
