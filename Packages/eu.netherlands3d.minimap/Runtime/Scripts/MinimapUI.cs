@@ -233,7 +233,9 @@ namespace Netherlands3D.Minimap
         public void OnEndDrag(PointerEventData eventData)
         {
             dragging = false;
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
+            
+            if(isClickable) ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
+            else ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
         }
 
         public void OnScroll(PointerEventData eventData)
