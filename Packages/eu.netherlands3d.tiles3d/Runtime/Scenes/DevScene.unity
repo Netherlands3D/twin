@@ -475,7 +475,7 @@ GameObject:
   - component: {fileID: 1051919835}
   - component: {fileID: 1051919834}
   m_Layer: 0
-  m_Name: GlbLoadTest
+  m_Name: MemoryTestGlbLoader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -493,7 +493,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08811f55bfad043d39ede2550ddd8a39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxConcurrentLoads: 6
+  maxParallelDownloads: 6
   parentTransform: {fileID: 0}
   centerUsingBounds: 1
   applyCsvTransforms: 1

@@ -27,8 +27,9 @@ namespace Netherlands3D.Tiles3D
         }
 
         [Header("Settings")]
-        [Tooltip("Maximum aantal GLB bestanden om tegelijk te laden")]
-        public int maxConcurrentLoads = 5;
+        [Tooltip("Aantal tiles dat parallel wordt gedownload (1 = sequentieel, 6 = browser limiet)")]
+        [Range(1, 6)]
+        public int maxParallelDownloads = 6;
         
         [Tooltip("Parent object waar alle GLB objecten onder komen")]
         public Transform parentTransform;
@@ -395,6 +396,7 @@ namespace Netherlands3D.Tiles3D
                 }
             }
             
+            ShuffleList(loadDataList);
             totalFiles = loadDataList.Count;
             Debug.Log($"Found {totalFiles} GLB files to load");
             
@@ -419,20 +421,29 @@ namespace Netherlands3D.Tiles3D
                 yield return FetchSessionId();
             }
             
-            foreach (var loadData in loadDataList)
+            // Load tiles with parallel downloads support
+            int currentIndex = 0;
+            int activeDownloads = 0;
+            List<Coroutine> activeCoroutines = new List<Coroutine>();
+            
+            while (currentIndex < loadDataList.Count || activeDownloads > 0)
             {
                 if (cancelRequested)
                 {
                     break;
                 }
-
-                yield return Loader.LoadGlb(loadData.url, loadData.position, loadData.rotation, loadData.scale, success =>
+                
+                // Start new downloads up to the max parallel limit
+                while (activeDownloads < maxParallelDownloads && currentIndex < loadDataList.Count)
                 {
-                    if (success)
-                    {
-                        loadedFiles++;
-                    }
-                });
+                    var loadData = loadDataList[currentIndex];
+                    currentIndex++;
+                    activeDownloads++;
+                    
+                    StartCoroutine(LoadSingleTile(loadData, () => activeDownloads--));
+                }
+                
+                yield return null;
             }
             
             isLoading = false;
@@ -447,6 +458,19 @@ namespace Netherlands3D.Tiles3D
             {
                 Debug.Log($"Finished loading {loadedFiles}/{totalFiles} GLB files");
             }
+        }
+        
+        private IEnumerator LoadSingleTile(GLBLoadData loadData, Action onComplete)
+        {
+            yield return Loader.LoadGlb(loadData.url, loadData.position, loadData.rotation, loadData.scale, success =>
+            {
+                if (success)
+                {
+                    loadedFiles++;
+                }
+            });
+            
+            onComplete?.Invoke();
         }
 
         private void ForceStopLoading(bool clearScene)
@@ -671,6 +695,28 @@ namespace Netherlands3D.Tiles3D
             }
 
             return sum / count;
+        }
+
+        /// <summary>
+        /// Shuffles the list using the Fisher-Yates algorithm.
+        /// Uses a time-based seed to ensure different ordering on each run.
+        /// The unchecked keyword prevents overflow exceptions when TickCount wraps around Int32.MaxValue.
+        /// </summary>
+        private static void ShuffleList(List<GLBLoadData> loadDataList)
+        {
+            if (loadDataList == null || loadDataList.Count <= 1)
+            {
+                return;
+            }
+
+            System.Random random = new System.Random(unchecked(Environment.TickCount * 31 + loadDataList.Count));
+            int n = loadDataList.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = random.Next(n + 1);
+                (loadDataList[n], loadDataList[k]) = (loadDataList[k], loadDataList[n]);
+            }
         }
 
         private void AutoPositionCamera(Vector3 focusPoint)
