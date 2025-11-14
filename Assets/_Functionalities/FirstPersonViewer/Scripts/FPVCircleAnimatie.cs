@@ -1,3 +1,4 @@
+using Netherlands3D.Services;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,23 +12,26 @@ namespace Netherlands3D.FirstPersonViewer
 
         [Header("Animation")]
         [SerializeField] private Sprite[] unlockCircleSprites;
-        [SerializeField] private Image unlockCircleImage;
+        private Image unlockCircleImage;
+        FirstPersonViewerInput firstPersonInput;
 
         private void OnEnable()
         {
-            FirstPersonViewerInput.OnLockStateChanged += PlayUnlockCircleAnimation;
+            firstPersonInput = ServiceLocator.GetService<FirstPersonViewer>().Input;
+            firstPersonInput.OnLockStateChanged += PlayUnlockCircleAnimation;
             unlockCircleImage = GetComponent<Image>();
         }
 
         private void OnDisable()
         {
-            FirstPersonViewerInput.OnLockStateChanged -= PlayUnlockCircleAnimation;
+            firstPersonInput.OnLockStateChanged -= PlayUnlockCircleAnimation;
         }
 
         void Update()
         {
             if (playingSequence)
             {
+                Debug.Log(unlockCircleImage + " hoi ");
                 unlockCircleImage.transform.position = Mouse.current.position.ReadValue();
             }
         }

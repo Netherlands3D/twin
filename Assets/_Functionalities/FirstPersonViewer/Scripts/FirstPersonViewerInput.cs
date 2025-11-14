@@ -39,7 +39,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         //Events
         public event Action<float> ExitDuration;
-        public static event Action<CursorLockMode> OnLockStateChanged;
+        public event Action<CursorLockMode> OnLockStateChanged;
         private event Action<bool> OnInputExit;
 
         private void Awake()
