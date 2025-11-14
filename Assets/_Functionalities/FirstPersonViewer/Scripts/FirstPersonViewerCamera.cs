@@ -214,6 +214,12 @@ namespace Netherlands3D.FirstPersonViewer
             return default;
         }
 
-        private void ResetToStart() => transform.rotation = startRotation;
+        private void ResetToStart()
+        {
+            xRotation = startRotation.x;
+            yRotation = startRotation.y;
+
+            transform.rotation = startRotation;
+        }
     }
 }

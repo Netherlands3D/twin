@@ -26,7 +26,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             currentSpeed = 0;
 
-            viewer.OnResetToGround += ResetToGround;
+            viewer.OnResetToGround += ResetCurrentSpeed;
+            viewer.OnResetToStart += ResetCurrentSpeed;
         }
 
         public override void OnUpdate()
@@ -41,7 +42,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnExit()
         {
-            viewer.OnResetToGround -= ResetToGround;
+            viewer.OnResetToGround -= ResetCurrentSpeed;
+            viewer.OnResetToStart -= ResetCurrentSpeed;
         }
 
         private void MoveVehicle(Vector2 moveInput)
@@ -78,7 +80,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             }
         }
 
-        private void ResetToGround()
+        private void ResetCurrentSpeed()
         {
             currentSpeed = 0;
         }
