@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Netherlands3D.Services;
+using Netherlands3D.Events;
 using Netherlands3D.Twin.Samplers;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,11 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         [Space(5)]
         [SerializeField] private InputActionReference hideButton;
+
+        [Header("Snackbar")]
+        [SerializeField] private StringEvent snackbarEvent;
+        [SerializeField] private string fpvExitText;
+        [SerializeField] private string uiHideText;
 
         private PointerToWorldPosition pointerToWorld;
         private FirstPersonViewer firstPersonViewer;
@@ -43,17 +49,18 @@ namespace Netherlands3D.FirstPersonViewer.UI
         {
             uiToDisable.ForEach(ui => ui.SetActive(false));
 
-            if(viewerGroup != null)
+            if (viewerGroup != null)
             {
                 viewerGroup.alpha = 0;
                 viewerUI.SetActive(false);
-                viewerGroup.DOFade(1, 1f).SetDelay(1);
-            } viewerUI.SetActive(true);
+                viewerGroup.DOFade(1, 1f).SetDelay(1).OnComplete(() => snackbarEvent.InvokeStarted(fpvExitText));
+            }
+            viewerUI.SetActive(true);
 
             pointerToWorld.SetActiveCamera(FirstPersonViewerCamera.FPVCamera);
         }
 
-        private void ExitViewer()
+        private void ExitViewer(bool modified)
         {
             viewerUI?.SetActive(false);
             uiToDisable.ForEach(ui => ui.SetActive(true));
@@ -67,6 +74,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
         public void HideUI()
         {
             viewerUI.SetActive(!viewerUI.activeSelf);
+            if (!viewerUI.activeSelf) snackbarEvent.InvokeStarted(uiHideText);
         }
 
         private void OnHideUIPressed(InputAction.CallbackContext context) => HideUI();

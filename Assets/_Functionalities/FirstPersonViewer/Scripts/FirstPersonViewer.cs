@@ -1,13 +1,10 @@
 using Netherlands3D.Coordinates;
-using Netherlands3D.Events;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer
@@ -43,6 +40,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         [Header("Settings")]
         [SerializeField] private float stepHeight = 1.5f;
+        [SerializeField] private float returnFocusDistance = 150;
 
         private GameObject viewObject;
 
@@ -52,7 +50,8 @@ namespace Netherlands3D.FirstPersonViewer
         public Action OnSetCameraNorth;
 
         public Action OnViewerEntered;
-        public Action OnViewerExited;
+        public Action<bool> OnViewerExited;
+
 
         private void Awake()
         {
@@ -209,7 +208,7 @@ namespace Netherlands3D.FirstPersonViewer
         //Bool is needed for another branch to prevent another scene update in the future (The branch where it's used is already ready) | WHEN USED PLEASE REMOVE COMMENT :)
         public void ExitViewer(bool exitOriginalPosition)
         {
-            OnViewerExited?.Invoke();
+            OnViewerExited?.Invoke(exitOriginalPosition);
 
             Input.ViewerExited();
 
