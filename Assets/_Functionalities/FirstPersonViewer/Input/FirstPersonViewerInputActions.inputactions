@@ -113,6 +113,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ExitModifier",
+                    "type": "Button",
+                    "id": "3f57fbc5-c575-4a0f-84cf-4f522adf5099",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -718,6 +727,17 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "NavigateModusPrevious",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "44073454-677b-49e0-997a-328f581d4c95",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard & Mouse",
+                    "action": "ExitModifier",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

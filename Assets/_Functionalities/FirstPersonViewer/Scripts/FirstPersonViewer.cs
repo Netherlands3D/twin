@@ -1,28 +1,25 @@
 using Netherlands3D.Coordinates;
-using Netherlands3D.Events;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer
 {
-    [RequireComponent(typeof(FirstPersonViewerInput))]
+    [RequireComponent(typeof(FirstPersonViewerInput), typeof(MovementModusSwitcher))]
     public class FirstPersonViewer : MonoBehaviour
     {
         [Header("Camera")]
         [field: SerializeField] public FirstPersonViewerCamera FirstPersonCamera { private set; get; }
+        public FirstPersonViewerInput Input { private set; get; }
+        public MovementModusSwitcher MovementSwitcher { private set; get; }
 
         private MeshFilter meshFilter;
         private MeshRenderer meshRenderer;
-        private FirstPersonViewerInput input;
         private FirstPersonViewerStateMachine fsm;
-        private MovementModusSwitcher movementSwitcher;
         private WorldTransform worldTransform;
 
         //Movement
@@ -45,6 +42,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         [Header("Settings")]
         [SerializeField] private float stepHeight = 1.5f;
+        [SerializeField] private float returnFocusDistance = 150;
 
         //Events
         public Action OnResetToStart;
@@ -52,25 +50,27 @@ namespace Netherlands3D.FirstPersonViewer
         public Action OnSetCameraNorth;
 
         public Action OnViewerEntered;
-        public Action OnViewerExited;
+        public Action<bool> OnViewerExited;
+
 
         private void Awake()
         {
-            input = GetComponent<FirstPersonViewerInput>();
-            movementSwitcher = GetComponent<MovementModusSwitcher>();
+            Input = GetComponent<FirstPersonViewerInput>();
+            MovementSwitcher = GetComponent<MovementModusSwitcher>();
 
             meshFilter = GetComponent<MeshFilter>();
             meshRenderer = GetComponent<MeshRenderer>();
             worldTransform = GetComponent<WorldTransform>();
 
             OnViewerEntered += ViewerEnterd;
-            input.SetExitCallback(ExitViewer);
+            Input.SetExitCallback(ExitViewer);
         }
 
         private void Start()
         {
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
-            ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged += SetMovementModus;
+            MovementSwitcher.SetViewerInput(Input);
+            MovementSwitcher.OnMovementPresetChanged += SetMovementModus;
 
             SetupFSM();
             gameObject.SetActive(false);
@@ -83,7 +83,7 @@ namespace Netherlands3D.FirstPersonViewer
             yPositionTarget = transform.position.y;
 
             worldTransform.MoveToCoordinate(startPosition);
-            input.OnFPVEnter();
+            Input.OnFPVEnter();
             FirstPersonCamera.SetupViewer();
 
             ServiceLocator.GetService<CameraSwitcher>().SwitchCamera(this);
@@ -91,7 +91,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void OnDestroy()
         {
-            ServiceLocator.GetService<MovementModusSwitcher>().OnMovementPresetChanged -= SetMovementModus;
+            MovementSwitcher.OnMovementPresetChanged -= SetMovementModus;
             OnViewerEntered = null;
             OnResetToStart = null;
             OnResetToGround = null;
@@ -102,9 +102,9 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetupFSM()
         {
-            ViewerState[] playerStates = movementSwitcher.MovementPresets.ToArray();
+            ViewerState[] playerStates = MovementSwitcher.MovementPresets.ToArray();
 
-            fsm = new FirstPersonViewerStateMachine(this, input, playerStates);
+            fsm = new FirstPersonViewerStateMachine(this, Input, playerStates);
         }
 
         private void Update()
@@ -115,7 +115,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             transform.position += Vector3.up * velocity.y * Time.deltaTime;
 
-            if (input.ResetInput.triggered) ResetToGround();
+            if (Input.ResetInput.triggered) ResetToGround();
         }
 
         public void GetGroundPosition()
@@ -153,18 +153,18 @@ namespace Netherlands3D.FirstPersonViewer
             }
         }
 
-        private void SetMovementModus(ViewerState movementPresets)
+        private void SetMovementModus(ViewerState viewerState)
         {
-            if (movementPresets.viewMesh != null)
+            if (viewerState.viewMesh != null)
             {
-                meshFilter.mesh = movementPresets.viewMesh;
-                meshRenderer.materials = movementPresets.meshMaterials;
+                meshFilter.mesh = viewerState.viewMesh;
+                meshRenderer.materials = viewerState.meshMaterials;
             }
             else meshFilter.mesh = null;
 
-            FirstPersonCamera.SetCameraConstrain(movementPresets.CameraConstrain);
+            FirstPersonCamera.SetCameraConstrain(viewerState.CameraConstrain);
 
-            fsm.SwitchState(movementPresets);
+            fsm.SwitchState(viewerState);
         }
 
         public void SetupState(Vector3 cameraPosition, Vector3 playerEuler, Vector3 cameraEuler, float cameraHeightOffset)
@@ -205,9 +205,9 @@ namespace Netherlands3D.FirstPersonViewer
         //Bool is needed for another branch to prevent another scene update in the future (The branch where it's used is already ready) | WHEN USED PLEASE REMOVE COMMENT :)
         public void ExitViewer(bool exitOriginalPosition)
         {
-            OnViewerExited?.Invoke();
+            OnViewerExited?.Invoke(exitOriginalPosition);
 
-            input.ViewerExited();
+            Input.ViewerExited();
 
             ServiceLocator.GetService<CameraSwitcher>().SwitchToPreviousCamera();
         }

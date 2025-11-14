@@ -26,6 +26,8 @@ namespace Netherlands3D.FirstPersonViewer
         public InputAction CycleNextModus { private set; get; }
         public InputAction CyclePreviousModus { private set; get; }
 
+        private InputAction exitModifier;
+
         [Header("Exit")]
         [SerializeField] private float exitDuration = 1;
         [SerializeField] private float exitViewDelay = .15f;
@@ -36,7 +38,7 @@ namespace Netherlands3D.FirstPersonViewer
         public bool LockInput => inputLocks.Count > 0;
 
         //Events
-        public static event Action<float> ExitDuration;
+        public event Action<float> ExitDuration;
         public static event Action<CursorLockMode> OnLockStateChanged;
         private event Action<bool> OnInputExit;
 
@@ -52,6 +54,7 @@ namespace Netherlands3D.FirstPersonViewer
             ResetInput = inputActionAsset.FindAction("Reset");
             CycleNextModus = inputActionAsset.FindAction("NavigateModusNext");
             CyclePreviousModus = inputActionAsset.FindAction("NavigateModusPrevious");
+            exitModifier = inputActionAsset.FindAction("ExitModifier");
 
             inputLocks = new List<MonoBehaviour>();
 
@@ -95,7 +98,6 @@ namespace Netherlands3D.FirstPersonViewer
                 //When no UI object is detected lock the mouse to screen again.
                 LockCursor();
             }
-
         }
 
         private bool ShouldSkipCursorLocking()
@@ -143,7 +145,7 @@ namespace Netherlands3D.FirstPersonViewer
                 if (exitTimer == 0)
                 {
                     ExitDuration?.Invoke(-1);
-                    OnInputExit?.Invoke(false);
+                    OnInputExit?.Invoke(exitModifier.IsPressed());
                 }
             }
             else if (ExitInput.WasReleasedThisFrame()) ExitDuration?.Invoke(-1); //Reset the visual
@@ -163,7 +165,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void SetExitCallback(Action<bool> callback) => OnInputExit = callback;
 
-        public static bool IsInputfieldSelected()
+        public bool IsInputfieldSelected()
         {
             GameObject selected = EventSystem.current.currentSelectedGameObject;
 

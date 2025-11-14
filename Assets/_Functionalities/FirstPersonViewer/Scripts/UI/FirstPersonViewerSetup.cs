@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 using SnapshotComponent = Netherlands3D.Snapshots.Snapshots;
 
-namespace Netherlands3D
+namespace Netherlands3D.FirstPersonViewer.UI
 {
     public class FirstPersonViewerSetup : MonoBehaviour
     {

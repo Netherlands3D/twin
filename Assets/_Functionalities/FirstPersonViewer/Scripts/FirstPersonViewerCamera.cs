@@ -1,11 +1,11 @@
 using DG.Tweening;
 using Netherlands3D.FirstPersonViewer.ViewModus;
-using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer
 {
-    public enum CameraConstrain { CONTROL_Y, CONTROL_BOTH, CONTROL_NONE, CONTROL_MY_HEAD }
+    public enum CameraConstrain { CONTROL_Y, CONTROL_BOTH, CONTROL_NONE }
 
     public class FirstPersonViewerCamera : MonoBehaviour
     {
@@ -32,10 +32,13 @@ namespace Netherlands3D.FirstPersonViewer
 
         [Header("Main Cam")]
         [SerializeField] private float cameraHeightAboveGround;
+        [SerializeField] private float returnFocusDistance = 150;
+
         private Camera mainCam;
         private Vector3 prevCameraPosition;
         private Quaternion prevCameraRotation;
         private int prevCameraCullingMask;
+        private bool prevCameraOrthographic;
 
         private void Awake()
         {
@@ -47,34 +50,17 @@ namespace Netherlands3D.FirstPersonViewer
             FPVCamera = firstPersonViewerCamera;
         }
 
-        private void OnDisable()
-        {
-            ExitViewer();
-        }
-
-        private void ExitViewer()
-        {
-            fovSetting.OnValueChanged.RemoveListener(SetCameraFOV);
-            viewHeightSetting.OnValueChanged.RemoveListener(SetCameraHeight);
-
-            viewer.OnResetToStart -= ResetToStart;
-            viewer.OnSetCameraNorth -= SetCameraNorth;
-
-            if (mainCam != null)
-            {
-                mainCam.transform.position = prevCameraPosition;
-                mainCam.transform.rotation = prevCameraRotation;
-                mainCam.cullingMask = prevCameraCullingMask;
-                mainCam.orthographic = false;
-                mainCam.targetDisplay = 0;
-            }
-        }
-
         public void SetupViewer()
         {
             mainCam = Camera.main;
+            prevCameraPosition = mainCam.transform.position;
+            prevCameraRotation = mainCam.transform.rotation;
+            prevCameraCullingMask = mainCam.cullingMask;
+            prevCameraOrthographic = mainCam.orthographic;
 
             input.AddInputLockConstrain(this);
+            viewer.OnViewerExited += ExitViewer;
+
             transform.position = mainCam.transform.position;
             transform.rotation = mainCam.transform.rotation;
 
@@ -102,23 +88,47 @@ namespace Netherlands3D.FirstPersonViewer
             viewer.OnResetToStart += ResetToStart;
             viewer.OnSetCameraNorth += SetCameraNorth;
 
-            ServiceLocator.GetService<MovementModusSwitcher>().LoadMovementPreset(0);
+            viewer.MovementSwitcher.LoadMovementPreset(0);
             input.RemoveInputLockConstrain(this);
         }
 
         //Disable the Main Camera through rendering.
         private void SetupMainCam()
         {
-            prevCameraPosition = mainCam.transform.position;
-            prevCameraRotation = mainCam.transform.rotation;
-            prevCameraCullingMask = mainCam.cullingMask;
-
             mainCam.transform.position = transform.position + Vector3.up * cameraHeightAboveGround;
             mainCam.transform.rotation = Quaternion.Euler(90, 0, 0);
             mainCam.cullingMask = 0;
 
             mainCam.orthographic = true;
             mainCam.targetDisplay = 1;
+        }
+
+        private void ExitViewer(bool modified)
+        {
+            //Make sure the tween is not running.
+            transform.DOKill();
+
+            mainCam.cullingMask = prevCameraCullingMask;
+            mainCam.orthographic = prevCameraOrthographic;
+            mainCam.targetDisplay = 0;
+
+            fovSetting.OnValueChanged.RemoveListener(SetCameraFOV);
+            viewHeightSetting.OnValueChanged.RemoveListener(SetCameraHeight);
+
+            viewer.OnResetToStart -= ResetToStart;
+            viewer.OnSetCameraNorth -= SetCameraNorth;
+            viewer.OnViewerExited -= ExitViewer;
+
+
+            if (modified)
+            {
+                mainCam.transform.position = prevCameraPosition;
+                mainCam.transform.rotation = prevCameraRotation;
+            }
+            else
+            {
+                mainCam.GetComponent<FreeCamera>().FocusOnPoint(transform.position, returnFocusDistance);
+            }
         }
 
         private void Update()

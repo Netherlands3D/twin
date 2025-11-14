@@ -505,6 +505,36 @@ PrefabInstance:
       propertyPath: m_CullingMask.m_Bits
       value: 2039
       objectReference: {fileID: 0}
+    - target: {fileID: 6660788825186363282, guid: ce284aba191b2f642866ceac4d3d56ab,
+        type: 3}
+      propertyPath: ExitDuration.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6660788825186363282, guid: ce284aba191b2f642866ceac4d3d56ab,
+        type: 3}
+      propertyPath: ExitDuration.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7980937525333781998}
+    - target: {fileID: 6660788825186363282, guid: ce284aba191b2f642866ceac4d3d56ab,
+        type: 3}
+      propertyPath: ExitDuration.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6660788825186363282, guid: ce284aba191b2f642866ceac4d3d56ab,
+        type: 3}
+      propertyPath: ExitDuration.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: UpdateTimer
+      objectReference: {fileID: 0}
+    - target: {fileID: 6660788825186363282, guid: ce284aba191b2f642866ceac4d3d56ab,
+        type: 3}
+      propertyPath: ExitDuration.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.FirstPersonViewer.UI.ViewerExit, eu.netherlands3d.twin
+      objectReference: {fileID: 0}
+    - target: {fileID: 6660788825186363282, guid: ce284aba191b2f642866ceac4d3d56ab,
+        type: 3}
+      propertyPath: ExitDuration.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 8111522683061574636, guid: ce284aba191b2f642866ceac4d3d56ab,
         type: 3}
       propertyPath: m_Name
@@ -4378,6 +4408,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02c20fd0e6c83ab46afacb4c2e6263df, type: 3}
+--- !u!114 &7980937525333781998 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2277313791795893008, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
+    type: 3}
+  m_PrefabInstance: {fileID: 7980937525333781997}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3e17ecff04d9124f9a9a052d0e45169, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8208335865081263597
 PrefabInstance:
   m_ObjectHideFlags: 0
