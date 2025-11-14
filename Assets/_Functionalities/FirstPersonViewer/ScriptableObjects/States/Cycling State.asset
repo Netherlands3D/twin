@@ -57,9 +57,9 @@ MonoBehaviour:
         isVisible: 1
         movementSetting: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad,
           type: 2}
-        defaultValue: 35
+        defaultValue: 20
         minValue: 1
-        maxValue: 500
+        maxValue: 100
     - rid: 1516422325167980660
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
         asm: eu.netherlands3d.twin}
@@ -117,7 +117,7 @@ MonoBehaviour:
         isVisible: 0
         movementSetting: {fileID: 11400000, guid: 238246fd8535293479b916db1ac470bc,
           type: 2}
-        defaultValue: 1.5
+        defaultValue: 2
         minValue: 0
         maxValue: 0
     - rid: 1516422325167980666
