@@ -3,6 +3,8 @@ using Netherlands3D.Minimap;
 using Netherlands3D.Services;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 using SnapshotComponent = Netherlands3D.Snapshots.Snapshots;
 
@@ -16,7 +18,6 @@ namespace Netherlands3D
         [Space()]
         [SerializeField] private Camera2DFrustum frustum;
         [SerializeField] private WMTSMap wmtsMap;
-
 
         private void OnEnable()
         {
@@ -43,5 +44,6 @@ namespace Netherlands3D
 
             ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(activeCam);
         }
+
     }
 }

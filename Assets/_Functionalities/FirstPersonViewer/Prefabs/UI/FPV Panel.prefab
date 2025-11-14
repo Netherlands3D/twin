@@ -1219,7 +1219,7 @@ GameObject:
   - component: {fileID: 2918654089687910781}
   - component: {fileID: 5629545662794770054}
   m_Layer: 5
-  m_Name: BottomLeft
+  m_Name: Bottom Right Elements
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1237,15 +1237,15 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5807535839906888646}
   - {fileID: 5104290462660487825}
+  - {fileID: 5807535839906888646}
   m_Father: {fileID: 4997419578823107694}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_Pivot: {x: 1, y: 0}
 --- !u!222 &8565978742340809007
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2416,7 +2416,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipText: Snap to maaiveld
+  tooltipText: Snap naar hoogste punt (R)
 --- !u!114 &5599331511777983950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2990,7 +2990,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipText: Reset naar het startpunt
+  tooltipText: Reset naar startpunt
 --- !u!114 &7845256807810938703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3771,7 +3771,7 @@ GameObject:
   - component: {fileID: 4921064676016318814}
   - component: {fileID: 8806089794291773564}
   m_Layer: 5
-  m_Name: Right
+  m_Name: Bottom Left Elements
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3794,11 +3794,11 @@ RectTransform:
   - {fileID: 3875553650319833043}
   m_Father: {fileID: 4997419578823107694}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 1, y: 0}
+  m_Pivot: {x: 0, y: 0}
 --- !u!222 &1695974297560088171
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3962,7 +3962,6 @@ GameObject:
   - component: {fileID: 297942020326514440}
   - component: {fileID: 898963798061876152}
   - component: {fileID: 790557086420049307}
-  - component: {fileID: 474986964326212686}
   - component: {fileID: 901389181492682019}
   m_Layer: 5
   m_Name: FPV Panel
@@ -4046,18 +4045,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &474986964326212686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5031786889156781905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 082ee06cfed3ba24c82368651a321939, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &901389181492682019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4161,7 +4148,7 @@ GameObject:
   - component: {fileID: 7409228381713325581}
   - component: {fileID: 1136294440471377456}
   m_Layer: 5
-  m_Name: Escape Button
+  m_Name: Backspace Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4184,7 +4171,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 45, y: 0}
+  m_SizeDelta: {x: 45.566, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7409228381713325581
 CanvasRenderer:
@@ -4214,9 +4201,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 88b3eb083d9d7fa4e85a786dcb3f9626, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4dcc631d2f7e5a04aabddbf08d2d854e, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -4777,7 +4764,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 101.265, y: -22.5}
+  m_AnchoredPosition: {x: 101.831, y: -22.5}
   m_SizeDelta: {x: 112.53, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6082284197546984917
@@ -4973,15 +4960,15 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 939546726206940029}
   - {fileID: 9052660540256076878}
   - {fileID: 7629885247512935706}
+  - {fileID: 939546726206940029}
   m_Father: {fileID: 2163536913614694551}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 377.5, y: -164}
-  m_SizeDelta: {x: 169, y: 0}
+  m_AnchoredPosition: {x: 91, y: -164}
+  m_SizeDelta: {x: 172, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6466112604020787291
 CanvasRenderer:
@@ -5034,8 +5021,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 5
-    m_Right: 0
+    m_Left: 0
+    m_Right: 8
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
@@ -7807,11 +7794,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6740410228911076946, guid: b9565e5e6806aa84fa4bee3688c5cb46,
         type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 474986964326212686}
-    - target: {fileID: 6740410228911076946, guid: b9565e5e6806aa84fa4bee3688c5cb46,
-        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
@@ -7967,7 +7949,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 452fb5315f90464b9b17bf47a7eecf82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipText: Verlaat first-person modus
+  tooltipText: Verlaat first-person modus (Backspace inhouden)
 --- !u!224 &6151074720974636489 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8616850838438046538, guid: b9565e5e6806aa84fa4bee3688c5cb46,
@@ -8356,6 +8338,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ButtonSmall_Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 7662381555634833805, guid: 795bd620b2a206741a74b37b48005c7d,
+        type: 3}
+      propertyPath: tooltipText
+      value: Schermafbeelding maken (C)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8379,6 +8366,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ButtonSmall_UI_Hider
+      objectReference: {fileID: 0}
+    - target: {fileID: 3004499452041772352, guid: 461aee81d187748439f6b71800ac6b60,
+        type: 3}
+      propertyPath: tooltipText
+      value: Interfaces verbergen (H)
       objectReference: {fileID: 0}
     - target: {fileID: 6328999162435464409, guid: 461aee81d187748439f6b71800ac6b60,
         type: 3}
@@ -8484,7 +8476,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 474986964326212686}
+      objectReference: {fileID: 0}
     - target: {fileID: 9064220470025580993, guid: 461aee81d187748439f6b71800ac6b60,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
