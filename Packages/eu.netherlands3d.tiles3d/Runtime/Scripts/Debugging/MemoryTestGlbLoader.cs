@@ -230,6 +230,7 @@ namespace Netherlands3D.Tiles3D
         {
             while (automatedTestActive)
             {
+                Debug.Log("AutomatedTest: Starting load cycle...");
                 yield return LoadGLBFilesRoutine();
 
                 if (!automatedTestActive && !clearSceneAfterTestStops)
@@ -237,6 +238,7 @@ namespace Netherlands3D.Tiles3D
                     break;
                 }
 
+                Debug.Log("AutomatedTest: Waiting for all tiles to finish loading...");
                 yield return WaitUntilAllTilesLoaded();
 
                 if (!automatedTestActive && !clearSceneAfterTestStops)
@@ -244,6 +246,7 @@ namespace Netherlands3D.Tiles3D
                     break;
                 }
 
+                Debug.Log("AutomatedTest: Clearing scene...");
                 ClearSceneContents();
 
                 if (!automatedTestActive)
@@ -251,6 +254,7 @@ namespace Netherlands3D.Tiles3D
                     break;
                 }
 
+                Debug.Log($"AutomatedTest: Waiting {reloadDelaySeconds} seconds before next cycle...");
                 yield return WaitWhileActive(reloadDelaySeconds);
             }
 
@@ -294,15 +298,14 @@ namespace Netherlands3D.Tiles3D
                 yield break;
             }
 
-            while (automatedTestActive || clearSceneAfterTestStops)
+            // Wait until loading is complete
+            while (isLoading && (automatedTestActive || clearSceneAfterTestStops))
             {
-                if (!isLoading && loadedFiles >= totalFiles)
-                {
-                    yield break;
-                }
-
                 yield return null;
             }
+            
+            // Extra safety: wait one more frame to ensure all instantiation is done
+            yield return null;
         }
         
         private IEnumerator LoadGLBFilesRoutine()

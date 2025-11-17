@@ -65,12 +65,36 @@ namespace Netherlands3D.Tiles3D.Editor
 
             RemoveFromResources(logPrefix: null);
 
-            FileUtil.CopyFileOrDirectory(SourcePath, TargetPath);
+            // Copy files manually without .meta files to avoid GUID conflicts
+            CopyDirectoryWithoutMeta(SourcePath, TargetPath);
             AssetDatabase.Refresh();
 
-            if (!string.IsNullOrEmpty(logPrefix))
+
+        }
+        
+        private static void CopyDirectoryWithoutMeta(string sourceDir, string targetDir)
+        {
+            Directory.CreateDirectory(targetDir);
+            
+            // Copy all files except .meta files
+            foreach (string file in Directory.GetFiles(sourceDir))
             {
-                Debug.Log($"{logPrefix}: TestData beschikbaar gemaakt in Resources.");
+                if (file.EndsWith(".meta"))
+                {
+                    continue;
+                }
+                
+                string fileName = Path.GetFileName(file);
+                string targetFile = Path.Combine(targetDir, fileName);
+                File.Copy(file, targetFile, overwrite: true);
+            }
+            
+            // Recursively copy subdirectories
+            foreach (string subDir in Directory.GetDirectories(sourceDir))
+            {
+                string dirName = Path.GetFileName(subDir);
+                string targetSubDir = Path.Combine(targetDir, dirName);
+                CopyDirectoryWithoutMeta(subDir, targetSubDir);
             }
         }
 
