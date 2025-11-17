@@ -204,18 +204,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void CreatePolygonLayer(List<Vector3> unityPolygon)
         {
-            //todo: this is now broken, needs to be fixed
-            //PolygonSelectionLayer data = new PolygonSelectionLayer( 
-            //    "Polygon", 
-            //    polygonSelectionVisualisationPrefab.PrefabIdentifier, 
-            //    unityPolygon, 
-            //    ShapeType.Polygon                
-            //);
-
-            //// Layer layer = App.Layers.VisualizeData(data);
-            //layers.Add(data.PolygonVisualisation, data);
-            //data.polygonSelected.AddListener(ProcessPolygonSelection);
-            //polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work
+            ILayerBuilder layerBuilder = LayerBuilder.Create()
+                .OfType(polygonSelectionVisualisationPrefab.PrefabIdentifier)
+                .NamedAs("Polygon")
+                .AddProperty(new PolygonSelectionLayerPropertyData
+                {
+                    ShapeType = ShapeType.Polygon,
+                    OriginalPolygon = unityPolygon.ToCoordinates().ToList()
+                });
+            App.Layers.Add(layerBuilder, visualisation =>
+            {
+                PolygonSelectionVisualisation polygonVisualisation = visualisation as PolygonSelectionVisualisation;
+                layers.Add(polygonVisualisation, visualisation.LayerData);
+                PolygonSelectionLayerPropertyData data = visualisation.LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+                data.polygonSelected.AddListener(ProcessPolygonSelection);
+                polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit);
+                ProcessPolygonSelection(visualisation.LayerData);
+            });
         }
 
         private void UpdateLayer(List<Vector3> editedPolygon)
@@ -227,22 +232,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         }
 
         private void CreateLineLayer(List<Vector3> unityLine)
-        {
-            //TODO rewrite this to work
-            //_ = new PolygonSelectionLayer(
-            //    "Line", 
-            //    polygonSelectionVisualisationPrefab.PrefabIdentifier, 
-            //    unityLine, 
-            //    ShapeType.Line, 
-            //    defaultLineWidth,
-            //    layer =>
-            //    {                  
-            //        if (layer is not PolygonSelectionLayer polygonSelectionLayer) return;
-            //        layers.Add(polygonSelectionLayer.PolygonVisualisation, polygonSelectionLayer);
-            //        polygonSelectionLayer.polygonSelected.AddListener(ProcessPolygonSelection);
-            //        lineInput.SetDrawMode(PolygonInput.DrawMode.Edit); //set the mode to edit explicitly, so the reselect functionality of ProcessPolygonSelection() will immediately work                   
-            //    }
-            //);
+        {      
+            ILayerBuilder layerBuilder = LayerBuilder.Create()
+                .OfType(polygonSelectionVisualisationPrefab.PrefabIdentifier)
+                .NamedAs("Line")
+                .AddProperty(new PolygonSelectionLayerPropertyData
+                {
+                    ShapeType = ShapeType.Line,
+                    OriginalPolygon = unityLine.ToCoordinates().ToList(),
+                    LineWidth = defaultLineWidth
+                });
+            App.Layers.Add(layerBuilder, visualisation =>
+            {
+                PolygonSelectionVisualisation polygonVisualisation = visualisation as PolygonSelectionVisualisation;
+                layers.Add(polygonVisualisation, visualisation.LayerData);
+                PolygonSelectionLayerPropertyData data = visualisation.LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+                data.polygonSelected.AddListener(ProcessPolygonSelection);
+                lineInput.SetDrawMode(PolygonInput.DrawMode.Edit);
+                ProcessPolygonSelection(visualisation.LayerData);
+            });
         }
 
         //called in the inspector
