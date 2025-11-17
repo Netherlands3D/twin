@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Netherlands3D.Functionalities.OGC3DTiles;
 using Netherlands3D.Functionalities.Wms;
@@ -6,15 +7,22 @@ using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes
 {
+    [Serializable]
+    public class LayerSpriteCollection
+    {
+        public Sprite PrimarySprite;
+        public Sprite SecondarySprite;
+    }
+    
     [CreateAssetMenu(fileName = "LayerTypeSpriteLibrary", menuName = "ScriptableObjects/LayerTypeSpriteLibrary", order = 1)]
     public class LayerTypeSpriteLibrary : ScriptableObject
     {
-        [SerializeField] private List<Sprite> layerTypeSprites;
-
-        public Sprite GetLayerTypeSprite(LayerData layer)
+        [SerializeField] private List<LayerSpriteCollection> layerTypeSprites;
+        public LayerSpriteCollection GetLayerTypeSprite(LayerData layer)
         {
             switch (layer)
             {
@@ -35,7 +43,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             }
         }
 
-        private Sprite GetProxyLayerSprite(LayerGameObject layer)
+        private LayerSpriteCollection GetProxyLayerSprite(LayerGameObject layer)
         {
             switch (layer)
             {

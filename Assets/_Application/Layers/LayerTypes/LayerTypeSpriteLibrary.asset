@@ -13,16 +13,29 @@ MonoBehaviour:
   m_Name: LayerTypeSpriteLibrary
   m_EditorClassIdentifier: 
   layerTypeSprites:
-  - {fileID: 21300000, guid: 8195ba93da7d54414990e31bfc4040cd, type: 3}
-  - {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25, type: 3}
-  - {fileID: 21300000, guid: 3765d3359f9e147d68845fa587338a6e, type: 3}
-  - {fileID: 21300000, guid: 2c832d49ceeba4326aa064851cbb7bc7, type: 3}
-  - {fileID: 21300000, guid: 15bc370712bc94ceaa909cdc8b259d71, type: 3}
-  - {fileID: 21300000, guid: f08423d0fb71848ec9bf1e77397260a2, type: 3}
-  - {fileID: 21300000, guid: dc4aeda70a7a447c4b457e41e216a80a, type: 3}
-  - {fileID: 21300000, guid: 4c0989c5e9ec1404ab9e3523c94f6b29, type: 3}
-  - {fileID: 21300000, guid: 1c8435c321d2348d6b890dae0769264b, type: 3}
-  - {fileID: 21300000, guid: 302449484203745dbac0d82605206394, type: 3}
-  - {fileID: 21300000, guid: 675193f4a560b4698b5f5ec01af3ba36, type: 3}
-  - {fileID: 21300000, guid: e4bf1be4a2ec6ab4da3735fdfcc314da, type: 3}
-  - {fileID: 21300000, guid: dcb7e9de9d2b4429ba1476b040a73dd0, type: 3}
+  - PrimarySprite: {fileID: 21300000, guid: 8195ba93da7d54414990e31bfc4040cd, type: 3}
+    SecondarySprite: {fileID: 0}
+  - PrimarySprite: {fileID: 21300000, guid: 01d5c98db5ff54c98854de8005f49f25, type: 3}
+    SecondarySprite: {fileID: 21300000, guid: 564f756d525e542b1a8a4e2f0801dabd, type: 3}
+  - PrimarySprite: {fileID: 21300000, guid: 3765d3359f9e147d68845fa587338a6e, type: 3}
+    SecondarySprite: {fileID: 0}
+  - PrimarySprite: {fileID: 21300000, guid: 2c832d49ceeba4326aa064851cbb7bc7, type: 3}
+    SecondarySprite: {fileID: 21300000, guid: 1922596620fa144e6ae6068957587ee9, type: 3}
+  - PrimarySprite: {fileID: 21300000, guid: 15bc370712bc94ceaa909cdc8b259d71, type: 3}
+    SecondarySprite: {fileID: 21300000, guid: c7c08f8ece25d4fb9bda6ab15c59e8ef, type: 3}
+  - PrimarySprite: {fileID: 21300000, guid: f08423d0fb71848ec9bf1e77397260a2, type: 3}
+    SecondarySprite: {fileID: 21300000, guid: 0035d60f794426f43882c9a7b8dfbe38, type: 3}
+  - PrimarySprite: {fileID: 21300000, guid: dc4aeda70a7a447c4b457e41e216a80a, type: 3}
+    SecondarySprite: {fileID: 21300000, guid: 60568f85042a643e3b319a4b356e7704, type: 3}
+  - PrimarySprite: {fileID: 21300000, guid: 4c0989c5e9ec1404ab9e3523c94f6b29, type: 3}
+    SecondarySprite: {fileID: 21300000, guid: b4dbc949f58ca6e4c96a1ffdc7c62f63, type: 3}
+  - PrimarySprite: {fileID: 21300000, guid: 1c8435c321d2348d6b890dae0769264b, type: 3}
+    SecondarySprite: {fileID: 0}
+  - PrimarySprite: {fileID: 21300000, guid: 302449484203745dbac0d82605206394, type: 3}
+    SecondarySprite: {fileID: 0}
+  - PrimarySprite: {fileID: 21300000, guid: 675193f4a560b4698b5f5ec01af3ba36, type: 3}
+    SecondarySprite: {fileID: 0}
+  - PrimarySprite: {fileID: 21300000, guid: e4bf1be4a2ec6ab4da3735fdfcc314da, type: 3}
+    SecondarySprite: {fileID: 0}
+  - PrimarySprite: {fileID: 21300000, guid: dcb7e9de9d2b4429ba1476b040a73dd0, type: 3}
+    SecondarySprite: {fileID: 0}
