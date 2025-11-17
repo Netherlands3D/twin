@@ -270,7 +270,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 .NamedAs("Grid")
                 .AddProperty(new PolygonSelectionLayerPropertyData{ 
                     ShapeType = ShapeType.Grid,
-                    OriginalPolygon = new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(topLeft), new Coordinate(topRight), new Coordinate(bottomRight) }
+                    OriginalPolygon = new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(topLeft), new Coordinate(topRight), new Coordinate(bottomRight) },                    
                 });
             App.Layers.Add(layerBuilder, visualisation =>
             {

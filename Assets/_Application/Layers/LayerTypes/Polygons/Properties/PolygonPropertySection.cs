@@ -37,7 +37,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
                 SetLinePropertiesActive(data.ShapeType == ShapeType.Line);
                 SetGridPropertiesActive(data.ShapeType == ShapeType.Grid);
 
-                maskToggle.interactable = maskToggle.isOn || PolygonSelectionVisualisation.NumAvailableMasks > 0;
+                maskToggle.interactable = maskToggle.isOn || PolygonSelectionLayerPropertyData.NumAvailableMasks > 0;
                 SetMaxMasksText();
 
                 if (data.IsMask)
@@ -47,7 +47,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 
         private void SetMaxMasksText()
         {
-            maxMasksText.text = string.Format(maxMasksTextTemplate, PolygonSelectionVisualisation.NumAvailableMasks.ToString(), PolygonSelectionVisualisation.MaxAvailableMasks.ToString());
+            maxMasksText.text = string.Format(maxMasksTextTemplate, PolygonSelectionLayerPropertyData.NumAvailableMasks.ToString(), PolygonSelectionLayerPropertyData.MaxAvailableMasks.ToString());
         }
 
         private void SetLinePropertiesActive(bool isLine)

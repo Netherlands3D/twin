@@ -24,10 +24,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public Material PolygonMeshMaterial;
         [SerializeField] private Material polygonMaskMaterial;
         private bool isMask;
-        private static List<int> availableMaskChannels = new List<int>() { 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
-        public static int NumAvailableMasks => availableMaskChannels.Count;
-        public static int MaxAvailableMasks => 22;
-        public static UnityEvent<int> MaskDestroyed = new();
+        
 
         public UnityEvent OnPolygonVisualisationUpdated = new();
 
@@ -124,15 +121,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             base.SetData(layerData);
             UpdatePolygon();
             PolygonSelectionCalculator.RegisterPolygon(LayerData);
-            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            availableMaskChannels.Remove(data.MaskBitIndex);
-        }
-
-        protected override void OnLayerInitialize()
-        {
-            base.OnLayerInitialize();
-
-            //InitializePropertyData(); //TODO should this be done in the future from layergameobject?
         }
 
         protected override void OnLayerReady()
@@ -141,16 +129,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
             var vertices = CoordinatesToVertices(data.OriginalPolygon);
             UpdateVisualisation(vertices, data.ExtrusionHeight);
-        }
-
-        protected virtual void InitializePropertyData()
-        {
-            if (!LayerData.HasProperty<PolygonSelectionLayerPropertyData>())
-            {
-                LayerData.SetProperty(
-                    new PolygonSelectionLayerPropertyData()
-                );
-            }
         }
 
         protected override void RegisterEventListeners()
@@ -299,7 +277,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void OnIsMaskChanged(bool isMask)
         {
             PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            if (isMask && data.MaskBitIndex == -1 && availableMaskChannels.Count == 0)
+            if (isMask && data.MaskBitIndex == -1 && PolygonSelectionLayerPropertyData.NumAvailableMasks == 0)
             {
                 Debug.LogError("No more masking channels available");
                 data.IsMask = false;
@@ -315,13 +293,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if (!isMask && data.MaskBitIndex != -1)
             {
                 OnInvertMaskChanged(invertMask); //clear the inverted mask property before clearing the bit index
-                availableMaskChannels.Add(data.MaskBitIndex);
+                PolygonSelectionLayerPropertyData.AddAvailableMaskChannel(data.MaskBitIndex);
+                //availableMaskChannels.Add(data.MaskBitIndex);
                 data.MaskBitIndex = -1;
             }
             else if (isMask && data.MaskBitIndex == -1)
             {
-                data.MaskBitIndex = availableMaskChannels.Last();
-                availableMaskChannels.Remove(data.MaskBitIndex);
+                data.MaskBitIndex = PolygonSelectionLayerPropertyData.LastAvailableMaskChannel();
+                PolygonSelectionLayerPropertyData.RemoveAvailableMaskChannel(data.MaskBitIndex);
+                //availableMaskChannels.Remove(data.MaskBitIndex);
                 OnInvertMaskChanged(invertMask); //set the inverted mask property after assigning the bit index
             }
         }

@@ -11,6 +11,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
+
 
 
 #if UNITY_EDITOR
@@ -194,14 +196,14 @@ namespace Netherlands3D.Twin.Layers
         {
             onShow.Invoke();
             if(IsMaskable)
-                PolygonSelectionVisualisation.MaskDestroyed.AddListener(ResetMask);
+                PolygonSelectionLayerPropertyData.MaskDestroyed.AddListener(ResetMask);
         }
 
         protected virtual void OnDisable()
         {
             onHide.Invoke();
             if(IsMaskable)
-                PolygonSelectionVisualisation.MaskDestroyed.RemoveListener(ResetMask);
+                PolygonSelectionLayerPropertyData.MaskDestroyed.RemoveListener(ResetMask);
         }
 
         private void ResetMask(int maskBitIndex)
