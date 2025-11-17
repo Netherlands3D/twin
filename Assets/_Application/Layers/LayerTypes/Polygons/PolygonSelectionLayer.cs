@@ -99,7 +99,8 @@
 //            //availableMaskChannels.Remove(MaskBitIndex);
 //        }
 
-//        public PolygonSelectionLayer(string name,
+//        public PolygonSelectionLayer(
+//            string name,
 //            string prefabId,
 //            List<Vector3> polygonUnityInput,
 //            ShapeType shapeType,

@@ -128,6 +128,31 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             availableMaskChannels.Remove(data.MaskBitIndex);
         }
 
+        protected override void OnLayerInitialize()
+        {
+            base.OnLayerInitialize();
+
+            //InitializePropertyData(); //TODO should this be done in the future from layergameobject?
+        }
+
+        protected override void OnLayerReady()
+        {
+            base.OnLayerReady();
+            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            var vertices = CoordinatesToVertices(data.OriginalPolygon);
+            UpdateVisualisation(vertices, data.ExtrusionHeight);
+        }
+
+        protected virtual void InitializePropertyData()
+        {
+            if (!LayerData.HasProperty<PolygonSelectionLayerPropertyData>())
+            {
+                LayerData.SetProperty(
+                    new PolygonSelectionLayerPropertyData()
+                );
+            }
+        }
+
         protected override void RegisterEventListeners()
         {
             base.RegisterEventListeners();

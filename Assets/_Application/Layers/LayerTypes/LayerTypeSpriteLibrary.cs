@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier);
             if (template != null)
             {
-                return GetProxyLayerSprite(template);
+                return GetProxyLayerSprite(template, layer);
             }
 
             Debug.LogError("layer type of " + layer.Name + " is not specified");
@@ -40,9 +40,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
 
         }
 
-        private LayerSpriteCollection GetProxyLayerSprite(LayerGameObject layer)
+        private LayerSpriteCollection GetProxyLayerSprite(LayerGameObject template, LayerData data)
         {
-            switch (layer)
+            switch (template)
             {
                 case WMSLayerGameObject _:
                 case GeoJsonLayerGameObject _:
@@ -68,15 +68,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return layerTypeSprites[9];
                 case PolygonSelectionVisualisation _:
                     {
-                        PolygonSelectionLayerPropertyData data = layer.LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-                        if (data.ShapeType == ShapeType.Line)
+                        PolygonSelectionLayerPropertyData propertyData = data.GetProperty<PolygonSelectionLayerPropertyData>();
+                        if (propertyData.ShapeType == ShapeType.Line)
                             return layerTypeSprites[7];
-                        else if (data.ShapeType == ShapeType.Grid)
+                        else if (propertyData.ShapeType == ShapeType.Grid)
                             return layerTypeSprites[12];
                         return layerTypeSprites[6];
                     }
                 default:
-                    Debug.LogError($"layer type of {layer.GetType()} is not specified");
+                    Debug.LogError($"layer type of {template.GetType()} is not specified");
                     return layerTypeSprites[0];
             }
         }

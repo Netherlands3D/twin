@@ -107,7 +107,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void ProcessPolygonSelection(LayerData layer)
         {
-            PolygonSelectionLayerPropertyData data = layer.GetProperty<PolygonSelectionLayerPropertyData>();
+            PolygonSelectionLayerPropertyData data = layer?.GetProperty<PolygonSelectionLayerPropertyData>();
             //we don't reselect immediately in case of a grid, but we already register the active layer
             if (data?.ShapeType == ShapeType.Grid)
             {
@@ -265,21 +265,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 return;
             }
 
-            //TODO rewrite this to work
-            //_ = new PolygonSelectionLayer(
-            //    "Grid", 
-            //    polygonSelectionVisualisationPrefab.PrefabIdentifier, 
-            //    new List<Vector3>() { bottomLeft, topLeft, topRight, bottomRight }, 
-            //    ShapeType.Grid,
-            //    onSpawn: data =>
-            //    {                   
-            //        if (data is not PolygonSelectionLayer layer) return;
-
-            //        layers.Add(layer.PolygonVisualisation, layer);
-            //        layer.polygonSelected.AddListener(ProcessPolygonSelection);
-            //        gridInput.SetDrawMode(PolygonInput.DrawMode.Edit);
-            //    }
-            //);
+            ILayerBuilder layerBuilder = LayerBuilder.Create()
+                .OfType(polygonSelectionVisualisationPrefab.PrefabIdentifier)
+                .NamedAs("Grid")
+                .AddProperty(new PolygonSelectionLayerPropertyData{ 
+                    ShapeType = ShapeType.Grid,
+                    OriginalPolygon = new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(topLeft), new Coordinate(topRight), new Coordinate(bottomRight) }
+                });
+            App.Layers.Add(layerBuilder, visualisation =>
+            {
+                PolygonSelectionVisualisation polygonVisualisation = visualisation as PolygonSelectionVisualisation;
+                layers.Add(polygonVisualisation, visualisation.LayerData);
+                PolygonSelectionLayerPropertyData data = visualisation.LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+                data.polygonSelected.AddListener(ProcessPolygonSelection);
+                gridInput.SetDrawMode(PolygonInput.DrawMode.Edit);
+                ProcessPolygonSelection(visualisation.LayerData);
+            });
         }
 
         public void SetPolygonInputModeToCreate(bool isCreateMode)
