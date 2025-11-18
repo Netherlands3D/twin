@@ -1,7 +1,9 @@
 using DG.Tweening;
+using GG.Extensions;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Twin.Cameras;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -20,8 +22,6 @@ namespace Netherlands3D.FirstPersonViewer
 
         [Header("Viewer")]
         [SerializeField] private Transform viewerBase;
-        private float xRotation;
-        private float yRotation;
         public CameraConstrain cameraConstrain;
 
         private Quaternion startRotation;
@@ -78,7 +78,6 @@ namespace Netherlands3D.FirstPersonViewer
         //From Setup Viewer
         private void CameraSetupComplete()
         {
-            xRotation = transform.localEulerAngles.x;
             startRotation = transform.rotation;
 
             //Setup events when done with animation.
@@ -153,8 +152,11 @@ namespace Netherlands3D.FirstPersonViewer
         {
             Vector2 mouseLook = pointerDelta * currentsensitivity * Time.deltaTime;
 
-            xRotation = Mathf.Clamp(xRotation - mouseLook.y, -90, 90);
-            yRotation = yRotation + mouseLook.x;
+            float currentPitch = GetCameraRotation().x;
+            if (currentPitch > 180) currentPitch -= 360;
+
+            float xRotation = Mathf.Clamp(currentPitch - mouseLook.y, -90, 90);
+            float yRotation = GetCameraRotation().y + mouseLook.x;
 
             switch (cameraConstrain)
             {
@@ -171,16 +173,8 @@ namespace Netherlands3D.FirstPersonViewer
             }
         }
 
-        public void SetCameraConstrain(CameraConstrain state)
-        {
-            if (state == CameraConstrain.CONTROL_BOTH)
-                yRotation = transform.eulerAngles.y;
-            else
-                yRotation = transform.localEulerAngles.y;
-
-            cameraConstrain = state;
-        }
-
+        public void SetCameraConstrain(CameraConstrain state) => cameraConstrain = state;
+        
         private void SetCameraHeight(float height)
         {
             CameraHeightOffset = height;
@@ -192,34 +186,36 @@ namespace Netherlands3D.FirstPersonViewer
             input.AddInputLockConstrain(this);
             transform.DORotate(Vector3.zero, .4f).SetEase(Ease.InOutCubic);
             viewerBase.DORotate(Vector3.zero, .4f).SetEase(Ease.InOutCubic).OnComplete(() => input.RemoveInputLockConstrain(this));
-
-            xRotation = 0;
-            yRotation = 0;
         }
 
         private void SetCameraFOV(float FOV) => firstPersonViewerCamera.fieldOfView = FOV;
 
-        public Vector3 GetEulerRotation()
+        private Vector3 GetCameraRotation()
         {
             switch (cameraConstrain)
             {
+                default:
                 case CameraConstrain.CONTROL_Y:
+                case CameraConstrain.CONTROL_BOTH:
                     return transform.eulerAngles;
+                case CameraConstrain.CONTROL_NONE:
+                    return transform.localEulerAngles;
+            }
+        }
+
+        public Vector3 GetStateRotation()
+        {
+            switch (cameraConstrain)
+            {
+                default:
+                case CameraConstrain.CONTROL_Y:
                 case CameraConstrain.CONTROL_BOTH:
                     return transform.eulerAngles;
                 case CameraConstrain.CONTROL_NONE:
                     return transform.parent.eulerAngles;
             }
-
-            return default;
         }
 
-        private void ResetToStart()
-        {
-            xRotation = startRotation.x;
-            yRotation = startRotation.y;
-
-            transform.rotation = startRotation;
-        }
+        private void ResetToStart() => transform.rotation = startRotation;
     }
 }
