@@ -1,12 +1,13 @@
 using System;
+using Netherlands3D.Coordinates;
 using Netherlands3D.Tilekit.ExtensionMethods;
-using Netherlands3D.Tilekit.Optimized.TileSets;
+using Netherlands3D.Tilekit.Geometry;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using Debug = System.Diagnostics.Debug;
 
-namespace Netherlands3D.Tilekit.Optimized
+namespace Netherlands3D.Tilekit
 {
     public class TilesSelector
     {
@@ -56,11 +57,22 @@ namespace Netherlands3D.Tilekit.Optimized
             return featheredPlanes;
         }
         
-        // Depth First Search on the nodes
+        // BEAM Search on the nodes (https://en.wikipedia.org/wiki/Beam_search)
+        // TODO: This is not beam - this is DFS. Good enough for initial POCcing
         private NativeHashSet<int> Traverse(Tile tile, NativeHashSet<int> traversedTiles)
         {
-            if (!IsInView(tile)) return traversedTiles;
-            
+            try
+            {
+                // If the tile is not in view - no use to consider it. Just prune the branch from here
+                if (!IsInView(tile)) return traversedTiles;
+            }
+            catch (FailedInViewTest e)
+            {
+                // if we failed to determine whether the tile is in view, we can't do anything about it now, let's continue and log the error.
+                UnityEngine.Debug.LogException(e);
+                return traversedTiles;
+            }
+
             // If the LOD is sufficient, mark the tile for rendering and skip its children.
             if (IsLodSufficient(tile))
             {
@@ -69,44 +81,13 @@ namespace Netherlands3D.Tilekit.Optimized
                 return traversedTiles;
             }
 
-            // if (tile.ImplicitTiling.SubdivisionScheme is not SubdivisionScheme.None)
-            // {
-                // TraverseImplicit(tile, tile, 1, traversedTiles);
-                
-                // return traversedTiles;
-            // }
-            
             // Explicit tilesets: loop through all children
             var children = tile.Children();
             for (var index = 0; index < children.Count; index++)
             {
-                traversedTiles = Traverse(tile.GetChild(children[index]), traversedTiles);
+                var child = tile.GetChild(index);
+                traversedTiles = Traverse(child, traversedTiles);
             }
-
-            return traversedTiles;
-        }
-
-        private NativeHashSet<int> TraverseImplicit(Tile rootTile, Tile tile, int level, NativeHashSet<int> traversedTiles)
-        {
-            // TODO: Add support for an implicit system
-            // Divide BoundingVolume according to type (octree or quadtree)
-            // Half geometric error of parent tile into half for children
-            
-            // implicit traversal is always done from a root tile - consider passing the root tile
-            // along the chain when doing implicit to copy it - and thus introduce a copy constructor?
-            
-            // WARNING:
-            // In order to maintain numerical stability during this subdivision process, the actual bounding volumes
-            // should not be computed progressively by subdividing a non-root tile volume. Instead, the exact bounding
-            // volumes should be computed directly for a given level.
-            
-            // Let the extent of the root bounding volume along one dimension d be (mind, maxd). The number of bounding
-            // volumes along that dimension for a given level is 2level. The size of each bounding volume at this level,
-            // along dimension d, is sized = (maxd - mind) / 2level. The extent of the bounding volume of a child can
-            // then be computed directly as (mind + sized * i, mind + sized * (i + 1)), where i is the index of the
-            // child in dimension d.
-
-            // Tile coords: https://github.com/CesiumGS/3d-tiles/blob/main/specification/ImplicitTiling/README.adoc#tile-coordinates
 
             return traversedTiles;
         }
@@ -116,11 +97,16 @@ namespace Netherlands3D.Tilekit.Optimized
         /// </summary>
         private bool IsInView(Tile tile)
         {
-            // TODO: Can we cache the projection? This is now done for each tile and that will make it heavier
-            return GeometryUtility.TestPlanesAABB(
-                frustumPlanes, 
-                tile.BoundingVolume.ToBounds()
-            );
+            try
+            {
+                var bounds = tile.BoundingVolume.ToBounds().ToLocalCoordinateSystem(CoordinateSystem.RD);
+                return GeometryUtility.TestPlanesAABB(frustumPlanes, bounds);
+            } 
+            catch (Exception e) 
+            {
+                UnityEngine.Debug.LogException(e);
+                throw new FailedInViewTest("Unable to determine whether tile with id " + tile.Index + " is in view, an error occurred");
+            }
         }
 
         private bool IsLodSufficient(Tile tile)
@@ -131,7 +117,7 @@ namespace Netherlands3D.Tilekit.Optimized
         
         private float CalculateTileScreenSpaceError(Tile child)
         {
-            BoundsDouble boundsDouble = child.BoundingVolume.ToBounds();
+            BoundsDouble boundsDouble = child.BoundingVolume.ToBounds().ToLocalCoordinateSystem(CoordinateSystem.RD);
             var cameraPosition = mainCameraTransform.position;
             
             var distanceToCamera = Vector3.Distance(
@@ -144,6 +130,21 @@ namespace Netherlands3D.Tilekit.Optimized
                 : (float)child.GeometricError / distanceToCamera;
 
             return sse;
+        }
+    }
+
+    public class FailedInViewTest : Exception
+    {
+        public FailedInViewTest()
+        {
+        }
+
+        public FailedInViewTest(string message) : base(message)
+        {
+        }
+
+        public FailedInViewTest(string message, Exception innerException) : base(message, innerException)
+        {
         }
     }
 }
