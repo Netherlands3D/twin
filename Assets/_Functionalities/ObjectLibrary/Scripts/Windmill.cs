@@ -65,6 +65,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
                     AxisHeight = defaultHeight,
                     RotorDiameter = defaultDiameter
                 };
+                GetComponent<LayerGameObject>().LayerData.SetProperty<WindmillPropertyData>(propertyData);
             }
 
             AddListeners();

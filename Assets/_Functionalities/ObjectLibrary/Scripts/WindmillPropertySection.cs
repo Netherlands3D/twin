@@ -5,21 +5,18 @@ using UnityEngine.UI;
 namespace Netherlands3D.Functionalities.ObjectLibrary
 {
     [PropertySection(typeof(WindmillPropertyData))]
-    public class WindmillPropertySection : MonoBehaviour
+    public class WindmillPropertySection : PropertySection
     {
-        private Windmill windmill;
         [SerializeField] private Slider axisHeightSlider;
         [SerializeField] private Slider rotorDiameterSlider;
 
-        public Windmill Windmill
+        private WindmillPropertyData propertyData;
+
+        public override void Initialize(LayerPropertyData property)
         {
-            get => windmill;
-            set
-            {
-                windmill = value;
-                axisHeightSlider.value = windmill.AxisHeight;
-                rotorDiameterSlider.value = windmill.RotorDiameter;
-            }
+            propertyData = property as WindmillPropertyData;
+            axisHeightSlider.value = propertyData.AxisHeight;
+            rotorDiameterSlider.value = propertyData.RotorDiameter;
         }
 
         private void OnEnable()
@@ -27,7 +24,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             axisHeightSlider.onValueChanged.AddListener(HandleAxisHeightChange);
             rotorDiameterSlider.onValueChanged.AddListener(HandleRotorDiameterChange);
         }
-        
+
         private void OnDisable()
         {
             axisHeightSlider.onValueChanged.RemoveListener(HandleAxisHeightChange);
@@ -36,12 +33,12 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
 
         private void HandleAxisHeightChange(float newValue)
         {
-            windmill.AxisHeight = newValue;
+            propertyData.AxisHeight = newValue;
         }
 
         private void HandleRotorDiameterChange(float newValue)
         {
-            windmill.RotorDiameter = newValue;
+            propertyData.RotorDiameter = newValue;
         }
     }
 }

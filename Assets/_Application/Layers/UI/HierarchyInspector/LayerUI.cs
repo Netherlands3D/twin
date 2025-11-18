@@ -769,7 +769,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private void RegisterWithPropertiesPanel(Properties.Properties propertiesPanel)
         {
             var hasPropertiesWithPanel = propertiesPanel.HasPropertiesWithPanel(Layer);
-            Debug.Log("layer" + Layer.Name +" has properties: "+ hasPropertiesWithPanel);
             propertyToggle.gameObject.SetActive(hasPropertiesWithPanel);
 
             if (!hasPropertiesWithPanel)

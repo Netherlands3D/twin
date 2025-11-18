@@ -10,9 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 28cced23e91f74fd08028f2f8ae48fad, type: 3}
-  m_Name: PropertyPanelRegistry
+  m_Name: PropertySectionRegistry
   m_EditorClassIdentifier: 
   Entries:
+  - TypeName: Netherlands3D.Functionalities.ObjectLibrary.WindmillPropertyData, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 8974799710454270034, guid: 4d2ed55a8b4bec140a8d4a78fa283812,
+      type: 3}
   - TypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformLayerPropertyData,
       eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     Prefab: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672, type: 3}
