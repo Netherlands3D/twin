@@ -64,7 +64,7 @@ namespace Netherlands3D.FirstPersonViewer
             transform.position = mainCam.transform.position;
             transform.rotation = mainCam.transform.rotation;
 
-            Vector3 forward = mainCam.transform.forward;
+            Vector3 forward = transform.parent.forward;
             forward.y = 0;
             forward.Normalize();
 

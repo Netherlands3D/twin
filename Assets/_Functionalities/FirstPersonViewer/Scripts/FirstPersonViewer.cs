@@ -83,6 +83,7 @@ namespace Netherlands3D.FirstPersonViewer
             yPositionTarget = transform.position.y;
 
             worldTransform.MoveToCoordinate(startPosition);
+            worldTransform.SetRotation(startRotation);
             Input.OnFPVEnter();
             FirstPersonCamera.SetupViewer();
 
