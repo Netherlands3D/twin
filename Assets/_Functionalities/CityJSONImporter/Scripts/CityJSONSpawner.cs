@@ -14,7 +14,7 @@ using UnityEngine;
 namespace Netherlands3D.Functionalities.CityJSON
 {
     [RequireComponent(typeof(CityJSONLayerGameObject))]
-    public class CityJSONSpawner : MonoBehaviour, ILayerWithPropertyData
+    public class CityJSONSpawner : MonoBehaviour, IVisualizationWithPropertyData
     {
         [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
         private CityJSONPropertyData propertyData = new();

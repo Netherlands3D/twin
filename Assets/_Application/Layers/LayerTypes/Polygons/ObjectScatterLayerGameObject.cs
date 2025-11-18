@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     }
 
     [RequireComponent(typeof(ToggleScatterPropertySectionInstantiator))]
-    public class ObjectScatterLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, IPropertySectionInstantiator
+    public class ObjectScatterLayerGameObject : LayerGameObject, IVisualizationWithPropertyData//, ILayerWithPropertyPanels, IPropertySectionInstantiator
     {
         public override BoundingBox Bounds => new (polygonBounds);
         public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
@@ -42,7 +42,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
         public PolygonSelectionLayer polygonLayer;
-        private List<IPropertySectionInstantiator> propertySections = new();
+        // private List<IPropertySectionInstantiator> propertySections = new();
         private List<PolygonVisualisation> visualisations = new();
 
         private Bounds polygonBounds = new();
@@ -52,12 +52,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public LayerPropertyData PropertyData => settings;
 
         private CartesianTileLayerGameObject areaReference;
-
-        protected override void OnLayerInitialize()
-        {
-            toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
-            propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
-        } 
 
         public void Initialize(string previousPrefabId)
         {
@@ -309,11 +303,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 polygonLayer.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
                 polygonLayer.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             }
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return propertySections;
         }
 
         public void AddToProperties(RectTransform properties)

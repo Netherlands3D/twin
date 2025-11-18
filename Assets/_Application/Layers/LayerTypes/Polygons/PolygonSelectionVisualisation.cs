@@ -11,7 +11,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
-    public class PolygonSelectionVisualisation : LayerGameObject, ILayerWithPropertyPanels
+    public class PolygonSelectionVisualisation : LayerGameObject//, ILayerWithPropertyPanels
     {
         public override bool IsMaskable => false;
 
@@ -60,11 +60,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("Projected");
 
             return polygonVisualisation;
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return GetComponents<IPropertySectionInstantiator>().ToList();
         }
 
         protected override void OnDestroy()

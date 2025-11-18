@@ -17,14 +17,14 @@ using UnityEngine;
 namespace Netherlands3D.Functionalities.GLBImporter
 {
     [RequireComponent(typeof(HierarchicalObjectLayerGameObject))]
-    public class GLBSpawner : MonoBehaviour, ILayerWithPropertyData
+    public class GLBSpawner : MonoBehaviour, IVisualizationWithPropertyData
     {
         private GLBPropertyData propertyData = new();
         public LayerPropertyData PropertyData => propertyData;
         private GameObject importedObject;
         private HierarchicalObjectLayerGameObject layerGameObject;
         private MoveCameraToCoordinate cameraMover;
-        private TransformLayerPropertyData TransformPropertyData => (TransformLayerPropertyData)((ILayerWithPropertyData)layerGameObject).PropertyData;
+        private TransformLayerPropertyData TransformPropertyData => (TransformLayerPropertyData)((IVisualizationWithPropertyData)layerGameObject).PropertyData;
         
         [Header("Settings")]
         [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;

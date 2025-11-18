@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Netherlands3D.Functionalities.UrbanReLeaf
 {
     [RequireComponent(typeof(SensorProjectionLayer))]
-    public class SensorLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels
+    public class SensorLayerGameObject : CartesianTileLayerGameObject, IVisualizationWithPropertyData//, ILayerWithPropertyPanels
     {
         private SensorProjectionLayer SensorProjectionLayer { get; set; }
 

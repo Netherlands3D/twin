@@ -13,7 +13,7 @@ using Netherlands3D.Functionalities.ObjectInformation;
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
     [RequireComponent(typeof(Layer))]
-    public class CartesianTileLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
+    public class CartesianTileLayerGameObject : LayerGameObject//, ILayerWithPropertyPanels
     {
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
 
@@ -175,28 +175,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             }
 
         }
-
-        private List<IPropertySectionInstantiator> propertySections;
-
-        protected List<IPropertySectionInstantiator> PropertySections
-        {
-            get
-            {
-                if (propertySections == null)
-                {
-                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
-                }
-
-                return propertySections;
-            }
-            set => propertySections = value;
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return PropertySections;
-        }
-
+        
         public override void ApplyStyling()
         {
             // WMS and other projection layers also use this class as base - but they should not apply this styling

@@ -3,15 +3,15 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.OBJImporter
 {
-    public class MTLImportPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
+    public class MTLImportPropertySectionInstantiator : MonoBehaviour//, IPropertySectionInstantiator todo: delete
     {
         [SerializeField] private MTLImportPropertySection propertySectionPrefab; 
-        public MTLImportPropertySection PropertySection { get; private set; }
+        // public MTLImportPropertySection PropertySection { get; private set; }
 
-        public void AddToProperties(RectTransform properties)
-        {
-            PropertySection = Instantiate(propertySectionPrefab, properties);
-            PropertySection.ObjSpawner = GetComponent<OBJSpawner>();
-        }
+        // public void AddToProperties(RectTransform properties)
+        // {
+        //     PropertySection = Instantiate(propertySectionPrefab, properties);
+        //     PropertySection.ObjSpawner = GetComponent<OBJSpawner>();
+        // }
     }
 }

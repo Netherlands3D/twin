@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.ObjectLibrary
 {
-    public class WindmillPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
+    public class WindmillPropertySectionInstantiator : MonoBehaviour//, IPropertySectionInstantiator
     {
         [SerializeField] private WindmillPropertySection propertySectionPrefab;
 
-        public void AddToProperties(RectTransform properties)
-        {
-            if (!propertySectionPrefab) return;
-
-            var settings = Instantiate(propertySectionPrefab, properties);
-            settings.Windmill = GetComponent<Windmill>();
-        }
+        // public void AddToProperties(RectTransform properties)
+        // {
+        //     if (!propertySectionPrefab) return;
+        //
+        //     var settings = Instantiate(propertySectionPrefab, properties);
+        //     settings.Windmill = GetComponent<Windmill>();
+        // }
     }
 }

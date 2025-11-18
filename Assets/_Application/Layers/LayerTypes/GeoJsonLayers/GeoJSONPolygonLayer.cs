@@ -55,27 +55,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 LayerData.OnStylingApplied.Invoke();
             }
         }
-        
-        private List<IPropertySectionInstantiator> propertySections;
-
-        protected List<IPropertySectionInstantiator> PropertySections
-        {
-            get
-            {
-                if (propertySections == null)
-                {
-                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
-                }
-
-                return propertySections;
-            }
-            set => propertySections = value;
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return PropertySections;
-        }
 
         public List<Mesh> GetMeshData(Feature feature)
         {

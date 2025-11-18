@@ -18,7 +18,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [RequireComponent(typeof(ICredentialHandler))]
-    public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
+    public class GeoJsonLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
     {
         public override BoundingBox Bounds
         {

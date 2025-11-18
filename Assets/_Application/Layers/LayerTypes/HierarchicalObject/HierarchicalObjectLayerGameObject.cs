@@ -21,7 +21,7 @@ using UnityEngine.EventSystems;
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
     [RequireComponent(typeof(WorldTransform))]
-    public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, ILayerWithPropertyPanels, ILayerWithPropertyData
+    public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, IVisualizationWithPropertyData//, ILayerWithPropertyPanels
     {
         public override BoundingBox Bounds => CalculateWorldBoundsFromRenderers();
         public bool DebugBoundingBox = false;
@@ -51,14 +51,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
-        private List<IPropertySectionInstantiator> propertySections = new();
+        // private List<IPropertySectionInstantiator> propertySections = new();
         protected TransformLayerPropertyData TransformPropertyData => LayerData.GetProperty<TransformLayerPropertyData>();
         private Coordinate previousCoordinate;
         private Quaternion previousRotation;
         private Vector3 previousScale;
         public WorldTransform WorldTransform { get; private set; }
 
-        LayerPropertyData ILayerWithPropertyData.PropertyData => TransformPropertyData;
+        LayerPropertyData IVisualizationWithPropertyData.PropertyData => TransformPropertyData;
         public bool TransformIsSetFromProperty { get; private set; } = false;
 
         protected override void OnLayerInitialize()
@@ -68,7 +68,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
             InitializePropertyData();
 
-            propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
+            // propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
         }
 
@@ -319,10 +319,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
         }
 
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return propertySections;
-        }
+        // public List<IPropertySectionInstantiator> GetPropertySections()
+        // {
+        //     return propertySections;
+        // }
 
         public override void OnProxyTransformParentChanged()
         {

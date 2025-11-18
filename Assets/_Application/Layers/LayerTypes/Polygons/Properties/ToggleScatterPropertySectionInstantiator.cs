@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 {
-    public class ToggleScatterPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
+    public class ToggleScatterPropertySectionInstantiator : MonoBehaviour//, IPropertySectionInstantiator todo: delete
     {
         public ToggleScatterPropertySection PropertySection { get; private set; }
 
-        public void AddToProperties(RectTransform properties)
-        {
-            if (!ScatterMap.Instance.ToggleScatterPropertySection) return;
-
-            PropertySection = Instantiate(ScatterMap.Instance.ToggleScatterPropertySection, properties);
-            PropertySection.LayerGameObject = GetComponent<LayerGameObject>();
-        }
+        // public void AddToProperties(RectTransform properties)
+        // {
+        //     if (!ScatterMap.Instance.ToggleScatterPropertySection) return;
+        //
+        //     PropertySection = Instantiate(ScatterMap.Instance.ToggleScatterPropertySection, properties);
+        //     PropertySection.LayerGameObject = GetComponent<LayerGameObject>();
+        // }
     }
 }

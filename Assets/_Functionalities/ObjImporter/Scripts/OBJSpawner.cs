@@ -15,7 +15,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Functionalities.OBJImporter
 {
     [RequireComponent(typeof(HierarchicalObjectLayerGameObject))]
-    public class OBJSpawner : MonoBehaviour, ILayerWithPropertyData
+    public class OBJSpawner : MonoBehaviour, IVisualizationWithPropertyData
     {
         [Header("Required input")]
         [SerializeField] private Material baseMaterial;
@@ -38,7 +38,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
         public UnityEvent<bool> MtlImportSuccess = new();
         private HierarchicalObjectLayerGameObject layerGameObject;
         private MoveCameraToCoordinate cameraMover;
-        private TransformLayerPropertyData TransformPropertyData => (TransformLayerPropertyData)((ILayerWithPropertyData)layerGameObject).PropertyData;
+        private TransformLayerPropertyData TransformPropertyData => (TransformLayerPropertyData)((IVisualizationWithPropertyData)layerGameObject).PropertyData;
 
         private void Awake()
         {

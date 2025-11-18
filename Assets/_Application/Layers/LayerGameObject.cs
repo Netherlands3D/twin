@@ -184,7 +184,7 @@ namespace Netherlands3D.Twin.Layers
 
         private void LoadPropertiesInVisualisations()
         {
-            foreach (var visualisation in GetComponents<ILayerWithPropertyData>())
+            foreach (var visualisation in GetComponents<IVisualizationWithPropertyData>())
             {
                 visualisation.LoadProperties(LayerData.LayerProperties);
             }

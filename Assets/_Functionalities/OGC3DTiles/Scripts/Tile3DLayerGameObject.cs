@@ -18,7 +18,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 {
     [RequireComponent(typeof(ReadSubtree))]
     [RequireComponent(typeof(Read3DTileset))]
-    public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels
+    public class Tile3DLayerGameObject : LayerGameObject, IVisualizationWithPropertyData//, ILayerWithPropertyPanels
     {
         public override BoundingBox Bounds => TileSet.root != null ? new BoundingBox(TileSet.root.BottomLeft, TileSet.root.TopRight) : null;
         public Tile3DLayerPropertyData PropertyData => tile3DPropertyData;
@@ -26,11 +26,8 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         private Read3DTileset tileSet;
         private Read3DTileset TileSet => GetAndCacheComponent(ref tileSet);
         
-        [SerializeField] private bool usePropertySections = true;
-        private List<IPropertySectionInstantiator> propertySections = new();
-
         private Tile3DLayerPropertyData tile3DPropertyData => LayerData.GetProperty<Tile3DLayerPropertyData>();
-        LayerPropertyData ILayerWithPropertyData.PropertyData => tile3DPropertyData;
+        LayerPropertyData IVisualizationWithPropertyData.PropertyData => tile3DPropertyData;
 
         [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
         public UnityEvent<Uri> OnURLChanged => tile3DPropertyData.OnUrlChanged;
@@ -63,10 +60,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             // listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
             tile3DPropertyData.OnUrlChanged.AddListener(UpdateURL);
             tile3DPropertyData.OnCRSChanged.AddListener(UpdateCRS);
-            
-            propertySections = usePropertySections 
-                ? GetComponents<IPropertySectionInstantiator>().ToList() 
-                : new();
         }
 
         private void HandleCredentials(Uri uri, StoredAuthorization auth)
@@ -178,11 +171,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             }
 
             UnsupportedExtensionsMessage.Invoke(message);
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return propertySections;
         }
 
         public void ClearCredentials()

@@ -12,7 +12,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
-    public class CartesianTileSubObjectColorLayerGameObject : LayerGameObject, ILayerWithPropertyData
+    public class CartesianTileSubObjectColorLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
     {
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
         public int PriorityIndex

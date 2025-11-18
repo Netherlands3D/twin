@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Netherlands3D.Functionalities.ObjectLibrary
 {
     [RequireComponent(typeof(LayerGameObject))]
-    public class Windmill : MonoBehaviour, ILayerWithPropertyData
+    public class Windmill : MonoBehaviour, IVisualizationWithPropertyData
     {
         public float RotorDiameter
         {

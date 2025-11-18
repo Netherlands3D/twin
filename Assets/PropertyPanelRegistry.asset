@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28cced23e91f74fd08028f2f8ae48fad, type: 3}
+  m_Name: PropertyPanelRegistry
+  m_EditorClassIdentifier: 
+  Entries:
+  - TypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformLayerPropertyData,
+      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672, type: 3}
+  - TypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformLayerPropertyData,
+      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 796619874070242168, guid: cab41e04a3b554cd69a854280daaaa2d, type: 3}

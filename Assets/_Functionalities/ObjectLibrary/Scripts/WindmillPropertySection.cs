@@ -1,8 +1,10 @@
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Functionalities.ObjectLibrary
 {
+    [PropertySection(typeof(WindmillPropertyData))]
     public class WindmillPropertySection : MonoBehaviour
     {
         private Windmill windmill;

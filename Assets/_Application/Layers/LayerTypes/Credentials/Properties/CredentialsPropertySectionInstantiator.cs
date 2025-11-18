@@ -4,20 +4,20 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
-    public class CredentialsPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
+    public class CredentialsPropertySectionInstantiator : MonoBehaviour//, IPropertySectionInstantiator todo: delete
     {
         [SerializeField] private GameObject inputPropertySectionPrefab;
 
-        public void AddToProperties(RectTransform properties)
-        {
-            if (!inputPropertySectionPrefab) return;
-
-            var settings = Instantiate(inputPropertySectionPrefab, properties);
-            var handler = GetComponent<ICredentialHandler>();
-            foreach (var credentialInterface in settings.GetComponentsInChildren<ICredentialsPropertySection>(true))
-            {
-                credentialInterface.Handler = handler;
-            }
-        }
+        // public void AddToProperties(RectTransform properties)
+        // {
+        //     if (!inputPropertySectionPrefab) return;
+        //
+        //     var settings = Instantiate(inputPropertySectionPrefab, properties);
+        //     var handler = GetComponent<ICredentialHandler>();
+        //     foreach (var credentialInterface in settings.GetComponentsInChildren<ICredentialsPropertySection>(true))
+        //     {
+        //         credentialInterface.Handler = handler;
+        //     }
+        // }
     }
 }

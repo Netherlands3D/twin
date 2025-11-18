@@ -3,15 +3,13 @@ using System.Globalization;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI;
-using RuntimeHandle;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
 {
-    public class TransformPropertySection : AbstractHierarchicalObjectPropertySection
+    [PropertySection(typeof(TransformLayerPropertyData))]
+    public class TransformPropertySection : PropertySection
     {
-        private TransformLayerPropertyData transformPropertyData;
-        private HierarchicalObjectLayerGameObject layerGameObject;
 
         [Serializable]
         private class SetOfXYZ
@@ -38,47 +36,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
         [SerializeField] private int scaleDecimals = 0;
         [SerializeField] private string scaleUnitCharacter = "%";
 
+        private TransformLayerPropertyData transformPropertyData;
         private string formatString;
         
         private const string unparseableDecimalSeparator = ",";
         private const string parseableDecimalSeparator = ".";
-        
-        public override HierarchicalObjectLayerGameObject LayerGameObject //todo: possibly remove this and replace it with a direct reference to the TransformLayerProperty
-        {
-            get => layerGameObject;
-            set
-            {
-                layerGameObject = value;
-                var layerWithPropertyData = layerGameObject as ILayerWithPropertyData;
-                TransformPropertyData = layerWithPropertyData.PropertyData as TransformLayerPropertyData;
-            }
-        }
-
-        private TransformLayerPropertyData TransformPropertyData
-        {
-            get => transformPropertyData;
-            set
-            {
-                if (transformPropertyData != null)
-                {
-                    TransformPropertyData.OnPositionChanged.RemoveListener(UpdatePositionFields);
-                    TransformPropertyData.OnRotationChanged.RemoveListener(UpdateRotationFields);
-                    TransformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);
-                }
-
-                transformPropertyData = value;
-
-                transformPropertyData.OnPositionChanged.AddListener(UpdatePositionFields);
-                transformPropertyData.OnRotationChanged.AddListener(UpdateRotationFields);
-                transformPropertyData.OnScaleChanged.AddListener(UpdateScalingFields);
-
-                UpdatePositionFields(transformPropertyData.Position);
-                UpdateRotationFields(transformPropertyData.EulerRotation);
-                UpdateScalingFields(transformPropertyData.LocalScale);
-
-                SetTransformLocks();
-            }
-        }
 
         private void Awake()
         {
@@ -110,37 +72,60 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             scale.yField.onEndEdit.RemoveListener(OnScaleChanged);
             scale.zField.onEndEdit.RemoveListener(OnScaleChanged);
 
-            TransformPropertyData.OnPositionChanged.RemoveListener(UpdatePositionFields);
-            TransformPropertyData.OnRotationChanged.RemoveListener(UpdateRotationFields);
-            TransformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);
+            transformPropertyData.OnPositionChanged.RemoveListener(UpdatePositionFields);
+            transformPropertyData.OnRotationChanged.RemoveListener(UpdateRotationFields);
+            transformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);
+        }
+        
+        public override void Initialize(LayerPropertyData property)
+        {
+            if (transformPropertyData != null)
+            {
+                transformPropertyData.OnPositionChanged.RemoveListener(UpdatePositionFields);
+                transformPropertyData.OnRotationChanged.RemoveListener(UpdateRotationFields);
+                transformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);
+            }
+
+            transformPropertyData = property as TransformLayerPropertyData;
+
+            transformPropertyData.OnPositionChanged.AddListener(UpdatePositionFields);
+            transformPropertyData.OnRotationChanged.AddListener(UpdateRotationFields);
+            transformPropertyData.OnScaleChanged.AddListener(UpdateScalingFields);
+
+            UpdatePositionFields(transformPropertyData.Position);
+            UpdateRotationFields(transformPropertyData.EulerRotation);
+            UpdateScalingFields(transformPropertyData.LocalScale);
+
+            SetTransformLocks();
         }
 
         private void SetTransformLocks()
         {
-            if (layerGameObject.TryGetComponent(out TransformAxes transformLocks))
-            {
-                position.xField.Interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.X);
-                position.yField.Interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.Z);
-                position.zField.Interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.Y);
-                rotation.xField.Interactable = !transformLocks.RotationLocked && transformLocks.rotationAxes.HasFlag(HandleAxes.X);
-                rotation.yField.Interactable = !transformLocks.RotationLocked && transformLocks.rotationAxes.HasFlag(HandleAxes.Y);
-                rotation.zField.Interactable = !transformLocks.RotationLocked && transformLocks.rotationAxes.HasFlag(HandleAxes.Z);
-                scale.xField.Interactable = !transformLocks.ScaleLocked && transformLocks.scaleAxes.HasFlag(HandleAxes.X);
-                scale.yField.Interactable = !transformLocks.ScaleLocked && transformLocks.scaleAxes.HasFlag(HandleAxes.Y);
-                scale.zField.Interactable = !transformLocks.ScaleLocked && transformLocks.scaleAxes.HasFlag(HandleAxes.Z);
-            }
-            else
-            {
-                position.xField.Interactable = true;
-                position.yField.Interactable = true;
-                position.zField.Interactable = true;
-                rotation.xField.Interactable = true;
-                rotation.yField.Interactable = true;
-                rotation.zField.Interactable = true;
-                scale.xField.Interactable = true;
-                scale.yField.Interactable = true;
-                scale.zField.Interactable = true;
-            }
+                Debug.LogError("todo: move locks to property data");
+            // if (layerGameObject.TryGetComponent(out TransformAxes transformLocks))
+            // {
+            //     position.xField.Interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.X);
+            //     position.yField.Interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.Z);
+            //     position.zField.Interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.Y);
+            //     rotation.xField.Interactable = !transformLocks.RotationLocked && transformLocks.rotationAxes.HasFlag(HandleAxes.X);
+            //     rotation.yField.Interactable = !transformLocks.RotationLocked && transformLocks.rotationAxes.HasFlag(HandleAxes.Y);
+            //     rotation.zField.Interactable = !transformLocks.RotationLocked && transformLocks.rotationAxes.HasFlag(HandleAxes.Z);
+            //     scale.xField.Interactable = !transformLocks.ScaleLocked && transformLocks.scaleAxes.HasFlag(HandleAxes.X);
+            //     scale.yField.Interactable = !transformLocks.ScaleLocked && transformLocks.scaleAxes.HasFlag(HandleAxes.Y);
+            //     scale.zField.Interactable = !transformLocks.ScaleLocked && transformLocks.scaleAxes.HasFlag(HandleAxes.Z);
+            // }
+            // else
+            // {
+            //     position.xField.Interactable = true;
+            //     position.yField.Interactable = true;
+            //     position.zField.Interactable = true;
+            //     rotation.xField.Interactable = true;
+            //     rotation.yField.Interactable = true;
+            //     rotation.zField.Interactable = true;
+            //     scale.xField.Interactable = true;
+            //     scale.yField.Interactable = true;
+            //     scale.zField.Interactable = true;
+            // }
         }
 
         public void SetPositionX(int value)
@@ -223,7 +208,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
 
 
             var rdCoordinate = new Coordinate(CoordinateSystem.RDNAP, x, y, z);
-            TransformPropertyData.Position = rdCoordinate;
+            transformPropertyData.Position = rdCoordinate;
         }
 
         //the param is doing nothing to match signature
@@ -250,7 +235,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             float.TryParse(yText, NumberStyles.Float, numberFormat, out var y);
             float.TryParse(zText, NumberStyles.Float, numberFormat, out var z);
 
-            TransformPropertyData.EulerRotation = new Vector3(x, y, z);
+            transformPropertyData.EulerRotation = new Vector3(x, y, z);
         }
 
         //the param is doing nothing to match signature
@@ -277,7 +262,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             float.TryParse(yText, NumberStyles.Float, numberFormat, out var y);
             float.TryParse(zText, NumberStyles.Float, numberFormat, out var z);
 
-            TransformPropertyData.LocalScale = new Vector3(x / scaleMultiplier, y / scaleMultiplier, z / scaleMultiplier);
+            transformPropertyData.LocalScale = new Vector3(x / scaleMultiplier, y / scaleMultiplier, z / scaleMultiplier);
         }
 
         private void UpdatePositionFields(Coordinate coordinate)
@@ -315,5 +300,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             string zeros = new string('0', decimals);
             return $"0.{zeros}";
         }
+
     }
 }
