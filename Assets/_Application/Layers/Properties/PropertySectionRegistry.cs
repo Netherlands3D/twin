@@ -10,12 +10,6 @@ namespace Netherlands3D.Twin.Layers.Properties
     {
         public string TypeName;
         public PropertySection Prefab;
-
-        // public PropertyPanelEntry(string typeName, GameObject prefab)
-        // {
-        //     TypeName = typeName;
-        //     Prefab = prefab;
-        // }
     }
 
     [CreateAssetMenu(fileName = "PropertyPanelRegistry", menuName = "Netherlands3D/PropertyPanelRegistry", order = 0)]
@@ -51,5 +45,6 @@ namespace Netherlands3D.Twin.Layers.Properties
             var entry = Entries.FirstOrDefault(e => e.TypeName == type.AssemblyQualifiedName);
             return entry.Prefab;
         }
+        
     }
 }
