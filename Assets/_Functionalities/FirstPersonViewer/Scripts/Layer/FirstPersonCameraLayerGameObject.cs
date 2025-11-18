@@ -11,6 +11,7 @@ namespace Netherlands3D.FirstPersonViewer.Layer
         {
             FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer>();
             fpv.transform.position = transform.position;
+            fpv.transform.rotation = transform.rotation;
             fpv.OnViewerEntered?.Invoke();
         }
     }

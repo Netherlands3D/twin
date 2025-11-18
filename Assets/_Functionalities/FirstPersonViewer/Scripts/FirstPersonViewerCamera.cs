@@ -80,6 +80,7 @@ namespace Netherlands3D.FirstPersonViewer
         {
             xRotation = transform.localEulerAngles.x;
             startRotation = transform.rotation;
+            mainCam.transform.position = transform.position + Vector3.up * cameraHeightAboveGround;
 
             //Setup events when done with animation.
             fovSetting.OnValueChanged.AddListener(SetCameraFOV);
