@@ -84,6 +84,10 @@ namespace Netherlands3D.FirstPersonViewer
             Input.OnFPVEnter();
             FirstPersonCamera.SetupViewer();
 
+            //Remove old visual (So no weird transition will happen)
+            fsm.SwitchState(null);
+            SetMovementVisual(null);
+
             ServiceLocator.GetService<CameraSwitcher>().SwitchCamera(this);
         }
 
@@ -153,14 +157,11 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetMovementModus(ViewerState viewerState)
         {
+
+            SetMovementVisual(viewerState.viewPrefab);
+
             if (viewObject != null)
             {
-                Destroy(viewObject);
-            }
-
-            if (viewerState.viewPrefab != null)
-            {
-                viewObject = Instantiate(viewerState.viewPrefab, transform);
                 MovementVisualController movementVisualController = viewObject.GetComponent<MovementVisualController>();
                 viewerState.movementVisualController = movementVisualController;
             }
@@ -168,6 +169,16 @@ namespace Netherlands3D.FirstPersonViewer
             FirstPersonCamera.SetCameraConstrain(viewerState.CameraConstrain);
 
             fsm.SwitchState(viewerState);
+        }
+
+        private void SetMovementVisual(GameObject visualObject)
+        {
+            if(viewObject != null) Destroy(viewObject);
+
+            if (visualObject != null)
+            {
+                viewObject = Instantiate(visualObject, transform);
+            }
         }
 
         public void SetupState(Vector3 cameraPosition, Vector3 playerEuler, Vector3 cameraEuler, float cameraHeightOffset)

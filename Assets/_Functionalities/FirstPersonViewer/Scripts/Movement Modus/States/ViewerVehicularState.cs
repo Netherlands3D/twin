@@ -33,6 +33,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             Vector2 moveInput = GetMoveInput();
             MoveVehicle(moveInput);
+            if (input.SpaceAction.IsPressed())  Handbrake();
 
             viewer.SnapToGround();
 
@@ -79,6 +80,12 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
                 currentSpeedLabel.Value = speedInKilometers.ToString();
             }
+        }
+
+        private void Handbrake()
+        {
+            float handbrakeForce = 5;
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0, decelerationSetting.Value * handbrakeForce * Time.deltaTime);
         }
 
         private void ResetToGround()
