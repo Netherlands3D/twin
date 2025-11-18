@@ -53,6 +53,18 @@ namespace Netherlands3D.Twin.Layers
             {NameOfDefaultStyle, LayerStyle.CreateDefaultStyle()}
         };
 
+#if UNITY_EDITOR
+        [SerializeField]
+        private List<LayerStyle> styles_editor = new(); // always serialized
+        public List<LayerStyle> GetEditorStyles()
+        {
+            if (styles_editor == null || styles_editor.Count == 0)
+            {
+                styles_editor = styles?.Values.ToList() ?? new() { LayerStyle.CreateDefaultStyle() };
+            }
+            return styles_editor;
+        }
+#endif
         [JsonIgnore] private bool hasValidCredentials = true; //assume credentials are not needed. not serialized because we don't save credentials
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
         [JsonIgnore] public LayerData ParentLayer => parent;

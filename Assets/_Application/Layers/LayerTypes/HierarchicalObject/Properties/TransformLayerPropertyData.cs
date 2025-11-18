@@ -13,6 +13,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
         [DataMember] private Coordinate position;
         [DataMember] private Vector3 eulerRotation;
         [DataMember] private Vector3 localScale;
+        [DataMember] private string scaleUnitCharacter;
 
         [JsonIgnore]
         public Coordinate Position
@@ -53,16 +54,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             }
         }
 
+        [JsonIgnore]
+        public string ScaleUnitCharacter => scaleUnitCharacter;
+
         [JsonIgnore] public readonly UnityEvent<Coordinate> OnPositionChanged = new();
         [JsonIgnore] public readonly UnityEvent<Vector3> OnRotationChanged = new();
         [JsonIgnore] public readonly UnityEvent<Vector3> OnScaleChanged = new();
         
         [JsonConstructor]
-        public TransformLayerPropertyData(Coordinate position, Vector3 eulerRotation, Vector3 localScale)
+        public TransformLayerPropertyData(Coordinate position, Vector3 eulerRotation, Vector3 localScale, string scaleUnitCharacter = "%")
         {
             this.position = position.Convert(CoordinateSystems.connectedCoordinateSystem);
             this.eulerRotation = eulerRotation;
             this.localScale = localScale;
+            this.scaleUnitCharacter = scaleUnitCharacter;
         }
     }
 }

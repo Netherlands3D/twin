@@ -34,7 +34,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
         [Header("scale settings")]
         [SerializeField] private float scaleMultiplier = 100f;
         [SerializeField] private int scaleDecimals = 0;
-        [SerializeField] private string scaleUnitCharacter = "%";
 
         private TransformLayerPropertyData transformPropertyData;
         private string formatString;
@@ -249,13 +248,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             //remove the unit character and set the correct decimal separator
             var xText = scale.xField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
             var yText = scale.yField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
-            var zText = scale.zField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);
+            var zText = scale.zField.Text.Replace(unparseableDecimalSeparator, parseableDecimalSeparator);            
 
-            if (scaleUnitCharacter.Length > 0)
+            if (transformPropertyData.ScaleUnitCharacter.Length > 0)
             {
-                xText = xText.Replace(scaleUnitCharacter, string.Empty);
-                yText = yText.Replace(scaleUnitCharacter, string.Empty);
-                zText = zText.Replace(scaleUnitCharacter, string.Empty);
+                xText = xText.Replace(transformPropertyData.ScaleUnitCharacter, string.Empty);
+                yText = yText.Replace(transformPropertyData.ScaleUnitCharacter, string.Empty);
+                zText = zText.Replace(transformPropertyData.ScaleUnitCharacter, string.Empty);
             }
             
             float.TryParse(xText, NumberStyles.Float, numberFormat, out var x);
@@ -287,9 +286,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             var yPercentage = localScale.y * scaleMultiplier;
             var zPercentage = localScale.z * scaleMultiplier;
 
-            scale.xField.SetTextWithoutNotify($"{xPercentage.ToString(formatString, CultureInfo.InvariantCulture)}{scaleUnitCharacter}");
-            scale.yField.SetTextWithoutNotify($"{yPercentage.ToString(formatString, CultureInfo.InvariantCulture)}{scaleUnitCharacter}");
-            scale.zField.SetTextWithoutNotify($"{zPercentage.ToString(formatString, CultureInfo.InvariantCulture)}{scaleUnitCharacter}");
+            scale.xField.SetTextWithoutNotify($"{xPercentage.ToString(formatString, CultureInfo.InvariantCulture)}{transformPropertyData.ScaleUnitCharacter}");
+            scale.yField.SetTextWithoutNotify($"{yPercentage.ToString(formatString, CultureInfo.InvariantCulture)}{transformPropertyData.ScaleUnitCharacter}");
+            scale.zField.SetTextWithoutNotify($"{zPercentage.ToString(formatString, CultureInfo.InvariantCulture)}{transformPropertyData.ScaleUnitCharacter}");
         }
 
         private static string GetFormatString(int decimals)

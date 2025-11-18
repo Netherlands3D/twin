@@ -58,6 +58,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private Vector3 previousScale;
         public WorldTransform WorldTransform { get; private set; }
 
+        [SerializeField] private string scaleUnitCharacter = "%";
+
         LayerPropertyData IVisualizationWithPropertyData.PropertyData => TransformPropertyData;
         public bool TransformIsSetFromProperty { get; private set; } = false;
 
@@ -80,7 +82,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                     new TransformLayerPropertyData(
                         new Coordinate(transform.position),
                         transform.eulerAngles,
-                        transform.localScale
+                        transform.localScale,
+                        scaleUnitCharacter
                     )
                 );
             }
