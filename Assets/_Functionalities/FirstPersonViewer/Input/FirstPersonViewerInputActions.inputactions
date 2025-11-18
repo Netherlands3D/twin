@@ -381,7 +381,18 @@
                 {
                     "name": "",
                     "id": "69ec00dc-154d-4540-9355-66666dab4e2b",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f1b90454-ce6b-4d38-8a43-f143a250571e",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
@@ -403,7 +414,7 @@
                 {
                     "name": "",
                     "id": "e6f802bf-e4a4-468d-924c-28371ff9ed17",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
@@ -568,10 +579,10 @@
                 {
                     "name": "",
                     "id": "b9ff29b2-4cc6-4373-ba55-9b7f0a457d30",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Gamepad>/dpad/down",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad",
+                    "groups": ";Gamepad;Keyboard & Mouse",
                     "action": "HideUI",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -590,7 +601,7 @@
                 {
                     "name": "",
                     "id": "60a23b6c-b1bb-4fc7-90fd-683a625a7b41",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
@@ -615,7 +626,7 @@
                     "path": "<Gamepad>/dpad/up",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Gamepad",
                     "action": "Reset",
                     "isComposite": false,
                     "isPartOfComposite": false
