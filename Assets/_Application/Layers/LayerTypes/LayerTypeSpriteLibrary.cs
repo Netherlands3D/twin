@@ -6,6 +6,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.FirstPersonViewer.Layer;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -57,6 +58,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return layerTypeSprites[10];
                 case CameraPositionLayerGameObject _:
                     return layerTypeSprites[11];
+                case FirstPersonCameraLayerGameObject _:
+                    return layerTypeSprites[13];
                 case HierarchicalObjectLayerGameObject _:
                     return layerTypeSprites[3];
                 case ObjectScatterLayerGameObject _:

@@ -3,13 +3,17 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Tools;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.Layer
 {
     public class FirstPersonCameraLayerGameObject : HierarchicalObjectLayerGameObject
     {
+        [SerializeField] private Tool layerTool;
         private FirstPersonLayerPropertyData firstPersonPropertyData => LayerData.GetProperty<FirstPersonLayerPropertyData>();
+
+        public override bool IsMaskable => false;
 
         protected override void InitializePropertyData()
         {
@@ -26,6 +30,8 @@ namespace Netherlands3D.FirstPersonViewer.Layer
 
         protected override void OnDoubleClick(LayerData layer)
         {
+            layerTool.CloseInspector();
+
             FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer>();
             fpv.transform.position = transform.position;
             fpv.transform.rotation = transform.rotation;
