@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 121414271217785244}
   - component: {fileID: 8704022603555858576}
   - component: {fileID: -5293961980780918241}
-  - component: {fileID: 5255875011013651193}
   - component: {fileID: -6061652039040134668}
   m_Layer: 0
   m_Name: Canadapopulier
@@ -92,18 +91,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   scaleUnitCharacter: m
---- !u!114 &5255875011013651193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4573407623913318474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ffc363b02a0945c7ad8cdc45e55f5ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-6061652039040134668
 MonoBehaviour:
   m_ObjectHideFlags: 0

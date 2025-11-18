@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 3368845975537227529}
   - component: {fileID: -2556228473040769515}
-  - component: {fileID: -3612406555919901277}
   - component: {fileID: -1071879601358292985}
   - component: {fileID: 5954464799649402090}
+  - component: {fileID: 6375688278721494907}
   m_Layer: 0
-  m_Name: NAP vlak
+  m_Name: NAP Vlak
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,30 +48,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92795e992dcbe4b3c8ada171c5551674, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabIdentifier: 
+  prefabIdentifier: f7b3d6632f1e47b4f902509046b93e7a
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
     m_PersistentCalls:
       m_Calls: []
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
+  DebugBoundingBox: 0
   objectCreated:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &-3612406555919901277
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2705356315501710771}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8cceefce4ff4530b78245056d126688, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672,
-    type: 3}
+  scaleUnitCharacter: '%'
 --- !u!114 &-1071879601358292985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,6 +100,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraToFollow: {fileID: 0}
   centerOfViewport: 1
+--- !u!114 &6375688278721494907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2705356315501710771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldTransformShifter: {fileID: 0}
+  onPreShift:
+    m_PersistentCalls:
+      m_Calls: []
+  onPostShift:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5340316855501384213
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,6 +177,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

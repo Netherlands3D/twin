@@ -17,9 +17,10 @@ MonoBehaviour:
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     Prefab: {fileID: 8974799710454270034, guid: 4d2ed55a8b4bec140a8d4a78fa283812,
       type: 3}
+  - TypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.ToggleScatterPropertyData,
+      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 3812163125236446964, guid: 78bb15813f932433888f9c5536c7f12a,
+      type: 3}
   - TypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformLayerPropertyData,
       eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     Prefab: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672, type: 3}
-  - TypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformLayerPropertyData,
-      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Prefab: {fileID: 796619874070242168, guid: cab41e04a3b554cd69a854280daaaa2d, type: 3}
