@@ -81,9 +81,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 GeometryColorizer.RecalculatePrioritizedColors();
         }
 
-        public override void OnProxyTransformParentChanged()
+        public override void OnLayerDataParentChanged()
         {
-            base.OnProxyTransformParentChanged();
+            base.OnLayerDataParentChanged();
             RecalculateColorPriorities();
         }
 

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.UI;
@@ -17,7 +18,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public override bool IsMaskable => false;
         private TextPopout annotation;
-        private AnnotationPropertyData annotationPropertyData => (AnnotationPropertyData)TransformPropertyData;
+        private AnnotationPropertyData annotationPropertyData => (AnnotationPropertyData)LayerData.GetProperty<TransformLayerPropertyData>(); // todo: this should not be a TransformPropertyData inheritance
         private enum EditMode
         {
             Disabled, // Neither move the annotation, nor edit the text

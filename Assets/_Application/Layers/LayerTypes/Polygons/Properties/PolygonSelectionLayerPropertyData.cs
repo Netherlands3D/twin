@@ -18,7 +18,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [DataMember] private bool invertMask;
         [DataMember] private int maskBitIndex = -1;
 
-        [DataMember] public List<Coordinate> originalPolygon { get; private set; }        
+        [DataMember] private List<Coordinate> originalPolygon;  
         [DataMember] private ShapeType shapeType;
 
         [JsonIgnore] public readonly UnityEvent<float> OnLineWidthChanged = new();

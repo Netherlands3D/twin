@@ -189,7 +189,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void UpdatePolygon()
         {
             PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            SetShape(data.originalPolygon);
+            SetShape(data.OriginalPolygon);
         }
 
         private void UpdatePolygonVisualisation()

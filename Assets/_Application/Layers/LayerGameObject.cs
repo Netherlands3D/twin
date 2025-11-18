@@ -110,15 +110,17 @@ namespace Netherlands3D.Twin.Layers
             // Event invocation is separate from template method on purpose to ensure child classes complete their
             // readiness before external classes get to act - it also prevents forgetting calling the base method
             // when overriding OnLayerReady
+            OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
+            LayerData.OnStylingApplied.Invoke(); //apply the styling once at initialization
+            
             onLayerReady.Invoke();
-            InitializeVisualisation();
         }
 
         private LayerGameObject Object() => this;
 
         protected virtual void RegisterEventListeners()
         {
-            layerData.ParentChanged.AddListener(OnProxyTransformParentChanged);
+            layerData.ParentChanged.AddListener(OnLayerDataParentChanged);
             layerData.ChildrenChanged.AddListener(OnProxyTransformChildrenChanged);
             layerData.ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
             layerData.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
@@ -133,7 +135,7 @@ namespace Netherlands3D.Twin.Layers
 
         protected virtual void UnregisterEventListeners()
         {
-            layerData.ParentChanged.RemoveListener(OnProxyTransformParentChanged);
+            layerData.ParentChanged.RemoveListener(OnLayerDataParentChanged);
             layerData.ChildrenChanged.RemoveListener(OnProxyTransformChildrenChanged);
             layerData.ParentOrSiblingIndexChanged.RemoveListener(OnSiblingIndexOrParentChanged);
             layerData.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
@@ -172,16 +174,6 @@ namespace Netherlands3D.Twin.Layers
         {
             // Intentionally left blank as it is a template method and child classes should not have to
             // call `base.OnLayerReady` (and possibly forget to do that)
-        }
-
-        //Use this function to initialize anything that has to be done after either:
-        // 1. Instantiating prefab -> creating new LayerData, or
-        // 2. Creating LayerData (from project), Instantiating prefab, coupling that LayerData to this LayerGameObject
-        protected virtual void InitializeVisualisation()
-        {            
-            OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
-
-            LayerData.OnStylingApplied.Invoke(); //apply the styling once at initialization
         }
 
         private void LoadPropertiesInVisualisations()
@@ -241,7 +233,7 @@ namespace Netherlands3D.Twin.Layers
             //called when the Proxy's children change            
         }
 
-        public virtual void OnProxyTransformParentChanged()
+        public virtual void OnLayerDataParentChanged()
         {
             //called when the Proxy's parent changes            
         }
