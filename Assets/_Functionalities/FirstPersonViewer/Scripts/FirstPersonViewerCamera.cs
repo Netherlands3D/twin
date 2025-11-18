@@ -195,8 +195,6 @@ namespace Netherlands3D.FirstPersonViewer
             switch (cameraConstrain)
             {
                 default:
-                case CameraConstrain.CONTROL_Y:
-                case CameraConstrain.CONTROL_BOTH:
                     return transform.eulerAngles;
                 case CameraConstrain.CONTROL_NONE:
                     return transform.localEulerAngles;
@@ -208,8 +206,6 @@ namespace Netherlands3D.FirstPersonViewer
             switch (cameraConstrain)
             {
                 default:
-                case CameraConstrain.CONTROL_Y:
-                case CameraConstrain.CONTROL_BOTH:
                     return transform.eulerAngles;
                 case CameraConstrain.CONTROL_NONE:
                     return transform.parent.eulerAngles;
