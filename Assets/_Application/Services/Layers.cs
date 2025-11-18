@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin.Services
         private VisualizationSpawner spawner;
         
         public UnityEvent<Layer> LayerAdded { get; } = new();
-        public UnityEvent<Layer> LayerRemoved { get; } = new();
+        public UnityEvent<LayerData> LayerRemoved { get; } = new();
 
         private void Awake()
         {
@@ -104,30 +104,6 @@ namespace Netherlands3D.Twin.Services
             return null;
         }
 
-       
-
-        /// <summary>
-        /// Visualizes an existing layer's data by spawning a placeholder and after that the actual visualisation
-        /// (LayerGameObject).
-        ///
-        /// Usually used when loading a project file as this will restore the layer's data but the visualisation needs
-        /// to be spawned. 
-        /// </summary>
-        // public async Task<Layer> SpawnLayer(LayerData layerData, Vector3 position, Quaternion? rotation = null)
-        // {   
-        //     //TODO we need to remove the as ReferencedLayerData cast and make this work for all LayerData types
-        //     if (layerData is not ReferencedLayerData)
-        //     {
-        //         throw new NotSupportedException("Only ReferencedLayerData visualization is supported currently.");
-        //     }
-        //
-        //     Layer layer = new Layer(layerData);           
-        //     LayerGameObject visualization = await spawner.Spawn(layerData as ReferencedLayerData, position, rotation ?? Quaternion.identity);
-        //     layer.SetVisualization(visualization);
-        //     visualization.SetData(layerData);
-        //     return layer;
-        // }
-
         /// <summary>
         /// Force a LayerData object to be visualized as a specific prefab.
         ///
@@ -146,10 +122,10 @@ namespace Netherlands3D.Twin.Services
         /// <summary>
         /// Removes the layer from the current project and ensures the visualisation is removed as well.
         /// </summary>
-        public void Remove(Layer layer)
+        public void Remove(LayerData layerData)
         {
-            layer.LayerData.DestroyLayer();            
-            LayerRemoved.Invoke(layer);
+            layerData.Dispose();  
+            LayerRemoved.Invoke(layerData);
         }
 
         private Uri RetrieveUrlForLayer(LayerBuilder layerBuilder)
@@ -176,7 +152,7 @@ namespace Netherlands3D.Twin.Services
             Visualize(layer, spawner, callback, errorCallback);
         }
         
-        private static async void Visualize(Layer layer, ILayerSpawner spawner, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null) //todo: change callbacks for promises
+        private static async void Visualize(Layer layer, ILayerSpawner spawner, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null) //todo: change callbacks for promises?
         {
             try
             {

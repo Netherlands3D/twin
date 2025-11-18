@@ -1,5 +1,6 @@
 using System;
 using Netherlands3D.Events;
+using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Projects;
 using TMPro;
 using UnityEngine;
@@ -20,32 +21,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [SerializeField] private TextMeshProUGUI maxMasksText;
         private string maxMasksTextTemplate;
 
-        private PolygonSelectionLayer polygonLayer;
+        private LayerData polygonLayer;
 
-        public PolygonSelectionLayer PolygonLayer
+        public LayerData PolygonLayer
         {
             get => polygonLayer;
             set
             {
                 polygonLayer = value;
-                strokeWidthSlider.value = polygonLayer.LineWidth;
-                maskToggle.isOn = polygonLayer.IsMask;
-                maskInvertToggle.isOn = polygonLayer.InvertMask;
+                PolygonSelectionLayerPropertyData data = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+                strokeWidthSlider.value = data.LineWidth;
+                maskToggle.isOn = data.IsMask;
+                maskInvertToggle.isOn = data.InvertMask;
 
-                SetLinePropertiesActive(polygonLayer.ShapeType == ShapeType.Line);
-                SetGridPropertiesActive(polygonLayer.ShapeType == ShapeType.Grid);
+                SetLinePropertiesActive(data.ShapeType == ShapeType.Line);
+                SetGridPropertiesActive(data.ShapeType == ShapeType.Grid);
 
-                maskToggle.interactable = maskToggle.isOn || PolygonSelectionLayer.NumAvailableMasks > 0;
+                maskToggle.interactable = maskToggle.isOn || PolygonSelectionLayerPropertyData.NumAvailableMasks > 0;
                 SetMaxMasksText();
 
-                if (polygonLayer.IsMask)
+                if (data.IsMask)
                     PopulateMaskLayerPanel();
             }
         }
 
         private void SetMaxMasksText()
         {
-            maxMasksText.text = string.Format(maxMasksTextTemplate, PolygonSelectionLayer.NumAvailableMasks.ToString(), PolygonSelectionLayer.MaxAvailableMasks.ToString());
+            maxMasksText.text = string.Format(maxMasksTextTemplate, PolygonSelectionLayerPropertyData.NumAvailableMasks.ToString(), PolygonSelectionLayerPropertyData.MaxAvailableMasks.ToString());
         }
 
         private void SetLinePropertiesActive(bool isLine)
@@ -81,9 +83,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 
         private void OnDisable()
         {
-            if (polygonLayer.ShapeType == ShapeType.Line)
+            PolygonSelectionLayerPropertyData data = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+            if (data.ShapeType == ShapeType.Line)
                 strokeWidthSlider.onValueChanged.RemoveListener(HandleStrokeWidthChange);
-            if (polygonLayer.ShapeType == ShapeType.Grid)
+            if (data.ShapeType == ShapeType.Grid)
                 editGridSelectionButton.onClick.RemoveListener(ReselectLayer);
 
             maskToggle.onValueChanged.RemoveListener(OnIsMaskChanged);
@@ -94,7 +97,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 
         private void OnIsMaskChanged(bool isMask)
         {
-            polygonLayer.IsMask = isMask;
+            PolygonSelectionLayerPropertyData data = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+            data.IsMask = isMask;
 
             if (isMask)
                 PopulateMaskLayerPanel();
@@ -128,13 +132,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 
         private void OnInvertMaskChanged(bool invert)
         {
-            polygonLayer.InvertMask = invert;
+            PolygonSelectionLayerPropertyData data = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+            data.InvertMask = invert;
         }
 
 
         private void HandleStrokeWidthChange(float newValue)
         {
-            polygonLayer.LineWidth = newValue;
+            PolygonSelectionLayerPropertyData data = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+            data.LineWidth = newValue;
         }
     }
 }

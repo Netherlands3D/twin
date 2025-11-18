@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     }
 
     [RequireComponent(typeof(ToggleScatterPropertySectionInstantiator))]
-    public class ObjectScatterLayerGameObject : LayerGameObject, IVisualizationWithPropertyData//, ILayerWithPropertyPanels, IPropertySectionInstantiator
+    public class ObjectScatterLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, IPropertySectionInstantiator
     {
         public override BoundingBox Bounds => new (polygonBounds);
         public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
@@ -41,8 +41,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
-        public PolygonSelectionLayer polygonLayer;
-        // private List<IPropertySectionInstantiator> propertySections = new();
+        public LayerData polygonLayer;
+        private List<IPropertySectionInstantiator> propertySections = new();
         private List<PolygonVisualisation> visualisations = new();
 
         private Bounds polygonBounds = new();
@@ -53,14 +53,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private CartesianTileLayerGameObject areaReference;
 
+        protected override void OnLayerInitialize()
+        {
+            toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
+            propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
+        } 
+
         public void Initialize(string previousPrefabId)
         {
             InitializeScatterMesh(previousPrefabId);            
-            polygonLayer = LayerData.ParentLayer as PolygonSelectionLayer;
+            polygonLayer = LayerData.ParentLayer;
             var existingScatterProperties = (ScatterGenerationSettingsPropertyData) LayerData.LayerProperties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
             if (existingScatterProperties == null)
             {
-                InitializeNewScatterProperties(previousPrefabId, polygonLayer.ShapeType);
+                PolygonSelectionLayerPropertyData polygonProperties = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+                InitializeNewScatterProperties(previousPrefabId, polygonProperties.ShapeType);
                 LayerData.SetProperty(settings);
             }
             else
@@ -110,8 +117,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             settings.ScatterSettingsChanged.AddListener(ResampleTexture);
             settings.ScatterDistributionChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             settings.ScatterShapeChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
-            polygonLayer.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
-            polygonLayer.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
+
+            PolygonSelectionLayerPropertyData polygonProperties = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+            polygonProperties.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
+            polygonProperties.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
         }
 
         public void RemoveReScatterListeners()
@@ -119,8 +128,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             settings.ScatterSettingsChanged.RemoveListener(ResampleTexture);
             settings.ScatterDistributionChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
             settings.ScatterShapeChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
-            polygonLayer.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
-            polygonLayer.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
+
+            PolygonSelectionLayerPropertyData polygonProperties = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+            polygonProperties.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
+            polygonProperties.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
         }
 
         protected override void OnDestroy()
@@ -160,7 +171,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 contours.Add(polygon.Paths[i].ToVector3List());
             }
 
-            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, 1f, false, false, false, polygonLayer.PolygonVisualisation.PolygonMeshMaterial);
+            //TODO is this the right way to get the polygon visualisation layergameobject?
+            var match = FindObjectsByType<PolygonSelectionVisualisation>(FindObjectsSortMode.None).ToList()
+            .FirstOrDefault(v => v.LayerData == polygonLayer);
+
+            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, 1f, false, false, false, match.PolygonMeshMaterial);
             polygonVisualisation.DrawLine = true;
 
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
@@ -186,10 +201,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private Bounds RecalculatePolygonsAndGetBounds()
         {
-            if (polygonLayer.ShapeType == ShapeType.Line)
-                settings.Angle = CalculateLineAngle(polygonLayer);
+            PolygonSelectionLayerPropertyData polygonProperties = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+            if (polygonProperties.ShapeType == ShapeType.Line)
+                settings.Angle = CalculateLineAngle(polygonProperties);
 
-            var polygons = CalculateAndVisualisePolygons(polygonLayer.Polygon);
+            //TODO is this the right way to get the polygon visualisation layergameobject?
+            var match = FindObjectsByType<PolygonSelectionVisualisation>(FindObjectsSortMode.None).ToList()
+            .FirstOrDefault(v => v.LayerData == polygonLayer);
+
+            var polygons = CalculateAndVisualisePolygons(match.Polygon);
             if (polygons.Count == 0)
                 return new Bounds(); // the stroke/fill is clipped out because of the stroke width and no further processing is needed
 
@@ -286,7 +306,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if (!completedInitialization) //this is needed because the initial instantiation will also set the parent, and this should not do any of the logic below before this layer is properly initialized.
                 return;
 
-            var newPolygonParent = LayerData.ParentLayer as PolygonSelectionLayer;
+            var newPolygonParent = LayerData.ParentLayer;
             if (newPolygonParent == null) //new parent is not a polygon, so the scatter layer should revert to its original object
             {               
                 App.Layers.VisualizeAs(LayerData, settings.OriginalPrefabId);
@@ -295,14 +315,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             if (newPolygonParent != polygonLayer) //the new parent is a polygon, but not the same as the one currently registered, so a reinitialization is required.
             {
-                polygonLayer.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
-                polygonLayer.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
+                PolygonSelectionLayerPropertyData polygonProperties = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+
+                polygonProperties.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
+                polygonProperties.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
 
                 polygonLayer = newPolygonParent;
                 RecalculatePolygonsAndSamplerTexture();
-                polygonLayer.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
-                polygonLayer.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
+                polygonProperties.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
+                polygonProperties.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             }
+        }
+
+        public List<IPropertySectionInstantiator> GetPropertySections()
+        {
+            return propertySections;
         }
 
         public void AddToProperties(RectTransform properties)
@@ -317,12 +344,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if (scatterSettings != null)
             {
                 settings = scatterSettings;
-                if (LayerData.ParentLayer is PolygonSelectionLayer p)
+                PolygonSelectionLayerPropertyData polygonProperties = LayerData.ParentLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+                if (polygonProperties != null)
                 {
-                    polygonLayer = p;
-                    if (p.PolygonVisualisation == null)
+                    polygonLayer = LayerData.ParentLayer;
+                    //TODO is this the right way to get the polygon visualisation layergameobject?
+                    var match = FindObjectsByType<PolygonSelectionVisualisation>(FindObjectsSortMode.None).ToList()
+                    .FirstOrDefault(v => v.LayerData == polygonLayer);
+
+                    if (match == null)
                     {
-                        p.OnPrefabIdChanged.AddListener(OnPolygonParentInitialized);
+                        //TODO this is wrong, we need to know when the visualisation is present
+                        polygonLayer.OnPrefabIdChanged.AddListener(OnPolygonParentInitialized);
                     }
                     else
                     {
@@ -334,9 +367,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void OnPolygonParentInitialized()
         {
-            if(polygonLayer.PolygonVisualisation.Bounds == null)
+            //TODO is this the right way to get the polygon visualisation layergameobject?
+            var match = FindObjectsByType<PolygonSelectionVisualisation>(FindObjectsSortMode.None).ToList()
+            .FirstOrDefault(v => v.LayerData == polygonLayer);
+            if (match.Bounds == null)
             {
-                polygonLayer.PolygonVisualisation.OnPolygonVisualisationUpdated.AddListener(OnPolygonVisualisationUpdated);
+                match.OnPolygonVisualisationUpdated.AddListener(OnPolygonVisualisationUpdated);
             }
             else
             {
@@ -352,7 +388,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if (areaReference == null) return;
 
             InitializeScatterArea();
-            polygonLayer.PolygonVisualisation.OnPolygonVisualisationUpdated.RemoveListener(OnPolygonVisualisationUpdated);
+
+            //TODO is this the right way to get the polygon visualisation layergameobject?
+            var match = FindObjectsByType<PolygonSelectionVisualisation>(FindObjectsSortMode.None).ToList()
+            .FirstOrDefault(v => v.LayerData == polygonLayer);
+            match.OnPolygonVisualisationUpdated.RemoveListener(OnPolygonVisualisationUpdated);
         }
 
         private void InitializeScatterArea()
@@ -360,7 +400,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             areaReference.LayerData.OnPrefabIdChanged.RemoveListener(InitializeScatterArea);
             RecalculatePolygonsAndSamplerTexture();
 
-            BoundingBox polygonBoundingBox = polygonLayer.PolygonVisualisation.Bounds;
+            //TODO is this the right way to get the polygon visualisation layergameobject?
+            var match = FindObjectsByType<PolygonSelectionVisualisation>(FindObjectsSortMode.None).ToList()
+            .FirstOrDefault(v => v.LayerData == polygonLayer);
+            BoundingBox polygonBoundingBox = match.Bounds;
             polygonBoundingBox.Convert(CoordinateSystem.RD);
             BinaryMeshLayer bml = areaReference.Layer as BinaryMeshLayer;
             Initialize(settings.OriginalPrefabId);
@@ -414,8 +457,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             return mesh;
         }
         
-        private static float CalculateLineAngle(PolygonSelectionLayer polygon)
+        private static float CalculateLineAngle(PolygonSelectionLayerPropertyData polygon)
         {
+
             var linePoints = polygon.OriginalPolygon.ToUnityPositions().ToList();
             var start = new Vector2(linePoints[0].x, linePoints[0].z);
             var end = new Vector2(linePoints[1].x, linePoints[1].z);

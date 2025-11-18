@@ -11,6 +11,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
+
 
 
 #if UNITY_EDITOR
@@ -87,7 +89,7 @@ namespace Netherlands3D.Twin.Layers
            
         }
 
-        public void SetData(LayerData layerData)
+        public virtual void SetData(LayerData layerData)
         {
             if (this.LayerData == layerData) return;
 
@@ -114,7 +116,7 @@ namespace Netherlands3D.Twin.Layers
 
         private LayerGameObject Object() => this;
 
-        private void RegisterEventListeners()
+        protected virtual void RegisterEventListeners()
         {
             layerData.ParentChanged.AddListener(OnProxyTransformParentChanged);
             layerData.ChildrenChanged.AddListener(OnProxyTransformChildrenChanged);
@@ -129,7 +131,7 @@ namespace Netherlands3D.Twin.Layers
             layerData.OnStylingApplied.AddListener(ApplyStyling);
         }
 
-        private void UnregisterEventListeners()
+        protected virtual void UnregisterEventListeners()
         {
             layerData.ParentChanged.RemoveListener(OnProxyTransformParentChanged);
             layerData.ChildrenChanged.RemoveListener(OnProxyTransformChildrenChanged);
@@ -194,14 +196,14 @@ namespace Netherlands3D.Twin.Layers
         {
             onShow.Invoke();
             if(IsMaskable)
-                PolygonSelectionLayer.MaskDestroyed.AddListener(ResetMask);
+                PolygonSelectionLayerPropertyData.MaskDestroyed.AddListener(ResetMask);
         }
 
         protected virtual void OnDisable()
         {
             onHide.Invoke();
             if(IsMaskable)
-                PolygonSelectionLayer.MaskDestroyed.RemoveListener(ResetMask);
+                PolygonSelectionLayerPropertyData.MaskDestroyed.RemoveListener(ResetMask);
         }
 
         private void ResetMask(int maskBitIndex)
@@ -224,9 +226,9 @@ namespace Netherlands3D.Twin.Layers
         {
         }
 
-        public void DestroyLayer()
+        public virtual void DestroyLayer() //todo: remove this function?
         {
-            LayerData.DestroyLayer();
+            App.Layers.Remove(LayerData);
         }
 
         public virtual void DestroyLayerGameObject()

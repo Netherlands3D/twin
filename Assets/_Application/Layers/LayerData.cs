@@ -15,7 +15,7 @@ namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "Prefab")] //todo: this should not be named Prefab
-    public class LayerData : IEquatable<LayerData>
+    public class LayerData : IEquatable<LayerData>, IDisposable
     {
         private const string NameOfDefaultStyle = "default";
 
@@ -348,19 +348,18 @@ namespace Netherlands3D.Twin.Layers
             return false;
         }
 
-        public virtual void DestroyLayer()
+        public virtual void Dispose()
         {
             DeselectLayer();
 
             foreach (var child in ChildrenLayers.ToList()) //use ToList to make a copy and avoid a CollectionWasModified error
             {
-                child.DestroyLayer();
+                child.Dispose();
             }
 
             ParentLayer.ChildrenLayers.Remove(this);
             parent.ChildrenChanged.Invoke(); //call event on old parent
             ParentOrSiblingIndexChanged.RemoveListener(Root.UpdateLayerTreeOrder);
-            ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
         }
 
@@ -439,6 +438,7 @@ namespace Netherlands3D.Twin.Layers
         public bool Equals(LayerData other) => other is not null && other.Id == Id;
         public override bool Equals(object obj) => Equals(obj as LayerData);
         public override int GetHashCode() => Id.GetHashCode();
+
         public static bool operator ==(LayerData left, LayerData right)
         {
             if (ReferenceEquals(left, right)) return true;

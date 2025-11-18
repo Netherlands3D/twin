@@ -266,7 +266,7 @@ namespace Netherlands3D.CartesianTiles
 
         private void AbortSimilarTileChanges(TileChange removeChange)
         {
-            var changes = activeTileChanges.Where(change => ((change.Value.X == removeChange.X) && (change.Value.Y == removeChange.Y))).ToArray();
+            var changes = activeTileChanges.Where(change => (change.Value.X == removeChange.X) && (change.Value.Y == removeChange.Y) && (change.Value.layerIndex == removeChange.layerIndex)).ToArray();
             for (int i = changes.Length - 1; i >= 0; i--)
             {
                 var runningChange = changes[i];
@@ -278,7 +278,7 @@ namespace Netherlands3D.CartesianTiles
 
         private void AbortPendingSimilarTileChanges(TileChange removeChange)
         {
-            var changes = pendingTileChanges.Where(change => ((change.X == removeChange.X) && (change.Y == removeChange.Y))).ToArray();
+            var changes = pendingTileChanges.Where(change => (change.X == removeChange.X) && (change.Y == removeChange.Y) && (change.layerIndex == removeChange.layerIndex)).ToArray();
             for (int i = changes.Length - 1; i >= 0; i--)
             {
                 var runningChange = changes[i];
