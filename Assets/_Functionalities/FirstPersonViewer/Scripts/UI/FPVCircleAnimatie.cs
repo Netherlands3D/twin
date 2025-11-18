@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace Netherlands3D.FirstPersonViewer
+namespace Netherlands3D.FirstPersonViewer.UI
 {
     public class FPVCircleAnimatie : MonoBehaviour
     {
