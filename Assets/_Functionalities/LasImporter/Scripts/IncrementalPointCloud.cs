@@ -9,8 +9,7 @@ using UnityEngine.Rendering;
 ///     * Overview : light sample across entire cloud.
 ///     * Medium   : denser sample across entire cloud.
 ///     * Detail   : densest sample across entire cloud.
-/// - Each LOD just picks every N-th point (global stride),
-///   so it's very cheap and WebGL friendly.
+/// - Rendering uses MeshTopology.Points (Editor + WebGL friendly).
 /// </summary>
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class IncrementalPointCloud : MonoBehaviour
@@ -28,20 +27,20 @@ public class IncrementalPointCloud : MonoBehaviour
     private MeshRenderer _meshRenderer;
 
     [Header("Display")]
-    public Material pointMaterial;
+    public Material pointMaterial;    // must use NL3D/PointCloudWebGL
 
     [Tooltip("Automatically move point cloud so its center is at (0,0,0) once (re)built.")]
     public bool recenter = true;
 
     [Header("LOD Point Caps")]
     [Tooltip("Maximum points when zoomed out (overview).")]
-    public int maxPointsOverview = 30000;
+    public int maxPointsOverview = 20000;
 
     [Tooltip("Maximum points when in medium zoom level.")]
-    public int maxPointsMedium = 100000;
+    public int maxPointsMedium = 80000;
 
     [Tooltip("Maximum points when zoomed in (detail).")]
-    public int maxPointsDetail = 250000;
+    public int maxPointsDetail = 150000;
 
     [Header("LOD thresholds (Perspective)")]
     [Tooltip("Camera height above which we are in OVERVIEW mode (perspective camera).")]
@@ -239,7 +238,6 @@ public class IncrementalPointCloud : MonoBehaviour
         }
 
         BuildStrideSubset(cap);
-
         UpdateMesh();
 
         if (logStats)
@@ -265,9 +263,7 @@ public class IncrementalPointCloud : MonoBehaviour
         }
 
         int step = Mathf.Max(1, total / cap);
-
-        // Small offset so we don't always start at the very first point.
-        int offset = 0;
+        int offset = 0; // could be randomized
 
         for (int i = offset; i < total; i += step)
         {
@@ -309,7 +305,6 @@ public class IncrementalPointCloud : MonoBehaviour
         if (recenter && !_hasCentered)
         {
             var center = _mesh.bounds.center;
-            // place the cloud so its center is at world origin
             transform.position = -center;
             _hasCentered = true;
             Debug.Log($"[IncrementalPointCloud] Recentered to origin with offset {center}");

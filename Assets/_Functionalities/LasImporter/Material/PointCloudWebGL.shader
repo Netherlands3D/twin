@@ -48,7 +48,7 @@
                 o.color = v.color * _Tint;
                 o.color.a *= _Alpha;
 
-                // Point size in pixels; PointCloudAutoSize can drive this
+                // Point size in pixels
                 o.psize = _PointSize;
 
                 return o;
@@ -57,8 +57,6 @@
             fixed4 frag(v2f i) : SV_Target
             {
                 // Square points (fast & compatible).
-                // If you want perfect round points later, we can switch
-                // to instanced quads instead of MeshTopology.Points.
                 return i.color;
             }
             ENDCG
