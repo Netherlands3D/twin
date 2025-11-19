@@ -1,23 +1,28 @@
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.UI.ColorPicker;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class ColorPickerPropertySection : PropertySectionWithLayerGameObject
+    [PropertySection(typeof(FillColorPropertyData))] //TODO what about stroke color? fill color is default
+    public class ColorPickerPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         [SerializeField] private Color defaultColor = Color.white;
         [SerializeField] private ColorWheel colorPicker;
         public UnityEvent<Color> PickedColor = new();
 
-        private LayerGameObject layer;
+        FillColorPropertyData fillColorPropertyData;
 
-        public override LayerGameObject LayerGameObject
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            get => layer;
-            set => ChangeLayerTo(value);
+            fillColorPropertyData = properties.Find(p => p is FillColorPropertyData) as FillColorPropertyData;
+            if (fillColorPropertyData == null) return;
+            
+            fillColorPropertyData.OnColorChanged.AddListener(UpdateColorFromLayer);
+            UpdateColorFromLayer();
         }
 
         private void Awake()
@@ -47,18 +52,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             colorPicker.SetColorWithoutNotify(color);
         }
 
-        /// <summary>
-        /// Since the layer may or may not be known on Awake/Start of this component, we need to remove and re-add
-        /// listeners on a layer when we set/replace it, and update the color in the color picker to that of the layer.
-        /// </summary>
-        private void ChangeLayerTo(LayerGameObject value)
-        {
-            if (layer && enabled) layer.LayerData.OnStylingApplied.RemoveListener(UpdateColorFromLayer);
-            layer = value;
-            if (layer && enabled) layer.LayerData.OnStylingApplied.AddListener(UpdateColorFromLayer);
-
-            UpdateColorFromLayer();
-        }
+      
 
         public void OnPickedColor(Color color)
         {
@@ -68,6 +62,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void UpdateColorFromLayer()
         {
+            //todo move this to hierarchical object 
             if (layer is HierarchicalObjectLayerGameObject hierarchicalObjectLayerGameObject)
             {
                 var color = HierarchicalObjectLayerStyler.GetColor(hierarchicalObjectLayerGameObject);
@@ -88,5 +83,6 @@ namespace Netherlands3D.Twin.Layers.Properties
                 HierarchicalObjectLayerStyler.SetColor(hierarchicalObjectLayerGameObject, color);
             }
         }
+
     }
 }
