@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI.Properties;
 using UnityEngine;
@@ -7,7 +9,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 
 {
     [PropertySection(typeof(ScatterGenerationSettingsPropertyData))]
-    public class ScatterSettingsPropertySection : PropertySection
+    public class ScatterSettingsPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         private ScatterGenerationSettingsPropertyData settings;
         [SerializeField] private Toggle completeToggle;
@@ -151,9 +153,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             settings.MaxScale = maxScale;
         }
 
-        public override void Initialize(LayerPropertyData property)
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            settings = property as ScatterGenerationSettingsPropertyData;
+            settings = properties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData) as ScatterGenerationSettingsPropertyData;
         }
     }
 }

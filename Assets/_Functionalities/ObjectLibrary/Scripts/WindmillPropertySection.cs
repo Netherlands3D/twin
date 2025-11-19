@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,16 +7,16 @@ using UnityEngine.UI;
 namespace Netherlands3D.Functionalities.ObjectLibrary
 {
     [PropertySection(typeof(WindmillPropertyData))]
-    public class WindmillPropertySection : PropertySection
+    public class WindmillPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         [SerializeField] private Slider axisHeightSlider;
         [SerializeField] private Slider rotorDiameterSlider;
 
         private WindmillPropertyData propertyData;
 
-        public override void Initialize(LayerPropertyData property)
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            propertyData = property as WindmillPropertyData;
+            propertyData = properties.FirstOrDefault(p => p is WindmillPropertyData) as WindmillPropertyData;
             axisHeightSlider.value = propertyData.AxisHeight;
             rotorDiameterSlider.value = propertyData.RotorDiameter;
         }

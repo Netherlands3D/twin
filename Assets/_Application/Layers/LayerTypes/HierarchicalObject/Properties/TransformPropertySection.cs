@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI;
@@ -9,9 +11,8 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
 {
     [PropertySection(typeof(TransformLayerPropertyData))]
-    public class TransformPropertySection : PropertySection
+    public class TransformPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
-
         [Serializable]
         private class SetOfXYZ
         {
@@ -76,8 +77,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             transformPropertyData.OnRotationChanged.RemoveListener(UpdateRotationFields);
             transformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);
         }
-        
-        public override void Initialize(LayerPropertyData property)
+
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
             if (transformPropertyData != null)
             {
@@ -86,7 +87,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
                 transformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);
             }
 
-            transformPropertyData = property as TransformLayerPropertyData;
+            transformPropertyData = properties.FirstOrDefault(p => p is TransformLayerPropertyData) as TransformLayerPropertyData;
 
             transformPropertyData.OnPositionChanged.AddListener(UpdatePositionFields);
             transformPropertyData.OnRotationChanged.AddListener(UpdateRotationFields);

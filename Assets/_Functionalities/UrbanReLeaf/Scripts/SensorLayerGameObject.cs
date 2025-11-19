@@ -10,11 +10,7 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
     public class SensorLayerGameObject : CartesianTileLayerGameObject, IVisualizationWithPropertyData//, ILayerWithPropertyPanels
     {
         private SensorProjectionLayer SensorProjectionLayer { get; set; }
-
-        public LayerPropertyData PropertyData => URLPropertyData;
-
-        private LayerURLPropertyData URLPropertyData => LayerData.GetProperty<LayerURLPropertyData>();
-
+        
         protected override void OnLayerInitialize()
         {
             SensorProjectionLayer = GetComponent<SensorProjectionLayer>();

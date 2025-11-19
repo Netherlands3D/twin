@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             UpdateGrid();
             PolygonSelectionLayerPropertyData data = layerGameObject.polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
             data.polygonChanged.AddListener(UpdateGrid);
-            var scatterSettings = layerGameObject.PropertyData as ScatterGenerationSettingsPropertyData;
+            var scatterSettings = layerGameObject.LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
             scatterSettings.ScatterSettingsChanged.AddListener(UpdateGrid);
         }
 
@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var match = FindObjectsByType<PolygonSelectionVisualisation>(FindObjectsSortMode.None).ToList()
             .FirstOrDefault(v => v.LayerData == layerGameObject.polygonLayer);
             poly = match.Polygon;
-            var scatterSettings = layerGameObject.PropertyData as ScatterGenerationSettingsPropertyData;
+            var scatterSettings = layerGameObject.LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
             var angle = scatterSettings.Angle;
             
             var densityPerSquareUnit = scatterSettings.Density / 10000f; //in de UI is het het bomen per hectare, in de functie is het punten per m2

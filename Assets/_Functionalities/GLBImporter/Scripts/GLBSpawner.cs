@@ -20,11 +20,9 @@ namespace Netherlands3D.Functionalities.GLBImporter
     public class GLBSpawner : MonoBehaviour, IVisualizationWithPropertyData
     {
         private GLBPropertyData propertyData = new();
-        public LayerPropertyData PropertyData => propertyData;
         private GameObject importedObject;
         private HierarchicalObjectLayerGameObject layerGameObject;
         private MoveCameraToCoordinate cameraMover;
-        private TransformLayerPropertyData TransformPropertyData => (TransformLayerPropertyData)((IVisualizationWithPropertyData)layerGameObject).PropertyData;
         
         [Header("Settings")]
         [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
@@ -194,7 +192,7 @@ namespace Netherlands3D.Functionalities.GLBImporter
             Coordinate position = origin;
             if (!layerGameObject.LayerData.IsNew)
             {
-                position = TransformPropertyData.Position;
+                position = layerGameObject.LayerData.GetProperty<TransformLayerPropertyData>().Position; //TransformPropertyData.Position;
             }
             
             layerGameObject.WorldTransform.MoveToCoordinate(position);

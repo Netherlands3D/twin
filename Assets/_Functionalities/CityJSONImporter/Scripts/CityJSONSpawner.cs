@@ -19,7 +19,6 @@ namespace Netherlands3D.Functionalities.CityJSON
         [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
         private CityJSONPropertyData propertyData = new();
         private CityJSONLayerGameObject layerGameObject;
-        public LayerPropertyData PropertyData => propertyData;
 
         private TransformLayerPropertyData TransformLayerPropertyData =>
             layerGameObject.LayerData.GetProperty<TransformLayerPropertyData>();
