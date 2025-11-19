@@ -3,12 +3,14 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 /// <summary>
-/// Incremental point cloud renderer with simple view-dependent LOD:
+/// Incremental point cloud renderer with simple, global, stride-based LOD:
 /// - Stores all incoming LAS points in memory (positions + colors).
-/// - Only uploads a subset of points to the mesh depending on camera zoom:
-///     * Overview mode  : evenly sampled subset over whole cloud.
-///     * Detail mode    : points within a radius around the camera in XZ.
-/// This avoids rendering millions of points at once in WebGL.
+/// - Uses 3 LOD levels based on camera zoom:
+///     * Overview : light sample across entire cloud.
+///     * Medium   : denser sample across entire cloud.
+///     * Detail   : densest sample across entire cloud.
+/// - Each LOD just picks every N-th point (global stride),
+///   so it's very cheap and WebGL friendly.
 /// </summary>
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class IncrementalPointCloud : MonoBehaviour
@@ -31,26 +33,31 @@ public class IncrementalPointCloud : MonoBehaviour
     [Tooltip("Automatically move point cloud so its center is at (0,0,0) once (re)built.")]
     public bool recenter = true;
 
-    [Header("LOD Settings")]
+    [Header("LOD Point Caps")]
     [Tooltip("Maximum points when zoomed out (overview).")]
-    public int maxPointsOverview = 50000;
+    public int maxPointsOverview = 30000;
 
-    [Tooltip("Maximum points when zoomed in (detail region).")]
+    [Tooltip("Maximum points when in medium zoom level.")]
+    public int maxPointsMedium = 100000;
+
+    [Tooltip("Maximum points when zoomed in (detail).")]
     public int maxPointsDetail = 250000;
 
-    [Tooltip("Radius (in local XZ units) around camera used for detail mode.")]
-    public float detailRadius = 50f;
+    [Header("LOD thresholds (Perspective)")]
+    [Tooltip("Camera height above which we are in OVERVIEW mode (perspective camera).")]
+    public float overviewHeightFar = 200f;
 
-    [Tooltip("If orthographic, overview when orthographicSize > this.")]
-    public float overviewOrthoSize = 150f;
+    [Tooltip("Camera height above which we are in MEDIUM mode (perspective camera). Below this is DETAIL.")]
+    public float overviewHeightMedium = 80f;
 
-    [Tooltip("If perspective, overview when camera Y position > this.")]
-    public float overviewHeight = 200f;
+    [Header("LOD thresholds (Orthographic)")]
+    [Tooltip("Ortho size above which we are in OVERVIEW mode.")]
+    public float overviewOrthoFar = 150f;
+
+    [Tooltip("Ortho size above which we are in MEDIUM mode. Below this is DETAIL.")]
+    public float overviewOrthoMedium = 60f;
 
     [Header("Update Thresholds")]
-    [Tooltip("Rebuild visible subset when camera moved more than this (world units).")]
-    public float cameraMoveThreshold = 10f;
-
     [Tooltip("Rebuild visible subset when zoom changed more than this.")]
     public float zoomChangeThreshold = 10f;
 
@@ -65,8 +72,9 @@ public class IncrementalPointCloud : MonoBehaviour
     private bool _lodDirty = false;
     private bool _hasCentered = false;
 
-    private Vector3 _lastCamPos;
     private float _lastCamZoomMetric;
+
+    private enum LodMode { Overview, Medium, Detail }
 
     void Awake()
     {
@@ -111,7 +119,6 @@ public class IncrementalPointCloud : MonoBehaviour
 
         if (targetCamera != null)
         {
-            _lastCamPos = targetCamera.transform.position;
             _lastCamZoomMetric = GetCameraZoomMetric(targetCamera);
         }
     }
@@ -163,19 +170,13 @@ public class IncrementalPointCloud : MonoBehaviour
         }
 
         float zoomMetric = GetCameraZoomMetric(targetCamera);
-        Vector3 camPos = targetCamera.transform.position;
-
-        bool camMovedFar =
-            Vector3.Distance(camPos, _lastCamPos) >= cameraMoveThreshold;
-
         bool zoomChanged =
             Mathf.Abs(zoomMetric - _lastCamZoomMetric) >= zoomChangeThreshold;
 
-        if (_firstBuild || _lodDirty || camMovedFar || zoomChanged)
+        if (_firstBuild || _lodDirty || zoomChanged)
         {
-            RebuildLOD(camPos, zoomMetric);
+            RebuildLOD(zoomMetric);
 
-            _lastCamPos = camPos;
             _lastCamZoomMetric = zoomMetric;
             _firstBuild = false;
             _lodDirty = false;
@@ -190,15 +191,27 @@ public class IncrementalPointCloud : MonoBehaviour
             return cam.transform.position.y;
     }
 
-    private bool IsOverview(float zoomMetric)
+    private LodMode GetLodMode(float zoomMetric)
     {
         if (targetCamera != null && targetCamera.orthographic)
-            return zoomMetric > overviewOrthoSize;
+        {
+            if (zoomMetric > overviewOrthoFar)
+                return LodMode.Overview;
+            if (zoomMetric > overviewOrthoMedium)
+                return LodMode.Medium;
+            return LodMode.Detail;
+        }
         else
-            return zoomMetric > overviewHeight;
+        {
+            if (zoomMetric > overviewHeightFar)
+                return LodMode.Overview;
+            if (zoomMetric > overviewHeightMedium)
+                return LodMode.Medium;
+            return LodMode.Detail;
+        }
     }
 
-    private void RebuildLOD(Vector3 camWorldPos, float zoomMetric)
+    private void RebuildLOD(float zoomMetric)
     {
         if (_allPositions.Count == 0)
         {
@@ -209,80 +222,63 @@ public class IncrementalPointCloud : MonoBehaviour
         _curPositions.Clear();
         _curColors.Clear();
 
-        if (IsOverview(zoomMetric))
-        {
-            BuildOverviewSubset();
-        }
-        else
-        {
-            BuildDetailSubset(camWorldPos);
+        LodMode mode = GetLodMode(zoomMetric);
+        int cap = maxPointsDetail;
 
-            // Fallback: if local region is too sparse, show overview instead
-            if (_curPositions.Count < maxPointsOverview / 4)
-            {
-                BuildOverviewSubset();
-            }
+        switch (mode)
+        {
+            case LodMode.Overview:
+                cap = maxPointsOverview;
+                break;
+            case LodMode.Medium:
+                cap = maxPointsMedium;
+                break;
+            case LodMode.Detail:
+                cap = maxPointsDetail;
+                break;
         }
+
+        BuildStrideSubset(cap);
 
         UpdateMesh();
 
         if (logStats)
         {
-            Debug.Log($"[IncrementalPointCloud LOD] total={_allPositions.Count} vis={_curPositions.Count} mode={(IsOverview(zoomMetric) ? "OVERVIEW" : "DETAIL")}");
+            Debug.Log($"[IncrementalPointCloud LOD] total={_allPositions.Count} vis={_curPositions.Count} mode={mode}");
         }
     }
 
-    private void BuildOverviewSubset()
+    /// <summary>
+    /// Global, stride-based sampling:
+    /// pick every N-th point so we never exceed "cap" points,
+    /// spread across the whole dataset.
+    /// </summary>
+    private void BuildStrideSubset(int cap)
     {
         int total = _allPositions.Count;
 
-        if (total <= maxPointsOverview)
+        if (total <= cap)
         {
             _curPositions.AddRange(_allPositions);
             _curColors.AddRange(_allColors);
             return;
         }
 
-        // Evenly sample across the dataset
-        int step = Mathf.Max(1, total / maxPointsOverview);
-        for (int i = 0; i < total; i += step)
+        int step = Mathf.Max(1, total / cap);
+
+        // Small offset so we don't always start at the very first point.
+        int offset = 0;
+
+        for (int i = offset; i < total; i += step)
         {
             _curPositions.Add(_allPositions[i]);
             _curColors.Add(_allColors[i]);
         }
 
-        if (_curPositions.Count > maxPointsOverview)
+        if (_curPositions.Count > cap)
         {
-            _curPositions.RemoveRange(maxPointsOverview, _curPositions.Count - maxPointsOverview);
-            _curColors.RemoveRange(maxPointsOverview, _curColors.Count - maxPointsOverview);
-        }
-    }
-
-    private void BuildDetailSubset(Vector3 camWorldPos)
-    {
-        // Convert camera to local space of the point cloud
-        Vector3 camLocal = transform.InverseTransformPoint(camWorldPos);
-
-        int total = _allPositions.Count;
-        float radiusSqr = detailRadius * detailRadius;
-        int added = 0;
-
-        for (int i = 0; i < total; i++)
-        {
-            Vector3 p = _allPositions[i];
-            float dx = p.x - camLocal.x;
-            float dz = p.z - camLocal.z;
-            float d2 = dx * dx + dz * dz;
-
-            if (d2 <= radiusSqr)
-            {
-                _curPositions.Add(p);
-                _curColors.Add(_allColors[i]);
-                added++;
-
-                if (added >= maxPointsDetail)
-                    break;
-            }
+            _curPositions.RemoveRange(cap, _curPositions.Count - cap);
+            _curColors.RemoveRange(cap, _curColors.Count - cap);
         }
     }
 
