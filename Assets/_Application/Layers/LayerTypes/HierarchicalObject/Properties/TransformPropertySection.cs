@@ -10,7 +10,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
 {
     [PropertySection(typeof(TransformLayerPropertyData))]
-    public class TransformPropertySection : PropertySection, IVisualizationWithPropertyData
+    public class TransformPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         [Serializable]
         private class SetOfXYZ
@@ -77,7 +77,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             transformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);
         }
 
-        public override void LoadProperties(List<LayerPropertyData> properties)
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
             if (transformPropertyData != null)
             {

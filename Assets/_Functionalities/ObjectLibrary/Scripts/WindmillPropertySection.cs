@@ -7,14 +7,14 @@ using UnityEngine.UI;
 namespace Netherlands3D.Functionalities.ObjectLibrary
 {
     [PropertySection(typeof(WindmillPropertyData))]
-    public class WindmillPropertySection : PropertySection
+    public class WindmillPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         [SerializeField] private Slider axisHeightSlider;
         [SerializeField] private Slider rotorDiameterSlider;
 
         private WindmillPropertyData propertyData;
 
-        public override void LoadProperties(List<LayerPropertyData> properties)
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
             propertyData = properties.FirstOrDefault(p => p is WindmillPropertyData) as WindmillPropertyData;
             axisHeightSlider.value = propertyData.AxisHeight;

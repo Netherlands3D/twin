@@ -8,13 +8,13 @@ using UnityEngine.UI;
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
 {
     [PropertySection(typeof(ToggleScatterPropertyData))]
-    public class ToggleScatterPropertySection : PropertySection
+    public class ToggleScatterPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         [SerializeField] private Toggle convertToggle;
 
         ToggleScatterPropertyData convertTogglePropertyData;
 
-        public override void LoadProperties(List<LayerPropertyData> properties)
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
             convertTogglePropertyData = properties.FirstOrDefault(p=> p is ToggleScatterPropertyData) as ToggleScatterPropertyData;
             SetSectionVisible(convertTogglePropertyData.AllowScatter);

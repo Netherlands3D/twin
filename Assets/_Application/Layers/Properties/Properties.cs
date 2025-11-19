@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using Netherlands3D.Twin.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
@@ -27,11 +23,11 @@ namespace Netherlands3D.Twin.Layers.Properties
             
             foreach (var property in layer.LayerProperties)
             {
-                PropertySection prefab = registry.GetPrefab(property.GetType());
-                if (prefab)
+                var prefab = registry.GetPrefab(property.GetType());
+                if (prefab!=null)
                 {
                     var panel = Instantiate(prefab, sections);
-                    panel.LoadProperties(layer.LayerProperties);
+                    panel.GetComponent<IVisualizationWithPropertyData>().LoadProperties(layer.LayerProperties);
                 }
             }
         }

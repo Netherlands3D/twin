@@ -7,7 +7,7 @@ namespace Netherlands3D.Twin.Layers.Properties
     public static class PropertySectionRegistryBuilder
     {
         public static PropertySectionRegistry Registry;
-        
+
         [MenuItem("Tools/Rebuild Property UI Registry")]
         public static void Rebuild(bool log = true)
         {
@@ -21,27 +21,19 @@ namespace Netherlands3D.Twin.Layers.Properties
             foreach (var guid in prefabGuids)
             {
                 var path = AssetDatabase.GUIDToAssetPath(guid);
-                var prefab = AssetDatabase.LoadAssetAtPath<PropertySection>(path);
+                var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
                 if (prefab == null) continue;
+                var i = prefab.GetComponent<IVisualizationWithPropertyData>();
+                if (i == null)
+                    continue;
 
-                // Look for components with the PropertyUI attribute
-                // var propertySection = prefab.GetComponent<PropertySection>(true);
-
-                // foreach (var component in propertySection)
-                // {
-                    if (prefab == null)
-                    {
-                        Debug.Log(prefab.name + "has null component of type PropertySection");
-                        continue;
-                    }
-                    if (prefab.GetType()
-                            .GetCustomAttributes(typeof(PropertySectionAttribute), false)
-                            .FirstOrDefault() is PropertySectionAttribute attr)
-                    {
-                        Debug.Log("found prefab " + prefab.name + " with property panel attribute for: " + attr.RequiredPropertyType + " with name: " + attr.RequiredPropertyType.AssemblyQualifiedName);
-                        Registry.AddEntry(attr.RequiredPropertyType.AssemblyQualifiedName, prefab);
-                    }
-                // }
+                if (i.GetType()
+                        .GetCustomAttributes(typeof(PropertySectionAttribute), false)
+                        .FirstOrDefault() is PropertySectionAttribute attr)
+                {
+                    Debug.Log("found prefab " + prefab.name + " with property panel attribute for: " + attr.RequiredPropertyType + " with name: " + attr.RequiredPropertyType.AssemblyQualifiedName);
+                    Registry.AddEntry(attr.RequiredPropertyType.AssemblyQualifiedName, prefab.gameObject);
+                }
             }
 
             EditorUtility.SetDirty(Registry);
