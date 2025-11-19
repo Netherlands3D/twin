@@ -13,6 +13,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
+    //do not change order for shapetype enum as it is stored in project files
     public enum ShapeType
     {
         Undefined = 0,

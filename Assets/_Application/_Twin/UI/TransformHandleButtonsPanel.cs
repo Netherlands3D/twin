@@ -75,11 +75,15 @@ namespace Netherlands3D.Twin.UI
                 TransformHandleInterfaceToggle.RuntimeTransformHandle.SetAxis(transformLocks.rotationAxes);
             else if (scaleToggle.Toggle.isOn)
                 TransformHandleInterfaceToggle.RuntimeTransformHandle.SetAxis(transformLocks.scaleAxes);
+
+            TransformHandleInterfaceToggle.SetLocks.Invoke(transformLocks);
         }
  
         public void ClearLocks()
         {
             transformLocks = null;
+
+            TransformHandleInterfaceToggle.SetLocks.Invoke(transformLocks);
 
             positionToggle.SetInteractable(true);
             rotationToggle.SetInteractable(true);
