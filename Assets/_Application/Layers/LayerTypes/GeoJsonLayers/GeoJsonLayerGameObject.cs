@@ -76,9 +76,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         List<PendingFeature> pendingPointFeatures = new();
 
         [Space] protected LayerURLPropertyData urlPropertyData = new();
-
-        public LayerPropertyData PropertyData => urlPropertyData;
-
+        
         protected override void OnLayerInitialize()
         {
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);

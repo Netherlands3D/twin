@@ -24,7 +24,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         public override bool IsMaskable => false;
         public ColorSetLayer ColorSetLayer { get; private set; } = new(0, new());
         private CartesianTileSubObjectColorPropertyData propertyData = new();
-        public LayerPropertyData PropertyData => propertyData;
 
         public UnityEvent<float> progressEvent = new();
 

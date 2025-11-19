@@ -45,6 +45,5 @@ namespace Netherlands3D.Twin.Layers.Properties
             var entry = Entries.FirstOrDefault(e => e.TypeName == type.AssemblyQualifiedName);
             return entry.Prefab;
         }
-        
     }
 }

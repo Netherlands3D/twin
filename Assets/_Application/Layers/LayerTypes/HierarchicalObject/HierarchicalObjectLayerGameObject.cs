@@ -55,9 +55,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public WorldTransform WorldTransform { get; private set; }
 
         [SerializeField] private string scaleUnitCharacter = "%";
-
-        LayerPropertyData IVisualizationWithPropertyData.PropertyData => LayerData.GetProperty<TransformLayerPropertyData>();
-
+        
         protected override void OnLayerInitialize()
         {
             snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings"));

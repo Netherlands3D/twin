@@ -29,12 +29,8 @@ namespace Netherlands3D.Functionalities.Wms
         public bool TransparencyEnabled = true; //this gives the requesting url the extra param to set transparancy enabled by default       
         public int DefaultEnabledLayersMax = 5; //in case the dataset is very large with many layers. lets topggle the layers after this count to not visible.
         public Vector2Int PreferredImageSize = Vector2Int.one * 512;
-        public LayerPropertyData PropertyData => URLPropertyData;
-        private LayerURLPropertyData URLPropertyData => LayerData.GetProperty<LayerURLPropertyData>();
         public bool ShowLegendOnSelect { get; set; } = true;
         public override BoundingBox Bounds => WMSProjectionLayer?.BoundingBox;
-
-        public UnityEvent<Uri> OnURLChanged => URLPropertyData.OnDataChanged;
         
         protected override void OnLayerInitialize()
         {
@@ -45,18 +41,20 @@ namespace Netherlands3D.Functionalities.Wms
         protected override void OnLayerReady()
         {
             base.OnLayerReady();
-            UpdateURL(URLPropertyData.Data);
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            UpdateURL(urlPropertyData.Data);
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
-            Legend.Instance.RegisterUrl(URLPropertyData.Data.ToString());
-            Legend.Instance.ShowLegend(URLPropertyData.Data.ToString(), ShowLegendOnSelect && LayerData.IsSelected);
+            Legend.Instance.RegisterUrl(urlPropertyData.Data.ToString());
+            Legend.Instance.ShowLegend(urlPropertyData.Data.ToString(), ShowLegendOnSelect && LayerData.IsSelected);
         }
 
         public void SetLegendActive(bool active)
         {
-            if (URLPropertyData.Data == null) return;
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            if (urlPropertyData.Data == null) return;
             
-            Legend.Instance.ShowLegend(URLPropertyData.Data.ToString(), active);
+            Legend.Instance.ShowLegend(urlPropertyData.Data.ToString(), active);
         }
 
         //a higher order means rendering over lower indices
@@ -99,9 +97,10 @@ namespace Netherlands3D.Functionalities.Wms
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
-            if (URLPropertyData == null) return;
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            if (urlPropertyData == null) return;
             
-            UpdateURL(URLPropertyData.Data);
+            UpdateURL(urlPropertyData.Data);
         }
 
         private void UpdateURL(Uri storedUri)
@@ -116,7 +115,8 @@ namespace Netherlands3D.Functionalities.Wms
             base.OnDestroy();
             LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
             CredentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
-            Legend.Instance.UnregisterUrl(URLPropertyData.Data.ToString());
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            Legend.Instance.UnregisterUrl(urlPropertyData.Data.ToString());
         }
 
         public override void OnSelect()
@@ -133,7 +133,8 @@ namespace Netherlands3D.Functionalities.Wms
         {
             if (boundingBoxContainer == null) return;
 
-            var wmsUrl = URLPropertyData.Data.ToString();
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            var wmsUrl = urlPropertyData.Data.ToString();
             var featureLayerName = OgcWebServicesUtility.GetParameterFromURL(wmsUrl, "layers");
 
             if (boundingBoxContainer.LayerBoundingBoxes.ContainsKey(featureLayerName))

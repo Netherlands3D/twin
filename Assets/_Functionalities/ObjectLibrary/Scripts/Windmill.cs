@@ -15,7 +15,6 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             set => propertyData.RotorDiameter = value;
         }
         private WindmillPropertyData propertyData;
-        public LayerPropertyData PropertyData => propertyData;
 
         public float AxisHeight
         {

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
@@ -11,11 +13,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
         [SerializeField] private Toggle convertToggle;
 
         ToggleScatterPropertyData convertTogglePropertyData;
-        // public LayerGameObject LayerGameObject { get; set; }
 
-        public override void Initialize(LayerPropertyData property)
+        public override void LoadProperties(List<LayerPropertyData> properties)
         {
-            convertTogglePropertyData = property as ToggleScatterPropertyData;
+            convertTogglePropertyData = properties.FirstOrDefault(p=> p is ToggleScatterPropertyData) as ToggleScatterPropertyData;
             SetSectionVisible(convertTogglePropertyData.AllowScatter);
             
             convertTogglePropertyData.AllowScatterChanged.AddListener(SetSectionVisible);

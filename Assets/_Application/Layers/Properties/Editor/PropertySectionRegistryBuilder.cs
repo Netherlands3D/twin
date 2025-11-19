@@ -38,8 +38,8 @@ namespace Netherlands3D.Twin.Layers.Properties
                             .GetCustomAttributes(typeof(PropertySectionAttribute), false)
                             .FirstOrDefault() is PropertySectionAttribute attr)
                     {
-                        Debug.Log("found prefab " + prefab.name + " with property panel attribute for: " + attr.PropertyType + " with name: " + attr.PropertyType.AssemblyQualifiedName);
-                        Registry.AddEntry(attr.PropertyType.AssemblyQualifiedName, prefab);
+                        Debug.Log("found prefab " + prefab.name + " with property panel attribute for: " + attr.RequiredPropertyType + " with name: " + attr.RequiredPropertyType.AssemblyQualifiedName);
+                        Registry.AddEntry(attr.RequiredPropertyType.AssemblyQualifiedName, prefab);
                     }
                 // }
             }

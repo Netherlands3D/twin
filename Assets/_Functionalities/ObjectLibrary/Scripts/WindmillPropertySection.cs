@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,9 +14,9 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
 
         private WindmillPropertyData propertyData;
 
-        public override void Initialize(LayerPropertyData property)
+        public override void LoadProperties(List<LayerPropertyData> properties)
         {
-            propertyData = property as WindmillPropertyData;
+            propertyData = properties.FirstOrDefault(p => p is WindmillPropertyData) as WindmillPropertyData;
             axisHeightSlider.value = propertyData.AxisHeight;
             rotorDiameterSlider.value = propertyData.RotorDiameter;
         }

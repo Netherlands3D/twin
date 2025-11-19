@@ -40,11 +40,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private Bounds polygonBounds = new();
         private SampleTexture sampleTexture;
-
-        public LayerPropertyData PropertyData => LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
-
-        // private CartesianTileLayerGameObject areaReference;
-
+        
         protected override void OnLayerReady()
         {
             base.OnLayerReady();

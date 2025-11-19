@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Projects;
@@ -22,13 +24,14 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             card.SetActive(true);
             sections.ClearAllChildren();
+            
             foreach (var property in layer.LayerProperties)
             {
                 PropertySection prefab = registry.GetPrefab(property.GetType());
                 if (prefab)
                 {
                     var panel = Instantiate(prefab, sections);
-                    panel.Initialize(property);
+                    panel.LoadProperties(layer.LayerProperties);
                 }
             }
         }
