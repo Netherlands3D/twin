@@ -3,8 +3,12 @@
     Properties
     {
         _Tint("Tint", Color) = (1,1,1,1)
-        _PointSize("Point Size (px)", Float) = 3.0
+        _PointSize("Point Size (px)", Float) = 4.0
         _Alpha("Alpha", Range(0,1)) = 1.0
+
+        // Multiplier applied only on WebGL builds, so you can make
+        // WebGL points smaller or larger without affecting the Editor.
+        _WebGLSizeMul("WebGL Size Multiplier", Float) = 0.7
     }
 
         SubShader
@@ -16,52 +20,60 @@
         {
             Blend SrcAlpha OneMinusSrcAlpha
             ZWrite Off
-            Cull Off
 
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
+        // 🔥 Make point material double-sided
+        Cull Off
 
-            #include "UnityCG.cginc"
+        CGPROGRAM
+        #pragma vertex vert
+        #pragma fragment frag
 
-            fixed4 _Tint;
-            float  _PointSize;
-            float  _Alpha;
+        #include "UnityCG.cginc"
 
-            struct appdata
-            {
-                float4 vertex : POSITION;
-                fixed4 color : COLOR;
-            };
+        fixed4 _Tint;
+        float  _PointSize;
+        float  _Alpha;
+        float  _WebGLSizeMul;
 
-            struct v2f
-            {
-                float4 pos   : SV_POSITION;
-                fixed4 color : COLOR;
-                float  psize : PSIZE;   // point size in pixels
-            };
+        struct appdata
+        {
+            float4 vertex : POSITION;
+            fixed4 color : COLOR;
+        };
 
-            v2f vert(appdata v)
-            {
-                v2f o;
-                o.pos = UnityObjectToClipPos(v.vertex);
-                o.color = v.color * _Tint;
-                o.color.a *= _Alpha;
+        struct v2f
+        {
+            float4 pos   : SV_POSITION;
+            fixed4 color : COLOR;
+            float  psize : PSIZE;
+        };
 
-                // Point size in pixels
-                o.psize = _PointSize;
+        v2f vert(appdata v)
+        {
+            v2f o;
+            o.pos = UnityObjectToClipPos(v.vertex);
+            o.color = v.color * _Tint;
+            o.color.a *= _Alpha;
 
-                return o;
-            }
+            float size = _PointSize;
 
-            fixed4 frag(v2f i) : SV_Target
-            {
-                // Square points (fast & compatible).
-                return i.color;
-            }
-            ENDCG
+            // Platform-specific adjustment
+            #if defined(UNITY_WEBGL) || defined(SHADER_API_GLES)
+                size *= _WebGLSizeMul;
+            #endif
+
+            o.psize = size;
+            return o;
         }
+
+        fixed4 frag(v2f i) : SV_Target
+        {
+            return i.color;
+        }
+        ENDCG
     }
+    }
+
 
         FallBack Off
 }
