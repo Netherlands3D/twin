@@ -3,37 +3,70 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 /// <summary>
-/// Incrementally builds a MeshTopology.Points mesh from streamed LAS points.
-/// Designed to be WebGL-friendly (16-bit indices, no exotic features).
+/// Incremental point cloud renderer with simple view-dependent LOD:
+/// - Stores all incoming LAS points in memory (positions + colors).
+/// - Only uploads a subset of points to the mesh depending on camera zoom:
+///     * Overview mode  : evenly sampled subset over whole cloud.
+///     * Detail mode    : points within a radius around the camera in XZ.
+/// This avoids rendering millions of points at once in WebGL.
 /// </summary>
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class IncrementalPointCloud : MonoBehaviour
 {
-    // Internal buffers
-    private readonly List<Vector3> _positions = new List<Vector3>();
-    private readonly List<Color32> _colors = new List<Color32>();
+    // Full dataset (CPU side, all points ever streamed)
+    private readonly List<Vector3> _allPositions = new List<Vector3>();
+    private readonly List<Color32> _allColors = new List<Color32>();
+
+    // Currently rendered subset
+    private readonly List<Vector3> _curPositions = new List<Vector3>();
+    private readonly List<Color32> _curColors = new List<Color32>();
+
     private Mesh _mesh;
+    private MeshFilter _meshFilter;
+    private MeshRenderer _meshRenderer;
 
     [Header("Display")]
     public Material pointMaterial;
 
-    [Tooltip("Automatically move point cloud so its center is at (0,0,0) once it's built.")]
+    [Tooltip("Automatically move point cloud so its center is at (0,0,0) once (re)built.")]
     public bool recenter = true;
 
-    [Tooltip("Auto-update mesh when new points are added.")]
-    public bool autoUpdateMesh = true;
+    [Header("LOD Settings")]
+    [Tooltip("Maximum points when zoomed out (overview).")]
+    public int maxPointsOverview = 50000;
 
-    [Tooltip("Rebuild mesh after this many new points are added.")]
-    public int updateBatchSize = 10000;
+    [Tooltip("Maximum points when zoomed in (detail region).")]
+    public int maxPointsDetail = 250000;
 
-    // WebGL-safe limit (UInt16 indices)
-    private const int MaxVertices = 65000;
+    [Tooltip("Radius (in local XZ units) around camera used for detail mode.")]
+    public float detailRadius = 50f;
 
-    private MeshFilter _meshFilter;
-    private MeshRenderer _meshRenderer;
-    private bool _meshDirty;
-    private bool _hasCentered;
-    private int _lastUpdateVertexCount;
+    [Tooltip("If orthographic, overview when orthographicSize > this.")]
+    public float overviewOrthoSize = 150f;
+
+    [Tooltip("If perspective, overview when camera Y position > this.")]
+    public float overviewHeight = 200f;
+
+    [Header("Update Thresholds")]
+    [Tooltip("Rebuild visible subset when camera moved more than this (world units).")]
+    public float cameraMoveThreshold = 10f;
+
+    [Tooltip("Rebuild visible subset when zoom changed more than this.")]
+    public float zoomChangeThreshold = 10f;
+
+    [Header("Debug")]
+    public bool logStats = false;
+
+    [Tooltip("Camera used to decide LOD. If null, Camera.main is used.")]
+    public Camera targetCamera;
+
+    // Internal state
+    private bool _firstBuild = true;
+    private bool _lodDirty = false;
+    private bool _hasCentered = false;
+
+    private Vector3 _lastCamPos;
+    private float _lastCamZoomMetric;
 
     void Awake()
     {
@@ -57,9 +90,14 @@ public class IncrementalPointCloud : MonoBehaviour
         {
             _mesh = new Mesh
             {
-                name = "IncrementalPointCloudMesh",
-                indexFormat = IndexFormat.UInt16    // WebGL-safe
+                name = "IncrementalPointCloudMesh"
             };
+
+            // Use 32-bit indices when available (WebGL2 usually supports this)
+            _mesh.indexFormat = SystemInfo.supports32bitsIndexBuffer
+                ? IndexFormat.UInt32
+                : IndexFormat.UInt16;
+
             _mesh.MarkDynamic();
         }
 
@@ -67,81 +105,184 @@ public class IncrementalPointCloud : MonoBehaviour
 
         if (pointMaterial != null)
             _meshRenderer.sharedMaterial = pointMaterial;
+
+        if (targetCamera == null)
+            targetCamera = Camera.main;
+
+        if (targetCamera != null)
+        {
+            _lastCamPos = targetCamera.transform.position;
+            _lastCamZoomMetric = GetCameraZoomMetric(targetCamera);
+        }
     }
 
     /// <summary>
-    /// Clear everything (for re-use).
+    /// Clear everything so the component can be reused.
     /// </summary>
-    public void Clear()
+    public void ClearAll()
     {
-        _positions.Clear();
-        _colors.Clear();
+        _allPositions.Clear();
+        _allColors.Clear();
+        _curPositions.Clear();
+        _curColors.Clear();
 
         if (_mesh != null)
             _mesh.Clear();
 
-        _meshDirty = false;
+        _firstBuild = true;
+        _lodDirty = false;
         _hasCentered = false;
-        _lastUpdateVertexCount = 0;
     }
 
     /// <summary>
-    /// Add a single point (convenience).
+    /// Called by the streaming loader for each chunk of LAS points.
+    /// Keeps all points in CPU memory; rendering subset is decided by LOD.
     /// </summary>
-    public void AddPoint(LasStreamingParser.LasPoint point)
-    {
-        var list = new List<LasStreamingParser.LasPoint>(1) { point };
-        AddPoints(list);
-    }
-
-    /// <summary>
-    /// Add a chunk of LAS points.
-    /// This is what your LasStreamingLoader / LASSpawner calls.
-    /// </summary>
-    public void AddPoints(IReadOnlyList<LasStreamingParser.LasPoint> points)
+    public void AddPoints(System.Collections.Generic.IReadOnlyList<LasStreamingParser.LasPoint> points)
     {
         if (points == null || points.Count == 0) return;
-
-        // Make sure mesh exists
         Init();
 
-        int canAdd = Mathf.Min(points.Count, MaxVertices - _positions.Count);
-        if (canAdd <= 0)
-        {
-            Debug.LogWarning($"[IncrementalPointCloud] Vertex limit ({MaxVertices}) reached, skipping remaining points.");
-            return;
-        }
-
-        for (int i = 0; i < canAdd; i++)
+        for (int i = 0; i < points.Count; i++)
         {
             var p = points[i];
-            _positions.Add(p.position);
-            _colors.Add(p.color);
+            _allPositions.Add(p.position);
+            _allColors.Add(p.color);
         }
 
-        if (canAdd < points.Count)
-        {
-            Debug.LogWarning($"[IncrementalPointCloud] Truncated chunk: added {canAdd} of {points.Count} points due to 16-bit index limit.");
-        }
-
-        _meshDirty = true;
-
-        if (autoUpdateMesh)
-        {
-            int diff = _positions.Count - _lastUpdateVertexCount;
-            if (diff >= updateBatchSize)
-            {
-                UpdateMesh();
-            }
-        }
+        _lodDirty = true;
     }
 
     void LateUpdate()
     {
-        // Fallback: ensure mesh eventually updates even if batch threshold not hit
-        if (_meshDirty && !autoUpdateMesh)
+        if (targetCamera == null)
         {
-            UpdateMesh();
+            // Try again if camera was created later
+            targetCamera = Camera.main;
+            if (targetCamera == null) return;
+        }
+
+        float zoomMetric = GetCameraZoomMetric(targetCamera);
+        Vector3 camPos = targetCamera.transform.position;
+
+        bool camMovedFar =
+            Vector3.Distance(camPos, _lastCamPos) >= cameraMoveThreshold;
+
+        bool zoomChanged =
+            Mathf.Abs(zoomMetric - _lastCamZoomMetric) >= zoomChangeThreshold;
+
+        if (_firstBuild || _lodDirty || camMovedFar || zoomChanged)
+        {
+            RebuildLOD(camPos, zoomMetric);
+
+            _lastCamPos = camPos;
+            _lastCamZoomMetric = zoomMetric;
+            _firstBuild = false;
+            _lodDirty = false;
+        }
+    }
+
+    private float GetCameraZoomMetric(Camera cam)
+    {
+        if (cam.orthographic)
+            return cam.orthographicSize;
+        else
+            return cam.transform.position.y;
+    }
+
+    private bool IsOverview(float zoomMetric)
+    {
+        if (targetCamera != null && targetCamera.orthographic)
+            return zoomMetric > overviewOrthoSize;
+        else
+            return zoomMetric > overviewHeight;
+    }
+
+    private void RebuildLOD(Vector3 camWorldPos, float zoomMetric)
+    {
+        if (_allPositions.Count == 0)
+        {
+            _mesh.Clear();
+            return;
+        }
+
+        _curPositions.Clear();
+        _curColors.Clear();
+
+        if (IsOverview(zoomMetric))
+        {
+            BuildOverviewSubset();
+        }
+        else
+        {
+            BuildDetailSubset(camWorldPos);
+
+            // Fallback: if local region is too sparse, show overview instead
+            if (_curPositions.Count < maxPointsOverview / 4)
+            {
+                BuildOverviewSubset();
+            }
+        }
+
+        UpdateMesh();
+
+        if (logStats)
+        {
+            Debug.Log($"[IncrementalPointCloud LOD] total={_allPositions.Count} vis={_curPositions.Count} mode={(IsOverview(zoomMetric) ? "OVERVIEW" : "DETAIL")}");
+        }
+    }
+
+    private void BuildOverviewSubset()
+    {
+        int total = _allPositions.Count;
+
+        if (total <= maxPointsOverview)
+        {
+            _curPositions.AddRange(_allPositions);
+            _curColors.AddRange(_allColors);
+            return;
+        }
+
+        // Evenly sample across the dataset
+        int step = Mathf.Max(1, total / maxPointsOverview);
+        for (int i = 0; i < total; i += step)
+        {
+            _curPositions.Add(_allPositions[i]);
+            _curColors.Add(_allColors[i]);
+        }
+
+        if (_curPositions.Count > maxPointsOverview)
+        {
+            _curPositions.RemoveRange(maxPointsOverview, _curPositions.Count - maxPointsOverview);
+            _curColors.RemoveRange(maxPointsOverview, _curColors.Count - maxPointsOverview);
+        }
+    }
+
+    private void BuildDetailSubset(Vector3 camWorldPos)
+    {
+        // Convert camera to local space of the point cloud
+        Vector3 camLocal = transform.InverseTransformPoint(camWorldPos);
+
+        int total = _allPositions.Count;
+        float radiusSqr = detailRadius * detailRadius;
+        int added = 0;
+
+        for (int i = 0; i < total; i++)
+        {
+            Vector3 p = _allPositions[i];
+            float dx = p.x - camLocal.x;
+            float dz = p.z - camLocal.z;
+            float d2 = dx * dx + dz * dz;
+
+            if (d2 <= radiusSqr)
+            {
+                _curPositions.Add(p);
+                _curColors.Add(_allColors[i]);
+                added++;
+
+                if (added >= maxPointsDetail)
+                    break;
+            }
         }
     }
 
@@ -150,51 +291,38 @@ public class IncrementalPointCloud : MonoBehaviour
         if (_mesh == null) Init();
         if (_mesh == null) return;
 
-        int vCount = _positions.Count;
+        int vCount = _curPositions.Count;
         if (vCount == 0)
         {
             _mesh.Clear();
-            _meshDirty = false;
             return;
         }
 
-        // Set vertex + color buffers
-        _mesh.SetVertices(_positions);
-        _mesh.SetColors(_colors);
+        _mesh.Clear();
 
-        // Generate simple 0..N-1 indices (UInt16 by default)
+        _mesh.SetVertices(_curPositions);
+        _mesh.SetColors(_curColors);
+
         int[] indices = new int[vCount];
         for (int i = 0; i < vCount; i++)
             indices[i] = i;
 
         _mesh.SetIndices(indices, MeshTopology.Points, 0, false);
-
-        // Bounds are important for culling!
         _mesh.RecalculateBounds();
 
         if (recenter && !_hasCentered)
         {
-            RecenterToBounds();
+            var center = _mesh.bounds.center;
+            // place the cloud so its center is at world origin
+            transform.position = -center;
             _hasCentered = true;
+            Debug.Log($"[IncrementalPointCloud] Recentered to origin with offset {center}");
         }
-
-        _lastUpdateVertexCount = vCount;
-        _meshDirty = false;
-
-        Debug.Log($"[IncrementalPointCloud] Updated mesh: {vCount} points.");
     }
 
-    private void RecenterToBounds()
-    {
-        var bounds = _mesh.bounds;
-        var center = bounds.center;
-
-        // Move the transform so the cloud is centered around world origin
-        transform.position = -center;
-        Debug.Log($"[IncrementalPointCloud] Recentered to origin (offset {center}).");
-    }
-
-    // Optional helper if you want to undo recentering
+    /// <summary>
+    /// optional helper to restore original position later
+    /// </summary>
     public void ResetCenter()
     {
         transform.position = Vector3.zero;

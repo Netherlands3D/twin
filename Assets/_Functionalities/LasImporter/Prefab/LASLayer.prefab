@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8623154647674561649}
-  - component: {fileID: 5531145879236340144}
   - component: {fileID: 2302507610021416155}
+  - component: {fileID: 4021273681337027827}
   - component: {fileID: 284254616408615734}
   - component: {fileID: 8265727308599614120}
   - component: {fileID: 8003728092722776754}
@@ -37,7 +37,15 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5531145879236340144
+--- !u!33 &2302507610021416155
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8689871552523927041}
+  m_Mesh: {fileID: 0}
+--- !u!114 &4021273681337027827
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -51,14 +59,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointCloud: {fileID: 8265727308599614120}
   pointsPerFrame: 5000
---- !u!33 &2302507610021416155
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8689871552523927041}
-  m_Mesh: {fileID: 0}
 --- !u!23 &284254616408615734
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -118,6 +118,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointMaterial: {fileID: 2100000, guid: 6ac091cbb9567334b9a12d11b6c7df22, type: 2}
   recenter: 1
+  maxPointsOverview: 50000
+  maxPointsDetail: 250000
+  detailRadius: 50
+  overviewOrthoSize: 150
+  overviewHeight: 200
+  cameraMoveThreshold: 10
+  zoomChangeThreshold: 10
+  logStats: 0
+  targetCamera: {fileID: 0}
 --- !u!114 &8003728092722776754
 MonoBehaviour:
   m_ObjectHideFlags: 0

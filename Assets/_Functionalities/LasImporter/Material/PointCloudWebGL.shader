@@ -3,7 +3,7 @@
     Properties
     {
         _Tint("Tint", Color) = (1,1,1,1)
-        _PointSize("Point Size (px)", Float) = 5.0
+        _PointSize("Point Size (px)", Float) = 3.0
         _Alpha("Alpha", Range(0,1)) = 1.0
     }
 
@@ -38,7 +38,7 @@
             {
                 float4 pos   : SV_POSITION;
                 fixed4 color : COLOR;
-                float  psize : PSIZE;   // <- point size semantic
+                float  psize : PSIZE;   // point size in pixels
             };
 
             v2f vert(appdata v)
@@ -48,7 +48,7 @@
                 o.color = v.color * _Tint;
                 o.color.a *= _Alpha;
 
-                // This controls the rendered point size in pixels
+                // Point size in pixels; PointCloudAutoSize can drive this
                 o.psize = _PointSize;
 
                 return o;
@@ -56,7 +56,9 @@
 
             fixed4 frag(v2f i) : SV_Target
             {
-                // Simple square points (no round clipping for max compatibility)
+                // Square points (fast & compatible).
+                // If you want perfect round points later, we can switch
+                // to instanced quads instead of MeshTopology.Points.
                 return i.color;
             }
             ENDCG
