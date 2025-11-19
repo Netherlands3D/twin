@@ -14,15 +14,13 @@
 
         Pass
         {
-            Cull Off
-            ZWrite Off
-            ZTest LEqual
             Blend SrcAlpha OneMinusSrcAlpha
+            ZWrite Off
+            Cull Off
 
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #pragma target 2.0
             #include "UnityCG.cginc"
 
             fixed4 _Tint;
@@ -37,11 +35,8 @@
 
             struct v2f
             {
-                float4 pos    : SV_POSITION;
+                float4 pos   : SV_POSITION;
                 fixed4 color : COLOR;
-            #if defined(SHADER_API_D3D11) || defined(SHADER_API_XBOXONE) || defined(UNITY_WINRT)
-                float psize : PSIZE;
-            #endif
             };
 
             v2f vert(appdata v)
@@ -51,24 +46,28 @@
                 o.color = v.color * _Tint;
                 o.color.a *= _Alpha;
 
-            #if defined(UNITY_WEBGL) || defined(SHADER_API_GLES) || defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)
+                #if defined(UNITY_WEBGL) || defined(SHADER_API_GLES) || defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)
+                // Set point size per-vertex in WebGL
                 gl_PointSize = _PointSize;
-            #else
-                o.psize = _PointSize;
             #endif
-                return o;
-            }
 
-            fixed4 frag(v2f i) : SV_Target
-            {
-            #if defined(UNITY_WEBGL) || defined(SHADER_API_GLES) || defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)
-                float2 uv = gl_PointCoord * 2.0 - 1.0;
-                if (dot(uv, uv) > 1.0) discard; // round sprite
-            #endif
-                return i.color;
-            }
-            ENDCG
+            return o;
         }
+
+        fixed4 frag(v2f i) : SV_Target
+        {
+            #if defined(UNITY_WEBGL) || defined(SHADER_API_GLES) || defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)
+            // Make points round
+            float2 uv = gl_PointCoord * 2.0 - 1.0;
+            if (dot(uv, uv) > 1.0)
+                discard;
+        #endif
+
+        return i.color;
     }
+    ENDCG
+}
+    }
+
         FallBack Off
 }

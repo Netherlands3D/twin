@@ -83,6 +83,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AddPrecomputedVelocity: 0
+    - _Alpha: 1
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
@@ -104,7 +105,7 @@ Material:
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
-    - _PointSize: 10
+    - _PointSize: 20
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _SampleGI: 0
