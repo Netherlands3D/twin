@@ -11,7 +11,6 @@ namespace Netherlands3D.Twin.UI
 
         public UnityEvent<GameObject> SetTarget = new();
         public UnityEvent SnapTarget = new();
-        public UnityEvent<TransformAxes> SetLocks = new();
 
         public RuntimeTransformHandle RuntimeTransformHandle { get => runtimeTransformHandle; private set => runtimeTransformHandle = value; }
 

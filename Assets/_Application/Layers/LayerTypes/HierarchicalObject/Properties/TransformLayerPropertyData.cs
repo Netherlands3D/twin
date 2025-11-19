@@ -16,10 +16,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
         [DataMember] private Vector3 localScale;
         [DataMember] private string scaleUnitCharacter;
 
-        [DataMember] private int positionAxes = 0;
-        [DataMember] private int rotationAxes = 0;
-        [DataMember] private int scaleAxes = 0;
-
         [JsonIgnore]
         public Coordinate Position
         {
@@ -59,49 +55,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             }
         }
 
-
-        [JsonIgnore]
-        public int PositionAxes
-        {
-            get => positionAxes;
-            set
-            {
-                positionAxes = value;
-                OnPositionAxesChanged.Invoke(value);
-            }
-        }
-
-        [JsonIgnore]
-        public int RotationAxes
-        {
-            get => rotationAxes;
-            set
-            {
-                rotationAxes = value;
-                OnRotationAxesChanged.Invoke(value);
-            }
-        }
-
-        [JsonIgnore]
-        public int ScaleAxes
-        {
-            get => scaleAxes;
-            set
-            {
-                scaleAxes = value;
-                OnScaleAxesChanged.Invoke(value);
-            }
-        }
-
         [JsonIgnore]
         public string ScaleUnitCharacter => scaleUnitCharacter;
 
         [JsonIgnore] public readonly UnityEvent<Coordinate> OnPositionChanged = new();
         [JsonIgnore] public readonly UnityEvent<Vector3> OnRotationChanged = new();
         [JsonIgnore] public readonly UnityEvent<Vector3> OnScaleChanged = new();
-        [JsonIgnore] public readonly UnityEvent<int> OnPositionAxesChanged = new();
-        [JsonIgnore] public readonly UnityEvent<int> OnRotationAxesChanged = new();
-        [JsonIgnore] public readonly UnityEvent<int> OnScaleAxesChanged = new();
 
         [JsonConstructor]
         public TransformLayerPropertyData(Coordinate position, Vector3 eulerRotation, Vector3 localScale, string scaleUnitCharacter = "%")

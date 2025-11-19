@@ -11,7 +11,7 @@ namespace Netherlands3D.Twin.UI
         [SerializeField] private ToggleGroupItem rotationToggle;
         [SerializeField] private ToggleGroupItem scaleToggle;
         [SerializeField] private Button snapButton;
-       public TransformHandleInterfaceToggle TransformHandleInterfaceToggle { get; set; }
+        public TransformHandleInterfaceToggle TransformHandleInterfaceToggle { get; set; }
         private TransformAxes transformLocks;
 
         private void OnEnable()
@@ -75,15 +75,11 @@ namespace Netherlands3D.Twin.UI
                 TransformHandleInterfaceToggle.RuntimeTransformHandle.SetAxis(transformLocks.rotationAxes);
             else if (scaleToggle.Toggle.isOn)
                 TransformHandleInterfaceToggle.RuntimeTransformHandle.SetAxis(transformLocks.scaleAxes);
-
-            TransformHandleInterfaceToggle.SetLocks.Invoke(transformLocks);
         }
  
         public void ClearLocks()
         {
             transformLocks = null;
-
-            TransformHandleInterfaceToggle.SetLocks.Invoke(transformLocks);
 
             positionToggle.SetInteractable(true);
             rotationToggle.SetInteractable(true);

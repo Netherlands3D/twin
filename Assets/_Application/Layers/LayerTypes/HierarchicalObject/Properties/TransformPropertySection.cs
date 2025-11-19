@@ -97,37 +97,44 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             UpdateRotationFields(transformPropertyData.EulerRotation);
             UpdateScalingFields(transformPropertyData.LocalScale);
 
-            SetTransformLocks();
+            SetTransformLocks(properties);
         }
 
-        private void SetTransformLocks()
-        {             
-            HandleAxes positionAxes = (HandleAxes)transformPropertyData.PositionAxes;
-            bool positionLocked = TryParseAxes(transformPropertyData.PositionAxes, ref positionAxes);
-            //if (layerGameObject.TryGetComponent(out TransformAxes transformLocks))
-            //{
-            //     position.xField.Interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.X);
-            //    position.yField.Interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.Z);
-            //    position.zField.Interactable = !transformLocks.PositionLocked && transformLocks.positionAxes.HasFlag(HandleAxes.Y);
-            //    rotation.xField.Interactable = !transformLocks.RotationLocked && transformLocks.rotationAxes.HasFlag(HandleAxes.X);
-            //    rotation.yField.Interactable = !transformLocks.RotationLocked && transformLocks.rotationAxes.HasFlag(HandleAxes.Y);
-            //    rotation.zField.Interactable = !transformLocks.RotationLocked && transformLocks.rotationAxes.HasFlag(HandleAxes.Z);
-            //    scale.xField.Interactable = !transformLocks.ScaleLocked && transformLocks.scaleAxes.HasFlag(HandleAxes.X);
-            //    scale.yField.Interactable = !transformLocks.ScaleLocked && transformLocks.scaleAxes.HasFlag(HandleAxes.Y);
-            //    scale.zField.Interactable = !transformLocks.ScaleLocked && transformLocks.scaleAxes.HasFlag(HandleAxes.Z);
-            //}
-            //else
-            //{
-            //    position.xField.Interactable = true;
-            //    position.yField.Interactable = true;
-            //    position.zField.Interactable = true;
-            //    rotation.xField.Interactable = true;
-            //    rotation.yField.Interactable = true;
-            //    rotation.zField.Interactable = true;
-            //    scale.xField.Interactable = true;
-            //    scale.yField.Interactable = true;
-            //    scale.zField.Interactable = true;
-            //}
+        private void SetTransformLocks(List<LayerPropertyData> properties)
+        {
+            TransformLockLayerPropertyData propertyData = properties.FirstOrDefault(p => p is TransformLockLayerPropertyData) as TransformLockLayerPropertyData;
+            if (propertyData == null)
+            {
+                position.xField.Interactable = true;
+                position.yField.Interactable = true;
+                position.zField.Interactable = true;
+                rotation.xField.Interactable = true;
+                rotation.yField.Interactable = true;
+                rotation.zField.Interactable = true;
+                scale.xField.Interactable = true;
+                scale.yField.Interactable = true;
+                scale.zField.Interactable = true;
+                return;
+            }
+
+            HandleAxes positionAxes = (HandleAxes)propertyData.PositionAxes;
+            HandleAxes rotationAxes = (HandleAxes)propertyData.RotationAxes;
+            HandleAxes scaleAxes = (HandleAxes)propertyData.ScaleAxes;
+            bool positionLocked = TryParseAxes(propertyData.PositionAxes, ref positionAxes);
+            bool rotationLocked = TryParseAxes(propertyData.RotationAxes, ref rotationAxes);
+            bool scaleLocked = TryParseAxes(propertyData.ScaleAxes, ref scaleAxes);
+
+            position.xField.Interactable = !positionLocked && positionAxes.HasFlag(HandleAxes.X);
+            position.yField.Interactable = !positionLocked && positionAxes.HasFlag(HandleAxes.Y);
+            position.zField.Interactable = !positionLocked && positionAxes.HasFlag(HandleAxes.Z);
+
+            rotation.xField.Interactable = !rotationLocked && rotationAxes.HasFlag(HandleAxes.X);
+            rotation.yField.Interactable = !rotationLocked && rotationAxes.HasFlag(HandleAxes.Y);
+            rotation.zField.Interactable = !rotationLocked && rotationAxes.HasFlag(HandleAxes.Z);
+
+            scale.xField.Interactable = !scaleLocked && scaleAxes.HasFlag(HandleAxes.X);
+            scale.yField.Interactable = !scaleLocked && scaleAxes.HasFlag(HandleAxes.Y);
+            scale.zField.Interactable = !scaleLocked && scaleAxes.HasFlag(HandleAxes.Z);
         }
 
         public static bool TryParseAxes(int input, ref HandleAxes axes)
