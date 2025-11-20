@@ -31,7 +31,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
         {
             if (playingSequence)
             {
-                Debug.Log(unlockCircleImage + " hoi ");
                 unlockCircleImage.transform.position = Mouse.current.position.ReadValue();
             }
         }
@@ -45,11 +44,15 @@ namespace Netherlands3D.FirstPersonViewer.UI
         {
             playingSequence = true;
             unlockCircleImage.enabled = true;
-            foreach (Sprite sprite in unlockCircleSprites)
+            yield return new WaitForEndOfFrame();
+
+            for (int i = 0; i < unlockCircleSprites.Length; i++)
             {
+                Sprite sprite = unlockCircleSprites[i];
                 unlockCircleImage.sprite = sprite;
                 unlockCircleImage.rectTransform.sizeDelta = sprite.textureRect.size;
                 yield return new WaitForSeconds(0.03f);
+
             }
             unlockCircleImage.enabled = false;
             playingSequence = false;

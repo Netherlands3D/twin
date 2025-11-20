@@ -91,12 +91,13 @@ namespace Netherlands3D.FirstPersonViewer
             //When key is released release/lock mouse
             if (ExitInput.WasReleasedThisFrame() && !isEditingInputfield)
             {
-                ToggleCursorLock();
+                bool isLocked = Cursor.lockState == CursorLockMode.Locked;
+                ToggleCursor(isLocked);
             }
             else if (LeftClick.triggered && !Interface.PointerIsOverUI())
             {
-                //When no UI object is detected lock the mouse to screen again.
-                LockCursor();
+                //When no UI object is detected lock the mouse to screen again, Lock Cursor.
+                ToggleCursor(false); 
             }
         }
 
@@ -108,24 +109,15 @@ namespace Netherlands3D.FirstPersonViewer
             return isEditingInputfield;
         }
 
-        private void ToggleCursorLock()
+        private void ToggleCursor(bool unlock)
         {
-            if (Cursor.lockState == CursorLockMode.Locked)
-            {
-                AddInputLockConstrain(this);
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            else LockCursor();
+            if (unlock) AddInputLockConstrain(this);
+            else  RemoveInputLockConstrain(this);
+
+            Cursor.lockState = unlock ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = unlock;
 
             OnLockStateChanged?.Invoke(Cursor.lockState);
-        }
-
-        private void LockCursor()
-        {
-            RemoveInputLockConstrain(this);
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
         }
 
         //When holding the exit key and not editing any inputfield. Start the exiting proceidure. 
