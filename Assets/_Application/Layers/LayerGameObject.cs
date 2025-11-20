@@ -100,12 +100,12 @@ namespace Netherlands3D.Twin.Layers
             //todo: what if layerData is null? e.g. because it was destroyed before the visualisation was loaded
             this.layerData = layerData;
             
-            RegisterEventListeners();
             OnLayerInitialize();
             onLayerInitialized.Invoke();
             // Call a template method that children are free to play with - this way we can avoid using
             // the start method directly and prevent forgetting to call the base.Start() from children
             LoadPropertiesInVisualisations();
+            RegisterEventListeners();
             OnLayerReady();
             // Event invocation is separate from template method on purpose to ensure child classes complete their
             // readiness before external classes get to act - it also prevents forgetting calling the base method

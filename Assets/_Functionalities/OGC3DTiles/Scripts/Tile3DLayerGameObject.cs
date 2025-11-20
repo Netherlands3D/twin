@@ -42,25 +42,8 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         protected override void OnLayerInitialize()
         {
-            // InitializePropertyData();
             CredentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
         }
-
-        // protected virtual void InitializePropertyData()
-        // {
-        //     if (!LayerData.HasProperty<Tile3DLayerPropertyData>())
-        //     {
-        //         LayerData.SetProperty(
-        //             UpdateURL(new Uri(tile3DPropertyData.Url));
-        //         new Tile3DLayerPropertyData(
-        //                 new Coordinate(transform.position),
-        //                 transform.eulerAngles,
-        //                 transform.localScale,
-        //                 scaleUnitCharacter
-        //             )
-        //             );
-        //     }
-        // }
 
         private void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
@@ -187,36 +170,22 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             var tile3DPropertyData = properties.Get<Tile3DLayerPropertyData>();
-            Test(tile3DPropertyData);
-        }
-
-        private void Test(Tile3DLayerPropertyData tile3DPropertyData)
-        {
-            var oldTile3DPropertyData = LayerData.GetProperty<Tile3DLayerPropertyData>();
-            if (oldTile3DPropertyData != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
-
-            {
-                oldTile3DPropertyData.OnUrlChanged.RemoveListener(UpdateURL);
-                oldTile3DPropertyData.OnCRSChanged.RemoveListener(UpdateCRS);
-            }
-
             if (tile3DPropertyData == null)
+            {
                 tile3DPropertyData = new Tile3DLayerPropertyData(TileSet.tilesetUrl);
-            LayerData.SetProperty(tile3DPropertyData);
+                LayerData.SetProperty(tile3DPropertyData);
+            }
 
             UpdateURL(new Uri(tile3DPropertyData.Url));
             UpdateCRS(tile3DPropertyData.ContentCRS);
-            
-            tile3DPropertyData.OnUrlChanged.AddListener(UpdateURL);
-            tile3DPropertyData.OnCRSChanged.AddListener(UpdateCRS);
         }
-
+        
         protected override void RegisterEventListeners()
         {
             base.RegisterEventListeners();
             var tile3DPropertyData = LayerData.GetProperty<Tile3DLayerPropertyData>();
-            // tile3DPropertyData.OnUrlChanged.AddListener(UpdateURL);
-            // tile3DPropertyData.OnCRSChanged.AddListener(UpdateCRS);
+            tile3DPropertyData.OnUrlChanged.AddListener(UpdateURL);
+            tile3DPropertyData.OnCRSChanged.AddListener(UpdateCRS);
         }
 
         protected override void OnDestroy()
