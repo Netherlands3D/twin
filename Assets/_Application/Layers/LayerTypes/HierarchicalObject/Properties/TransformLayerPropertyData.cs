@@ -1,7 +1,8 @@
-using System.Runtime.Serialization;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
+using RuntimeHandle;
+using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -60,7 +61,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
         [JsonIgnore] public readonly UnityEvent<Coordinate> OnPositionChanged = new();
         [JsonIgnore] public readonly UnityEvent<Vector3> OnRotationChanged = new();
         [JsonIgnore] public readonly UnityEvent<Vector3> OnScaleChanged = new();
-        
+
         [JsonConstructor]
         public TransformLayerPropertyData(Coordinate position, Vector3 eulerRotation, Vector3 localScale, string scaleUnitCharacter = "%")
         {
