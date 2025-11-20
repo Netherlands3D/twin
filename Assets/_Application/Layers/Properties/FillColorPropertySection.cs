@@ -1,24 +1,24 @@
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.UI.ColorPicker;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class FillColorPropertySection : PropertySectionWithLayerGameObject
+    public class FillColorPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
-        private LayerGameObject layer;
-        
         [SerializeField] private Color defaultColor = Color.white;
         [SerializeField] private ColorWheel colorPicker;
-        
-        public override LayerGameObject LayerGameObject
+
+        private StylingPropertyData stylingPropertyData;
+
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            get => layer;
-            set
-            {
-                layer = value;
-                colorPicker.SetColorWithoutNotify(layer.LayerData.DefaultStyle.AnyFeature.Symbolizer.GetFillColor() ?? defaultColor);
-            }
+            stylingPropertyData = properties.Get<StylingPropertyData>();
+            if (stylingPropertyData == null) return;
+
+            colorPicker.SetColorWithoutNotify(stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.GetFillColor() ?? defaultColor);
         }
 
         private void OnEnable()
@@ -33,8 +33,8 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public void OnPickedColor(Color color)
         {
-            layer.LayerData.DefaultStyle.AnyFeature.Symbolizer.SetFillColor(color);
-            layer.LayerData.OnStylingApplied.Invoke();
-        }
+            stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.SetFillColor(color);
+            stylingPropertyData.OnStylingApplied.Invoke();
+        }       
     }
 }

@@ -29,7 +29,7 @@ namespace Netherlands3D.Twin.Layers
         PrefabPosition = 2 //keep the original prefab position and rotation
     }
     
-    public abstract class LayerGameObject : MonoBehaviour, IStylable
+    public abstract class LayerGameObject : MonoBehaviour
     {
         public const int DEFAULT_MASK_BIT_MASK = 16777215; //(2^24)-1; 
         
@@ -41,9 +41,6 @@ namespace Netherlands3D.Twin.Layers
         public SpawnLocation SpawnLocation => spawnLocation;
         public virtual bool IsMaskable => true; // Can we mask this layer? Usually yes, but not in case of projections
 
-        public virtual IStyler Styler => styler;
-        protected IStyler styler;
-
         public string Name
         {
             get => LayerData.Name;
@@ -53,10 +50,7 @@ namespace Netherlands3D.Twin.Layers
         public bool HasLayerData => LayerData != null;
 
         private LayerData layerData;
-        public LayerData LayerData => layerData;
-
-        public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
-        Dictionary<string, LayerStyle> IStylable.Styles => LayerData.Styles;
+        public LayerData LayerData => layerData;       
 
         [Space] 
         public UnityEvent onShow = new();
@@ -111,12 +105,12 @@ namespace Netherlands3D.Twin.Layers
             // readiness before external classes get to act - it also prevents forgetting calling the base method
             // when overriding OnLayerReady
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
-            LayerData.OnStylingApplied.Invoke(); //apply the styling once at initialization
-            
+
+            //todo move this into loadproperties?
+            LayerData.GetProperty<StylingPropertyData>()?.OnStylingApplied.Invoke(); //apply the styling once at initialization
+
             onLayerReady.Invoke();
         }
-
-        private LayerGameObject Object() => this;
 
         protected virtual void RegisterEventListeners()
         {
@@ -124,13 +118,13 @@ namespace Netherlands3D.Twin.Layers
             layerData.ChildrenChanged.AddListener(OnProxyTransformChildrenChanged);
             layerData.ParentOrSiblingIndexChanged.AddListener(OnSiblingIndexOrParentChanged);
             layerData.LayerActiveInHierarchyChanged.AddListener(OnLayerActiveInHierarchyChanged);
-            layerData.OnVisualizationRequested += Object;
             layerData.LayerDoubleClicked.AddListener(OnDoubleClick);
             layerData.OnPrefabIdChanged.AddListener(DestroyLayerGameObject);
             layerData.LayerSelected.AddListener(OnSelect);
             layerData.LayerDeselected.AddListener(OnDeselect);
             layerData.LayerDestroyed.AddListener(DestroyLayerGameObject);
-            layerData.OnStylingApplied.AddListener(ApplyStyling);
+
+            LayerData.GetProperty<StylingPropertyData>()?.OnStylingApplied.AddListener(ApplyStyling);
         }
 
         protected virtual void UnregisterEventListeners()
@@ -139,13 +133,13 @@ namespace Netherlands3D.Twin.Layers
             layerData.ChildrenChanged.RemoveListener(OnProxyTransformChildrenChanged);
             layerData.ParentOrSiblingIndexChanged.RemoveListener(OnSiblingIndexOrParentChanged);
             layerData.LayerActiveInHierarchyChanged.RemoveListener(OnLayerActiveInHierarchyChanged);
-            layerData.OnVisualizationRequested -= Object;
             layerData.LayerDoubleClicked.RemoveListener(OnDoubleClick);
             layerData.OnPrefabIdChanged.RemoveListener(DestroyLayerGameObject);
             layerData.LayerSelected.RemoveListener(OnSelect);
             layerData.LayerDeselected.RemoveListener(OnDeselect);
             layerData.LayerDestroyed.RemoveListener(DestroyLayerGameObject);
-            layerData.OnStylingApplied.RemoveListener(ApplyStyling);
+
+            LayerData.GetProperty<StylingPropertyData>()?.OnStylingApplied.RemoveListener(ApplyStyling);
         }
 
         /// <summary>
@@ -182,6 +176,7 @@ namespace Netherlands3D.Twin.Layers
             {
                 visualisation.LoadProperties(LayerData.LayerProperties);
             }
+           
         }
 
         protected virtual void OnEnable()
@@ -283,7 +278,10 @@ namespace Netherlands3D.Twin.Layers
 #region Styling
         protected Symbolizer GetStyling(LayerFeature feature)
         {
-            return StyleResolver.Instance.GetStyling(feature, LayerData.Styles);
+            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            if (stylingPropertyData == null) return null;
+
+            return StyleResolver.Instance.GetStyling(feature, stylingPropertyData.Styles);
         }
 
         public virtual void ApplyStyling()
@@ -297,7 +295,10 @@ namespace Netherlands3D.Twin.Layers
 
         protected int GetBitMask()
         {
-            int? bitMask = LayerData.DefaultSymbolizer.GetMaskLayerMask();
+            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            if(stylingPropertyData == null) return DEFAULT_MASK_BIT_MASK;
+
+            int? bitMask = stylingPropertyData.DefaultSymbolizer.GetMaskLayerMask();
             if (bitMask == null)
                 bitMask = DEFAULT_MASK_BIT_MASK;
             
@@ -325,8 +326,11 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         public void SetMaskLayerMask(int bitMask, LayerData data)
         {
-            data.DefaultStyle.AnyFeature.Symbolizer.SetMaskLayerMask(bitMask);
-            data.OnStylingApplied.Invoke();
+            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            if (stylingPropertyData == null) return;
+
+            stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.SetMaskLayerMask(bitMask);
+            stylingPropertyData.OnStylingApplied.Invoke();
         }
 
         public void SetMaskBit(int bitIndex, bool enableBit, LayerData data)
@@ -351,7 +355,10 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         public int GetMaskLayerMask(LayerData data)
         {
-            int? bitMask = data.DefaultStyle.AnyFeature.Symbolizer.GetMaskLayerMask();
+            StylingPropertyData stylingPropertyData = data.GetProperty<StylingPropertyData>();
+            if (stylingPropertyData == null) return LayerGameObject.DEFAULT_MASK_BIT_MASK;
+
+            int? bitMask = stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.GetMaskLayerMask();
             if (bitMask == null)
                 bitMask = LayerGameObject.DEFAULT_MASK_BIT_MASK;
 

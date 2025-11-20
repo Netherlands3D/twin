@@ -211,9 +211,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             layer.LayerData.Color = LayerData.Color;
 
+            StylingPropertyData stylingPropertyData = layer.LayerData.GetProperty<StylingPropertyData>();
+
             // Replace default style with the parent's default style
-            layer.LayerData.RemoveStyle(layer.LayerData.DefaultStyle);
-            layer.LayerData.AddStyle(LayerData.DefaultStyle);
+            stylingPropertyData.RemoveStyle(stylingPropertyData.DefaultStyle);
+            stylingPropertyData.AddStyle(LayerData.GetProperty<StylingPropertyData>().DefaultStyle);
             layer.LayerData.SetParent(LayerData);
             layer.FeatureRemoved += OnFeatureRemoved;
 

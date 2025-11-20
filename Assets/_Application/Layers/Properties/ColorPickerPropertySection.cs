@@ -1,23 +1,29 @@
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.UI.ColorPicker;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class ColorPickerPropertySection : PropertySectionWithLayerGameObject
+    [PropertySection(typeof(StylingPropertyData))] //TODO what about stroke color? fill color is default
+    public class ColorPickerPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         [SerializeField] private Color defaultColor = Color.white;
         [SerializeField] private ColorWheel colorPicker;
         public UnityEvent<Color> PickedColor = new();
 
-        private LayerGameObject layer;
+        private StylingPropertyData stylingPropertyData;
 
-        public override LayerGameObject LayerGameObject
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            get => layer;
-            set => ChangeLayerTo(value);
+            stylingPropertyData = properties.Get<StylingPropertyData>();
+            if (stylingPropertyData == null) return;
+            
+            stylingPropertyData.OnStylingApplied.AddListener(UpdateColorFromLayer);
+            UpdateColorFromLayer();
         }
 
         private void Awake()
@@ -28,51 +34,34 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void OnDestroy()
         {
             PickedColor.RemoveListener(OnColorPicked);
+            stylingPropertyData.OnStylingApplied.RemoveListener(UpdateColorFromLayer);
         }
 
         private void OnEnable()
         {
             colorPicker.colorChanged.AddListener(OnPickedColor);
-            if (layer) layer.LayerData.OnStylingApplied.AddListener(UpdateColorFromLayer);
         }
 
         private void OnDisable()
         {
             colorPicker.colorChanged.RemoveListener(OnPickedColor);
-            if (layer) layer.LayerData.OnStylingApplied.RemoveListener(UpdateColorFromLayer);
         }
 
         public void PickColorWithoutNotify(Color color)
         {
             colorPicker.SetColorWithoutNotify(color);
-        }
-
-        /// <summary>
-        /// Since the layer may or may not be known on Awake/Start of this component, we need to remove and re-add
-        /// listeners on a layer when we set/replace it, and update the color in the color picker to that of the layer.
-        /// </summary>
-        private void ChangeLayerTo(LayerGameObject value)
-        {
-            if (layer && enabled) layer.LayerData.OnStylingApplied.RemoveListener(UpdateColorFromLayer);
-            layer = value;
-            if (layer && enabled) layer.LayerData.OnStylingApplied.AddListener(UpdateColorFromLayer);
-
-            UpdateColorFromLayer();
-        }
+        }      
 
         public void OnPickedColor(Color color)
         {
             PickedColor.Invoke(color);
-            layer.LayerData.OnStylingApplied.Invoke();
+            stylingPropertyData.OnStylingApplied.Invoke();
         }
 
         private void UpdateColorFromLayer()
         {
-            if (layer is HierarchicalObjectLayerGameObject hierarchicalObjectLayerGameObject)
-            {
-                var color = HierarchicalObjectLayerStyler.GetColor(hierarchicalObjectLayerGameObject);
-                this.PickColorWithoutNotify(color.HasValue ? color.Value : defaultColor);
-            }
+            Color? color = stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.GetFillColor();
+            this.PickColorWithoutNotify(color.HasValue ? color.Value : defaultColor);
         }
 
         /// <summary>
@@ -83,10 +72,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         /// <param name="color"></param>
         private void OnColorPicked(Color color)
         {
-            if (layer is HierarchicalObjectLayerGameObject hierarchicalObjectLayerGameObject)
-            {
-                HierarchicalObjectLayerStyler.SetColor(hierarchicalObjectLayerGameObject, color);
-            }
+            stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.SetFillColor(color);            
         }
+
     }
 }

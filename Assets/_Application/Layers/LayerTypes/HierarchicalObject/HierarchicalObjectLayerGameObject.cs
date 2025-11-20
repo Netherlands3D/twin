@@ -87,6 +87,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                     }
                 );
             }
+
+            if (!LayerData.HasProperty<StylingPropertyData>())
+            {
+                LayerData.SetProperty(
+                    new StylingPropertyData()                    
+                );
+            }
         }
 
         protected override void OnEnable()

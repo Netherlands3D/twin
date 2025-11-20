@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.ExtensionMethods;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
@@ -10,13 +11,13 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class CartesianTileLayerFeatureColorPropertySection : PropertySectionWithLayerGameObject, IMultiSelectable
+    public class CartesianTileLayerFeatureColorPropertySection : MonoBehaviour, IVisualizationWithPropertyData, IMultiSelectable
     {  
         [SerializeField] private RectTransform content;
         [SerializeField] private GameObject colorSwatchPrefab;
         [SerializeField] private RectTransform layerContent;
 
-        private LayerGameObject layer;
+        //private LayerGameObject layer;
         private readonly Dictionary<LayerFeature, ColorSwatch> swatches = new();
         [SerializeField] private ColorPickerPropertySection colorPicker;
 
@@ -25,25 +26,22 @@ namespace Netherlands3D.Twin.Layers.Properties
         public List<ISelectable> Items { get; set; } = new();
         public ISelectable FirstSelectedItem { get; set; }
 
-        public override LayerGameObject LayerGameObject
-        {
-            get => layer;
-            set => Initialize(value);
-        }       
+        private StylingPropertyData stylingPropertyData;
 
-        private void Initialize(LayerGameObject layer)
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            this.layer = layer;
+            stylingPropertyData = properties.Get<StylingPropertyData>();
+           
             CreateSwatches();
 
-            layer.LayerData.OnStylingApplied.AddListener(UpdateSwatches);
+            stylingPropertyData.OnStylingApplied.AddListener(UpdateSwatches);
 
-            StartCoroutine(OnPropertySectionsLoaded()); 
+            StartCoroutine(OnPropertySectionsLoaded());
         }
 
         private void OnDestroy()
         {
-            layer.LayerData.OnStylingApplied.RemoveListener(UpdateSwatches);
+            stylingPropertyData.OnStylingApplied.RemoveListener(UpdateSwatches);
             colorPicker.PickedColor.RemoveListener(OnPickColor);
         }
 
@@ -53,7 +51,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
             // Reset listeners to prevent default behaviour
             colorPicker.PickedColor.RemoveAllListeners();
-            colorPicker.LayerGameObject = layer;
+            //colorPicker.LayerGameObject = layer;
             colorPicker.PickedColor.AddListener(OnPickColor);
             HideColorPicker();
 
@@ -66,7 +64,9 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             swatches.Clear();
             layerContent.ClearAllChildren();
-            foreach (var layerFeature in layer.LayerFeatures.Values)
+
+            
+            foreach (var layerFeature in stylingPropertyData.LayerFeatures.Values)
             {
                 swatches[layerFeature] = CreateSwatch(layerFeature);
                 SetSwatchColorFromFeature(layerFeature);
@@ -121,7 +121,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void SetColorizationStylingRule(LayerFeature layerFeature, Color color)
         {
-            (layer.Styler as CartesianTileLayerStyler).SetColor(layerFeature, color);
+            CartesianTileLayerStyler.SetColor(layerFeature, color, stylingPropertyData);
         }
 
         private void UpdateSwatches()
@@ -137,7 +137,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             // if there is no swatch matching this layer feature, we can skip this update
             if (!swatches.TryGetValue(layerFeature, out var swatch)) return;
             
-            var color = (layer.Styler as CartesianTileLayerStyler).GetColor(layerFeature);
+            var color = CartesianTileLayerStyler.GetColor(layerFeature, stylingPropertyData);
 
             swatch.SetColor(color.GetValueOrDefault(Color.white));
         }
@@ -150,6 +150,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void HideColorPicker()
         {
             colorPicker.gameObject.SetActive(false);
-        }
+        }       
     }
 }

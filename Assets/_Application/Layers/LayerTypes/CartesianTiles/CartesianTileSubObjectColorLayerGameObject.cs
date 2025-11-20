@@ -102,23 +102,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             var list = new List<CartesianTileSubObjectColorLayerGameObject>();
 
-            AddLayersRecursive(root, list);
+            //TODO broken feature fix this!
+            // AddLayersRecursive(root, list);
 
             return list;
         }
 
-        private void AddLayersRecursive(LayerData layer, List<CartesianTileSubObjectColorLayerGameObject> list)
-        {
-            if (layer.Visualization is CartesianTileSubObjectColorLayerGameObject datasetLayer)
-            {
-                list.Add(datasetLayer);
-            }
+        //private void AddLayersRecursive(LayerData layer, List<CartesianTileSubObjectColorLayerGameObject> list)
+        //{
+        //    if (layer.Visualization is CartesianTileSubObjectColorLayerGameObject datasetLayer)
+        //    {
+        //        list.Add(datasetLayer);
+        //    }
 
-            foreach (var child in layer.ChildrenLayers)
-            {
-                AddLayersRecursive(child, list);
-            }
-        }
+        //    foreach (var child in layer.ChildrenLayers)
+        //    {
+        //        AddLayersRecursive(child, list);
+        //    }
+        //}
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {

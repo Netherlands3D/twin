@@ -12,6 +12,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
+    //TODO STYLING: add stylingpropertydata to this layer
     [Serializable]
     public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
@@ -162,7 +163,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public override void ApplyStyling()
         {
             // The color in the Layer Panel represents the default stroke color for this layer
-            LayerData.Color = LayerData.DefaultSymbolizer?.GetStrokeColor() ?? LayerData.Color;
+            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            LayerData.Color = stylingPropertyData.DefaultSymbolizer?.GetStrokeColor() ?? LayerData.Color;
 
             MaterialApplicator.Apply(this.Applicator);
         }
