@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 6210933797574673189}
   - component: {fileID: -3573476773808680392}
   - component: {fileID: -6864652715131870147}
-  - component: {fileID: 5317938799488142332}
   m_Layer: 6
   m_Name: Maaiveld (3D Tiles)
   m_TagString: Untagged
@@ -266,10 +265,6 @@ MonoBehaviour:
   onLayerReady:
     m_PersistentCalls:
       m_Calls: []
-  OnStylingApplied:
-    m_PersistentCalls:
-      m_Calls: []
-  usePropertySections: 1
   UnsupportedExtensionsMessage:
     m_PersistentCalls:
       m_Calls:
@@ -361,17 +356,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
---- !u!114 &5317938799488142332
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7974831043381414785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de5cd78f3fd5c1842b127eafceb944e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 2842465798221092780, guid: aec1cc38c05be4c69b9adb0159593506,
-    type: 3}

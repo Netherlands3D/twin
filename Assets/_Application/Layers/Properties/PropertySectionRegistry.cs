@@ -43,7 +43,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         public GameObject GetPrefab(Type type)
         {
             var entry = Entries.FirstOrDefault(e => e.TypeName == type.AssemblyQualifiedName);
-            return entry.Prefab;
+            return entry?.Prefab;
         }
     }
 }

@@ -231,21 +231,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void SetTransformPropertyData(TransformLayerPropertyData transformProperty)
         {
-            var oldTransformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
-
-            if (oldTransformProperty != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
-            {
-                oldTransformProperty.OnPositionChanged.RemoveListener(UpdatePosition);
-                oldTransformProperty.OnRotationChanged.RemoveListener(UpdateRotation);
-                oldTransformProperty.OnScaleChanged.RemoveListener(UpdateScale);
-            }
-
-            LayerData.SetProperty(transformProperty);
-
             UpdatePosition(transformProperty.Position);
             UpdateRotation(transformProperty.EulerRotation);
             UpdateScale(transformProperty.LocalScale);
+        }
 
+        protected override void RegisterEventListeners()
+        {
+            base.RegisterEventListeners();
+            var transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
             transformProperty.OnPositionChanged.AddListener(UpdatePosition);
             transformProperty.OnRotationChanged.AddListener(UpdateRotation);
             transformProperty.OnScaleChanged.AddListener(UpdateScale);

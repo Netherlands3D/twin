@@ -22,7 +22,19 @@ namespace Netherlands3D.Twin.Layers.Properties
             
             foreach (var property in layer.LayerProperties)
             {
-                var prefab = registry.GetPrefab(property.GetType());
+                var type = property.GetType();
+                var prefab = registry.GetPrefab(type);
+                if (prefab == null)
+                {
+                    foreach (var interfaceType in type.GetInterfaces())
+                    {
+                        if (!registry.HasPanel(interfaceType)) continue;
+                        
+                        prefab = registry.GetPrefab(interfaceType);
+                        break;
+                    }
+                }
+                
                 if (prefab!=null)
                 {
                     var panel = Instantiate(prefab, sections);
@@ -41,8 +53,17 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             foreach (var property in layer.LayerProperties)
             {
-                if (registry.HasPanel(property.GetType()))
+                var type = property.GetType();
+                if (registry.HasPanel(type))
                     return true;
+                
+                foreach (var interfaceType in type.GetInterfaces())
+                {
+                    if (registry.HasPanel(interfaceType))
+                    {
+                        return true;
+                    }
+                }
             }
 
             return false;

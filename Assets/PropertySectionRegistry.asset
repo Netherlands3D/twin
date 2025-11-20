@@ -29,3 +29,7 @@ MonoBehaviour:
       eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     Prefab: {fileID: 1252027859236190791, guid: b2b695c4876427c439761dd2521bf672,
       type: 3}
+  - TypeName: Netherlands3D.Twin.Layers.Properties.ILayerPropertyDataWithCRS, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 7185160580400989932, guid: aec1cc38c05be4c69b9adb0159593506,
+      type: 3}
