@@ -15,32 +15,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         /// <summary>
         /// Sets a custom color for all layer features matching the material index of the given layer feature.
         /// </summary>
-        public static void SetColor(HierarchicalObjectLayerGameObject layer, Color? color)
-        {
-            var symbolizer = layer.LayerData.DefaultStyle.AnyFeature.Symbolizer;
-            if (color.HasValue)
-            {
-                symbolizer.SetFillColor(color.Value);
-            }
-            else
-            {
-                symbolizer.ClearFillColor();
-            }
-        }
+        //public static void SetColor(HierarchicalObjectLayerGameObject layer, Color? color)
+        //{
+        //    var symbolizer = layer.LayerData.DefaultStyle.AnyFeature.Symbolizer;
+        //    if (color.HasValue)
+        //    {
+        //        symbolizer.SetFillColor(color.Value);
+        //    }
+        //    else
+        //    {
+        //        symbolizer.ClearFillColor();
+        //    }
+        //}
 
         /// <summary>
         /// Retrieves the color for the current object.
         /// </summary>
-        public static Color? GetColor(HierarchicalObjectLayerGameObject layer)
-        {
-            return layer.LayerData.DefaultStyle.AnyFeature.Symbolizer.GetFillColor();
-        }
+        //public static Color? GetColor(HierarchicalObjectLayerGameObject layer)
+        //{
+        //    return layer.LayerData.DefaultStyle.AnyFeature.Symbolizer.GetFillColor();
+        //}
 
-        public static void ResetColoring(HierarchicalObjectLayerGameObject layer)
-        {
-            SetColor(layer, null);
-            layer.LayerData.OnStylingApplied.Invoke();
-        }
+        //public static void ResetColoring(HierarchicalObjectLayerGameObject layer)
+        //{           
+        //    var symbolizer = layer.LayerData.DefaultStyle.AnyFeature.Symbolizer;
+        //    symbolizer.ClearFillColor();
+        //    layer.LayerData.OnStylingApplied.Invoke();
+        //}
 
         /// <summary>
         /// The other methods deal with manipulating the styles for a layerfeature, this method takes the outcome of

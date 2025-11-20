@@ -1,4 +1,5 @@
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -28,13 +29,13 @@ namespace Netherlands3D.Twin.Layers.Editor
 
 
             root.Add(Subheading("Styles"));
-            if (layerData.GetEditorStyles().Count == 0)
+            if (layerData.GetProperty<StylingPropertyData>().GetEditorStyles().Count == 0)
             {
                 root.Add(FieldContent("This layer doesn't have any styles associated with it (yet)."));
             }
 
             bool first = true;
-            foreach (var style in layerData.GetEditorStyles())
+            foreach (var style in layerData.GetProperty<StylingPropertyData>().GetEditorStyles())
             {
                 var foldout = StyleFoldout(style);
                 // first should be folded out, rest collapsed by default

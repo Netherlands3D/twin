@@ -16,6 +16,7 @@ using UnityEngine.Networking;
 
 namespace Netherlands3D.Functionalities.OGC3DTiles
 {
+    //TODO STYLING: add stylingpropertydata to this layer
     [RequireComponent(typeof(ReadSubtree))]
     [RequireComponent(typeof(Read3DTileset))]
     public class Tile3DLayerGameObject : LayerGameObject, IVisualizationWithPropertyData//, ILayerWithPropertyPanels
@@ -105,7 +106,8 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         private void InitializeStyling(Content content)
         {
-            var bitmask = LayerData.DefaultSymbolizer.GetMaskLayerMask();
+            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            var bitmask = stylingPropertyData.DefaultSymbolizer.GetMaskLayerMask();
             
             if (bitmask == null)
                 bitmask = LayerGameObject.DEFAULT_MASK_BIT_MASK; 

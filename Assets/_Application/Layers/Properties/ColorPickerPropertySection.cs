@@ -1,3 +1,4 @@
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.UI.ColorPicker;
@@ -7,21 +8,21 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    [PropertySection(typeof(FillColorPropertyData))] //TODO what about stroke color? fill color is default
+    [PropertySection(typeof(StylingPropertyData))] //TODO what about stroke color? fill color is default
     public class ColorPickerPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         [SerializeField] private Color defaultColor = Color.white;
         [SerializeField] private ColorWheel colorPicker;
         public UnityEvent<Color> PickedColor = new();
 
-        FillColorPropertyData fillColorPropertyData;
+        private StylingPropertyData stylingPropertyData;
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            fillColorPropertyData = properties.Find(p => p is FillColorPropertyData) as FillColorPropertyData;
-            if (fillColorPropertyData == null) return;
+            stylingPropertyData = properties.Get<StylingPropertyData>();
+            if (stylingPropertyData == null) return;
             
-            fillColorPropertyData.OnColorChanged.AddListener(UpdateColorFromLayer);
+            stylingPropertyData.OnStylingApplied.AddListener(UpdateColorFromLayer);
             UpdateColorFromLayer();
         }
 
@@ -33,41 +34,34 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void OnDestroy()
         {
             PickedColor.RemoveListener(OnColorPicked);
+            stylingPropertyData.OnStylingApplied.RemoveListener(UpdateColorFromLayer);
         }
 
         private void OnEnable()
         {
             colorPicker.colorChanged.AddListener(OnPickedColor);
-            if (layer) layer.LayerData.OnStylingApplied.AddListener(UpdateColorFromLayer);
         }
 
         private void OnDisable()
         {
             colorPicker.colorChanged.RemoveListener(OnPickedColor);
-            if (layer) layer.LayerData.OnStylingApplied.RemoveListener(UpdateColorFromLayer);
         }
 
         public void PickColorWithoutNotify(Color color)
         {
             colorPicker.SetColorWithoutNotify(color);
-        }
-
-      
+        }      
 
         public void OnPickedColor(Color color)
         {
             PickedColor.Invoke(color);
-            layer.LayerData.OnStylingApplied.Invoke();
+            stylingPropertyData.OnStylingApplied.Invoke();
         }
 
         private void UpdateColorFromLayer()
         {
-            //todo move this to hierarchical object 
-            if (layer is HierarchicalObjectLayerGameObject hierarchicalObjectLayerGameObject)
-            {
-                var color = HierarchicalObjectLayerStyler.GetColor(hierarchicalObjectLayerGameObject);
-                this.PickColorWithoutNotify(color.HasValue ? color.Value : defaultColor);
-            }
+            Color? color = stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.GetFillColor();
+            this.PickColorWithoutNotify(color.HasValue ? color.Value : defaultColor);
         }
 
         /// <summary>
@@ -78,10 +72,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         /// <param name="color"></param>
         private void OnColorPicked(Color color)
         {
-            if (layer is HierarchicalObjectLayerGameObject hierarchicalObjectLayerGameObject)
-            {
-                HierarchicalObjectLayerStyler.SetColor(hierarchicalObjectLayerGameObject, color);
-            }
+            stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.SetFillColor(color);            
         }
 
     }

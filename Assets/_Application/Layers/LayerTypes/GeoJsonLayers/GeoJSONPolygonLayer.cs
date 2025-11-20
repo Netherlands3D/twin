@@ -13,6 +13,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
+    //TODO STYLING: add stylingpropertydata to this layer
     [Serializable]
     public partial class GeoJSONPolygonLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
@@ -52,7 +53,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 }
                 polygonVisualizationMaterialInstance = new Material(value);
 
-                LayerData.OnStylingApplied.Invoke();
+                StylingPropertyData layerStyling = LayerData.GetProperty<StylingPropertyData>();
+                layerStyling.OnStylingApplied.Invoke();
             }
         }
 
@@ -193,8 +195,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
+            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
             // The color in the Layer Panel represents the default fill color for this layer
-            LayerData.Color = LayerData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
+            LayerData.Color = stylingPropertyData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
 
             MaterialApplicator.Apply(Applicator);
             foreach (var visualisation in spawnedVisualisations)

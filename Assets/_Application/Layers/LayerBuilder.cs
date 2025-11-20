@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerPresets;
-using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
@@ -130,35 +130,6 @@ namespace Netherlands3D.Twin.Layers
             return this;
         }
 
-        //public LayerData Build(LayerGameObject ontoReference)
-        //{
-        //    var layerData = new ReferencedLayerData(Name, Type, ontoReference);
-        //    ontoReference.SetData(layerData);
-            
-        //    if (!string.IsNullOrEmpty(Name)) layerData.Name = Name;
-        //    if (Color.HasValue) layerData.Color = Color.Value;
-        //    if (Parent != null) layerData.SetParent(Parent);
-
-        //    foreach (var property in Properties)
-        //    {
-        //        layerData.SetProperty(property);
-        //    }
-
-        //    if (DefaultSymbolizer != null)
-        //    {
-        //        layerData.DefaultStyle.AnyFeature.Symbolizer = DefaultSymbolizer;
-        //    }
-            
-        //    foreach (var style in Styles)
-        //    {
-        //        layerData.AddStyle(style);
-        //    }
-
-        //    whenBuilt?.Invoke(layerData);
-
-        //    return layerData;
-        //}
-
         public LayerData Build()
         {            
             LayerData layerData = new LayerData(Name, Type);
@@ -172,14 +143,17 @@ namespace Netherlands3D.Twin.Layers
                 layerData.SetProperty(property);
             }
 
-            if (DefaultSymbolizer != null)
+            StylingPropertyData stylingProperty = Properties.Get<StylingPropertyData>();
+            if (stylingProperty != null)
             {
-                layerData.DefaultStyle.AnyFeature.Symbolizer = DefaultSymbolizer;
-            }
-
-            foreach (var style in Styles)
-            {
-                layerData.AddStyle(style);
+                if (DefaultSymbolizer != null)
+                {
+                    stylingProperty.DefaultStyle.AnyFeature.Symbolizer = DefaultSymbolizer;
+                }
+                foreach (var style in Styles)
+                {
+                    stylingProperty.AddStyle(style);
+                }
             }
 
             whenBuilt?.Invoke(layerData);

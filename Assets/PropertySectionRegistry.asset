@@ -17,6 +17,10 @@ MonoBehaviour:
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     Prefab: {fileID: 7185160580400989932, guid: 4d2ed55a8b4bec140a8d4a78fa283812,
       type: 3}
+  - TypeName: Netherlands3D.Twin.Layers.Properties.StylingPropertyData, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 7610518432015451019, guid: c78b9cbfeb6b857479e94e59739d2347,
+      type: 3}
   - TypeName: Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties.ScatterGenerationSettingsPropertyData,
       eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     Prefab: {fileID: 7185160580400989932, guid: 268ed3efe96c84284a00792823db0330,
