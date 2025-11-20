@@ -6,7 +6,7 @@ using UnityEngine;
 
 using SnapshotComponent = Netherlands3D.Snapshots.Snapshots;
 
-namespace Netherlands3D
+namespace Netherlands3D.FirstPersonViewer.UI
 {
     public class FirstPersonViewerSetup : MonoBehaviour
     {
@@ -16,7 +16,6 @@ namespace Netherlands3D
         [Space()]
         [SerializeField] private Camera2DFrustum frustum;
         [SerializeField] private WMTSMap wmtsMap;
-
 
         private void OnEnable()
         {
