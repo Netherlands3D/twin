@@ -16,12 +16,12 @@ namespace Netherlands3D.Twin.Layers.Properties
     public class PropertySectionRegistry : ScriptableObject
     {
         [SerializeField] private List<PropertyPanelEntry> Entries = new();
-
+#if UNITY_EDITOR
         private void OnValidate()
         {
             PropertySectionRegistryBuilder.Rebuild();
         }
-
+#endif
         public void AddEntry(string typeName, GameObject prefab)
         {
             var entry = new PropertyPanelEntry();

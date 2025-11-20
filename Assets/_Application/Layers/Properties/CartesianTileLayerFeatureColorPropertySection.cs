@@ -18,7 +18,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private GameObject colorSwatchPrefab;
         [SerializeField] private RectTransform layerContent;
 
-        //private LayerGameObject layer;
         private readonly Dictionary<LayerFeature, ColorSwatch> swatches = new();
         [SerializeField] private ColorPickerPropertySection colorPicker;
 

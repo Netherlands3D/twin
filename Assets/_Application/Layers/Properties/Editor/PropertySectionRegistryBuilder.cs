@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
+
+#if UNITY_EDITOR
     public static class PropertySectionRegistryBuilder
     {
         public static PropertySectionRegistry Registry;
@@ -62,4 +64,5 @@ namespace Netherlands3D.Twin.Layers.Properties
             return registry;
         }
     }
+#endif
 }

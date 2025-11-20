@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 using Netherlands3D.Twin.Layers.Properties;
-using Unity.Plastic.Newtonsoft.Json;
+using Newtonsoft.Json;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
