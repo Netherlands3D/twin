@@ -6,14 +6,14 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.FirstPersonViewer.UI
 {
-    public class FPVCircleAnimatie : MonoBehaviour
+    public class FPVMouseUnlockAnimation : MonoBehaviour
     {
         private bool playingSequence;
 
         [Header("Animation")]
         [SerializeField] private Sprite[] unlockCircleSprites;
         private Image unlockCircleImage;
-        FirstPersonViewerInput firstPersonInput;
+        private FirstPersonViewerInput firstPersonInput;
 
         private void OnEnable()
         {

@@ -118,7 +118,7 @@ namespace Netherlands3D.FirstPersonViewer
             }
             else LockCursor();
 
-            OnLockStateChanged.Invoke(Cursor.lockState);
+            OnLockStateChanged?.Invoke(Cursor.lockState);
         }
 
         private void LockCursor()
