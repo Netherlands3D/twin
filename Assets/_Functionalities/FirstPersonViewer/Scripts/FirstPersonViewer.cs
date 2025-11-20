@@ -49,7 +49,7 @@ namespace Netherlands3D.FirstPersonViewer
         public Action OnResetToGround;
         public Action OnSetCameraNorth;
 
-        public Action OnViewerEntered;
+        public Action<ViewerState> OnViewerEntered;
         public Action<bool> OnViewerExited;
 
 
@@ -76,7 +76,7 @@ namespace Netherlands3D.FirstPersonViewer
             gameObject.SetActive(false);
         }
 
-        private void ViewerEnterd()
+        private void ViewerEnterd(ViewerState state)
         {
             startPosition = new Coordinate(transform.position);
             startRotation = transform.rotation;
@@ -85,7 +85,7 @@ namespace Netherlands3D.FirstPersonViewer
             worldTransform.MoveToCoordinate(startPosition);
             worldTransform.SetRotation(startRotation);
             Input.OnFPVEnter();
-            FirstPersonCamera.SetupViewer();
+            FirstPersonCamera.SetupViewer(state);
 
             ServiceLocator.GetService<CameraSwitcher>().SwitchCamera(this);
         }     

@@ -5,6 +5,7 @@ using Netherlands3D.Twin.Samplers;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Netherlands3D.FirstPersonViewer.ViewModus;
 
 namespace Netherlands3D.FirstPersonViewer.UI
 {
@@ -45,7 +46,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             hideButton.action.performed -= OnHideUIPressed;
         }
 
-        private void EnterViewer()
+        private void EnterViewer(ViewerState state)
         {
             uiToDisable.ForEach(ui => ui.SetActive(false));
 

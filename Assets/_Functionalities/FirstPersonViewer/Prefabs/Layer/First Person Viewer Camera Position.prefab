@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 4084941853766836174}
   - component: {fileID: 5990074631127989039}
   - component: {fileID: 6628375546731435886}
+  - component: {fileID: 3212330624063793946}
+  - component: {fileID: 6723064659720530540}
   m_Layer: 0
   m_Name: First Person Viewer Camera Position
   m_TagString: Untagged
@@ -106,3 +108,50 @@ MonoBehaviour:
   positionAxes: 7
   rotationAxes: 2
   scaleAxes: 7
+--- !u!114 &3212330624063793946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112870276665013437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4e15ae4a4b42ffbe4bc9b862a15a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  functionalities:
+  - {fileID: 11400000, guid: 73566e5fce73b5440b33ed107ed5be94, type: 2}
+  OnEnableFunctionality:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisableFunctionality:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5990074631127989039}
+        m_TargetAssemblyTypeName: Netherlands3D.FirstPersonViewer.Layer.FirstPersonCameraLayerGameObject,
+          eu.netherlands3d.twin
+        m_MethodName: DestroyLayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6723064659720530540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112870276665013437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de5cd78f3fd5c1842b127eafceb944e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propertySectionPrefab: {fileID: 8084960324514009907, guid: 6a978cded680e5e47b1f2eafa8f88211,
+    type: 3}

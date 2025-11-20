@@ -1,4 +1,5 @@
 using Netherlands3D.Coordinates;
+using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
@@ -33,9 +34,12 @@ namespace Netherlands3D.FirstPersonViewer.Layer
             layerTool.CloseInspector();
 
             FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer>();
+
+            ViewerState viewerState = fpv.MovementSwitcher.MovementPresets.Find(m => m.viewName == firstPersonPropertyData.MovementName);
+
             fpv.transform.position = transform.position;
             fpv.transform.rotation = transform.rotation;
-            fpv.OnViewerEntered?.Invoke();
+            fpv.OnViewerEntered?.Invoke(viewerState);
         }
     }
 }
