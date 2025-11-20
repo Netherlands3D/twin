@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8209116542904522024}
   - component: {fileID: 1646213389209705716}
   - component: {fileID: 8128677453936289607}
-  - component: {fileID: -8031406265216150104}
   - component: {fileID: -47069250887761774}
   m_Layer: 0
   m_Name: GLBLayer
@@ -99,20 +98,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50fab43e07a540b89d245bd4ec8e4887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-8031406265216150104
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9204913902124509902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6303d72dc2aa4f61bcacd10f6b5e3e43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 3414392683841753435, guid: c78b9cbfeb6b857479e94e59739d2347,
-    type: 3}
 --- !u!114 &-47069250887761774
 MonoBehaviour:
   m_ObjectHideFlags: 0

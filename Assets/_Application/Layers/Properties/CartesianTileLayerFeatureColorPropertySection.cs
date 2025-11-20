@@ -11,6 +11,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
+    [PropertySection(typeof(CartesianTileLayerFeatureColorPropertyData))]
     public class CartesianTileLayerFeatureColorPropertySection : MonoBehaviour, IVisualizationWithPropertyData, IMultiSelectable
     {  
         [SerializeField] private RectTransform content;
@@ -27,11 +28,13 @@ namespace Netherlands3D.Twin.Layers.Properties
         public ISelectable FirstSelectedItem { get; set; }
 
         private StylingPropertyData stylingPropertyData;
+        private CartesianTileLayerFeatureColorPropertyData featureColorPropertyData;
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             stylingPropertyData = properties.Get<StylingPropertyData>();
-           
+            featureColorPropertyData = properties.Get<CartesianTileLayerFeatureColorPropertyData>();
+
             CreateSwatches();
 
             stylingPropertyData.OnStylingApplied.AddListener(UpdateSwatches);
@@ -66,7 +69,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             layerContent.ClearAllChildren();
 
             
-            foreach (var layerFeature in stylingPropertyData.LayerFeatures.Values)
+            foreach (var layerFeature in featureColorPropertyData.LayerFeatures.Values)
             {
                 swatches[layerFeature] = CreateSwatch(layerFeature);
                 SetSwatchColorFromFeature(layerFeature);

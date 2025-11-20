@@ -14,6 +14,19 @@ namespace Netherlands3D.Twin.Layers.Properties
     {
         private const string NameOfDefaultStyle = "default";
 
+        [DataMember] private string activeToolProperty = Symbolizer.DefaultColorPropertyIdentifier;
+
+        [JsonIgnore]
+        public string ActiveToolProperty
+        {
+            get => activeToolProperty;
+            set
+            {
+                activeToolProperty = value;
+                ToolPropertyChanged.Invoke(value);
+            }
+        }
+
         /// <summary>
         /// A list of styles with their names (which are meant as machine-readable names and not human-readable names,
         /// for the latter the 'title' field exists), including a default style that always applies.
@@ -22,9 +35,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         protected Dictionary<string, LayerStyle> styles; 
 
         [JsonIgnore] public Dictionary<string, LayerStyle> Styles => styles;
-
-        //TODO layerfeatures should maybe not be abused within the propertydata, change this in the future
-        [JsonIgnore] public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
 
 
         /// <summary>
@@ -43,6 +53,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         [JsonIgnore] public readonly UnityEvent OnStylingApplied = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleAdded = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleRemoved = new();
+        [JsonIgnore] public readonly UnityEvent<string> ToolPropertyChanged = new();
 
         public StylingPropertyData()
         {

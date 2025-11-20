@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
+    [PropertySection(typeof(StylingPropertyData))]
     public class StrokeColorPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         [SerializeField] private Color defaultColor = Color.white;
@@ -17,7 +18,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             stylingPropertyData = properties.Get<StylingPropertyData>();
             if (stylingPropertyData == null) return;
 
-            colorPicker.SetColorWithoutNotify(stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.GetFillColor() ?? defaultColor);
+            colorPicker.SetColorWithoutNotify(stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.GetStrokeColor() ?? defaultColor);
         }
 
         private void OnEnable()

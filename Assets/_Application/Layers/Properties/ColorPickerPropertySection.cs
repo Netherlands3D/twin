@@ -1,6 +1,4 @@
 using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.UI.ColorPicker;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +14,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         public UnityEvent<Color> PickedColor = new();
 
         private StylingPropertyData stylingPropertyData;
+
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {

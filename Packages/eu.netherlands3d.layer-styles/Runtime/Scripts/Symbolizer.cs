@@ -23,7 +23,7 @@ namespace Netherlands3D.LayerStyles
         //Constants for custom properties
         private const string CustomPropertyPrefix = "--";
 
-
+        public static string DefaultColorPropertyIdentifier => FillColorProperty;
 
         /// <summary>
         /// Store each property as a string, and use specific getters and setting to convert from and to string.
@@ -45,6 +45,19 @@ namespace Netherlands3D.LayerStyles
         public Color? GetFillColor() => GetAndNormalizeColor(FillColorProperty);
 
         public void ClearFillColor() => ClearProperty(FillColorProperty);
+
+        public Color? GetColor(string property)
+        {
+            switch(property)
+            {
+                case FillColorProperty:
+                    return GetFillColor();
+                case StrokeColorProperty:
+                    return GetStrokeColor();
+                default:
+                    return null;
+            }    
+        }
 
         public void SetMaskLayerMask(int maskLayerMask) => SetProperty(MaskLayerMaskProperty, Convert.ToString(maskLayerMask, 2));
 

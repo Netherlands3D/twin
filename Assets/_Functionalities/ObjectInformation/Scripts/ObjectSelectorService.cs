@@ -311,11 +311,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (layer == null)
                 return null;
 
-            StylingPropertyData stylingPropertyData = layer.LayerData.GetProperty<StylingPropertyData>();
-            if (!stylingPropertyData.LayerFeatures.ContainsKey(item))
+            CartesianTileLayerFeatureColorPropertyData layerFeaturePropertyData = layer.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
+            if (!layerFeaturePropertyData.LayerFeatures.ContainsKey(item))
                 return null;
             
-            return stylingPropertyData.LayerFeatures[item]; 
+            return layerFeaturePropertyData.LayerFeatures[item]; 
         }
 
         /// <summary>
