@@ -3697,9 +3697,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 7315335471195440229}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
+      - m_Target: {fileID: 1493264673464392920}
+        m_TargetAssemblyTypeName: Netherlands3D.FPVCrosshairVisibility, eu.netherlands3d.twin
+        m_MethodName: EnableCursor
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3712,9 +3712,9 @@ MonoBehaviour:
   OnToolDeselected:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7315335471195440229}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
+      - m_Target: {fileID: 1493264673464392920}
+        m_TargetAssemblyTypeName: Netherlands3D.FPVCrosshairVisibility, eu.netherlands3d.twin
+        m_MethodName: EnableCursor
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5808,6 +5808,7 @@ GameObject:
   - component: {fileID: 2058524841720549808}
   - component: {fileID: 3426752175749035274}
   - component: {fileID: 3322839993179837116}
+  - component: {fileID: 1493264673464392920}
   m_Layer: 5
   m_Name: Crosshair
   m_TagString: Untagged
@@ -5872,6 +5873,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1493264673464392920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7315335471195440229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2999e7fca9e4f54d8726f07e5a127a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7627108531174032736
 GameObject:
   m_ObjectHideFlags: 0
