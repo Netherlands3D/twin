@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.OBJImporter
 {
+    [PropertySection(typeof(OBJPropertyData))]
     public class MTLImportPropertySection :  MonoBehaviour, IVisualizationWithPropertyData
     {
         [SerializeField] private GameObject defaultImportPanel;
