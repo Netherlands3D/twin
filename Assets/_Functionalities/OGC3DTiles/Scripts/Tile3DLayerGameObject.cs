@@ -16,6 +16,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 {
     [RequireComponent(typeof(ReadSubtree))]
     [RequireComponent(typeof(Read3DTileset))]
+    //todo: this visualization should get a stylingPropertyData
     public class Tile3DLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
     {
         public override BoundingBox Bounds => TileSet.root != null ? new BoundingBox(TileSet.root.BottomLeft, TileSet.root.TopRight) : null;
@@ -90,10 +91,11 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         private void InitializeStyling(Content content)
         {
-            var bitmask = LayerData.DefaultSymbolizer.GetMaskLayerMask();
+            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            var bitmask = stylingPropertyData.DefaultSymbolizer.GetMaskLayerMask();
 
             if (bitmask == null)
-                bitmask = LayerGameObject.DEFAULT_MASK_BIT_MASK;
+                bitmask = DEFAULT_MASK_BIT_MASK;
 
             foreach (var r in GetComponentsInChildren<Renderer>())
             {
