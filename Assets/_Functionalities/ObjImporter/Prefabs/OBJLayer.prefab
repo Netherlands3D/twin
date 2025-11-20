@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 739909529550263350}
   - component: {fileID: 1646213389209705716}
   - component: {fileID: 8128677453936289607}
-  - component: {fileID: 8185954481546126233}
   - component: {fileID: -8031406265216150104}
   m_Layer: 0
   m_Name: OBJLayer
@@ -86,9 +85,6 @@ MonoBehaviour:
     type: 3}
   createSubMeshes: 0
   cameraDistanceFromGeoReferencedObject: 150
-  MtlImportSuccess:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1646213389209705716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,20 +116,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50fab43e07a540b89d245bd4ec8e4887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8185954481546126233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9204913902124509902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1bc34a4f899504adcbb4183d7637d70d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 603709164805375050, guid: e2706125b4e8b43429f60205608c5a9b,
-    type: 3}
 --- !u!114 &-8031406265216150104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,5 +128,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6303d72dc2aa4f61bcacd10f6b5e3e43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 3414392683841753435, guid: c78b9cbfeb6b857479e94e59739d2347,
-    type: 3}
+  propertySectionPrefab: {fileID: 0}
