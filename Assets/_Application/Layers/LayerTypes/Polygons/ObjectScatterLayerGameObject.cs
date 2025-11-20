@@ -184,16 +184,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var boundingBox = GetPolygonBoundingBox();
             polygonBounds = boundingBox.ToUnityBounds();
             
-            // var polygons = CalculateAndVisualisePolygons(polygonProperties.OriginalPolygon);
-            // if (polygons.Count == 0)
-            //     return new Bounds(); // the stroke/fill is clipped out because of the stroke width and no further processing is needed
-            //
-            // var bounds = polygons[0].Bounds; //start with the bounds of the first polygon and add the others if needed
-            // for (var index = 1; index < polygons.Count; index++)
-            // {
-            //     var polygon = polygons[index];
-            //     bounds.Encapsulate(polygon.Bounds);
-            // }
+            var vertices = PolygonUtility.CoordinatesToVertices(polygonProperties.OriginalPolygon, polygonProperties.LineWidth);
+            var polygons = CalculateAndVisualisePolygons(new CompoundPolygon(vertices));
+            if (polygons.Count == 0)
+                return new Bounds(); // the stroke/fill is clipped out because of the stroke width and no further processing is needed
+            
+            var bounds = polygons[0].Bounds; //start with the bounds of the first polygon and add the others if needed
+            for (var index = 1; index < polygons.Count; index++)
+            {
+                var polygon = polygons[index];
+                bounds.Encapsulate(polygon.Bounds);
+            }
 
             return polygonBounds;
         }

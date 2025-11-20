@@ -371,6 +371,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 existingScatterPropertyData = new ScatterGenerationSettingsPropertyData(LayerData.PrefabIdentifier);
                 LayerData.SetProperty(existingScatterPropertyData);
             }
+            
+            LayerData.DeselectLayer(); //remove any transform interaction that might be present
 
             App.Layers.VisualizeAs(LayerData, ObjectScatterLayerGameObject.ScatterBasePrefabID);
         }

@@ -122,7 +122,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             base.OnLayerReady();
             PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            var vertices = CoordinatesToVertices(data.OriginalPolygon);
+            var vertices = PolygonUtility.CoordinatesToVertices(data.OriginalPolygon, data.LineWidth);
             UpdateVisualisation(vertices, data.ExtrusionHeight);
         }
 
@@ -197,7 +197,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if (PolygonVisualisation)
             {
                 PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-                var vertices = CoordinatesToVertices(data.OriginalPolygon);                
+                var vertices = PolygonUtility.CoordinatesToVertices(data.OriginalPolygon, data.LineWidth);
                 UpdateVisualisation(vertices, data.ExtrusionHeight);
                 PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
             }
@@ -206,7 +206,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void RecalculatePolygon()
         {
             PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            var vertices = CoordinatesToVertices(data.OriginalPolygon);
+            var vertices = PolygonUtility.CoordinatesToVertices(data.OriginalPolygon, data.LineWidth);
             Polygon = new CompoundPolygon(vertices);
         }
 
@@ -216,49 +216,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             SetVisualisationActive(activeInHierarchy);
             PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
             UpdateInvertedMaskBitInShaders(data.IsMask, data.InvertMask, activeInHierarchy);
-        }
-
-        private Vector2[] CoordinatesToVertices(List<Coordinate> coordinates)
-        {
-            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-
-            var positions = coordinates.ToUnityPositions().ToList();
-            var vertices = PolygonCalculator.FlattenPolygon(positions, new Plane(Vector3.up, 0));
-            if (vertices.Length == 2)
-            {
-                vertices = LineToPolygon(vertices, data.LineWidth);
-            }
-
-            return vertices;
-        }
-
-        private static Vector2[] LineToPolygon(Vector2[] vertices, float width)
-        {
-            if (vertices.Length != 2)
-            {
-                Debug.LogError("cannot create rectangle because position list contains more than 2 entries");
-                return null;
-            }
-
-            var dir = vertices[1] - vertices[0];
-            var normal = new Vector2(-dir.y, dir.x).normalized;
-
-            var dist = normal * width / 2;
-
-            var point1 = vertices[0] + new Vector2(dist.x, dist.y);
-            var point4 = vertices[1] + new Vector2(dist.x, dist.y);
-            var point3 = vertices[1] - new Vector2(dist.x, dist.y);
-            var point2 = vertices[0] - new Vector2(dist.x, dist.y);
-
-            var polygon = new Vector2[]
-            {
-                point1,
-                point2,
-                point3,
-                point4
-            };
-
-            return polygon;
         }
 
         private void UpdateInvertedMaskBitInShaders(bool isMask, bool invertMask, bool activeInHierarchy)
