@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.FloatingOrigin;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
-using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Events;
@@ -22,13 +19,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public override BoundingBox Bounds => polygonBounds;
         public PolygonVisualisation PolygonVisualisation { get; private set; }
         public Material PolygonMeshMaterial;
+        public CompoundPolygon Polygon { get; set; }
+
         [SerializeField] private Material polygonMaskMaterial;
-        private bool isMask;
-        
+        private bool isMask;        
 
         public UnityEvent OnPolygonVisualisationUpdated = new();
-
-        public CompoundPolygon Polygon { get; set; }
        
 
         /// <summary>

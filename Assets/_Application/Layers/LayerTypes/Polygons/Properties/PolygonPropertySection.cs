@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Netherlands3D.Events;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using TMPro;
 using UnityEngine;
@@ -8,7 +11,8 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 {
-    public class PolygonPropertySection : MonoBehaviour
+    [PropertySection(typeof(PolygonSelectionLayerPropertyData))]
+    public class PolygonPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         [SerializeField] private GameObject strokeWidthTitle;
         [SerializeField] private Slider strokeWidthSlider;
@@ -21,28 +25,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [SerializeField] private TextMeshProUGUI maxMasksText;
         private string maxMasksTextTemplate;
 
-        private LayerData polygonLayer;
-
-        public LayerData PolygonLayer
+        private PolygonSelectionLayerPropertyData polygonPropertyData;
+       
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            get => polygonLayer;
-            set
-            {
-                polygonLayer = value;
-                PolygonSelectionLayerPropertyData data = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
-                strokeWidthSlider.value = data.LineWidth;
-                maskToggle.isOn = data.IsMask;
-                maskInvertToggle.isOn = data.InvertMask;
+            polygonPropertyData = properties.Get<PolygonSelectionLayerPropertyData>();
+            strokeWidthSlider.value = polygonPropertyData.LineWidth;
+            maskToggle.isOn = polygonPropertyData.IsMask;
+            maskInvertToggle.isOn = polygonPropertyData.InvertMask;
 
-                SetLinePropertiesActive(data.ShapeType == ShapeType.Line);
-                SetGridPropertiesActive(data.ShapeType == ShapeType.Grid);
+            SetLinePropertiesActive(polygonPropertyData.ShapeType == ShapeType.Line);
+            SetGridPropertiesActive(polygonPropertyData.ShapeType == ShapeType.Grid);
 
-                maskToggle.interactable = maskToggle.isOn || PolygonSelectionLayerPropertyData.NumAvailableMasks > 0;
-                SetMaxMasksText();
+            maskToggle.interactable = maskToggle.isOn || PolygonSelectionLayerPropertyData.NumAvailableMasks > 0;
+            SetMaxMasksText();
 
-                if (data.IsMask)
-                    PopulateMaskLayerPanel();
-            }
+            if (polygonPropertyData.IsMask)
+                PopulateMaskLayerPanel();
         }
 
         private void SetMaxMasksText()
@@ -65,8 +64,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         }
 
         private void ReselectLayer()
-        {
-            polygonLayer.SelectLayer(true);
+        {           
             EnableGridInputInEditModeEvent.InvokeStarted(true);
         }
 
@@ -82,23 +80,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         }
 
         private void OnDisable()
-        {
-            PolygonSelectionLayerPropertyData data = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
-            if (data.ShapeType == ShapeType.Line)
+        {            
+            if (polygonPropertyData.ShapeType == ShapeType.Line)
                 strokeWidthSlider.onValueChanged.RemoveListener(HandleStrokeWidthChange);
-            if (data.ShapeType == ShapeType.Grid)
+            if (polygonPropertyData.ShapeType == ShapeType.Grid)
                 editGridSelectionButton.onClick.RemoveListener(ReselectLayer);
 
             maskToggle.onValueChanged.RemoveListener(OnIsMaskChanged);
             maskInvertToggle.onValueChanged.RemoveListener(OnInvertMaskChanged);
-
-            EnableGridInputInEditModeEvent.InvokeStarted(false);
         }
 
         private void OnIsMaskChanged(bool isMask)
         {
-            PolygonSelectionLayerPropertyData data = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
-            data.IsMask = isMask;
+            polygonPropertyData.IsMask = isMask;
 
             if (isMask)
                 PopulateMaskLayerPanel();
@@ -117,7 +111,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
                 if (template != null && template.IsMaskable)
                 {
                     var toggle = Instantiate(maskTogglePrefab, maskToggleParent);
-                    toggle.Initialize(polygonLayer, layer);
+                    toggle.Initialize(polygonPropertyData, layer);
                 }
             }
         }
@@ -132,15 +126,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 
         private void OnInvertMaskChanged(bool invert)
         {
-            PolygonSelectionLayerPropertyData data = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
-            data.InvertMask = invert;
+            polygonPropertyData.InvertMask = invert;
         }
 
 
         private void HandleStrokeWidthChange(float newValue)
         {
-            PolygonSelectionLayerPropertyData data = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
-            data.LineWidth = newValue;
+            polygonPropertyData.LineWidth = newValue;
         }
     }
 }
