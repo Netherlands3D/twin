@@ -74,8 +74,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         List<PendingFeature> pendingPolygonFeatures = new();
         List<PendingFeature> pendingLineFeatures = new();
         List<PendingFeature> pendingPointFeatures = new();
-
-        [Space] protected LayerURLPropertyData urlPropertyData = new();
         
         protected override void OnLayerInitialize()
         {
@@ -90,6 +88,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         protected virtual void StartLoadingData()
         {
+            LayerURLPropertyData urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             if (urlPropertyData.Data.IsStoredInProject())
             {
                 string path = AssetUriFactory.GetLocalPath(urlPropertyData.Data);
@@ -104,6 +103,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         protected void RequestCredentials()
         {
             var credentialHandler = GetComponent<ICredentialHandler>();
+            LayerURLPropertyData urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             credentialHandler.Uri = urlPropertyData.Data;
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             credentialHandler.ApplyCredentials();
@@ -144,11 +144,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// </summary>
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
-            var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
-            if (urlProperty != null)
-            {
-                this.urlPropertyData = urlProperty;
-            }
+            //property already added through layerbuilder
         }
 
         /// <summary>

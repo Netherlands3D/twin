@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
@@ -60,40 +60,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings"));
             WorldTransform = GetComponent<WorldTransform>();
-
-            InitializePropertyData();
-        }
-
-        protected virtual void InitializePropertyData()
-        {
-            if (!LayerData.HasProperty<TransformLayerPropertyData>())
-            {
-                LayerData.SetProperty(
-                    new TransformLayerPropertyData(
-                        new Coordinate(transform.position),
-                        transform.eulerAngles,
-                        transform.localScale,
-                        scaleUnitCharacter
-                    )
-                );
-            }
-
-            if (!LayerData.HasProperty<ToggleScatterPropertyData>())
-            {
-                LayerData.SetProperty(
-                    new ToggleScatterPropertyData()
-                    {
-                        AllowScatter = true
-                    }
-                );
-            }
-
-            if (!LayerData.HasProperty<StylingPropertyData>())
-            {
-                LayerData.SetProperty(
-                    new StylingPropertyData()                    
-                );
-            }
         }
 
         protected override void OnEnable()
@@ -116,28 +82,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             previousScale = transform.localScale;
 
             objectCreated.Invoke(gameObject);
-
-            //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
-            var transformPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
-            transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
-            transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
-            transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
-
-            var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
-            toggleScatterPropertyData.AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
-            toggleScatterPropertyData.IsScatteredChanged.AddListener(ConvertToScatterLayer);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            var transformPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
-            transformPropertyData?.OnPositionChanged.RemoveListener(UpdatePosition);
-            transformPropertyData?.OnRotationChanged.RemoveListener(UpdateRotation);
-            transformPropertyData?.OnScaleChanged.RemoveListener(UpdateScale);
-
-            var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
-            toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToScatterLayer);
         }
 
         private void UpdatePosition(Coordinate newPosition)
@@ -232,8 +176,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
-            SetTransformPropertyData(properties.Get<TransformLayerPropertyData>());
-            CreateOrGetToggleScatterPropertyData(properties.Get<ToggleScatterPropertyData>());
+            var transformPropertyData = properties.Get<TransformLayerPropertyData>();
+            if (transformPropertyData == null)
+            {
+                transformPropertyData = new TransformLayerPropertyData(new Coordinate(transform.position),
+                        transform.eulerAngles,
+                        transform.localScale,
+                        scaleUnitCharacter);
+                LayerData.SetProperty(transformPropertyData);
+            }
+
+            var toggleScatterPropertyData = properties.Get<ToggleScatterPropertyData>();
+            if (toggleScatterPropertyData == null)
+            {
+                toggleScatterPropertyData = new ToggleScatterPropertyData() { AllowScatter = true };
+                LayerData.SetProperty(toggleScatterPropertyData);
+            }
+
+            var stylingPropertyData = properties.Get<StylingPropertyData>();
+            if (stylingPropertyData == null)
+            {
+                stylingPropertyData = new StylingPropertyData();
+                LayerData.SetProperty(stylingPropertyData);
+            }
+
+            SetTransformPropertyData(transformPropertyData);
+                        
+            toggleScatterPropertyData.AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
         }
 
         private void SetTransformPropertyData(TransformLayerPropertyData transformProperty)
@@ -246,15 +215,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void RegisterEventListeners()
         {
             base.RegisterEventListeners();
-            var transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
-            transformProperty.OnPositionChanged.AddListener(UpdatePosition);
-            transformProperty.OnRotationChanged.AddListener(UpdateRotation);
-            transformProperty.OnScaleChanged.AddListener(UpdateScale);
+            var transformPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
+            transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
+            transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
+
+            var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
+            toggleScatterPropertyData.IsScatteredChanged.AddListener(ConvertToScatterLayer);
         }
 
-        private void CreateOrGetToggleScatterPropertyData(ToggleScatterPropertyData toggleScatterPropertyData)
+        protected override void UnregisterEventListeners()
         {
-            LayerData.SetProperty(toggleScatterPropertyData);
+            base.UnregisterEventListeners();
+            var transformPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformPropertyData?.OnPositionChanged.RemoveListener(UpdatePosition);
+            transformPropertyData?.OnRotationChanged.RemoveListener(UpdateRotation);
+            transformPropertyData?.OnScaleChanged.RemoveListener(UpdateScale);
+
+            var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
+            toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToScatterLayer);
         }
 
         protected virtual void Update()
@@ -352,14 +331,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             // an import or replacement.
             var features = CreateFeaturesByType<MeshRenderer>();
 
+           
             // Apply style to the features that was discovered
             foreach (var feature in features)
             {
-                HierarchicalObjectLayerStyler.Apply(this, GetStyling(feature), feature);
+                if (feature.Geometry is not MeshRenderer meshRenderer) return;
+
+                Symbolizer styling = GetStyling(feature);
+                var fillColor = styling.GetFillColor();
+
+                // Keep the original material color if fill color is not set (null)
+                if (!fillColor.HasValue) return;
+
+                LayerData.Color = fillColor.Value;
+                var block = new MaterialPropertyBlock();
+                for (int m = 0; m <= meshRenderer.sharedMaterials.Length - 1; m++)
+                {
+                    meshRenderer.GetPropertyBlock(block, m);
+                    block.SetColor(BaseColorID, fillColor.Value);
+                    meshRenderer.SetPropertyBlock(block, m);
+                }
             }
 
             base.ApplyStyling();
         }
+
+        private static readonly int BaseColorID = Shader.PropertyToID("_BaseColor");
+      
 
         private void ConvertToScatterLayer(bool isScattered)
         {

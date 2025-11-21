@@ -1,6 +1,8 @@
 using UnityEngine;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
+using System.Collections.Generic;
+using Netherlands3D.Twin.Layers.Properties;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
@@ -9,9 +11,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public Vector3 Coordinates = Vector3.zero;
         [SerializeField] private CoordinateSystem coordinateSystem;
 
-        protected override void OnLayerReady()
+        public override void LoadProperties(List<LayerPropertyData> properties)
         {
-            base.OnLayerReady();
+            base.LoadProperties(properties);        
             var transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
             transformProperty.Position = new Coordinate(coordinateSystem, Coordinates.y, Coordinates.x, Coordinates.z);
             transformProperty.EulerRotation = transform.rotation.eulerAngles;

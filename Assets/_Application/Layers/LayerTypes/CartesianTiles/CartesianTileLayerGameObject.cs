@@ -10,11 +10,12 @@ using Netherlands3D.SubObjects;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
     [RequireComponent(typeof(Layer))]
-    public class CartesianTileLayerGameObject : LayerGameObject//, ILayerWithPropertyPanels
+    public class CartesianTileLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
     {
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
 
@@ -231,6 +232,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             feature.Attributes.Add(CartesianTileLayerStyler.MaterialNameIdentifier, mat.name);
 
             return feature;
+        }
+
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            var stylingPropertyData = properties.Get<StylingPropertyData>();
+            if (stylingPropertyData == null)
+            {
+                stylingPropertyData = new StylingPropertyData();
+                LayerData.SetProperty(stylingPropertyData);
+            }
+
+            var layerFeaturePropertyData = properties.Get<CartesianTileLayerFeatureColorPropertyData>();
+            if (layerFeaturePropertyData == null)
+            {
+                layerFeaturePropertyData = new CartesianTileLayerFeatureColorPropertyData();
+                LayerData.SetProperty(layerFeaturePropertyData);
+            }
         }
     }
 }

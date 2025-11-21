@@ -4,6 +4,7 @@ using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
@@ -14,50 +15,58 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         [SerializeField] private Tool layerTool;
         [SerializeField] private GameObject ghostGameObject;
         private Color defaultColor;
-        private CameraPropertyData cameraPropertyData => LayerData.GetProperty<CameraPropertyData>();
+       
         public override bool IsMaskable => false;
 
         protected override void OnLayerInitialize()
         {
             base.OnLayerInitialize();
-            cameraPropertyData.OnOrthographicChanged.AddListener(SetOrthographic);
-
             defaultColor = ghostMaterial.color;
             
             layerTool.onOpen.AddListener(EnableGhost);
             layerTool.onClose.AddListener(DisableGhost);
         }
 
-        protected override void InitializePropertyData()
-        {
-            if (cameraPropertyData != null) return;
-
-            var cam = Camera.main;
-            var camTransform = cam.transform;
-
-            LayerData.SetProperty(
-                new CameraPropertyData(
-                    new Coordinate(camTransform.position), 
-                    camTransform.eulerAngles, 
-                    camTransform.localScale, 
-                    cam.orthographic
-                )
-            );
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            cameraPropertyData.OnOrthographicChanged.RemoveListener(SetOrthographic);
-            layerTool.onOpen.RemoveListener(EnableGhost);
-            layerTool.onClose.RemoveListener(DisableGhost);
-        }
-
         public override void LoadProperties(List<LayerPropertyData> properties)
         {
             base.LoadProperties(properties);
 
+            var cameraPropertyData = properties.Get<CameraPropertyData>();
+            if (cameraPropertyData == null)
+            {
+                var cam = Camera.main;
+                var camTransform = cam.transform;
+                cameraPropertyData = new CameraPropertyData(
+                    new Coordinate(camTransform.position),
+                    camTransform.eulerAngles,
+                    camTransform.localScale,
+                    cam.orthographic
+                    );
+                LayerData.SetProperty(cameraPropertyData);
+            }
+
             SetOrthographic(cameraPropertyData.Orthographic);
+        }
+
+        protected override void RegisterEventListeners()
+        {
+            base.RegisterEventListeners();
+            var cameraPropertyData = LayerData.GetProperty<CameraPropertyData>();
+            cameraPropertyData.OnOrthographicChanged.AddListener(SetOrthographic);
+        }
+
+        protected override void UnregisterEventListeners()
+        {
+            base.UnregisterEventListeners();
+            var cameraPropertyData = LayerData.GetProperty<CameraPropertyData>();
+            cameraPropertyData.OnOrthographicChanged.RemoveListener(SetOrthographic);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();           
+            layerTool.onOpen.RemoveListener(EnableGhost);
+            layerTool.onClose.RemoveListener(DisableGhost);
         }
 
         private void SetOrthographic(bool orthographic)
@@ -72,6 +81,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void MoveCameraToSavedLocation()
         {
+            var cameraPropertyData = LayerData.GetProperty<CameraPropertyData>();
             Camera.main.GetComponent<MoveCameraToCoordinate>().LoadCameraData(cameraPropertyData);
         }
         
