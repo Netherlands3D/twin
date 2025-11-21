@@ -29,9 +29,12 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         void Update()
         {
-            if (playingSequence)
+            if (!playingSequence) return;
+
+            if (Pointer.current != null)
             {
-                unlockCircleImage.transform.position = Mouse.current.position.ReadValue();
+                Vector2 pos = Pointer.current.position.ReadValue();
+                unlockCircleImage.transform.position = pos;
             }
         }
 
@@ -50,9 +53,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
             {
                 Sprite sprite = unlockCircleSprites[i];
                 unlockCircleImage.sprite = sprite;
-                unlockCircleImage.rectTransform.sizeDelta = sprite.textureRect.size;
+                unlockCircleImage.rectTransform.sizeDelta = (sprite.textureRect.size / 1.5f);
                 yield return new WaitForSeconds(0.03f);
-
             }
             unlockCircleImage.enabled = false;
             playingSequence = false;
