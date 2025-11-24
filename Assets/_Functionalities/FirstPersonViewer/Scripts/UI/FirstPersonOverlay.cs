@@ -14,7 +14,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         [SerializeField] private InputActionReference openOverlayButton;
         [SerializeField] private TextMeshProUGUI overlayText;
-    
+
         private void Start()
         {
             firstPersonViewer = ServiceLocator.GetService<FirstPersonViewer>();
@@ -41,13 +41,20 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void UpdateInfoMenu(Coordinate playerCoords, float groundPos)
         {
-            float groundHeight = Mathf.Round(heightMap.GetHeight(playerCoords, true) * 100f) / 100f;
+            float heightMapValue = heightMap.GetHeight(playerCoords, true);
 
-            double dstToGround = Mathf.Round(((float)playerCoords.value3 - Mathf.Abs(groundHeight)) * 100f) / 100f;
-            float dstToObject = Mathf.Round(((float)playerCoords.value3 - groundPos) * 100f) / 100f;
+            float napHeight = Mathf.Round(heightMapValue * 100f) / 100f;
 
-            overlayText.text = $"Coordinaten {playerCoords.Convert(CoordinateSystem.RDNAP).ToString()}\nAfstand Grond: {dstToGround}m\nAfstand tot Object: {dstToObject}m\nNAP Hoogte: 0m\nGrondhoogte: {groundHeight}m\n<i><size=10>Data is een geschatte benadering en kan afwijken van de werkelijkheid.</i>";
+            float dstToGround = Mathf.Round(((float)playerCoords.value3 - heightMapValue) * 100f) / 100f;
+            float dstToObject = Mathf.Round((playerCoords.ToUnity().y - groundPos) * 100f) / 100f;
+
+            overlayText.text =
+                $"Coordinaten: {playerCoords.Convert(CoordinateSystem.RDNAP).ToString()}\n" +
+                $"Gelezen hoogtekaart: {heightMapValue}\n" +
+                $"Afstand Grond: {dstToGround}m\n" +
+                $"Afstand tot Object: {dstToObject}m\n" +
+                $"NAP Hoogte: {napHeight + .6f}m\n" +
+                $"<i><size=10>Data is een geschatte benadering en kan afwijken van de werkelijkheid.</i>";
         }
-
     }
 }
