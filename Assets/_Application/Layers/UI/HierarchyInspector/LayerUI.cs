@@ -399,7 +399,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private void SetLayerTypeImage()
         {
             var sprite = layerTypeSpriteLibrary.GetLayerTypeSprite(Layer);
-            layerTypeImage.sprite = sprite;
+            layerTypeImage.sprite = sprite.PrimarySprite;
         }
 
         private void UpdateFoldout()

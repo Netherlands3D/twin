@@ -115,7 +115,10 @@ namespace Netherlands3D.Twin.Cameras
 
             pointer = FindAnyObjectByType<PointerToWorldPosition>();
             orthographicSwitcher = orthographicSwitcher ? orthographicSwitcher : GetComponent<OrthographicSwitcher>();            
+        }
 
+        private void OnEnable()
+        {
             horizontalInput.AddListenerStarted(MoveHorizontally);
             verticalInput.AddListenerStarted(MoveForwardBackwards);
             upDownInput.AddListenerStarted(MoveUpDown);
@@ -134,7 +137,28 @@ namespace Netherlands3D.Twin.Cameras
             if (ortographicEnabled) ortographicEnabled.AddListenerStarted(EnableOrtographic);
             if (focusOnObject) focusOnObject.AddListenerStarted(FocusOnObject);
         }
-                
+
+        private void OnDisable()
+        {
+            horizontalInput.RemoveListenerStarted(MoveHorizontally);
+            verticalInput.RemoveListenerStarted(MoveForwardBackwards);
+            upDownInput.RemoveListenerStarted(MoveUpDown);
+            lookInput.RemoveListenerStarted(PointerDelta);
+            flyInput.RemoveListenerStarted(FreeFly);
+            rotateInput.RemoveListenerStarted(RotateAroundOwnAxis);
+
+            zoomToPointerInput.RemoveListenerStarted(ZoomToPointer);
+            pointerPosition.RemoveListenerStarted(SetPointerPosition);
+
+            dragModifier.RemoveListenerStarted(Drag);
+            rotateModifier.RemoveListenerStarted(Rotate);
+            firstPersonModifier.RemoveListenerStarted(RotateFirstPerson);
+
+            if (blockCameraDrag) blockCameraDrag.RemoveListenerStarted(LockDragging);
+            if (ortographicEnabled) ortographicEnabled.RemoveListenerStarted(EnableOrtographic);
+            if (focusOnObject) focusOnObject.RemoveListenerStarted(FocusOnObject);
+        }
+
         /// <summary>
         /// Switch camera to ortographic mode and limit its controls
         /// </summary>
@@ -171,6 +195,24 @@ namespace Netherlands3D.Twin.Cameras
                 this.transform.Translate(Vector3.back * focusDistanceMultiplier, Space.Self);
             }
 
+        }
+
+        /// <summary>
+        /// Focus camera on a point in the world
+        /// </summary>
+        /// <param name="point">The focus point</param>
+        public void FocusOnPoint(Vector3 point) => FocusOnPoint(point, focusDistanceMultiplier);
+
+        /// <summary>
+        /// Focus camera on a point in the world
+        /// </summary>
+        /// <param name="point">The focus point</param>
+        /// <param name="distanceMultiplier">Distance from point</param>
+        public void FocusOnPoint(Vector3 point, float distanceMultiplier)
+        {
+            transform.position = point;
+            transform.eulerAngles = new Vector3((cameraComponent.orthographic) ? 90 : focusAngle, 0, 0);
+            transform.Translate(Vector3.back * distanceMultiplier, Space.Self);
         }
 
         /// <summary>
