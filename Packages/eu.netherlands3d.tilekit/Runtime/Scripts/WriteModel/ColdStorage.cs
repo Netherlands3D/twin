@@ -5,6 +5,7 @@ using Netherlands3D.Tilekit.MemoryManagement;
 using Unity.Collections;
 using Unity.Mathematics;
 using Unity.Profiling;
+using UnityEngine;
 
 namespace Netherlands3D.Tilekit.WriteModel
 {
@@ -13,6 +14,8 @@ namespace Netherlands3D.Tilekit.WriteModel
     /// </summary>
     public sealed class ColdStorage : IDisposable
     {
+        public BoxBoundingVolume AreaOfInterest;
+        
         public BoundingVolumeStore BoundingVolumes;
         public NativeList<double> GeometricError; // hot
         public NativeList<MethodOfRefinement> Refine; // hot/small
@@ -22,6 +25,7 @@ namespace Netherlands3D.Tilekit.WriteModel
         public readonly Buckets<int> Children;
         public readonly Buckets<TileContentData> Contents;
         public readonly StringTable Strings;
+        public Tile Root => Get(0);
 
         // Allocation and growth are aligned to 64 tiles. This ensures memory alignment 
         // and reduces fragmentation when resizing or replacing storages. Because each 
@@ -30,34 +34,44 @@ namespace Netherlands3D.Tilekit.WriteModel
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         bool IsMultipleOf64(int value) => (value & 63) == 0;
 
-        static readonly ProfilerCounterValue<int> layersCounter = new(
+        private static readonly ProfilerCounterValue<int> LayersCounter = new(
             ProfilerCategory.Scripts, 
             "Tilekit - Number of layers",
             ProfilerMarkerDataUnit.Count, 
             ProfilerCounterOptions.FlushOnEndOfFrame
         );
-        static readonly ProfilerCounterValue<int> allocatedTilesCounter = new(
+
+        private static readonly ProfilerCounterValue<int> AllocatedTilesCounter = new(
             ProfilerCategory.Scripts, 
             "Tilekit - Allocated tiles",
             ProfilerMarkerDataUnit.Count, 
             ProfilerCounterOptions.FlushOnEndOfFrame
         );
-        static readonly ProfilerCounterValue<int> actualTilesCounter = new(
+
+        private static readonly ProfilerCounterValue<int> ActualTilesCounter = new(
             ProfilerCategory.Scripts, 
             "Tilekit - Actual tiles",
             ProfilerMarkerDataUnit.Count, 
             ProfilerCounterOptions.FlushOnEndOfFrame
         );
         
-        public ColdStorage(int initialSize = 64, Allocator alloc = Allocator.Persistent)
+        static ColdStorage()
+        {
+            LayersCounter.Value = 0;
+            ActualTilesCounter.Value = 0;
+            AllocatedTilesCounter.Value = 0;
+        }
+
+        public ColdStorage(BoxBoundingVolume areaOfInterest, int initialSize = 64, Allocator alloc = Allocator.Persistent)
         {
             if (!IsMultipleOf64(initialSize))
             {
                 throw new ArgumentException("Initial size must be a multiple of 64", nameof(initialSize));
             }
 
-            layersCounter.Value += 1;
-            allocatedTilesCounter.Value += initialSize;
+            AreaOfInterest = areaOfInterest;
+            LayersCounter.Value += 1;
+            AllocatedTilesCounter.Value += initialSize;
             
             BoundingVolumes = new BoundingVolumeStore();
             BoundingVolumes.Alloc(initialSize, alloc);
@@ -90,7 +104,7 @@ namespace Netherlands3D.Tilekit.WriteModel
             // as the new id as this is last id + 1
             int id = GeometricError.Length;
 
-            actualTilesCounter.Value += 1;
+            ActualTilesCounter.Value += 1;
             
             BoundingVolumes.Add(id, boundingVolume);
             GeometricError.AddNoResize(geometricError);
@@ -98,9 +112,8 @@ namespace Netherlands3D.Tilekit.WriteModel
             Subdivision.AddNoResize(subdivision);
             Transform.AddNoResize(transform);
 
-            // TODO: Should we store these?
-            var childOffset = Children.Add(children);
-            var contentOffset = Contents.Add(contents);
+            Children.Add(children);
+            Contents.Add(contents);
 
             return id;
         }
@@ -112,9 +125,11 @@ namespace Netherlands3D.Tilekit.WriteModel
 
         public void Dispose()
         {
-            layersCounter.Value -= 1;
-            allocatedTilesCounter.Value -= GeometricError.Capacity;
-            actualTilesCounter.Value -= GeometricError.Length;
+            // Clear all storages first to allow for a proper cleanup before disposing
+            Clear();
+            
+            LayersCounter.Value -= 1;
+            AllocatedTilesCounter.Value -= GeometricError.Capacity;
             
             GeometricError.Dispose();
             Refine.Dispose();
@@ -128,6 +143,9 @@ namespace Netherlands3D.Tilekit.WriteModel
 
         public void Clear()
         {
+            // Clearing will not free memory, but will reset the counters for the actual tiles - allocated tiles will stay the same
+            ActualTilesCounter.Value -= GeometricError.Length;
+
             GeometricError.Clear();
             Refine.Clear();
             Subdivision.Clear();

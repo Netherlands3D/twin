@@ -11,11 +11,27 @@ namespace Netherlands3D.Tilekit.Tests
     public class ColdStorageTests
     {
         private ColdStorage s;
+        private static BoxBoundingVolume AreaOfInterest
+        {
+            get
+            {
+                int left = 153000;
+                int right = 158000;
+                int top = 462000;
+                int bottom = 467000;
 
+                var areaOfInterest = BoxBoundingVolume.FromTopLeftAndBottomRight(
+                    new double3(left, top, 0),
+                    new double3(right, bottom, 0)
+                );
+                return areaOfInterest;
+            }
+        }
+        
         [SetUp]
         public void SetUp()
         {
-            s = new ColdStorage(initialSize: 64, alloc: Allocator.Temp);
+            s = new ColdStorage(AreaOfInterest, initialSize: 64, alloc: Allocator.Temp);
         }
 
         [TearDown]

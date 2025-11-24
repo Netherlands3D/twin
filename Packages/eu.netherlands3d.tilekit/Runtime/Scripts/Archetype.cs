@@ -1,10 +1,23 @@
 ﻿using System;
+using Netherlands3D.Tilekit.BoundingVolumes;
 using Netherlands3D.Tilekit.WriteModel;
 using Unity.Collections;
 
 namespace Netherlands3D.Tilekit
 {
-    public class Archetype<TWarmTile, THotTile> : IDisposable where TWarmTile : unmanaged where THotTile : unmanaged
+    public interface IHasTileIndex
+    {
+        int TileIndex { get; }
+    }
+
+    public interface IHasWarmTileIndex
+    {
+        int WarmTileIndex { get; }
+    }
+    
+    public class Archetype<TWarmTile, THotTile> : IDisposable 
+        where TWarmTile : unmanaged, IHasTileIndex 
+        where THotTile : unmanaged, IHasWarmTileIndex
     {
         private readonly ColdStorage cold;
         public NativeList<TWarmTile> warm;
@@ -14,9 +27,9 @@ namespace Netherlands3D.Tilekit
         public NativeList<TWarmTile> Warm => warm;
         public NativeList<THotTile> Hot => hot;
         
-        public Archetype(int initialCapacity, Allocator alloc)
+        public Archetype(BoxBoundingVolume areaOfInterest, int initialCapacity, Allocator alloc)
         {
-            cold = new ColdStorage(initialCapacity, alloc);
+            cold = new ColdStorage(areaOfInterest, initialCapacity, alloc);
             warm = new NativeList<TWarmTile>(128, alloc);
             hot = new NativeList<THotTile>(64, alloc);
         }

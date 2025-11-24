@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.Wms;
 using Netherlands3D.Tilekit.Archetypes;
 using Netherlands3D.Tilekit.BoundingVolumes;
-using Netherlands3D.Tilekit.ContentImporters;
-using Netherlands3D.Tilekit.ExtensionMethods;
+using Netherlands3D.Tilekit.ContentLoaders;
 using Netherlands3D.Tilekit.Renderers;
 using Netherlands3D.Tilekit.TileBuilders;
 using Unity.Collections;
@@ -17,8 +14,7 @@ using UnityEngine;
 namespace Netherlands3D.Tilekit.ServiceTypes
 {
     // https://docs.ogc.org/cs/22-025r4/22-025r4.html#toc31 for implicit tiling inspiration
-    [RequireComponent(typeof(Timer))]
-    public class WmsServiceType : MonoBehaviour
+    public class WmsServiceType : ServiceType<RasterArchetype, RasterArchetype.WarmTile, RasterArchetype.HotTile>, ITileLifecycleBehaviour
     {
         private const int InitialCapacity = 1024;
 
@@ -26,13 +22,10 @@ namespace Netherlands3D.Tilekit.ServiceTypes
 
         public string CapabilitiesUrl;
         public string Url;
-        private Timer timer;
-        private RemoteTextureContentImporter importer;
+        private Texture2DLoader importer;
         private Texture2DOverlayRenderer tileRenderer;
 
-        private RasterArchetype archetype;
         private readonly Dictionary<int, int> warmIndexByTile = new(); // tileIndex -> index in warmTiles
-        private TilesSelector tileSelector;
 
         // https://service.pdok.nl/prorail/spoorwegen/wms/v1_0?request=GetCapabilities&service=WMS
         // https://service.pdok.nl/prorail/spoorwegen/wms/v1_0?request=GetMap&service=WMS&version=1.3.0&layers=kilometrering&styles=kilometrering&CRS=EPSG%3a28992&bbox=155000%2c464000%2c156000%2c465000&width=1024&height=1024&format=image%2fpng&transparent=true
@@ -40,73 +33,20 @@ namespace Netherlands3D.Tilekit.ServiceTypes
         // https://service.pdok.nl/kadaster/kadastralekaart/wms/v5_0?request=GetCapabilities&service=WMS
         // https://service.pdok.nl/kadaster/kadastralekaart/wms/v5_0?request=GetMap&service=WMS&version=1.3.0&layers=OpenbareRuimteNaam&styles=standaard%3aopenbareruimtenaam&CRS=EPSG%3a28992&width=1024&height=1024&format=image%2fpng&transparent=true&bbox=154000%2c462000%2c155000%2c463000
 
-        private IEnumerator Start()
+        protected override void Initialize()
         {
-            // Wait two frames for the switch to main scene
-            yield return null;
-            yield return null;
-
             Url = "https://service.pdok.nl/prorail/spoorwegen/wms/v1_0?request=GetMap&service=WMS&version=1.3.0&layers={layers}&styles={styles}&CRS=EPSG%3a28992&width=1024&height=1024&format=image%2fpng&transparent=true&bbox={bbox}";
-            importer = new RemoteTextureContentImporter();
+            importer = new Texture2DLoader();
             tileRenderer = new Texture2DOverlayRenderer(new DecalProjectorPool(textureDecalProjectorPrefab, gameObject));
-            tileSelector = new TilesSelector();
-            archetype = new RasterArchetype(InitialCapacity, Allocator.Persistent);
-
-            timer = GetComponent<Timer>();
-            timer.tick.AddListener(OnTick);
-            timer.Resume();
-
+            archetype = new RasterArchetype(AreaOfInterest, InitialCapacity, Allocator.Persistent);
             OnColdAlloc();
-        }
-
-        private void OnTick()
-        {
-            var tilesInFrustrum = new NativeHashSet<int>(1024, Allocator.Temp);
-            var warmTileIndices = new NativeHashSet<int>(1024, Allocator.Temp);
-            var shouldWarmUp = new NativeHashSet<int>(1024, Allocator.Temp);
-            var shouldFreeze = new NativeHashSet<int>(1024, Allocator.Temp);
-            
-            
-            tileSelector.Select(tilesInFrustrum, archetype.Cold.Get(0), GeometryUtility.CalculateFrustumPlanes(Camera.main));
-            
-            // Tiles are selected using a zoned approach, where we can select a subset of tiles that are in a certain zone. 
-            // There is a warm and hot zone, and when tiles who are active in either zone migrate to another zone - they
-            // should either warm/heat up or cool down/freeze.
-            
-            // Tiles are not only selected on their spatial property - but also on their LOD or temporal properties, where 
-            // selection criteria is based on information from the global system - such as camera position and time of day
-            
-            foreach (var warmTile in archetype.Warm)
-            {
-                warmTileIndices.Add(warmTile.TileIndex);
-                if (tilesInFrustrum.Contains(warmTile.TileIndex) == false)
-                {
-                    shouldFreeze.Add(warmTile.TileIndex);
-                }
-            }
-            foreach (var tileInFrustum in tilesInFrustrum)
-            {
-                if (warmTileIndices.Contains(tileInFrustum) == false)
-                {
-                    shouldWarmUp.Add(tileInFrustum);
-                }
-            }
-            OnWarmUp(shouldWarmUp.ToNativeArray(Allocator.Temp));
-            // TODO: Heat up
-            // TODO: Cool down
-            OnFreeze(shouldFreeze.ToNativeArray(Allocator.Temp));
-            
-            tilesInFrustrum.Dispose();
-            warmTileIndices.Dispose();
-            shouldWarmUp.Dispose();
-            shouldFreeze.Dispose();
         }
 
         private void OnDestroy()
         {
             archetype.Dispose();
         }
-        
+
         private void OnColdAlloc()
         {
             // var capabilities = new WmsGetCapabilities(new Uri(CapabilitiesUrl), response.Data as string);
@@ -114,60 +54,27 @@ namespace Netherlands3D.Tilekit.ServiceTypes
             // var tileSet = new TileSet();
             // var bbox = capabilities.GetBounds().GlobalBoundingBox;
 
-            int left = 153000;
-            int right = 158000;
-            int top = 462000;
-            int bottom = 467000;
-            int depth = 4;
+            new ExplicitQuadTreeTilesHydrator().Build(archetype.Cold, new() { Depth = 4});
+        }
 
-            ExplicitQuadTreeTilesBuilder.Build(
-                archetype.Cold, 
-                BoxBoundingVolume.FromTopLeftAndBottomRight(
-                    new double3(left, top, 0), 
+        private static BoxBoundingVolume AreaOfInterest
+        {
+            get
+            {
+                int left = 153000;
+                int right = 158000;
+                int top = 462000;
+                int bottom = 467000;
+
+                var areaOfInterest = BoxBoundingVolume.FromTopLeftAndBottomRight(
+                    new double3(left, top, 0),
                     new double3(right, bottom, 0)
-                ), 
-                depth
-            );
-        }
-
-        private void OnDrawGizmosSelected()
-        {
-            if (!Application.isPlaying)
-                return;
-
-            if (!archetype.Warm.IsCreated || !archetype.Hot.IsCreated)
-                return;
-
-            var tile = archetype.Cold.Get(0);
-            DrawTileGizmo(tile);
-        }
-
-        private void DrawTileGizmo(Tile tile, int height = 0)
-        {
-            var bounds = tile.BoundingVolume.ToBounds().ToLocalCoordinateSystem(CoordinateSystem.RD);
-            
-            Gizmos.color = Color.white;
-            // TODO: can we make this O(1)?
-            for (var index = 0; index < archetype.Warm.Length; index++)
-            {
-                if (archetype.Warm[index].TileIndex == tile.Index) Gizmos.color = Color.yellow;
-            }
-            // TODO: can we make this O(1)?
-            for (var index = 0; index < archetype.Hot.Length; index++)
-            {
-                if (archetype.Warm[archetype.Hot[index].WarmTileIndex].TileIndex == tile.Index) Gizmos.color = Color.red;
-            }
-
-            if (Gizmos.color != Color.white)
-                Gizmos.DrawWireCube(bounds.center, bounds.size);
-
-            for (int i = 0; i < tile.Children().Count; i++)
-            {
-                DrawTileGizmo(tile.GetChild(i), height + 1);
+                );
+                return areaOfInterest;
             }
         }
-
-        public void OnWarmUp(ReadOnlySpan<int> candidateTileIndices)
+        
+        public override void OnWarmUp(ReadOnlySpan<int> candidateTileIndices)
         {
             var urlStringBuilder = new StringBuilder(Url);
             urlStringBuilder.Replace("{layers}", "kilometrering");
@@ -183,24 +90,24 @@ namespace Netherlands3D.Tilekit.ServiceTypes
                 newUrlStringBuilder.Replace("{bbox}", $"{bv.TopLeft.x},{bv.TopLeft.y},{bv.BottomRight.x},{bv.BottomRight.y}");
                 var url = newUrlStringBuilder.ToString();
                 Debug.Log($"Warming tile {candidate} with url {url}");
-                var key = RemoteTextureContentImporter.HashUrl(url);
+                var key = Texture2DLoader.HashUrl(url);
 
                 var warmIdx = archetype.Warm.Length;
                 archetype.Warm.AddNoResize(new RasterArchetype.WarmTile { TileIndex = candidate, TextureKey = key });
                 warmIndexByTile[candidate] = warmIdx;
 
-                importer.Import(url);
+                importer.Load(url);
             }
 
             OnHeatUp(candidateTileIndices);
         }
 
-        public void OnHeatUp(ReadOnlySpan<int> candidateTileIndices)
+        public override void OnHeatUp(ReadOnlySpan<int> candidateTileIndices)
         {
             for (int i = 0; i < candidateTileIndices.Length; i++)
             {
                 int tileIndex = candidateTileIndices[i];
-                
+
                 // If it aint' warm - it cannot get hot
                 if (!warmIndexByTile.TryGetValue(tileIndex, out var warmIdx)) continue;
 
@@ -224,7 +131,7 @@ namespace Netherlands3D.Tilekit.ServiceTypes
             }
         }
 
-        public void OnCooldown(ReadOnlySpan<int> candidateTileIndices)
+        public override void OnCooldown(ReadOnlySpan<int> candidateTileIndices)
         {
             for (int i = 0; i < candidateTileIndices.Length; i++)
             {
@@ -241,11 +148,10 @@ namespace Netherlands3D.Tilekit.ServiceTypes
                         index--;
                     }
                 }
-
             }
         }
 
-        public void OnFreeze(ReadOnlySpan<int> candidateTileIndices)
+        public override void OnFreeze(ReadOnlySpan<int> candidateTileIndices)
         {
             OnCooldown(candidateTileIndices);
 
@@ -290,7 +196,7 @@ namespace Netherlands3D.Tilekit.ServiceTypes
                 warmIndexByTile.Remove(tileIndex);
             }
         }
-        
+
         private void OnColdDealloc()
         {
             archetype.Clear();

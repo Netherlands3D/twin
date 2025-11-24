@@ -4,15 +4,15 @@ using Netherlands3D.Tilekit.WriteModel;
 
 namespace Netherlands3D.Tilekit.TileBuilders
 {
-    public static class ExplicitQuadTreeTilesBuilder
+    public class ExplicitQuadTreeTilesHydrator : IColdStorageHydrator<ExplicitQuadTreeTilesHydratorSettings>
     {
-        public static void Build(ColdStorage tiles, BoxBoundingVolume boundingVolume, int depth)
+        public void Build(ColdStorage tiles, ExplicitQuadTreeTilesHydratorSettings settings)
         {
             // Reset tilestorage to be empty without releasing memory
             tiles.Clear();
             
             // Create the whole tree in the TilesStorage
-            int stride = SubtreeSize(depth - 1);
+            int stride = SubtreeSize(settings.Depth - 1);
             // int myIndex = 0;
 
             // var tileIndex = tiles.AddTile(
@@ -21,7 +21,7 @@ namespace Netherlands3D.Tilekit.TileBuilders
             //     new ReadOnlySpan<TileContentData>(new[] { new TileContentData(myIndex, new BoundingVolumeRef(BoundingVolumeType.Box, myIndex)) }),
             //     stackalloc int[] {  myIndex + 1, myIndex + 1 + stride, myIndex + 1 + stride*2, myIndex + 1 + stride*3 } 
             // );
-            AddChildTile(tiles, -1, depth, stride, boundingVolume);
+            AddChildTile(tiles, -1, settings.Depth, stride, tiles.AreaOfInterest);
             // AddLevelOfTiles(tiles, boundingVolume, tileIndex, depth);
         }
 
@@ -72,6 +72,10 @@ namespace Netherlands3D.Tilekit.TileBuilders
 
             return AddLevelOfTiles(tiles, boundingVolume, tileIndex, depth);
         }
-       
+    }
+    
+    public struct ExplicitQuadTreeTilesHydratorSettings
+    {
+        public int Depth;
     }
 }

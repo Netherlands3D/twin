@@ -5,15 +5,15 @@ using RSG;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Netherlands3D.Tilekit.ContentImporters
+namespace Netherlands3D.Tilekit.ContentLoaders
 {
-    public class RemoteTextureContentImporter : IDisposable
+    public class Texture2DLoader : IDisposable, IContentLoader<Texture2D>
     {
         // Completed textures and coalesced in-flight requests
         private readonly Dictionary<ulong, Texture2D> cache = new();
         private readonly Dictionary<ulong, Promise<Texture2D>> inflight = new();
 
-        public IPromise<Texture2D> Import(string url)
+        public IPromise<Texture2D> Load(string url)
         {
             var key = HashUrl(url);
 

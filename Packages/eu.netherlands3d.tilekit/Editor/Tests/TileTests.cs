@@ -12,10 +12,27 @@ namespace Netherlands3D.Tilekit.Tests
     {
         private ColdStorage s;
 
+        private static BoxBoundingVolume AreaOfInterest
+        {
+            get
+            {
+                int left = 153000;
+                int right = 158000;
+                int top = 462000;
+                int bottom = 467000;
+
+                var areaOfInterest = BoxBoundingVolume.FromTopLeftAndBottomRight(
+                    new double3(left, top, 0),
+                    new double3(right, bottom, 0)
+                );
+                return areaOfInterest;
+            }
+        }
+
         [SetUp]
         public void SetUp()
         {
-            s = new ColdStorage(initialSize: 64, alloc: Allocator.Temp);
+            s = new ColdStorage(AreaOfInterest, initialSize: 64, alloc: Allocator.Temp);
         }
 
         [TearDown]
@@ -125,7 +142,7 @@ namespace Netherlands3D.Tilekit.Tests
         [Test]
         public void Tile_GetChild_Uses_Addition_With_NonZero_Offset()
         {
-            var s = new ColdStorage(initialSize: 64, alloc: Allocator.Temp);
+            var s = new ColdStorage(AreaOfInterest, initialSize: 64, alloc: Allocator.Temp);
 
             // First parent to bump the Flat offset (3 children -> offset = 3 for next)
             s.AddTile(Box(), 1.0, ReadOnlySpan<TileContentData>.Empty, new int[] { 10, 11, 12 });
