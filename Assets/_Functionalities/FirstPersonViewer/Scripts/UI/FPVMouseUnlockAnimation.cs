@@ -13,6 +13,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [Header("Animation")]
         [SerializeField] private Sprite[] unlockCircleSprites;
         private Image unlockCircleImage;
+        private Transform unlockCircleImageTransform;
         private FirstPersonViewerInput firstPersonInput;
 
         private void OnEnable()
@@ -20,6 +21,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             firstPersonInput = ServiceLocator.GetService<FirstPersonViewer>().Input;
             firstPersonInput.OnLockStateChanged += PlayUnlockCircleAnimation;
             unlockCircleImage = GetComponent<Image>();
+            unlockCircleImageTransform = GetComponent<Transform>();
         }
 
         private void OnDisable()
@@ -29,10 +31,10 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         void Update()
         {
-            if (playingSequence)
-            {
-                unlockCircleImage.transform.position = Mouse.current.position.ReadValue();
-            }
+            if (!playingSequence) return;
+            if (Pointer.current == null) return;
+
+            unlockCircleImageTransform.position = Pointer.current.position.ReadValue();
         }
 
         private void PlayUnlockCircleAnimation(CursorLockMode lockMode)
@@ -50,9 +52,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
             {
                 Sprite sprite = unlockCircleSprites[i];
                 unlockCircleImage.sprite = sprite;
-                unlockCircleImage.rectTransform.sizeDelta = sprite.textureRect.size;
+                unlockCircleImage.rectTransform.sizeDelta = sprite.textureRect.size * 0.66667f;
                 yield return new WaitForSeconds(0.03f);
-
             }
             unlockCircleImage.enabled = false;
             playingSequence = false;
