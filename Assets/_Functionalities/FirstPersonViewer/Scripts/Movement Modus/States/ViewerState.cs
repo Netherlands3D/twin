@@ -32,17 +32,17 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             this.viewer = viewer;
 
             transform = viewer.transform;
-        }
-
-        public virtual void OnEnter()
-        {
             maxSpeedSetting.OnValueChanged.AddListener(SetMaxSpeed);
         }
 
-        public virtual void OnExit()
+        private void OnDestroy()
         {
-            maxSpeedSetting.OnValueChanged.RemoveListener(SetMaxSpeed);
+            maxSpeedSetting.OnValueChanged.RemoveListener(SetMaxSpeed);    
         }
+
+        public virtual void OnEnter() { }
+
+        public virtual void OnExit() { }
 
         public virtual void OnUpdate() { }
 

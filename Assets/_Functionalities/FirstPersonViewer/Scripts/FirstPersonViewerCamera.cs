@@ -19,6 +19,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         public float CameraHeightOffset { private set; get; } = 1.75f;
         private float currentsensitivity = .1f;
+        public float PreviousCameraHeight { private set; get; }
 
         [Header("Viewer")]
         [SerializeField] private Transform viewerBase;
@@ -177,8 +178,10 @@ namespace Netherlands3D.FirstPersonViewer
         
         private void SetCameraHeight(float height)
         {
+            PreviousCameraHeight = CameraHeightOffset;
             CameraHeightOffset = height;
-            transform.localPosition = Vector3.up * CameraHeightOffset;
+
+            if(transform.localPosition.y != CameraHeightOffset) transform.localPosition = Vector3.up * CameraHeightOffset;
         }
 
         private void SetCameraNorth()
