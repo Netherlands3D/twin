@@ -181,7 +181,7 @@ namespace Netherlands3D.FirstPersonViewer
             PreviousCameraHeight = CameraHeightOffset;
             CameraHeightOffset = height;
 
-            if(transform.localPosition.y != CameraHeightOffset) transform.localPosition = Vector3.up * CameraHeightOffset;
+            transform.localPosition = Vector3.up * CameraHeightOffset;
         }
 
         private void SetCameraNorth()
