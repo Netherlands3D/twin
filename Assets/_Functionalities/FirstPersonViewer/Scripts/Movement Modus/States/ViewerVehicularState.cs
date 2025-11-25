@@ -6,6 +6,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     public class ViewerVehicularState : ViewerState
     {
         private float currentSpeed;
+        private int lastSpeed;
 
         [SerializeField] private MovementFloatSetting accelerationSetting;
         [SerializeField] private MovementFloatSetting decelerationSetting;
@@ -74,13 +75,13 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             movementVisualController.SetSteeringWheelRotation(turn * 30 * (isGoingBackwards ? -1 : 1));
 
-            if (Mathf.Abs(currentSpeed) > 0)
+            if (Mathf.Abs(currentSpeed) > 0) viewer.GetGroundPosition();
+
+            int speedInKilometers = Mathf.RoundToInt(currentSpeed * 3.6f);
+            if(speedInKilometers != lastSpeed)
             {
-                viewer.GetGroundPosition();
-
-                int speedInKilometers = Mathf.RoundToInt(currentSpeed * 3.6f);
-
                 currentSpeedLabel.Value = speedInKilometers.ToString();
+                lastSpeed = speedInKilometers;
             }
         }
 
