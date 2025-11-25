@@ -20,7 +20,6 @@ namespace Netherlands3D.Tilekit
         public BoundingVolume BoundingVolume => new (store, tileIndex);
         public double GeometricError => store.GeometricError[tileIndex];
         public MethodOfRefinement Refinement => store.Refine[tileIndex];
-        public SubdivisionScheme Subdivision => store.Subdivision[tileIndex];
 
         public float4x4 Transform => store.Transform[tileIndex];
 

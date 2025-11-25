@@ -54,7 +54,6 @@ namespace Netherlands3D.Tilekit.Tests
                 contents: ReadOnlySpan<TileContentData>.Empty,
                 children: ReadOnlySpan<int>.Empty,
                 refine: MethodOfRefinement.Replace,
-                subdivision: SubdivisionScheme.Quadtree,
                 transform: tr
             );
 
@@ -66,7 +65,6 @@ namespace Netherlands3D.Tilekit.Tests
             Assert.That(tile.Index, Is.EqualTo(id));
             Assert.That(tile.GeometricError, Is.EqualTo(7.5));
             Assert.That(tile.Refinement, Is.EqualTo(MethodOfRefinement.Replace));
-            Assert.That(tile.Subdivision, Is.EqualTo(SubdivisionScheme.Quadtree));
             Assert.That(tile.Transform, Is.EqualTo(tr));
             // BoundingVolume presence (don’t assert internals here)
             Assert.DoesNotThrow(() =>

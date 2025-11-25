@@ -87,7 +87,6 @@ namespace Netherlands3D.Tilekit.ColdStorageMaterializers
                 ReadOnlySpan<TileContentData>.Empty, // TODO: populate contents
                 childIndices,
                 tile.Refine == "REPLACE" ? MethodOfRefinement.Replace : MethodOfRefinement.Add,
-                SubdivisionScheme.None,
                 float4x4.identity
             );
 

@@ -17,7 +17,6 @@ namespace Netherlands3D.Tilekit.WriteModel
         public BoundingVolumeStore BoundingVolumes;
         public NativeList<double> GeometricError; // hot
         public NativeList<MethodOfRefinement> Refine; // hot/small
-        public NativeList<SubdivisionScheme> Subdivision; // small
         public NativeList<float4x4> Transform; // consider sparsifying if many are identity
 
         public readonly Buckets<int> Children;
@@ -76,7 +75,6 @@ namespace Netherlands3D.Tilekit.WriteModel
             BoundingVolumes.Alloc(initialSize, alloc);
             GeometricError = new NativeList<double>(initialSize, alloc);
             Refine = new NativeList<MethodOfRefinement>(initialSize, alloc);
-            Subdivision = new NativeList<SubdivisionScheme>(initialSize, alloc);
             Transform = new NativeList<float4x4>(initialSize, alloc);
 
             // Assume 4 children per tile and have the list autogrow. This matches the concept of quad trees, and
@@ -96,7 +94,6 @@ namespace Netherlands3D.Tilekit.WriteModel
             ReadOnlySpan<TileContentData> contents,
             ReadOnlySpan<int> children = default,
             MethodOfRefinement refine = MethodOfRefinement.Replace,
-            SubdivisionScheme subdivision = SubdivisionScheme.None,
             in float4x4 transform = default
         ) {
             // Take any of the arrays whose length matches the number of tiles in this storage and use it's length
@@ -108,7 +105,6 @@ namespace Netherlands3D.Tilekit.WriteModel
             BoundingVolumes.Add(id, boundingVolume);
             GeometricError.AddNoResize(geometricError);
             Refine.AddNoResize(refine);
-            Subdivision.AddNoResize(subdivision);
             Transform.AddNoResize(transform);
 
             Children.Add(children);
@@ -132,7 +128,6 @@ namespace Netherlands3D.Tilekit.WriteModel
             
             GeometricError.Dispose();
             Refine.Dispose();
-            Subdivision.Dispose();
             Transform.Dispose();
 
             Children.Dispose();
@@ -147,7 +142,6 @@ namespace Netherlands3D.Tilekit.WriteModel
 
             GeometricError.Clear();
             Refine.Clear();
-            Subdivision.Clear();
             Transform.Clear();
 
             Children.Clear();
