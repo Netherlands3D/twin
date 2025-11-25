@@ -53,5 +53,10 @@ namespace Netherlands3D.FirstPersonViewer
         }
 
         public void LoadMovementPreset(int index) => LoadMovementPreset(MovementPresets[index]);
+
+        private void OnDestroy()
+        {
+            MovementPresets.ForEach(m => m.Uninitialize());
+        }
     }
 }

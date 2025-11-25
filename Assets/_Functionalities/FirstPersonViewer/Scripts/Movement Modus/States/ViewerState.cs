@@ -35,7 +35,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             maxSpeedSetting.OnValueChanged.AddListener(SetMaxSpeed);
         }
 
-        private void OnDestroy()
+        public void Uninitialize()
         {
             maxSpeedSetting.OnValueChanged.RemoveListener(SetMaxSpeed);    
         }
