@@ -19,7 +19,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         public float CameraHeightOffset { private set; get; } = 1.75f;
         public float PreviousCameraHeight { private set; get; }
-        private float currentsensitivity = .1f;
+        private float currentSensitivity = .1f;
 
         [Header("Viewer")]
         [SerializeField] private Transform viewerBase;
@@ -151,7 +151,7 @@ namespace Netherlands3D.FirstPersonViewer
         //Sets the rotation of the camera or the viewerBase based on the current Camera Constrain.
         private void RotateCamera(Vector2 pointerDelta)
         {
-            Vector2 mouseLook = pointerDelta * currentsensitivity;
+            Vector2 mouseLook = pointerDelta * currentSensitivity;
 
             float currentPitch = GetCameraRotation().x;
             if (currentPitch > 180) currentPitch -= 360;
