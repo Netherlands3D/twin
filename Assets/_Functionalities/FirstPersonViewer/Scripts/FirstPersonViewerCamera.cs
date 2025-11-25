@@ -18,8 +18,8 @@ namespace Netherlands3D.FirstPersonViewer
         public static Camera FPVCamera;
 
         public float CameraHeightOffset { private set; get; } = 1.75f;
-        private float currentsensitivity = .1f;
         public float PreviousCameraHeight { private set; get; }
+        private float currentsensitivity = .1f;
 
         [Header("Viewer")]
         [SerializeField] private Transform viewerBase;
