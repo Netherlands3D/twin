@@ -5,17 +5,29 @@ using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Tilekit.Archetypes;
 using Netherlands3D.Tilekit.BoundingVolumes;
 using Netherlands3D.Tilekit.TileBuilders;
-using Netherlands3D.Tilekit.WriteModel;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace Netherlands3D.Tilekit.ServiceTypes
 {
-    // TODO: This is not a raster archetype, but we fake it for now
-    public class Ogc3DTilesServiceType : ServiceType<RasterArchetype, RasterArchetype.WarmTile, RasterArchetype.HotTile>
+    public class Ogc3DTilesServiceType : ServiceType<GenericArchetype, GenericArchetype.WarmTile, GenericArchetype.HotTile> 
     {
         public string Url;
         public Key Authorization;
-        private ColdStorage coldStorage;
+
+        [Header("Area of Interest (RD)")]
+        public int left = 153000;
+        public int right = 158000;
+        public int top = 462000;
+        public int bottom = 467000;
+
+        private BoxBoundingVolume AreaOfInterest =>
+            BoxBoundingVolume.FromTopLeftAndBottomRight(
+                new double3(left, top, 0),
+                new double3(right, bottom, 0)
+            );
+
+        protected override GenericArchetype CreateArchetype() => new(AreaOfInterest);
 
         protected override void Initialize()
         {
@@ -26,8 +38,7 @@ namespace Netherlands3D.Tilekit.ServiceTypes
         private void Build(IResponse obj)
         {
             using var stream = new MemoryStream(obj.Data as byte[] ?? Array.Empty<byte>());
-            coldStorage = new ColdStorage(AreaOfInterest, 1024);
-            new Ogc3DTilesHydrator().Build(coldStorage, new() {Stream = stream});
+            new Ogc3DTilesHydrator().Build(this.archetype.Cold, new() { Stream = stream });
         }
 
         protected override void OnTick()
@@ -53,29 +64,6 @@ namespace Netherlands3D.Tilekit.ServiceTypes
         public override void OnFreeze(ReadOnlySpan<int> candidateTileIndices)
         {
             
-        }
-
-        protected override void OnDestroy()
-        {
-            coldStorage?.Dispose();
-            base.OnDestroy();
-        }
-
-        private static BoxBoundingVolume AreaOfInterest
-        {
-            get
-            {
-                int left = 153000;
-                int right = 158000;
-                int top = 462000;
-                int bottom = 467000;
-
-                var areaOfInterest = BoxBoundingVolume.FromTopLeftAndBottomRight(
-                    new double3(left, top, 0),
-                    new double3(right, bottom, 0)
-                );
-                return areaOfInterest;
-            }
         }
     }
 }

@@ -38,14 +38,10 @@ namespace Netherlands3D.Tilekit.ServiceTypes
             Url = "https://service.pdok.nl/prorail/spoorwegen/wms/v1_0?request=GetMap&service=WMS&version=1.3.0&layers={layers}&styles={styles}&CRS=EPSG%3a28992&width=1024&height=1024&format=image%2fpng&transparent=true&bbox={bbox}";
             importer = new Texture2DLoader();
             tileRenderer = new Texture2DOverlayRenderer(new DecalProjectorPool(textureDecalProjectorPrefab, gameObject));
-            archetype = new RasterArchetype(AreaOfInterest, InitialCapacity, Allocator.Persistent);
             OnColdAlloc();
         }
 
-        private void OnDestroy()
-        {
-            archetype.Dispose();
-        }
+        protected override RasterArchetype CreateArchetype() => new (AreaOfInterest, InitialCapacity);
 
         private void OnColdAlloc()
         {

@@ -4,13 +4,12 @@ using Unity.Collections;
 
 namespace Netherlands3D.Tilekit.Archetypes
 {
-    public class RasterArchetype : Archetype<RasterArchetype.WarmTile, RasterArchetype.HotTile>
+    public class GenericArchetype : Archetype<GenericArchetype.WarmTile, GenericArchetype.HotTile>
     {
         [StructLayout(LayoutKind.Sequential)]
         public struct WarmTile : IHasTileIndex
         {
             public int TileIndex { get; set; }
-            public ulong TextureKey; // 0 = none
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -19,7 +18,7 @@ namespace Netherlands3D.Tilekit.Archetypes
             public int WarmTileIndex { get; set; }
         }
 
-        public RasterArchetype(BoxBoundingVolume areaOfInterest, int initialCapacity = 1024, Allocator alloc = Allocator.Persistent) : base(areaOfInterest, initialCapacity, alloc)
+        public GenericArchetype(BoxBoundingVolume areaOfInterest, int initialCapacity = 1024, Allocator alloc = Allocator.Persistent) : base(areaOfInterest, initialCapacity, alloc)
         {
         }
     }

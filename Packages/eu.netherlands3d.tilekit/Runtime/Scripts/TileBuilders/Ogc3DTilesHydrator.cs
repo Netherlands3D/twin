@@ -51,14 +51,28 @@ namespace Netherlands3D.Tilekit.TileBuilders
             Debug.Log("5. Building tileset from");
 
             storage.Clear();
-            HydrateTile(storage, tileset.Root);
+            try
+            {
+                HydrateTile(storage, tileset.Root);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
 
         private int HydrateTile(ColdStorage storage, TileDto tile)
         {
+            if (tile == null)
+            {
+                Debug.Log("No tile");
+                return -1;
+            }
+            Debug.Log("Hydrating tile with geometric error " + tile.GeometricError);
             var boxBoundingVolume = tile.BoundingVolume.ToBoxBoundingVolume();
             if (!boxBoundingVolume.HasValue)
             {
+                Debug.Log("Could not decipher bounding volume of tile");
                 // Invalid tile - so return a -1 to indicate that it is invalid
                 return -1;
             }
@@ -77,6 +91,7 @@ namespace Netherlands3D.Tilekit.TileBuilders
                 float4x4.identity
             );
 
+            Debug.Log("Hydrating tile with id " + tileIndex + " and children: " + tile.Children.Count);
             // Create the children and capture their tile ids
             for (var index = 0; index < tile.Children.Count; index++)
             {

@@ -23,12 +23,15 @@ namespace Netherlands3D.Tilekit
             timer = GetComponent<Timer>();
         }
 
+        protected abstract TArchetype CreateArchetype();
+
         private IEnumerator Start()
         {
             // Wait two frames for the switch to main scene
             yield return null;
             yield return null;
 
+            archetype = CreateArchetype();
             stateScheduler = new (new TilesSelector(), this, archetype);
 
             timer.tick.AddListener(OnTick);
@@ -52,6 +55,11 @@ namespace Netherlands3D.Tilekit
             
         }
 
+        public abstract void OnWarmUp(ReadOnlySpan<int> candidateTileIndices);
+        public abstract void OnHeatUp(ReadOnlySpan<int> candidateTileIndices);
+        public abstract void OnCooldown(ReadOnlySpan<int> candidateTileIndices);
+        public abstract void OnFreeze(ReadOnlySpan<int> candidateTileIndices);
+
         protected virtual void OnTick()
         {
             stateScheduler.Schedule();
@@ -70,15 +78,14 @@ namespace Netherlands3D.Tilekit
             if (!archetype.Warm.IsCreated || !archetype.Hot.IsCreated)
                 return;
 
-            var tile = archetype.Cold.Get(0);
-            DrawTileGizmo(tile);
+            DrawTileGizmo(archetype.Cold.Root);
         }
 
         private void DrawTileGizmo(Tile tile, int height = 0)
         {
             var bounds = tile.BoundingVolume.ToBounds().ToLocalCoordinateSystem(CoordinateSystem.RD);
             
-            Gizmos.color = Color.white;
+            Gizmos.color = Color.grey;
             // TODO: can we make this O(1)?
             for (var index = 0; index < archetype.Warm.Length; index++)
             {
@@ -90,18 +97,15 @@ namespace Netherlands3D.Tilekit
                 if (archetype.Warm[archetype.Hot[index].WarmTileIndex].TileIndex == tile.Index) Gizmos.color = Color.red;
             }
 
-            if (Gizmos.color != Color.white)
-                Gizmos.DrawWireCube(bounds.center, bounds.size);
+            if (Gizmos.color != Color.grey)
+            {
+                Gizmos.DrawWireCube(bounds.center + Vector3.up * 0.1f, bounds.size);
+            }
 
             for (int i = 0; i < tile.Children().Count; i++)
             {
                 DrawTileGizmo(tile.GetChild(i), height + 1);
             }
         }
-
-        public abstract void OnWarmUp(ReadOnlySpan<int> candidateTileIndices);
-        public abstract void OnHeatUp(ReadOnlySpan<int> candidateTileIndices);
-        public abstract void OnCooldown(ReadOnlySpan<int> candidateTileIndices);
-        public abstract void OnFreeze(ReadOnlySpan<int> candidateTileIndices);
     }
 }

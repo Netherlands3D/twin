@@ -33,7 +33,10 @@ namespace Netherlands3D.Tilekit.MemoryManagement
                 throw new System.ArgumentException("Replacing a bucket is only possible if the number of children matches the bucket's size.");
             }
 
-            s[0] = replacement[0];
+            for (int i = 0; i < replacement.Length; i++)
+            {
+                s[i] = replacement[i];
+            }
         }
     }
 }

@@ -31,9 +31,9 @@ namespace Netherlands3D.Tilekit.TileBuilders
             [JsonProperty("geometricError")] public double GeometricError { get; set; }
             [JsonProperty("refine")] public string Refine { get; set; } // "ADD" or "REPLACE"
             [JsonProperty("transform")] public double[] Transform { get; set; } // optional
-            [JsonProperty("children")] public List<TileDto> Children { get; set; }
+            [JsonProperty("children")] public List<TileDto> Children { get; set; } = new();
             [JsonProperty("content")] public ContentDto Content { get; set; }
-            [JsonProperty("contents")] public List<ContentDto> Contents { get; set; }
+            [JsonProperty("contents")] public List<ContentDto> Contents { get; set; } = new();
 
             public bool IntersectsAoi { get; set; }
             // For now we ignore implicit tiling here; add later if needed.
@@ -215,7 +215,9 @@ namespace Netherlands3D.Tilekit.TileBuilders
                             tile.BoundingVolume = serializer.Deserialize<BoundingVolumeDto>(reader);
 
                             aoiChecked = true;
-                            insideAoi = tile.BoundingVolume.Intersects2D(areaOfInterest);
+                            // TODO: remove AoI check for this moment to see if it works - restore it later 
+                            // insideAoi = tile.BoundingVolume.Intersects2D(areaOfInterest);
+                            insideAoi = true;
                             tile.IntersectsAoi = insideAoi;
                             break;
 

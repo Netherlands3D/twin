@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using Netherlands3D.Tilekit.BoundingVolumes;
 using Netherlands3D.Tilekit.WriteModel;
 using Unity.Collections;
@@ -27,7 +28,7 @@ namespace Netherlands3D.Tilekit
         public NativeList<TWarmTile> Warm => warm;
         public NativeList<THotTile> Hot => hot;
         
-        public Archetype(BoxBoundingVolume areaOfInterest, int initialCapacity, Allocator alloc)
+        public Archetype(BoxBoundingVolume areaOfInterest, int initialCapacity = 1024, Allocator alloc = Allocator.Persistent)
         {
             cold = new ColdStorage(areaOfInterest, initialCapacity, alloc);
             warm = new NativeList<TWarmTile>(128, alloc);
