@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using Netherlands3D.Tilekit.Geometry;
 using Unity.Mathematics;
 
-namespace Netherlands3D.Tilekit.BoundingVolumes
+namespace Netherlands3D.Tilekit.WriteModel
 {
     [StructLayout(LayoutKind.Sequential)]
     public readonly struct SphereBoundingVolume // 4 doubles = 32 B

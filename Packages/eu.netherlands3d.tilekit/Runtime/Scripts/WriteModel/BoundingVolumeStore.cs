@@ -1,6 +1,6 @@
 ﻿using Unity.Collections;
 
-namespace Netherlands3D.Tilekit.BoundingVolumes
+namespace Netherlands3D.Tilekit.WriteModel
 {
     public struct BoundingVolumeStore
     {

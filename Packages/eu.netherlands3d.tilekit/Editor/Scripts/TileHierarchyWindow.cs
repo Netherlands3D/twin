@@ -121,7 +121,7 @@ namespace Netherlands3D.Tilekit.Editor
                 var type = mb.GetType();
                 while (type != null)
                 {
-                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ServiceType<,,>))
+                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(DataSet<,,>))
                     {
                         return mb;
                     }

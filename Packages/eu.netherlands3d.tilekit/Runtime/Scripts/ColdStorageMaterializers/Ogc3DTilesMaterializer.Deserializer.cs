@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Netherlands3D.Tilekit.BoundingVolumes;
+using Netherlands3D.Tilekit.WriteModel;
 using Newtonsoft.Json;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Netherlands3D.Tilekit.TileBuilders
+namespace Netherlands3D.Tilekit.ColdStorageMaterializers
 {
-    public partial class Ogc3DTilesHydrator
+    public partial class Ogc3DTilesMaterializer
     {
         private sealed class TilesetDto
         {

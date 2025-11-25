@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Netherlands3D.Tilekit
 {
     [RequireComponent(typeof(Timer))]
-    public abstract class ServiceType<TArchetype, TWarmTile, THotTile> : MonoBehaviour, ITileLifecycleBehaviour 
+    public abstract class DataSet<TArchetype, TWarmTile, THotTile> : MonoBehaviour, ITileLifecycleBehaviour 
         where TArchetype : Archetype<TWarmTile, THotTile>
         where TWarmTile : unmanaged, IHasTileIndex 
         where THotTile : unmanaged, IHasWarmTileIndex

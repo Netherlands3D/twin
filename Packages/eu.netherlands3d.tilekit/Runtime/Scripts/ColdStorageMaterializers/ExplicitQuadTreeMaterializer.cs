@@ -1,12 +1,11 @@
 ﻿using System;
-using Netherlands3D.Tilekit.BoundingVolumes;
 using Netherlands3D.Tilekit.WriteModel;
 
-namespace Netherlands3D.Tilekit.TileBuilders
+namespace Netherlands3D.Tilekit.ColdStorageMaterializers
 {
-    public class ExplicitQuadTreeTilesHydrator : IColdStorageHydrator<ExplicitQuadTreeTilesHydratorSettings>
+    public class ExplicitQuadTreeMaterializer : IColdStorageMaterializer<ExplicitQuadTreePopulatorSettings>
     {
-        public void Build(ColdStorage tiles, ExplicitQuadTreeTilesHydratorSettings settings)
+        public void Materialize(ColdStorage tiles, ExplicitQuadTreePopulatorSettings settings)
         {
             // Reset tilestorage to be empty without releasing memory
             tiles.Clear();
@@ -74,7 +73,7 @@ namespace Netherlands3D.Tilekit.TileBuilders
         }
     }
     
-    public struct ExplicitQuadTreeTilesHydratorSettings
+    public struct ExplicitQuadTreePopulatorSettings
     {
         public int Depth;
     }

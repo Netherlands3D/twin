@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using Netherlands3D.Tilekit.Geometry;
 
-namespace Netherlands3D.Tilekit.BoundingVolumes
+namespace Netherlands3D.Tilekit.WriteModel
 {
     [StructLayout(LayoutKind.Sequential)]
     public readonly struct RegionBoundingVolume // 6 doubles = 48 B

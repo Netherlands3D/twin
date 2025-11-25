@@ -1,5 +1,4 @@
 ﻿using System;
-using Netherlands3D.Tilekit.BoundingVolumes;
 using Netherlands3D.Tilekit.Geometry;
 using Netherlands3D.Tilekit.WriteModel;
 

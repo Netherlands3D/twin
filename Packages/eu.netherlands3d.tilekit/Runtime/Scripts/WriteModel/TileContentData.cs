@@ -1,6 +1,4 @@
-﻿using Netherlands3D.Tilekit.BoundingVolumes;
-
-namespace Netherlands3D.Tilekit
+﻿namespace Netherlands3D.Tilekit.WriteModel
 {
     public readonly struct TileContentData
     {

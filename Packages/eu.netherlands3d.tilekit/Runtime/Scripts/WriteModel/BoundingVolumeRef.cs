@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Netherlands3D.Tilekit.BoundingVolumes
+namespace Netherlands3D.Tilekit.WriteModel
 {
     [StructLayout(LayoutKind.Sequential)]
     public readonly struct BoundingVolumeRef // 1 byte (+ 3 B padding) + 1 int = 8 B

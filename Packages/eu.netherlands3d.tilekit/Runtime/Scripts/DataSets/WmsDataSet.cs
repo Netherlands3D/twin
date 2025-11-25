@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Text;
 using Netherlands3D.Functionalities.Wms;
 using Netherlands3D.Tilekit.Archetypes;
-using Netherlands3D.Tilekit.BoundingVolumes;
 using Netherlands3D.Tilekit.ContentLoaders;
 using Netherlands3D.Tilekit.Renderers;
-using Netherlands3D.Tilekit.TileBuilders;
-using Unity.Collections;
+using Netherlands3D.Tilekit.ColdStorageMaterializers;
+using Netherlands3D.Tilekit.WriteModel;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Netherlands3D.Tilekit.ServiceTypes
+namespace Netherlands3D.Tilekit.DataSets
 {
     // https://docs.ogc.org/cs/22-025r4/22-025r4.html#toc31 for implicit tiling inspiration
-    public class WmsServiceType : ServiceType<RasterArchetype, RasterArchetype.WarmTile, RasterArchetype.HotTile>, ITileLifecycleBehaviour
+    public class WmsDataSet : DataSet<RasterArchetype, RasterArchetype.WarmTile, RasterArchetype.HotTile>, ITileLifecycleBehaviour
     {
         private const int InitialCapacity = 1024;
 
@@ -50,7 +49,7 @@ namespace Netherlands3D.Tilekit.ServiceTypes
             // var tileSet = new TileSet();
             // var bbox = capabilities.GetBounds().GlobalBoundingBox;
 
-            new ExplicitQuadTreeTilesHydrator().Build(archetype.Cold, new() { Depth = 4});
+            new ExplicitQuadTreeMaterializer().Materialize(archetype.Cold, new() { Depth = 4});
         }
 
         private static BoxBoundingVolume AreaOfInterest

@@ -3,14 +3,14 @@ using System.IO;
 using KindMen.Uxios;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Tilekit.Archetypes;
-using Netherlands3D.Tilekit.BoundingVolumes;
-using Netherlands3D.Tilekit.TileBuilders;
+using Netherlands3D.Tilekit.ColdStorageMaterializers;
+using Netherlands3D.Tilekit.WriteModel;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Netherlands3D.Tilekit.ServiceTypes
+namespace Netherlands3D.Tilekit.DataSets
 {
-    public class Ogc3DTilesServiceType : ServiceType<GenericArchetype, GenericArchetype.WarmTile, GenericArchetype.HotTile> 
+    public class Ogc3DTilesDataSet : DataSet<GenericArchetype, GenericArchetype.WarmTile, GenericArchetype.HotTile> 
     {
         public string Url;
         public Key Authorization;
@@ -38,7 +38,7 @@ namespace Netherlands3D.Tilekit.ServiceTypes
         private void Build(IResponse obj)
         {
             using var stream = new MemoryStream(obj.Data as byte[] ?? Array.Empty<byte>());
-            new Ogc3DTilesHydrator().Build(this.archetype.Cold, new() { Stream = stream });
+            new Ogc3DTilesMaterializer().Materialize(this.archetype.Cold, new() { Stream = stream });
         }
 
         protected override void OnTick()

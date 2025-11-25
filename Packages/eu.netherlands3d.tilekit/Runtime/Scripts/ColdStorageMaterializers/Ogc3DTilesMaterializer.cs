@@ -6,11 +6,11 @@ using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Netherlands3D.Tilekit.TileBuilders
+namespace Netherlands3D.Tilekit.ColdStorageMaterializers
 {
-    public partial class Ogc3DTilesHydrator : IColdStorageHydrator<Ogc3DTilesHydratorSettings>
+    public partial class Ogc3DTilesMaterializer : IColdStorageMaterializer<Ogc3DTilesPopulatorSettings>
     {
-        public void Build(ColdStorage storage, Ogc3DTilesHydratorSettings settings)
+        public void Materialize(ColdStorage storage, Ogc3DTilesPopulatorSettings settings)
         {
             Debug.Log("1. Building tileset from");
             var jsonSerializerSettings = new JsonSerializerSettings
@@ -107,7 +107,7 @@ namespace Netherlands3D.Tilekit.TileBuilders
         }
     }
 
-    public struct Ogc3DTilesHydratorSettings
+    public struct Ogc3DTilesPopulatorSettings
     {
         public Stream Stream;
     }

@@ -1,11 +1,9 @@
 using System;
 using System.Runtime.CompilerServices;
-using Netherlands3D.Tilekit.BoundingVolumes;
 using Netherlands3D.Tilekit.MemoryManagement;
 using Unity.Collections;
 using Unity.Mathematics;
 using Unity.Profiling;
-using UnityEngine;
 
 namespace Netherlands3D.Tilekit.WriteModel
 {
@@ -57,6 +55,7 @@ namespace Netherlands3D.Tilekit.WriteModel
         
         static ColdStorage()
         {
+            // Always reset counters to 0 on first class use - in case something didn't get disposed correctly
             LayersCounter.Value = 0;
             ActualTilesCounter.Value = 0;
             AllocatedTilesCounter.Value = 0;

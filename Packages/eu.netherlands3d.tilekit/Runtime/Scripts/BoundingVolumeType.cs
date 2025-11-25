@@ -1,4 +1,4 @@
-﻿namespace Netherlands3D.Tilekit.BoundingVolumes
+﻿namespace Netherlands3D.Tilekit
 {
     public enum BoundingVolumeType : byte
     {

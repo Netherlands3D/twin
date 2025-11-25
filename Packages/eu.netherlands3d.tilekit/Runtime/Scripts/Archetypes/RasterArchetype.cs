@@ -1,5 +1,5 @@
 ﻿using System.Runtime.InteropServices;
-using Netherlands3D.Tilekit.BoundingVolumes;
+using Netherlands3D.Tilekit.WriteModel;
 using Unity.Collections;
 
 namespace Netherlands3D.Tilekit.Archetypes

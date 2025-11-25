@@ -2,7 +2,7 @@
 using Netherlands3D.Tilekit.Geometry;
 using Unity.Mathematics;
 
-namespace Netherlands3D.Tilekit.BoundingVolumes
+namespace Netherlands3D.Tilekit.WriteModel
 {
     [StructLayout(LayoutKind.Sequential)]
     public readonly struct BoxBoundingVolume // 12 doubles = 96 B

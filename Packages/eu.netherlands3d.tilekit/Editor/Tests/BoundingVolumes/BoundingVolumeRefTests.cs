@@ -1,4 +1,4 @@
-﻿using Netherlands3D.Tilekit.BoundingVolumes;
+﻿using Netherlands3D.Tilekit.WriteModel;
 using NUnit.Framework;
 
 namespace Netherlands3D.Tilekit.Tests.BoundingVolumes

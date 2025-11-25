@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using Netherlands3D.Tilekit.BoundingVolumes;
 using Netherlands3D.Tilekit.WriteModel;
 using Unity.Collections;
 
