@@ -44,7 +44,7 @@ namespace Netherlands3D.FirstPersonViewer
         private void Awake()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
-            currentsensitivity = .03f;
+            currentSensitivity = .03f;
 #endif
 
             firstPersonViewerCamera = GetComponent<Camera>();
