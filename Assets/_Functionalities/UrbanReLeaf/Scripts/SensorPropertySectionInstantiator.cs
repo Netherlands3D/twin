@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.UrbanReLeaf
 {
-    public class SensorPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
+    public class SensorPropertySectionInstantiator : MonoBehaviour//, IPropertySectionInstantiator todo; delete
     {
         [SerializeField] private SensorPropertySection propertySectionPrefab;
 
-        public void AddToProperties(RectTransform properties)
-        {
-            if (!propertySectionPrefab) return;
-
-            var settings = Instantiate(propertySectionPrefab, properties);
-            settings.Controller = GetComponent<SensorDataController>();
-        }
+        // public void AddToProperties(RectTransform properties)
+        // {
+        //     if (!propertySectionPrefab) return;
+        //
+        //     var settings = Instantiate(propertySectionPrefab, properties);
+        //     settings.Controller = GetComponent<SensorDataController>();
+        // }
     }
 }

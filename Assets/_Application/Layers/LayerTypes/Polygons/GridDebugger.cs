@@ -1,5 +1,6 @@
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,15 +20,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             layerGameObject = GetComponent<ObjectScatterLayerGameObject>();
             UpdateGrid();
-            layerGameObject.polygonLayer.polygonChanged.AddListener(UpdateGrid);
-            var scatterSettings = layerGameObject.PropertyData as ScatterGenerationSettingsPropertyData;
+            PolygonSelectionLayerPropertyData data = layerGameObject.polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+            data.polygonChanged.AddListener(UpdateGrid);
+            var scatterSettings = layerGameObject.LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
             scatterSettings.ScatterSettingsChanged.AddListener(UpdateGrid);
         }
 
         private void UpdateGrid()
         {
-            poly = layerGameObject.polygonLayer.Polygon;
-            var scatterSettings = layerGameObject.PropertyData as ScatterGenerationSettingsPropertyData;
+            //TODO is this the right way to get the polygon visualisation layergameobject?
+            var match = FindObjectsByType<PolygonSelectionVisualisation>(FindObjectsSortMode.None).ToList()
+            .FirstOrDefault(v => v.LayerData == layerGameObject.polygonLayer);
+            poly = match.Polygon;
+            var scatterSettings = layerGameObject.LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
             var angle = scatterSettings.Angle;
             
             var densityPerSquareUnit = scatterSettings.Density / 10000f; //in de UI is het het bomen per hectare, in de functie is het punten per m2

@@ -22,9 +22,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public Transform Transform => transform;
 
-        public delegate void GeoJSONPointHandler(Feature feature);
-
-        public event GeoJSONPointHandler FeatureRemoved;
+        public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
         private List<List<Coordinate>> visualisationsToRemove = new();
@@ -125,8 +123,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             pointRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
-        public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
-            where T : GeoJSONObject
+        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
             if (spawnedVisualisations.ContainsKey(feature))
@@ -222,27 +219,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var crs2D = CoordinateSystems.To2D(bbox.CoordinateSystem);
             bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
-        }
-
-        private List<IPropertySectionInstantiator> propertySections;
-
-        protected List<IPropertySectionInstantiator> PropertySections
-        {
-            get
-            {
-                if (propertySections == null)
-                {
-                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
-                }
-
-                return propertySections;
-            }
-            set => propertySections = value;
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return PropertySections;
         }
     }
 }

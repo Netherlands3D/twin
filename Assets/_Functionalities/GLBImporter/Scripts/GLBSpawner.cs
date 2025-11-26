@@ -17,14 +17,12 @@ using UnityEngine;
 namespace Netherlands3D.Functionalities.GLBImporter
 {
     [RequireComponent(typeof(HierarchicalObjectLayerGameObject))]
-    public class GLBSpawner : MonoBehaviour, ILayerWithPropertyData
+    public class GLBSpawner : MonoBehaviour, IVisualizationWithPropertyData
     {
         private GLBPropertyData propertyData = new();
-        public LayerPropertyData PropertyData => propertyData;
         private GameObject importedObject;
         private HierarchicalObjectLayerGameObject layerGameObject;
         private MoveCameraToCoordinate cameraMover;
-        private TransformLayerPropertyData TransformPropertyData => (TransformLayerPropertyData)((ILayerWithPropertyData)layerGameObject).PropertyData;
         
         [Header("Settings")]
         [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
@@ -123,7 +121,8 @@ namespace Netherlands3D.Functionalities.GLBImporter
             }
 
             // Object is loaded / replaced - trigger the application of styling
-            layerGameObject.ApplyStyling();
+            //layerGameObject.ApplyStyling();
+            layerGameObject.LayerData.OnStylingApplied.Invoke();
         }
 
         private void PositionImportedGameObject(GameObject returnedGameObject)
@@ -193,7 +192,7 @@ namespace Netherlands3D.Functionalities.GLBImporter
             Coordinate position = origin;
             if (!layerGameObject.LayerData.IsNew)
             {
-                position = TransformPropertyData.Position;
+                position = layerGameObject.LayerData.GetProperty<TransformLayerPropertyData>().Position; //TransformPropertyData.Position;
             }
             
             layerGameObject.WorldTransform.MoveToCoordinate(position);

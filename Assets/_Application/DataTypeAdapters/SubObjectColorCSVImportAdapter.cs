@@ -34,7 +34,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             
             activeCartesianTileSubObjectColorLayer = Instantiate(layerGameObjectPrefab);
             activeCartesianTileSubObjectColorLayer.gameObject.name = fileName;
-            var propertyData = activeCartesianTileSubObjectColorLayer.PropertyData as CartesianTileSubObjectColorPropertyData;
+            var propertyData = activeCartesianTileSubObjectColorLayer.LayerData.GetProperty<CartesianTileSubObjectColorPropertyData>();
             propertyData.Data = AssetUriFactory.CreateProjectAssetUri(localFile.LocalFilePath);
             
             // TODO: Temporary proxying during refactoring, it would be better to simplify this.

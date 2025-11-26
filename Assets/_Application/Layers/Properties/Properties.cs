@@ -1,39 +1,34 @@
 using Netherlands3D.Twin.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
     public class Properties : MonoBehaviour
     {
-        public static Properties Instance { get; private set; }
 
         [SerializeField] private GameObject card;
         [SerializeField] private RectTransform sections;
-        
-        private void Awake()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-                return;
-            }
-
-            Destroy(gameObject);
-        }
+        [SerializeField] private PropertySectionRegistry registry;
+        private static PropertySectionRegistry Registry;
 
         private void Start()
         {
             Hide();
         }
         
-        public void Show(ILayerWithPropertyPanels layer)
+        public void Show(LayerData layer)
         {
             card.SetActive(true);
             sections.ClearAllChildren();
-            foreach (var propertySection in layer.GetPropertySections())
+            
+            foreach (var property in layer.LayerProperties)
             {
-                propertySection.AddToProperties(sections);
+                var prefab = registry.GetPrefab(property.GetType());
+                if (prefab!=null)
+                {
+                    var panel = Instantiate(prefab, sections);
+                    panel.GetComponent<IVisualizationWithPropertyData>().LoadProperties(layer.LayerProperties);
+                }
             }
         }
 
@@ -42,12 +37,22 @@ namespace Netherlands3D.Twin.Layers.Properties
             card.gameObject.SetActive(false);
             sections.ClearAllChildren();
         }
-        
-        public static ILayerWithPropertyPanels TryFindProperties(LayerData layer)
-        {
-            var layerProxy = layer as ReferencedLayerData;
 
-            return (layerProxy == null) ? layer as ILayerWithPropertyPanels : layerProxy.Reference as ILayerWithPropertyPanels;
+        public bool HasPropertiesWithPanel(LayerData layer)
+        {
+            foreach (var property in layer.LayerProperties)
+            {
+                if (registry.HasPanel(property.GetType()))
+                    return true;
+            }
+
+            return false;
         }
+        
+        // public static ILayerWithPropertyPanels TryFindProperties(LayerData layer)
+        // {
+        //     LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier); //todo: this now gives an error if the prefabID is not in the library (e.g. folderLayers)
+        //     return (template == null) ? layer as ILayerWithPropertyPanels : template as ILayerWithPropertyPanels;
+        // }
     }
 }

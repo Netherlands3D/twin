@@ -14,7 +14,7 @@ namespace Netherlands3D.Functionalities.Wfs
     /// <summary>
     /// Extention of GeoJSONLayerGameObject that injects a 'streaming' dataprovider WFSGeoJSONTileDataLayer
     /// </summary>
-    public class WFSGeoJsonLayerGameObject : GeoJsonLayerGameObject, ILayerWithPropertyPanels
+    public class WFSGeoJsonLayerGameObject : GeoJsonLayerGameObject//, ILayerWithPropertyPanels
     {
         public override bool IsMaskable => false;
 
@@ -22,12 +22,10 @@ namespace Netherlands3D.Functionalities.Wfs
         public override BoundingBox Bounds => cartesianTileWFSLayer?.BoundingBox;
 
         public WFSGeoJSONTileDataLayer CartesianTileWFSLayer => cartesianTileWFSLayer;
-        private List<IPropertySectionInstantiator> propertySections = new();
 
         protected override void OnLayerInitialize()
         {
             base.OnLayerInitialize();
-            propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
             CartesianTileWFSLayer.WFSGeoJSONLayer = this;
         }
 
@@ -95,11 +93,6 @@ namespace Netherlands3D.Functionalities.Wfs
         {
             if (cartesianTileWFSLayer.isEnabled != isActive)
                 cartesianTileWFSLayer.isEnabled = isActive;
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return propertySections;
         }
     }
 }

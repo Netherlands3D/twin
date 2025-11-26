@@ -18,23 +18,13 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 {
     [RequireComponent(typeof(ReadSubtree))]
     [RequireComponent(typeof(Read3DTileset))]
-    public class Tile3DLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels
+    public class Tile3DLayerGameObject : LayerGameObject, IVisualizationWithPropertyData//, ILayerWithPropertyPanels
     {
         public override BoundingBox Bounds => TileSet.root != null ? new BoundingBox(TileSet.root.BottomLeft, TileSet.root.TopRight) : null;
-        public Tile3DLayerPropertyData PropertyData => tile3DPropertyData;
 
         private Read3DTileset tileSet;
         private Read3DTileset TileSet => GetAndCacheComponent(ref tileSet);
         
-        [SerializeField] private bool usePropertySections = true;
-        private List<IPropertySectionInstantiator> propertySections = new();
-
-        private Tile3DLayerPropertyData tile3DPropertyData => LayerData.GetProperty<Tile3DLayerPropertyData>();
-        LayerPropertyData ILayerWithPropertyData.PropertyData => tile3DPropertyData;
-
-        [Obsolete("this is a temporary fix to apply credentials to the 3d Tiles package. this should go through the ICredentialHandler instead")]
-        public UnityEvent<Uri> OnURLChanged => tile3DPropertyData.OnUrlChanged;
-
         private ICredentialHandler credentialHandler;
         private ICredentialHandler CredentialHandler => GetAndCacheComponent(ref credentialHandler);
         
@@ -50,6 +40,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         protected override void OnLayerInitialize()
         {
+            var tile3DPropertyData = LayerData.GetProperty<Tile3DLayerPropertyData>();
             if (tile3DPropertyData == null)
             {
                 LayerData.SetProperty(new Tile3DLayerPropertyData(TileSet.tilesetUrl));
@@ -63,10 +54,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             // listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
             tile3DPropertyData.OnUrlChanged.AddListener(UpdateURL);
             tile3DPropertyData.OnCRSChanged.AddListener(UpdateCRS);
-            
-            propertySections = usePropertySections 
-                ? GetComponents<IPropertySectionInstantiator>().ToList() 
-                : new();
         }
 
         private void HandleCredentials(Uri uri, StoredAuthorization auth)
@@ -131,6 +118,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         protected override void OnLayerReady()
         {
+            var tile3DPropertyData = LayerData.GetProperty<Tile3DLayerPropertyData>();
             if (string.IsNullOrEmpty(tile3DPropertyData.Url) && !string.IsNullOrEmpty(TileSet.tilesetUrl)) //if we are making a new layer, we should take the serialized url from the tileset if it exists.
             {
                 UpdateURL(new Uri(TileSet.tilesetUrl));
@@ -180,11 +168,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             UnsupportedExtensionsMessage.Invoke(message);
         }
 
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return propertySections;
-        }
-
         public void ClearCredentials()
         {
             TileSet.personalKey = "";
@@ -196,11 +179,13 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
+            var tile3DPropertyData = LayerData.GetProperty<Tile3DLayerPropertyData>();
             UpdateCRS(tile3DPropertyData.ContentCRS);
         }
 
         protected override void OnDestroy()
         {
+            var tile3DPropertyData = LayerData.GetProperty<Tile3DLayerPropertyData>();
             tile3DPropertyData.OnUrlChanged.RemoveListener(UpdateURL);
             tile3DPropertyData.OnCRSChanged.RemoveListener(UpdateCRS);
         }

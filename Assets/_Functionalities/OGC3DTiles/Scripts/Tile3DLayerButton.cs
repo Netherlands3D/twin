@@ -8,31 +8,34 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.OGC3DTiles
 {
-    public class Tile3DLayerButton : ObjectLibraryButton
-    {
-        protected override async Task<LayerData> CreateLayer(ILayerBuilder layerBuilder = null)
-        {
-            layerBuilder ??= LayerBuilder.Create();
-            layerBuilder.NamedAs(prefab.name);
-            
-            if (await base.CreateLayer(layerBuilder) is not ReferencedLayerData newLayer)
-            {
-                Debug.LogError(
-                    "Expected layer created by the Tile3DLayerButton to be ReferencedLayerData, but received a null"
-                );
-
-                return null;
-            }
-            
-            if (newLayer.Reference is not Tile3DLayerGameObject tile3dLayerGameObject)
-            {
-                Debug.LogError(
-                    "Expected layer created by the Tile3DLayerButton to be a Tile3DLayerGameObject, " 
-                    + $"but received a {newLayer.Reference.GetType()}"
-                );
-            }
-
-            return newLayer;
-        }
-    }
+    // public class Tile3DLayerButton : ObjectLibraryButton
+    // {
+    //     protected override async Task<Layer> CreateLayer(ILayerBuilder layerBuilder = null)
+    //     {
+    //         layerBuilder ??= LayerBuilder.Create();
+    //         layerBuilder.NamedAs(prefab.name);
+    //
+    //         Layer layer = await base.CreateLayer(layerBuilder);
+    //         
+    //         
+    //         if (layer.LayerGameObject == null)
+    //         {
+    //             Debug.LogError(
+    //                 "Expected layer created by the Tile3DLayerButton to be ReferencedLayerData, but received a null"
+    //             );
+    //
+    //             return null;
+    //         }
+    //         
+    //         if (layer.LayerGameObject is not Tile3DLayerGameObject tile3dLayerGameObject)
+    //         {
+    //             Debug.LogError(
+    //                 "Expected layer created by the Tile3DLayerButton to be a Tile3DLayerGameObject, " 
+    //                 + $"but received a {layer.LayerGameObject.GetType()}"
+    //             );
+    //         }
+    //
+    //         return layer;
+    //     }
+    // }
 }

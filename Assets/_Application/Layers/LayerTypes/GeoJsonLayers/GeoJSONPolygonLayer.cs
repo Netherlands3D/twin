@@ -31,8 +31,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public bool IsPolygon => true;
         public override bool IsMaskable => false;
         public Transform Transform { get => transform; }
-        public delegate void GeoJSONPointHandler(Feature feature);
-        public event GeoJSONPointHandler FeatureRemoved;
+        public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePolygonVisualisations> spawnedVisualisations = new();     
         
@@ -52,30 +51,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     return;
                 }
                 polygonVisualizationMaterialInstance = new Material(value);
-                
-                ApplyStyling();
+
+                LayerData.OnStylingApplied.Invoke();
             }
-        }
-        
-        private List<IPropertySectionInstantiator> propertySections;
-
-        protected List<IPropertySectionInstantiator> PropertySections
-        {
-            get
-            {
-                if (propertySections == null)
-                {
-                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
-                }
-
-                return propertySections;
-            }
-            set => propertySections = value;
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return PropertySections;
         }
 
         public List<Mesh> GetMeshData(Feature feature)
@@ -170,8 +148,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
-            where T : GeoJSONObject
+        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem)           
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
             if (spawnedVisualisations.ContainsKey(feature))

@@ -15,7 +15,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Functionalities.OBJImporter
 {
     [RequireComponent(typeof(HierarchicalObjectLayerGameObject))]
-    public class OBJSpawner : MonoBehaviour, ILayerWithPropertyData
+    public class OBJSpawner : MonoBehaviour, IVisualizationWithPropertyData
     {
         [Header("Required input")]
         [SerializeField] private Material baseMaterial;
@@ -26,7 +26,6 @@ namespace Netherlands3D.Functionalities.OBJImporter
         [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
 
         private OBJPropertyData propertyData = new();
-        public LayerPropertyData PropertyData => propertyData;
 
         private Netherlands3D.ObjImporter.ObjImporter importer;
         private GameObject importedObject;
@@ -38,7 +37,6 @@ namespace Netherlands3D.Functionalities.OBJImporter
         public UnityEvent<bool> MtlImportSuccess = new();
         private HierarchicalObjectLayerGameObject layerGameObject;
         private MoveCameraToCoordinate cameraMover;
-        private TransformLayerPropertyData TransformPropertyData => (TransformLayerPropertyData)((ILayerWithPropertyData)layerGameObject).PropertyData;
 
         private void Awake()
         {
@@ -111,16 +109,18 @@ namespace Netherlands3D.Functionalities.OBJImporter
             importedObject = returnedGameObject;
             returnedGameObject.AddComponent<MeshCollider>();
             DisposeImporter();
-            
+
             // Object is loaded / replaced - trigger the application of styling
-            layerGameObject.ApplyStyling();
+            //layerGameObject.ApplyStyling();
+            layerGameObject.LayerData.OnStylingApplied.Invoke();
         }
 
         private void PositionImportedGameObject(GameObject returnedGameObject)
         {
             if (IsGeoReferenced())
             {
-                PositionGeoReferencedObj(returnedGameObject, TransformPropertyData.Position);
+                var transformPropertyData = layerGameObject.LayerData.GetProperty<TransformLayerPropertyData>();
+                PositionGeoReferencedObj(returnedGameObject, transformPropertyData.Position);
                 return;
             }
 
@@ -128,7 +128,8 @@ namespace Netherlands3D.Functionalities.OBJImporter
             // current position.
             if (!layerGameObject.LayerData.IsNew)
             {
-                transform.position = TransformPropertyData.Position.ToUnity();
+                var transformPropertyData = layerGameObject.LayerData.GetProperty<TransformLayerPropertyData>();
+                transform.position = transformPropertyData.Position.ToUnity();
             }
         }
 
