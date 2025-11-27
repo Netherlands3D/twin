@@ -18,7 +18,7 @@ namespace Netherlands3D.FirstPersonViewer
         public static Camera FPVCamera;
 
         public float CameraHeightOffset { private set; get; } = 1.75f;
-        public float PreviousCameraHeight { private set; get; }
+        private float previousCameraHeight;
         private float currentSensitivity = .1f;
 
         [Header("Viewer")]
@@ -178,7 +178,7 @@ namespace Netherlands3D.FirstPersonViewer
         
         private void SetCameraHeight(float height)
         {
-            PreviousCameraHeight = CameraHeightOffset;
+            previousCameraHeight = CameraHeightOffset;
             CameraHeightOffset = height;
 
             transform.localPosition = Vector3.up * CameraHeightOffset;
@@ -214,6 +214,8 @@ namespace Netherlands3D.FirstPersonViewer
                     return transform.parent.eulerAngles;
             }
         }
+
+        public Vector3 GetPreviousCameraHeight() => transform.position + Vector3.up * previousCameraHeight;
 
         private void ResetToStart() => transform.rotation = startRotation;
     }

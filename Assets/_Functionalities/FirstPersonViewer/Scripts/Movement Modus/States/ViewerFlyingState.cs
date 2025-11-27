@@ -9,7 +9,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             base.OnEnter();
 
-            Vector3 camPosition = viewer.FirstPersonCamera.transform.position + Vector3.up * viewer.FirstPersonCamera.PreviousCameraHeight;
+            Vector3 camPosition = viewer.FirstPersonCamera.GetPreviousCameraHeight();
             //Get Rotation this depends on the current Camera Constrain
             Vector3 eulerRotation = viewer.FirstPersonCamera.GetStateRotation();
             viewer.SetupState(camPosition, eulerRotation, Vector3.zero, 0);
