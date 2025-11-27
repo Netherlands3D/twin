@@ -216,7 +216,6 @@ namespace Netherlands3D.FirstPersonViewer
             }, snappingCullingMask);
         }
 
-        //Bool is needed for another branch to prevent another scene update in the future (The branch where it's used is already ready) | WHEN USED PLEASE REMOVE COMMENT :)
         public void ExitViewer(bool exitOriginalPosition)
         {
             OnViewerExited?.Invoke(exitOriginalPosition);

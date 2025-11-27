@@ -11,7 +11,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             Vector3 camPosition = viewer.FirstPersonCamera.transform.position;
             //Get Rotation this depends on the current Camera Constrain
-            Vector3 eulerRotation = viewer.FirstPersonCamera.GetEulerRotation();
+            Vector3 eulerRotation = viewer.FirstPersonCamera.GetStateRotation();
             viewer.SetupState(camPosition, eulerRotation, Vector3.zero, 0);
 
             viewer.SetVelocity(Vector2.zero);
