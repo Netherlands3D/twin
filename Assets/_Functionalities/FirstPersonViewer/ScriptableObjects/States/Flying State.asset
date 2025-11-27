@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37748b16695f8464b998fdbfd9bdcddf, type: 3}
   m_Name: Flying State
   m_EditorClassIdentifier: 
+  movementVisualController: {fileID: 0}
   <CameraConstrain>k__BackingField: 1
   viewName: Vliegen
   viewIcon: {fileID: 21300000, guid: 26f707f416c041342b3259ca9920c3a3, type: 3}
-  viewMesh: {fileID: 0}
-  meshMaterials: []
+  viewPrefab: {fileID: 0}
   editableSettings:
     list:
     - rid: 1516422325167980648
@@ -60,8 +60,8 @@ MonoBehaviour:
         movementSetting: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225,
           type: 2}
         defaultValue: 60
-        minValue: 10
-        maxValue: 140
+        minValue: 25
+        maxValue: 130
     - rid: 1516422325167980653
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
         asm: eu.netherlands3d.twin}

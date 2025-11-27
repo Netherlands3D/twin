@@ -17,8 +17,6 @@ namespace Netherlands3D.FirstPersonViewer
         public FirstPersonViewerInput Input { private set; get; }
         public MovementModusSwitcher MovementSwitcher { private set; get; }
 
-        private MeshFilter meshFilter;
-        private MeshRenderer meshRenderer;
         private FirstPersonViewerStateMachine fsm;
         private WorldTransform worldTransform;
 
@@ -44,6 +42,8 @@ namespace Netherlands3D.FirstPersonViewer
         [SerializeField] private float stepHeight = 1.5f;
         [SerializeField] private float returnFocusDistance = 150;
 
+        private GameObject viewObject;
+
         //Events
         public Action OnResetToStart;
         public Action OnResetToGround;
@@ -58,8 +58,6 @@ namespace Netherlands3D.FirstPersonViewer
             Input = GetComponent<FirstPersonViewerInput>();
             MovementSwitcher = GetComponent<MovementModusSwitcher>();
 
-            meshFilter = GetComponent<MeshFilter>();
-            meshRenderer = GetComponent<MeshRenderer>();
             worldTransform = GetComponent<WorldTransform>();
 
             OnViewerEntered += ViewerEnterd;
@@ -86,8 +84,12 @@ namespace Netherlands3D.FirstPersonViewer
             Input.OnFPVEnter();
             FirstPersonCamera.SetupViewer();
 
+            //Remove old visual (So no weird transition will happen)
+            fsm.SwitchState(null);
+            SetMovementVisual(null);
+
             ServiceLocator.GetService<CameraSwitcher>().SwitchCamera(this);
-        }     
+        }
 
         private void OnDestroy()
         {
@@ -155,16 +157,28 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetMovementModus(ViewerState viewerState)
         {
-            if (viewerState.viewMesh != null)
+
+            SetMovementVisual(viewerState.viewPrefab);
+
+            if (viewObject != null)
             {
-                meshFilter.mesh = viewerState.viewMesh;
-                meshRenderer.materials = viewerState.meshMaterials;
+                MovementVisualController movementVisualController = viewObject.GetComponent<MovementVisualController>();
+                viewerState.movementVisualController = movementVisualController;
             }
-            else meshFilter.mesh = null;
 
             FirstPersonCamera.SetCameraConstrain(viewerState.CameraConstrain);
 
             fsm.SwitchState(viewerState);
+        }
+
+        private void SetMovementVisual(GameObject visualObject)
+        {
+            if(viewObject != null) Destroy(viewObject);
+
+            if (visualObject != null)
+            {
+                viewObject = Instantiate(visualObject, transform);
+            }
         }
 
         public void SetupState(Vector3 cameraPosition, Vector3 playerEuler, Vector3 cameraEuler, float cameraHeightOffset)
