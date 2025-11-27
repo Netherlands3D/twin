@@ -59,7 +59,7 @@ MonoBehaviour:
           type: 2}
         defaultValue: 20
         minValue: 1
-        maxValue: 100
+        maxValue: 75
     - rid: 1516422325167980660
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
         asm: eu.netherlands3d.twin}
