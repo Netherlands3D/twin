@@ -20,7 +20,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private MovementModusButton movementModusButtonPrefab;
         [SerializeField] private Transform movementParent;
 
-        private MovementModusSwitcher modusSwitcher; 
+        private MovementModusSwitcher modusSwitcher;
 
         private void OnEnable()
         {
@@ -29,12 +29,12 @@ namespace Netherlands3D.FirstPersonViewer.UI
             CreateMovementPresetButtons(modusSwitcher.MovementPresets, modusSwitcher.CurrentMovement);
             RefreshSettings(modusSwitcher.CurrentMovement);
 
-            ServiceLocator.GetService<FirstPersonViewer>().MovementSwitcher.OnMovementPresetChanged += RefreshSettings;
+            modusSwitcher.OnMovementPresetChanged += RefreshSettings;
         }
 
         private void OnDisable()
         {
-            ServiceLocator.GetService<FirstPersonViewer>().MovementSwitcher.OnMovementPresetChanged -= RefreshSettings;
+            modusSwitcher.OnMovementPresetChanged -= RefreshSettings;
         }
 
         private void CreateMovementPresetButtons(List<ViewerState> viewerStates, ViewerState activeState)

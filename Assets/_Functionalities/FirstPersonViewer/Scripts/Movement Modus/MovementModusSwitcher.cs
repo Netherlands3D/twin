@@ -48,7 +48,7 @@ namespace Netherlands3D.FirstPersonViewer
             //$$ TODO Only supports floats for now should be revisited
             foreach (ViewerSetting setting in CurrentMovement.editableSettings.list)
             {
-                setting.InvokeOnValueChanged(setting.GetValue());
+                setting.InvokeOnValueChanged(setting.GetDefaultValue());
             }
         }
 
