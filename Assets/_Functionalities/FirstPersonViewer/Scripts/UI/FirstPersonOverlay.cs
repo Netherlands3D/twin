@@ -41,19 +41,20 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void UpdateInfoMenu(Coordinate playerCoords, float groundPos)
         {
-            float heightMapValue = heightMap.GetHeight(playerCoords, true);
+            Coordinate rdNapCoords = playerCoords.Convert(CoordinateSystem.RDNAP);
+
+            float heightMapValue = heightMap.GetHeight(rdNapCoords, true);
 
             float napHeight = Mathf.Round(heightMapValue * 100f) / 100f;
 
-            float dstToGround = Mathf.Round(((float)playerCoords.value3 - heightMapValue) * 100f) / 100f;
-            float dstToObject = Mathf.Round((playerCoords.ToUnity().y - groundPos) * 100f) / 100f;
+            float dstToGround = Mathf.Round(((float)rdNapCoords.value3 - heightMapValue) * 100f) / 100f;
+            float dstToObject = Mathf.Round((rdNapCoords.ToUnity().y - groundPos) * 100f) / 100f;
 
             overlayText.text =
-                $"Coordinaten: {playerCoords.Convert(CoordinateSystem.RDNAP).ToString()}\n" +
-                $"Gelezen hoogtekaart: {heightMapValue}\n" +
-                $"Afstand Grond: {dstToGround}m\n" +
+                $"Coordinaten: {rdNapCoords.ToString()}\n" +
+                $"Afstand tot Grond: {dstToGround}m\n" +
                 $"Afstand tot Object: {dstToObject}m\n" +
-                $"NAP Hoogte: {napHeight + .6f}m\n" +
+                $"NAP Hoogte: {napHeight}m\n" +
                 $"<i><size=10>Data is een geschatte benadering en kan afwijken van de werkelijkheid.</i>";
         }
     }

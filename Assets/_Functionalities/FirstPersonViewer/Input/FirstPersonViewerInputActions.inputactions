@@ -753,10 +753,10 @@
                 {
                     "name": "",
                     "id": "53f7d462-f90a-4c52-b272-6b4ce1eb0751",
-                    "path": "<Keyboard>/f3",
+                    "path": "<Keyboard>/f2",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard & Mouse",
                     "action": "OpenOverlay",
                     "isComposite": false,
                     "isPartOfComposite": false
