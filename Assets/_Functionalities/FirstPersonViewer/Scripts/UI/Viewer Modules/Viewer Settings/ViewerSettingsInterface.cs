@@ -10,8 +10,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
 {
     public class ViewerSettingsInterface : MonoBehaviour
     {
-        [SerializeField] private ContentFitterRefresh contentFitterRefresh;
-
         [Header("Settings Label")]
         [SerializeField] private List<ViewerSettingPrefab> settingPrefabs;
         [SerializeField] private Transform settingParent;
@@ -69,22 +67,11 @@ namespace Netherlands3D.FirstPersonViewer.UI
                 ViewerSettingComponent settingObject = Instantiate(componentprefab, settingParent);
                 settingObject.Init(setting);
             }
-
-            StartCoroutine(UpdateCanvas());
         }
 
         public void ModusButtonPressed(ViewerState preset)
         {
             modusSwitcher.LoadMovementPreset(preset);
-        }
-
-        //TODO Use Vertical/Horizontal Layout group instead of content size fitters
-        private IEnumerator UpdateCanvas()
-        {
-            Canvas.ForceUpdateCanvases();
-            contentFitterRefresh.RefreshContentFitters();
-            yield return null;
-            contentFitterRefresh.RefreshContentFitters();
         }
     }
 

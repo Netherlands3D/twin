@@ -582,5 +582,35 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4151227325010422218, guid: c9c980a6d72fe49d6b1b7e465edd594f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3698951257711387781}
   m_SourcePrefab: {fileID: 100100000, guid: c9c980a6d72fe49d6b1b7e465edd594f, type: 3}
+--- !u!1 &4341340879056787810 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4151227325010422218, guid: c9c980a6d72fe49d6b1b7e465edd594f,
+    type: 3}
+  m_PrefabInstance: {fileID: 406333065676976296}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3698951257711387781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4341340879056787810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: 324.98
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
