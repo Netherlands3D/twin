@@ -11,10 +11,10 @@ namespace Netherlands3D.LayerStyles
     public sealed class Symbolizer
     {       
         //Constants for property keys
-        private const string FillColorProperty = "fill-color";
-        private const string StrokeColorProperty = "stroke-color";
-        private const string VisibilityProperty = "visibility";
-        private const string MaskLayerMaskProperty = "mask-layer-mask";
+        public const string FillColorProperty = "fill-color";
+        public const string StrokeColorProperty = "stroke-color";
+        public const string VisibilityProperty = "visibility";
+        public const string MaskLayerMaskProperty = "mask-layer-mask";
 
         //Constants for property values
         private const string VisibilityVisible = "visible";
@@ -22,8 +22,6 @@ namespace Netherlands3D.LayerStyles
 
         //Constants for custom properties
         private const string CustomPropertyPrefix = "--";
-
-        public static string DefaultColorPropertyIdentifier => FillColorProperty;
 
         /// <summary>
         /// Store each property as a string, and use specific getters and setting to convert from and to string.

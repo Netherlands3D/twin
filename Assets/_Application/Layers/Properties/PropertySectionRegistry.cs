@@ -10,6 +10,7 @@ namespace Netherlands3D.Twin.Layers.Properties
     {
         public string TypeName;
         public GameObject Prefab;
+        public string SubType;
     }
 
     [CreateAssetMenu(fileName = "PropertyPanelRegistry", menuName = "Netherlands3D/PropertyPanelRegistry", order = 0)]
@@ -22,11 +23,12 @@ namespace Netherlands3D.Twin.Layers.Properties
             PropertySectionRegistryBuilder.Rebuild();
         }
 #endif
-        public void AddEntry(string typeName, GameObject prefab)
+        public void AddEntry(string typeName, GameObject prefab, string subType)
         {
             var entry = new PropertyPanelEntry();
             entry.TypeName = typeName;
             entry.Prefab = prefab;
+            entry.SubType = subType;
             Entries.Add(entry);
         }
 
@@ -35,15 +37,51 @@ namespace Netherlands3D.Twin.Layers.Properties
             Entries.Clear();
         }
 
-        public bool HasPanel(Type type)
+        public bool HasPanel(Type type, LayerPropertyData propertyData)
         {
+            if(propertyData.CustomFlags != null && propertyData.CustomFlags.Count > 0)
+            {
+                foreach (var flag in propertyData.CustomFlags)
+                {
+                    if (Entries.Any(e => e.TypeName == type.AssemblyQualifiedName && e.SubType == flag))
+                    {
+                        return true;
+                    }
+                }
+            }
+
             return Entries.Any(entry => entry.TypeName == type.AssemblyQualifiedName);
         }
 
-        public GameObject GetPrefab(Type type)
+        public List<GameObject> GetPanelPrefabs(Type type, LayerPropertyData propertyData)
         {
+            List<GameObject> prefabs = new List<GameObject>();  
+            if (propertyData.CustomFlags != null && propertyData.CustomFlags.Count > 0)
+            {
+                foreach (var flag in propertyData.CustomFlags)
+                {
+                    var entryWithFlag = Entries.FirstOrDefault(e => e.TypeName == type.AssemblyQualifiedName && e.SubType == flag);
+                    if (entryWithFlag != null)
+                    {
+                        prefabs.Add(entryWithFlag.Prefab);
+                    }
+                }
+                return prefabs;
+            }
+
             var entry = Entries.FirstOrDefault(e => e.TypeName == type.AssemblyQualifiedName);
-            return entry?.Prefab;
+            if (entry != null)
+            {
+                foreach (var interfaceType in type.GetInterfaces())
+                {
+                    if (!HasPanel(interfaceType, propertyData)) continue;
+
+                    entry = Entries.FirstOrDefault(e => e.TypeName == interfaceType.AssemblyQualifiedName);
+                    break;
+                }
+                prefabs.Add(entry.Prefab);
+            }
+            return prefabs;
         }
     }
 }

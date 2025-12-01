@@ -16,6 +16,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
+    [PropertySection(typeof(StylingPropertyData), Symbolizer.VisibilityProperty)]
     public class HiddenObjectsPropertySection : MonoBehaviour, IVisualizationWithPropertyData, IMultiSelectable
     {
         [SerializeField] private RectTransform content;

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -14,5 +15,11 @@ namespace Netherlands3D.Twin.Layers.Properties
         /// property; such as assets. 
         /// </summary>
         [DataMember] public Guid UUID = Guid.NewGuid();
+
+        [DataMember] protected List<string> customFlags { get; set; } = null;
+
+        [JsonIgnore] public List<string> CustomFlags => customFlags;
+
+
     }
 }

@@ -24,7 +24,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         private Layer layer;
         private TileHandler tileHandler;
 
-        bool debugFeatures = false;
+        bool debugFeatures = false;        
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
@@ -234,7 +234,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             var stylingPropertyData = properties.Get<StylingPropertyData>();
             if (stylingPropertyData == null)
             {
-                stylingPropertyData = new StylingPropertyData();
+                stylingPropertyData = new StylingPropertyData(new List<string> { Symbolizer.VisibilityProperty, Symbolizer.FillColorProperty });
                 LayerData.SetProperty(stylingPropertyData);
             }
 

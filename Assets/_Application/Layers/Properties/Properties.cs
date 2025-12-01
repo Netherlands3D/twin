@@ -8,7 +8,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private GameObject card;
         [SerializeField] private RectTransform sections;
         [SerializeField] private PropertySectionRegistry registry;
-        private static PropertySectionRegistry Registry;
 
         private void Start()
         {
@@ -23,22 +22,14 @@ namespace Netherlands3D.Twin.Layers.Properties
             foreach (var property in layer.LayerProperties)
             {
                 var type = property.GetType();
-                var prefab = registry.GetPrefab(type);
-                if (prefab == null)
+                var prefabs = registry.GetPanelPrefabs(type, property);                
+                if (prefabs.Count > 0)
                 {
-                    foreach (var interfaceType in type.GetInterfaces())
+                    foreach(var prefab in prefabs)
                     {
-                        if (!registry.HasPanel(interfaceType)) continue;
-                        
-                        prefab = registry.GetPrefab(interfaceType);
-                        break;
+                        var panel = Instantiate(prefab, sections);
+                        panel.GetComponent<IVisualizationWithPropertyData>().LoadProperties(layer.LayerProperties);
                     }
-                }
-                
-                if (prefab!=null)
-                {
-                    var panel = Instantiate(prefab, sections);
-                    panel.GetComponent<IVisualizationWithPropertyData>().LoadProperties(layer.LayerProperties);
                 }
             }
         }
@@ -54,12 +45,12 @@ namespace Netherlands3D.Twin.Layers.Properties
             foreach (var property in layer.LayerProperties)
             {
                 var type = property.GetType();
-                if (registry.HasPanel(type))
+                if (registry.HasPanel(type, property))
                     return true;
                 
                 foreach (var interfaceType in type.GetInterfaces())
                 {
-                    if (registry.HasPanel(interfaceType))
+                    if (registry.HasPanel(interfaceType, property))
                     {
                         return true;
                     }

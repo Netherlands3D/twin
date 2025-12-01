@@ -196,7 +196,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             var stylingPropertyData = properties.Get<StylingPropertyData>();
             if (stylingPropertyData == null)
             {
-                stylingPropertyData = new StylingPropertyData();
+                stylingPropertyData = new StylingPropertyData(new List<string> { Symbolizer.FillColorProperty, Symbolizer.VisibilityProperty });
                 LayerData.SetProperty(stylingPropertyData);
             }
 

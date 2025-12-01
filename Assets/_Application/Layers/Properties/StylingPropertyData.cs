@@ -12,9 +12,9 @@ namespace Netherlands3D.Twin.Layers.Properties
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "Styling")]
     public class StylingPropertyData : LayerPropertyData
     {
-        private const string NameOfDefaultStyle = "default";
+        private const string NameOfDefaultStyle = "default";        
 
-        [DataMember] private string activeToolProperty = Symbolizer.DefaultColorPropertyIdentifier;
+        [DataMember] private string activeToolProperty = Symbolizer.FillColorProperty; //default
 
         [JsonIgnore]
         public string ActiveToolProperty
@@ -55,8 +55,9 @@ namespace Netherlands3D.Twin.Layers.Properties
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleRemoved = new();
         [JsonIgnore] public readonly UnityEvent<string> ToolPropertyChanged = new();
 
-        public StylingPropertyData()
+        public StylingPropertyData(List<string> styleModes = null)
         {
+            this.customFlags = styleModes;
             styles = new Dictionary<string, LayerStyle>
             {
                 { NameOfDefaultStyle, LayerStyle.CreateDefaultStyle() }

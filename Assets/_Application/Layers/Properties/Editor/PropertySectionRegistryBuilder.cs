@@ -34,7 +34,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                         .FirstOrDefault() is PropertySectionAttribute attr)
                 {
                     Debug.Log("found prefab " + prefab.name + " with property panel attribute for: " + attr.RequiredPropertyType + " with name: " + attr.RequiredPropertyType.AssemblyQualifiedName);
-                    Registry.AddEntry(attr.RequiredPropertyType.AssemblyQualifiedName, prefab.gameObject);
+                    Registry.AddEntry(attr.RequiredPropertyType.AssemblyQualifiedName, prefab.gameObject, attr.SubType);
                 }
             }
 
