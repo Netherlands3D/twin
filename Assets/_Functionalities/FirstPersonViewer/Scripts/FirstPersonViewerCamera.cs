@@ -213,5 +213,7 @@ namespace Netherlands3D.FirstPersonViewer
         }
 
         private void ResetToStart() => transform.rotation = startRotation;
+        public void SetSensitivity(float sensitivity) => currentsensitivity = sensitivity;
+        public float GetSensitivity() => currentsensitivity;
     }
 }

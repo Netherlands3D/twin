@@ -8,7 +8,6 @@ using System;
 
 namespace Netherlands3D.FirstPersonViewer
 {
-
     public class FirstPersonViewerInput : MonoBehaviour
     {
         [Header("Input")]
@@ -36,6 +35,7 @@ namespace Netherlands3D.FirstPersonViewer
         private bool isEditingInputfield;
         private List<MonoBehaviour> inputLocks;
         public bool LockInput => inputLocks.Count > 0;
+        private bool lockMouseModus;
 
         //Events
         public event Action<float> ExitDuration;
@@ -57,7 +57,6 @@ namespace Netherlands3D.FirstPersonViewer
             exitModifier = inputActionAsset.FindAction("ExitModifier");
 
             inputLocks = new List<MonoBehaviour>();
-
         }
 
         private void OnEnable()
@@ -67,8 +66,12 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void OnFPVEnter()
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            //Only lock mouse when the locking modus is selected.
+            if (lockMouseModus)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
 
         private void OnDisable()
@@ -85,19 +88,35 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void HandleCursorLocking()
         {
-            //When editing an inputfield just block this function.
-            if (ShouldSkipCursorLocking()) return;
+            if (!lockMouseModus)
+            {
+                //Use the normal locking mode (Mouse Click)
+                bool cursorLocked = Cursor.lockState == CursorLockMode.Locked;
+                if (LeftClick.triggered && !cursorLocked)
+                {
+                    if (ShouldSkipCursorLocking()) return;
+                    if (Interface.PointerIsOverUI()) return;
 
-            //When key is released release/lock mouse
-            if (ExitInput.WasReleasedThisFrame() && !isEditingInputfield)
-            {
-                bool isLocked = Cursor.lockState == CursorLockMode.Locked;
-                ToggleCursor(isLocked);
+                    ToggleCursor(false);
+                }
+                else if (LeftClick.WasReleasedThisFrame() && cursorLocked) ToggleCursor(true);
             }
-            else if (LeftClick.triggered && !Interface.PointerIsOverUI())
+            else
             {
-                //When no UI object is detected lock the mouse to screen again, Lock Cursor.
-                ToggleCursor(false); 
+                //When editing an inputfield just block this function.
+                if (ShouldSkipCursorLocking()) return;
+
+                //When key is released release/lock mouse
+                if (ExitInput.WasReleasedThisFrame() && !isEditingInputfield)
+                {
+                    bool isLocked = Cursor.lockState == CursorLockMode.Locked;
+                    ToggleCursor(isLocked);
+                }
+                else if (LeftClick.triggered && !Interface.PointerIsOverUI())
+                {
+                    //When no UI object is detected lock the mouse to screen again, Lock Cursor.
+                    ToggleCursor(false);
+                }
             }
         }
 
@@ -112,7 +131,7 @@ namespace Netherlands3D.FirstPersonViewer
         private void ToggleCursor(bool unlock)
         {
             if (unlock) AddInputLockConstrain(this);
-            else  RemoveInputLockConstrain(this);
+            else RemoveInputLockConstrain(this);
 
             Cursor.lockState = unlock ? CursorLockMode.None : CursorLockMode.Locked;
             Cursor.visible = unlock;
@@ -147,8 +166,7 @@ namespace Netherlands3D.FirstPersonViewer
         public void ViewerExited()
         {
             //TODO Move this to a application wide cursor manager.
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            ToggleCursor(true);
         }
 
         public void AddInputLockConstrain(MonoBehaviour monoBehaviour) => inputLocks.Add(monoBehaviour);
@@ -165,5 +183,8 @@ namespace Netherlands3D.FirstPersonViewer
 
             return selected.GetComponent<TMP_InputField>() != null;
         }
+
+        public void SetMouseLockModus(bool lockMouseModus) => this.lockMouseModus = lockMouseModus;
+        public bool GetMouseLockModus() => lockMouseModus;
     }
 }
