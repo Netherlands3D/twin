@@ -310,12 +310,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             ObjectMappingItem item = GetMappingItemForBagID(bagID, selectedMapping, out layer);
             if (layer == null)
                 return null;
-
-            CartesianTileLayerFeatureColorPropertyData layerFeaturePropertyData = layer.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
-            if (!layerFeaturePropertyData.LayerFeatures.ContainsKey(item))
+           
+            if (!layer.LayerFeatures.ContainsKey(item))
                 return null;
             
-            return layerFeaturePropertyData.LayerFeatures[item]; 
+            return layer.LayerFeatures[item]; 
         }
 
         /// <summary>

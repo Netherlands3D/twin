@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI;
 using RuntimeHandle;
@@ -87,7 +88,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
                 transformPropertyData.OnScaleChanged.RemoveListener(UpdateScalingFields);
             }
 
-            transformPropertyData = properties.FirstOrDefault(p => p is TransformLayerPropertyData) as TransformLayerPropertyData;
+            transformPropertyData = properties.Get<TransformLayerPropertyData>();
 
             transformPropertyData.OnPositionChanged.AddListener(UpdatePositionFields);
             transformPropertyData.OnRotationChanged.AddListener(UpdateRotationFields);
@@ -102,7 +103,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
 
         private void SetTransformLocks(List<LayerPropertyData> properties)
         {
-            TransformLockLayerPropertyData propertyData = properties.FirstOrDefault(p => p is TransformLockLayerPropertyData) as TransformLockLayerPropertyData;
+            TransformLockLayerPropertyData propertyData = properties.Get<TransformLockLayerPropertyData>();
             if (propertyData == null)
             {
                 position.xField.Interactable = true;

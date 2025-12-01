@@ -10,8 +10,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
-{
-    [PropertySection(typeof(CartesianTileLayerFeatureColorPropertyData))]
+{  
     public class CartesianTileLayerFeatureColorPropertySection : MonoBehaviour, IVisualizationWithPropertyData, IMultiSelectable
     {  
         [SerializeField] private RectTransform content;
@@ -27,12 +26,11 @@ namespace Netherlands3D.Twin.Layers.Properties
         public ISelectable FirstSelectedItem { get; set; }
 
         private StylingPropertyData stylingPropertyData;
-        private CartesianTileLayerFeatureColorPropertyData featureColorPropertyData;
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             stylingPropertyData = properties.Get<StylingPropertyData>();
-            featureColorPropertyData = properties.Get<CartesianTileLayerFeatureColorPropertyData>();
+           
 
             CreateSwatches();
 
@@ -67,8 +65,17 @@ namespace Netherlands3D.Twin.Layers.Properties
             swatches.Clear();
             layerContent.ClearAllChildren();
 
-            
-            foreach (var layerFeature in featureColorPropertyData.LayerFeatures.Values)
+
+            CartesianTileLayerGameObject visualization = FindObjectsByType<CartesianTileLayerGameObject>(FindObjectsSortMode.None).ToList()
+                .FirstOrDefault(v => v.LayerData.GetProperty<StylingPropertyData>() == stylingPropertyData);
+
+            if(visualization == null) 
+            {
+                Debug.LogError("invalid visualisation!");
+                return;
+            }
+
+            foreach (var layerFeature in visualization.LayerFeatures.Values)
             {
                 swatches[layerFeature] = CreateSwatch(layerFeature);
                 SetSwatchColorFromFeature(layerFeature);

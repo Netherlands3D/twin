@@ -61,6 +61,8 @@ namespace Netherlands3D.Twin.Layers
 
         public abstract BoundingBox Bounds { get; }
 
+        public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
+
 #if UNITY_EDITOR
         private void OnValidate()
         {

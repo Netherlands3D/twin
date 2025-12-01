@@ -1,6 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +15,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            convertTogglePropertyData = properties.FirstOrDefault(p=> p is ToggleScatterPropertyData) as ToggleScatterPropertyData;
+            convertTogglePropertyData = properties.Get<ToggleScatterPropertyData>();
             SetSectionVisible(convertTogglePropertyData.AllowScatter);
             
             convertTogglePropertyData.AllowScatterChanged.AddListener(SetSectionVisible);
@@ -27,24 +26,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
         {
             gameObject.SetActive(isVisible);
         }
-        
-
-        // private void Convert(bool isScattered)
-        // {
-        //     string oldPrefabId = convertTogglePropertyData.PrefabId;
-        //     if (isScattered)
-        //     {
-        //         App.Layers.VisualizeAs(objectLayer.LayerData, ObjectScatterLayerGameObject.ScatterBasePrefabID, convertedVisualization => //todo: not make lambda to reduce allocations
-        //         {
-        //             ((ObjectScatterLayerGameObject)convertedVisualization).Initialize(oldPrefabId);
-        //         });
-        //     }
-        //     else
-        //     {
-        //         - case ObjectScatterLayerGameObject scatterLayer:
-        //         -App.Layers.VisualizeAs(scatterLayer.LayerData, scatterLayer.Settings.OriginalPrefabId);
-        //     }
-        // }
 
         private void OnDestroy()
         {

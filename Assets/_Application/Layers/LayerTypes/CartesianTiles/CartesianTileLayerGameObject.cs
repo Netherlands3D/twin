@@ -71,8 +71,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 ObjectSelectorService.MappingTree.OnMappingAdded.AddListener(OnDebugMapping);
             }
 
-            CartesianTileLayerFeatureColorPropertyData layerFeaturePropertyData = LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
-
             for (var materialIndex = 0; materialIndex < binaryMeshLayer.DefaultMaterialList.Count; materialIndex++)
             {
                 // Make a copy of the default material, so we can change the color without affecting the original
@@ -82,7 +80,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 binaryMeshLayer.DefaultMaterialList[materialIndex] = material;
 
                 var layerFeature = CreateFeature(material);
-                layerFeaturePropertyData.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             }
         }
        
@@ -108,12 +106,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         }
 
         private void OnAddedMapping(ObjectMapping mapping)
-        {         
-            CartesianTileLayerFeatureColorPropertyData layerFeaturePropertyData = LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
+        {   
             foreach (ObjectMappingItem item in mapping.items)
             {
                 var layerFeature = CreateFeature(item);
-                layerFeaturePropertyData.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             }
             StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
             stylingPropertyData.OnStylingApplied.Invoke();
@@ -121,10 +118,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         private void OnRemovedMapping(ObjectMapping mapping)
         {
-            CartesianTileLayerFeatureColorPropertyData layerFeaturePropertyData = LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
             foreach (ObjectMappingItem item in mapping.items)
             {
-                layerFeaturePropertyData.LayerFeatures.Remove(item);
+                LayerFeatures.Remove(item);
             }
         }
 
@@ -181,12 +177,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         }
         
         public override void ApplyStyling()
-        {
-            CartesianTileLayerFeatureColorPropertyData stylingPropertyData = LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
+        {           
             // WMS and other projection layers also use this class as base - but they should not apply this styling
             if (layer is BinaryMeshLayer binaryMeshLayer)
             {
-                foreach (var (_, feature) in stylingPropertyData.LayerFeatures)
+                foreach (var (_, feature) in LayerFeatures)
                 {
                     Symbolizer symbolizer = GetStyling(feature);
                     CartesianTileLayerStyler.Apply(symbolizer, feature);
@@ -243,12 +238,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 LayerData.SetProperty(stylingPropertyData);
             }
 
-            var layerFeaturePropertyData = properties.Get<CartesianTileLayerFeatureColorPropertyData>();
-            if (layerFeaturePropertyData == null)
-            {
-                layerFeaturePropertyData = new CartesianTileLayerFeatureColorPropertyData();
-                LayerData.SetProperty(layerFeaturePropertyData);
-            }
+            //var layerFeaturePropertyData = properties.Get<CartesianTileLayerFeatureColorPropertyData>();
+            //if (layerFeaturePropertyData == null)
+            //{
+            //    layerFeaturePropertyData = new CartesianTileLayerFeatureColorPropertyData();
+            //    LayerData.SetProperty(layerFeaturePropertyData);
+            //}
         }
     }
 }
