@@ -87,9 +87,10 @@ namespace Netherlands3D.Functionalities.Wms
             );
 
             WMSProjectionLayer.SetAuthorization(auth);
-            LayerData.HasValidCredentials = true;
-            WMSProjectionLayer.RefreshTiles();
+            LayerData.HasValidCredentials = true;           
             WMSProjectionLayer.isEnabled = LayerData.ActiveInHierarchy;
+            if(WMSProjectionLayer.isEnabled)
+                WMSProjectionLayer.RefreshTiles();
         }
 
         public void ClearCredentials()
@@ -108,7 +109,10 @@ namespace Netherlands3D.Functionalities.Wms
         {
             CredentialHandler.Uri = storedUri; //apply the URL from what is stored in the Project data
             WMSProjectionLayer.WmsUrl = storedUri.ToString();
-            CredentialHandler.ApplyCredentials();
+
+            //TODO apply this when toggled active from menu when this was a disabled layer
+            if(LayerData.ActiveInHierarchy)
+                CredentialHandler.ApplyCredentials();
         }
 
         protected override void OnDestroy()
@@ -129,6 +133,18 @@ namespace Netherlands3D.Functionalities.Wms
             SetLegendActive(false);
         }
 
+        public override void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            if (isActive)
+            {
+                UpdateURL(URLPropertyData.Data);
+            }
+
+            if (WMSProjectionLayer.isEnabled == isActive) return;
+
+            WMSProjectionLayer.isEnabled = isActive;           
+        }
+
         private void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)
         {
             if (boundingBoxContainer == null) return;
@@ -143,13 +159,6 @@ namespace Netherlands3D.Functionalities.Wms
             }
 
             WMSProjectionLayer.BoundingBox = boundingBoxContainer.GlobalBoundingBox;
-        }
-
-        public override void OnLayerActiveInHierarchyChanged(bool isActive)
-        {
-            if (WMSProjectionLayer.isEnabled == isActive) return;
-            
-            WMSProjectionLayer.isEnabled = isActive;
         }
     }
 }
