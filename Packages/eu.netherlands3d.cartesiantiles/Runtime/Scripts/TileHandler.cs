@@ -177,7 +177,7 @@ namespace Netherlands3D.CartesianTiles
                 }
             }
 
-            foreach (var kvp in activeTileChanges)
+            foreach (var kvp in activeTileChanges.ToList())
             {
                 var oldChange = kvp.Value;
                 var newChange = oldChange;
