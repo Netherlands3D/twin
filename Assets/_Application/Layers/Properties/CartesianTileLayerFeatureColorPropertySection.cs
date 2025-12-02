@@ -12,7 +12,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    [PropertySection(typeof(StylingPropertyData), CartesianTileLayerStyler.LayerFeatureColoring)]// Symbolizer.FillColorProperty)]
+    [PropertySection(typeof(StylingPropertyData), CartesianTileLayerStyler.LayerFeatureColoring)]
     public class CartesianTileLayerFeatureColorPropertySection : MonoBehaviour, IVisualizationWithPropertyData, IMultiSelectable
     {  
         [SerializeField] private RectTransform content;

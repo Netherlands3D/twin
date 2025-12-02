@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Services;
@@ -11,6 +11,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Unity.Collections;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
@@ -24,7 +25,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         private Layer layer;
         private TileHandler tileHandler;
 
-        bool debugFeatures = false;        
+        bool debugFeatures = false;
+
+
+      
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
@@ -245,10 +249,46 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             var stylingPropertyData = properties.Get<StylingPropertyData>();
             if (stylingPropertyData == null)
-            {
-                stylingPropertyData = new StylingPropertyData(new List<string> { Symbolizer.VisibilityProperty, CartesianTileLayerStyler.LayerFeatureColoring });
+            {               
+                stylingPropertyData = new StylingPropertyData();
                 LayerData.SetProperty(stylingPropertyData);
             }
+            LoadCustomFlags(stylingPropertyData);
+        }
+
+        [System.Serializable]
+        public struct PropertySectionOption
+        {
+            public string type;
+            public bool Enabled;
+        }
+             
+        public List<PropertySectionOption> PropertySections = new();
+        private List<string> customFlags = new List<string> { Symbolizer.VisibilityProperty, CartesianTileLayerStyler.LayerFeatureColoring };
+
+        private void OnValidate()
+        {
+            foreach (string customFlag in customFlags)
+            {
+                if (!PropertySections.Any(f => f.type == customFlag))
+                    PropertySections.Add(new PropertySectionOption { type = customFlag, Enabled = false });
+            }
+
+            // Remove duplicates by type
+            PropertySections = PropertySections
+                .GroupBy(f => f.type)
+                .Select(g => g.First())
+                .ToList();
+        }
+
+        private void LoadCustomFlags(LayerPropertyData property)
+        {
+            var existingFlags = PropertySections
+            .Where(option => option.Enabled)
+            .Select(option => option.type)
+            .ToList();
+
+            property.SetCustomFlags(existingFlags);
         }
     }
 }

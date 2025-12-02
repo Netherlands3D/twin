@@ -13,37 +13,37 @@ namespace Netherlands3D.Twin.Layers.Editor
 
         public static void LayerData(LayerData layerData, VisualElement root)
         {
-            // Add a divider first
-            root.Add(Heading("Layer Data"));
-            root.Add(Divider());
+            //// Add a divider first
+            //root.Add(Heading("Layer Data"));
+            //root.Add(Divider());
 
-            if (layerData == null)
-            {
-                root.Add(FieldContent("This layer doesn't have any data associated with it (yet)."));
-                return; 
-            }
+            //if (layerData == null)
+            //{
+            //    root.Add(FieldContent("This layer doesn't have any data associated with it (yet)."));
+            //    return; 
+            //}
 
-            root.Add(FieldWithCaption("Id", layerData.Id.ToString()));
-            root.Add(FieldWithCaption("Name", layerData.Name));
-            root.Add(FieldWithColor("Color", layerData.Color));
+            //root.Add(FieldWithCaption("Id", layerData.Id.ToString()));
+            //root.Add(FieldWithCaption("Name", layerData.Name));
+            //root.Add(FieldWithColor("Color", layerData.Color));
 
 
-            root.Add(Subheading("Styles"));
-            if (layerData.GetProperty<StylingPropertyData>().GetEditorStyles().Count == 0)
-            {
-                root.Add(FieldContent("This layer doesn't have any styles associated with it (yet)."));
-            }
+            //root.Add(Subheading("Styles"));
+            //if (layerData.GetProperty<StylingPropertyData>().GetEditorStyles().Count == 0)
+            //{
+            //    root.Add(FieldContent("This layer doesn't have any styles associated with it (yet)."));
+            //}
 
-            bool first = true;
-            foreach (var style in layerData.GetProperty<StylingPropertyData>().GetEditorStyles())
-            {
-                var foldout = StyleFoldout(style);
-                // first should be folded out, rest collapsed by default
-                foldout.value = first;
-                if (first) first = false;
+            //bool first = true;
+            //foreach (var style in layerData.GetProperty<StylingPropertyData>().GetEditorStyles())
+            //{
+            //    var foldout = StyleFoldout(style);
+            //    // first should be folded out, rest collapsed by default
+            //    foldout.value = first;
+            //    if (first) first = false;
 
-                root.Add(foldout);
-            }
+            //    root.Add(foldout);
+            //}
         }
 
         private static Foldout StyleFoldout(LayerStyle layerStyle)

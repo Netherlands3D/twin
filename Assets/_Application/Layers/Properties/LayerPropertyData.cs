@@ -19,7 +19,10 @@ namespace Netherlands3D.Twin.Layers.Properties
         [DataMember] protected List<string> customFlags { get; set; } = null;
 
         [JsonIgnore] public List<string> CustomFlags => customFlags;
-
-
+               
+        public void SetCustomFlags(List<string> flags)
+        {
+            customFlags = flags;
+        }
     }
 }
