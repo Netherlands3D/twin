@@ -81,6 +81,7 @@ namespace Netherlands3D.FirstPersonViewer
                 Cursor.visible = false;
                 snackbarEvent.InvokeStarted(fpvExitText);
             }
+            else AddInputLockConstrain(this);
         }
 
         private void OnDisable()
