@@ -89,8 +89,7 @@ namespace Netherlands3D.Functionalities.Wms
             WMSProjectionLayer.SetAuthorization(auth);
             LayerData.HasValidCredentials = true;           
             WMSProjectionLayer.isEnabled = LayerData.ActiveInHierarchy;
-            if(WMSProjectionLayer.isEnabled)
-                WMSProjectionLayer.RefreshTiles();
+            WMSProjectionLayer.RefreshTiles();
         }
 
         public void ClearCredentials()
