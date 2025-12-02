@@ -23,6 +23,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public MovementSetting<T> movementSetting;
         public override string GetDisplayName() => movementSetting.displayName;
         public override string GetDisplayUnits() => movementSetting.units;
+        public override object GetValue() => movementSetting.Value;
 
         public override void InvokeOnValueChanged(object value)
         {
@@ -48,14 +49,20 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public float maxValue;
 
         public override object GetDefaultValue() => defaultValue;
-
-        public override object GetValue() => movementSetting.Value;
     }
 
     [Serializable]
     public class ViewerSettingLabel : ViewerSettingGeneric<string>
     {
         public override object GetDefaultValue() => "";
-        public override object GetValue() => movementSetting.Value;
+    }
+
+    [Serializable]
+    public class ViewerSettingBool : ViewerSettingGeneric<bool>
+    {
+        [Header("Settings")]
+        public bool defaultValue;
+
+        public override object GetDefaultValue() => defaultValue;
     }
 }

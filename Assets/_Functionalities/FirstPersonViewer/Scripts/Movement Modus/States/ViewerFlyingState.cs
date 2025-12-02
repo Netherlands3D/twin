@@ -5,6 +5,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     [CreateAssetMenu(fileName = "Flying State", menuName = "ScriptableObjects/FirstPersonViewer/States/Flying State")]
     public class ViewerFlyingState : ViewerState
     {
+        [SerializeField] private MovementBoolSetting smoothFlight;
+
         public override void OnEnter()
         {
             base.OnEnter();
