@@ -108,8 +108,10 @@ namespace Netherlands3D.Functionalities.Wms
         {
             CredentialHandler.Uri = storedUri; //apply the URL from what is stored in the Project data
             WMSProjectionLayer.WmsUrl = storedUri.ToString();
-                        
-            if(LayerData.ActiveInHierarchy)
+
+            //TODO this is a major problem, for now blocking the credential handler to invoke credential validation for all layers connected to 
+            //OnAuthorizationTypeDetermined.Invoke(authorization); within the key vault. The way we listen to this event should change to a per layer basis instead of global           
+            if (LayerData.ActiveInHierarchy)
                 CredentialHandler.ApplyCredentials();
         }
 
