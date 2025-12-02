@@ -34,7 +34,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void OnDestroy()
         {
             PickedColor.RemoveListener(OnColorPicked);
-            stylingPropertyData.OnStylingApplied.RemoveListener(UpdateColorFromLayer);
+            stylingPropertyData?.OnStylingApplied.RemoveListener(UpdateColorFromLayer);
         }
 
         private void OnEnable()

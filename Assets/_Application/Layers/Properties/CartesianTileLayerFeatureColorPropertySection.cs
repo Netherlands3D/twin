@@ -79,6 +79,8 @@ namespace Netherlands3D.Twin.Layers.Properties
 
             foreach (var layerFeature in visualization.LayerFeatures.Values)
             {
+                if (layerFeature.Geometry is not Material) continue;
+
                 swatches[layerFeature] = CreateSwatch(layerFeature);
                 SetSwatchColorFromFeature(layerFeature);
             }
@@ -156,6 +158,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void ShowColorPicker()
         {
             colorPicker.gameObject.SetActive(true);
+            colorPicker.LoadProperties(new List<LayerPropertyData>() { stylingPropertyData });
         }
 
         private void HideColorPicker()

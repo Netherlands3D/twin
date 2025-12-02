@@ -66,6 +66,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         public static Color? GetColor(LayerFeature layerFeature, StylingPropertyData data)
         {
             if (layerFeature.Geometry is not Material mat) return null;
+            if(mat.HasProperty("_Color") == false) return null;
 
             int.TryParse(layerFeature.GetAttribute(MaterialIndexIdentifier), out int materialIndexIdentifier);
             var stylingRuleName = ColorizationStyleRuleName(materialIndexIdentifier);
