@@ -41,17 +41,22 @@ namespace Netherlands3D.FirstPersonViewer
         public void LoadMovementPreset(ViewerState viewerState)
         {
             CurrentMovement = viewerState;
-
-            //Send events
-            OnMovementPresetChanged?.Invoke(CurrentMovement);
-
+            
             //$$ TODO Only supports floats for now should be revisited
             foreach (ViewerSetting setting in CurrentMovement.editableSettings.list)
             {
                 setting.InvokeOnValueChanged(setting.GetDefaultValue());
             }
+
+            //Send events
+            OnMovementPresetChanged?.Invoke(CurrentMovement);
         }
 
         public void LoadMovementPreset(int index) => LoadMovementPreset(MovementPresets[index]);
+
+        private void OnDestroy()
+        {
+            MovementPresets.ForEach(m => m.Uninitialize());
+        }
     }
 }
