@@ -55,7 +55,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void OnPickedColor(Color color)
         {
             PickedColor.Invoke(color);
-            stylingPropertyData.OnStylingApplied.Invoke();
         }
 
         private void UpdateColorFromLayer()
@@ -72,7 +71,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         /// <param name="color"></param>
         private void OnColorPicked(Color color)
         {
-            stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.SetFillColor(color);            
+            stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.SetFillColor(color);
+            stylingPropertyData.OnStylingApplied.Invoke();
         }
 
     }
