@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    [PropertySection(typeof(StylingPropertyData), Symbolizer.FillColorProperty)]//TODO what about stroke color? fill color is default
+    [PropertySection(typeof(StylingPropertyData), Symbolizer.FillColorProperty)]
     public class ColorPickerPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         [SerializeField] private Color defaultColor = Color.white;

@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using Netherlands3D.Events;
-using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;

@@ -60,11 +60,8 @@ namespace Netherlands3D.Twin.Layers.Properties
             {
                 foreach (var flag in propertyData.CustomFlags)
                 {
-                    var entryWithFlag = Entries.FirstOrDefault(e => e.TypeName == type.AssemblyQualifiedName && e.SubType == flag);
-                    if (entryWithFlag != null)
-                    {
-                        prefabs.Add(entryWithFlag.Prefab);
-                    }
+                    var entriesWithFlag = Entries.Where(e => e.TypeName == type.AssemblyQualifiedName && e.SubType == flag);
+                    prefabs.AddRange(entriesWithFlag.Select(e => e.Prefab));
                 }
                 return prefabs;
             }

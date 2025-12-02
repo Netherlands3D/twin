@@ -24,6 +24,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         public const string VisibilityAttributePositionIdentifier = "data-visibility-position";
         public const string VisibilityIdentifier = "visibility";
 
+        public const string LayerFeatureColoring = "LayerFeatureColoring";
+
         public static ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
 
 
@@ -63,10 +65,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         /// </summary>
         public static Color? GetColor(LayerFeature layerFeature, StylingPropertyData data)
         {
+            if (layerFeature.Geometry is not Material mat) return null;
+
             int.TryParse(layerFeature.GetAttribute(MaterialIndexIdentifier), out int materialIndexIdentifier);
             var stylingRuleName = ColorizationStyleRuleName(materialIndexIdentifier);
 
-            var defaultColor = ((Material)layerFeature.Geometry).color;
+            var defaultColor = mat.color;
             if (!data.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
             {
                 return defaultColor;

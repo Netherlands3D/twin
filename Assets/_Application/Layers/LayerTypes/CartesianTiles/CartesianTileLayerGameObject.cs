@@ -234,7 +234,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             var stylingPropertyData = properties.Get<StylingPropertyData>();
             if (stylingPropertyData == null)
             {
-                stylingPropertyData = new StylingPropertyData(new List<string> { Symbolizer.VisibilityProperty, Symbolizer.FillColorProperty });
+                stylingPropertyData = new StylingPropertyData(new List<string> { Symbolizer.VisibilityProperty, CartesianTileLayerStyler.LayerFeatureColoring });
                 LayerData.SetProperty(stylingPropertyData);
             }
 
