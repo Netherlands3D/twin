@@ -9,7 +9,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
     public class ViewerModulebar : MonoBehaviour
     {
         private RectTransform rect;
-        private ContentFitterRefresh contentFilterRefresh; //TWIN Dependent
 
         [SerializeField] private RectTransform underBar;
         private float underBarYSize;
@@ -27,7 +26,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
         private void Start()
         {
             rect = GetComponent<RectTransform>();
-            contentFilterRefresh = GetComponent<ContentFitterRefresh>(); //TWIN Dependent
 
             underBarYSize = underBar.sizeDelta.y;
 
@@ -58,7 +56,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
                     {
                         Destroy(t.gameObject);
                     }
-                    contentFilterRefresh.RefreshContentFitters(); //TWIN Dependent
                 });
                 currentSequence.AppendInterval(Time.deltaTime);
             }
@@ -71,8 +68,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
                     currentSequence.AppendCallback(() =>
                     {
                         RectTransform windowPanel = Instantiate(windowPrefab, contentParent);
-
-                        contentFilterRefresh.RefreshContentFitters(); //TWIN Dependent
 
                         windowPanel.anchoredPosition = new Vector2(windowPanel.anchoredPosition.x, -rect.sizeDelta.y);
                     });

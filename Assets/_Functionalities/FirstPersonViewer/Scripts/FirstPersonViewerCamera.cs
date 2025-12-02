@@ -18,7 +18,8 @@ namespace Netherlands3D.FirstPersonViewer
         public static Camera FPVCamera;
 
         public float CameraHeightOffset { private set; get; } = 1.75f;
-        private float currentsensitivity = 10f;
+        private float previousCameraHeight;
+        private float currentSensitivity = .1f;
 
         [Header("Viewer")]
         [SerializeField] private Transform viewerBase;
@@ -43,7 +44,7 @@ namespace Netherlands3D.FirstPersonViewer
         private void Awake()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
-            currentsensitivity = 3f;
+            currentSensitivity = .03f;
 #endif
 
             firstPersonViewerCamera = GetComponent<Camera>();
@@ -150,7 +151,7 @@ namespace Netherlands3D.FirstPersonViewer
         //Sets the rotation of the camera or the viewerBase based on the current Camera Constrain.
         private void RotateCamera(Vector2 pointerDelta)
         {
-            Vector2 mouseLook = pointerDelta * currentsensitivity * Time.deltaTime;
+            Vector2 mouseLook = pointerDelta * currentSensitivity;
 
             float currentPitch = GetCameraRotation().x;
             if (currentPitch > 180) currentPitch -= 360;
@@ -177,7 +178,9 @@ namespace Netherlands3D.FirstPersonViewer
         
         private void SetCameraHeight(float height)
         {
+            previousCameraHeight = CameraHeightOffset;
             CameraHeightOffset = height;
+
             transform.localPosition = Vector3.up * CameraHeightOffset;
         }
 
@@ -211,6 +214,8 @@ namespace Netherlands3D.FirstPersonViewer
                     return transform.parent.eulerAngles;
             }
         }
+
+        public Vector3 GetPreviousCameraHeight() => transform.position + Vector3.up * previousCameraHeight;
 
         private void ResetToStart() => transform.rotation = startRotation;
         public void SetSensitivity(float sensitivity) => currentsensitivity = sensitivity;
