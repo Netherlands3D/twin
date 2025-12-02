@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Netherlands3D.SelectionTools;
 using System;
+using Netherlands3D.Events;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -31,6 +32,8 @@ namespace Netherlands3D.FirstPersonViewer
         [SerializeField] private float exitDuration = 1;
         [SerializeField] private float exitViewDelay = .15f;
         private float exitTimer;
+        [SerializeField] private StringEvent snackbarEvent;
+        [SerializeField] private string fpvExitText;
 
         private bool isEditingInputfield;
         private List<MonoBehaviour> inputLocks;
@@ -74,7 +77,9 @@ namespace Netherlands3D.FirstPersonViewer
             if (lockMouseModus)
             {
                 isLocked = true;
-                WebGLCursor.Lock();
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                snackbarEvent.InvokeStarted(fpvExitText);
             }
         }
 
@@ -142,6 +147,7 @@ namespace Netherlands3D.FirstPersonViewer
             {
                 Cursor.lockState = unlock ? CursorLockMode.None : CursorLockMode.Locked;
                 Cursor.visible = unlock;
+                if(!unlock) snackbarEvent.InvokeStarted(fpvExitText);
             }
             else
             {
