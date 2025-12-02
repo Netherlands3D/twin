@@ -34,13 +34,17 @@ namespace Netherlands3D.FirstPersonViewer
 
         private bool isEditingInputfield;
         private List<MonoBehaviour> inputLocks;
+       
+        //Mouse Locking
         public bool LockInput => inputLocks.Count > 0;
         private bool lockMouseModus;
+        private bool isLocked;
 
         //Events
         public event Action<float> ExitDuration;
-        public event Action<CursorLockMode> OnLockStateChanged;
+        public event Action<bool> OnLockStateChanged;
         private event Action<bool> OnInputExit;
+
 
         private void Awake()
         {
@@ -69,8 +73,8 @@ namespace Netherlands3D.FirstPersonViewer
             //Only lock mouse when the locking modus is selected.
             if (lockMouseModus)
             {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+                isLocked = true;
+                WebGLCursor.Lock();
             }
         }
 
@@ -91,7 +95,7 @@ namespace Netherlands3D.FirstPersonViewer
             if (!lockMouseModus)
             {
                 //Use the normal locking mode (Mouse Click)
-                bool cursorLocked = Cursor.lockState == CursorLockMode.Locked;
+                bool cursorLocked = isLocked;
                 if (LeftClick.triggered && !cursorLocked)
                 {
                     if (ShouldSkipCursorLocking()) return;
@@ -109,7 +113,7 @@ namespace Netherlands3D.FirstPersonViewer
                 //When key is released release/lock mouse
                 if (ExitInput.WasReleasedThisFrame() && !isEditingInputfield)
                 {
-                    bool isLocked = Cursor.lockState == CursorLockMode.Locked;
+                    bool isLocked = this.isLocked;
                     ToggleCursor(isLocked);
                 }
                 else if (LeftClick.triggered && !Interface.PointerIsOverUI())
@@ -133,10 +137,21 @@ namespace Netherlands3D.FirstPersonViewer
             if (unlock) AddInputLockConstrain(this);
             else RemoveInputLockConstrain(this);
 
-            Cursor.lockState = unlock ? CursorLockMode.None : CursorLockMode.Locked;
-            Cursor.visible = unlock;
+            // Lock the mouse cursor to the screen using the old method to keep it centered (used by the Object Selector).
+            if (lockMouseModus)
+            {
+                Cursor.lockState = unlock ? CursorLockMode.None : CursorLockMode.Locked;
+                Cursor.visible = unlock;
+            }
+            else
+            {
+                if (unlock) WebGLCursor.Unlock();
+                else WebGLCursor.Lock();
+            }
 
-            OnLockStateChanged?.Invoke(Cursor.lockState);
+            isLocked = !unlock;
+
+            OnLockStateChanged?.Invoke(isLocked);
         }
 
         //When holding the exit key and not editing any inputfield. Start the exiting proceidure. 

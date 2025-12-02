@@ -5,9 +5,15 @@ namespace Netherlands3D.FirstPersonViewer.UI
 {
     public class FPVCrosshairVisibility : MonoBehaviour
     {
+        private FirstPersonViewerInput input;
+
+        private void Start()
+        {
+            input = ServiceLocator.GetService<FirstPersonViewer>().Input;
+        }
+
         public void EnableCursor(bool enable)
         {
-            FirstPersonViewerInput input = ServiceLocator.GetService<FirstPersonViewer>().Input;
             
             if (enable)
             {
@@ -19,9 +25,12 @@ namespace Netherlands3D.FirstPersonViewer.UI
             }
         }
 
-        private void OnLockStateChanged(CursorLockMode locked)
+        private void OnLockStateChanged(bool locked)
         {
-            gameObject.SetActive(locked == CursorLockMode.Locked);
+            //Don't show the fake cursos when not locking the mouse the center.
+            if (!input.GetMouseLockModus()) return;
+
+            gameObject.SetActive(locked);
         }
     }
 }

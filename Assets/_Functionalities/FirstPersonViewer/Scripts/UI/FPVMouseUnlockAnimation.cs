@@ -42,9 +42,9 @@ namespace Netherlands3D.FirstPersonViewer.UI
             unlockCircleImageTransform.position = Pointer.current.position.ReadValue();
         }
 
-        private void PlayUnlockCircleAnimation(CursorLockMode lockMode)
+        private void PlayUnlockCircleAnimation(bool isLocked)
         {
-            if (lockMode == CursorLockMode.None) StartCoroutine(UnlockCircleSequence());
+            if (!isLocked) StartCoroutine(UnlockCircleSequence());
         }
 
         private IEnumerator UnlockCircleSequence()
