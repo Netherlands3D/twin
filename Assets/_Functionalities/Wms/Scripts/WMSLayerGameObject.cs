@@ -109,8 +109,7 @@ namespace Netherlands3D.Functionalities.Wms
         {
             CredentialHandler.Uri = storedUri; //apply the URL from what is stored in the Project data
             WMSProjectionLayer.WmsUrl = storedUri.ToString();
-
-            //TODO apply this when toggled active from menu when this was a disabled layer
+                        
             if(LayerData.ActiveInHierarchy)
                 CredentialHandler.ApplyCredentials();
         }
