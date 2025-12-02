@@ -133,7 +133,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void Update()
         {
-            if (input.LockInput) return;
+            if (input.LockInput || input.LockCamera) return;
 
             Vector2 cameraMovement = input.LookInput.ReadValue<Vector2>();
 

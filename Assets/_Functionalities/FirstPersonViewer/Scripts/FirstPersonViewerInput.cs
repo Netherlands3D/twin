@@ -40,6 +40,7 @@ namespace Netherlands3D.FirstPersonViewer
        
         //Mouse Locking
         public bool LockInput => inputLocks.Count > 0;
+        public bool LockCamera { private set; get; }
         private bool lockMouseModus;
         private bool isLocked;
 
@@ -81,7 +82,7 @@ namespace Netherlands3D.FirstPersonViewer
                 Cursor.visible = false;
                 snackbarEvent.InvokeStarted(fpvExitText);
             }
-            else AddInputLockConstrain(this);
+            else LockCamera = true;
         }
 
         private void OnDisable()
@@ -140,12 +141,12 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void ToggleCursor(bool unlock)
         {
-            if (unlock) AddInputLockConstrain(this);
-            else RemoveInputLockConstrain(this);
-
             // Lock the mouse cursor to the screen using the old method to keep it centered (used by the Object Selector).
             if (lockMouseModus)
             {
+                if (unlock) AddInputLockConstrain(this);
+                else RemoveInputLockConstrain(this);
+
                 Cursor.lockState = unlock ? CursorLockMode.None : CursorLockMode.Locked;
                 Cursor.visible = unlock;
                 if(!unlock) snackbarEvent.InvokeStarted(fpvExitText);
@@ -157,6 +158,7 @@ namespace Netherlands3D.FirstPersonViewer
             }
 
             isLocked = !unlock;
+            LockCamera = unlock;
 
             OnLockStateChanged?.Invoke(isLocked);
         }
@@ -198,7 +200,7 @@ namespace Netherlands3D.FirstPersonViewer
         public void SetExitCallback(Action<bool> callback) => OnInputExit = callback;
 
         public bool IsInputfieldSelected()
-        {
+        { 
             GameObject selected = EventSystem.current.currentSelectedGameObject;
 
             if (selected == null) return false;
