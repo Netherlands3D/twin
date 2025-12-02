@@ -184,15 +184,27 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 foreach (var (_, feature) in LayerFeatures)
                 {
                     Symbolizer symbolizer = GetStyling(feature);
-                    CartesianTileLayerStyler.Apply(symbolizer, feature);
-                    if (feature.Geometry is not Material material) continue;
 
-                    Color? color = symbolizer.GetFillColor();
-                    if (color.HasValue)
+                    if (feature.Geometry is ObjectMappingItem item)
                     {
-                        if (int.TryParse(feature.Attributes[CartesianTileLayerStyler.MaterialIndexIdentifier], out var materialIndex))
-                        {                            
-                            binaryMeshLayer.DefaultMaterialList[materialIndex].color = color.Value;
+                        bool? visiblity = symbolizer.GetVisibility();
+                        if (visiblity.HasValue)
+                        {
+                            string id = feature.Attributes[CartesianTileLayerStyler.VisibilityAttributeIdentifier];
+                            var visibilityColor = visiblity == true ? symbolizer.GetFillColor() ?? Color.white : Color.clear;
+                            GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, visibilityColor } });
+                        }
+                    }
+
+                    if (feature.Geometry is Material material)
+                    {
+                        Color? color = CartesianTileLayerStyler.GetColor(feature, LayerData.GetProperty<StylingPropertyData>());
+                        if (color.HasValue)
+                        {
+                            if (int.TryParse(feature.Attributes[CartesianTileLayerStyler.MaterialIndexIdentifier], out var materialIndex))
+                            {
+                                binaryMeshLayer.DefaultMaterialList[materialIndex].color = color.Value;
+                            }
                         }
                     }
                 }
@@ -237,13 +249,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 stylingPropertyData = new StylingPropertyData(new List<string> { Symbolizer.VisibilityProperty, CartesianTileLayerStyler.LayerFeatureColoring });
                 LayerData.SetProperty(stylingPropertyData);
             }
-
-            //var layerFeaturePropertyData = properties.Get<CartesianTileLayerFeatureColorPropertyData>();
-            //if (layerFeaturePropertyData == null)
-            //{
-            //    layerFeaturePropertyData = new CartesianTileLayerFeatureColorPropertyData();
-            //    LayerData.SetProperty(layerFeaturePropertyData);
-            //}
         }
     }
 }

@@ -44,7 +44,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void OnDestroy()
         {
             stylingPropertyData.OnStylingApplied.RemoveListener(UpdateSwatches);
-            colorPicker.PickedColor.RemoveListener(OnPickColor);
+            colorPicker.ColorWheel.colorChanged.RemoveListener(OnPickColor);
         }
 
         private IEnumerator OnPropertySectionsLoaded()
@@ -52,9 +52,9 @@ namespace Netherlands3D.Twin.Layers.Properties
             yield return new WaitForEndOfFrame();
 
             // Reset listeners to prevent default behaviour
-            colorPicker.PickedColor.RemoveAllListeners();
+            colorPicker.ColorWheel.colorChanged.RemoveAllListeners();
             //colorPicker.LayerGameObject = layer;
-            colorPicker.PickedColor.AddListener(OnPickColor);
+            colorPicker.ColorWheel.colorChanged.AddListener(OnPickColor);
             HideColorPicker();
 
             // workaround to have a minimum height for the content loaded (because of scrollrects)
@@ -128,13 +128,8 @@ namespace Netherlands3D.Twin.Layers.Properties
                 if (!swatch.IsSelected) continue;
                 
                 swatch.SetColor(color);
-                SetColorizationStylingRule(layerFeature, color);
+                CartesianTileLayerStyler.SetColor(layerFeature, color, stylingPropertyData);
             }
-        }
-
-        private void SetColorizationStylingRule(LayerFeature layerFeature, Color color)
-        {
-            CartesianTileLayerStyler.SetColor(layerFeature, color, stylingPropertyData);
         }
 
         private void UpdateSwatches()
