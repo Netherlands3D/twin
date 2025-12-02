@@ -13,9 +13,11 @@ namespace Netherlands3D.FirstPersonViewer.UI
         private void OnEnable()
         {
             FirstPersonViewer firstPersonViewer = ServiceLocator.GetService<FirstPersonViewer>();
-            sensitivitySlider.SetValue(firstPersonViewer.FirstPersonCamera.GetSensitivity());
+
+            float currentSensitivity = firstPersonViewer.FirstPersonCamera.GetSensitivity() * 100;
+            sensitivitySlider.SetValue(currentSensitivity);
             //Invoke this so the text display will update.
-            sensitivitySlider.onValueChanged?.Invoke(firstPersonViewer.FirstPersonCamera.GetSensitivity());
+            sensitivitySlider.onValueChanged?.Invoke(currentSensitivity);
 
             mouseLockingToggle.SetValue(firstPersonViewer.Input.GetMouseLockModus());
         }
