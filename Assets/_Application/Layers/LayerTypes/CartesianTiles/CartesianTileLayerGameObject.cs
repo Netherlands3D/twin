@@ -11,7 +11,6 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Unity.Collections;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
