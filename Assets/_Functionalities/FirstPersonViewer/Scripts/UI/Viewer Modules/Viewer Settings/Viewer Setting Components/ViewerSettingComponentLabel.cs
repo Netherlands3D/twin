@@ -7,7 +7,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
     public class ViewerSettingComponentLabel : ViewerSettingComponent
     {
         [SerializeField] private TextMeshProUGUI valueLabelText;
-        private ViewerSettingLabel settingLabel;
+        [SerializeField] private ViewerSettingLabel settingLabel;
 
         [SerializeField] private MovementLabelSetting baseSetting;
 

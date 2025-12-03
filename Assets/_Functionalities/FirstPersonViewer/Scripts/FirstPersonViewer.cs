@@ -42,7 +42,7 @@ namespace Netherlands3D.FirstPersonViewer
         [SerializeField] private float stepHeight = 1.5f;
         [SerializeField] private float returnFocusDistance = 150;
 
-        private GameObject viewObject;
+        private MovementVisualController viewObject;
 
         //Events
         public Action OnResetToStart;
@@ -51,7 +51,6 @@ namespace Netherlands3D.FirstPersonViewer
 
         public Action OnViewerEntered;
         public Action<bool> OnViewerExited;
-
 
         private void Awake()
         {
@@ -157,23 +156,18 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetMovementModus(ViewerState viewerState)
         {
-
             SetMovementVisual(viewerState.viewPrefab);
 
-            if (viewObject != null)
-            {
-                MovementVisualController movementVisualController = viewObject.GetComponent<MovementVisualController>();
-                viewerState.movementVisualController = movementVisualController;
-            }
+            viewerState.movementVisualController = viewObject;
 
             FirstPersonCamera.SetCameraConstrain(viewerState.CameraConstrain);
 
             fsm.SwitchState(viewerState);
         }
 
-        private void SetMovementVisual(GameObject visualObject)
+        private void SetMovementVisual(MovementVisualController visualObject)
         {
-            if(viewObject != null) Destroy(viewObject);
+            if (viewObject != null) Destroy(viewObject.gameObject);
 
             if (visualObject != null)
             {
