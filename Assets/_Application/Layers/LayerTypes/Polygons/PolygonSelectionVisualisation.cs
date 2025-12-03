@@ -265,6 +265,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void SetPolygonLayer(LayerMask layer)
         {
+            PolygonVisualisation.gameObject.layer = layer;
             foreach (Transform t in PolygonVisualisation.gameObject.transform)
             {
                 t.gameObject.gameObject.layer = layer;
