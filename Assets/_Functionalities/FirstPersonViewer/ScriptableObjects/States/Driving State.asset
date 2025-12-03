@@ -16,7 +16,7 @@ MonoBehaviour:
   <CameraConstrain>k__BackingField: 2
   viewName: Auto
   viewIcon: {fileID: 21300000, guid: 3edea80a8439cc5479ed6682ad352b7d, type: 3}
-  viewPrefab: {fileID: 3189998725335213987, guid: ce174108b6f2e8240b51ba1908ee93e6,
+  viewPrefab: {fileID: 3430108012395509898, guid: ce174108b6f2e8240b51ba1908ee93e6,
     type: 3}
   editableSettings:
     list:
