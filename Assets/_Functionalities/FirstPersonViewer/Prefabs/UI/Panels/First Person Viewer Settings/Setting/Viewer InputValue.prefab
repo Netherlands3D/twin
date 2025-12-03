@@ -92,17 +92,22 @@ PrefabInstance:
     - target: {fileID: 2582127579224010494, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
       propertyPath: m_text
-      value: m
+      value: km/u
       objectReference: {fileID: 0}
     - target: {fileID: 2582127579224010494, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
       propertyPath: m_fontSize
-      value: 10.65
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2582127579224010494, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
       propertyPath: m_fontSizeBase
-      value: 10.65
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2582127579224010494, guid: c7b4ed3ca1dcba245a37420ca328777d,
+        type: 3}
+      propertyPath: m_TextWrappingMode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2582127579224010494, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
@@ -247,7 +252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 25
+  m_MinWidth: 30
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -287,8 +292,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2582127579224010494, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
+      propertyPath: m_fontSize
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2582127579224010494, guid: c7b4ed3ca1dcba245a37420ca328777d,
+        type: 3}
       propertyPath: m_fontStyle
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2582127579224010494, guid: c7b4ed3ca1dcba245a37420ca328777d,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2582127579224010494, guid: c7b4ed3ca1dcba245a37420ca328777d,
         type: 3}
