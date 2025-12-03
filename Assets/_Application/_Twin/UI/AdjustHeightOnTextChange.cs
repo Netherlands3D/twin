@@ -19,6 +19,8 @@ namespace Netherlands3D.Twin.UI
             {
                 textMeshPro = GetComponentInChildren<TextMeshProUGUI>();
             }
+
+            UpdateHeight();
         }
 
         void Start()
