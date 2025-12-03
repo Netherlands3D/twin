@@ -36,6 +36,7 @@ namespace Netherlands3D.FirstPersonViewer
         [SerializeField] private string fpvExitText;
 
         private bool isEditingInputfield;
+        private GameObject selectedUI;
         private List<MonoBehaviour> inputLocks;
        
         //Mouse Locking
@@ -48,7 +49,6 @@ namespace Netherlands3D.FirstPersonViewer
         public event Action<float> ExitDuration;
         public event Action<bool> OnLockStateChanged;
         private event Action<bool> OnInputExit;
-
 
         private void Awake()
         {
@@ -94,6 +94,8 @@ namespace Netherlands3D.FirstPersonViewer
         {
             HandleCursorLocking();
 
+            isEditingInputfield = IsInputfieldSelected();
+
             HandleExiting();
         }
 
@@ -105,7 +107,7 @@ namespace Netherlands3D.FirstPersonViewer
                 bool cursorLocked = isLocked;
                 if (LeftClick.triggered && !cursorLocked)
                 {
-                    if (ShouldSkipCursorLocking()) return;
+                    if (isEditingInputfield) return;
                     if (Interface.PointerIsOverUI()) return;
 
                     ToggleCursor(false);
@@ -115,7 +117,7 @@ namespace Netherlands3D.FirstPersonViewer
             else
             {
                 //When editing an inputfield just block this function.
-                if (ShouldSkipCursorLocking()) return;
+                if (isEditingInputfield) return;
 
                 //When key is released release/lock mouse
                 if (ExitInput.WasReleasedThisFrame() && !isEditingInputfield)
@@ -129,14 +131,6 @@ namespace Netherlands3D.FirstPersonViewer
                     ToggleCursor(false);
                 }
             }
-        }
-
-        private bool ShouldSkipCursorLocking()
-        {
-            if (!ExitInput.triggered) return false;
-
-            isEditingInputfield = IsInputfieldSelected();
-            return isEditingInputfield;
         }
 
         private void ToggleCursor(bool unlock)
@@ -205,6 +199,9 @@ namespace Netherlands3D.FirstPersonViewer
 
             if (selected == null) return false;
 
+            if(selected == selectedUI) return isEditingInputfield;
+
+            selectedUI = selected;
             return selected.GetComponent<TMP_InputField>() != null;
         }
 
