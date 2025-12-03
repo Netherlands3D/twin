@@ -208,7 +208,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visibilityToggle: {fileID: 8108018487823674463}
-  visibilityDialog: {fileID: 5929048841642740412, guid: 7b20863b969f0e34c8a56e230c699e64,
+  visibilityDialog: {fileID: 9003188680568348102, guid: 7b20863b969f0e34c8a56e230c699e64,
     type: 3}
   offset: {x: 20, y: 0}
 --- !u!114 &8108018487823674463 stripped
