@@ -13,11 +13,10 @@ namespace Netherlands3D.FirstPersonViewer.UI
         public override void Init(ViewerSetting setting)
         {
             base.Init(setting);
-            
-            ViewerSettingLabel settingLabel = setting as ViewerSettingLabel;
-            
+
             if (baseSetting == null)
             {
+                ViewerSettingLabel settingLabel = setting as ViewerSettingLabel;
                 baseSetting = settingLabel.movementSetting as MovementLabelSetting;
             }
 
