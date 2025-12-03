@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e4186aed324b142b4be93f81deb807, type: 3}
   m_Name: Walking State
   m_EditorClassIdentifier: 
+  movementVisualController: {fileID: 0}
   <CameraConstrain>k__BackingField: 0
   viewName: Lopen
   viewIcon: {fileID: 21300000, guid: 9d1a13bddeede7a44899be4cf66f6e96, type: 3}
-  viewMesh: {fileID: 0}
-  meshMaterials: []
+  viewPrefab: {fileID: 0}
   editableSettings:
     list:
     - rid: 1516422325167980674
@@ -52,8 +52,8 @@ MonoBehaviour:
         movementSetting: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225,
           type: 2}
         defaultValue: 60
-        minValue: 10
-        maxValue: 140
+        minValue: 25
+        maxValue: 130
     - rid: 1516422325167980676
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
         asm: eu.netherlands3d.twin}

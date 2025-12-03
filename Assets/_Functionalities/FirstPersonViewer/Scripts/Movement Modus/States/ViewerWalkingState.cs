@@ -46,7 +46,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         private void Jump()
         {
-            if (input.JumpAction.triggered && viewer.isGrounded)
+            if (input.SpaceAction.triggered && viewer.isGrounded)
             {
                 viewer.SetVelocity(new Vector2(viewer.Velocity.x, jumpFoceSetting.Value));
                 viewer.isGrounded = false;
