@@ -10,12 +10,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         
         public override void ApplyStyling()
         {
+            base.ApplyStyling();
             foreach (var feature in layerFeatures)
             {
                 ApplyStylingToFeature(feature);
             }
-            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
-            stylingPropertyData.OnStylingApplied.Invoke();
         }
         
         private void ApplyStylingToFeature(LayerFeature feature)
