@@ -197,9 +197,13 @@ namespace Netherlands3D.FirstPersonViewer
         { 
             GameObject selected = EventSystem.current.currentSelectedGameObject;
 
-            if (selected == null) return false;
+            if (selected == null)
+            {
+                selectedUI = null;
+                return false;
+            }
 
-            if(selected == selectedUI) return isEditingInputfield;
+            if (selected == selectedUI) return isEditingInputfield;
 
             selectedUI = selected;
             return selected.GetComponent<TMP_InputField>() != null;

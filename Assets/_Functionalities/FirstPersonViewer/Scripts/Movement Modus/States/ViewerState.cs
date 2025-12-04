@@ -53,8 +53,10 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         protected Vector2 GetMoveInput()
         {
-            if (input.LockInput) return Vector2.zero;
+            if (DisableMovement()) return Vector2.zero;
             else return input.MoveAction.ReadValue<Vector2>();
         }
+
+        protected bool DisableMovement() => input.LockInput || input.IsInputfieldSelected();
     }
 }
