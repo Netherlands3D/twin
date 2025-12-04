@@ -35,7 +35,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
             CreateSwatches();
 
-            stylingPropertyData.OnStylingApplied.AddListener(UpdateSwatches);
+            stylingPropertyData.OnStylingChanged.AddListener(UpdateSwatches);
             colorPicker.ColorWheel.colorChanged.AddListener(OnPickColor);
 
             StartCoroutine(OnPropertySectionsLoaded());
@@ -43,7 +43,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void OnDestroy()
         {
-            stylingPropertyData.OnStylingApplied.RemoveListener(UpdateSwatches);
+            stylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
             colorPicker.ColorWheel.colorChanged.RemoveListener(OnPickColor);
         }
 
