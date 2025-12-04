@@ -31,6 +31,7 @@ MonoBehaviour:
   groundResetHeightOffsetSetting: {fileID: 11400000, guid: 4c40903bf39dba84f8368fc1996e6354,
     type: 2}
   smoothFlight: {fileID: 11400000, guid: bfddc625dc41fe44ba70e8f59496d3f7, type: 2}
+  verticalSmoothTime: 0.5
   references:
     version: 2
     RefIds:
