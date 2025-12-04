@@ -121,8 +121,7 @@ namespace Netherlands3D.Functionalities.GLBImporter
             }
 
             // Object is loaded / replaced - trigger the application of styling
-            //layerGameObject.ApplyStyling();
-            layerGameObject.LayerData.GetProperty<StylingPropertyData>().OnStylingApplied.Invoke();
+            layerGameObject.ApplyStyling();
         }
 
         private void PositionImportedGameObject(GameObject returnedGameObject)

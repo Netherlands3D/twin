@@ -41,9 +41,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
             // When importing an MTL - we want to reset the coloring of the object
             //HierarchicalObjectLayerStyler.ResetColoring(layer);
 
-            var symbolizer = stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer;
-            symbolizer.ClearFillColor();
-            stylingPropertyData.OnStylingApplied.Invoke();
+            stylingPropertyData.SetDefaultSymbolizerFillColor(null);
 
             SetMtlPathInPropertyData(path);
             

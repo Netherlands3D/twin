@@ -112,8 +112,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 var layerFeature = CreateFeature(item);
                 LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             }
-            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
-            stylingPropertyData.OnStylingApplied.Invoke();
+            ApplyStyling();
         }
 
         private void OnRemovedMapping(ObjectMapping mapping)

@@ -22,7 +22,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             stylingPropertyData = properties.Get<StylingPropertyData>();
             if (stylingPropertyData == null) return;
             
-            stylingPropertyData.OnStylingApplied.AddListener(UpdateColorFromProperty);
+            stylingPropertyData.OnStylingChanged.AddListener(UpdateColorFromProperty);
             colorWheel.colorChanged.AddListener(OnColorPicked);
 
             UpdateColorFromProperty();
@@ -30,7 +30,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void OnDestroy()
         {       
-            stylingPropertyData?.OnStylingApplied.RemoveListener(UpdateColorFromProperty);
+            stylingPropertyData?.OnStylingChanged.RemoveListener(UpdateColorFromProperty);
             colorWheel.colorChanged.RemoveListener(OnColorPicked);
         }
 
@@ -47,8 +47,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void OnColorPicked(Color color)
         {
-            stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.SetFillColor(color);
-            stylingPropertyData.OnStylingApplied.Invoke();
+            stylingPropertyData.SetDefaultSymbolizerFillColor(color); //todo: should this be stroke color in some cases?
         }
     }
 }

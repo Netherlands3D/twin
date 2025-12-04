@@ -134,7 +134,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
             //Object is loaded / replaced - trigger the application of styling
             //TODO this script should probably have nothing to do with styling! check this or move this (maybe onmeshchanged event?)
-            layerGameObject.LayerData.GetProperty<StylingPropertyData>().OnStylingApplied.Invoke();
+            layerGameObject.ApplyStyling();
         }
 
         private void PositionImportedGameObject(GameObject returnedGameObject)
