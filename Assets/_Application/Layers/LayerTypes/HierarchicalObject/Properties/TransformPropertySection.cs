@@ -140,12 +140,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
 
         public static bool TryParseAxes(int input, ref HandleAxes axes)
         {
-            input = 3;
-            if(!axes.HasFlag((HandleAxes)input))
-                return false;
+            HandleAxes inputFlag = (HandleAxes)input;
+            if(input == 0) //no flag is used
+                return true;
 
-            axes = (HandleAxes)input;
-            return true;
+            axes = inputFlag;
+            return false;
         }
 
         public void SetPositionX(int value)
