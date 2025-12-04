@@ -51,11 +51,11 @@ namespace Netherlands3D.FirstPersonViewer.UI
             float dstToObject = Mathf.Round((rdNapCoords.ToUnity().y - groundPos) * 100f) / 100f;
 
             overlayText.text =
-                $"Coordinaten: {rdNapCoords.ToString()}\n" +
+                $"Coördinaten: {rdNapCoords.ToString()}\n" +
                 $"Afstand tot Grond: {dstToGround}m\n" +
                 $"Afstand tot Object: {dstToObject}m\n" +
                 $"NAP Hoogte: {napHeight}m\n" +
-                $"<i><size=10>Data is een geschatte benadering en kan afwijken van de werkelijkheid.</i>";
+                $"<i><size=10>Hoogtedata is een geschatte benadering en kan afwijken van de werkelijkheid.</i>";
         }
     }
 }
