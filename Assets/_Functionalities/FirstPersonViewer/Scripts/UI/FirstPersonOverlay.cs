@@ -68,7 +68,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             float dstToObject = Mathf.Round((rdNapCoords.ToUnity().y - groundPos) * 100f) / 100f;
 
             overlayText.text =
-                $"Coördinaten: {rdNapCoords.ToString()}\n" +
+                $"Coordinaten: {rdNapCoords.ToString()}\n" +
                 $"Afstand tot Grond: {dstToGround}m\n" +
                 $"Afstand tot Object: {dstToObject}m\n" +
                 $"NAP Hoogte: {napHeight}m\n" +
