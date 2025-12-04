@@ -12,6 +12,8 @@ using UnityEngine.Events;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
+using System.Linq;
+
 
 
 
@@ -76,6 +78,8 @@ namespace Netherlands3D.Twin.Layers
                     EditorUtility.SetDirty(this);
                 }
             }
+
+            OnValidateCustomFlags();
         }
 #endif
 
@@ -177,8 +181,49 @@ namespace Netherlands3D.Twin.Layers
             foreach (var visualisation in GetComponents<IVisualizationWithPropertyData>())
             {
                 visualisation.LoadProperties(LayerData.LayerProperties);
+                if(visualisation is LayerGameObject v)
+                    v.LoadCustomFlags(LayerData.LayerProperties);
+            }           
+        }
+
+        [System.Serializable]
+        public struct PropertySectionOption
+        {
+            public string type;
+            public bool Enabled;
+        }
+
+        public List<PropertySectionOption> PropertySections = new();
+        protected virtual List<string> allowedStylingPropertySections { get; }
+
+        private void OnValidateCustomFlags()
+        {
+            if (allowedStylingPropertySections == null) return;
+
+            foreach (string customFlag in allowedStylingPropertySections)
+            {
+                if (!PropertySections.Any(f => f.type == customFlag))
+                    PropertySections.Add(new PropertySectionOption { type = customFlag, Enabled = true });
             }
-           
+
+            // Remove duplicates by type
+            PropertySections = PropertySections
+                .GroupBy(f => f.type)
+                .Select(g => g.First())
+                .ToList();
+        }
+
+        private void LoadCustomFlags(List<LayerPropertyData> properties)
+        {
+            foreach (LayerPropertyData data in properties)
+            {
+                var existingFlags = PropertySections
+                .Where(option => option.Enabled)
+                .Select(option => option.type)
+                .ToList();
+
+                data.SetCustomFlags(existingFlags);
+            }            
         }
 
         protected virtual void OnEnable()

@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 return prefabs;
             }
 
-            var entry = Entries.FirstOrDefault(e => e.TypeName == type.AssemblyQualifiedName);
+            var entry = Entries.FirstOrDefault(e => e.TypeName == type.AssemblyQualifiedName && string.IsNullOrEmpty(e.SubType));
             if (entry != null)
             {
                 foreach (var interfaceType in type.GetInterfaces())

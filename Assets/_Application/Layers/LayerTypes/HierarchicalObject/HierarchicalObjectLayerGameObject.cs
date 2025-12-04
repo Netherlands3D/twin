@@ -197,7 +197,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             if (stylingPropertyData == null)
             {
                 stylingPropertyData = new StylingPropertyData();
-                stylingPropertyData.SetCustomFlags(new List<string> { Symbolizer.FillColorProperty, Symbolizer.VisibilityProperty });
                 LayerData.SetProperty(stylingPropertyData);
             }
 
@@ -205,6 +204,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                         
             toggleScatterPropertyData.AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
         }
+
+        protected override List<string> allowedStylingPropertySections => new(){ Symbolizer.FillColorProperty, Symbolizer.VisibilityProperty };
 
         private void SetTransformPropertyData(TransformLayerPropertyData transformProperty)
         {

@@ -251,43 +251,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             {               
                 stylingPropertyData = new StylingPropertyData();
                 LayerData.SetProperty(stylingPropertyData);
-            }
-            LoadCustomFlags(stylingPropertyData);
+            }           
         }
 
-        [System.Serializable]
-        public struct PropertySectionOption
-        {
-            public string type;
-            public bool Enabled;
-        }
-             
-        public List<PropertySectionOption> PropertySections = new();
-        private List<string> customFlags = new List<string> { Symbolizer.VisibilityProperty, CartesianTileLayerStyler.LayerFeatureColoring };
+        protected override List<string> allowedStylingPropertySections => new() { Symbolizer.FillColorProperty, Symbolizer.VisibilityProperty, CartesianTileLayerStyler.LayerFeatureColoring };
 
-        private void OnValidate()
-        {
-            foreach (string customFlag in customFlags)
-            {
-                if (!PropertySections.Any(f => f.type == customFlag))
-                    PropertySections.Add(new PropertySectionOption { type = customFlag, Enabled = false });
-            }
-
-            // Remove duplicates by type
-            PropertySections = PropertySections
-                .GroupBy(f => f.type)
-                .Select(g => g.First())
-                .ToList();
-        }
-
-        private void LoadCustomFlags(LayerPropertyData property)
-        {
-            var existingFlags = PropertySections
-            .Where(option => option.Enabled)
-            .Select(option => option.type)
-            .ToList();
-
-            property.SetCustomFlags(existingFlags);
-        }
     }
 }

@@ -4085,6 +4085,11 @@ MonoBehaviour:
   onLayerReady:
     m_PersistentCalls:
       m_Calls: []
+  PropertySections:
+  - type: fill-color
+    Enabled: 1
+  - type: visibility
+    Enabled: 0
   DebugBoundingBox: 0
   objectCreated:
     m_PersistentCalls:
