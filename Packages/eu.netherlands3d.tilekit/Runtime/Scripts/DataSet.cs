@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
-using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Tilekit.ExtensionMethods;
 using Netherlands3D.Tilekit.WriteModel;
+using Unity.Collections;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit
@@ -16,7 +16,7 @@ namespace Netherlands3D.Tilekit
         protected Timer timer;
 
         protected TTileSet tileSet;
-        // private TileStateScheduler<TArchetype, TWarmTile, THotTile> stateScheduler;
+        private TileStateScheduler stateScheduler;
 
         private void Awake()
         {
@@ -32,7 +32,7 @@ namespace Netherlands3D.Tilekit
             yield return null;
 
             tileSet = CreateTileSet();
-            // stateScheduler = new (new TilesSelector(), this, archetype);
+            stateScheduler = new (new TilesSelector(), this, tileSet);
 
             timer.tick.AddListener(OnTick);
             Initialize();
@@ -62,7 +62,7 @@ namespace Netherlands3D.Tilekit
 
         protected virtual void OnTick()
         {
-            // stateScheduler.Schedule();
+            stateScheduler.Schedule();
         }
 
         protected virtual void OnDestroy()

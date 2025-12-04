@@ -38,7 +38,7 @@ namespace Netherlands3D.Tilekit.TileSets
 
             public Tilekit.Tile GetChild(int childIndex) => tileSet.Get(Children()[childIndex]);
             public bool IsWarm => tileSet.Warm.Contains(tileIndex);
-            private int WarmIndex => tileSet.Warm.ElementAt(tileIndex);
+            private int WarmIndex => tileSet.Warm.IndexOf(tileIndex);
             public bool IsHot => tileSet.Hot.Contains(tileIndex);
             public ulong Texture2DRef => !IsWarm ? ulong.MaxValue : tileSet.TextureRef[WarmIndex];
         }

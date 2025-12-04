@@ -1,35 +1,31 @@
-﻿using Unity.Collections;
+﻿using Netherlands3D.Tilekit.WriteModel;
+using Unity.Collections;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit
 {
-    public class TileStateScheduler<TArchetype, TWarmTile, THotTile>
-        where TArchetype : Archetype<TWarmTile, THotTile>
-        where TWarmTile : unmanaged, IHasTileIndex
-        where THotTile : unmanaged, IHasWarmTileIndex
+    public class TileStateScheduler
     {
         private TilesSelector tileSelector;
         private ITileLifecycleBehaviour tileLifecycleBehaviour;
-        private TArchetype archetype;
+        private TileSet tileSet;
 
-        public TileStateScheduler(TilesSelector tileSelector, ITileLifecycleBehaviour tileLifecycleBehaviour, TArchetype archetype)
+        public TileStateScheduler(TilesSelector tileSelector, ITileLifecycleBehaviour tileLifecycleBehaviour, TileSet tileSet)
         {
             this.tileSelector = tileSelector;
             this.tileLifecycleBehaviour = tileLifecycleBehaviour;
-            this.archetype = archetype;
+            this.tileSet = tileSet;
         }
 
         public void Schedule()
         {
-            // TODO: make these fields
             var tilesInFrustrum = new NativeHashSet<int>(1024, Allocator.Temp);
             var warmTileIndices = new NativeHashSet<int>(1024, Allocator.Temp);
             var shouldWarmUp = new NativeHashSet<int>(1024, Allocator.Temp);
             var shouldFreeze = new NativeHashSet<int>(1024, Allocator.Temp);
 
-
             var frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
-            tileSelector.Select(tilesInFrustrum, archetype.Cold.Root, frustumPlanes);
+            tileSelector.Select(tilesInFrustrum, tileSet.Root, frustumPlanes);
 
             // Tiles are selected using a zoned approach, where we can select a subset of tiles that are in a certain zone. 
             // There is a warm and hot zone, and when tiles who are active in either zone migrate to another zone - they
@@ -38,21 +34,20 @@ namespace Netherlands3D.Tilekit
             // Tiles are not only selected on their spatial property - but also on their LOD or temporal properties, where 
             // selection criteria is based on information from the global system - such as camera position and time of day
 
-            foreach (var warmTile in archetype.Warm)
+            for (var warmTileIndex = 0; warmTileIndex < tileSet.Warm.Length; warmTileIndex++)
             {
-                warmTileIndices.Add(warmTile.TileIndex);
-                if (tilesInFrustrum.Contains(warmTile.TileIndex) == false)
-                {
-                    shouldFreeze.Add(warmTile.TileIndex);
-                }
+                var warmTile = tileSet.Warm[warmTileIndex];
+                warmTileIndices.Add(warmTile);
+                if (tilesInFrustrum.Contains(warmTile)) continue;
+                
+                shouldFreeze.Add(warmTile);
             }
 
             foreach (var tileInFrustum in tilesInFrustrum)
             {
-                if (warmTileIndices.Contains(tileInFrustum) == false)
-                {
-                    shouldWarmUp.Add(tileInFrustum);
-                }
+                if (warmTileIndices.Contains(tileInFrustum)) continue;
+                
+                shouldWarmUp.Add(tileInFrustum);
             }
 
             tileLifecycleBehaviour.OnWarmUp(shouldWarmUp.ToNativeArray(Allocator.Temp));

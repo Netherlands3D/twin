@@ -89,6 +89,10 @@ namespace Netherlands3D.Tilekit.WriteModel
 
             // Assume strings have a length of 128 bytes on average
             Strings = new StringTable(initialSize, initialSize * 128, alloc);
+            
+            // TODO: these initial capacities should be changed
+            Warm = new NativeList<int>(128, alloc);
+            Hot = new NativeList<int>(32, alloc);
         }
 
         public int AddTile(
