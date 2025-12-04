@@ -43,7 +43,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
             CreateItems();
             UpdateVisibility();
-            stylingPropertyData.OnStylingApplied.AddListener(UpdateVisibility);
+            stylingPropertyData.OnStylingChanged.AddListener(UpdateVisibility);
 
             ObjectSelectorService.MappingTree.OnMappingRemoved.AddListener(OnMappingRemoved);
             //deselect any selected feature in the world when opening the hidden feature panel
@@ -296,7 +296,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void OnDestroy()
         {
             DestroyGhostMesh();
-            stylingPropertyData.OnStylingApplied.RemoveListener(UpdateVisibility);
+            stylingPropertyData.OnStylingChanged.RemoveListener(UpdateVisibility);
             ObjectSelectorService.MappingTree.OnMappingRemoved.RemoveListener(OnMappingRemoved);
 
             //remove all visibility data for features that became visible

@@ -53,8 +53,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             );
             stylingRule.Symbolizer.SetFillColor(color);
 
-            stylingPropertyData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
-            stylingPropertyData.OnStylingApplied.Invoke(); //todo this should be done on change instead of manually called
+            stylingPropertyData.SetDefaultStylingRule(stylingRuleName, stylingRule);
         }
 
         /// <summary>
@@ -72,7 +71,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             if (!data.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
             {
-                return mat.color;
+                if(mat.HasProperty("_Color") || mat.HasProperty("_BaseColor")) //TODO check a list of standardized tags for color properties
+                    return mat.color;
+                else
+                    return null;
             }
             return stylingRule.Symbolizer.GetFillColor();
         }
@@ -98,9 +100,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             stylingRule.Symbolizer.SetVisibility(visible);
             stylingRule.Symbolizer.SetCustomProperty(VisibilityAttributePositionIdentifier, coordinate);
             
-
-            stylingPropertyData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
-            stylingPropertyData.OnStylingApplied.Invoke();
+            stylingPropertyData.SetDefaultStylingRule(stylingRuleName, stylingRule);
         }
 
         public static bool? GetVisibilityForSubObject(LayerFeature layerFeature, StylingPropertyData stylingPropertyData)
@@ -141,28 +141,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 return null;
             }
             return stylingRule.Symbolizer.GetCustomProperty<Coordinate>(VisibilityAttributePositionIdentifier);
-        }
-
-        /// <summary>
-        /// The other methods deal with manipulating the styles for a layerfeature, this method takes the outcome of
-        /// those actions and applies them to the materials for the binary mesh layer.
-        /// </summary>
-        public static void Apply(Symbolizer styling, LayerFeature layerFeature)
-        {
-            ApplyVisibility(styling, layerFeature);
-        }
-
-        private static void ApplyVisibility(Symbolizer styling, LayerFeature layerFeature)
-        {
-            if (layerFeature.Geometry is not ObjectMappingItem item) return;
-
-            bool? visiblity = styling.GetVisibility();
-            if (visiblity.HasValue)
-            {
-                string id = layerFeature.Attributes[VisibilityAttributeIdentifier];
-                var color = visiblity == true ? styling.GetFillColor() ?? Color.white : Color.clear;
-                GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, color } });
-            }            
         }
        
         private static string ColorizationStyleRuleName(int materialIndexIdentifier)

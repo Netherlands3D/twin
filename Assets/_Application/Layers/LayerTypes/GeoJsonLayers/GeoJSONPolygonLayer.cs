@@ -53,8 +53,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 }
                 polygonVisualizationMaterialInstance = new Material(value);
 
-                StylingPropertyData layerStyling = LayerData.GetProperty<StylingPropertyData>();
-                layerStyling.OnStylingApplied.Invoke();
+                ApplyStyling();
             }
         }
 

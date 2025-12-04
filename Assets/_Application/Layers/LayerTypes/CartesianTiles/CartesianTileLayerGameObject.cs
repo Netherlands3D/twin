@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Services;
@@ -24,7 +24,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         private Layer layer;
         private TileHandler tileHandler;
 
-        bool debugFeatures = false;        
+        bool debugFeatures = false;
+
+
+      
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
@@ -112,8 +115,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 var layerFeature = CreateFeature(item);
                 LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             }
-            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
-            stylingPropertyData.OnStylingApplied.Invoke();
+            ApplyStyling();
         }
 
         private void OnRemovedMapping(ObjectMapping mapping)
@@ -184,15 +186,28 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 foreach (var (_, feature) in LayerFeatures)
                 {
                     Symbolizer symbolizer = GetStyling(feature);
-                    CartesianTileLayerStyler.Apply(symbolizer, feature);
-                    if (feature.Geometry is not Material material) continue;
 
-                    Color? color = symbolizer.GetFillColor();
-                    if (color.HasValue)
+                    if (feature.Geometry is ObjectMappingItem item)
                     {
-                        if (int.TryParse(feature.Attributes[CartesianTileLayerStyler.MaterialIndexIdentifier], out var materialIndex))
-                        {                            
-                            binaryMeshLayer.DefaultMaterialList[materialIndex].color = color.Value;
+                        bool? visiblity = symbolizer.GetVisibility();
+                        if (visiblity.HasValue)
+                        {
+                            string id = feature.Attributes[CartesianTileLayerStyler.VisibilityAttributeIdentifier];
+                            Color storedColor = symbolizer.GetFillColor() ?? Color.white;
+                            var visibilityColor = visiblity == true ? storedColor : Color.clear;
+                            GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, visibilityColor } });
+                        }
+                    }
+
+                    if (feature.Geometry is Material material)
+                    {
+                        Color? color = CartesianTileLayerStyler.GetColor(feature, LayerData.GetProperty<StylingPropertyData>());
+                        if (color.HasValue)
+                        {
+                            if (int.TryParse(feature.Attributes[CartesianTileLayerStyler.MaterialIndexIdentifier], out var materialIndex))
+                            {
+                                binaryMeshLayer.DefaultMaterialList[materialIndex].color = color.Value;
+                            }
                         }
                     }
                 }
@@ -233,17 +248,46 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             var stylingPropertyData = properties.Get<StylingPropertyData>();
             if (stylingPropertyData == null)
-            {
-                stylingPropertyData = new StylingPropertyData(new List<string> { Symbolizer.VisibilityProperty, CartesianTileLayerStyler.LayerFeatureColoring });
+            {               
+                stylingPropertyData = new StylingPropertyData();
                 LayerData.SetProperty(stylingPropertyData);
             }
+            LoadCustomFlags(stylingPropertyData);
+        }
 
-            //var layerFeaturePropertyData = properties.Get<CartesianTileLayerFeatureColorPropertyData>();
-            //if (layerFeaturePropertyData == null)
-            //{
-            //    layerFeaturePropertyData = new CartesianTileLayerFeatureColorPropertyData();
-            //    LayerData.SetProperty(layerFeaturePropertyData);
-            //}
+        [System.Serializable]
+        public struct PropertySectionOption
+        {
+            public string type;
+            public bool Enabled;
+        }
+             
+        public List<PropertySectionOption> PropertySections = new();
+        private List<string> customFlags = new List<string> { Symbolizer.VisibilityProperty, CartesianTileLayerStyler.LayerFeatureColoring };
+
+        private void OnValidate()
+        {
+            foreach (string customFlag in customFlags)
+            {
+                if (!PropertySections.Any(f => f.type == customFlag))
+                    PropertySections.Add(new PropertySectionOption { type = customFlag, Enabled = false });
+            }
+
+            // Remove duplicates by type
+            PropertySections = PropertySections
+                .GroupBy(f => f.type)
+                .Select(g => g.First())
+                .ToList();
+        }
+
+        private void LoadCustomFlags(LayerPropertyData property)
+        {
+            var existingFlags = PropertySections
+            .Where(option => option.Enabled)
+            .Select(option => option.type)
+            .ToList();
+
+            property.SetCustomFlags(existingFlags);
         }
     }
 }

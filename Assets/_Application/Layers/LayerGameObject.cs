@@ -109,7 +109,7 @@ namespace Netherlands3D.Twin.Layers
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 
             //todo move this into loadproperties?
-            LayerData.GetProperty<StylingPropertyData>()?.OnStylingApplied.Invoke(); //apply the styling once at initialization
+            LayerData.GetProperty<StylingPropertyData>()?.OnStylingChanged.Invoke(); //apply the styling once at initialization
 
             onLayerReady.Invoke();
         }
@@ -126,7 +126,7 @@ namespace Netherlands3D.Twin.Layers
             layerData.LayerDeselected.AddListener(OnDeselect);
             layerData.LayerDestroyed.AddListener(DestroyLayerGameObject);
 
-            LayerData.GetProperty<StylingPropertyData>()?.OnStylingApplied.AddListener(ApplyStyling);
+            LayerData.GetProperty<StylingPropertyData>()?.OnStylingChanged.AddListener(ApplyStyling);
         }
 
         protected virtual void UnregisterEventListeners()
@@ -141,7 +141,7 @@ namespace Netherlands3D.Twin.Layers
             layerData.LayerDeselected.RemoveListener(OnDeselect);
             layerData.LayerDestroyed.RemoveListener(DestroyLayerGameObject);
 
-            LayerData.GetProperty<StylingPropertyData>()?.OnStylingApplied.RemoveListener(ApplyStyling);
+            LayerData.GetProperty<StylingPropertyData>()?.OnStylingChanged.RemoveListener(ApplyStyling);
         }
 
         /// <summary>
@@ -328,11 +328,10 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         public void SetMaskLayerMask(int bitMask, LayerData data)
         {
-            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            StylingPropertyData stylingPropertyData = data.GetProperty<StylingPropertyData>();
             if (stylingPropertyData == null) return;
 
-            stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.SetMaskLayerMask(bitMask);
-            stylingPropertyData.OnStylingApplied.Invoke();
+            stylingPropertyData.SetMaskBitMask(bitMask);
         }
 
         public void SetMaskBit(int bitIndex, bool enableBit, LayerData data)

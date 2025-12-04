@@ -50,14 +50,13 @@ namespace Netherlands3D.Twin.Layers.Properties
         [JsonIgnore] public Symbolizer DefaultSymbolizer => DefaultStyle.StylingRules[NameOfDefaultStyle].Symbolizer;
 
 
-        [JsonIgnore] public readonly UnityEvent OnStylingApplied = new();
+        [JsonIgnore] public readonly UnityEvent OnStylingChanged = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleAdded = new();
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleRemoved = new();
         [JsonIgnore] public readonly UnityEvent<string> ToolPropertyChanged = new();
 
-        public StylingPropertyData(List<string> styleModes = null)
-        {
-            this.customFlags = styleModes;
+        public StylingPropertyData()
+        {            
             styles = new Dictionary<string, LayerStyle>
             {
                 { NameOfDefaultStyle, LayerStyle.CreateDefaultStyle() }
@@ -102,5 +101,28 @@ namespace Netherlands3D.Twin.Layers.Properties
             return styles_editor;
         }
 #endif
+        public void SetDefaultStylingRule(string stylingRuleName, StylingRule stylingRule)
+        {
+            DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
+            OnStylingChanged.Invoke();
+        }
+
+        public void SetDefaultSymbolizerFillColor(Color? color)
+        {
+            var symbolizer = DefaultStyle.AnyFeature.Symbolizer;
+            
+            if(color.HasValue)
+                symbolizer.SetFillColor(color.Value);
+            else
+                symbolizer.ClearFillColor();
+            
+            OnStylingChanged.Invoke();
+        }
+        
+        public void SetMaskBitMask(int bitMask)
+        {
+            DefaultStyle.AnyFeature.Symbolizer.SetMaskLayerMask(bitMask);
+            OnStylingChanged.Invoke();
+        }
     }
 }

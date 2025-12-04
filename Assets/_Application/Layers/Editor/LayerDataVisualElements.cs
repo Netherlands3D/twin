@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
@@ -17,10 +18,10 @@ namespace Netherlands3D.Twin.Layers.Editor
             root.Add(Heading("Layer Data"));
             root.Add(Divider());
 
-            if (layerData == null)
+            if (layerData == null || layerData.Id == Guid.Empty)
             {
                 root.Add(FieldContent("This layer doesn't have any data associated with it (yet)."));
-                return; 
+                return;
             }
 
             root.Add(FieldWithCaption("Id", layerData.Id.ToString()));
@@ -29,20 +30,25 @@ namespace Netherlands3D.Twin.Layers.Editor
 
 
             root.Add(Subheading("Styles"));
-            if (layerData.GetProperty<StylingPropertyData>().GetEditorStyles().Count == 0)
+            var stylingPropertyData = layerData.GetProperty<StylingPropertyData>();
+            if (stylingPropertyData == null || stylingPropertyData.GetEditorStyles().Count == 0)
             {
                 root.Add(FieldContent("This layer doesn't have any styles associated with it (yet)."));
             }
-
-            bool first = true;
-            foreach (var style in layerData.GetProperty<StylingPropertyData>().GetEditorStyles())
+            else
             {
-                var foldout = StyleFoldout(style);
-                // first should be folded out, rest collapsed by default
-                foldout.value = first;
-                if (first) first = false;
+                bool first = true;
+                foreach (var style in stylingPropertyData.GetEditorStyles())
+                {
+                    if (style == null)
+                        continue;
+                    var foldout = StyleFoldout(style);
+                    // first should be folded out, rest collapsed by default
+                    foldout.value = first;
+                    if (first) first = false;
 
-                root.Add(foldout);
+                    root.Add(foldout);
+                }
             }
         }
 
@@ -71,7 +77,7 @@ namespace Netherlands3D.Twin.Layers.Editor
             ruleFoldout.Add(FieldWithCaption("Name", stylingRule.Name));
             ruleFoldout.Add(FieldWithCaption("Selector", "If " + JsonConvert.SerializeObject(stylingRule.Selector)));
             var styles = stylingRule.Symbolizer.ToString();
-            ruleFoldout.Add(FieldWithCaption("Styles", string.IsNullOrEmpty(styles) ? "[None]" : styles ));
+            ruleFoldout.Add(FieldWithCaption("Styles", string.IsNullOrEmpty(styles) ? "[None]" : styles));
 
             return ruleFoldout;
         }
@@ -90,7 +96,7 @@ namespace Netherlands3D.Twin.Layers.Editor
             tf.labelElement.style.unityTextAlign = TextAnchor.MiddleLeft;
             return tf;
         }
-        
+
         private static VisualElement FieldWithColor(string caption, Color color)
         {
             var row = new VisualElement
@@ -117,12 +123,15 @@ namespace Netherlands3D.Twin.Layers.Editor
 
         private static Label Subheading(string caption)
         {
-            return new Label(caption) { style =
+            return new Label(caption)
+            {
+                style =
             {
                 unityFontStyleAndWeight = FontStyle.Bold,
                 marginTop = 6,
                 marginLeft = 3
-            }};
+            }
+            };
         }
 
         private static Label FieldContent(string content)
