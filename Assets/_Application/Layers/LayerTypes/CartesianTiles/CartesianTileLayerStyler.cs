@@ -72,7 +72,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             if (!data.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
             {
-                return mat.color;
+                if(mat.HasProperty("_Color") || mat.HasProperty("_BaseColor")) //TODO check a list of standardized tags for color properties
+                    return mat.color;
+                else
+                    return null;
             }
             return stylingRule.Symbolizer.GetFillColor();
         }
