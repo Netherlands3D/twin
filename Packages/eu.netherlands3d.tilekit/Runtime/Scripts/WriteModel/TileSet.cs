@@ -10,7 +10,7 @@ namespace Netherlands3D.Tilekit.WriteModel
     /// <summary>
     /// The central storage location for memory related to a tileset
     /// </summary>
-    public sealed class ColdStorage : IDisposable
+    public class TileSet : IDisposable
     {
         public BoxBoundingVolume AreaOfInterest;
         
@@ -23,6 +23,9 @@ namespace Netherlands3D.Tilekit.WriteModel
         public readonly Buckets<TileContentData> Contents;
         public readonly StringTable Strings;
         public Tile Root => Get(0);
+
+        public NativeList<int> Warm;
+        public NativeList<int> Hot;
 
         // Allocation and growth are aligned to 64 tiles. This ensures memory alignment 
         // and reduces fragmentation when resizing or replacing storages. Because each 
@@ -52,7 +55,7 @@ namespace Netherlands3D.Tilekit.WriteModel
             ProfilerCounterOptions.FlushOnEndOfFrame
         );
         
-        static ColdStorage()
+        static TileSet()
         {
             // Always reset counters to 0 on first class use - in case something didn't get disposed correctly
             LayersCounter.Value = 0;
@@ -60,7 +63,7 @@ namespace Netherlands3D.Tilekit.WriteModel
             AllocatedTilesCounter.Value = 0;
         }
 
-        public ColdStorage(BoxBoundingVolume areaOfInterest, int initialSize = 64, Allocator alloc = Allocator.Persistent)
+        public TileSet(BoxBoundingVolume areaOfInterest, int initialSize = 64, Allocator alloc = Allocator.Persistent)
         {
             if (!IsMultipleOf64(initialSize))
             {
@@ -116,6 +119,30 @@ namespace Netherlands3D.Tilekit.WriteModel
         public Tile Get(int i)
         {
             return new Tile(this, i);
+        }
+        
+        public int WarmTile(int tileIndex)
+        {
+            if (Warm.Contains(tileIndex))
+            {
+                return Warm.IndexOf(tileIndex);
+            }
+
+            var warmIdx = Warm.Length;
+            Warm.AddNoResize(tileIndex);
+            return warmIdx;
+        }
+
+        public int HeatTile(int tileIndex)
+        {
+            if (Hot.Contains(tileIndex))
+            {
+                return Hot.IndexOf(tileIndex);
+            }
+
+            var hotIdx = Hot.Length;
+            Hot.AddNoResize(tileIndex);
+            return hotIdx;
         }
 
         public void Dispose()

@@ -43,9 +43,19 @@ namespace Netherlands3D.Tilekit.Renderers
             return projectors[tile.Index];
         }
 
+        public TextureDecalProjector Get(int tileIndex)
+        {
+            return projectors[tileIndex];
+        }
+
         public void Release(Tile tile)
         {
             projectorPool.Release(Get(tile));
+        }
+
+        public void Release(int tileIndex)
+        {
+            projectorPool.Release(Get(tileIndex));
         }
     }
 }

@@ -9,10 +9,10 @@ namespace Netherlands3D.Tilekit
     /// </summary>
     public readonly struct BoundingVolume
     {
-        private readonly ColdStorage store;
+        private readonly TileSet store;
         private readonly int index;
         
-        public BoundingVolume(ColdStorage store, int index)
+        public BoundingVolume(TileSet store, int index)
         {
             this.store = store;
             this.index = index;

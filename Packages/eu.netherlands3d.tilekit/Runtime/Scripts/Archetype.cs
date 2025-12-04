@@ -19,17 +19,17 @@ namespace Netherlands3D.Tilekit
         where TWarmTile : unmanaged, IHasTileIndex 
         where THotTile : unmanaged, IHasWarmTileIndex
     {
-        private readonly ColdStorage cold;
+        private readonly TileSet cold;
         public NativeList<TWarmTile> warm;
         public NativeList<THotTile> hot;
         
-        public ColdStorage Cold => cold;
+        public TileSet Cold => cold;
         public NativeList<TWarmTile> Warm => warm;
         public NativeList<THotTile> Hot => hot;
         
         public Archetype(BoxBoundingVolume areaOfInterest, int initialCapacity = 1024, Allocator alloc = Allocator.Persistent)
         {
-            cold = new ColdStorage(areaOfInterest, initialCapacity, alloc);
+            cold = new TileSet(areaOfInterest, initialCapacity, alloc);
             warm = new NativeList<TWarmTile>(128, alloc);
             hot = new NativeList<THotTile>(64, alloc);
         }

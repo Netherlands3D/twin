@@ -16,7 +16,7 @@ namespace Netherlands3D.Tilekit.Editor
 
         private MonoBehaviour _currentService;
         private object _currentArchetype;
-        private ColdStorage _coldStorage;
+        private TileSet tileSet;
 
         private readonly Dictionary<int, TileTemperature> _tileStates = new();
         private VisualElement _headerContainer;
@@ -88,7 +88,7 @@ namespace Netherlands3D.Tilekit.Editor
         {
             UpdateSelectionFromActive();
             _currentArchetype = null;
-            _coldStorage = null;
+            tileSet = null;
             RefreshUI();
         }
 
@@ -121,7 +121,7 @@ namespace Netherlands3D.Tilekit.Editor
                 var type = mb.GetType();
                 while (type != null)
                 {
-                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(DataSet<,,>))
+                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(DataSet<>))
                     {
                         return mb;
                     }
@@ -172,14 +172,14 @@ namespace Netherlands3D.Tilekit.Editor
 
             DrawHeaderDetails();
 
-            if (_coldStorage.GeometricError.Length == 0)
+            if (tileSet.GeometricError.Length == 0)
             {
                 _scrollView.Add(new HelpBox("ColdStorage is empty (no tiles).", HelpBoxMessageType.Info));
                 return;
             }
 
             // Root hierarchy
-            var rootTile = _coldStorage.Root;
+            var rootTile = tileSet.Root;
             var rootElement = CreateTileFoldout(rootTile);
             _scrollView.Add(rootElement);
         }
@@ -211,7 +211,7 @@ namespace Netherlands3D.Tilekit.Editor
 
         private void DrawHeaderDetails()
         {
-            int totalTiles = _coldStorage.GeometricError.Length;
+            int totalTiles = tileSet.GeometricError.Length;
             int warmCount = 0;
             int hotCount = 0;
 
@@ -289,7 +289,7 @@ namespace Netherlands3D.Tilekit.Editor
                 }
             }
 
-            if (_coldStorage == null)
+            if (tileSet == null)
             {
                 var archetypeType = _currentArchetype.GetType();
                 var coldProp = archetypeType.GetProperty("Cold",
@@ -300,8 +300,8 @@ namespace Netherlands3D.Tilekit.Editor
                     return false;
                 }
 
-                _coldStorage = coldProp.GetValue(_currentArchetype) as ColdStorage;
-                if (_coldStorage == null)
+                tileSet = coldProp.GetValue(_currentArchetype) as TileSet;
+                if (tileSet == null)
                 {
                     reasonNotReady = "ColdStorage instance is null.";
                     return false;

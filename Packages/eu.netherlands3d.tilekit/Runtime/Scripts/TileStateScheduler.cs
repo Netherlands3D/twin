@@ -1,5 +1,4 @@
-﻿using Netherlands3D.Tilekit.DataSets;
-using Unity.Collections;
+﻿using Unity.Collections;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit

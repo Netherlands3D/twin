@@ -10,11 +10,11 @@ namespace Netherlands3D.Tilekit
     /// previously captured views become invalid. Use immediately or seal storage to NativeArray.
     public struct TileContents
     {
-        private readonly ColdStorage store;
+        private readonly TileSet store;
         private Bucket<TileContentData> bucket;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public TileContents(ColdStorage store, Bucket<TileContentData> bucket)
+        public TileContents(TileSet store, Bucket<TileContentData> bucket)
         {
             this.store = store;
             this.bucket = bucket;

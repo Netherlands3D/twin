@@ -1,29 +1,29 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Tilekit.ExtensionMethods;
+using Netherlands3D.Tilekit.WriteModel;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit
 {
     [RequireComponent(typeof(Timer))]
-    public abstract class DataSet<TArchetype, TWarmTile, THotTile> : MonoBehaviour, ITileLifecycleBehaviour 
-        where TArchetype : Archetype<TWarmTile, THotTile>
-        where TWarmTile : unmanaged, IHasTileIndex 
-        where THotTile : unmanaged, IHasWarmTileIndex
+    public abstract class DataSet<TTileSet> : MonoBehaviour, ITileLifecycleBehaviour where TTileSet : TileSet 
     {
         public bool IsInitialized { get; set; } = false;
 
         protected Timer timer;
-        protected TArchetype archetype;
-        private TileStateScheduler<TArchetype, TWarmTile, THotTile> stateScheduler;
+
+        protected TTileSet tileSet;
+        // private TileStateScheduler<TArchetype, TWarmTile, THotTile> stateScheduler;
 
         private void Awake()
         {
             timer = GetComponent<Timer>();
         }
 
-        protected abstract TArchetype CreateArchetype();
+        protected abstract TTileSet CreateTileSet();
 
         private IEnumerator Start()
         {
@@ -31,8 +31,8 @@ namespace Netherlands3D.Tilekit
             yield return null;
             yield return null;
 
-            archetype = CreateArchetype();
-            stateScheduler = new (new TilesSelector(), this, archetype);
+            tileSet = CreateTileSet();
+            // stateScheduler = new (new TilesSelector(), this, archetype);
 
             timer.tick.AddListener(OnTick);
             Initialize();
@@ -62,12 +62,12 @@ namespace Netherlands3D.Tilekit
 
         protected virtual void OnTick()
         {
-            stateScheduler.Schedule();
+            // stateScheduler.Schedule();
         }
 
         protected virtual void OnDestroy()
         {
-            archetype?.Dispose();
+            tileSet?.Dispose();
         }
 
         private void OnDrawGizmosSelected()
@@ -75,10 +75,10 @@ namespace Netherlands3D.Tilekit
             if (!Application.isPlaying)
                 return;
 
-            if (!archetype.Warm.IsCreated || !archetype.Hot.IsCreated)
+            if (!tileSet.Warm.IsCreated || !tileSet.Hot.IsCreated)
                 return;
 
-            DrawTileGizmo(archetype.Cold.Root);
+            DrawTileGizmo(tileSet.Root);
         }
 
         private void DrawTileGizmo(Tile tile, int height = 0)
@@ -86,16 +86,8 @@ namespace Netherlands3D.Tilekit
             var bounds = tile.BoundingVolume.ToBounds().ToLocalCoordinateSystem(CoordinateSystem.RD);
             
             Gizmos.color = Color.grey;
-            // TODO: can we make this O(1)?
-            for (var index = 0; index < archetype.Warm.Length; index++)
-            {
-                if (archetype.Warm[index].TileIndex == tile.Index) Gizmos.color = Color.yellow;
-            }
-            // TODO: can we make this O(1)?
-            for (var index = 0; index < archetype.Hot.Length; index++)
-            {
-                if (archetype.Warm[archetype.Hot[index].WarmTileIndex].TileIndex == tile.Index) Gizmos.color = Color.red;
-            }
+            if (tileSet.Warm.Contains(tile.Index)) Gizmos.color = Color.yellow;
+            if (tileSet.Hot.Contains(tile.Index)) Gizmos.color = Color.red;
 
             if (Gizmos.color != Color.grey)
             {

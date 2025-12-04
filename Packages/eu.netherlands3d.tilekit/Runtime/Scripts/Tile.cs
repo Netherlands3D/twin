@@ -8,9 +8,9 @@ namespace Netherlands3D.Tilekit
     public readonly struct Tile
     {
         private readonly int tileIndex;
-        private readonly ColdStorage store;
+        private readonly TileSet store;
 
-        public Tile(ColdStorage store, int tileIndex)
+        public Tile(TileSet store, int tileIndex)
         {
             this.store = store;
             this.tileIndex = tileIndex;
@@ -34,17 +34,5 @@ namespace Netherlands3D.Tilekit
         }
 
         public Tile GetChild(int childIndex) => store.Get(Children()[childIndex]);
-        //
-        // public bool TryGetName(out FixedString128Bytes name)
-        // {
-        //     int nameIdx = store.NameIndex[tileIndex];
-        //     if (nameIdx < 0)
-        //     {
-        //         name = default;
-        //         return false;
-        //     }
-        //
-        //     return store.Strings.TryGetFixedString128(nameIdx, out name);
-        // }
     }
 }

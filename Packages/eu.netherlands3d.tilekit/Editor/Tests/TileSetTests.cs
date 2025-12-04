@@ -7,9 +7,9 @@ using Unity.Mathematics;
 namespace Netherlands3D.Tilekit.Tests
 {
     [TestFixture]
-    public class ColdStorageTests
+    public class TileSetTests
     {
-        private ColdStorage s;
+        private TileSet s;
         private static BoxBoundingVolume AreaOfInterest
         {
             get
@@ -30,7 +30,7 @@ namespace Netherlands3D.Tilekit.Tests
         [SetUp]
         public void SetUp()
         {
-            s = new ColdStorage(AreaOfInterest, initialSize: 64, alloc: Allocator.Temp);
+            s = new TileSet(AreaOfInterest, initialSize: 64, alloc: Allocator.Temp);
         }
 
         [TearDown]

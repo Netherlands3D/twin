@@ -1,11 +1,11 @@
 ﻿using System;
 using Netherlands3D.Tilekit.WriteModel;
 
-namespace Netherlands3D.Tilekit.ColdStorageMaterializers
+namespace Netherlands3D.Tilekit.TileSetMaterializers
 {
-    public class ExplicitQuadTreeMaterializer : IColdStorageMaterializer<ExplicitQuadTreePopulatorSettings>
+    public class ExplicitQuadTreeMaterializer : ITileSetMaterializer<ExplicitQuadTreePopulatorSettings>
     {
-        public void Materialize(ColdStorage tiles, ExplicitQuadTreePopulatorSettings settings)
+        public void Materialize(TileSet tiles, ExplicitQuadTreePopulatorSettings settings)
         {
             // Reset tilestorage to be empty without releasing memory
             tiles.Clear();
@@ -35,7 +35,7 @@ namespace Netherlands3D.Tilekit.ColdStorageMaterializers
             // T(depth) = (4^(depth+1) - 1) / 3
             return depth < 0 ? 0 : (Pow4(depth + 1) - 1) / 3;
         }
-        private static int AddLevelOfTiles(ColdStorage tiles, BoxBoundingVolume boundingVolume, int tileIndex, int remainingDepth)
+        private static int AddLevelOfTiles(TileSet tiles, BoxBoundingVolume boundingVolume, int tileIndex, int remainingDepth)
         {
             // Work is done, return
             // TODO: Add support for availability: https://docs.ogc.org/cs/22-025r4/22-025r4.html#implicittiling-availability
@@ -56,7 +56,7 @@ namespace Netherlands3D.Tilekit.ColdStorageMaterializers
             return tileIndex;
         }
 
-        private static int AddChildTile(ColdStorage tiles, int tileIndex, int depth, int stride, BoxBoundingVolume boundingVolume)
+        private static int AddChildTile(TileSet tiles, int tileIndex, int depth, int stride, BoxBoundingVolume boundingVolume)
         {
             int myIndex = tileIndex + 1;
             ReadOnlySpan<int> children = depth > 0 

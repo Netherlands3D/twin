@@ -7,11 +7,11 @@ namespace Netherlands3D.Tilekit
     /// A typed, allocation-free view over a single content entry.
     public readonly struct TileContent
     {
-        private readonly ColdStorage store;
+        private readonly TileSet store;
         private readonly TileContentData data;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public TileContent(ColdStorage store, in TileContentData data)
+        public TileContent(TileSet store, in TileContentData data)
         {
             this.store = store;
             this.data = data;
