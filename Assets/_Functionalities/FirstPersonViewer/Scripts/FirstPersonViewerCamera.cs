@@ -17,7 +17,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         public float CameraHeightOffset { private set; get; } = 1.75f;
         private float previousCameraHeight;
-        private float currentSensitivity = .1f;
+        private float currentSensitivity = .11f;
 
         [Header("Viewer")]
         [SerializeField] private Transform viewerBase;
@@ -42,7 +42,7 @@ namespace Netherlands3D.FirstPersonViewer
         private void Awake()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
-            currentSensitivity = .03f;
+            currentSensitivity = .035f;
 #endif
 
             firstPersonViewerCamera = GetComponent<Camera>();
