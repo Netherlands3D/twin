@@ -12,7 +12,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    [PropertySection(typeof(StylingPropertyData), CartesianTileLayerStyler.LayerFeatureColoring)]// Symbolizer.FillColorProperty)]
+    [PropertySection(typeof(StylingPropertyData), CartesianTileLayerStyler.LayerFeatureColoring)]
     public class CartesianTileLayerFeatureColorPropertySection : MonoBehaviour, IVisualizationWithPropertyData, IMultiSelectable
     {  
         [SerializeField] private RectTransform content;
@@ -31,32 +31,27 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            stylingPropertyData = properties.Get<StylingPropertyData>();
-           
+            stylingPropertyData = properties.Get<StylingPropertyData>();           
 
             CreateSwatches();
 
-            stylingPropertyData.OnStylingChanged.AddListener(UpdateSwatches);
+            stylingPropertyData.OnStylingApplied.AddListener(UpdateSwatches);
+            colorPicker.ColorWheel.colorChanged.AddListener(OnPickColor);
 
             StartCoroutine(OnPropertySectionsLoaded());
         }
 
         private void OnDestroy()
         {
-            stylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
+            stylingPropertyData.OnStylingApplied.RemoveListener(UpdateSwatches);
             colorPicker.ColorWheel.colorChanged.RemoveListener(OnPickColor);
         }
 
         private IEnumerator OnPropertySectionsLoaded()
         {
-            yield return new WaitForEndOfFrame();
-
-            // Reset listeners to prevent default behaviour
-            colorPicker.ColorWheel.colorChanged.RemoveAllListeners();
-            //colorPicker.LayerGameObject = layer;
-            colorPicker.ColorWheel.colorChanged.AddListener(OnPickColor);
+            yield return new WaitForEndOfFrame(); 
+            
             HideColorPicker();
-
             // workaround to have a minimum height for the content loaded (because of scrollrects)
             LayoutElement layout = GetComponent<LayoutElement>();
             layout.minHeight = content.rect.height;
@@ -67,7 +62,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             swatches.Clear();
             layerContent.ClearAllChildren();
 
-
+            //TODO this could be personal, but a hunch these (runtime only) layerfeatures should be part of a data container so this propertysection and other logic should not be visualisation dependent
             CartesianTileLayerGameObject visualization = FindObjectsByType<CartesianTileLayerGameObject>(FindObjectsSortMode.None).ToList()
                 .FirstOrDefault(v => v.LayerData.GetProperty<StylingPropertyData>() == stylingPropertyData);
 

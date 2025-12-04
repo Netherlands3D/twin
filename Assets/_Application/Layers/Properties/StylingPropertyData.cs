@@ -55,9 +55,8 @@ namespace Netherlands3D.Twin.Layers.Properties
         [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleRemoved = new();
         [JsonIgnore] public readonly UnityEvent<string> ToolPropertyChanged = new();
 
-        public StylingPropertyData(List<string> styleModes = null)
-        {
-            this.customFlags = styleModes;
+        public StylingPropertyData()
+        {            
             styles = new Dictionary<string, LayerStyle>
             {
                 { NameOfDefaultStyle, LayerStyle.CreateDefaultStyle() }

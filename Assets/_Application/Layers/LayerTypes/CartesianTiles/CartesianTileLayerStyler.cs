@@ -53,8 +53,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             );
             stylingRule.Symbolizer.SetFillColor(color);
 
-            stylingPropertyData.SetDefaultStylingRule(stylingRuleName, stylingRule);
-
+            stylingPropertyData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
+            stylingPropertyData.OnStylingApplied.Invoke(); //todo this should be done on change instead of manually called
         }
 
         /// <summary>
@@ -72,7 +72,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             if (!data.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
             {
-                return mat.color;
+                if(mat.HasProperty("_Color") || mat.HasProperty("_BaseColor")) //TODO check a list of standardized tags for color properties
+                    return mat.color;
+                else
+                    return null;
             }
             return stylingRule.Symbolizer.GetFillColor();
         }
@@ -98,7 +101,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             stylingRule.Symbolizer.SetVisibility(visible);
             stylingRule.Symbolizer.SetCustomProperty(VisibilityAttributePositionIdentifier, coordinate);
             
-            stylingPropertyData.SetDefaultStylingRule(stylingRuleName, stylingRule);
+
+            stylingPropertyData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
+            stylingPropertyData.OnStylingApplied.Invoke();
         }
 
         public static bool? GetVisibilityForSubObject(LayerFeature layerFeature, StylingPropertyData stylingPropertyData)
