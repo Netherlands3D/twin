@@ -400,3 +400,5 @@ MonoBehaviour:
   <MovementPresets>k__BackingField:
   - {fileID: 11400000, guid: bc41cb17aeb0e9e4dad0bc62ddaa02ea, type: 2}
   - {fileID: 11400000, guid: 594defc4112e8534f9cc9c41b8492119, type: 2}
+  - {fileID: 11400000, guid: 38cd0b8cb5cb89d49ada4ec0f381d368, type: 2}
+  - {fileID: 11400000, guid: 130c7cf512e492a4fa526f2b64dc26f5, type: 2}

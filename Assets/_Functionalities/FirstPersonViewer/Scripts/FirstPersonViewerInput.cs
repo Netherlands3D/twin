@@ -16,7 +16,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         public InputAction MoveAction { private set; get; }
         public InputAction SprintAction { private set; get; }
-        public InputAction JumpAction { private set; get; }
+        public InputAction SpaceAction { private set; get; }
         public InputAction VerticalMoveAction { private set; get; }
         public InputAction LookInput { private set; get; }
         public InputAction ExitInput { private set; get; }
@@ -54,7 +54,7 @@ namespace Netherlands3D.FirstPersonViewer
         {
             MoveAction = inputActionAsset.FindAction("Move");
             SprintAction = inputActionAsset.FindAction("Sprint");
-            JumpAction = inputActionAsset.FindAction("Jump");
+            SpaceAction = inputActionAsset.FindAction("Space");
             VerticalMoveAction = inputActionAsset.FindAction("VerticalMove");
             LookInput = inputActionAsset.FindAction("Look");
             ExitInput = inputActionAsset.FindAction("Exit");
