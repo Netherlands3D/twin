@@ -518,6 +518,14 @@
         "eu.netherlands3d.geotimezone": "1.1.0"
       }
     },
+    "eu.netherlands3d.tilekit": {
+      "version": "file:eu.netherlands3d.tilekit",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.mathematics": "1.2.6"
+      }
+    },
     "eu.netherlands3d.tiles3d": {
       "version": "file:eu.netherlands3d.tiles3d",
       "depth": 0,
