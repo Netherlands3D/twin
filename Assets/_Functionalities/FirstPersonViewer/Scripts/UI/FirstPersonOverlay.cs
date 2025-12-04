@@ -79,7 +79,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
         public void CopyCoordinates()
         {
             snackbarEvent.InvokeStarted(copySnackbarText);
-            Clipboard.SetText(currentCoordinates.ToString());
+            WebGLClipboard.Copy(currentCoordinates.ToString());
         }
 
         public void OnPointerEnter(PointerEventData eventData)
