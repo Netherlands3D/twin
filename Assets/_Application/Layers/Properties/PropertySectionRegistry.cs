@@ -63,21 +63,34 @@ namespace Netherlands3D.Twin.Layers.Properties
                     var entriesWithFlag = Entries.Where(e => e.TypeName == type.AssemblyQualifiedName && e.SubType == flag);
                     prefabs.AddRange(entriesWithFlag.Select(e => e.Prefab));
                 }
-                return prefabs;
             }
+            
+            var entry = Entries.FirstOrDefault(e =>
+                e.TypeName == type.AssemblyQualifiedName &&
+                string.IsNullOrEmpty(e.SubType)
+            );
 
-            var entry = Entries.FirstOrDefault(e => e.TypeName == type.AssemblyQualifiedName && string.IsNullOrEmpty(e.SubType));
-            if (entry != null)
+            //interfaces
+            if (entry == null)
             {
                 foreach (var interfaceType in type.GetInterfaces())
                 {
-                    if (!HasPanel(interfaceType, propertyData)) continue;
+                    if (!HasPanel(interfaceType, propertyData))
+                        continue;
 
-                    entry = Entries.FirstOrDefault(e => e.TypeName == interfaceType.AssemblyQualifiedName);
-                    break;
+                    entry = Entries.FirstOrDefault(e =>
+                        e.TypeName == interfaceType.AssemblyQualifiedName &&
+                        string.IsNullOrEmpty(e.SubType)
+                    );
+
+                    if (entry != null)
+                        break;
                 }
-                prefabs.Add(entry.Prefab);
             }
+
+            if (entry != null)
+                prefabs.Add(entry.Prefab);
+
             return prefabs;
         }
     }
