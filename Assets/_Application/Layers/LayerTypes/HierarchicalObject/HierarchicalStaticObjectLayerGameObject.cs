@@ -18,6 +18,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             transformProperty.Position = new Coordinate(coordinateSystem, Coordinates.y, Coordinates.x, Coordinates.z);
             transformProperty.EulerRotation = transform.rotation.eulerAngles;
             transformProperty.LocalScale = transform.localScale;
+            WorldTransform.MoveToCoordinate(transformProperty.Position);
         }
 
         public override void OnSelect()
