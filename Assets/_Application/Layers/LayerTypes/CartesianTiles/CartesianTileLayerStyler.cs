@@ -54,7 +54,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             stylingRule.Symbolizer.SetFillColor(color);
 
             stylingPropertyData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
-            //stylingPropertyData.OnStylingApplied.Invoke(); //todo this should be done on change instead of manually called
+            stylingPropertyData.OnStylingApplied.Invoke(); //todo this should be done on change instead of manually called
         }
 
         /// <summary>

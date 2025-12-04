@@ -11,7 +11,6 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Unity.Collections;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
@@ -195,7 +194,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                         if (visiblity.HasValue)
                         {
                             string id = feature.Attributes[CartesianTileLayerStyler.VisibilityAttributeIdentifier];
-                            var visibilityColor = visiblity == true ? symbolizer.GetFillColor() ?? Color.white : Color.clear;
+                            Color storedColor = symbolizer.GetFillColor() ?? Color.white;
+                            var visibilityColor = visiblity == true ? storedColor : Color.clear;
                             GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, visibilityColor } });
                         }
                     }
