@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Cameras;
-using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -13,6 +11,8 @@ using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using System.Linq;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
+
 
 
 
@@ -178,11 +178,16 @@ namespace Netherlands3D.Twin.Layers
 
         private void LoadPropertiesInVisualisations()
         {
+            List<string> allowedSections = new List<string>();
+            foreach(PropertySectionOption option in PropertySections)
+            {
+                if (option.Enabled && !allowedSections.Contains(option.type))
+                    allowedSections.Add(option.type);
+            }
+            LayerData.allowedPropertySections = allowedSections;
             foreach (var visualisation in GetComponents<IVisualizationWithPropertyData>())
             {
                 visualisation.LoadProperties(LayerData.LayerProperties);
-                if(visualisation is LayerGameObject v)
-                    v.LoadCustomFlags(LayerData.LayerProperties);
             }           
         }
 
@@ -194,13 +199,31 @@ namespace Netherlands3D.Twin.Layers
         }
 
         public List<PropertySectionOption> PropertySections = new();
-        protected virtual List<string> allowedStylingPropertySections { get; }
 
-        private void OnValidateCustomFlags()
+#if UNITY_EDITOR
+        protected virtual void OnValidateCustomFlags(List<LayerPropertyData> properties = null)
         {
-            if (allowedStylingPropertySections == null) return;
+            PropertySectionRegistry registry = LoadRegistry();
+            if (properties == null)
+            {
+                properties = new List<LayerPropertyData>();
+            }           
+            List<string> allPanelTypes = new List<string>();
+            foreach (var visualisation in GetComponents<IVisualizationWithPropertyData>())
+            {                
+                visualisation.LoadProperties(properties);
+            }
+            foreach (LayerPropertyData propertyData in properties)
+            {
+                List<GameObject> allPanels = registry.GetPanelPrefabs(propertyData.GetType(), propertyData);
+                foreach (var item in allPanels)
+                {
+                    allPanelTypes.Add(item.GetComponent<IVisualizationWithPropertyData>().GetType().AssemblyQualifiedName);
+                }
 
-            foreach (string customFlag in allowedStylingPropertySections)
+            }            
+
+            foreach (string customFlag in allPanelTypes)
             {
                 if (!PropertySections.Any(f => f.type == customFlag))
                     PropertySections.Add(new PropertySectionOption { type = customFlag, Enabled = true });
@@ -213,18 +236,16 @@ namespace Netherlands3D.Twin.Layers
                 .ToList();
         }
 
-        private void LoadCustomFlags(List<LayerPropertyData> properties)
-        {
-            foreach (LayerPropertyData data in properties)
-            {
-                var existingFlags = PropertySections
-                .Where(option => option.Enabled)
-                .Select(option => option.type)
-                .ToList();
 
-                data.SetCustomFlags(existingFlags);
-            }            
+        private static PropertySectionRegistry LoadRegistry()
+        {
+            var guid = AssetDatabase.FindAssets("t:PropertySectionRegistry").FirstOrDefault();
+            if (guid == null) return null;
+
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            return AssetDatabase.LoadAssetAtPath<PropertySectionRegistry>(path);
         }
+#endif
 
         protected virtual void OnEnable()
         {
@@ -473,6 +494,24 @@ namespace Netherlands3D.Twin.Layers
             }
 
             return cache;
+        }
+
+        public virtual void InitProperty<T>(List<LayerPropertyData> properties, Action<T> onInit = null, params object[] constructorArgs)
+    where T : LayerPropertyData
+        {
+            T property = properties.OfType<T>().FirstOrDefault();
+
+            if (property == null)
+            {
+                property = (T)Activator.CreateInstance(typeof(T), constructorArgs);               
+
+#if UNITY_EDITOR
+                properties.Add(property);
+#else
+                LayerData.SetProperty(property);
+                onInit?.Invoke(property);
+#endif
+            }
         }
     }
 }

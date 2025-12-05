@@ -76,12 +76,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected override void OnLayerReady()
         {
+            TransformLayerPropertyData transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
+            UpdatePosition(transformProperty.Position);
+            UpdateRotation(transformProperty.EulerRotation);
+            UpdateScale(transformProperty.LocalScale);
+
+            ToggleScatterPropertyData scatterProperty = LayerData.GetProperty<ToggleScatterPropertyData>();
+            scatterProperty.AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
+
             WorldTransform.RecalculatePositionAndRotation();
             previousCoordinate = WorldTransform.Coordinate;
             previousRotation = WorldTransform.Rotation;
             previousScale = transform.localScale;
 
-            objectCreated.Invoke(gameObject);
+            objectCreated.Invoke(gameObject);         
         }
 
         private void UpdatePosition(Coordinate newPosition)
@@ -176,42 +184,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
-            var transformPropertyData = properties.Get<TransformLayerPropertyData>();
-            if (transformPropertyData == null)
-            {
-                transformPropertyData = new TransformLayerPropertyData(new Coordinate(transform.position),
+            InitProperty<TransformLayerPropertyData>(properties, null, new Coordinate(transform.position),
                         transform.eulerAngles,
                         transform.localScale,
                         scaleUnitCharacter);
-                LayerData.SetProperty(transformPropertyData);
-            }
-
-            var toggleScatterPropertyData = properties.Get<ToggleScatterPropertyData>();
-            if (toggleScatterPropertyData == null)
-            {
-                toggleScatterPropertyData = new ToggleScatterPropertyData() { AllowScatter = true };
-                LayerData.SetProperty(toggleScatterPropertyData);
-            }
-
-            var stylingPropertyData = properties.Get<StylingPropertyData>();
-            if (stylingPropertyData == null)
-            {
-                stylingPropertyData = new StylingPropertyData();
-                LayerData.SetProperty(stylingPropertyData);
-            }
-
-            SetTransformPropertyData(transformPropertyData);
-                        
-            toggleScatterPropertyData.AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
-        }
-
-        protected override List<string> allowedStylingPropertySections => new(){ Symbolizer.FillColorProperty, Symbolizer.VisibilityProperty };
-
-        private void SetTransformPropertyData(TransformLayerPropertyData transformProperty)
-        {
-            UpdatePosition(transformProperty.Position);
-            UpdateRotation(transformProperty.EulerRotation);
-            UpdateScale(transformProperty.LocalScale);
+            InitProperty<ToggleScatterPropertyData>(properties, p => p.AllowScatter = true);
+            InitProperty<StylingPropertyData>(properties);
         }
 
         protected override void RegisterEventListeners()
@@ -364,15 +342,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private void ConvertToScatterLayer(bool isScattered)
         {
             if (!isScattered)
-                return;
-            
-            var existingScatterPropertyData = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
-            if (existingScatterPropertyData == null)
-            {
-                existingScatterPropertyData = new ScatterGenerationSettingsPropertyData(LayerData.PrefabIdentifier);
-                LayerData.SetProperty(existingScatterPropertyData);
-            }
-            
+                return;            
+           
+            InitProperty<ScatterGenerationSettingsPropertyData>(LayerData.LayerProperties, null, LayerData.PrefabIdentifier);
+
             LayerData.DeselectLayer(); //remove any transform interaction that might be present
 
             App.Layers.VisualizeAs(LayerData, ObjectScatterLayerGameObject.ScatterBasePrefabID);

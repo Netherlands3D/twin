@@ -30,22 +30,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void LoadProperties(List<LayerPropertyData> properties)
         {
             base.LoadProperties(properties);
+            InitProperty<CameraPropertyData>(properties, null, new Coordinate(Camera.main.transform.position),
+                    Camera.main.transform.eulerAngles,
+                    Camera.main.transform.localScale,
+                    Camera.main.orthographic);
+            
 
-            var cameraPropertyData = properties.Get<CameraPropertyData>();
-            if (cameraPropertyData == null)
-            {
-                var cam = Camera.main;
-                var camTransform = cam.transform;
-                cameraPropertyData = new CameraPropertyData(
-                    new Coordinate(camTransform.position),
-                    camTransform.eulerAngles,
-                    camTransform.localScale,
-                    cam.orthographic
-                    );
-                LayerData.SetProperty(cameraPropertyData);
-            }
-
-            SetOrthographic(cameraPropertyData.Orthographic);
+            SetOrthographic(LayerData.GetProperty<CameraPropertyData>().Orthographic);
         }
 
         protected override void RegisterEventListeners()

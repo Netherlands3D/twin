@@ -8,6 +8,7 @@ using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -15,6 +16,10 @@ using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
@@ -310,7 +315,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
-        {
+        {            
+            //todo, can this be moved to OnLayerReady?
+#if UNITY_EDITOR
+#else
             var scatterSettings = properties.Get<ScatterGenerationSettingsPropertyData>();
             if (scatterSettings != null)
             {
@@ -320,7 +328,29 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     polygonLayer = LayerData.ParentLayer;
                 }
             }
+#endif
         }
+
+#if UNITY_EDITOR
+        protected override void OnValidateCustomFlags(List<LayerPropertyData> properties = null)
+        {
+            var guid = AssetDatabase.FindAssets("t:PrefabLibrary").FirstOrDefault();
+            if (guid == null) return;
+
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            PrefabLibrary lib = AssetDatabase.LoadAssetAtPath<PrefabLibrary>(path);
+            if (lib == null) return;
+
+            HierarchicalObjectLayerGameObject obj = lib.FindPrefabOfType<HierarchicalObjectLayerGameObject>() as HierarchicalObjectLayerGameObject;
+            properties = new List<LayerPropertyData>();
+            obj.InitProperty<ScatterGenerationSettingsPropertyData>(properties, null, obj.PrefabIdentifier);
+            foreach (var visualisation in obj.GetComponents<IVisualizationWithPropertyData>())
+            {
+                visualisation.LoadProperties(properties);
+            }
+            base.OnValidateCustomFlags(properties);
+        }
+#endif
 
         private void AddListenersToCartesianTiles()
         {

@@ -129,10 +129,15 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   PropertySections:
-  - type: visibility
-    Enabled: 0
-  - type: LayerFeatureColoring
+  - type: Netherlands3D.Twin.Layers.Properties.CartesianTileLayerFeatureColorPropertySection,
+      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     Enabled: 1
+  - type: Netherlands3D.Twin.Layers.Properties.ColorPickerPropertySection, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+  - type: Netherlands3D.Twin.Layers.Properties.HiddenObjectsPropertySection, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
 --- !u!114 &8284198237993072344
 MonoBehaviour:
   m_ObjectHideFlags: 0

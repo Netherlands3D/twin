@@ -27,6 +27,9 @@ namespace Netherlands3D.Twin.Layers.Properties
                 {
                     foreach(var prefab in prefabs)
                     {
+                        IVisualizationWithPropertyData prefabPanel = prefab.GetComponent<IVisualizationWithPropertyData>();
+                        if (!layer.allowedPropertySections.Contains(prefabPanel.GetType().AssemblyQualifiedName)) continue;
+
                         var panel = Instantiate(prefab, sections);
                         panel.GetComponent<IVisualizationWithPropertyData>().LoadProperties(layer.LayerProperties);
                     }
@@ -45,12 +48,12 @@ namespace Netherlands3D.Twin.Layers.Properties
             foreach (var property in layer.LayerProperties)
             {
                 var type = property.GetType();
-                if (registry.HasPanel(type, property))
+                if (registry.HasPanel(type))
                     return true;
                 
                 foreach (var interfaceType in type.GetInterfaces())
                 {
-                    if (registry.HasPanel(interfaceType, property))
+                    if (registry.HasPanel(interfaceType))
                     {
                         return true;
                     }

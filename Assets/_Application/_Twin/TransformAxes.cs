@@ -24,12 +24,7 @@ namespace Netherlands3D.Twin
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var propertyData = (TransformLockLayerPropertyData)properties.FirstOrDefault(p => p is TransformLockLayerPropertyData);           
-            if (propertyData == null)
-            {
-                propertyData = new TransformLockLayerPropertyData(PositionLocked ? 0 : (int)positionAxes, RotationLocked ? 0 : (int)rotationAxes, ScaleLocked ? 0 : (int)scaleAxes);                
-                GetComponent<LayerGameObject>().LayerData.SetProperty(propertyData);
-            }
+            GetComponent<LayerGameObject>().InitProperty<TransformLockLayerPropertyData>(properties, null, PositionLocked ? 0 : (int)positionAxes, RotationLocked ? 0 : (int)rotationAxes, ScaleLocked ? 0 : (int)scaleAxes);
         }
     }
 }

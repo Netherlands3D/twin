@@ -166,14 +166,9 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
-        {
-            var tile3DPropertyData = properties.Get<Tile3DLayerPropertyData>();
-            if (tile3DPropertyData == null)
-            {
-                tile3DPropertyData = new Tile3DLayerPropertyData(TileSet.tilesetUrl);
-                LayerData.SetProperty(tile3DPropertyData);
-            }
-
+        {            
+            InitProperty<Tile3DLayerPropertyData>(properties, null, TileSet.tilesetUrl);
+            Tile3DLayerPropertyData tile3DPropertyData = properties.Get<Tile3DLayerPropertyData>();
             UpdateURL(new Uri(tile3DPropertyData.Url));
             UpdateCRS(tile3DPropertyData.ContentCRS);
         }

@@ -24,10 +24,6 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             SetRenderOrder(LayerData.RootIndex);
         }
 
-        public void LoadProperties(List<LayerPropertyData> properties)
-        {
-        }
-
         //a higher order means rendering over lower indices
         private void SetRenderOrder(int order)
         {

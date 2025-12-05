@@ -130,16 +130,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void LoadProperties(List<LayerPropertyData> properties)
         {
             base.LoadProperties(properties);
+            InitProperty<AnnotationPropertyData>(properties, null, "");
+            
+        }
 
-            var annotationPropertyData = properties.Get<AnnotationPropertyData>();
-            if (annotationPropertyData == null)
-            {
-                annotationPropertyData = new AnnotationPropertyData(                    
-                    ""
-                );
-                LayerData.SetProperty(annotationPropertyData);
-            }
-
+        protected override void OnLayerReady()
+        {
+            base.OnLayerReady();
+            AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
             annotation.Show(annotationPropertyData.AnnotationText, WorldTransform.Coordinate, true);
             UpdateAnnotation(annotationPropertyData.AnnotationText);
         }

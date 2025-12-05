@@ -81,5 +81,20 @@ namespace Netherlands3D.Twin.Projects
         {
             return group.prefabs.FirstOrDefault(prefab => prefab.PrefabIdentifier == id);
         }
+
+        public LayerGameObject FindPrefabOfType<T>() where T : LayerGameObject
+        {
+            foreach (var group in prefabGroups)
+            {
+                foreach (var prefab in group.prefabs)
+                {
+                    if (prefab is T)
+                    {
+                        return prefab;
+                    }
+                }
+            }            
+            return fallbackPrefab;
+        }
     }
 }
