@@ -57,7 +57,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
         private void SetNormalUIPanels()
         {
             importErrorPanel.SetActive(false);
-            if (!string.IsNullOrEmpty(objPropertyData.MtlFile.ToString()))
+            if (!string.IsNullOrEmpty(objPropertyData.MtlFile?.ToString()))
             {
                 defaultImportPanel.SetActive(false);
                 hasMtlPanel.SetActive(true);
