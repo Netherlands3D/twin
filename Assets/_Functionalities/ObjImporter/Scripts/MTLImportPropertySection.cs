@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Netherlands3D.Functionalities.OBJImporter
 {
     [PropertySection(typeof(OBJPropertyData))]
-    public class MTLImportPropertySection :  MonoBehaviour, IVisualizationWithPropertyData
+    public class MTLImportPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         [SerializeField] private GameObject defaultImportPanel;
         [SerializeField] private GameObject hasMtlPanel;
@@ -38,26 +38,29 @@ namespace Netherlands3D.Functionalities.OBJImporter
         {
             path = path.TrimEnd(',');
 
+            if (!path.EndsWith(".mtl"))
+                return;
+
             // When importing an MTL - we want to reset the coloring of the object
             //HierarchicalObjectLayerStyler.ResetColoring(layer);
 
             stylingPropertyData.SetDefaultSymbolizerFillColor(null);
 
             SetMtlPathInPropertyData(path);
-            
+
             SetNormalUIPanels();
         }
 
 
         private void SetMtlPathInPropertyData(string fullPath)
-        {          
+        {
             objPropertyData.MtlFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
         }
 
         private void SetNormalUIPanels()
         {
             importErrorPanel.SetActive(false);
-            if (!string.IsNullOrEmpty(objPropertyData.MtlFile.ToString()))
+            if (!string.IsNullOrEmpty(objPropertyData.MtlFile?.ToString()))
             {
                 defaultImportPanel.SetActive(false);
                 hasMtlPanel.SetActive(true);
