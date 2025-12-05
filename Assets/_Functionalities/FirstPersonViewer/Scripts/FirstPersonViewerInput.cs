@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using Netherlands3D.SelectionTools;
 using System;
 using Netherlands3D.Events;
+using UnityEngine.Events;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -32,13 +33,13 @@ namespace Netherlands3D.FirstPersonViewer
         [SerializeField] private float exitDuration = 1;
         [SerializeField] private float exitViewDelay = .15f;
         private float exitTimer;
-        [SerializeField] private StringEvent snackbarEvent;
+        public UnityEvent<string> onShowSnackbarExit;
         [SerializeField] private string fpvExitText;
 
         private bool isEditingInputfield;
         private GameObject selectedUI;
         private List<MonoBehaviour> inputLocks;
-       
+
         //Mouse Locking
         public bool LockInput => inputLocks.Count > 0;
         public bool LockCamera { private set; get; }
@@ -80,9 +81,9 @@ namespace Netherlands3D.FirstPersonViewer
                 isLocked = true;
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
-                snackbarEvent.InvokeStarted(fpvExitText);
+                onShowSnackbarExit.Invoke(fpvExitText);
             }
-            else LockCamera = true;
+            else ToggleCursor(true);
         }
 
         private void OnDisable()
@@ -101,36 +102,33 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void HandleCursorLocking()
         {
+            //When editing an inputfield just block this function.
+            if (isEditingInputfield) return;
+
             if (!lockMouseModus)
             {
                 //Use the normal locking mode (Mouse Click)
-                bool cursorLocked = isLocked;
-                if (LeftClick.triggered && !cursorLocked)
+                bool isCurrentlyLocked = isLocked;
+                if (LeftClick.triggered && !isCurrentlyLocked)
                 {
-                    if (isEditingInputfield) return;
-                    if (Interface.PointerIsOverUI()) return;
-
-                    ToggleCursor(false);
+                    if (!Interface.PointerIsOverUI()) ToggleCursor(false);
                 }
-                else if (LeftClick.WasReleasedThisFrame() && cursorLocked) ToggleCursor(true);
+                else if (LeftClick.WasReleasedThisFrame() && isCurrentlyLocked) ToggleCursor(true);
+
+                return;
             }
-            else
+
+            //When key is released release/lock mouse
+            if (ExitInput.WasReleasedThisFrame())
             {
-                //When editing an inputfield just block this function.
-                if (isEditingInputfield) return;
-
-                //When key is released release/lock mouse
-                if (ExitInput.WasReleasedThisFrame() && !isEditingInputfield)
-                {
-                    bool isLocked = this.isLocked;
-                    ToggleCursor(isLocked);
-                }
-                else if (LeftClick.triggered && !Interface.PointerIsOverUI())
-                {
-                    //When no UI object is detected lock the mouse to screen again, Lock Cursor.
-                    ToggleCursor(false);
-                }
+                ToggleCursor(isLocked);
             }
+            else if (LeftClick.triggered && !Interface.PointerIsOverUI())
+            {
+                //When no UI object is detected lock the mouse to screen again, Lock Cursor.
+                ToggleCursor(false);
+            }
+
         }
 
         private void ToggleCursor(bool unlock)
@@ -143,7 +141,7 @@ namespace Netherlands3D.FirstPersonViewer
 
                 Cursor.lockState = unlock ? CursorLockMode.None : CursorLockMode.Locked;
                 Cursor.visible = unlock;
-                if(!unlock) snackbarEvent.InvokeStarted(fpvExitText);
+                if (!unlock) onShowSnackbarExit.Invoke(fpvExitText);
             }
             else
             {
@@ -194,7 +192,7 @@ namespace Netherlands3D.FirstPersonViewer
         public void SetExitCallback(Action<bool> callback) => OnInputExit = callback;
 
         public bool IsInputfieldSelected()
-        { 
+        {
             GameObject selected = EventSystem.current.currentSelectedGameObject;
 
             if (selected == null)

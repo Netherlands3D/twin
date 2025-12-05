@@ -24,7 +24,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public void OnSensitivityChanged(float sensitivity)
         {
-            ServiceLocator.GetService<FirstPersonViewer>().FirstPersonCamera.SetSensitivity(sensitivity);
+            ServiceLocator.GetService<FirstPersonViewer>().FirstPersonCamera.SetSensitivity(sensitivity / 100);
         }
 
         public void OnMouseLockModeChanged(bool useMouseLocking)

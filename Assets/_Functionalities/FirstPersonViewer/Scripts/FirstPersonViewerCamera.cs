@@ -219,7 +219,7 @@ namespace Netherlands3D.FirstPersonViewer
         public Vector3 GetPreviousCameraHeight() => transform.position + Vector3.up * previousCameraHeight;
 
         private void ResetToStart() => transform.rotation = startRotation;
-        public void SetSensitivity(float sensitivity) => currentSensitivity = sensitivity / 100;
+        public void SetSensitivity(float sensitivity) => currentSensitivity = sensitivity;
         public float GetSensitivity() => currentSensitivity;
     }
 }
