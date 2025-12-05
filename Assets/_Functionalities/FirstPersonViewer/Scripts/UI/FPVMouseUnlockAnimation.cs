@@ -18,15 +18,20 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnEnable()
         {
-            firstPersonInput = ServiceLocator.GetService<FirstPersonViewer>().Input;
-            firstPersonInput.OnLockStateChanged += PlayUnlockCircleAnimation;
+            FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer>();
+            if (fpv != null)
+            {
+                firstPersonInput = fpv.Input;
+                firstPersonInput.OnLockStateChanged += PlayUnlockCircleAnimation;
+            }
+
             unlockCircleImage = GetComponent<Image>();
             unlockCircleImageTransform = GetComponent<Transform>();
         }
 
         private void OnDisable()
         {
-            firstPersonInput.OnLockStateChanged -= PlayUnlockCircleAnimation;
+            if(firstPersonInput != null) firstPersonInput.OnLockStateChanged -= PlayUnlockCircleAnimation;
         }
 
         void Update()
@@ -37,9 +42,9 @@ namespace Netherlands3D.FirstPersonViewer.UI
             unlockCircleImageTransform.position = Pointer.current.position.ReadValue();
         }
 
-        private void PlayUnlockCircleAnimation(CursorLockMode lockMode)
+        private void PlayUnlockCircleAnimation(bool isLocked)
         {
-            if (lockMode == CursorLockMode.None) StartCoroutine(UnlockCircleSequence());
+            if (!isLocked) StartCoroutine(UnlockCircleSequence());
         }
 
         private IEnumerator UnlockCircleSequence()

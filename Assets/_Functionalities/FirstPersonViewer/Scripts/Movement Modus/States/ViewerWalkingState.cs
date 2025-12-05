@@ -29,7 +29,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             viewer.SnapToGround();
 
-            if(!input.LockInput) Jump();
+            if(!DisableMovement()) Jump();
 
             viewer.ApplyGravity();
         }
