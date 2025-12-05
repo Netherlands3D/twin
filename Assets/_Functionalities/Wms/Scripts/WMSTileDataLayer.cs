@@ -54,8 +54,8 @@ namespace Netherlands3D.Functionalities.Wms
             {
                 var baseDataset = new DataSet()
                 {
-                    maximumDistance = 6000,
-                    maximumDistanceSquared = 1000 * 1000
+                    maximumDistance = 3000,
+                    maximumDistanceSquared = 3000 * 3000
                 };
                 Datasets.Add(baseDataset);
             }
