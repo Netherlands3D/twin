@@ -6,10 +6,10 @@ namespace Netherlands3D.Twin.Layers
 {
     public interface ILayerSpawner
     {
-        public Task<LayerGameObject> Spawn(ReferencedLayerData layerData);
+        public Task<LayerGameObject> Spawn(LayerData layerData);
 
         public Task<LayerGameObject> Spawn(
-            ReferencedLayerData layerData,
+            LayerData layerData,
             Vector3 position,
             Quaternion rotation
         );

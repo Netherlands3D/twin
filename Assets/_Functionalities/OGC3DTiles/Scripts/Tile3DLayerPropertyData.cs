@@ -47,7 +47,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         public void SetDefaultCrs()
         {
-            this.contentCRS = (int)CoordinateSystem.WGS84_ECEF;
+            ContentCRS = (int)CoordinateSystem.WGS84_ECEF;
         }
     }
 }

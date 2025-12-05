@@ -22,14 +22,13 @@ namespace Netherlands3D.Functionalities.CityJSON
                 );
         }
 
-        public async void Execute(LocalFile localFile)
+        public void Execute(LocalFile localFile)
         {
-            await App.Layers.Add(
-                new LayerPresets.CityJSONPreset.Args(
-                    CreateName(localFile), 
-                    AssetUriFactory.ConvertLocalFileToAssetUri(localFile)
-                )
+            var preset = new LayerPresets.CityJSONPreset.Args(
+                CreateName(localFile),
+                AssetUriFactory.ConvertLocalFileToAssetUri(localFile)
             );
+            App.Layers.Add(preset);
         }
 
         private static string CreateName(LocalFile f)

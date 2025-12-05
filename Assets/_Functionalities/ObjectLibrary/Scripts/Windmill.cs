@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Netherlands3D.Functionalities.ObjectLibrary
 {
     [RequireComponent(typeof(LayerGameObject))]
-    public class Windmill : MonoBehaviour, ILayerWithPropertyData
+    public class Windmill : MonoBehaviour, IVisualizationWithPropertyData
     {
         public float RotorDiameter
         {
@@ -15,7 +15,6 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             set => propertyData.RotorDiameter = value;
         }
         private WindmillPropertyData propertyData;
-        public LayerPropertyData PropertyData => propertyData;
 
         public float AxisHeight
         {
@@ -65,6 +64,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
                     AxisHeight = defaultHeight,
                     RotorDiameter = defaultDiameter
                 };
+                GetComponent<LayerGameObject>().LayerData.SetProperty<WindmillPropertyData>(propertyData);
             }
 
             AddListeners();

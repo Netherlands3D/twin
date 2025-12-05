@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wms.UI
 {
-    public class WMSPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
+    public class WMSPropertySectionInstantiator : MonoBehaviour//, IPropertySectionInstantiator todo: delete
     {
         [SerializeField] private WMSPropertySection propertySectionPrefab;
 
-        public void AddToProperties(RectTransform properties)
-        {
-            if (!propertySectionPrefab) return;
-
-            var settings = Instantiate(propertySectionPrefab, properties);
-            settings.Controller = GetComponent<WMSLayerGameObject>();
-        }
+        // public void AddToProperties(RectTransform properties)
+        // {
+        //     if (!propertySectionPrefab) return;
+        //
+        //     var settings = Instantiate(propertySectionPrefab, properties);
+        //     settings.Controller = GetComponent<WMSLayerGameObject>();
+        // }
     }
 }

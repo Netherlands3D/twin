@@ -12,6 +12,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
+    //TODO STYLING: add stylingpropertydata to this layer
     [Serializable]
     public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer
     {
@@ -20,9 +21,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public Transform Transform => transform;
 
-        public delegate void GeoJSONLineHandler(Feature feature);
-
-        public event GeoJSONLineHandler FeatureRemoved;
+        public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeatureLineVisualisations> spawnedVisualisations = new();
         private List<List<Coordinate>> visualisationsToRemove = new();
@@ -134,8 +133,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             LineRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
-        public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
-            where T : GeoJSONObject
+        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem)          
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
             if (spawnedVisualisations.ContainsKey(feature)) return;
@@ -165,7 +163,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public override void ApplyStyling()
         {
             // The color in the Layer Panel represents the default stroke color for this layer
-            LayerData.Color = LayerData.DefaultSymbolizer?.GetStrokeColor() ?? LayerData.Color;
+            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            LayerData.Color = stylingPropertyData.DefaultSymbolizer?.GetStrokeColor() ?? LayerData.Color;
 
             MaterialApplicator.Apply(this.Applicator);
         }
@@ -238,27 +237,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var crs2D = CoordinateSystems.To2D(bbox.CoordinateSystem);
             bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
-        }
-
-        private List<IPropertySectionInstantiator> propertySections;
-
-        protected List<IPropertySectionInstantiator> PropertySections
-        {
-            get
-            {
-                if (propertySections == null)
-                {
-                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
-                }
-
-                return propertySections;
-            }
-            set => propertySections = value;
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return PropertySections;
         }
     }
 }
