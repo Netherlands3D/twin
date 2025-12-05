@@ -77,6 +77,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void OnLayerReady()
         {
             TransformLayerPropertyData transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformProperty.IsEditable = true;
             UpdatePosition(transformProperty.Position);
             UpdateRotation(transformProperty.EulerRotation);
             UpdateScale(transformProperty.LocalScale);
@@ -89,7 +90,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             previousRotation = WorldTransform.Rotation;
             previousScale = transform.localScale;
 
-            objectCreated.Invoke(gameObject);         
+            objectCreated.Invoke(gameObject);       
+            
+
         }
 
         private void UpdatePosition(Coordinate newPosition)
@@ -349,6 +352,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             LayerData.DeselectLayer(); //remove any transform interaction that might be present
 
             App.Layers.VisualizeAs(LayerData, ObjectScatterLayerGameObject.ScatterBasePrefabID);
+           
         }
     }
 }

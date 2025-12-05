@@ -54,6 +54,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var scatterSettings = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
             InitializeScatterMesh(scatterSettings.OriginalPrefabId);
 
+            TransformLayerPropertyData transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformProperty.IsEditable = false;
+
             RecalculatePolygonsAndSamplerTexture();
             AddReScatterListeners();
         }
@@ -330,27 +333,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
 #endif
         }
-
-#if UNITY_EDITOR
-        protected override void OnValidateCustomFlags(List<LayerPropertyData> properties = null)
-        {
-            var guid = AssetDatabase.FindAssets("t:PrefabLibrary").FirstOrDefault();
-            if (guid == null) return;
-
-            var path = AssetDatabase.GUIDToAssetPath(guid);
-            PrefabLibrary lib = AssetDatabase.LoadAssetAtPath<PrefabLibrary>(path);
-            if (lib == null) return;
-
-            HierarchicalObjectLayerGameObject obj = lib.FindPrefabOfType<HierarchicalObjectLayerGameObject>() as HierarchicalObjectLayerGameObject;
-            properties = new List<LayerPropertyData>();
-            obj.InitProperty<ScatterGenerationSettingsPropertyData>(properties, null, obj.PrefabIdentifier);
-            foreach (var visualisation in obj.GetComponents<IVisualizationWithPropertyData>())
-            {
-                visualisation.LoadProperties(properties);
-            }
-            base.OnValidateCustomFlags(properties);
-        }
-#endif
 
         private void AddListenersToCartesianTiles()
         {

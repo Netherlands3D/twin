@@ -21,6 +21,8 @@ namespace Netherlands3D.Twin.Layers.Properties
             
             foreach (var property in layer.LayerProperties)
             {
+                if(property.IsEditable == false) continue;
+
                 var type = property.GetType();
                 var prefabs = registry.GetPanelPrefabs(type, property);                
                 if (prefabs.Count > 0)
