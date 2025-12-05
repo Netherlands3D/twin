@@ -11,13 +11,16 @@ namespace Netherlands3D.Twin.Configuration
     {
         [SerializeField] private ProjectData currentProjectData;
         [SerializeField] private Configurator configurator;
+        public UnityEvent OnStartConfiguration = new();
         public UnityEvent<Configuration> OnLoadedConfiguration = new();
 
         /// <summary>
         /// Make sure to set the culture to invariant to prevent issues with parsing floats and doubles.
         /// This way we consistently use the dot as the decimal separator.
         /// </summary>
-        private void Awake() {
+        private void Awake()
+        {
+            OnStartConfiguration.Invoke();
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             Coordinates.CoordinateSystems.connectedCoordinateSystem = Coordinates.CoordinateSystem.RDNAP;
 
