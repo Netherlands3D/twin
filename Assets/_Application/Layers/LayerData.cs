@@ -1,4 +1,4 @@
-using Netherlands3D.LayerStyles;
+﻿using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
@@ -65,8 +65,16 @@ namespace Netherlands3D.Twin.Layers
             get => name;
             set
             {
+                if (name == value) return;          // optional: avoid redundant events
+
                 name = value;
                 NameChanged.Invoke(value);
+
+                // 🔽 NEW: notify project that something changed (e.g. layer renamed)
+                if (ProjectData.Current != null && ProjectData.Current.OnDataChanged != null)
+                {
+                    ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
+                }
             }
         }
 
