@@ -1,3 +1,5 @@
+using NUnit.Framework.Constraints;
+using System;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.ViewModus
@@ -6,10 +8,12 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     public class ViewerFlyingState : ViewerState
     {
         [SerializeField] private MovementBoolSetting smoothFlight;
+        [SerializeField] private MovementBoolSetting lockHeight;
         private float currentSpeed;
         private float verticalVelocity;
         private float verticalSmoothTime = 0.4f;
         private Vector3 smoothVelocity = Vector3.zero;
+        private Vector3 lastMovementInput;
 
         public override void OnEnter()
         {
@@ -40,13 +44,18 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             Vector2 moveInput = GetMoveInput();
             viewer.FirstPersonCamera.SetCameraRotationDampening(smoothFlight.Value);
 
-            if (smoothFlight.Value) MoveFreeCamSmooth(moveInput);
-            else MoveFreeCam(moveInput);
-
             float verticalInput = input.VerticalMoveAction.ReadValue<float>();
-            if (smoothFlight.Value) MoveVerticalSmooth(verticalInput);
-            else MoveVertical(verticalInput);
 
+            if (smoothFlight.Value)
+            {
+                MoveFreeCamSmooth(moveInput);
+                MoveVerticalSmooth(verticalInput);
+            }
+            else
+            {
+                MoveFreeCam(moveInput);
+                MoveVertical(verticalInput);
+            }
         }
 
         private void MoveFreeCam(Vector2 moveInput)
@@ -63,22 +72,30 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         private void MoveFreeCamSmooth(Vector2 moveInput)
         {
             float currentMultiplier = input.SprintAction.IsPressed() ? speedMultiplierSetting.Value : 1;
-
             Vector3 direction = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
-            Vector3 targetSpeed = moveInput * MovementSpeed;
+            Vector3 targetSpeed = moveInput * MovementSpeed * currentMultiplier;
 
+            //Accelleratie/ decelleratie
             if (targetSpeed.magnitude > 0.1f) currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed.magnitude, (MovementSpeed * .15f) * currentMultiplier * Time.deltaTime);
-            else currentSpeed = Mathf.MoveTowards(currentSpeed, 0, (MovementSpeed * .10f) * currentMultiplier * Time.deltaTime);
-
+            else currentSpeed = Mathf.MoveTowards(currentSpeed, 0, (MovementSpeed * .5f) * currentMultiplier * Time.deltaTime);
 
             Vector3 targetTransformation = direction * currentSpeed;
-            if (Vector3.Dot(smoothVelocity, targetTransformation) < 0f) smoothVelocity = Vector3.zero;
+
+            //Turn more than 90 degrees - reset momentum
+            if (Vector3.Dot(smoothVelocity, targetTransformation) < 0f || Vector3.Dot(moveInput, lastMovementInput) < 0f)
+                smoothVelocity = Vector3.zero;
+
+            //No input direction, take the current momentum from smoothVelocity and apply it as it decellerates.
+            if (direction == Vector3.zero)
+                targetTransformation = smoothVelocity.normalized * currentSpeed;
+
             smoothVelocity = Vector3.Slerp(smoothVelocity, targetTransformation, 10f * Time.deltaTime);
 
             transform.Translate(smoothVelocity * Time.deltaTime, Space.World);
+
+            //Save last Input for snap-turning.
+            lastMovementInput = moveInput;
         }
-
-
 
         private void MoveVertical(float verticalInput)
         {
@@ -88,7 +105,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             transform.Translate(Vector3.up * verticalInput * calculatedSpeed * Time.deltaTime, Space.World);
         }
-        
+
         private void MoveVerticalSmooth(float verticalInput)
         {
             float targetSpeed = 0f;
@@ -113,6 +130,11 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         private void ResetCurrentSpeed()
         {
             currentSpeed = 0;
+        }
+
+        private Vector3 ClampVector3(Vector3 vector, float min, float max)
+        {
+            return new Vector3(Mathf.Clamp(vector.x, min, max), Mathf.Clamp(vector.y, min, max), Mathf.Clamp(vector.z, min, max));
         }
     }
 }

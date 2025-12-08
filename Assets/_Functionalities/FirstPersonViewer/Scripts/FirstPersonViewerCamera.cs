@@ -24,8 +24,7 @@ namespace Netherlands3D.FirstPersonViewer
         [SerializeField] private Transform viewerBase;
         public CameraConstrain cameraConstrain;
         public bool useRotationDampening = true;
-        private float rotationLerpSpeed = .03f;
-        public float smoothTime = 0.2f;
+        private float smoothTime = 0.15f;
         private Quaternion rotationVelocity; // must be stored!
         private Quaternion viewerRotationVelocity;
         private Quaternion cameraRotationVelocity;
