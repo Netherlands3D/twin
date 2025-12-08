@@ -154,18 +154,18 @@ namespace Netherlands3D.Twin.Services
         
         private static async void Visualize(Layer layer, ILayerSpawner spawner, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null) //todo: change callbacks for promises?
         {
-                var task = spawner.Spawn(layer.LayerData);
-                LayerGameObject visualization = await task;
-                if (task.IsFaulted)
-                {
-                    Debug.LogError(task.Exception);
-                    errorCallback?.Invoke(task.Exception);
-                }
-                
+            try
+            {
+                LayerGameObject visualization = await spawner.Spawn(layer.LayerData);
                 layer.SetVisualization(visualization);
                 visualization.SetData(layer.LayerData);
                 callback?.Invoke(visualization);
-            
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                errorCallback?.Invoke(e);
+            }
         }
     }
 }
