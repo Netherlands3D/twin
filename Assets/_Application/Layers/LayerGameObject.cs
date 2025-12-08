@@ -113,8 +113,8 @@ namespace Netherlands3D.Twin.Layers
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 
             //todo move this into loadproperties?
-            LayerData.GetProperty<StylingPropertyData>()?.OnStylingChanged.Invoke(); //apply the styling once at initialization
-
+            ApplyStyling();
+            
             onLayerReady.Invoke();
         }
 
