@@ -8,6 +8,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         protected FirstPersonViewerInput input;
         protected FirstPersonViewer viewer;
         protected Transform transform;
+        public MovementVisualController movementVisualController;
 
         [field: SerializeField] public CameraConstrain CameraConstrain { private set; get; }
         protected float MovementSpeed { private set; get; }
@@ -15,8 +16,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         [Header("Visuals")]
         public string viewName;
         public Sprite viewIcon;
-        public Mesh viewMesh;
-        public Material[] meshMaterials;
+        public MovementVisualController viewPrefab;
 
         [Header("Editable Settings")]
         public SerializableViewerSettingsList editableSettings = new SerializableViewerSettingsList();
@@ -53,8 +53,10 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         protected Vector2 GetMoveInput()
         {
-            if (input.LockInput) return Vector2.zero;
+            if (DisableMovement()) return Vector2.zero;
             else return input.MoveAction.ReadValue<Vector2>();
         }
+
+        protected bool DisableMovement() => input.LockInput || input.IsInputfieldSelected();
     }
 }
