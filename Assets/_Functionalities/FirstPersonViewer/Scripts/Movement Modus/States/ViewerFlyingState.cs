@@ -41,6 +41,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnUpdate()
         {
+            if (DisableMovement()) return;
+
             Vector2 moveInput = GetMoveInput();
             viewer.FirstPersonCamera.SetCameraRotationDampening(smoothFlight.Value);
 

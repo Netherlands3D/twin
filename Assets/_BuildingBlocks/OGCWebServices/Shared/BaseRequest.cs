@@ -27,9 +27,11 @@ namespace Netherlands3D.OgcWebServices.Shared
         protected readonly XmlNamespaceManager namespaceManager;
         protected virtual Dictionary<string, string> defaultNameSpaces { get; } = new();
 
-        protected BaseRequest(Uri sourceUrl, string xml)
+        protected BaseRequest(Uri sourceUrl, string xml = null)
         {
             Url = sourceUrl;
+            if(string.IsNullOrEmpty(xml)) return;
+
             xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(xml);
             namespaceManager = CreateOrReadNamespaceManager(xmlDocument, defaultNameSpaces);

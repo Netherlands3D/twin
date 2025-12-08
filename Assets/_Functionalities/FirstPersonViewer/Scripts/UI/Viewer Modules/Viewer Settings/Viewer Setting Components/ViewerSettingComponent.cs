@@ -11,11 +11,16 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         protected ViewerSetting setting;
 
+        private void Start()
+        {
+            if (setting != null) Init(setting);
+        }
+
         public virtual void Init(ViewerSetting setting)
         {
             this.setting = setting;
 
-            settingNameText.text = setting.GetDisplayName();
+            if (settingNameText != null) settingNameText.text = setting.GetDisplayName();
 
             if (settingUnitText != null)
             {
