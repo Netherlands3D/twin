@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     //TODO STYLING: add stylingpropertydata to this layer
     [Serializable]
-    public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer
+    public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
     {
         public bool IsPolygon => false;
         public override bool IsMaskable => false;
@@ -237,6 +237,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var crs2D = CoordinateSystems.To2D(bbox.CoordinateSystem);
             bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
+        }
+        
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            //copy the parent styles in this layer
+            var parentStyleStyles = LayerData?.ParentLayer?.GetProperty<StylingPropertyData>().Styles;
+            InitProperty<StylingPropertyData>(properties, null, parentStyleStyles);
         }
     }
 }

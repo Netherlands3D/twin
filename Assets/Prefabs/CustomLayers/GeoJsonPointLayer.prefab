@@ -63,6 +63,16 @@ MonoBehaviour:
   onLayerReady:
     m_PersistentCalls:
       m_Calls: []
+  PropertySections:
+  - type: Netherlands3D.Twin.Layers.Properties.ColorPickerPropertySection, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+  - type: Netherlands3D.Twin.Layers.Properties.CartesianTileLayerFeatureColorPropertySection,
+      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+  - type: Netherlands3D.Twin.Layers.Properties.HiddenObjectsPropertySection, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
   pointRenderer3D: {fileID: -4723935055048165154}
   selectionPointRenderer3D: {fileID: -5733166687025956999}
 --- !u!114 &-4723935055048165154

@@ -13,7 +13,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONPointLayer : LayerGameObject, IGeoJsonVisualisationLayer
+    public partial class GeoJSONPointLayer : LayerGameObject, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
     {
         [SerializeField] private PointRenderer3D pointRenderer3D;
         [SerializeField] private PointRenderer3D selectionPointRenderer3D;
@@ -220,6 +220,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var crs2D = CoordinateSystems.To2D(bbox.CoordinateSystem);
             bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
+        }
+
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            //copy the parent styles in this layer
+            var parentStyleStyles = LayerData?.ParentLayer?.GetProperty<StylingPropertyData>().Styles;
+            InitProperty<StylingPropertyData>(properties, null, parentStyleStyles);
         }
     }
 }

@@ -10,6 +10,7 @@ using System.Linq;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
@@ -144,7 +145,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// </summary>
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
-            //property already added through layerbuilder
+            InitProperty<StylingPropertyData>(properties);
+            //Initialize the styling with the default color that is gotten from the LayerData.Color
+            var stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            stylingPropertyData.DefaultSymbolizer.SetFillColor(LayerData.Color);
+            stylingPropertyData.DefaultSymbolizer.SetStrokeColor(LayerData.Color);
         }
 
         /// <summary>
@@ -206,13 +211,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private void SetVisualization(IGeoJsonVisualisationLayer layer, List<PendingFeature> pendingFeatures)
         {
             layer.LayerData.Color = LayerData.Color;
-
-            StylingPropertyData stylingPropertyData = layer.LayerData.GetProperty<StylingPropertyData>();
-
-            // Replace default style with the parent's default style
-            stylingPropertyData.RemoveStyle(stylingPropertyData.DefaultStyle);
-            stylingPropertyData.AddStyle(LayerData.GetProperty<StylingPropertyData>().DefaultStyle);
-            layer.LayerData.SetParent(LayerData);
             layer.FeatureRemoved += OnFeatureRemoved;
 
             foreach (var pendingFeature in pendingFeatures)

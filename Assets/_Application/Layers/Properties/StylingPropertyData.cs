@@ -77,6 +77,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             if (Styles.TryAdd(style.Metadata.Name, style))
             {
                 StyleAdded.Invoke(style);
+                OnStylingChanged.Invoke();
             }
         }
 
