@@ -41,13 +41,13 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void UpdateColorFromProperty()
         {
-            Color? color = stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.GetFillColor();
+            Color? color = stylingPropertyData.GetDefaultSymbolizerColor();
             colorWheel.SetColorWithoutNotify(color.HasValue ? color.Value : defaultColor);
         }
 
         private void OnColorPicked(Color color)
         {
-            stylingPropertyData.SetDefaultSymbolizerFillColor(color); //todo: should this be stroke color in some cases?
+            stylingPropertyData.SetDefaultSymbolizerColor(color);
         }
     }
 }

@@ -108,16 +108,17 @@ namespace Netherlands3D.Twin.Layers.Properties
             OnStylingChanged.Invoke();
         }
 
-        public void SetDefaultSymbolizerFillColor(Color? color)
+        public void SetDefaultSymbolizerColor(Color? color)
         {
             var symbolizer = DefaultStyle.AnyFeature.Symbolizer;
-            
-            if(color.HasValue)
-                symbolizer.SetFillColor(color.Value);
-            else
-                symbolizer.ClearFillColor();
-            
+            symbolizer.SetColor(ActiveToolProperty, color);
             OnStylingChanged.Invoke();
+        }
+        
+        public Color? GetDefaultSymbolizerColor()
+        {
+            var symbolizer = DefaultStyle.AnyFeature.Symbolizer;
+            return symbolizer.GetColor(ActiveToolProperty);
         }
         
         public void SetMaskBitMask(int bitMask)

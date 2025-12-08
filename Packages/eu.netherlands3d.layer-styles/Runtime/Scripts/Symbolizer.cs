@@ -9,7 +9,7 @@ namespace Netherlands3D.LayerStyles
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/styling", Name = "Symbolizer")]
     public sealed class Symbolizer
-    {       
+    {
         //Constants for property keys
         public const string FillColorProperty = "fill-color";
         public const string StrokeColorProperty = "stroke-color";
@@ -46,7 +46,7 @@ namespace Netherlands3D.LayerStyles
 
         public Color? GetColor(string property)
         {
-            switch(property)
+            switch (property)
             {
                 case FillColorProperty:
                     return GetFillColor();
@@ -54,7 +54,15 @@ namespace Netherlands3D.LayerStyles
                     return GetStrokeColor();
                 default:
                     return null;
-            }    
+            }
+        }
+
+        public void SetColor(string property, Color? color)
+        {
+            if(color.HasValue)
+                SetAndNormalizeColor(property, color.Value);
+            else
+                ClearProperty(property);
         }
 
         public void SetMaskLayerMask(int maskLayerMask) => SetProperty(MaskLayerMaskProperty, Convert.ToString(maskLayerMask, 2));
@@ -62,9 +70,9 @@ namespace Netherlands3D.LayerStyles
         public int? GetMaskLayerMask()
         {
             var json = GetProperty(MaskLayerMaskProperty);
-            if(json == null || string.IsNullOrEmpty((string)json))
+            if (json == null || string.IsNullOrEmpty((string)json))
                 return null;
-            
+
             var bitMaskString = (string)json;
             return StringToBitmask(bitMaskString);
         }
@@ -76,7 +84,7 @@ namespace Netherlands3D.LayerStyles
 
             return Convert.ToInt32(bitString, 2);
         }
-        
+
         public void ClearMaskLayerMask() => ClearProperty(MaskLayerMaskProperty);
 
         /// <link href="https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-color"/>
@@ -100,16 +108,16 @@ namespace Netherlands3D.LayerStyles
         public void SetVisibility(bool visible) => SetProperty(VisibilityProperty, visible ? VisibilityVisible : VisibilityNone);
 
         public bool? GetVisibility()
-        {         
+        {
             if (GetProperty(VisibilityProperty) is not string property) return null;
 
             if (property == VisibilityVisible) return true;
 
-            return false;            
+            return false;
         }
 
         public void ClearVisibility() => ClearProperty(VisibilityProperty);
-        
+
         public void SetCustomProperty(string key, object value)
         {
             string prefix = CustomPropertyPrefix;
@@ -117,16 +125,18 @@ namespace Netherlands3D.LayerStyles
             {
                 key = prefix + key;
             }
+
             SetProperty(key, JsonConvert.SerializeObject(value));
         }
 
         public T GetCustomProperty<T>(string key)
         {
             string prefix = CustomPropertyPrefix;
-            if(!key.StartsWith(prefix))
+            if (!key.StartsWith(prefix))
             {
                 key = prefix + key;
             }
+
             return JsonConvert.DeserializeObject<T>(GetProperty(key));
         }
 
@@ -137,6 +147,7 @@ namespace Netherlands3D.LayerStyles
             {
                 key = prefix + key;
             }
+
             ClearProperty(key);
         }
 

@@ -5,6 +5,7 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
@@ -57,6 +58,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // of a material asset when replacing the material - no destroy of the old material must be done because
             // that is an asset and not an instance
             lineRenderer3D.LineMaterial = new Material(lineRenderer3D.LineMaterial);
+            var stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            stylingPropertyData.ActiveToolProperty = Symbolizer.StrokeColorProperty;
         }
 
         public List<Mesh> GetMeshData(Feature feature)

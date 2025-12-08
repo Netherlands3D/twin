@@ -50,8 +50,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public bool IsSelected => Root.SelectedLayers.Contains(this);
 
         [JsonIgnore] public List<string> allowedPropertySections = new();
-
-
+        
         [JsonIgnore]
         public string Name
         {
@@ -139,8 +138,6 @@ namespace Netherlands3D.Twin.Layers
         }
 
         [JsonIgnore] public bool HasProperties => LayerProperties.Count > 0;
-
-       
         
         [DataMember] protected string prefabId;
 

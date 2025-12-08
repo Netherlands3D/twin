@@ -4,6 +4,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using System.Collections.Generic;
+using Netherlands3D.LayerStyles;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.OBJImporter
@@ -43,8 +44,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
             // When importing an MTL - we want to reset the coloring of the object
             //HierarchicalObjectLayerStyler.ResetColoring(layer);
-
-            stylingPropertyData.SetDefaultSymbolizerFillColor(null);
+            stylingPropertyData.SetDefaultSymbolizerColor(null);
 
             SetMtlPathInPropertyData(path);
 
