@@ -39,10 +39,16 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         [JsonIgnore] public readonly UnityEvent<Uri> OnUrlChanged = new();
         [JsonIgnore] public readonly UnityEvent<int> OnCRSChanged = new();
         [JsonConstructor]
-        public Tile3DLayerPropertyData(string url, int contentCRS = (int)CoordinateSystem.WGS84_ECEF)
+        public Tile3DLayerPropertyData(string url, int contentCRS)
         {
             this.url = url;
             this.contentCRS = contentCRS;
+        }
+        
+        public Tile3DLayerPropertyData(string url)
+        {
+            this.url = url;
+            this.contentCRS = (int)CoordinateSystem.WGS84_ECEF;
         }
 
         public void SetDefaultCrs()
