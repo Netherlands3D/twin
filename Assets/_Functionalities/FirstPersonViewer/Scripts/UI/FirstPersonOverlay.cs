@@ -69,10 +69,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
             overlayText.text =
                 $"Coordinaten: {rdNapCoords.ToString()}\n" +
-                $"Afstand tot Grond: {dstToGround}m\n" +
-                $"Afstand tot Object: {dstToObject}m\n" +
-                $"NAP Hoogte: {napHeight}m\n" +
-                $"<i><size=10>Hoogtedata is een geschatte benadering en kan afwijken van de werkelijkheid.</i>";
+                $"Hoogte t.o.v. NAP: {rdNapCoords.value3.ToString("F2")}m\n" +
+                $"<i><size=14>Hoogtedata is een benadering en kan afwijken van de werkelijkheid.</i>";
         }
 
         public void CopyCoordinates()
