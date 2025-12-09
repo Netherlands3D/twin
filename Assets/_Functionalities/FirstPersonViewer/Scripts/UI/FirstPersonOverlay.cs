@@ -32,12 +32,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
             openOverlayButton.action.performed += ToggleOverlay;
             gameObject.SetActive(false);
-            
-            //For some weird reason Unity keeps reseting the set anchor. So we set it with code.
-            RectTransform rect = copyButtonGroup.RectTransform();
-            rect.anchorMin = new Vector2(1, 1);
-            rect.anchorMax = new Vector2(1, 1);
-            rect.anchoredPosition = new Vector2(45, -5);
         }
 
         private void OnDestroy()
@@ -53,7 +47,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
             if (!wasActive) firstPersonViewer.OnPositionUpdated += UpdateInfoMenu;
             else firstPersonViewer.OnPositionUpdated -= UpdateInfoMenu;
         }
-
 
         private void UpdateInfoMenu(Coordinate playerCoords, float groundPos)
         {
@@ -86,7 +79,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
             copyButtonGroup.DOKill();
             copyButtonGroup.DOFade(1, .5f);
-            
         }
 
         public void OnPointerExit(PointerEventData eventData)
