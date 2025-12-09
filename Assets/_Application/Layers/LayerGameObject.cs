@@ -11,8 +11,6 @@ using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using System.Linq;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
-
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -104,6 +102,7 @@ namespace Netherlands3D.Twin.Layers
             }
 
             List<string> allPanelTypes = new List<string>();
+            SetData(new LayerData("temp")); // we need a temp layerData to store the properties in
             foreach (var visualisation in GetComponents<IVisualizationWithPropertyData>())
             {
                 visualisation.LoadProperties(properties);
@@ -508,14 +507,14 @@ namespace Netherlands3D.Twin.Layers
             if (property != null)
                 return;
             
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-            {
-                property = (T)Activator.CreateInstance(typeof(T), constructorArgs);
-                properties.Add(property);
-                return;
-            }
-#endif
+// #if UNITY_EDITOR
+//             if (!Application.isPlaying)
+//             {
+//                 property = (T)Activator.CreateInstance(typeof(T), constructorArgs);
+//                 properties.Add(property);
+//                 return;
+//             }
+// #endif
 
             property = (T)Activator.CreateInstance(typeof(T), constructorArgs);
             LayerData.SetProperty(property);
