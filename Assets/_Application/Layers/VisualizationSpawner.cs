@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
@@ -25,6 +24,10 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         public async Task<LayerGameObject> Spawn(LayerData layerData)
         {
+            if (layerData.PrefabIdentifier == "folder" || string.IsNullOrEmpty(layerData.PrefabIdentifier))
+            {
+                return null; //a folder has no visualization, if there is no prefab ID, there is no visualization (possibly legacy Folder data structure). The string "folder" comes from the LayerBuilder.Type, and maybe should be changed so we don't have to do a hard check here
+            }
             var prefab = prefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
             return await SpawnUsingPrefab(layerData, prefab);
         }
