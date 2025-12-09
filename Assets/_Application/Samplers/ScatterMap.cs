@@ -33,10 +33,7 @@ namespace Netherlands3D.Twin.Samplers
 
         private Coroutine scatterCoroutine;
         private Queue<IEnumerator> coroutineQueue = new Queue<IEnumerator>(); //queue to ensure the camera only processes one request at a time
-
-        public ScatterSettingsPropertySection scatterProptertiesPrefab; //todo: find a better way to reference this.
-        public ToggleScatterPropertySection ToggleScatterPropertySection; //todo: find a better way to reference this.
-
+        
 #if UNITY_EDITOR //for debug purposes
         private Bounds polyBounds;
         private Bounds gridBounds;

@@ -8,7 +8,7 @@ namespace Netherlands3D.Twin.Layers.Properties
     /// as superclass.
     /// </summary>
     [RequireComponent(typeof(LayerGameObject))]
-    public class LayerGameObjectPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
+    public class LayerGameObjectPropertySectionInstantiator : MonoBehaviour//, IPropertySectionInstantiator //todo: delete
     {
         [SerializeField] private PropertySectionWithLayerGameObject propertySectionPrefab;
 

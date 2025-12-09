@@ -198,6 +198,24 @@ namespace Netherlands3D.Twin.Cameras
         }
 
         /// <summary>
+        /// Focus camera on a point in the world
+        /// </summary>
+        /// <param name="point">The focus point</param>
+        public void FocusOnPoint(Vector3 point) => FocusOnPoint(point, focusDistanceMultiplier);
+
+        /// <summary>
+        /// Focus camera on a point in the world
+        /// </summary>
+        /// <param name="point">The focus point</param>
+        /// <param name="distanceMultiplier">Distance from point</param>
+        public void FocusOnPoint(Vector3 point, float distanceMultiplier)
+        {
+            transform.position = point;
+            transform.eulerAngles = new Vector3((cameraComponent.orthographic) ? 90 : focusAngle, 0, 0);
+            transform.Translate(Vector3.back * distanceMultiplier, Space.Self);
+        }
+
+        /// <summary>
         /// Set dragging input to locked/unlocked. This ignores pointer drag input while still allowing other movement inputs.
         /// If another feature used mouse pointer but want to stop the camera from dragging while click+dragging, set this to locked.
         /// </summary>

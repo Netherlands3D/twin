@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
@@ -21,7 +19,7 @@ using UnityEngine.EventSystems;
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
     [RequireComponent(typeof(WorldTransform))]
-    public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, ILayerWithPropertyPanels, ILayerWithPropertyData
+    public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, IVisualizationWithPropertyData //, ILayerWithPropertyPanels
     {
         public override BoundingBox Bounds => CalculateWorldBoundsFromRenderers();
         public bool DebugBoundingBox = false;
@@ -49,41 +47,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             return new BoundingBox(bl, tr);
         }
 
-        private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         [SerializeField] private UnityEvent<GameObject> objectCreated = new();
-        private List<IPropertySectionInstantiator> propertySections = new();
-        protected TransformLayerPropertyData TransformPropertyData => LayerData.GetProperty<TransformLayerPropertyData>();
+
         private Coordinate previousCoordinate;
         private Quaternion previousRotation;
         private Vector3 previousScale;
         public WorldTransform WorldTransform { get; private set; }
 
-        LayerPropertyData ILayerWithPropertyData.PropertyData => TransformPropertyData;
-        public bool TransformIsSetFromProperty { get; private set; } = false;
-
+        [SerializeField] private string scaleUnitCharacter = "%";
+        
         protected override void OnLayerInitialize()
         {
             snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings"));
             WorldTransform = GetComponent<WorldTransform>();
-
-            InitializePropertyData();
-
-            propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
-            toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
-        }
-
-        protected virtual void InitializePropertyData()
-        {
-            if (!LayerData.HasProperty<TransformLayerPropertyData>())
-            {
-                LayerData.SetProperty(
-                    new TransformLayerPropertyData(
-                        new Coordinate(transform.position),
-                        transform.eulerAngles,
-                        transform.localScale
-                    )
-                );
-            }
         }
 
         protected override void OnEnable()
@@ -100,25 +76,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected override void OnLayerReady()
         {
+            TransformLayerPropertyData transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformProperty.IsEditable = true;
+            UpdatePosition(transformProperty.Position);
+            UpdateRotation(transformProperty.EulerRotation);
+            UpdateScale(transformProperty.LocalScale);
+
+            ToggleScatterPropertyData scatterProperty = LayerData.GetProperty<ToggleScatterPropertyData>();
+            scatterProperty.AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
+
             WorldTransform.RecalculatePositionAndRotation();
             previousCoordinate = WorldTransform.Coordinate;
             previousRotation = WorldTransform.Rotation;
             previousScale = transform.localScale;
+
+            objectCreated.Invoke(gameObject);       
             
-            objectCreated.Invoke(gameObject);
 
-            //listen to property changes in start and OnDestroy because the object should still update its transform even when disabled
-            TransformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
-            TransformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
-            TransformPropertyData.OnScaleChanged.AddListener(UpdateScale);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            TransformPropertyData?.OnPositionChanged.RemoveListener(UpdatePosition);
-            TransformPropertyData?.OnRotationChanged.RemoveListener(UpdateRotation);
-            TransformPropertyData?.OnScaleChanged.RemoveListener(UpdateScale);
         }
 
         private void UpdatePosition(Coordinate newPosition)
@@ -163,20 +137,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             public Vector3 PreviousPosition;
             public OpticalRaycaster Raycaster;
             public HierarchicalObjectLayerGameObject Target;
-            public int cullingMask; 
+            public int cullingMask;
 
             public void SnapFromPosition(Vector3 position)
             {
-               Raycaster.GetWorldPointFromDirectionAsync(
-                   position,
-                   Vector3.down,
-                   OnRaycastDown,
-                   cullingMask
-               );
+                Raycaster.GetWorldPointFromDirectionAsync(
+                    position,
+                    Vector3.down,
+                    OnRaycastDown,
+                    cullingMask
+                );
             }
 
             private void OnRaycastDown(Vector3 worldPos, bool hit)
-            {                
+            {
                 if (hit)
                 {
                     Coordinate target = new Coordinate(worldPos + Vector3.up * (HeightExtent - PivotOffset));
@@ -194,7 +168,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
 
             private void OnRaycastUp(Vector3 worldPos, bool hit)
-            {                
+            {
                 if (hit)
                 {
                     Coordinate target = new Coordinate(worldPos + Vector3.up * (-HeightExtent - PivotOffset));
@@ -213,55 +187,65 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
-            var transformProperty = properties.Get<TransformLayerPropertyData>();
-            if (transformProperty == null) return;
-
-            if (TransformPropertyData != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
-            {
-                TransformPropertyData.OnPositionChanged.RemoveListener(UpdatePosition);
-                TransformPropertyData.OnRotationChanged.RemoveListener(UpdateRotation);
-                TransformPropertyData.OnScaleChanged.RemoveListener(UpdateScale);
-            }
-
-            LayerData.SetProperty(transformProperty);
-
-            UpdatePosition(transformProperty.Position);
-            UpdateRotation(transformProperty.EulerRotation);
-            UpdateScale(transformProperty.LocalScale);
-            TransformIsSetFromProperty = true;
-
-            transformProperty.OnPositionChanged.AddListener(UpdatePosition);
-            transformProperty.OnRotationChanged.AddListener(UpdateRotation);
-            transformProperty.OnScaleChanged.AddListener(UpdateScale);
+            InitProperty<TransformLayerPropertyData>(properties, null, new Coordinate(transform.position),
+                        transform.eulerAngles,
+                        transform.localScale,
+                        scaleUnitCharacter);
+            InitProperty<ToggleScatterPropertyData>(properties, p => p.AllowScatter = true);
+            InitProperty<StylingPropertyData>(properties);
         }
-        
+
+        protected override void RegisterEventListeners()
+        {
+            base.RegisterEventListeners();
+            var transformPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
+            transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
+            transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
+
+            var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
+            toggleScatterPropertyData.IsScatteredChanged.AddListener(ConvertToScatterLayer);
+        }
+
+        protected override void UnregisterEventListeners()
+        {
+            base.UnregisterEventListeners();
+            var transformPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformPropertyData?.OnPositionChanged.RemoveListener(UpdatePosition);
+            transformPropertyData?.OnRotationChanged.RemoveListener(UpdateRotation);
+            transformPropertyData?.OnScaleChanged.RemoveListener(UpdateScale);
+
+            var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
+            toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToScatterLayer);
+        }
+
         protected virtual void Update()
         {
             //Position and rotation changes are handled by the WorldTransform, but should be updated in the project data
             //todo: add a == and != operator to Coordinate.cs to avoid having to do this
-            if(Math.Abs(WorldTransform.Coordinate.value1 - previousCoordinate.value1) > 0.0001d ||
-               Math.Abs(WorldTransform.Coordinate.value2 - previousCoordinate.value2) > 0.0001d ||
-               Math.Abs(WorldTransform.Coordinate.value3 - previousCoordinate.value3) > 0.0001d)
+            if (Math.Abs(WorldTransform.Coordinate.value1 - previousCoordinate.value1) > 0.0001d ||
+                Math.Abs(WorldTransform.Coordinate.value2 - previousCoordinate.value2) > 0.0001d ||
+                Math.Abs(WorldTransform.Coordinate.value3 - previousCoordinate.value3) > 0.0001d)
             {
-                TransformPropertyData.Position = WorldTransform.Coordinate;
+                LayerData.GetProperty<TransformLayerPropertyData>().Position = WorldTransform.Coordinate;
                 previousCoordinate = WorldTransform.Coordinate;
             }
-            
+
             if (WorldTransform.Rotation != previousRotation)
             {
-                TransformPropertyData.EulerRotation = WorldTransform.Rotation.eulerAngles;
+                LayerData.GetProperty<TransformLayerPropertyData>().EulerRotation = WorldTransform.Rotation.eulerAngles;
                 previousRotation = WorldTransform.Rotation;
             }
-            
+
             // Check for scale change
             if (transform.localScale != previousScale)
             {
-                TransformPropertyData.LocalScale = transform.localScale;
+                LayerData.GetProperty<TransformLayerPropertyData>().LocalScale = transform.localScale;
                 previousScale = transform.localScale;
             }
 
             //enable this to debug the exact bounds in worldspace, based on the Bounds (3d)
-            if(DebugBoundingBox)
+            if (DebugBoundingBox)
                 Bounds.Debug(Color.magenta);
         }
 
@@ -319,18 +303,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
         }
 
-        public List<IPropertySectionInstantiator> GetPropertySections()
+        public override void OnLayerDataParentChanged()
         {
-            return propertySections;
-        }
-
-        public override void OnProxyTransformParentChanged()
-        {
-            // TODO: Is this a valid scenario - or worthy of an error message?
-            if (!toggleScatterPropertySectionInstantiator) return;
-            if (!toggleScatterPropertySectionInstantiator.PropertySection) return;
-
-            toggleScatterPropertySectionInstantiator.PropertySection.TogglePropertyToggle();
+            LayerData.LayerProperties.Get<ToggleScatterPropertyData>().AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
         }
 
         public override void ApplyStyling()
@@ -338,14 +313,46 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             // Dynamically create a list of Layer features because a different set of renderers could be present after
             // an import or replacement.
             var features = CreateFeaturesByType<MeshRenderer>();
-            
+
+           
             // Apply style to the features that was discovered
             foreach (var feature in features)
             {
-                HierarchicalObjectLayerStyler.Apply(this, GetStyling(feature), feature);
+                if (feature.Geometry is not MeshRenderer meshRenderer) return;
+
+                Symbolizer styling = GetStyling(feature);
+                var fillColor = styling.GetFillColor();
+
+                // Keep the original material color if fill color is not set (null)
+                if (!fillColor.HasValue) return;
+
+                LayerData.Color = fillColor.Value;
+                var block = new MaterialPropertyBlock();
+                for (int m = 0; m <= meshRenderer.sharedMaterials.Length - 1; m++)
+                {
+                    meshRenderer.GetPropertyBlock(block, m);
+                    block.SetColor(BaseColorID, fillColor.Value);
+                    meshRenderer.SetPropertyBlock(block, m);
+                }
             }
-            
+
             base.ApplyStyling();
+        }
+
+        private static readonly int BaseColorID = Shader.PropertyToID("_BaseColor");
+      
+
+        private void ConvertToScatterLayer(bool isScattered)
+        {
+            if (!isScattered)
+                return;            
+           
+            InitProperty<ScatterGenerationSettingsPropertyData>(LayerData.LayerProperties, null, LayerData.PrefabIdentifier);
+
+            LayerData.DeselectLayer(); //remove any transform interaction that might be present
+
+            App.Layers.VisualizeAs(LayerData, ObjectScatterLayerGameObject.ScatterBasePrefabID);
+           
         }
     }
 }

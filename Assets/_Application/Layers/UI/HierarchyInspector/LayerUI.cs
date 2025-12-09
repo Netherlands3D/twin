@@ -12,6 +12,7 @@ using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using UnityEngine.Serialization;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.UI;
 
 namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
@@ -174,7 +175,9 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             Layer.ChildrenChanged.AddListener(OnLayerChildrenChanged);
             Layer.ParentOrSiblingIndexChanged.AddListener(OnParentOrSiblingIndexChanged);
             Layer.LayerDestroyed.AddListener(DestroyUI);
-            Layer.OnPrefabIdChanged.AddListener(UpdateReference);
+            Layer.OnPrefabIdChanged.AddListener(RebuildUI);
+            Layer.PropertySet.AddListener(OnPropertiesChanged);
+            Layer.PropertyRemoved.AddListener(OnPropertiesChanged);
 
             MarkLayerUIAsDirty();
 
@@ -746,10 +749,17 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             Layer.ChildrenChanged.RemoveListener(OnLayerChildrenChanged);
             Layer.ParentOrSiblingIndexChanged.RemoveListener(OnParentOrSiblingIndexChanged);
             Layer.LayerDestroyed.RemoveListener(DestroyUI);
-            Layer.OnPrefabIdChanged.RemoveListener(UpdateReference);
+            Layer.OnPrefabIdChanged.RemoveListener(RebuildUI);
+            Layer.PropertySet.RemoveListener(OnPropertiesChanged);
+            Layer.PropertyRemoved.RemoveListener(OnPropertiesChanged);
         }
         
-        private void UpdateReference()
+        private void OnPropertiesChanged(LayerPropertyData propertyData)
+        {
+            RebuildUI();
+        }
+        
+        private void RebuildUI()
         {
             MarkLayerUIAsDirty();
             RegisterWithPropertiesPanel(ServiceLocator.GetService<Properties.Properties>());
@@ -758,11 +768,10 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void RegisterWithPropertiesPanel(Properties.Properties propertiesPanel)
         {
-            var layerWithProperties = Properties.Properties.TryFindProperties(Layer);
-            var hasProperties = layerWithProperties is { HasPropertySections: true };
-            propertyToggle.gameObject.SetActive(hasProperties);
+            var hasPropertiesWithPanel = propertiesPanel.HasPropertiesWithPanel(Layer);
+            propertyToggle.gameObject.SetActive(hasPropertiesWithPanel);
 
-            if (!hasProperties)
+            if (!hasPropertiesWithPanel)
                 return;
 
             propertyToggle.group = propertiesPanel.GetComponent<ToggleGroup>();
@@ -777,8 +786,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void ToggleProperties(bool onOrOff, Properties.Properties properties)
         {
-            var layerWithProperties = Properties.Properties.TryFindProperties(Layer);
-            if (layerWithProperties == null) return; // no properties, no action
+            var hasPropertiesWithPanel = properties.HasPropertiesWithPanel(Layer);
+            if (!hasPropertiesWithPanel) return; // no properties, no action
 
             if (!onOrOff)
             {
@@ -786,7 +795,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 return;
             }
 
-            properties.Show(layerWithProperties);
+            properties.Show(Layer);
 
             if (!Layer.IsSelected)
             {

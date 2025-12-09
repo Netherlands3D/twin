@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.ExtensionMethods;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
@@ -10,13 +12,13 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class CartesianTileLayerFeatureColorPropertySection : PropertySectionWithLayerGameObject, IMultiSelectable
+    [PropertySection(typeof(StylingPropertyData), CartesianTileLayerStyler.LayerFeatureColoring)]
+    public class CartesianTileLayerFeatureColorPropertySection : MonoBehaviour, IVisualizationWithPropertyData, IMultiSelectable
     {  
         [SerializeField] private RectTransform content;
         [SerializeField] private GameObject colorSwatchPrefab;
         [SerializeField] private RectTransform layerContent;
 
-        private LayerGameObject layer;
         private readonly Dictionary<LayerFeature, ColorSwatch> swatches = new();
         [SerializeField] private ColorPickerPropertySection colorPicker;
 
@@ -25,38 +27,31 @@ namespace Netherlands3D.Twin.Layers.Properties
         public List<ISelectable> Items { get; set; } = new();
         public ISelectable FirstSelectedItem { get; set; }
 
-        public override LayerGameObject LayerGameObject
-        {
-            get => layer;
-            set => Initialize(value);
-        }       
+        private StylingPropertyData stylingPropertyData;
 
-        private void Initialize(LayerGameObject layer)
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            this.layer = layer;
+            stylingPropertyData = properties.Get<StylingPropertyData>();           
+
             CreateSwatches();
 
-            layer.LayerData.OnStylingApplied.AddListener(UpdateSwatches);
+            stylingPropertyData.OnStylingChanged.AddListener(UpdateSwatches);
+            colorPicker.ColorWheel.colorChanged.AddListener(OnPickColor);
 
-            StartCoroutine(OnPropertySectionsLoaded()); 
+            StartCoroutine(OnPropertySectionsLoaded());
         }
 
         private void OnDestroy()
         {
-            layer.LayerData.OnStylingApplied.RemoveListener(UpdateSwatches);
-            colorPicker.PickedColor.RemoveListener(OnPickColor);
+            stylingPropertyData.OnStylingChanged.RemoveListener(UpdateSwatches);
+            colorPicker.ColorWheel.colorChanged.RemoveListener(OnPickColor);
         }
 
         private IEnumerator OnPropertySectionsLoaded()
         {
-            yield return new WaitForEndOfFrame();
-
-            // Reset listeners to prevent default behaviour
-            colorPicker.PickedColor.RemoveAllListeners();
-            colorPicker.LayerGameObject = layer;
-            colorPicker.PickedColor.AddListener(OnPickColor);
+            yield return new WaitForEndOfFrame(); 
+            
             HideColorPicker();
-
             // workaround to have a minimum height for the content loaded (because of scrollrects)
             LayoutElement layout = GetComponent<LayoutElement>();
             layout.minHeight = content.rect.height;
@@ -66,8 +61,21 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             swatches.Clear();
             layerContent.ClearAllChildren();
-            foreach (var layerFeature in layer.LayerFeatures.Values)
+
+            //TODO this could be personal, but a hunch these (runtime only) layerfeatures should be part of a data container so this propertysection and other logic should not be visualisation dependent
+            CartesianTileLayerGameObject visualization = FindObjectsByType<CartesianTileLayerGameObject>(FindObjectsSortMode.None).ToList()
+                .FirstOrDefault(v => v.LayerData.GetProperty<StylingPropertyData>() == stylingPropertyData);
+
+            if(visualization == null) 
             {
+                Debug.LogError("invalid visualisation!");
+                return;
+            }
+
+            foreach (var layerFeature in visualization.LayerFeatures.Values)
+            {
+                if (layerFeature.Geometry is not Material) continue;
+
                 swatches[layerFeature] = CreateSwatch(layerFeature);
                 SetSwatchColorFromFeature(layerFeature);
             }
@@ -115,13 +123,8 @@ namespace Netherlands3D.Twin.Layers.Properties
                 if (!swatch.IsSelected) continue;
                 
                 swatch.SetColor(color);
-                SetColorizationStylingRule(layerFeature, color);
+                CartesianTileLayerStyler.SetColor(layerFeature, color, stylingPropertyData);
             }
-        }
-
-        private void SetColorizationStylingRule(LayerFeature layerFeature, Color color)
-        {
-            (layer.Styler as CartesianTileLayerStyler).SetColor(layerFeature, color);
         }
 
         private void UpdateSwatches()
@@ -137,7 +140,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             // if there is no swatch matching this layer feature, we can skip this update
             if (!swatches.TryGetValue(layerFeature, out var swatch)) return;
             
-            var color = (layer.Styler as CartesianTileLayerStyler).GetColor(layerFeature);
+            var color = CartesianTileLayerStyler.GetColor(layerFeature, stylingPropertyData);
 
             swatch.SetColor(color.GetValueOrDefault(Color.white));
         }
@@ -145,11 +148,12 @@ namespace Netherlands3D.Twin.Layers.Properties
         private void ShowColorPicker()
         {
             colorPicker.gameObject.SetActive(true);
+            colorPicker.LoadProperties(new List<LayerPropertyData>() { stylingPropertyData });
         }
 
         private void HideColorPicker()
         {
             colorPicker.gameObject.SetActive(false);
-        }
+        }       
     }
 }

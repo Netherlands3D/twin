@@ -13,8 +13,9 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
+    //TODO STYLING: add stylingpropertydata to this layer
     [Serializable]
-    public partial class GeoJSONPolygonLayer : LayerGameObject, IGeoJsonVisualisationLayer
+    public partial class GeoJSONPolygonLayer : LayerGameObject, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
     {
         private GeoJsonPolygonLayerMaterialApplicator applicator;
         internal GeoJsonPolygonLayerMaterialApplicator Applicator
@@ -52,29 +53,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 }
                 polygonVisualizationMaterialInstance = new Material(value);
 
-                LayerData.OnStylingApplied.Invoke();
+                ApplyStyling();
             }
-        }
-        
-        private List<IPropertySectionInstantiator> propertySections;
-
-        protected List<IPropertySectionInstantiator> PropertySections
-        {
-            get
-            {
-                if (propertySections == null)
-                {
-                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
-                }
-
-                return propertySections;
-            }
-            set => propertySections = value;
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return PropertySections;
         }
 
         public List<Mesh> GetMeshData(Feature feature)
@@ -214,8 +194,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
+            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
             // The color in the Layer Panel represents the default fill color for this layer
-            LayerData.Color = LayerData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
+            LayerData.Color = stylingPropertyData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
 
             MaterialApplicator.Apply(Applicator);
             foreach (var visualisation in spawnedVisualisations)
@@ -313,6 +294,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var crs2D = CoordinateSystems.To2D(bbox.CoordinateSystem);
             bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
+        }
+
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            //copy the parent styles in this layer
+            var parentStyleStyles = LayerData?.ParentLayer?.GetProperty<StylingPropertyData>().Styles;
+            InitProperty<StylingPropertyData>(properties, null, parentStyleStyles);
         }
     }
 }

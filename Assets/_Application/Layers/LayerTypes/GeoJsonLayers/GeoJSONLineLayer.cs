@@ -5,6 +5,7 @@ using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
@@ -12,8 +13,9 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
+    //TODO STYLING: add stylingpropertydata to this layer
     [Serializable]
-    public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer
+    public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
     {
         public bool IsPolygon => false;
         public override bool IsMaskable => false;
@@ -56,6 +58,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // of a material asset when replacing the material - no destroy of the old material must be done because
             // that is an asset and not an instance
             lineRenderer3D.LineMaterial = new Material(lineRenderer3D.LineMaterial);
+            var stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            stylingPropertyData.ActiveToolProperty = Symbolizer.StrokeColorProperty;
         }
 
         public List<Mesh> GetMeshData(Feature feature)
@@ -162,7 +166,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public override void ApplyStyling()
         {
             // The color in the Layer Panel represents the default stroke color for this layer
-            LayerData.Color = LayerData.DefaultSymbolizer?.GetStrokeColor() ?? LayerData.Color;
+            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            LayerData.Color = stylingPropertyData.DefaultSymbolizer?.GetStrokeColor() ?? LayerData.Color;
 
             MaterialApplicator.Apply(this.Applicator);
         }
@@ -236,26 +241,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
         }
-
-        private List<IPropertySectionInstantiator> propertySections;
-
-        protected List<IPropertySectionInstantiator> PropertySections
+        
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            get
-            {
-                if (propertySections == null)
-                {
-                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
-                }
-
-                return propertySections;
-            }
-            set => propertySections = value;
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return PropertySections;
+            //copy the parent styles in this layer
+            var parentStyleStyles = LayerData?.ParentLayer?.GetProperty<StylingPropertyData>().Styles;
+            InitProperty<StylingPropertyData>(properties, null, parentStyleStyles);
         }
     }
 }

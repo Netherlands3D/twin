@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28cced23e91f74fd08028f2f8ae48fad, type: 3}
+  m_Name: PropertySectionRegistry
+  m_EditorClassIdentifier: 
+  Entries:
+  - TypeName: Netherlands3D.Functionalities.ObjectLibrary.WindmillPropertyData, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 7185160580400989932, guid: 4d2ed55a8b4bec140a8d4a78fa283812,
+      type: 3}
+  - TypeName: Netherlands3D.Twin.Layers.Properties.StylingPropertyData, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 7610518432015451019, guid: c78b9cbfeb6b857479e94e59739d2347,
+      type: 3}
+  - TypeName: Netherlands3D.Functionalities.OBJImporter.OBJPropertyData, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 5078733024073835164, guid: e2706125b4e8b43429f60205608c5a9b,
+      type: 3}
+  - TypeName: Netherlands3D.Functionalities.OBJImporter.OBJPropertyData, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 5078733024073835164, guid: e3551a6eb7620214c9a2399f9004680f,
+      type: 3}
+  - TypeName: Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties.PolygonSelectionLayerPropertyData,
+      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 7185160580400989932, guid: 599137b5f8b96463dbf2bd16d71cd26d,
+      type: 3}
+  - TypeName: Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties.ScatterGenerationSettingsPropertyData,
+      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 7185160580400989932, guid: 268ed3efe96c84284a00792823db0330,
+      type: 3}
+  - TypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.ToggleScatterPropertyData,
+      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 7185160580400989932, guid: 78bb15813f932433888f9c5536c7f12a,
+      type: 3}
+  - TypeName: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformLayerPropertyData,
+      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 1252027859236190791, guid: b2b695c4876427c439761dd2521bf672,
+      type: 3}
+  - TypeName: Netherlands3D.Twin.Layers.Properties.ILayerPropertyDataWithCRS, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 7185160580400989932, guid: aec1cc38c05be4c69b9adb0159593506,
+      type: 3}
+  - TypeName: Netherlands3D.Twin.Layers.Properties.StylingPropertyData, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 5529894738576217112, guid: ca4dfb99b441c8b45bdab6fe8cb84efa,
+      type: 3}
+  - TypeName: Netherlands3D.Twin.Layers.Properties.StylingPropertyData, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 5529894738576217112, guid: 69c9fe71d167b9845a064a899ec7ce25,
+      type: 3}

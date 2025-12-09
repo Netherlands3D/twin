@@ -1,40 +1,41 @@
 using Netherlands3D.Twin.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
     public class Properties : MonoBehaviour
     {
-        public static Properties Instance { get; private set; }
-
         [SerializeField] private GameObject card;
         [SerializeField] private RectTransform sections;
-        
-        private void Awake()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-                return;
-            }
-
-            Destroy(gameObject);
-        }
+        [SerializeField] private PropertySectionRegistry registry;
 
         private void Start()
         {
             Hide();
         }
         
-        public void Show(ILayerWithPropertyPanels layer)
+        public void Show(LayerData layer)
         {
             card.SetActive(true);
             sections.ClearAllChildren();
-            foreach (var propertySection in layer.GetPropertySections())
+            
+            foreach (var property in layer.LayerProperties)
             {
-                propertySection.AddToProperties(sections);
+                if(property.IsEditable == false) continue;
+
+                var type = property.GetType();
+                var prefabs = registry.GetPanelPrefabs(type, property);                
+                if (prefabs.Count > 0)
+                {
+                    foreach(var prefab in prefabs)
+                    {
+                        IVisualizationWithPropertyData prefabPanel = prefab.GetComponent<IVisualizationWithPropertyData>();
+                        if (!layer.allowedPropertySections.Contains(prefabPanel.GetType().AssemblyQualifiedName)) continue;
+
+                        var panel = Instantiate(prefab, sections);
+                        panel.GetComponent<IVisualizationWithPropertyData>().LoadProperties(layer.LayerProperties);
+                    }
+                }
             }
         }
 
@@ -43,11 +44,25 @@ namespace Netherlands3D.Twin.Layers.Properties
             card.gameObject.SetActive(false);
             sections.ClearAllChildren();
         }
-        
-        public static ILayerWithPropertyPanels TryFindProperties(LayerData layer)
+
+        public bool HasPropertiesWithPanel(LayerData layer)
         {
-            LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier); //todo: this now gives an error if the prefabID is not in the library (e.g. folderLayers)
-            return (template == null) ? layer as ILayerWithPropertyPanels : template as ILayerWithPropertyPanels;
+            foreach (var property in layer.LayerProperties)
+            {
+                var type = property.GetType();
+                if (registry.HasPanel(type))
+                    return true;
+                
+                foreach (var interfaceType in type.GetInterfaces())
+                {
+                    if (registry.HasPanel(interfaceType))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

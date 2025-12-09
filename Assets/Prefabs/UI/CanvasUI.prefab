@@ -282,6 +282,9 @@ MonoBehaviour:
   - {fileID: 7002829453032552845}
   hideButton: {fileID: 4738308340472357476, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
     type: 3}
+  snackbarEvent: {fileID: 11400000, guid: 882c7f2cbbcbc4ae68cd7ae166c6a838, type: 2}
+  fpvExitText: Druk op 'backspace' om je muis te ontgrendelen.
+  uiHideText: Druk op 'H' om de interfaces weer te tonen.
 --- !u!1 &5631424678328310606
 GameObject:
   m_ObjectHideFlags: 0
@@ -317,7 +320,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -0.000061035156, y: 148.5587}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &1444187355798821787

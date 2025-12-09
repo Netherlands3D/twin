@@ -10,6 +10,7 @@ using System.Linq;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
@@ -18,7 +19,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [RequireComponent(typeof(ICredentialHandler))]
-    public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
+    public class GeoJsonLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
     {
         public override BoundingBox Bounds
         {
@@ -74,11 +75,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         List<PendingFeature> pendingPolygonFeatures = new();
         List<PendingFeature> pendingLineFeatures = new();
         List<PendingFeature> pendingPointFeatures = new();
-
-        [Space] protected LayerURLPropertyData urlPropertyData = new();
-
-        public LayerPropertyData PropertyData => urlPropertyData;
-
+        
         protected override void OnLayerInitialize()
         {
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
@@ -92,6 +89,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         protected virtual void StartLoadingData()
         {
+            LayerURLPropertyData urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             if (urlPropertyData.Data.IsStoredInProject())
             {
                 string path = AssetUriFactory.GetLocalPath(urlPropertyData.Data);
@@ -106,6 +104,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         protected void RequestCredentials()
         {
             var credentialHandler = GetComponent<ICredentialHandler>();
+            LayerURLPropertyData urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             credentialHandler.Uri = urlPropertyData.Data;
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             credentialHandler.ApplyCredentials();
@@ -146,11 +145,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// </summary>
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
-            var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
-            if (urlProperty != null)
-            {
-                this.urlPropertyData = urlProperty;
-            }
+            InitProperty<StylingPropertyData>(properties);
+            //Initialize the styling with the default color that is gotten from the LayerData.Color
+            var stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            stylingPropertyData.DefaultSymbolizer.SetFillColor(LayerData.Color);
+            stylingPropertyData.DefaultSymbolizer.SetStrokeColor(LayerData.Color);
         }
 
         /// <summary>
@@ -212,11 +211,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private void SetVisualization(IGeoJsonVisualisationLayer layer, List<PendingFeature> pendingFeatures)
         {
             layer.LayerData.Color = LayerData.Color;
-
-            // Replace default style with the parent's default style
-            layer.LayerData.RemoveStyle(layer.LayerData.DefaultStyle);
-            layer.LayerData.AddStyle(LayerData.DefaultStyle);
-            layer.LayerData.SetParent(LayerData);
             layer.FeatureRemoved += OnFeatureRemoved;
 
             foreach (var pendingFeature in pendingFeatures)
@@ -270,11 +264,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 if (child.PrefabIdentifier == prefab.PrefabIdentifier)
                 {
                     //todo: check if the async visualisation spawning has issues with destroying the layerData before the visualisation is loaded
-                    child.DestroyLayer(); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
+                    App.Layers.Remove(child); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
                 }
             }
 
-            ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs(prefab.name);
+            ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs(prefab.name).ChildOf(LayerData);
             App.Layers.Add(layerBuilder, callBack);
         }
 

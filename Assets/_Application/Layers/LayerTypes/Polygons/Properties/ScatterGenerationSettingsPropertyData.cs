@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -6,24 +7,25 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 {
-    [Serializable]
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "ScatterGenerationSettings")]
     public class ScatterGenerationSettingsPropertyData : LayerPropertyData
     {
-        [SerializeField, JsonProperty] private string originalObjectPrefabId;
-        [SerializeField, JsonProperty] private float density = 1f;
-        [SerializeField, JsonProperty] private float scatter = 0f;
-        [SerializeField, JsonProperty] private float angle = 0f;
-        [SerializeField, JsonProperty] private Vector3 minScale = Vector3.one;
-        [SerializeField, JsonProperty] private Vector3 maxScale = Vector3.one;
-        [SerializeField, JsonProperty] private FillType fillType = FillType.Complete;
-        [SerializeField, JsonProperty] private float strokeWidth = 1f;
+        [DataMember] private string originalObjectPrefabId;
+        [DataMember] private float density = 1000f;
+        [DataMember] private float scatter = 0f;
+        [DataMember] private float angle = 0f;
+        [DataMember] private Vector3 minScale = Vector3.one * 3;
+        [DataMember] private Vector3 maxScale = Vector3.one * 6;
+        [DataMember] private FillType fillType = FillType.Complete;
+        [DataMember] private float strokeWidth = 1f;
 
         [JsonIgnore] public UnityEvent ScatterSettingsChanged = new UnityEvent(); //called when the settings of the to be scattered objects change, without needing to regenerate the sampler texture
         [JsonIgnore] public UnityEvent ScatterShapeChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
         [JsonIgnore] public UnityEvent ScatterDistributionChanged = new UnityEvent(); //called when the settings of the shape should change, thereby needing a regenerating of the sampler texture
 
-        public ScatterGenerationSettingsPropertyData()
+        public ScatterGenerationSettingsPropertyData(string originalObjectPrefabId) //todo: check if parameterless constructor is needed to avoid errors in the build
         {
+            this.originalObjectPrefabId = originalObjectPrefabId;
         }
         
         [JsonConstructor]
@@ -37,12 +39,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             this.maxScale = maxScale;
             this.fillType = fillType;
             this.strokeWidth = strokeWidth;
-            AutoRotateToLine = autoRotateToLine;
+            AutoRotateToLine = autoRotateToLine; //todo: remove this
         }
 
-        [JsonProperty] public bool AutoRotateToLine { get; set; } = false; //todo: is it needed to serialize this?
+        [DataMember] public bool AutoRotateToLine { get; set; } = false; //todo: is it needed to serialize this?
 
-        [JsonIgnore] public string OriginalPrefabId
+        [JsonIgnore] 
+        public string OriginalPrefabId
         {
             get => originalObjectPrefabId;
             set

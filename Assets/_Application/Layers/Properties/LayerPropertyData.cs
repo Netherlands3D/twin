@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -14,5 +15,13 @@ namespace Netherlands3D.Twin.Layers.Properties
         /// property; such as assets. 
         /// </summary>
         [DataMember] public Guid UUID = Guid.NewGuid();
+
+        [JsonIgnore] protected bool isEditable = true;
+
+        [JsonIgnore] public bool IsEditable
+        {
+            get => isEditable;
+            set => isEditable = value;
+        }
     }
 }

@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 {
-    public class PolygonPropertySectionInstantiator : MonoBehaviour, IPropertySectionInstantiator
+    public class PolygonPropertySectionInstantiator : MonoBehaviour//, IPropertySectionInstantiator //todo: delete
     {
-        public void AddToProperties(RectTransform properties)
-        {
-            if (!PolygonInputToLayer.PolygonPropertySectionPrefab) return;
-
-            var settings = Instantiate(PolygonInputToLayer.PolygonPropertySectionPrefab, properties);
-            settings.PolygonLayer = GetComponent<PolygonSelectionVisualisation>().LayerData as PolygonSelectionLayer;
-        }
+        // public void AddToProperties(RectTransform properties)
+        // {
+        //     if (!PolygonInputToLayer.PolygonPropertySectionPrefab) return;
+        //
+        //     var settings = Instantiate(PolygonInputToLayer.PolygonPropertySectionPrefab, properties);
+        //     settings.PolygonLayer = GetComponent<PolygonSelectionVisualisation>().LayerData as PolygonSelectionLayer;
+        // }
     }
 }

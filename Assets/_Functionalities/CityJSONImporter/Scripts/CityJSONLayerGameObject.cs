@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Netherlands3D.CityJson.Visualisation;
+using Netherlands3D.Twin.Layers.Properties;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
@@ -9,18 +10,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         
         public override void ApplyStyling()
         {
+            base.ApplyStyling();
             foreach (var feature in layerFeatures)
             {
                 ApplyStylingToFeature(feature);
             }
-            LayerData.OnStylingApplied.Invoke();
         }
         
         private void ApplyStylingToFeature(LayerFeature feature)
         {
             if (feature.Geometry is not CityObjectVisualizer visualizer) return;
-        
-            var symbolizer = LayerData.DefaultStyle.AnyFeature.Symbolizer;
+
+            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            var symbolizer = stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer;
             var fillColor = symbolizer.GetFillColor();
             if (fillColor.HasValue)
                 visualizer.SetFillColor(fillColor.Value);

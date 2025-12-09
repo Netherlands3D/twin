@@ -3,6 +3,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.SerializableGisExpressions;
 using Netherlands3D.SubObjects;
+using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
     /// Cartesian Tile layers can be styled by changing the color for a material - or set of layer features. This class
     /// can provide helpers to ensure a consistent set of styling rules is made, and to manage them.  
     /// </summary>
-    public class CartesianTileLayerStyler : IStyler
+    public class CartesianTileLayerStyler
     {
         public const string MaterialNameIdentifier = "data-materialname";
         public const string MaterialIndexIdentifier = "data-materialindex";
@@ -23,19 +24,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         public const string VisibilityAttributePositionIdentifier = "data-visibility-position";
         public const string VisibilityIdentifier = "visibility";
 
+        public const string LayerFeatureColoring = "LayerFeatureColoring";
+
         public static ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
 
-        private LayerGameObject layer;
 
         public CartesianTileLayerStyler(LayerGameObject layer)
         {
-            this.layer = layer;
+           
         }
 
         /// <summary>
         /// Sets a custom color for all layer features matching the material index of the given layer feature.
         /// </summary>
-        public void SetColor(LayerFeature layerFeature, Color color)
+        public static void SetColor(LayerFeature layerFeature, Color color, StylingPropertyData stylingPropertyData)
         {
             int.TryParse(layerFeature.Attributes[MaterialIndexIdentifier], out int materialIndexIdentifier);
 
@@ -51,8 +53,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             );
             stylingRule.Symbolizer.SetFillColor(color);
 
-            layer.LayerData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
-            layer.LayerData.OnStylingApplied.Invoke(); //todo this should be done on change instead of manually called
+            stylingPropertyData.SetDefaultStylingRule(stylingRuleName, stylingRule);
         }
 
         /// <summary>
@@ -61,27 +62,30 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         /// This method will provide a color override that has been set earlier, or it will return the current
         /// material's color if none was set. This can help in the UI to set swatches.
         /// </summary>
-        public Color? GetColor(LayerFeature layerFeature)
+        public static Color? GetColor(LayerFeature layerFeature, StylingPropertyData data)
         {
+            if (layerFeature.Geometry is not Material mat) return null;
+
             int.TryParse(layerFeature.GetAttribute(MaterialIndexIdentifier), out int materialIndexIdentifier);
             var stylingRuleName = ColorizationStyleRuleName(materialIndexIdentifier);
 
-            var defaultColor = ((Material)layerFeature.Geometry).color;
-            if (!layer.LayerData.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
+            if (!data.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
             {
-                return defaultColor;
+                if(mat.HasProperty("_Color") || mat.HasProperty("_BaseColor")) //TODO check a list of standardized tags for color properties
+                    return mat.color;
+                else
+                    return null;
             }
-
             return stylingRule.Symbolizer.GetFillColor();
         }
 
-        public void SetVisibilityForSubObject(LayerFeature layerFeature, bool visible, Coordinate coordinate)
+        public static void SetVisibilityForSubObject(LayerFeature layerFeature, bool visible, Coordinate coordinate, StylingPropertyData stylingPropertyData)
         {
             string id = layerFeature.Attributes[VisibilityAttributeIdentifier];
-            SetVisibilityForSubObjectByAttributeTag(id, visible, coordinate);
+            SetVisibilityForSubObjectByAttributeTag(id, visible, coordinate, stylingPropertyData);
         }   
         
-        public void SetVisibilityForSubObjectByAttributeTag(string objectId, bool visible, Coordinate coordinate)
+        public static void SetVisibilityForSubObjectByAttributeTag(string objectId, bool visible, Coordinate coordinate, StylingPropertyData stylingPropertyData)
         {
             var stylingRuleName = VisibilityStyleRuleName(objectId);
 
@@ -96,22 +100,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             stylingRule.Symbolizer.SetVisibility(visible);
             stylingRule.Symbolizer.SetCustomProperty(VisibilityAttributePositionIdentifier, coordinate);
             
-
-            layer.LayerData.DefaultStyle.StylingRules[stylingRuleName] = stylingRule;
-            layer.LayerData.OnStylingApplied.Invoke();
+            stylingPropertyData.SetDefaultStylingRule(stylingRuleName, stylingRule);
         }
 
-        public bool? GetVisibilityForSubObject(LayerFeature layerFeature)
+        public static bool? GetVisibilityForSubObject(LayerFeature layerFeature, StylingPropertyData stylingPropertyData)
         {
             string id = layerFeature.GetAttribute(VisibilityAttributeIdentifier);
-            return GetVisibilityForSubObjectByAttributeTag(id);
+            return GetVisibilityForSubObjectByAttributeTag(id, stylingPropertyData);
         }
 
-        public bool? GetVisibilityForSubObjectByAttributeTag(string id)
+        public static bool? GetVisibilityForSubObjectByAttributeTag(string id, StylingPropertyData data)
         {
             var stylingRuleName = VisibilityStyleRuleName(id);
 
-            if (!layer.LayerData.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
+            if (!data.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
             {
                 return true;
             }
@@ -119,64 +121,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             return stylingRule.Symbolizer.GetVisibility();
         }
 
-        public void RemoveVisibilityForSubObjectByAttributeTag(string id)
+        public static void RemoveVisibilityForSubObjectByAttributeTag(string id, StylingPropertyData stylingPropertyData)
         {
             var stylingRuleName = VisibilityStyleRuleName(id);
-            bool dataRemoved = layer.LayerData.DefaultStyle.StylingRules.Remove(stylingRuleName);
+            bool dataRemoved = stylingPropertyData.DefaultStyle.StylingRules.Remove(stylingRuleName);
         }
 
-        public Coordinate? GetVisibilityCoordinateForSubObject(LayerFeature layerFeature)
+        public static Coordinate? GetVisibilityCoordinateForSubObject(LayerFeature layerFeature, StylingPropertyData stylingPropertyData)
         {
             string id = layerFeature.GetAttribute(VisibilityAttributeIdentifier);
-            return GetVisibilityCoordinateForSubObjectByTag(id);
+            return GetVisibilityCoordinateForSubObjectByTag(id, stylingPropertyData);
         }
 
-        public Coordinate? GetVisibilityCoordinateForSubObjectByTag(string objectId)
+        public static Coordinate? GetVisibilityCoordinateForSubObjectByTag(string objectId, StylingPropertyData stylingPropertyData)
         {
             var stylingRuleName = VisibilityStyleRuleName(objectId);
-            if (!layer.LayerData.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
+            if (!stylingPropertyData.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
             {
                 return null;
             }
             return stylingRule.Symbolizer.GetCustomProperty<Coordinate>(VisibilityAttributePositionIdentifier);
-        }
-
-        /// <summary>
-        /// The other methods deal with manipulating the styles for a layerfeature, this method takes the outcome of
-        /// those actions and applies them to the materials for the binary mesh layer.
-        /// </summary>
-        public void Apply(Symbolizer styling, LayerFeature layerFeature)
-        {
-            ApplyMaterial(styling, layerFeature);
-            ApplyVisibility(styling, layerFeature);
-        }
-
-        private void ApplyMaterial(Symbolizer styling, LayerFeature layerFeature)
-        {
-            if (layerFeature.Geometry is not Material material) return;
-
-            Color? color = styling.GetFillColor();
-            if (color.HasValue)
-            {
-                if (int.TryParse(layerFeature.Attributes[MaterialIndexIdentifier], out var materialIndex))
-                {
-                    BinaryMeshLayer binaryMeshLayer = (layer as CartesianTileLayerGameObject).Layer as BinaryMeshLayer;
-                    binaryMeshLayer.DefaultMaterialList[materialIndex].color = color.Value;
-                }
-            }
-        }
-
-        private void ApplyVisibility(Symbolizer styling, LayerFeature layerFeature)
-        {
-            if (layerFeature.Geometry is not ObjectMappingItem item) return;
-
-            bool? visiblity = styling.GetVisibility();
-            if (visiblity.HasValue)
-            {
-                string id = layerFeature.Attributes[VisibilityAttributeIdentifier];
-                var color = visiblity == true ? styling.GetFillColor() ?? Color.white : Color.clear;
-                GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, color } });
-            }            
         }
        
         private static string ColorizationStyleRuleName(int materialIndexIdentifier)

@@ -1,64 +1,46 @@
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
+using System.Collections.Generic;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
+namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
 {
-    public class ToggleScatterPropertySection : MonoBehaviour
+    [PropertySection(typeof(ToggleScatterPropertyData))]
+    public class ToggleScatterPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         [SerializeField] private Toggle convertToggle;
 
-        public LayerGameObject LayerGameObject { get; set; }
+        ToggleScatterPropertyData convertTogglePropertyData;
 
-        private void OnEnable()
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
+            convertTogglePropertyData = properties.Get<ToggleScatterPropertyData>();
+            SetSectionVisible(convertTogglePropertyData.AllowScatter);
+            
+            convertTogglePropertyData.AllowScatterChanged.AddListener(SetSectionVisible);
             convertToggle.onValueChanged.AddListener(ToggleScatter);
         }
 
-        private void OnDisable()
+        private void SetSectionVisible(bool isVisible)
         {
+            gameObject.SetActive(isVisible);
+        }
+
+        private void OnDestroy()
+        {
+            convertTogglePropertyData.AllowScatterChanged.RemoveListener(SetSectionVisible);
             convertToggle.onValueChanged.RemoveListener(ToggleScatter);
         }
 
         private void Start()
         {
-            TogglePropertyToggle();
-        }
-
-        public void TogglePropertyToggle()
-        {
-            switch (LayerGameObject)
-            {
-                case ObjectScatterLayerGameObject:
-                    gameObject.SetActive(true);
-                    convertToggle.SetIsOnWithoutNotify(true);
-                    return;
-                case HierarchicalObjectLayerGameObject objectLayer when objectLayer.LayerData.ParentLayer is PolygonSelectionLayer:
-                    gameObject.SetActive(true);
-                    convertToggle.SetIsOnWithoutNotify(false);
-                    return;
-                default:
-                    gameObject.SetActive(false);
-                    break;
-            }
+            convertToggle.SetIsOnWithoutNotify(convertTogglePropertyData.IsScattered);
         }
 
         private void ToggleScatter(bool isOn)
         {
-            string oldPrefabId = LayerGameObject.LayerData.PrefabIdentifier;
-            switch (LayerGameObject)
-            { 
-                case ObjectScatterLayerGameObject scatterLayer:
-                    App.Layers.VisualizeAs(scatterLayer.LayerData, scatterLayer.Settings.OriginalPrefabId);
-                    return;
-                case HierarchicalObjectLayerGameObject objectLayer:
-                    App.Layers.VisualizeAs(objectLayer.LayerData, ObjectScatterLayerGameObject.ScatterBasePrefabID, convertedVisualization => //todo: not make lambda to reduce allocations
-                    {
-                        ((ObjectScatterLayerGameObject)convertedVisualization).Initialize(oldPrefabId);
-                    });
-                    return;
-            }
+            convertTogglePropertyData.IsScattered = isOn;
         }
     }
 }
