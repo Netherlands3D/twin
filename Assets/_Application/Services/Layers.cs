@@ -158,7 +158,7 @@ namespace Netherlands3D.Twin.Services
             {
                 LayerGameObject visualization = await spawner.Spawn(layer.LayerData);
                 layer.SetVisualization(visualization);
-                visualization.SetData(layer.LayerData);
+                visualization?.SetData(layer.LayerData);
                 callback?.Invoke(visualization);
             }
             catch (Exception e)

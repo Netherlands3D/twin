@@ -25,6 +25,10 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         public async Task<LayerGameObject> Spawn(LayerData layerData)
         {
+            if (layerData.PrefabIdentifier == "folder")
+            {
+                return null;
+            }
             var prefab = prefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
             return await SpawnUsingPrefab(layerData, prefab);
         }
