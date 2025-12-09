@@ -1,11 +1,7 @@
-using GG.Extensions;
-using netDxf.Tables;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Samplers;
-using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
