@@ -134,7 +134,7 @@ namespace Netherlands3D.Twin.Layers
         public LayerData Build()
         {            
             LayerData layerData = new LayerData(Name, Type);
-            layerData.InitializeParent();
+            layerData.InitializeParent(ProjectData.Current.RootLayer);
             ProjectData.Current.RootLayer.AddChild(layerData, 0); //todo: this should not depend on projectData here, but we must set the new layer as child of the rootLayer.
 
             if (!string.IsNullOrEmpty(Name)) layerData.Name = Name;
