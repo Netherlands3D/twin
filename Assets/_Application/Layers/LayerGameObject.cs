@@ -11,6 +11,7 @@ using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using System.Linq;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -348,10 +349,11 @@ namespace Netherlands3D.Twin.Layers
 
         protected Symbolizer GetStyling(LayerFeature feature)
         {
-            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
-            if (stylingPropertyData == null) return null;
+            
+            List<StylingPropertyData> stylingPropertyDatas = LayerData.GetProperties<StylingPropertyData>();
+            if (stylingPropertyDatas == null || stylingPropertyDatas.Count == 0) return null;
 
-            return StyleResolver.Instance.GetStyling(feature, stylingPropertyData.Styles);
+            return StyleResolver.Instance.GetStyling(feature, stylingPropertyDatas);
         }
 
         public virtual void ApplyStyling()
@@ -365,10 +367,10 @@ namespace Netherlands3D.Twin.Layers
 
         protected int GetBitMask()
         {
-            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            StylingPropertyData stylingPropertyData =  LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
             if (stylingPropertyData == null) return DEFAULT_MASK_BIT_MASK;
 
-            int? bitMask = stylingPropertyData.DefaultSymbolizer.GetMaskLayerMask();
+           int? bitMask = stylingPropertyData.DefaultSymbolizer.GetMaskLayerMask();
             if (bitMask == null)
                 bitMask = DEFAULT_MASK_BIT_MASK;
 
@@ -424,10 +426,10 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         public int GetMaskLayerMask(LayerData data)
         {
-            StylingPropertyData stylingPropertyData = data.GetProperty<StylingPropertyData>();
+            StylingPropertyData stylingPropertyData = data.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
             if (stylingPropertyData == null) return LayerGameObject.DEFAULT_MASK_BIT_MASK;
 
-            int? bitMask = stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.GetMaskLayerMask();
+            int? bitMask = stylingPropertyData.AnyFeature.Symbolizer.GetMaskLayerMask();
             if (bitMask == null)
                 bitMask = LayerGameObject.DEFAULT_MASK_BIT_MASK;
 

@@ -38,7 +38,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            stylingPropertyData = properties.Get<StylingPropertyData>();
+            stylingPropertyData = properties.GetDefaultStylingPropertyData<StylingPropertyData>();
             if (stylingPropertyData == null) return;
 
             CreateItems();
@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             layerContent.ClearAllChildren();
             //find attributes within the data, we cannot rely on layer.layerfeatures.values because tiles arent potentialy loaded
-            foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.DefaultStyle.StylingRules)
+            foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
             {
                 if(kv.Key.Contains(CartesianTileLayerStyler.VisibilityIdentifier))
                 {
@@ -301,7 +301,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
             //remove all visibility data for features that became visible
             List<string> idsToRemove = new List<string>();
-            foreach (KeyValuePair<string, StylingRule> kv in stylingPropertyData.DefaultStyle.StylingRules)
+            foreach (KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
             {
                 if (kv.Key.Contains(CartesianTileLayerStyler.VisibilityIdentifier))
                 {

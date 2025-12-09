@@ -4,6 +4,7 @@ using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
@@ -159,7 +160,7 @@ namespace Netherlands3D.Twin.UI
             {
                 bool? v;
                 LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out LayerGameObject layer);
-                StylingPropertyData stylingPropertyData = layer.LayerData.GetProperty<StylingPropertyData>();
+                StylingPropertyData stylingPropertyData = layer.LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
                 if (feature == null)
                     v = CartesianTileLayerStyler.GetVisibilityForSubObjectByAttributeTag(currentSelectedBagId, stylingPropertyData);
                 else

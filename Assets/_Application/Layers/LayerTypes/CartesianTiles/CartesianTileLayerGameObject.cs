@@ -201,7 +201,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
                     if (feature.Geometry is Material material)
                     {
-                        Color? color = CartesianTileLayerStyler.GetColor(feature, LayerData.GetProperty<StylingPropertyData>());
+                        Color? color = CartesianTileLayerStyler.GetColor(feature, LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>());
                         if (color.HasValue)
                         {
                             if (int.TryParse(feature.Attributes[CartesianTileLayerStyler.MaterialIndexIdentifier], out var materialIndex))

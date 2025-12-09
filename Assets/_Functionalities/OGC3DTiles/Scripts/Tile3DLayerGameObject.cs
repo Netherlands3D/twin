@@ -91,7 +91,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 
         private void InitializeStyling(Content content)
         {
-            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            StylingPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
             var bitmask = stylingPropertyData.DefaultSymbolizer.GetMaskLayerMask();
 
             if (bitmask == null)

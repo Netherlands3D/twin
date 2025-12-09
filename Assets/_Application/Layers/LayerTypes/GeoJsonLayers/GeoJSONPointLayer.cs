@@ -224,9 +224,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            //copy the parent styles in this layer
-            var parentStyleStyles = LayerData?.ParentLayer?.GetProperty<StylingPropertyData>().Styles;
-            InitProperty<StylingPropertyData>(properties, null, parentStyleStyles);
+            InitProperty<StylingPropertyData>(properties); 
         }
     }
 }

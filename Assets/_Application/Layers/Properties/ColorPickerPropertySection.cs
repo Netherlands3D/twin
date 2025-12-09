@@ -19,7 +19,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            stylingPropertyData = properties.Get<StylingPropertyData>();
+            stylingPropertyData = properties.GetDefaultStylingPropertyData<StylingPropertyData>();
             if (stylingPropertyData == null) return;
             
             stylingPropertyData.OnStylingChanged.AddListener(UpdateColorFromProperty);

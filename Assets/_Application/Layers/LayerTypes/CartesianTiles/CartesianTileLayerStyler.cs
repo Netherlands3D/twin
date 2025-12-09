@@ -53,7 +53,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             );
             stylingRule.Symbolizer.SetFillColor(color);
 
-            stylingPropertyData.SetDefaultStylingRule(stylingRuleName, stylingRule);
+            stylingPropertyData.SetStylingRule(stylingRuleName, stylingRule);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             int.TryParse(layerFeature.GetAttribute(MaterialIndexIdentifier), out int materialIndexIdentifier);
             var stylingRuleName = ColorizationStyleRuleName(materialIndexIdentifier);
 
-            if (!data.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
+            if (!data.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
             {
                 if(mat.HasProperty("_Color") || mat.HasProperty("_BaseColor")) //TODO check a list of standardized tags for color properties
                     return mat.color;
@@ -100,7 +100,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             stylingRule.Symbolizer.SetVisibility(visible);
             stylingRule.Symbolizer.SetCustomProperty(VisibilityAttributePositionIdentifier, coordinate);
             
-            stylingPropertyData.SetDefaultStylingRule(stylingRuleName, stylingRule);
+            stylingPropertyData.SetStylingRule(stylingRuleName, stylingRule);
         }
 
         public static bool? GetVisibilityForSubObject(LayerFeature layerFeature, StylingPropertyData stylingPropertyData)
@@ -113,7 +113,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             var stylingRuleName = VisibilityStyleRuleName(id);
 
-            if (!data.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
+            if (!data.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
             {
                 return true;
             }
@@ -124,7 +124,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         public static void RemoveVisibilityForSubObjectByAttributeTag(string id, StylingPropertyData stylingPropertyData)
         {
             var stylingRuleName = VisibilityStyleRuleName(id);
-            bool dataRemoved = stylingPropertyData.DefaultStyle.StylingRules.Remove(stylingRuleName);
+            bool dataRemoved = stylingPropertyData.StylingRules.Remove(stylingRuleName);
         }
 
         public static Coordinate? GetVisibilityCoordinateForSubObject(LayerFeature layerFeature, StylingPropertyData stylingPropertyData)
@@ -136,7 +136,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         public static Coordinate? GetVisibilityCoordinateForSubObjectByTag(string objectId, StylingPropertyData stylingPropertyData)
         {
             var stylingRuleName = VisibilityStyleRuleName(objectId);
-            if (!stylingPropertyData.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
+            if (!stylingPropertyData.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
             {
                 return null;
             }

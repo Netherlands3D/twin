@@ -11,6 +11,7 @@ using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
@@ -269,7 +270,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs(prefab.name).ChildOf(LayerData);
-            App.Layers.Add(layerBuilder, callBack);
+            var newLayer = App.Layers.Add(layerBuilder, callBack);
+            
+            StylingPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
+            
+            //TODO better to copy values from the parent symbolizer
+            StylingPropertyData childStylingPropertyData = newLayer.LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
+            
+            var fillColor = stylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetFillColor().Value : LayerData.Color;
+            var strokeColor = stylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetStrokeColor().Value : LayerData.Color;
+            childStylingPropertyData.DefaultSymbolizer.SetFillColor(fillColor);
+            childStylingPropertyData.DefaultSymbolizer.SetStrokeColor(strokeColor);
         }
 
         protected virtual void OnFeatureRemoved(Feature feature)

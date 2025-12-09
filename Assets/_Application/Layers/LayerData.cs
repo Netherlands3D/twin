@@ -331,6 +331,11 @@ namespace Netherlands3D.Twin.Layers
         {
             return LayerProperties.Get<T>();
         }
+        
+        public List<T> GetProperties<T>() where T : LayerPropertyData
+        {
+            return LayerProperties.OfType<T>().ToList();
+        }
 
         public void SetProperty<T>(T propertyData) where T : LayerPropertyData
         {
@@ -346,8 +351,8 @@ namespace Netherlands3D.Twin.Layers
             {
                 PropertyRemoved.Invoke(propertyData);
             }
-        }        
-
+        }
+        
         /// <summary>
         /// Recursively collect all assets from each of the property data elements for loading and saving
         /// purposes. 
