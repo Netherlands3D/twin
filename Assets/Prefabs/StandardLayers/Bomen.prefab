@@ -72,6 +72,9 @@ MonoBehaviour:
   OnMappingRemoved:
     m_PersistentCalls:
       m_Calls: []
+  OnTileObjectCreated:
+    m_PersistentCalls:
+      m_Calls: []
   hasMetaData: 0
   removeFromID: 
   DefaultMaterialList:
@@ -106,9 +109,16 @@ MonoBehaviour:
   onLayerReady:
     m_PersistentCalls:
       m_Calls: []
-  OnStylingApplied:
-    m_PersistentCalls:
-      m_Calls: []
+  PropertySections:
+  - type: Netherlands3D.Twin.Layers.Properties.ColorPickerPropertySection, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+  - type: Netherlands3D.Twin.Layers.Properties.HiddenObjectsPropertySection, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+  - type: Netherlands3D.Twin.Layers.Properties.CartesianTileLayerFeatureColorPropertySection,
+      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
 --- !u!114 &-6617633297429980398
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -22,7 +22,6 @@ namespace Netherlands3D.Twin.Projects
     public class PrefabLibrary : ScriptableObject
     {
         public LayerGameObject fallbackPrefab;
-        public PlaceholderLayerGameObject placeholderPrefab;
         public List<PrefabGroup> prefabGroups;
         [NonSerialized] private List<PrefabGroup> prefabRuntimeGroups = new();
         public List<PrefabGroup> PrefabRuntimeGroups => prefabRuntimeGroups;
@@ -37,6 +36,11 @@ namespace Netherlands3D.Twin.Projects
 
             Debug.LogError($"Can't find the id of { id } returning the default prefab");
             return fallbackPrefab;
+        }
+
+        public bool IsPrefabOfType<T>(string id) where T : LayerGameObject
+        {           
+            return ProjectData.Current.PrefabLibrary.GetPrefabById(id) is T;
         }
 
         public void AddPrefabRuntimeGroup(string groupName)
@@ -76,6 +80,21 @@ namespace Netherlands3D.Twin.Projects
         private LayerGameObject FindPrefabInGroup(string id, PrefabGroup group)
         {
             return group.prefabs.FirstOrDefault(prefab => prefab.PrefabIdentifier == id);
+        }
+
+        public LayerGameObject FindPrefabOfType<T>() where T : LayerGameObject
+        {
+            foreach (var group in prefabGroups)
+            {
+                foreach (var prefab in group.prefabs)
+                {
+                    if (prefab is T)
+                    {
+                        return prefab;
+                    }
+                }
+            }            
+            return fallbackPrefab;
         }
     }
 }

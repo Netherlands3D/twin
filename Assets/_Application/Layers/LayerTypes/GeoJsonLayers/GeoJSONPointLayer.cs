@@ -13,7 +13,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONPointLayer : LayerGameObject, IGeoJsonVisualisationLayer
+    public partial class GeoJSONPointLayer : LayerGameObject, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
     {
         [SerializeField] private PointRenderer3D pointRenderer3D;
         [SerializeField] private PointRenderer3D selectionPointRenderer3D;
@@ -22,9 +22,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public Transform Transform => transform;
 
-        public delegate void GeoJSONPointHandler(Feature feature);
-
-        public event GeoJSONPointHandler FeatureRemoved;
+        public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeaturePointVisualisations> spawnedVisualisations = new();
         private List<List<Coordinate>> visualisationsToRemove = new();
@@ -125,8 +123,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             pointRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
-        public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
-            where T : GeoJSONObject
+        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
             if (spawnedVisualisations.ContainsKey(feature))
@@ -153,8 +150,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
+            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
             // The color in the Layer Panel represents the default fill color for this layer
-            LayerData.Color = LayerData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
+            LayerData.Color = stylingPropertyData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
 
             MaterialApplicator.Apply(Applicator);
         }
@@ -224,25 +222,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return bbox;
         }
 
-        private List<IPropertySectionInstantiator> propertySections;
-
-        protected List<IPropertySectionInstantiator> PropertySections
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            get
-            {
-                if (propertySections == null)
-                {
-                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
-                }
-
-                return propertySections;
-            }
-            set => propertySections = value;
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return PropertySections;
+            //copy the parent styles in this layer
+            var parentStyleStyles = LayerData?.ParentLayer?.GetProperty<StylingPropertyData>().Styles;
+            InitProperty<StylingPropertyData>(properties, null, parentStyleStyles);
         }
     }
 }

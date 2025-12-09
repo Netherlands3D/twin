@@ -62,7 +62,17 @@ MonoBehaviour:
   onLayerReady:
     m_PersistentCalls:
       m_Calls: []
-  OnStylingApplied:
+  PropertySections:
+  - type: Netherlands3D.Twin.Layers.Properties.ColorPickerPropertySection, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+  - type: Netherlands3D.Twin.Layers.Properties.CartesianTileLayerFeatureColorPropertySection,
+      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+  - type: Netherlands3D.Twin.Layers.Properties.HiddenObjectsPropertySection, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+  onParseError:
     m_PersistentCalls:
       m_Calls: []
   polygonLayerPrefab: {fileID: 5640076176564817079, guid: 509ce6cf579d6ed4b946913dff7eaed4,

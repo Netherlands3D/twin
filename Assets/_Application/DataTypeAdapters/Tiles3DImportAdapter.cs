@@ -90,9 +90,9 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             }
         }
 
-        public async void Execute(LocalFile localFile)
+        public void Execute(LocalFile localFile)
         {
-            await App.Layers.Add(new OGC3DTilesPreset.Args(localFile.SourceUrl));
+            App.Layers.Add(new OGC3DTilesPreset.Args(localFile.SourceUrl));
         }
     }
 }

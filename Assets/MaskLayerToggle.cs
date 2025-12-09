@@ -1,5 +1,7 @@
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
+using Netherlands3D.Twin.Projects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,8 +10,6 @@ namespace Netherlands3D.Twin.Layers
 {
     public class MaskLayerToggle : MonoBehaviour
     {
-        public PolygonSelectionLayer MaskLayer { get; set; }
-
         private LayerData layerData;
         public LayerData LayerData
         {
@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 layerData = value;
-                toggle.interactable = value is ReferencedLayerData;
+                toggle.interactable = ProjectData.Current.PrefabLibrary.GetPrefabById(layerData.PrefabIdentifier) != null;
             }
         }
 
@@ -26,39 +26,42 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private Image layerIconImage;
         [SerializeField] private Image maskIconImage;
         [SerializeField] private LayerTypeSpriteLibrary layerTypeSpriteLibrary;
-        [SerializeField] private Color acceptMaskTextColor = new Color(204f/255f, 215/255f, 228f/255f);
-        [SerializeField] private Color ignoreMaskTextColor = new Color(47f/255f, 53f/255f, 80f/255f);
-        
+        [SerializeField] private Color acceptMaskTextColor = new Color(204f / 255f, 215 / 255f, 228f / 255f);
+        [SerializeField] private Color ignoreMaskTextColor = new Color(47f / 255f, 53f / 255f, 80f / 255f);
+
+        private PolygonSelectionLayerPropertyData maskPropertyData;
+
         private void Awake()
         {
             toggle.interactable = false;
         }
 
-        public void Initialize(PolygonSelectionLayer mask, LayerData layer)
+        public void Initialize(PolygonSelectionLayerPropertyData maskPropertyData, LayerData layer)
         {
-            MaskLayer = mask;
+            this.maskPropertyData = maskPropertyData;
             LayerData = layer;
 
             layerNameLabel.text = LayerData.Name;
 
             var layerTypeSpriteCollection = layerTypeSpriteLibrary.GetLayerTypeSprite(layer);
             layerIconImage.sprite = layerTypeSpriteCollection.PrimarySprite; //initialize the sprite correctly in case it is not a ReferencedLayerData
-            
-            if (layerData is ReferencedLayerData referencedLayerData)
-            {
-                var currentLayerMask = referencedLayerData.Reference.GetMaskLayerMask();
-                int maskBitToCheck = 1 << MaskLayer.MaskBitIndex;
+
+            LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
+            if (template != null)
+            {               
+                var currentLayerMask = template.GetMaskLayerMask(layer); //TODO this should be written more logically, perhaps in layerdata itself or helper method
+                int maskBitToCheck = 1 << maskPropertyData.MaskBitIndex;
                 bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
                 toggle.SetIsOnWithoutNotify(!isBitSet);
                 UpdateUIAppearance(isBitSet);
             }
         }
-        
+
         private void OnEnable()
         {
             toggle.onValueChanged.AddListener(OnValueChanged);
         }
-        
+
         private void OnDisable()
         {
             toggle.onValueChanged.RemoveListener(OnValueChanged);
@@ -66,11 +69,9 @@ namespace Netherlands3D.Twin.Layers
 
         private void OnValueChanged(bool isOn)
         {
-            var acceptMask = !isOn;
-            if (layerData is ReferencedLayerData referencedLayerData)
-            {
-                referencedLayerData.Reference.SetMaskBit(MaskLayer.MaskBitIndex, acceptMask);
-            }
+            var acceptMask = !isOn;           
+            LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
+            template.SetMaskBit(maskPropertyData.MaskBitIndex, acceptMask, layerData);//TODO this should be written more logically, perhaps in layerdata itself or helper method
             UpdateUIAppearance(acceptMask);
         }
 

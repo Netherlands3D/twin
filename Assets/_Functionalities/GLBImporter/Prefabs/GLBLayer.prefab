@@ -12,9 +12,6 @@ GameObject:
   - component: {fileID: 8209116542904522024}
   - component: {fileID: 1646213389209705716}
   - component: {fileID: 8128677453936289607}
-  - component: {fileID: 2362124063262672280}
-  - component: {fileID: 3482478533686408333}
-  - component: {fileID: -8031406265216150104}
   - component: {fileID: -47069250887761774}
   m_Layer: 0
   m_Name: GLBLayer
@@ -53,18 +50,23 @@ MonoBehaviour:
   prefabIdentifier: 9c30c9cc071ed4343b05fb7ded7859d2
   thumbnail: {fileID: 0}
   spawnLocation: 0
-  OnStylingApplied:
-    m_PersistentCalls:
-      m_Calls: []
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
     m_PersistentCalls:
       m_Calls: []
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
+  DebugBoundingBox: 0
   objectCreated:
     m_PersistentCalls:
       m_Calls: []
+  scaleUnitCharacter: '%'
 --- !u!114 &1646213389209705716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,46 +98,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50fab43e07a540b89d245bd4ec8e4887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2362124063262672280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9204913902124509902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8cceefce4ff4530b78245056d126688, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672,
-    type: 3}
---- !u!114 &3482478533686408333
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9204913902124509902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ffc363b02a0945c7ad8cdc45e55f5ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-8031406265216150104
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9204913902124509902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6303d72dc2aa4f61bcacd10f6b5e3e43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 3414392683841753435, guid: c78b9cbfeb6b857479e94e59739d2347,
-    type: 3}
 --- !u!114 &-47069250887761774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,6 +110,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eed8af16ae4b48feb3d1e678376610b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseMaterial: {fileID: 2100000, guid: 861462801ebf04373a6810d6c7eb1929, type: 2}
-  createSubMeshes: 0
   cameraDistanceFromGeoReferencedObject: 150

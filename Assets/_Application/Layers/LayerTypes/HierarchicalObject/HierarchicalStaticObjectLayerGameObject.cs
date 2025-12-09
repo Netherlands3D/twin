@@ -1,9 +1,12 @@
 using UnityEngine;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
+using System.Collections.Generic;
+using Netherlands3D.Twin.Layers.Properties;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
-    public class HierarchicalStaticObjectLayerGameObject : HierarchicalObjectLayerGameObject
+    public class HierarchicalStaticObjectLayerGameObject : HierarchicalObjectLayerGameObject //todo: delete this class since axis locks are now in the Transform property data, dont forget to rebuild the asset bundle for zuidoost
     {
         public Vector3 Coordinates = Vector3.zero;
         [SerializeField] private CoordinateSystem coordinateSystem;
@@ -11,9 +14,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void OnLayerReady()
         {
             base.OnLayerReady();
-            TransformPropertyData.Position = new Coordinate(coordinateSystem, Coordinates.y, Coordinates.x, Coordinates.z);
-            TransformPropertyData.EulerRotation = transform.rotation.eulerAngles;
-            TransformPropertyData.LocalScale = transform.localScale;
+            var transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformProperty.Position = new Coordinate(coordinateSystem, Coordinates.y, Coordinates.x, Coordinates.z);
+            transformProperty.EulerRotation = transform.rotation.eulerAngles;
+            transformProperty.LocalScale = transform.localScale;
         }
 
         public override void OnSelect()
