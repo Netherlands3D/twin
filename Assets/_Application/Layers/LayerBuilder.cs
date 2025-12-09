@@ -6,6 +6,7 @@ using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
@@ -133,6 +134,8 @@ namespace Netherlands3D.Twin.Layers
         public LayerData Build()
         {            
             LayerData layerData = new LayerData(Name, Type);
+            layerData.InitializeParent();
+            ProjectData.Current.RootLayer.AddChild(layerData, 0); //todo: this should not depend on projectData here, but we must set the new layer as child of the rootLayer.
 
             if (!string.IsNullOrEmpty(Name)) layerData.Name = Name;
             if (Color.HasValue) layerData.Color = Color.Value;

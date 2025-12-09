@@ -183,6 +183,7 @@ namespace Netherlands3D.Twin.Layers
         private void OnDeserialized(StreamingContext _)
         {
             IsNew = false;
+            // InitializeParent(); todo: is this needed here?
         }
 
         public void InitializeParent(LayerData initialParent = null)
@@ -219,26 +220,26 @@ namespace Netherlands3D.Twin.Layers
         {
             PrefabIdentifier = prefabId;
             Name = name;
-            if (this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
-            {
-                InitializeParent();
-                ProjectData.Current.RootLayer.AddChild(this, 0); //todo: this should not depend on projectData here, but we must set the new layer as child of the rootLayer.
-            }
+            // if (this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
+            // {
+            //     InitializeParent();
+            //     ProjectData.Current.RootLayer.AddChild(this, 0); //todo: this should not depend on projectData here, but we must set the new layer as child of the rootLayer.
+            // }
         }
 
         public LayerData(string name) //initialize without layer properties, needed when creating an object at runtime.
         {
             Name = name;
-            if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
-                InitializeParent();
+            // if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
+            //     InitializeParent();
         }
 
         [JsonConstructor]
         public LayerData(string name, List<LayerPropertyData> layerProperties) //initialize with explicit layer properties, needed when deserializing an object that already has properties.
         {
             Name = name;
-            if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
-                InitializeParent();
+            // if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
+            //     InitializeParent();
             this.layerProperties = layerProperties ?? new List<LayerPropertyData>();
         }
 
