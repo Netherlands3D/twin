@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Netherlands3D.Tilekit.TileSetMaterializers
+namespace Netherlands3D.Tilekit.TileSetBuilders
 {
-    public partial class Ogc3DTileSetMaterializer
+    public partial class Ogc3DTileSetBuilder
     {
         private sealed class TilesetDto
         {

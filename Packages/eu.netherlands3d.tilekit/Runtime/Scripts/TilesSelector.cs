@@ -83,7 +83,7 @@ namespace Netherlands3D.Tilekit
 
             // Explicit tilesets: loop through all children
             var children = tile.Children();
-            for (var index = 0; index < children.Count; index++)
+            for (var index = 0; index < children.Length; index++)
             {
                 var child = tile.GetChild(index);
                 traversedTiles = Traverse(child, traversedTiles);

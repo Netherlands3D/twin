@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using Netherlands3D.Tilekit.TileSetBuilders;
 using Netherlands3D.Tilekit.TileSets;
 using Unity.Collections;
 
@@ -23,6 +24,8 @@ namespace Netherlands3D.Tilekit.DataSets
             urlStringBuilder.Replace("{styles}", "kilometrering");
             Url = urlStringBuilder.ToString();
 
+            builder ??= new WmsTileSetBuilder(Url);
+            
             base.Initialize();
         }
 

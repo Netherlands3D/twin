@@ -27,16 +27,16 @@ namespace Netherlands3D.Tilekit.TileSets
             public float4x4 Transform => tileSet.Transform[tileIndex];
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TileContents Contents() => new(tileSet, tileSet.Contents.GetBucket(tileIndex));
+            public TileContents Contents() => new(tileSet, tileSet.Contents.GetBlockById(tileIndex));
 
             // TODO: It can be confusing to return the 'absolute' children indices instead of the relative ones - you can't reuse this
             //   in the GetChild method
-            public Bucket<int> Children()
+            public BufferBlock<int> Children()
             {
-                return tileSet.Children.GetBucket(tileIndex);
+                return tileSet.Children.GetBlockById(tileIndex);
             }
 
-            public Tilekit.Tile GetChild(int childIndex) => tileSet.Get(Children()[childIndex]);
+            public Tilekit.Tile GetChild(int childIndex) => tileSet.GetTile(Children()[childIndex]);
             public bool IsWarm => tileSet.Warm.Contains(tileIndex);
             private int WarmIndex => tileSet.Warm.IndexOf(tileIndex);
             public bool IsHot => tileSet.Hot.Contains(tileIndex);

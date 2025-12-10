@@ -8,31 +8,29 @@ namespace Netherlands3D.Tilekit
     public readonly struct Tile
     {
         private readonly int tileIndex;
-        private readonly TileSet store;
+        private readonly TileSet tileSet;
 
-        public Tile(TileSet store, int tileIndex)
+        public Tile(TileSet tileSet, int tileIndex)
         {
-            this.store = store;
+            this.tileSet = tileSet;
             this.tileIndex = tileIndex;
         }
 
         public int Index => tileIndex;
-        public BoundingVolume BoundingVolume => new (store, tileIndex);
-        public double GeometricError => store.GeometricError[tileIndex];
-        public MethodOfRefinement Refinement => store.Refine[tileIndex];
+        public BoundingVolume BoundingVolume => tileSet.GetBoundingVolume(tileIndex);
+        public double GeometricError => tileSet.GetGeometricError(tileIndex);
+        public MethodOfRefinement Refinement => tileSet.GetMethodOfRefinement(tileIndex);
 
-        public float4x4 Transform => store.Transform[tileIndex];
+        public float4x4 Transform => tileSet.GetTransform(tileIndex);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public TileContents Contents() => new(store, store.Contents.GetBucket(tileIndex));
+        public TileContents Contents => tileSet.GetContents(tileIndex);
 
         // TODO: It can be confusing to return the 'absolute' children indices instead of the relative ones - you can't reuse this
         //   in the GetChild method
-        public Bucket<int> Children()
-        {
-            return store.Children.GetBucket(tileIndex);
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public BufferBlock<int> Children() => tileSet.GetChildren(tileIndex);
 
-        public Tile GetChild(int childIndex) => store.Get(Children()[childIndex]);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Tile GetChild(int childIndex) => tileSet.GetTile(Children()[childIndex]);
     }
 }

@@ -12,6 +12,10 @@ namespace Netherlands3D.Tilekit.WriteModel
     /// </summary>
     public class TileSet : IDisposable
     {
+        public Tile Root => GetTile(0);
+        private int NumberOfTiles => GeometricError.Length;
+        private int NextTileIndex => GeometricError.Length;
+
         public BoxBoundingVolume AreaOfInterest;
         
         public BoundingVolumeStore BoundingVolumes;
@@ -19,10 +23,9 @@ namespace Netherlands3D.Tilekit.WriteModel
         public NativeList<MethodOfRefinement> Refine; // hot/small
         public NativeList<float4x4> Transform; // consider sparsifying if many are identity
 
-        public readonly Buckets<int> Children;
-        public readonly Buckets<TileContentData> Contents;
+        public readonly Buffer<int> Children;
+        public readonly Buffer<TileContentData> Contents;
         public readonly StringTable Strings;
-        public Tile Root => Get(0);
 
         public NativeList<int> Warm;
         public NativeList<int> Hot;
@@ -82,10 +85,10 @@ namespace Netherlands3D.Tilekit.WriteModel
 
             // Assume 4 children per tile and have the list autogrow. This matches the concept of quad trees, and
             // even though these should be defined as implicit tilesets - it is a useful metric.
-            Children = new Buckets<int>(initialSize, initialSize * 4, alloc);
+            Children = new Buffer<int>(initialSize, initialSize * 4, alloc);
 
             // Assume that tiles have a single content by default, there could be multiple but generally there is only 1
-            Contents = new Buckets<TileContentData>(initialSize, initialSize, alloc);
+            Contents = new Buffer<TileContentData>(initialSize, initialSize, alloc);
 
             // Assume strings have a length of 128 bytes on average
             Strings = new StringTable(initialSize, initialSize * 128, alloc);
@@ -105,7 +108,7 @@ namespace Netherlands3D.Tilekit.WriteModel
         ) {
             // Take any of the arrays whose length matches the number of tiles in this storage and use it's length
             // as the new id as this is last id + 1
-            int id = GeometricError.Length;
+            int id = NextTileIndex;
 
             ActualTilesCounter.Value += 1;
             
@@ -119,14 +122,28 @@ namespace Netherlands3D.Tilekit.WriteModel
 
             return id;
         }
-
-        public Tile Get(int i)
-        {
-            return new Tile(this, i);
-        }
         
+        public Tile GetTile(int tileIndex)
+        {
+            return new Tile(this, tileIndex);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public double GetGeometricError(int tileIndex) => GeometricError[tileIndex];
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public BoundingVolume GetBoundingVolume(int tileIndex) => new(this, tileIndex);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public float4x4 GetTransform(int tileIndex) => Transform[tileIndex];
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public MethodOfRefinement GetMethodOfRefinement(int tileIndex) => Refine[tileIndex];
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public BufferBlock<int> GetChildren(int tileIndex) => Children[tileIndex];
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public TileContents GetContents(int tileIndex) => new (this, Contents.GetBlockById(tileIndex));
+
         public int WarmTile(int tileIndex)
         {
+            // If the tile is already warm - just return the index. This makes it idempotent
             if (Warm.Contains(tileIndex))
             {
                 return Warm.IndexOf(tileIndex);
@@ -139,6 +156,7 @@ namespace Netherlands3D.Tilekit.WriteModel
 
         public int HeatTile(int tileIndex)
         {
+            // If the tile is already warm - just return the index. This makes it idempotent
             if (Hot.Contains(tileIndex))
             {
                 return Hot.IndexOf(tileIndex);
@@ -169,7 +187,7 @@ namespace Netherlands3D.Tilekit.WriteModel
         public void Clear()
         {
             // Clearing will not free memory, but will reset the counters for the actual tiles - allocated tiles will stay the same
-            ActualTilesCounter.Value -= GeometricError.Length;
+            ActualTilesCounter.Value -= NumberOfTiles;
 
             GeometricError.Clear();
             Refine.Clear();

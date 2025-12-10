@@ -6,11 +6,11 @@ using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Netherlands3D.Tilekit.TileSetMaterializers
+namespace Netherlands3D.Tilekit.TileSetBuilders
 {
-    public partial class Ogc3DTileSetMaterializer : ITileSetMaterializer<Ogc3DTilesPopulatorSettings>
+    public partial class Ogc3DTileSetBuilder : ITileSetBuilder<Ogc3DTilesPopulatorSettings>
     {
-        public void Materialize(TileSet storage, Ogc3DTilesPopulatorSettings settings)
+        public void Build(TileSet storage, Ogc3DTilesPopulatorSettings settings)
         {
             Debug.Log("1. Building tileset from");
             var jsonSerializerSettings = new JsonSerializerSettings

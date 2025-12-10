@@ -1,27 +1,18 @@
 ﻿using System;
 using Netherlands3D.Tilekit.WriteModel;
 
-namespace Netherlands3D.Tilekit.TileSetMaterializers
+namespace Netherlands3D.Tilekit.TileSetBuilders
 {
-    public class ExplicitQuadTreeMaterializer : ITileSetMaterializer<ExplicitQuadTreePopulatorSettings>
+    public abstract class QuadTreeBuilder : ITileSetBuilder<ExplicitQuadTreePopulatorSettings>
     {
-        public void Materialize(TileSet tiles, ExplicitQuadTreePopulatorSettings settings)
+        public void Build(TileSet tiles, ExplicitQuadTreePopulatorSettings settings)
         {
             // Reset tilestorage to be empty without releasing memory
             tiles.Clear();
             
             // Create the whole tree in the TilesStorage
             int stride = SubtreeSize(settings.Depth - 1);
-            // int myIndex = 0;
-
-            // var tileIndex = tiles.AddTile(
-            //     boundingVolume,
-            //     1000 * depth,
-            //     new ReadOnlySpan<TileContentData>(new[] { new TileContentData(myIndex, new BoundingVolumeRef(BoundingVolumeType.Box, myIndex)) }),
-            //     stackalloc int[] {  myIndex + 1, myIndex + 1 + stride, myIndex + 1 + stride*2, myIndex + 1 + stride*3 } 
-            // );
             AddChildTile(tiles, -1, settings.Depth, stride, tiles.AreaOfInterest);
-            // AddLevelOfTiles(tiles, boundingVolume, tileIndex, depth);
         }
 
         static int Pow4(int n)
@@ -30,12 +21,13 @@ namespace Netherlands3D.Tilekit.TileSetMaterializers
             while (n-- > 0) r *= 4; // avoid float pow
             return r;
         }
-        static int SubtreeSize(int depth) // depth >= 0
+
+        static int SubtreeSize(int depth)
         {
-            // T(depth) = (4^(depth+1) - 1) / 3
             return depth < 0 ? 0 : (Pow4(depth + 1) - 1) / 3;
         }
-        private static int AddLevelOfTiles(TileSet tiles, BoxBoundingVolume boundingVolume, int tileIndex, int remainingDepth)
+        
+        private int AddLevelOfTiles(TileSet tiles, BoxBoundingVolume boundingVolume, int tileIndex, int remainingDepth)
         {
             // Work is done, return
             // TODO: Add support for availability: https://docs.ogc.org/cs/22-025r4/22-025r4.html#implicittiling-availability
@@ -56,21 +48,27 @@ namespace Netherlands3D.Tilekit.TileSetMaterializers
             return tileIndex;
         }
 
-        private static int AddChildTile(TileSet tiles, int tileIndex, int depth, int stride, BoxBoundingVolume boundingVolume)
+        private int AddChildTile(TileSet tileSet, int tileIndex, int depth, int stride, BoxBoundingVolume boundingVolume)
         {
             int myIndex = tileIndex + 1;
             ReadOnlySpan<int> children = depth > 0 
-                ? stackalloc int[4] { myIndex + 1, myIndex + 1 + stride, myIndex + 1 + stride*2, myIndex + 1 + stride*3 } 
+                ? stackalloc int[4] { myIndex + 1, myIndex + 1 + stride, myIndex + 1 + stride * 2, myIndex + 1 + stride * 3 } 
                 : ReadOnlySpan<int>.Empty;
+            
+            // Re-use the same content bounding volume as the tile's bounding volume
+            var boundingVolumeRef = new BoundingVolumeRef(BoundingVolumeType.Box, myIndex);
+            
             ReadOnlySpan<TileContentData> content = stackalloc TileContentData[1]
             {
-                new TileContentData(myIndex, new BoundingVolumeRef(BoundingVolumeType.Box, myIndex))
+                new TileContentData(GenerateUrl(tileSet, myIndex, boundingVolume), boundingVolumeRef)
             };
             
-            tileIndex = tiles.AddTile(boundingVolume, 1000 * depth, content, children);
+            tileIndex = tileSet.AddTile(boundingVolume, 1000 * depth, content, children);
 
-            return AddLevelOfTiles(tiles, boundingVolume, tileIndex, depth);
+            return AddLevelOfTiles(tileSet, boundingVolume, tileIndex, depth);
         }
+        
+        protected abstract int GenerateUrl(TileSet tileSet, int tileIndex, BoxBoundingVolume boundingVolume);
     }
     
     public struct ExplicitQuadTreePopulatorSettings

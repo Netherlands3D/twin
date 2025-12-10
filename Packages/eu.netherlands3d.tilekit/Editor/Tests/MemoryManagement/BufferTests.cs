@@ -5,13 +5,13 @@ using Unity.Collections;
 
 namespace Netherlands3D.Tilekit.Tests.MemoryManagement
 {
-    public class BucketsTests
+    public class BufferTests
     {
         [Test]
         public void Add_ReturnsRangeIndex_AndStoresFlatDataInOrder()
         {
             // Arrange
-            using var buckets = new Buckets<int>(expectedRanges: 20, expectedItems: 80, alloc: Allocator.Temp);
+            using var buckets = new Buffer<int>(blockCapacity: 20, itemCapacity: 80, alloc: Allocator.Temp);
 
             ReadOnlySpan<int> a = stackalloc int[] { 1, 2, 3 };
             ReadOnlySpan<int> b = stackalloc int[] { 10, 20 };
@@ -42,23 +42,23 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             Assert.That(rc.Count, Is.EqualTo(4));
 
             // Assert (flat buffer content)
-            Assert.That(buckets.Flat.Length, Is.EqualTo(3 + 2 + 4));
-            Assert.That(buckets.Flat[0], Is.EqualTo(1));
-            Assert.That(buckets.Flat[1], Is.EqualTo(2));
-            Assert.That(buckets.Flat[2], Is.EqualTo(3));
-            Assert.That(buckets.Flat[3], Is.EqualTo(10));
-            Assert.That(buckets.Flat[4], Is.EqualTo(20));
-            Assert.That(buckets.Flat[5], Is.EqualTo(7));
-            Assert.That(buckets.Flat[6], Is.EqualTo(8));
-            Assert.That(buckets.Flat[7], Is.EqualTo(9));
-            Assert.That(buckets.Flat[8], Is.EqualTo(10));
+            Assert.That(buckets.Items.Length, Is.EqualTo(3 + 2 + 4));
+            Assert.That(buckets.Items[0], Is.EqualTo(1));
+            Assert.That(buckets.Items[1], Is.EqualTo(2));
+            Assert.That(buckets.Items[2], Is.EqualTo(3));
+            Assert.That(buckets.Items[3], Is.EqualTo(10));
+            Assert.That(buckets.Items[4], Is.EqualTo(20));
+            Assert.That(buckets.Items[5], Is.EqualTo(7));
+            Assert.That(buckets.Items[6], Is.EqualTo(8));
+            Assert.That(buckets.Items[7], Is.EqualTo(9));
+            Assert.That(buckets.Items[8], Is.EqualTo(10));
         }
 
         [Test]
         public void GetBucket_ReturnsCorrectSlice_ForEachRange()
         {
             // Arrange
-            using var buckets = new Buckets<int>(expectedRanges: 20, expectedItems: 80, alloc: Allocator.Temp);
+            using var buckets = new Buffer<int>(blockCapacity: 20, itemCapacity: 80, alloc: Allocator.Temp);
 
             int i0 = buckets.Add(stackalloc int[] { 4, 5, 6 });
             int i1 = buckets.Add(stackalloc int[] { 9 });
@@ -72,18 +72,18 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             var b3 = buckets[i3];
 
             // Assert
-            Assert.That(b0.Count, Is.EqualTo(3));
+            Assert.That(b0.Length, Is.EqualTo(3));
             Assert.That(b0[0], Is.EqualTo(4));
             Assert.That(b0[1], Is.EqualTo(5));
             Assert.That(b0[2], Is.EqualTo(6));
 
-            Assert.That(b1.Count, Is.EqualTo(1));
+            Assert.That(b1.Length, Is.EqualTo(1));
             Assert.That(b1[0], Is.EqualTo(9));
 
-            Assert.That(b2.Count, Is.EqualTo(4));
+            Assert.That(b2.Length, Is.EqualTo(4));
             Assert.That(new[] { b2[0], b2[1], b2[2], b2[3] }, Is.EqualTo(new[] { 1, 2, 3, 4 }));
 
-            Assert.That(b3.Count, Is.EqualTo(0));
+            Assert.That(b3.Length, Is.EqualTo(0));
             foreach (var _ in b3) { /* should not iterate */ }
         }
 
@@ -91,7 +91,7 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
         public void Clear_ResetsRangesAndFlatLengths()
         {
             // Arrange
-            using var buckets = new Buckets<int>(expectedRanges: 2, expectedItems: 8, alloc: Allocator.Temp);
+            using var buckets = new Buffer<int>(blockCapacity: 2, itemCapacity: 8, alloc: Allocator.Temp);
             buckets.Add(stackalloc int[] { 1, 2, 3 });
             buckets.Add(stackalloc int[] { 4, 5 });
 
@@ -100,20 +100,20 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
 
             // Assert
             Assert.That(buckets.Ranges.Length, Is.EqualTo(0));
-            Assert.That(buckets.Flat.Length, Is.EqualTo(0));
+            Assert.That(buckets.Items.Length, Is.EqualTo(0));
 
             // Ability to reuse after Clear (capacity remains)
             buckets.Add(stackalloc int[] { 7 });
             Assert.That(buckets.Ranges.Length, Is.EqualTo(1));
-            Assert.That(buckets.Flat.Length, Is.EqualTo(1));
-            Assert.That(buckets.Flat[0], Is.EqualTo(7));
+            Assert.That(buckets.Items.Length, Is.EqualTo(1));
+            Assert.That(buckets.Items[0], Is.EqualTo(7));
         }
 
         [Test]
         public void MultipleAdds_OffsetsAccumulateCorrectly()
         {
             // Arrange
-            using var buckets = new Buckets<int>(expectedRanges: 5, expectedItems: 16, alloc: Allocator.Temp);
+            using var buckets = new Buffer<int>(blockCapacity: 5, itemCapacity: 16, alloc: Allocator.Temp);
 
             // Act
             int i0 = buckets.Add(stackalloc int[] { 1, 1, 1, 1 });          // off 0, len 4
@@ -136,32 +136,32 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             Assert.That(buckets.Ranges[i4].Count, Is.EqualTo(6));
 
             // Verify a couple of sample values in Flat at the offsets
-            Assert.That(buckets.Flat[0], Is.EqualTo(1));
-            Assert.That(buckets.Flat[4], Is.EqualTo(2));
-            Assert.That(buckets.Flat[5], Is.EqualTo(3));
-            Assert.That(buckets.Flat[8], Is.EqualTo(4));
-            Assert.That(buckets.Flat[10], Is.EqualTo(5));
+            Assert.That(buckets.Items[0], Is.EqualTo(1));
+            Assert.That(buckets.Items[4], Is.EqualTo(2));
+            Assert.That(buckets.Items[5], Is.EqualTo(3));
+            Assert.That(buckets.Items[8], Is.EqualTo(4));
+            Assert.That(buckets.Items[10], Is.EqualTo(5));
         }
 
         [Test]
         public void Disposing_MarksListsAsDisposed()
         {
             // Arrange
-            var buckets = new Buckets<int>(expectedRanges: 1, expectedItems: 1, alloc: Allocator.Temp);
+            var buckets = new Buffer<int>(blockCapacity: 1, itemCapacity: 1, alloc: Allocator.Temp);
 
             // Act
             buckets.Dispose();
 
             // Assert
             Assert.That(buckets.Ranges.IsCreated, Is.False);
-            Assert.That(buckets.Flat.IsCreated, Is.False);
+            Assert.That(buckets.Items.IsCreated, Is.False);
         }
 
         [Test]
         public void ZeroLengthAdd_CreatesEmptyRange_WithStableOffsets()
         {
             // Arrange
-            using var buckets = new Buckets<int>(expectedRanges: 3, expectedItems: 4, alloc: Allocator.Temp);
+            using var buckets = new Buffer<int>(blockCapacity: 3, itemCapacity: 4, alloc: Allocator.Temp);
 
             // Act
             int i0 = buckets.Add(stackalloc int[] { 9, 9 });     // off 0, len 2
@@ -178,13 +178,13 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             Assert.That((r2.Offset, r2.Count), Is.EqualTo((2, 2)));
 
             // And bucket access behaves
-            var b0 = buckets.GetBucket(i0);
-            var b1 = buckets.GetBucket(i1);
-            var b2 = buckets.GetBucket(i2);
+            var b0 = buckets.GetBlockById(i0);
+            var b1 = buckets.GetBlockById(i1);
+            var b2 = buckets.GetBlockById(i2);
 
-            Assert.That(b0.Count, Is.EqualTo(2));
-            Assert.That(b1.Count, Is.EqualTo(0));
-            Assert.That(b2.Count, Is.EqualTo(2));
+            Assert.That(b0.Length, Is.EqualTo(2));
+            Assert.That(b1.Length, Is.EqualTo(0));
+            Assert.That(b2.Length, Is.EqualTo(2));
             Assert.That(b0[0], Is.EqualTo(9));
             Assert.That(b2[1], Is.EqualTo(7));
         }
@@ -193,15 +193,15 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
         public void BucketEnumerators_WorkForAllRanges()
         {
             // Arrange
-            using var buckets = new Buckets<int>(expectedRanges: 3, expectedItems: 10, alloc: Allocator.Temp);
+            using var buckets = new Buffer<int>(blockCapacity: 3, itemCapacity: 10, alloc: Allocator.Temp);
             int i0 = buckets.Add(stackalloc int[] { 1, 2, 3 });
             int i1 = buckets.Add(stackalloc int[] { 4 });
             int i2 = buckets.Add(stackalloc int[] { 5, 6 });
 
             // Act
-            var e0 = buckets.GetBucket(i0).ToArray();
-            var e1 = buckets.GetBucket(i1).ToArray();
-            var e2 = buckets.GetBucket(i2).ToArray();
+            var e0 = buckets.GetBlockById(i0).ToArray();
+            var e1 = buckets.GetBlockById(i1).ToArray();
+            var e2 = buckets.GetBlockById(i2).ToArray();
 
             // Assert
             Assert.That(e0, Is.EqualTo(new[] { 1, 2, 3 }));

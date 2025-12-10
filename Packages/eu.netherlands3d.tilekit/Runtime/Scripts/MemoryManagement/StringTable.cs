@@ -4,42 +4,17 @@ using Unity.Collections;
 
 namespace Netherlands3D.Tilekit.MemoryManagement
 {
-    public sealed class StringTable : IDisposable
+    public sealed class StringTable : Buffer<byte>
     {
-        private NativeList<byte> blob;
-        private NativeList<int> offsets;
-        private NativeList<int> lengths;
-
-        public StringTable(int expectedStrings, int expectedBytes, Allocator alloc)
+        public StringTable(int blockCapacity, int itemCapacity, Allocator alloc) : base(blockCapacity, itemCapacity, alloc)
         {
-            blob = new NativeList<byte>(expectedBytes, alloc);
-            offsets = new NativeList<int>(expectedStrings, alloc);
-            lengths = new NativeList<int>(expectedStrings, alloc);
-        }
-
-        public int AddUtf8(ReadOnlySpan<byte> utf8, bool zeroTerminate = true)
-        {
-            int idx = offsets.Length;
-            offsets.AddNoResize(blob.Length);
-            lengths.AddNoResize(utf8.Length);
-            for (int i = 0; i < utf8.Length; i++) blob.AddNoResize(utf8[i]);
-            if (zeroTerminate) blob.AddNoResize(0);
-            return idx;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public NativeSlice<byte> GetSlice(int strIndex)
-        {
-            int start = offsets[strIndex];
-            int len = lengths[strIndex];
-            return new NativeSlice<byte>(blob.AsArray(), start, len);
         }
 
         /// Tries to read into a FixedString128Bytes. Returns false if truncated.
         public bool TryGetFixedString128(int strIndex, out FixedString128Bytes fs)
         {
             fs = default;
-            var slice = GetSlice(strIndex);
+            var slice = GetBlockById(strIndex);
             int i = 0;
             int written = 0;
             const int cap = 127; // FixedString128Bytes payload
@@ -85,20 +60,5 @@ namespace Netherlands3D.Tilekit.MemoryManagement
             // Return false if we truncated
             return i >= slice.Length;
         }
-
-
-        public void Dispose()
-        {
-            blob.Dispose();
-            offsets.Dispose();
-            lengths.Dispose();
-        }
-
-        public void Clear()
-        {
-            blob.Clear();
-            offsets.Clear();
-            lengths.Clear();
-        }
-    }
+   }
 }

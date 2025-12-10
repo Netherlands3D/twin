@@ -5,20 +5,20 @@ using Unity.Collections;
 
 namespace Netherlands3D.Tilekit.Tests.MemoryManagement
 {
-    public class BucketTests
+    public class BufferBlockTests
     {
         [Test]
         public void FromArray_BasicIndexingAndCount()
         {
             // Arrange
             using var arr = new NativeArray<int>(new[] { 10, 20, 30, 40, 50 }, Allocator.Temp);
-            var r = new BucketRange(offset: 1, count: 3);
+            var r = new BlockRange(offset: 1, count: 3);
 
             // Act
-            var bucket = Bucket<int>.From(arr, r);
+            var bucket = BufferBlock<int>.From(arr, r);
 
             // Assert
-            Assert.That(bucket.Count, Is.EqualTo(3));
+            Assert.That(bucket.Length, Is.EqualTo(3));
             Assert.That(bucket[0], Is.EqualTo(20));
             Assert.That(bucket[1], Is.EqualTo(30));
             Assert.That(bucket[2], Is.EqualTo(40));
@@ -29,13 +29,13 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
         {
             // Arrange
             using var arr = new NativeArray<int>(new[] { 7, 8, 9 }, Allocator.Temp);
-            var r = new BucketRange(offset: 2, count: 0);
+            var r = new BlockRange(offset: 2, count: 0);
 
             // Act
-            var bucket = Bucket<int>.From(arr, r);
+            var bucket = BufferBlock<int>.From(arr, r);
 
             // Assert
-            Assert.That(bucket.Count, Is.EqualTo(0));
+            Assert.That(bucket.Length, Is.EqualTo(0));
             // enumerating should not throw
             foreach (var _ in bucket) { /* no-op */ }
         }
@@ -45,11 +45,11 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
         {
             // Arrange
             using var arr = new NativeArray<int>(new[] { 1, 2, 3, 4 }, Allocator.Temp);
-            var r = new BucketRange(offset: 1, count: 2); // valid slice [2,3]
-            var bucket = Bucket<int>.From(arr, r);
+            var r = new BlockRange(offset: 1, count: 2); // valid slice [2,3]
+            var bucket = BufferBlock<int>.From(arr, r);
 
             // Act + Assert
-            Assert.That(bucket.Count, Is.EqualTo(2));
+            Assert.That(bucket.Length, Is.EqualTo(2));
             Assert.That(() => { var _ = bucket[2]; }, Throws.TypeOf<IndexOutOfRangeException>());
             Assert.That(() => { var _ = bucket[-1]; }, Throws.TypeOf<IndexOutOfRangeException>());
         }
@@ -65,13 +65,13 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             list.AddNoResize(400);
             list.AddNoResize(500);
 
-            var r = new BucketRange(offset: 2, count: 2);
+            var r = new BlockRange(offset: 2, count: 2);
 
             // Act
-            var bucket = Bucket<int>.From(list, r);
+            var bucket = BufferBlock<int>.From(list, r);
 
             // Assert
-            Assert.That(bucket.Count, Is.EqualTo(2));
+            Assert.That(bucket.Length, Is.EqualTo(2));
             Assert.That(bucket[0], Is.EqualTo(300));
             Assert.That(bucket[1], Is.EqualTo(400));
 
@@ -86,10 +86,10 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
     /// </summary>
     public static class BucketTestExtensions
     {
-        public static int[] ToArray(this Bucket<int> bucket)
+        public static int[] ToArray(this BufferBlock<int> bufferBlock)
         {
-            var arr = new int[bucket.Count];
-            for (int i = 0; i < bucket.Count; i++) arr[i] = bucket[i];
+            var arr = new int[bufferBlock.Length];
+            for (int i = 0; i < bufferBlock.Length; i++) arr[i] = bufferBlock[i];
             return arr;
         }
     }

@@ -57,7 +57,7 @@ namespace Netherlands3D.Tilekit.Tests
                 transform: tr
             );
 
-            var tile = s.Get(id);
+            var tile = s.GetTile(id);
 
             // Act
 
@@ -84,13 +84,13 @@ namespace Netherlands3D.Tilekit.Tests
             s.AddTile(Box(), 1.0, ReadOnlySpan<TileContentData>.Empty, ReadOnlySpan<int>.Empty); // id 3
             s.AddTile(Box(), 1.0, ReadOnlySpan<TileContentData>.Empty, ReadOnlySpan<int>.Empty); // id 4
 
-            var tile = s.Get(parent);
+            var tile = s.GetTile(parent);
 
             // Act
             var bucket = tile.Children();
 
             // Assert
-            Assert.That(bucket.Count, Is.EqualTo(4));
+            Assert.That(bucket.Length, Is.EqualTo(4));
             Assert.That(bucket[0], Is.EqualTo(1));
             Assert.That(bucket[1], Is.EqualTo(2));
             Assert.That(bucket[2], Is.EqualTo(3));
@@ -117,13 +117,13 @@ namespace Netherlands3D.Tilekit.Tests
 
             // This parent’s children will start at Flat offset 3 (non-zero)
             int parent = s.AddTile(Box(), 1.0, ReadOnlySpan<TileContentData>.Empty, new int[] { c0, c1, c2, c3 });
-            var tile = s.Get(parent);
+            var tile = s.GetTile(parent);
 
             // Act
             var kids = tile.Children();
 
             // Assert
-            Assert.That(kids.Count, Is.EqualTo(4));
+            Assert.That(kids.Length, Is.EqualTo(4));
             Assert.That(kids[0], Is.EqualTo(c0));
             Assert.That(kids[1], Is.EqualTo(c1));
             Assert.That(kids[2], Is.EqualTo(c2));
@@ -150,11 +150,11 @@ namespace Netherlands3D.Tilekit.Tests
             int c3 = s.AddTile(Box(), 1.0, ReadOnlySpan<TileContentData>.Empty, ReadOnlySpan<int>.Empty);
 
             int parent = s.AddTile(Box(), 1.0, ReadOnlySpan<TileContentData>.Empty, new int[] { c0, c1, c2, c3 });
-            var tile = s.Get(parent);
+            var tile = s.GetTile(parent);
 
             var kids = tile.Children();
 
-            Assert.That(kids.Count, Is.EqualTo(4));
+            Assert.That(kids.Length, Is.EqualTo(4));
             Assert.That(kids[0], Is.EqualTo(c0));
             Assert.That(kids[1], Is.EqualTo(c1));
             Assert.That(kids[2], Is.EqualTo(c2));
@@ -173,7 +173,7 @@ namespace Netherlands3D.Tilekit.Tests
         {
             // Arrange
             int parent = s.AddTile(Box(), 1.0, ReadOnlySpan<TileContentData>.Empty, new int[] { 7, 8, 9 });
-            var tile = s.Get(parent);
+            var tile = s.GetTile(parent);
 
             // Act + Assert
             Assert.That(() => tile.GetChild(-1), Throws.Exception);
@@ -185,13 +185,13 @@ namespace Netherlands3D.Tilekit.Tests
         {
             // Arrange
             int t = s.AddTile(Box(), 1.0, ReadOnlySpan<TileContentData>.Empty, ReadOnlySpan<int>.Empty);
-            var tile = s.Get(t);
+            var tile = s.GetTile(t);
 
             // Act
             var kids = tile.Children();
 
             // Assert
-            Assert.That(kids.Count, Is.EqualTo(0));
+            Assert.That(kids.Length, Is.EqualTo(0));
             Assert.That(() => tile.GetChild(0), Throws.Exception);
         }
     }

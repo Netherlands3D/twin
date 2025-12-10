@@ -2,9 +2,10 @@
 using Netherlands3D.Functionalities.Wms;
 using Netherlands3D.Tilekit.ContentLoaders;
 using Netherlands3D.Tilekit.Renderers;
-using Netherlands3D.Tilekit.TileSetMaterializers;
+using Netherlands3D.Tilekit.TileSetBuilders;
 using Netherlands3D.Tilekit.TileSets;
 using Netherlands3D.Tilekit.WriteModel;
+using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -16,6 +17,7 @@ namespace Netherlands3D.Tilekit.DataSets
         public int right = 158000;
         public int top = 462000;
         public int bottom = 467000;
+        public int depth = 4;
         private const int InitialCapacity = 1024;
         
         public TextureDecalProjector textureDecalProjectorPrefab;
@@ -23,12 +25,12 @@ namespace Netherlands3D.Tilekit.DataSets
 
         private Texture2DLoader importer;
         private Texture2DOverlayRenderer tileRenderer;
-        private ExplicitQuadTreeMaterializer materializer;
+        protected QuadTreeBuilder builder;
         private BoxBoundingVolume AreaOfInterest => BoxBoundingVolume.FromTopLeftAndBottomRight(new double3(left, top, 0), new double3(right, bottom, 0));
 
         protected override void Initialize()
         {
-            materializer = new ExplicitQuadTreeMaterializer();
+            builder ??= new WmsTileSetBuilder(Url);
             importer = new Texture2DLoader();
             tileRenderer = new Texture2DOverlayRenderer(new DecalProjectorPool(textureDecalProjectorPrefab, gameObject));
             OnColdAlloc();
@@ -38,7 +40,7 @@ namespace Netherlands3D.Tilekit.DataSets
 
         private void OnColdAlloc()
         {
-            materializer.Materialize(tileSet, new() { Depth = 4 });
+            builder.Build(tileSet, new() { Depth = this.depth });
         }
         
         public override void OnWarmUp(ReadOnlySpan<int> candidateTileIndices)
@@ -92,7 +94,7 @@ namespace Netherlands3D.Tilekit.DataSets
             }
 
             tileSet.HeatTile(tileIndex);
-            tileRenderer.Create(tileSet.Get(tileIndex), tex);
+            tileRenderer.Create(tileSet.GetTile(tileIndex), tex);
         }
 
         public override void OnCooldown(ReadOnlySpan<int> candidateTileIndices)
@@ -119,7 +121,25 @@ namespace Netherlands3D.Tilekit.DataSets
 
         public override void OnFreeze(ReadOnlySpan<int> candidateTileIndices)
         {
-            // TODO: Write this again as soon as DataSet/TileSet refactor is done
+            for (var index = 0; index < candidateTileIndices.Length; index++)
+            {
+                var tileIndex = candidateTileIndices[index];
+                var tileWarmIndex = tileSet.Warm.IndexOf(tileIndex);
+
+                // If evicting failed - continue and try again next cycle
+                if (!importer.TryEvict(tileSet.TextureRef[tileWarmIndex])) continue;
+                
+                // Reorder texture refs
+                for (int i = tileWarmIndex; i < tileSet.Warm.Length; i++)
+                {
+                    tileSet.TextureRef[i -1] = tileSet.TextureRef[i];
+                }
+                // Clear last ref because we are going to remove the tile from tileSet.Warm
+                tileSet.TextureRef[tileSet.Warm.Length] = ulong.MaxValue;
+    
+                // Remove it - this will also reorder all entries after tileWarmIndex - hence the prior action
+                tileSet.Warm.RemoveAt(tileWarmIndex);
+            }
         }
 
         private void OnColdDealloc()

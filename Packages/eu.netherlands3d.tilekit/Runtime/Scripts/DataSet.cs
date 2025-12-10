@@ -91,10 +91,14 @@ namespace Netherlands3D.Tilekit
 
             if (Gizmos.color != Color.grey)
             {
+                // Gizmos.DrawWireCube(bounds.center + Vector3.up * 0.1f, bounds.size);
+            }
+            if (Gizmos.color == Color.red)
+            {
                 Gizmos.DrawWireCube(bounds.center + Vector3.up * 0.1f, bounds.size);
             }
 
-            for (int i = 0; i < tile.Children().Count; i++)
+            for (int i = 0; i < tile.Children().Length; i++)
             {
                 DrawTileGizmo(tile.GetChild(i), height + 1);
             }

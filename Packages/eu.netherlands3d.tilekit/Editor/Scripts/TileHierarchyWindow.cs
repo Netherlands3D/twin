@@ -476,7 +476,7 @@ namespace Netherlands3D.Tilekit.Editor
             // (for now it's just a visual tree).
 
             var children = tile.Children();
-            for (int i = 0; i < children.Count; i++)
+            for (int i = 0; i < children.Length; i++)
             {
                 var child = tile.GetChild(i);
                 if (child.Index != -1)

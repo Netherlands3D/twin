@@ -11,20 +11,20 @@ namespace Netherlands3D.Tilekit
     public struct TileContents
     {
         private readonly TileSet store;
-        private Bucket<TileContentData> bucket;
+        private BufferBlock<TileContentData> bufferBlock;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public TileContents(TileSet store, Bucket<TileContentData> bucket)
+        public TileContents(TileSet store, BufferBlock<TileContentData> bufferBlock)
         {
             this.store = store;
-            this.bucket = bucket;
+            this.bufferBlock = bufferBlock;
         }
 
-        public int Count => bucket.Count;
+        public int Count => bufferBlock.Length;
 
-        public TileContent this[int i] => new(store, bucket[i]);
+        public TileContent this[int i] => new(store, bufferBlock[i]);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public NativeSlice<TileContentData>.Enumerator GetEnumerator() => bucket.GetEnumerator();
+        public NativeSlice<TileContentData>.Enumerator GetEnumerator() => bufferBlock.GetEnumerator();
     }
 }
