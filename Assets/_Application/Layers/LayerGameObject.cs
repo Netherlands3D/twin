@@ -60,15 +60,6 @@ namespace Netherlands3D.Twin.Layers
 
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
 
-        [System.Serializable]
-        public struct PropertySectionOption
-        {
-            public string type;
-            public bool Enabled;
-        }
-
-        public List<PropertySectionOption> PropertySections = new();
-
 #if UNITY_EDITOR
         private void OnValidate()
         {
@@ -90,56 +81,8 @@ namespace Netherlands3D.Twin.Layers
                     EditorUtility.SetDirty(this);
                 }
             }
-
-            OnValidateCustomFlags();
         }
 
-        protected virtual void OnValidateCustomFlags(List<LayerPropertyData> properties = null)
-        {
-            PropertySectionRegistry registry = LoadRegistry();
-            if (properties == null)
-            {
-                properties = new List<LayerPropertyData>();
-            }
-
-            List<string> allPanelTypes = new List<string>();
-            SetData(new LayerData("temp")); // we need a temp layerData to store the properties in
-            foreach (var visualisation in GetComponents<IVisualizationWithPropertyData>())
-            {
-                visualisation.LoadProperties(properties);
-            }
-
-            foreach (LayerPropertyData propertyData in properties)
-            {
-                List<GameObject> allPanels = registry.GetPanelPrefabs(propertyData.GetType(), propertyData);
-                foreach (var item in allPanels)
-                {
-                    allPanelTypes.Add(item.GetComponent<IVisualizationWithPropertyData>().GetType().AssemblyQualifiedName);
-                }
-            }
-
-            foreach (string customFlag in allPanelTypes)
-            {
-                if (!PropertySections.Any(f => f.type == customFlag))
-                    PropertySections.Add(new PropertySectionOption { type = customFlag, Enabled = true });
-            }
-
-            // Remove duplicates by type
-            PropertySections = PropertySections
-                .GroupBy(f => f.type)
-                .Select(g => g.First())
-                .ToList();
-        }
-
-
-        private static PropertySectionRegistry LoadRegistry()
-        {
-            var guid = AssetDatabase.FindAssets("t:PropertySectionRegistry").FirstOrDefault();
-            if (guid == null) return null;
-
-            var path = AssetDatabase.GUIDToAssetPath(guid);
-            return AssetDatabase.LoadAssetAtPath<PropertySectionRegistry>(path);
-        }
 #endif
 
         [Obsolete("Do not use Awake in subclasses, use OnLayerInitialize instead", true)]

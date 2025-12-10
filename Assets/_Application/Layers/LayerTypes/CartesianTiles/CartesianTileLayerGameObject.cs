@@ -246,7 +246,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {          
-            InitProperty<StylingPropertyData>(properties);
+            //InitProperty<StylingPropertyData>(properties);
         }
     }
 }

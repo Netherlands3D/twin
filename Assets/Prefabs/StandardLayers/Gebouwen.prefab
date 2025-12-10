@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -1780917372914214898}
   - component: {fileID: 2626529733265145809}
   - component: {fileID: -1431062917293908258}
-  - component: {fileID: 2772068806802537498}
+  - component: {fileID: 1552071124099096867}
   m_Layer: 7
   m_Name: Gebouwen
   m_TagString: Untagged
@@ -190,7 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2772068806802537498
+--- !u!114 &1552071124099096867
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -199,7 +199,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4311489376399559593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de5cd78f3fd5c1842b127eafceb944e3, type: 3}
+  m_Script: {fileID: 11500000, guid: 040e59742c03762f891b4749d60c2b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 0}

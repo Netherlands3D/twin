@@ -16,7 +16,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    [PropertySection(typeof(StylingPropertyData), Symbolizer.VisibilityProperty)]
+    [PropertySection(typeof(HiddenObjectsPropertyData), Symbolizer.VisibilityProperty)]
     public class HiddenObjectsPropertySection : MonoBehaviour, IVisualizationWithPropertyData, IMultiSelectable
     {
         [SerializeField] private RectTransform content;
@@ -34,11 +34,11 @@ namespace Netherlands3D.Twin.Layers.Properties
         public List<ISelectable> Items { get; set; } = new();
         public ISelectable FirstSelectedItem { get; set; }
 
-        private StylingPropertyData stylingPropertyData;
+        private HiddenObjectsPropertyData stylingPropertyData;
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            stylingPropertyData = properties.GetDefaultStylingPropertyData<StylingPropertyData>();
+            stylingPropertyData = properties.GetDefaultStylingPropertyData<HiddenObjectsPropertyData>();
             if (stylingPropertyData == null) return;
 
             CreateItems();
