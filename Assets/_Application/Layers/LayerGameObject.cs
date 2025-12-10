@@ -235,14 +235,14 @@ namespace Netherlands3D.Twin.Layers
 
         private void LoadPropertiesInVisualisations()
         {
-            List<string> allowedSections = new List<string>();
-            foreach (PropertySectionOption option in PropertySections)
-            {
-                if (option.Enabled && !allowedSections.Contains(option.type))
-                    allowedSections.Add(option.type);
-            }
+            // List<string> allowedSections = new List<string>();
+            // foreach (PropertySectionOption option in PropertySections)
+            // {
+            //     if (option.Enabled && !allowedSections.Contains(option.type))
+            //         allowedSections.Add(option.type);
+            // }
 
-            LayerData.allowedPropertySections = allowedSections;
+            //LayerData.allowedPropertySections = allowedSections;
             foreach (var visualisation in GetComponents<IVisualizationWithPropertyData>())
             {
                 visualisation.LoadProperties(LayerData.LayerProperties);

@@ -192,7 +192,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                         transform.localScale,
                         scaleUnitCharacter);
             InitProperty<ToggleScatterPropertyData>(properties, p => p.AllowScatter = true);
-            InitProperty<StylingPropertyData>(properties);
+            InitProperty<ColorPropertyData>(properties);
         }
 
         protected override void RegisterEventListeners()

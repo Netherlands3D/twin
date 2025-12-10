@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    [PropertySection(typeof(StylingPropertyData), Symbolizer.FillColorProperty)]
+    [PropertySection(typeof(ColorPropertyData))]
     public class ColorPickerPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         public ColorWheel ColorWheel => colorWheel;
@@ -15,11 +15,11 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private Color defaultColor = Color.white;
         [SerializeField] private ColorWheel colorWheel;
 
-        private StylingPropertyData stylingPropertyData;
+        private ColorPropertyData stylingPropertyData;
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            stylingPropertyData = properties.GetDefaultStylingPropertyData<StylingPropertyData>();
+            stylingPropertyData = properties.GetDefaultStylingPropertyData<ColorPropertyData>();
             if (stylingPropertyData == null) return;
             
             stylingPropertyData.OnStylingChanged.AddListener(UpdateColorFromProperty);

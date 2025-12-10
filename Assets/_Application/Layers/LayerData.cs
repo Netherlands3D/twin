@@ -49,7 +49,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public List<LayerData> ChildrenLayers => children;
         [JsonIgnore] public bool IsSelected => Root.SelectedLayers.Contains(this);
 
-        [JsonIgnore] public List<string> allowedPropertySections = new();
+        //[JsonIgnore] public List<string> allowedPropertySections = new();
         
         [JsonIgnore]
         public string Name
