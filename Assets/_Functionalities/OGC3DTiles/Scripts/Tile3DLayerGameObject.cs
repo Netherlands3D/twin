@@ -22,7 +22,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         public override BoundingBox Bounds => TileSet.root != null ? new BoundingBox(TileSet.root.BottomLeft, TileSet.root.TopRight) : null;
 
         private Read3DTileset tileSet;
-        private Read3DTileset TileSet => GetAndCacheComponent(ref tileSet);
+        public Read3DTileset TileSet => GetAndCacheComponent(ref tileSet);
 
         private ICredentialHandler credentialHandler;
         private ICredentialHandler CredentialHandler => GetAndCacheComponent(ref credentialHandler);
@@ -78,7 +78,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             base.OnEnable();
             TileSet.unsupportedExtensionsParsed.AddListener(InvokeUnsupportedExtensionsMessage);
             TileSet.OnServerResponseReceived.AddListener(ProcessServerResponse);
-            TileSet.OnTileLoaded.AddListener(InitializeStyling);
         }
 
         protected override void OnDisable()

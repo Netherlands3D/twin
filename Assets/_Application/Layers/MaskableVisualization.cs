@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Netherlands3D.CartesianTiles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -11,17 +10,21 @@ namespace Netherlands3D.Twin.Layers
     [RequireComponent(typeof(LayerGameObject))]
     public class MaskableVisualization : MonoBehaviour, IVisualizationWithPropertyData
     {
+        protected LayerGameObject layerGameObject;
         private MaskingLayerPropertyData maskingLayerPropertyData;
+
+        private void Awake()
+        {
+            layerGameObject = GetComponent<LayerGameObject>();
+        }
 
         protected virtual void OnEnable()
         {
-            // layerGameObject.onLayerReady.AddListener(RegisterListeners);
             PolygonSelectionLayerPropertyData.MaskDestroyed.AddListener(ResetMask);
         }
 
         protected virtual void OnDisable()
         {
-            // layerGameObject.onLayerReady.RemoveListener(RegisterListeners);
             PolygonSelectionLayerPropertyData.MaskDestroyed.RemoveListener(ResetMask);
         }
 
@@ -58,11 +61,6 @@ namespace Netherlands3D.Twin.Layers
             {
                 UpdateBitMaskForMaterials(bitmask, r.materials);
             }
-
-            //todo: this currently only works for regular objects and carteseian tile layers, CityJSON and 3dTiles should still be done, maybe make inherited classes for each to reduce coupling?
-            var binaryMeshLayer = GetComponent<BinaryMeshLayer>();
-            if (binaryMeshLayer != null)
-                UpdateBitMaskForMaterials(bitmask, binaryMeshLayer.DefaultMaterialList);
         }
 
         protected void UpdateBitMaskForMaterials(int bitmask, IEnumerable<Material> materials)
@@ -75,7 +73,7 @@ namespace Netherlands3D.Twin.Layers
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            GetComponent<LayerGameObject>().InitProperty<MaskingLayerPropertyData>(properties);
+            layerGameObject.InitProperty<MaskingLayerPropertyData>(properties);
             maskingLayerPropertyData = properties.Get<MaskingLayerPropertyData>();
             ApplyMasking();
             maskingLayerPropertyData.OnStylingChanged.AddListener(ApplyMasking);
