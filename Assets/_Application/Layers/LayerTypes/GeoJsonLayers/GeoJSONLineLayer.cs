@@ -59,7 +59,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // of a material asset when replacing the material - no destroy of the old material must be done because
             // that is an asset and not an instance
             lineRenderer3D.LineMaterial = new Material(lineRenderer3D.LineMaterial);
-            var stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            var stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
             stylingPropertyData.ActiveToolProperty = Symbolizer.StrokeColorProperty;
         }
 
@@ -167,7 +167,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public override void ApplyStyling()
         {
             // The color in the Layer Panel represents the default stroke color for this layer
-            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            ColorPropertyData stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
             LayerData.Color = stylingPropertyData.DefaultSymbolizer?.GetStrokeColor() ?? LayerData.Color;
 
             MaterialApplicator.Apply(this.Applicator);
@@ -245,7 +245,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            InitProperty<StylingPropertyData>(properties); 
+            InitProperty<ColorPropertyData>(properties); 
         }
     }
 }

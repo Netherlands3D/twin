@@ -246,11 +246,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             if (mapping is MeshMapping map)
             {
-                //TODO maybe to the best place here to have a dependency to the cartesianlayerstyler, needs a better implementation
+                //TODO we should get the component from the layergameobject to manage visibility, as it can check for the visibility value in the propertydata
                 LayerFeature feature = GetLayerFeatureFromBagID(bagId, map, out LayerGameObject layer);
                 if (feature != null)
                 {
-                    bool? v = CartesianTileLayerStyler.GetVisibilityForSubObject(feature, layer.LayerData.GetProperty<StylingPropertyData>());
+                    bool? v = CartesianTileLayerStyler.GetVisibilityForSubObject(feature, layer.LayerData.GetProperty<HiddenObjectsPropertyData>());
                     if (v != true) return false;
                 }
             }

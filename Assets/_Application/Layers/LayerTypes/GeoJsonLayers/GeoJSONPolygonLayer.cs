@@ -194,7 +194,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
-            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            ColorPropertyData stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
             // The color in the Layer Panel represents the default fill color for this layer
             LayerData.Color = stylingPropertyData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
 
@@ -298,7 +298,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            InitProperty<StylingPropertyData>(properties); 
+            InitProperty<ColorPropertyData>(properties); 
         }
     }
 }

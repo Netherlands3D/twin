@@ -131,7 +131,9 @@ namespace Netherlands3D.Twin.Layers
             layerData.LayerDeselected.AddListener(OnDeselect);
             layerData.LayerDestroyed.AddListener(DestroyLayerGameObject);
 
-            LayerData.GetProperty<StylingPropertyData>()?.OnStylingChanged.AddListener(ApplyStyling);
+            List<StylingPropertyData> styles = LayerData.GetProperties<StylingPropertyData>();
+            foreach (var style in styles)
+                style.OnStylingChanged.AddListener(ApplyStyling);
         }
 
         protected virtual void UnregisterEventListeners()
@@ -146,7 +148,9 @@ namespace Netherlands3D.Twin.Layers
             layerData.LayerDeselected.RemoveListener(OnDeselect);
             layerData.LayerDestroyed.RemoveListener(DestroyLayerGameObject);
 
-            LayerData.GetProperty<StylingPropertyData>()?.OnStylingChanged.RemoveListener(ApplyStyling);
+            List<StylingPropertyData> styles = LayerData.GetProperties<StylingPropertyData>();
+            foreach (var style in styles)
+                style.OnStylingChanged.RemoveListener(ApplyStyling);
         }
 
         /// <summary>

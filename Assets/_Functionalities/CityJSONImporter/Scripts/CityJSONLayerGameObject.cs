@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
+using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
@@ -22,7 +23,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             if (feature.Geometry is not CityObjectVisualizer visualizer) return;
 
-            var stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
+            var stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
             var symbolizer = stylingPropertyData.AnyFeature.Symbolizer;
             var fillColor = symbolizer.GetFillColor();
             if (fillColor.HasValue)

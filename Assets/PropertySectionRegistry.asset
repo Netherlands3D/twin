@@ -49,8 +49,8 @@ MonoBehaviour:
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     Prefab: {fileID: 7185160580400989932, guid: aec1cc38c05be4c69b9adb0159593506,
       type: 3}
-  - TypeName: Netherlands3D.Twin.Layers.Properties.StylingPropertyData, eu.netherlands3d.twin,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - TypeName: Netherlands3D.Twin.Layers.Properties.LayerFeatureColorPropertyData,
+      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     Prefab: {fileID: 5529894738576217112, guid: ca4dfb99b441c8b45bdab6fe8cb84efa,
       type: 3}
   - TypeName: Netherlands3D.Twin.Layers.Properties.HiddenObjectsPropertyData, eu.netherlands3d.twin,

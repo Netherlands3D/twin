@@ -92,7 +92,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             if (debugFeatures)
             {
-                StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+                HiddenObjectsPropertyData hiddenPropertyData = LayerData.GetProperty<HiddenObjectsPropertyData>();
                 if (mapping is MeshMapping map)
                 {
                     for(int i = 0; i < 10; i++)
@@ -101,7 +101,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                         ObjectMappingItem item = map.Items[i].ObjectMappingItem;
                         Coordinate coord = map.GetCoordinateForObjectMappingItem(map.ObjectMapping, item);
                         var layerFeature = CreateFeature(item);
-                        CartesianTileLayerStyler.SetVisibilityForSubObject(layerFeature, false, coord, stylingPropertyData);
+                        CartesianTileLayerStyler.SetVisibilityForSubObject(layerFeature, false, coord, hiddenPropertyData);
                     }                    
                 }
                 debugFeatures = false;
@@ -185,6 +185,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             {
                 foreach (var (_, feature) in LayerFeatures)
                 {
+                    //do cascading to get css result styling
                     Symbolizer symbolizer = GetStyling(feature);
 
                     if (feature.Geometry is ObjectMappingItem item)
@@ -201,7 +202,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
                     if (feature.Geometry is Material material)
                     {
-                        Color? color = CartesianTileLayerStyler.GetColor(feature, LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>());
+                        Color? color = symbolizer.GetFillColor(); //CartesianTileLayerStyler.GetColor(feature, LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>());
                         if (color.HasValue)
                         {
                             if (int.TryParse(feature.Attributes[CartesianTileLayerStyler.MaterialIndexIdentifier], out var materialIndex))
