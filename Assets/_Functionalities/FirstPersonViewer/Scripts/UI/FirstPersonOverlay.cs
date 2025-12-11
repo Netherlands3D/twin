@@ -1,11 +1,9 @@
 using DG.Tweening;
-using GG.Extensions;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Events;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.Samplers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
@@ -14,7 +12,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
     public class FirstPersonOverlay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         private FirstPersonViewer firstPersonViewer;
-        private HeightMap heightMap;
 
         [SerializeField] private InputActionReference openOverlayButton;
         [SerializeField] private TextMeshProUGUI overlayText;
@@ -22,13 +19,12 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [Header("Copy Button")]
         [SerializeField] private CanvasGroup copyButtonGroup;
         private Coordinate currentCoordinates;
-        [SerializeField] private StringEvent snackbarEvent;
         [SerializeField] private string copySnackbarText;
+        [SerializeField] private UnityEvent<string> onShowCopyText;
 
         private void Start()
         {
             firstPersonViewer = ServiceLocator.GetService<FirstPersonViewer>();
-            heightMap = ServiceLocator.GetService<HeightMap>();
 
             openOverlayButton.action.performed += ToggleOverlay;
             gameObject.SetActive(false);
@@ -48,27 +44,19 @@ namespace Netherlands3D.FirstPersonViewer.UI
             else firstPersonViewer.OnPositionUpdated -= UpdateInfoMenu;
         }
 
-        private void UpdateInfoMenu(Coordinate playerCoords, float groundPos)
+        private void UpdateInfoMenu(Coordinate playerCoords)
         {
-            Coordinate rdNapCoords = playerCoords.Convert(CoordinateSystem.RDNAP);
-            currentCoordinates = rdNapCoords;
-
-            float heightMapValue = heightMap.GetHeight(rdNapCoords, true);
-
-            float napHeight = Mathf.Round(heightMapValue * 100f) / 100f;
-
-            float dstToGround = Mathf.Round(((float)rdNapCoords.value3 - heightMapValue) * 100f) / 100f;
-            float dstToObject = Mathf.Round((rdNapCoords.ToUnity().y - groundPos) * 100f) / 100f;
+            currentCoordinates = playerCoords;
 
             overlayText.text =
-                $"Coordinaten: {rdNapCoords.ToString()}\n" +
-                $"Hoogte t.o.v. NAP: {rdNapCoords.value3.ToString("F2")}m\n" +
+                $"Coordinaten: {playerCoords.ToString()}\n" +
+                $"Hoogte t.o.v. NAP: {playerCoords.value3.ToString("F2")}m\n" +
                 $"<i><size=14>Hoogtedata is een benadering en kan afwijken van de werkelijkheid.</i>";
         }
 
         public void CopyCoordinates()
         {
-            snackbarEvent.InvokeStarted(copySnackbarText);
+            onShowCopyText.Invoke(copySnackbarText);
             WebGLClipboard.Copy(currentCoordinates.ToString());
         }
 

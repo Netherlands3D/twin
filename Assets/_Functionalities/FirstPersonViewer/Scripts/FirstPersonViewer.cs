@@ -48,7 +48,7 @@ namespace Netherlands3D.FirstPersonViewer
         public Action OnResetToStart;
         public Action OnResetToGround;
         public Action OnSetCameraNorth;
-        public Action<Coordinate, float> OnPositionUpdated;
+        public Action<Coordinate> OnPositionUpdated;
 
         public Action OnViewerEntered;
         public Action<bool> OnViewerExited;
@@ -116,7 +116,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             transform.position += Vector3.up * velocity.y * Time.deltaTime;
 
-            OnPositionUpdated?.Invoke(new Coordinate(transform.position), yPositionTarget);
+            OnPositionUpdated?.Invoke(new Coordinate(transform.position));
 
             if (Input.ResetInput.triggered) ResetToGround();
         }
