@@ -21,11 +21,26 @@ namespace Netherlands3D.Twin.Layers
         protected virtual void OnEnable()
         {
             PolygonSelectionLayerPropertyData.MaskDestroyed.AddListener(ResetMask);
+            var importedObject = GetComponent<IImportedObject>();
+            if (importedObject != null)
+            {
+                importedObject.ObjectVisualized.AddListener(OnImportedObjectVisualized);
+            }
         }
 
         protected virtual void OnDisable()
         {
             PolygonSelectionLayerPropertyData.MaskDestroyed.RemoveListener(ResetMask);
+            var importedObject = GetComponent<IImportedObject>();
+            if (importedObject != null)
+            {
+                importedObject.ObjectVisualized.AddListener(OnImportedObjectVisualized);
+            }
+        }
+
+        private void OnImportedObjectVisualized(GameObject go)
+        {
+            ApplyMasking();
         }
 
         private void OnDestroy()

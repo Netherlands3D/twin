@@ -73,7 +73,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.OnDisable();
             ClickNothingPlane.ClickedOnNothing.RemoveListener(OnMouseClickNothing);
         }
-
+        
         protected override void OnLayerReady()
         {
             TransformLayerPropertyData transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
@@ -91,8 +91,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             previousScale = transform.localScale;
 
             objectCreated.Invoke(gameObject);       
-            
-
         }
 
         private void UpdatePosition(Coordinate newPosition)
@@ -205,6 +203,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
             toggleScatterPropertyData.IsScatteredChanged.AddListener(ConvertToScatterLayer);
+
+            var importedObject = GetComponent<IImportedObject>();
+            if (importedObject != null)
+            {
+                importedObject.ObjectVisualized.AddListener(OnImportedObjectVisualized);
+            }
         }
 
         protected override void UnregisterEventListeners()
@@ -217,6 +221,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
             toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToScatterLayer);
+            
+            var importedObject = GetComponent<IImportedObject>();
+            if (importedObject != null)
+            {
+                importedObject.ObjectVisualized.RemoveListener(OnImportedObjectVisualized);
+            }
         }
 
         protected virtual void Update()
@@ -308,6 +318,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             LayerData.LayerProperties.Get<ToggleScatterPropertyData>().AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
         }
 
+        private void OnImportedObjectVisualized(GameObject importedObject)
+        {
+            ApplyStyling();
+        }
+        
         public override void ApplyStyling()
         {
             // Dynamically create a list of Layer features because a different set of renderers could be present after
