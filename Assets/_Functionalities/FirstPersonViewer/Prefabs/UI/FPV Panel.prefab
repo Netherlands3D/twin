@@ -4661,7 +4661,6 @@ GameObject:
   - component: {fileID: 8931503976894062666}
   - component: {fileID: 6995138453341352447}
   - component: {fileID: 6540738744095850233}
-  - component: {fileID: 3614572794455721997}
   - component: {fileID: 215398076143446762}
   m_Layer: 5
   m_Name: Content
@@ -4684,10 +4683,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1651815029518827557}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 161.5, y: -25}
-  m_SizeDelta: {x: 323, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8931503976894062666
 CanvasRenderer:
@@ -4749,24 +4748,10 @@ MonoBehaviour:
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
-  m_ChildControlHeight: 0
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &3614572794455721997
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5629058134678259506}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 0
-  m_VerticalFit: 2
 --- !u!114 &215398076143446762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6032,10 +6017,10 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 7
   m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
-  m_ChildControlHeight: 0
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
@@ -6052,7 +6037,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
-  m_VerticalFit: 1
+  m_VerticalFit: 2
 --- !u!114 &5605894596699867571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7946,16 +7931,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4997419578823107694}
     m_Modifications:
-    - target: {fileID: 1126586908407311830, guid: 39b1ee56aa3127c4eace4e12c1f4883b,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 1126586908407311830, guid: 39b1ee56aa3127c4eace4e12c1f4883b,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 15
-      objectReference: {fileID: 0}
     - target: {fileID: 1577154297404096381, guid: 39b1ee56aa3127c4eace4e12c1f4883b,
         type: 3}
       propertyPath: m_Pivot.x
@@ -7989,12 +7964,12 @@ PrefabInstance:
     - target: {fileID: 1577154297404096381, guid: 39b1ee56aa3127c4eace4e12c1f4883b,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 100
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1577154297404096381, guid: 39b1ee56aa3127c4eace4e12c1f4883b,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1577154297404096381, guid: 39b1ee56aa3127c4eace4e12c1f4883b,
         type: 3}
@@ -8056,24 +8031,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3840938447403872002, guid: 39b1ee56aa3127c4eace4e12c1f4883b,
-        type: 3}
-      propertyPath: unlockCircleImage
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 4364221994797183784, guid: 39b1ee56aa3127c4eace4e12c1f4883b,
         type: 3}
       propertyPath: m_Name
       value: MouseUnlockAnimatie
       objectReference: {fileID: 0}
-    - target: {fileID: 9153299710080591911, guid: 39b1ee56aa3127c4eace4e12c1f4883b,
+    - target: {fileID: 7118861976157877185, guid: 39b1ee56aa3127c4eace4e12c1f4883b,
         type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -666968458, guid: 24d673ce8ef9d1f46af6e56a6ea232fc,
-        type: 3}
-    m_RemovedComponents:
-    - {fileID: 9153299710080591911, guid: 39b1ee56aa3127c4eace4e12c1f4883b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

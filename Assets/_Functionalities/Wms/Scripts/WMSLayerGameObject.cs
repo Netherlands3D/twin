@@ -87,9 +87,9 @@ namespace Netherlands3D.Functionalities.Wms
             );
 
             WMSProjectionLayer.SetAuthorization(auth);
-            LayerData.HasValidCredentials = true;
-            WMSProjectionLayer.RefreshTiles();
+            LayerData.HasValidCredentials = true;           
             WMSProjectionLayer.isEnabled = LayerData.ActiveInHierarchy;
+            WMSProjectionLayer.RefreshTiles();
         }
 
         public void ClearCredentials()
@@ -108,7 +108,11 @@ namespace Netherlands3D.Functionalities.Wms
         {
             CredentialHandler.Uri = storedUri; //apply the URL from what is stored in the Project data
             WMSProjectionLayer.WmsUrl = storedUri.ToString();
-            CredentialHandler.ApplyCredentials();
+
+            //TODO this is a major problem, for now blocking the credential handler to invoke credential validation for all layers connected to 
+            //OnAuthorizationTypeDetermined.Invoke(authorization); within the key vault. The way we listen to this event should change to a per layer basis instead of global           
+            if (LayerData.ActiveInHierarchy)
+                CredentialHandler.ApplyCredentials();
         }
 
         protected override void OnDestroy()
@@ -129,6 +133,18 @@ namespace Netherlands3D.Functionalities.Wms
             SetLegendActive(false);
         }
 
+        public override void OnLayerActiveInHierarchyChanged(bool isActive)
+        {
+            if (isActive)
+            {
+                UpdateURL(URLPropertyData.Data);
+            }
+
+            if (WMSProjectionLayer.isEnabled == isActive) return;
+
+            WMSProjectionLayer.isEnabled = isActive;           
+        }
+
         private void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)
         {
             if (boundingBoxContainer == null) return;
@@ -143,13 +159,6 @@ namespace Netherlands3D.Functionalities.Wms
             }
 
             WMSProjectionLayer.BoundingBox = boundingBoxContainer.GlobalBoundingBox;
-        }
-
-        public override void OnLayerActiveInHierarchyChanged(bool isActive)
-        {
-            if (WMSProjectionLayer.isEnabled == isActive) return;
-            
-            WMSProjectionLayer.isEnabled = isActive;
         }
     }
 }
