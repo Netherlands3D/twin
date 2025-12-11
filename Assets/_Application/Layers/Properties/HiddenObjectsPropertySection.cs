@@ -68,10 +68,10 @@ namespace Netherlands3D.Twin.Layers.Properties
             //find attributes within the data, we cannot rely on layer.layerfeatures.values because tiles arent potentialy loaded
             foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
             {
-                if(kv.Key.Contains(CartesianTileLayerStyler.VisibilityIdentifier))
+                if(kv.Key.Contains(HiddenObjectsPropertyData.VisibilityIdentifier))
                 {
-                    string objectId = CartesianTileLayerStyler.ObjectIdFromVisibilityStyleRuleName(kv.Key);                    
-                    bool? visibility = CartesianTileLayerStyler.GetVisibilityForSubObjectByAttributeTag(objectId, stylingPropertyData);
+                    string objectId = stylingPropertyData.ObjectIdFromVisibilityStyleRuleName(kv.Key);                    
+                    bool? visibility = stylingPropertyData.GetVisibilityForSubObjectByAttributeTag(objectId);
                     if (visibility == false)
                         CreateVisibilityItem(objectId);
                 }
@@ -99,7 +99,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             //update the toggles based on visibility attributes in data
             foreach (HiddenObjectsVisibilityItem item in Items.OfType<HiddenObjectsVisibilityItem>())
             {
-                bool? visibility = CartesianTileLayerStyler.GetVisibilityForSubObjectByAttributeTag(item.ObjectId, stylingPropertyData);
+                bool? visibility = stylingPropertyData.GetVisibilityForSubObjectByAttributeTag(item.ObjectId);
                 item.SetToggleState(visibility == true);
             }
         }        
@@ -111,22 +111,22 @@ namespace Netherlands3D.Twin.Layers.Properties
             LayerFeature layerFeature = CartesianTileLayerGameObject.GetLayerFeatureFromBagId(objectId);
             if(layerFeature != null)
             {               
-                coord = CartesianTileLayerStyler.GetVisibilityCoordinateForSubObject(layerFeature, stylingPropertyData);
+                coord = stylingPropertyData.GetVisibilityCoordinateForSubObject(layerFeature);
                 if(coord == null)
                 {
                     Debug.LogError("the styling rule does not contain a coordinate for this feature!");
                     return;
                 }
-                CartesianTileLayerStyler.SetVisibilityForSubObject(layerFeature, visible, (Coordinate)coord, stylingPropertyData);
+                stylingPropertyData.SetVisibilityForSubObject(layerFeature, visible, (Coordinate)coord);
                 return;
             }
-            coord = (Coordinate)CartesianTileLayerStyler.GetVisibilityCoordinateForSubObjectByTag(objectId, stylingPropertyData);
+            coord = (Coordinate)stylingPropertyData.GetVisibilityCoordinateForSubObjectByTag(objectId);
             if (coord == null)
             {
                 Debug.LogError("the styling rule does not contain a coordinate for this feature!");
                 return;
             }
-            CartesianTileLayerStyler.SetVisibilityForSubObjectByAttributeTag(objectId, visible, (Coordinate)coord, stylingPropertyData);            
+            stylingPropertyData.SetVisibilityForSubObjectByAttributeTag(objectId, visible, (Coordinate)coord);            
         }
 
         private void ToggleVisibilityForSelectedFeatures(string objectId, bool visible)
@@ -189,7 +189,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void HiddenFeatureSelected(string objectId)
         {
-            Coordinate ? coord = CartesianTileLayerStyler.GetVisibilityCoordinateForSubObjectByTag(objectId, stylingPropertyData);
+            Coordinate ? coord = stylingPropertyData.GetVisibilityCoordinateForSubObjectByTag(objectId);
             if (coord == null)
             {
                 Debug.LogError("the styling rule does not contain a coordinate for this feature!");
@@ -251,13 +251,13 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void ShowGhostMesh(string objectId)
         {
             DestroyGhostMesh();
-            bool? visibility = CartesianTileLayerStyler.GetVisibilityForSubObjectByAttributeTag(objectId, stylingPropertyData);
+            bool? visibility = stylingPropertyData.GetVisibilityForSubObjectByAttributeTag(objectId);
             if (visibility == true)
             {
                 return;
             }
 
-            Coordinate? coord = CartesianTileLayerStyler.GetVisibilityCoordinateForSubObjectByTag(objectId, stylingPropertyData);
+            Coordinate? coord = stylingPropertyData.GetVisibilityCoordinateForSubObjectByTag(objectId);
             if (coord == null)
             {
                 Debug.LogError("the styling rule does not contain a coordinate for this feature!");
@@ -303,16 +303,16 @@ namespace Netherlands3D.Twin.Layers.Properties
             List<string> idsToRemove = new List<string>();
             foreach (KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
             {
-                if (kv.Key.Contains(CartesianTileLayerStyler.VisibilityIdentifier))
+                if (kv.Key.Contains(HiddenObjectsPropertyData.VisibilityIdentifier))
                 {
-                    string objectId = CartesianTileLayerStyler.ObjectIdFromVisibilityStyleRuleName(kv.Key);
-                    bool? visibility = CartesianTileLayerStyler.GetVisibilityForSubObjectByAttributeTag(objectId, stylingPropertyData);
+                    string objectId = stylingPropertyData.ObjectIdFromVisibilityStyleRuleName(kv.Key);
+                    bool? visibility = stylingPropertyData.GetVisibilityForSubObjectByAttributeTag(objectId);
                     if (visibility == true)
                         idsToRemove.Add(objectId);
                 }
             }
             foreach (string id in idsToRemove)
-                CartesianTileLayerStyler.RemoveVisibilityForSubObjectByAttributeTag(id, stylingPropertyData);
+                stylingPropertyData.RemoveVisibilityForSubObjectByAttributeTag(id);
         }
     }
 }

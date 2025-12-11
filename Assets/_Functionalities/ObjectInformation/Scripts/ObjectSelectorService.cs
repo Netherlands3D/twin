@@ -250,7 +250,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 LayerFeature feature = GetLayerFeatureFromBagID(bagId, map, out LayerGameObject layer);
                 if (feature != null)
                 {
-                    bool? v = CartesianTileLayerStyler.GetVisibilityForSubObject(feature, layer.LayerData.GetProperty<HiddenObjectsPropertyData>());
+                    HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
+                    bool? v = hiddenPropertyData.GetVisibilityForSubObject(feature);
                     if (v != true) return false;
                 }
             }

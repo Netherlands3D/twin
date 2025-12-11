@@ -87,7 +87,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             GameObject swatchObject = Instantiate(colorSwatchPrefab, layerContent);
             ColorSwatch swatch = swatchObject.GetComponent<ColorSwatch>();
                 
-            string layerName = layerFeature.GetAttribute(CartesianTileLayerStyler.MaterialNameIdentifier);
+            string layerName = layerFeature.GetAttribute(LayerFeatureColorPropertyData.MaterialNameIdentifier);
                 
             swatch.SetLayerName(layerName);
             swatch.SetInputText(layerName);
@@ -123,7 +123,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 if (!swatch.IsSelected) continue;
                 
                 swatch.SetColor(color);
-                CartesianTileLayerStyler.SetColor(layerFeature, color, stylingPropertyData);
+                stylingPropertyData.SetColor(layerFeature, color);
             }
         }
 
@@ -140,7 +140,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             // if there is no swatch matching this layer feature, we can skip this update
             if (!swatches.TryGetValue(layerFeature, out var swatch)) return;
             
-            var color = CartesianTileLayerStyler.GetColor(layerFeature, stylingPropertyData);
+            var color = stylingPropertyData.GetColor(layerFeature);
 
             swatch.SetColor(color.GetValueOrDefault(Color.white));
         }

@@ -18,25 +18,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
     /// </summary>
     public class CartesianTileLayerStyler
     {
-        public const string MaterialNameIdentifier = "data-materialname";
-        public const string MaterialIndexIdentifier = "data-materialindex";
-        public const string VisibilityAttributeIdentifier = "data-visibility";
-        public const string VisibilityAttributePositionIdentifier = "data-visibility-position";
-        public const string VisibilityIdentifier = "visibility";
+        //public const string MaterialNameIdentifier = "data-materialname";
+        
+        //public const string VisibilityAttributeIdentifier = "data-visibility";
+        //public const string VisibilityAttributePositionIdentifier = "data-visibility-position";
+        //public const string VisibilityIdentifier = "visibility";
 
-        public const string LayerFeatureColoring = "LayerFeatureColoring";
+        //public const string LayerFeatureColoring = "LayerFeatureColoring";
 
-        public static ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
+        //public static ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
 
 
-        public CartesianTileLayerStyler(LayerGameObject layer)
-        {
+        //public CartesianTileLayerStyler(LayerGameObject layer)
+        //{
            
-        }
+        //}
 
         /// <summary>
         /// Sets a custom color for all layer features matching the material index of the given layer feature.
         /// </summary>
+        /*
         public static void SetColor(LayerFeature layerFeature, Color color, StylingPropertyData stylingPropertyData)
         {
             int.TryParse(layerFeature.Attributes[MaterialIndexIdentifier], out int materialIndexIdentifier);
@@ -55,13 +56,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             stylingPropertyData.SetStylingRule(stylingRuleName, stylingRule);
         }
-
+*/
         /// <summary>
         /// Retrieves the color for any feature that matches the given feature's material index.
         ///
         /// This method will provide a color override that has been set earlier, or it will return the current
         /// material's color if none was set. This can help in the UI to set swatches.
         /// </summary>
+       /*
         public static Color? GetColor(LayerFeature layerFeature, StylingPropertyData data)
         {
             if (layerFeature.Geometry is not Material mat) return null;
@@ -142,26 +144,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             }
             return stylingRule.Symbolizer.GetCustomProperty<Coordinate>(VisibilityAttributePositionIdentifier);
         }
-       
-        private static string ColorizationStyleRuleName(int materialIndexIdentifier)
-        {
-            return $"feature.{materialIndexIdentifier}.colorize";
-        }        
+        */
+        //private static string ColorizationStyleRuleName(int materialIndexIdentifier)
+        //{
+        //    return $"feature.{materialIndexIdentifier}.colorize";
+        //}        
 
-        private static string VisibilityStyleRuleName(string visibilityIdentifier)
-        {
-            return $"feature.{visibilityIdentifier}.{VisibilityIdentifier}";
-        }
+        //private static string VisibilityStyleRuleName(string visibilityIdentifier)
+        //{
+        //    return $"feature.{visibilityIdentifier}.{VisibilityIdentifier}";
+        //}
 
-        public static string ObjectIdFromVisibilityStyleRuleName(string styleRuleName)
-        {
-            int startIndex = styleRuleName.IndexOf('.') + 1;
-            int endIndex = styleRuleName.LastIndexOf('.');
-            if (startIndex > 0 && endIndex > startIndex)
-            {
-                return styleRuleName.Substring(startIndex, endIndex - startIndex);
-            }
-            return null;
-        }       
+        //public static string ObjectIdFromVisibilityStyleRuleName(string styleRuleName)
+        //{
+        //    int startIndex = styleRuleName.IndexOf('.') + 1;
+        //    int endIndex = styleRuleName.LastIndexOf('.');
+        //    if (startIndex > 0 && endIndex > startIndex)
+        //    {
+        //        return styleRuleName.Substring(startIndex, endIndex - startIndex);
+        //    }
+        //   return null;
+        //}       
     }
 }

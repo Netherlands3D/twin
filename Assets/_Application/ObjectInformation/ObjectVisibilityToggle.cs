@@ -92,7 +92,8 @@ namespace Netherlands3D.Twin.UI
                         if (layer != null)
                         {   
                             Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
-                            CartesianTileLayerStyler.SetVisibilityForSubObject(feature, false, coord, layer.LayerData.GetProperty<HiddenObjectsPropertyData>());
+                            HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
+                            hiddenPropertyData.SetVisibilityForSubObject(feature, false, coord);
                         }
                     }
                     
@@ -162,9 +163,9 @@ namespace Netherlands3D.Twin.UI
                 LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out LayerGameObject layer);
                 HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.LayerProperties.GetDefaultStylingPropertyData<HiddenObjectsPropertyData>();
                 if (feature == null)
-                    v = CartesianTileLayerStyler.GetVisibilityForSubObjectByAttributeTag(currentSelectedBagId, hiddenPropertyData);
+                    v = hiddenPropertyData.GetVisibilityForSubObjectByAttributeTag(currentSelectedBagId);
                 else
-                    v = CartesianTileLayerStyler.GetVisibilityForSubObject(feature, hiddenPropertyData);
+                    v = hiddenPropertyData.GetVisibilityForSubObject(feature);
                 if (v == true) visible = true;                
             }
 

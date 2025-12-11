@@ -98,7 +98,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                         ObjectMappingItem item = map.Items[i].ObjectMappingItem;
                         Coordinate coord = map.GetCoordinateForObjectMappingItem(map.ObjectMapping, item);
                         var layerFeature = CreateFeature(item);
-                        CartesianTileLayerStyler.SetVisibilityForSubObject(layerFeature, false, coord, hiddenPropertyData);
+                        hiddenPropertyData.SetVisibilityForSubObject(layerFeature, false, coord);
                     }                    
                 }
                 debugFeatures = false;
@@ -190,7 +190,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                         bool? visiblity = symbolizer.GetVisibility();
                         if (visiblity.HasValue)
                         {
-                            string id = feature.Attributes[CartesianTileLayerStyler.VisibilityAttributeIdentifier];
+                            string id = feature.Attributes[HiddenObjectsPropertyData.VisibilityAttributeIdentifier];
                             Color storedColor = symbolizer.GetFillColor() ?? Color.white;
                             var visibilityColor = visiblity == true ? storedColor : Color.clear;
                             GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, visibilityColor } });
@@ -203,7 +203,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                         Color? color = symbolizer.GetFillColor(); //CartesianTileLayerStyler.GetColor(feature, LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>());
                         if (color.HasValue)
                         {
-                            if (int.TryParse(feature.Attributes[CartesianTileLayerStyler.MaterialIndexIdentifier], out var materialIndex))
+                            if (int.TryParse(feature.Attributes[LayerFeatureColorPropertyData.MaterialIndexIdentifier], out var materialIndex))
                             {
                                 binaryMeshLayer.DefaultMaterialList[materialIndex].color = color.Value;
                             }
@@ -222,16 +222,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             if(feature.Geometry is ObjectMappingItem item)
             {
-                feature.Attributes.Add(CartesianTileLayerStyler.VisibilityAttributeIdentifier, item.objectID); 
+                feature.Attributes.Add(HiddenObjectsPropertyData.VisibilityAttributeIdentifier, item.objectID); 
             }
 
             if (feature.Geometry is not Material mat) return feature;
 
             feature.Attributes.Add(
-                CartesianTileLayerStyler.MaterialIndexIdentifier,
+                LayerFeatureColorPropertyData.MaterialIndexIdentifier,
                 meshLayer.DefaultMaterialList.IndexOf(mat).ToString()
             );
-            feature.Attributes.Add(CartesianTileLayerStyler.MaterialNameIdentifier, mat.name);
+            feature.Attributes.Add(LayerFeatureColorPropertyData.MaterialNameIdentifier, mat.name);
 
             return feature;
         }
