@@ -30,15 +30,15 @@ namespace Netherlands3D.Twin.Layers.Editor
 
 
             root.Add(Subheading("Styles"));
-            var stylingPropertyData = layerData.GetProperty<StylingPropertyData>();
-            if (stylingPropertyData == null || stylingPropertyData.GetEditorStyles().Count == 0)
+            var stylingPropertyDatas = layerData.GetProperties<StylingPropertyData>();
+            if (stylingPropertyDatas == null || stylingPropertyDatas.Count == 0)
             {
                 root.Add(FieldContent("This layer doesn't have any styles associated with it (yet)."));
             }
             else
             {
                 bool first = true;
-                foreach (var style in stylingPropertyData.GetEditorStyles())
+                foreach (var style in stylingPropertyDatas)
                 {
                     if (style == null)
                         continue;
@@ -52,7 +52,7 @@ namespace Netherlands3D.Twin.Layers.Editor
             }
         }
 
-        private static Foldout StyleFoldout(LayerStyle layerStyle)
+        private static Foldout StyleFoldout(StylingPropertyData layerStyle)
         {
             var foldout = new Foldout { text = layerStyle.Metadata.Name };
             var group = new VisualElement();

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Netherlands3D.SerializableGisExpressions;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.Properties;
 
 namespace Netherlands3D.LayerStyles
 {
@@ -34,7 +35,7 @@ namespace Netherlands3D.LayerStyles
         /// <returns>
         /// A <see cref="Symbolizer"/> representing the combined styling of all matching rules.
         /// </returns>
-        public Symbolizer GetStyling(LayerFeature feature, Dictionary<string, LayerStyle> styles)
+        public Symbolizer GetStyling(LayerFeature feature, IEnumerable<StylingPropertyData> styles)
         {
             var symbolizer = new Symbolizer();
             var context = new ExpressionContext(feature);
@@ -51,9 +52,9 @@ namespace Netherlands3D.LayerStyles
         /// <param name="symbolizer">The target <see cref="Symbolizer"/> to merge matching rules into.</param>
         /// <param name="styles">A collection of <see cref="LayerStyle"/> objects whose rules will be applied.</param>
         /// <param name="context">An <see cref="ExpressionContext"/> for evaluating selectors against a context.</param>
-        private void CopyStylingInto(Symbolizer symbolizer, Dictionary<string, LayerStyle> styles, ExpressionContext context)
+        private void CopyStylingInto(Symbolizer symbolizer, IEnumerable<StylingPropertyData> styles, ExpressionContext context)
         {
-            foreach (var style in styles.Values)
+            foreach (var style in styles)
             {
                 CopyStylingInto(symbolizer, style, context);
             }
@@ -65,7 +66,7 @@ namespace Netherlands3D.LayerStyles
         /// <param name="symbolizer">The symbolizer to merge matching rule symbolizers into.</param>
         /// <param name="style">A <see cref="LayerStyle"/> containing one or more styling rules.</param>
         /// <param name="context">An <see cref="ExpressionContext"/> for evaluating selectors against a context.</param>
-        private void CopyStylingInto(Symbolizer symbolizer, LayerStyle style, ExpressionContext context)
+        private void CopyStylingInto(Symbolizer symbolizer, StylingPropertyData style, ExpressionContext context)
         {
             foreach (var rule in style.StylingRules.Values)
             {

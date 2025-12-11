@@ -13,11 +13,12 @@ using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Functionalities.GLBImporter
 {
     [RequireComponent(typeof(HierarchicalObjectLayerGameObject))]
-    public class GLBSpawner : MonoBehaviour, IVisualizationWithPropertyData
+    public class GLBSpawner : MonoBehaviour, IVisualizationWithPropertyData, IImportedObject
     {
         private GLBPropertyData propertyData = new();
         private GameObject importedObject;
@@ -26,6 +27,8 @@ namespace Netherlands3D.Functionalities.GLBImporter
         
         [Header("Settings")]
         [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
+
+        public UnityEvent<GameObject> ObjectVisualized { get; } = new();
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -120,8 +123,7 @@ namespace Netherlands3D.Functionalities.GLBImporter
                 meshFilter.gameObject.AddComponent<MeshCollider>();
             }
 
-            // Object is loaded / replaced - trigger the application of styling
-            layerGameObject.ApplyStyling();
+            ObjectVisualized.Invoke(returnedGameObject);
         }
 
         private void PositionImportedGameObject(GameObject returnedGameObject)

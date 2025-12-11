@@ -1,23 +1,21 @@
-using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
-using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Layers.Properties;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D.Twin.Layers
+namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
 {
     public class MaskLayerToggle : MonoBehaviour
     {
-        private LayerData layerData;
-        public LayerData LayerData
+        private MaskingLayerPropertyData layerPropertyData;
+
+        public MaskingLayerPropertyData LayerPropertyData
         {
-            get => layerData;
+            get => layerPropertyData;
             set
             {
-                layerData = value;
-                toggle.interactable = ProjectData.Current.PrefabLibrary.GetPrefabById(layerData.PrefabIdentifier) != null;
+                layerPropertyData = value;
+                toggle.interactable = layerPropertyData != null;
             }
         }
 
@@ -36,25 +34,24 @@ namespace Netherlands3D.Twin.Layers
             toggle.interactable = false;
         }
 
-        public void Initialize(PolygonSelectionLayerPropertyData maskPropertyData, LayerData layer)
+        public void Initialize(PolygonSelectionLayerPropertyData maskPropertyData, LayerData layerToAffect)
         {
             this.maskPropertyData = maskPropertyData;
-            LayerData = layer;
+            LayerPropertyData = layerToAffect.GetProperty<MaskingLayerPropertyData>();
+            if (LayerPropertyData == null)
+                return;
 
-            layerNameLabel.text = LayerData.Name;
+            layerNameLabel.text = layerToAffect.Name;
 
-            var layerTypeSpriteCollection = layerTypeSpriteLibrary.GetLayerTypeSprite(layer);
-            layerIconImage.sprite = layerTypeSpriteCollection.PrimarySprite; //initialize the sprite correctly in case it is not a ReferencedLayerData
+            var layerTypeSpriteCollection = layerTypeSpriteLibrary.GetLayerTypeSprite(layerToAffect);
+            layerIconImage.sprite = layerTypeSpriteCollection.PrimarySprite;
 
-            LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
-            if (template != null)
-            {               
-                var currentLayerMask = template.GetMaskLayerMask(layer); //TODO this should be written more logically, perhaps in layerdata itself or helper method
-                int maskBitToCheck = 1 << maskPropertyData.MaskBitIndex;
-                bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
-                toggle.SetIsOnWithoutNotify(!isBitSet);
-                UpdateUIAppearance(isBitSet);
-            }
+            var currentLayerMask = LayerPropertyData.GetMaskLayerMask();
+            int maskBitToCheck = 1 << maskPropertyData.MaskBitIndex;
+            bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
+            toggle.SetIsOnWithoutNotify(!isBitSet);
+
+            UpdateUIAppearance(isBitSet);
         }
 
         private void OnEnable()
@@ -69,17 +66,14 @@ namespace Netherlands3D.Twin.Layers
 
         private void OnValueChanged(bool isOn)
         {
-            var acceptMask = !isOn;           
-            LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layerData.PrefabIdentifier);
-            template.SetMaskBit(maskPropertyData.MaskBitIndex, acceptMask, layerData);//TODO this should be written more logically, perhaps in layerdata itself or helper method
+            var acceptMask = !isOn;
+            LayerPropertyData.SetMaskBit(maskPropertyData.MaskBitIndex, acceptMask);
             UpdateUIAppearance(acceptMask);
         }
 
         private void UpdateUIAppearance(bool acceptMask)
         {
             maskIconImage.gameObject.SetActive(acceptMask);
-            var layerTypeSpriteCollection = layerTypeSpriteLibrary.GetLayerTypeSprite(layerData);
-            layerIconImage.sprite = acceptMask ? layerTypeSpriteCollection.SecondarySprite : layerTypeSpriteCollection.PrimarySprite;
             layerNameLabel.color = acceptMask ? acceptMaskTextColor : ignoreMaskTextColor;
         }
     }

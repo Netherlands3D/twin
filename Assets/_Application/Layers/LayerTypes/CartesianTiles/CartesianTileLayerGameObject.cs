@@ -15,7 +15,7 @@ using Netherlands3D.Twin.Layers.ExtensionMethods;
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
     [RequireComponent(typeof(Layer))]
-    public class CartesianTileLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
+    public class CartesianTileLayerGameObject : LayerGameObject
     {
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
 
@@ -25,9 +25,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         private TileHandler tileHandler;
 
         bool debugFeatures = false;
-
-
-      
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
@@ -92,7 +89,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             if (debugFeatures)
             {
-                StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+                HiddenObjectsPropertyData hiddenPropertyData = LayerData.GetProperty<HiddenObjectsPropertyData>();
                 if (mapping is MeshMapping map)
                 {
                     for(int i = 0; i < 10; i++)
@@ -101,7 +98,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                         ObjectMappingItem item = map.Items[i].ObjectMappingItem;
                         Coordinate coord = map.GetCoordinateForObjectMappingItem(map.ObjectMapping, item);
                         var layerFeature = CreateFeature(item);
-                        CartesianTileLayerStyler.SetVisibilityForSubObject(layerFeature, false, coord, stylingPropertyData);
+                        hiddenPropertyData.SetVisibilityForSubObject(layerFeature, false, coord);
                     }                    
                 }
                 debugFeatures = false;
@@ -185,6 +182,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             {
                 foreach (var (_, feature) in LayerFeatures)
                 {
+                    //do cascading to get css result styling
                     Symbolizer symbolizer = GetStyling(feature);
 
                     if (feature.Geometry is ObjectMappingItem item)
@@ -192,7 +190,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                         bool? visiblity = symbolizer.GetVisibility();
                         if (visiblity.HasValue)
                         {
-                            string id = feature.Attributes[CartesianTileLayerStyler.VisibilityAttributeIdentifier];
+                            string id = feature.Attributes[HiddenObjectsPropertyData.VisibilityAttributeIdentifier];
                             Color storedColor = symbolizer.GetFillColor() ?? Color.white;
                             var visibilityColor = visiblity == true ? storedColor : Color.clear;
                             GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, visibilityColor } });
@@ -201,10 +199,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
                     if (feature.Geometry is Material material)
                     {
-                        Color? color = CartesianTileLayerStyler.GetColor(feature, LayerData.GetProperty<StylingPropertyData>());
+                        //todo: check if this symbolizer is the correct one
+                        Color? color = symbolizer.GetFillColor(); //CartesianTileLayerStyler.GetColor(feature, LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>());
                         if (color.HasValue)
                         {
-                            if (int.TryParse(feature.Attributes[CartesianTileLayerStyler.MaterialIndexIdentifier], out var materialIndex))
+                            if (int.TryParse(feature.Attributes[LayerFeatureColorPropertyData.MaterialIndexIdentifier], out var materialIndex))
                             {
                                 binaryMeshLayer.DefaultMaterialList[materialIndex].color = color.Value;
                             }
@@ -214,14 +213,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             }
             base.ApplyStyling();
         }
-
-        public override void UpdateMaskBitMask(int bitmask)
-        {
-            if (layer is BinaryMeshLayer binaryMeshLayer)
-            {
-                UpdateBitMaskForMaterials(bitmask, binaryMeshLayer.DefaultMaterialList);
-            }
-        }
+        
 
         protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
         {
@@ -230,23 +222,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             if(feature.Geometry is ObjectMappingItem item)
             {
-                feature.Attributes.Add(CartesianTileLayerStyler.VisibilityAttributeIdentifier, item.objectID); 
+                feature.Attributes.Add(HiddenObjectsPropertyData.VisibilityAttributeIdentifier, item.objectID); 
             }
 
             if (feature.Geometry is not Material mat) return feature;
 
             feature.Attributes.Add(
-                CartesianTileLayerStyler.MaterialIndexIdentifier,
+                LayerFeatureColorPropertyData.MaterialIndexIdentifier,
                 meshLayer.DefaultMaterialList.IndexOf(mat).ToString()
             );
-            feature.Attributes.Add(CartesianTileLayerStyler.MaterialNameIdentifier, mat.name);
+            feature.Attributes.Add(LayerFeatureColorPropertyData.MaterialNameIdentifier, mat.name);
 
             return feature;
-        }
-
-        public void LoadProperties(List<LayerPropertyData> properties)
-        {          
-            InitProperty<StylingPropertyData>(properties);
         }
     }
 }

@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 2740582493697960923}
   - component: {fileID: 1859171214202950123}
   - component: {fileID: -2689954650890677593}
+  - component: {fileID: 3077997549703185236}
   m_Layer: 7
   m_Name: Nieuwe laag (3D Tiles)
   m_TagString: Untagged
@@ -371,3 +372,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
+--- !u!114 &3077997549703185236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbec0784a8dc94e72a12ea2e00678bfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

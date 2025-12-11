@@ -125,6 +125,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _IncludeInGlobalMask: 1
+    - _MaskingChannelBitmask: 16777215
     - _Metallic: 0.08
     - _OcclusionStrength: 1
     - _QueueControl: 0

@@ -12,7 +12,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    [PropertySection(typeof(StylingPropertyData), CartesianTileLayerStyler.LayerFeatureColoring)]
+    [PropertySection(typeof(LayerFeatureColorPropertyData))]
     public class CartesianTileLayerFeatureColorPropertySection : MonoBehaviour, IVisualizationWithPropertyData, IMultiSelectable
     {  
         [SerializeField] private RectTransform content;
@@ -27,11 +27,11 @@ namespace Netherlands3D.Twin.Layers.Properties
         public List<ISelectable> Items { get; set; } = new();
         public ISelectable FirstSelectedItem { get; set; }
 
-        private StylingPropertyData stylingPropertyData;
+        private LayerFeatureColorPropertyData stylingPropertyData;
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            stylingPropertyData = properties.Get<StylingPropertyData>();           
+            stylingPropertyData = properties.GetDefaultStylingPropertyData<LayerFeatureColorPropertyData>(); 
 
             CreateSwatches();
 
@@ -64,7 +64,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
             //TODO this could be personal, but a hunch these (runtime only) layerfeatures should be part of a data container so this propertysection and other logic should not be visualisation dependent
             CartesianTileLayerGameObject visualization = FindObjectsByType<CartesianTileLayerGameObject>(FindObjectsSortMode.None).ToList()
-                .FirstOrDefault(v => v.LayerData.GetProperty<StylingPropertyData>() == stylingPropertyData);
+                .FirstOrDefault(v => v.LayerData.GetProperty<LayerFeatureColorPropertyData>() == stylingPropertyData);
 
             if(visualization == null) 
             {
@@ -87,7 +87,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             GameObject swatchObject = Instantiate(colorSwatchPrefab, layerContent);
             ColorSwatch swatch = swatchObject.GetComponent<ColorSwatch>();
                 
-            string layerName = layerFeature.GetAttribute(CartesianTileLayerStyler.MaterialNameIdentifier);
+            string layerName = layerFeature.GetAttribute(LayerFeatureColorPropertyData.MaterialNameIdentifier);
                 
             swatch.SetLayerName(layerName);
             swatch.SetInputText(layerName);
@@ -123,7 +123,7 @@ namespace Netherlands3D.Twin.Layers.Properties
                 if (!swatch.IsSelected) continue;
                 
                 swatch.SetColor(color);
-                CartesianTileLayerStyler.SetColor(layerFeature, color, stylingPropertyData);
+                stylingPropertyData.SetColor(layerFeature, color);
             }
         }
 
@@ -140,7 +140,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             // if there is no swatch matching this layer feature, we can skip this update
             if (!swatches.TryGetValue(layerFeature, out var swatch)) return;
             
-            var color = CartesianTileLayerStyler.GetColor(layerFeature, stylingPropertyData);
+            var color = stylingPropertyData.GetColor(layerFeature);
 
             swatch.SetColor(color.GetValueOrDefault(Color.white));
         }

@@ -22,7 +22,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         public override BoundingBox Bounds => TileSet.root != null ? new BoundingBox(TileSet.root.BottomLeft, TileSet.root.TopRight) : null;
 
         private Read3DTileset tileSet;
-        private Read3DTileset TileSet => GetAndCacheComponent(ref tileSet);
+        public Read3DTileset TileSet => GetAndCacheComponent(ref tileSet);
 
         private ICredentialHandler credentialHandler;
         private ICredentialHandler CredentialHandler => GetAndCacheComponent(ref credentialHandler);
@@ -78,7 +78,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             base.OnEnable();
             TileSet.unsupportedExtensionsParsed.AddListener(InvokeUnsupportedExtensionsMessage);
             TileSet.OnServerResponseReceived.AddListener(ProcessServerResponse);
-            TileSet.OnTileLoaded.AddListener(InitializeStyling);
         }
 
         protected override void OnDisable()
@@ -89,18 +88,19 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             TileSet.OnTileLoaded.RemoveListener(InitializeStyling);
         }
 
+        //todo: make Tile3D maskable
         private void InitializeStyling(Content content)
         {
-            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
-            var bitmask = stylingPropertyData.DefaultSymbolizer.GetMaskLayerMask();
-
-            if (bitmask == null)
-                bitmask = DEFAULT_MASK_BIT_MASK;
-
-            foreach (var r in GetComponentsInChildren<Renderer>())
-            {
-                UpdateBitMaskForMaterials(bitmask.Value, r.materials);
-            }
+        //     MaskingLayerPropertyData maskingPropertyData = LayerData.GetProperty<MaskingLayerPropertyData>();
+        //     var bitmask = maskingPropertyData.DefaultSymbolizer.GetMaskLayerMask();
+        //
+        //     if (bitmask == null)
+        //         bitmask = MaskingLayerPropertyData.DEFAULT_MASK_BIT_MASK;
+        //
+        //     foreach (var r in GetComponentsInChildren<Renderer>())
+        //     {
+        //         UpdateBitMaskForMaterials(bitmask.Value, r.materials);
+        //     }
         }
 
         protected override void OnLayerReady()

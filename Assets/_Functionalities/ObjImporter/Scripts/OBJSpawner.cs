@@ -16,7 +16,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Functionalities.OBJImporter
 {
     [RequireComponent(typeof(HierarchicalObjectLayerGameObject))]
-    public class OBJSpawner : MonoBehaviour, IVisualizationWithPropertyData
+    public class OBJSpawner : MonoBehaviour, IVisualizationWithPropertyData, IImportedObject
     {
         [Header("Required input")]
         [SerializeField]
@@ -41,6 +41,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
         private MoveCameraToCoordinate cameraMover;
 
         private OBJPropertyData propertyData;
+        public UnityEvent<GameObject> ObjectVisualized { get; } = new();
 
         private void Awake()
         {
@@ -133,8 +134,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
             DisposeImporter();
 
             //Object is loaded / replaced - trigger the application of styling
-            //TODO this script should probably have nothing to do with styling! check this or move this (maybe onmeshchanged event?)
-            layerGameObject.ApplyStyling();
+            ObjectVisualized.Invoke(returnedGameObject);
         }
 
         private void PositionImportedGameObject(GameObject returnedGameObject)
@@ -196,6 +196,5 @@ namespace Netherlands3D.Functionalities.OBJImporter
             propertyData.OnObjUriChanged.RemoveListener(OnPathChanged);
             propertyData.OnMtlUriChanged.RemoveListener(OnPathChanged);
         }
-
     }
 }

@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin.Layers
         internal StoredAuthorization Credentials { get; set; }
         internal List<LayerPropertyData> Properties { get; } = new();
         [CanBeNull] private Symbolizer DefaultSymbolizer { get; set; }
-        private List<LayerStyle> Styles { get; } = new();
+        //private List<LayerStyle> Styles { get; } = new();
         private Action<LayerData> whenBuilt;
         
         internal LayerBuilder()
@@ -117,12 +117,12 @@ namespace Netherlands3D.Twin.Layers
             return this;
         }
 
-        public ILayerBuilder AddStyle(LayerStyle style)
-        {
-            Styles.Add(style);
-
-            return this;
-        }
+        // public ILayerBuilder AddStyle(LayerStyle style)
+        // {
+        //     Styles.Add(style);
+        //
+        //     return this;
+        // }
 
         public ILayerBuilder WhenBuilt(Action<LayerData> callback)
         {
@@ -146,18 +146,21 @@ namespace Netherlands3D.Twin.Layers
                 layerData.SetProperty(property);
             }
 
-            StylingPropertyData stylingProperty = Properties.Get<StylingPropertyData>();
-            if (stylingProperty != null)
-            {
-                if (DefaultSymbolizer != null)
-                {
-                    stylingProperty.DefaultStyle.AnyFeature.Symbolizer = DefaultSymbolizer;
-                }
-                foreach (var style in Styles)
-                {
-                    stylingProperty.AddStyle(style);
-                }
-            }
+            
+            
+            //TODO if you add more styles with the layerbuilder then you have to add more stylingpropertydata's
+            // StylingPropertyData stylingProperty = Properties.Get<StylingPropertyData>();
+            // if (stylingProperty != null)
+            // {
+            //     if (DefaultSymbolizer != null)
+            //     {
+            //         stylingProperty.DefaultStyle.AnyFeature.Symbolizer = DefaultSymbolizer;
+            //     }
+            //     foreach (var style in Styles)
+            //     {
+            //         stylingProperty.AddStyle(style);
+            //     }
+            // }
 
             whenBuilt?.Invoke(layerData);
 

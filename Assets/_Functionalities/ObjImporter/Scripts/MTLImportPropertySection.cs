@@ -31,7 +31,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
             objPropertyData = properties.Get<OBJPropertyData>();
             objPropertyData.MtlImportSuccess.AddListener(OnMTLImportError);
 
-            stylingPropertyData = properties.Get<StylingPropertyData>();
+            stylingPropertyData = properties.GetDefaultStylingPropertyData<StylingPropertyData>();
         }
 
         //called in the inspector by FileOpen.cs

@@ -4,6 +4,7 @@ using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
@@ -91,7 +92,8 @@ namespace Netherlands3D.Twin.UI
                         if (layer != null)
                         {   
                             Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
-                            CartesianTileLayerStyler.SetVisibilityForSubObject(feature, false, coord, layer.LayerData.GetProperty<StylingPropertyData>());
+                            HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
+                            hiddenPropertyData.SetVisibilityForSubObject(feature, false, coord);
                         }
                     }
                     
@@ -159,11 +161,11 @@ namespace Netherlands3D.Twin.UI
             {
                 bool? v;
                 LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out LayerGameObject layer);
-                StylingPropertyData stylingPropertyData = layer.LayerData.GetProperty<StylingPropertyData>();
+                HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.LayerProperties.GetDefaultStylingPropertyData<HiddenObjectsPropertyData>();
                 if (feature == null)
-                    v = CartesianTileLayerStyler.GetVisibilityForSubObjectByAttributeTag(currentSelectedBagId, stylingPropertyData);
+                    v = hiddenPropertyData.GetVisibilityForSubObjectByAttributeTag(currentSelectedBagId);
                 else
-                    v = CartesianTileLayerStyler.GetVisibilityForSubObject(feature, stylingPropertyData);
+                    v = hiddenPropertyData.GetVisibilityForSubObject(feature);
                 if (v == true) visible = true;                
             }
 

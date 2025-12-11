@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: -1805953198364215317}
   - component: {fileID: -7062163889935492721}
   - component: {fileID: 4831181432255528813}
+  - component: {fileID: -5533844408175278750}
   m_Layer: 0
   m_Name: Beuk
   m_TagString: Untagged
@@ -196,3 +197,15 @@ MonoBehaviour:
   onPostShift:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-5533844408175278750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3900504088924924644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b050df83d47a4b0aa83cc328c57a63b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
