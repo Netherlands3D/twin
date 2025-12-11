@@ -44,7 +44,7 @@ namespace Netherlands3D.Twin.Layers
             UpdateMaskBitMask(bitMask);
         }
 
-        private int GetBitMask()
+        protected int GetBitMask()
         {
             if (maskingLayerPropertyData == null) return MaskingLayerPropertyData.DEFAULT_MASK_BIT_MASK;
 
