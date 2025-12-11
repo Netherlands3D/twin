@@ -246,7 +246,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             if (mapping is MeshMapping map)
             {
-                //TODO we should get the component from the layergameobject to manage visibility, as it can check for the visibility value in the propertydata
                 LayerFeature feature = GetLayerFeatureFromBagID(bagId, map, out LayerGameObject layer);
                 if (feature != null)
                 {

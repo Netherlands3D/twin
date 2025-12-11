@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.layers.properties
 {
-    //[RequireComponent(typeof(LayerGameObject))]
+    [RequireComponent(typeof(LayerGameObject))]
     public class HiddenObject : MonoBehaviour, IVisualizationWithPropertyData
     {
         public void LoadProperties(List<LayerPropertyData> properties)
