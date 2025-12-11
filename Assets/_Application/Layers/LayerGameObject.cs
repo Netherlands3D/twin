@@ -29,15 +29,13 @@ namespace Netherlands3D.Twin.Layers
 
     public abstract class LayerGameObject : MonoBehaviour
     {
-        public const int DEFAULT_MASK_BIT_MASK = 16777215; //(2^24)-1; 
-
         [SerializeField] private string prefabIdentifier;
         [SerializeField] private SpriteState thumbnail;
         [SerializeField] private SpawnLocation spawnLocation;
         public string PrefabIdentifier => prefabIdentifier;
         public SpriteState Thumbnail => thumbnail;
         public SpawnLocation SpawnLocation => spawnLocation;
-        public virtual bool IsMaskable => true; // Can we mask this layer? Usually yes, but not in case of projections
+        // public virtual bool IsMaskable => true; // Can we mask this layer? Usually yes, but not in case of projections
 
         public string Name
         {
@@ -199,22 +197,12 @@ namespace Netherlands3D.Twin.Layers
         protected virtual void OnEnable()
         {
             onShow.Invoke();
-            if (IsMaskable)
-                PolygonSelectionLayerPropertyData.MaskDestroyed.AddListener(ResetMask);
         }
 
         protected virtual void OnDisable()
         {
             onHide.Invoke();
-            if (IsMaskable)
-                PolygonSelectionLayerPropertyData.MaskDestroyed.RemoveListener(ResetMask);
         }
-
-        private void ResetMask(int maskBitIndex)
-        {
-            SetMaskBit(maskBitIndex, true, layerData); //reset accepting masks
-        }
-
         protected virtual void OnDestroy()
         {
             //don't unsubscribe in OnDisable, because we still want to be able to center to a 
@@ -305,83 +293,9 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void ApplyStyling()
         {
-            var bitMask = GetBitMask();
-            UpdateMaskBitMask(bitMask);
-            // var mask = LayerStyler.GetMaskLayerMask(this); todo?
-            //initialize the layer's style and emit an event for other services and/or UI to update
-            //layerData.OnStylingApplied.Invoke();
+            //todo: can this be removed now?
         }
 
-        protected int GetBitMask()
-        {
-            StylingPropertyData stylingPropertyData =  LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
-            if (stylingPropertyData == null) return DEFAULT_MASK_BIT_MASK;
-
-           int? bitMask = stylingPropertyData.DefaultSymbolizer.GetMaskLayerMask();
-            if (bitMask == null)
-                bitMask = DEFAULT_MASK_BIT_MASK;
-
-            return bitMask.Value;
-        }
-
-        public virtual void UpdateMaskBitMask(int bitmask)
-        {
-            foreach (var r in GetComponentsInChildren<Renderer>())
-            {
-                UpdateBitMaskForMaterials(bitmask, r.materials);
-            }
-        }
-
-        protected void UpdateBitMaskForMaterials(int bitmask, IEnumerable<Material> materials)
-        {
-            foreach (var m in materials)
-            {
-                m.SetFloat("_MaskingChannelBitmask", bitmask);
-            }
-        }
-
-        /// <summary>
-        /// Sets a bitmask to the layer to determine which masks affect the provided LayerGameObject
-        /// </summary>
-        public void SetMaskLayerMask(int bitMask, LayerData data)
-        {
-            StylingPropertyData stylingPropertyData = data.GetProperty<StylingPropertyData>();
-            if (stylingPropertyData == null) return;
-
-            stylingPropertyData.SetMaskBitMask(bitMask);
-        }
-
-        public void SetMaskBit(int bitIndex, bool enableBit, LayerData data)
-        {
-            var currentLayerMask = GetMaskLayerMask(data);
-            int maskBitToSet = 1 << bitIndex;
-
-            if (enableBit)
-            {
-                currentLayerMask |= maskBitToSet; // set bit to 1
-            }
-            else
-            {
-                currentLayerMask &= ~maskBitToSet; // set bit to 0
-            }
-
-            SetMaskLayerMask(currentLayerMask, data);
-        }
-
-        /// <summary>
-        /// Retrieves the bitmask for masking of the LayerGameObject.
-        /// </summary>
-        public int GetMaskLayerMask(LayerData data)
-        {
-            StylingPropertyData stylingPropertyData = data.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
-            if (stylingPropertyData == null) return LayerGameObject.DEFAULT_MASK_BIT_MASK;
-
-            int? bitMask = stylingPropertyData.AnyFeature.Symbolizer.GetMaskLayerMask();
-            if (bitMask == null)
-                bitMask = LayerGameObject.DEFAULT_MASK_BIT_MASK;
-
-            return bitMask.Value;
-        }
 
         #endregion
 
@@ -449,7 +363,7 @@ namespace Netherlands3D.Twin.Layers
             return cache;
         }
 
-        public virtual void InitProperty<T>(List<LayerPropertyData> properties, Action<T> onInit = null, params object[] constructorArgs)
+        public void InitProperty<T>(List<LayerPropertyData> properties, Action<T> onInit = null, params object[] constructorArgs)
             where T : LayerPropertyData
         {
             T property = properties.OfType<T>().FirstOrDefault();

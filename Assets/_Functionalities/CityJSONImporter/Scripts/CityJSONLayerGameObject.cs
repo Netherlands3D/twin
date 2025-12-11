@@ -33,8 +33,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             if (strokeColor.HasValue)
                 visualizer.SetLineColor(strokeColor.Value);
         
-            int bitMask = GetBitMask();
-            UpdateBitMaskForMaterials(bitMask, visualizer.Materials);
+            //todo:
+            // int bitMask = GetBitMask();
+            // UpdateBitMaskForMaterials(bitMask, visualizer.Materials);
         }
         
         public void AddFeature(CityObjectVisualizer visualizer)

@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: -4152094607996323852}
   - component: {fileID: -6065409727045272873}
   - component: {fileID: -4678721770060341485}
+  - component: {fileID: -4146295641340988972}
   m_Layer: 0
   m_Name: Berk
   m_TagString: Untagged
@@ -196,3 +197,15 @@ MonoBehaviour:
   onPostShift:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-4146295641340988972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8873161933895963455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b050df83d47a4b0aa83cc328c57a63b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

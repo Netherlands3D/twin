@@ -15,9 +15,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         [SerializeField] private Tool layerTool;
         [SerializeField] private GameObject ghostGameObject;
         private Color defaultColor;
-       
-        public override bool IsMaskable => false;
-
+        
         protected override void OnLayerInitialize()
         {
             base.OnLayerInitialize();

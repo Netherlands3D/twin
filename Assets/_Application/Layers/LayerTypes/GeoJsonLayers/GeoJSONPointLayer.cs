@@ -18,7 +18,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         [SerializeField] private PointRenderer3D pointRenderer3D;
         [SerializeField] private PointRenderer3D selectionPointRenderer3D;
         public bool IsPolygon => false;
-        public override bool IsMaskable => false;
 
         public Transform Transform => transform;
 

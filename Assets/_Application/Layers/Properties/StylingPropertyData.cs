@@ -155,12 +155,5 @@ namespace Netherlands3D.Twin.Layers.Properties
             var symbolizer = AnyFeature.Symbolizer;
             return symbolizer.GetColor(ActiveToolProperty);
         }
-        
-        public void SetMaskBitMask(int bitMask)
-        {
-            AnyFeature.Symbolizer.SetMaskLayerMask(bitMask);
-            OnStylingChanged.Invoke();
-        }
-        
     }
 }

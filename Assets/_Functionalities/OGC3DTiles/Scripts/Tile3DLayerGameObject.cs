@@ -89,18 +89,19 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             TileSet.OnTileLoaded.RemoveListener(InitializeStyling);
         }
 
+        //todo: make Tile3D maskable
         private void InitializeStyling(Content content)
         {
-            StylingPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
-            var bitmask = stylingPropertyData.DefaultSymbolizer.GetMaskLayerMask();
-
-            if (bitmask == null)
-                bitmask = DEFAULT_MASK_BIT_MASK;
-
-            foreach (var r in GetComponentsInChildren<Renderer>())
-            {
-                UpdateBitMaskForMaterials(bitmask.Value, r.materials);
-            }
+        //     MaskingLayerPropertyData maskingPropertyData = LayerData.GetProperty<MaskingLayerPropertyData>();
+        //     var bitmask = maskingPropertyData.DefaultSymbolizer.GetMaskLayerMask();
+        //
+        //     if (bitmask == null)
+        //         bitmask = MaskingLayerPropertyData.DEFAULT_MASK_BIT_MASK;
+        //
+        //     foreach (var r in GetComponentsInChildren<Renderer>())
+        //     {
+        //         UpdateBitMaskForMaterials(bitmask.Value, r.materials);
+        //     }
         }
 
         protected override void OnLayerReady()

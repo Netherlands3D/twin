@@ -15,7 +15,7 @@ using Netherlands3D.Twin.Layers.ExtensionMethods;
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
     [RequireComponent(typeof(Layer))]
-    public class CartesianTileLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
+    public class CartesianTileLayerGameObject : LayerGameObject
     {
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
 
@@ -25,9 +25,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         private TileHandler tileHandler;
 
         bool debugFeatures = false;
-
-
-      
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
@@ -202,6 +199,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
                     if (feature.Geometry is Material material)
                     {
+                        //todo: check if this symbolizer is the correct one
                         Color? color = symbolizer.GetFillColor(); //CartesianTileLayerStyler.GetColor(feature, LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>());
                         if (color.HasValue)
                         {
@@ -215,14 +213,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             }
             base.ApplyStyling();
         }
-
-        public override void UpdateMaskBitMask(int bitmask)
-        {
-            if (layer is BinaryMeshLayer binaryMeshLayer)
-            {
-                UpdateBitMaskForMaterials(bitmask, binaryMeshLayer.DefaultMaterialList);
-            }
-        }
+        
 
         protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
         {
@@ -243,11 +234,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             feature.Attributes.Add(CartesianTileLayerStyler.MaterialNameIdentifier, mat.name);
 
             return feature;
-        }
-
-        public void LoadProperties(List<LayerPropertyData> properties)
-        {          
-            //InitProperty<StylingPropertyData>(properties);
         }
     }
 }
