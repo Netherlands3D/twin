@@ -1,6 +1,7 @@
 using DG.Tweening;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -22,6 +23,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private string copySnackbarText;
         [SerializeField] private UnityEvent<string> onShowCopyText;
 
+        private readonly StringBuilder stringBuilder = new StringBuilder(128);
+
         private void Start()
         {
             firstPersonViewer = ServiceLocator.GetService<FirstPersonViewer>();
@@ -37,21 +40,26 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void ToggleOverlay(InputAction.CallbackContext context)
         {
-            bool wasActive = gameObject.activeSelf;
-            gameObject.SetActive(!wasActive);
+            bool isActive = gameObject.activeSelf;
+            gameObject.SetActive(!isActive);
 
-            if (!wasActive) firstPersonViewer.OnPositionUpdated += UpdateInfoMenu;
-            else firstPersonViewer.OnPositionUpdated -= UpdateInfoMenu;
+            if (!isActive) firstPersonViewer.OnPositionUpdated += UpdateOverlayInformation;
+            else firstPersonViewer.OnPositionUpdated -= UpdateOverlayInformation;
         }
 
-        private void UpdateInfoMenu(Coordinate playerCoords)
+        private void UpdateOverlayInformation(Coordinate playerCoords)
         {
             currentCoordinates = playerCoords;
 
-            overlayText.text =
-                $"Coordinaten: {playerCoords.ToString()}\n" +
-                $"Hoogte t.o.v. NAP: {playerCoords.value3.ToString("F2")}m\n" +
-                $"<i><size=14>Hoogtedata is een benadering en kan afwijken van de werkelijkheid.</i>";
+            stringBuilder.Clear();
+
+            stringBuilder.Append("Coordinaten: ")
+            .Append(playerCoords.ToString()).Append('\n')
+            .Append("Hoogte t.o.v. NAP: ")
+            .Append(playerCoords.value3.ToString("F2")).Append("m\n")
+            .Append("<i><size=14>Hoogtedata is een benadering en kan afwijken van de werkelijkheid.</i>");
+
+            overlayText.text = stringBuilder.ToString();
         }
 
         public void CopyCoordinates()
