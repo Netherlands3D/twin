@@ -1,36 +1,27 @@
 ﻿using System.Runtime.CompilerServices;
 using Netherlands3D.Tilekit.WriteModel;
-using Unity.Collections;
 
 namespace Netherlands3D.Tilekit
 {
     /// A typed, allocation-free view over a single content entry.
     public readonly struct TileContent
     {
-        private readonly TileSet store;
+        private readonly TileSet tileSet;
         private readonly TileContentData data;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public TileContent(TileSet store, in TileContentData data)
+        public TileContent(TileSet tileSet, in TileContentData data)
         {
-            this.store = store;
+            this.tileSet = tileSet;
             this.data = data;
         }
 
         public BoundingVolumeRef Bounds => data.BoundingVolume;
         private int UriIndex => data.UriIndex;
 
-        /// Returns false if UriIndex < 0 or string truncated to 127 chars.
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool TryGetUri(out FixedString128Bytes uri)
+        public string Uri()
         {
-            if (UriIndex < 0)
-            {
-                uri = default;
-                return false;
-            }
-
-            return store.Strings.TryGetFixedString128(UriIndex, out uri);
+            return tileSet.ContentUrls.GetAsString(UriIndex);
         }
     }
 }

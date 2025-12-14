@@ -1,4 +1,5 @@
 ﻿using RSG;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit.ContentLoaders
@@ -7,8 +8,8 @@ namespace Netherlands3D.Tilekit.ContentLoaders
     {
         public IPromise<T> Load(string url);
         public bool TryEvict(string url);
-        public bool TryEvict(ulong key);
-        public bool TryGet(ulong key, out T tex);
-        public IPromise<T> GetAsync(ulong key);
+        public bool TryEvict(uint2 key);
+        public bool TryGet(uint2 key, out T tex);
+        public IPromise<T> GetAsync(uint2 key);
     }
 }

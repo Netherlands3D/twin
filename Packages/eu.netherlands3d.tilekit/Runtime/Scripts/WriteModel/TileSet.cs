@@ -3,18 +3,22 @@ using System.Runtime.CompilerServices;
 using Netherlands3D.Tilekit.MemoryManagement;
 using Unity.Collections;
 using Unity.Mathematics;
-using Unity.Profiling;
 
 namespace Netherlands3D.Tilekit.WriteModel
 {
     /// <summary>
     /// The central storage location for memory related to a tileset
     /// </summary>
-    public class TileSet : IDisposable
+    public partial class TileSet : IDisposable, IMemoryReporter
     {
+        private const int AVERAGE_CONTENT_ITEMS_PER_TILE = 1;
+        private const int AVERAGE_STRING_LENGTH = 128;
+        private const int AVERAGE_CHILDREN_PER_TILE = 4;
+
         public Tile Root => GetTile(0);
-        private int NumberOfTiles => GeometricError.Length;
         private int NextTileIndex => GeometricError.Length;
+        private int Count => GeometricError.Length;
+        private int Capacity => GeometricError.Capacity;
 
         public BoxBoundingVolume AreaOfInterest;
         
@@ -25,7 +29,8 @@ namespace Netherlands3D.Tilekit.WriteModel
 
         public readonly Buffer<int> Children;
         public readonly Buffer<TileContentData> Contents;
-        public readonly StringTable Strings;
+        public readonly StringBuffer Strings;
+        public readonly UriBuffer ContentUrls;
 
         public NativeList<int> Warm;
         public NativeList<int> Hot;
@@ -37,65 +42,46 @@ namespace Netherlands3D.Tilekit.WriteModel
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         bool IsMultipleOf64(int value) => (value & 63) == 0;
 
-        private static readonly ProfilerCounterValue<int> LayersCounter = new(
-            ProfilerCategory.Scripts, 
-            "Tilekit - Number of layers",
-            ProfilerMarkerDataUnit.Count, 
-            ProfilerCounterOptions.FlushOnEndOfFrame
-        );
-
-        private static readonly ProfilerCounterValue<int> AllocatedTilesCounter = new(
-            ProfilerCategory.Scripts, 
-            "Tilekit - Allocated tiles",
-            ProfilerMarkerDataUnit.Count, 
-            ProfilerCounterOptions.FlushOnEndOfFrame
-        );
-
-        private static readonly ProfilerCounterValue<int> ActualTilesCounter = new(
-            ProfilerCategory.Scripts, 
-            "Tilekit - Actual tiles",
-            ProfilerMarkerDataUnit.Count, 
-            ProfilerCounterOptions.FlushOnEndOfFrame
-        );
-        
-        static TileSet()
+        public TileSet(BoxBoundingVolume areaOfInterest, int capacity = 64, int warmCapacity = 0, int hotCapacity = 0, Allocator alloc = Allocator.Persistent)
         {
-            // Always reset counters to 0 on first class use - in case something didn't get disposed correctly
-            LayersCounter.Value = 0;
-            ActualTilesCounter.Value = 0;
-            AllocatedTilesCounter.Value = 0;
-        }
-
-        public TileSet(BoxBoundingVolume areaOfInterest, int initialSize = 64, Allocator alloc = Allocator.Persistent)
-        {
-            if (!IsMultipleOf64(initialSize))
+            if (!IsMultipleOf64(capacity))
             {
-                throw new ArgumentException("Initial size must be a multiple of 64", nameof(initialSize));
+                throw new ArgumentException("Initial size must be a multiple of 64", nameof(capacity));
             }
 
+            if (warmCapacity == 0)
+            {
+                // When no explicit warm capacity is given, assume 12.5% (or 1/8th) of the total capacity can become warm, with a minimum of 16 tiles.
+                warmCapacity = Math.Max(16, (int)(capacity * .125f));
+            }
+            if (hotCapacity == 0)
+            {
+                // When no explicit warm capacity is given, assume 3.125% or (1/32th) of the total capacity can become hot, with a minimum of 8 tiles.
+                hotCapacity = Math.Max(8, (int)(capacity * .03125f));
+            }
             AreaOfInterest = areaOfInterest;
-            LayersCounter.Value += 1;
-            AllocatedTilesCounter.Value += initialSize;
             
-            BoundingVolumes = new BoundingVolumeStore();
-            BoundingVolumes.Alloc(initialSize, alloc);
-            GeometricError = new NativeList<double>(initialSize, alloc);
-            Refine = new NativeList<MethodOfRefinement>(initialSize, alloc);
-            Transform = new NativeList<float4x4>(initialSize, alloc);
+            BoundingVolumes = new BoundingVolumeStore(capacity, alloc);
+            GeometricError = new NativeList<double>(capacity, alloc);
+            Refine = new NativeList<MethodOfRefinement>(capacity, alloc);
+            Transform = new NativeList<float4x4>(capacity, alloc);
 
             // Assume 4 children per tile and have the list autogrow. This matches the concept of quad trees, and
             // even though these should be defined as implicit tilesets - it is a useful metric.
-            Children = new Buffer<int>(initialSize, initialSize * 4, alloc);
+            Children = new Buffer<int>(capacity, capacity * AVERAGE_CHILDREN_PER_TILE, alloc);
+
+            // Each content item has a url composed of multiple parts - so it can exceed average content items per tile (would be weird though), let's test
+            // with 10x the average length
+            // TODO: Investigate if this is correct - I think so, because each content uri has a unique component, and then we have entries for the common stuff
+            //    It is the byte size that should fit neatly, which I think it does?
+            Strings = new StringBuffer(capacity * AVERAGE_CONTENT_ITEMS_PER_TILE * 10, capacity * AVERAGE_STRING_LENGTH * 10, alloc);
 
             // Assume that tiles have a single content by default, there could be multiple but generally there is only 1
-            Contents = new Buffer<TileContentData>(initialSize, initialSize, alloc);
-
-            // Assume strings have a length of 128 bytes on average
-            Strings = new StringTable(initialSize, initialSize * 128, alloc);
+            Contents = new Buffer<TileContentData>(capacity, capacity * AVERAGE_CONTENT_ITEMS_PER_TILE, alloc);
+            ContentUrls = new UriBuffer(Strings, capacity * AVERAGE_CONTENT_ITEMS_PER_TILE, alloc);
             
-            // TODO: these initial capacities should be changed
-            Warm = new NativeList<int>(128, alloc);
-            Hot = new NativeList<int>(32, alloc);
+            Warm = new NativeList<int>(warmCapacity, alloc);
+            Hot = new NativeList<int>(hotCapacity, alloc);
         }
 
         public int AddTile(
@@ -110,8 +96,6 @@ namespace Netherlands3D.Tilekit.WriteModel
             // as the new id as this is last id + 1
             int id = NextTileIndex;
 
-            ActualTilesCounter.Value += 1;
-            
             BoundingVolumes.Add(id, boundingVolume);
             GeometricError.AddNoResize(geometricError);
             Refine.AddNoResize(refine);
@@ -172,9 +156,6 @@ namespace Netherlands3D.Tilekit.WriteModel
             // Clear all storages first to allow for a proper cleanup before disposing
             Clear();
             
-            LayersCounter.Value -= 1;
-            AllocatedTilesCounter.Value -= GeometricError.Capacity;
-            
             GeometricError.Dispose();
             Refine.Dispose();
             Transform.Dispose();
@@ -182,13 +163,14 @@ namespace Netherlands3D.Tilekit.WriteModel
             Children.Dispose();
             Contents.Dispose();
             Strings.Dispose();
+            ContentUrls.Dispose();
+            BoundingVolumes.Dispose();
+            Warm.Dispose();
+            Hot.Dispose();
         }
 
         public void Clear()
         {
-            // Clearing will not free memory, but will reset the counters for the actual tiles - allocated tiles will stay the same
-            ActualTilesCounter.Value -= NumberOfTiles;
-
             GeometricError.Clear();
             Refine.Clear();
             Transform.Clear();
@@ -196,6 +178,9 @@ namespace Netherlands3D.Tilekit.WriteModel
             Children.Clear();
             Contents.Clear();
             Strings.Clear();
+            ContentUrls.Clear();
+            Warm.Clear();
+            Hot.Clear();
         }
     }
 }

@@ -18,20 +18,10 @@ namespace Netherlands3D.Tilekit
             this.index = index;
         }
         
-        public BoxBoundingVolume AsBox() => store.BoundingVolumes.Boxes[index];
-        public RegionBoundingVolume AsRegion() => store.BoundingVolumes.Regions[index];
-        public SphereBoundingVolume AsSphere() => store.BoundingVolumes.Spheres[index];
+        public BoxBoundingVolume AsBox() => store.BoundingVolumes.Box(index);
+        public RegionBoundingVolume AsRegion() => store.BoundingVolumes.Region(index);
+        public SphereBoundingVolume AsSphere() => store.BoundingVolumes.Sphere(index);
 
-        public BoundsDouble ToBounds()
-        {
-            var boundingVolumeRef = store.BoundingVolumes.BoundingVolumeRefs[index];
-            return boundingVolumeRef.Type switch
-            {
-                BoundingVolumeType.Region => AsRegion().ToBounds(),
-                BoundingVolumeType.Box => AsBox().ToBounds(),
-                BoundingVolumeType.Sphere => AsSphere().ToBounds(),
-                _ => throw new Exception("Invalid bounding volume type")
-            };
-        }
+        public BoundsDouble ToBounds() => store.BoundingVolumes.Bounds(index);
     }
 }

@@ -60,7 +60,7 @@ namespace Netherlands3D.Tilekit.TileSetBuilders
             
             ReadOnlySpan<TileContentData> content = stackalloc TileContentData[1]
             {
-                new TileContentData(GenerateUrl(tileSet, myIndex, boundingVolume), boundingVolumeRef)
+                new TileContentData(GenerateUrl(tileSet, boundingVolume), boundingVolumeRef)
             };
             
             tileIndex = tileSet.AddTile(boundingVolume, 1000 * depth, content, children);
@@ -68,7 +68,7 @@ namespace Netherlands3D.Tilekit.TileSetBuilders
             return AddLevelOfTiles(tileSet, boundingVolume, tileIndex, depth);
         }
         
-        protected abstract int GenerateUrl(TileSet tileSet, int tileIndex, BoxBoundingVolume boundingVolume);
+        protected abstract int GenerateUrl(TileSet tileSet, BoxBoundingVolume boundingVolume);
     }
     
     public struct ExplicitQuadTreePopulatorSettings

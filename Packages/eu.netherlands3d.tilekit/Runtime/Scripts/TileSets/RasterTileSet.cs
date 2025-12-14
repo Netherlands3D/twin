@@ -40,14 +40,17 @@ namespace Netherlands3D.Tilekit.TileSets
             public bool IsWarm => tileSet.Warm.Contains(tileIndex);
             private int WarmIndex => tileSet.Warm.IndexOf(tileIndex);
             public bool IsHot => tileSet.Hot.Contains(tileIndex);
-            public ulong Texture2DRef => !IsWarm ? ulong.MaxValue : tileSet.TextureRef[WarmIndex];
+            
+            // uint2.zero means - no ref. A cache key should never result in the value 0, so we can (ab)use this to signify: there is no texture here
+            public uint2 Texture2DRef => !IsWarm ? uint2.zero : tileSet.TextureRef[WarmIndex];
         }
 
-        public NativeArray<ulong> TextureRef;
+        public NativeArray<uint2> TextureRef;
         
-        public RasterTileSet(BoxBoundingVolume areaOfInterest, int initialSize = 64, Allocator alloc = Allocator.Persistent) : base(areaOfInterest, initialSize, alloc)
+        public RasterTileSet(BoxBoundingVolume areaOfInterest, int capacity = 64, int warmCapacity = 0, int hotCapacity = 0, Allocator alloc = Allocator.Persistent) 
+            : base(areaOfInterest, capacity, warmCapacity, hotCapacity, alloc)
         {
-            TextureRef = new NativeArray<ulong>(Warm.Capacity, alloc);
+            TextureRef = new NativeArray<uint2>(Warm.Capacity, alloc);
         }
     }
 }

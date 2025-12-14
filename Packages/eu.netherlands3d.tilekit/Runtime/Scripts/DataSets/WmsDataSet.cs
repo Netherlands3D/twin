@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using Netherlands3D.Tilekit.TileSetBuilders;
-using Netherlands3D.Tilekit.TileSets;
-using Unity.Collections;
 
 namespace Netherlands3D.Tilekit.DataSets
 {
@@ -24,18 +21,9 @@ namespace Netherlands3D.Tilekit.DataSets
             urlStringBuilder.Replace("{styles}", "kilometrering");
             Url = urlStringBuilder.ToString();
 
-            builder ??= new WmsTileSetBuilder(Url);
-            
             base.Initialize();
         }
 
-        protected override string GetImageUrl(RasterTileSet.Tile tile)
-        {
-            var boundingVolume = tile.BoundingVolume.AsBox();
-
-            return new StringBuilder(Url)
-                .Replace("{bbox}", $"{boundingVolume.TopLeft.x},{boundingVolume.TopLeft.y},{boundingVolume.BottomRight.x},{boundingVolume.BottomRight.y}")
-                .ToString();
-        }
+        protected override QuadTreeBuilder CreateTileSetBuilder() => new WmsTileSetBuilder(Url);
     }
 }

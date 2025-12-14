@@ -2,6 +2,7 @@
 using System.Collections;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Tilekit.ExtensionMethods;
+using Netherlands3D.Tilekit.Profiling;
 using Netherlands3D.Tilekit.WriteModel;
 using Unity.Collections;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace Netherlands3D.Tilekit
         protected Timer timer;
 
         protected TTileSet tileSet;
+        private TileSetStatsAdapter telemetry;
         private TileStateScheduler stateScheduler;
 
         private void Awake()
@@ -32,6 +34,8 @@ namespace Netherlands3D.Tilekit
             yield return null;
 
             tileSet = CreateTileSet();
+            telemetry = new TileSetStatsAdapter(GetInstanceID(), gameObject.name, tileSet);
+            Telemetry.Register(telemetry);
             stateScheduler = new (new TilesSelector(), this, tileSet);
 
             timer.tick.AddListener(OnTick);
@@ -67,6 +71,7 @@ namespace Netherlands3D.Tilekit
 
         protected virtual void OnDestroy()
         {
+            if (telemetry != null) Telemetry.Unregister(telemetry);
             tileSet?.Dispose();
         }
 

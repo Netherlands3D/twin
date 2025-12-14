@@ -1,42 +1,77 @@
-﻿using Unity.Collections;
+﻿using System;
+using Netherlands3D.Tilekit.Geometry;
+using Netherlands3D.Tilekit.MemoryManagement;
+using Unity.Collections;
 
 namespace Netherlands3D.Tilekit.WriteModel
 {
-    public struct BoundingVolumeStore
+    // TODO: Change to a double buffer instead of structs - this way we can be a lot more compact
+    public sealed class BoundingVolumeStore : IDisposable, IMemoryReporter
     {
-        // TODO: Change to native lists
-        public NativeArray<BoundingVolumeRef> BoundingVolumeRefs;
-        public NativeArray<BoxBoundingVolume> Boxes;
-        public NativeArray<RegionBoundingVolume> Regions;
-        public NativeArray<SphereBoundingVolume> Spheres;
+        private NativeArray<BoundingVolumeRef> boundingVolumeRefs;
+        private NativeArray<BoxBoundingVolume> boxes;
+        private NativeArray<RegionBoundingVolume> regions;
+        private NativeArray<SphereBoundingVolume> spheres;
 
-        public void Alloc(int initialSize, Allocator alloc = Allocator.Persistent)
+        public BoundingVolumeStore(int initialSize, Allocator alloc = Allocator.Persistent)
         {
-            BoundingVolumeRefs = new NativeArray<BoundingVolumeRef>(initialSize, alloc);
-            Boxes = new NativeArray<BoxBoundingVolume>(initialSize, alloc);
-            Regions = new NativeArray<RegionBoundingVolume>(initialSize, alloc);
-            Spheres = new NativeArray<SphereBoundingVolume>(initialSize, alloc);
+            boundingVolumeRefs = new NativeArray<BoundingVolumeRef>(initialSize, alloc);
+            boxes = new NativeArray<BoxBoundingVolume>(initialSize, alloc);
+            regions = new NativeArray<RegionBoundingVolume>(initialSize, alloc);
+            spheres = new NativeArray<SphereBoundingVolume>(initialSize, alloc);
         }
         
         public BoundingVolumeRef Add(int idx, BoxBoundingVolume b)
         {
-            Boxes[idx] = b;
-            BoundingVolumeRefs[idx] = new BoundingVolumeRef(BoundingVolumeType.Box, idx);
-            return BoundingVolumeRefs[idx];
+            boxes[idx] = b;
+            boundingVolumeRefs[idx] = new BoundingVolumeRef(BoundingVolumeType.Box, idx);
+            return boundingVolumeRefs[idx];
         }
 
         public BoundingVolumeRef Add(int idx, RegionBoundingVolume r)
         {
-            Regions[idx] = r;
-            BoundingVolumeRefs[idx] = new BoundingVolumeRef(BoundingVolumeType.Region, idx);
-            return BoundingVolumeRefs[idx];
+            regions[idx] = r;
+            boundingVolumeRefs[idx] = new BoundingVolumeRef(BoundingVolumeType.Region, idx);
+            return boundingVolumeRefs[idx];
         }
 
         public BoundingVolumeRef Add(int idx, SphereBoundingVolume s)
         {
-            Spheres[idx] = s;
-            BoundingVolumeRefs[idx] = new BoundingVolumeRef(BoundingVolumeType.Sphere, idx);
-            return BoundingVolumeRefs[idx];
+            spheres[idx] = s;
+            boundingVolumeRefs[idx] = new BoundingVolumeRef(BoundingVolumeType.Sphere, idx);
+            return boundingVolumeRefs[idx];
+        }
+
+        public BoxBoundingVolume Box(int index) => boxes[boundingVolumeRefs[index].Index];
+
+        public RegionBoundingVolume Region(int index) => regions[boundingVolumeRefs[index].Index];
+
+        public SphereBoundingVolume Sphere(int index) => spheres[boundingVolumeRefs[index].Index];
+
+        public BoundsDouble Bounds(int index)
+        {
+            var boundingVolumeRef = boundingVolumeRefs[index];
+            return boundingVolumeRef.Type switch
+            {
+                BoundingVolumeType.Region => Region(boundingVolumeRef.Index).ToBounds(),
+                BoundingVolumeType.Box => Box(boundingVolumeRef.Index).ToBounds(),
+                BoundingVolumeType.Sphere => Sphere(boundingVolumeRef.Index).ToBounds(),
+                _ => throw new Exception("Invalid bounding volume type")
+            };
+        }
+
+        public long GetReservedBytes() 
+            => boundingVolumeRefs.GetReservedBytes() + boxes.GetReservedBytes() + regions.GetReservedBytes() + spheres.GetReservedBytes();
+
+        public long GetUsedBytes() 
+            => boundingVolumeRefs.GetUsedBytes() + boxes.GetUsedBytes() + regions.GetUsedBytes() + spheres.GetUsedBytes();
+
+        public void Dispose()
+        {
+            boundingVolumeRefs.Dispose();
+            boxes.Dispose();
+            regions.Dispose();
+            spheres.Dispose();
         }
     }
 }
