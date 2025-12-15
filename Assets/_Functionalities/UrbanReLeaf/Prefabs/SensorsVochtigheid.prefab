@@ -66,9 +66,6 @@ MonoBehaviour:
   onLayerReady:
     m_PersistentCalls:
       m_Calls: []
-  OnStylingApplied:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &6731469812728504720
 MonoBehaviour:
   m_ObjectHideFlags: 0

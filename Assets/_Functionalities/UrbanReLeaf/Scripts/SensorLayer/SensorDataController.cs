@@ -13,11 +13,20 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
         public enum SensorPropertyType { None, Temperature, RelativeHumidity, ThermalDiscomfort }
         public SensorPropertyType propertyType;
         public List<SensorCell> Cells { get { return StaticSensorData ? staticCells : cells; } }
+        
         public float Maximum;
         public float Minimum;        
         public Color MaxColor;
         public Color MinColor;
-
+        public float defaultMinValue;
+        public float defaultMaxValue;
+        public Color defaultMinColor;
+        public Color defaultMaxColor;
+        protected DateTime startDate;
+        protected DateTime endDate;
+        protected DateTime defaultStartDate = new();
+        protected DateTime defaultEndDate = new();
+        
         public float heightMultiplier = 500; //how high will the tile rise on selection, multiplication scale per measurement
         public bool MeasurementsIsValue = false;
 
@@ -36,10 +45,7 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
         protected int observationLimit = 5000; //the maximum data points per tile retrieved. a low number sometimes causes cells not to properly overlap with other tiles
 
 
-        protected DateTime startDate;
-        protected DateTime endDate;
-        protected DateTime defaultStartDate = new();
-        protected DateTime defaultEndDate = new();
+       
 
         public struct SensorCell
         {
@@ -52,6 +58,10 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
 
         public virtual void Start()
         {
+            defaultMinValue = Minimum;
+            defaultMaxValue = Maximum;
+            defaultMinColor = MinColor;
+            defaultMaxColor = MaxColor;
             SetTimeWindow(defaultStartDate, defaultEndDate);
         }
 
