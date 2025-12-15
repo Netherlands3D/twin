@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: -8558701900799187924}
   - component: {fileID: 4683332348422220768}
   - component: {fileID: 1953088678775989159}
-  - component: {fileID: -7635511712639531463}
   - component: {fileID: 4514186496007414640}
   m_Layer: 0
   m_Name: SensorsThermischOngemak
@@ -64,9 +63,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onLayerReady:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStylingApplied:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &4798792025898717726
@@ -191,20 +187,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-7635511712639531463
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1762811913447571165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7ea0481d59678846a64ecaf6ba21187, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 8621565738462384234, guid: 98f37a0bb63723d44a8a8b584de0ac34,
-    type: 3}
 --- !u!114 &4514186496007414640
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -29,10 +29,6 @@ MonoBehaviour:
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     Prefab: {fileID: 5078733024073835164, guid: e2706125b4e8b43429f60205608c5a9b,
       type: 3}
-  - TypeName: Netherlands3D.Functionalities.OBJImporter.OBJPropertyData, eu.netherlands3d.twin,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Prefab: {fileID: 5078733024073835164, guid: e3551a6eb7620214c9a2399f9004680f,
-      type: 3}
   - TypeName: Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties.PolygonSelectionLayerPropertyData,
       eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     Prefab: {fileID: 7185160580400989932, guid: 599137b5f8b96463dbf2bd16d71cd26d,
