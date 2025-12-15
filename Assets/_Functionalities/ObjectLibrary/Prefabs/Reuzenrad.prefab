@@ -4034,6 +4034,7 @@ GameObject:
   - component: {fileID: 2268550633859707694}
   - component: {fileID: 5031382651597372068}
   - component: {fileID: 2811255133333936376}
+  - component: {fileID: -8342262807860936339}
   m_Layer: 0
   m_Name: Reuzenrad
   m_TagString: Untagged
@@ -4085,11 +4086,6 @@ MonoBehaviour:
   onLayerReady:
     m_PersistentCalls:
       m_Calls: []
-  PropertySections:
-  - type: fill-color
-    Enabled: 1
-  - type: visibility
-    Enabled: 0
   DebugBoundingBox: 0
   objectCreated:
     m_PersistentCalls:
@@ -4151,6 +4147,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 20.76, y: 21.78, z: 1}
   m_Center: {x: 0, y: 10.48, z: 0}
+--- !u!114 &-8342262807860936339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4536377726316931888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b050df83d47a4b0aa83cc328c57a63b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4711277355690726795
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: -3892557586120215936}
   - component: {fileID: 379969814246679949}
   - component: {fileID: 837440091551581272}
+  - component: {fileID: -6040131995221107821}
   m_Layer: 6
   m_Name: Fotorealistische wereld (Google 3D Tiles)
   m_TagString: Untagged
@@ -68,77 +69,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 870952d2aa83a564fb93f5fbf40f70ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tile:
-    level: 0
-    X: 0
-    Y: 0
-    hascontent: 0
-    priority: 0
-    childrenCountDelayingDispose: 0
-    boundingVolume:
-      boundingVolumeType: 0
-      values: []
-    BottomLeft:
-      coordinateSystem: 0
-      extraLongitudeRotation: 0
-      extraLattitudeRotation: 0
-      value1: 0
-      value2: 0
-      value3: 0
-      PointsLength: 0
-    TopRight:
-      coordinateSystem: 0
-      extraLongitudeRotation: 0
-      extraLattitudeRotation: 0
-      value1: 0
-      value2: 0
-      value3: 0
-      PointsLength: 0
-    inView: 0
-    requestedDispose: 0
-    requestedUpdate: 0
-    isLoading: 0
-    children: []
-    tileTransform:
-      m00: 1
-      m01: 0
-      m02: 0
-      m03: 0
-      m10: 0
-      m11: 1
-      m12: 0
-      m13: 0
-      m20: 0
-      m21: 0
-      m22: 1
-      m23: 0
-      m30: 0
-      m31: 0
-      m32: 0
-      m33: 1
-    transform:
-    - 1
-    - 0
-    - 0
-    - 0
-    - 0
-    - 1
-    - 0
-    - 0
-    - 0
-    - 0
-    - 1
-    - 0
-    - 0
-    - 0
-    - 0
-    - 1
-    geometricError: 0
-    screenSpaceError: 3.4028235e+38
-    refine: 
-    contentUri: 
-    content: {fileID: 0}
-    loadedChildren: 0
   settings:
     refinementType: 0
     subdivisionScheme: 0
@@ -153,6 +83,7 @@ MonoBehaviour:
     boundingRegion: []
   subtreeUrl: 
   isbusy: 0
+  debugLog: 0
 --- !u!114 &5648866956155822156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,6 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilesetUrl: https://tile.googleapis.com:443/v1/3dtiles/root.json
+  contentCoordinateSystem: 4978
   publicKey: 
   personalKey: 
   queryKeyName: key
@@ -174,6 +106,7 @@ MonoBehaviour:
     X: 0
     Y: 0
     hascontent: 0
+    tileSet: {fileID: 0}
     priority: 0
     childrenCountDelayingDispose: 0
     boundingVolume:
@@ -186,7 +119,6 @@ MonoBehaviour:
       value1: 0
       value2: 0
       value3: 0
-      PointsLength: 0
     TopRight:
       coordinateSystem: 0
       extraLongitudeRotation: 0
@@ -194,7 +126,6 @@ MonoBehaviour:
       value1: 0
       value2: 0
       value3: 0
-      PointsLength: 0
     inView: 0
     requestedDispose: 0
     requestedUpdate: 0
@@ -262,6 +193,7 @@ MonoBehaviour:
   sseComponent: -1
   tilePrioritiser: {fileID: 7109194962515795805}
   materialOverride: {fileID: 0}
+  debugLog: 0
   unsupportedExtensionsParsed:
     m_PersistentCalls:
       m_Calls: []
@@ -272,6 +204,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnLoadAssetMetadata:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTileLoaded:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &6390242371133718726
@@ -386,7 +321,12 @@ MonoBehaviour:
   onHide:
     m_PersistentCalls:
       m_Calls: []
-  usePropertySections: 1
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
   UnsupportedExtensionsMessage:
     m_PersistentCalls:
       m_Calls: []
@@ -403,7 +343,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldTransformShifter: {fileID: -3892557586120215936}
-  referenceCoordinateSystem: 4326
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
@@ -449,6 +388,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
-  CredentialsSucceeded:
-    m_PersistentCalls:
-      m_Calls: []
+--- !u!114 &-6040131995221107821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7974831043381414785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbec0784a8dc94e72a12ea2e00678bfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

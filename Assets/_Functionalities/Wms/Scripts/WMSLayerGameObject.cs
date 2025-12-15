@@ -19,7 +19,6 @@ namespace Netherlands3D.Functionalities.Wms
     [RequireComponent(typeof(ICredentialHandler))]
     public class WMSLayerGameObject : CartesianTileLayerGameObject, IVisualizationWithPropertyData//, ILayerWithPropertyPanels
     {
-        public override bool IsMaskable => false;
         private WMSTileDataLayer wmsProjectionLayer;
         private WMSTileDataLayer WMSProjectionLayer => GetAndCacheComponent(ref wmsProjectionLayer);
 

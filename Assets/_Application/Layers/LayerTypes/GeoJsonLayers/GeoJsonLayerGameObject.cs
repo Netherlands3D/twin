@@ -11,6 +11,7 @@ using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
@@ -145,9 +146,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// </summary>
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
-            InitProperty<StylingPropertyData>(properties);
+            InitProperty<ColorPropertyData>(properties);
             //Initialize the styling with the default color that is gotten from the LayerData.Color
-            var stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            var stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
             stylingPropertyData.DefaultSymbolizer.SetFillColor(LayerData.Color);
             stylingPropertyData.DefaultSymbolizer.SetStrokeColor(LayerData.Color);
         }
@@ -269,7 +270,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs(prefab.name).ChildOf(LayerData);
-            App.Layers.Add(layerBuilder, callBack);
+            var newLayer = App.Layers.Add(layerBuilder, callBack);
+            
+            ColorPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
+            ColorPropertyData childStylingPropertyData = newLayer.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
+            
+            var fillColor = stylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetFillColor().Value : LayerData.Color;
+            var strokeColor = stylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetStrokeColor().Value : LayerData.Color;
+            childStylingPropertyData.DefaultSymbolizer.SetFillColor(fillColor);
+            childStylingPropertyData.DefaultSymbolizer.SetStrokeColor(strokeColor);
         }
 
         protected virtual void OnFeatureRemoved(Feature feature)

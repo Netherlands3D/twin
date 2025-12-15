@@ -29,8 +29,8 @@ namespace Netherlands3D.Twin.Layers.Properties
                 {
                     foreach(var prefab in prefabs)
                     {
-                        IVisualizationWithPropertyData prefabPanel = prefab.GetComponent<IVisualizationWithPropertyData>();
-                        if (!layer.allowedPropertySections.Contains(prefabPanel.GetType().AssemblyQualifiedName)) continue;
+                        // IVisualizationWithPropertyData prefabPanel = prefab.GetComponent<IVisualizationWithPropertyData>();
+                        // if (!layer.allowedPropertySections.Contains(prefabPanel.GetType().AssemblyQualifiedName)) continue;
 
                         var panel = Instantiate(prefab, sections);
                         panel.GetComponent<IVisualizationWithPropertyData>().LoadProperties(layer.LayerProperties);
