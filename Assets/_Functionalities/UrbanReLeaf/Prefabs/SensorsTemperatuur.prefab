@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: -3615321823364236960}
   - component: {fileID: 8999195932812253715}
   - component: {fileID: -5673596216332244454}
-  - component: {fileID: -1830606201930232543}
   - component: {fileID: -2270055792247843345}
   m_Layer: 0
   m_Name: SensorsTemperatuur
@@ -64,9 +63,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onLayerReady:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStylingApplied:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &8385893786410652466
@@ -191,20 +187,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-1830606201930232543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1762811913447571165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7ea0481d59678846a64ecaf6ba21187, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 8621565738462384234, guid: 220ded5efe14b85439d8749d9b05aae3,
-    type: 3}
 --- !u!114 &-2270055792247843345
 MonoBehaviour:
   m_ObjectHideFlags: 0
