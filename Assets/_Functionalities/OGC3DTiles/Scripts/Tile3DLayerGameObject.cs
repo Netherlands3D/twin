@@ -106,13 +106,14 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         protected override void OnLayerReady()
         {
             var tile3DPropertyData = LayerData.GetProperty<Tile3DLayerPropertyData>();
-            if (string.IsNullOrEmpty(tile3DPropertyData.Url) && !string.IsNullOrEmpty(TileSet.tilesetUrl)) //if we are making a new layer, we should take the serialized url from the tileset if it exists.
+            var hasEmptyUrl = tile3DPropertyData.Url == null || string.IsNullOrEmpty(tile3DPropertyData.Url.ToString());
+            if (hasEmptyUrl && !string.IsNullOrEmpty(TileSet.tilesetUrl)) //if we are making a new layer, we should take the serialized url from the tileset if it exists.
             {
                 UpdateURL(new Uri(TileSet.tilesetUrl));
             }
             else
             {
-                UpdateURL(new Uri(tile3DPropertyData.Url));
+                UpdateURL(tile3DPropertyData.Url);
             }
 
             UpdateCRS(tile3DPropertyData.ContentCRS);
@@ -169,7 +170,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         {            
             InitProperty<Tile3DLayerPropertyData>(properties, null, TileSet.tilesetUrl);
             Tile3DLayerPropertyData tile3DPropertyData = properties.Get<Tile3DLayerPropertyData>();
-            UpdateURL(new Uri(tile3DPropertyData.Url));
+            UpdateURL(tile3DPropertyData.Url);
             UpdateCRS(tile3DPropertyData.ContentCRS);
         }
         

@@ -1,11 +1,17 @@
 using System;
+using System.Collections.Generic;
+using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Credentials
 {
     //this is the handler to query the keyvault and return the credentials object to be processed further
-    public class CredentialHandler : MonoBehaviour, ICredentialHandler
+    public class CredentialHandler : MonoBehaviour, ICredentialHandler, IVisualizationWithPropertyData
     {
         [Tooltip("KeyVault Scriptable Object")] [SerializeField]
         private KeyVault keyVault;
@@ -52,8 +58,19 @@ namespace Netherlands3D.Credentials
             if (Uri == null || auth.Domain != new Uri(Uri.GetLeftPart(UriPartial.Path))) //ensure the returned authorization is relevant to us
                 return;
 
+            if (auth.GetType() != typeof(Public))
+            {
+                var prop = new CredentialsRequiredPropertyData(); 
+                GetComponent<LayerGameObject>()?.LayerData.SetProperty(prop); //todo: a bit hacky to check if the LayerGameObject exists here
+            }
+            
             Authorization = auth;
             OnAuthorizationHandled.Invoke(auth.SanitizeUrl(Uri), auth);
+        }
+
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            var needsCredentials = properties.Get<CredentialsRequiredPropertyData>() != null;
         }
     }
 }

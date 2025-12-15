@@ -91,12 +91,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         protected virtual void StartLoadingData()
         {
             LayerURLPropertyData urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            if (urlPropertyData.Data.IsStoredInProject())
+            if (urlPropertyData.Url.IsStoredInProject())
             {
-                string path = AssetUriFactory.GetLocalPath(urlPropertyData.Data);
+                string path = AssetUriFactory.GetLocalPath(urlPropertyData.Url);
                 StartCoroutine(parser.ParseGeoJSONLocal(path));
             }
-            else if (urlPropertyData.Data.IsRemoteAsset())
+            else if (urlPropertyData.Url.IsRemoteAsset())
             {
                 RequestCredentials();
             }
@@ -106,7 +106,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             var credentialHandler = GetComponent<ICredentialHandler>();
             LayerURLPropertyData urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            credentialHandler.Uri = urlPropertyData.Data;
+            credentialHandler.Uri = urlPropertyData.Url;
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             credentialHandler.ApplyCredentials();
         }

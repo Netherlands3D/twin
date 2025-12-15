@@ -1,11 +1,15 @@
 using System;
+using System.Collections.Generic;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
-    public class CredentialsValidationPropertySection : MonoBehaviour, ICredentialsPropertySection
+    [PropertySection(typeof(CredentialsRequiredPropertyData))]
+    public class CredentialsValidationPropertySection : MonoBehaviour, ICredentialsPropertySection, IVisualizationWithPropertyData
     {
         private ICredentialHandler handler;
 
@@ -24,6 +28,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
                 OnCredentialsHandled(handler.Uri, handler.Authorization);
                 handler.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
             }
+        }
+
+        private void Awake()
+        {
+            Handler = GetComponent<ICredentialHandler>();
         }
 
         private void Start()
@@ -45,6 +54,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
     
             validCredentialsPanel.SetActive(accepted);
             invalidCredentialsPanel.SetActive(!accepted);
+        }
+
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            Handler.Uri = properties.Get<LayerURLPropertyData>().Url;
         }
     }
 }

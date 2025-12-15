@@ -8,22 +8,11 @@ using UnityEngine.Events;
 namespace Netherlands3D.Functionalities.OGC3DTiles
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "3DTiles")]
-    public class Tile3DLayerPropertyData : LayerPropertyData, ILayerPropertyDataWithCRS
+    public class Tile3DLayerPropertyData : LayerURLPropertyData, ILayerPropertyDataWithCRS
     {
-        [DataMember] private string url;
-
-        [JsonIgnore]
-        public string Url
-        {
-            get => url;
-            set
-            {
-                url = value;
-                OnUrlChanged.Invoke(new Uri(url));
-            }
-        }
         [DataMember] private int contentCRS = (int)CoordinateSystem.WGS84_ECEF;
-
+        [JsonIgnore] public readonly UnityEvent<int> OnCRSChanged = new();
+        
         [JsonIgnore]
         public int ContentCRS
         {
@@ -35,22 +24,30 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             }
         }
 
-
-        [JsonIgnore] public readonly UnityEvent<Uri> OnUrlChanged = new();
-        [JsonIgnore] public readonly UnityEvent<int> OnCRSChanged = new();
-        [JsonConstructor]
-        public Tile3DLayerPropertyData(string url, int contentCRS)
+        [JsonConstructor] //todo: check if deserialization works
+        public Tile3DLayerPropertyData(Uri url, int contentCRS)
         {
             this.url = url;
             this.contentCRS = contentCRS;
         }
         
-        public Tile3DLayerPropertyData(string url)
+        public Tile3DLayerPropertyData(Uri url)
         {
             this.url = url;
             this.contentCRS = (int)CoordinateSystem.WGS84_ECEF;
         }
-
+        
+        public Tile3DLayerPropertyData(string url, int contentCRS)
+        {
+            this.url = new Uri(url);
+            this.contentCRS = contentCRS;
+        }
+        
+        public Tile3DLayerPropertyData(string url)
+        {
+            this.url = new Uri(url);
+            this.contentCRS = (int)CoordinateSystem.WGS84_ECEF;
+        }
         public void SetDefaultCrs()
         {
             ContentCRS = (int)CoordinateSystem.WGS84_ECEF;
