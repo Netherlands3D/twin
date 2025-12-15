@@ -11,7 +11,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Credentials
 {
     //this is the handler to query the keyvault and return the credentials object to be processed further
-    public class CredentialHandler : MonoBehaviour, ICredentialHandler, IVisualizationWithPropertyData
+    public class CredentialHandler : MonoBehaviour, ICredentialHandler
     {
         [Tooltip("KeyVault Scriptable Object")] [SerializeField]
         private KeyVault keyVault;
@@ -60,11 +60,6 @@ namespace Netherlands3D.Credentials
             
             Authorization = auth;
             OnAuthorizationHandled.Invoke(auth.SanitizeUrl(Uri), auth);
-        }
-
-        public void LoadProperties(List<LayerPropertyData> properties)
-        {
-            var needsCredentials = properties.Get<CredentialsRequiredPropertyData>() != null;
         }
     }
 }
