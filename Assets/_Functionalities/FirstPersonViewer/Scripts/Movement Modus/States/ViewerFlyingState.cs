@@ -37,6 +37,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             viewer.OnResetToStart -= ResetCurrentSpeed;
 
             viewer.FirstPersonCamera.SetCameraRotationDampening(false);
+            ResetSmoothVelocity();
         }
 
         public override void OnUpdate()
@@ -57,6 +58,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             {
                 MoveFreeCam(moveInput);
                 MoveVertical(verticalInput);
+                ResetSmoothVelocity();
             }
         }
 
@@ -84,8 +86,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             Vector3 targetTransformation = direction * currentSpeed;
 
             //Turn more than 90 degrees - reset momentum
-            if (Vector3.Dot(smoothVelocity, targetTransformation) < 0f || Vector3.Dot(moveInput, lastMovementInput) < 0f)
-                smoothVelocity = Vector3.zero;
+            if (Vector3.Dot(smoothVelocity.normalized, targetTransformation.normalized) < 0f || Vector3.Dot(moveInput.normalized, lastMovementInput.normalized) < 0f)
+            { smoothVelocity = Vector3.zero; currentSpeed = 0; }
 
             //No input direction, take the current momentum from smoothVelocity and apply it as it decellerates.
             if (direction == Vector3.zero)
@@ -134,9 +136,9 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             currentSpeed = 0;
         }
 
-        private Vector3 ClampVector3(Vector3 vector, float min, float max)
+        private void ResetSmoothVelocity()
         {
-            return new Vector3(Mathf.Clamp(vector.x, min, max), Mathf.Clamp(vector.y, min, max), Mathf.Clamp(vector.z, min, max));
+            smoothVelocity = Vector3.zero;
         }
     }
 }
