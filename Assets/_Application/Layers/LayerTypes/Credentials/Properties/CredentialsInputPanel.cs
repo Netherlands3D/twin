@@ -1,13 +1,12 @@
 using System;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
-using Netherlands3D.Twin.UI;
 using TMPro;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
-    public class CredentialsInputPropertySection : MonoBehaviour, ICredentialsPropertySection
+    public class CredentialsInputPanel : MonoBehaviour, ICredentialsPropertySection
     {
         private ICredentialHandler handler;
         
