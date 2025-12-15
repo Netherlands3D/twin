@@ -42,36 +42,30 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
         {
             propertyData = properties.Get<SensorPropertyData>();
             
-            DateTime startDate = propertyData.StartDate;
-            startTimeYearField.text = startDate.Year.ToString();
-            startTimeMonthField.text = startDate.Month.ToString();
-            startTimeDayField.text = startDate.Day.ToString();
-
-            DateTime endDate = propertyData.EndDate;
-            endTimeYearField.text = endDate.Year.ToString();
-            endTimeMonthField.text = endDate.Month.ToString();
-            endTimeDayField.text = endDate.Day.ToString();
-
-            if(minSlider != null)
-                minSlider.value = propertyData.MinValue;
-            if(maxSlider != null) 
-                maxSlider.value = propertyData.MaxValue;
-            if(minimumColorPicker != null)
-                minimumColorPicker.color = propertyData.MinColor;
-            if(maximumColorPicker != null)
-                maximumColorPicker.color = propertyData.MaxColor;
+            propertyData.OnMinValueChanged.AddListener(UpdateMinimumSlider);
+            propertyData.OnMaxValueChanged.AddListener(UpdateMaximumSlider);
+            propertyData.OnMinColorChanged.AddListener(UpdateMinimumColor);
+            propertyData.OnMaxColorChanged.AddListener(UpdateMaximumColor);
+            propertyData.OnStartDateChanged.AddListener(UpdateStartDate);
+            propertyData.OnEndDateChanged.AddListener(UpdateEndDate);
+            
+            UpdateStartDate(propertyData.StartDate);
+            UpdateEndDate(propertyData.EndDate);
+            UpdateMinimumSlider(propertyData.MinValue);
+            UpdateMaximumSlider(propertyData.MaxValue);
+            UpdateMinimumColor(propertyData.MinColor);
+            UpdateMaximumColor(propertyData.MaxColor);
         }
-
 
         private void Awake()
         {
-            startTimeYearInputField.onValueChanged.AddListener(v => { startTimeYearField.text = v; OnInputStartTimeValueChanged(); });
-            startTimeMonthInputField.onValueChanged.AddListener(v => { startTimeMonthField.text = v; OnInputStartTimeValueChanged(); });
-            startTimeDayInputField.onValueChanged.AddListener(v => { startTimeDayField.text = v; OnInputStartTimeValueChanged(); });
+            startTimeYearInputField.onValueChanged.AddListener(v => { startTimeYearField.text = v; HandleStartDate(); });
+            startTimeMonthInputField.onValueChanged.AddListener(v => { startTimeMonthField.text = v; HandleStartDate(); });
+            startTimeDayInputField.onValueChanged.AddListener(v => { startTimeDayField.text = v; HandleStartDate(); });
 
-            endTimeYearInputField.onValueChanged.AddListener(v => { endTimeYearField.text = v; OnInputEndTimeValueChanged(); });
-            endTimeMonthInputField.onValueChanged.AddListener(v => { endTimeMonthField.text = v; OnInputEndTimeValueChanged(); });
-            endTimeDayInputField.onValueChanged.AddListener(v => { endTimeDayField.text = v; OnInputEndTimeValueChanged(); });
+            endTimeYearInputField.onValueChanged.AddListener(v => { endTimeYearField.text = v; HandleEndDate(); });
+            endTimeMonthInputField.onValueChanged.AddListener(v => { endTimeMonthField.text = v; HandleEndDate(); });
+            endTimeDayInputField.onValueChanged.AddListener(v => { endTimeDayField.text = v; HandleEndDate(); });
         }
 
         private void OnEnable()
@@ -98,32 +92,100 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             resetButton.onClick.RemoveListener(HandleReset);
         }
 
+        private void OnDestroy()
+        {
+            propertyData.OnMinValueChanged.RemoveListener(UpdateMinimumSlider);
+            propertyData.OnMaxValueChanged.RemoveListener(UpdateMaximumSlider);
+            propertyData.OnMinColorChanged.RemoveListener(UpdateMinimumColor);
+            propertyData.OnMaxColorChanged.RemoveListener(UpdateMaximumColor);
+            propertyData.OnStartDateChanged.RemoveListener(UpdateStartDate);
+            propertyData.OnEndDateChanged.RemoveListener(UpdateEndDate);
+        }
+
         private void HandleReset()
         {
             propertyData.OnResetValues.Invoke();
         }
 
+        private void UpdateMinimumSlider(float value)
+        {
+            if(minSlider != null)
+                minSlider.value = value;
+        }
+        
+        private void UpdateMaximumSlider(float value)
+        {
+            if (maxSlider != null)
+                maxSlider.value = value;
+        }
+
+        private void UpdateMinimumColor(Color color)
+        {
+            if (minimumColorPicker != null)
+                minimumColorPicker.color = color;
+        }
+
+        private void UpdateMaximumColor(Color  color)
+        {
+            if (maximumColorPicker != null)
+                maximumColorPicker.color = color;
+        }
+
+        private void UpdateStartDate(DateTime startDate)
+        {
+            startTimeYearField.text = startDate.Year.ToString();
+            startTimeMonthField.text = startDate.Month.ToString();
+            startTimeDayField.text = startDate.Day.ToString();
+
+            startTimeYearInputField.text = startTimeYearField.text;
+            startTimeMonthInputField.text = startTimeMonthField.text;
+            startTimeDayInputField.text = startTimeDayField.text;
+        }
+
+        private void UpdateEndDate(DateTime endDate)
+        {
+            endTimeYearField.text = endDate.Year.ToString();
+            endTimeMonthField.text = endDate.Month.ToString();
+            endTimeDayField.text = endDate.Day.ToString();
+
+            endTimeYearInputField.text = endTimeYearField.text;
+            endTimeMonthInputField.text = endTimeMonthField.text;
+            endTimeDayInputField.text = endTimeDayField.text;
+        }
+
         private void HandleMinimum(float newValue) 
         {
-            propertyData.MinValue = newValue;            
+            if(propertyData == null) return;
+            
+            if(newValue !=  propertyData.MinValue)
+                propertyData.MinValue = newValue;            
         }
 
         private void HandleMaximum(float newValue) 
         {
-            propertyData.MaxValue = newValue;            
+            if(propertyData == null) return;
+            
+            if(newValue !=  propertyData.MaxValue)
+                propertyData.MaxValue = newValue;            
         }
 
         private void HandleMinimumColor(Color newValue) 
         {
-            propertyData.MinColor  = newValue;
+            if(propertyData == null) return;
+            
+            if(newValue !=  propertyData.MinColor)
+                propertyData.MinColor  = newValue;
         }
 
         private void HandleMaximumColor(Color newValue) 
         {
-            propertyData.MaxColor =  newValue;
+            if(propertyData == null) return;
+            
+            if(newValue !=  propertyData.MaxColor)
+                propertyData.MaxColor =  newValue;
         }
 
-        private void OnInputStartTimeValueChanged()
+        private void HandleStartDate()
         {
             if (!IsValidYear(startTimeDayField.text, startTimeMonthField.text, startTimeYearField.text))
                 return;
@@ -136,10 +198,11 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             int month = int.Parse(startTimeMonthField.text);
             int year = int.Parse(startTimeYearField.text);
             DateTime newStart = new DateTime(year, month, day);
-            propertyData.StartDate =  newStart;
+            if(newStart != propertyData.StartDate)
+                propertyData.StartDate = newStart;
         }
 
-        private void OnInputEndTimeValueChanged()
+        private void HandleEndDate()
         {
             if (!IsValidYear(endTimeDayField.text, endTimeMonthField.text, endTimeYearField.text))
                 return;
@@ -152,7 +215,8 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             int month = int.Parse(endTimeMonthField.text);
             int year = int.Parse(endTimeYearField.text);
             DateTime newEnd = new DateTime(year, month, day);
-            propertyData.EndDate = newEnd;
+            if(newEnd != propertyData.EndDate)
+                propertyData.EndDate = newEnd;
         }
 
         private bool IsValidYear(string day, string month, string year)

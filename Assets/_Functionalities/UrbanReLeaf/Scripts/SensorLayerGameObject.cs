@@ -72,12 +72,14 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             InitProperty<SensorPropertyData>(properties, null, 
-                SensorProjectionLayer.SensorDataController.Minimum,
-                SensorProjectionLayer.SensorDataController.Maximum,
-                SensorProjectionLayer.SensorDataController.MinColor,
-                SensorProjectionLayer.SensorDataController.MaxColor,
+                SensorProjectionLayer.SensorDataController.defaultMinValue,
+                SensorProjectionLayer.SensorDataController.defaultMaxValue,
+                SensorProjectionLayer.SensorDataController.defaultMinColor,
+                SensorProjectionLayer.SensorDataController.defaultMaxColor,
                 SensorProjectionLayer.SensorDataController.DefaultStartDate,
                 SensorProjectionLayer.SensorDataController.DefaultEndDate);
+            
+            SensorProjectionLayer.SensorDataController.LoadProperties(properties);
         }
 
         public void ResetValues()
