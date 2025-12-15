@@ -35,6 +35,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     {
         public override BoundingBox Bounds => new(polygonBounds);
         public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
+        private static readonly int baseColorID = Shader.PropertyToID("_BaseColor");
 
         private Mesh mesh;
         private Material material;
@@ -88,7 +89,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 if (!fillColor.HasValue) return;
 
                 LayerData.Color = fillColor.Value;
-                material.SetColor("_BaseColor", fillColor.Value);
+                material.SetColor(baseColorID, fillColor.Value);
             }
         }
 

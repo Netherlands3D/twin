@@ -21,6 +21,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
     [RequireComponent(typeof(WorldTransform))]
     public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, IVisualizationWithPropertyData //, ILayerWithPropertyPanels
     {
+        private static readonly int baseColorID = Shader.PropertyToID("_BaseColor");
         public override BoundingBox Bounds => CalculateWorldBoundsFromRenderers();
         public bool DebugBoundingBox = false;
 
@@ -189,8 +190,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                         transform.eulerAngles,
                         transform.localScale,
                         scaleUnitCharacter);
-            InitProperty<ToggleScatterPropertyData>(properties, p => p.AllowScatter = true);
             InitProperty<ColorPropertyData>(properties);
+            InitProperty<ToggleScatterPropertyData>(properties, p => p.AllowScatter = true);
         }
 
         protected override void RegisterEventListeners()
@@ -346,16 +347,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 for (int m = 0; m <= meshRenderer.sharedMaterials.Length - 1; m++)
                 {
                     meshRenderer.GetPropertyBlock(block, m);
-                    block.SetColor(BaseColorID, fillColor.Value);
+                    block.SetColor(baseColorID, fillColor.Value);
                     meshRenderer.SetPropertyBlock(block, m);
                 }
             }
 
             base.ApplyStyling();
         }
-
-        private static readonly int BaseColorID = Shader.PropertyToID("_BaseColor");
-      
 
         private void ConvertToScatterLayer(bool isScattered)
         {
