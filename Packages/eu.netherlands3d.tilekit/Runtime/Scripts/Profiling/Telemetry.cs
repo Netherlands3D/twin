@@ -237,7 +237,7 @@ namespace Netherlands3D.Tilekit.Profiling
                     rowPtr->TilesAllocated = stats.TilesAllocated;
                     rowPtr->TilesActual = stats.TilesActual;
                     rowPtr->StringsAllocated = stats.StringsAllocated;
-                    rowPtr->StringsActual = stats.StringsAllocated;
+                    rowPtr->StringsActual = stats.StringsActual;
                     rowPtr->UrisAllocated = stats.UrisAllocated;
                     rowPtr->UrisActual = stats.UrisActual;
                     rowPtr->WarmCount = stats.WarmCount;

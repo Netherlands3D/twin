@@ -10,9 +10,21 @@ namespace Netherlands3D.Tilekit.TileSetBuilders
         // String is acceptable, this is a one-time allocation for this service and not on the hot path
         private readonly string wmsMapUrl;
 
-        public WmsTileSetBuilder(string wmsMapUrl)
+        public WmsTileSetBuilder(string wmsMapUrl, string layers, string styles, string crs)
         {
-            this.wmsMapUrl = wmsMapUrl;
+            var version = "1.3.0";
+            var queryString = new StringBuilder()
+                .AppendFormat(
+                    "service=WMS&version={0}&request=GetMap&layers={1}&styles={2}&CRS={3}&width=1024&height=1024&format=image%2fpng&transparent=true", 
+                    version,
+                    layers, 
+                    styles, 
+                    crs
+                )
+                .ToString();
+
+            // Replace query string with the one we just built
+            this.wmsMapUrl = new UriBuilder(wmsMapUrl) { Query = queryString }.Uri.ToString();
         }
 
         protected override int GenerateUrl(TileSet tileSet, BoxBoundingVolume boundingVolume)

@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using Netherlands3D.Tilekit.ContentLoaders;
 using Netherlands3D.Tilekit.MemoryManagement;
 using Netherlands3D.Tilekit.WriteModel;
 using Unity.Collections;
@@ -8,6 +9,9 @@ namespace Netherlands3D.Tilekit.TileSets
 {
     public class RasterTileSet : TileSet
     {
+        // uint2.zero means - no ref. A cache key should never result in the value 0, so we can (ab)use this to signify: there is no texture here
+        private static readonly uint2 NO_TEXTURE = uint2.zero;
+
         public readonly struct Tile
         {
             private readonly int tileIndex;
@@ -41,8 +45,7 @@ namespace Netherlands3D.Tilekit.TileSets
             private int WarmIndex => tileSet.Warm.IndexOf(tileIndex);
             public bool IsHot => tileSet.Hot.Contains(tileIndex);
             
-            // uint2.zero means - no ref. A cache key should never result in the value 0, so we can (ab)use this to signify: there is no texture here
-            public uint2 Texture2DRef => !IsWarm ? uint2.zero : tileSet.TextureRef[WarmIndex];
+            public uint2 Texture2DRef => !IsWarm ? NO_TEXTURE : tileSet.TextureRef[WarmIndex];
         }
 
         public NativeArray<uint2> TextureRef;
@@ -52,5 +55,30 @@ namespace Netherlands3D.Tilekit.TileSets
         {
             TextureRef = new NativeArray<uint2>(Warm.Capacity, alloc);
         }
+
+        public void LoadTexture(int warmIdx, string url)
+        {
+            TextureRef[warmIdx] = Texture2DLoader.HashUrl(url);
+            Texture2DLoader.Instance.Load(url);
+        }
+
+        public bool UnloadTexture(int warmIndex)
+        {
+            if (!Texture2DLoader.Instance.TryEvict(TextureRef[warmIndex])) return false;
+         
+            // TODO: can we make this a reordering buffer class? to minimize bugs
+            // TODO: Or make the buffer class not append-only and signify a free slot using a value of -1?
+            // Reorder texture refs
+            for (int i = warmIndex; i < Warm.Length; i++)
+            {
+                if (i == 0) continue;
+                TextureRef[i -1] = TextureRef[i];
+            }
+            // Clear last ref because we are going to remove the tile from tileSet.Warm
+            TextureRef[Warm.Length] = NO_TEXTURE;
+            
+            return true;
+        }
+
     }
 }

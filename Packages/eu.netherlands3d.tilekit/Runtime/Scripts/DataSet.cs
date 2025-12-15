@@ -1,62 +1,36 @@
 ﻿using System;
-using System.Collections;
-using Netherlands3D.Coordinates;
-using Netherlands3D.Tilekit.ExtensionMethods;
 using Netherlands3D.Tilekit.Profiling;
 using Netherlands3D.Tilekit.WriteModel;
-using Unity.Collections;
 using UnityEngine;
 
 namespace Netherlands3D.Tilekit
 {
     [RequireComponent(typeof(Timer))]
-    public abstract class DataSet<TTileSet> : MonoBehaviour, ITileLifecycleBehaviour where TTileSet : TileSet 
+    public abstract class DataSet : MonoBehaviour, ITileLifecycleBehaviour
     {
-        public bool IsInitialized { get; set; } = false;
-
-        protected Timer timer;
-
-        protected TTileSet tileSet;
+        public bool IsInitialized { get; private set; }
         private TileSetStatsAdapter telemetry;
         private TileStateScheduler stateScheduler;
 
-        private void Awake()
+        public TileSet TileSet { get; private set; } = null!;
+
+        protected abstract TileSet CreateTileSetBase();
+
+        public void Initialize()
         {
-            timer = GetComponent<Timer>();
-        }
-
-        protected abstract TTileSet CreateTileSet();
-
-        private IEnumerator Start()
-        {
-            // Wait two frames for the switch to main scene
-            yield return null;
-            yield return null;
-
-            tileSet = CreateTileSet();
-            telemetry = new TileSetStatsAdapter(GetInstanceID(), gameObject.name, tileSet);
+            TileSet = CreateTileSetBase();
+            telemetry = new TileSetStatsAdapter(GetInstanceID(), gameObject.name, TileSet);
             Telemetry.Register(telemetry);
-            stateScheduler = new (new TilesSelector(), this, tileSet);
-
-            timer.tick.AddListener(OnTick);
-            Initialize();
+            stateScheduler = new (new TilesSelector(), this, TileSet);
+            OnInitialize();
             IsInitialized = true;
-            timer.Resume();
-        }
-        
-        private void OnEnable()
-        {
-            if (IsInitialized) timer.Resume();
         }
 
-        private void OnDisable()
+        protected virtual void OnInitialize() { }
+
+        public virtual void TickedUpdate()
         {
-            timer.Pause();
-        }
-        
-        protected virtual void Initialize()
-        {
-            
+            stateScheduler.Schedule();
         }
 
         public abstract void OnWarmUp(ReadOnlySpan<int> candidateTileIndices);
@@ -64,49 +38,21 @@ namespace Netherlands3D.Tilekit
         public abstract void OnCooldown(ReadOnlySpan<int> candidateTileIndices);
         public abstract void OnFreeze(ReadOnlySpan<int> candidateTileIndices);
 
-        protected virtual void OnTick()
-        {
-            stateScheduler.Schedule();
-        }
-
-        protected virtual void OnDestroy()
+        public void Dispose()
         {
             if (telemetry != null) Telemetry.Unregister(telemetry);
-            tileSet?.Dispose();
+            TileSet?.Dispose();
         }
+    }
 
-        private void OnDrawGizmosSelected()
-        {
-            if (!Application.isPlaying)
-                return;
+    public abstract class DataSet<TTileSet> : DataSet where TTileSet : TileSet
+    {
+        protected new TTileSet TileSet => (TTileSet)base.TileSet;
 
-            if (!tileSet.Warm.IsCreated || !tileSet.Hot.IsCreated)
-                return;
+        // Factory method to create the tileset instance for this dataset.
+        protected abstract TTileSet CreateTileSet();
 
-            DrawTileGizmo(tileSet.Root);
-        }
-
-        private void DrawTileGizmo(Tile tile, int height = 0)
-        {
-            var bounds = tile.BoundingVolume.ToBounds().ToLocalCoordinateSystem(CoordinateSystem.RD);
-            
-            Gizmos.color = Color.grey;
-            if (tileSet.Warm.Contains(tile.Index)) Gizmos.color = Color.yellow;
-            if (tileSet.Hot.Contains(tile.Index)) Gizmos.color = Color.red;
-
-            if (Gizmos.color != Color.grey)
-            {
-                // Gizmos.DrawWireCube(bounds.center + Vector3.up * 0.1f, bounds.size);
-            }
-            if (Gizmos.color == Color.red)
-            {
-                Gizmos.DrawWireCube(bounds.center + Vector3.up * 0.1f, bounds.size);
-            }
-
-            for (int i = 0; i < tile.Children().Length; i++)
-            {
-                DrawTileGizmo(tile.GetChild(i), height + 1);
-            }
-        }
+        // Adapter hook to avoid casting in base class
+        protected sealed override TileSet CreateTileSetBase() => CreateTileSet();
     }
 }

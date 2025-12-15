@@ -151,6 +151,12 @@ namespace Netherlands3D.Tilekit.WriteModel
             return hotIdx;
         }
 
+        public void FreezeTile(int tileIndex)
+        {
+            // Note: this will reorder the list - any reference tables that use the index of the Warm array should reorder
+            Warm.RemoveAt(Warm.IndexOf(tileIndex));
+        }
+
         public void Dispose()
         {
             // Clear all storages first to allow for a proper cleanup before disposing
