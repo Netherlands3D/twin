@@ -13,6 +13,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
     {
         private ICredentialHandler handler;
 
+        [SerializeField] private GameObject statusPanel;
         [SerializeField] private GameObject validCredentialsPanel;
         [SerializeField] private GameObject invalidCredentialsPanel;
 
@@ -22,10 +23,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             set
             {
                 handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
-
                 handler = value;
-
-                OnCredentialsHandled(handler.Uri, handler.Authorization);
                 handler.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
             }
         }
@@ -36,7 +34,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         }
 
         private void Start()
-        {            
+        {
             handler?.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
         }
 
@@ -47,11 +45,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
         private void OnCredentialsHandled(Uri uri, StoredAuthorization auth)
         {
-            var accepted = auth is not FailedOrUnsupported;
+            Debug.LogError(gameObject.name + " handling credentials for: " + uri + "\t " + auth?.GetType());
 
-            if(accepted)
-                gameObject.SetActive(true);
-    
+            var accepted = auth != null && auth is not FailedOrUnsupported;
+
+            if (accepted)
+                statusPanel.SetActive(true); //bring back the panel if we come from the input panel, but don't disable it when there are invalid credentials because we might want to display the status
+
             validCredentialsPanel.SetActive(accepted);
             invalidCredentialsPanel.SetActive(!accepted);
         }
@@ -59,6 +59,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             Handler.Uri = properties.Get<LayerURLPropertyData>().Url;
+            Handler.ApplyCredentials();
         }
     }
 }

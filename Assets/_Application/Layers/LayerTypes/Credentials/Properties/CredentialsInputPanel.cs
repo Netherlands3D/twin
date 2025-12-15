@@ -9,7 +9,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
     public class CredentialsInputPanel : MonoBehaviour, ICredentialsPropertySection
     {
         private ICredentialHandler handler;
-        
+
         [SerializeField] private GameObject inputPanel;
         [SerializeField] private GameObject errorMessage;
 
@@ -19,7 +19,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         [SerializeField] private TMP_Dropdown credentialTypeDropdown;
         private bool skipFirstCredentialErrorMessage = true;
         private TMP_InputField inputFieldToUseForPasswordOrKey;
-        
+
         public ICredentialHandler Handler
         {
             get => handler;
@@ -38,29 +38,30 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         {
             var accepted = auth is not FailedOrUnsupported;
 
-            if (!gameObject.activeSelf)
-            {
-                gameObject.SetActive(true);
-                ShowCredentialsWarning(false);
-                return;
-            }
-            
-            ShowCredentialsWarning(!accepted);
             if (accepted)
             {
-                inputPanel.gameObject.SetActive(false);
                 gameObject.SetActive(false);
+                return;
             }
+
+            gameObject.SetActive(true);
+            
+            if (skipFirstCredentialErrorMessage)
+            {
+                skipFirstCredentialErrorMessage = false;
+                return;
+            }
+            ShowCredentialsWarning(!accepted);
         }
 
         private void OnEnable()
         {
-             ShowCredentialsWarning(false);
+            ShowCredentialsWarning(false);
         }
 
         private void Start()
         {
-            if(Handler == null) //we might want to set the handler explicitly, in which case we don't want to get it in the parent
+            if (Handler == null) //we might want to set the handler explicitly, in which case we don't want to get it in the parent
                 Handler = GetComponentInParent<ICredentialHandler>();
         }
 

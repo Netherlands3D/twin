@@ -116,6 +116,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             enabledToggle.onValueChanged.AddListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.AddListener(OnFoldoutToggleValueChanged);
             layerNameField.onEndEdit.AddListener(OnInputFieldChanged);
+            propertyToggle.onValueChanged.AddListener(ToggleProperties);
+
         }
 
         private void OnDisable()
@@ -123,6 +125,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             enabledToggle.onValueChanged.RemoveListener(OnEnabledToggleValueChanged);
             foldoutToggle.onValueChanged.RemoveListener(OnFoldoutToggleValueChanged);
             layerNameField.onEndEdit.RemoveListener(OnInputFieldChanged);
+            propertyToggle.onValueChanged.RemoveListener(ToggleProperties);
         }
 
         private void OnEnabledToggleValueChanged(bool isOn)
@@ -752,6 +755,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             Layer.OnPrefabIdChanged.RemoveListener(RebuildUI);
             Layer.PropertySet.RemoveListener(OnPropertiesChanged);
             Layer.PropertyRemoved.RemoveListener(OnPropertiesChanged);
+            propertyToggle.onValueChanged.RemoveListener(ToggleProperties);
         }
         
         private void OnPropertiesChanged(LayerPropertyData propertyData)
@@ -762,7 +766,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private void RebuildUI()
         {
             MarkLayerUIAsDirty();
-            RegisterWithPropertiesPanel(ServiceLocator.GetService<Properties.Properties>());
+            var properties = ServiceLocator.GetService<Properties.Properties>();
+            RegisterWithPropertiesPanel(properties);
             propertyToggle.isOn = false;
         }
 
@@ -775,17 +780,13 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 return;
 
             propertyToggle.group = propertiesPanel.GetComponent<ToggleGroup>();
-            propertyToggle.onValueChanged.AddListener((onOrOff) => ToggleProperties(onOrOff, propertiesPanel));
-            ToggleProperties(propertyToggle.isOn, propertiesPanel);
+            ToggleProperties(propertyToggle.isOn);
         }
 
         public void ToggleProperties(bool onOrOff)
         {
-            propertyToggle.isOn = onOrOff;
-        }
-
-        private void ToggleProperties(bool onOrOff, Properties.Properties properties)
-        {
+            var properties = ServiceLocator.GetService<Properties.Properties>();
+            
             var hasPropertiesWithPanel = properties.HasPropertiesWithPanel(Layer);
             if (!hasPropertiesWithPanel) return; // no properties, no action
 
