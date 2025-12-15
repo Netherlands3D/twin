@@ -211,7 +211,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void SetVisualization(IGeoJsonVisualisationLayer layer, List<PendingFeature> pendingFeatures)
         {
-            layer.LayerData.Color = LayerData.Color;
+            ColorPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
+            ColorPropertyData childStylingPropertyData = layer.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
+            
+            var fillColor = stylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetFillColor().Value : LayerData.Color;
+            var strokeColor = stylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetStrokeColor().Value : LayerData.Color;
+            
+            //TODO we have to convert this to an enum in the future
+            childStylingPropertyData.ActiveToolProperty = Symbolizer.StrokeColorProperty;
+            childStylingPropertyData.SetDefaultSymbolizerColor(strokeColor);
+            childStylingPropertyData.ActiveToolProperty = Symbolizer.FillColorProperty;
+            childStylingPropertyData.SetDefaultSymbolizerColor(fillColor);
+            
             layer.FeatureRemoved += OnFeatureRemoved;
 
             foreach (var pendingFeature in pendingFeatures)
@@ -270,15 +281,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs(prefab.name).ChildOf(LayerData);
-            var newLayer = App.Layers.Add(layerBuilder, callBack);
-            
-            ColorPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
-            ColorPropertyData childStylingPropertyData = newLayer.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
-            
-            var fillColor = stylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetFillColor().Value : LayerData.Color;
-            var strokeColor = stylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetStrokeColor().Value : LayerData.Color;
-            childStylingPropertyData.DefaultSymbolizer.SetFillColor(fillColor);
-            childStylingPropertyData.DefaultSymbolizer.SetStrokeColor(strokeColor);
+            App.Layers.Add(layerBuilder, callBack);
         }
 
         protected virtual void OnFeatureRemoved(Feature feature)
