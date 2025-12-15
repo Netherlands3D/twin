@@ -6,6 +6,7 @@ using Netherlands3D.Services;
 using Netherlands3D.Tiles3D;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -46,6 +47,11 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
         {
             ClearCredentials();
 
+            if (auth.GetType() != typeof(Public))//if it is public, we don't want the property panel to show up
+            {
+                InitProperty<CredentialsRequiredPropertyData>(LayerData.LayerProperties);
+            }
+            
             switch (auth) //todo: pass auth.GetConfig to the tileset instead of this switch statement.
             {
                 case FailedOrUnsupported:

@@ -57,12 +57,6 @@ namespace Netherlands3D.Credentials
         {
             if (Uri == null || auth.Domain != new Uri(Uri.GetLeftPart(UriPartial.Path))) //ensure the returned authorization is relevant to us
                 return;
-
-            if (auth.GetType() != typeof(Public))
-            {
-                var prop = new CredentialsRequiredPropertyData(); 
-                GetComponent<LayerGameObject>()?.LayerData.SetProperty(prop); //todo: a bit hacky to check if the LayerGameObject exists here
-            }
             
             Authorization = auth;
             OnAuthorizationHandled.Invoke(auth.SanitizeUrl(Uri), auth);
