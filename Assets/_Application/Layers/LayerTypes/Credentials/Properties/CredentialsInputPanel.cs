@@ -45,12 +45,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             }
 
             gameObject.SetActive(true);
-            
+
             if (skipFirstCredentialErrorMessage)
             {
                 skipFirstCredentialErrorMessage = false;
                 return;
             }
+
             ShowCredentialsWarning(!accepted);
         }
 
@@ -116,6 +117,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         private void OnDestroy()
         {
             handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
+        }
+
+        public void DisablePanelWhenUserInputsSameCredentials()
+        {
+            // Same credentials as before, disable the panel again, called in the inspector
+            if (handler.PasswordOrKeyOrTokenOrCode == inputFieldToUseForPasswordOrKey.text)
+            {
+                gameObject.SetActive(false);
+                var valid = handler.Authorization is not FailedOrUnsupported;
+                GetComponentInParent<CredentialsValidationPropertySection>()?.ResetStatusPanel(valid); //re-enable the status panel if it exists (not the case in the URL import panel)
+            }
         }
     }
 }

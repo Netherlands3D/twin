@@ -48,10 +48,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             Debug.LogError(gameObject.name + " handling credentials for: " + uri + "\t " + auth?.GetType());
 
             var accepted = auth != null && auth is not FailedOrUnsupported;
-
-            if (accepted)
-                statusPanel.SetActive(true); //bring back the panel if we come from the input panel, but don't disable it when there are invalid credentials because we might want to display the status
-
+            
             validCredentialsPanel.SetActive(accepted);
             invalidCredentialsPanel.SetActive(!accepted);
         }
@@ -60,6 +57,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         {
             Handler.Uri = properties.Get<LayerURLPropertyData>().Url;
             Handler.ApplyCredentials();
+        }
+        
+        public void ResetStatusPanel(bool validCredentials)
+        {
+            statusPanel.SetActive(true);
+            validCredentialsPanel.SetActive(validCredentials);
+            invalidCredentialsPanel.SetActive(!validCredentials);
         }
     }
 }
