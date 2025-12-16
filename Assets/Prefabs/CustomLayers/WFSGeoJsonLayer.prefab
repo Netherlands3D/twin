@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5593278776292583182}
   - component: {fileID: -2609350098801323660}
   - component: {fileID: 3380251589959099885}
-  - component: {fileID: -483285077612963814}
   m_Layer: 0
   m_Name: WFSGeoJsonLayer
   m_TagString: Untagged
@@ -62,16 +61,6 @@ MonoBehaviour:
   onLayerReady:
     m_PersistentCalls:
       m_Calls: []
-  PropertySections:
-  - type: Netherlands3D.Twin.Layers.Properties.ColorPickerPropertySection, eu.netherlands3d.twin,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Enabled: 0
-  - type: Netherlands3D.Twin.Layers.Properties.CartesianTileLayerFeatureColorPropertySection,
-      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Enabled: 0
-  - type: Netherlands3D.Twin.Layers.Properties.HiddenObjectsPropertySection, eu.netherlands3d.twin,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Enabled: 0
   onParseError:
     m_PersistentCalls:
       m_Calls: []
@@ -118,17 +107,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
---- !u!114 &-483285077612963814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2418701555395206593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 217db7c8cb91f974daf1e7f820fb6a30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputPropertySectionPrefab: {fileID: 7185160580400989932, guid: f241bd5b609aa4447ae89fb4325470ef,
-    type: 3}
