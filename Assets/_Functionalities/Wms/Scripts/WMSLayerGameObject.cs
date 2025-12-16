@@ -1,12 +1,10 @@
 using System;
-using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
-using UnityEngine.Events;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
@@ -142,7 +140,7 @@ namespace Netherlands3D.Functionalities.Wms
         {
             if (isActive)
             {
-                UpdateURL(URLPropertyData.Data);
+                UpdateURL(LayerData.GetProperty<LayerURLPropertyData>().Url);
             }
 
             if (WMSProjectionLayer.isEnabled == isActive) return;
