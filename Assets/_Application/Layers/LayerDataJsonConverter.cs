@@ -23,8 +23,10 @@ namespace Netherlands3D
         private const string polygonSelectionVisualizationPrefabID = "0dd48855510674827b667fa4abd5cf60";
 
         [Preserve]
-        public LayerDataJsonConverter() { }
-        
+        public LayerDataJsonConverter()
+        {
+        }
+
         public override void WriteJson(JsonWriter writer, LayerData value, JsonSerializer serializer)
         {
             if (value == null)
@@ -47,21 +49,21 @@ namespace Netherlands3D
             JsonSerializer serializer)
         {
             JObject obj = JObject.Load(reader);
-            
+
             LayerData layer = new LayerData(obj["name"]?.Value<string>() ?? "Layer");
             //we always load the projectTemplate, so any project files are derived from the project template with the same RootLayer uuid
             if (obj["$type"]?.ToString() == namespaceIdentifier + "Root"
-                ||obj["$type"]?.ToString() == string.Empty
+                || obj["$type"]?.ToString() == string.Empty
                 || obj["UUID"]?.ToString() == "81797d29-517a-48c8-8733-5dbe7d351dc3")
                 layer = new RootLayer("RootLayer");
-            
+
             Debug.Log("reading layer data: " + layer.Name);
             //Parse as much as default fields as possible
             using (var subReader = obj.CreateReader())
             {
                 serializer.Populate(subReader, layer);
             }
-            
+
             //parse custom fields
             var typeToken = obj["$type"]?.ToString();
             if (typeToken == namespaceIdentifier + legacyFolderIdentifier)
@@ -70,12 +72,21 @@ namespace Netherlands3D
             {
                 layer.PrefabIdentifier = polygonSelectionVisualizationPrefabID;
                 var pd = layer.GetProperty<PolygonSelectionLayerPropertyData>();
-                pd.ShapeType = Enum.Parse<ShapeType>(obj["shapeType"]?.ToString());
-                pd.OriginalPolygon = obj["OriginalPolygon"]?.ToObject<List<Coordinate>>();
-                
+                var shapeTypeProperty = obj["shapeType"];
+                if (shapeTypeProperty != null)
+                {
+                    Enum.TryParse<ShapeType>(shapeTypeProperty.ToString(), out var shapeType);
+                    pd.ShapeType = shapeType;
+                }
+
+                var originalPolygonProperty = obj["OriginalPolygon"];
+                if (originalPolygonProperty != null)
+                {
+                    pd.OriginalPolygon = originalPolygonProperty.ToObject<List<Coordinate>>();
+                }
                 layer.SetProperty(pd);
             }
-            
+
             return layer;
         }
 
