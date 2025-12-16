@@ -99,7 +99,7 @@ namespace Netherlands3D.Twin.Projects
 
         public void LoadVisualizations()
         {    
-            foreach (var layer in rootLayer.ChildrenLayers)
+            foreach (var layer in rootLayer.GetFlatHierarchy())
             {
                 if (layer is RootLayer) continue;
                 App.Layers.VisualizeData(layer);
