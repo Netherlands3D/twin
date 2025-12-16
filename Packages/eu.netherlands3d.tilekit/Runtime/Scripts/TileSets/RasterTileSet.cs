@@ -79,6 +79,5 @@ namespace Netherlands3D.Tilekit.TileSets
             
             return true;
         }
-
     }
 }

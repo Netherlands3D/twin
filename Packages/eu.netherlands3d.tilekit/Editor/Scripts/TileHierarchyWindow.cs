@@ -89,15 +89,14 @@ namespace Netherlands3D.Tilekit.Editor
                 return;
 
             var now = EditorApplication.timeSinceStartup;
-            if (now - _lastRefresh > RefreshIntervalSeconds)
-            {
-                _lastRefresh = now;
+            if (!(now - _lastRefresh > RefreshIntervalSeconds)) return;
+            
+            _lastRefresh = now;
 
-                BuildTileStateCache();
-                BuildActivePathCache();
+            BuildTileStateCache();
+            BuildActivePathCache();
 
-                _treeView.RefreshItems(); // cheap: rebind visible rows only
-            }
+            _treeView.RefreshItems(); // cheap: rebind visible rows only
         }
 
         private void UpdateSelection()

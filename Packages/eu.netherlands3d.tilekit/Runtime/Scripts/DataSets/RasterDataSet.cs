@@ -49,37 +49,29 @@ namespace Netherlands3D.Tilekit.DataSets
             {
                 var tile = new RasterTileSet.Tile(TileSet, candidateTileIndices[index]);
 
-                WarmTile(tile);
+                var url = tile.Contents()[0].Uri();
+
+                // TODO: The WarmTile method assumed an AppendOnly structure for WarmTiles, but they are not - they are reused.
+                //   Also: TextureRef uses the WarmIdx - but if that is not append-only, we need to ensure it is not renumbered when
+                //   removing elements.
+                // TODO: Or is this not a problem because OnFreeze reorders?
+                TileSet.LoadTexture(TileSet.WarmTile(tile.Index), url);
             }
-        }
-
-        private void WarmTile(RasterTileSet.Tile tile)
-        {
-            var url = tile.Contents()[0].Uri();
-            Debug.Log($"Warming tile {tile.Index} with url {url}");
-
-            // TODO: The WarmTile method assumed an AppendOnly structure for WarmTiles, but they are not - they are reused.
-            //   Also: TextureRef uses the WarmIdx - but if that is not append-only, we need to ensure it is not renumbered when
-            //   removing elements.
-            // TODO: Or is this not a problem because OnFreeze reorders?
-            TileSet.LoadTexture(TileSet.WarmTile(tile.Index), url);
         }
 
         public override void OnHeatUp(ReadOnlySpan<int> candidateTileIndices)
         {
-            // for (int i = 0; i < candidateTileIndices.Length; i++)
-            // {
-            //     HeatUpTile(candidateTileIndices[i]);
-            // }
+            for (int i = 0; i < candidateTileIndices.Length; i++)
+            {
+                HeatUpTile(candidateTileIndices[i]);
+            }
         }
 
         private void HeatUpTile(int tileIndex)
         {
-            // var tile = new RasterTileSet.Tile(TileSet, tileIndex);
-            //
             // // If it aint' warm - it cannot get hot
-            // if (!tile.IsWarm) return;
-            //
+            if (TileSet.Warm.Contains(tileIndex)) return;
+            
             // // TODO: shouldn't this be a condition to go to hot? Instead of waiting while hot? or is this better so that we can show a placeholder?
             // // TODO: Check if tiles have an empty texture after moving this to the warm phase, and immediately discard the texture and prevent this tile
             // //   from using rendered representation
@@ -91,30 +83,22 @@ namespace Netherlands3D.Tilekit.DataSets
             //     return;
             // }
             //
-            // TileSet.HeatTile(tileIndex);
+            TileSet.HeatTile(tileIndex);
             // tileRenderer.Create(TileSet.GetTile(tileIndex), tex);
         }
 
         public override void OnCooldown(ReadOnlySpan<int> candidateTileIndices)
         {
-            // for (int i = 0; i < candidateTileIndices.Length; i++)
-            // {
-            //     CooldownTile(candidateTileIndices[i]);
-            // }
+            for (int i = 0; i < candidateTileIndices.Length; i++)
+            {
+                CooldownTile(candidateTileIndices[i]);
+            }
         }
 
         private void CooldownTile(int tileIndex)
         {
+            TileSet.CoolTile(tileIndex);
             // tileRenderer.Release(tileIndex);
-            //
-            // for (var index = 0; index < TileSet.Hot.Length; index++)
-            // {
-            //     var hotTile = TileSet.Hot[index];
-            //     if (TileSet.Hot[hotTile] != tileIndex) continue;
-            //
-            //     TileSet.Hot.RemoveAtSwapBack(index);
-            //     index--;
-            // }
         }
 
         public override void OnFreeze(ReadOnlySpan<int> candidateTileIndices)

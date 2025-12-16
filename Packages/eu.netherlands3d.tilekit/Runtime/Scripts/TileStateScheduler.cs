@@ -1,82 +1,139 @@
-﻿using Netherlands3D.Tilekit.WriteModel;
+﻿using System;
+using System.Runtime.InteropServices;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
+using Netherlands3D.Tilekit.WriteModel;
 
 namespace Netherlands3D.Tilekit
 {
     public class TileStateScheduler
     {
-        private TilesSelector tileSelector;
-        private ITileLifecycleBehaviour tileLifecycleBehaviour;
-        private TileSet tileSet;
-        private Plane[] frustumPlanes = new Plane[6]; 
-        private readonly int capacity;
+        private readonly TilesSelector tileSelector;
+        private readonly ITileLifecycleBehaviour tileLifecycleBehaviour;
+        private readonly TileSet tileSet;
 
-        public TileStateScheduler(TilesSelector tileSelector, ITileLifecycleBehaviour tileLifecycleBehaviour, TileSet tileSet, int capacity = 64)
+        private readonly Plane[] frustumPlanes = new Plane[6];
+        private readonly float warmFeather;
+
+        public TileStateScheduler(
+            TilesSelector tileSelector,
+            ITileLifecycleBehaviour tileLifecycleBehaviour,
+            TileSet tileSet,
+            float warmFeather = 1.25f
+        )
         {
             this.tileSelector = tileSelector;
             this.tileLifecycleBehaviour = tileLifecycleBehaviour;
             this.tileSet = tileSet;
-            this.capacity = capacity;
+            this.warmFeather = Mathf.Max(1f, warmFeather);
         }
 
-        // Tiles are selected using a zoned approach, where we can select a subset of tiles that are in a certain zone. 
-        // There is a warm and hot zone, and when tiles who are active in either zone migrate to another zone - they
-        // should either warm/heat up or cool down/freeze.
-
-        // Tiles are not only selected on their spatial property - but also on their LOD or temporal properties, where 
-        // selection criteria is based on information from the global system - such as camera position and time of day
         public void Schedule()
         {
-            // TODO: this can probably be done more memory efficient - let's roll with it for now
-            var tilesInFrustrum = new NativeHashSet<int>(capacity, Allocator.Temp);
-            var warmTileIndices = new NativeHashSet<int>(capacity, Allocator.Temp);
-            var shouldWarmUp = new NativeHashSet<int>(capacity, Allocator.Temp);
-            var shouldHeatUp = new NativeHashSet<int>(capacity, Allocator.Temp);
-            var shouldCooldown = new NativeHashSet<int>(capacity, Allocator.Temp);
-            var shouldFreeze = new NativeHashSet<int>(capacity, Allocator.Temp);
+            var camera = Camera.main;
+            if (camera == null) return;
 
-            GeometryUtility.CalculateFrustumPlanes(Camera.main, frustumPlanes);
-            
-            // TODO: this only matches hot tiles, we should do another pass with a larger feather for the warm area
-            tileSelector.Select(tilesInFrustrum, tileSet.Root, frustumPlanes);
+            GeometryUtility.CalculateFrustumPlanes(camera, frustumPlanes);
 
-            // For each tile that is warm in the tileSet, check if it should cool down
-            for (var warmTileIndex = 0; warmTileIndex < tileSet.Warm.Length; warmTileIndex++)
-            {
-                var warmTile = tileSet.Warm[warmTileIndex];
-                warmTileIndices.Add(warmTile);
-                
-                // Tile is in frustum, so it should not cool down
-                if (tilesInFrustrum.Contains(warmTile)) continue;
-                
-                // TODO: Split this - at the moment we assume all tiles in frustum do the same, but this should be zoned
-                shouldCooldown.Add(warmTile);
-                shouldFreeze.Add(warmTile);
-            }
+            int warmCap = Math.Max(16, tileSet.Warm.Capacity);
+            int hotCap = Math.Max(8, tileSet.Hot.Capacity);
 
-            // For each tile is in frustum, check it it should warm up
-            foreach (var tileInFrustum in tilesInFrustrum)
-            {
-                // Tile is already warm, no need to try again
-                if (warmTileIndices.Contains(tileInFrustum)) continue;
+            var desiredHot = new NativeHashSet<int>(hotCap, Allocator.Temp);
+            var desiredWarm = new NativeHashSet<int>(warmCap, Allocator.Temp);
 
-                // TODO: Split this - at the moment we assume all tiles in frustum do the same, but this should be zoned
-                shouldWarmUp.Add(tileInFrustum);
-                shouldHeatUp.Add(tileInFrustum);
-            }
+            var currentWarm = new NativeHashSet<int>(warmCap, Allocator.Temp);
+            var currentHot = new NativeHashSet<int>(hotCap, Allocator.Temp);
 
-            tileLifecycleBehaviour.OnWarmUp(shouldWarmUp.ToNativeArray(Allocator.Temp));
-            tileLifecycleBehaviour.OnHeatUp(shouldHeatUp.ToNativeArray(Allocator.Temp));
-            tileLifecycleBehaviour.OnCooldown(shouldCooldown.ToNativeArray(Allocator.Temp));
-            tileLifecycleBehaviour.OnFreeze(shouldFreeze.ToNativeArray(Allocator.Temp));
+            var shouldWarmUp = new NativeHashSet<int>(warmCap, Allocator.Temp);
+            var shouldFreeze = new NativeHashSet<int>(warmCap, Allocator.Temp);
+            var shouldHeatUp = new NativeHashSet<int>(hotCap, Allocator.Temp);
+            var shouldCooldown = new NativeHashSet<int>(hotCap, Allocator.Temp);
 
-            tilesInFrustrum.Dispose();
-            warmTileIndices.Dispose();
+            // 1) Select desired states
+            tileSelector.Select(desiredHot, tileSet.Root, frustumPlanes, 1f);
+            tileSelector.Select(desiredWarm, tileSet.Root, frustumPlanes, warmFeather);
+
+            // Ensure hot is always a subset of warm
+            foreach (var h in desiredHot)
+                desiredWarm.Add(h);
+
+            // 2) Snapshot current states
+            for (int i = 0; i < tileSet.Warm.Length; i++)
+                currentWarm.Add(tileSet.Warm[i]);
+
+            for (int i = 0; i < tileSet.Hot.Length; i++)
+                currentHot.Add(tileSet.Hot[i]);
+
+            // 3) Warm diffs
+            foreach (var w in desiredWarm)
+                if (!currentWarm.Contains(w))
+                    shouldWarmUp.Add(w);
+
+            foreach (var w in currentWarm)
+                if (!desiredWarm.Contains(w))
+                    shouldFreeze.Add(w);
+
+            // 4) Hot diffs
+            foreach (var h in desiredHot)
+                if (!currentHot.Contains(h))
+                    shouldHeatUp.Add(h);
+
+            foreach (var h in currentHot)
+                if (!desiredHot.Contains(h))
+                    shouldCooldown.Add(h);
+
+            // 5) Dispatch in a sensible order
+            InvokeWarmUp(shouldWarmUp);
+            InvokeHeatUp(shouldHeatUp);
+            InvokeCooldown(shouldCooldown);
+            InvokeFreeze(shouldFreeze);
+
+            desiredHot.Dispose();
+            desiredWarm.Dispose();
+            currentWarm.Dispose();
+            currentHot.Dispose();
             shouldWarmUp.Dispose();
             shouldHeatUp.Dispose();
             shouldCooldown.Dispose();
             shouldFreeze.Dispose();
+        }
+
+        private void InvokeWarmUp(NativeHashSet<int> set)
+        {
+            if (set.Count == 0) return;
+            var arr = set.ToNativeArray(Allocator.Temp);
+            tileLifecycleBehaviour.OnWarmUp(ToReadOnlySpan(arr));
+            arr.Dispose();
+        }
+
+        private void InvokeHeatUp(NativeHashSet<int> set)
+        {
+            if (set.Count == 0) return;
+            var arr = set.ToNativeArray(Allocator.Temp);
+            tileLifecycleBehaviour.OnHeatUp(ToReadOnlySpan(arr));
+            arr.Dispose();
+        }
+
+        private void InvokeCooldown(NativeHashSet<int> set)
+        {
+            if (set.Count == 0) return;
+            var arr = set.ToNativeArray(Allocator.Temp);
+            tileLifecycleBehaviour.OnCooldown(ToReadOnlySpan(arr));
+            arr.Dispose();
+        }
+
+        private void InvokeFreeze(NativeHashSet<int> set)
+        {
+            if (set.Count == 0) return;
+            var arr = set.ToNativeArray(Allocator.Temp);
+            tileLifecycleBehaviour.OnFreeze(ToReadOnlySpan(arr));
+            arr.Dispose();
+        }
+
+        private static ReadOnlySpan<int> ToReadOnlySpan(NativeArray<int> arr)
+        {
+            return arr.AsReadOnlySpan();
         }
     }
 }

@@ -51,7 +51,7 @@ namespace Netherlands3D.Tilekit
             // Modify the copy
             for (int i = 0; i < featheredPlanes.Length; i++)
             {
-                featheredPlanes[i].distance += featheredPlanes[i].distance * featherPercentage;
+                featheredPlanes[i].distance *= featherPercentage;
             }
 
             return featheredPlanes;
