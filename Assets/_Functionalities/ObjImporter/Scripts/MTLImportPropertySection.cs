@@ -21,9 +21,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
         private void Start()
         {
-            //layer = ObjSpawner.GetComponent<HierarchicalObjectLayerGameObject>();
             SetNormalUIPanels();
-            //ObjSpawner.MtlImportSuccess.AddListener(OnMTLImportError);
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
