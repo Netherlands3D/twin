@@ -57,11 +57,8 @@ namespace Netherlands3D.Twin.Services
             }
 
             var layerData = builder.Build();
-            // ProjectData.Current.AddStandardLayer(layerData);
             var layer = new Layer(layerData);
-            //AddPlaceholder(layer)
             Visualize(layer, spawner, callback, errorCallback);
-            // Layer layer = await VisualizeData(layerData);
             LayerAdded.Invoke(layer);
             return layer;
         }
@@ -69,7 +66,6 @@ namespace Netherlands3D.Twin.Services
         private Layer AddFolderLayer(LayerBuilder layerBuilder)
         {
             var folderLayer = layerBuilder.Build();
-            // ProjectData.Current.AddStandardLayer(folderLayer);
             var folder = new Layer(folderLayer);
             LayerAdded.Invoke(folder);
             return folder;
