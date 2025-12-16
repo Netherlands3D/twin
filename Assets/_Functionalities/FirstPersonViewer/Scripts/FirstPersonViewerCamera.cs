@@ -16,12 +16,11 @@ namespace Netherlands3D.FirstPersonViewer
         public static Camera FPVCamera;
 
         public float CameraHeightOffset { private set; get; } = 1.75f;
-        private float currentsensitivity = 10f;
+        private float previousCameraHeight;
+        private float currentSensitivity = .11f;
 
         [Header("Viewer")]
         [SerializeField] private Transform viewerBase;
-        private float xRotation;
-        private float yRotation;
         public CameraConstrain cameraConstrain;
 
         private Quaternion startRotation;
@@ -43,7 +42,7 @@ namespace Netherlands3D.FirstPersonViewer
         private void Awake()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
-            currentsensitivity = 3f;
+            currentSensitivity = .035f;
 #endif
 
             firstPersonViewerCamera = GetComponent<Camera>();
@@ -78,7 +77,6 @@ namespace Netherlands3D.FirstPersonViewer
         //From Setup Viewer
         private void CameraSetupComplete()
         {
-            xRotation = transform.localEulerAngles.x;
             startRotation = transform.rotation;
 
             //Setup events when done with animation.
@@ -133,7 +131,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void Update()
         {
-            if (input.LockInput) return;
+            if (input.LockInput || input.LockCamera) return;
 
             Vector2 cameraMovement = input.LookInput.ReadValue<Vector2>();
 
@@ -151,10 +149,14 @@ namespace Netherlands3D.FirstPersonViewer
         //Sets the rotation of the camera or the viewerBase based on the current Camera Constrain.
         private void RotateCamera(Vector2 pointerDelta)
         {
-            Vector2 mouseLook = pointerDelta * currentsensitivity * Time.deltaTime;
+            Vector2 mouseLook = pointerDelta * currentSensitivity;
 
-            xRotation = Mathf.Clamp(xRotation - mouseLook.y, -90, 90);
-            yRotation = yRotation + mouseLook.x;
+            Vector2 currentRot = GetCameraRotation();
+            if (currentRot.x > 180) currentRot.x -= 360;
+            if (currentRot.y > 180) currentRot.y -= 360;
+
+            float xRotation = Mathf.Clamp(currentRot.x - mouseLook.y, -90, 90);
+            float yRotation = currentRot.y + mouseLook.x;
 
             switch (cameraConstrain)
             {
@@ -166,24 +168,20 @@ namespace Netherlands3D.FirstPersonViewer
                     viewerBase.rotation = Quaternion.Euler(xRotation, yRotation, 0);
                     break;
                 case CameraConstrain.CONTROL_NONE:
+                    xRotation = Mathf.Clamp(xRotation, -45, 45);
+                    yRotation = Mathf.Clamp(yRotation, -90, 90);
                     transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
                     break;
             }
         }
 
-        public void SetCameraConstrain(CameraConstrain state)
-        {
-            if (state == CameraConstrain.CONTROL_BOTH)
-                yRotation = transform.eulerAngles.y;
-            else
-                yRotation = transform.localEulerAngles.y;
-
-            cameraConstrain = state;
-        }
-
+        public void SetCameraConstrain(CameraConstrain state) => cameraConstrain = state;
+        
         private void SetCameraHeight(float height)
         {
+            previousCameraHeight = CameraHeightOffset;
             CameraHeightOffset = height;
+
             transform.localPosition = Vector3.up * CameraHeightOffset;
         }
 
@@ -192,28 +190,36 @@ namespace Netherlands3D.FirstPersonViewer
             input.AddInputLockConstrain(this);
             transform.DORotate(Vector3.zero, .4f).SetEase(Ease.InOutCubic);
             viewerBase.DORotate(Vector3.zero, .4f).SetEase(Ease.InOutCubic).OnComplete(() => input.RemoveInputLockConstrain(this));
-
-            xRotation = 0;
-            yRotation = 0;
         }
 
         private void SetCameraFOV(float FOV) => firstPersonViewerCamera.fieldOfView = FOV;
 
-        public Vector3 GetEulerRotation()
+        private Vector3 GetCameraRotation()
         {
             switch (cameraConstrain)
             {
-                case CameraConstrain.CONTROL_Y:
+                default:
                     return transform.eulerAngles;
-                case CameraConstrain.CONTROL_BOTH:
+                case CameraConstrain.CONTROL_NONE:
+                    return transform.localEulerAngles;
+            }
+        }
+
+        public Vector3 GetStateRotation()
+        {
+            switch (cameraConstrain)
+            {
+                default:
                     return transform.eulerAngles;
                 case CameraConstrain.CONTROL_NONE:
                     return transform.parent.eulerAngles;
             }
-
-            return default;
         }
 
+        public Vector3 GetPreviousCameraHeight() => transform.position + Vector3.up * previousCameraHeight;
+
         private void ResetToStart() => transform.rotation = startRotation;
+        public void SetSensitivity(float sensitivity) => currentSensitivity = sensitivity;
+        public float GetSensitivity() => currentSensitivity;
     }
 }

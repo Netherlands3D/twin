@@ -9,9 +9,9 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             base.OnEnter();
 
-            Vector3 camPosition = viewer.FirstPersonCamera.transform.position;
+            Vector3 camPosition = viewer.FirstPersonCamera.GetPreviousCameraHeight();
             //Get Rotation this depends on the current Camera Constrain
-            Vector3 eulerRotation = viewer.FirstPersonCamera.GetEulerRotation();
+            Vector3 eulerRotation = viewer.FirstPersonCamera.GetStateRotation();
             viewer.SetupState(camPosition, eulerRotation, Vector3.zero, 0);
 
             viewer.SetVelocity(Vector2.zero);
@@ -19,6 +19,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnUpdate()
         {
+            if (DisableMovement()) return;
+
             Vector2 moveInput = GetMoveInput();
             MoveFreeCam(moveInput);
 

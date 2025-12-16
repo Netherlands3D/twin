@@ -174,6 +174,8 @@ namespace Netherlands3D.Functionalities.Wms
 
         public void RefreshTiles()
         {
+            if (!isEnabled) return;
+
             //is the update already running cancel it
             if (visibleTilesDirty && updateTilesRoutine != null)
             {
