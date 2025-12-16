@@ -25,12 +25,22 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private readonly StringBuilder stringBuilder = new StringBuilder(128);
 
+        private void OnEnable()
+        {
+            if (firstPersonViewer != null) firstPersonViewer.OnPositionUpdated.AddListener(UpdateOverlayInformation);
+        }
+
         private void Start()
         {
             firstPersonViewer = ServiceLocator.GetService<FirstPersonViewer>();
 
             openOverlayButton.action.performed += ToggleOverlay;
             gameObject.SetActive(false);
+        }
+
+        private void OnDisable()
+        {
+            if (firstPersonViewer != null) firstPersonViewer.OnPositionUpdated.RemoveListener(UpdateOverlayInformation);
         }
 
         private void OnDestroy()
@@ -42,9 +52,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
         {
             bool isActive = gameObject.activeSelf;
             gameObject.SetActive(!isActive);
-
-            if (!isActive) firstPersonViewer.OnPositionUpdated += UpdateOverlayInformation;
-            else firstPersonViewer.OnPositionUpdated -= UpdateOverlayInformation;
         }
 
         private void UpdateOverlayInformation(Coordinate playerCoords)

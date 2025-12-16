@@ -6,6 +6,7 @@ using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -48,7 +49,7 @@ namespace Netherlands3D.FirstPersonViewer
         public Action OnResetToStart;
         public Action OnResetToGround;
         public Action OnSetCameraNorth;
-        public Action<Coordinate> OnPositionUpdated;
+        public UnityEvent<Coordinate> OnPositionUpdated = new();
 
         public Action OnViewerEntered;
         public Action<bool> OnViewerExited;
@@ -117,7 +118,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             transform.position += Vector3.up * velocity.y * Time.deltaTime;
 
-            OnPositionUpdated?.Invoke(new Coordinate(transform.position));
+            OnPositionUpdated.Invoke(new Coordinate(transform.position));
 
             if (Input.ResetInput.triggered) ResetToGround();
         }
