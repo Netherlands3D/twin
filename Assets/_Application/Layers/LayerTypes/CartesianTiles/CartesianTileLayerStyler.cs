@@ -18,25 +18,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
     /// </summary>
     public class CartesianTileLayerStyler
     {
-        public const string MaterialNameIdentifier = "data-materialname";
-        public const string MaterialIndexIdentifier = "data-materialindex";
-        public const string VisibilityAttributeIdentifier = "data-visibility";
-        public const string VisibilityAttributePositionIdentifier = "data-visibility-position";
-        public const string VisibilityIdentifier = "visibility";
+        //public const string MaterialNameIdentifier = "data-materialname";
+        
+        //public const string VisibilityAttributeIdentifier = "data-visibility";
+        //public const string VisibilityAttributePositionIdentifier = "data-visibility-position";
+        //public const string VisibilityIdentifier = "visibility";
 
-        public const string LayerFeatureColoring = "LayerFeatureColoring";
+        //public const string LayerFeatureColoring = "LayerFeatureColoring";
 
-        public static ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
+        //public static ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
 
 
-        public CartesianTileLayerStyler(LayerGameObject layer)
-        {
+        //public CartesianTileLayerStyler(LayerGameObject layer)
+        //{
            
-        }
+        //}
 
         /// <summary>
         /// Sets a custom color for all layer features matching the material index of the given layer feature.
         /// </summary>
+        /*
         public static void SetColor(LayerFeature layerFeature, Color color, StylingPropertyData stylingPropertyData)
         {
             int.TryParse(layerFeature.Attributes[MaterialIndexIdentifier], out int materialIndexIdentifier);
@@ -53,15 +54,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             );
             stylingRule.Symbolizer.SetFillColor(color);
 
-            stylingPropertyData.SetDefaultStylingRule(stylingRuleName, stylingRule);
+            stylingPropertyData.SetStylingRule(stylingRuleName, stylingRule);
         }
-
+*/
         /// <summary>
         /// Retrieves the color for any feature that matches the given feature's material index.
         ///
         /// This method will provide a color override that has been set earlier, or it will return the current
         /// material's color if none was set. This can help in the UI to set swatches.
         /// </summary>
+       /*
         public static Color? GetColor(LayerFeature layerFeature, StylingPropertyData data)
         {
             if (layerFeature.Geometry is not Material mat) return null;
@@ -69,7 +71,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             int.TryParse(layerFeature.GetAttribute(MaterialIndexIdentifier), out int materialIndexIdentifier);
             var stylingRuleName = ColorizationStyleRuleName(materialIndexIdentifier);
 
-            if (!data.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
+            if (!data.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
             {
                 if(mat.HasProperty("_Color") || mat.HasProperty("_BaseColor")) //TODO check a list of standardized tags for color properties
                     return mat.color;
@@ -100,7 +102,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             stylingRule.Symbolizer.SetVisibility(visible);
             stylingRule.Symbolizer.SetCustomProperty(VisibilityAttributePositionIdentifier, coordinate);
             
-            stylingPropertyData.SetDefaultStylingRule(stylingRuleName, stylingRule);
+            stylingPropertyData.SetStylingRule(stylingRuleName, stylingRule);
         }
 
         public static bool? GetVisibilityForSubObject(LayerFeature layerFeature, StylingPropertyData stylingPropertyData)
@@ -113,7 +115,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             var stylingRuleName = VisibilityStyleRuleName(id);
 
-            if (!data.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
+            if (!data.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
             {
                 return true;
             }
@@ -124,7 +126,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         public static void RemoveVisibilityForSubObjectByAttributeTag(string id, StylingPropertyData stylingPropertyData)
         {
             var stylingRuleName = VisibilityStyleRuleName(id);
-            bool dataRemoved = stylingPropertyData.DefaultStyle.StylingRules.Remove(stylingRuleName);
+            bool dataRemoved = stylingPropertyData.StylingRules.Remove(stylingRuleName);
         }
 
         public static Coordinate? GetVisibilityCoordinateForSubObject(LayerFeature layerFeature, StylingPropertyData stylingPropertyData)
@@ -136,32 +138,32 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         public static Coordinate? GetVisibilityCoordinateForSubObjectByTag(string objectId, StylingPropertyData stylingPropertyData)
         {
             var stylingRuleName = VisibilityStyleRuleName(objectId);
-            if (!stylingPropertyData.DefaultStyle.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
+            if (!stylingPropertyData.StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
             {
                 return null;
             }
             return stylingRule.Symbolizer.GetCustomProperty<Coordinate>(VisibilityAttributePositionIdentifier);
         }
-       
-        private static string ColorizationStyleRuleName(int materialIndexIdentifier)
-        {
-            return $"feature.{materialIndexIdentifier}.colorize";
-        }        
+        */
+        //private static string ColorizationStyleRuleName(int materialIndexIdentifier)
+        //{
+        //    return $"feature.{materialIndexIdentifier}.colorize";
+        //}        
 
-        private static string VisibilityStyleRuleName(string visibilityIdentifier)
-        {
-            return $"feature.{visibilityIdentifier}.{VisibilityIdentifier}";
-        }
+        //private static string VisibilityStyleRuleName(string visibilityIdentifier)
+        //{
+        //    return $"feature.{visibilityIdentifier}.{VisibilityIdentifier}";
+        //}
 
-        public static string ObjectIdFromVisibilityStyleRuleName(string styleRuleName)
-        {
-            int startIndex = styleRuleName.IndexOf('.') + 1;
-            int endIndex = styleRuleName.LastIndexOf('.');
-            if (startIndex > 0 && endIndex > startIndex)
-            {
-                return styleRuleName.Substring(startIndex, endIndex - startIndex);
-            }
-            return null;
-        }       
+        //public static string ObjectIdFromVisibilityStyleRuleName(string styleRuleName)
+        //{
+        //    int startIndex = styleRuleName.IndexOf('.') + 1;
+        //    int endIndex = styleRuleName.LastIndexOf('.');
+        //    if (startIndex > 0 && endIndex > startIndex)
+        //    {
+        //        return styleRuleName.Substring(startIndex, endIndex - startIndex);
+        //    }
+        //   return null;
+        //}       
     }
 }

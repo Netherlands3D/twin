@@ -35,7 +35,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
         [SerializeField] private string rotationUnitCharacter = "";
 
         [Header("scale settings")]
-        [SerializeField] private float scaleMultiplier = 100f;
         [SerializeField] private int scaleDecimals = 0;
 
         private TransformLayerPropertyData transformPropertyData;
@@ -282,6 +281,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
             float.TryParse(yText, NumberStyles.Float, numberFormat, out var y);
             float.TryParse(zText, NumberStyles.Float, numberFormat, out var z);
 
+            float scaleMultiplier = transformPropertyData.ScaleUnitCharacter == "%" ? 100f : 1f;
             transformPropertyData.LocalScale = new Vector3(x / scaleMultiplier, y / scaleMultiplier, z / scaleMultiplier);
         }
 
@@ -303,6 +303,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
 
         private void UpdateScalingFields(Vector3 localScale)
         {
+            float scaleMultiplier = transformPropertyData.ScaleUnitCharacter == "%" ? 100f : 1f;
             var xPercentage = localScale.x * scaleMultiplier;
             var yPercentage = localScale.y * scaleMultiplier;
             var zPercentage = localScale.z * scaleMultiplier;

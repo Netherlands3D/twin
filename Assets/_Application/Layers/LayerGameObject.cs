@@ -11,6 +11,7 @@ using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using System.Linq;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -28,15 +29,13 @@ namespace Netherlands3D.Twin.Layers
 
     public abstract class LayerGameObject : MonoBehaviour
     {
-        public const int DEFAULT_MASK_BIT_MASK = 16777215; //(2^24)-1; 
-
         [SerializeField] private string prefabIdentifier;
         [SerializeField] private SpriteState thumbnail;
         [SerializeField] private SpawnLocation spawnLocation;
         public string PrefabIdentifier => prefabIdentifier;
         public SpriteState Thumbnail => thumbnail;
         public SpawnLocation SpawnLocation => spawnLocation;
-        public virtual bool IsMaskable => true; // Can we mask this layer? Usually yes, but not in case of projections
+        // public virtual bool IsMaskable => true; // Can we mask this layer? Usually yes, but not in case of projections
 
         public string Name
         {
@@ -59,15 +58,6 @@ namespace Netherlands3D.Twin.Layers
 
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
 
-        [System.Serializable]
-        public struct PropertySectionOption
-        {
-            public string type;
-            public bool Enabled;
-        }
-
-        public List<PropertySectionOption> PropertySections = new();
-
 #if UNITY_EDITOR
         private void OnValidate()
         {
@@ -89,56 +79,8 @@ namespace Netherlands3D.Twin.Layers
                     EditorUtility.SetDirty(this);
                 }
             }
-
-            OnValidateCustomFlags();
         }
 
-        protected virtual void OnValidateCustomFlags(List<LayerPropertyData> properties = null)
-        {
-            PropertySectionRegistry registry = LoadRegistry();
-            if (properties == null)
-            {
-                properties = new List<LayerPropertyData>();
-            }
-
-            List<string> allPanelTypes = new List<string>();
-            SetData(new LayerData("temp")); // we need a temp layerData to store the properties in
-            foreach (var visualisation in GetComponents<IVisualizationWithPropertyData>())
-            {
-                visualisation.LoadProperties(properties);
-            }
-
-            foreach (LayerPropertyData propertyData in properties)
-            {
-                List<GameObject> allPanels = registry.GetPanelPrefabs(propertyData.GetType(), propertyData);
-                foreach (var item in allPanels)
-                {
-                    allPanelTypes.Add(item.GetComponent<IVisualizationWithPropertyData>().GetType().AssemblyQualifiedName);
-                }
-            }
-
-            foreach (string customFlag in allPanelTypes)
-            {
-                if (!PropertySections.Any(f => f.type == customFlag))
-                    PropertySections.Add(new PropertySectionOption { type = customFlag, Enabled = true });
-            }
-
-            // Remove duplicates by type
-            PropertySections = PropertySections
-                .GroupBy(f => f.type)
-                .Select(g => g.First())
-                .ToList();
-        }
-
-
-        private static PropertySectionRegistry LoadRegistry()
-        {
-            var guid = AssetDatabase.FindAssets("t:PropertySectionRegistry").FirstOrDefault();
-            if (guid == null) return null;
-
-            var path = AssetDatabase.GUIDToAssetPath(guid);
-            return AssetDatabase.LoadAssetAtPath<PropertySectionRegistry>(path);
-        }
 #endif
 
         [Obsolete("Do not use Awake in subclasses, use OnLayerInitialize instead", true)]
@@ -187,7 +129,9 @@ namespace Netherlands3D.Twin.Layers
             layerData.LayerDeselected.AddListener(OnDeselect);
             layerData.LayerDestroyed.AddListener(DestroyLayerGameObject);
 
-            LayerData.GetProperty<StylingPropertyData>()?.OnStylingChanged.AddListener(ApplyStyling);
+            List<StylingPropertyData> styles = LayerData.GetProperties<StylingPropertyData>();
+            foreach (var style in styles)
+                style.OnStylingChanged.AddListener(ApplyStyling);
         }
 
         protected virtual void UnregisterEventListeners()
@@ -202,7 +146,9 @@ namespace Netherlands3D.Twin.Layers
             layerData.LayerDeselected.RemoveListener(OnDeselect);
             layerData.LayerDestroyed.RemoveListener(DestroyLayerGameObject);
 
-            LayerData.GetProperty<StylingPropertyData>()?.OnStylingChanged.RemoveListener(ApplyStyling);
+            List<StylingPropertyData> styles = LayerData.GetProperties<StylingPropertyData>();
+            foreach (var style in styles)
+                style.OnStylingChanged.RemoveListener(ApplyStyling);
         }
 
         /// <summary>
@@ -234,14 +180,14 @@ namespace Netherlands3D.Twin.Layers
 
         private void LoadPropertiesInVisualisations()
         {
-            List<string> allowedSections = new List<string>();
-            foreach (PropertySectionOption option in PropertySections)
-            {
-                if (option.Enabled && !allowedSections.Contains(option.type))
-                    allowedSections.Add(option.type);
-            }
+            // List<string> allowedSections = new List<string>();
+            // foreach (PropertySectionOption option in PropertySections)
+            // {
+            //     if (option.Enabled && !allowedSections.Contains(option.type))
+            //         allowedSections.Add(option.type);
+            // }
 
-            LayerData.allowedPropertySections = allowedSections;
+            //LayerData.allowedPropertySections = allowedSections;
             foreach (var visualisation in GetComponents<IVisualizationWithPropertyData>())
             {
                 visualisation.LoadProperties(LayerData.LayerProperties);
@@ -251,22 +197,12 @@ namespace Netherlands3D.Twin.Layers
         protected virtual void OnEnable()
         {
             onShow.Invoke();
-            if (IsMaskable)
-                PolygonSelectionLayerPropertyData.MaskDestroyed.AddListener(ResetMask);
         }
 
         protected virtual void OnDisable()
         {
             onHide.Invoke();
-            if (IsMaskable)
-                PolygonSelectionLayerPropertyData.MaskDestroyed.RemoveListener(ResetMask);
         }
-
-        private void ResetMask(int maskBitIndex)
-        {
-            SetMaskBit(maskBitIndex, true, layerData); //reset accepting masks
-        }
-
         protected virtual void OnDestroy()
         {
             //don't unsubscribe in OnDisable, because we still want to be able to center to a 
@@ -348,91 +284,18 @@ namespace Netherlands3D.Twin.Layers
 
         protected Symbolizer GetStyling(LayerFeature feature)
         {
-            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
-            if (stylingPropertyData == null) return null;
+            
+            List<StylingPropertyData> stylingPropertyDatas = LayerData.GetProperties<StylingPropertyData>();
+            if (stylingPropertyDatas == null || stylingPropertyDatas.Count == 0) return null;
 
-            return StyleResolver.Instance.GetStyling(feature, stylingPropertyData.Styles);
+            return StyleResolver.Instance.GetStyling(feature, stylingPropertyDatas);
         }
 
         public virtual void ApplyStyling()
         {
-            var bitMask = GetBitMask();
-            UpdateMaskBitMask(bitMask);
-            // var mask = LayerStyler.GetMaskLayerMask(this); todo?
-            //initialize the layer's style and emit an event for other services and/or UI to update
-            //layerData.OnStylingApplied.Invoke();
+            //todo: can this be removed now?
         }
 
-        protected int GetBitMask()
-        {
-            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
-            if (stylingPropertyData == null) return DEFAULT_MASK_BIT_MASK;
-
-            int? bitMask = stylingPropertyData.DefaultSymbolizer.GetMaskLayerMask();
-            if (bitMask == null)
-                bitMask = DEFAULT_MASK_BIT_MASK;
-
-            return bitMask.Value;
-        }
-
-        public virtual void UpdateMaskBitMask(int bitmask)
-        {
-            foreach (var r in GetComponentsInChildren<Renderer>())
-            {
-                UpdateBitMaskForMaterials(bitmask, r.materials);
-            }
-        }
-
-        protected void UpdateBitMaskForMaterials(int bitmask, IEnumerable<Material> materials)
-        {
-            foreach (var m in materials)
-            {
-                m.SetFloat("_MaskingChannelBitmask", bitmask);
-            }
-        }
-
-        /// <summary>
-        /// Sets a bitmask to the layer to determine which masks affect the provided LayerGameObject
-        /// </summary>
-        public void SetMaskLayerMask(int bitMask, LayerData data)
-        {
-            StylingPropertyData stylingPropertyData = data.GetProperty<StylingPropertyData>();
-            if (stylingPropertyData == null) return;
-
-            stylingPropertyData.SetMaskBitMask(bitMask);
-        }
-
-        public void SetMaskBit(int bitIndex, bool enableBit, LayerData data)
-        {
-            var currentLayerMask = GetMaskLayerMask(data);
-            int maskBitToSet = 1 << bitIndex;
-
-            if (enableBit)
-            {
-                currentLayerMask |= maskBitToSet; // set bit to 1
-            }
-            else
-            {
-                currentLayerMask &= ~maskBitToSet; // set bit to 0
-            }
-
-            SetMaskLayerMask(currentLayerMask, data);
-        }
-
-        /// <summary>
-        /// Retrieves the bitmask for masking of the LayerGameObject.
-        /// </summary>
-        public int GetMaskLayerMask(LayerData data)
-        {
-            StylingPropertyData stylingPropertyData = data.GetProperty<StylingPropertyData>();
-            if (stylingPropertyData == null) return LayerGameObject.DEFAULT_MASK_BIT_MASK;
-
-            int? bitMask = stylingPropertyData.DefaultStyle.AnyFeature.Symbolizer.GetMaskLayerMask();
-            if (bitMask == null)
-                bitMask = LayerGameObject.DEFAULT_MASK_BIT_MASK;
-
-            return bitMask.Value;
-        }
 
         #endregion
 
@@ -500,7 +363,7 @@ namespace Netherlands3D.Twin.Layers
             return cache;
         }
 
-        public virtual void InitProperty<T>(List<LayerPropertyData> properties, Action<T> onInit = null, params object[] constructorArgs)
+        public void InitProperty<T>(List<LayerPropertyData> properties, Action<T> onInit = null, params object[] constructorArgs)
             where T : LayerPropertyData
         {
             T property = properties.OfType<T>().FirstOrDefault();

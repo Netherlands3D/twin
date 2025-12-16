@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 5613502240167318439}
   - component: {fileID: 4705758047892485819}
   - component: {fileID: -18391829949753534}
+  - component: {fileID: -1451336180358219254}
   m_Layer: 0
   m_Name: Kubus
   m_TagString: Untagged
@@ -169,22 +170,6 @@ MonoBehaviour:
   onLayerReady:
     m_PersistentCalls:
       m_Calls: []
-  PropertySections:
-  - type: Netherlands3D.Twin.Layers.Properties.ColorPickerPropertySection, eu.netherlands3d.twin,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Enabled: 1
-  - type: Netherlands3D.Twin.Layers.Properties.HiddenObjectsPropertySection, eu.netherlands3d.twin,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Enabled: 0
-  - type: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.ToggleScatterPropertySection,
-      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Enabled: 1
-  - type: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformPropertySection,
-      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Enabled: 1
-  - type: Netherlands3D.Twin.Layers.Properties.CartesianTileLayerFeatureColorPropertySection,
-      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Enabled: 0
   DebugBoundingBox: 0
   objectCreated:
     m_PersistentCalls:
@@ -209,3 +194,15 @@ MonoBehaviour:
   onPostShift:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-1451336180358219254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3937650689336427930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b050df83d47a4b0aa83cc328c57a63b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

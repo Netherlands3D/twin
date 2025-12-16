@@ -61,8 +61,7 @@ MonoBehaviour:
       m_Calls: []
   PropertySections: []
   PolygonMeshMaterial: {fileID: 2100000, guid: c7fb2e346bb0d4f6da1f26f4c0bcf533, type: 2}
-  polygonMaskMaterial: {fileID: -876546973899608171, guid: c7d81ed14ccbe4efb816be8947f31ab3,
-    type: 3}
+  polygonMaskMaterial: {fileID: -876546973899608171, guid: c7d81ed14ccbe4efb816be8947f31ab3, type: 3}
   OnPolygonVisualisationUpdated:
     m_PersistentCalls:
       m_Calls: []

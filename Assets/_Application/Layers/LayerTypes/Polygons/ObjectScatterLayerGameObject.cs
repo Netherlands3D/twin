@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
@@ -34,6 +35,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     {
         public override BoundingBox Bounds => new(polygonBounds);
         public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
+        private static readonly int baseColorID = Shader.PropertyToID("_BaseColor");
 
         private Mesh mesh;
         private Material material;
@@ -45,7 +47,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private Bounds polygonBounds = new();
         private SampleTexture sampleTexture;
-        
+
         protected override void OnLayerReady()
         {
             base.OnLayerReady();
@@ -65,8 +67,30 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             var scatterObjectPrefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
             this.mesh = CombineHierarchicalMeshes(scatterObjectPrefab.transform);
-            this.material = scatterObjectPrefab.GetComponentInChildren<MeshRenderer>().sharedMaterial; //todo: make this work with multiple materials for hierarchical meshes?
+            var sharedMaterial = scatterObjectPrefab.GetComponentInChildren<MeshRenderer>().sharedMaterial; //todo: make this work with multiple materials for hierarchical meshes?
+            this.material = new Material(sharedMaterial);
             this.material.enableInstancing = true;
+            
+            var feature = CreateFeature(material);
+            LayerFeatures.Add(feature.Geometry, feature);
+        }
+
+        public override void ApplyStyling()
+        {
+            base.ApplyStyling();
+
+            // Apply style to the features that was discovered
+            foreach (var feature in LayerFeatures.Values)
+            {
+                Symbolizer styling = GetStyling(feature);
+                var fillColor = styling.GetFillColor();
+
+                // Keep the original material color if fill color is not set (null)
+                if (!fillColor.HasValue) return;
+
+                LayerData.Color = fillColor.Value;
+                material.SetColor(baseColorID, fillColor.Value);
+            }
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
@@ -105,7 +129,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
             toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToHierarchicalLayerGameObject);
-      
+
             // polygonLayer.OnPrefabIdChanged.RemoveListener(OnPolygonParentPrefabIdChanged);
         }
 
@@ -191,12 +215,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             var boundingBox = GetPolygonBoundingBox();
             polygonBounds = boundingBox.ToUnityBounds();
-            
+
             var vertices = PolygonUtility.CoordinatesToVertices(polygonProperties.OriginalPolygon, polygonProperties.LineWidth);
             var polygons = CalculateAndVisualisePolygons(new CompoundPolygon(vertices));
             if (polygons.Count == 0)
                 return new Bounds(); // the stroke/fill is clipped out because of the stroke width and no further processing is needed
-            
+
             var bounds = polygons[0].Bounds; //start with the bounds of the first polygon and add the others if needed
             for (var index = 1; index < polygons.Count; index++)
             {
@@ -318,7 +342,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
-        {            
+        {
             //todo, can this be moved to OnLayerReady?
 #if UNITY_EDITOR
 #else
@@ -341,7 +365,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 .OrderBy(o => o.LayerData.RootIndex)
                 .FirstOrDefault();
             if (areaReference == null) return;
-            
+
             BinaryMeshLayer bml = areaReference.Layer as BinaryMeshLayer;
 
             var polygonBoundingBox = GetPolygonBoundingBox();

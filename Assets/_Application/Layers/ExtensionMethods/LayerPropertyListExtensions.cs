@@ -31,6 +31,11 @@ namespace Netherlands3D.Twin.Layers.ExtensionMethods
         {
             return properties.OfType<T>().FirstOrDefault();
         }
+        
+        public static T GetDefaultStylingPropertyData<T>(this List<LayerPropertyData> properties) where T : StylingPropertyData
+        {
+            return properties.OfType<T>().FirstOrDefault(data => data.StyleName == StylingPropertyData.NameOfDefaultStyle);
+        }
 
         public static IEnumerable<T> FindAll<T>(this List<LayerPropertyData> properties) where T : class
         {

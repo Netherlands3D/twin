@@ -30,7 +30,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
         public bool IsPolygon => true;
-        public override bool IsMaskable => false;
         public Transform Transform { get => transform; }
         public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
 
@@ -194,7 +193,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
-            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            ColorPropertyData stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
             // The color in the Layer Panel represents the default fill color for this layer
             LayerData.Color = stylingPropertyData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
 
@@ -298,9 +297,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            //copy the parent styles in this layer
-            var parentStyleStyles = LayerData?.ParentLayer?.GetProperty<StylingPropertyData>().Styles;
-            InitProperty<StylingPropertyData>(properties, null, parentStyleStyles);
+            InitProperty<ColorPropertyData>(properties); 
         }
     }
 }

@@ -18,7 +18,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         [SerializeField] private PointRenderer3D pointRenderer3D;
         [SerializeField] private PointRenderer3D selectionPointRenderer3D;
         public bool IsPolygon => false;
-        public override bool IsMaskable => false;
 
         public Transform Transform => transform;
 
@@ -150,7 +149,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
-            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            ColorPropertyData stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
             // The color in the Layer Panel represents the default fill color for this layer
             LayerData.Color = stylingPropertyData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
 
@@ -224,9 +223,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            //copy the parent styles in this layer
-            var parentStyleStyles = LayerData?.ParentLayer?.GetProperty<StylingPropertyData>().Styles;
-            InitProperty<StylingPropertyData>(properties, null, parentStyleStyles);
+            InitProperty<ColorPropertyData>(properties); 
         }
     }
 }

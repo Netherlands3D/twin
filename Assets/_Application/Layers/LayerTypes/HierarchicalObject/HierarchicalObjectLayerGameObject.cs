@@ -21,6 +21,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
     [RequireComponent(typeof(WorldTransform))]
     public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, IVisualizationWithPropertyData //, ILayerWithPropertyPanels
     {
+        private static readonly int baseColorID = Shader.PropertyToID("_BaseColor");
         public override BoundingBox Bounds => CalculateWorldBoundsFromRenderers();
         public bool DebugBoundingBox = false;
 
@@ -73,7 +74,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.OnDisable();
             ClickNothingPlane.ClickedOnNothing.RemoveListener(OnMouseClickNothing);
         }
-
+        
         protected override void OnLayerReady()
         {
             TransformLayerPropertyData transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
@@ -91,8 +92,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             previousScale = transform.localScale;
 
             objectCreated.Invoke(gameObject);       
-            
-
         }
 
         private void UpdatePosition(Coordinate newPosition)
@@ -191,8 +190,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                         transform.eulerAngles,
                         transform.localScale,
                         scaleUnitCharacter);
+            InitProperty<ColorPropertyData>(properties);
             InitProperty<ToggleScatterPropertyData>(properties, p => p.AllowScatter = true);
-            InitProperty<StylingPropertyData>(properties);
         }
 
         protected override void RegisterEventListeners()
@@ -205,6 +204,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
             toggleScatterPropertyData.IsScatteredChanged.AddListener(ConvertToScatterLayer);
+
+            var importedObject = GetComponent<IImportedObject>();
+            if (importedObject != null)
+            {
+                importedObject.ObjectVisualized.AddListener(OnImportedObjectVisualized);
+            }
         }
 
         protected override void UnregisterEventListeners()
@@ -217,6 +222,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
             toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToScatterLayer);
+            
+            var importedObject = GetComponent<IImportedObject>();
+            if (importedObject != null)
+            {
+                importedObject.ObjectVisualized.RemoveListener(OnImportedObjectVisualized);
+            }
         }
 
         protected virtual void Update()
@@ -308,6 +319,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             LayerData.LayerProperties.Get<ToggleScatterPropertyData>().AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
         }
 
+        private void OnImportedObjectVisualized(GameObject importedObject)
+        {
+            ApplyStyling();
+        }
+        
         public override void ApplyStyling()
         {
             // Dynamically create a list of Layer features because a different set of renderers could be present after
@@ -331,16 +347,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 for (int m = 0; m <= meshRenderer.sharedMaterials.Length - 1; m++)
                 {
                     meshRenderer.GetPropertyBlock(block, m);
-                    block.SetColor(BaseColorID, fillColor.Value);
+                    block.SetColor(baseColorID, fillColor.Value);
                     meshRenderer.SetPropertyBlock(block, m);
                 }
             }
 
             base.ApplyStyling();
         }
-
-        private static readonly int BaseColorID = Shader.PropertyToID("_BaseColor");
-      
 
         private void ConvertToScatterLayer(bool isScattered)
         {

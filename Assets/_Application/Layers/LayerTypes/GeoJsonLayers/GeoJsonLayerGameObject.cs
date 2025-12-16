@@ -11,6 +11,7 @@ using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
@@ -145,9 +146,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// </summary>
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
-            InitProperty<StylingPropertyData>(properties);
+            InitProperty<ColorPropertyData>(properties);
             //Initialize the styling with the default color that is gotten from the LayerData.Color
-            var stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            var stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
             stylingPropertyData.DefaultSymbolizer.SetFillColor(LayerData.Color);
             stylingPropertyData.DefaultSymbolizer.SetStrokeColor(LayerData.Color);
         }
@@ -210,7 +211,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void SetVisualization(IGeoJsonVisualisationLayer layer, List<PendingFeature> pendingFeatures)
         {
-            layer.LayerData.Color = LayerData.Color;
+            ColorPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
+            ColorPropertyData childStylingPropertyData = layer.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
+            
+            var fillColor = stylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetFillColor().Value : LayerData.Color;
+            var strokeColor = stylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetStrokeColor().Value : LayerData.Color;
+            
+            //TODO we have to convert this to an enum in the future
+            childStylingPropertyData.ActiveToolProperty = Symbolizer.StrokeColorProperty;
+            childStylingPropertyData.SetDefaultSymbolizerColor(strokeColor);
+            childStylingPropertyData.ActiveToolProperty = Symbolizer.FillColorProperty;
+            childStylingPropertyData.SetDefaultSymbolizerColor(fillColor);
+            
             layer.FeatureRemoved += OnFeatureRemoved;
 
             foreach (var pendingFeature in pendingFeatures)

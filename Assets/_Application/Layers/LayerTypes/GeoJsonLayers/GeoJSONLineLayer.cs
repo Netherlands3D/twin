@@ -6,6 +6,7 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
@@ -18,7 +19,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
     public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
     {
         public bool IsPolygon => false;
-        public override bool IsMaskable => false;
 
         public Transform Transform => transform;
 
@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // of a material asset when replacing the material - no destroy of the old material must be done because
             // that is an asset and not an instance
             lineRenderer3D.LineMaterial = new Material(lineRenderer3D.LineMaterial);
-            var stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            var stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
             stylingPropertyData.ActiveToolProperty = Symbolizer.StrokeColorProperty;
         }
 
@@ -166,7 +166,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public override void ApplyStyling()
         {
             // The color in the Layer Panel represents the default stroke color for this layer
-            StylingPropertyData stylingPropertyData = LayerData.GetProperty<StylingPropertyData>();
+            ColorPropertyData stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
             LayerData.Color = stylingPropertyData.DefaultSymbolizer?.GetStrokeColor() ?? LayerData.Color;
 
             MaterialApplicator.Apply(this.Applicator);
@@ -244,9 +244,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            //copy the parent styles in this layer
-            var parentStyleStyles = LayerData?.ParentLayer?.GetProperty<StylingPropertyData>().Styles;
-            InitProperty<StylingPropertyData>(properties, null, parentStyleStyles);
+            InitProperty<ColorPropertyData>(properties); 
         }
     }
 }
