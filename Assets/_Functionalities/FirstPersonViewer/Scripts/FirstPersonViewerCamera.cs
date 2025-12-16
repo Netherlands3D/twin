@@ -1,9 +1,7 @@
 using DG.Tweening;
-using GG.Extensions;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Twin.Cameras;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -19,7 +17,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         public float CameraHeightOffset { private set; get; } = 1.75f;
         private float previousCameraHeight;
-        private float currentSensitivity = .1f;
+        private float currentSensitivity = .11f;
 
         [Header("Viewer")]
         [SerializeField] private Transform viewerBase;
@@ -44,7 +42,7 @@ namespace Netherlands3D.FirstPersonViewer
         private void Awake()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
-            currentSensitivity = .03f;
+            currentSensitivity = .035f;
 #endif
 
             firstPersonViewerCamera = GetComponent<Camera>();
@@ -133,7 +131,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void Update()
         {
-            if (input.LockInput) return;
+            if (input.LockInput || input.LockCamera) return;
 
             Vector2 cameraMovement = input.LookInput.ReadValue<Vector2>();
 
@@ -153,11 +151,12 @@ namespace Netherlands3D.FirstPersonViewer
         {
             Vector2 mouseLook = pointerDelta * currentSensitivity;
 
-            float currentPitch = GetCameraRotation().x;
-            if (currentPitch > 180) currentPitch -= 360;
+            Vector2 currentRot = GetCameraRotation();
+            if (currentRot.x > 180) currentRot.x -= 360;
+            if (currentRot.y > 180) currentRot.y -= 360;
 
-            float xRotation = Mathf.Clamp(currentPitch - mouseLook.y, -90, 90);
-            float yRotation = GetCameraRotation().y + mouseLook.x;
+            float xRotation = Mathf.Clamp(currentRot.x - mouseLook.y, -90, 90);
+            float yRotation = currentRot.y + mouseLook.x;
 
             switch (cameraConstrain)
             {
@@ -169,6 +168,8 @@ namespace Netherlands3D.FirstPersonViewer
                     viewerBase.rotation = Quaternion.Euler(xRotation, yRotation, 0);
                     break;
                 case CameraConstrain.CONTROL_NONE:
+                    xRotation = Mathf.Clamp(xRotation, -45, 45);
+                    yRotation = Mathf.Clamp(yRotation, -90, 90);
                     transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
                     break;
             }
@@ -218,5 +219,7 @@ namespace Netherlands3D.FirstPersonViewer
         public Vector3 GetPreviousCameraHeight() => transform.position + Vector3.up * previousCameraHeight;
 
         private void ResetToStart() => transform.rotation = startRotation;
+        public void SetSensitivity(float sensitivity) => currentSensitivity = sensitivity;
+        public float GetSensitivity() => currentSensitivity;
     }
 }
