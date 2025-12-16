@@ -283,7 +283,6 @@ MonoBehaviour:
   hideButton: {fileID: 4738308340472357476, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
     type: 3}
   snackbarEvent: {fileID: 11400000, guid: 882c7f2cbbcbc4ae68cd7ae166c6a838, type: 2}
-  fpvExitText: Druk op 'backspace' om je muis te ontgrendelen.
   uiHideText: Druk op 'H' om de interfaces weer te tonen.
 --- !u!1 &5631424678328310606
 GameObject:
@@ -4495,17 +4494,17 @@ PrefabInstance:
     - target: {fileID: 3975450050322068602, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3975450050322068602, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3975450050322068602, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 323
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3975450050322068602, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
         type: 3}
@@ -4515,12 +4514,12 @@ PrefabInstance:
     - target: {fileID: 3975450050322068602, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 161.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3975450050322068602, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -25
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4875962263667687260, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
         type: 3}
@@ -4660,7 +4659,7 @@ PrefabInstance:
     - target: {fileID: 5104290462660487825, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 169
+      value: 165
       objectReference: {fileID: 0}
     - target: {fileID: 5104290462660487825, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
         type: 3}
@@ -4670,7 +4669,7 @@ PrefabInstance:
     - target: {fileID: 5104290462660487825, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 377.5
+      value: 82.5
       objectReference: {fileID: 0}
     - target: {fileID: 5104290462660487825, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
         type: 3}
@@ -5140,6 +5139,12 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1609081047764786245}
     m_Modifications:
+    - target: {fileID: 108770029423874267, guid: 5879c916237b14c9d9033ebc40ee71bc,
+        type: 3}
+      propertyPath: visibilityDialog
+      value: 
+      objectReference: {fileID: 3484609653272048982, guid: 7b20863b969f0e34c8a56e230c699e64,
+        type: 3}
     - target: {fileID: 243665462220072876, guid: 5879c916237b14c9d9033ebc40ee71bc,
         type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
