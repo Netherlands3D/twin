@@ -4,14 +4,16 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
-    public class PolygonSelectionVisualisation : LayerGameObject//, ILayerWithPropertyPanels
+    public class PolygonSelectionVisualisation : LayerGameObject, IVisualizationWithPropertyData
     {
         private BoundingBox polygonBounds;
         public override BoundingBox Bounds => polygonBounds;
@@ -115,9 +117,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         protected override void OnLayerReady()
         {
             base.OnLayerReady();
-            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            var vertices = PolygonUtility.CoordinatesToVertices(data.OriginalPolygon, data.LineWidth);
-            UpdateVisualisation(vertices, data.ExtrusionHeight);
+
         }
 
         protected override void RegisterEventListeners()
@@ -304,6 +304,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             base.DestroyLayer();
             PolygonSelectionCalculator.UnregisterPolygon(LayerData);
             CleanupMasking();            
+        }
+
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            InitProperty<PolygonSelectionLayerPropertyData>(properties);
+            
+            PolygonSelectionLayerPropertyData data = properties.Get<PolygonSelectionLayerPropertyData>();
+            var vertices = PolygonUtility.CoordinatesToVertices(data.OriginalPolygon, data.LineWidth);
+            UpdateVisualisation(vertices, data.ExtrusionHeight);
+            
+            OnIsMaskChanged(data.IsMask);
+            OnInvertMaskChanged(data.InvertMask); 
+            
+            RecalculatePolygon();
+            UpdatePolygonVisualisation();
         }
     }
 }

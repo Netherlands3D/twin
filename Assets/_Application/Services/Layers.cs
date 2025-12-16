@@ -143,7 +143,7 @@ namespace Netherlands3D.Twin.Services
                 throw new Exception("Cannot add layer with type 'url' without a URL");
             }
 
-            return urlPropertyData.Data;
+            return urlPropertyData.Url;
         }
 
         public void VisualizeData(LayerData layerData, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null)

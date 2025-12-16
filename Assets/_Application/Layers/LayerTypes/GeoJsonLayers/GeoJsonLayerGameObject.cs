@@ -12,6 +12,7 @@ using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
@@ -91,12 +92,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         protected virtual void StartLoadingData()
         {
             LayerURLPropertyData urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            if (urlPropertyData.Data.IsStoredInProject())
+            if (urlPropertyData.Url.IsStoredInProject())
             {
-                string path = AssetUriFactory.GetLocalPath(urlPropertyData.Data);
+                string path = AssetUriFactory.GetLocalPath(urlPropertyData.Url);
                 StartCoroutine(parser.ParseGeoJSONLocal(path));
             }
-            else if (urlPropertyData.Data.IsRemoteAsset())
+            else if (urlPropertyData.Url.IsRemoteAsset())
             {
                 RequestCredentials();
             }
@@ -106,13 +107,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             var credentialHandler = GetComponent<ICredentialHandler>();
             LayerURLPropertyData urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            credentialHandler.Uri = urlPropertyData.Data;
+            credentialHandler.Uri = urlPropertyData.Url;
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             credentialHandler.ApplyCredentials();
         }
 
         protected virtual void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
+            if (auth.GetType() != typeof(Public))//if it is public, we don't want the property panel to show up
+            {
+                InitProperty<CredentialsRequiredPropertyData>(LayerData.LayerProperties);
+            }
+            
             if (auth is FailedOrUnsupported)
             {
                 LayerData.HasValidCredentials = false;
@@ -211,7 +217,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void SetVisualization(IGeoJsonVisualisationLayer layer, List<PendingFeature> pendingFeatures)
         {
-            layer.LayerData.Color = LayerData.Color;
+            ColorPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
+            ColorPropertyData childStylingPropertyData = layer.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
+            
+            var fillColor = stylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetFillColor().Value : LayerData.Color;
+            var strokeColor = stylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetStrokeColor().Value : LayerData.Color;
+            
+            //TODO we have to convert this to an enum in the future
+            childStylingPropertyData.ActiveToolProperty = Symbolizer.StrokeColorProperty;
+            childStylingPropertyData.SetDefaultSymbolizerColor(strokeColor);
+            childStylingPropertyData.ActiveToolProperty = Symbolizer.FillColorProperty;
+            childStylingPropertyData.SetDefaultSymbolizerColor(fillColor);
+            
             layer.FeatureRemoved += OnFeatureRemoved;
 
             foreach (var pendingFeature in pendingFeatures)
@@ -270,15 +287,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs(prefab.name).ChildOf(LayerData);
-            var newLayer = App.Layers.Add(layerBuilder, callBack);
-            
-            ColorPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
-            ColorPropertyData childStylingPropertyData = newLayer.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
-            
-            var fillColor = stylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetFillColor().Value : LayerData.Color;
-            var strokeColor = stylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetStrokeColor().Value : LayerData.Color;
-            childStylingPropertyData.DefaultSymbolizer.SetFillColor(fillColor);
-            childStylingPropertyData.DefaultSymbolizer.SetStrokeColor(strokeColor);
+            App.Layers.Add(layerBuilder, callBack);
         }
 
         protected virtual void OnFeatureRemoved(Feature feature)
