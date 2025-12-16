@@ -89,7 +89,6 @@ namespace Netherlands3D.CityJson.Visualisation
         //create the meshes
         protected override void Visualize()
         {
-            IsVisualized = false;
             transform.localPosition = SetLocalPosition(cityObject); //set position first so the CityObject's transformationMatrix can be used to position the mesh.
             materialConverter.Initialize(cityObject.Appearance);
             StartCoroutine(CreateMeshesPerFrame(maxMeshesPerFrame));
@@ -118,7 +117,6 @@ namespace Netherlands3D.CityJson.Visualisation
             if(addMeshCollider && meshes.Count > 0)
                 gameObject.AddComponent<MeshCollider>();
 
-            IsVisualized = true;
             cityObjectVisualized?.Invoke(this);
         }
 
