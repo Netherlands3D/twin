@@ -6,6 +6,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     public class ViewerVehicularState : ViewerState
     {
         private float currentSpeed;
+        private int lastSpeed;
 
         [SerializeField] private MovementFloatSetting accelerationSetting;
         [SerializeField] private MovementFloatSetting decelerationSetting;
@@ -19,20 +20,22 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             base.OnEnter();
 
             //Get Rotation this depends on the current Camera Constrain
-            Vector3 euler = viewer.FirstPersonCamera.GetEulerRotation();
+            Vector3 euler = viewer.FirstPersonCamera.GetStateRotation();
             viewer.SetupState(transform.position, new Vector3(0f, euler.y, 0f), new Vector3(euler.x, 0f, 0f), viewer.FirstPersonCamera.CameraHeightOffset);
 
             viewer.GetGroundPosition();
 
             currentSpeed = 0;
 
-            viewer.OnResetToGround += ResetToGround;
+            viewer.OnResetToGround += ResetCurrentSpeed;
+            viewer.OnResetToStart += ResetCurrentSpeed;
         }
 
         public override void OnUpdate()
         {
             Vector2 moveInput = GetMoveInput();
             MoveVehicle(moveInput);
+            if (input.SpaceAction.IsPressed())  Handbrake();
 
             viewer.SnapToGround();
 
@@ -41,7 +44,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         public override void OnExit()
         {
-            viewer.OnResetToGround -= ResetToGround;
+            viewer.OnResetToGround -= ResetCurrentSpeed;
+            viewer.OnResetToStart -= ResetCurrentSpeed;
         }
 
         private void MoveVehicle(Vector2 moveInput)
@@ -57,28 +61,37 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
 
+            float turn = 0;
             if (Mathf.Abs(currentSpeed) > 0.1f)
             {
-                float turn = moveInput.x * turnSpeedSetting.Value * Time.deltaTime * Mathf.Sign(currentSpeed);
+                turn = moveInput.x * turnSpeedSetting.Value * Time.deltaTime * Mathf.Sign(currentSpeed);
                 transform.Rotate(Vector3.up * turn);
             }
             else
             {
-                float turn = moveInput.x * turnSpeedSetting.Value * .2f * Time.deltaTime;
+                turn = moveInput.x * turnSpeedSetting.Value * .2f * Time.deltaTime;
                 transform.Rotate(Vector3.up * turn);
             }
 
-            if (Mathf.Abs(currentSpeed) > 0)
+            movementVisualController.SetSteeringWheelRotation(turn * 30 * (isGoingBackwards ? -1 : 1));
+
+            if (Mathf.Abs(currentSpeed) > 0) viewer.GetGroundPosition();
+
+            int speedInKilometers = Mathf.RoundToInt(currentSpeed * 3.6f);
+            if(speedInKilometers != lastSpeed)
             {
-                viewer.GetGroundPosition();
-
-                int speedInKilometers = Mathf.RoundToInt(currentSpeed * 3.6f);
-
                 currentSpeedLabel.Value = speedInKilometers.ToString();
+                lastSpeed = speedInKilometers;
             }
         }
 
-        private void ResetToGround()
+        private void Handbrake()
+        {
+            float handbrakeForce = 5;
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0, decelerationSetting.Value * handbrakeForce * Time.deltaTime);
+        }
+
+        private void ResetCurrentSpeed()
         {
             currentSpeed = 0;
         }

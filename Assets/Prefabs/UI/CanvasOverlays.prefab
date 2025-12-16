@@ -179,7 +179,7 @@ PrefabInstance:
     - target: {fileID: 499634653280162646, guid: fa95a79a7e4dec44e93740e8a3589b07,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 90.53
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 499634653280162646, guid: fa95a79a7e4dec44e93740e8a3589b07,
         type: 3}
@@ -194,7 +194,7 @@ PrefabInstance:
     - target: {fileID: 499634653280162646, guid: fa95a79a7e4dec44e93740e8a3589b07,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -15.205
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3059925889726845270, guid: fa95a79a7e4dec44e93740e8a3589b07,
         type: 3}
@@ -360,4 +360,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2
-  renderOrder: 0
+  renderOrder: 20

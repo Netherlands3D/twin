@@ -12,7 +12,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             base.OnEnter();
 
             //Get Rotation this depends on the current Camera Constrain
-            Vector3 euler = viewer.FirstPersonCamera.GetEulerRotation();
+            Vector3 euler = viewer.FirstPersonCamera.GetStateRotation();
 
             viewer.SetupState(transform.position, new Vector3(0f, euler.y, 0f), new Vector3(euler.x, 0f, 0f), viewer.FirstPersonCamera.CameraHeightOffset);
 
@@ -29,7 +29,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             viewer.SnapToGround();
 
-            if(!input.LockInput) Jump();
+            if(!DisableMovement()) Jump();
 
             viewer.ApplyGravity();
         }
@@ -46,7 +46,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         private void Jump()
         {
-            if (input.JumpAction.triggered && viewer.isGrounded)
+            if (input.SpaceAction.triggered && viewer.isGrounded)
             {
                 viewer.SetVelocity(new Vector2(viewer.Velocity.x, jumpFoceSetting.Value));
                 viewer.isGrounded = false;

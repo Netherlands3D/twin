@@ -17,7 +17,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private Camera2DFrustum frustum;
         [SerializeField] private WMTSMap wmtsMap;
 
-
         private void OnEnable()
         {
             StartCoroutine(SetupViewer());
