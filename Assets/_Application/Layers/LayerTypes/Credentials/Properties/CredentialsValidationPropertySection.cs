@@ -45,8 +45,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
         private void OnCredentialsHandled(Uri uri, StoredAuthorization auth)
         {
-            Debug.LogError(gameObject.name + " handling credentials for: " + uri + "\t " + auth?.GetType());
-
             var accepted = auth != null && auth is not FailedOrUnsupported;
             
             validCredentialsPanel.SetActive(accepted);

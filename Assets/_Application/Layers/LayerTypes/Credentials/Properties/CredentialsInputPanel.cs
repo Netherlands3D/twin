@@ -122,10 +122,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         public void DisablePanelWhenUserInputsSameCredentials()
         {
             // Same credentials as before, disable the panel again, called in the inspector
-            if (handler.PasswordOrKeyOrTokenOrCode == inputFieldToUseForPasswordOrKey.text)
+            var valid = handler.Authorization is not FailedOrUnsupported;
+            if (valid && handler.PasswordOrKeyOrTokenOrCode == inputFieldToUseForPasswordOrKey.text)
             {
                 gameObject.SetActive(false);
-                var valid = handler.Authorization is not FailedOrUnsupported;
                 GetComponentInParent<CredentialsValidationPropertySection>()?.ResetStatusPanel(valid); //re-enable the status panel if it exists (not the case in the URL import panel)
             }
         }

@@ -1,10 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Netherlands3D.Credentials.StoredAuthorization;
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
-using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.Events;
 
