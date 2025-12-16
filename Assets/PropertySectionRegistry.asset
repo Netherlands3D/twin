@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: PropertySectionRegistry
   m_EditorClassIdentifier: 
   Entries:
+  - TypeName: Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties.CredentialsRequiredPropertyData,
+      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Prefab: {fileID: 7185160580400989932, guid: f241bd5b609aa4447ae89fb4325470ef,
+      type: 3}
   - TypeName: Netherlands3D.Functionalities.ObjectLibrary.WindmillPropertyData, eu.netherlands3d.twin,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     Prefab: {fileID: 7185160580400989932, guid: 4d2ed55a8b4bec140a8d4a78fa283812,

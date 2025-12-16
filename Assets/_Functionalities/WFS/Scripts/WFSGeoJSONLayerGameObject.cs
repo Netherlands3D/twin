@@ -26,7 +26,7 @@ namespace Netherlands3D.Functionalities.Wfs
 
         protected override void StartLoadingData()
         {
-            var wfsUrl = LayerData.GetProperty<LayerURLPropertyData>().Data.ToString();
+            var wfsUrl = LayerData.GetProperty<LayerURLPropertyData>().Url.ToString();
 
             RequestCredentials();
             
@@ -42,7 +42,7 @@ namespace Netherlands3D.Functionalities.Wfs
                 return;
             }
             
-            var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(LayerData.GetProperty<LayerURLPropertyData>().Data.ToString(), ServiceType.Wfs);
+            var getCapabilitiesString = OgcWebServicesUtility.CreateGetCapabilitiesURL(LayerData.GetProperty<LayerURLPropertyData>().Url.ToString(), ServiceType.Wfs);
             var getCapabilitiesUrl = new Uri(getCapabilitiesString);
             BoundingBoxCache.Instance.GetBoundingBoxContainer(
                 getCapabilitiesUrl,
@@ -58,7 +58,7 @@ namespace Netherlands3D.Functionalities.Wfs
 
         public void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)
         {
-            var wfsUrl = LayerData.GetProperty<LayerURLPropertyData>().Data.ToString();
+            var wfsUrl = LayerData.GetProperty<LayerURLPropertyData>().Url.ToString();
             var featureLayerName = WfsGetCapabilities.GetLayerNameFromURL(wfsUrl);
             
             if (boundingBoxContainer.LayerBoundingBoxes.ContainsKey(featureLayerName))

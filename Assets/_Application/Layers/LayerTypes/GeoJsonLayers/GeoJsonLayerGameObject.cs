@@ -12,6 +12,7 @@ using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
@@ -91,12 +92,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         protected virtual void StartLoadingData()
         {
             LayerURLPropertyData urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            if (urlPropertyData.Data.IsStoredInProject())
+            if (urlPropertyData.Url.IsStoredInProject())
             {
-                string path = AssetUriFactory.GetLocalPath(urlPropertyData.Data);
+                string path = AssetUriFactory.GetLocalPath(urlPropertyData.Url);
                 StartCoroutine(parser.ParseGeoJSONLocal(path));
             }
-            else if (urlPropertyData.Data.IsRemoteAsset())
+            else if (urlPropertyData.Url.IsRemoteAsset())
             {
                 RequestCredentials();
             }
@@ -106,13 +107,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             var credentialHandler = GetComponent<ICredentialHandler>();
             LayerURLPropertyData urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            credentialHandler.Uri = urlPropertyData.Data;
+            credentialHandler.Uri = urlPropertyData.Url;
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             credentialHandler.ApplyCredentials();
         }
 
         protected virtual void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
+            if (auth.GetType() != typeof(Public))//if it is public, we don't want the property panel to show up
+            {
+                InitProperty<CredentialsRequiredPropertyData>(LayerData.LayerProperties);
+            }
+            
             if (auth is FailedOrUnsupported)
             {
                 LayerData.HasValidCredentials = false;

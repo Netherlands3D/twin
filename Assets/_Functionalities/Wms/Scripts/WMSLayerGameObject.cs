@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -41,19 +42,19 @@ namespace Netherlands3D.Functionalities.Wms
         {
             base.OnLayerReady();
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            UpdateURL(urlPropertyData.Data);
+            UpdateURL(urlPropertyData.Url);
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
-            Legend.Instance.RegisterUrl(urlPropertyData.Data.ToString());
-            Legend.Instance.ShowLegend(urlPropertyData.Data.ToString(), ShowLegendOnSelect && LayerData.IsSelected);
+            Legend.Instance.RegisterUrl(urlPropertyData.Url.ToString());
+            Legend.Instance.ShowLegend(urlPropertyData.Url.ToString(), ShowLegendOnSelect && LayerData.IsSelected);
         }
 
         public void SetLegendActive(bool active)
         {
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            if (urlPropertyData.Data == null) return;
+            if (urlPropertyData.Url == null) return;
             
-            Legend.Instance.ShowLegend(urlPropertyData.Data.ToString(), active);
+            Legend.Instance.ShowLegend(urlPropertyData.Url.ToString(), active);
         }
 
         //a higher order means rendering over lower indices
@@ -67,6 +68,11 @@ namespace Netherlands3D.Functionalities.Wms
         {
             ClearCredentials();
 
+            if (auth.GetType() != typeof(Public))//if it is public, we don't want the property panel to show up
+            {
+                InitProperty<CredentialsRequiredPropertyData>(LayerData.LayerProperties);
+            }
+            
             if (auth is FailedOrUnsupported)
             {
                 LayerData.HasValidCredentials = false;
@@ -99,7 +105,7 @@ namespace Netherlands3D.Functionalities.Wms
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             if (urlPropertyData == null) return;
             
-            UpdateURL(urlPropertyData.Data);
+            UpdateURL(urlPropertyData.Url);
         }
 
         private void UpdateURL(Uri storedUri)
@@ -115,7 +121,7 @@ namespace Netherlands3D.Functionalities.Wms
             LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
             CredentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            Legend.Instance.UnregisterUrl(urlPropertyData.Data.ToString());
+            Legend.Instance.UnregisterUrl(urlPropertyData.Url.ToString());
         }
 
         public override void OnSelect()
@@ -133,7 +139,7 @@ namespace Netherlands3D.Functionalities.Wms
             if (boundingBoxContainer == null) return;
 
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            var wmsUrl = urlPropertyData.Data.ToString();
+            var wmsUrl = urlPropertyData.Url.ToString();
             var featureLayerName = OgcWebServicesUtility.GetParameterFromURL(wmsUrl, "layers");
 
             if (boundingBoxContainer.LayerBoundingBoxes.ContainsKey(featureLayerName))
