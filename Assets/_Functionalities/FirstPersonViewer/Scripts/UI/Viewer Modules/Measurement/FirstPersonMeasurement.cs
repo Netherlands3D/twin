@@ -80,8 +80,11 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                             totalDistanceInMeters += dst;
                             totalDistanceText.text = "Totale afstand: " + ConvertToUnits(totalDistanceInMeters);
 
-                            measurementElement.Init(GetAlphabetLetter(index - 1), GetAlphabetLetter(index), dst, lineColors[clickCount % lineColors.Length], RemoveElement);
+                            Color32 objectColor = lineColors[clickCount % lineColors.Length];
+                            measurementElement.Init(GetAlphabetLetter(index - 1), GetAlphabetLetter(index), dst, objectColor, RemoveElement);
                             measurementElements.Add(measurementElement);
+
+                            pointObj.SetLine(pointList[index].transform.position, pointList[index - 1].transform.position, objectColor);
                         }
                     }
                 }, FirstPersonViewerCamera.FPVCamera, measurementLayerMask);
@@ -165,6 +168,13 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             for (int i = 0; i < pointList.Count; i++)
             {
                 pointList[i].UpdatePointerLetter(GetAlphabetLetter(i));
+
+                if(i > 0)
+                {
+                    Vector3 start = pointList[i].transform.position;
+                    Vector3 end = pointList[i - 1].transform.position;
+                    pointList[i].SetLine(start, end);
+                }
             }
 
             float newTotalDistance = 0;
