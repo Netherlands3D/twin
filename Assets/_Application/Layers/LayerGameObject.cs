@@ -9,9 +9,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using System.Linq;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -35,7 +33,6 @@ namespace Netherlands3D.Twin.Layers
         public string PrefabIdentifier => prefabIdentifier;
         public SpriteState Thumbnail => thumbnail;
         public SpawnLocation SpawnLocation => spawnLocation;
-        // public virtual bool IsMaskable => true; // Can we mask this layer? Usually yes, but not in case of projections
 
         public string Name
         {
@@ -180,14 +177,6 @@ namespace Netherlands3D.Twin.Layers
 
         private void LoadPropertiesInVisualisations()
         {
-            // List<string> allowedSections = new List<string>();
-            // foreach (PropertySectionOption option in PropertySections)
-            // {
-            //     if (option.Enabled && !allowedSections.Contains(option.type))
-            //         allowedSections.Add(option.type);
-            // }
-
-            //LayerData.allowedPropertySections = allowedSections;
             foreach (var visualisation in GetComponents<IVisualizationWithPropertyData>())
             {
                 visualisation.LoadProperties(LayerData.LayerProperties);
@@ -293,9 +282,8 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void ApplyStyling()
         {
-            //todo: can this be removed now?
+            //called when the Styling of the visualization changes
         }
-
 
         #endregion
 
@@ -370,15 +358,6 @@ namespace Netherlands3D.Twin.Layers
             if (property != null)
                 return;
             
-// #if UNITY_EDITOR
-//             if (!Application.isPlaying)
-//             {
-//                 property = (T)Activator.CreateInstance(typeof(T), constructorArgs);
-//                 properties.Add(property);
-//                 return;
-//             }
-// #endif
-
             property = (T)Activator.CreateInstance(typeof(T), constructorArgs);
             LayerData.SetProperty(property);
             onInit?.Invoke(property);
