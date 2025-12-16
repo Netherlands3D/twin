@@ -114,12 +114,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             PolygonSelectionCalculator.RegisterPolygon(LayerData);
         }
 
-        protected override void OnLayerReady()
-        {
-            base.OnLayerReady();
-
-        }
-
         protected override void RegisterEventListeners()
         {
             base.RegisterEventListeners();
@@ -240,14 +234,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 OnInvertMaskChanged(invertMask); //clear the inverted mask property before clearing the bit index
                 PolygonSelectionLayerPropertyData.AddAvailableMaskChannel(data.MaskBitIndex);
-                //availableMaskChannels.Add(data.MaskBitIndex);
                 data.MaskBitIndex = -1;
             }
             else if (isMask && data.MaskBitIndex == -1)
             {
                 data.MaskBitIndex = PolygonSelectionLayerPropertyData.LastAvailableMaskChannel();
                 PolygonSelectionLayerPropertyData.RemoveAvailableMaskChannel(data.MaskBitIndex);
-                //availableMaskChannels.Remove(data.MaskBitIndex);
                 OnInvertMaskChanged(invertMask); //set the inverted mask property after assigning the bit index
             }
         }

@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Functionalities;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Services;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
