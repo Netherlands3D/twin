@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
@@ -51,22 +52,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var windmillProperties = (WindmillPropertyData)properties.FirstOrDefault(p => p is WindmillPropertyData);
-            if (windmillProperties != null)
-            {
-                propertyData = windmillProperties;
-            }
-
-            if (propertyData == null)
-            {
-                propertyData = new()
-                {
-                    AxisHeight = defaultHeight,
-                    RotorDiameter = defaultDiameter
-                };
-                GetComponent<LayerGameObject>().LayerData.SetProperty<WindmillPropertyData>(propertyData);
-            }
-
+            GetComponent<LayerGameObject>().InitProperty<WindmillPropertyData>(properties, null, defaultHeight, defaultDiameter);
             AddListeners();
         }
 
