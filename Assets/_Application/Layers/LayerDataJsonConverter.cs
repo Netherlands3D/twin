@@ -4,10 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.Scripting;
 
@@ -86,6 +88,13 @@ namespace Netherlands3D
                 }
                 layer.SetProperty(pd);
             }
+            
+            //styles
+            var styleToken = obj["styles"] as JObject;
+            if (styleToken != null)
+            {
+                MigrateSingleLegacyStyle(layer, styleToken, serializer);
+            }
 
             return layer;
         }
@@ -119,6 +128,35 @@ namespace Netherlands3D
             }
 
             return serializer;
+        }
+        
+        private void MigrateSingleLegacyStyle(
+            LayerData layer,
+            JObject stylesToken,
+            JsonSerializer serializer)
+        {
+            var firstStyle = stylesToken.Properties().FirstOrDefault()?.Value as JObject;
+            if (firstStyle == null)
+                return;
+
+            var stylingProperty = layer.GetProperty<StylingPropertyData>();
+            if(stylingProperty != null) return;
+
+            stylingProperty = new StylingPropertyData();
+            
+            var metadataToken = firstStyle["metadata"];
+            if (metadataToken != null)
+            {
+                serializer.Populate(metadataToken.CreateReader(), stylingProperty.Metadata);
+            }
+            var rulesToken = firstStyle["stylingRules"] as JObject;
+            if (rulesToken != null)
+            {
+                stylingProperty.StylingRules.Clear();
+                serializer.Populate(rulesToken.CreateReader(), stylingProperty.StylingRules);
+            }
+
+            layer.SetProperty(stylingProperty);
         }
     }
 }
