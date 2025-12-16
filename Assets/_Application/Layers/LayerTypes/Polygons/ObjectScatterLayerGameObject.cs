@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.CartesianTiles;
@@ -9,7 +7,6 @@ using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -113,7 +110,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             toggleScatterPropertyData.IsScatteredChanged.AddListener(ConvertToHierarchicalLayerGameObject);
 
             AddListenersToCartesianTiles();
-            // polygonLayer.OnPrefabIdChanged.AddListener(OnPolygonParentPrefabIdChanged);
         }
 
         public void RemoveReScatterListeners()
@@ -129,8 +125,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
             toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToHierarchicalLayerGameObject);
-
-            // polygonLayer.OnPrefabIdChanged.RemoveListener(OnPolygonParentPrefabIdChanged);
         }
 
         protected override void OnDestroy()
@@ -311,9 +305,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public override void OnSiblingIndexOrParentChanged(int newSiblingIndex)
         {
             base.OnSiblingIndexOrParentChanged(newSiblingIndex);
-
-            // if (!completedInitialization) //this is needed because the initial instantiation will also set the parent, and this should not do any of the logic below before this layer is properly initialized.
-            //     return;
 
             var newPolygonParent = LayerData.ParentLayer;
             if (newPolygonParent != polygonLayer) //the parent changed
