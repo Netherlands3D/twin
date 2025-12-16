@@ -47,6 +47,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
         {
             var accepted = auth != null && auth is not FailedOrUnsupported;
             
+            if (accepted)//we always want to show the status if credentials are accepted, however we might still want to display the error of the input panel if it was not accepted
+                statusPanel.SetActive(true);
+    
             validCredentialsPanel.SetActive(accepted);
             invalidCredentialsPanel.SetActive(!accepted);
         }
