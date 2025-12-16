@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +16,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            propertyData = properties.FirstOrDefault(p => p is WindmillPropertyData) as WindmillPropertyData;
+            propertyData = properties.Get<WindmillPropertyData>();
             axisHeightSlider.value = propertyData.AxisHeight;
             rotorDiameterSlider.value = propertyData.RotorDiameter;
         }
