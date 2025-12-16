@@ -193,15 +193,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
-            ColorPropertyData stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
-            // The color in the Layer Panel represents the default fill color for this layer
-            LayerData.Color = stylingPropertyData.DefaultSymbolizer?.GetFillColor() ?? LayerData.Color;
-
             MaterialApplicator.Apply(Applicator);
             foreach (var visualisation in spawnedVisualisations)
             {
                 ApplyStyling(visualisation.Value);
             }
+            // The color in the Layer Panel represents the default fill color for this layer
+            LayerData.Color = Applicator.GetMaterial().color;
         }
 
         public void ApplyStyling(FeaturePolygonVisualisations visualisation)

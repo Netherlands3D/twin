@@ -165,11 +165,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
-            // The color in the Layer Panel represents the default stroke color for this layer
-            ColorPropertyData stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
-            LayerData.Color = stylingPropertyData.DefaultSymbolizer?.GetStrokeColor() ?? LayerData.Color;
-
-            MaterialApplicator.Apply(this.Applicator);
+            MaterialApplicator.Apply(Applicator);
+            // The color in the Layer Panel represents the default fill color for this layer
+            LayerData.Color = Applicator.GetMaterial().color;
         }
 
         public void ApplyStyling(FeatureLineVisualisations newFeatureVisualisation)
