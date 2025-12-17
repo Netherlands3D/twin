@@ -19,7 +19,7 @@ using UnityEngine.EventSystems;
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
     [RequireComponent(typeof(WorldTransform))]
-    public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, IVisualizationWithPropertyData //, ILayerWithPropertyPanels
+    public class HierarchicalObjectLayerGameObject : LayerGameObject, IPointerClickHandler, IVisualizationWithPropertyData
     {
         private static readonly int baseColorID = Shader.PropertyToID("_BaseColor");
         public override BoundingBox Bounds => CalculateWorldBoundsFromRenderers();
