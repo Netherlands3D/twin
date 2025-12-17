@@ -11,7 +11,7 @@ namespace Netherlands3D.Functionalities.Wfs
     /// <summary>
     /// Extention of GeoJSONLayerGameObject that injects a 'streaming' dataprovider WFSGeoJSONTileDataLayer
     /// </summary>
-    public class WFSGeoJsonLayerGameObject : GeoJsonLayerGameObject//, ILayerWithPropertyPanels
+    public class WFSGeoJsonLayerGameObject : GeoJsonLayerGameObject
     {
         [SerializeField] private WFSGeoJSONTileDataLayer cartesianTileWFSLayer;
         public override BoundingBox Bounds => cartesianTileWFSLayer?.BoundingBox;

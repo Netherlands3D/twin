@@ -32,14 +32,12 @@ namespace Netherlands3D.Twin.Services
         /// </summary>
         public Layer Add(LayerPresetArgs args, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null)
         {
-            return Add(LayerBuilder.Create(args), callback);
+            return Add(LayerBuilder.Create(args), callback, errorCallback);
         }
 
         /// <summary>
         /// Adds a new layer to the current project using the given builder.
         /// </summary>
-        [ItemCanBeNull]
-        // public async Task<Layer> Add(ILayerBuilder builder)
         public Layer Add(ILayerBuilder builder, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null)
         {
             if (builder is not LayerBuilder layerBuilder)
@@ -76,7 +74,7 @@ namespace Netherlands3D.Twin.Services
 
             // Return null to indicate that adding this flow does not directly result in a Layer, it may do so
             // indirectly (DataTypeAdapters call this Layer service again).
-            Debug.LogWarning("the fileTypeAdapter currently does not return anything, the returned object is null. This should be refactored in the future"); //todo: the fileTypeAdapter should be refactored to return the resulting objects
+            //todo: the fileTypeAdapter should be refactored to return the resulting objects
             return null;
         }
 
@@ -94,7 +92,7 @@ namespace Netherlands3D.Twin.Services
                 
             // Return null to indicate that adding this flow does not directly result in a Layer, it may do so
             // indirectly (DataTypeAdapters call this Layer service again).
-            Debug.LogWarning("the urlImportAdapter currently does not return anything, the returned object is null. This should be refactored in the future"); //todo: the DataTypeChain should be refactored to return the resulting objects
+            //todo: the DataTypeChain should be refactored to return the resulting objects
             return null;
         }
 
@@ -109,7 +107,6 @@ namespace Netherlands3D.Twin.Services
             layerData.PrefabIdentifier = prefabIdentifier;
             var layer = new Layer(layerData);
             Visualize(layer, spawner, callback, errorCallback);
-            // if (previousId != prefabIdentifier) layer.LayerGameObject.OnConvert(previousId); //todo: this should not be done here but in the future VisualizationPropertyData (ticket 3/4)
             return layer;
         }
 
