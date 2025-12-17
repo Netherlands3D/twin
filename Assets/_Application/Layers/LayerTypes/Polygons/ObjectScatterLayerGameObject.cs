@@ -44,19 +44,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private Bounds polygonBounds = new();
         private SampleTexture sampleTexture;
-
+        
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            SetParentPolygonLayer(LayerData.ParentLayer);
+            var scatterSettings = properties.Get<ScatterGenerationSettingsPropertyData>();
+            InitializeScatterMesh(scatterSettings.OriginalPrefabId);
+        }
+        
         protected override void OnLayerReady()
         {
             base.OnLayerReady();
-            polygonLayer = LayerData.ParentLayer;
-
-            var scatterSettings = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
-            InitializeScatterMesh(scatterSettings.OriginalPrefabId);
-
+            
             TransformLayerPropertyData transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
             transformProperty.IsEditable = false;
-
             RecalculatePolygonsAndSamplerTexture();
+        }
+
+        protected override void RegisterEventListeners()
+        {
+            base.RegisterEventListeners();
             AddReScatterListeners();
         }
 
@@ -67,7 +74,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var sharedMaterial = scatterObjectPrefab.GetComponentInChildren<MeshRenderer>().sharedMaterial; //todo: make this work with multiple materials for hierarchical meshes?
             this.material = new Material(sharedMaterial);
             this.material.enableInstancing = true;
-            
+
             var feature = CreateFeature(material);
             LayerFeatures.Add(feature.Geometry, feature);
         }
@@ -330,23 +337,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 LayerData.GetProperty<ToggleScatterPropertyData>().IsScattered = false; //revert to Object Visualization
             }
-        }
-
-        public void LoadProperties(List<LayerPropertyData> properties)
-        {
-            //todo, can this be moved to OnLayerReady?
-#if UNITY_EDITOR
-#else
-            var scatterSettings = properties.Get<ScatterGenerationSettingsPropertyData>();
-            if (scatterSettings != null)
-            {
-                PolygonSelectionLayerPropertyData polygonProperties = LayerData.ParentLayer.GetProperty<PolygonSelectionLayerPropertyData>();
-                if (polygonProperties != null)
-                {
-                    polygonLayer = LayerData.ParentLayer;
-                }
-            }
-#endif
         }
 
         private void AddListenersToCartesianTiles()
