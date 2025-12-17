@@ -24,31 +24,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [SerializeField] private DoubleSlider heightRangeSlider;
         [SerializeField] private DoubleSlider diameterRangeSlider;
 
-        public ScatterGenerationSettingsPropertyData Settings
-        {
-            get => settings;
-            set
-            {
-                settings = value;
-                if (settings.FillType == FillType.Complete)
-                    completeToggle.isOn = true;
-                else if (settings.FillType == FillType.Stroke)
-                    strokeToggle.isOn = true;
-                else
-                    fillToggle.isOn = true;
-
-                strokeWidthSlider.value = settings.StrokeWidth;
-                densitySlider.value = settings.Density;
-                scatterSlider.value = settings.Scatter; 
-                angleSlider.value = settings.Angle;
-                ShowAngleSlider = !settings.AutoRotateToLine;
-                heightRangeSlider.minSliderValue = settings.MinScale.y;
-                heightRangeSlider.maxSliderValue = settings.MaxScale.y;
-                diameterRangeSlider.minSliderValue = settings.MinScale.x; //x and z are the same for diameter
-                diameterRangeSlider.maxSliderValue = settings.MaxScale.x;
-            }
-        }
-
         public bool ShowAngleSlider
         {
             get => angleSlider.gameObject.activeSelf;
@@ -157,6 +132,27 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             settings = properties.Get<ScatterGenerationSettingsPropertyData>();
+            UpdatePanel();
+        }
+
+        private void UpdatePanel()
+        {
+            if (settings.FillType == FillType.Complete)
+                completeToggle.isOn = true;
+            else if (settings.FillType == FillType.Stroke)
+                strokeToggle.isOn = true;
+            else
+                fillToggle.isOn = true;
+
+            strokeWidthSlider.value = settings.StrokeWidth;
+            densitySlider.value = settings.Density;
+            scatterSlider.value = settings.Scatter; 
+            angleSlider.value = settings.Angle;
+            ShowAngleSlider = !settings.AutoRotateToLine;
+            heightRangeSlider.minSliderValue = settings.MinScale.y;
+            heightRangeSlider.maxSliderValue = settings.MaxScale.y;
+            diameterRangeSlider.minSliderValue = settings.MinScale.x; //x and z are the same for diameter
+            diameterRangeSlider.maxSliderValue = settings.MaxScale.x;
         }
     }
 }

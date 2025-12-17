@@ -315,6 +315,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             PolygonSelectionLayerPropertyData polygonProperties = newPolygonParent.GetProperty<PolygonSelectionLayerPropertyData>();
             if (polygonProperties != null) //the new parent is also a polygon layer
             {
+                var autoRotate = polygonProperties.ShapeType == ShapeType.Line;
+                LayerData.GetProperty<ScatterGenerationSettingsPropertyData>().AutoRotateToLine = autoRotate;
+                
                 polygonProperties.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
                 polygonProperties.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
 
