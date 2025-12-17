@@ -153,10 +153,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             InitProperty<ColorPropertyData>(properties);
-            //Initialize the styling with the default color that is gotten from the LayerData.Color
-            var stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
-            stylingPropertyData.DefaultSymbolizer.SetFillColor(LayerData.Color);
-            stylingPropertyData.DefaultSymbolizer.SetStrokeColor(LayerData.Color);
         }
 
         /// <summary>
