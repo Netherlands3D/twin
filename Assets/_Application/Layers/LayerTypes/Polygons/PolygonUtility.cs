@@ -14,8 +14,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         public static Vector2[] CoordinatesToVertices(List<Coordinate> coordinates, float lineWidth = 0)
         {
-            // PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-
             var positions = coordinates.ToUnityPositions().ToList();
             var vertices = PolygonCalculator.FlattenPolygon(positions, new Plane(Vector3.up, 0));
             if (vertices.Length == 2)
