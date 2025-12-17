@@ -26,7 +26,8 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
             return folder.LayerData;
         }
         
-        private async void GroupSelectedLayers()
+        //todo move this non ui logic into a service
+        private void GroupSelectedLayers()
         {
             if (ProjectData.Current.RootLayer.SelectedLayers.Count == 0) 
                 return;

@@ -82,16 +82,16 @@ namespace Netherlands3D.Twin.Layers
             {
                 try
                 {
+                    LayerGameObject result;
                     if (isHit)
                     {
-                        var result = await SpawnObjectAt(prefab, position, prefab.transform.rotation);
-                        tcs.SetResult(result);
+                        result = await SpawnObjectAt(prefab, position, prefab.transform.rotation);
                     }
                     else
                     {
-                        var result = await SpawnObjectAtSpawnPoint(prefab);
-                        tcs.SetResult(result);
+                        result = await SpawnObjectAtSpawnPoint(prefab);
                     }
+                    tcs.SetResult(result);
                 }
                 catch (Exception ex)
                 {
