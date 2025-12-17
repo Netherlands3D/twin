@@ -126,7 +126,7 @@ namespace Netherlands3D.Twin.Layers
             layerData.LayerDeselected.AddListener(OnDeselect);
             layerData.LayerDestroyed.AddListener(DestroyLayerGameObject);
 
-            List<StylingPropertyData> styles = LayerData.GetProperties<StylingPropertyData>();
+            var styles = LayerData.GetProperties<StylingPropertyData>();
             foreach (var style in styles)
                 style.OnStylingChanged.AddListener(ApplyStyling);
         }
@@ -143,7 +143,7 @@ namespace Netherlands3D.Twin.Layers
             layerData.LayerDeselected.RemoveListener(OnDeselect);
             layerData.LayerDestroyed.RemoveListener(DestroyLayerGameObject);
 
-            List<StylingPropertyData> styles = LayerData.GetProperties<StylingPropertyData>();
+            var styles = LayerData.GetProperties<StylingPropertyData>();
             foreach (var style in styles)
                 style.OnStylingChanged.RemoveListener(ApplyStyling);
         }
@@ -273,9 +273,8 @@ namespace Netherlands3D.Twin.Layers
 
         protected Symbolizer GetStyling(LayerFeature feature)
         {
-            
-            List<StylingPropertyData> stylingPropertyDatas = LayerData.GetProperties<StylingPropertyData>();
-            if (stylingPropertyDatas == null || stylingPropertyDatas.Count == 0) return null;
+            var stylingPropertyDatas = LayerData.GetProperties<StylingPropertyData>();
+            if (stylingPropertyDatas == null || !stylingPropertyDatas.Any()) return null;
 
             return StyleResolver.Instance.GetStyling(feature, stylingPropertyDatas);
         }

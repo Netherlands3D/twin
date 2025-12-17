@@ -319,9 +319,9 @@ namespace Netherlands3D.Twin.Layers
             return LayerProperties.Get<T>();
         }
         
-        public List<T> GetProperties<T>() where T : LayerPropertyData
+        public IEnumerable<T> GetProperties<T>() where T : LayerPropertyData
         {
-            return LayerProperties.OfType<T>().ToList();
+            return LayerProperties.OfType<T>();
         }
 
         public void SetProperty<T>(T propertyData) where T : LayerPropertyData
