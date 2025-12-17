@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return layerTypeSprites[7];                
                 case GeoJSONPointLayer _:
                     return layerTypeSprites[9];
-                case PolygonSelectionVisualisation _:
+                case PolygonSelectionLayerGameObject _:
                     {
                         PolygonSelectionLayerPropertyData propertyData = data.GetProperty<PolygonSelectionLayerPropertyData>();
                         if (propertyData.ShapeType == ShapeType.Line)

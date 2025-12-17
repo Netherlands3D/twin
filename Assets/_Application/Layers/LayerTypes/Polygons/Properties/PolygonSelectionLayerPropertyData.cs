@@ -129,7 +129,5 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
                 OnMaskBitIndexChanged.Invoke(maskBitIndex);
             }
         }
-               
-        
     }
 }

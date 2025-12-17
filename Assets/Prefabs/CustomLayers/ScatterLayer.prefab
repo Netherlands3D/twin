@@ -60,29 +60,13 @@ MonoBehaviour:
   onLayerReady:
     m_PersistentCalls:
       m_Calls: []
-  PropertySections:
-  - type: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.TransformPropertySection,
-      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Enabled: 0
-  - type: Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties.ToggleScatterPropertySection,
-      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Enabled: 1
-  - type: Netherlands3D.Twin.Layers.Properties.ColorPickerPropertySection, eu.netherlands3d.twin,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Enabled: 0
-  - type: Netherlands3D.Twin.Layers.Properties.CartesianTileLayerFeatureColorPropertySection,
-      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Enabled: 0
-  - type: Netherlands3D.Twin.Layers.Properties.HiddenObjectsPropertySection, eu.netherlands3d.twin,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    Enabled: 0
+  polygonMaterial: {fileID: 2100000, guid: c7fb2e346bb0d4f6da1f26f4c0bcf533, type: 2}
   polygonLayer:
     name: 
     activeSelf: 0
     color: {r: 0, g: 0, b: 0, a: 0}
     children: []
     layerProperties: []
-    allowedPropertySections: []
     OnPrefabIdChanged:
       m_PersistentCalls:
         m_Calls: []

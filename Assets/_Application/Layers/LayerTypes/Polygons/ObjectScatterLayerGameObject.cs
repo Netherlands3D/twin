@@ -30,6 +30,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
     public class ObjectScatterLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
     {
+        [SerializeField] private Material polygonMaterial;
+
         public override BoundingBox Bounds => new(polygonBounds);
         public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
         private static readonly int baseColorID = Shader.PropertyToID("_BaseColor");
@@ -163,7 +165,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             return polygons;
         }
-
+        
         private PolygonVisualisation CreatePolygonMesh(CompoundPolygon polygon)
         {
             var contours = new List<List<Vector3>>(polygon.Paths.Count);
@@ -171,12 +173,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 contours.Add(polygon.Paths[i].ToVector3List());
             }
-
-            //TODO is this the right way to get the polygon visualisation layergameobject?
-            var match = FindObjectsByType<PolygonSelectionVisualisation>(FindObjectsSortMode.None).ToList()
-                .FirstOrDefault(v => v.LayerData == polygonLayer);
-
-            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, 1f, false, false, false, match.PolygonMeshMaterial);
+            
+            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, 1f, false, false, false, polygonMaterial);
             polygonVisualisation.DrawLine = true;
 
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
@@ -209,10 +207,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 var settings = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
                 settings.Angle = CalculateLineAngle(polygonProperties);
             }
-
-            // //TODO is this the right way to get the polygon visualisation layergameobject?
-            // var match = FindObjectsByType<PolygonSelectionVisualisation>(FindObjectsSortMode.None).ToList()
-            //     .FirstOrDefault(v => v.LayerData == polygonLayer);
 
             var boundingBox = GetPolygonBoundingBox();
             polygonBounds = boundingBox.ToUnityBounds();

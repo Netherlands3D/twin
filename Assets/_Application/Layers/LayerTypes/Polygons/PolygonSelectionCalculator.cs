@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Samplers;
+using Netherlands3D.Twin.Utility;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
@@ -68,12 +70,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             //since we use a visual projection of the polygon, we need to calculate if a user clicks on the polygon manually
             //if this polygon is out of view of the camera, it can't be clicked on.
+            
+            var polygonPropertyData = layer.GetProperty<PolygonSelectionLayerPropertyData>();
+            if(polygonPropertyData == null || polygonPropertyData.OriginalPolygon == null ||  polygonPropertyData.OriginalPolygon.Count == 0)
+                return false;
+            
+            var bbox = new BoundingBox(polygonPropertyData.OriginalPolygon[0], polygonPropertyData.OriginalPolygon[0]);
+            for (var i = 1; i < polygonPropertyData.OriginalPolygon.Count; i++)
+            {
+                var coord = polygonPropertyData.OriginalPolygon[i];
+                bbox.Encapsulate(coord);
+            }
 
-            //TODO is this the right way to get the polygon visualisation layergameobject?
-            var match = FindObjectsByType<PolygonSelectionVisualisation>(FindObjectsSortMode.None).ToList()
-            .FirstOrDefault(v => v.LayerData == layer);
-
-            var bounds = match.Polygon.Bounds;
+            var bounds = bbox.ToUnityBounds();
+            
             if (!IsBoundsInView(bounds, frustumPlanes))
                 return false;
 
@@ -83,7 +93,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 return false;
 
             //check if the click was in the polygon bounds
-            return CompoundPolygon.IsPointInPolygon(point2d, match.Polygon);
+            var vertices = PolygonUtility.CoordinatesToVertices(polygonPropertyData.OriginalPolygon, polygonPropertyData.LineWidth);
+            var polygon = new CompoundPolygon(vertices);
+            return CompoundPolygon.IsPointInPolygon(point2d, polygon);
         }
 
         public static bool IsBoundsInView(Bounds bounds, Plane[] frustumPlanes)
