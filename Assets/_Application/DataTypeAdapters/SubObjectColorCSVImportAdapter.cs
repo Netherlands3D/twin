@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
             var fileName = Path.GetFileName(localFile.LocalFilePath);
             
-            activeCartesianTileSubObjectColorLayer = Instantiate(layerGameObjectPrefab);
+            activeCartesianTileSubObjectColorLayer = Instantiate(layerGameObjectPrefab); //todo: replace this with App.Layers.Add
             activeCartesianTileSubObjectColorLayer.gameObject.name = fileName;
             var propertyData = activeCartesianTileSubObjectColorLayer.LayerData.GetProperty<CartesianTileSubObjectColorPropertyData>();
             propertyData.Data = AssetUriFactory.CreateProjectAssetUri(localFile.LocalFilePath);
