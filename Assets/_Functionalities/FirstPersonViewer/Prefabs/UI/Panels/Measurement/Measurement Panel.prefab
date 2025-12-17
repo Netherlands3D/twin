@@ -1719,13 +1719,25 @@ MonoBehaviour:
     type: 3}
   lineColors:
   - serializedVersion: 2
-    rgba: 4278190270
+    rgba: 4278247452
   - serializedVersion: 2
-    rgba: 4291105536
+    rgba: 4289855965
   - serializedVersion: 2
-    rgba: 4281052416
+    rgba: 4290763008
+  - serializedVersion: 2
+    rgba: 4279682530
+  - serializedVersion: 2
+    rgba: 4278321376
   - serializedVersion: 2
     rgba: 4278218476
+  - serializedVersion: 2
+    rgba: 4294913849
+  - serializedVersion: 2
+    rgba: 4285333672
+  - serializedVersion: 2
+    rgba: 4278217728
+  - serializedVersion: 2
+    rgba: 4278321250
   totalDistanceText: {fileID: 6789790002799268453}
 --- !u!1 &5617049967120185613
 GameObject:
