@@ -30,15 +30,15 @@ namespace Netherlands3D.Twin.Services
         /// <summary>
         /// Adds a new layer to the current project using the given preset.
         /// </summary>
-        public Layer Add(LayerPresetArgs args, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null)
+        public Layer Add(LayerPresetArgs args, UnityAction<LayerGameObject> callback = null)
         {
-            return Add(LayerBuilder.Create(args), callback, errorCallback);
+            return Add(LayerBuilder.Create(args), callback);
         }
 
         /// <summary>
         /// Adds a new layer to the current project using the given builder.
         /// </summary>
-        public Layer Add(ILayerBuilder builder, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null)
+        public Layer Add(ILayerBuilder builder, UnityAction<LayerGameObject> callback = null)
         {
             if (builder is not LayerBuilder layerBuilder)
             {
@@ -54,7 +54,7 @@ namespace Netherlands3D.Twin.Services
 
             var layerData = builder.Build();
             var layer = new Layer(layerData);
-            Visualize(layer, spawner, callback, errorCallback);
+            Visualize(layer, spawner, callback);
             LayerAdded.Invoke(layer);
             return layer;
         }
@@ -101,12 +101,12 @@ namespace Netherlands3D.Twin.Services
         ///
         /// Warning: this code does not check if the given prefab is compatible with this LayerData, make sure you know what you are doing.
         /// </summary>
-        public Layer VisualizeAs(LayerData layerData, string prefabIdentifier, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null)
+        public Layer VisualizeAs(LayerData layerData, string prefabIdentifier, UnityAction<LayerGameObject> callback = null)
         {
             // string previousId = layerData.PrefabIdentifier;
             layerData.PrefabIdentifier = prefabIdentifier;
             var layer = new Layer(layerData);
-            Visualize(layer, spawner, callback, errorCallback);
+            Visualize(layer, spawner, callback);
             return layer;
         }
 
@@ -137,13 +137,13 @@ namespace Netherlands3D.Twin.Services
             return urlPropertyData.Url;
         }
 
-        public void VisualizeData(LayerData layerData, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null)
+        public void VisualizeData(LayerData layerData, UnityAction<LayerGameObject> callback = null)
         {
             Layer layer = new Layer(layerData);
-            Visualize(layer, spawner, callback, errorCallback);
+            Visualize(layer, spawner, callback);
         }
         
-        private static async void Visualize(Layer layer, ILayerSpawner spawner, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null) //todo: change callbacks for promises?
+        private static async void Visualize(Layer layer, ILayerSpawner spawner, UnityAction<LayerGameObject> callback = null) //todo: change callbacks for promises?
         {
             try
             {
@@ -155,7 +155,6 @@ namespace Netherlands3D.Twin.Services
             catch (Exception e)
             {
                 Debug.LogException(e);
-                errorCallback?.Invoke(e);
             }
         }
     }
