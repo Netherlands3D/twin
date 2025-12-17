@@ -53,7 +53,7 @@ namespace Netherlands3D.LayerStyles
                 case StrokeColorProperty:
                     return GetStrokeColor();
                 default:
-                    return null;
+                    throw new ArgumentException($"Unknown color property '{property}'", nameof(property));
             }
         }
 
