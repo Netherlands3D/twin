@@ -16,7 +16,6 @@
 *  permissions and limitations under the License.
 */
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -30,19 +29,6 @@ namespace Netherlands3D.Functionalities.Wms
             SetSize(size, size, size);
             gameObject.SetActive(isEnabled);
             SetTexture(tex);
-
-            //force the depth to be at least larger than its height to prevent z-fighting
-            if (this is TextureDecalProjector textureDecalProjector)
-            {
-                DecalProjector decalProjector = GetComponent<DecalProjector>();
-                if (height >= decalProjector.size.z)
-                {
-                    SetSize(decalProjector.size.x, decalProjector.size.y, minDepth);
-                }
-
-                //set the render index, to make sure the render order is maintained
-                textureDecalProjector.SetPriority(renderIndex);
-            }
         }
 
         /// <summary>
