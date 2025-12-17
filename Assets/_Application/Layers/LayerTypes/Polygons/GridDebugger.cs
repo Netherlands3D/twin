@@ -28,10 +28,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void UpdateGrid()
         {
-            //TODO is this the right way to get the polygon visualisation layergameobject?
-            var match = FindObjectsByType<PolygonSelectionVisualisation>(FindObjectsSortMode.None).ToList()
-            .FirstOrDefault(v => v.LayerData == layerGameObject.polygonLayer);
-            poly = match.Polygon;
+            var polygonPropertyData = layerGameObject.polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+            var vertices = PolygonUtility.CoordinatesToVertices(polygonPropertyData.OriginalPolygon, polygonPropertyData.LineWidth);
+            poly = new CompoundPolygon(vertices);
             var scatterSettings = layerGameObject.LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
             var angle = scatterSettings.Angle;
             
