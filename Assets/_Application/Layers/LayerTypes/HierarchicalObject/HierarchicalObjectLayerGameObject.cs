@@ -232,26 +232,28 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         protected virtual void Update()
         {
+            var transformPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
+            
             //Position and rotation changes are handled by the WorldTransform, but should be updated in the project data
             //todo: add a == and != operator to Coordinate.cs to avoid having to do this
             if (Math.Abs(WorldTransform.Coordinate.value1 - previousCoordinate.value1) > 0.0001d ||
                 Math.Abs(WorldTransform.Coordinate.value2 - previousCoordinate.value2) > 0.0001d ||
                 Math.Abs(WorldTransform.Coordinate.value3 - previousCoordinate.value3) > 0.0001d)
             {
-                LayerData.GetProperty<TransformLayerPropertyData>().Position = WorldTransform.Coordinate;
+                transformPropertyData.Position = WorldTransform.Coordinate;
                 previousCoordinate = WorldTransform.Coordinate;
             }
 
             if (WorldTransform.Rotation != previousRotation)
             {
-                LayerData.GetProperty<TransformLayerPropertyData>().EulerRotation = WorldTransform.Rotation.eulerAngles;
+                transformPropertyData.EulerRotation = WorldTransform.Rotation.eulerAngles;
                 previousRotation = WorldTransform.Rotation;
             }
 
             // Check for scale change
             if (transform.localScale != previousScale)
             {
-                LayerData.GetProperty<TransformLayerPropertyData>().LocalScale = transform.localScale;
+                transformPropertyData.LocalScale = transform.localScale;
                 previousScale = transform.localScale;
             }
 
