@@ -11,6 +11,7 @@ using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -311,10 +312,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (layer == null)
                 return null;
            
-            if (!layer.LayerFeatures.ContainsKey(item))
+            StylingPropertyData stylingPropertyData = layer.LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
+            if (!stylingPropertyData.LayerFeatures.ContainsKey(item))
                 return null;
             
-            return layer.LayerFeatures[item]; 
+            return stylingPropertyData.LayerFeatures[item]; 
         }
 
         /// <summary>

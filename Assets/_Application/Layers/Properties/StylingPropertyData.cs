@@ -18,6 +18,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         [JsonIgnore] public string StyleName => styleName;
         
+        [JsonIgnore] public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
 
         [DataMember] private string activeToolProperty = Symbolizer.FillColorProperty; //default
 
