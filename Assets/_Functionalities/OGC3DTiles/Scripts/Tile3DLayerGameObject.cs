@@ -17,7 +17,6 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
 {
     [RequireComponent(typeof(ReadSubtree))]
     [RequireComponent(typeof(Read3DTileset))]
-    //todo: this visualization should get a stylingPropertyData
     public class Tile3DLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
     {
         public override BoundingBox Bounds => TileSet.root != null ? new BoundingBox(TileSet.root.BottomLeft, TileSet.root.TopRight) : null;
