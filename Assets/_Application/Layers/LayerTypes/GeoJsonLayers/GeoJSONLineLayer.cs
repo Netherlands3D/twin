@@ -163,7 +163,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public override void ApplyStyling()
         {
             MaterialApplicator.Apply(Applicator);
-            // The color in the Layer Panel represents the default fill color for this layer
+            // The color in the Layer Panel represents the default line color for this layer
             LayerData.Color = Applicator.GetMaterial().color;
         }
 
