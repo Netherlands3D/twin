@@ -25,11 +25,19 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             lineRenderer.gameObject.SetActive(true);
         }
         
-        public void SetLine(Vector3 start, Vector3 end, Color32 color)
+        public void SetLineColor(Color32 color)
         {
-            SetLine(start, end);
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;
         }
+
+        public void SetText(Vector3 center, float distance)
+        {
+            lineDistanceText.text =  $"{distance.ToString("F2")}m";
+            lineDistanceText.transform.position = center;
+            lineDistanceText.gameObject.SetActive(true);
+        }
+
+        public void SetTextColor(Color32 color) => lineDistanceText.color = color;
     }
 }

@@ -64,9 +64,9 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                 {
                     if (hit)
                     {
-                        FirstPersonMeasurementPoint pointObj = Instantiate(pointObject, point, Quaternion.identity);
-                        pointObj.Init(GetAlphabetLetter(pointList.Count));
-                        pointList.Add(pointObj);
+                        FirstPersonMeasurementPoint newPoint = Instantiate(pointObject, point, Quaternion.identity);
+                        newPoint.Init(GetAlphabetLetter(pointList.Count));
+                        pointList.Add(newPoint);
                         clickCount++;
 
                         if (pointList.Count > 1)
@@ -74,8 +74,10 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                             FirstPersonMeasurementElement measurementElement = Instantiate(measurementElementPrefab, measurementParent);
                             measurementElement.transform.SetSiblingIndex(measurementParent.childCount - 2);
 
-                            int index = pointList.Count - 1;
-                            float dst = Vector3.Distance(pointList[index - 1].transform.position, pointList[index].transform.position);
+                            int index = pointList.Count - 1; //Hmm IDK about this yet.
+                            FirstPersonMeasurementPoint prevPoint = pointList[index - 1];
+
+                            float dst = Vector3.Distance(prevPoint.transform.position, newPoint.transform.position);
 
                             totalDistanceInMeters += dst;
                             totalDistanceText.text = "Totale afstand: " + ConvertToUnits(totalDistanceInMeters);
@@ -84,7 +86,12 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                             measurementElement.Init(GetAlphabetLetter(index - 1), GetAlphabetLetter(index), dst, objectColor, RemoveElement);
                             measurementElements.Add(measurementElement);
 
-                            pointObj.SetLine(pointList[index].transform.position, pointList[index - 1].transform.position, objectColor);
+                            newPoint.SetLine(newPoint.transform.position, prevPoint.transform.position);
+                            newPoint.SetLineColor(objectColor);
+
+                            Vector3 center = (newPoint.transform.position + prevPoint.transform.position) / 2;
+                            newPoint.SetText(center + Vector3.up * .65f, dst);
+                            newPoint.SetTextColor(objectColor);
                         }
                     }
                 }, FirstPersonViewerCamera.FPVCamera, measurementLayerMask);
@@ -174,6 +181,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                     Vector3 start = pointList[i].transform.position;
                     Vector3 end = pointList[i - 1].transform.position;
                     pointList[i].SetLine(start, end);
+                    //pointList[i].SetText();
                 }
             }
 
