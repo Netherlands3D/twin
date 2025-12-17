@@ -10,7 +10,7 @@ namespace Netherlands3D.Twin.Layers.Properties
     {
         public static PropertySectionRegistry Registry;
 
-        [MenuItem("Tools/Rebuild Property UI Registry")]
+        [MenuItem("Netherlands3D/Rebuild Property UI Registry")]
         public static void Rebuild(bool log = true)
         {
             Registry = GetOrCreateRegistry();
