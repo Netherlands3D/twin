@@ -16,6 +16,7 @@
 *  permissions and limitations under the License.
 */
 
+using System;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -24,6 +25,17 @@ namespace Netherlands3D.Functionalities.Wms
     public class TextureDecalProjector : TextureProjectorBase
     {
         [SerializeField] private DecalProjector projector;
+        [SerializeField] private bool forcePointingDown;
+
+        private void Update()
+        {
+            // [S3DA-1904] This is a quick-fix/workaround because the origin shifting (correctly) aligns (thus rotates) a shifted object
+            // to align with the surface vector of the CRS (some CRS are spheres and not planes). The better fix would be to
+            // move this projector into a tile body, but this costs a bigger refactor in ImageProjectionLayer and WMSTileDataLayer
+            // because there are multiple assumptions that the tile gameobject has this component 
+            if (forcePointingDown)
+                transform.rotation = Quaternion.Euler(90, 0, 0);
+        }
 
         public override void SetSize(Vector3 size)
         {
