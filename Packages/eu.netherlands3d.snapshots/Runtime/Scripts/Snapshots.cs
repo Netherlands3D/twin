@@ -35,6 +35,12 @@ namespace Netherlands3D.Snapshots
         [DllImport("__Internal")]
         private static extern void DownloadFile(string gameObjectName, string methodName, string filename, byte[] byteArray, int byteArraySize);
 
+        [DllImport("__Internal")]
+        private static extern void ShareImage(string filename, byte[] byteArray, int byteArraySize, string gameObjectName, string methodName);
+
+        [DllImport("__Internal")]
+        private static extern bool IsWebShareSupported();
+
         [Tooltip("Optional source camera (Defaults to Camera.main)")]
         [SerializeField] private Camera sourceCamera;
 
@@ -102,7 +108,14 @@ namespace Netherlands3D.Snapshots
             var path = DetermineSaveLocation();
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-            DownloadFile(gameObject.name, "OnSnapshotDownloadComplete", Path.GetFileName(path), bytes, bytes.Length);
+            if (IsWebShareSupported())
+            {
+                ShareImage(Path.GetFileName(path), bytes, bytes.Length, gameObject.name, "OnSnapshotDownloadComplete");
+            }
+            else
+            {
+                DownloadFile(gameObject.name, "OnSnapshotDownloadComplete", Path.GetFileName(path), bytes, bytes.Length);
+            }
 #else
             File.WriteAllBytes(path, bytes);
 #endif
