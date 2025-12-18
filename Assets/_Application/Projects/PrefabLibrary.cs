@@ -38,11 +38,6 @@ namespace Netherlands3D.Twin.Projects
             return fallbackPrefab;
         }
 
-        public bool IsPrefabOfType<T>(string id) where T : LayerGameObject
-        {           
-            return ProjectData.Current.PrefabLibrary.GetPrefabById(id) is T;
-        }
-
         public void AddPrefabRuntimeGroup(string groupName)
         {
             prefabRuntimeGroups.Add(
@@ -80,21 +75,6 @@ namespace Netherlands3D.Twin.Projects
         private LayerGameObject FindPrefabInGroup(string id, PrefabGroup group)
         {
             return group.prefabs.FirstOrDefault(prefab => prefab.PrefabIdentifier == id);
-        }
-
-        public LayerGameObject FindPrefabOfType<T>() where T : LayerGameObject
-        {
-            foreach (var group in prefabGroups)
-            {
-                foreach (var prefab in group.prefabs)
-                {
-                    if (prefab is T)
-                    {
-                        return prefab;
-                    }
-                }
-            }            
-            return fallbackPrefab;
         }
     }
 }

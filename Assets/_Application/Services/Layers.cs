@@ -6,7 +6,6 @@ using Netherlands3D.Twin.DataTypeAdapters;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerPresets;
-using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
@@ -20,7 +19,7 @@ namespace Netherlands3D.Twin.Services
         [SerializeField] private FileTypeAdapter fromFileImporter;
         [SerializeField] private DataTypeChain fromUrlImporter;
         private VisualizationSpawner spawner;
-        
+
         public UnityEvent<Layer> LayerAdded { get; } = new();
         public UnityEvent<LayerData> LayerRemoved { get; } = new();
 
@@ -32,23 +31,21 @@ namespace Netherlands3D.Twin.Services
         /// <summary>
         /// Adds a new layer to the current project using the given preset.
         /// </summary>
-        public Layer Add(LayerPresetArgs args, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null)
+        public Layer Add(LayerPresetArgs args)
         {
-            return Add(LayerBuilder.Create(args), callback);
+            return Add(LayerBuilder.Create(args));
         }
 
         /// <summary>
         /// Adds a new layer to the current project using the given builder.
         /// </summary>
-        [ItemCanBeNull]
-        // public async Task<Layer> Add(ILayerBuilder builder)
-        public Layer Add(ILayerBuilder builder, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null)
+        public Layer Add(ILayerBuilder builder)
         {
             if (builder is not LayerBuilder layerBuilder)
             {
                 throw new NotSupportedException("Unsupported layer builder type: " + builder.GetType().Name);
             }
-            
+
             switch (layerBuilder.Type)
             {
                 case "url": return ImportFromUrl(layerBuilder);
@@ -57,11 +54,8 @@ namespace Netherlands3D.Twin.Services
             }
 
             var layerData = builder.Build();
-            // ProjectData.Current.AddStandardLayer(layerData);
             var layer = new Layer(layerData);
-            //AddPlaceholder(layer)
-            Visualize(layer, spawner, callback, errorCallback);
-            // Layer layer = await VisualizeData(layerData);
+            Visualize(layer, spawner);
             LayerAdded.Invoke(layer);
             return layer;
         }
@@ -69,7 +63,6 @@ namespace Netherlands3D.Twin.Services
         private Layer AddFolderLayer(LayerBuilder layerBuilder)
         {
             var folderLayer = layerBuilder.Build();
-            // ProjectData.Current.AddStandardLayer(folderLayer);
             var folder = new Layer(folderLayer);
             LayerAdded.Invoke(folder);
             return folder;
@@ -82,7 +75,7 @@ namespace Netherlands3D.Twin.Services
 
             // Return null to indicate that adding this flow does not directly result in a Layer, it may do so
             // indirectly (DataTypeAdapters call this Layer service again).
-            Debug.LogWarning("the fileTypeAdapter currently does not return anything, the returned object is null. This should be refactored in the future"); //todo: the fileTypeAdapter should be refactored to return the resulting objects
+            //todo: the fileTypeAdapter should be refactored to return the resulting objects
             return null;
         }
 
@@ -95,12 +88,12 @@ namespace Netherlands3D.Twin.Services
                 // then as a direct build
                 return Add(layerBuilder.OfType(url.AbsolutePath.Trim('/')));
             }
-                    
+
             fromUrlImporter.DetermineAdapter(url, layerBuilder.Credentials);
-                
+
             // Return null to indicate that adding this flow does not directly result in a Layer, it may do so
             // indirectly (DataTypeAdapters call this Layer service again).
-            Debug.LogWarning("the urlImportAdapter currently does not return anything, the returned object is null. This should be refactored in the future"); //todo: the DataTypeChain should be refactored to return the resulting objects
+            //todo: the DataTypeChain should be refactored to return the resulting objects
             return null;
         }
 
@@ -109,14 +102,10 @@ namespace Netherlands3D.Twin.Services
         ///
         /// Warning: this code does not check if the given prefab is compatible with this LayerData, make sure you know what you are doing.
         /// </summary>
-        public Layer VisualizeAs(LayerData layerData, string prefabIdentifier, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null)
+        public async Task<Layer> VisualizeAs(LayerData layerData, string prefabIdentifier)
         {
-            // string previousId = layerData.PrefabIdentifier;
             layerData.PrefabIdentifier = prefabIdentifier;
-            var layer = new Layer(layerData);
-            Visualize(layer, spawner, callback, errorCallback);
-            // if (previousId != prefabIdentifier) layer.LayerGameObject.OnConvert(previousId); //todo: this should not be done here but in the future VisualizationPropertyData (ticket 3/4)
-            return layer;
+            return await VisualizeData(layerData);
         }
 
         /// <summary>
@@ -124,7 +113,7 @@ namespace Netherlands3D.Twin.Services
         /// </summary>
         public void Remove(LayerData layerData)
         {
-            layerData.Dispose();  
+            layerData.Dispose();
             LayerRemoved.Invoke(layerData);
         }
 
@@ -146,26 +135,19 @@ namespace Netherlands3D.Twin.Services
             return urlPropertyData.Url;
         }
 
-        public void VisualizeData(LayerData layerData, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null)
+        public async Task<Layer> VisualizeData(LayerData layerData)
         {
             Layer layer = new Layer(layerData);
-            Visualize(layer, spawner, callback, errorCallback);
+            await Visualize(layer, spawner);
+            return layer;
         }
-        
-        private static async void Visualize(Layer layer, ILayerSpawner spawner, UnityAction<LayerGameObject> callback = null, UnityAction<Exception> errorCallback = null) //todo: change callbacks for promises?
+
+        private static async Task<LayerGameObject> Visualize(Layer layer, ILayerSpawner spawner)
         {
-            try
-            {
-                LayerGameObject visualization = await spawner.Spawn(layer.LayerData);
-                layer.SetVisualization(visualization);
-                visualization?.SetData(layer.LayerData);
-                callback?.Invoke(visualization);
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-                errorCallback?.Invoke(e);
-            }
+            LayerGameObject visualization = await spawner.Spawn(layer.LayerData);
+            layer.SetVisualization(visualization);
+            visualization.SetData(layer.LayerData);
+            return visualization;
         }
     }
 }

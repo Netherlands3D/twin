@@ -153,10 +153,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
             InitProperty<ColorPropertyData>(properties);
-            //Initialize the styling with the default color that is gotten from the LayerData.Color
-            var stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
-            stylingPropertyData.DefaultSymbolizer.SetFillColor(LayerData.Color);
-            stylingPropertyData.DefaultSymbolizer.SetStrokeColor(LayerData.Color);
         }
 
         /// <summary>
@@ -287,7 +283,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs(prefab.name).ChildOf(LayerData);
-            App.Layers.Add(layerBuilder, callBack);
+            App.Layers.Add(layerBuilder);
         }
 
         protected virtual void OnFeatureRemoved(Feature feature)

@@ -44,24 +44,12 @@ namespace Netherlands3D.Twin.Layers
             return await SpawnUsingPrefab(layerData, prefab);
         }
 
-        /// <summary>
-        /// Spawn a visualisation for the given LayerData but use a specific visualisation based on a given prefab identifier.
-        /// </summary>
-        // public async Task<LayerGameObject> Spawn(
-        //     // ReferencedLayerData layerData, 
-        //     string prefabId
-        // ) {
-        //     var prefab = prefabLibrary.GetPrefabById(prefabId);
-        //     return await SpawnObject(prefab);
-        // }
-
         private async Task<LayerGameObject> SpawnUsingPrefab(LayerData layerData, LayerGameObject prefab)
         {
             var property = layerData.GetProperty<TransformLayerPropertyData>();
             if (property != null)
             {
                 return await SpawnObjectAt(
-                    // layerData, 
                     prefab, 
                     property.UnityPosition, 
                     property.Rotation
@@ -79,7 +67,6 @@ namespace Netherlands3D.Twin.Layers
         }
 
         private async Task<LayerGameObject> SpawnAtOpticalPosition(
-            // ReferencedLayerData layerData,
             LayerGameObject prefab
         ) {
             var opticalRaycaster = Object.FindAnyObjectByType<OpticalRaycaster>();
@@ -98,16 +85,16 @@ namespace Netherlands3D.Twin.Layers
             {
                 try
                 {
+                    LayerGameObject result;
                     if (isHit)
                     {
-                        var result = await SpawnObjectAt(prefab, position, prefab.transform.rotation);
-                        tcs.SetResult(result);
+                        result = await SpawnObjectAt(prefab, position, prefab.transform.rotation);
                     }
                     else
                     {
-                        var result = await SpawnObjectAtSpawnPoint(prefab);
-                        tcs.SetResult(result);
+                        result = await SpawnObjectAtSpawnPoint(prefab);
                     }
+                    tcs.SetResult(result);
                 }
                 catch (Exception ex)
                 {
@@ -123,52 +110,19 @@ namespace Netherlands3D.Twin.Layers
             var mainCameraTransform = Camera.main?.transform;
 
             return await SpawnObjectAt(
-                // layerData,
                 prefab,
                 mainCameraTransform?.position ?? Vector3.zero,
                 mainCameraTransform?.rotation ?? Quaternion.identity
             );
         }
-
-        // private async Task<LayerGameObject> SpawnObject(
-        //     // ReferencedLayerData layerData, 
-        //     LayerGameObject prefab,
-        //     Vector3 position, 
-        //     bool hasHit
-        // ) {
-        //     if (!hasHit)
-        //     {
-        //         // if there is no hit from the optical raycaster - we fallback to the ObjectPlacementUtility's
-        //         // SpawnPoint
-        //         return await SpawnObjectAtSpawnPoint(prefab);
-        //     }
-        //
-        //     return await SpawnObjectAt(prefab, position, prefab.transform.rotation);
-        // }
-
+        
         private async Task<LayerGameObject> SpawnObject(
-            // ReferencedLayerData layerData,
             LayerGameObject prefab
         ) {           
             return await SpawnObjectAt(prefab, prefab.transform.position, prefab.transform.rotation);
         }
 
-        // private async Task<LayerGameObject> SpawnObject(
-        //     ReferencedLayerData layerData,
-        //     LayerGameObject prefab,
-        //     Vector3 position,
-        //     Quaternion rotation
-        // ) {
-        //     if (position == Vector3.zero)
-        //     {
-        //         return await SpawnObjectAtSpawnPoint(layerData, prefab);
-        //     }
-        //
-        //     return await SpawnObjectAt(layerData, prefab, position, rotation);
-        // }
-
         private async Task<LayerGameObject> SpawnObjectAtSpawnPoint(
-            // ReferencedLayerData layerData,
             LayerGameObject prefab
         ) {
             var spawnPoint = ObjectPlacementUtility.GetSpawnPoint();
@@ -177,16 +131,13 @@ namespace Netherlands3D.Twin.Layers
         }
 
         private static async Task<LayerGameObject> SpawnObjectAt(
-            // ReferencedLayerData layerData,
             LayerGameObject prefab,
             Vector3 position,
             Quaternion rotation
         ) {
-            // var placeholder = layerData.Visualization;
             
             var layerGameObjects = await Object.InstantiateAsync(
                 prefab,
-                // placeholder.transform,
                 position,
                 rotation
             );

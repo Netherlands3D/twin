@@ -26,16 +26,9 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
         [Header("Settings")][SerializeField] private bool createSubMeshes = false;
         [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
-
-        // private OBJPropertyData propertyData = new();
-
+        
         private Netherlands3D.ObjImporter.ObjImporter importer;
         private GameObject importedObject;
-
-        // private string ObjFilePath => propertyData.ObjFile != null ? AssetUriFactory.GetLocalPath(propertyData.ObjFile) : string.Empty;
-        // private string MtlFilePath => propertyData.MtlFile != null ? AssetUriFactory.GetLocalPath(propertyData.MtlFile) : string.Empty;
-
-        // public bool HasMtl => MtlFilePath != string.Empty;
         
         private HierarchicalObjectLayerGameObject layerGameObject;
         private MoveCameraToCoordinate cameraMover;

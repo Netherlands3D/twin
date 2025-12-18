@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.Properties;
 using Newtonsoft.Json;
@@ -31,7 +32,7 @@ namespace Netherlands3D.Twin.Layers.Editor
 
             root.Add(Subheading("Styles"));
             var stylingPropertyDatas = layerData.GetProperties<StylingPropertyData>();
-            if (stylingPropertyDatas == null || stylingPropertyDatas.Count == 0)
+            if (stylingPropertyDatas == null || !stylingPropertyDatas.Any())
             {
                 root.Add(FieldContent("This layer doesn't have any styles associated with it (yet)."));
             }

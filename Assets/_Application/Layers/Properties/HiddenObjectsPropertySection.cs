@@ -25,7 +25,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private float cameraDistance = 150f;
         [SerializeField] private Material selectionMaterial;
 
-        //private LayerGameObject layer;       
         private GameObject selectedGhostObject;
         private UnityAction<IMapping> waitForMappingLoaded;
         

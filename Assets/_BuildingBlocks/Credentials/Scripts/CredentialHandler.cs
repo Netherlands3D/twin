@@ -50,7 +50,7 @@ namespace Netherlands3D.Credentials
         private void DeterminedAuthorizationType(StoredAuthorization.StoredAuthorization auth)
         {
             if (Uri == null || 
-                auth.Domain != new Uri(Uri.GetLeftPart(UriPartial.Path))|//ensure the returned authorization is relevant to us
+                auth.Domain != new Uri(Uri.GetLeftPart(UriPartial.Path)) ||//ensure the returned authorization is relevant to us
                 auth == Authorization) //ensure the new auth is not the same at the one we already have. If it is, we don't need a reload
                 return;
             

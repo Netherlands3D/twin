@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.CartesianTiles;
@@ -9,7 +7,6 @@ using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -17,10 +14,6 @@ using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
-
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
@@ -33,6 +26,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
     public class ObjectScatterLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
     {
+        [SerializeField] private Material polygonMaterial;
+
         public override BoundingBox Bounds => new(polygonBounds);
         public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
         private static readonly int baseColorID = Shader.PropertyToID("_BaseColor");
@@ -47,19 +42,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private Bounds polygonBounds = new();
         private SampleTexture sampleTexture;
-
+        
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            SetParentPolygonLayer(LayerData.ParentLayer);
+            var scatterSettings = properties.Get<ScatterGenerationSettingsPropertyData>();
+            InitializeScatterMesh(scatterSettings.OriginalPrefabId);
+        }
+        
         protected override void OnLayerReady()
         {
             base.OnLayerReady();
-            polygonLayer = LayerData.ParentLayer;
-
-            var scatterSettings = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
-            InitializeScatterMesh(scatterSettings.OriginalPrefabId);
-
+            
             TransformLayerPropertyData transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
             transformProperty.IsEditable = false;
-
             RecalculatePolygonsAndSamplerTexture();
+        }
+
+        protected override void RegisterEventListeners()
+        {
+            base.RegisterEventListeners();
             AddReScatterListeners();
         }
 
@@ -70,7 +72,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var sharedMaterial = scatterObjectPrefab.GetComponentInChildren<MeshRenderer>().sharedMaterial; //todo: make this work with multiple materials for hierarchical meshes?
             this.material = new Material(sharedMaterial);
             this.material.enableInstancing = true;
-            
+
             var feature = CreateFeature(material);
             LayerFeatures.Add(feature.Geometry, feature);
         }
@@ -113,7 +115,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             toggleScatterPropertyData.IsScatteredChanged.AddListener(ConvertToHierarchicalLayerGameObject);
 
             AddListenersToCartesianTiles();
-            // polygonLayer.OnPrefabIdChanged.AddListener(OnPolygonParentPrefabIdChanged);
         }
 
         public void RemoveReScatterListeners()
@@ -129,8 +130,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
             toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToHierarchicalLayerGameObject);
-
-            // polygonLayer.OnPrefabIdChanged.RemoveListener(OnPolygonParentPrefabIdChanged);
         }
 
         protected override void OnDestroy()
@@ -162,7 +161,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             return polygons;
         }
-
+        
         private PolygonVisualisation CreatePolygonMesh(CompoundPolygon polygon)
         {
             var contours = new List<List<Vector3>>(polygon.Paths.Count);
@@ -170,12 +169,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 contours.Add(polygon.Paths[i].ToVector3List());
             }
-
-            //TODO is this the right way to get the polygon visualisation layergameobject?
-            var match = FindObjectsByType<PolygonSelectionVisualisation>(FindObjectsSortMode.None).ToList()
-                .FirstOrDefault(v => v.LayerData == polygonLayer);
-
-            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, 1f, false, false, false, match.PolygonMeshMaterial);
+            
+            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, 1f, false, false, false, polygonMaterial);
             polygonVisualisation.DrawLine = true;
 
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
@@ -208,10 +203,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 var settings = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
                 settings.Angle = CalculateLineAngle(polygonProperties);
             }
-
-            // //TODO is this the right way to get the polygon visualisation layergameobject?
-            // var match = FindObjectsByType<PolygonSelectionVisualisation>(FindObjectsSortMode.None).ToList()
-            //     .FirstOrDefault(v => v.LayerData == polygonLayer);
 
             var boundingBox = GetPolygonBoundingBox();
             polygonBounds = boundingBox.ToUnityBounds();
@@ -312,9 +303,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             base.OnSiblingIndexOrParentChanged(newSiblingIndex);
 
-            // if (!completedInitialization) //this is needed because the initial instantiation will also set the parent, and this should not do any of the logic below before this layer is properly initialized.
-            //     return;
-
             var newPolygonParent = LayerData.ParentLayer;
             if (newPolygonParent != polygonLayer) //the parent changed
             {
@@ -327,6 +315,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             PolygonSelectionLayerPropertyData polygonProperties = newPolygonParent.GetProperty<PolygonSelectionLayerPropertyData>();
             if (polygonProperties != null) //the new parent is also a polygon layer
             {
+                var autoRotate = polygonProperties.ShapeType == ShapeType.Line;
+                LayerData.GetProperty<ScatterGenerationSettingsPropertyData>().AutoRotateToLine = autoRotate;
+                
                 polygonProperties.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
                 polygonProperties.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
 
@@ -339,23 +330,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 LayerData.GetProperty<ToggleScatterPropertyData>().IsScattered = false; //revert to Object Visualization
             }
-        }
-
-        public void LoadProperties(List<LayerPropertyData> properties)
-        {
-            //todo, can this be moved to OnLayerReady?
-#if UNITY_EDITOR
-#else
-            var scatterSettings = properties.Get<ScatterGenerationSettingsPropertyData>();
-            if (scatterSettings != null)
-            {
-                PolygonSelectionLayerPropertyData polygonProperties = LayerData.ParentLayer.GetProperty<PolygonSelectionLayerPropertyData>();
-                if (polygonProperties != null)
-                {
-                    polygonLayer = LayerData.ParentLayer;
-                }
-            }
-#endif
         }
 
         private void AddListenersToCartesianTiles()

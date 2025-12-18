@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.LayerStyles;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -23,7 +22,6 @@ namespace Netherlands3D.Twin.Layers
         internal StoredAuthorization Credentials { get; set; }
         internal List<LayerPropertyData> Properties { get; } = new();
         [CanBeNull] private Symbolizer DefaultSymbolizer { get; set; }
-        //private List<LayerStyle> Styles { get; } = new();
         private Action<LayerData> whenBuilt;
         
         internal LayerBuilder()
@@ -116,14 +114,7 @@ namespace Netherlands3D.Twin.Layers
             
             return this;
         }
-
-        // public ILayerBuilder AddStyle(LayerStyle style)
-        // {
-        //     Styles.Add(style);
-        //
-        //     return this;
-        // }
-
+        
         public ILayerBuilder WhenBuilt(Action<LayerData> callback)
         {
             this.whenBuilt = callback;
@@ -134,8 +125,12 @@ namespace Netherlands3D.Twin.Layers
         public LayerData Build()
         {            
             LayerData layerData = new LayerData(Name, Type);
-            layerData.InitializeParent(ProjectData.Current.RootLayer);
-            ProjectData.Current.RootLayer.AddChild(layerData, 0); //todo: this should not depend on projectData here, but we must set the new layer as child of the rootLayer.
+            
+            /// todo: the following 2 lines of code should not be done here, but in the Layers service.
+            /// but we must set the new layer as child of the rootLayer before the SetParent function works, which is also done in this function.
+            /// this will be addressed in ticket 1909
+            layerData.InitializeParent();
+            ProjectData.Current.RootLayer.AddChild(layerData, 0);
 
             if (!string.IsNullOrEmpty(Name)) layerData.Name = Name;
             if (Color.HasValue) layerData.Color = Color.Value;
@@ -145,22 +140,6 @@ namespace Netherlands3D.Twin.Layers
             {
                 layerData.SetProperty(property);
             }
-
-            
-            
-            //TODO if you add more styles with the layerbuilder then you have to add more stylingpropertydata's
-            // StylingPropertyData stylingProperty = Properties.Get<StylingPropertyData>();
-            // if (stylingProperty != null)
-            // {
-            //     if (DefaultSymbolizer != null)
-            //     {
-            //         stylingProperty.DefaultStyle.AnyFeature.Symbolizer = DefaultSymbolizer;
-            //     }
-            //     foreach (var style in Styles)
-            //     {
-            //         stylingProperty.AddStyle(style);
-            //     }
-            // }
 
             whenBuilt?.Invoke(layerData);
 

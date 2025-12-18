@@ -6,7 +6,7 @@ using Netherlands3D.Twin.Layers.Properties;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
-    public class HierarchicalStaticObjectLayerGameObject : HierarchicalObjectLayerGameObject //todo: delete this class since axis locks are now in the Transform property data, dont forget to rebuild the asset bundle for zuidoost
+    public class HierarchicalStaticObjectLayerGameObject : HierarchicalObjectLayerGameObject
     {
         public Vector3 Coordinates = Vector3.zero;
         [SerializeField] private CoordinateSystem coordinateSystem;

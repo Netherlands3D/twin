@@ -365,7 +365,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f01518e17ca84bcba8478a2b11f92a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  polygonSelectionVisualisationPrefab: {fileID: 2578961074007820944, guid: 0dd48855510674827b667fa4abd5cf60,
+  polygonSelectionLayerGameObjectPrefab: {fileID: 2578961074007820944, guid: 0dd48855510674827b667fa4abd5cf60,
     type: 3}
   selectionCalculator: {fileID: 3544518474178100614}
   polygonInput: {fileID: 2971444630074657358}

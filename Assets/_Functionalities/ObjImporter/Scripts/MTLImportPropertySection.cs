@@ -21,9 +21,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
         private void Start()
         {
-            //layer = ObjSpawner.GetComponent<HierarchicalObjectLayerGameObject>();
             SetNormalUIPanels();
-            //ObjSpawner.MtlImportSuccess.AddListener(OnMTLImportError);
         }
 
         public void LoadProperties(List<LayerPropertyData> properties)
@@ -43,7 +41,6 @@ namespace Netherlands3D.Functionalities.OBJImporter
                 return;
 
             // When importing an MTL - we want to reset the coloring of the object
-            //HierarchicalObjectLayerStyler.ResetColoring(layer);
             stylingPropertyData.SetDefaultSymbolizerColor(null);
 
             SetMtlPathInPropertyData(path);

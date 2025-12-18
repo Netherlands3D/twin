@@ -1,4 +1,3 @@
-using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
@@ -51,8 +50,6 @@ namespace Netherlands3D.Twin.Layers
 
         [JsonIgnore] public List<LayerData> ChildrenLayers => children;
         [JsonIgnore] public bool IsSelected => Root.SelectedLayers.Contains(this);
-
-        //[JsonIgnore] public List<string> allowedPropertySections = new();
         
         [JsonIgnore]
         public string Name
@@ -186,7 +183,6 @@ namespace Netherlands3D.Twin.Layers
         private void OnDeserialized(StreamingContext _)
         {
             IsNew = false;
-            // InitializeParent(); todo: is this needed here?
         }
 
         /// <summary>
@@ -227,26 +223,17 @@ namespace Netherlands3D.Twin.Layers
         {
             PrefabIdentifier = prefabId;
             Name = name;
-            // if (this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
-            // {
-            //     InitializeParent();
-            //     ProjectData.Current.RootLayer.AddChild(this, 0); //todo: this should not depend on projectData here, but we must set the new layer as child of the rootLayer.
-            // }
         }
 
         public LayerData(string name) //initialize without layer properties, needed when creating an object at runtime.
         {
             Name = name;
-            // if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
-            //     InitializeParent();
         }
 
         [JsonConstructor]
         public LayerData(string name, List<LayerPropertyData> layerProperties) //initialize with explicit layer properties, needed when deserializing an object that already has properties.
         {
             Name = name;
-            // if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
-            //     InitializeParent();
             this.layerProperties = layerProperties ?? new List<LayerPropertyData>();
         }
 
@@ -339,9 +326,9 @@ namespace Netherlands3D.Twin.Layers
             return LayerProperties.Get<T>();
         }
         
-        public List<T> GetProperties<T>() where T : LayerPropertyData
+        public IEnumerable<T> GetProperties<T>() where T : LayerPropertyData
         {
-            return LayerProperties.OfType<T>().ToList();
+            return LayerProperties.OfType<T>();
         }
 
         public void SetProperty<T>(T propertyData) where T : LayerPropertyData

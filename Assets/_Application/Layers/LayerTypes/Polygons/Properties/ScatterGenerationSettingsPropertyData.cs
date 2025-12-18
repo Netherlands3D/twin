@@ -39,10 +39,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             this.maxScale = maxScale;
             this.fillType = fillType;
             this.strokeWidth = strokeWidth;
-            AutoRotateToLine = autoRotateToLine; //todo: remove this
         }
 
-        [DataMember] public bool AutoRotateToLine { get; set; } = false; //todo: is it needed to serialize this?
+        [JsonIgnore] public bool AutoRotateToLine { get; set; } = false; // the Panel needs to know the shapeType of the parent, but this is not accessible, so this is an intermediary
 
         [JsonIgnore] 
         public string OriginalPrefabId

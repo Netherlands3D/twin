@@ -193,7 +193,7 @@ namespace Netherlands3D.Functionalities.GLBImporter
             Coordinate position = origin;
             if (!layerGameObject.LayerData.IsNew)
             {
-                position = layerGameObject.LayerData.GetProperty<TransformLayerPropertyData>().Position; //TransformPropertyData.Position;
+                position = layerGameObject.LayerData.GetProperty<TransformLayerPropertyData>().Position;
             }
             
             layerGameObject.WorldTransform.MoveToCoordinate(position);

@@ -18,7 +18,6 @@ namespace Netherlands3D.CityJson.Visualisation
 
         protected override void Visualize()
         {
-            IsVisualized = false;
             batchedMeshInstanceRenderer.Clear();
             foreach (var geometry in cityObject.Geometries)
             {
@@ -29,7 +28,6 @@ namespace Netherlands3D.CityJson.Visualisation
                 batchedMeshInstanceRenderer.AppendCollections(collections);
             }
 
-            IsVisualized = true;
             cityObjectVisualized?.Invoke(this);
         }
 

@@ -199,8 +199,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
                     if (feature.Geometry is Material material)
                     {
-                        //todo: check if this symbolizer is the correct one
-                        Color? color = symbolizer.GetFillColor(); //CartesianTileLayerStyler.GetColor(feature, LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>());
+                        Color? color = symbolizer.GetFillColor();
                         if (color.HasValue)
                         {
                             if (int.TryParse(feature.Attributes[LayerFeatureColorPropertyData.MaterialIndexIdentifier], out var materialIndex))
