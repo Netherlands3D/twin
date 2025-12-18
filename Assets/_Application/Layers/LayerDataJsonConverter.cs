@@ -7,6 +7,7 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -88,6 +89,8 @@ namespace Netherlands3D
                 }
                 layer.SetProperty(pd);
             }
+
+            MigratePropertyData(layer, obj);
             
             //styles
             var styleToken = obj["styles"] as JObject;
@@ -157,6 +160,58 @@ namespace Netherlands3D
             }
 
             layer.SetProperty(stylingProperty);
+        }
+
+        private void MigratePropertyData(LayerData layer, JObject obj)
+        {
+            var layerProps = obj["layerProperties"] as JArray;
+            if (layerProps != null)
+            {
+                foreach (var prop in layerProps)
+                {
+                    var type = prop["$type"]?.ToString();
+
+                    // Only handle Annotation type for now
+                    if (type == "https://netherlands3d.eu/schemas/projects/layers/properties/Annotation")
+                    {
+                        var annotationText = prop["annotationText"]?.ToString();
+
+                        var positionToken = prop["position"];
+                        Coordinate coordinate;
+                        if (positionToken != null)
+                        {
+                            coordinate = positionToken.ToObject<Coordinate>();
+                            
+                            var eulerToken = prop["eulerRotation"];
+                            Vector3 eulerRotation = Vector3.zero;
+                            if (eulerToken != null)
+                            {
+                                eulerRotation = new Vector3(
+                                    eulerToken["x"]?.Value<float>() ?? 0f,
+                                    eulerToken["y"]?.Value<float>() ?? 0f,
+                                    eulerToken["z"]?.Value<float>() ?? 0f
+                                );
+                            }
+
+                            var scaleToken = prop["localScale"];
+                            Vector3 localScale = Vector3.one;
+                            if (scaleToken != null)
+                            {
+                                localScale = new Vector3(
+                                    scaleToken["x"]?.Value<float>() ?? 1f,
+                                    scaleToken["y"]?.Value<float>() ?? 1f,
+                                    scaleToken["z"]?.Value<float>() ?? 1f
+                                );
+                            }
+
+                            AnnotationPropertyData annotationProperty = new AnnotationPropertyData(annotationText);
+                            TransformLayerPropertyData transformLayerPropertyData = new TransformLayerPropertyData(coordinate, eulerRotation, localScale);
+                            layer.SetProperty(annotationProperty);
+                            layer.SetProperty(transformLayerPropertyData);
+                        }
+                    }
+                }
+            }
         }
     }
 }
