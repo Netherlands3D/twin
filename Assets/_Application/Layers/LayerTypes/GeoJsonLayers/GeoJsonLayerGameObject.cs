@@ -283,7 +283,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs(prefab.name).ChildOf(LayerData);
-            App.Layers.Add(layerBuilder);
+            App.Layers.Add(layerBuilder, callBack);
         }
 
         protected virtual void OnFeatureRemoved(Feature feature)
