@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using UnityEngine.Events;
@@ -7,10 +8,10 @@ namespace Netherlands3D.Twin.Services
 {
     public interface ILayersServiceFacade
     {
-        public Layer Add(LayerPresetArgs layerBuilder, UnityAction<LayerGameObject> callback = null);
-        public Layer Add(ILayerBuilder layerBuilder, UnityAction<LayerGameObject> callback = null);
-        public void VisualizeData(LayerData layerData, UnityAction<LayerGameObject> callback = null);
-        public Layer VisualizeAs(LayerData layerData, string prefabIdentifier, UnityAction<LayerGameObject> callback = null);
+        public Layer Add(LayerPresetArgs layerBuilder);
+        public Layer Add(ILayerBuilder layerBuilder);
+        public Task<Layer> VisualizeData(LayerData layerData);
+        public Task<Layer> VisualizeAs(LayerData layerData, string prefabIdentifier);
         public void Remove(LayerData layer);
 
         public UnityEvent<Layer> LayerAdded { get; }
