@@ -26,6 +26,8 @@ namespace Netherlands3D.Twin.UI
         public UnityEvent TextFieldDoubleClicked;
         public UnityEvent TextFieldInputConfirmed;
         
+        public TMP_InputField TextField => textField;
+        
         public bool ReadOnly
         {
             get => textField.readOnly;

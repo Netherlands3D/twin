@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -8,6 +9,7 @@ using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
@@ -124,6 +126,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             base.Update();
             annotation.StickTo(WorldTransform.Coordinate);
+        }
+        
+        public override void ApplyStyling()
+        {
+            base.ApplyStyling();
+            //LayerFeature feature = CreateFeature(annotation.TextField);
+            List<LayerFeature> features = CreateFeaturesByType<Image>(annotation.gameObject);
+            foreach (var feature in features)
+            {
+                if (feature.Geometry is not Image image) continue;
+
+                Symbolizer styling = GetStyling(feature);
+                var fillColor = styling.GetFillColor();
+
+                // Keep the original material color if fill color is not set (null)
+                if (!fillColor.HasValue) continue;
+
+                image.color = fillColor.Value;
+            }
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)

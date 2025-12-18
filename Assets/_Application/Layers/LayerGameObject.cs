@@ -308,11 +308,16 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         protected List<LayerFeature> CreateFeaturesByType<T>() where T : Component
         {
+            return CreateFeaturesByType<T>(this.gameObject);
+        }
+        
+        protected List<LayerFeature> CreateFeaturesByType<T>(GameObject target) where T : Component
+        {
             var cachedFeatures = new List<LayerFeature>();
 
             // By default, consider each Unity.Component of type T as a "Feature" and create an ExpressionContext to
             // select the correct styling Rule to apply to the given "Feature". 
-            var components = GetComponentsInChildren<T>();
+            var components = target.GetComponentsInChildren<T>();
 
             foreach (var component in components)
             {
