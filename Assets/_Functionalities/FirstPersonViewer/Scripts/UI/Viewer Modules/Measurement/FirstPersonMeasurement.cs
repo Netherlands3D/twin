@@ -13,9 +13,9 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
     {
         [Header("Measuring")]
         [SerializeField] private InputActionReference mouseClick;
+        [SerializeField] private InputActionReference measuringHeightModifier;
         [SerializeField] private LayerMask measurementLayerMask;
         private OpticalRaycaster raycaster;
-        [SerializeField] private InputActionReference measuringHeightModifier;
         [SerializeField] private float maxClickDuration = 0.1f;
         private float clickDownTime;
         private Vector2 clickPosition;
@@ -23,7 +23,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
         [SerializeField] private FirstPersonMeasurementPoint pointObject;
         private List<FirstPersonMeasurementPoint> pointList;
-        private float textHeightAboveLines = .65f;
+        [SerializeField] private float textHeightAboveLines = .65f;
 
         [Header("UI")]
         [SerializeField] private FirstPersonMeasurementElement measurementElementPrefab;
@@ -58,68 +58,76 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             {
                 float heldTime = Time.time - clickDownTime;
 
-                if (heldTime > maxClickDuration) return;
-
-                raycaster.GetWorldPointAsync(clickPosition, (point, hit) =>
-                {
-                    if (hit)
-                    {
-                        if (measuringHeightModifier.action.IsPressed() && pointList.Count > 0)
-                            point.y = pointList[pointList.Count - 1].transform.position.y;
-
-                        FirstPersonMeasurementPoint newPoint = Instantiate(pointObject, point, Quaternion.identity);
-                        newPoint.Init(GetAlphabetLetter(pointList.Count));
-                        pointList.Add(newPoint);
-                        clickCount++;
-
-                        if (pointList.Count > 1)
-                        {
-                            FirstPersonMeasurementElement measurementElement = Instantiate(measurementElementPrefab, measurementParent);
-                            measurementElement.transform.SetSiblingIndex(measurementParent.childCount - 2);
-
-                            int index = pointList.Count - 1; //Hmm IDK about this yet.
-                            FirstPersonMeasurementPoint prevPoint = pointList[index - 1];
-
-                            float dst = Vector3.Distance(prevPoint.transform.position, newPoint.transform.position);
-
-                            totalDistanceInMeters += dst;
-                            totalDistanceText.text = "Totale afstand: " + ConvertToUnits(totalDistanceInMeters);
-
-                            Color32 objectColor = lineColors[clickCount % lineColors.Length];
-                            measurementElement.Init(GetAlphabetLetter(index - 1), GetAlphabetLetter(index), dst, objectColor, RemoveElement);
-                            measurementElements.Add(measurementElement);
-
-                            newPoint.SetLine(newPoint.transform.position, prevPoint.transform.position);
-                            newPoint.SetLineColor(objectColor);
-
-                            Vector3 center = (newPoint.transform.position + prevPoint.transform.position) / 2;
-                            newPoint.SetText(center + Vector3.up * textHeightAboveLines, dst);
-                            newPoint.SetTextColor(objectColor);
-                        }
-                    }
-                }, FirstPersonViewerCamera.FPVCamera, measurementLayerMask);
+                if (heldTime <= maxClickDuration) SetMeasuringPoint();
             }
 
-            if (Mouse.current.rightButton.wasPressedThisFrame)
+            if (Mouse.current.rightButton.wasPressedThisFrame) RemoveMeasuringPoint();
+        }
+
+        private void SetMeasuringPoint()
+        {
+            raycaster.GetWorldPointAsync(clickPosition, (point, hit) =>
             {
-                if (pointList == null) return;
-                if (pointList.Count == 0) return;
-
-                raycaster.GetWorldPointAsync(Pointer.current.position.ReadValue(), (point, hit) =>
+                if (hit)
                 {
-                    if (hit)
+                    //When the Lock key is pressed use the previous y position. 
+                    if (measuringHeightModifier.action.IsPressed() && pointList.Count > 0)
+                        point.y = pointList[pointList.Count - 1].transform.position.y;
+
+                    FirstPersonMeasurementPoint newPoint = Instantiate(pointObject, point, Quaternion.identity);
+                    newPoint.Init(GetAlphabetLetter(pointList.Count));
+                    pointList.Add(newPoint);
+                    clickCount++;
+
+                    if (pointList.Count > 1)
                     {
-                        for (int i = pointList.Count - 1; i >= 0; i--)
+                        FirstPersonMeasurementElement measurementElement = Instantiate(measurementElementPrefab, measurementParent);
+                        measurementElement.transform.SetSiblingIndex(measurementParent.childCount - 2);
+
+                        //Get the last added item.
+                        int index = pointList.Count - 1; 
+                        FirstPersonMeasurementPoint prevPoint = pointList[index - 1];
+
+                        float dst = Vector3.Distance(prevPoint.transform.position, newPoint.transform.position);
+
+                        totalDistanceInMeters += dst;
+                        totalDistanceText.text = "Totale afstand: " + ConvertToUnits(totalDistanceInMeters);
+
+                        //We use clickCount for colors to prevent repeating colors (next to each other).
+                        Color32 objectColor = lineColors[clickCount % lineColors.Length];
+                        measurementElement.Init(GetAlphabetLetter(index - 1), GetAlphabetLetter(index), dst, objectColor, RemoveElement);
+                        measurementElements.Add(measurementElement);
+
+                        newPoint.SetLine(newPoint.transform.position, prevPoint.transform.position);
+                        newPoint.SetLineColor(objectColor);
+
+                        Vector3 center = (newPoint.transform.position + prevPoint.transform.position) / 2;
+                        newPoint.SetText(center + Vector3.up * textHeightAboveLines, dst);
+                        newPoint.SetTextColor(objectColor);
+                    }
+                }
+            }, FirstPersonViewerCamera.FPVCamera, measurementLayerMask);
+        }
+
+        private void RemoveMeasuringPoint()
+        {
+            if (pointList == null) return;
+            if (pointList.Count == 0) return;
+
+            raycaster.GetWorldPointAsync(Pointer.current.position.ReadValue(), (point, hit) =>
+            {
+                if (hit)
+                {
+                    for (int i = pointList.Count - 1; i >= 0; i--)
+                    {
+                        if (Vector3.Distance(point, pointList[i].transform.position) < 1f)
                         {
-                            if (Vector3.Distance(point, pointList[i].transform.position) < 1f)
-                            {
-                                RemovePoint(pointList[i]);
-                                break;
-                            }
+                            RemovePoint(pointList[i]);
+                            break;
                         }
                     }
-                }, FirstPersonViewerCamera.FPVCamera, measurementLayerMask);
-            }
+                }
+            }, FirstPersonViewerCamera.FPVCamera, measurementLayerMask);
         }
 
         public void ResetMeasurements()
@@ -246,8 +254,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                 valueInMeters /= 1000;
             }
 
-            float roundedValue = Mathf.Round(valueInMeters * 100) / 100;
-            return "~" + roundedValue + units;
+            return "~" + valueInMeters.ToString("F2") + units;
         }
     }
 }
