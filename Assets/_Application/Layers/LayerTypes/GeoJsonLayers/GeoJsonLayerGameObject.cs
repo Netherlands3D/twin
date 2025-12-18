@@ -220,9 +220,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var strokeColor = stylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetStrokeColor().Value : LayerData.Color;
             
             //TODO we have to convert this to an enum in the future
-            childStylingPropertyData.ActiveToolProperty = Symbolizer.StrokeColorProperty;
+            childStylingPropertyData.ColorType = Symbolizer.StrokeColorProperty;
             childStylingPropertyData.SetDefaultSymbolizerColor(strokeColor);
-            childStylingPropertyData.ActiveToolProperty = Symbolizer.FillColorProperty;
+            childStylingPropertyData.ColorType = Symbolizer.FillColorProperty;
             childStylingPropertyData.SetDefaultSymbolizerColor(fillColor);
             
             layer.FeatureRemoved += OnFeatureRemoved;
