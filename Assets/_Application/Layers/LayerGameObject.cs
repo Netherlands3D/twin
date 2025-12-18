@@ -10,6 +10,7 @@ using UnityEngine.Events;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Services;
 using System.Linq;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -364,7 +365,35 @@ namespace Netherlands3D.Twin.Layers
             
             property = (T)Activator.CreateInstance(typeof(T), constructorArgs);
             LayerData.SetProperty(property);
+            
             onInit?.Invoke(property);
+        }
+
+        public void ConvertOldStylingDataIntoProperty(List<LayerPropertyData> properties, string propertyName, StylingPropertyData targetStylingPropertyData)
+        {
+            //BC conversion, finding all stylkingpropertydatas without any correct type and storing data in the correct places
+            var styles = properties.GetAll<StylingPropertyData>();
+            Dictionary<string, StylingRule> rulesToCopy = new();
+
+            foreach (var style in styles)
+            {
+                //must not be subclass of StylingPropertyData
+                if (style.GetType() != typeof(StylingPropertyData))
+                    continue;
+               
+                if (!style.StylingRules.Keys.Any(k => k.Contains(propertyName)))
+                    continue;
+
+                foreach (var kvp in style.StylingRules)
+                {
+                    rulesToCopy[kvp.Key] = kvp.Value;
+                }
+            }
+            
+            foreach (var kvp in rulesToCopy)
+            {
+                targetStylingPropertyData.StylingRules[kvp.Key] = kvp.Value;
+            }
         }
     }
 }
