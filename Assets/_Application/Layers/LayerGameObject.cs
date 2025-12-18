@@ -369,15 +369,16 @@ namespace Netherlands3D.Twin.Layers
             onInit?.Invoke(property);
         }
 
-        public void ConvertOldStylingDataIntoProperty(List<LayerPropertyData> properties, string propertyName, StylingPropertyData targetStylingPropertyData)
+        public void ConvertOldStylingDataIntoProperty(List<LayerPropertyData> properties, string propertyName, StylingPropertyData targetStylingPropertyData, bool removeOldData = true)
         {
             //BC conversion, finding all stylkingpropertydatas without any correct type and storing data in the correct places
-            var styles = properties.GetAll<StylingPropertyData>();
+            //and if needed clear the properties from old data
+            var styles = properties.GetAll<StylingPropertyData>().ToList();
             Dictionary<string, StylingRule> rulesToCopy = new();
 
             foreach (var style in styles)
             {
-                //must not be subclass of StylingPropertyData
+                //must not be subclass of StylingPropertyData and be this exact type
                 if (style.GetType() != typeof(StylingPropertyData))
                     continue;
                
@@ -388,6 +389,9 @@ namespace Netherlands3D.Twin.Layers
                 {
                     rulesToCopy[kvp.Key] = kvp.Value;
                 }
+                
+                if(removeOldData)
+                    properties.Remove(style);
             }
             
             foreach (var kvp in rulesToCopy)
