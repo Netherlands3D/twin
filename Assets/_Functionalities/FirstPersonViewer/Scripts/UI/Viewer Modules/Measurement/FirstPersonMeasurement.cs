@@ -26,13 +26,12 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
         [SerializeField] private FirstPersonMeasurementPoint pointObject;
         private List<FirstPersonMeasurementPoint> pointList;
-
+        private float textHeightAboveLines = .65f;
 
         [Header("UI")]
         [SerializeField] private Color32[] lineColors;
         [SerializeField] private TextMeshProUGUI totalDistanceText;
         private float totalDistanceInMeters;
-
 
         private void Start()
         {
@@ -90,7 +89,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                             newPoint.SetLineColor(objectColor);
 
                             Vector3 center = (newPoint.transform.position + prevPoint.transform.position) / 2;
-                            newPoint.SetText(center + Vector3.up * .65f, dst);
+                            newPoint.SetText(center + Vector3.up * textHeightAboveLines, dst);
                             newPoint.SetTextColor(objectColor);
                         }
                     }
@@ -162,9 +161,12 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                 Destroy(pointList[index].gameObject);
                 pointList.RemoveAt(index);
 
+                if (measurementElements.Count > 0)
+                {
+                    Destroy(measurementElements[0].gameObject);
+                    measurementElements.RemoveAt(0);
+                }
 
-                Destroy(measurementElements[0].gameObject);
-                measurementElements.RemoveAt(0);
                 RefreshMeasurements();
             }
             else RemoveElement(measurementElements[index - 1]);
@@ -176,13 +178,17 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             {
                 pointList[i].UpdatePointerLetter(GetAlphabetLetter(i));
 
-                if(i > 0)
+                if (i > 0)
                 {
                     Vector3 start = pointList[i].transform.position;
                     Vector3 end = pointList[i - 1].transform.position;
                     pointList[i].SetLine(start, end);
-                    //pointList[i].SetText();
+
+                    Vector3 center = (start + end) / 2;
+                    float dst = Vector3.Distance(start, end);
+                    pointList[i].SetText(center + Vector3.up * textHeightAboveLines, dst);
                 }
+                else if (i == 0) pointList[i].DisableVisuals();
             }
 
             float newTotalDistance = 0;
@@ -190,7 +196,6 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             {
                 if (i + 1 >= pointList.Count)
                 {
-                    Debug.Log($"<color=yellow>BITCH WAAROM {pointList.Count} |  {measurementElements.Count} | {i}");
                     measurementElements[i].UpdateMeasurement(GetAlphabetLetter(i), "-", -1);
                     continue;
                 }

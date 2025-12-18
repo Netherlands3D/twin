@@ -47,8 +47,7 @@ namespace Netherlands3D
                 valueInMeters /= 1000;
             }
 
-            float roundedValue = Mathf.Round(valueInMeters * 100) / 100;
-            return "~" + roundedValue + units;
+            return "~" + valueInMeters.ToString("F2") + units;
         }
         
         public void RemoveMeasurement()

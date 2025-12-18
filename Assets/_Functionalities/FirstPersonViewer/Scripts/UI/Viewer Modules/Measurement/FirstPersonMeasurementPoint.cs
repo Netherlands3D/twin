@@ -39,5 +39,11 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         }
 
         public void SetTextColor(Color32 color) => lineDistanceText.color = color;
+
+        public void DisableVisuals()
+        {
+            lineRenderer.gameObject.SetActive(false);
+            lineDistanceText.gameObject.SetActive(false);
+        }
     }
 }
