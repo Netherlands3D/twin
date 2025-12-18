@@ -14,7 +14,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void ApplyStyling()
         {
             base.ApplyStyling();
-            foreach (var feature in LayerFeatures.Values)
+            StylingPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
+            foreach (var feature in stylingPropertyData.LayerFeatures.Values)
             {
                 ApplyStylingToFeature(feature);
             }
@@ -38,7 +39,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public void AddFeature(CityObjectVisualizer visualizer)
         {
             var layerFeature = CreateFeature(visualizer);
-            LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+            StylingPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
+            stylingPropertyData.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             ApplyStylingToFeature(layerFeature);
             OnFeatureAdded.Invoke(visualizer);
         }

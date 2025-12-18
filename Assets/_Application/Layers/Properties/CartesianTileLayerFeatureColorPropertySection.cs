@@ -28,10 +28,12 @@ namespace Netherlands3D.Twin.Layers.Properties
         public ISelectable FirstSelectedItem { get; set; }
 
         private LayerFeatureColorPropertyData stylingPropertyData;
+        private StylingPropertyData defaultStylingPropertyData;
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             stylingPropertyData = properties.GetDefaultStylingPropertyData<LayerFeatureColorPropertyData>(); 
+            defaultStylingPropertyData = properties.GetDefaultStylingPropertyData<StylingPropertyData>();
 
             CreateSwatches();
 
@@ -61,18 +63,18 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             swatches.Clear();
             layerContent.ClearAllChildren();
+            
+            // CartesianTileLayerGameObject visualization = FindObjectsByType<CartesianTileLayerGameObject>(FindObjectsSortMode.None).ToList()
+            //     .FirstOrDefault(v => v.LayerData.GetProperty<LayerFeatureColorPropertyData>() == stylingPropertyData);
 
-            //TODO this could be personal, but a hunch these (runtime only) layerfeatures should be part of a data container so this propertysection and other logic should not be visualisation dependent
-            CartesianTileLayerGameObject visualization = FindObjectsByType<CartesianTileLayerGameObject>(FindObjectsSortMode.None).ToList()
-                .FirstOrDefault(v => v.LayerData.GetProperty<LayerFeatureColorPropertyData>() == stylingPropertyData);
-
-            if(visualization == null) 
-            {
-                Debug.LogError("invalid visualisation!");
-                return;
-            }
-
-            foreach (var layerFeature in visualization.LayerFeatures.Values)
+            // if(visualization == null) 
+            // {
+            //     Debug.LogError("invalid visualisation!");
+            //     return;
+            // }
+            
+            
+            foreach (var layerFeature in defaultStylingPropertyData.LayerFeatures.Values)
             {
                 if (layerFeature.Geometry is not Material) continue;
 

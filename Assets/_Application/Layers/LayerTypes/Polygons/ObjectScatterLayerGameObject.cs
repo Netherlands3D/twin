@@ -74,15 +74,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             this.material.enableInstancing = true;
 
             var feature = CreateFeature(material);
-            LayerFeatures.Add(feature.Geometry, feature);
+            StylingPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
+            stylingPropertyData.LayerFeatures.Add(feature.Geometry, feature);
         }
 
         public override void ApplyStyling()
         {
             base.ApplyStyling();
 
+            StylingPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
             // Apply style to the features that was discovered
-            foreach (var feature in LayerFeatures.Values)
+            foreach (var feature in stylingPropertyData.LayerFeatures.Values)
             {
                 Symbolizer styling = GetStyling(feature);
                 var fillColor = styling.GetFillColor();
