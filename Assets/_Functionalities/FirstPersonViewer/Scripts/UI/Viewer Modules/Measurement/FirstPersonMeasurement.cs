@@ -2,6 +2,7 @@ using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Samplers;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,15 +11,11 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 {
     public class FirstPersonMeasurement : MonoBehaviour
     {
-        [Header("UI")]
-        [SerializeField] private FirstPersonMeasurementElement measurementElementPrefab;
-        [SerializeField] private Transform measurementParent;
-        private List<FirstPersonMeasurementElement> measurementElements;
-
         [Header("Measuring")]
         [SerializeField] private InputActionReference mouseClick;
         [SerializeField] private LayerMask measurementLayerMask;
         private OpticalRaycaster raycaster;
+        [SerializeField] private InputActionReference measuringHeightModifier;
         [SerializeField] private float maxClickDuration = 0.1f;
         private float clickDownTime;
         private Vector2 clickPosition;
@@ -29,6 +26,10 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         private float textHeightAboveLines = .65f;
 
         [Header("UI")]
+        [SerializeField] private FirstPersonMeasurementElement measurementElementPrefab;
+        [SerializeField] private Transform measurementParent;
+        private List<FirstPersonMeasurementElement> measurementElements;
+
         [SerializeField] private Color32[] lineColors;
         [SerializeField] private TextMeshProUGUI totalDistanceText;
         private float totalDistanceInMeters;
@@ -63,6 +64,9 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                 {
                     if (hit)
                     {
+                        if (measuringHeightModifier.action.IsPressed() && pointList.Count > 0)
+                            point.y = pointList[pointList.Count - 1].transform.position.y;
+
                         FirstPersonMeasurementPoint newPoint = Instantiate(pointObject, point, Quaternion.identity);
                         newPoint.Init(GetAlphabetLetter(pointList.Count));
                         pointList.Add(newPoint);
