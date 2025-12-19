@@ -10,13 +10,13 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.FirstPersonViewer
 {
-    [RequireComponent(typeof(FirstPersonViewerInput), typeof(MovementModusSwitcher))]
+    [RequireComponent(typeof(FirstPersonViewerInput))]
     public class FirstPersonViewer : MonoBehaviour
     {
         [Header("Camera")]
         [field: SerializeField] public FirstPersonViewerCamera FirstPersonCamera { private set; get; }
         public FirstPersonViewerInput Input { private set; get; }
-        public MovementModusSwitcher MovementSwitcher { private set; get; }
+        [SerializeField] private ViewerState walkingState;
 
         private FirstPersonViewerStateMachine fsm;
         private WorldTransform worldTransform;
@@ -57,7 +57,6 @@ namespace Netherlands3D.FirstPersonViewer
         private void Awake()
         {
             Input = GetComponent<FirstPersonViewerInput>();
-            MovementSwitcher = GetComponent<MovementModusSwitcher>();
 
             worldTransform = GetComponent<WorldTransform>();
 
@@ -68,10 +67,9 @@ namespace Netherlands3D.FirstPersonViewer
         private void Start()
         {
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
-            MovementSwitcher.SetViewerInput(Input);
-            MovementSwitcher.OnMovementPresetChanged += SetMovementModus;
 
             SetupFSM();
+
             gameObject.SetActive(false);
         }
 
@@ -94,7 +92,6 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void OnDestroy()
         {
-            MovementSwitcher.OnMovementPresetChanged -= SetMovementModus;
             OnViewerEntered = null;
             OnResetToStart = null;
             OnResetToGround = null;
@@ -105,10 +102,11 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetupFSM()
         {
-            ViewerState[] playerStates = MovementSwitcher.MovementPresets.ToArray();
+            ViewerState[] playerStates = new ViewerState[] { walkingState };
 
             fsm = new FirstPersonViewerStateMachine(this, Input, playerStates);
         }
+
 
         private void Update()
         {
@@ -158,6 +156,7 @@ namespace Netherlands3D.FirstPersonViewer
             }
         }
 
+        public void SetWalkingState() => SetMovementModus(walkingState);
         private void SetMovementModus(ViewerState viewerState)
         {
             SetMovementVisual(viewerState.viewPrefab);
@@ -167,6 +166,11 @@ namespace Netherlands3D.FirstPersonViewer
             FirstPersonCamera.SetCameraConstrain(viewerState.CameraConstrain);
 
             fsm.SwitchState(viewerState);
+
+            foreach (ViewerSetting setting in viewerState.editableSettings.list)
+            {
+                setting.InvokeOnValueChanged(setting.GetDefaultValue());
+            }
         }
 
         private void SetMovementVisual(MovementVisualController visualObject)

@@ -86,7 +86,7 @@ namespace Netherlands3D.FirstPersonViewer
             viewer.OnResetToStart += ResetToStart;
             viewer.OnSetCameraNorth += SetCameraNorth;
 
-            viewer.MovementSwitcher.LoadMovementPreset(0);
+            viewer.SetWalkingState();
             input.RemoveInputLockConstrain(this);
         }
 

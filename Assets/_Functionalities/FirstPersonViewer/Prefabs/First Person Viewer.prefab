@@ -226,7 +226,6 @@ GameObject:
   - component: {fileID: 3034395081720571745}
   - component: {fileID: 1609831314963826710}
   - component: {fileID: 6660788825186363282}
-  - component: {fileID: 6417052032803972631}
   m_Layer: 2
   m_Name: First Person Viewer
   m_TagString: Untagged
@@ -347,6 +346,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <FirstPersonCamera>k__BackingField: {fileID: 2754359901435342932}
+  walkingState: {fileID: 11400000, guid: bc41cb17aeb0e9e4dad0bc62ddaa02ea, type: 2}
   snappingCullingMask:
     serializedVersion: 2
     m_Bits: 193
@@ -354,6 +354,9 @@ MonoBehaviour:
   isGrounded: 0
   stepHeight: 1.5
   returnFocusDistance: 150
+  OnPositionUpdated:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1609831314963826710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,34 +388,5 @@ MonoBehaviour:
   exitViewDelay: 0.15
   onShowSnackbarExit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 882c7f2cbbcbc4ae68cd7ae166c6a838, type: 2}
-        m_TargetAssemblyTypeName: Netherlands3D.Events.StringEvent, eu.netherlands3d.event-system.Runtime
-        m_MethodName: InvokeStarted
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   fpvExitText: Druk op 'backspace' om je muis te ontgrendelen.
---- !u!114 &6417052032803972631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8111522683061574636}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81b9524fc1cc5d94d9026224aa20d3ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <MovementPresets>k__BackingField:
-  - {fileID: 11400000, guid: bc41cb17aeb0e9e4dad0bc62ddaa02ea, type: 2}
-  - {fileID: 11400000, guid: 594defc4112e8534f9cc9c41b8492119, type: 2}
-  - {fileID: 11400000, guid: 38cd0b8cb5cb89d49ada4ec0f381d368, type: 2}
-  - {fileID: 11400000, guid: 130c7cf512e492a4fa526f2b64dc26f5, type: 2}
