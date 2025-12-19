@@ -132,7 +132,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "Maak een nieuw punt door te \nklikken. Verwijder een punt door rechtermuisknop
-    op het punt te drukken.\n\n<size=10>De data van Netherlands3D is niet op de centimeter
+    op het punt te drukken.\n\n<size=14>De data van Netherlands3D is niet op de centimeter
     accuraat. Neem deze data als schatting."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 32ddfb0cac272234c9b6f41500eb9afb, type: 2}
@@ -2469,12 +2469,12 @@ PrefabInstance:
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_Size
-      value: 0.11557621
+      value: 0.10122857
       objectReference: {fileID: 0}
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_Value
-      value: 0.99999976
+      value: 0.9999998
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
