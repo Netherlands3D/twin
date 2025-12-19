@@ -129,7 +129,7 @@ namespace Netherlands3D.Twin.Layers
             /// todo: the following 2 lines of code should not be done here, but in the Layers service.
             /// but we must set the new layer as child of the rootLayer before the SetParent function works, which is also done in this function.
             /// this will be addressed in ticket 1909
-            layerData.InitializeParent();
+            layerData.InitializeParent(ProjectData.Current.RootLayer);
             ProjectData.Current.RootLayer.AddChild(layerData, 0);
 
             if (!string.IsNullOrEmpty(Name)) layerData.Name = Name;

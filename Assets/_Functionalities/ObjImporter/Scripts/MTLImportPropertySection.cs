@@ -16,7 +16,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
         [SerializeField] private GameObject hasMtlPanel;
         [SerializeField] private GameObject importErrorPanel;
 
-        private StylingPropertyData stylingPropertyData;
+        private ColorPropertyData stylingPropertyData;
         private OBJPropertyData objPropertyData;
 
         private void Start()
@@ -29,7 +29,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
             objPropertyData = properties.Get<OBJPropertyData>();
             objPropertyData.MtlImportSuccess.AddListener(OnMTLImportError);
 
-            stylingPropertyData = properties.GetDefaultStylingPropertyData<StylingPropertyData>();
+            stylingPropertyData = properties.GetDefaultStylingPropertyData<ColorPropertyData>();
         }
 
         //called in the inspector by FileOpen.cs

@@ -56,7 +56,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             // that is an asset and not an instance
             lineRenderer3D.LineMaterial = new Material(lineRenderer3D.LineMaterial);
             var stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
-            stylingPropertyData.ActiveToolProperty = Symbolizer.StrokeColorProperty;
+            stylingPropertyData.ColorType = Symbolizer.StrokeColorProperty;
         }
 
         public List<Mesh> GetMeshData(Feature feature)

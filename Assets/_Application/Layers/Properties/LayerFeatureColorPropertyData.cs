@@ -16,6 +16,7 @@ namespace Netherlands3D.Twin.Layers.Properties
     {
         public const string MaterialIndexIdentifier = "data-materialindex";
         public const string MaterialNameIdentifier = "data-materialname";
+        public const string ColoringIdentifier = "colorize";
         
         public void SetColor(LayerFeature layerFeature, Color color)
         {
@@ -55,7 +56,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         private string ColorizationStyleRuleName(int materialIndexIdentifier)
         {
-            return $"feature.{materialIndexIdentifier}.colorize";
+            return $"feature.{materialIndexIdentifier}.{ColoringIdentifier}";
         }    
         
         [JsonConstructor]

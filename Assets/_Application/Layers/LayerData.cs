@@ -13,7 +13,10 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "Prefab")] //todo: this should not be named Prefab
+    // [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "Prefab")] //todo: this should not be named Prefab
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "Layer")]
+    [DataContractAliases(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Names = new[] { "Folder", "Prefab", "PolygonSelection" })]
+    [JsonConverter(typeof(LayerDataJsonConverter))]
     public class LayerData : IEquatable<LayerData>, IDisposable
     {
         [SerializeField, DataMember] protected Guid UUID = Guid.NewGuid();
@@ -182,7 +185,11 @@ namespace Netherlands3D.Twin.Layers
             IsNew = false;
         }
 
-        public void InitializeParent(LayerData initialParent = null)
+        /// <summary>
+        /// This is needed because we cannot serialize both the parent and children since that would give a circular reference. Therefore, we need to initialize the parent value at runtime
+        /// </summary>
+        /// <param name="initialParent"></param>
+        public void InitializeParent(LayerData initialParent)
         { 
             parent = initialParent;            
             if (initialParent == null)

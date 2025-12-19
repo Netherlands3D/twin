@@ -75,7 +75,15 @@ namespace Netherlands3D.Twin.Projects
         
         private void LoadJSON(string json)
         {
-            JsonConvert.PopulateObject(json, ProjectData.Current, serializerSettings);
+            try
+            {
+                JsonConvert.PopulateObject(json, ProjectData.Current, serializerSettings);
+            }
+            catch(Exception e)
+            {
+                Debug.LogException(e);
+            }
+
             ProjectData.Current.RootLayer.ReconstructParentsRecursive();
 
             ProjectData.Current.RootLayer.UpdateLayerTreeOrder(0);

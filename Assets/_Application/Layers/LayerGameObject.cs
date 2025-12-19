@@ -10,6 +10,7 @@ using UnityEngine.Events;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Services;
 using System.Linq;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -295,11 +296,16 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         protected List<LayerFeature> CreateFeaturesByType<T>() where T : Component
         {
+            return CreateFeaturesByType<T>(this.gameObject);
+        }
+        
+        protected List<LayerFeature> CreateFeaturesByType<T>(GameObject target) where T : Component
+        {
             var cachedFeatures = new List<LayerFeature>();
 
             // By default, consider each Unity.Component of type T as a "Feature" and create an ExpressionContext to
             // select the correct styling Rule to apply to the given "Feature". 
-            var components = GetComponentsInChildren<T>();
+            var components = target.GetComponentsInChildren<T>();
 
             foreach (var component in components)
             {
@@ -359,7 +365,39 @@ namespace Netherlands3D.Twin.Layers
             
             property = (T)Activator.CreateInstance(typeof(T), constructorArgs);
             LayerData.SetProperty(property);
+            
             onInit?.Invoke(property);
+        }
+
+        public void ConvertOldStylingDataIntoProperty(List<LayerPropertyData> properties, string propertyName, StylingPropertyData targetStylingPropertyData, bool removeOldData = true)
+        {
+            //BC conversion, finding all stylkingpropertydatas without any correct type and storing data in the correct places
+            //and if needed clear the properties from old data
+            var styles = properties.GetAll<StylingPropertyData>().ToList();
+            Dictionary<string, StylingRule> rulesToCopy = new();
+
+            foreach (var style in styles)
+            {
+                //must not be subclass of StylingPropertyData and be this exact type
+                if (style.GetType() != typeof(StylingPropertyData))
+                    continue;
+               
+                if (!style.StylingRules.Keys.Any(k => k.Contains(propertyName)))
+                    continue;
+
+                foreach (var kvp in style.StylingRules)
+                {
+                    rulesToCopy[kvp.Key] = kvp.Value;
+                }
+                
+                if(removeOldData)
+                    properties.Remove(style);
+            }
+            
+            foreach (var kvp in rulesToCopy)
+            {
+                targetStylingPropertyData.StylingRules[kvp.Key] = kvp.Value;
+            }
         }
     }
 }
