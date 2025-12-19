@@ -587,6 +587,17 @@
                 },
                 {
                     "name": "",
+                    "id": "d9a12bc1-3638-4d5d-81fd-2e453cc20e51",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "f4f8a4b9-a7e6-48a9-848f-e1ad1dd7c4be",
                     "path": "<Keyboard>/h",
                     "interactions": "",
