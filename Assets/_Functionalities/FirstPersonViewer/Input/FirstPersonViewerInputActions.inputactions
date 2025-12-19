@@ -378,6 +378,17 @@
                 },
                 {
                     "name": "",
+                    "id": "e4c8038f-fdd9-4f4c-81ec-77af9e263b91",
+                    "path": "<Touchscreen>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "e71b19ad-eec2-4a4b-88db-7d401338e11f",
                     "path": "<Keyboard>/shift",
                     "interactions": "",
