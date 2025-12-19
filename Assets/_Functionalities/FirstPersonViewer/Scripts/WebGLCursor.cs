@@ -1,3 +1,4 @@
+using Netherlands3D;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -11,7 +12,10 @@ public static class WebGLCursor
     public static void Lock()
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
-        LockCursorInternal();
+        if (!WebGLOsDetection.IsMobile()) 
+        {
+            LockCursorInternal();
+        }
 #else
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -21,7 +25,10 @@ public static class WebGLCursor
     public static void Unlock()
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
-        UnlockCursorInternal();
+        if (!WebGLOsDetection.IsMobile())
+        {
+            UnlockCursorInternal();
+        }
 #else
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
