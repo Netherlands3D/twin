@@ -33,7 +33,7 @@ namespace Netherlands3D
         {
             joints = new Transform[segmentCount-1];
             var previousTransform = start;
-            JoinSegment(previousTransform, null, true); //start
+            JoinSegment(previousTransform, null); //start
             var dir = (end.position - start.position);
 
             for (int i = 0; i < segmentCount-1; i++)
@@ -47,17 +47,17 @@ namespace Netherlands3D
                 previousTransform = segment.transform;
             }
 
-            JoinSegment(end, previousTransform, false, true); //end
+            JoinSegment(end, previousTransform, true); //end
         }
 
-        private void JoinSegment(Transform currentJoint, Transform connectedJoint, bool isKinematic = false, bool isClosed = false)
+        private void JoinSegment(Transform currentJoint, Transform connectedJoint, bool isClosed = false)
         {
             var rb = currentJoint.GetComponent<Rigidbody>();
-            rb.isKinematic = isKinematic;
-            rb.mass = totalWeight / segmentCount;
-            rb.linearDamping = drag;
-            rb.angularDamping = angularDrag;
-            
+            // rb.isKinematic = isKinematic;
+            // rb.mass = totalWeight / segmentCount;
+            // rb.linearDamping = drag;
+            // rb.angularDamping = angularDrag;
+            //
             if (connectedJoint == null)
                 return;
 
