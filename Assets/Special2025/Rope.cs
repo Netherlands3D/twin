@@ -8,7 +8,7 @@ namespace Netherlands3D
         [SerializeField] private Transform start, end, segmentContainer;
         [SerializeField] private GameObject segmentPrefab;
         [SerializeField] private int segmentCount = 10;
-        [SerializeField] private float totalLength;
+        // [SerializeField] private float totalLength;
 
         private Transform[] joints = Array.Empty<Transform>();
 
@@ -52,7 +52,7 @@ namespace Netherlands3D
 
         private void JoinSegment(Transform currentJoint, Transform connectedJoint, bool isClosed = false)
         {
-            var rb = currentJoint.GetComponent<Rigidbody>();
+            // var rb = currentJoint.GetComponent<Rigidbody>();
             // rb.isKinematic = isKinematic;
             // rb.mass = totalWeight / segmentCount;
             // rb.linearDamping = drag;
@@ -65,7 +65,8 @@ namespace Netherlands3D
             joint.connectedBody = connectedJoint.GetComponent<Rigidbody>();
             joint.autoConfigureConnectedAnchor = true;
 
-            joint.connectedAnchor = isClosed ? Vector3.forward * 0.1f : Vector3.forward * (totalLength / segmentCount);
+            // var totalLength = start - end
+            // joint.connectedAnchor = isClosed ? Vector3.forward * 0.1f : Vector3.forward * (totalLength / segmentCount);
 
             joint.xMotion = ConfigurableJointMotion.Locked;
             joint.yMotion = ConfigurableJointMotion.Locked;
