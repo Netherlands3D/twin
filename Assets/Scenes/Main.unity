@@ -1312,9 +1312,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputActionAsset: {fileID: -944628639613478452, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
     type: 3}
-  projectileType: 1
   projectilePrefabs:
-  - {fileID: 7827756977115197229, guid: 1cfb7ef43a2f65089b1e92b5974b1f7a, type: 3}
+  - {fileID: 334854240398157970, guid: 9887b1f8c094401c9bbd5de7ac27d726, type: 3}
   - {fileID: 8514432176467636189, guid: 62506ae4f3ece4a16be41d93d3aed88c, type: 3}
 --- !u!1001 &2488954073963816146
 PrefabInstance:

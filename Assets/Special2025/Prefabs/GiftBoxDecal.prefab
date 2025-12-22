@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3670395091755573933}
   - component: {fileID: 1885316914457406719}
   m_Layer: 0
-  m_Name: CubeDecal
+  m_Name: GiftBoxDecal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0777d029ed3dffa4692f417d4aba19ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: ed436095fe0f191ed98859673cbea1df, type: 2}
+  m_Material: {fileID: 2100000, guid: f072c1e01c329c41f9fecde02d10e7b8, type: 2}
   m_DrawDistance: 1000
   m_FadeScale: 0.9
   m_StartAngleFade: 180

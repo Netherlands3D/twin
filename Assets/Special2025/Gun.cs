@@ -40,22 +40,15 @@ namespace Netherlands3D
 
         private int maxProjectiles = 10;
         
-        [SerializeField] private ProjectileType projectileType = ProjectileType.Sneeuwbal;
         public List<GameObject> projectilePrefabs = new List<GameObject>();
-        private string selectedPrefabName = "Cube";
+        private int selectedPrefabIndex = 0;
         
         private Dictionary<string, List<Projectile>> projectilePool = new Dictionary<string, List<Projectile>>();
         private Dictionary<string, List<Projectile>> projectileActive = new Dictionary<string, List<Projectile>>();
         
         private void OnValidate()
         {
-            SetProjectileType(projectileType);
-        }
-
-        public void SetProjectileType(ProjectileType type)
-        {
-            selectedPrefabName = type.ToString();
-            projectileType = type;
+            
         }
 
         
@@ -116,7 +109,7 @@ namespace Netherlands3D
             Vector2 screenPosition =  Pointer.current.position.ReadValue();
             Vector3 pos = fpvCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, fpvCamera.nearClipPlane));
 
-            Projectile projectile = SpawnProjectile(pos, selectedPrefabName);
+            Projectile projectile = SpawnProjectile(pos, projectilePrefabs[selectedPrefabIndex].name);
             cooldown = projectile.Cooldown;
             projectileSpeed = projectile.Power;
             
