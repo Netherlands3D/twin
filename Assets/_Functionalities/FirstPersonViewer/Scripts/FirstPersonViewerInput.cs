@@ -5,8 +5,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Netherlands3D.SelectionTools;
 using System;
-using Netherlands3D.Events;
 using UnityEngine.Events;
+using UnityEngine.InputSystem.Controls;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -20,6 +20,7 @@ namespace Netherlands3D.FirstPersonViewer
         public InputAction SpaceAction { private set; get; }
         public InputAction VerticalMoveAction { private set; get; }
         public InputAction LookInput { private set; get; }
+        public Vector2 LookDelta { private set; get; }
         public InputAction ExitInput { private set; get; }
         public InputAction LeftClick { private set; get; }
         public InputAction ResetInput { private set; get; }
@@ -98,6 +99,9 @@ namespace Netherlands3D.FirstPersonViewer
             isEditingInputfield = IsInputfieldSelected();
 
             HandleExiting();
+
+            LookDelta = LookInput.ReadValue<Vector2>();
+            TouchInput();
         }
 
         private void HandleCursorLocking()
@@ -209,5 +213,23 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void SetMouseLockModus(bool lockMouseModus) => this.lockMouseModus = lockMouseModus;
         public bool GetMouseLockModus() => lockMouseModus;
+
+        private void TouchInput()
+        {
+            if (Touchscreen.current == null) return;
+
+            foreach (TouchControl touch in Touchscreen.current.touches)
+            {
+                if (!touch.press.isPressed) continue;
+
+                int id = touch.touchId.ReadValue();
+
+                if (EventSystem.current.IsPointerOverGameObject(id))
+                    continue;
+
+                Vector2 delta = touch.delta.ReadValue();
+                LookDelta = delta;
+            }
+        }
     }
 }
