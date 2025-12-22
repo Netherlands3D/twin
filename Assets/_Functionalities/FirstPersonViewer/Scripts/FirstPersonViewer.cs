@@ -73,6 +73,12 @@ namespace Netherlands3D.FirstPersonViewer
             gameObject.SetActive(false);
         }
 
+        public void SetPosition(Coordinate point)
+        {
+            transform.position = point.ToUnity();
+            OnViewerEntered?.Invoke();
+        }
+
         private void ViewerEnterd()
         {
             startPosition = new Coordinate(transform.position);
