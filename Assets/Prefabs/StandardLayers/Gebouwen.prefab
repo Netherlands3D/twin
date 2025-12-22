@@ -57,14 +57,14 @@ MonoBehaviour:
     geoLOD: 
     path: https://assets.netherlands3d.eu/publicassets/3dbag/2024.12.16/lod2.2simplified100/buildings-{x}_{y}.2.2.100.bin
     pathQuery: 
-    maximumDistance: 8000
+    maximumDistance: 3000
     maximumDistanceSquared: 0
     enabled: 1
   - Description: 
     geoLOD: 
     path: https://assets.netherlands3d.eu/publicassets/3dbag/2024.12.16/lod2.2/buildings-{x}_{y}.2.2.bin
     pathQuery: 
-    maximumDistance: 3000
+    maximumDistance: 1000
     maximumDistanceSquared: 0
     enabled: 1
   pauseLoading: 0
@@ -80,13 +80,16 @@ MonoBehaviour:
   OnMappingRemoved:
     m_PersistentCalls:
       m_Calls: []
+  OnTileObjectCreated:
+    m_PersistentCalls:
+      m_Calls: []
   hasMetaData: 1
   removeFromID: 
   DefaultMaterialList:
   - {fileID: 2100000, guid: 0df5f2c6c1221f94cb0ff68c38ee66f0, type: 2}
   tileShadowCastingMode: 1
   brotliCompressedExtention: .br
-  createMeshcollider: 0
+  createMeshcollider: 1
 --- !u!114 &6432123512545269546
 MonoBehaviour:
   m_ObjectHideFlags: 0

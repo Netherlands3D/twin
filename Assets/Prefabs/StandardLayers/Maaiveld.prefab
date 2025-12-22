@@ -57,14 +57,14 @@ MonoBehaviour:
     geoLOD: 
     path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked_simplified100/Terrain{x}_{y}.1.100.bin
     pathQuery: 
-    maximumDistance: 8000
+    maximumDistance: 3000
     maximumDistanceSquared: 0
     enabled: 1
   - Description: 
     geoLOD: 
     path: https://assets.netherlands3d.eu/publicassets/Terrain_2019-despiked/Terrain{x}_{y}.1.bin
     pathQuery: 
-    maximumDistance: 3000
+    maximumDistance: 1000
     maximumDistanceSquared: 0
     enabled: 1
   pauseLoading: 0
@@ -78,6 +78,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnMappingRemoved:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTileObjectCreated:
     m_PersistentCalls:
       m_Calls: []
   hasMetaData: 0
@@ -97,7 +100,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: d661d9c11041bdd48b6e208c48c9cd8c, type: 2}
   tileShadowCastingMode: 0
   brotliCompressedExtention: .br
-  createMeshcollider: 0
+  createMeshcollider: 1
 --- !u!114 &4447745080902320339
 MonoBehaviour:
   m_ObjectHideFlags: 0
