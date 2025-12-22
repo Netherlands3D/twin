@@ -6,7 +6,13 @@ namespace Netherlands3D
 {
     public class ProjectileSelected : MonoBehaviour
     {
+        public Button next => nextButton;
+        public Button previous => previousButton;
+        
         [SerializeField] private Image projectileIcon;
+        [SerializeField] private Button nextButton;
+        [SerializeField] private Button previousButton;
+        
         private PrefabThumbnail pt;
 
         private void Awake()

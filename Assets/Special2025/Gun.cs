@@ -81,16 +81,32 @@ namespace Netherlands3D
 
         private void Start()
         {
+            projectileUI = FindAnyObjectByType<ProjectileSelected>();
+            projectileUI.next.onClick.AddListener(NextProjectile);
+            projectileUI.previous.onClick.AddListener(PreviousProjectile);
+            
             
             SetProjectileSelected(selectedPrefabIndex);
         }
 
+        private void NextProjectile()
+        {
+            SetProjectileSelected(selectedPrefabIndex + 1);
+        }
+
+        private void PreviousProjectile()
+        {
+            SetProjectileSelected(selectedPrefabIndex - 1);
+        }
+
         private void SetProjectileSelected(int index)
         {
-            if(index < 0 || index >= projectilePrefabs.Count)
+            if(index < 0)
+                index = projectilePrefabs.Count - 1;
+            if(index >= projectilePrefabs.Count)
                 index = 0;
-           
-            projectileUI = FindAnyObjectByType<ProjectileSelected>();
+
+            selectedPrefabIndex = index;
             projectileUI.SetImage(projectilePrefabs[index]);
         }
 
@@ -162,11 +178,14 @@ namespace Netherlands3D
             
             projectileActive[type].Add(projectile);
             ResetRigidBody(projectile.rb);
+            projectile.SetGun(this);
+            projectile.SetAlive(true);
             return projectile;
         }
 
-        private void Despawn(Projectile obj)
+        public void Despawn(Projectile obj)
         {
+            obj.SetAlive(false);
             ResetRigidBody(obj.rb);
             
             string type = obj.gameObject.name;
@@ -179,13 +198,14 @@ namespace Netherlands3D
                 projectilePool.Add(type, new List<Projectile>());
             
             projectilePool[type].Add(obj);
+            obj.SetGun(null);
         }
 
         private void ResetRigidBody(Rigidbody obj)
         {
             obj.linearVelocity = Vector3.zero;
             obj.angularVelocity = Vector3.zero;
-            obj.Sleep();                 
+            //obj.Sleep();                 
             obj.ResetInertiaTensor();    
         }
     }
