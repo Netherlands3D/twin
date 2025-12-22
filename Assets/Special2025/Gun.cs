@@ -1,16 +1,17 @@
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using Netherlands3D.SelectionTools;
 using System;
-using Netherlands3D.Events;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
 using Netherlands3D.FirstPersonViewer;
-using UnityEngine.Events;
 
 namespace Netherlands3D
 {
+    public enum ProjectileType
+    {
+        Cube,
+        Sneeuwbal
+    }
+    
     public class Gun : MonoBehaviour
     {
         [Header("Input")]
@@ -39,7 +40,8 @@ namespace Netherlands3D
         private int maxProjectiles = 10;
         
         public List<GameObject> projectilePrefabs = new List<GameObject>();
-        private string selectedPrefab = "Cube";
+        [SerializeField] private ProjectileType projectileType = ProjectileType.Sneeuwbal;
+        private string selectedPrefabName = "Cube";
         
         private Dictionary<string, List<Rigidbody>> projectilePool = new Dictionary<string, List<Rigidbody>>();
         private Dictionary<string, List<Rigidbody>> projectileActive = new Dictionary<string, List<Rigidbody>>();
@@ -66,6 +68,17 @@ namespace Netherlands3D
             
         }
 
+        private void OnValidate()
+        {
+            SetProjectileType(projectileType);
+        }
+
+        public void SetProjectileType(ProjectileType type)
+        {
+            selectedPrefabName = type.ToString();
+            projectileType = type;
+        }
+
         private void OnClickHandler(InputAction.CallbackContext context)
         {
             if (cd > 0) return;
@@ -75,7 +88,7 @@ namespace Netherlands3D
             Vector2 screenPosition =  Pointer.current.position.ReadValue();
             Vector3 pos = fpvCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, fpvCamera.nearClipPlane));
 
-            Rigidbody rb = SpawnProjectile(pos, selectedPrefab);
+            Rigidbody rb = SpawnProjectile(pos, selectedPrefabName);
             rb?.AddForce(fpvCamera.transform.forward * projectileSpeed, ForceMode.Impulse);
             
         }
