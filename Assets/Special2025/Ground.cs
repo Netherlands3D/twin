@@ -11,6 +11,7 @@ namespace Netherlands3D
         private int Width = 4;
         private int Depth = 4;
         private int tileSize = 1000;
+        private float heightOffset = -4;
 
         void Start()
         {
@@ -33,7 +34,7 @@ namespace Netherlands3D
                     Vector3 targetPosition = new Vector3(x * tileSize + centerPosition.x, 0, y * tileSize + centerPosition.z);
                     Coordinate coord = new Coordinate(targetPosition);
                     float height = map.GetHeight(coord);
-                    targetPosition.y = height;
+                    targetPosition.y = height + heightOffset;
 
                     int ix = x + halfWidth;
                     int iy = y + halfDepth;
