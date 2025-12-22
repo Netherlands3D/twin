@@ -7,7 +7,8 @@ namespace Netherlands3D
     public class Projectile : MonoBehaviour
     {
         [SerializeField] private GameObject splatVisual;
-        
+
+        [SerializeField] private float breakForce = 100f;
         public Rigidbody rb;
         public float Cooldown = 0.5f;
         public float Power = 60f;
@@ -24,7 +25,10 @@ namespace Netherlands3D
             
             var contact = col.GetContact(0);
             
-            
+            // print((col.impulse / Time.fixedDeltaTime).magnitude);
+            if((col.impulse / Time.fixedDeltaTime).magnitude > breakForce)
+                Destroy(gameObject);
+
             CreateSplat(contact.point, contact.normal);
         }
 
