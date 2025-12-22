@@ -30,11 +30,13 @@ namespace Netherlands3D
         
         public float ProjectileSpeed => projectileSpeed;
         public float Cooldown => cooldown;
+        
 
         private Camera fpvCamera;
         private float projectileSpeed = 60;
-        private float cooldown = 0.5f;
+        private float cooldown = 0.1f;
         private float cd;
+        private bool isShooting = false;
 
         private int maxProjectiles = 10;
         
@@ -59,6 +61,7 @@ namespace Netherlands3D
             CyclePreviousModus = inputActionAsset.FindAction("NavigateModusPrevious");
 
             LeftClick.performed += OnClickHandler;
+            LeftClick.canceled += OnClickStopHandler;
             
             fpvCamera = FindObjectOfType<FirstPersonViewerCamera>().GetComponent<Camera>();
             
@@ -68,27 +71,40 @@ namespace Netherlands3D
 
         private void OnClickHandler(InputAction.CallbackContext context)
         {
-            if (cd > 0) return;
-            
-            cd = cooldown;
-            
-            Vector2 screenPosition =  Pointer.current.position.ReadValue();
-            Vector3 pos = fpvCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, fpvCamera.nearClipPlane));
-
-            Rigidbody rb = SpawnProjectile(pos, selectedPrefab);
-            rb?.AddForce(fpvCamera.transform.forward * projectileSpeed, ForceMode.Impulse);
-            
+            isShooting = true;
+        }
+        
+        private void OnClickStopHandler(InputAction.CallbackContext context)
+        {
+            isShooting = false;
         }
 
         private void Update()
         {
             cd -= Time.deltaTime;
-            
+            if (isShooting)
+            {
+                if (cd < 0)
+                {
+                    cd = cooldown;
+                    OnFire();
+                }
+            }
+
             foreach(KeyValuePair<string, List<Rigidbody>> proj in projectileActive)
                 if (proj.Value.Count > maxProjectiles)
                 {
                     Despawn(proj.Value[0]);
                 }
+        }
+
+        private void OnFire()
+        {
+            Vector2 screenPosition =  Pointer.current.position.ReadValue();
+            Vector3 pos = fpvCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, fpvCamera.nearClipPlane));
+
+            Rigidbody rb = SpawnProjectile(pos, selectedPrefab);
+            rb?.AddForce(fpvCamera.transform.forward * projectileSpeed, ForceMode.Impulse);
         }
 
         private Rigidbody SpawnProjectile(Vector3 position, string type)
@@ -116,15 +132,13 @@ namespace Netherlands3D
                 projectileActive.Add(type, new List<Rigidbody>());
             
             projectileActive[type].Add(projectileRb);
+            ResetRigidBody(projectileRb);
             return projectileRb;
         }
 
         private void Despawn(Rigidbody obj)
         {
-            obj.linearVelocity = Vector3.zero;
-            obj.angularVelocity = Vector3.zero;
-            obj.Sleep();                 
-            obj.ResetInertiaTensor();    
+            ResetRigidBody(obj);
             
             string type = obj.name;
             type = type.Replace("(Clone)", "");
@@ -136,6 +150,14 @@ namespace Netherlands3D
                 projectilePool.Add(type, new List<Rigidbody>());
             
             projectilePool[type].Add(obj);
+        }
+
+        private void ResetRigidBody(Rigidbody obj)
+        {
+            obj.linearVelocity = Vector3.zero;
+            obj.angularVelocity = Vector3.zero;
+            obj.Sleep();                 
+            obj.ResetInertiaTensor();    
         }
     }
 }
