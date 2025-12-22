@@ -12,7 +12,7 @@ namespace Netherlands3D
         
         [SerializeField] private GameObject splatVisual;
 
-        [SerializeField] private float breakForce = 100f;
+        [SerializeField] private float breakForce = 1000;
         public Rigidbody rb;
         public float Cooldown = 0.5f;
         public float Power = 60f;
@@ -33,6 +33,8 @@ namespace Netherlands3D
         public void SetAlive(bool isAlive)
         {
             this.isAlive = isAlive;
+            if(gameObject.activeInHierarchy != isAlive)
+                gameObject.SetActive(isAlive);
         }
 
         private void OnCollisionEnter(Collision col)
@@ -40,12 +42,13 @@ namespace Netherlands3D
             if (col.contactCount == 0 || !isAlive)
                 return;
             
-            var contact = col.GetContact(0);
-            
-            // print((col.impulse / Time.fixedDeltaTime).magnitude);
-            if ((col.impulse / Time.fixedDeltaTime).magnitude > breakForce)
+            float energy = 0.5f * rb.mass * col.relativeVelocity.sqrMagnitude; //(0.5f * mass 1 * rel 60 * 60 ≈ 1800
+            if (energy > breakForce)
+            {
                 gun.Despawn(this);
+            }
 
+            var contact = col.GetContact(0);
             CreateSplat(contact.point, contact.normal);
         }
 

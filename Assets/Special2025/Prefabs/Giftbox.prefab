@@ -127,7 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   splatVisual: {fileID: 7780954651499608782, guid: c3196f637c2f955d681f3850ed831ec8,
     type: 3}
-  breakForce: 100
+  breakForce: 1000
   rb: {fileID: 0}
   Cooldown: 0.5
   Power: 60
