@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Netherlands3D.FirstPersonViewer;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 
 namespace Netherlands3D
 {
@@ -40,23 +42,18 @@ namespace Netherlands3D
 
         private int maxProjectiles = 10;
         
-        [SerializeField] private ProjectileType projectileType = ProjectileType.Sneeuwbal;
         public List<GameObject> projectilePrefabs = new List<GameObject>();
-        private string selectedPrefabName = "Cube";
+        private int selectedPrefabIndex = 0;
         
         private Dictionary<string, List<Projectile>> projectilePool = new Dictionary<string, List<Projectile>>();
         private Dictionary<string, List<Projectile>> projectileActive = new Dictionary<string, List<Projectile>>();
         
-        private void OnValidate()
-        {
-            SetProjectileType(projectileType);
-        }
-
-        public void SetProjectileType(ProjectileType type)
-        {
-            selectedPrefabName = type.ToString();
-            projectileType = type;
-        }
+        private ProjectileSelected projectileUI;
+        
+        // private void OnValidate()
+        // {
+        //     SetProjectileSelected(selectedPrefabIndex);
+        // }
 
         
         private void Awake()
@@ -77,8 +74,40 @@ namespace Netherlands3D
             
             fpvCamera = FindObjectOfType<FirstPersonViewerCamera>().GetComponent<Camera>();
             
-            cd = cooldown;
             
+            
+            cd = cooldown;
+        }
+
+        private void Start()
+        {
+            projectileUI = FindAnyObjectByType<ProjectileSelected>();
+            projectileUI.next.onClick.AddListener(NextProjectile);
+            projectileUI.previous.onClick.AddListener(PreviousProjectile);
+            
+            
+            SetProjectileSelected(selectedPrefabIndex);
+        }
+
+        private void NextProjectile()
+        {
+            SetProjectileSelected(selectedPrefabIndex + 1);
+        }
+
+        private void PreviousProjectile()
+        {
+            SetProjectileSelected(selectedPrefabIndex - 1);
+        }
+
+        private void SetProjectileSelected(int index)
+        {
+            if(index < 0)
+                index = projectilePrefabs.Count - 1;
+            if(index >= projectilePrefabs.Count)
+                index = 0;
+
+            selectedPrefabIndex = index;
+            projectileUI.SetImage(projectilePrefabs[index]);
         }
 
         private void OnClickHandler(InputAction.CallbackContext context)
@@ -116,7 +145,7 @@ namespace Netherlands3D
             Vector2 screenPosition =  Pointer.current.position.ReadValue();
             Vector3 pos = fpvCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, fpvCamera.nearClipPlane));
 
-            Projectile projectile = SpawnProjectile(pos, selectedPrefabName);
+            Projectile projectile = SpawnProjectile(pos, projectilePrefabs[selectedPrefabIndex].name);
             cooldown = projectile.Cooldown;
             projectileSpeed = projectile.Power;
             
@@ -149,11 +178,14 @@ namespace Netherlands3D
             
             projectileActive[type].Add(projectile);
             ResetRigidBody(projectile.rb);
+            projectile.SetGun(this);
+            projectile.SetAlive(true);
             return projectile;
         }
 
-        private void Despawn(Projectile obj)
+        public void Despawn(Projectile obj)
         {
+            obj.SetAlive(false);
             ResetRigidBody(obj.rb);
             
             string type = obj.gameObject.name;
@@ -166,13 +198,14 @@ namespace Netherlands3D
                 projectilePool.Add(type, new List<Projectile>());
             
             projectilePool[type].Add(obj);
+            obj.SetGun(null);
         }
 
         private void ResetRigidBody(Rigidbody obj)
         {
             obj.linearVelocity = Vector3.zero;
             obj.angularVelocity = Vector3.zero;
-            obj.Sleep();                 
+            //obj.Sleep();                 
             obj.ResetInertiaTensor();    
         }
     }
