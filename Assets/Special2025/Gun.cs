@@ -170,7 +170,7 @@ namespace Netherlands3D
                 }
 
                 GameObject test = Instantiate(prefab);
-                projectile = test.GetComponent<Projectile>();    
+                projectile = test.GetComponentInChildren<Projectile>();    
             }
             projectile.gameObject.transform.position = position;   
             if(!projectileActive.ContainsKey(type))

@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Netherlands3D
 {
-    [RequireComponent(typeof(Rigidbody))]
     public class Projectile : MonoBehaviour
     {
         public bool IsAlive => isAlive;
@@ -22,7 +21,8 @@ namespace Netherlands3D
 
         private void Awake()
         {
-            rb = GetComponent<Rigidbody>();
+            if(!rb)
+                rb = GetComponent<Rigidbody>();
         }
 
         public void SetGun(Gun gun)

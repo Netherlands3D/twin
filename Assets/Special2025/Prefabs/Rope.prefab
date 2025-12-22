@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1885071565005032971}
   - component: {fileID: 5067472827406088515}
+  - component: {fileID: 4834988545243783099}
   m_Layer: 0
   m_Name: Rope
   m_TagString: Untagged
@@ -84,6 +85,23 @@ MonoBehaviour:
   segmentPrefab: {fileID: 5762470443586899808, guid: e1658fcdfdec1424baef5fa46f734541,
     type: 3}
   segmentCount: 10
+--- !u!114 &4834988545243783099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2731009277449144939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 437ab97a0a28143ccbf01bc2ab7a56f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  splatVisual: {fileID: 0}
+  breakForce: 1000
+  rb: {fileID: 257914108873252825}
+  Cooldown: 0.5
+  Power: 60
 --- !u!1001 &1193882193194280353
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -237,6 +255,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1658fcdfdec1424baef5fa46f734541, type: 3}
+--- !u!54 &257914108873252825 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: -7042574021704089034, guid: e1658fcdfdec1424baef5fa46f734541,
+    type: 3}
+  m_PrefabInstance: {fileID: 2150340997167226351}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &664415028012576191 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1508690811947216976, guid: e1658fcdfdec1424baef5fa46f734541,
