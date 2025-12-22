@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Netherlands3D
 {
@@ -10,7 +13,7 @@ namespace Netherlands3D
         [SerializeField] private int segmentCount = 10;
         // [SerializeField] private float totalLength;
 
-        private Transform[] joints = Array.Empty<Transform>();
+        private Rigidbody[] joints = Array.Empty<Rigidbody>();
 
         private float totalWeight = 10;
         private float drag = 1;
@@ -24,14 +27,21 @@ namespace Netherlands3D
             }
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
+            yield return null; //wait a frame so the gun applies the force to the start segment
             GenerateSegments();
+            var startSegmentSpeed = start.GetComponent<Rigidbody>().linearVelocity;
+            foreach (var rb in GetComponentsInChildren<Rigidbody>())
+            {
+                rb.linearVelocity = startSegmentSpeed * Random.Range(0.9f, 1.1f);
+                rb.angularVelocity = Vector3.zero;
+            }
         }
 
         private void GenerateSegments()
         {
-            joints = new Transform[segmentCount-1];
+            joints = new Rigidbody[segmentCount-1];
             var previousTransform = start;
             JoinSegment(previousTransform, null); //start
             var dir = (end.position - start.position);
@@ -40,7 +50,11 @@ namespace Netherlands3D
             {
                 var pos = previousTransform.position + (dir / segmentCount);
                 var segment = Instantiate(segmentPrefab, pos, Quaternion.identity, segmentContainer);
-                joints[i] = segment.transform;
+                
+                var joint =  segment.GetComponent<Rigidbody>();
+                joint.maxAngularVelocity = 25f;
+                joint.maxLinearVelocity = 50f;
+                joints[i] = joint;
 
                 JoinSegment(segment.transform, previousTransform, false);
 
@@ -52,12 +66,6 @@ namespace Netherlands3D
 
         private void JoinSegment(Transform currentJoint, Transform connectedJoint, bool isClosed = false)
         {
-            // var rb = currentJoint.GetComponent<Rigidbody>();
-            // rb.isKinematic = isKinematic;
-            // rb.mass = totalWeight / segmentCount;
-            // rb.linearDamping = drag;
-            // rb.angularDamping = angularDrag;
-            //
             if (connectedJoint == null)
                 return;
 
