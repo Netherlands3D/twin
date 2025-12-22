@@ -123,13 +123,13 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void GetGroundPosition()
         {
-            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * stepHeight, Vector3.down, (point, hit) =>
+            if(Physics.Raycast(transform.position + Vector3.up * stepHeight, Vector3.down, out RaycastHit hit, 500, snappingCullingMask))
             {
-                if (hit)
+                if (hit.collider != null)
                 {
-                    yPositionTarget = point.y;
+                    yPositionTarget = hit.point.y;
                 }
-            }, snappingCullingMask);
+            }
         }
 
         private void CheckGroundCollision()
