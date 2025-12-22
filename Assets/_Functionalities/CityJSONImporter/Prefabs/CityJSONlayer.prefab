@@ -12,10 +12,9 @@ GameObject:
   - component: {fileID: 4033951798068751712}
   - component: {fileID: 1646213389209705716}
   - component: {fileID: -7506931798047145048}
-  - component: {fileID: 2362124063262672280}
-  - component: {fileID: -8031406265216150104}
   - component: {fileID: -5290351893147975871}
   - component: {fileID: 5482031777458148174}
+  - component: {fileID: 5469177947320262563}
   m_Layer: 0
   m_Name: CityJSONlayer
   m_TagString: Untagged
@@ -65,13 +64,11 @@ MonoBehaviour:
   onLayerReady:
     m_PersistentCalls:
       m_Calls: []
-  OnStylingApplied:
-    m_PersistentCalls:
-      m_Calls: []
   DebugBoundingBox: 0
   objectCreated:
     m_PersistentCalls:
       m_Calls: []
+  scaleUnitCharacter: '%'
 --- !u!114 &1646213389209705716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,34 +100,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 512c87952c34d4e5aa3c6f45f74c8731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2362124063262672280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9204913902124509902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8cceefce4ff4530b78245056d126688, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672,
-    type: 3}
---- !u!114 &-8031406265216150104
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9204913902124509902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6303d72dc2aa4f61bcacd10f6b5e3e43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 3414392683841753435, guid: c78b9cbfeb6b857479e94e59739d2347,
-    type: 3}
 --- !u!114 &-5290351893147975871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,3 +133,15 @@ MonoBehaviour:
   isCityJSONType:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5469177947320262563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9204913902124509902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddc48b375ab884bad980e4629de70020, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

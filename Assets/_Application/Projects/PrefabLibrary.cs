@@ -22,7 +22,6 @@ namespace Netherlands3D.Twin.Projects
     public class PrefabLibrary : ScriptableObject
     {
         public LayerGameObject fallbackPrefab;
-        public PlaceholderLayerGameObject placeholderPrefab;
         public List<PrefabGroup> prefabGroups;
         [NonSerialized] private List<PrefabGroup> prefabRuntimeGroups = new();
         public List<PrefabGroup> PrefabRuntimeGroups => prefabRuntimeGroups;

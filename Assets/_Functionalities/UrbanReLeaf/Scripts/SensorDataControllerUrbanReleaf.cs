@@ -20,14 +20,14 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
         private const string observationLimitKey = "&observations_limit=";
         private const string timeFormatSpecifier = "s";        
 
-        private static StringBuilder strBuilder;       
+        private static StringBuilder strBuilder;
 
-        public override void Start()
+        public override void Awake()
         {
             strBuilder = new StringBuilder();
             defaultStartDate = new DateTime(2024, 7, 1);
             defaultEndDate = new DateTime(2024, 8, 31);
-            base.Start();
+            base.Awake();
         }
 
         public override UnityWebRequest GetRequest(Tile tile, string baseUrl)

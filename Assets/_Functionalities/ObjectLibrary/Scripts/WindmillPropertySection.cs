@@ -1,23 +1,24 @@
+using System.Collections.Generic;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Functionalities.ObjectLibrary
 {
-    public class WindmillPropertySection : MonoBehaviour
+    [PropertySection(typeof(WindmillPropertyData))]
+    public class WindmillPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
-        private Windmill windmill;
         [SerializeField] private Slider axisHeightSlider;
         [SerializeField] private Slider rotorDiameterSlider;
 
-        public Windmill Windmill
+        private WindmillPropertyData propertyData;
+
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            get => windmill;
-            set
-            {
-                windmill = value;
-                axisHeightSlider.value = windmill.AxisHeight;
-                rotorDiameterSlider.value = windmill.RotorDiameter;
-            }
+            propertyData = properties.Get<WindmillPropertyData>();
+            axisHeightSlider.value = propertyData.AxisHeight;
+            rotorDiameterSlider.value = propertyData.RotorDiameter;
         }
 
         private void OnEnable()
@@ -25,7 +26,7 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             axisHeightSlider.onValueChanged.AddListener(HandleAxisHeightChange);
             rotorDiameterSlider.onValueChanged.AddListener(HandleRotorDiameterChange);
         }
-        
+
         private void OnDisable()
         {
             axisHeightSlider.onValueChanged.RemoveListener(HandleAxisHeightChange);
@@ -34,12 +35,12 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
 
         private void HandleAxisHeightChange(float newValue)
         {
-            windmill.AxisHeight = newValue;
+            propertyData.AxisHeight = newValue;
         }
 
         private void HandleRotorDiameterChange(float newValue)
         {
-            windmill.RotorDiameter = newValue;
+            propertyData.RotorDiameter = newValue;
         }
     }
 }

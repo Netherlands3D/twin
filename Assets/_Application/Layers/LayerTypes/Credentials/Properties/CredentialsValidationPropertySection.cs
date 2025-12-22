@@ -1,14 +1,19 @@
 using System;
+using System.Collections.Generic;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 {
-    public class CredentialsValidationPropertySection : MonoBehaviour, ICredentialsPropertySection
+    [PropertySection(typeof(CredentialsRequiredPropertyData))]
+    public class CredentialsValidationPropertySection : MonoBehaviour, ICredentialsPropertySection, IVisualizationWithPropertyData
     {
         private ICredentialHandler handler;
 
+        [SerializeField] private GameObject statusPanel;
         [SerializeField] private GameObject validCredentialsPanel;
         [SerializeField] private GameObject invalidCredentialsPanel;
 
@@ -18,16 +23,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
             set
             {
                 handler?.OnAuthorizationHandled.RemoveListener(OnCredentialsHandled);
-
                 handler = value;
-
-                OnCredentialsHandled(handler.Uri, handler.Authorization);
                 handler.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
             }
         }
 
+        private void Awake()
+        {
+            Handler = GetComponent<ICredentialHandler>();
+        }
+
         private void Start()
-        {            
+        {
             handler?.OnAuthorizationHandled.AddListener(OnCredentialsHandled);
         }
 
@@ -38,13 +45,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties
 
         private void OnCredentialsHandled(Uri uri, StoredAuthorization auth)
         {
-            var accepted = auth is not FailedOrUnsupported;
-
-            if(accepted)
-                gameObject.SetActive(true);
+            var accepted = auth != null && auth is not FailedOrUnsupported;
+            
+            if (accepted)//we always want to show the status if credentials are accepted, however we might still want to display the error of the input panel if it was not accepted
+                statusPanel.SetActive(true);
     
             validCredentialsPanel.SetActive(accepted);
             invalidCredentialsPanel.SetActive(!accepted);
+        }
+
+        public void LoadProperties(List<LayerPropertyData> properties)
+        {
+            Handler.Uri = properties.Get<LayerURLPropertyData>().Url;
+            Handler.ApplyCredentials();
+        }
+        
+        public void ResetStatusPanel(bool validCredentials)
+        {
+            statusPanel.SetActive(true);
+            validCredentialsPanel.SetActive(validCredentials);
+            invalidCredentialsPanel.SetActive(!validCredentials);
         }
     }
 }

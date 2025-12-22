@@ -10,16 +10,17 @@ using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Functionalities.CityJSON
 {
     [RequireComponent(typeof(CityJSONLayerGameObject))]
-    public class CityJSONSpawner : MonoBehaviour, ILayerWithPropertyData
+    public class CityJSONSpawner : MonoBehaviour, IVisualizationWithPropertyData, IImportedObject
     {
         [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
         private CityJSONPropertyData propertyData = new();
         private CityJSONLayerGameObject layerGameObject;
-        public LayerPropertyData PropertyData => propertyData;
+        public UnityEvent<GameObject> ObjectVisualized { get; } = new();
 
         private TransformLayerPropertyData TransformLayerPropertyData =>
             layerGameObject.LayerData.GetProperty<TransformLayerPropertyData>();
@@ -70,10 +71,17 @@ namespace Netherlands3D.Functionalities.CityJSON
                 foreach (var visualizer in visualizers)
                 {
                     layerGameObject.AddFeature(visualizer);
+                    visualizer.cityObjectVisualized.AddListener(OnObjectVisualized);
                 }
             }
 
             SetCityJSONPosition(cityJson);
+        }
+
+        private void OnObjectVisualized(CityObjectVisualizer visualizer)
+        {
+            ObjectVisualized.Invoke(visualizer.gameObject);
+            visualizer.cityObjectVisualized.RemoveListener(OnObjectVisualized);
         }
 
         private void SetCityJSONPosition(CityJson.Structure.CityJSON cityJson)
