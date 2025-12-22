@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d923de955f294562b5be072fac17cfb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultProjectFileName: ProjectTemplate.nl3d
+  defaultProjectFileName: ProjectTemplateSpecial2025.nl3d
   projectDataStore: {fileID: 11400000, guid: d44646dfa83fba241ac198123f4db956, type: 2}
   undoStack: []
   redoStack: []
