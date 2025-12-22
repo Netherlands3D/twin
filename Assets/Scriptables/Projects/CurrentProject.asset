@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ProjectData
   m_EditorClassIdentifier: 
   Version: 1
-  SavedTimestamp: 20241008130521
-  UUID: 6a9f1798-d710-4956-96da-f109deb1487c
+  SavedTimestamp: 20251222123155
+  UUID: fd38b2b1-33df-4999-8b32-8cfcdf0fc110
   CameraRotation:
-  - 60.000003814697266
+  - 90
   - 0
   - 0
   UseCurrentTime: 0

@@ -3,10 +3,20 @@ using UnityEngine;
 
 namespace Netherlands3D
 {
-    public class SplattableObject : MonoBehaviour
+    [RequireComponent(typeof(Rigidbody))]
+    public class Projectile : MonoBehaviour
     {
         [SerializeField] private GameObject splatVisual;
         
+        public Rigidbody rb;
+        public float Cooldown = 0.5f;
+        public float Power = 60f;
+
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody>();
+        }
+
         private void OnCollisionEnter(Collision col)
         {
             if (col.contactCount == 0)

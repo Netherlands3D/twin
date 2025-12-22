@@ -44,8 +44,8 @@ namespace Netherlands3D
         public List<GameObject> projectilePrefabs = new List<GameObject>();
         private string selectedPrefabName = "Cube";
         
-        private Dictionary<string, List<Rigidbody>> projectilePool = new Dictionary<string, List<Rigidbody>>();
-        private Dictionary<string, List<Rigidbody>> projectileActive = new Dictionary<string, List<Rigidbody>>();
+        private Dictionary<string, List<Projectile>> projectilePool = new Dictionary<string, List<Projectile>>();
+        private Dictionary<string, List<Projectile>> projectileActive = new Dictionary<string, List<Projectile>>();
         
         private void OnValidate()
         {
@@ -98,12 +98,13 @@ namespace Netherlands3D
             {
                 if (cd < 0)
                 {
-                    cd = cooldown;
                     OnFire();
+                    
+                    cd = cooldown;
                 }
             }
 
-            foreach(KeyValuePair<string, List<Rigidbody>> proj in projectileActive)
+            foreach(KeyValuePair<string, List<Projectile>> proj in projectileActive)
                 if (proj.Value.Count > maxProjectiles)
                 {
                     Despawn(proj.Value[0]);
@@ -115,16 +116,19 @@ namespace Netherlands3D
             Vector2 screenPosition =  Pointer.current.position.ReadValue();
             Vector3 pos = fpvCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, fpvCamera.nearClipPlane));
 
-            Rigidbody rb = SpawnProjectile(pos, selectedPrefabName);
-            rb?.AddForce(fpvCamera.transform.forward * projectileSpeed, ForceMode.Impulse);
+            Projectile projectile = SpawnProjectile(pos, selectedPrefabName);
+            cooldown = projectile.Cooldown;
+            projectileSpeed = projectile.Power;
+            
+            projectile.rb.AddForce(fpvCamera.transform.forward * projectileSpeed, ForceMode.Impulse);
         }
 
-        private Rigidbody SpawnProjectile(Vector3 position, string type)
+        private Projectile SpawnProjectile(Vector3 position, string type)
         {
-            Rigidbody projectileRb;
+            Projectile projectile;
             if (projectilePool.ContainsKey(type) && projectilePool[type].Count > 0)
             {
-                projectileRb = projectilePool[type][0];
+                projectile = projectilePool[type][0];
                 projectilePool[type].RemoveAt(0);
             }
             else
@@ -137,29 +141,29 @@ namespace Netherlands3D
                 }
 
                 GameObject test = Instantiate(prefab);
-                projectileRb = test.AddComponent<Rigidbody>();    
+                projectile = test.GetComponent<Projectile>();    
             }
-            projectileRb.position = position;   
+            projectile.gameObject.transform.position = position;   
             if(!projectileActive.ContainsKey(type))
-                projectileActive.Add(type, new List<Rigidbody>());
+                projectileActive.Add(type, new List<Projectile>());
             
-            projectileActive[type].Add(projectileRb);
-            ResetRigidBody(projectileRb);
-            return projectileRb;
+            projectileActive[type].Add(projectile);
+            ResetRigidBody(projectile.rb);
+            return projectile;
         }
 
-        private void Despawn(Rigidbody obj)
+        private void Despawn(Projectile obj)
         {
-            ResetRigidBody(obj);
+            ResetRigidBody(obj.rb);
             
-            string type = obj.name;
+            string type = obj.gameObject.name;
             type = type.Replace("(Clone)", "");
             bool removed = projectileActive[type].Remove(obj); //should be present
             if(!removed)
                 Debug.LogError("projectile was not in the active list");
             
             if(!projectilePool.ContainsKey(type))
-                projectilePool.Add(type, new List<Rigidbody>());
+                projectilePool.Add(type, new List<Projectile>());
             
             projectilePool[type].Add(obj);
         }
