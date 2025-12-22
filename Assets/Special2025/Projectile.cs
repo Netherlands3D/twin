@@ -6,6 +6,8 @@ namespace Netherlands3D
     [RequireComponent(typeof(Rigidbody))]
     public class Projectile : MonoBehaviour
     {
+        public GameObject SplatVisual => splatVisual;
+        
         [SerializeField] private GameObject splatVisual;
 
         [SerializeField] private float breakForce = 100f;

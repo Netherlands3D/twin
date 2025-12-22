@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Netherlands3D.FirstPersonViewer;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 
 namespace Netherlands3D
 {
@@ -46,10 +48,12 @@ namespace Netherlands3D
         private Dictionary<string, List<Projectile>> projectilePool = new Dictionary<string, List<Projectile>>();
         private Dictionary<string, List<Projectile>> projectileActive = new Dictionary<string, List<Projectile>>();
         
-        private void OnValidate()
-        {
-            
-        }
+        private ProjectileSelected projectileUI;
+        
+        // private void OnValidate()
+        // {
+        //     SetProjectileSelected(selectedPrefabIndex);
+        // }
 
         
         private void Awake()
@@ -70,8 +74,24 @@ namespace Netherlands3D
             
             fpvCamera = FindObjectOfType<FirstPersonViewerCamera>().GetComponent<Camera>();
             
-            cd = cooldown;
             
+            
+            cd = cooldown;
+        }
+
+        private void Start()
+        {
+            
+            SetProjectileSelected(selectedPrefabIndex);
+        }
+
+        private void SetProjectileSelected(int index)
+        {
+            if(index < 0 || index >= projectilePrefabs.Count)
+                index = 0;
+           
+            projectileUI = FindAnyObjectByType<ProjectileSelected>();
+            projectileUI.SetImage(projectilePrefabs[index]);
         }
 
         private void OnClickHandler(InputAction.CallbackContext context)
