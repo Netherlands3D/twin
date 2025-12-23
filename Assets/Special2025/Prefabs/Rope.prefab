@@ -83,7 +83,7 @@ MonoBehaviour:
   breakForce: 10000000
   rb: {fileID: 257914108873252825}
   Cooldown: 1
-  Power: 40
+  Power: 300
 --- !u!114 &5067472827406088515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,7 +103,7 @@ MonoBehaviour:
     type: 3}
   segmentPrefab: {fileID: 6521755229256326403, guid: dcaaa3fb16daf4283b274ec94c1c79a1,
     type: 3}
-  segmentCount: 8
+  segmentCount: 10
 --- !u!1001 &1193882193194280353
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -115,12 +115,12 @@ PrefabInstance:
     - target: {fileID: -7042574021704089034, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: m_Mass
-      value: 1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1508690811947216976, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 1508690811947216976, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
@@ -170,7 +170,7 @@ PrefabInstance:
     - target: {fileID: 1880696187413426056, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: kinematicOnCollision
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5762470443586899808, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
@@ -199,12 +199,17 @@ PrefabInstance:
     - target: {fileID: -7042574021704089034, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: m_Mass
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -7042574021704089034, guid: e1658fcdfdec1424baef5fa46f734541,
+        type: 3}
+      propertyPath: m_CollisionDetection
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1508690811947216976, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1508690811947216976, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
@@ -254,7 +259,7 @@ PrefabInstance:
     - target: {fileID: 1880696187413426056, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: kinematicOnCollision
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5762470443586899808, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}

@@ -142,7 +142,7 @@ namespace Netherlands3D
         )
         {
             Vector3 dir = b - a;
-            float length = dir.magnitude;
+            float length = dir.magnitude*10;// why x10 i dont know?
 
             // Position in the middle
             mesh.position = a + dir * 0.5f;
