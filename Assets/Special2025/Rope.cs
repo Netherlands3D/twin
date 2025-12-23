@@ -107,8 +107,10 @@ namespace Netherlands3D
             var jointGO = Instantiate(jointPrefab, newPos, Quaternion.identity, jointContainer);
             jointGO.name = "joint " + (joints.Count - 1);
             var rb = jointGO.GetComponent<Rigidbody>();
-            rb.maxAngularVelocity = 25f;
-            rb.maxLinearVelocity = 50f;
+            rb.linearVelocity = previous.GetComponent<Rigidbody>().linearVelocity *0.9f;
+            rb.angularVelocity = previous.GetComponent<Rigidbody>().angularVelocity*0.9f;
+            rb.maxAngularVelocity = 2f;
+            rb.maxLinearVelocity = 20f;
 
             ConnectJoint(jointGO.transform, previous);
             ConnectJoint(end, jointGO.transform, true);
@@ -116,7 +118,7 @@ namespace Netherlands3D
             // Update lists
             joints.Insert(joints.Count - 1, rb);
 
-            var segGO = Instantiate(segmentPrefab, jointContainer);
+            var segGO = Instantiate(segmentPrefab, segmentContainer);
             segments.Insert(segments.Count - 1, segGO.GetComponent<SpawnLights>());
         }
         
@@ -156,7 +158,7 @@ namespace Netherlands3D
             linearLimit.limit = Vector3.Distance(start.position, end.position) / (joints.Count - 1);
             joint.linearLimit = linearLimit;
 
-            var linearDrive = new JointDrive { positionSpring = 0f, positionDamper = 5f, maximumForce = Mathf.Infinity };
+            var linearDrive = new JointDrive { positionSpring = 0f, positionDamper = 20f, maximumForce = Mathf.Infinity };
             joint.xDrive = linearDrive;
             joint.yDrive = linearDrive;
             joint.zDrive = linearDrive;
