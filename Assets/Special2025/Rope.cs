@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using NetTopologySuite.Triangulate;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,7 +11,7 @@ namespace Netherlands3D
         [SerializeField] private GameObject jointPrefab;
         [SerializeField] private GameObject segmentPrefab;
         [SerializeField] private int segmentCount = 10;
-        private Transform[] ropeMeshes;
+        private SpawnLights[] segments;
         private Rigidbody[] joints = Array.Empty<Rigidbody>();
 
         private float totalWeight = 10;
@@ -43,7 +41,7 @@ namespace Netherlands3D
 
         private void Update()
         {
-            if (ropeMeshes == null)
+            if (segments == null)
                 return;
 
             UpdateMeshes();
@@ -110,25 +108,25 @@ namespace Netherlands3D
 
         private void GenerateMeshes()
         {
-            ropeMeshes = new Transform[joints.Length - 1];
+            segments = new SpawnLights[joints.Length - 1];
 
-            for (int i = 0; i < ropeMeshes.Length; i++)
+            for (int i = 0; i < segments.Length; i++)
             {
-                var mesh = Instantiate(
+                var go = Instantiate(
                     segmentPrefab,
                     jointContainer
                 );
 
-                ropeMeshes[i] = mesh.transform;
+                segments[i] = go.GetComponent<SpawnLights>();
             }
         }
 
         private void UpdateMeshes()
         {
-            for (int i = 0; i < ropeMeshes.Length; i++)
+            for (int i = 0; i < segments.Length; i++)
             {
                 UpdateSegmentMesh(
-                    ropeMeshes[i],
+                    segments[i],
                     joints[i].position,
                     joints[i+1].position
                 );
@@ -136,25 +134,25 @@ namespace Netherlands3D
         }
 
         private void UpdateSegmentMesh(
-            Transform mesh,
+            SpawnLights segment,
             Vector3 a,
             Vector3 b
         )
         {
             Vector3 dir = b - a;
-            float length = dir.magnitude*10;// why x10 i dont know?
+            float length = dir.magnitude/2;
 
             // Position in the middle
-            mesh.position = a + dir * 0.5f;
+            segment.transform.position = a + dir * 0.5f;
 
             // Rotate to face B
-            mesh.rotation = Quaternion.LookRotation(dir);
+            segment.transform.rotation = Quaternion.LookRotation(dir) * Quaternion.Euler(90, 0, 0);
 
             // Scale along Z to match distance
-            mesh.localScale = new Vector3(
-                mesh.localScale.x,
-                mesh.localScale.y,
-                length
+            segment.cylinder.localScale = new Vector3(
+                segment.cylinder.localScale.x,
+                length,
+                segment.cylinder.localScale.z
             );
         }
     }

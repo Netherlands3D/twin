@@ -80,6 +80,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   splatVisual: {fileID: 0}
+  deathVisual: {fileID: 0}
   breakForce: 10000000
   rb: {fileID: 257914108873252825}
   Cooldown: 1
@@ -103,7 +104,7 @@ MonoBehaviour:
     type: 3}
   segmentPrefab: {fileID: 6521755229256326403, guid: dcaaa3fb16daf4283b274ec94c1c79a1,
     type: 3}
-  segmentCount: 10
+  segmentCount: 15
 --- !u!1001 &1193882193194280353
 PrefabInstance:
   m_ObjectHideFlags: 0
