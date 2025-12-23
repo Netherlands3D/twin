@@ -1,0 +1,22 @@
+{
+    "name": "eu.netherlands3d.tilekit.Editor",
+    "rootNamespace": "Netherlands3D.Tilekit.Editor",
+    "references": [
+        "GUID:b098fab306ab1de4f98d515a587b18de",
+        "GUID:e0cd26848372d4e5c891c569017e11f1",
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:b46779583a009f04ba9f5f31d0e7e6ac",
+        "GUID:19c45768ddcd67943afbf0cb4e4ff0b3"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
