@@ -53,8 +53,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 50
+  MaxDistance: 700
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -89,7 +89,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -182,8 +182,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 200
+  MinDistance: 10
+  MaxDistance: 250
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -218,7 +218,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -346,6 +346,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: edf09d63b95b9ab4ebe9cd01d61c9f31,
         type: 3}
       insertIndex: -1
+      addedObject: {fileID: 2112078454036044779}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: edf09d63b95b9ab4ebe9cd01d61c9f31,
+        type: 3}
+      insertIndex: -1
       addedObject: {fileID: 3156096590435997983}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: edf09d63b95b9ab4ebe9cd01d61c9f31,
         type: 3}
@@ -461,60 +465,76 @@ MonoBehaviour:
   fuseTime: 2
   fireworkTrailParticle: {fileID: 2938876071064020442}
   fireworkParticle: {fileID: 4048650641663744723}
+  fireworkBallParticle: {fileID: 3691249068905694335}
   trailParticle: {fileID: 103199714709319210}
   fireworkShow:
   - delayBetweenShots: 0.9
-    hasTrail: 1
+    fireworKType: 1
     shotCount: 8
     burstCount: 2
     endDelay: 0.75
   - delayBetweenShots: 0.2
-    hasTrail: 0
+    fireworKType: 0
     shotCount: 8
     burstCount: 1
     endDelay: 1
+  - delayBetweenShots: 0.15
+    fireworKType: 2
+    shotCount: 10
+    burstCount: 3
+    endDelay: 0.3
   - delayBetweenShots: 0.6
-    hasTrail: 1
+    fireworKType: 1
     shotCount: 7
     burstCount: 1
     endDelay: 1
   - delayBetweenShots: 0.9
-    hasTrail: 0
+    fireworKType: 0
     shotCount: 6
     burstCount: 5
     endDelay: 2
   - delayBetweenShots: 2
-    hasTrail: 1
+    fireworKType: 1
     shotCount: 2
     burstCount: 10
     endDelay: 1
   - delayBetweenShots: 1
-    hasTrail: 1
+    fireworKType: 1
     shotCount: 6
     burstCount: 5
     endDelay: 1.5
   - delayBetweenShots: 1
-    hasTrail: 1
+    fireworKType: 1
     shotCount: 2
     burstCount: 1
     endDelay: 3
   - delayBetweenShots: 0.5
-    hasTrail: 1
+    fireworKType: 1
     shotCount: 5
     burstCount: 10
     endDelay: 2
   - delayBetweenShots: 1.5
-    hasTrail: 1
+    fireworKType: 1
     shotCount: 3
     burstCount: 20
     endDelay: 2
+  - delayBetweenShots: 0.2
+    fireworKType: 2
+    shotCount: 30
+    burstCount: 3
+    endDelay: 2
   - delayBetweenShots: 0.1
-    hasTrail: 1
+    fireworKType: 1
     shotCount: 25
     burstCount: 2
     endDelay: 2
+  - delayBetweenShots: 0.2
+    fireworKType: 2
+    shotCount: 4
+    burstCount: 30
+    endDelay: 0.5
   - delayBetweenShots: 0.1
-    hasTrail: 1
+    fireworKType: 1
     shotCount: 1
     burstCount: 30
     endDelay: 2
@@ -709,4 +729,84 @@ ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 2256019613145760538, guid: 426bf3a9382e00149b94d94edce1b919,
     type: 3}
   m_PrefabInstance: {fileID: 4000887336013702848}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6064172454414569852
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1254454056619004069}
+    m_Modifications:
+    - target: {fileID: 1539393552665697253, guid: f2ff993de005eb6419181e0f4466144b,
+        type: 3}
+      propertyPath: m_Name
+      value: Firework Pop
+      objectReference: {fileID: 0}
+    - target: {fileID: 5289434461233334935, guid: f2ff993de005eb6419181e0f4466144b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5289434461233334935, guid: f2ff993de005eb6419181e0f4466144b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.47
+      objectReference: {fileID: 0}
+    - target: {fileID: 5289434461233334935, guid: f2ff993de005eb6419181e0f4466144b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5289434461233334935, guid: f2ff993de005eb6419181e0f4466144b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5289434461233334935, guid: f2ff993de005eb6419181e0f4466144b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5289434461233334935, guid: f2ff993de005eb6419181e0f4466144b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5289434461233334935, guid: f2ff993de005eb6419181e0f4466144b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5289434461233334935, guid: f2ff993de005eb6419181e0f4466144b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 5289434461233334935, guid: f2ff993de005eb6419181e0f4466144b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5289434461233334935, guid: f2ff993de005eb6419181e0f4466144b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f2ff993de005eb6419181e0f4466144b, type: 3}
+--- !u!4 &2112078454036044779 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5289434461233334935, guid: f2ff993de005eb6419181e0f4466144b,
+    type: 3}
+  m_PrefabInstance: {fileID: 6064172454414569852}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &3691249068905694335 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7426919361598412035, guid: f2ff993de005eb6419181e0f4466144b,
+    type: 3}
+  m_PrefabInstance: {fileID: 6064172454414569852}
   m_PrefabAsset: {fileID: 0}

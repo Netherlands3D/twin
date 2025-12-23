@@ -53,7 +53,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 25
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -89,7 +89,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -182,7 +182,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 10
   MaxDistance: 200
   Pan2D: 0
   rolloffMode: 0
@@ -218,7 +218,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -455,25 +455,26 @@ MonoBehaviour:
   fuseTime: 2
   fireworkTrailParticle: {fileID: 8599066242328250469}
   fireworkParticle: {fileID: 4874449429874240001}
+  fireworkBallParticle: {fileID: 0}
   trailParticle: {fileID: 6841067473870406549}
   fireworkShow:
   - delayBetweenShots: 2
-    hasTrail: 1
+    fireworKType: 0
     shotCount: 4
     burstCount: 1
     endDelay: 1
   - delayBetweenShots: 0.25
-    hasTrail: 0
+    fireworKType: 0
     shotCount: 10
     burstCount: 1
     endDelay: 1
   - delayBetweenShots: 2
-    hasTrail: 1
+    fireworKType: 0
     shotCount: 2
     burstCount: 1
     endDelay: 2
   - delayBetweenShots: 3
-    hasTrail: 1
+    fireworKType: 0
     shotCount: 4
     burstCount: 5
     endDelay: 2
