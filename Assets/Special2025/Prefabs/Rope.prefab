@@ -87,7 +87,8 @@ MonoBehaviour:
   - {fileID: 257914108873252825}
   - {fileID: 1067992730949216151}
   activeRbIndex: 0
-  thumbnailPrefab: {fileID: 0}
+  thumbnailPrefab: {fileID: 6510139233617388915, guid: da050b1063d4340aea0d2a00dd5819c9,
+    type: 3}
   Cooldown: 0.5
   Power: 1500
   IsSticky: 0
