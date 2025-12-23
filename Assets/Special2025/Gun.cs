@@ -41,6 +41,7 @@ namespace Netherlands3D
         private float cd;
         private bool isShooting = false;
         private float charge = 0f;
+        private float spawnStartDistance = 0.5f;
 
         private int maxProjectiles = 10;
         
@@ -58,6 +59,9 @@ namespace Netherlands3D
         // {
         //     SetProjectileSelected(selectedPrefabIndex);
         // }
+        
+        //sticky objects
+        //iets verder van camera af spawnen
 
         
         private void Awake()
@@ -88,7 +92,7 @@ namespace Netherlands3D
             projectileUI = FindAnyObjectByType<ProjectileSelected>();
             projectileUI.next.onClick.AddListener(NextProjectile);
             projectileUI.previous.onClick.AddListener(PreviousProjectile);
-            projectileUI.Powericon.transform.parent.gameObject.SetActive(false);
+            projectileUI.SetPowerEnabled(false);
             
             SetProjectileSelected(selectedPrefabIndex);
         }
@@ -112,12 +116,18 @@ namespace Netherlands3D
 
             selectedPrefabIndex = index;
             projectileUI.SetImage(projectilePrefabs[index]);
+            
+            int count = projectilePrefabs.Count;
+            int prev = (index - 1 + count) % count;
+            int next = (index + 1) % count;
+            projectileUI.SetImageForPrevious(projectilePrefabs[prev]);
+            projectileUI.SetImageForNext(projectilePrefabs[next]);
         }
-
+        
         private void OnClickHandler(InputAction.CallbackContext context)
         {
             isShooting = true;
-            projectileUI.Powericon.transform.parent.gameObject.SetActive(true);
+            projectileUI.SetPowerEnabled(true);
         }
         
         private void OnClickStopHandler(InputAction.CallbackContext context)
@@ -131,7 +141,7 @@ namespace Netherlands3D
                 }
             }
             isShooting = false;
-            projectileUI.Powericon.transform.parent.gameObject.SetActive(false);
+            projectileUI.SetPowerEnabled(false);
         }
 
         private void Update()
@@ -161,7 +171,7 @@ namespace Netherlands3D
             Vector2 screenPosition =  Pointer.current.position.ReadValue();
             Vector3 pos = fpvCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, fpvCamera.nearClipPlane));
 
-            Projectile projectile = SpawnProjectile(pos, projectilePrefabs[selectedPrefabIndex].name);
+            Projectile projectile = SpawnProjectile(pos + fpvCamera.transform.forward.normalized * spawnStartDistance, projectilePrefabs[selectedPrefabIndex].name);
             cooldown = projectile.Cooldown;
             projectileSpeed = projectile.Power * charge;
             
@@ -189,11 +199,12 @@ namespace Netherlands3D
                 projectile = test.GetComponentInChildren<Projectile>();    
             }
             projectile.gameObject.transform.position = position;   
+            projectile.gameObject.transform.rotation = Quaternion.identity;
             if(!projectileActive.ContainsKey(type))
                 projectileActive.Add(type, new List<Projectile>());
             
             projectileActive[type].Add(projectile);
-            ResetRigidBody(projectile.rb);
+            projectile.Reset();
             projectile.SetGun(this);
             projectile.SetAlive(true);
             return projectile;
@@ -201,8 +212,16 @@ namespace Netherlands3D
 
         public void Despawn(Projectile obj)
         {
+            if(!obj.IsAlive) return;
+            
             obj.SetAlive(false);
-            ResetRigidBody(obj.rb);
+            
+            Projectile[] children = obj.gameObject.GetComponentsInChildren<Projectile>();
+            foreach(Projectile child in children)
+                Despawn(child);
+            
+            transform.parent = null; 
+            obj.Reset();
             
             string type = obj.gameObject.name;
             type = type.Replace("(Clone)", "");
@@ -215,14 +234,6 @@ namespace Netherlands3D
             
             projectilePool[type].Add(obj);
             obj.SetGun(null);
-        }
-
-        private void ResetRigidBody(Rigidbody obj)
-        {
-            obj.linearVelocity = Vector3.zero;
-            obj.angularVelocity = Vector3.zero;
-            //obj.Sleep();                 
-            obj.ResetInertiaTensor();    
         }
     }
 }
