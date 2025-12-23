@@ -116,8 +116,14 @@ namespace Netherlands3D
 
             selectedPrefabIndex = index;
             projectileUI.SetImage(projectilePrefabs[index]);
+            
+            int count = projectilePrefabs.Count;
+            int prev = (index - 1 + count) % count;
+            int next = (index + 1) % count;
+            projectileUI.SetImageForPrevious(projectilePrefabs[prev]);
+            projectileUI.SetImageForNext(projectilePrefabs[next]);
         }
-
+        
         private void OnClickHandler(InputAction.CallbackContext context)
         {
             isShooting = true;

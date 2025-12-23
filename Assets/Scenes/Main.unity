@@ -1124,7 +1124,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: ProjectileUI
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6167659158257514188, guid: c187e73f4487f5a5c9f2f3e75d84abe3, type: 3}
+    - {fileID: 1763523799701402302, guid: c187e73f4487f5a5c9f2f3e75d84abe3, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

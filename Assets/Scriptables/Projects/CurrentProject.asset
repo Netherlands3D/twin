@@ -16,7 +16,7 @@ MonoBehaviour:
   SavedTimestamp: 20251222123155
   UUID: fd38b2b1-33df-4999-8b32-8cfcdf0fc110
   CameraRotation:
-  - 60.000003814697266
+  - 90
   - 0
   - 0
   UseCurrentTime: 0

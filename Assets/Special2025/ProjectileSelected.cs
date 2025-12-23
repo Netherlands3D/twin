@@ -24,7 +24,17 @@ namespace Netherlands3D
 
         public void SetImage(GameObject projectilePrefab)
         {
-            projectileIcon.sprite = pt.GetThumbnail(projectilePrefab);;
+            projectileIcon.sprite = pt.GetThumbnail(projectilePrefab);
+        }
+
+        public void SetImageForNext(GameObject projectilePrefab)
+        {
+            nextButton.gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = pt.GetThumbnail(projectilePrefab);
+        }
+        
+        public void SetImageForPrevious(GameObject projectilePrefab)
+        {
+            previousButton.gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = pt.GetThumbnail(projectilePrefab);
         }
 
         public void SetPowerEnabled(bool enabled)
