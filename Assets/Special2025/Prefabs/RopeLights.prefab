@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51619f5cf033247d3b10725d0f926425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lightPrefab: {fileID: 8600735547615349392, guid: 035beb450a57a475a882bc04921d96ec,
+  lightPrefab: {fileID: 6986008122500749467, guid: 09672c4c986454d72be3af8743b1a69d,
     type: 3}
   cylinder: {fileID: 3344405115261045874}
   lightDensity: 1
