@@ -18,9 +18,16 @@ namespace Netherlands3D.Special2025
             yield return new WaitForSeconds(2);
             FirstPersonViewer.FirstPersonViewer firstPersonViewer = ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>();
 
-            //if(Physics.Raycast())
-
-            firstPersonViewer.transform.position = coordinate.ToUnity();
+            Vector3 rayOrigin = coordinate.ToUnity();
+            rayOrigin.y = 300;
+            if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 400))
+            {
+                if (hit.collider != null)
+                {
+                    firstPersonViewer.transform.position = hit.point;
+                } else firstPersonViewer.transform.position = coordinate.ToUnity();
+            }
+            
             firstPersonViewer.OnViewerEntered?.Invoke();
             gameObject.SetActive(false);
         }
