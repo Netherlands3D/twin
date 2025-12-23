@@ -21,7 +21,7 @@ namespace Netherlands3D
         private float angularDrag = 1;
         
         // private float defaultSegmentLength = 0.3f;
-        private float maxSegmentLength = 1f;
+        [SerializeField] private float maxSegmentLength = 0.3f;
 
 #if UNITY_EDITOR
         private void OnDrawGizmos()
@@ -35,22 +35,14 @@ namespace Netherlands3D
 
         private void Start()
         {
-            // yield return null; //wait a frame so the gun applies the force to the start segment
             GenerateInitialRope();
-            //     GenerateJoints();
-            //     GenerateMeshes();
-            //     var startSegmentSpeed = start.GetComponent<Rigidbody>().linearVelocity;
-            //     foreach (var rb in GetComponentsInChildren<Rigidbody>())
-            //     {
-            //         rb.linearVelocity = startSegmentSpeed * Random.Range(0.9f, 1.1f);
-            //         rb.angularVelocity = Vector3.zero;
-            //     }
+
         }
 
         private void Update()
         {
             float lastSegmentDist = Vector3.Distance(joints[^2].position, end.position);
-    // Debug.Log(lastSegmentDist);
+            
             // Add a new joint if stretched
             if (lastSegmentDist > maxSegmentLength && joints.Count < maxSegmentCount)
             {
@@ -198,54 +190,5 @@ namespace Netherlands3D
             segment.transform.rotation = Quaternion.LookRotation(dir) * Quaternion.Euler(90, 0, 0);
             segment.cylinder.localScale = new Vector3(segment.cylinder.localScale.x, length, segment.cylinder.localScale.z);
         }
-        // private void GenerateMeshes()
-        // {
-        //     segments = new SpawnLights[joints.Length - 1];
-        //
-        //     for (int i = 0; i < segments.Length; i++)
-        //     {
-        //         var go = Instantiate(
-        //             segmentPrefab,
-        //             jointContainer
-        //         );
-        //
-        //         segments[i] = go.GetComponent<SpawnLights>();
-        //     }
-        // }
-        //
-        // private void UpdateMeshes()
-        // {
-        //     for (int i = 0; i < segments.Length; i++)
-        //     {
-        //         UpdateSegmentMesh(
-        //             segments[i],
-        //             joints[i].position,
-        //             joints[i+1].position
-        //         );
-        //     }
-        // }
-        //
-        // private void UpdateSegmentMesh(
-        //     SpawnLights segment,
-        //     Vector3 a,
-        //     Vector3 b
-        // )
-        // {
-        //     Vector3 dir = b - a;
-        //     float length = dir.magnitude/2;
-        //
-        //     // Position in the middle
-        //     segment.transform.position = a + dir * 0.5f;
-        //
-        //     // Rotate to face B
-        //     segment.transform.rotation = Quaternion.LookRotation(dir) * Quaternion.Euler(90, 0, 0);
-        //
-        //     // Scale along Z to match distance
-        //     segment.cylinder.localScale = new Vector3(
-        //         segment.cylinder.localScale.x,
-        //         length,
-        //         segment.cylinder.localScale.z
-        //     );
-        // }
     }
 }
