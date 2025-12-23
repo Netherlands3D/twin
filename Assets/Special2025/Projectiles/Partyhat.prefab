@@ -103,7 +103,7 @@ MonoBehaviour:
   breakForce: 10000
   rb: {fileID: 0}
   Cooldown: 0.5
-  Power: 10
+  Power: 60
 --- !u!54 &-7765537399970945386
 Rigidbody:
   m_ObjectHideFlags: 0
