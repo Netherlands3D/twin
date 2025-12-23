@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3039302697647142388}
   - component: {fileID: 5021140353071262633}
   - component: {fileID: 2549784465917176791}
+  - component: {fileID: 8963369870145418283}
   m_Layer: 5
   m_Name: Special Start Screen
   m_TagString: Untagged
@@ -77,6 +78,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8963369870145418283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1338773246703692944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3204b31ad9ff751429d97ca3213c9124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1474373355969427727
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,13 +337,18 @@ PrefabInstance:
     - target: {fileID: 2568988434724862235, guid: 316af653f2625134ab367f8e339c26b9,
         type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2568988434724862235, guid: 316af653f2625134ab367f8e339c26b9,
         type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 2568988434724862235, guid: 316af653f2625134ab367f8e339c26b9,
+        type: 3}
+      propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8963369870145418283}
     - target: {fileID: 2568988434724862235, guid: 316af653f2625134ab367f8e339c26b9,
         type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -349,7 +367,7 @@ PrefabInstance:
     - target: {fileID: 2568988434724862235, guid: 316af653f2625134ab367f8e339c26b9,
         type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetPosition
+      value: SetLocation
       objectReference: {fileID: 0}
     - target: {fileID: 2568988434724862235, guid: 316af653f2625134ab367f8e339c26b9,
         type: 3}
@@ -359,7 +377,7 @@ PrefabInstance:
     - target: {fileID: 2568988434724862235, guid: 316af653f2625134ab367f8e339c26b9,
         type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.FirstPersonViewer.FirstPersonViewer, eu.netherlands3d.twin
+      value: Netherlands3D.Special2025.SpecialStart, eu.netherlands3d.twin
       objectReference: {fileID: 0}
     - target: {fileID: 2568988434724862235, guid: 316af653f2625134ab367f8e339c26b9,
         type: 3}
@@ -633,13 +651,18 @@ PrefabInstance:
     - target: {fileID: 4627320187779630611, guid: 80ebb1a4ed174de4ba2c7c2e383d4d69,
         type: 3}
       propertyPath: onCoordinateFound.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4627320187779630611, guid: 80ebb1a4ed174de4ba2c7c2e383d4d69,
         type: 3}
       propertyPath: onCoordinateFound.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 4627320187779630611, guid: 80ebb1a4ed174de4ba2c7c2e383d4d69,
+        type: 3}
+      propertyPath: onCoordinateFound.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8963369870145418283}
     - target: {fileID: 4627320187779630611, guid: 80ebb1a4ed174de4ba2c7c2e383d4d69,
         type: 3}
       propertyPath: onCoordinateFound.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -653,7 +676,7 @@ PrefabInstance:
     - target: {fileID: 4627320187779630611, guid: 80ebb1a4ed174de4ba2c7c2e383d4d69,
         type: 3}
       propertyPath: onCoordinateFound.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetPosition
+      value: SetLocation
       objectReference: {fileID: 0}
     - target: {fileID: 4627320187779630611, guid: 80ebb1a4ed174de4ba2c7c2e383d4d69,
         type: 3}
@@ -663,7 +686,7 @@ PrefabInstance:
     - target: {fileID: 4627320187779630611, guid: 80ebb1a4ed174de4ba2c7c2e383d4d69,
         type: 3}
       propertyPath: onCoordinateFound.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.FirstPersonViewer.FirstPersonViewer, eu.netherlands3d.twin
+      value: Netherlands3D.Special2025.SpecialStart, eu.netherlands3d.twin
       objectReference: {fileID: 0}
     - target: {fileID: 4627320187779630611, guid: 80ebb1a4ed174de4ba2c7c2e383d4d69,
         type: 3}
