@@ -12,8 +12,9 @@ namespace Netherlands3D.Special2025.Firework
 
         [SerializeField] private List<FireworkBoxShot> fireworkShow;
 
-        [SerializeField] private AudioSource shotAudioSource;
+        [SerializeField] private AudioSource explosioSource;
         [SerializeField] private List<AudioClip> explosionAudio;
+        [SerializeField] private AudioSource shotAudioSource;
         [SerializeField] private List<AudioClip> shotAudio;
 
         public override void StartFirework()
@@ -28,12 +29,21 @@ namespace Netherlands3D.Special2025.Firework
                 FireworkBoxShot shot = fireworkShow[i];
                 for (int j = 0; j < shot.shotCount; j++)
                 {
-                    shotAudioSource.PlayOneShot(shotAudio[Random.Range(0, shotAudio.Count)]);
-
                     for (int k = 0; k < shot.burstCount; k++)
                     {
+                        shotAudioSource.PlayOneShot(shotAudio[Random.Range(0, shotAudio.Count)]);
+
                         if (shot.hasTrail) fireworkTrailParticle.Play(true);
                         else fireworkParticle.Play(true);
+
+                        ParticleSystem ps = shot.hasTrail ? fireworkTrailParticle : fireworkParticle;
+
+                        float lifeTime;
+                        if (ps.main.startLifetime.mode == ParticleSystemCurveMode.TwoConstants) lifeTime = Random.Range(ps.main.startLifetime.constantMin, ps.main.startLifetime.constantMax);
+                        else lifeTime = ps.main.startLifetime.constant;
+                        
+                        StartCoroutine(PlayAudioAfterLifetime(lifeTime - .1f));
+
                         yield return new WaitForEndOfFrame();
                     }
 
@@ -44,6 +54,13 @@ namespace Netherlands3D.Special2025.Firework
                 yield return new WaitForSeconds(shot.endDelay);
             }
             fireworkTrailParticle.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        }
+
+        private IEnumerator PlayAudioAfterLifetime(float duration)
+        {
+            yield return new WaitForSeconds(duration);
+
+            explosioSource.PlayOneShot(explosionAudio[Random.Range(0, shotAudio.Count)]);
         }
     }
 
