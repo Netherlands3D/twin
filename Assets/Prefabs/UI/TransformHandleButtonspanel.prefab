@@ -694,6 +694,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 2e5f87e8bdae64179a9f10551a131f38,
         type: 3}
+    - target: {fileID: 3104802660641940083, guid: 9b03494031e3bb643997bd5432bc015b,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3104802660641940083, guid: 9b03494031e3bb643997bd5432bc015b,
+        type: 3}
+      propertyPath: tooltipText
+      value: Plaatsen op maaiveld
+      objectReference: {fileID: 0}
     - target: {fileID: 3663558178498436140, guid: 9b03494031e3bb643997bd5432bc015b,
         type: 3}
       propertyPath: m_IsActive
