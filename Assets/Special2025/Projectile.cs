@@ -172,5 +172,7 @@ namespace Netherlands3D
             //obj.Sleep();                 
             rb[activeRbIndex].ResetInertiaTensor();
         }
+
+        public void Despawn() => gun.Despawn(this);
     }
 }

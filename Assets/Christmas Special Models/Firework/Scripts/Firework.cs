@@ -9,8 +9,9 @@ namespace Netherlands3D.Special2025.Firework
 
         protected bool FuseEnded { private set; get; }
         
-        protected virtual void Start()
+        protected virtual void OnEnable()
         {
+            FuseEnded = false;
             fuseTimer = fuseTime;
         }
 
