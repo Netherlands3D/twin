@@ -1,90 +1,196 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Netherlands3D
 {
     public class Rope : MonoBehaviour
     {
-        [SerializeField] private Transform start, end, segmentContainer;
+        [SerializeField] private Transform start, end, jointContainer, segmentContainer;
+        [SerializeField] private GameObject jointPrefab;
         [SerializeField] private GameObject segmentPrefab;
-        [SerializeField] private int segmentCount = 10;
-        // [SerializeField] private float totalLength;
-
-        private Transform[] joints = Array.Empty<Transform>();
+        [SerializeField] private int initialSegmentCount = 10;
+        [SerializeField] private int maxSegmentCount = 50;
+        private List<SpawnLights> segments = new();
+        private List<Rigidbody> joints = new();
 
         private float totalWeight = 10;
         private float drag = 1;
         private float angularDrag = 1;
+        
+        // private float defaultSegmentLength = 0.3f;
+        [SerializeField] private float maxSegmentLength = 0.3f;
 
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            foreach (var segment in joints)
+            foreach (var joint in joints)
             {
-                Gizmos.DrawSphere(segment.position, 0.1f);
+                Gizmos.DrawSphere(joint.position, 0.1f);
             }
         }
+#endif
 
         private void Start()
         {
-            GenerateSegments();
+            GenerateInitialRope();
+
         }
 
-        private void GenerateSegments()
+        private void Update()
         {
-            joints = new Transform[segmentCount-1];
-            var previousTransform = start;
-            JoinSegment(previousTransform, null); //start
-            var dir = (end.position - start.position);
-
-            for (int i = 0; i < segmentCount-1; i++)
+            float lastSegmentDist = Vector3.Distance(joints[^2].position, end.position);
+            
+            // Add a new joint if stretched
+            if (lastSegmentDist > maxSegmentLength && joints.Count < maxSegmentCount)
             {
-                var pos = previousTransform.position + (dir / segmentCount);
-                var segment = Instantiate(segmentPrefab, pos, Quaternion.identity, segmentContainer);
-                joints[i] = segment.transform;
+                AddJoint();
+            }
+            // Remove the second-last joint if compressed
+            else if (lastSegmentDist < maxSegmentLength * 0.5f && joints.Count > initialSegmentCount) // ensure at least start+end+one joint
+            {
+                RemoveJoint();
+            }
+            
+            if (segments == null)
+                return;
 
-                JoinSegment(segment.transform, previousTransform, false);
+            UpdateMeshes();
+        }
 
-                previousTransform = segment.transform;
+        private void GenerateInitialRope()
+        {
+            joints.Clear();
+            segments.Clear();
+
+            joints.Add(start.GetComponent<Rigidbody>());
+
+            Transform previous = start;
+
+            Vector3 dir = (end.position - start.position);
+
+            for (int i = 1; i <= initialSegmentCount; i++)
+            {
+                Vector3 pos = start.position + dir * i / (initialSegmentCount + 1);
+                var jointGO = Instantiate(jointPrefab, pos, Quaternion.identity, jointContainer);
+                jointGO.name = "joint " + i;
+                var rb = jointGO.GetComponent<Rigidbody>();
+                rb.maxAngularVelocity = 25f;
+                rb.maxLinearVelocity = 50f;
+                joints.Add(rb);
+
+                ConnectJoint(jointGO.transform, previous);
+
+                previous = jointGO.transform;
             }
 
-            JoinSegment(end, previousTransform, true); //end
+            ConnectJoint(end, previous, true);
+            joints.Add(end.GetComponent<Rigidbody>());
+
+            // Generate segments
+            for (int i = 0; i < joints.Count - 1; i++)
+            {
+                var segGO = Instantiate(segmentPrefab, segmentContainer);
+                segments.Add(segGO.GetComponent<SpawnLights>());
+            }
         }
 
-        private void JoinSegment(Transform currentJoint, Transform connectedJoint, bool isClosed = false)
+        private void AddJoint()
         {
-            // var rb = currentJoint.GetComponent<Rigidbody>();
-            // rb.isKinematic = isKinematic;
-            // rb.mass = totalWeight / segmentCount;
-            // rb.linearDamping = drag;
-            // rb.angularDamping = angularDrag;
-            //
-            if (connectedJoint == null)
-                return;
+            Transform previous = joints[^2].transform;
+
+            Vector3 dir = end.position - previous.position;
+            Vector3 newPos = previous.position + dir.normalized * maxSegmentLength;
+
+            var jointGO = Instantiate(jointPrefab, newPos, Quaternion.identity, jointContainer);
+            jointGO.name = "joint " + (joints.Count - 1);
+            var rb = jointGO.GetComponent<Rigidbody>();
+            rb.linearVelocity = previous.GetComponent<Rigidbody>().linearVelocity *0.9f;
+            rb.angularVelocity = previous.GetComponent<Rigidbody>().angularVelocity*0.9f;
+            rb.maxAngularVelocity = 2f;
+            rb.maxLinearVelocity = 20f;
+
+            ConnectJoint(jointGO.transform, previous);
+            ConnectJoint(end, jointGO.transform, true);
+
+            // Update lists
+            joints.Insert(joints.Count - 1, rb);
+
+            var segGO = Instantiate(segmentPrefab, segmentContainer);
+            segments.Insert(segments.Count - 1, segGO.GetComponent<SpawnLights>());
+        }
+        
+        private void RemoveJoint()
+        {
+            // Remove the second-last joint (before end)
+            int removeIndex = joints.Count - 2;
+            Rigidbody jointToRemove = joints[removeIndex];
+            var segmentToRemove = segments[removeIndex - 1];
+
+            // Destroy GameObject
+            Destroy(jointToRemove.gameObject);
+            Destroy(segmentToRemove.gameObject);
+
+            // Remove from lists
+            joints.RemoveAt(removeIndex);
+            segments.RemoveAt(removeIndex - 1); // segment corresponds to joint index - 1
+
+            // Reconnect end to new last joint
+            ConnectJoint(end, joints[^2].transform, true);
+        }
+
+
+        private void ConnectJoint(Transform currentJoint, Transform connectedJoint, bool isClosed = false)
+        {
+            if (connectedJoint == null) return;
 
             var joint = currentJoint.GetComponent<ConfigurableJoint>();
             joint.connectedBody = connectedJoint.GetComponent<Rigidbody>();
             joint.autoConfigureConnectedAnchor = true;
 
-            // var totalLength = start - end
-            // joint.connectedAnchor = isClosed ? Vector3.forward * 0.1f : Vector3.forward * (totalLength / segmentCount);
+            joint.xMotion = ConfigurableJointMotion.Limited;
+            joint.yMotion = ConfigurableJointMotion.Limited;
+            joint.zMotion = ConfigurableJointMotion.Limited;
 
-            joint.xMotion = ConfigurableJointMotion.Locked;
-            joint.yMotion = ConfigurableJointMotion.Locked;
-            joint.zMotion = ConfigurableJointMotion.Locked;
+            var linearLimit = new SoftJointLimit();
+            linearLimit.limit = Vector3.Distance(start.position, end.position) / (joints.Count - 1);
+            joint.linearLimit = linearLimit;
+
+            var linearDrive = new JointDrive { positionSpring = 0f, positionDamper = 20f, maximumForce = Mathf.Infinity };
+            joint.xDrive = linearDrive;
+            joint.yDrive = linearDrive;
+            joint.zDrive = linearDrive;
 
             joint.angularXMotion = ConfigurableJointMotion.Free;
             joint.angularYMotion = ConfigurableJointMotion.Free;
-            joint.angularZMotion = ConfigurableJointMotion.Limited; //prevent too much twisting
+            joint.angularZMotion = ConfigurableJointMotion.Limited;
 
-            var limit = new SoftJointLimit();
-            limit.limit = 0;
+            var limit = new SoftJointLimit { limit = 0 };
             joint.angularZLimit = limit;
 
-            var jointDrive = new JointDrive();
-            jointDrive.positionDamper = 0;
-            jointDrive.positionSpring = 0;
+            var jointDrive = new JointDrive { positionSpring = 0, positionDamper = 5 };
             joint.angularXDrive = jointDrive;
             joint.angularYZDrive = jointDrive;
+        }
+
+        private void UpdateMeshes()
+        {
+            for (int i = 0; i < segments.Count; i++)
+            {
+                UpdateSegmentMesh(segments[i], joints[i].position, joints[i + 1].position);
+            }
+        }
+
+        private void UpdateSegmentMesh(SpawnLights segment, Vector3 a, Vector3 b)
+        {
+            Vector3 dir = b - a;
+            float length = dir.magnitude / 2;
+
+            segment.transform.position = a + dir * 0.5f;
+            segment.transform.rotation = Quaternion.LookRotation(dir) * Quaternion.Euler(90, 0, 0);
+            segment.cylinder.localScale = new Vector3(segment.cylinder.localScale.x, length, segment.cylinder.localScale.z);
         }
     }
 }

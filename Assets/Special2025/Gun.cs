@@ -131,7 +131,7 @@ namespace Netherlands3D
                 return projectilePrefabs[index];
             return  projectile.ThumbnailVisual;
         }
-
+        
         private void OnClickHandler(InputAction.CallbackContext context)
         {
             isShooting = true;
@@ -174,16 +174,33 @@ namespace Netherlands3D
                 }
         }
 
+
+        private Projectile projectile;
+
         private void OnFire()
         {
-            Vector2 screenPosition =  Pointer.current.position.ReadValue();
+            Vector2 screenPosition = Pointer.current.position.ReadValue();
             Vector3 pos = fpvCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, fpvCamera.nearClipPlane));
 
-            Projectile projectile = SpawnProjectile(pos + fpvCamera.transform.forward.normalized * spawnStartDistance, projectilePrefabs[selectedPrefabIndex].name);
-            cooldown = projectile.Cooldown;
-            projectileSpeed = projectile.Power * charge;
+            if (projectile == null)
+            {
+                projectile = SpawnProjectile(pos + fpvCamera.transform.forward.normalized * spawnStartDistance, projectilePrefabs[selectedPrefabIndex].name);
+                cooldown = projectile.Cooldown;
+                projectileSpeed = projectile.Power * charge;
+            }
             
-            projectile.rb.AddForce(fpvCamera.transform.forward * projectileSpeed, ForceMode.Impulse);
+            projectile.rb[projectile.activeRbIndex].isKinematic = false;
+            projectile.rb[projectile.activeRbIndex].AddForce(fpvCamera.transform.forward * projectileSpeed, ForceMode.Impulse);
+
+            var nextIndex = projectile.activeRbIndex + 1;
+            if (nextIndex >= projectile.rb.Length)
+            {
+                projectile = null;
+            }
+            else
+            {
+                projectile.activeRbIndex++;
+            }
         }
 
         private Projectile SpawnProjectile(Vector3 position, string type)
