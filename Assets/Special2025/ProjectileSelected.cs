@@ -27,6 +27,12 @@ namespace Netherlands3D
             projectileIcon.sprite = pt.GetThumbnail(projectilePrefab);;
         }
 
+        public void SetPowerEnabled(bool enabled)
+        {
+            powerIcon.gameObject.transform.parent.gameObject.GetComponent<Image>().enabled = enabled;
+            powerIcon.enabled = enabled;
+        }
+
         //0 to 1
         public void SetPower(float power)
         {

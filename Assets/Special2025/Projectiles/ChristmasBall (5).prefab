@@ -109,6 +109,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   Cooldown: 0.5
   Power: 60
+  IsSticky: 1
 --- !u!54 &-8639573387617532931
 Rigidbody:
   m_ObjectHideFlags: 0
