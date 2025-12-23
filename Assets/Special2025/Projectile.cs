@@ -18,9 +18,10 @@ namespace Netherlands3D
         [SerializeField] private GameObject deathVisual;
 
         [SerializeField] private float breakForce = 1000;
+        public Rigidbody[] rb;
+        public int activeRbIndex = 0;
         [SerializeField] private GameObject thumbnailPrefab;
         
-        public Rigidbody rb;
         public float Cooldown = 0.5f;
         public float Power = 60f;
         public bool IsSticky = false;
@@ -38,14 +39,16 @@ namespace Netherlands3D
 
         private void Awake()
         {
-            if(!rb)
-                rb = GetComponent<Rigidbody>();
-           
+            GetDefaultRigidBody();
         }
 
-        private void Start()
+        private void GetDefaultRigidBody()
         {
-            
+            if (rb == null || rb.Length == 0 || rb[0] == null)
+            {
+                rb = new Rigidbody[1];
+                rb[0] = GetComponent<Rigidbody>();
+            }
         }
 
         public void SetGun(Gun gun)
@@ -81,8 +84,8 @@ namespace Netherlands3D
                     return;
                 }
             }
-            
-            float energy = 0.5f * rb.mass * col.relativeVelocity.sqrMagnitude; //(0.5f * mass 1 * rel 60 * 60 ≈ 1800
+
+            float energy = 0.5f * rb[activeRbIndex].mass * col.relativeVelocity.sqrMagnitude; //(0.5f * mass 1 * rel 60 * 60 ≈ 1800
             if (energy > breakForce)
             {
                 CreateDeathEffect(contact.point);
@@ -149,26 +152,25 @@ namespace Netherlands3D
 
         public void Attach(Transform target)
         {
-            if(isSticking) return;
-            
+            if (isSticking) return;
+
             isSticking = true;
             transform.parent = target;
-            rb.isKinematic = true;
-            Destroy(rb);
+            rb[activeRbIndex].isKinematic = true;
+            Destroy(rb[activeRbIndex]);
             rb = null;
         }
 
         public void Reset()
         {
-            if(rb == null)
-                rb = gameObject.AddComponent<Rigidbody>();
-            
+            GetDefaultRigidBody();
+
             isSticking = false;
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.isKinematic = false;
+            rb[activeRbIndex].linearVelocity = Vector3.zero;
+            rb[activeRbIndex].angularVelocity = Vector3.zero;
+            rb[activeRbIndex].isKinematic = false;
             //obj.Sleep();                 
-            rb.ResetInertiaTensor();    
+            rb[activeRbIndex].ResetInertiaTensor();
         }
     }
 }
