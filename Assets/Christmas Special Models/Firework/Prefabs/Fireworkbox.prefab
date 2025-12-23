@@ -501,18 +501,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: edf09d63b95b9ab4ebe9cd01d61c9f31,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 200818039523000085}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: edf09d63b95b9ab4ebe9cd01d61c9f31,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6900387783091293094}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: edf09d63b95b9ab4ebe9cd01d61c9f31,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 121853886550069090}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: edf09d63b95b9ab4ebe9cd01d61c9f31,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 8916593544490243431}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: edf09d63b95b9ab4ebe9cd01d61c9f31,
         type: 3}
@@ -539,71 +527,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1444859123215008012}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &200818039523000085
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1786876159116164189}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  worldTransformShifter: {fileID: 121853886550069090}
-  onPreShift:
-    m_PersistentCalls:
-      m_Calls: []
-  onPostShift:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &6900387783091293094
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1786876159116164189}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92795e992dcbe4b3c8ada171c5551674, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabIdentifier: 77f1e27b43550d448b3bbf4079d941ab
-  thumbnail: {fileID: 0}
-  spawnLocation: 0
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onHide:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerInitialized:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerReady:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStylingApplied:
-    m_PersistentCalls:
-      m_Calls: []
-  DebugBoundingBox: 0
-  objectCreated:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &121853886550069090
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1786876159116164189}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50fab43e07a540b89d245bd4ec8e4887, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8916593544490243431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -616,7 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eee32cb650912843a5ad0f0d32179a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fuseTime: 5
+  fuseTime: 2
   fireworkTrailParticle: {fileID: 8599066242328250469}
   fireworkParticle: {fileID: 4874449429874240001}
   fireworkBallParticle: {fileID: 4111965360610643059}
@@ -704,11 +627,14 @@ MonoBehaviour:
   splatVisual: {fileID: 0}
   deathVisual: {fileID: 0}
   breakForce: 1000
+  rb:
+  - {fileID: 0}
+  activeRbIndex: 0
   thumbnailPrefab: {fileID: 0}
-  rb: {fileID: 5371230209968727902}
   Cooldown: 0.5
   Power: 60
   IsSticky: 0
+  ContinuousSplat: 0
 --- !u!54 &5371230209968727902
 Rigidbody:
   m_ObjectHideFlags: 0
