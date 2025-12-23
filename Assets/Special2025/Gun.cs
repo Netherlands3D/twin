@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Netherlands3D.FirstPersonViewer;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
@@ -13,11 +14,10 @@ namespace Netherlands3D
         Cube,
         Sneeuwbal
     }
-    
+
     public class Gun : MonoBehaviour
     {
-        [Header("Input")]
-        [SerializeField] private InputActionAsset inputActionAsset;
+        [Header("Input")] [SerializeField] private InputActionAsset inputActionAsset;
 
         public InputAction MoveAction { private set; get; }
         public InputAction SprintAction { private set; get; }
@@ -30,10 +30,10 @@ namespace Netherlands3D
 
         public InputAction CycleNextModus { private set; get; }
         public InputAction CyclePreviousModus { private set; get; }
-        
+
         public float ProjectileSpeed => projectileSpeed;
         public float Cooldown => cooldown;
-        
+
 
         private Camera fpvCamera;
         private float projectileSpeed = 60;
@@ -44,26 +44,26 @@ namespace Netherlands3D
         private float spawnStartDistance = 0.5f;
 
         private int maxProjectiles = 10;
-        
+
         public List<GameObject> projectilePrefabs = new List<GameObject>();
         private int selectedPrefabIndex = 0;
-        
+
         private Dictionary<string, List<Projectile>> projectilePool = new Dictionary<string, List<Projectile>>();
         private Dictionary<string, List<Projectile>> projectileActive = new Dictionary<string, List<Projectile>>();
-        
+
         private ProjectileSelected projectileUI;
 
         private Quaternion lastRotation;
-        
+
         // private void OnValidate()
         // {
         //     SetProjectileSelected(selectedPrefabIndex);
         // }
-        
+
         //sticky objects
         //iets verder van camera af spawnen
 
-        
+
         private void Awake()
         {
             MoveAction = inputActionAsset.FindAction("Move");
@@ -79,11 +79,10 @@ namespace Netherlands3D
 
             LeftClick.performed += OnClickHandler;
             LeftClick.canceled += OnClickStopHandler;
-            
+
             fpvCamera = FindObjectOfType<FirstPersonViewerCamera>().GetComponent<Camera>();
-            
-            
-            
+
+
             cd = cooldown;
         }
 
@@ -93,7 +92,7 @@ namespace Netherlands3D
             projectileUI.next.onClick.AddListener(NextProjectile);
             projectileUI.previous.onClick.AddListener(PreviousProjectile);
             projectileUI.SetPowerEnabled(false);
-            
+
             SetProjectileSelected(selectedPrefabIndex);
         }
 
@@ -109,27 +108,27 @@ namespace Netherlands3D
 
         private void SetProjectileSelected(int index)
         {
-            if(index < 0)
+            if (index < 0)
                 index = projectilePrefabs.Count - 1;
-            if(index >= projectilePrefabs.Count)
+            if (index >= projectilePrefabs.Count)
                 index = 0;
 
             selectedPrefabIndex = index;
             projectileUI.SetImage(projectilePrefabs[index]);
-            
+
             int count = projectilePrefabs.Count;
             int prev = (index - 1 + count) % count;
             int next = (index + 1) % count;
             projectileUI.SetImageForPrevious(projectilePrefabs[prev]);
             projectileUI.SetImageForNext(projectilePrefabs[next]);
         }
-        
+
         private void OnClickHandler(InputAction.CallbackContext context)
         {
             isShooting = true;
             projectileUI.SetPowerEnabled(true);
         }
-        
+
         private void OnClickStopHandler(InputAction.CallbackContext context)
         {
             if (isShooting && !EventSystem.current.IsPointerOverGameObject())
@@ -140,6 +139,7 @@ namespace Netherlands3D
                     cd = cooldown;
                 }
             }
+
             isShooting = false;
             projectileUI.SetPowerEnabled(false);
         }
@@ -149,33 +149,49 @@ namespace Netherlands3D
             cd -= Time.deltaTime;
             if (isShooting)
                 charge += Time.deltaTime;
-            else 
+            else
                 charge = 0;
             charge = Mathf.Clamp01(charge);
             projectileUI.SetPower(charge);
-            
+
             float deltaDegrees = Quaternion.Angle(lastRotation, transform.rotation);
-            if(deltaDegrees > 0)
+            if (deltaDegrees > 0)
                 charge = 0;
             lastRotation = transform.rotation;
 
-            foreach(KeyValuePair<string, List<Projectile>> proj in projectileActive)
+            foreach (KeyValuePair<string, List<Projectile>> proj in projectileActive)
                 if (proj.Value.Count > maxProjectiles)
                 {
                     Despawn(proj.Value[0]);
                 }
         }
 
+
+        private Projectile projectile;
+
         private void OnFire()
         {
-            Vector2 screenPosition =  Pointer.current.position.ReadValue();
+            Vector2 screenPosition = Pointer.current.position.ReadValue();
             Vector3 pos = fpvCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, fpvCamera.nearClipPlane));
 
-            Projectile projectile = SpawnProjectile(pos + fpvCamera.transform.forward.normalized * spawnStartDistance, projectilePrefabs[selectedPrefabIndex].name);
-            cooldown = projectile.Cooldown;
-            projectileSpeed = projectile.Power * charge;
-            
-            projectile.rb.AddForce(fpvCamera.transform.forward * projectileSpeed, ForceMode.Impulse);
+            if (projectile == null)
+            {
+                projectile = SpawnProjectile(pos + fpvCamera.transform.forward.normalized * spawnStartDistance, projectilePrefabs[selectedPrefabIndex].name);
+                cooldown = projectile.Cooldown;
+                projectileSpeed = projectile.Power * charge;
+            }
+
+            projectile.rb[projectile.activeRbIndex].AddForce(fpvCamera.transform.forward * projectileSpeed, ForceMode.Impulse);
+
+            var nextIndex = projectile.activeRbIndex + 1;
+            if (nextIndex >= projectile.rb.Length)
+            {
+                projectile = null;
+            }
+            else
+            {
+                projectile.activeRbIndex++;
+            }
         }
 
         private Projectile SpawnProjectile(Vector3 position, string type)
@@ -192,17 +208,18 @@ namespace Netherlands3D
                 if (prefab == null)
                 {
                     Debug.LogError("selected prefab does not exist!");
-                    return null; 
+                    return null;
                 }
 
                 GameObject test = Instantiate(prefab);
-                projectile = test.GetComponentInChildren<Projectile>();    
+                projectile = test.GetComponentInChildren<Projectile>();
             }
-            projectile.gameObject.transform.position = position;   
+
+            projectile.gameObject.transform.position = position;
             projectile.gameObject.transform.rotation = Quaternion.identity;
-            if(!projectileActive.ContainsKey(type))
+            if (!projectileActive.ContainsKey(type))
                 projectileActive.Add(type, new List<Projectile>());
-            
+
             projectileActive[type].Add(projectile);
             projectile.Reset();
             projectile.SetGun(this);
@@ -212,26 +229,26 @@ namespace Netherlands3D
 
         public void Despawn(Projectile obj)
         {
-            if(!obj.IsAlive) return;
-            
+            if (!obj.IsAlive) return;
+
             obj.SetAlive(false);
-            
+
             Projectile[] children = obj.gameObject.GetComponentsInChildren<Projectile>();
-            foreach(Projectile child in children)
+            foreach (Projectile child in children)
                 Despawn(child);
-            
-            transform.parent = null; 
+
+            transform.parent = null;
             obj.Reset();
-            
+
             string type = obj.gameObject.name;
             type = type.Replace("(Clone)", "");
             bool removed = projectileActive[type].Remove(obj); //should be present
-            if(!removed)
+            if (!removed)
                 Debug.LogError("projectile was not in the active list");
-            
-            if(!projectilePool.ContainsKey(type))
+
+            if (!projectilePool.ContainsKey(type))
                 projectilePool.Add(type, new List<Projectile>());
-            
+
             projectilePool[type].Add(obj);
             obj.SetGun(null);
         }

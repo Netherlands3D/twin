@@ -6,16 +6,17 @@ namespace Netherlands3D
     public class Projectile : MonoBehaviour
     {
         public bool IsAlive => isAlive;
-        
+
         public GameObject SplatVisual => splatVisual;
-        
+
         public bool IsSticking => isSticking;
-        
+
         [SerializeField] private GameObject splatVisual;
         [SerializeField] private GameObject deathVisual;
 
         [SerializeField] private float breakForce = 1000;
-        public Rigidbody rb;
+        public Rigidbody[] rb;
+        public int activeRbIndex = 0;
         public float Cooldown = 0.5f;
         public float Power = 60f;
         public bool IsSticky = false;
@@ -29,14 +30,16 @@ namespace Netherlands3D
 
         private void Awake()
         {
-            if(!rb)
-                rb = GetComponent<Rigidbody>();
-           
+            GetDefaultRigidBody();
         }
 
-        private void Start()
+        private void GetDefaultRigidBody()
         {
-            
+            if (rb == null || rb.Length == 0 || rb[0] == null)
+            {
+                rb = new Rigidbody[1];
+                rb[0] = GetComponent<Rigidbody>();
+            }
         }
 
         public void SetGun(Gun gun)
@@ -47,7 +50,7 @@ namespace Netherlands3D
         public void SetAlive(bool isAlive)
         {
             this.isAlive = isAlive;
-            if(gameObject.activeInHierarchy != isAlive)
+            if (gameObject.activeInHierarchy != isAlive)
                 gameObject.SetActive(isAlive);
         }
 
@@ -55,7 +58,7 @@ namespace Netherlands3D
         {
             if (col.contactCount == 0 || !isAlive || isSticking)
                 return;
-            
+
             var contact = col.GetContact(0);
             if (IsSticky)
             {
@@ -67,61 +70,61 @@ namespace Netherlands3D
                     return;
                 }
             }
-            
-            float energy = 0.5f * rb.mass * col.relativeVelocity.sqrMagnitude; //(0.5f * mass 1 * rel 60 * 60 ≈ 1800
+
+            float energy = 0.5f * rb[activeRbIndex].mass * col.relativeVelocity.sqrMagnitude; //(0.5f * mass 1 * rel 60 * 60 ≈ 1800
             if (energy > breakForce)
             {
                 CreateDeathEffect(contact.point);
                 gun.Despawn(this);
             }
 
-            
+
             CreateSplat(contact.point, contact.normal);
         }
 
         private void CreateSplat(Vector3 position, Vector3 normal)
         {
-            if(splatVisual == null) return;
-            
-            var rot =  Quaternion.LookRotation(-normal, Vector3.up);
-            Instantiate(splatVisual, position + (0.5f*normal), rot);
+            if (splatVisual == null) return;
+
+            var rot = Quaternion.LookRotation(-normal, Vector3.up);
+            Instantiate(splatVisual, position + (0.5f * normal), rot);
         }
 
         private void CreateDeathEffect(Vector3 position)
         {
-            if(deathVisual == null) return;
-            
+            if (deathVisual == null) return;
+
             if (ps == null)
             {
                 GameObject psg = Instantiate(deathVisual, transform.position, transform.rotation);
                 ps = psg.GetComponent<ParticleSystem>();
             }
+
             ps.gameObject.transform.position = position;
             ps.Play();
         }
 
         public void Attach(Transform target)
         {
-            if(isSticking) return;
-            
+            if (isSticking) return;
+
             isSticking = true;
             transform.parent = target;
-            rb.isKinematic = true;
-            Destroy(rb);
+            rb[activeRbIndex].isKinematic = true;
+            Destroy(rb[activeRbIndex]);
             rb = null;
         }
 
         public void Reset()
         {
-            if(rb == null)
-                rb = gameObject.AddComponent<Rigidbody>();
-            
+            GetDefaultRigidBody();
+
             isSticking = false;
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.isKinematic = false;
+            rb[activeRbIndex].linearVelocity = Vector3.zero;
+            rb[activeRbIndex].angularVelocity = Vector3.zero;
+            rb[activeRbIndex].isKinematic = false;
             //obj.Sleep();                 
-            rb.ResetInertiaTensor();    
+            rb[activeRbIndex].ResetInertiaTensor();
         }
     }
 }
