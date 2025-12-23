@@ -231,14 +231,6 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void SetVelocity(Vector2 velocity) => this.velocity = velocity;
 
-        public bool IsMovementBlocked(Vector3 moveDir, float distance)
-        {
-            Vector3 bottom = transform.position + Vector3.up * .4f;
-            Vector3 top = bottom + Vector3.up * (FirstPersonCamera.CameraHeightOffset - .4f * 2);
-
-            return Physics.CapsuleCast(bottom, top, .4f, moveDir.normalized, distance, collisionMask);
-        }
-
         public bool TryGetMovementHit(Vector3 moveDir, float distance, out RaycastHit hit)
         {
             Vector3 bottom = transform.position + Vector3.up * .4f;
