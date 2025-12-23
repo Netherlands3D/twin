@@ -59,7 +59,7 @@ namespace Netherlands3D
             {
                 var pos = previousTransform.position + (dir / segmentCount);
                 var segment = Instantiate(jointPrefab, pos, Quaternion.identity, jointContainer);
-                segment.name = "joint + " + i.ToString();
+                segment.name = "joint " + i;
 
                 var joint = segment.GetComponent<Rigidbody>();
                 joint.maxAngularVelocity = 25f;
@@ -87,9 +87,25 @@ namespace Netherlands3D
             // var totalLength = start - end
             // joint.connectedAnchor = isClosed ? Vector3.forward * 0.1f : Vector3.forward * (totalLength / segmentCount);
 
-            joint.xMotion = ConfigurableJointMotion.Locked;
-            joint.yMotion = ConfigurableJointMotion.Locked;
-            joint.zMotion = ConfigurableJointMotion.Locked;
+            joint.xMotion = ConfigurableJointMotion.Limited;
+            joint.yMotion = ConfigurableJointMotion.Limited;
+            joint.zMotion = ConfigurableJointMotion.Limited;
+            
+            var linearLimit = new SoftJointLimit();
+            float totalLength = Vector3.Distance(start.position, end.position);
+            linearLimit.limit = totalLength / segmentCount; // max stretch per segment
+            joint.linearLimit = linearLimit;
+            
+            var linearDrive = new JointDrive
+            {
+                positionSpring = 0f,       // 0 = no extra force pulling
+                positionDamper = 5f,       // absorbs energy
+                maximumForce = Mathf.Infinity
+            };
+
+            joint.xDrive = linearDrive;
+            joint.yDrive = linearDrive;
+            joint.zDrive = linearDrive;
 
             joint.angularXMotion = ConfigurableJointMotion.Free;
             joint.angularYMotion = ConfigurableJointMotion.Free;
@@ -100,7 +116,7 @@ namespace Netherlands3D
             joint.angularZLimit = limit;
 
             var jointDrive = new JointDrive();
-            jointDrive.positionDamper = 0;
+            jointDrive.positionDamper = 5f;
             jointDrive.positionSpring = 0;
             joint.angularXDrive = jointDrive;
             joint.angularYZDrive = jointDrive;
