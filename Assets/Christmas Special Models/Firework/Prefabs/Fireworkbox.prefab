@@ -616,7 +616,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eee32cb650912843a5ad0f0d32179a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fuseTime: 2
+  fuseTime: 5
   fireworkTrailParticle: {fileID: 8599066242328250469}
   fireworkParticle: {fileID: 4874449429874240001}
   fireworkBallParticle: {fileID: 4111965360610643059}
@@ -704,6 +704,7 @@ MonoBehaviour:
   splatVisual: {fileID: 0}
   deathVisual: {fileID: 0}
   breakForce: 1000
+  thumbnailPrefab: {fileID: 0}
   rb: {fileID: 5371230209968727902}
   Cooldown: 0.5
   Power: 60
