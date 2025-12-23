@@ -8,10 +8,11 @@ namespace Netherlands3D
 {
     public class Rope : MonoBehaviour
     {
-        [SerializeField] private Transform start, end, jointContainer;
+        [SerializeField] private Transform start, end, jointContainer, segmentContainer;
         [SerializeField] private GameObject jointPrefab;
         [SerializeField] private GameObject segmentPrefab;
         [SerializeField] private int initialSegmentCount = 10;
+        [SerializeField] private int maxSegmentCount = 50;
         private List<SpawnLights> segments = new();
         private List<Rigidbody> joints = new();
 
@@ -19,7 +20,8 @@ namespace Netherlands3D
         private float drag = 1;
         private float angularDrag = 1;
         
-        [SerializeField] private float maxSegmentLength = 0.3f;
+        // private float defaultSegmentLength = 0.3f;
+        private float maxSegmentLength = 1f;
 
 #if UNITY_EDITOR
         private void OnDrawGizmos()
@@ -31,9 +33,9 @@ namespace Netherlands3D
         }
 #endif
 
-        private IEnumerator Start()
+        private void Start()
         {
-            yield return null; //wait a frame so the gun applies the force to the start segment
+            // yield return null; //wait a frame so the gun applies the force to the start segment
             GenerateInitialRope();
             //     GenerateJoints();
             //     GenerateMeshes();
@@ -47,9 +49,17 @@ namespace Netherlands3D
 
         private void Update()
         {
-            if (joints.Count > 1 && Vector3.Distance(joints[^2].position, end.position) > maxSegmentLength)
+            float lastSegmentDist = Vector3.Distance(joints[^2].position, end.position);
+    // Debug.Log(lastSegmentDist);
+            // Add a new joint if stretched
+            if (lastSegmentDist > maxSegmentLength && joints.Count < maxSegmentCount)
             {
                 AddJoint();
+            }
+            // Remove the second-last joint if compressed
+            else if (lastSegmentDist < maxSegmentLength * 0.5f && joints.Count > initialSegmentCount) // ensure at least start+end+one joint
+            {
+                RemoveJoint();
             }
             
             if (segments == null)
@@ -90,7 +100,7 @@ namespace Netherlands3D
             // Generate segments
             for (int i = 0; i < joints.Count - 1; i++)
             {
-                var segGO = Instantiate(segmentPrefab, jointContainer);
+                var segGO = Instantiate(segmentPrefab, segmentContainer);
                 segments.Add(segGO.GetComponent<SpawnLights>());
             }
         }
@@ -117,6 +127,26 @@ namespace Netherlands3D
             var segGO = Instantiate(segmentPrefab, jointContainer);
             segments.Insert(segments.Count - 1, segGO.GetComponent<SpawnLights>());
         }
+        
+        private void RemoveJoint()
+        {
+            // Remove the second-last joint (before end)
+            int removeIndex = joints.Count - 2;
+            Rigidbody jointToRemove = joints[removeIndex];
+            var segmentToRemove = segments[removeIndex - 1];
+
+            // Destroy GameObject
+            Destroy(jointToRemove.gameObject);
+            Destroy(segmentToRemove.gameObject);
+
+            // Remove from lists
+            joints.RemoveAt(removeIndex);
+            segments.RemoveAt(removeIndex - 1); // segment corresponds to joint index - 1
+
+            // Reconnect end to new last joint
+            ConnectJoint(end, joints[^2].transform, true);
+        }
+
 
         private void ConnectJoint(Transform currentJoint, Transform connectedJoint, bool isClosed = false)
         {

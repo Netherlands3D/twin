@@ -64,6 +64,7 @@ Transform:
   m_Children:
   - {fileID: 664415028012576191}
   - {fileID: 1593837723223450868}
+  - {fileID: 3470817514329203275}
   - {fileID: 323827939915339249}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -87,7 +88,7 @@ MonoBehaviour:
   - {fileID: 1067992730949216151}
   activeRbIndex: 0
   Cooldown: 1
-  Power: 3000
+  Power: 600
   IsSticky: 0
 --- !u!114 &5067472827406088515
 MonoBehaviour:
@@ -104,12 +105,44 @@ MonoBehaviour:
   start: {fileID: 664415028012576191}
   end: {fileID: 323827939915339249}
   jointContainer: {fileID: 1593837723223450868}
+  segmentContainer: {fileID: 3470817514329203275}
   jointPrefab: {fileID: 5762470443586899808, guid: e1658fcdfdec1424baef5fa46f734541,
     type: 3}
   segmentPrefab: {fileID: 6116636703134448264, guid: 456a3b5a555e148a3a2a718bebfb0fbd,
     type: 3}
-  initialSegmentCount: 10
-  maxSegmentLength: 0.3
+  initialSegmentCount: 5
+  maxSegmentCount: 25
+--- !u!1 &3968728929593480564
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3470817514329203275}
+  m_Layer: 0
+  m_Name: Segments
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3470817514329203275
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3968728929593480564}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1885071565005032971}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1193882193194280353
 PrefabInstance:
   m_ObjectHideFlags: 0
