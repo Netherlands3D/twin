@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Netherlands3D.FirstPersonViewer;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
@@ -123,7 +124,7 @@ namespace Netherlands3D
         private void Update()
         {
             cd -= Time.deltaTime;
-            if (isShooting)
+            if (isShooting && !EventSystem.current.IsPointerOverGameObject())
             {
                 if (cd < 0)
                 {

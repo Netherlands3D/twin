@@ -66,6 +66,8 @@ namespace Netherlands3D
 
         private void CreateSplat(Vector3 position, Vector3 normal)
         {
+            if(splatVisual == null) return;
+            
             var rot =  Quaternion.LookRotation(-normal, Vector3.up);
             Instantiate(splatVisual, position + (0.5f*normal), rot);
         }
