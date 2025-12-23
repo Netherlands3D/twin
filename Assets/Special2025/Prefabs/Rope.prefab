@@ -88,8 +88,8 @@ MonoBehaviour:
   - {fileID: 1067992730949216151}
   activeRbIndex: 0
   thumbnailPrefab: {fileID: 0}
-  Cooldown: 1
-  Power: 800
+  Cooldown: 0.5
+  Power: 1500
   IsSticky: 0
   ContinuousSplat: 0
 --- !u!114 &5067472827406088515
@@ -157,12 +157,12 @@ PrefabInstance:
     - target: {fileID: -7042574021704089034, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: m_Drag
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7042574021704089034, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: m_Mass
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -7042574021704089034, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
@@ -257,12 +257,12 @@ PrefabInstance:
     - target: {fileID: -7042574021704089034, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: m_Drag
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7042574021704089034, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: m_Mass
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -7042574021704089034, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
