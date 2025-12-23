@@ -129,7 +129,7 @@ namespace Netherlands3D
             splat.transform.rotation = rot;
             DecalProjector proj = splat.GetComponent<DecalProjector>();
             Vector3 clampedSize = Vector3.one * Mathf.Clamp(size * 0.01f, 0.5f, 3f);
-            clampedSize.z = 1;
+            clampedSize.z = 0.1f;
             proj.size = clampedSize;
             //splat.SetActive(true);
         }
