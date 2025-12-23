@@ -112,9 +112,11 @@ MonoBehaviour:
     type: 3}
   deathVisual: {fileID: 186756, guid: 69524a2ee29c9e14db79217d6623cacf, type: 3}
   breakForce: 10000
+  thumbnailPrefab: {fileID: 0}
   rb: {fileID: 0}
   Cooldown: 0.5
   Power: 60
+  IsSticky: 0
 --- !u!54 &3733071005449566455
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -141,7 +143,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!65 &139514461279649311
 BoxCollider:
   m_ObjectHideFlags: 0

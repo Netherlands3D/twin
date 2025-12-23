@@ -15,6 +15,8 @@ namespace Netherlands3D
         [SerializeField] private GameObject deathVisual;
 
         [SerializeField] private float breakForce = 1000;
+        [SerializeField] private GameObject thumbnailPrefab;
+        
         public Rigidbody rb;
         public float Cooldown = 0.5f;
         public float Power = 60f;
@@ -62,6 +64,11 @@ namespace Netherlands3D
                 //lets not stick to another sticking object or loads of recursive nonsense will happen
                 Projectile projectile = col.gameObject.GetComponent<Projectile>();
                 if (projectile != null && !projectile.isSticking)
+                {
+                    Attach(col.gameObject.transform);
+                    return;
+                }
+                else if (projectile == null)
                 {
                     Attach(col.gameObject.transform);
                     return;

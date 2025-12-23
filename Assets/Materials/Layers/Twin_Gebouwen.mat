@@ -108,6 +108,7 @@ Material:
     - _DecalMeshViewBias: 0
     - _DrawOrder: 0
     - _DstBlend: 0
+    - _EnableSnow: 1
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -128,6 +129,7 @@ Material:
     - _Smoothness: 0.2
     - _SmoothnessSource: 0
     - _SmoothnessTextureChannel: 0
+    - _SnowNoise: 0
     - _SpecSource: 0
     - _SpecularHighlights: 1
     - _SpikeClampHeight: 50

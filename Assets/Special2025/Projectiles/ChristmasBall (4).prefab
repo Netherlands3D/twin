@@ -106,6 +106,7 @@ MonoBehaviour:
   splatVisual: {fileID: 0}
   deathVisual: {fileID: 0}
   breakForce: 10000
+  thumbnailPrefab: {fileID: 0}
   rb: {fileID: 0}
   Cooldown: 0.5
   Power: 60
@@ -136,7 +137,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!135 &-7213374010429654505
 SphereCollider:
   m_ObjectHideFlags: 0
