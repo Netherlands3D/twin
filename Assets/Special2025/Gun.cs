@@ -180,7 +180,8 @@ namespace Netherlands3D
                 cooldown = projectile.Cooldown;
                 projectileSpeed = projectile.Power * charge;
             }
-
+            
+            projectile.rb[projectile.activeRbIndex].isKinematic = false;
             projectile.rb[projectile.activeRbIndex].AddForce(fpvCamera.transform.forward * projectileSpeed, ForceMode.Impulse);
 
             var nextIndex = projectile.activeRbIndex + 1;

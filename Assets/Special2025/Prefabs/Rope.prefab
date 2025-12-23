@@ -87,7 +87,7 @@ MonoBehaviour:
   - {fileID: 1067992730949216151}
   activeRbIndex: 0
   Cooldown: 1
-  Power: 300
+  Power: 3000
   IsSticky: 0
 --- !u!114 &5067472827406088515
 MonoBehaviour:
@@ -108,7 +108,8 @@ MonoBehaviour:
     type: 3}
   segmentPrefab: {fileID: 6116636703134448264, guid: 456a3b5a555e148a3a2a718bebfb0fbd,
     type: 3}
-  segmentCount: 15
+  initialSegmentCount: 10
+  maxSegmentLength: 0.3
 --- !u!1001 &1193882193194280353
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -122,10 +123,15 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7042574021704089034, guid: e1658fcdfdec1424baef5fa46f734541,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1508690811947216976, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3
+      value: 0.36
       objectReference: {fileID: 0}
     - target: {fileID: 1508690811947216976, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
@@ -135,7 +141,7 @@ PrefabInstance:
     - target: {fileID: 1508690811947216976, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2
+      value: 0.48
       objectReference: {fileID: 0}
     - target: {fileID: 1508690811947216976, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
@@ -175,7 +181,7 @@ PrefabInstance:
     - target: {fileID: 1880696187413426056, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: kinematicOnCollision
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5762470443586899808, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
@@ -270,7 +276,7 @@ PrefabInstance:
     - target: {fileID: 1880696187413426056, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: kinematicOnCollision
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5762470443586899808, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
