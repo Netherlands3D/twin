@@ -125,6 +125,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _IncludeInGlobalMask: 1
+    - _MaskingChannelBitmask: 16777215
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _QueueControl: 0
@@ -144,7 +145,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.6226415, g: 0.5968864, b: 0.56683874, a: 1}
+    - _BaseColor: {r: 0.4716981, g: 0.4716981, b: 0.4716981, a: 1}
     - _ClippingMask: {r: 3.4028235e+38, g: 3.4028235e+38, b: 3.4028235e+38, a: 3.4028235e+38}
     - _ClippingMaskDome: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.4509804, g: 0.42745098, b: 0.4, a: 1}
