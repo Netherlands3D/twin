@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Netherlands3D.FirstPersonViewer;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
@@ -39,6 +40,7 @@ namespace Netherlands3D
         private float cooldown = 0.1f;
         private float cd;
         private bool isShooting = false;
+        private float charge = 0f;
 
         private int maxProjectiles = 10;
         
@@ -49,6 +51,8 @@ namespace Netherlands3D
         private Dictionary<string, List<Projectile>> projectileActive = new Dictionary<string, List<Projectile>>();
         
         private ProjectileSelected projectileUI;
+
+        private Quaternion lastRotation;
         
         // private void OnValidate()
         // {
@@ -84,7 +88,7 @@ namespace Netherlands3D
             projectileUI = FindAnyObjectByType<ProjectileSelected>();
             projectileUI.next.onClick.AddListener(NextProjectile);
             projectileUI.previous.onClick.AddListener(PreviousProjectile);
-            
+            projectileUI.Powericon.transform.parent.gameObject.SetActive(false);
             
             SetProjectileSelected(selectedPrefabIndex);
         }
@@ -113,25 +117,37 @@ namespace Netherlands3D
         private void OnClickHandler(InputAction.CallbackContext context)
         {
             isShooting = true;
+            projectileUI.Powericon.transform.parent.gameObject.SetActive(true);
         }
         
         private void OnClickStopHandler(InputAction.CallbackContext context)
         {
+            if (isShooting && !EventSystem.current.IsPointerOverGameObject())
+            {
+                if (cd < 0)
+                {
+                    OnFire();
+                    cd = cooldown;
+                }
+            }
             isShooting = false;
+            projectileUI.Powericon.transform.parent.gameObject.SetActive(false);
         }
 
         private void Update()
         {
             cd -= Time.deltaTime;
             if (isShooting)
-            {
-                if (cd < 0)
-                {
-                    OnFire();
-                    
-                    cd = cooldown;
-                }
-            }
+                charge += Time.deltaTime;
+            else 
+                charge = 0;
+            charge = Mathf.Clamp01(charge);
+            projectileUI.SetPower(charge);
+            
+            float deltaDegrees = Quaternion.Angle(lastRotation, transform.rotation);
+            if(deltaDegrees > 0)
+                charge = 0;
+            lastRotation = transform.rotation;
 
             foreach(KeyValuePair<string, List<Projectile>> proj in projectileActive)
                 if (proj.Value.Count > maxProjectiles)
@@ -147,7 +163,7 @@ namespace Netherlands3D
 
             Projectile projectile = SpawnProjectile(pos, projectilePrefabs[selectedPrefabIndex].name);
             cooldown = projectile.Cooldown;
-            projectileSpeed = projectile.Power;
+            projectileSpeed = projectile.Power * charge;
             
             projectile.rb.AddForce(fpvCamera.transform.forward * projectileSpeed, ForceMode.Impulse);
         }
