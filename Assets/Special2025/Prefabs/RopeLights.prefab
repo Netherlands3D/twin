@@ -326,13 +326,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51619f5cf033247d3b10725d0f926425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lightPrefab: {fileID: 8453924149811408499, guid: 035beb450a57a475a882bc04921d96ec,
+  lightPrefab: {fileID: 8600735547615349392, guid: 035beb450a57a475a882bc04921d96ec,
     type: 3}
   cylinder: {fileID: 7970822174059033803}
   lightDensity: 1
   surfaceOffset: 0.2
-  radiusMultiplier: 10
-  rot: {x: 90, y: 0, z: 0}
+  lightMaterials:
+  - {fileID: 2100000, guid: 471e0ce775f3c455794230027ca69847, type: 2}
+  - {fileID: 2100000, guid: 24396b4f2cfd943879d9cddd3b6e796f, type: 2}
+  - {fileID: 2100000, guid: 5f40268632d034b41ae7f8e20ab39e62, type: 2}
 --- !u!4 &6857339900207109960 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2774220344278030320, guid: bbd5a98b53acd4f2781f965f680ebf42,
