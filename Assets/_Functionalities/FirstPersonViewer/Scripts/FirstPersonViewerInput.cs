@@ -44,7 +44,6 @@ namespace Netherlands3D.FirstPersonViewer
         //Mouse Locking
         public bool LockInput => inputLocks.Count > 0;
         public bool LockCamera { private set; get; }
-        private bool lockMouseModus;
         private bool isLocked;
 
         //Events
@@ -76,15 +75,10 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void OnFPVEnter()
         {
-            //Only lock mouse when the locking modus is selected.
-            if (lockMouseModus)
-            {
-                isLocked = true;
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-                onShowSnackbarExit.Invoke(fpvExitText);
-            }
-            else ToggleCursor(true);
+            isLocked = true;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            onShowSnackbarExit.Invoke(fpvExitText);
         }
 
         private void OnDisable()
@@ -109,19 +103,6 @@ namespace Netherlands3D.FirstPersonViewer
             //When editing an inputfield just block this function.
             if (isEditingInputfield) return;
 
-            if (!lockMouseModus)
-            {
-                //Use the normal locking mode (Mouse Click)
-                bool isCurrentlyLocked = isLocked;
-                if (LeftClick.triggered && !isCurrentlyLocked)
-                {
-                    if (!Interface.PointerIsOverUI()) ToggleCursor(false);
-                }
-                else if (LeftClick.WasReleasedThisFrame() && isCurrentlyLocked) ToggleCursor(true);
-
-                return;
-            }
-
             //When key is released release/lock mouse
             if (ExitInput.WasReleasedThisFrame())
             {
@@ -138,20 +119,12 @@ namespace Netherlands3D.FirstPersonViewer
         private void ToggleCursor(bool unlock)
         {
             // Lock the mouse cursor to the screen using the old method to keep it centered (used by the Object Selector).
-            if (lockMouseModus)
-            {
-                if (unlock) AddInputLockConstrain(this);
-                else RemoveInputLockConstrain(this);
+            if (unlock) AddInputLockConstrain(this);
+            else RemoveInputLockConstrain(this);
 
-                Cursor.lockState = unlock ? CursorLockMode.None : CursorLockMode.Locked;
-                Cursor.visible = unlock;
-                if (!unlock) onShowSnackbarExit.Invoke(fpvExitText);
-            }
-            else
-            {
-                if (unlock) WebGLCursor.Unlock();
-                else WebGLCursor.Lock();
-            }
+            Cursor.lockState = unlock ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = unlock;
+            if (!unlock) onShowSnackbarExit.Invoke(fpvExitText);
 
             isLocked = !unlock;
             LockCamera = unlock;
@@ -210,9 +183,6 @@ namespace Netherlands3D.FirstPersonViewer
             selectedUI = selected;
             return selected.GetComponent<TMP_InputField>() != null;
         }
-
-        public void SetMouseLockModus(bool lockMouseModus) => this.lockMouseModus = lockMouseModus;
-        public bool GetMouseLockModus() => lockMouseModus;
 
         private void TouchInput()
         {
