@@ -87,9 +87,11 @@ MonoBehaviour:
   - {fileID: 257914108873252825}
   - {fileID: 1067992730949216151}
   activeRbIndex: 0
+  thumbnailPrefab: {fileID: 0}
   Cooldown: 1
   Power: 800
   IsSticky: 0
+  ContinuousSplat: 0
 --- !u!114 &5067472827406088515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,9 +112,9 @@ MonoBehaviour:
     type: 3}
   segmentPrefab: {fileID: 6116636703134448264, guid: 456a3b5a555e148a3a2a718bebfb0fbd,
     type: 3}
-  initialSegmentCount: 5
-  maxSegmentCount: 50
-  maxSegmentLength: 0.3
+  initialSegmentCount: 10
+  maxSegmentCount: 40
+  maxSegmentLength: 0.5
 --- !u!1 &3968728929593480564
 GameObject:
   m_ObjectHideFlags: 0
