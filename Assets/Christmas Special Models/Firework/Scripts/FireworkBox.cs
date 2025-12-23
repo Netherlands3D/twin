@@ -9,6 +9,8 @@ namespace Netherlands3D.Special2025.Firework
         [SerializeField] private ParticleSystem fireworkTrailParticle;
         [SerializeField] private ParticleSystem fireworkParticle;
         [SerializeField] private ParticleSystem fireworkBallParticle;
+        [SerializeField] private ParticleSystem fireworkSecondairParticle;
+
         [SerializeField] private GameObject trailParticle;
 
         [SerializeField] private List<FireworkBoxShot> fireworkShow;
@@ -46,6 +48,9 @@ namespace Netherlands3D.Special2025.Firework
                             case FireworkType.Ball:
                                 ps = fireworkBallParticle;
                                 break;
+                            case FireworkType.Second:
+                                ps = fireworkSecondairParticle;
+                                break;
                         }
 
                         ps.Play(true);
@@ -79,7 +84,7 @@ namespace Netherlands3D.Special2025.Firework
         }
     }
 
-    public enum FireworkType { Regular, Trail, Ball }
+    public enum FireworkType { Regular, Trail, Ball, Second }
 
     [System.Serializable]
     public class FireworkBoxShot
