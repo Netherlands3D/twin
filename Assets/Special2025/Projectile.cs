@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace Netherlands3D
 {
@@ -8,6 +10,7 @@ namespace Netherlands3D
         public bool IsAlive => isAlive;
         
         public GameObject SplatVisual => splatVisual;
+        public GameObject ThumbnailVisual => thumbnailPrefab;
         
         public bool IsSticking => isSticking;
         
@@ -21,6 +24,7 @@ namespace Netherlands3D
         public float Cooldown = 0.5f;
         public float Power = 60f;
         public bool IsSticky = false;
+        public bool ContinuousSplat = false;
 
         private bool isSticking = false;
 
@@ -28,6 +32,9 @@ namespace Netherlands3D
         private bool isAlive = false;
 
         private ParticleSystem ps;
+        
+        private static Dictionary<string, List<GameObject>> splatPool = new Dictionary<string, List<GameObject>>();
+        private static int maxSplats = 10000;
 
         private void Awake()
         {
@@ -82,16 +89,49 @@ namespace Netherlands3D
                 gun.Despawn(this);
             }
 
-            
-            CreateSplat(contact.point, contact.normal);
+            if(!ContinuousSplat)
+                CreateSplat(contact.point, contact.normal, col.relativeVelocity.sqrMagnitude);
         }
 
-        private void CreateSplat(Vector3 position, Vector3 normal)
+        private void OnCollisionStay(Collision col)
+        {
+            if (col.contactCount == 0 || !isAlive || isSticking)
+                return;
+            
+            if(col.relativeVelocity.sqrMagnitude < 10) return;
+            if(!ContinuousSplat) return;
+               
+            var contact = col.GetContact(0);
+            CreateSplat(contact.point, contact.normal, col.relativeVelocity.sqrMagnitude);
+        }
+
+        private void CreateSplat(Vector3 position, Vector3 normal, float size)
         {
             if(splatVisual == null) return;
             
+            if(!splatPool.ContainsKey(splatVisual.name))
+                splatPool.Add(splatVisual.name, new List<GameObject>());
+            
             var rot =  Quaternion.LookRotation(-normal, Vector3.up);
-            Instantiate(splatVisual, position + (0.5f*normal), rot);
+
+            GameObject splat;
+            if (splatPool[splatVisual.name].Count > maxSplats)
+            {
+                splat = splatPool[splatVisual.name][0];
+                splatPool[splatVisual.name].RemoveAt(0);
+            }
+            else
+            {
+                splat = Instantiate(splatVisual, position, rot);   
+            }
+            splatPool[splatVisual.name].Add(splat);
+            splat.transform.position = position + 0.5f * normal;
+            splat.transform.rotation = rot;
+            DecalProjector proj = splat.GetComponent<DecalProjector>();
+            Vector3 clampedSize = Vector3.one * Mathf.Clamp(size * 0.01f, 0.5f, 3f);
+            clampedSize.z = 1;
+            proj.size = clampedSize;
+            //splat.SetActive(true);
         }
 
         private void CreateDeathEffect(Vector3 position)

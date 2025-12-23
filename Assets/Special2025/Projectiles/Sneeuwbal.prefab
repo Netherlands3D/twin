@@ -131,6 +131,7 @@ MonoBehaviour:
   Cooldown: 0.5
   Power: 60
   IsSticky: 0
+  ContinuousSplat: 1
 --- !u!54 &3645227548151663625
 Rigidbody:
   m_ObjectHideFlags: 0

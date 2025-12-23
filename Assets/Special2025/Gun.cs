@@ -115,15 +115,23 @@ namespace Netherlands3D
                 index = 0;
 
             selectedPrefabIndex = index;
-            projectileUI.SetImage(projectilePrefabs[index]);
+            projectileUI.SetImage(GetThumbnailPrefab(index));
             
             int count = projectilePrefabs.Count;
             int prev = (index - 1 + count) % count;
             int next = (index + 1) % count;
-            projectileUI.SetImageForPrevious(projectilePrefabs[prev]);
-            projectileUI.SetImageForNext(projectilePrefabs[next]);
+            projectileUI.SetImageForPrevious(GetThumbnailPrefab(prev));
+            projectileUI.SetImageForNext(GetThumbnailPrefab(next));
         }
-        
+
+        private GameObject GetThumbnailPrefab(int index)
+        {
+            Projectile projectile = projectilePrefabs[index].GetComponent<Projectile>();
+            if (projectile.ThumbnailVisual == null)
+                return projectilePrefabs[index];
+            return  projectile.ThumbnailVisual;
+        }
+
         private void OnClickHandler(InputAction.CallbackContext context)
         {
             isShooting = true;
