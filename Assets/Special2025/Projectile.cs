@@ -10,6 +10,7 @@ namespace Netherlands3D
         public GameObject SplatVisual => splatVisual;
         
         [SerializeField] private GameObject splatVisual;
+        [SerializeField] private GameObject deathVisual;
 
         [SerializeField] private float breakForce = 1000;
         public Rigidbody rb;
@@ -19,10 +20,19 @@ namespace Netherlands3D
         private Gun gun;
         private bool isAlive = false;
 
+        private ParticleSystem ps;
+
         private void Awake()
         {
             if(!rb)
                 rb = GetComponent<Rigidbody>();
+            
+           
+        }
+
+        private void Start()
+        {
+            
         }
 
         public void SetGun(Gun gun)
@@ -42,20 +52,37 @@ namespace Netherlands3D
             if (col.contactCount == 0 || !isAlive)
                 return;
             
+            var contact = col.GetContact(0);
             float energy = 0.5f * rb.mass * col.relativeVelocity.sqrMagnitude; //(0.5f * mass 1 * rel 60 * 60 ≈ 1800
             if (energy > breakForce)
             {
+                CreateDeathEffect(contact.point);
                 gun.Despawn(this);
             }
 
-            var contact = col.GetContact(0);
+            
             CreateSplat(contact.point, contact.normal);
         }
 
         private void CreateSplat(Vector3 position, Vector3 normal)
         {
+            if(splatVisual == null) return;
+            
             var rot =  Quaternion.LookRotation(-normal, Vector3.up);
             Instantiate(splatVisual, position + (0.5f*normal), rot);
+        }
+
+        private void CreateDeathEffect(Vector3 position)
+        {
+            if(deathVisual == null) return;
+            
+            if (ps == null)
+            {
+                GameObject psg = Instantiate(deathVisual, transform.position, transform.rotation);
+                ps = psg.GetComponent<ParticleSystem>();
+            }
+            ps.gameObject.transform.position = position;
+            ps.Play();
         }
     }
 }
