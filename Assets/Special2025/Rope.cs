@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NetTopologySuite.Triangulate;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,11 +9,11 @@ namespace Netherlands3D
 {
     public class Rope : MonoBehaviour
     {
-        [SerializeField] private Transform start, end, segmentContainer;
+        [SerializeField] private Transform start, end, jointContainer;
+        [SerializeField] private GameObject jointPrefab;
         [SerializeField] private GameObject segmentPrefab;
         [SerializeField] private int segmentCount = 10;
-        // [SerializeField] private float totalLength;
-
+        private Transform[] ropeMeshes;
         private Rigidbody[] joints = Array.Empty<Rigidbody>();
 
         private float totalWeight = 10;
@@ -21,16 +22,17 @@ namespace Netherlands3D
 
         private void OnDrawGizmos()
         {
-            foreach (var segment in joints)
+            foreach (var joint in joints)
             {
-                Gizmos.DrawSphere(segment.position, 0.1f);
+                Gizmos.DrawSphere(joint.position, 0.1f);
             }
         }
 
         private IEnumerator Start()
         {
             yield return null; //wait a frame so the gun applies the force to the start segment
-            GenerateSegments();
+            GenerateJoints();
+            GenerateMeshes();
             var startSegmentSpeed = start.GetComponent<Rigidbody>().linearVelocity;
             foreach (var rb in GetComponentsInChildren<Rigidbody>())
             {
@@ -39,32 +41,43 @@ namespace Netherlands3D
             }
         }
 
-        private void GenerateSegments()
+        private void Update()
         {
-            joints = new Rigidbody[segmentCount-1];
+            if (ropeMeshes == null)
+                return;
+
+            UpdateMeshes();
+        }
+
+        private void GenerateJoints()
+        {
+            joints = new Rigidbody[segmentCount + 1];
+            joints[0] = start.GetComponent<Rigidbody>();
             var previousTransform = start;
-            JoinSegment(previousTransform, null); //start
+            ConnectJoint(previousTransform, null); //start
             var dir = (end.position - start.position);
 
-            for (int i = 0; i < segmentCount-1; i++)
+            for (int i = 1; i < segmentCount; i++)
             {
                 var pos = previousTransform.position + (dir / segmentCount);
-                var segment = Instantiate(segmentPrefab, pos, Quaternion.identity, segmentContainer);
-                
-                var joint =  segment.GetComponent<Rigidbody>();
+                var segment = Instantiate(jointPrefab, pos, Quaternion.identity, jointContainer);
+                segment.name = "joint + " + i.ToString();
+
+                var joint = segment.GetComponent<Rigidbody>();
                 joint.maxAngularVelocity = 25f;
                 joint.maxLinearVelocity = 50f;
                 joints[i] = joint;
 
-                JoinSegment(segment.transform, previousTransform, false);
+                ConnectJoint(segment.transform, previousTransform, false);
 
                 previousTransform = segment.transform;
             }
 
-            JoinSegment(end, previousTransform, true); //end
+            ConnectJoint(end, previousTransform, true); //end
+            joints[^1] = end.GetComponent<Rigidbody>();
         }
 
-        private void JoinSegment(Transform currentJoint, Transform connectedJoint, bool isClosed = false)
+        private void ConnectJoint(Transform currentJoint, Transform connectedJoint, bool isClosed = false)
         {
             if (connectedJoint == null)
                 return;
@@ -93,6 +106,56 @@ namespace Netherlands3D
             jointDrive.positionSpring = 0;
             joint.angularXDrive = jointDrive;
             joint.angularYZDrive = jointDrive;
+        }
+
+        private void GenerateMeshes()
+        {
+            ropeMeshes = new Transform[joints.Length - 1];
+
+            for (int i = 0; i < ropeMeshes.Length; i++)
+            {
+                var mesh = Instantiate(
+                    segmentPrefab,
+                    jointContainer
+                );
+
+                ropeMeshes[i] = mesh.transform;
+            }
+        }
+
+        private void UpdateMeshes()
+        {
+            for (int i = 0; i < ropeMeshes.Length; i++)
+            {
+                UpdateSegmentMesh(
+                    ropeMeshes[i],
+                    joints[i].position,
+                    joints[i+1].position
+                );
+            }
+        }
+
+        private void UpdateSegmentMesh(
+            Transform mesh,
+            Vector3 a,
+            Vector3 b
+        )
+        {
+            Vector3 dir = b - a;
+            float length = dir.magnitude;
+
+            // Position in the middle
+            mesh.position = a + dir * 0.5f;
+
+            // Rotate to face B
+            mesh.rotation = Quaternion.LookRotation(dir);
+
+            // Scale along Z to match distance
+            mesh.localScale = new Vector3(
+                mesh.localScale.x,
+                mesh.localScale.y,
+                length
+            );
         }
     }
 }

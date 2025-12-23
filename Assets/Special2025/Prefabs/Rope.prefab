@@ -98,8 +98,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   start: {fileID: 664415028012576191}
   end: {fileID: 323827939915339249}
-  segmentContainer: {fileID: 1593837723223450868}
-  segmentPrefab: {fileID: 5762470443586899808, guid: e1658fcdfdec1424baef5fa46f734541,
+  jointContainer: {fileID: 1593837723223450868}
+  jointPrefab: {fileID: 5762470443586899808, guid: e1658fcdfdec1424baef5fa46f734541,
+    type: 3}
+  segmentPrefab: {fileID: 6521755229256326403, guid: dcaaa3fb16daf4283b274ec94c1c79a1,
     type: 3}
   segmentCount: 8
 --- !u!1001 &1193882193194280353
@@ -164,6 +166,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880696187413426056, guid: e1658fcdfdec1424baef5fa46f734541,
+        type: 3}
+      propertyPath: kinematicOnCollision
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5762470443586899808, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
@@ -243,6 +250,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880696187413426056, guid: e1658fcdfdec1424baef5fa46f734541,
+        type: 3}
+      propertyPath: kinematicOnCollision
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5762470443586899808, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
