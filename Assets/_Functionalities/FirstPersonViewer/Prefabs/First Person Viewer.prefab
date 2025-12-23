@@ -355,6 +355,9 @@ MonoBehaviour:
   isGrounded: 0
   stepHeight: 1.5
   returnFocusDistance: 150
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 128
   OnPositionUpdated:
     m_PersistentCalls:
       m_Calls: []
