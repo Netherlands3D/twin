@@ -33,6 +33,7 @@ namespace Netherlands3D.Special2025.Firework
         {
             base.OnEnable();
             rb.isKinematic = true;
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
 
             audioSource.Stop();
             rocketLaunchParticle.Stop();
@@ -42,6 +43,7 @@ namespace Netherlands3D.Special2025.Firework
         public override void StartFirework()
         {
             rb.isKinematic = false;
+            rb.constraints = RigidbodyConstraints.None;
             audioSource.Play();
             rocketLaunchParticle.Play();
         }
