@@ -35,7 +35,7 @@ namespace Netherlands3D
         private ParticleSystem ps;
         
         private static Dictionary<string, List<GameObject>> splatPool = new Dictionary<string, List<GameObject>>();
-        private static int maxSplats = 10000;
+        private static int maxSplats = 1000;
 
         private void Awake()
         {
