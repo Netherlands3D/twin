@@ -127,7 +127,8 @@ namespace Netherlands3D.Minimap
         private void StoppedMapInteraction()
         {
             navigation.gameObject.SetActive(false);
-            wmtsMap.CenterPointerInView = true;
+            wmtsMap.CenterPointerInView = false;
+            
             ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
 
             StopAllCoroutines();

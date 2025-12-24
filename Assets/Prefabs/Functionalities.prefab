@@ -620,6 +620,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MaskingDomeSpawner
       objectReference: {fileID: 0}
+    - target: {fileID: 5546791445585588271, guid: baace213b95c7fb45bd3f3bc71721fcd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -1558,6 +1563,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3919916255551741050}
     m_Modifications:
+    - target: {fileID: 777692122200182169, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.21026473
+      objectReference: {fileID: 0}
+    - target: {fileID: 777692122200182169, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.08892226
+      objectReference: {fileID: 0}
+    - target: {fileID: 777692122200182169, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.8967014
+      objectReference: {fileID: 0}
+    - target: {fileID: 777692122200182169, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.37922058
+      objectReference: {fileID: 0}
     - target: {fileID: 5593048648800678674, guid: 00b6e5ce09fbf1a4784c2207f271bcdc,
         type: 3}
       propertyPath: m_LocalPosition.x
