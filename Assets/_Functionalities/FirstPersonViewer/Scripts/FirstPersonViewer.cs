@@ -45,6 +45,8 @@ namespace Netherlands3D.FirstPersonViewer
 
         private MovementVisualController viewObject;
 
+        [SerializeField] private LayerMask collisionMask;
+
         //Events
         public Action OnResetToStart;
         public Action OnResetToGround;
@@ -129,7 +131,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void GetGroundPosition()
         {
-            if(Physics.Raycast(transform.position + Vector3.up * stepHeight, Vector3.down, out RaycastHit hit, 500, snappingCullingMask))
+            if (Physics.Raycast(transform.position + Vector3.up * stepHeight, Vector3.down, out RaycastHit hit, 500, snappingCullingMask))
             {
                 if (hit.collider != null)
                 {
@@ -234,5 +236,13 @@ namespace Netherlands3D.FirstPersonViewer
         }
 
         public void SetVelocity(Vector2 velocity) => this.velocity = velocity;
+
+        public bool TryGetMovementHit(Vector3 moveDir, float distance, out RaycastHit hit)
+        {
+            Vector3 bottom = transform.position + Vector3.up * .4f;
+            Vector3 top = bottom + Vector3.up * (FirstPersonCamera.CameraHeightOffset - .4f * 2);
+
+            return Physics.CapsuleCast(bottom, top, .4f, moveDir.normalized, out hit, distance, collisionMask);
+        }
     }
 }

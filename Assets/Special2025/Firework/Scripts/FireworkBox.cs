@@ -8,12 +8,16 @@ namespace Netherlands3D.Special2025.Firework
     {
         [SerializeField] private ParticleSystem fireworkTrailParticle;
         [SerializeField] private ParticleSystem fireworkParticle;
+        [SerializeField] private ParticleSystem fireworkBallParticle;
+        [SerializeField] private ParticleSystem fireworkSecondairParticle;
+
         [SerializeField] private GameObject trailParticle;
 
         [SerializeField] private List<FireworkBoxShot> fireworkShow;
 
-        [SerializeField] private AudioSource shotAudioSource;
+        [SerializeField] private AudioSource explosioSource;
         [SerializeField] private List<AudioClip> explosionAudio;
+        [SerializeField] private AudioSource shotAudioSource;
         [SerializeField] private List<AudioClip> shotAudio;
 
         public override void StartFirework()
@@ -28,12 +32,38 @@ namespace Netherlands3D.Special2025.Firework
                 FireworkBoxShot shot = fireworkShow[i];
                 for (int j = 0; j < shot.shotCount; j++)
                 {
-                    shotAudioSource.PlayOneShot(shotAudio[Random.Range(0, shotAudio.Count)]);
-
                     for (int k = 0; k < shot.burstCount; k++)
                     {
-                        if (shot.hasTrail) fireworkTrailParticle.Play(true);
-                        else fireworkParticle.Play(true);
+                        shotAudioSource.PlayOneShot(shotAudio[Random.Range(0, shotAudio.Count)]);
+
+                        ParticleSystem ps = null;
+                        switch (shot.fireworKType)
+                        {
+                            case FireworkType.Regular:
+                                ps = fireworkParticle;
+                                break;
+                            case FireworkType.Trail:
+                                ps = fireworkTrailParticle;
+                                break;
+                            case FireworkType.Ball:
+                                ps = fireworkBallParticle;
+                                break;
+                            case FireworkType.Second:
+                                ps = fireworkSecondairParticle;
+                                break;
+                        }
+
+                        ps.Play(true);
+
+                        if (shot.fireworKType != FireworkType.Ball)
+                        {
+                            float lifeTime;
+                            if (ps.main.startLifetime.mode == ParticleSystemCurveMode.TwoConstants) lifeTime = Random.Range(ps.main.startLifetime.constantMin, ps.main.startLifetime.constantMax);
+                            else lifeTime = ps.main.startLifetime.constant;
+
+                            StartCoroutine(PlayAudioAfterLifetime(lifeTime - .1f));
+                        }
+
                         yield return new WaitForEndOfFrame();
                     }
 
@@ -45,13 +75,22 @@ namespace Netherlands3D.Special2025.Firework
             }
             fireworkTrailParticle.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         }
+
+        private IEnumerator PlayAudioAfterLifetime(float duration)
+        {
+            yield return new WaitForSeconds(duration);
+
+            explosioSource.PlayOneShot(explosionAudio[Random.Range(0, shotAudio.Count)]);
+        }
     }
+
+    public enum FireworkType { Regular, Trail, Ball, Second }
 
     [System.Serializable]
     public class FireworkBoxShot
     {
         public float delayBetweenShots;
-        public bool hasTrail;
+        public FireworkType fireworKType;
         public int shotCount;
         public int burstCount = 1;
         public float endDelay;

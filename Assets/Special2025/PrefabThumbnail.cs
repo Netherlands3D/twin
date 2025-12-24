@@ -7,7 +7,8 @@ public class PrefabThumbnail : MonoBehaviour
     [SerializeField] private int textureSize = 128;
     
     private Dictionary<string, Sprite> sprites = new Dictionary<string, Sprite>();
-
+    private static int nextLayer = 0;
+    
     public Sprite GetThumbnail(GameObject prefab)
     {
         if(sprites.ContainsKey(prefab.name))
@@ -18,6 +19,11 @@ public class PrefabThumbnail : MonoBehaviour
         
         Quaternion isoRotation = Quaternion.Euler(30f, 45f, 0f);
         instance.transform.rotation = isoRotation;
+
+        nextLayer++;
+        if(nextLayer >= 3)
+            nextLayer = 0;
+        SetLayerRecursive(instance, nextLayer);
         
         Renderer[] renderers = instance.GetComponentsInChildren<Renderer>();
         Shader unlitShader = Shader.Find("Universal Render Pipeline/Unlit");
@@ -40,7 +46,7 @@ public class PrefabThumbnail : MonoBehaviour
         cam.orthographic = false; // perspective
         cam.nearClipPlane = 0.01f;
         cam.farClipPlane = 100f;
-        cam.cullingMask = LayerMask.GetMask("Default"); // adjust if needed
+        cam.cullingMask = 1 << nextLayer; // adjust if needed
         
         GameObject lightGO = new GameObject("ThumbnailLight");
         Light light = lightGO.AddComponent<Light>();
@@ -79,6 +85,13 @@ public class PrefabThumbnail : MonoBehaviour
         sprites.Add(prefab.name, sprite);
         
         return sprite; 
+    }
+    
+    void SetLayerRecursive(GameObject go, int layer)
+    {
+        go.layer = layer;
+        foreach (Transform t in go.transform)
+            SetLayerRecursive(t.gameObject, layer);
     }
 
     private Bounds CalculateBounds(GameObject obj)

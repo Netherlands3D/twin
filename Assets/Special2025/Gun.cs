@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Netherlands3D.FirstPersonViewer;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
@@ -39,6 +40,8 @@ namespace Netherlands3D
         private float cooldown = 0.1f;
         private float cd;
         private bool isShooting = false;
+        private float charge = 0f;
+        private float spawnStartDistance = 0.5f;
 
         private int maxProjectiles = 10;
         
@@ -49,11 +52,16 @@ namespace Netherlands3D
         private Dictionary<string, List<Projectile>> projectileActive = new Dictionary<string, List<Projectile>>();
         
         private ProjectileSelected projectileUI;
+
+        private Quaternion lastRotation;
         
         // private void OnValidate()
         // {
         //     SetProjectileSelected(selectedPrefabIndex);
         // }
+        
+        //sticky objects
+        //iets verder van camera af spawnen
 
         
         private void Awake()
@@ -84,7 +92,7 @@ namespace Netherlands3D
             projectileUI = FindAnyObjectByType<ProjectileSelected>();
             projectileUI.next.onClick.AddListener(NextProjectile);
             projectileUI.previous.onClick.AddListener(PreviousProjectile);
-            
+            projectileUI.SetPowerEnabled(false);
             
             SetProjectileSelected(selectedPrefabIndex);
         }
@@ -107,31 +115,57 @@ namespace Netherlands3D
                 index = 0;
 
             selectedPrefabIndex = index;
-            projectileUI.SetImage(projectilePrefabs[index]);
+            projectileUI.SetImage(GetThumbnailPrefab(index));
+            
+            int count = projectilePrefabs.Count;
+            int prev = (index - 1 + count) % count;
+            int next = (index + 1) % count;
+            projectileUI.SetImageForPrevious(GetThumbnailPrefab(prev));
+            projectileUI.SetImageForNext(GetThumbnailPrefab(next));
         }
 
+        private GameObject GetThumbnailPrefab(int index)
+        {
+            Projectile projectile = projectilePrefabs[index].GetComponent<Projectile>();
+            if (projectile.ThumbnailVisual == null)
+                return projectilePrefabs[index];
+            return  projectile.ThumbnailVisual;
+        }
+        
         private void OnClickHandler(InputAction.CallbackContext context)
         {
             isShooting = true;
+            projectileUI.SetPowerEnabled(true);
         }
         
         private void OnClickStopHandler(InputAction.CallbackContext context)
         {
+            if (isShooting && !EventSystem.current.IsPointerOverGameObject())
+            {
+                if (cd < 0)
+                {
+                    OnFire();
+                    cd = cooldown;
+                }
+            }
             isShooting = false;
+            projectileUI.SetPowerEnabled(false);
         }
 
         private void Update()
         {
             cd -= Time.deltaTime;
             if (isShooting)
-            {
-                if (cd < 0)
-                {
-                    OnFire();
-                    
-                    cd = cooldown;
-                }
-            }
+                charge += Time.deltaTime;
+            else 
+                charge = 0;
+            charge = Mathf.Clamp01(charge);
+            projectileUI.SetPower(charge);
+            
+            float deltaDegrees = Quaternion.Angle(lastRotation, transform.rotation);
+            if(deltaDegrees > 0)
+                charge = 0;
+            lastRotation = transform.rotation;
 
             foreach(KeyValuePair<string, List<Projectile>> proj in projectileActive)
                 if (proj.Value.Count > maxProjectiles)
@@ -140,16 +174,33 @@ namespace Netherlands3D
                 }
         }
 
+
+        private Projectile projectile;
+
         private void OnFire()
         {
-            Vector2 screenPosition =  Pointer.current.position.ReadValue();
+            Vector2 screenPosition = Pointer.current.position.ReadValue();
             Vector3 pos = fpvCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, fpvCamera.nearClipPlane));
 
-            Projectile projectile = SpawnProjectile(pos, projectilePrefabs[selectedPrefabIndex].name);
-            cooldown = projectile.Cooldown;
-            projectileSpeed = projectile.Power;
+            if (projectile == null)
+            {
+                projectile = SpawnProjectile(pos + fpvCamera.transform.forward.normalized * spawnStartDistance, projectilePrefabs[selectedPrefabIndex].name);
+                cooldown = projectile.Cooldown;
+                projectileSpeed = projectile.Power * charge;
+            }
             
-            projectile.rb.AddForce(fpvCamera.transform.forward * projectileSpeed, ForceMode.Impulse);
+            projectile.rb[projectile.activeRbIndex].isKinematic = false;
+            projectile.rb[projectile.activeRbIndex].AddForce(fpvCamera.transform.forward * projectileSpeed, ForceMode.Impulse);
+
+            var nextIndex = projectile.activeRbIndex + 1;
+            if (nextIndex >= projectile.rb.Length)
+            {
+                projectile = null;
+            }
+            else
+            {
+                projectile.activeRbIndex++;
+            }
         }
 
         private Projectile SpawnProjectile(Vector3 position, string type)
@@ -170,14 +221,15 @@ namespace Netherlands3D
                 }
 
                 GameObject test = Instantiate(prefab);
-                projectile = test.GetComponent<Projectile>();    
+                projectile = test.GetComponentInChildren<Projectile>();    
             }
             projectile.gameObject.transform.position = position;   
+            projectile.gameObject.transform.rotation = Quaternion.identity;
             if(!projectileActive.ContainsKey(type))
                 projectileActive.Add(type, new List<Projectile>());
             
             projectileActive[type].Add(projectile);
-            ResetRigidBody(projectile.rb);
+            projectile.Reset();
             projectile.SetGun(this);
             projectile.SetAlive(true);
             return projectile;
@@ -185,8 +237,16 @@ namespace Netherlands3D
 
         public void Despawn(Projectile obj)
         {
+            if(!obj.IsAlive) return;
+            
             obj.SetAlive(false);
-            ResetRigidBody(obj.rb);
+            
+            Projectile[] children = obj.gameObject.GetComponentsInChildren<Projectile>();
+            foreach(Projectile child in children)
+                Despawn(child);
+            
+            transform.parent = null; 
+            obj.Reset();
             
             string type = obj.gameObject.name;
             type = type.Replace("(Clone)", "");
@@ -199,14 +259,6 @@ namespace Netherlands3D
             
             projectilePool[type].Add(obj);
             obj.SetGun(null);
-        }
-
-        private void ResetRigidBody(Rigidbody obj)
-        {
-            obj.linearVelocity = Vector3.zero;
-            obj.angularVelocity = Vector3.zero;
-            //obj.Sleep();                 
-            obj.ResetInertiaTensor();    
         }
     }
 }

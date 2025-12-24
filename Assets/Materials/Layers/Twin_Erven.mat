@@ -107,11 +107,13 @@ Material:
     - _DecalMeshViewBias: 0
     - _DrawOrder: 0
     - _DstBlend: 0
+    - _EnableSnow: 1
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _IncludeInGlobalMask: 1
+    - _MaskingChannelBitmask: 16777215
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _QueueControl: 0
@@ -122,6 +124,7 @@ Material:
     - _SUBOBJECT_FILTERING: 0
     - _Smoothness: 0.03
     - _SmoothnessTextureChannel: 0
+    - _SnowNoise: 0
     - _SpecularHighlights: 1
     - _SpikeClampHeight: 320
     - _SrcBlend: 1
@@ -130,7 +133,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.48878327, g: 0.6509434, b: 0.45136172, a: 1}
+    - _BaseColor: {r: 0.21272047, g: 0.3490566, b: 0.17946778, a: 1}
     - _ClippingMask: {r: 3.4028235e+38, g: 3.4028235e+38, b: 3.4028235e+38, a: 3.4028235e+38}
     - _ClippingMaskDome: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.18431373, g: 0.34901962, b: 0.14901961, a: 1}

@@ -20,11 +20,22 @@ namespace Netherlands3D.Special2025.Firework
         public float accelerationTime = 2f;
         private float timer;
 
+        private Projectile projectile;
+
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
+            projectile = GetComponent<Projectile>();
+
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
             rb.isKinematic = true;
 
+            audioSource.Stop();
+            rocketLaunchParticle.Stop();
             explosionTimer = Random.Range(timeBeforeExploding.x, timeBeforeExploding.y);
         }
 
@@ -57,7 +68,7 @@ namespace Netherlands3D.Special2025.Firework
         private void Explode()
         {
             Instantiate(explosionParticlePrefab, transform.position, Quaternion.LookRotation(transform.up));
-            Destroy(gameObject);
+            projectile.Despawn();
         }
     }
 }

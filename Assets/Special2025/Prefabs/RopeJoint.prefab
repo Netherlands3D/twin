@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -7764255130866172634}
   - component: {fileID: 2001985000471358739}
   - component: {fileID: 1510741606604507963}
+  - component: {fileID: 1880696187413426056}
   m_Layer: 0
   m_Name: RopeJoint
   m_TagString: Untagged
@@ -44,9 +45,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5762470443586899808}
   serializedVersion: 4
-  m_Mass: 0.1
-  m_Drag: 2
-  m_AngularDrag: 5
+  m_Mass: 0.01
+  m_Drag: 6
+  m_AngularDrag: 8
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -201,7 +202,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5762470443586899808}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -239,3 +240,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1880696187413426056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5762470443586899808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f58d933293894d0c96a3b99e046a968, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  kinematicOnCollision: 0

@@ -37,10 +37,17 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         private void MovePlayer(Vector2 moveInput)
         {
             Vector3 direction = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
+            float speed = MovementSpeed * (input.SprintAction.IsPressed() ? speedMultiplierSetting.Value : 1);
+            float dist = speed * Time.deltaTime;
 
-            float calculatedSpeed = MovementSpeed * (input.SprintAction.IsPressed() ? speedMultiplierSetting.Value : 1);
+            if (viewer.TryGetMovementHit(direction, dist, out RaycastHit hit))
+            {
+                direction = Vector3.ProjectOnPlane(direction, hit.normal).normalized;
 
-            transform.Translate(direction * calculatedSpeed * Time.deltaTime, Space.World);
+                if (viewer.TryGetMovementHit(direction, dist, out _)) return;
+            }
+
+            transform.Translate(direction * dist, Space.World);
             viewer.GetGroundPosition();
         }
 

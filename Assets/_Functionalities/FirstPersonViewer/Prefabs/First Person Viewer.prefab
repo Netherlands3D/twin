@@ -226,7 +226,6 @@ GameObject:
   - component: {fileID: 3034395081720571745}
   - component: {fileID: 1609831314963826710}
   - component: {fileID: 6660788825186363282}
-  - component: {fileID: 8297049154362065758}
   m_Layer: 2
   m_Name: First Person Viewer
   m_TagString: Untagged
@@ -355,6 +354,9 @@ MonoBehaviour:
   isGrounded: 0
   stepHeight: 1.5
   returnFocusDistance: 150
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 128
   OnPositionUpdated:
     m_PersistentCalls:
       m_Calls: []
@@ -391,11 +393,3 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   fpvExitText: Druk op 'backspace' om je muis te ontgrendelen.
---- !u!81 &8297049154362065758
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8111522683061574636}
-  m_Enabled: 1
