@@ -26,7 +26,7 @@ namespace Netherlands3D
         public float Power = 60f;
         public bool IsSticky = false;
         public bool ContinuousSplat = false;
-        public bool RandomSize = false;
+        public bool RandomSize;
 
         private bool isSticking = false;
 
