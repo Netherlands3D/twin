@@ -92,7 +92,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             isEditingInputfield = IsInputfieldSelected();
 
-            HandleExiting();
+            //HandleExiting();
 
             LookDelta = LookInput.ReadValue<Vector2>();
             TouchInput();
