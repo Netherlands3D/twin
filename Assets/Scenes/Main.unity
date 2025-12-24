@@ -684,6 +684,16 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6752518611905131148, guid: 853944de830b2c6468b7451d909bf7be,
+        type: 3}
+      propertyPath: m_text
+      value: 'Versieren: A knop (inhouden voor power)
+
+        Springen: B knop
+
+        Lopen:
+        Stuurknuppel'
+      objectReference: {fileID: 0}
     - target: {fileID: 6830054651982626012, guid: 853944de830b2c6468b7451d909bf7be,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -769,6 +779,16 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8647644236357762292, guid: 853944de830b2c6468b7451d909bf7be,
+        type: 3}
+      propertyPath: m_text
+      value: 'Lopen: W / A / S / D
+
+        Wisselen versiering: Q / E
+
+        Versieren:
+        Linker muisklik (inhouden voor power)'
+      objectReference: {fileID: 0}
     - target: {fileID: 8693835931782608528, guid: 853944de830b2c6468b7451d909bf7be,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -793,6 +813,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8704328644583519655, guid: 853944de830b2c6468b7451d909bf7be,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 24.999512
       objectReference: {fileID: 0}
     - target: {fileID: 8866778389169099348, guid: 853944de830b2c6468b7451d909bf7be,
         type: 3}
@@ -2477,22 +2502,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.7512772
+      value: 0.20579392
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.6012348
+      value: 0.08769552
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.21253234
+      value: 0.89664197
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.17008613
+      value: -0.38208845
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920523, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
