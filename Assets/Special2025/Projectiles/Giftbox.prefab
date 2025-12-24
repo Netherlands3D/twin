@@ -125,8 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 437ab97a0a28143ccbf01bc2ab7a56f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  splatVisual: {fileID: 7780954651499608782, guid: c3196f637c2f955d681f3850ed831ec8,
-    type: 3}
+  splatVisual: {fileID: 0}
   deathVisual: {fileID: 186756, guid: 69524a2ee29c9e14db79217d6623cacf, type: 3}
   breakForce: 10000
   rb:
