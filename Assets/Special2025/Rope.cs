@@ -141,15 +141,23 @@ namespace Netherlands3D
             ConnectJoint(end, joints[^2].transform, true);
         }
 
-
         private void ConnectJoint(Transform currentJoint, Transform connectedJoint, bool isClosed = false)
         {
             if (connectedJoint == null) return;
 
             var joint = currentJoint.GetComponent<ConfigurableJoint>();
             joint.connectedBody = connectedJoint.GetComponent<Rigidbody>();
-            joint.autoConfigureConnectedAnchor = true;
+            joint.autoConfigureConnectedAnchor = false;
 
+            if (isClosed)
+            {
+                joint.connectedAnchor = Vector3.forward*maxSegmentLength;
+            }
+            else
+            {
+                joint.connectedAnchor = Vector3.zero;
+            }
+            
             joint.xMotion = ConfigurableJointMotion.Limited;
             joint.yMotion = ConfigurableJointMotion.Limited;
             joint.zMotion = ConfigurableJointMotion.Limited;
