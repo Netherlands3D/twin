@@ -114,7 +114,7 @@ MonoBehaviour:
   segmentPrefab: {fileID: 6116636703134448264, guid: 456a3b5a555e148a3a2a718bebfb0fbd,
     type: 3}
   initialSegmentCount: 15
-  maxSegmentCount: 40
+  maxSegmentCount: 60
   maxSegmentLength: 0.3
 --- !u!1 &3968728929593480564
 GameObject:

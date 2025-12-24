@@ -20,8 +20,11 @@ namespace Netherlands3D
 
         private void OnCollisionEnter(Collision other)
         {
-            if(kinematicOnCollision)
+            if (kinematicOnCollision)
+            {
                 rb.isKinematic = true;
+                GetComponent<Collider>().enabled = false;
+            }
         }
 
         private void FixedUpdate()
