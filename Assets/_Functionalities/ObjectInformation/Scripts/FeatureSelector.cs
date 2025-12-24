@@ -49,7 +49,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void Select(FeatureMapping mapping)
         {
-            mapping.SelectFeature();
+            //mapping.SelectFeature();
         }
 
         public void Deselect()
