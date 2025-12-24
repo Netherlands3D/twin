@@ -51,6 +51,8 @@ namespace Netherlands3D.Snapshots
         [SerializeField] private string fileName = "Snapshot";
         [SerializeField] private SnapshotFileType fileType = SnapshotFileType.png;
         [SerializeField] private LayerMask snapshotLayers;
+       
+        [SerializeField] private Texture2D overlayTexture;
 
         public UnityEvent<string> DownloadSnapshotComplete = new();
 
@@ -100,10 +102,12 @@ namespace Netherlands3D.Snapshots
 
         public void TakeSnapshot()
         {
-            var snapshotWidth = (useViewSize) ? Screen.width : width;
-            var snapshotHeight = (useViewSize) ? Screen.height : height;
+            var snapshotWidth = 1920;
+            var snapshotHeight = 1080;
 
             byte[] bytes = Snapshot.ToImageBytes(snapshotWidth, snapshotHeight, sourceCamera, snapshotLayers, fileType);
+
+            bytes = MergeOverlay(bytes, overlayTexture, snapshotWidth, snapshotHeight);
 
             var path = DetermineSaveLocation();
 
@@ -119,6 +123,30 @@ namespace Netherlands3D.Snapshots
 #else
             File.WriteAllBytes(path, bytes);
 #endif
+        }
+
+        public static byte[] MergeOverlay(
+    byte[] baseImageBytes,
+    Texture2D overlay,
+    int width,
+    int height
+   )
+        {
+            var baseTex = new Texture2D(width, height, TextureFormat.RGBA32, false);
+            baseTex.LoadImage(baseImageBytes);
+
+            Color[] basePixels = baseTex.GetPixels();
+            Color[] overlayPixels = overlay.GetPixels();
+
+            for (int i = 0; i < basePixels.Length; i++)
+            {
+                Color o = overlayPixels[i];
+                basePixels[i] = Color.Lerp(basePixels[i], o, o.a);
+            }
+
+            baseTex.SetPixels(basePixels);
+            baseTex.Apply();
+            return baseTex.EncodeToPNG();
         }
 
         public void OnSnapshotDownloadComplete(string message)
