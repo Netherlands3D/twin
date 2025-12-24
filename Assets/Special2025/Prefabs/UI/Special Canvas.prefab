@@ -207,6 +207,41 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 533446739574233602, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: onClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 533446739574233602, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 533446739574233602, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 4103610258668760460}
+    - target: {fileID: 533446739574233602, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 533446739574233602, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ClearInput
+      objectReference: {fileID: 0}
+    - target: {fileID: 533446739574233602, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Netherlands3D.AddressSearch.AddressSearch, eu.netherlands3d.address-search.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 533446739574233602, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 828619630086600508, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -236,6 +271,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1092224360729607791, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: m_text
+      value: Verder naar locatie versieren
       objectReference: {fileID: 0}
     - target: {fileID: 1186772308574961566, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
@@ -309,8 +349,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2552595024988117094, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2552595024988117094, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2552595024988117094, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 410.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 2552595024988117094, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2552595024988117094, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 205.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 2552595024988117094, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -70
       objectReference: {fileID: 0}
     - target: {fileID: 2894724268793318750, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
@@ -441,118 +506,169 @@ PrefabInstance:
         type: 3}
       propertyPath: m_text
       value: "<b>Stap 1:</b> Kies een locatie in Nederland\n<b>Stap 2:</b> Versier
-        de locatie zo feestelijk mogelijk\n<b>Stap 3:</b> deel jouw nieuwjaarsboodschap
+        de locatie zo feestelijk mogelijk\n<b>Stap 3:</b> Deel jouw nieuwjaarsboodschap
         met\n\t   familie, vrienden of collega's!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3594819819089116841, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4527375863932704068, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: m_text
+      value: 'Versier jouw plek in Nederland
+
+        en deel deze als nieuwjaarskaart!'
       objectReference: {fileID: 0}
     - target: {fileID: 4679312552362790290, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4679312552362790290, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4679312552362790290, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1920
       objectReference: {fileID: 0}
     - target: {fileID: 4679312552362790290, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 4679312552362790290, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 960
+      objectReference: {fileID: 0}
+    - target: {fileID: 6209203853849503085, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6678953771807728790, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6678953771807728790, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6678953771807728790, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1027.1172
       objectReference: {fileID: 0}
     - target: {fileID: 6678953771807728790, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 224.12332
       objectReference: {fileID: 0}
     - target: {fileID: 6678953771807728790, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -477.46664
       objectReference: {fileID: 0}
     - target: {fileID: 6853286011477147730, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7001337373175831186, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: m_text
+      value: '<b>Locatie Kiezen:</b>
+
+        Zoek op adres of kllk op de kaart waar
+        je wil beginnen.
+
+
+        <b>Versieren:</b>
+
+        Kies obejcten die je
+        wil gebruiken als versiering. Je kunt ze dichtbij en verderweg plaatsen.
+        Ballen in de boom, stapel cadeautjes, niks is te gek!
+
+
+        <b>Rondlopen:</b>
+
+        Loop
+        rond met de pijltjes (PC) of met de joystick (mobiel)
+
+        Druk backspace
+        om de muis te ontgrendelen en een andere versiering te kiezen!'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7001337373175831186, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 7001337373175831186, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 31
+      objectReference: {fileID: 0}
     - target: {fileID: 7116674644247804102, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7116674644247804102, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7116674644247804102, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1920
       objectReference: {fileID: 0}
     - target: {fileID: 7116674644247804102, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 930
       objectReference: {fileID: 0}
     - target: {fileID: 7116674644247804102, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 960
       objectReference: {fileID: 0}
     - target: {fileID: 7116674644247804102, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -615
       objectReference: {fileID: 0}
     - target: {fileID: 7621995908529781723, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7621995908529781723, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7621995908529781723, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1027.1172
       objectReference: {fileID: 0}
     - target: {fileID: 7621995908529781723, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 272.53333
       objectReference: {fileID: 0}
     - target: {fileID: 7621995908529781723, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -750
       objectReference: {fileID: 0}
     - target: {fileID: 8137908471621963279, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
@@ -622,27 +738,27 @@ PrefabInstance:
     - target: {fileID: 8478227781764372462, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8478227781764372462, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8478227781764372462, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1027.1172
       objectReference: {fileID: 0}
     - target: {fileID: 8478227781764372462, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 253.34332
       objectReference: {fileID: 0}
     - target: {fileID: 8478227781764372462, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -253.34332
       objectReference: {fileID: 0}
     - target: {fileID: 8854048428307164890, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
@@ -711,6 +827,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2600508441696342534}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4103610258668760460 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2081841084126642058, guid: cc3c5affdd80eea4c98121e5f10f5958,
+    type: 3}
+  m_PrefabInstance: {fileID: 2600508441696342534}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 763bb4e1fc27b0b48960113a0e4b5b0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6373321136335480365 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8963369870145418283, guid: cc3c5affdd80eea4c98121e5f10f5958,
@@ -1250,11 +1378,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4997419578823107694, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
-        type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5031786889156781905, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
         type: 3}

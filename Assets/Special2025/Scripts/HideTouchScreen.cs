@@ -4,9 +4,15 @@ namespace Netherlands3D
 {
     public class HideTouchScreen : MonoBehaviour
     {
+        [SerializeField] private GameObject mobileScreen;
+        [SerializeField] private GameObject computerScreen;
+
         private void Start()
         {
-            gameObject.SetActive(WebGLOsDetection.IsMobile());
+            bool isMobile = WebGLOsDetection.IsMobile();
+
+            mobileScreen.SetActive(isMobile);
+            computerScreen.SetActive(!isMobile);
         }
     }
 }

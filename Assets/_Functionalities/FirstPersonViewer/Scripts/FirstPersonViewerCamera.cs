@@ -1,7 +1,10 @@
 using DG.Tweening;
 using Netherlands3D.FirstPersonViewer.ViewModus;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
 using UnityEngine;
+
+using SnapshotComponent = Netherlands3D.Snapshots.Snapshots;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -47,6 +50,11 @@ namespace Netherlands3D.FirstPersonViewer
 
             firstPersonViewerCamera = GetComponent<Camera>();
             FPVCamera = firstPersonViewerCamera;
+        }
+
+        private void Start()
+        {
+            ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(firstPersonViewerCamera);
         }
 
         public void SetupViewer()

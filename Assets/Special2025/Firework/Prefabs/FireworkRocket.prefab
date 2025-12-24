@@ -4976,7 +4976,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!114 &7673828805499239881
 MonoBehaviour:
@@ -5131,10 +5131,15 @@ MonoBehaviour:
   splatVisual: {fileID: 0}
   deathVisual: {fileID: 0}
   breakForce: 1000
-  rb: {fileID: 1591469160111204665}
+  rb:
+  - {fileID: 0}
+  activeRbIndex: 0
+  thumbnailPrefab: {fileID: 0}
   Cooldown: 0.5
   Power: 60
   IsSticky: 0
+  ContinuousSplat: 0
+  RandomSize: 0
 --- !u!4 &887718890073534613 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3bea07242a9d8bb4882c32eade44eaf4,

@@ -11,6 +11,7 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngineInternal;
 
 namespace Netherlands3D.AddressSearch
 {
