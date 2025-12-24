@@ -624,13 +624,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 437ab97a0a28143ccbf01bc2ab7a56f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThumbnailVisual: {fileID: 21300000, guid: 66f041f2d89791b41bdf6b06707533ce, type: 3}
   splatVisual: {fileID: 0}
   deathVisual: {fileID: 0}
   breakForce: 1000
   rb:
   - {fileID: 0}
   activeRbIndex: 0
-  thumbnailPrefab: {fileID: 0}
   Cooldown: 0.5
   Power: 60
   IsSticky: 0

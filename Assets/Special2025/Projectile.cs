@@ -10,7 +10,7 @@ namespace Netherlands3D
         public bool IsAlive => isAlive;
         
         public GameObject SplatVisual => splatVisual;
-        public GameObject ThumbnailVisual => thumbnailPrefab;
+        public Sprite ThumbnailVisual;
         
         public bool IsSticking => isSticking;
         
@@ -20,7 +20,6 @@ namespace Netherlands3D
         [SerializeField] private float breakForce = 1000;
         public Rigidbody[] rb;
         public int activeRbIndex = 0;
-        [SerializeField] private GameObject thumbnailPrefab;
         
         public float Cooldown = 0.5f;
         public float Power = 60f;

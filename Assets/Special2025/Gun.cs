@@ -142,7 +142,7 @@ namespace Netherlands3D
             projectileUI.SetImageForNext(GetThumbnailPrefab(next));
         }
 
-        private GameObject GetThumbnailPrefab(int index)
+        private object GetThumbnailPrefab(int index)
         {
             Projectile projectile = projectilePrefabs[index].GetComponent<Projectile>();
             if (projectile.ThumbnailVisual == null)

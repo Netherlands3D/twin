@@ -22,19 +22,40 @@ namespace Netherlands3D
             pt = GetComponent<PrefabThumbnail>();
         }
 
-        public void SetImage(GameObject projectilePrefab)
+        public void SetImage(object projectilePrefab)
         {
-            projectileIcon.sprite = pt.GetThumbnail(projectilePrefab);
+            Sprite sprite = projectilePrefab as Sprite;
+            if(sprite != null)
+            {
+                projectileIcon.sprite = sprite;
+                return;
+            }
+
+            projectileIcon.sprite = pt.GetThumbnail(projectilePrefab as GameObject);
         }
 
-        public void SetImageForNext(GameObject projectilePrefab)
+        public void SetImageForNext(object projectilePrefab)
         {
-            nextButton.gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = pt.GetThumbnail(projectilePrefab);
+            Sprite sprite = projectilePrefab as Sprite;
+            if (sprite != null)
+            {
+                nextButton.gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = sprite;
+                return;
+            }
+
+            nextButton.gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = pt.GetThumbnail(projectilePrefab as GameObject);
         }
         
-        public void SetImageForPrevious(GameObject projectilePrefab)
+        public void SetImageForPrevious(object projectilePrefab)
         {
-            previousButton.gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = pt.GetThumbnail(projectilePrefab);
+            Sprite sprite = projectilePrefab as Sprite;
+            if (sprite != null)
+            {
+                previousButton.gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = sprite;
+                return;
+            }
+
+            previousButton.gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = pt.GetThumbnail(projectilePrefab as GameObject);
         }
 
         public void SetPowerEnabled(bool enabled)
