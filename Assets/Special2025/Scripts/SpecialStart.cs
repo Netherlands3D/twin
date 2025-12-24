@@ -8,14 +8,21 @@ namespace Netherlands3D.Special2025
 {
     public class SpecialStart : MonoBehaviour
     {
+        private Coordinate setCoordinate;
+
         public void SetLocation(Coordinate coordinate)
         {
-            StartCoroutine(StartViewer(coordinate));
+            setCoordinate = coordinate;
+        }
+
+        public void PressStart()
+        {
+            StartCoroutine(StartViewer(setCoordinate));
         }
 
         private IEnumerator StartViewer(Coordinate coordinate)
         {
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(1);
             FirstPersonViewer.FirstPersonViewer firstPersonViewer = ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>();
 
             Vector3 rayOrigin = coordinate.ToUnity();
