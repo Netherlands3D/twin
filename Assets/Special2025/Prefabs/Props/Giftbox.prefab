@@ -110,7 +110,7 @@ MonoBehaviour:
   Power: 60
   IsSticky: 0
   ContinuousSplat: 0
-  RandomSize: 0
+  RandomSize: 1
 --- !u!54 &2218160981552406642
 Rigidbody:
   m_ObjectHideFlags: 0

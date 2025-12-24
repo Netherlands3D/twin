@@ -7,23 +7,20 @@ public class PrefabThumbnail : MonoBehaviour
     [SerializeField] private int textureSize = 128;
     
     private Dictionary<string, Sprite> sprites = new Dictionary<string, Sprite>();
-    private static int nextLayer = 0;
-    
+    private static int count = 0;
     public Sprite GetThumbnail(GameObject prefab)
     {
         if(sprites.ContainsKey(prefab.name))
             return sprites[prefab.name];
         
+        count++;
+
         // Create a temporary instance
         GameObject instance = Instantiate(prefab);
+        instance.transform.position += Vector3.right * count * 5;
         
         Quaternion isoRotation = Quaternion.Euler(30f, 45f, 0f);
         instance.transform.rotation = isoRotation;
-
-        nextLayer++;
-        if(nextLayer >= 3)
-            nextLayer = 0;
-        SetLayerRecursive(instance, nextLayer);
         
         Renderer[] renderers = instance.GetComponentsInChildren<Renderer>();
         Shader unlitShader = Shader.Find("Universal Render Pipeline/Unlit");
@@ -46,8 +43,8 @@ public class PrefabThumbnail : MonoBehaviour
         cam.orthographic = false; // perspective
         cam.nearClipPlane = 0.01f;
         cam.farClipPlane = 100f;
-        cam.cullingMask = 1 << nextLayer; // adjust if needed
-        
+        cam.cullingMask = 1 << LayerMask.NameToLayer("Default");
+
         GameObject lightGO = new GameObject("ThumbnailLight");
         Light light = lightGO.AddComponent<Light>();
         light.type = LightType.Directional;
