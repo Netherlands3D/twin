@@ -124,6 +124,8 @@ namespace Netherlands3D.Minimap
 		private Vector2 lastMapSizeDelta;
 		private Vector3 lastMinimapPosition;
 
+		public bool blockPointerMove;
+
         private void Awake()
         {
 			if(!cameraMoveTarget) cameraMoveTarget = Camera.main;
@@ -340,7 +342,7 @@ namespace Netherlands3D.Minimap
 
 			PositionObjectOnMap(pointer, new Coordinate(cameraMoveTarget.transform.position).Convert(CoordinateSystem.RDNAP));
 
-			if(CenterPointerInView)
+			if (CenterPointerInView)
 			{
 				this.transform.localPosition = -pointer.localPosition * mapRectTransform.localScale.x + (Vector3)parentUIRectTransform.sizeDelta * 0.5f;
 			}
