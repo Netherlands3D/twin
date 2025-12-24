@@ -44,11 +44,16 @@ namespace Netherlands3D
 
         private void GetDefaultRigidBody()
         {
-            if (rb == null || rb.Length == 0 || rb[0] == null)
+            if (rb == null || rb.Length == 0)
             {
                 rb = new Rigidbody[1];
-                rb[0] = GetComponent<Rigidbody>();
+               
             }
+            if(rb[0] == null)
+                rb[0] = gameObject.GetComponent<Rigidbody>();
+
+            if(rb[0] == null)
+                rb[0] = gameObject.AddComponent<Rigidbody>();
         }
 
         public void SetGun(Gun gun)
@@ -160,7 +165,7 @@ namespace Netherlands3D
             transform.parent = target;
             rb[activeRbIndex].isKinematic = true;
             Destroy(rb[activeRbIndex]);
-            rb = null;
+            rb[activeRbIndex] = null;
         }
 
         public void Reset()

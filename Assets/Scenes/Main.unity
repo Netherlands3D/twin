@@ -514,7 +514,7 @@ PrefabInstance:
     - target: {fileID: 6074286240799126273, guid: ce284aba191b2f642866ceac4d3d56ab,
         type: 3}
       propertyPath: projectilePrefabs.Array.size
-      value: 24
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 6074286240799126273, guid: ce284aba191b2f642866ceac4d3d56ab,
         type: 3}
@@ -526,7 +526,7 @@ PrefabInstance:
         type: 3}
       propertyPath: 'projectilePrefabs.Array.data[24]'
       value: 
-      objectReference: {fileID: 2731009277449144939, guid: d9595ddc962e63245bea256076dc2d19,
+      objectReference: {fileID: 2731009277449144939, guid: c23f69a8db342479db7dc21bf2c9e074,
         type: 3}
     - target: {fileID: 6660788825186363282, guid: ce284aba191b2f642866ceac4d3d56ab,
         type: 3}
