@@ -113,9 +113,9 @@ MonoBehaviour:
     type: 3}
   segmentPrefab: {fileID: 6116636703134448264, guid: 456a3b5a555e148a3a2a718bebfb0fbd,
     type: 3}
-  initialSegmentCount: 10
+  initialSegmentCount: 15
   maxSegmentCount: 40
-  maxSegmentLength: 0.5
+  maxSegmentLength: 0.3
 --- !u!1 &3968728929593480564
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,6 +219,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880696187413426056, guid: e1658fcdfdec1424baef5fa46f734541,
+        type: 3}
+      propertyPath: offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880696187413426056, guid: e1658fcdfdec1424baef5fa46f734541,
+        type: 3}
+      propertyPath: offset.y
+      value: 1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880696187413426056, guid: e1658fcdfdec1424baef5fa46f734541,
+        type: 3}
+      propertyPath: offset.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880696187413426056, guid: e1658fcdfdec1424baef5fa46f734541,
+        type: 3}
+      propertyPath: attatchToCamera
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1880696187413426056, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
