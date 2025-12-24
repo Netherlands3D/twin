@@ -113,9 +113,9 @@ MonoBehaviour:
     type: 3}
   segmentPrefab: {fileID: 6116636703134448264, guid: 456a3b5a555e148a3a2a718bebfb0fbd,
     type: 3}
-  initialSegmentCount: 10
-  maxSegmentCount: 40
-  maxSegmentLength: 0.5
+  initialSegmentCount: 15
+  maxSegmentCount: 60
+  maxSegmentLength: 0.2
 --- !u!1 &3968728929593480564
 GameObject:
   m_ObjectHideFlags: 0
@@ -155,6 +155,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1885071565005032971}
     m_Modifications:
+    - target: {fileID: -7764255130866172634, guid: e1658fcdfdec1424baef5fa46f734541,
+        type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -7042574021704089034, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: m_Drag
@@ -173,17 +178,17 @@ PrefabInstance:
     - target: {fileID: 1508690811947216976, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1508690811947216976, guid: e1658fcdfdec1424baef5fa46f734541,
-        type: 3}
-      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1508690811947216976, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1508690811947216976, guid: e1658fcdfdec1424baef5fa46f734541,
+        type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.198
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1508690811947216976, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
@@ -222,6 +227,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1880696187413426056, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
+      propertyPath: offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880696187413426056, guid: e1658fcdfdec1424baef5fa46f734541,
+        type: 3}
+      propertyPath: offset.y
+      value: 1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880696187413426056, guid: e1658fcdfdec1424baef5fa46f734541,
+        type: 3}
+      propertyPath: offset.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880696187413426056, guid: e1658fcdfdec1424baef5fa46f734541,
+        type: 3}
+      propertyPath: attatchToCamera
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880696187413426056, guid: e1658fcdfdec1424baef5fa46f734541,
+        type: 3}
       propertyPath: kinematicOnCollision
       value: 1
       objectReference: {fileID: 0}
@@ -255,6 +280,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1885071565005032971}
     m_Modifications:
+    - target: {fileID: -7764255130866172634, guid: e1658fcdfdec1424baef5fa46f734541,
+        type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -7042574021704089034, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: m_Drag
@@ -273,7 +303,7 @@ PrefabInstance:
     - target: {fileID: 1508690811947216976, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1508690811947216976, guid: e1658fcdfdec1424baef5fa46f734541,
         type: 3}
