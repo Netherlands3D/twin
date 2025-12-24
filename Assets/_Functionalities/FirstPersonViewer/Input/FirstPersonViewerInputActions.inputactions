@@ -540,39 +540,6 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "Space Up",
-                    "id": "ef0182d1-66ea-423a-8ff1-acf1df16b033",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "VerticalMove",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "fafe1665-316f-4bce-b360-c35ddd00ce2f",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "VerticalMove",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "24a8cd0e-4d95-4c14-a70c-9f09a058eae1",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "VerticalMove",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "",
                     "id": "80136697-0bcb-4845-8a90-3b946590b880",
                     "path": "<Mouse>/leftButton",
