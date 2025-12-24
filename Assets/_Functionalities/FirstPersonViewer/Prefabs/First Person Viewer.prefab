@@ -348,6 +348,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <FirstPersonCamera>k__BackingField: {fileID: 2754359901435342932}
   walkingState: {fileID: 11400000, guid: bc41cb17aeb0e9e4dad0bc62ddaa02ea, type: 2}
+  flyingState: {fileID: 11400000, guid: 594defc4112e8534f9cc9c41b8492119, type: 2}
+  secretFlight: {fileID: -1990338750895245690, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
+    type: 3}
   snappingCullingMask:
     serializedVersion: 2
     m_Bits: 193

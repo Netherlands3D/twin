@@ -7,6 +7,7 @@ using Netherlands3D.Twin.Samplers;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -17,6 +18,9 @@ namespace Netherlands3D.FirstPersonViewer
         [field: SerializeField] public FirstPersonViewerCamera FirstPersonCamera { private set; get; }
         public FirstPersonViewerInput Input { private set; get; }
         [SerializeField] private ViewerState walkingState;
+        [SerializeField] private ViewerState flyingState;
+        [SerializeField] private InputActionReference secretFlight;
+        private bool inFlight;
 
         private FirstPersonViewerStateMachine fsm;
         private WorldTransform worldTransform;
@@ -110,7 +114,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void SetupFSM()
         {
-            ViewerState[] playerStates = new ViewerState[] { walkingState };
+            ViewerState[] playerStates = new ViewerState[] { walkingState, flyingState };
 
             fsm = new FirstPersonViewerStateMachine(this, Input, playerStates);
         }
@@ -127,6 +131,14 @@ namespace Netherlands3D.FirstPersonViewer
             OnPositionUpdated.Invoke(new Coordinate(transform.position));
 
             if (Input.ResetInput.triggered) ResetToGround();
+
+            if (secretFlight.action.triggered)
+            {
+                inFlight = !inFlight;
+
+                if (inFlight) SetMovementModus(flyingState);
+                else SetMovementModus(walkingState);
+            }
         }
 
         public void GetGroundPosition()

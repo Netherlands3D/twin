@@ -26,6 +26,7 @@ namespace Netherlands3D
         public float Power = 60f;
         public bool IsSticky = false;
         public bool ContinuousSplat = false;
+        public bool RandomSize = false;
 
         private bool isSticking = false;
 
@@ -42,13 +43,26 @@ namespace Netherlands3D
             GetDefaultRigidBody();
         }
 
+        public void OnSpawn()
+        {
+            if(RandomSize)
+            {
+                transform.localScale = Vector3.one * UnityEngine.Random.Range(0.5f, 2f);
+            }
+        }
+
         private void GetDefaultRigidBody()
         {
-            if (rb == null || rb.Length == 0 || rb[0] == null)
+            if (rb == null || rb.Length == 0)
             {
                 rb = new Rigidbody[1];
-                rb[0] = GetComponent<Rigidbody>();
+               
             }
+            if(rb[0] == null)
+                rb[0] = gameObject.GetComponent<Rigidbody>();
+
+            if(rb[0] == null)
+                rb[0] = gameObject.AddComponent<Rigidbody>();
         }
 
         public void SetGun(Gun gun)
@@ -160,7 +174,7 @@ namespace Netherlands3D
             transform.parent = target;
             rb[activeRbIndex].isKinematic = true;
             Destroy(rb[activeRbIndex]);
-            rb = null;
+            rb[activeRbIndex] = null;
         }
 
         public void Reset()

@@ -131,6 +131,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SecretFlight",
+                    "type": "Button",
+                    "id": "3d3540de-f8d7-466a-ac1f-f8befd2d5224",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -782,6 +791,39 @@
                     "action": "OpenOverlay",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "One Modifier",
+                    "id": "edd24c81-ca12-40c4-8d5e-2bfa607b10e4",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SecretFlight",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "ea18d771-52a6-4386-8e76-84558492ae0a",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SecretFlight",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "8bd09e9a-6d6b-4dc4-b99a-5f191e4e59dc",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SecretFlight",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }
