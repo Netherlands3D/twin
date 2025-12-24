@@ -256,6 +256,7 @@ namespace Netherlands3D
             projectile.Reset();
             projectile.SetGun(this);
             projectile.SetAlive(true);
+            projectile.OnSpawn();
             return projectile;
         }
 

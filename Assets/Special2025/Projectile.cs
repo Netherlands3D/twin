@@ -26,6 +26,7 @@ namespace Netherlands3D
         public float Power = 60f;
         public bool IsSticky = false;
         public bool ContinuousSplat = false;
+        public bool RandomSize = false;
 
         private bool isSticking = false;
 
@@ -40,6 +41,14 @@ namespace Netherlands3D
         private void Awake()
         {
             GetDefaultRigidBody();
+        }
+
+        public void OnSpawn()
+        {
+            if(RandomSize)
+            {
+                transform.localScale = Vector3.one * UnityEngine.Random.Range(0.5f, 2f);
+            }
         }
 
         private void GetDefaultRigidBody()
