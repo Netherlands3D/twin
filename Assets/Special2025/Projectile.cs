@@ -103,7 +103,9 @@ namespace Netherlands3D
             
             if(col.relativeVelocity.sqrMagnitude < 10) return;
             if(!ContinuousSplat) return;
-               
+
+            if (UnityEngine.Random.value > 0.1f) return;
+
             var contact = col.GetContact(0);
             CreateSplat(contact.point, contact.normal, col.relativeVelocity.sqrMagnitude);
         }
