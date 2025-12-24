@@ -6,7 +6,7 @@ namespace Netherlands3D
     public class RopeNew : MonoBehaviour
     {
         [Header("Linking")]
-        public float searchRadius = 10f;
+        public float searchRadius = 30f;
         public LayerMask ropeLayer;
 
         [Header("Rope")]
@@ -23,15 +23,31 @@ namespace Netherlands3D
 
         readonly List<RopeConnection> connections = new();
 
+        private Projectile projectile;
+
         void Start()
         {
             FindNearbyRopes();
+            projectile = gameObject.GetComponent<Projectile>();
         }
 
         void Update()
         {
+            if(projectile != null && !projectile.IsAlive)
+            {
+                Despawn();
+                return;
+            }
+
+
             for (int i = 0; i < connections.Count; i++)
             {
+                if (connections[i].segments.Count > searchRadius)
+                {
+                    Despawn(); 
+                    return;
+                }
+
                 UpdateRope(connections[i]);
             }
         }
