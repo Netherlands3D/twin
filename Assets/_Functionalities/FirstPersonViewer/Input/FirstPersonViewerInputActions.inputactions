@@ -454,7 +454,7 @@
                 {
                     "name": "negative",
                     "id": "97ec8629-d65a-4243-9f10-59b6d0286420",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard & Mouse",
@@ -465,7 +465,7 @@
                 {
                     "name": "positive",
                     "id": "84556e8c-e8ae-436b-888e-340006a4ae1f",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard & Mouse",
