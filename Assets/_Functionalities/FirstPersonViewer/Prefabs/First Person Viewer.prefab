@@ -226,6 +226,7 @@ GameObject:
   - component: {fileID: 3034395081720571745}
   - component: {fileID: 1609831314963826710}
   - component: {fileID: 6660788825186363282}
+  - component: {fileID: 6074286240799126273}
   m_Layer: 2
   m_Name: First Person Viewer
   m_TagString: Untagged
@@ -393,3 +394,42 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   fpvExitText: Druk op 'backspace' om je muis te ontgrendelen.
+--- !u!114 &6074286240799126273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8111522683061574636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1972f294a97c9fd0486873111a6f8ca2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputActionAsset: {fileID: -944628639613478452, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
+    type: 3}
+  projectilePrefabs:
+  - {fileID: 4155696000373981224, guid: af3c822a2932f3642b7749b1b7f6fbda, type: 3}
+  - {fileID: 8514432176467636189, guid: 62506ae4f3ece4a16be41d93d3aed88c, type: 3}
+  - {fileID: 2731009277449144939, guid: c23f69a8db342479db7dc21bf2c9e074, type: 3}
+  - {fileID: 6335867041738269279, guid: ae263d7fbbd14984db27d0d1aec416c3, type: 3}
+  - {fileID: 4767415590051266161, guid: d95179eea2db4784697025e43c97c68d, type: 3}
+  - {fileID: 959889190068672811, guid: 2628341133abe2142bd3254d2aeed6b7, type: 3}
+  - {fileID: 9031143184919810920, guid: 2ee707da870040143b0d598ca6f07ce2, type: 3}
+  - {fileID: 7543907873441905734, guid: a6d9237ae4652aa45b7e6eb28c8052b6, type: 3}
+  - {fileID: 941336734417428643, guid: 668ace9d66a2c9d4ca2fb222f5391fa5, type: 3}
+  - {fileID: 5912720520482970230, guid: 698baf59ace81114f8d398a02d10b05a, type: 3}
+  - {fileID: 7659149317439543790, guid: 92999383e96bfc24dbd1b76d67897384, type: 3}
+  - {fileID: 8069472253049124151, guid: 074bcb0a925ca22418220ab9bd03c589, type: 3}
+  - {fileID: 7719243402526649325, guid: 0f75eae491f85e24cbcdbc3a02287e6f, type: 3}
+  - {fileID: 3750211608675849641, guid: 9165e22c94570e8499c7b6c9a4843258, type: 3}
+  - {fileID: 334854240398157970, guid: 9887b1f8c094401c9bbd5de7ac27d726, type: 3}
+  - {fileID: 5604026249007735249, guid: 6f3666f72a43ae34895bc7518eb2b754, type: 3}
+  - {fileID: 1202871627540882192, guid: 1ed89a19bb2fbc34f8b7c8741600d7a6, type: 3}
+  - {fileID: 5850514577646438524, guid: 4eb8fd5d73c3e5c46af8ca64bb70b705, type: 3}
+  - {fileID: 5291747059726914181, guid: b7dc5bf092b04f54781d9111bfb6e5b5, type: 3}
+  - {fileID: 7341344414582252048, guid: 15674c925955af042a1fac261b4dba2c, type: 3}
+  - {fileID: 6568879950635574614, guid: 137a70cd56bb31745815696f5de2b492, type: 3}
+  - {fileID: 511755644421597743, guid: 07094ebd5f6bce940aa1bba57fd8f9bd, type: 3}
+  - {fileID: 1786876159116164189, guid: 77f1e27b43550d448b3bbf4079d941ab, type: 3}
+  - {fileID: 1883463409612261919, guid: edfa8fb0eb410024d95030efaa01ef9d, type: 3}

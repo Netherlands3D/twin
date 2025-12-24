@@ -79,8 +79,12 @@ namespace Netherlands3D
 
             LeftClick.performed += OnClickHandler;
             LeftClick.canceled += OnClickStopHandler;
-            
-            fpvCamera = FindObjectOfType<FirstPersonViewerCamera>().GetComponent<Camera>();
+
+            VerticalMoveAction.performed += OnSwitch;
+
+            CycleNextModus.performed += OnSwitch;
+
+            fpvCamera = FindAnyObjectByType<FirstPersonViewerCamera>().GetComponent<Camera>();
             
             
             
@@ -105,6 +109,20 @@ namespace Netherlands3D
         private void PreviousProjectile()
         {
             SetProjectileSelected(selectedPrefabIndex - 1);
+        }
+
+        private void OnSwitch(InputAction.CallbackContext context)
+        {
+            float value = context.ReadValue<float>();
+
+            if (value < 0f)
+            {
+               PreviousProjectile();
+            }
+            else if (value > 0f)
+            {
+               NextProjectile();
+            }
         }
 
         private void SetProjectileSelected(int index)
