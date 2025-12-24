@@ -421,6 +421,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3586433581991201943, guid: cc3c5affdd80eea4c98121e5f10f5958,
+        type: 3}
+      propertyPath: m_text
+      value: "<b>Stap 1:</b> Kies een locatie in Nederland\n<b>Stap 2:</b> Versier
+        de locatie zo feestelijk mogelijk\n<b>Stap 3:</b> deel jouw nieuwjaarsboodschap
+        met\n\t   familie, vrienden of collega's!"
+      objectReference: {fileID: 0}
     - target: {fileID: 4679312552362790290, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -449,27 +456,27 @@ PrefabInstance:
     - target: {fileID: 6678953771807728790, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6678953771807728790, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6678953771807728790, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1027.1172
       objectReference: {fileID: 0}
     - target: {fileID: 6678953771807728790, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 224.12332
       objectReference: {fileID: 0}
     - target: {fileID: 6678953771807728790, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -477.46664
       objectReference: {fileID: 0}
     - target: {fileID: 6853286011477147730, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
@@ -509,27 +516,27 @@ PrefabInstance:
     - target: {fileID: 7621995908529781723, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7621995908529781723, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7621995908529781723, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1027.1172
       objectReference: {fileID: 0}
     - target: {fileID: 7621995908529781723, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 272.53333
       objectReference: {fileID: 0}
     - target: {fileID: 7621995908529781723, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -750
       objectReference: {fileID: 0}
     - target: {fileID: 8137908471621963279, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
@@ -599,27 +606,27 @@ PrefabInstance:
     - target: {fileID: 8478227781764372462, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8478227781764372462, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8478227781764372462, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1027.1172
       objectReference: {fileID: 0}
     - target: {fileID: 8478227781764372462, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 253.34332
       objectReference: {fileID: 0}
     - target: {fileID: 8478227781764372462, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -253.34332
       objectReference: {fileID: 0}
     - target: {fileID: 8854048428307164890, guid: cc3c5affdd80eea4c98121e5f10f5958,
         type: 3}
