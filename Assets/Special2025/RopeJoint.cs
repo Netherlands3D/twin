@@ -23,7 +23,7 @@ namespace Netherlands3D
             if (kinematicOnCollision)
             {
                 rb.isKinematic = true;
-                GetComponent<Collider>().enabled = false;
+                GetComponent<SphereCollider>().radius = 0.1f;
             }
         }
 
