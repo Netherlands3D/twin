@@ -176,7 +176,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         }
 
         private void Update()
-        {            
+        {
+            return;
+
             if (IsAnyToolActive())
             {    
                 if (IsClicked())
