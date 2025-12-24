@@ -95,7 +95,7 @@ namespace Netherlands3D.Snapshots
 
         private void Start()
         {
-            if (!sourceCamera) sourceCamera = Camera.main;
+           
         }
         
         public void UseViewSize(bool useViewSize) => this.useViewSize = useViewSize;
