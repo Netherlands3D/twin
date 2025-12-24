@@ -115,7 +115,7 @@ MonoBehaviour:
     type: 3}
   initialSegmentCount: 15
   maxSegmentCount: 60
-  maxSegmentLength: 0.3
+  maxSegmentLength: 0.2
 --- !u!1 &3968728929593480564
 GameObject:
   m_ObjectHideFlags: 0
