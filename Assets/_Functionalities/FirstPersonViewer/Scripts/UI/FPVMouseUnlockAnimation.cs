@@ -22,7 +22,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             if (fpv != null)
             {
                 firstPersonInput = fpv.Input;
-                firstPersonInput.OnLockStateChanged += PlayUnlockCircleAnimation;
+                if (firstPersonInput != null) firstPersonInput.OnLockStateChanged += PlayUnlockCircleAnimation;
             }
 
             unlockCircleImage = GetComponent<Image>();

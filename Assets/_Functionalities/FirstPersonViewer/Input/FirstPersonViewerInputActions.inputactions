@@ -131,6 +131,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "MeasuringYLock",
+                    "type": "Button",
+                    "id": "f10973bf-a3c8-42c2-895b-b036886baa9f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -769,6 +778,17 @@
                     "processors": "",
                     "groups": ";Keyboard & Mouse",
                     "action": "OpenOverlay",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "67789186-d054-48ff-a7f0-1de23e5368d6",
+                    "path": "<Keyboard>/alt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard & Mouse",
+                    "action": "MeasuringYLock",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
