@@ -43,7 +43,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Jump",
+                    "name": "Space",
                     "type": "Button",
                     "id": "97f84dd7-e6f2-43b6-8eb8-1ace5f9e7a22",
                     "expectedControlType": "",
@@ -118,6 +118,15 @@
                     "name": "ExitModifier",
                     "type": "Button",
                     "id": "3f57fbc5-c575-4a0f-84cf-4f522adf5099",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OpenOverlay",
+                    "type": "Button",
+                    "id": "a70a1e88-fa36-48c0-99e7-a1eac12976eb",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -381,7 +390,18 @@
                 {
                     "name": "",
                     "id": "69ec00dc-154d-4540-9355-66666dab4e2b",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f1b90454-ce6b-4d38-8a43-f143a250571e",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
@@ -396,18 +416,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard & Mouse",
-                    "action": "Jump",
+                    "action": "Space",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "e6f802bf-e4a4-468d-924c-28371ff9ed17",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Jump",
+                    "action": "Space",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -568,10 +588,10 @@
                 {
                     "name": "",
                     "id": "b9ff29b2-4cc6-4373-ba55-9b7f0a457d30",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Gamepad>/dpad/down",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad",
+                    "groups": ";Gamepad;Keyboard & Mouse",
                     "action": "HideUI",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -590,7 +610,7 @@
                 {
                     "name": "",
                     "id": "60a23b6c-b1bb-4fc7-90fd-683a625a7b41",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
@@ -615,7 +635,7 @@
                     "path": "<Gamepad>/dpad/up",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Gamepad",
                     "action": "Reset",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -738,6 +758,17 @@
                     "processors": "",
                     "groups": ";Keyboard & Mouse",
                     "action": "ExitModifier",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "53f7d462-f90a-4c52-b272-6b4ce1eb0751",
+                    "path": "<Keyboard>/f2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard & Mouse",
+                    "action": "OpenOverlay",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
