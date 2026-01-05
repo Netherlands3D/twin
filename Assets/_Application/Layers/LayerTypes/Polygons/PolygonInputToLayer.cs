@@ -24,7 +24,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     {
         [SerializeField] private PolygonSelectionLayerGameObject polygonSelectionLayerGameObjectPrefab;
 
-        private Dictionary<PolygonSelectionLayerPropertyData, LayerData> layers = new();
+        private List<LayerData> layers = new();
 
         private LayerData activeLayer;
 
@@ -70,24 +70,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             layers.Clear();
 
-            foreach (var layer in newData.RootLayer.ChildrenLayers)
+            foreach (var layer in newData.RootLayer.GetFlatHierarchy())
             {
                 PolygonSelectionLayerPropertyData propertyData = layer.GetProperty<PolygonSelectionLayerPropertyData>();
                 if (propertyData == null) continue;
 
-                //TODO after refactoring the layersystem and onreferencechanged this should also be refactored! 
                 propertyData.polygonSelected.AddListener(ProcessPolygonSelection);
+                
                 UnityAction referenceListener = null;
                 referenceListener = () =>
                 {
-                    layers.Add(propertyData, layer);
-
+                    layers.Add(layer);
+                    propertyData.polygonEnabled.Invoke(false);
                     // if (!propertyData.IsMask)
                     //     match.SetVisualisationActive(enabled); //todo: check if this works
-
-                    layer.OnPrefabIdChanged.RemoveListener(referenceListener);
+                
+                    layer.onLayerReady.RemoveListener(referenceListener);
                 };
-                layer.OnPrefabIdChanged.AddListener(referenceListener);
+                layer.onLayerReady.AddListener(referenceListener);
             }
         }
 
@@ -185,18 +185,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public void ShowPolygonVisualisations(bool enabled)
         {
-            foreach (var polygonLayer in layers.Values)
+            foreach (var polygonLayer in layers)
             {
                 PolygonSelectionLayerPropertyData propertyData = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
                 if (propertyData.IsMask)
                 {
                     continue;
                 }
-                //todo:
-                // var key = layers.FirstOrDefault(x => x.Value == polygonLayer).Key;
-                // key.gameObject.SetActive(enabled);
+                propertyData.polygonEnabled.Invoke(enabled);
             }
-
             selectionCalculator.gameObject.SetActive(enabled);
         }
 
@@ -212,7 +209,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 });
             var layer = App.Layers.Add(layerBuilder);
             var polygonPropertyData = layer.LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            layers.Add(polygonPropertyData, layer.LayerData);
+            layers.Add(layer.LayerData);
             polygonPropertyData.polygonSelected.AddListener(ProcessPolygonSelection);
             polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit);
             ProcessPolygonSelection(layer.LayerData);
@@ -236,7 +233,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 });
             var layer = App.Layers.Add(layerBuilder);
             PolygonSelectionLayerPropertyData data = layer.LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            layers.Add(data, layer.LayerData);
+            layers.Add(layer.LayerData);
             data.polygonSelected.AddListener(ProcessPolygonSelection);
             lineInput.SetDrawMode(PolygonInput.DrawMode.Edit);
             ProcessPolygonSelection(layer.LayerData);
@@ -270,7 +267,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 });
             var layer = App.Layers.Add(layerBuilder);
             data = layer.LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            layers.Add(data, layer.LayerData);
+            layers.Add(layer.LayerData);
             data.polygonSelected.AddListener(ProcessPolygonSelection);
             gridInput.SetDrawMode(PolygonInput.DrawMode.Edit);
             ProcessPolygonSelection(layer.LayerData);

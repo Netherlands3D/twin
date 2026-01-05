@@ -89,7 +89,6 @@ namespace Netherlands3D.Twin.Projects
             ProjectData.Current.RootLayer.UpdateLayerTreeOrder(0);
             Debug.Log("Loaded project with uuid: " + ProjectData.Current.UUID);
             ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
-
             ProjectData.Current.LoadVisualizations();
         }
 

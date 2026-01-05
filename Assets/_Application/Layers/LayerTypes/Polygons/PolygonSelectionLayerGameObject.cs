@@ -23,8 +23,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private bool isMask;   
 
         public UnityEvent OnPolygonVisualisationUpdated = new();
-       
-       
+
         /// <summary>
         /// Create or update PolygonVisualisation
         /// </summary>
@@ -129,8 +128,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
             data.OnIsMaskChanged.AddListener(OnIsMaskChanged);
             data.OnInvertMaskChanged.AddListener(OnInvertMaskChanged); 
-            
             data.OnPolygonSetShape.AddListener(UpdatePolygonVisualisation);
+            data.polygonEnabled.AddListener(SetActive);
         }
 
         protected override void UnregisterEventListeners()
@@ -144,7 +143,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
             data.OnIsMaskChanged.RemoveListener(OnIsMaskChanged);
             data.OnInvertMaskChanged.RemoveListener(OnInvertMaskChanged);
-            
+            data.OnPolygonSetShape.RemoveListener(UpdatePolygonVisualisation);
+            data.polygonEnabled.RemoveListener(SetActive);
+        }
+
+        private void SetActive(bool active)
+        {
+            gameObject.SetActive(active);
         }
 
         private void OnSwitchVisualisation()

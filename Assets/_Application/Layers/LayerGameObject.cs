@@ -49,7 +49,7 @@ namespace Netherlands3D.Twin.Layers
         [Space] public UnityEvent onShow = new();
         public UnityEvent onHide = new();
         public UnityEvent onLayerInitialized = new();
-        public UnityEvent onLayerReady = new();
+        
 
 
         public abstract BoundingBox Bounds { get; }
@@ -112,7 +112,8 @@ namespace Netherlands3D.Twin.Layers
             //todo move this into loadproperties?
             ApplyStyling();
 
-            onLayerReady.Invoke();
+            //TODO this is perhaps the wrong responsibility. change this in the future?
+            this.layerData.onLayerReady.Invoke();
         }
 
         protected virtual void RegisterEventListeners()
