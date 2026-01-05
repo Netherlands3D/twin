@@ -272,7 +272,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void CreateLayer(LayerGameObject prefab, UnityAction<LayerGameObject> callBack)
         {
-            var childrenInLayerData = LayerData.ChildrenLayers;
+            var childrenInLayerData = LayerData.ChildrenLayers.ToArray(); //Make a copy to avoid a collectionWasModifiedError
             foreach (var child in childrenInLayerData)
             {
                 if (child.PrefabIdentifier == prefab.PrefabIdentifier)
