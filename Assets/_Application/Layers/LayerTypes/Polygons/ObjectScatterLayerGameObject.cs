@@ -45,9 +45,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
+            InitProperty<ToggleScatterPropertyData>(properties, InitializePropertyForBackwardsCompatibility); 
+
             SetParentPolygonLayer(LayerData.ParentLayer);
             var scatterSettings = properties.Get<ScatterGenerationSettingsPropertyData>();
             InitializeScatterMesh(scatterSettings.OriginalPrefabId);
+        }
+
+        private void InitializePropertyForBackwardsCompatibility(ToggleScatterPropertyData data)
+        {
+            data.AllowScatter = true;
+            data.IsScattered = true;
         }
         
         protected override void OnLayerReady()
