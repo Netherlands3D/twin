@@ -195,7 +195,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             ResampleTexture();
         }
 
-        private Bounds RecalculatePolygonsAndGetBounds()
+        private Bounds   RecalculatePolygonsAndGetBounds()
         {
             PolygonSelectionLayerPropertyData polygonProperties = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
             if (polygonProperties.ShapeType == ShapeType.Line)

@@ -15,17 +15,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
     public class PolygonSelectionLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
     {
-        private BoundingBox polygonBounds;
-        public override BoundingBox Bounds => polygonBounds;
+        public override BoundingBox Bounds => LayerData.GetProperty<PolygonSelectionLayerPropertyData>().PolygonBoundingBox;
         public PolygonVisualisation PolygonVisualisation { get; private set; }
         public Material PolygonMeshMaterial;
 
         [SerializeField] private Material polygonMaskMaterial;
-        private bool isMask;        
+        private bool isMask;   
 
         public UnityEvent OnPolygonVisualisationUpdated = new();
        
-
+       
         /// <summary>
         /// Create or update PolygonVisualisation
         /// </summary>
@@ -43,10 +42,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 PolygonVisualisation.UpdateVisualisation(polygon3D);
             }
             
-            polygonBounds = new(PolygonVisualisation.GetComponent<Renderer>().bounds);
+            BoundingBox polygonBounds = new(PolygonVisualisation.GetComponent<Renderer>().bounds);
             var crs2D = CoordinateSystems.To2D(polygonBounds.CoordinateSystem);
             polygonBounds.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
 
+            //also cache the polygonbounds in the propertydata
+            var data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            data.PolygonBoundingBox = polygonBounds;
+            
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
 
             OnPolygonVisualisationUpdated.Invoke();

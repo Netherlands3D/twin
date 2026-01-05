@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Utility;
@@ -53,7 +51,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             foreach (var layer in Layers)
             {               
-                bool wasSelected = ProcessPolygonSelection(layer, camera, frustumPlanes, worldPoint);
+                bool wasSelected = ProcessPolygonSelection(layer, frustumPlanes, worldPoint);
                 if (wasSelected)
                 {
                     layer.SelectLayer(true);
@@ -65,23 +63,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 }
             }
         }
-
-        private bool ProcessPolygonSelection(LayerData layer, Camera camera, Plane[] frustumPlanes, Vector3 worldPoint)
+        
+        private bool ProcessPolygonSelection(LayerData layer, Plane[] frustumPlanes, Vector3 worldPoint)
         {
             //since we use a visual projection of the polygon, we need to calculate if a user clicks on the polygon manually
             //if this polygon is out of view of the camera, it can't be clicked on.
-            
             var polygonPropertyData = layer.GetProperty<PolygonSelectionLayerPropertyData>();
             if(polygonPropertyData == null || polygonPropertyData.OriginalPolygon == null ||  polygonPropertyData.OriginalPolygon.Count == 0)
                 return false;
             
-            var bbox = new BoundingBox(polygonPropertyData.OriginalPolygon[0], polygonPropertyData.OriginalPolygon[0]);
-            for (var i = 1; i < polygonPropertyData.OriginalPolygon.Count; i++)
-            {
-                var coord = polygonPropertyData.OriginalPolygon[i];
-                bbox.Encapsulate(coord);
-            }
-
+            BoundingBox bbox = polygonPropertyData.PolygonBoundingBox;
             var bounds = bbox.ToUnityBounds();
             
             if (!IsBoundsInView(bounds, frustumPlanes))
@@ -103,7 +94,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             return GeometryUtility.TestPlanesAABB(frustumPlanes, bounds);
         }
 
-        public static bool IsInBounds2D(Bounds bounds, Vector2 point)
+        public static bool IsInBounds2D(Bounds bounds, Vector2 point, bool useBoundsXZ = true)
         {
             return point.x > bounds.min.x && point.x < bounds.max.x && point.y > bounds.min.z && point.y < bounds.max.z;
         }

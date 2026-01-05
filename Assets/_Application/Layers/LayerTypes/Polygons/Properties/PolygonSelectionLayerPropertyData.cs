@@ -3,6 +3,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using UnityEngine.Events;
@@ -35,6 +36,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         public static void RemoveAvailableMaskChannel(int maskBitIndex) => availableMaskChannels.Remove(maskBitIndex);
         public static int LastAvailableMaskChannel() => availableMaskChannels.Last();
 
+        //runtime only generated bounding box
+        [JsonIgnore] public BoundingBox PolygonBoundingBox;
+        
         [JsonIgnore] public UnityEvent polygonMoved = new();
         [JsonIgnore] public UnityEvent polygonChanged = new();
         [JsonIgnore] public UnityEvent OnPolygonSetShape = new();
