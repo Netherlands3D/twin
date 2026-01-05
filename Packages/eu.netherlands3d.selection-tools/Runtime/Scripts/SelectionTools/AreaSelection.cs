@@ -76,6 +76,8 @@ namespace Netherlands3D.SelectionTools
             SetSelectionVisualEnabled(false);
 
             worldPlane = (useWorldSpace) ? new Plane(Vector3.up, Vector3.zero) : new Plane(this.transform.up, this.transform.position);
+            
+            SetDrawMode(DrawMode.Selected);
         }
 
 #if UNITY_EDITOR
