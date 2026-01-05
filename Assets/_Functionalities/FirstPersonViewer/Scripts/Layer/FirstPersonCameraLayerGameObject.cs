@@ -3,8 +3,10 @@ using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Tools;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.Layer
@@ -14,20 +16,11 @@ namespace Netherlands3D.FirstPersonViewer.Layer
         [SerializeField] private Tool layerTool;
         private FirstPersonLayerPropertyData firstPersonPropertyData => LayerData.GetProperty<FirstPersonLayerPropertyData>();
 
-        //public override bool IsMaskable => false;
-
-        //protected override void InitializePropertyData()
-        //{
-        //    if (firstPersonPropertyData != null) return;
-
-        //    LayerData.SetProperty(
-        //       new FirstPersonLayerPropertyData(
-        //           new Coordinate(transform.position),
-        //           transform.eulerAngles,
-        //           transform.localScale
-        //       )
-        //   );
-        //}
+        public override void LoadProperties(List<LayerPropertyData> properties)
+        {
+            InitProperty<TransformLayerPropertyData>(properties, null, new Coordinate(transform.position), transform.eulerAngles,  transform.localScale, "%");
+            InitProperty<FirstPersonLayerPropertyData>(properties);
+        }
 
         protected override void OnDoubleClick(LayerData layer)
         {
@@ -35,8 +28,7 @@ namespace Netherlands3D.FirstPersonViewer.Layer
 
             FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer>();
             
-            //ViewerState viewerState = fpv.MovementSwitcher.MovementPresets.Find(m => m.viewName == firstPersonPropertyData.MovementName);
-            ViewerState  viewerState = fpv.MovementSwitcher.MovementPresets[0];
+            ViewerState viewerState = fpv.MovementSwitcher.MovementPresets.Find(m => m.id == firstPersonPropertyData.MovementID);
 
             fpv.transform.position = transform.position;
             fpv.transform.rotation = transform.rotation;
