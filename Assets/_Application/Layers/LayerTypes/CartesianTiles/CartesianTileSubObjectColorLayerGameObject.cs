@@ -60,10 +60,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             GeometryColorizer.RecalculatePrioritizedColors();
         }
 
-        protected override void OnDestroy()
+        private void OnDestroy()
         {
             RemoveCustomColorSet();
-            base.OnDestroy();
         }
 
         public void RemoveCustomColorSet()

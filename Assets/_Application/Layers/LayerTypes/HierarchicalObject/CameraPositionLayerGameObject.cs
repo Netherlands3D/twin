@@ -49,11 +49,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.UnregisterEventListeners();
             var cameraPropertyData = LayerData.GetProperty<CameraPropertyData>();
             cameraPropertyData.OnOrthographicChanged.RemoveListener(SetOrthographic);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();           
+            
             layerTool.onOpen.RemoveListener(EnableGhost);
             layerTool.onClose.RemoveListener(DisableGhost);
         }

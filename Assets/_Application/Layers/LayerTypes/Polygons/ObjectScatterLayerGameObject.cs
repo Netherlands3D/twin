@@ -132,8 +132,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToHierarchicalLayerGameObject);
         }
 
-        protected override void OnDestroy()
+        protected override void UnregisterEventListeners()
         {
+            base.UnregisterEventListeners();
             RemoveReScatterListeners();
         }
 

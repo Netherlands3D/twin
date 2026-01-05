@@ -148,6 +148,14 @@ namespace Netherlands3D.Twin.Services
             try
             {
                 LayerGameObject visualization = await spawner.Spawn(layer.LayerData);
+
+                if (layer.LayerData.IsDisposed)
+                {
+                    Debug.Log("Layer " + layer.LayerData.Name + " was disposed before the visualisation was spawned, destroying the visualisation");
+                    Destroy(visualization.gameObject);
+                    return;
+                }
+                
                 layer.SetVisualization(visualization);
                 visualization.SetData(layer.LayerData);
                 callback?.Invoke(visualization);

@@ -54,12 +54,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.transform.SetSiblingIndex(1); //0 is for the blocker plane, and we want this to be in front of that, but behind the rest           
             annotation.ReadOnly = !layerTool.Open;       
         }
-
-        protected override void OnDestroy()
+        
+        private void OnDestroy()
         {
-            base.OnDestroy();
-            WorldInteractionBlocker.ClickedOnBlocker.RemoveListener(OnBlockerClicked);
-            
             Destroy(annotation.gameObject);
         }
 
@@ -184,6 +181,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.TextFieldSelected.RemoveListener(OnAnnotationSelected);
             annotation.TextFieldDoubleClicked.RemoveListener(OnAnnotationDoubleClicked);
             annotation.TextFieldInputConfirmed.RemoveListener(OnAnnotationTextConfirmed);
+            
+            WorldInteractionBlocker.ClickedOnBlocker.RemoveListener(OnBlockerClicked);
         }
 
         private void UpdateAnnotation(string newText)

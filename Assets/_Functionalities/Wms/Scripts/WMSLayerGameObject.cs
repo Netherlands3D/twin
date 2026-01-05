@@ -117,9 +117,9 @@ namespace Netherlands3D.Functionalities.Wms
                 CredentialHandler.ApplyCredentials();
         }
 
-        protected override void OnDestroy()
+        protected override void UnregisterEventListeners()
         {
-            base.OnDestroy();
+            base.UnregisterEventListeners();
             LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
             CredentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();

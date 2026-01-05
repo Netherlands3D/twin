@@ -129,14 +129,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
         }
 
-        protected override void OnDestroy()
+        protected override void UnregisterEventListeners()
         {
+            base.UnregisterEventListeners();
             parser.OnFeatureParsed.RemoveListener(AddFeatureVisualisation);
             parser.OnParseError.RemoveListener(onParseError.Invoke);
-
             var credentialHandler = GetComponent<ICredentialHandler>();
             credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
-            base.OnDestroy();
         }
 
         public void AddFeatureVisualisation(Feature feature)
@@ -293,9 +292,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 if (child.PrefabIdentifier == prefab.PrefabIdentifier)
                 {
-                    //todo: check if the async visualisation spawning has issues with destroying the layerData before the visualisation is loaded
                     App.Layers.Remove(child); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
-                    Debug.Log("destroying layer " + child.Name);
                     propertiesToAdd = child.LayerProperties.ToArray();
                     break;
                 }
@@ -303,7 +300,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
             ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs("TEST" + prefab.name).ChildOf(LayerData).AddProperties(propertiesToAdd);
             App.Layers.Add(layerBuilder, callBack);
-            Debug.Log("adding new child layer ");
         }
 
         protected virtual void OnFeatureRemoved(Feature feature)

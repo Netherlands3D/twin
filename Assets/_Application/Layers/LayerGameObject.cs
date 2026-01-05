@@ -193,12 +193,6 @@ namespace Netherlands3D.Twin.Layers
         {
             onHide.Invoke();
         }
-        protected virtual void OnDestroy()
-        {
-            //don't unsubscribe in OnDisable, because we still want to be able to center to a 
-
-            UnregisterEventListeners();
-        }
 
         public virtual void OnSelect()
         {
@@ -215,6 +209,8 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void DestroyLayerGameObject()
         {
+            //don't unsubscribe in OnDisable, because we still want to be able to center to a LayerGameObject
+            UnregisterEventListeners();
             Destroy(gameObject);
         }
 

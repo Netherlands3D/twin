@@ -64,7 +64,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             return polygonVisualisation;
         }
 
-        protected override void OnDestroy()
+        private void OnDestroy()
         {
             Destroy(PolygonVisualisation.gameObject);
         }
