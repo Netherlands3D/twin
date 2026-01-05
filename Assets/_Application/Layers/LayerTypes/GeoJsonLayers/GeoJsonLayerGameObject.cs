@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using GeoJSON.Net;
 using GeoJSON.Net.Feature;
@@ -11,14 +10,18 @@ using System.Linq;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Projects.ExtensionMethods;
 using Netherlands3D.Twin.Utility;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [RequireComponent(typeof(ICredentialHandler))]
-    public class GeoJsonLayerGameObject : LayerGameObject, ILayerWithPropertyData
+    public class GeoJsonLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
     {
         public override BoundingBox Bounds
         {
@@ -47,23 +50,38 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private GeoJSONParser parser = new GeoJSONParser(0.01f);
         public GeoJSONParser Parser => parser;
-
-        private GeoJSONPolygonLayer polygonFeaturesLayer;
-        private GeoJSONLineLayer lineFeaturesLayer;
-        private GeoJSONPointLayer pointFeaturesLayer;
-
+        
+        [SerializeField] private UnityEvent<string> onParseError = new();
+        
         [Header("Visualizer settings")]
         [SerializeField] private GeoJSONPolygonLayer polygonLayerPrefab;
         [SerializeField] private GeoJSONLineLayer lineLayerPrefab;
         [SerializeField] private GeoJSONPointLayer pointLayerPrefab;
 
-        [Space] protected LayerURLPropertyData urlPropertyData = new();
+        private GeoJSONPolygonLayer polygonFeaturesLayer;
+        private GeoJSONLineLayer lineFeaturesLayer;
+        private GeoJSONPointLayer pointFeaturesLayer;
 
-        public LayerPropertyData PropertyData => urlPropertyData;
+        public struct PendingFeature
+        {
+            public Feature Feature;
+            public CoordinateSystem CoordinateSystem;
 
+            public PendingFeature(Feature feature, CoordinateSystem coordinateSystem)
+            {
+                Feature = feature;
+                CoordinateSystem = coordinateSystem;
+            }
+        }
+
+        List<PendingFeature> pendingPolygonFeatures = new();
+        List<PendingFeature> pendingLineFeatures = new();
+        List<PendingFeature> pendingPointFeatures = new();
+        
         protected override void OnLayerInitialize()
         {
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
+            parser.OnParseError.AddListener(onParseError.Invoke);
         }
 
         protected override void OnLayerReady()
@@ -73,12 +91,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         protected virtual void StartLoadingData()
         {
-            if (urlPropertyData.Data.IsStoredInProject())
+            LayerURLPropertyData urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            if (urlPropertyData.Url.IsStoredInProject())
             {
-                string path = AssetUriFactory.GetLocalPath(urlPropertyData.Data);
+                string path = AssetUriFactory.GetLocalPath(urlPropertyData.Url);
                 StartCoroutine(parser.ParseGeoJSONLocal(path));
             }
-            else if (urlPropertyData.Data.IsRemoteAsset())
+            else if (urlPropertyData.Url.IsRemoteAsset())
             {
                 RequestCredentials();
             }
@@ -87,19 +106,25 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         protected void RequestCredentials()
         {
             var credentialHandler = GetComponent<ICredentialHandler>();
-            credentialHandler.Uri = urlPropertyData.Data;
+            LayerURLPropertyData urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            credentialHandler.Uri = urlPropertyData.Url;
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             credentialHandler.ApplyCredentials();
         }
 
         protected virtual void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
-            if(auth is FailedOrUnsupported)
+            if (auth.GetType() != typeof(Public))//if it is public, we don't want the property panel to show up
             {
-                    LayerData.HasValidCredentials = false;
-                    return;
+                InitProperty<CredentialsRequiredPropertyData>(LayerData.LayerProperties);
             }
             
+            if (auth is FailedOrUnsupported)
+            {
+                LayerData.HasValidCredentials = false;
+                return;
+            }
+
             LayerData.HasValidCredentials = true;
             StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
         }
@@ -107,6 +132,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         protected override void OnDestroy()
         {
             parser.OnFeatureParsed.RemoveListener(AddFeatureVisualisation);
+            parser.OnParseError.RemoveListener(onParseError.Invoke);
+
             var credentialHandler = GetComponent<ICredentialHandler>();
             credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
             base.OnDestroy();
@@ -114,7 +141,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public void AddFeatureVisualisation(Feature feature)
         {
-            VisualizeFeature(feature);
+            var originalCoordinateSystem = GeoJSONParser.GetCoordinateSystem(feature.CRS);
+            VisualizeFeature(feature, originalCoordinateSystem);
             ProcessFeatureMapping(feature);
         }
 
@@ -124,11 +152,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// </summary>
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
-            var urlProperty = (LayerURLPropertyData)properties.FirstOrDefault(p => p is LayerURLPropertyData);
-            if (urlProperty != null)
-            {
-                this.urlPropertyData = urlProperty;
-            }
+            InitProperty<ColorPropertyData>(properties);
         }
 
         /// <summary>
@@ -136,34 +160,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// </summary>
         public void RemoveFeaturesOutOfView()
         {
-            if (polygonFeaturesLayer != null)
-                polygonFeaturesLayer.RemoveFeaturesOutOfView();
-
-            if (lineFeaturesLayer != null)
-                lineFeaturesLayer.RemoveFeaturesOutOfView();
-
-            if (pointFeaturesLayer != null)
-                pointFeaturesLayer.RemoveFeaturesOutOfView();
+            polygonFeaturesLayer?.RemoveFeaturesOutOfView();            
+            lineFeaturesLayer?.RemoveFeaturesOutOfView();
+            pointFeaturesLayer?.RemoveFeaturesOutOfView();
         }
 
         private void ProcessFeatureMapping(Feature feature)
         {
-            var polygonData = polygonFeaturesLayer?.GetMeshData(feature);
-            if (polygonData != null)
-            {
-                CreateFeatureMappings(polygonFeaturesLayer, feature, polygonData);
-            }
+            CreateFeatureMappingsForFeature(feature, polygonFeaturesLayer);
+            CreateFeatureMappingsForFeature(feature, lineFeaturesLayer);
+            CreateFeatureMappingsForFeature(feature, pointFeaturesLayer);
+        }
 
-            var lineData = lineFeaturesLayer?.GetMeshData(feature);
-            if (lineData != null)
+        private void CreateFeatureMappingsForFeature(Feature feature, IGeoJsonVisualisationLayer layer)
+        {
+            var meshData = layer?.GetMeshData(feature);
+            if (meshData != null)
             {
-                CreateFeatureMappings(lineFeaturesLayer, feature, lineData);
-            }
-
-            var pointData = pointFeaturesLayer?.GetMeshData(feature);
-            if (pointData != null)
-            {
-                CreateFeatureMappings(pointFeaturesLayer, feature, pointData);
+                CreateFeatureMappings(layer, feature, meshData);
             }
         }
 
@@ -176,154 +190,100 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             objectMapping.SetGeoJsonLayerParent(this);
             objectMapping.UpdateBoundingBox();
             ObjectSelectorService.MappingTree.RootInsert(objectMapping);
-        }
+        }    
 
-        private GeoJSONPolygonLayer CreateOrGetPolygonLayer()
+        private void SetVisualization(LayerGameObject layerGameObject)
         {
-            var childrenInLayerData = LayerData.ChildrenLayers;
-            foreach (var child in childrenInLayerData)
+            switch (layerGameObject)
             {
-                if (child is not ReferencedLayerData referencedLayerData) continue;
-                if (referencedLayerData.Reference is not GeoJSONPolygonLayer polygonLayer) continue;
-
-                return polygonLayer;
+                case GeoJSONPolygonLayer layer:
+                    polygonFeaturesLayer = layer;
+                    SetVisualization(polygonFeaturesLayer, pendingPolygonFeatures);
+                    break;
+                case GeoJSONLineLayer layer:
+                    lineFeaturesLayer = layer;
+                    SetVisualization(lineFeaturesLayer, pendingLineFeatures);
+                    break;
+                case GeoJSONPointLayer layer:
+                    pointFeaturesLayer = layer;
+                    SetVisualization(pointFeaturesLayer, pendingPointFeatures);
+                    break;
             }
-
-            // TODO: Should use LayerSpawner? This is a temporary layer?
-            GeoJSONPolygonLayer newPolygonLayerGameObject = Instantiate(polygonLayerPrefab);
-            ProjectData.CreateAndAttachReferenceLayerTo(newPolygonLayerGameObject);
-            newPolygonLayerGameObject.LayerData.Color = LayerData.Color;
-
-            // Replace default style with the parent's default style
-            newPolygonLayerGameObject.LayerData.RemoveStyle(newPolygonLayerGameObject.LayerData.DefaultStyle);
-            newPolygonLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-            newPolygonLayerGameObject.LayerData.SetParent(LayerData);
-            newPolygonLayerGameObject.FeatureRemoved += OnFeatureRemoved;
-            return newPolygonLayerGameObject;
         }
 
-        private GeoJSONLineLayer CreateOrGetLineLayer()
+        private void SetVisualization(IGeoJsonVisualisationLayer layer, List<PendingFeature> pendingFeatures)
         {
-            var childrenInLayerData = LayerData.ChildrenLayers;
-            foreach (var child in childrenInLayerData)
+            ColorPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
+            ColorPropertyData childStylingPropertyData = layer.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
+            
+            var fillColor = stylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetFillColor().Value : LayerData.Color;
+            var strokeColor = stylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetStrokeColor().Value : LayerData.Color;
+            
+            //TODO we have to convert this to an enum in the future
+            childStylingPropertyData.ActiveToolProperty = Symbolizer.StrokeColorProperty;
+            childStylingPropertyData.SetDefaultSymbolizerColor(strokeColor);
+            childStylingPropertyData.ActiveToolProperty = Symbolizer.FillColorProperty;
+            childStylingPropertyData.SetDefaultSymbolizerColor(fillColor);
+            
+            layer.FeatureRemoved += OnFeatureRemoved;
+
+            foreach (var pendingFeature in pendingFeatures)
             {
-                if (child is not ReferencedLayerData referencedLayerData) continue;
-                if (referencedLayerData.Reference is not GeoJSONLineLayer lineLayer) continue;
-
-                return lineLayer;
+               VisualizeFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
             }
-
-            // TODO: Should use LayerSpawner? This is a temporary layer?
-            GeoJSONLineLayer newLineLayerGameObject = Instantiate(lineLayerPrefab);
-            ProjectData.CreateAndAttachReferenceLayerTo(newLineLayerGameObject);
-            newLineLayerGameObject.LayerData.Color = LayerData.Color;
-
-            // Replace default style with the parent's default style
-            newLineLayerGameObject.LayerData.RemoveStyle(newLineLayerGameObject.LayerData.DefaultStyle);
-            newLineLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-            newLineLayerGameObject.LayerData.SetParent(LayerData);
-            newLineLayerGameObject.FeatureRemoved += OnFeatureRemoved;
-            return newLineLayerGameObject;
+            pendingFeatures.Clear();
         }
 
-        private GeoJSONPointLayer CreateOrGetPointLayer()
-        {
-            var childrenInLayerData = LayerData.ChildrenLayers;
-            foreach (var child in childrenInLayerData)
-            {
-                if (child is not ReferencedLayerData referencedLayerData) continue;
-                if (referencedLayerData.Reference is not GeoJSONPointLayer pointLayer) continue;
-
-                return pointLayer;
-            }
-
-            // TODO: Should use LayerSpawner? This is a temporary layer?
-            GeoJSONPointLayer newPointLayerGameObject = Instantiate(pointLayerPrefab);
-            ProjectData.CreateAndAttachReferenceLayerTo(newPointLayerGameObject);
-            newPointLayerGameObject.LayerData.Color = LayerData.Color;
-
-            // Replace default style with the parent's default style
-            newPointLayerGameObject.LayerData.RemoveStyle(newPointLayerGameObject.LayerData.DefaultStyle);
-            newPointLayerGameObject.LayerData.AddStyle(LayerData.DefaultStyle);
-            newPointLayerGameObject.LayerData.SetParent(LayerData);
-            newPointLayerGameObject.FeatureRemoved += OnFeatureRemoved;
-            return newPointLayerGameObject;
-        }
-
-        private void VisualizeFeature(Feature feature)
-        {
-            var originalCoordinateSystem = GeoJSONParser.GetCoordinateSystem(feature.CRS);
+        private void VisualizeFeature(Feature feature, CoordinateSystem crs)
+        {            
             switch (feature.Geometry.Type)
             {
-                case GeoJSONObjectType.MultiPolygon:
-                    AddMultiPolygonFeature(feature, originalCoordinateSystem);
-                    return;
+                case GeoJSONObjectType.MultiPolygon:                    
                 case GeoJSONObjectType.Polygon:
-                    AddPolygonFeature(feature, originalCoordinateSystem);
+                    AddFeature(feature, crs, polygonFeaturesLayer, pendingPolygonFeatures, polygonLayerPrefab, SetVisualization);
                     return;
-                case GeoJSONObjectType.MultiLineString:
-                    AddMultiLineStringFeature(feature, originalCoordinateSystem);
-                    return;
+                case GeoJSONObjectType.MultiLineString:                    
                 case GeoJSONObjectType.LineString:
-                    AddLineStringFeature(feature, originalCoordinateSystem);
+                    AddFeature(feature, crs, lineFeaturesLayer, pendingLineFeatures, lineLayerPrefab, SetVisualization);
                     return;
-                case GeoJSONObjectType.MultiPoint:
-                    AddMultiPointFeature(feature, originalCoordinateSystem);
-                    return;
+                case GeoJSONObjectType.MultiPoint:                   
                 case GeoJSONObjectType.Point:
-                    AddPointFeature(feature, originalCoordinateSystem);
+                    AddFeature(feature, crs, pointFeaturesLayer, pendingPointFeatures, pointLayerPrefab, SetVisualization);
                     return;
                 default:
                     throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization");
             }
         }
 
-        private void AddPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        private void AddFeature(Feature feature, CoordinateSystem originalCoordinateSystem, IGeoJsonVisualisationLayer layer, List<PendingFeature> pendingFeatures, LayerGameObject prefab, UnityAction<LayerGameObject> callBack)
         {
-            if (pointFeaturesLayer == null)
-                pointFeaturesLayer = CreateOrGetPointLayer();
+            if (layer == null)
+            {
+                if (pendingFeatures.Count == 0)
+                    CreateLayer(prefab, callBack);
 
-            pointFeaturesLayer.AddAndVisualizeFeature<Point>(feature, originalCoordinateSystem);
+                var pendingFeature = new PendingFeature(feature, originalCoordinateSystem);
+                pendingFeatures.Add(pendingFeature);
+                return;
+            }
+
+            layer.AddAndVisualizeFeature(feature, originalCoordinateSystem);
         }
 
-        private void AddMultiPointFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
+        private void CreateLayer(LayerGameObject prefab, UnityAction<LayerGameObject> callBack)
         {
-            if (pointFeaturesLayer == null)
-                pointFeaturesLayer = CreateOrGetPointLayer();
+            var childrenInLayerData = LayerData.ChildrenLayers;
+            foreach (var child in childrenInLayerData)
+            {
+                if (child.PrefabIdentifier == prefab.PrefabIdentifier)
+                {
+                    //todo: check if the async visualisation spawning has issues with destroying the layerData before the visualisation is loaded
+                    App.Layers.Remove(child); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
+                }
+            }
 
-            pointFeaturesLayer.AddAndVisualizeFeature<MultiPoint>(feature, originalCoordinateSystem);
-        }
-
-        private void AddLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
-        {
-            if (lineFeaturesLayer == null)
-                lineFeaturesLayer = CreateOrGetLineLayer();
-
-            lineFeaturesLayer.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
-        }
-
-        private void AddMultiLineStringFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
-        {
-            if (lineFeaturesLayer == null)
-                lineFeaturesLayer = CreateOrGetLineLayer();
-
-            lineFeaturesLayer.AddAndVisualizeFeature<MultiLineString>(feature, originalCoordinateSystem);
-        }
-
-        private void AddPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
-        {
-            if (polygonFeaturesLayer == null)
-                polygonFeaturesLayer = CreateOrGetPolygonLayer();
-
-            polygonFeaturesLayer.AddAndVisualizeFeature<Polygon>(feature, originalCoordinateSystem);
-        }
-
-        private void AddMultiPolygonFeature(Feature feature, CoordinateSystem originalCoordinateSystem)
-        {
-            if (polygonFeaturesLayer == null)
-                polygonFeaturesLayer = CreateOrGetPolygonLayer();
-
-            polygonFeaturesLayer.AddAndVisualizeFeature<MultiPolygon>(feature, originalCoordinateSystem);
+            ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs(prefab.name).ChildOf(LayerData);
+            App.Layers.Add(layerBuilder);
         }
 
         protected virtual void OnFeatureRemoved(Feature feature)
@@ -345,20 +305,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public IGeoJsonVisualisationLayer GetVisualisationLayerForFeature(Feature feature)
         {
-            if (feature.Geometry is MultiLineString || feature.Geometry is LineString)
+            switch (feature.Geometry.Type)
             {
-                return lineFeaturesLayer;
+                case GeoJSONObjectType.MultiPolygon:
+                case GeoJSONObjectType.Polygon:
+                   return polygonFeaturesLayer;
+                case GeoJSONObjectType.MultiLineString:
+                case GeoJSONObjectType.LineString:
+                    return lineFeaturesLayer;
+                case GeoJSONObjectType.MultiPoint:
+                case GeoJSONObjectType.Point:
+                    return pointFeaturesLayer;
+                default:
+                    throw new InvalidCastException("Features of type " + feature.Geometry.Type + " are not supported for visualization layer");
             }
-            else if (feature.Geometry is MultiPolygon || feature.Geometry is Polygon)
-            {
-                return polygonFeaturesLayer;
-            }
-            else if (feature.Geometry is Point || feature.Geometry is MultiPoint)
-            {
-                return pointFeaturesLayer;
-            }
-
-            return null;
         }
     }
 }

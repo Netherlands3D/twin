@@ -20,7 +20,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         [Header("Snackbar")]
         [SerializeField] private StringEvent snackbarEvent;
-        [SerializeField] private string fpvExitText;
         [SerializeField] private string uiHideText;
 
         private PointerToWorldPosition pointerToWorld;
@@ -54,7 +53,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             {
                 viewerGroup.alpha = 0;
                 viewerUI.SetActive(false);
-                viewerGroup.DOFade(1, 1f).SetDelay(1).OnComplete(() => snackbarEvent.InvokeStarted(fpvExitText));
+                viewerGroup.DOFade(1, 1f).SetDelay(1);
             }
             viewerUI.SetActive(true);
 

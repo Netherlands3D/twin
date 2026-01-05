@@ -4,8 +4,8 @@ using JetBrains.Annotations;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.LayerPresets;
-using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
@@ -22,7 +22,6 @@ namespace Netherlands3D.Twin.Layers
         internal StoredAuthorization Credentials { get; set; }
         internal List<LayerPropertyData> Properties { get; } = new();
         [CanBeNull] private Symbolizer DefaultSymbolizer { get; set; }
-        private List<LayerStyle> Styles { get; } = new();
         private Action<LayerData> whenBuilt;
         
         internal LayerBuilder()
@@ -115,14 +114,7 @@ namespace Netherlands3D.Twin.Layers
             
             return this;
         }
-
-        public ILayerBuilder AddStyle(LayerStyle style)
-        {
-            Styles.Add(style);
-
-            return this;
-        }
-
+        
         public ILayerBuilder WhenBuilt(Action<LayerData> callback)
         {
             this.whenBuilt = callback;
@@ -130,11 +122,16 @@ namespace Netherlands3D.Twin.Layers
             return this;
         }
 
-        public LayerData Build(LayerGameObject ontoReference)
-        {
-            var layerData = new ReferencedLayerData(Name, Type, ontoReference);
-            ontoReference.LayerData = layerData;
+        public LayerData Build()
+        {            
+            LayerData layerData = new LayerData(Name, Type);
             
+            /// todo: the following 2 lines of code should not be done here, but in the Layers service.
+            /// but we must set the new layer as child of the rootLayer before the SetParent function works, which is also done in this function.
+            /// this will be addressed in ticket 1909
+            layerData.InitializeParent();
+            ProjectData.Current.RootLayer.AddChild(layerData, 0);
+
             if (!string.IsNullOrEmpty(Name)) layerData.Name = Name;
             if (Color.HasValue) layerData.Color = Color.Value;
             if (Parent != null) layerData.SetParent(Parent);
@@ -142,16 +139,6 @@ namespace Netherlands3D.Twin.Layers
             foreach (var property in Properties)
             {
                 layerData.SetProperty(property);
-            }
-
-            if (DefaultSymbolizer != null)
-            {
-                layerData.DefaultStyle.AnyFeature.Symbolizer = DefaultSymbolizer;
-            }
-            
-            foreach (var style in Styles)
-            {
-                layerData.AddStyle(style);
             }
 
             whenBuilt?.Invoke(layerData);

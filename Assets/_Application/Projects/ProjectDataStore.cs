@@ -41,7 +41,7 @@ namespace Netherlands3D.Twin.Projects
 
         public void LoadFromFile(string filePath)
         {
-            ProjectData.Current.RootLayer.DestroyLayer();
+            App.Layers.Remove(ProjectData.Current.RootLayer);
             ProjectData.Current.ClearFunctionalityData();
             
             Resources.UnloadUnusedAssets();
@@ -81,6 +81,8 @@ namespace Netherlands3D.Twin.Projects
             ProjectData.Current.RootLayer.UpdateLayerTreeOrder(0);
             Debug.Log("Loaded project with uuid: " + ProjectData.Current.UUID);
             ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
+
+            ProjectData.Current.LoadVisualizations();
         }
 
         public void SaveAsFile(ProjectDataHandler projectDataHandler)

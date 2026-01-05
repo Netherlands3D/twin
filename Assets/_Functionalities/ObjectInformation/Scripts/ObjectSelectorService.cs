@@ -4,6 +4,7 @@ using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Tools;
@@ -245,11 +246,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             if (mapping is MeshMapping map)
             {
-                //TODO maybe to the best place here to have a dependency to the cartesianlayerstyler, needs a better implementation
                 LayerFeature feature = GetLayerFeatureFromBagID(bagId, map, out LayerGameObject layer);
                 if (feature != null)
                 {
-                    bool? v = (layer.Styler as CartesianTileLayerStyler).GetVisibilityForSubObject(feature);
+                    HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
+                    bool? v = hiddenPropertyData.GetVisibilityForSubObject(feature);
                     if (v != true) return false;
                 }
             }
@@ -307,7 +308,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public LayerFeature GetLayerFeatureFromBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
         {
             ObjectMappingItem item = GetMappingItemForBagID(bagID, selectedMapping, out layer);
-            if (layer == null || !layer.LayerFeatures.ContainsKey(item))
+            if (layer == null)
+                return null;
+           
+            if (!layer.LayerFeatures.ContainsKey(item))
                 return null;
             
             return layer.LayerFeatures[item]; 

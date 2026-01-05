@@ -10,6 +10,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public bool isVisible = true;
 
         public abstract object GetValue();
+        public abstract object GetDefaultValue();
         public abstract string GetDisplayName();
         public abstract string GetDisplayUnits();
 
@@ -46,12 +47,15 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public float minValue;
         public float maxValue;
 
-        public override object GetValue() => defaultValue;
+        public override object GetDefaultValue() => defaultValue;
+
+        public override object GetValue() => movementSetting.Value;
     }
 
     [Serializable]
     public class ViewerSettingLabel : ViewerSettingGeneric<string>
     {
-        public override object GetValue() => "";
+        public override object GetDefaultValue() => "";
+        public override object GetValue() => movementSetting.Value;
     }
 }

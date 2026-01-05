@@ -1,7 +1,6 @@
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
 using TMPro;
@@ -9,15 +8,16 @@ using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.Layer
 {
-    public class FirstPersonPropertySection : PropertySectionWithLayerGameObject
+    [PropertySection(typeof(FirstPersonLayerPropertyData))]
+    public class FirstPersonPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         [SerializeField] private TMP_Dropdown modusDropdown;
 
         private LayerGameObject layer;
-        public override LayerGameObject LayerGameObject
+
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            get => layer;
-            set => Initialize(value);
+            //throw new System.NotImplementedException();
         }
 
         private void Initialize(LayerGameObject layer)

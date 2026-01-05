@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -6617633297429980398}
   - component: {fileID: -5577781340233138085}
   - component: {fileID: -7741956206036526357}
+  - component: {fileID: -6708588430167576258}
   m_Layer: 10
   m_Name: Bomen
   m_TagString: Untagged
@@ -72,6 +73,9 @@ MonoBehaviour:
   OnMappingRemoved:
     m_PersistentCalls:
       m_Calls: []
+  OnTileObjectCreated:
+    m_PersistentCalls:
+      m_Calls: []
   hasMetaData: 0
   removeFromID: 
   DefaultMaterialList:
@@ -104,9 +108,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onLayerReady:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStylingApplied:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &-6617633297429980398
@@ -170,5 +171,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-6708588430167576258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3712503248906199988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b050df83d47a4b0aa83cc328c57a63b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

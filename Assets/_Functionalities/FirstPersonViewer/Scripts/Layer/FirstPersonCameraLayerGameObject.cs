@@ -14,28 +14,29 @@ namespace Netherlands3D.FirstPersonViewer.Layer
         [SerializeField] private Tool layerTool;
         private FirstPersonLayerPropertyData firstPersonPropertyData => LayerData.GetProperty<FirstPersonLayerPropertyData>();
 
-        public override bool IsMaskable => false;
+        //public override bool IsMaskable => false;
 
-        protected override void InitializePropertyData()
-        {
-            if (firstPersonPropertyData != null) return;
+        //protected override void InitializePropertyData()
+        //{
+        //    if (firstPersonPropertyData != null) return;
 
-            LayerData.SetProperty(
-               new FirstPersonLayerPropertyData(
-                   new Coordinate(transform.position),
-                   transform.eulerAngles,
-                   transform.localScale
-               )
-           );
-        }
+        //    LayerData.SetProperty(
+        //       new FirstPersonLayerPropertyData(
+        //           new Coordinate(transform.position),
+        //           transform.eulerAngles,
+        //           transform.localScale
+        //       )
+        //   );
+        //}
 
         protected override void OnDoubleClick(LayerData layer)
         {
             layerTool.CloseInspector();
 
             FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer>();
-
-            ViewerState viewerState = fpv.MovementSwitcher.MovementPresets.Find(m => m.viewName == firstPersonPropertyData.MovementName);
+            
+            //ViewerState viewerState = fpv.MovementSwitcher.MovementPresets.Find(m => m.viewName == firstPersonPropertyData.MovementName);
+            ViewerState  viewerState = fpv.MovementSwitcher.MovementPresets[0];
 
             fpv.transform.position = transform.position;
             fpv.transform.rotation = transform.rotation;

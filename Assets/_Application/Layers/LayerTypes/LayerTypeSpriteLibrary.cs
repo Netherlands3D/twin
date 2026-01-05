@@ -6,6 +6,8 @@ using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.FirstPersonViewer.Layer;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -25,28 +27,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         [SerializeField] private List<LayerSpriteCollection> layerTypeSprites;
         public LayerSpriteCollection GetLayerTypeSprite(LayerData layer)
         {
-            switch (layer)
+            if(layer.PrefabIdentifier == "folder")
+                return layerTypeSprites[2];
+            
+            LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier);
+            if (template != null)
             {
-                case PolygonSelectionLayer selectionLayer:
-                    if (selectionLayer.ShapeType == ShapeType.Line)
-                        return layerTypeSprites[7];
-                    else if (selectionLayer.ShapeType == ShapeType.Grid)
-                        return layerTypeSprites[12];
-                    return layerTypeSprites[6];
-                case ReferencedLayerData data:
-                    var reference = data.Reference;
-                    return reference == null ? layerTypeSprites[0] : GetProxyLayerSprite(reference);
-                case FolderLayer _:
-                    return layerTypeSprites[2];
-                default:
-                    Debug.LogError("layer type of " + layer.Name + " is not specified");
-                    return layerTypeSprites[0];
+                return GetProxyLayerSprite(template, layer);
             }
+
+            Debug.LogError("layer type of " + layer.Name + " is not specified");
+            return layerTypeSprites[0];
+
         }
 
-        private LayerSpriteCollection GetProxyLayerSprite(LayerGameObject layer)
+        private LayerSpriteCollection GetProxyLayerSprite(LayerGameObject template, LayerData data)
         {
-            switch (layer)
+            switch (template)
             {
                 case WMSLayerGameObject _:
                 case GeoJsonLayerGameObject _:
@@ -72,10 +69,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return layerTypeSprites[7];                
                 case GeoJSONPointLayer _:
                     return layerTypeSprites[9];
-                case PlaceholderLayerGameObject _:
-                    return layerTypeSprites[0];
+                case PolygonSelectionLayerGameObject _:
+                    {
+                        PolygonSelectionLayerPropertyData propertyData = data.GetProperty<PolygonSelectionLayerPropertyData>();
+                        if (propertyData.ShapeType == ShapeType.Line)
+                            return layerTypeSprites[7];
+                        else if (propertyData.ShapeType == ShapeType.Grid)
+                            return layerTypeSprites[12];
+                        return layerTypeSprites[6];
+                    }
                 default:
-                    Debug.LogError($"layer type of {layer.GetType()} is not specified");
+                    Debug.LogError($"layer type of {template.GetType()} is not specified");
                     return layerTypeSprites[0];
             }
         }

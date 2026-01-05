@@ -1,92 +1,53 @@
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
+using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.UI.ColorPicker;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class ColorPickerPropertySection : PropertySectionWithLayerGameObject
+    [PropertySection(typeof(ColorPropertyData))]
+    public class ColorPickerPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
+        public ColorWheel ColorWheel => colorWheel;
+
         [SerializeField] private Color defaultColor = Color.white;
-        [SerializeField] private ColorWheel colorPicker;
-        public UnityEvent<Color> PickedColor = new();
+        [SerializeField] private ColorWheel colorWheel;
 
-        private LayerGameObject layer;
+        private ColorPropertyData stylingPropertyData;
 
-        public override LayerGameObject LayerGameObject
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            get => layer;
-            set => ChangeLayerTo(value);
-        }
+            stylingPropertyData = properties.GetDefaultStylingPropertyData<ColorPropertyData>();
+            if (stylingPropertyData == null) return;
+            
+            stylingPropertyData.OnStylingChanged.AddListener(UpdateColorFromProperty);
+            colorWheel.colorChanged.AddListener(OnColorPicked);
 
-        private void Awake()
-        {
-            PickedColor.AddListener(OnColorPicked);
+            UpdateColorFromProperty();
         }
 
         private void OnDestroy()
-        {
-            PickedColor.RemoveListener(OnColorPicked);
-        }
-
-        private void OnEnable()
-        {
-            colorPicker.colorChanged.AddListener(OnPickedColor);
-            if (layer) layer.OnStylingApplied.AddListener(UpdateColorFromLayer);
-        }
-
-        private void OnDisable()
-        {
-            colorPicker.colorChanged.RemoveListener(OnPickedColor);
-            if (layer) layer.OnStylingApplied.RemoveListener(UpdateColorFromLayer);
+        {       
+            stylingPropertyData?.OnStylingChanged.RemoveListener(UpdateColorFromProperty);
+            colorWheel.colorChanged.RemoveListener(OnColorPicked);
         }
 
         public void PickColorWithoutNotify(Color color)
         {
-            colorPicker.SetColorWithoutNotify(color);
-        }
+            colorWheel.SetColorWithoutNotify(color);
+        }   
 
-        /// <summary>
-        /// Since the layer may or may not be known on Awake/Start of this component, we need to remove and re-add
-        /// listeners on a layer when we set/replace it, and update the color in the color picker to that of the layer.
-        /// </summary>
-        private void ChangeLayerTo(LayerGameObject value)
+        private void UpdateColorFromProperty()
         {
-            if (layer && enabled) layer.OnStylingApplied.RemoveListener(UpdateColorFromLayer);
-            layer = value;
-            if (layer && enabled) layer.OnStylingApplied.AddListener(UpdateColorFromLayer);
-
-            UpdateColorFromLayer();
+            Color? color = stylingPropertyData.GetDefaultSymbolizerColor();
+            colorWheel.SetColorWithoutNotify(color.HasValue ? color.Value : defaultColor);
         }
 
-        public void OnPickedColor(Color color)
-        {
-            PickedColor.Invoke(color);
-            layer.ApplyStyling();
-        }
-
-        private void UpdateColorFromLayer()
-        {
-            if (layer is HierarchicalObjectLayerGameObject hierarchicalObjectLayerGameObject)
-            {
-                var color = HierarchicalObjectLayerStyler.GetColor(hierarchicalObjectLayerGameObject);
-                this.PickColorWithoutNotify(color.HasValue ? color.Value : defaultColor);
-            }
-        }
-
-        /// <summary>
-        /// Default behaviour is to set the picked color as the, unconditional, fill color for the given layer. This
-        /// should suffice in most situations, but if a different behaviour is desired you can remove all listeners
-        /// from the PickedColor event and provide your own implementation.
-        /// </summary>
-        /// <param name="color"></param>
         private void OnColorPicked(Color color)
         {
-            if (layer is HierarchicalObjectLayerGameObject hierarchicalObjectLayerGameObject)
-            {
-                HierarchicalObjectLayerStyler.SetColor(hierarchicalObjectLayerGameObject, color);
-            }
+            stylingPropertyData.SetDefaultSymbolizerColor(color);
         }
     }
 }

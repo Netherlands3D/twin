@@ -1,15 +1,13 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.ExtensionMethods;
-using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -26,84 +24,75 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         Stroke,
     }
 
-    [RequireComponent(typeof(ToggleScatterPropertySectionInstantiator))]
-    public class ObjectScatterLayerGameObject : LayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels, IPropertySectionInstantiator
+    public class ObjectScatterLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
     {
-        public override BoundingBox Bounds => new (polygonBounds);
+        [SerializeField] private Material polygonMaterial;
+
+        public override BoundingBox Bounds => new(polygonBounds);
         public const string ScatterBasePrefabID = "acb0d28ce2b674042ba63bf1d7789bfd"; //todo: not hardcode this
-        
+        private static readonly int baseColorID = Shader.PropertyToID("_BaseColor");
+
         private Mesh mesh;
         private Material material;
 
-        public ScatterGenerationSettingsPropertyData Settings => settings;
-
-        [SerializeField] private ScatterGenerationSettingsPropertyData settings = new();
-
-        private ToggleScatterPropertySectionInstantiator toggleScatterPropertySectionInstantiator;
         private Matrix4x4[][] matrixBatches; //Graphics.DrawMeshInstanced can only draw 1023 instances at once, so we use a 2d array to batch the matrices
-        public PolygonSelectionLayer polygonLayer;
-        private List<IPropertySectionInstantiator> propertySections = new();
+
+        public LayerData polygonLayer;
         private List<PolygonVisualisation> visualisations = new();
 
         private Bounds polygonBounds = new();
         private SampleTexture sampleTexture;
-
-        private bool completedInitialization;
-        public LayerPropertyData PropertyData => settings;
-
-        private ReferencedLayerData areaReferenceData;
-
-        protected override void OnLayerInitialize()
+        
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            toggleScatterPropertySectionInstantiator = GetComponent<ToggleScatterPropertySectionInstantiator>();
-            propertySections = new List<IPropertySectionInstantiator>() { toggleScatterPropertySectionInstantiator, this };
-        } 
-
-        public void Initialize(ReferencedLayerData data, string previousPrefabId)
-        {
-            InitializeScatterMesh(previousPrefabId);            
-            polygonLayer = data.ParentLayer as PolygonSelectionLayer;
-            var existingScatterProperties = (ScatterGenerationSettingsPropertyData) data.LayerProperties.FirstOrDefault(p => p is ScatterGenerationSettingsPropertyData);
-            if (existingScatterProperties == null)
-            {
-                InitializeNewScatterProperties(previousPrefabId, polygonLayer.ShapeType);
-                data.SetProperty(settings);
-            }
-            else
-                settings = existingScatterProperties;
-
-            FinishInitialization();
-        }
-
-        private void FinishInitialization()
-        {
-            RecalculatePolygonsAndSamplerTexture();
-            AddReScatterListeners();
-
-            completedInitialization = true;
+            SetParentPolygonLayer(LayerData.ParentLayer);
+            var scatterSettings = properties.Get<ScatterGenerationSettingsPropertyData>();
+            InitializeScatterMesh(scatterSettings.OriginalPrefabId);
         }
         
+        protected override void OnLayerReady()
+        {
+            base.OnLayerReady();
+            
+            TransformLayerPropertyData transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformProperty.IsEditable = false;
+            RecalculatePolygonsAndSamplerTexture();
+        }
+
+        protected override void RegisterEventListeners()
+        {
+            base.RegisterEventListeners();
+            AddReScatterListeners();
+        }
+
         private void InitializeScatterMesh(string prefabId)
         {
             var scatterObjectPrefab = ProjectData.Current.PrefabLibrary.GetPrefabById(prefabId);
             this.mesh = CombineHierarchicalMeshes(scatterObjectPrefab.transform);
-            this.material = scatterObjectPrefab.GetComponentInChildren<MeshRenderer>().sharedMaterial; //todo: make this work with multiple materials for hierarchical meshes?
+            var sharedMaterial = scatterObjectPrefab.GetComponentInChildren<MeshRenderer>().sharedMaterial; //todo: make this work with multiple materials for hierarchical meshes?
+            this.material = new Material(sharedMaterial);
             this.material.enableInstancing = true;
+
+            var feature = CreateFeature(material);
+            LayerFeatures.Add(feature.Geometry, feature);
         }
-        
-        private void InitializeNewScatterProperties(string originalObjectPrefabId, ShapeType shapeType)
+
+        public override void ApplyStyling()
         {
-            settings.OriginalPrefabId = originalObjectPrefabId;
-            settings.Density = 1000; // per ha for the UI
+            base.ApplyStyling();
 
-            if (shapeType == ShapeType.Line)
+            // Apply style to the features that was discovered
+            foreach (var feature in LayerFeatures.Values)
             {
-                settings.Angle = -1; //set angle to a value outside of the 0-180 range of Vector2.Angle in CalculateLineAngle(), because this will ensure the onchange event to be called when initializing the first time in SetAngleAndUpdateSampleTexture
-                settings.AutoRotateToLine = true;
-            }
+                Symbolizer styling = GetStyling(feature);
+                var fillColor = styling.GetFillColor();
 
-            settings.MinScale = new Vector3(3, 3, 3);
-            settings.MaxScale = new Vector3(6, 6, 6);
+                // Keep the original material color if fill color is not set (null)
+                if (!fillColor.HasValue) return;
+
+                LayerData.Color = fillColor.Value;
+                material.SetColor(baseColorID, fillColor.Value);
+            }
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
@@ -113,20 +102,34 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public void AddReScatterListeners()
         {
+            var settings = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
             settings.ScatterSettingsChanged.AddListener(ResampleTexture);
             settings.ScatterDistributionChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             settings.ScatterShapeChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
-            polygonLayer.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
-            polygonLayer.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
+
+            PolygonSelectionLayerPropertyData polygonProperties = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+            polygonProperties.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
+            polygonProperties.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
+
+            var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
+            toggleScatterPropertyData.IsScatteredChanged.AddListener(ConvertToHierarchicalLayerGameObject);
+
+            AddListenersToCartesianTiles();
         }
 
         public void RemoveReScatterListeners()
         {
+            var settings = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
             settings.ScatterSettingsChanged.RemoveListener(ResampleTexture);
             settings.ScatterDistributionChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
             settings.ScatterShapeChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
-            polygonLayer.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
-            polygonLayer.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
+
+            PolygonSelectionLayerPropertyData polygonProperties = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+            polygonProperties.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
+            polygonProperties.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
+
+            var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
+            toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToHierarchicalLayerGameObject);
         }
 
         protected override void OnDestroy()
@@ -143,6 +146,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             visualisations.Clear();
 
+            var settings = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
             var strokeWidth = -settings.StrokeWidth; //invert so the stroke is always inset
             if (settings.FillType == FillType.Complete)
                 strokeWidth = 0;
@@ -157,7 +161,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             return polygons;
         }
-
+        
         private PolygonVisualisation CreatePolygonMesh(CompoundPolygon polygon)
         {
             var contours = new List<List<Vector3>>(polygon.Paths.Count);
@@ -165,8 +169,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 contours.Add(polygon.Paths[i].ToVector3List());
             }
-
-            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, 1f, false, false, false, polygonLayer.PolygonVisualisation.PolygonMeshMaterial);
+            
+            var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, 1f, false, false, false, polygonMaterial);
             polygonVisualisation.DrawLine = true;
 
             polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("ScatterPolygons");
@@ -179,6 +183,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if (polygonBounds.size.sqrMagnitude == 0)
                 return; // the stroke/fill is clipped out because of the stroke width and no further processing is needed
 
+            var settings = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
             var densityPerSquareUnit = settings.Density / 10000f; //in de UI is het het bomen per hectare, in de functie is het punten per m2
             var normalizedScatter = settings.Scatter / 100f;
             ScatterMap.Instance.GenerateScatterPoints(visualisations, polygonBounds, densityPerSquareUnit, normalizedScatter, settings.Angle, UpdateSampleTexture);
@@ -192,10 +197,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private Bounds RecalculatePolygonsAndGetBounds()
         {
-            if (polygonLayer.ShapeType == ShapeType.Line)
-                settings.Angle = CalculateLineAngle(polygonLayer);
+            PolygonSelectionLayerPropertyData polygonProperties = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
+            if (polygonProperties.ShapeType == ShapeType.Line)
+            {
+                var settings = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
+                settings.Angle = CalculateLineAngle(polygonProperties);
+            }
 
-            var polygons = CalculateAndVisualisePolygons(polygonLayer.Polygon);
+            var boundingBox = GetPolygonBoundingBox();
+            polygonBounds = boundingBox.ToUnityBounds();
+
+            var vertices = PolygonUtility.CoordinatesToVertices(polygonProperties.OriginalPolygon, polygonProperties.LineWidth);
+            var polygons = CalculateAndVisualisePolygons(new CompoundPolygon(vertices));
             if (polygons.Count == 0)
                 return new Bounds(); // the stroke/fill is clipped out because of the stroke width and no further processing is needed
 
@@ -206,8 +219,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 bounds.Encapsulate(polygon.Bounds);
             }
 
-            polygonBounds = bounds;
-            return bounds;
+            return polygonBounds;
         }
 
         public void ReGeneratePointsWithoutResampling()
@@ -218,6 +230,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void ResampleTexture()
         {
+            var settings = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
             var densityPerSquareUnit = settings.Density / 10000; //in de UI is het het bomen per hectare, in de functie is het punten per m2
             float cellSize = 1f / Mathf.Sqrt(densityPerSquareUnit);
             var gridPoints = CompoundPolygon.GenerateGridPoints(polygonBounds, cellSize, 0, out var gridBounds); //dont rotate the grid here, we will rotate the results after sampling to avoid issues with anti-aliassing
@@ -242,6 +255,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 for (int j = 0; j < arraySize; j++)
                 {
                     var index = 1023 * i + j;
+                    var settings = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
                     scale.x = Mathf.Lerp(settings.MinScale.x, settings.MaxScale.x, sampledScales[index].x);
                     scale.y = Mathf.Lerp(settings.MinScale.y, settings.MaxScale.y, sampledScales[index].y);
                     scale.z = scale.x; // also x since we are taking a diameter
@@ -284,111 +298,54 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 visualisation.DrawLine = false;
             }
         }
-        
+
         public override void OnSiblingIndexOrParentChanged(int newSiblingIndex)
         {
             base.OnSiblingIndexOrParentChanged(newSiblingIndex);
 
-            if (!completedInitialization) //this is needed because the initial instantiation will also set the parent, and this should not do any of the logic below before this layer is properly initialized.
-                return;
-
-            var newPolygonParent = LayerData.ParentLayer as PolygonSelectionLayer;
-            if (newPolygonParent == null) //new parent is not a polygon, so the scatter layer should revert to its original object
-            {               
-                App.Layers.VisualizeAs(LayerData, settings.OriginalPrefabId);
-                return;
-            }
-
-            if (newPolygonParent != polygonLayer) //the new parent is a polygon, but not the same as the one currently registered, so a reinitialization is required.
+            var newPolygonParent = LayerData.ParentLayer;
+            if (newPolygonParent != polygonLayer) //the parent changed
             {
-                polygonLayer.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
-                polygonLayer.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
+                SetParentPolygonLayer(newPolygonParent);
+            }
+        }
+
+        private void SetParentPolygonLayer(LayerData newPolygonParent)
+        {
+            PolygonSelectionLayerPropertyData polygonProperties = newPolygonParent.GetProperty<PolygonSelectionLayerPropertyData>();
+            if (polygonProperties != null) //the new parent is also a polygon layer
+            {
+                var autoRotate = polygonProperties.ShapeType == ShapeType.Line;
+                LayerData.GetProperty<ScatterGenerationSettingsPropertyData>().AutoRotateToLine = autoRotate;
+                
+                polygonProperties.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
+                polygonProperties.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
 
                 polygonLayer = newPolygonParent;
                 RecalculatePolygonsAndSamplerTexture();
-                polygonLayer.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
-                polygonLayer.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
+                polygonProperties.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
+                polygonProperties.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
+            }
+            else //the layer is no longer parented to a polygon layer
+            {
+                LayerData.GetProperty<ToggleScatterPropertyData>().IsScattered = false; //revert to Object Visualization
             }
         }
 
-        public override void OnConvert(string previousId)
+        private void AddListenersToCartesianTiles()
         {
-            Initialize(LayerData, previousId);
-        }
+            var areaReference = FindObjectsByType<CartesianTileLayerGameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+                .Where(o => o.gameObject.layer == LayerMask.NameToLayer("Terrain"))
+                .OrderBy(o => o.LayerData.RootIndex)
+                .FirstOrDefault();
+            if (areaReference == null) return;
 
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return propertySections;
-        }
+            BinaryMeshLayer bml = areaReference.Layer as BinaryMeshLayer;
 
-        public void AddToProperties(RectTransform properties)
-        {
-            var propertySection = Instantiate(ScatterMap.Instance.scatterProptertiesPrefab, properties);
-            propertySection.Settings = settings;
-        }
-
-        public void LoadProperties(List<LayerPropertyData> properties)
-        {
-            var scatterSettings = properties.Get<ScatterGenerationSettingsPropertyData>();
-            if (scatterSettings != null)
-            {
-                settings = scatterSettings;
-                if (LayerData.ParentLayer is PolygonSelectionLayer p)
-                {
-                    polygonLayer = p;
-                    if (p.PolygonVisualisation == null)
-                    {
-                        p.OnReferenceChanged.AddListener(OnPolygonParentInitialized);
-                    }
-                    else
-                    {
-                        OnPolygonParentInitialized();
-                    }
-                }
-            }
-        }
-
-        private void OnPolygonParentInitialized()
-        {
-            if(polygonLayer.PolygonVisualisation.Bounds == null)
-            {
-                polygonLayer.PolygonVisualisation.OnPolygonVisualisationUpdated.AddListener(OnPolygonVisualisationUpdated);
-            }
-            else
-            {
-                OnPolygonVisualisationUpdated();
-            }            
-            polygonLayer?.OnReferenceChanged.RemoveListener(OnPolygonParentInitialized);
-        }
-
-        private void OnPolygonVisualisationUpdated()
-        {
-            //check or wait if the maaiveld reference data is loaded
-            areaReferenceData = ProjectData.Current.RootLayer.GetFirstLayerByLayerMask(LayerMask.NameToLayer("Terrain"));
-            if (areaReferenceData == null) return;
-
-            //for some reason this rarily happens depending on the speed of loading and needs to be checked
-            if (areaReferenceData.Reference is PlaceholderLayerGameObject)
-            {
-                areaReferenceData.OnReferenceChanged.AddListener(InitializeScatterArea);
-            }
-            else
-            {
-                InitializeScatterArea();
-            }
-            polygonLayer.PolygonVisualisation.OnPolygonVisualisationUpdated.RemoveListener(OnPolygonVisualisationUpdated);
-        }
-
-        private void InitializeScatterArea()
-        {
-            areaReferenceData.OnReferenceChanged.RemoveListener(InitializeScatterArea);
-            RecalculatePolygonsAndSamplerTexture();
-
-            BoundingBox polygonBoundingBox = polygonLayer.PolygonVisualisation.Bounds;
+            var polygonBoundingBox = GetPolygonBoundingBox();
             polygonBoundingBox.Convert(CoordinateSystem.RD);
-            BinaryMeshLayer bml = ((CartesianTileLayerGameObject)areaReferenceData.Reference).Layer as BinaryMeshLayer;
-            Initialize(LayerData, settings.OriginalPrefabId);
-            bml?.OnTileObjectCreated.AddListener(tile =>
+
+            bml?.OnTileObjectCreated.AddListener(tile => //todo: this is now not unsubscribed
             {
                 BoundingBox tileBox = GetBoundingBoxForTile(tile);
                 //is a tile being loaded intersecting with the polygon then regenerate the sampler texture
@@ -399,7 +356,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             });
         }
 
-        private BoundingBox GetBoundingBoxForTile(Tile tile)
+        private BoundingBox GetPolygonBoundingBox()
+        {
+            var polygonCoordinates = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>().OriginalPolygon;
+            BoundingBox polygonBoundingBox = new BoundingBox(polygonCoordinates[0], polygonCoordinates[0]);
+            for (var i = 1; i < polygonCoordinates.Count; i++)
+            {
+                polygonBoundingBox.Encapsulate(polygonCoordinates[i]);
+            }
+
+            return polygonBoundingBox;
+        }
+
+        private static BoundingBox GetBoundingBoxForTile(Tile tile)
         {
             int size = tile.layer.tileSize;
             BoundingBox boundingBox = new BoundingBox(new Coordinate(CoordinateSystem.RD, tile.tileKey.x, tile.tileKey.y), new Coordinate(CoordinateSystem.RD, tile.tileKey.x + size, tile.tileKey.y + size));
@@ -437,14 +406,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             return mesh;
         }
-        
-        private static float CalculateLineAngle(PolygonSelectionLayer polygon)
+
+        private static float CalculateLineAngle(PolygonSelectionLayerPropertyData polygon)
         {
             var linePoints = polygon.OriginalPolygon.ToUnityPositions().ToList();
             var start = new Vector2(linePoints[0].x, linePoints[0].z);
             var end = new Vector2(linePoints[1].x, linePoints[1].z);
             var dir = end - start;
             return Vector2.Angle(Vector2.up, dir);
+        }
+
+        private void ConvertToHierarchicalLayerGameObject(bool isScattered)
+        {
+            if (isScattered)
+                return;
+
+            App.Layers.VisualizeAs(LayerData, LayerData.GetProperty<ScatterGenerationSettingsPropertyData>().OriginalPrefabId);
         }
     }
 }
