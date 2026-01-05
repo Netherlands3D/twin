@@ -99,6 +99,8 @@ namespace Netherlands3D.Twin.Projects
             foreach (var layer in rootLayer.GetFlatHierarchy())
             {
                 if (layer is RootLayer) continue;
+                if (layer.IsDisposed) continue;
+                
                 App.Layers.VisualizeData(layer);
             }
         }

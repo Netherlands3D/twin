@@ -165,7 +165,7 @@ namespace Netherlands3D.Twin.Layers
             // call `base.OnLayerInitialize` (and possibly forget to do that)
         }
 
-        [Obsolete("Do not use Awake in subclasses, use OnLayerReady instead", true)]
+        [Obsolete("Do not use Start in subclasses, use OnLayerReady instead", true)]
         private void Start()
         {
         }
