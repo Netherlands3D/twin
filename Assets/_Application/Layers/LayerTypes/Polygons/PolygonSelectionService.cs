@@ -1,15 +1,25 @@
 using System.Collections.Generic;
+using System.Linq;
+using Netherlands3D.SelectionTools;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
     public class PolygonSelectionService : MonoBehaviour
     {
-        public static List<LayerData> Layers = new();
+        public LayerData ActiveLayer => activeLayer;
+        
+        private List<LayerData> layers = new();
+        private LayerData activeLayer;
         private PointerToWorldPosition pointerToWorldPosition;
+        private PolygonCreationService polygonCreationService;
 
         private void Awake()
         {
@@ -18,6 +28,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void OnEnable()
         {
+            polygonCreationService = ServiceLocator.GetService<PolygonCreationService>();
             ClickNothingPlane.ClickedOnNothing.AddListener(ProcessClick);
         }
 
@@ -26,21 +37,64 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             ClickNothingPlane.ClickedOnNothing.RemoveListener(ProcessClick);
         }
 
-        public static void RegisterPolygon(LayerData layer)
+        public void RegisterPolygon(LayerData data)
         {
-            if (Layers.Contains(layer))
-            {
-                Debug.LogError("layer " + layer + " is already registered");
-                return;
-            }
-
-            Layers.Add(layer);
+            layers.Add(data);
+            PolygonSelectionLayerPropertyData propertyData = data.GetProperty<PolygonSelectionLayerPropertyData>();
+            propertyData.polygonSelected.AddListener(ProcessPolygonSelection);
+            ProcessPolygonSelection(data);
+            
+            data.LayerDestroyed.AddListener(()=> UnRegisterPolygon(data)); //todo improve on this
+            
         }
 
-        public static void UnregisterPolygon(LayerData layer)
+        public void UnRegisterPolygon(LayerData data)
         {
-            if (!Layers.Remove(layer))
-                Debug.LogError("layer " + layer + " is not registered");
+            layers.Remove(data);
+            PolygonSelectionLayerPropertyData propertyData = data.GetProperty<PolygonSelectionLayerPropertyData>();
+            propertyData.polygonSelected.RemoveListener(ProcessPolygonSelection);
+        }
+
+        // public static void RegisterPolygon(LayerData layer)
+        // {
+        //     if (Layers.Contains(layer))
+        //     {
+        //         Debug.LogError("layer " + layer + " is already registered");
+        //         return;
+        //     }
+        //
+        //     Layers.Add(layer);
+        // }
+        //
+        // public static void UnregisterPolygon(LayerData layer)
+        // {
+        //     if (!Layers.Remove(layer))
+        //         Debug.LogError("layer " + layer + " is not registered");
+        // }
+
+        public void RegisterPolygons(ProjectData projectData)
+        {
+            layers.Clear();
+
+            foreach (var layer in projectData.RootLayer.GetFlatHierarchy())
+            {
+                PolygonSelectionLayerPropertyData propertyData = layer.GetProperty<PolygonSelectionLayerPropertyData>();
+                if (propertyData == null) continue;
+
+                propertyData.polygonSelected.AddListener(ProcessPolygonSelection);
+                
+                UnityAction referenceListener = null;
+                referenceListener = () =>
+                {
+                    layers.Add(layer);
+                    propertyData.polygonEnabled.Invoke(false);
+                    // if (!propertyData.IsMask)
+                    //     match.SetVisualisationActive(enabled); //todo: check if this works
+                
+                    propertyData.OnPolygonInitialized.RemoveListener(referenceListener);
+                };
+                propertyData.OnPolygonInitialized.AddListener(referenceListener);
+            }
         }
 
         private void ProcessClick()
@@ -49,7 +103,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(camera);
             var worldPoint = pointerToWorldPosition.WorldPoint.ToUnity();
 
-            foreach (var layer in Layers)
+            foreach (var layer in layers)
             {               
                 bool wasSelected = ProcessPolygonSelection(layer, frustumPlanes, worldPoint);
                 if (wasSelected)
@@ -87,6 +141,59 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var vertices = PolygonUtility.CoordinatesToVertices(polygonPropertyData.OriginalPolygon, polygonPropertyData.LineWidth);
             var polygon = new CompoundPolygon(vertices);
             return CompoundPolygon.IsPointInPolygon(point2d, polygon);
+        }
+        
+        private void ProcessPolygonSelection(LayerData layer)
+        {
+            PolygonSelectionLayerPropertyData data = layer?.GetProperty<PolygonSelectionLayerPropertyData>();
+            //we don't reselect immediately in case of a grid, but we already register the active layer
+            if (data?.ShapeType == ShapeType.Grid)
+            {
+                activeLayer = layer;
+                polygonCreationService.UpdateInputByType(layer);
+                polygonCreationService.GridInput.SetSelectionVisualEnabled(true);
+                return;
+            }
+
+            //Do not allow selecting a new polygon if we are still creating one
+            if (polygonCreationService.PolygonInput.Mode == PolygonInput.DrawMode.Create || polygonCreationService.LineInput.Mode == PolygonInput.DrawMode.Create)
+                return;
+
+            polygonCreationService.ClearInputs();
+
+            activeLayer = layer;
+            ReselectLayerPolygon(layer);
+        }
+        
+        private void ReselectLayerPolygon(LayerData layer)
+        {
+            if (layer == null)
+            {
+                // reselecting nothing, disabling all polygon selections
+                polygonCreationService.PolygonInput.gameObject.SetActive(false);
+                polygonCreationService.LineInput.gameObject.SetActive(false);
+                polygonCreationService.GridInput.gameObject.SetActive(false);
+                return;
+            }
+
+            //Align the input sytem by reselecting using layer polygon
+            polygonCreationService.UpdateInputByType(layer);
+        }
+        
+        public void ShowPolygonVisualisations(bool enabled)
+        {
+            foreach (var layer in layers)
+            {
+                PolygonSelectionLayerPropertyData propertyData = layer.GetProperty<PolygonSelectionLayerPropertyData>();
+                if (propertyData.IsMask)
+                {
+                    continue;
+                }
+                propertyData.polygonEnabled.Invoke(enabled);
+            }
+            
+            //todo needed?
+            //ServiceLocator.GetService<PolygonSelectionService>().gameObject.SetActive(enabled);
         }
 
         public static bool IsBoundsInView(Bounds bounds, Plane[] frustumPlanes)

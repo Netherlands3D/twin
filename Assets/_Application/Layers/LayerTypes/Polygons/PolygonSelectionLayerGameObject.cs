@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
@@ -105,16 +106,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public override void SetData(LayerData layerData)
         {
-            LayerData previousData = LayerData;
-            if(previousData != null && previousData != layerData)
-            {
-                PolygonSelectionService.UnregisterPolygon(LayerData);
-            }
+            //LayerData previousData = LayerData;
+            // if(previousData != null && previousData != layerData)
+            // {
+            //     PolygonSelectionService.UnregisterPolygon(LayerData);
+            // }
             base.SetData(layerData);
             var data = layerData.GetProperty<PolygonSelectionLayerPropertyData>();
             data.polygonChanged.Invoke(); //todo: why is this needed?
             data.OnPolygonInitialized.Invoke();
-            PolygonSelectionService.RegisterPolygon(LayerData);
+            //PolygonSelectionService.RegisterPolygon(LayerData);
         }
 
         protected override void RegisterEventListeners()
@@ -282,7 +283,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public override void DestroyLayer()
         {
             base.DestroyLayer();
-            PolygonSelectionService.UnregisterPolygon(LayerData);
+            //PolygonSelectionService.UnregisterPolygon(LayerData);
             CleanupMasking();            
         }
 
