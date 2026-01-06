@@ -571,8 +571,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4416122825769437922}
+  - component: {fileID: 3312545727708364171}
   m_Layer: 5
-  m_Name: Items
+  m_Name: Settings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -595,8 +596,34 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3312545727708364171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4856968024582258252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 5
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 10
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &5213755786761917760
 GameObject:
   m_ObjectHideFlags: 0
@@ -1043,7 +1070,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &855263469170216379
 MonoBehaviour:
@@ -1315,6 +1342,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3657432826502635418, guid: e3342ba09b3c3e245ac1e7d9f4102026,
         type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3657432826502635418, guid: e3342ba09b3c3e245ac1e7d9f4102026,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1350,6 +1382,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8226166663201219730, guid: e3342ba09b3c3e245ac1e7d9f4102026,
         type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8226166663201219730, guid: e3342ba09b3c3e245ac1e7d9f4102026,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1357,6 +1394,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8597775257156953464, guid: e3342ba09b3c3e245ac1e7d9f4102026,
+        type: 3}
+      propertyPath: m_ChildControlHeight
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9193392669041292004, guid: e3342ba09b3c3e245ac1e7d9f4102026,
         type: 3}
@@ -1493,6 +1535,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c82b6673901d4b046baa90a41ec7601e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  componentList: {fileID: 11400000, guid: 75d6cddbd511b234f8e11c3f84bfb85b, type: 2}
+  settingParent: {fileID: 4416122825769437922}
   modusDropdown: {fileID: 5405879692222379909}
 --- !u!224 &4036870631534911347 stripped
 RectTransform:
