@@ -162,7 +162,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             {
                 binaryMeshLayer.OnMappingCreated.RemoveListener(OnAddedMapping);
                 binaryMeshLayer.OnMappingRemoved.RemoveListener(OnRemovedMapping);
-
             }
         }
 

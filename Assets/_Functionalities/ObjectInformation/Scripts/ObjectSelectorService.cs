@@ -90,8 +90,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void OnProjectChanged(ProjectData data)
         {
+            ClearMappingTree();
             ProjectData.Current.RootLayer.AddedSelectedLayer.AddListener(OnAddSelectedLayer);
             ProjectData.Current.RootLayer.RemovedSelectedLayer.AddListener(OnRemoveSelectedLayer);
+        }
+
+        private void ClearMappingTree()
+        {
+            mappingTreeInstance.Clear();
+            BoundingBox bbox = StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds;
+            MappingTree tree = new MappingTree(bbox, 4, 12);                    
+            mappingTreeInstance = tree;
         }
 
         private void OnAddSelectedLayer(LayerData data)

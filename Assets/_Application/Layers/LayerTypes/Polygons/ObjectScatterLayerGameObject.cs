@@ -121,8 +121,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
             toggleScatterPropertyData.IsScatteredChanged.AddListener(ConvertToHierarchicalLayerGameObject);
-
-            AddListenersToCartesianTiles();
         }
 
         public void RemoveReScatterListeners()
@@ -329,11 +327,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 
                 polygonProperties.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
                 polygonProperties.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
+                polygonProperties.polygonChanged.RemoveListener(AddListenersToCartesianTiles);
 
                 polygonLayer = newPolygonParent;
                 RecalculatePolygonsAndSamplerTexture();
                 polygonProperties.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
                 polygonProperties.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
+                polygonProperties.polygonChanged.AddListener(AddListenersToCartesianTiles);
             }
             else //the layer is no longer parented to a polygon layer
             {
