@@ -108,12 +108,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             LayerData previousData = LayerData;
             if(previousData != null && previousData != layerData)
             {
-                PolygonSelectionCalculator.UnregisterPolygon(LayerData);
+                PolygonSelectionService.UnregisterPolygon(LayerData);
             }
             base.SetData(layerData);
             var data = layerData.GetProperty<PolygonSelectionLayerPropertyData>();
             data.polygonChanged.Invoke(); //todo: why is this needed?
-            PolygonSelectionCalculator.RegisterPolygon(LayerData);
+            data.OnPolygonInitialized.Invoke();
+            PolygonSelectionService.RegisterPolygon(LayerData);
         }
 
         protected override void RegisterEventListeners()
@@ -281,7 +282,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public override void DestroyLayer()
         {
             base.DestroyLayer();
-            PolygonSelectionCalculator.UnregisterPolygon(LayerData);
+            PolygonSelectionService.UnregisterPolygon(LayerData);
             CleanupMasking();            
         }
 

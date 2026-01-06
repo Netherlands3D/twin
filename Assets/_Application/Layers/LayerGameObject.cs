@@ -45,11 +45,6 @@ namespace Netherlands3D.Twin.Layers
 
         private LayerData layerData;
         public LayerData LayerData => layerData;
-
-        [Space] public UnityEvent onShow = new();
-        public UnityEvent onHide = new();
-        public UnityEvent onLayerInitialized = new();
-
         public abstract BoundingBox Bounds { get; }
 
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
@@ -96,7 +91,6 @@ namespace Netherlands3D.Twin.Layers
             this.layerData = layerData;
 
             OnLayerInitialize();
-            onLayerInitialized.Invoke();
             // Call a template method that children are free to play with - this way we can avoid using
             // the start method directly and prevent forgetting to call the base.Start() from children
             LoadPropertiesInVisualisations();
@@ -107,11 +101,6 @@ namespace Netherlands3D.Twin.Layers
             ApplyStyling();
 
             OnLayerReady();
-            // Event invocation is separate from template method on purpose to ensure child classes complete their
-            // readiness before external classes get to act - it also prevents forgetting calling the base method
-            // when overriding OnLayerReady
-            //TODO this is perhaps the wrong responsibility. change this in the future?
-            this.layerData.onLayerReady.Invoke();
         }
 
         protected virtual void RegisterEventListeners()
@@ -185,12 +174,12 @@ namespace Netherlands3D.Twin.Layers
 
         protected virtual void OnEnable()
         {
-            onShow.Invoke();
+           
         }
 
         protected virtual void OnDisable()
         {
-            onHide.Invoke();
+           
         }
 
         public virtual void OnSelect()

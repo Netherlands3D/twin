@@ -160,7 +160,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<Color> ColorChanged = new();
         [JsonIgnore] public readonly UnityEvent LayerDestroyed = new();
         [JsonIgnore] public readonly UnityEvent<int> LayerOrderChanged = new();
-        [JsonIgnore] public readonly UnityEvent onLayerReady = new();
+        
         [JsonIgnore] public readonly UnityEvent LayerSelected = new();
         [JsonIgnore] public readonly UnityEvent LayerDeselected = new();
         [JsonIgnore] public UnityEvent<LayerData> LayerDoubleClicked = new();
