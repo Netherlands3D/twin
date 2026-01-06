@@ -32,7 +32,7 @@ namespace Netherlands3D.FirstPersonViewer.Layer
 
             fpv.transform.position = transform.position;
             fpv.transform.rotation = transform.rotation;
-            fpv.OnViewerEntered?.Invoke(viewerState);
+            fpv.OnViewerEntered?.Invoke(viewerState, firstPersonPropertyData.settingValues);
         }
     }
 }

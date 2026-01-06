@@ -45,7 +45,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             hideButton.action.performed -= OnHideUIPressed;
         }
 
-        private void EnterViewer(ViewerState state)
+        private void EnterViewer(ViewerState state, Dictionary<string, object> settings)
         {
             uiToDisable.ForEach(ui => ui.SetActive(false));
 

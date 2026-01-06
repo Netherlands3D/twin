@@ -1,6 +1,7 @@
 using DG.Tweening;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Twin.Cameras;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer
@@ -49,7 +50,7 @@ namespace Netherlands3D.FirstPersonViewer
             FPVCamera = firstPersonViewerCamera;
         }
 
-        public void SetupViewer(ViewerState startState)
+        public void SetupViewer(ViewerState startState, Dictionary<string, object> settings)
         {
             mainCam = Camera.main;
             prevCameraPosition = mainCam.transform.position;
@@ -67,15 +68,16 @@ namespace Netherlands3D.FirstPersonViewer
             forward.y = 0;
             forward.Normalize();
 
+            SetCameraFOV(60);
             SetupMainCam();
             Quaternion targetRot = Quaternion.LookRotation(forward, Vector3.up);
 
             transform.DOLocalMove(Vector3.zero + Vector3.up * CameraHeightOffset, 2f).SetEase(Ease.InOutSine);
-            transform.DORotateQuaternion(targetRot, 2f).SetEase(Ease.InOutSine).OnComplete(() => CameraSetupComplete(startState));
+            transform.DORotateQuaternion(targetRot, 2f).SetEase(Ease.InOutSine).OnComplete(() => CameraSetupComplete(startState, settings));
         }
 
         //From Setup Viewer
-        private void CameraSetupComplete(ViewerState startState)
+        private void CameraSetupComplete(ViewerState startState, Dictionary<string, object> settings)
         {
             startRotation = transform.rotation;
             mainCam.transform.position = transform.position + Vector3.up * cameraHeightAboveGround;
@@ -87,7 +89,7 @@ namespace Netherlands3D.FirstPersonViewer
             viewer.OnResetToStart += ResetToStart;
             viewer.OnSetCameraNorth += SetCameraNorth;
 
-            if (startState != null) viewer.MovementSwitcher.LoadMovementPreset(startState);
+            if (startState != null) viewer.MovementSwitcher.LoadMovementPreset(startState, settings);
             else viewer.MovementSwitcher.LoadMovementPreset(0);
 
             input.RemoveInputLockConstrain(this);

@@ -5,6 +5,7 @@ using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer
@@ -49,7 +50,7 @@ namespace Netherlands3D.FirstPersonViewer
         public Action OnResetToGround;
         public Action OnSetCameraNorth;
 
-        public Action<ViewerState> OnViewerEntered;
+        public Action<ViewerState, Dictionary<string, object>> OnViewerEntered;
         public Action<bool> OnViewerExited;
 
         private void Awake()
@@ -73,7 +74,7 @@ namespace Netherlands3D.FirstPersonViewer
             gameObject.SetActive(false);
         }
 
-        private void ViewerEnterd(ViewerState state)
+        private void ViewerEnterd(ViewerState state, Dictionary<string, object> settings)
         {
             startPosition = new Coordinate(transform.position);
             startRotation = transform.rotation;
@@ -82,7 +83,7 @@ namespace Netherlands3D.FirstPersonViewer
             worldTransform.MoveToCoordinate(startPosition);
             worldTransform.SetRotation(startRotation);
             Input.OnFPVEnter();
-            FirstPersonCamera.SetupViewer(state);
+            FirstPersonCamera.SetupViewer(state, settings);
 
             //Remove old visual (So no weird transition will happen)
             fsm.SwitchState(null);

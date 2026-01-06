@@ -51,7 +51,7 @@ namespace Netherlands3D.FirstPersonViewer
                     forward.Normalize();
 
                     fpv.transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
-                    fpv.OnViewerEntered?.Invoke(null);
+                    fpv.OnViewerEntered?.Invoke(null, null);
 
                     //}
                 }
