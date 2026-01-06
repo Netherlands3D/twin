@@ -232,7 +232,7 @@ namespace Netherlands3D.SelectionTools
             selectionBlock.gameObject.SetActive(enabled);
         }
 
-        public void ReselectAreaFromPolygon(List<Vector3> points)
+        public void SetAreaFromPolygon(List<Vector3> points)
         {
             Bounds bounds = new Bounds(points[0], Vector3.zero);
             for (var i = 1; i < points.Count; i++)
