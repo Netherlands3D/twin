@@ -20,7 +20,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         Grid = 3
     }
 
-    public class PolygonInputToLayer : MonoBehaviour
+    public class PolygonCreationService : MonoBehaviour
     {
         [SerializeField] private PolygonSelectionLayerGameObject polygonSelectionLayerGameObjectPrefab;
 
@@ -177,7 +177,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public void ClearSelection()
         {
             //Clear inputs if no layer is selected by default
-            var emptyList = new List<Vector3>();
             lineInput.ClearPolygon(true);
             polygonInput.ClearPolygon(true);
             gridInput.SetSelectionVisualEnabled(false);
