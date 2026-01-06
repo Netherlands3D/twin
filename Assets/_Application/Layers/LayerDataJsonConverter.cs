@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
-using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
@@ -30,18 +29,12 @@ namespace Netherlands3D
         {
         }
 
+        public override bool CanWrite => false; // This serializer does not implement a custom write function, because we want to use the default seralization settings for writing. We only need it for reading legacy formatted LayerData.  
+
         public override void WriteJson(JsonWriter writer, LayerData value, JsonSerializer serializer)
         {
-            if (value == null)
-            {
-                writer.WriteNull();
-                return;
-            }
-
-            // Create a serializer without THIS converter
-            var cleanSerializer = CreateSerializerWithoutSelf(serializer);
-
-            cleanSerializer.Serialize(writer, value);
+            //this is not implemented on purpose, we want to use the default serializer, and therefore this code should never be reached.
+            throw new NotImplementedException();
         }
 
         public override LayerData ReadJson(
@@ -100,37 +93,6 @@ namespace Netherlands3D
             }
 
             return layer;
-        }
-
-        private static JsonSerializer CreateSerializerWithoutSelf(JsonSerializer original)
-        {
-            var serializer = new JsonSerializer
-            {
-                ContractResolver = original.ContractResolver,
-                Culture = original.Culture,
-                DateFormatHandling = original.DateFormatHandling,
-                DateParseHandling = original.DateParseHandling,
-                DateTimeZoneHandling = original.DateTimeZoneHandling,
-                FloatFormatHandling = original.FloatFormatHandling,
-                FloatParseHandling = original.FloatParseHandling,
-                Formatting = original.Formatting,
-                MaxDepth = original.MaxDepth,
-                MissingMemberHandling = original.MissingMemberHandling,
-                NullValueHandling = original.NullValueHandling,
-                ObjectCreationHandling = original.ObjectCreationHandling,
-                PreserveReferencesHandling = original.PreserveReferencesHandling,
-                ReferenceLoopHandling = original.ReferenceLoopHandling,
-                StringEscapeHandling = original.StringEscapeHandling,
-                TypeNameHandling = original.TypeNameHandling
-            };
-
-            foreach (var c in original.Converters)
-            {
-                if (c is not LayerDataJsonConverter)
-                    serializer.Converters.Add(c);
-            }
-
-            return serializer;
         }
         
         private void MigrateSingleLegacyStyle(
