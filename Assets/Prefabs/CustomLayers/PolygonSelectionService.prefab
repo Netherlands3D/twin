@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8722184823787277371}
   - component: {fileID: 4809104122177881319}
   - component: {fileID: 3173842257162390647}
+  - component: {fileID: 250652008268017288}
   m_Layer: 0
   m_Name: PolygonSelectionService
   m_TagString: ScatterProjector
@@ -229,4 +230,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f102b09479cbb46cdb6ef99a371713d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  service: {fileID: 5865487539782265388}
+  service: {fileID: 4809104122177881319}
+--- !u!114 &250652008268017288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739372930032675163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda199de660f4334b8a50d8e350bdf29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 271a09cff13d5466d9d355af09c8c900, type: 2}
+  onTriggered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4809104122177881319}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerTypes.Polygons.PolygonSelectionService,
+          eu.netherlands3d.twin
+        m_MethodName: ShowPolygonVisualisations
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTrue:
+    m_PersistentCalls:
+      m_Calls: []
+  onFalse:
+    m_PersistentCalls:
+      m_Calls: []

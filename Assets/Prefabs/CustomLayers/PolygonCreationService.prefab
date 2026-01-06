@@ -366,15 +366,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f01518e17ca84bcba8478a2b11f92a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  polygonSelectionLayerGameObjectPrefab: {fileID: 2578961074007820944, guid: 0dd48855510674827b667fa4abd5cf60,
+  polygonVisualisationPrefab: {fileID: 2578961074007820944, guid: 0dd48855510674827b667fa4abd5cf60,
     type: 3}
-  selectionCalculator: {fileID: 3544518474178100614}
+  gridInput: {fileID: 8869024336814900260}
   polygonInput: {fileID: 2971444630074657358}
   lineInput: {fileID: 6819746166564945398}
   defaultLineWidth: 10
-  polygonPropertySectionPrefab: {fileID: 3186418061294983386, guid: 599137b5f8b96463dbf2bd16d71cd26d,
-    type: 3}
-  gridInput: {fileID: 8869024336814900260}
 --- !u!114 &1166426914008804660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,19 +388,6 @@ MonoBehaviour:
   onTriggered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6970481386311860828}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.PolygonInputToLayer,
-          Assembly-CSharp
-        m_MethodName: ShowPolygonVisualisations
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 6970481386311860828}
         m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerTypes.Polygons.PolygonInputToLayer,
           eu.netherlands3d.twin
@@ -1903,18 +1887,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3be1faff22436b62eba3280bfd2f087f, type: 3}
---- !u!114 &3544518474178100614 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4809104122177881319, guid: 3be1faff22436b62eba3280bfd2f087f,
-    type: 3}
-  m_PrefabInstance: {fileID: 8326582306625452385}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d602daece20d4d718251faaf0cb627c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &4682479123126883472 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3708282776724663793, guid: 3be1faff22436b62eba3280bfd2f087f,
