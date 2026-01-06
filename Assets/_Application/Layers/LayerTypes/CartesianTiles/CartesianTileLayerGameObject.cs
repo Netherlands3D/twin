@@ -39,12 +39,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             transform.SetParent(tileHandler.transform);
             layer = GetComponent<Layer>();
 
-            tileHandler.AddLayer(layer);           
-        }
-
-        protected override void OnLayerReady()
-        {
-            base.OnLayerReady();
+            tileHandler.AddLayer(layer);         
+            
             SetupFeatures();
         }
 
