@@ -49,8 +49,6 @@ namespace Netherlands3D.Twin.Layers
         [Space] public UnityEvent onShow = new();
         public UnityEvent onHide = new();
         public UnityEvent onLayerInitialized = new();
-        public UnityEvent onLayerReady = new();
-
 
         public abstract BoundingBox Bounds { get; }
 
@@ -112,7 +110,8 @@ namespace Netherlands3D.Twin.Layers
             // Event invocation is separate from template method on purpose to ensure child classes complete their
             // readiness before external classes get to act - it also prevents forgetting calling the base method
             // when overriding OnLayerReady
-            onLayerReady.Invoke();
+            //TODO this is perhaps the wrong responsibility. change this in the future?
+            this.layerData.onLayerReady.Invoke();
         }
 
         protected virtual void RegisterEventListeners()
