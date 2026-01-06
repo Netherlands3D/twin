@@ -54,12 +54,7 @@ namespace Netherlands3D.Twin.Layers
         {
             if(Application.isPlaying)
                 return;
-            
-            // If the application is in the editor and not playing, we need to fill the property list with fake property data
-            // so that the inspector knows which property panels should be able to be togglable in the inspector.
-            // todo: this is very hacky, and should be done either with a new LayerData() to temporarily assign to this gameObject,
-            // todo: or even better: split StylingPropertyData so that this property data has a single responsibility instead of a a generic stylingPropertyData  
-
+         
             if (string.IsNullOrEmpty(prefabIdentifier) || prefabIdentifier == "00000000000000000000000000000000")
             {
                 var pathToPrefab = AssetDatabase.GetAssetPath(this);
