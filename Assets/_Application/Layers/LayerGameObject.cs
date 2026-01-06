@@ -95,14 +95,12 @@ namespace Netherlands3D.Twin.Layers
             // the start method directly and prevent forgetting to call the base.Start() from children
             LoadPropertiesInVisualisations();
             RegisterEventListeners();
-            OnLayerReady();
-            // Event invocation is separate from template method on purpose to ensure child classes complete their
-            // readiness before external classes get to act - it also prevents forgetting calling the base method
-            // when overriding OnLayerReady
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 
             //todo move this into loadproperties?
             ApplyStyling();
+
+            OnLayerReady();
         }
 
         protected virtual void RegisterEventListeners()
@@ -155,7 +153,7 @@ namespace Netherlands3D.Twin.Layers
             // call `base.OnLayerInitialize` (and possibly forget to do that)
         }
 
-        [Obsolete("Do not use Awake in subclasses, use OnLayerReady instead", true)]
+        [Obsolete("Do not use Start in subclasses, use OnLayerReady instead", true)]
         private void Start()
         {
         }
@@ -183,12 +181,6 @@ namespace Netherlands3D.Twin.Layers
         {
            
         }
-        protected virtual void OnDestroy()
-        {
-            //don't unsubscribe in OnDisable, because we still want to be able to center to a 
-
-            UnregisterEventListeners();
-        }
 
         public virtual void OnSelect()
         {
@@ -205,6 +197,8 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void DestroyLayerGameObject()
         {
+            //don't unsubscribe in OnDisable, because we still want to be able to center to a LayerGameObject
+            UnregisterEventListeners();
             Destroy(gameObject);
         }
 

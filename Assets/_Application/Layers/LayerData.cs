@@ -172,6 +172,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
        
         [JsonIgnore] public readonly UnityEvent<bool> HasValidCredentialsChanged = new();
+        [JsonIgnore] public bool IsDisposed {get; private set;}
 
         /// <summary>
         /// Track whether this data object is new, in other words instantiated during this session, or whether it comes
@@ -311,11 +312,11 @@ namespace Netherlands3D.Twin.Layers
             }
 
             ParentLayer.ChildrenLayers.Remove(this);
+            IsDisposed = true;
             parent.ChildrenChanged.Invoke(); //call event on old parent
             ParentOrSiblingIndexChanged.RemoveListener(Root.UpdateLayerTreeOrder);
             LayerDestroyed.Invoke();
         }
-
         public bool HasProperty<T>() where T : LayerPropertyData
         {
             return LayerProperties.Contains<T>();

@@ -254,7 +254,7 @@ namespace Netherlands3D.CartesianTiles
             //since we are modifying the collection, just take the first one and process it untill the collection is empty
             while (removeChanges.Any())
             {
-                var removeChange = pendingTileChanges[0]; 
+                var removeChange = removeChanges.First(); 
                 layers[removeChange.layerIndex].HandleTile(removeChange);
                 pendingTileChanges.RemoveAt(0);
 

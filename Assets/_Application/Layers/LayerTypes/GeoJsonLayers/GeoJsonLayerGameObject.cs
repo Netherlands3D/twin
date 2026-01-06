@@ -77,7 +77,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         List<PendingFeature> pendingPolygonFeatures = new();
         List<PendingFeature> pendingLineFeatures = new();
         List<PendingFeature> pendingPointFeatures = new();
-        
+
         protected override void OnLayerInitialize()
         {
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
@@ -114,11 +114,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         protected virtual void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
-            if (auth.GetType() != typeof(Public))//if it is public, we don't want the property panel to show up
+            if (auth.GetType() != typeof(Public)) //if it is public, we don't want the property panel to show up
             {
                 InitProperty<CredentialsRequiredPropertyData>(LayerData.LayerProperties);
             }
-            
+
             if (auth is FailedOrUnsupported)
             {
                 LayerData.HasValidCredentials = false;
@@ -129,14 +129,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
         }
 
-        protected override void OnDestroy()
+        protected override void UnregisterEventListeners()
         {
+            base.UnregisterEventListeners();
             parser.OnFeatureParsed.RemoveListener(AddFeatureVisualisation);
             parser.OnParseError.RemoveListener(onParseError.Invoke);
-
             var credentialHandler = GetComponent<ICredentialHandler>();
             credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
-            base.OnDestroy();
         }
 
         public void AddFeatureVisualisation(Feature feature)
@@ -160,7 +159,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// </summary>
         public void RemoveFeaturesOutOfView()
         {
-            polygonFeaturesLayer?.RemoveFeaturesOutOfView();            
+            polygonFeaturesLayer?.RemoveFeaturesOutOfView();
             lineFeaturesLayer?.RemoveFeaturesOutOfView();
             pointFeaturesLayer?.RemoveFeaturesOutOfView();
         }
@@ -190,7 +189,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             objectMapping.SetGeoJsonLayerParent(this);
             objectMapping.UpdateBoundingBox();
             ObjectSelectorService.MappingTree.RootInsert(objectMapping);
-        }    
+        }
 
         private void SetVisualization(LayerGameObject layerGameObject)
         {
@@ -213,40 +212,55 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void SetVisualization(IGeoJsonVisualisationLayer layer, List<PendingFeature> pendingFeatures)
         {
-            ColorPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
-            ColorPropertyData childStylingPropertyData = layer.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
+            var stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
+            var childStylingPropertyData = layer.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
+
+            ConvertOldStylingDataIntoProperty(layer.LayerData.LayerProperties, "default", childStylingPropertyData, true);
+            // ConvertOldStylingDataIntoProperty(layer.LayerData.LayerProperties, Symbolizer.StrokeColorProperty, childStylingPropertyData, true);
             
+            // in case the child property data was set explicitly by the user and this was saved in the project file, we do not want to overwrite this data with the parent styling.
+            var childFillSetExplicitly = childStylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue;
+            var childStrokeSetExplicitly = childStylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue;
+
             var fillColor = stylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetFillColor().Value : LayerData.Color;
             var strokeColor = stylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetStrokeColor().Value : LayerData.Color;
-            
+
             //TODO we have to convert this to an enum in the future
-            childStylingPropertyData.ColorType = Symbolizer.StrokeColorProperty;
-            childStylingPropertyData.SetDefaultSymbolizerColor(strokeColor);
-            childStylingPropertyData.ColorType = Symbolizer.FillColorProperty;
-            childStylingPropertyData.SetDefaultSymbolizerColor(fillColor);
-            
+            if (!childStrokeSetExplicitly)
+            {
+                childStylingPropertyData.ColorType = Symbolizer.StrokeColorProperty;
+                childStylingPropertyData.SetDefaultSymbolizerColor(strokeColor);
+            }
+
+            if (!childFillSetExplicitly)
+            {
+                childStylingPropertyData.ColorType = Symbolizer.FillColorProperty;
+                childStylingPropertyData.SetDefaultSymbolizerColor(fillColor);
+            }
+
             layer.FeatureRemoved += OnFeatureRemoved;
 
             foreach (var pendingFeature in pendingFeatures)
             {
-               VisualizeFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
+                VisualizeFeature(pendingFeature.Feature, pendingFeature.CoordinateSystem);
             }
+
             pendingFeatures.Clear();
         }
 
         private void VisualizeFeature(Feature feature, CoordinateSystem crs)
-        {            
+        {
             switch (feature.Geometry.Type)
             {
-                case GeoJSONObjectType.MultiPolygon:                    
+                case GeoJSONObjectType.MultiPolygon:
                 case GeoJSONObjectType.Polygon:
                     AddFeature(feature, crs, polygonFeaturesLayer, pendingPolygonFeatures, polygonLayerPrefab, SetVisualization);
                     return;
-                case GeoJSONObjectType.MultiLineString:                    
+                case GeoJSONObjectType.MultiLineString:
                 case GeoJSONObjectType.LineString:
                     AddFeature(feature, crs, lineFeaturesLayer, pendingLineFeatures, lineLayerPrefab, SetVisualization);
                     return;
-                case GeoJSONObjectType.MultiPoint:                   
+                case GeoJSONObjectType.MultiPoint:
                 case GeoJSONObjectType.Point:
                     AddFeature(feature, crs, pointFeaturesLayer, pendingPointFeatures, pointLayerPrefab, SetVisualization);
                     return;
@@ -272,17 +286,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         private void CreateLayer(LayerGameObject prefab, UnityAction<LayerGameObject> callBack)
         {
-            var childrenInLayerData = LayerData.ChildrenLayers;
+            var childrenInLayerData = LayerData.ChildrenLayers.ToArray(); //Make a copy to avoid a collectionWasModifiedError
+            var propertiesToAdd = Array.Empty<LayerPropertyData>();
             foreach (var child in childrenInLayerData)
             {
                 if (child.PrefabIdentifier == prefab.PrefabIdentifier)
                 {
-                    //todo: check if the async visualisation spawning has issues with destroying the layerData before the visualisation is loaded
                     App.Layers.Remove(child); // in case a layer already exists, we destroy it since we need the visualisation and don't have access to it. 
+                    propertiesToAdd = child.LayerProperties.ToArray();
+                    break;
                 }
             }
 
-            ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs(prefab.name).ChildOf(LayerData);
+            ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs(prefab.name).ChildOf(LayerData).AddProperties(propertiesToAdd);
             App.Layers.Add(layerBuilder, callBack);
         }
 
@@ -309,7 +325,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             {
                 case GeoJSONObjectType.MultiPolygon:
                 case GeoJSONObjectType.Polygon:
-                   return polygonFeaturesLayer;
+                    return polygonFeaturesLayer;
                 case GeoJSONObjectType.MultiLineString:
                 case GeoJSONObjectType.LineString:
                     return lineFeaturesLayer;

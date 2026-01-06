@@ -159,20 +159,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 transformInterfaceToggle.ShowVisibilityPanel(false);
         }
 
-        protected override void OnDestroy()
+        protected override void UnregisterEventListeners()
         {
-            base.OnDestroy();
+            base.UnregisterEventListeners();
             if(layer is BinaryMeshLayer binaryMeshLayer)
             {
                 binaryMeshLayer.OnMappingCreated.RemoveListener(OnAddedMapping);
                 binaryMeshLayer.OnMappingRemoved.RemoveListener(OnRemovedMapping);
 
             }
+        }
+
+        protected void OnDestroy()
+        {
             if (Application.isPlaying && tileHandler && layer)
             {
                 tileHandler.RemoveLayer(layer);
             }
-
         }
         
         public override void ApplyStyling()

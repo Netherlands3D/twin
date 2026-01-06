@@ -45,9 +45,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
+            InitProperty<ToggleScatterPropertyData>(properties, InitializePropertyForBackwardsCompatibility); 
+
             SetParentPolygonLayer(LayerData.ParentLayer);
             var scatterSettings = properties.Get<ScatterGenerationSettingsPropertyData>();
             InitializeScatterMesh(scatterSettings.OriginalPrefabId);
+        }
+
+        private void InitializePropertyForBackwardsCompatibility(ToggleScatterPropertyData data)
+        {
+            data.AllowScatter = true;
+            data.IsScattered = true;
         }
         
         protected override void OnLayerReady()
@@ -132,8 +140,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToHierarchicalLayerGameObject);
         }
 
-        protected override void OnDestroy()
+        protected override void UnregisterEventListeners()
         {
+            base.UnregisterEventListeners();
             RemoveReScatterListeners();
         }
 
@@ -195,7 +204,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             ResampleTexture();
         }
 
-        private Bounds   RecalculatePolygonsAndGetBounds()
+        private Bounds RecalculatePolygonsAndGetBounds()
         {
             PolygonSelectionLayerPropertyData polygonProperties = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
             if (polygonProperties.ShapeType == ShapeType.Line)

@@ -171,8 +171,9 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             tile3DPropertyData.OnCRSChanged.AddListener(UpdateCRS);
         }
 
-        protected override void OnDestroy()
+        protected override void UnregisterEventListeners()
         {
+            base.UnregisterEventListeners();
             var tile3DPropertyData = LayerData.GetProperty<Tile3DLayerPropertyData>();
             tile3DPropertyData.OnUrlChanged.RemoveListener(UpdateURL);
             tile3DPropertyData.OnCRSChanged.RemoveListener(UpdateCRS);
