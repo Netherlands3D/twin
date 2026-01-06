@@ -225,6 +225,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var fillColor = stylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetFillColor().Value : LayerData.Color;
             var strokeColor = stylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetStrokeColor().Value : LayerData.Color;
 
+            var colorType = childStylingPropertyData.ColorType;
+            
             //TODO we have to convert this to an enum in the future
             if (!childStrokeSetExplicitly)
             {
@@ -237,6 +239,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 childStylingPropertyData.ColorType = Symbolizer.FillColorProperty;
                 childStylingPropertyData.SetDefaultSymbolizerColor(fillColor);
             }
+            
+            childStylingPropertyData.ColorType = colorType;
 
             layer.FeatureRemoved += OnFeatureRemoved;
 
