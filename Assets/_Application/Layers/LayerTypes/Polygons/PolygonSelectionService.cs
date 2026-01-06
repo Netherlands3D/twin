@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
-    public class PolygonSelectionCalculator : MonoBehaviour
+    public class PolygonSelectionService : MonoBehaviour
     {
         public static List<LayerData> Layers = new();
         private PointerToWorldPosition pointerToWorldPosition;
