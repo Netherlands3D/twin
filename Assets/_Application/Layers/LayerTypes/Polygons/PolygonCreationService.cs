@@ -8,7 +8,6 @@ using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
@@ -28,7 +27,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public PolygonInput LineInput => lineInput;
         
         [SerializeField] private PolygonSelectionLayerGameObject polygonVisualisationPrefab;
-        
         [SerializeField] private AreaSelection gridInput;
         [SerializeField] private PolygonInput polygonInput;
         [SerializeField] private PolygonInput lineInput;
@@ -49,13 +47,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             lineInput.editedPolygonArea.AddListener(UpdateLayer);
 
             gridInput.whenAreaIsSelected.AddListener(CreateOrEditGridLayer);
-
-            ProjectData.Current.OnDataChanged.AddListener(ReregisterAllPolygons);
-        }
-
-        private void ReregisterAllPolygons(ProjectData newData)
-        {
-            polygonSelectionService.RegisterPolygons(newData);
         }
 
         private void OnDisable()
@@ -112,18 +103,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             gridInput.SetSelectionVisualEnabled(false);
         }
 
-        public void ShowPolygonVisualisations(bool enabled)
-        {
-            foreach (var propertyData in layers)
-            {
-                if (propertyData.IsMask)
-                {
-                    continue;
-                }
-                propertyData.polygonEnabled.Invoke(enabled);
-            }
-        }
-
         private void CreatePolygonLayer(List<Vector3> unityPolygon)
         {
             ILayerBuilder layerBuilder = LayerBuilder.Create()
@@ -138,11 +117,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             polygonSelectionService.RegisterPolygon(layer.LayerData);
             polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit);
            
-        }
-
-        public void ShowPolygonVisualisations(bool enabled)
-        {
-            polygonSelectionService?.ShowPolygonVisualisations(enabled);
         }
 
         private void UpdateLayer(List<Vector3> editedPolygon)

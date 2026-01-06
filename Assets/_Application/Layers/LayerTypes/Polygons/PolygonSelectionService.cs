@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
@@ -16,11 +14,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
     {
         public LayerData ActiveLayer => activeLayer;
         
-        private List<LayerData> layers = new();
         private LayerData activeLayer;
+        private List<LayerData> layers = new();
         private PointerToWorldPosition pointerToWorldPosition;
         private PolygonCreationService polygonCreationService;
 
+        
         private void Awake()
         {
             pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
@@ -30,6 +29,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             polygonCreationService = ServiceLocator.GetService<PolygonCreationService>();
             ClickNothingPlane.ClickedOnNothing.AddListener(ProcessClick);
+            
+            ProjectData.Current.OnDataChanged.AddListener(RegisterPolygons);
         }
 
         private void OnDisable()
@@ -54,23 +55,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             PolygonSelectionLayerPropertyData propertyData = data.GetProperty<PolygonSelectionLayerPropertyData>();
             propertyData.polygonSelected.RemoveListener(ProcessPolygonSelection);
         }
-
-        // public static void RegisterPolygon(LayerData layer)
-        // {
-        //     if (Layers.Contains(layer))
-        //     {
-        //         Debug.LogError("layer " + layer + " is already registered");
-        //         return;
-        //     }
-        //
-        //     Layers.Add(layer);
-        // }
-        //
-        // public static void UnregisterPolygon(LayerData layer)
-        // {
-        //     if (!Layers.Remove(layer))
-        //         Debug.LogError("layer " + layer + " is not registered");
-        // }
 
         public void RegisterPolygons(ProjectData projectData)
         {
@@ -126,6 +110,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if(polygonPropertyData == null || polygonPropertyData.OriginalPolygon == null ||  polygonPropertyData.OriginalPolygon.Count == 0)
                 return false;
             
+            //is polygon not initialized yet
+            if(polygonPropertyData.PolygonBoundingBox == null)
+                return  false;
+            
             BoundingBox bbox = polygonPropertyData.PolygonBoundingBox;
             var bounds = bbox.ToUnityBounds();
             
@@ -145,6 +133,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         private void ProcessPolygonSelection(LayerData layer)
         {
+            polygonCreationService = ServiceLocator.GetService<PolygonCreationService>();
             PolygonSelectionLayerPropertyData data = layer?.GetProperty<PolygonSelectionLayerPropertyData>();
             //we don't reselect immediately in case of a grid, but we already register the active layer
             if (data?.ShapeType == ShapeType.Grid)
@@ -191,9 +180,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 }
                 propertyData.polygonEnabled.Invoke(enabled);
             }
-            
-            //todo needed?
-            //ServiceLocator.GetService<PolygonSelectionService>().gameObject.SetActive(enabled);
         }
 
         public static bool IsBoundsInView(Bounds bounds, Plane[] frustumPlanes)
