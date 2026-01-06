@@ -45,13 +45,6 @@ namespace Netherlands3D.Twin.Layers
 
         private LayerData layerData;
         public LayerData LayerData => layerData;
-
-        [Space] public UnityEvent onShow = new();
-        public UnityEvent onHide = new();
-        public UnityEvent onLayerInitialized = new();
-        
-
-
         public abstract BoundingBox Bounds { get; }
 
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
@@ -98,7 +91,6 @@ namespace Netherlands3D.Twin.Layers
             this.layerData = layerData;
 
             OnLayerInitialize();
-            onLayerInitialized.Invoke();
             // Call a template method that children are free to play with - this way we can avoid using
             // the start method directly and prevent forgetting to call the base.Start() from children
             LoadPropertiesInVisualisations();
@@ -111,9 +103,6 @@ namespace Netherlands3D.Twin.Layers
 
             //todo move this into loadproperties?
             ApplyStyling();
-
-            //TODO this is perhaps the wrong responsibility. change this in the future?
-            this.layerData.onLayerReady.Invoke();
         }
 
         protected virtual void RegisterEventListeners()
@@ -187,12 +176,12 @@ namespace Netherlands3D.Twin.Layers
 
         protected virtual void OnEnable()
         {
-            onShow.Invoke();
+           
         }
 
         protected virtual void OnDisable()
         {
-            onHide.Invoke();
+           
         }
         protected virtual void OnDestroy()
         {

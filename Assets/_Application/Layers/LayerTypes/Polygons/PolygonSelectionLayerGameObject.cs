@@ -113,6 +113,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             base.SetData(layerData);
             var data = layerData.GetProperty<PolygonSelectionLayerPropertyData>();
             data.polygonChanged.Invoke(); //todo: why is this needed?
+            data.OnPolygonInitialized.Invoke();
             PolygonSelectionCalculator.RegisterPolygon(LayerData);
         }
 
