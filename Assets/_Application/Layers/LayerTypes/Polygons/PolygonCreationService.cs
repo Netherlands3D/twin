@@ -179,7 +179,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 }
                 propertyData.polygonEnabled.Invoke(enabled);
             }
-            ServiceLocator.GetService<PolygonSelectionService>().gameObject.SetActive(enabled);
         }
 
         private void CreatePolygonLayer(List<Vector3> unityPolygon)
