@@ -369,8 +369,8 @@ namespace Netherlands3D.Twin.Layers
                     rulesToCopy[kvp.Key] = kvp.Value;
                 }
                 
-                if(removeOldData)
-                    properties.Remove(style);
+                // if(removeOldData) //todo
+                //     properties.Remove(style);
             }
             
             foreach (var kvp in rulesToCopy)
