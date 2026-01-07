@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2626529733265145809}
   - component: {fileID: -1431062917293908258}
   - component: {fileID: 1552071124099096867}
-  - component: {fileID: 85236813141909104}
+  - component: {fileID: 8885966354490939882}
   m_Layer: 7
   m_Name: Gebouwen
   m_TagString: Untagged
@@ -106,18 +106,6 @@ MonoBehaviour:
   prefabIdentifier: cc9d0f9a5a1724c9695a1bef5ecccaec
   thumbnail: {fileID: 0}
   spawnLocation: -1
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onHide:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerInitialized:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerReady:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &-1780917372914214898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,7 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 040e59742c03762f891b4749d60c2b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &85236813141909104
+--- !u!114 &8885966354490939882
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -202,6 +190,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4311489376399559593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b050df83d47a4b0aa83cc328c57a63b, type: 3}
+  m_Script: {fileID: 11500000, guid: e7cf6eebb305744f697547e83f79458c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
