@@ -147,7 +147,9 @@ namespace Netherlands3D.Twin.Services
         {
             try
             {
-                LayerGameObject visualization = await spawner.Spawn(layer.LayerData);
+                var visualizationTask = spawner.Spawn(layer.LayerData);
+                layer.SetVisualizationTask(visualizationTask);
+                var visualization = await visualizationTask;
 
                 if (layer.LayerData == null || layer.LayerData.IsDisposed)
                 {
@@ -156,7 +158,6 @@ namespace Netherlands3D.Twin.Services
                     return;
                 }
                 
-                layer.SetVisualization(visualization);
                 visualization?.SetData(layer.LayerData);
                 callback?.Invoke(visualization);
             }
