@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.DataTypeAdapters;
@@ -147,8 +148,13 @@ namespace Netherlands3D.Twin.Services
         {
             try
             {
-                var visualizationTask = spawner.Spawn(layer.LayerData);
-                layer.SetVisualizationTask(visualizationTask);
+                Task<LayerGameObject> visualizationTask = layer.LayerGameObjectTask;
+                if (layer.LayerGameObjectTask == null)
+                {
+                    visualizationTask = spawner.Spawn(layer.LayerData);
+                    layer.SetVisualizationTask(visualizationTask);
+                }
+                
                 var visualization = await visualizationTask;
 
                 if (layer.LayerData == null || layer.LayerData.IsDisposed)
