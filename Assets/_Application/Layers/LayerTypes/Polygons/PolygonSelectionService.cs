@@ -71,9 +71,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 referenceListener = () =>
                 {
                     layers.Add(layer);
-                    propertyData.polygonEnabled.Invoke(false);
-                    // if (!propertyData.IsMask)
-                    //     match.SetVisualisationActive(enabled); //todo: check if this works
+                    if(!propertyData.IsMask)
+                        propertyData.polygonEnabled.Invoke(false);
                 
                     propertyData.OnPolygonInitialized.RemoveListener(referenceListener);
                 };

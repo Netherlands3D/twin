@@ -54,7 +54,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [JsonConstructor]
         public PolygonSelectionLayerPropertyData(int maskBitIndex)
         {
-            // Use the stored value, but do NOT assign it to the field
+            this.maskBitIndex = maskBitIndex;
             RemoveAvailableMaskChannel(maskBitIndex);
         }
 

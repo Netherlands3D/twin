@@ -38,8 +38,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void OnEnable()
         {
-            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
-            
             polygonInput.createdNewPolygonArea.AddListener(CreatePolygonLayer);
             polygonInput.editedPolygonArea.AddListener(UpdateLayer);
 
@@ -59,7 +57,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             gridInput.whenAreaIsSelected.RemoveListener(CreateOrEditGridLayer);
         }
-        
+
+        private void Start()
+        {
+            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
+        }
+
         /// <summary>
         /// Enable the proper line or poly input system based on layer type
         /// </summary>
@@ -121,7 +124,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void UpdateLayer(List<Vector3> editedPolygon)
         {
-            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
             polygonSelectionService.ActiveLayer.GetProperty<PolygonSelectionLayerPropertyData>().OriginalPolygon = editedPolygon.ToCoordinates().ToList();
         }
 
