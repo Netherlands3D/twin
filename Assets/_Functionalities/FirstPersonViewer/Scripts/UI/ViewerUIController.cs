@@ -47,6 +47,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void EnterViewer(ViewerState state, Dictionary<string, object> settings)
         {
+            if (firstPersonViewer.IsInFPV) return;
+
             uiToDisable.ForEach(ui => ui.SetActive(false));
 
             if (viewerGroup != null)

@@ -53,6 +53,7 @@ namespace Netherlands3D.FirstPersonViewer
         public Action<ViewerState, Dictionary<string, object>> OnViewerEntered;
         public Action<bool> OnViewerExited;
 
+        public bool IsInFPV { private set; get; }
         private void Awake()
         {
             Input = GetComponent<FirstPersonViewerInput>();
@@ -74,22 +75,37 @@ namespace Netherlands3D.FirstPersonViewer
             gameObject.SetActive(false);
         }
 
-        private void ViewerEnterd(ViewerState state, Dictionary<string, object> settings)
+        private void ViewerEnterd(ViewerState startState, Dictionary<string, object> settings)
         {
+            //Catch Postion picker double enter call (When FPS is low).
+            if (IsInFPV && startState == null) return;  
+
             startPosition = new Coordinate(transform.position);
             startRotation = transform.rotation;
             yPositionTarget = transform.position.y;
 
             worldTransform.MoveToCoordinate(startPosition);
             worldTransform.SetRotation(startRotation);
-            Input.OnFPVEnter();
-            FirstPersonCamera.SetupViewer(state, settings);
 
             //Remove old visual (So no weird transition will happen)
             fsm.SwitchState(null);
             SetMovementVisual(null);
 
-            ServiceLocator.GetService<CameraSwitcher>().SwitchCamera(this);
+            //When entering the FPV for the first time use the cool animation :).
+            if (!IsInFPV)
+            {
+                Input.OnFPVEnter();
+                
+                FirstPersonCamera.SetupViewer(() =>
+                {
+                    if (startState != null) MovementSwitcher.LoadMovementPreset(startState, settings);
+                    else MovementSwitcher.LoadMovementPreset(0);
+                });
+
+                ServiceLocator.GetService<CameraSwitcher>().SwitchCamera(this);
+                IsInFPV = true;
+            }
+            else if (startState != null) MovementSwitcher.LoadMovementPreset(startState, settings);
         }
 
         private void OnDestroy()
@@ -217,6 +233,7 @@ namespace Netherlands3D.FirstPersonViewer
             OnViewerExited?.Invoke(exitOriginalPosition);
 
             Input.ViewerExited();
+            IsInFPV = false;
 
             ServiceLocator.GetService<CameraSwitcher>().SwitchToPreviousCamera();
         }
