@@ -121,6 +121,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void UpdateLayer(List<Vector3> editedPolygon)
         {
+            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
             polygonSelectionService.ActiveLayer.GetProperty<PolygonSelectionLayerPropertyData>().OriginalPolygon = editedPolygon.ToCoordinates().ToList();
         }
 
