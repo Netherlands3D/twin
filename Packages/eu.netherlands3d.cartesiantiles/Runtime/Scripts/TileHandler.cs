@@ -366,6 +366,13 @@ namespace Netherlands3D.CartesianTiles
                     }
                 }
             }
+
+            if (tileSizes.Count == 0)
+            {
+                maxTileSize = 0;
+                return;
+            }
+            
             maxTileSize = tileSizes.Max();
         }
 
