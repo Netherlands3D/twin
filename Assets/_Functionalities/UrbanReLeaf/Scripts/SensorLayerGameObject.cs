@@ -20,7 +20,6 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
 
         protected override void OnVisualizationReady()
         {
-            LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
         }
 
@@ -42,6 +41,8 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             propertyData.OnMinColorChanged.AddListener(RefreshTiles);
             propertyData.OnMaxColorChanged.AddListener(RefreshTiles);
             propertyData.OnResetValues.AddListener(ResetValues);
+
+            LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
         }
 
         protected override void UnregisterEventListeners()
