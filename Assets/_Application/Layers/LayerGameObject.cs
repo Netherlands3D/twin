@@ -85,7 +85,7 @@ namespace Netherlands3D.Twin.Layers
             //todo: what if layerData is null? e.g. because it was destroyed before the visualisation was loaded
             this.layerData = layerData;
 
-            OnLayerInitialize();
+            OnVisualizationInitialize();
             // Call a template method that children are free to play with - this way we can avoid using
             // the start method directly and prevent forgetting to call the base.Start() from children
             LoadPropertiesInVisualisations();
@@ -95,7 +95,7 @@ namespace Netherlands3D.Twin.Layers
             //todo move this into loadproperties?
             ApplyStyling();
 
-            OnLayerReady();
+            OnVisualizationReady();
         }
 
         protected virtual void RegisterEventListeners()
@@ -142,7 +142,7 @@ namespace Netherlands3D.Twin.Layers
         /// When using the LayerSpawner, the OnLayerReady will be called once after this method is fired the first time.
         /// When you have a custom instantiation flow this is not guaranteed.
         /// </summary>
-        protected virtual void OnLayerInitialize()
+        protected virtual void OnVisualizationInitialize()
         {
             // Intentionally left blank as it is a template method and child classes should not have to
             // call `base.OnLayerInitialize` (and possibly forget to do that)
@@ -153,7 +153,7 @@ namespace Netherlands3D.Twin.Layers
         {
         }
 
-        protected virtual void OnLayerReady()
+        protected virtual void OnVisualizationReady()
         {
             // Intentionally left blank as it is a template method and child classes should not have to
             // call `base.OnLayerReady` (and possibly forget to do that)

@@ -78,13 +78,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         List<PendingFeature> pendingLineFeatures = new();
         List<PendingFeature> pendingPointFeatures = new();
 
-        protected override void OnLayerInitialize()
+        protected override void OnVisualizationInitialize()
         {
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
             parser.OnParseError.AddListener(onParseError.Invoke);
         }
 
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
             StartLoadingData();
         }

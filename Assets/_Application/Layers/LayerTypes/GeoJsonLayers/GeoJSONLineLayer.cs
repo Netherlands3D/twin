@@ -49,7 +49,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             set => lineRenderer3D = value;
         }
 
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
             // Ensure that LineRenderer3D.Material has a Material Instance to prevent accidental destruction
             // of a material asset when replacing the material - no destroy of the old material must be done because

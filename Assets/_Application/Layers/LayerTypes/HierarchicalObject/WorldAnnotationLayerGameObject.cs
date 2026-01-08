@@ -30,9 +30,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
         public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one), new Coordinate(transform.position + 5 * Vector3.one));
 
-        protected override void OnLayerInitialize()
+        protected override void OnVisualizationInitialize()
         {
-            base.OnLayerInitialize();
+            base.OnVisualizationInitialize();
 
             CreateTextPopup();
            
@@ -150,9 +150,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             
         }
 
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
-            base.OnLayerReady();
+            base.OnVisualizationReady();
             AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
             annotation.Show(annotationPropertyData.AnnotationText, WorldTransform.Coordinate, true);
             UpdateAnnotation(annotationPropertyData.AnnotationText);

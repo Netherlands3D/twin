@@ -58,9 +58,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             data.IsScattered = true;
         }
         
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
-            base.OnLayerReady();
+            base.OnVisualizationReady();
             
             TransformLayerPropertyData transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
             transformProperty.IsEditable = false;

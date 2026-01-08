@@ -12,13 +12,13 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
     {
         private SensorProjectionLayer SensorProjectionLayer { get; set; }
         
-        protected override void OnLayerInitialize()
+        protected override void OnVisualizationInitialize()
         {
             SensorProjectionLayer = GetComponent<SensorProjectionLayer>();
-            base.OnLayerInitialize();
+            base.OnVisualizationInitialize();
         }
 
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);

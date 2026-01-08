@@ -16,9 +16,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         [SerializeField] private GameObject ghostGameObject;
         private Color defaultColor;
         
-        protected override void OnLayerInitialize()
+        protected override void OnVisualizationInitialize()
         {
-            base.OnLayerInitialize();
+            base.OnVisualizationInitialize();
             defaultColor = ghostMaterial.color;
             
             layerTool.onOpen.AddListener(EnableGhost);

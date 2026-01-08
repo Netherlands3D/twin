@@ -37,7 +37,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
                 TileSet.RefreshTiles();
         }
 
-        protected override void OnLayerInitialize()
+        protected override void OnVisualizationInitialize()
         {
             CredentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
         }
@@ -92,7 +92,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles
             TileSet.OnServerResponseReceived.RemoveListener(ProcessServerResponse);
         }
         
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
             var tile3DPropertyData = LayerData.GetProperty<Tile3DLayerPropertyData>();
             var hasEmptyUrl = tile3DPropertyData.Url == null || string.IsNullOrEmpty(tile3DPropertyData.Url.ToString());

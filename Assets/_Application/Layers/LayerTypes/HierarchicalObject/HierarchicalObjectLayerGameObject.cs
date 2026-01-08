@@ -57,7 +57,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         [SerializeField] private string scaleUnitCharacter = "%";
         
-        protected override void OnLayerInitialize()
+        protected override void OnVisualizationInitialize()
         {
             snappingCullingMask = (1 << LayerMask.NameToLayer("Terrain")) | (1 << LayerMask.NameToLayer("Buildings"));
             WorldTransform = GetComponent<WorldTransform>();
@@ -75,7 +75,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             ClickNothingPlane.ClickedOnNothing.RemoveListener(OnMouseClickNothing);
         }
         
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
             TransformLayerPropertyData transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
             transformProperty.IsEditable = true;

@@ -33,7 +33,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             layer.isEnabled = isActive;
         }
 
-        protected override void OnLayerInitialize()
+        protected override void OnVisualizationInitialize()
         {
             tileHandler = FindAnyObjectByType<TileHandler>();
             transform.SetParent(tileHandler.transform);
