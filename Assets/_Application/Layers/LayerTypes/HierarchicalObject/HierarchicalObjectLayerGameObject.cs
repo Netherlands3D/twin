@@ -285,7 +285,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             LayerData.SelectLayer(true);
         }
 
-        public override void OnSelect()
+        public override void OnSelect(LayerData layer)
         {
             var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
 
@@ -300,7 +300,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
         }
 
-        public override void OnDeselect()
+        public override void OnDeselect(LayerData layer)
         {
             ClearTransformHandles();
         }

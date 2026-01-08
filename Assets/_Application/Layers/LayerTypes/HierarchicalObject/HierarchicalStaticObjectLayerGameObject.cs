@@ -20,12 +20,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             transformProperty.LocalScale = transform.localScale;
         }
 
-        public override void OnSelect()
+        public override void OnSelect(LayerData layer)
         {
             //this is to prevent executing base class functionality
         }
 
-        public override void OnDeselect()
+        public override void OnDeselect(LayerData layer)
         {
             //this is to prevent executing base class functionality
         }

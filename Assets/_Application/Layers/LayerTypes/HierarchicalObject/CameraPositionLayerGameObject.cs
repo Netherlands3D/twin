@@ -70,7 +70,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             Camera.main.GetComponent<MoveCameraToCoordinate>().LoadCameraData(cameraPropertyData);
         }
         
-        public override void OnSelect()
+        public override void OnSelect(LayerData layer)
         {
             //do not call base to not set transform handles
             foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
@@ -79,9 +79,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
         }
 
-        public override void OnDeselect()
+        public override void OnDeselect(LayerData layer)
         {
-            base.OnDeselect();
+            base.OnDeselect(layer);
             foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
             {
                 renderer.material.color = defaultColor;

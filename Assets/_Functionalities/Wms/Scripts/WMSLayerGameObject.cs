@@ -7,6 +7,7 @@ using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 
 namespace Netherlands3D.Functionalities.Wms
@@ -128,12 +129,12 @@ namespace Netherlands3D.Functionalities.Wms
             Legend.Instance.UnregisterUrl(urlPropertyData.Url.ToString());
         }
 
-        public override void OnSelect()
+        public override void OnSelect(LayerData layer)
         {
             SetLegendActive(ShowLegendOnSelect);
         }
 
-        public override void OnDeselect()
+        public override void OnDeselect(LayerData layer)
         {
             SetLegendActive(false);
         }

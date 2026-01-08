@@ -288,18 +288,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
         }
 
-        public override void OnSelect()
+        public override void OnSelect(LayerData layer)
         {
-            base.OnSelect();
+            base.OnSelect(layer);
             foreach (var visualisation in visualisations)
             {
                 visualisation.DrawLine = true;
             }
         }
 
-        public override void OnDeselect()
+        public override void OnDeselect(LayerData layer)
         {
-            base.OnDeselect();
+            base.OnDeselect(layer);
             foreach (var visualisation in visualisations)
             {
                 visualisation.DrawLine = false;

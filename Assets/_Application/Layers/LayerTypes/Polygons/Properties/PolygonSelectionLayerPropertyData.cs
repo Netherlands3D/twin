@@ -42,7 +42,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [JsonIgnore] public UnityEvent polygonMoved = new();
         [JsonIgnore] public UnityEvent polygonChanged = new();
         [JsonIgnore] public UnityEvent OnPolygonSetShape = new();
-        [JsonIgnore] public UnityEvent<LayerData> polygonSelected = new();
         [JsonIgnore] public UnityEvent<bool> polygonEnabled = new();
         [JsonIgnore] public UnityEvent OnPolygonInitialized = new();
 

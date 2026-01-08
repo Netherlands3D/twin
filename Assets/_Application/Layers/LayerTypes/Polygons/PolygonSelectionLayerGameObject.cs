@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
-using Netherlands3D.Services;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
@@ -250,20 +249,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public void SetVisualisationActive(bool active)
         {
             PolygonVisualisation.gameObject.SetActive(active);
-        }
-
-        public override void OnSelect()
-        {
-            base.OnSelect();
-            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            data.polygonSelected.Invoke(LayerData);
-        }
-
-        public override void OnDeselect()
-        {
-            base.OnDeselect();
-            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            data.polygonSelected.Invoke(null);
         }
 
         public override void DestroyLayer()

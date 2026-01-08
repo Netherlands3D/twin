@@ -38,22 +38,33 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             ClickNothingPlane.ClickedOnNothing.RemoveListener(ProcessClick);
         }
 
-        public void RegisterPolygon(LayerData data)
+        public void RegisterPolygon(LayerData layer)
         {
-            layers.Add(data);
-            PolygonSelectionLayerPropertyData propertyData = data.GetProperty<PolygonSelectionLayerPropertyData>();
-            propertyData.polygonSelected.AddListener(ProcessPolygonSelection);
-            ProcessPolygonSelection(data);
+            PolygonSelectionLayerPropertyData propertyData = layer.GetProperty<PolygonSelectionLayerPropertyData>();
+            if (propertyData == null)
+            {
+                Debug.LogError("The layer " + layer.Name + " is not a polygon layer");
+                return;
+            }
+            layers.Add(layer);
+            layer.LayerSelected.AddListener(ProcessPolygonSelection);
+            layer.LayerDeselected.AddListener(ProcessPolygonDeselection);
+            ProcessPolygonSelection(layer);
             
-            data.LayerDestroyed.AddListener(()=> UnRegisterPolygon(data)); //todo improve on this
-            
+            layer.LayerDestroyed.AddListener(()=> UnRegisterPolygon(layer)); //todo improve on this
         }
 
-        public void UnRegisterPolygon(LayerData data)
+        public void UnRegisterPolygon(LayerData layer)
         {
-            layers.Remove(data);
-            PolygonSelectionLayerPropertyData propertyData = data.GetProperty<PolygonSelectionLayerPropertyData>();
-            propertyData.polygonSelected.RemoveListener(ProcessPolygonSelection);
+            PolygonSelectionLayerPropertyData propertyData = layer.GetProperty<PolygonSelectionLayerPropertyData>();
+            if (propertyData == null)
+            {
+                Debug.LogError("The layer " + layer.Name + " is not a polygon layer");
+                return;
+            }
+            layers.Remove(layer);
+            layer.LayerSelected.RemoveListener(ProcessPolygonSelection);
+            layer.LayerDeselected.RemoveListener(ProcessPolygonDeselection);
         }
 
         public void RegisterPolygons(ProjectData projectData)
@@ -65,7 +76,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 PolygonSelectionLayerPropertyData propertyData = layer.GetProperty<PolygonSelectionLayerPropertyData>();
                 if (propertyData == null) continue;
 
-                propertyData.polygonSelected.AddListener(ProcessPolygonSelection);
+                RegisterPolygon(layer);
                 
                 UnityAction referenceListener = null;
                 referenceListener = () =>
@@ -88,7 +99,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             foreach (var layer in layers)
             {               
-                bool wasSelected = ProcessPolygonSelection(layer, frustumPlanes, worldPoint);
+                bool wasSelected = PolygonWasSelected(layer, frustumPlanes, worldPoint);
                 if (wasSelected)
                 {
                     layer.SelectLayer(true);
@@ -101,7 +112,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
         }
         
-        private bool ProcessPolygonSelection(LayerData layer, Plane[] frustumPlanes, Vector3 worldPoint)
+        private bool PolygonWasSelected(LayerData layer, Plane[] frustumPlanes, Vector3 worldPoint)
         {
             //since we use a visual projection of the polygon, we need to calculate if a user clicks on the polygon manually
             //if this polygon is out of view of the camera, it can't be clicked on.
@@ -128,6 +139,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             var vertices = PolygonUtility.CoordinatesToVertices(polygonPropertyData.OriginalPolygon, polygonPropertyData.LineWidth);
             var polygon = new CompoundPolygon(vertices);
             return CompoundPolygon.IsPointInPolygon(point2d, polygon);
+        }
+        
+        private void ProcessPolygonDeselection(LayerData layer)
+        {
+            if(layer != activeLayer) //only deselect if the deselected layer is the active layer
+                return;
+            
+            //Do not allow selecting a new polygon if we are still creating one
+            if (polygonCreationService.PolygonInput.Mode == PolygonInput.DrawMode.Create || polygonCreationService.LineInput.Mode == PolygonInput.DrawMode.Create)
+                return;
+
+            polygonCreationService.ClearInputs();
+
+            activeLayer = null;
+            ReselectLayerPolygon(null);
         }
         
         private void ProcessPolygonSelection(LayerData layer)

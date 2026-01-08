@@ -177,11 +177,11 @@ namespace Netherlands3D.Twin.Layers
            
         }
 
-        public virtual void OnSelect()
+        public virtual void OnSelect(LayerData layer)
         {
         }
 
-        public virtual void OnDeselect()
+        public virtual void OnDeselect(LayerData layer)
         {
         }
 
