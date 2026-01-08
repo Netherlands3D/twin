@@ -216,7 +216,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var childStylingPropertyData = layer.LayerData.LayerProperties.GetDefaultStylingPropertyData<ColorPropertyData>();
 
             ConvertOldStylingDataIntoProperty(layer.LayerData.LayerProperties, "default", childStylingPropertyData, true);
-            // ConvertOldStylingDataIntoProperty(layer.LayerData.LayerProperties, Symbolizer.StrokeColorProperty, childStylingPropertyData, true);
             
             // in case the child property data was set explicitly by the user and this was saved in the project file, we do not want to overwrite this data with the parent styling.
             var childFillSetExplicitly = childStylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue;
@@ -225,6 +224,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var fillColor = stylingPropertyData.DefaultSymbolizer.GetFillColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetFillColor().Value : LayerData.Color;
             var strokeColor = stylingPropertyData.DefaultSymbolizer.GetStrokeColor().HasValue ? stylingPropertyData.DefaultSymbolizer.GetStrokeColor().Value : LayerData.Color;
 
+            //we save the color type here to set it back after copying the parent's stroke/fill colors
             var colorType = childStylingPropertyData.ColorType;
             
             //TODO we have to convert this to an enum in the future
@@ -240,7 +240,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 childStylingPropertyData.SetDefaultSymbolizerColor(fillColor);
             }
             
-            childStylingPropertyData.ColorType = colorType;
+            childStylingPropertyData.ColorType = colorType; //set the color type back so we don't change which color type is being used
 
             layer.FeatureRemoved += OnFeatureRemoved;
 
