@@ -1,4 +1,3 @@
-using Codice.Client.BaseCommands;
 using Netherlands3D.Coordinates;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Services;
