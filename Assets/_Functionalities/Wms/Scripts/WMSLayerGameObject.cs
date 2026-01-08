@@ -30,20 +30,13 @@ namespace Netherlands3D.Functionalities.Wms
         public bool ShowLegendOnSelect { get; set; } = true;
         public override BoundingBox Bounds => WMSProjectionLayer?.BoundingBox;
         
-        protected override void OnVisualizationInitialize()
-        {
-            base.OnVisualizationInitialize();
-            CredentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
-        }
 
         protected override void OnVisualizationReady()
         {
             base.OnVisualizationReady();
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             UpdateURL(urlPropertyData.Url);
-            LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
-            Legend.Instance.RegisterUrl(urlPropertyData.Url.ToString());
             Legend.Instance.ShowLegend(urlPropertyData.Url.ToString(), ShowLegendOnSelect && LayerData.IsSelected);
         }
 
@@ -115,6 +108,15 @@ namespace Netherlands3D.Functionalities.Wms
             //OnAuthorizationTypeDetermined.Invoke(authorization); within the key vault. The way we listen to this event should change to a per layer basis instead of global           
             if (LayerData.ActiveInHierarchy)
                 CredentialHandler.ApplyCredentials();
+        }
+
+        protected override void RegisterEventListeners()
+        {
+            base.RegisterEventListeners();
+            LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
+            CredentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            Legend.Instance.RegisterUrl(urlPropertyData.Url.ToString());
         }
 
         protected override void UnregisterEventListeners()
