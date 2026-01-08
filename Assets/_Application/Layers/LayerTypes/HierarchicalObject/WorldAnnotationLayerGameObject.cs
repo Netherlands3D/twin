@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.UI;
