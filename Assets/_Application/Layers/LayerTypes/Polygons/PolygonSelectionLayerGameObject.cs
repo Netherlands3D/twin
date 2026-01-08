@@ -106,16 +106,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public override void SetData(LayerData layerData)
         {
-            //LayerData previousData = LayerData;
-            // if(previousData != null && previousData != layerData)
-            // {
-            //     PolygonSelectionService.UnregisterPolygon(LayerData);
-            // }
             base.SetData(layerData);
             var data = layerData.GetProperty<PolygonSelectionLayerPropertyData>();
             data.polygonChanged.Invoke(); //todo: why is this needed?
             data.OnPolygonInitialized.Invoke();
-            //PolygonSelectionService.RegisterPolygon(LayerData);
         }
 
         protected override void RegisterEventListeners()
