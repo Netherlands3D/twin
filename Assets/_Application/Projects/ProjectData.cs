@@ -99,7 +99,7 @@ namespace Netherlands3D.Twin.Projects
             foreach (var layer in rootLayer.GetFlatHierarchy())
             {
                 if (layer is RootLayer) continue;
-                if (layer.IsDisposed) continue;
+                if (layer.IsDisposed) continue; // the layerData was disposed by external initialization logic before the initial call to this function 
                 
                 App.Layers.VisualizeData(layer);
             }
