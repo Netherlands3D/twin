@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 [RequireComponent(typeof(RectTransform))]
 public class SideSlideUI : MonoBehaviour
@@ -16,6 +17,7 @@ public class SideSlideUI : MonoBehaviour
     [Header("Animation")]
     public float slideTime = 0.25f;
     public AnimationCurve ease = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    PresentationUIManager presentationUIManager;
 
     [Header("Optional UI Hook")]
     public Toggle pinToggle;
@@ -40,10 +42,6 @@ public class SideSlideUI : MonoBehaviour
         StartCoroutine(DeferredInit());
     }
 
-    void Awake()
-    {
-        TryCache();
-    }
 
     IEnumerator DeferredInit()
     {
@@ -57,7 +55,7 @@ public class SideSlideUI : MonoBehaviour
             Canvas.ForceUpdateCanvases();
             TryComputeHiddenPosition();
         }
-
+        presentationUIManager = GetComponentInParent<PresentationUIManager>();
         // Start visible by default (preserves authored position)
         isShownRequested = true;
         t = slideTime;
@@ -71,7 +69,7 @@ public class SideSlideUI : MonoBehaviour
     void TryCache()
     {
         if (rt == null) rt = GetComponent<RectTransform>();
-        if (rootCanvas == null) rootCanvas = GetComponentInParent<Canvas>();
+        if (rootCanvas == null) rootCanvas = presentationUIManager.rootCanvas;
 
         if (pinToggle != null && !pinHooked)
         {
@@ -86,7 +84,22 @@ public class SideSlideUI : MonoBehaviour
         // no-op; keep state
     }
 
-    void OnRectTransformDimensionsChange()
+    private void Update()
+    {
+        if (rt == null) return;
+
+        // Animate
+        if ((rt.anchoredPosition - animTarget).sqrMagnitude > 0.01f)
+        {
+            t += Time.unscaledDeltaTime;
+            rt.anchoredPosition = GetCurrentAnimatedPosition();
+        }
+        else
+        {
+            rt.anchoredPosition = animTarget;
+        }
+    }
+    private void OnRectTransformDimensionsChange()
     {
         // This can fire before Awake; be defensive.
         TryCache();
@@ -100,7 +113,7 @@ public class SideSlideUI : MonoBehaviour
         }
     }
 
-    bool TryComputeHiddenPosition()
+    public bool TryComputeHiddenPosition()
     {
         if (rt == null) return false;
 
@@ -128,7 +141,7 @@ public class SideSlideUI : MonoBehaviour
         return true;
     }
 
-    Vector2 GetCurrentAnimatedPosition()
+    private Vector2 GetCurrentAnimatedPosition()
     {
         if (slideTime <= 0f) return animTarget;
         float a = Mathf.Clamp01(t / slideTime);
@@ -136,21 +149,6 @@ public class SideSlideUI : MonoBehaviour
         return Vector2.LerpUnclamped(animStart, animTarget, k);
     }
 
-    void Update()
-    {
-        if (rt == null) return;
-
-        // Animate
-        if ((rt.anchoredPosition - animTarget).sqrMagnitude > 0.01f)
-        {
-            t += Time.unscaledDeltaTime;
-            rt.anchoredPosition = GetCurrentAnimatedPosition();
-        }
-        else
-        {
-            rt.anchoredPosition = animTarget;
-        }
-    }
 
     // --- Public API ---
 
@@ -167,7 +165,7 @@ public class SideSlideUI : MonoBehaviour
         StartAnim(false);
     }
 
-    void StartAnim(bool toShown)
+    private void StartAnim(bool toShown)
     {
         TryCache();
         // If positions aren’t ready yet, compute lazily to avoid NRE.

@@ -1,3 +1,4 @@
+using NetTopologySuite.Triangulate;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +17,23 @@ public class PresentationUIManager : MonoBehaviour
     [Header("Optional")]
     public bool revealOnlyInPresentation = true;
 
-    Canvas rootCanvas;
-    List<SideSlideUI> panels = new List<SideSlideUI>();
-    bool presentationActive;
+    public Canvas rootCanvas;
+    [SerializeField] List<SideSlideUI> panels = new List<SideSlideUI>();
+    private bool presentationActive;
 
     float edgeHoverTimerLeft, edgeHoverTimerRight, edgeHoverTimerTop, edgeHoverTimerBottom;
     bool initialized = false;
 
+    public void SubscribeSlideUI(SideSlideUI sideSlideUI)
+    {
+        if (panels == null) return;
+        if(panels.Contains(sideSlideUI)) return;
+
+        panels.Add(sideSlideUI);
+    }
+
     void Awake()
     {
-        // We no longer initialize immediately.
-        // We'll do it after a short delay to ensure the scene & UI are ready.
         StartCoroutine(DelayedInitialize());
     }
 
@@ -112,16 +119,16 @@ public class PresentationUIManager : MonoBehaviour
         edgeHoverTimerBottom = atBottom ? edgeHoverTimerBottom + Time.unscaledDeltaTime : 0f;
 
         if (edgeHoverTimerLeft >= hoverDelay) RevealSide(SideSlideUI.Side.Left);
-        else MaybeHideSide(SideSlideUI.Side.Left);
+        else HandleHideSides(SideSlideUI.Side.Left);
 
         if (edgeHoverTimerRight >= hoverDelay) RevealSide(SideSlideUI.Side.Right);
-        else MaybeHideSide(SideSlideUI.Side.Right);
+        else HandleHideSides(SideSlideUI.Side.Right);
 
         if (edgeHoverTimerTop >= hoverDelay) RevealSide(SideSlideUI.Side.Top);
-        else MaybeHideSide(SideSlideUI.Side.Top);
+        else HandleHideSides(SideSlideUI.Side.Top);
 
         if (edgeHoverTimerBottom >= hoverDelay) RevealSide(SideSlideUI.Side.Bottom);
-        else MaybeHideSide(SideSlideUI.Side.Bottom);
+        else HandleHideSides(SideSlideUI.Side.Bottom);
     }
 
     void RevealSide(SideSlideUI.Side side)
@@ -130,7 +137,7 @@ public class PresentationUIManager : MonoBehaviour
             if (p && p.side == side) p.Show();
     }
 
-    void MaybeHideSide(SideSlideUI.Side side)
+    void HandleHideSides(SideSlideUI.Side side)
     {
         if (!presentationActive) return;
         bool mouseOverAny = panels.Any(p => p && p.side == side && p.IsMouseOver());
@@ -154,4 +161,12 @@ public class PresentationUIManager : MonoBehaviour
     }
 
     public void TogglePresentationMode() => SetPresentationMode(!presentationActive);
+
+    public void RecomputePositions()
+    {
+        foreach(var p in panels)
+        {
+            p.TryComputeHiddenPosition();
+        }
+    }
 }
