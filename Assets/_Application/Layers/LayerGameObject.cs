@@ -74,7 +74,7 @@ namespace Netherlands3D.Twin.Layers
         {
         }
 
-        public virtual void SetData(LayerData layerData)
+        public void SetData(LayerData layerData)
         {
             if (this.LayerData == layerData) return;
 

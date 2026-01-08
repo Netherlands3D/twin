@@ -104,14 +104,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             this.isMask = true;
         }
 
-        public override void SetData(LayerData layerData)
-        {
-            base.SetData(layerData);
-            var data = layerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            data.polygonChanged.Invoke(); //todo: why is this needed?
-            data.OnPolygonInitialized.Invoke();
-        }
-
         protected override void RegisterEventListeners()
         {
             base.RegisterEventListeners();
@@ -277,7 +269,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public override void DestroyLayer()
         {
             base.DestroyLayer();
-            //PolygonSelectionService.UnregisterPolygon(LayerData);
             CleanupMasking();            
         }
 
@@ -286,6 +277,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             InitProperty<PolygonSelectionLayerPropertyData>(properties);
             
             PolygonSelectionLayerPropertyData data = properties.Get<PolygonSelectionLayerPropertyData>();
+            data.polygonChanged.Invoke(); //todo: why is this needed?
+            data.OnPolygonInitialized.Invoke();
+            
             var vertices = PolygonUtility.CoordinatesToVertices(data.OriginalPolygon, data.LineWidth);
             UpdateVisualisation(vertices, data.ExtrusionHeight);
             
