@@ -7888,12 +7888,12 @@ PrefabInstance:
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 16.2
+      value: 14.200012
       objectReference: {fileID: 0}
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 61.8
+      value: 40.33
       objectReference: {fileID: 0}
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
@@ -9415,7 +9415,7 @@ PrefabInstance:
     - target: {fileID: 9064220470025580993, guid: 461aee81d187748439f6b71800ac6b60,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Netherlands3D.FirstPersonViewer.UI.ViewerUIButtons, eu.netherlands3d.twin
+      value: Netherlands3D.FirstPersonViewer.UI.ViewerUIController, eu.netherlands3d.twin
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1690203253370091307, guid: 461aee81d187748439f6b71800ac6b60, type: 3}
