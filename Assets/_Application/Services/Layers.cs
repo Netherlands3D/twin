@@ -104,7 +104,6 @@ namespace Netherlands3D.Twin.Services
         /// </summary>
         public Layer VisualizeAs(LayerData layerData, string prefabIdentifier, UnityAction<LayerGameObject> callback = null)
         {
-            // string previousId = layerData.PrefabIdentifier;
             layerData.PrefabIdentifier = prefabIdentifier;
             var layer = new Layer(layerData);
             Visualize(layer, spawner, callback);
