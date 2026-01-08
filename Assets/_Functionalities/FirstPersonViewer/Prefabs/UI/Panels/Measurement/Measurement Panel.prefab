@@ -1543,7 +1543,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseClick: {fileID: -1253229678034407056, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
     type: 3}
-  measuringHeightModifier: {fileID: 391016143580945670, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
+  measuringYLockModifier: {fileID: 391016143580945670, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
+    type: 3}
+  measuringXZLockModifier: {fileID: -1166744412438346486, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
     type: 3}
   measurementLayerMask:
     serializedVersion: 2
@@ -1557,25 +1559,9 @@ MonoBehaviour:
   measurementParent: {fileID: 2746763837163628380}
   lineColors:
   - serializedVersion: 2
-    rgba: 4278247452
+    rgba: 4289769648
   - serializedVersion: 2
-    rgba: 4289855965
-  - serializedVersion: 2
-    rgba: 4290763008
-  - serializedVersion: 2
-    rgba: 4279682530
-  - serializedVersion: 2
-    rgba: 4278321376
-  - serializedVersion: 2
-    rgba: 4278218476
-  - serializedVersion: 2
-    rgba: 4294913849
-  - serializedVersion: 2
-    rgba: 4285333672
-  - serializedVersion: 2
-    rgba: 4278217728
-  - serializedVersion: 2
-    rgba: 4278321250
+    rgba: 4282598211
   totalDistanceText: {fileID: 6789790002799268453}
 --- !u!1 &5617049967120185613
 GameObject:

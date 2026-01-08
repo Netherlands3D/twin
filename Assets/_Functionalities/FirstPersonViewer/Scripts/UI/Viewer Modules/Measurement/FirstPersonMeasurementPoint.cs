@@ -14,6 +14,8 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         public void Init(string pointLetter)
         {
             UpdatePointerLetter(pointLetter);
+            lineDistanceText.isOverlay = true;
+            pointLetterText.isOverlay = true;
         }
 
         public void UpdatePointerLetter(string pointLetter) => pointLetterText.text = pointLetter;

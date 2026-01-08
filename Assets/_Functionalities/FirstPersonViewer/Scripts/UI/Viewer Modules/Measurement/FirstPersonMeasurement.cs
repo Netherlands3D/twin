@@ -13,13 +13,13 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
     {
         [Header("Measuring")]
         [SerializeField] private InputActionReference mouseClick;
-        [SerializeField] private InputActionReference measuringHeightModifier;
+        [SerializeField] private InputActionReference measuringYLockModifier;
+        [SerializeField] private InputActionReference measuringXZLockModifier;
         [SerializeField] private LayerMask measurementLayerMask;
         private OpticalRaycaster raycaster;
         [SerializeField] private float maxClickDuration = 0.1f;
         private float clickDownTime;
         private Vector2 clickPosition;
-        private int clickCount;
 
         [SerializeField] private FirstPersonMeasurementPoint pointObject;
         private List<FirstPersonMeasurementPoint> pointList;
@@ -71,13 +71,18 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                 if (hit)
                 {
                     //When the Lock key is pressed use the previous y position. 
-                    if (measuringHeightModifier.action.IsPressed() && pointList.Count > 0)
+                    if (measuringYLockModifier.action.IsPressed() && pointList.Count > 0)
                         point.y = pointList[pointList.Count - 1].transform.position.y;
+
+                    if (measuringXZLockModifier.action.IsPressed() && pointList.Count > 0)
+                    {
+                        point.x = pointList[pointList.Count - 1].transform.position.x;
+                        point.z = pointList[pointList.Count - 1].transform.position.z;
+                    }
 
                     FirstPersonMeasurementPoint newPoint = Instantiate(pointObject, point, Quaternion.identity);
                     newPoint.Init(GetAlphabetLetter(pointList.Count));
                     pointList.Add(newPoint);
-                    clickCount++;
 
                     if (pointList.Count > 1)
                     {
@@ -85,7 +90,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                         measurementElement.transform.SetSiblingIndex(measurementParent.childCount - 2);
 
                         //Get the last added item.
-                        int index = pointList.Count - 1; 
+                        int index = pointList.Count - 1;
                         FirstPersonMeasurementPoint prevPoint = pointList[index - 1];
 
                         float dst = Vector3.Distance(prevPoint.transform.position, newPoint.transform.position);
@@ -94,7 +99,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                         totalDistanceText.text = "Totale afstand: " + ConvertToUnits(totalDistanceInMeters);
 
                         //We use clickCount for colors to prevent repeating colors (next to each other).
-                        Color32 objectColor = lineColors[clickCount % lineColors.Length];
+                        Color32 objectColor = lineColors[(index - 1) % lineColors.Length];
                         measurementElement.Init(GetAlphabetLetter(index - 1), GetAlphabetLetter(index), dst, objectColor, RemoveElement);
                         measurementElements.Add(measurementElement);
 
@@ -103,7 +108,6 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
                         Vector3 center = (newPoint.transform.position + prevPoint.transform.position) / 2;
                         newPoint.SetText(center + Vector3.up * textHeightAboveLines, dst);
-                        newPoint.SetTextColor(objectColor);
                     }
                 }
             }, FirstPersonViewerCamera.FPVCamera, measurementLayerMask);
@@ -147,7 +151,9 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             }
 
             measurementElements.Clear();
-            clickCount = 0;
+
+            totalDistanceInMeters = 0;
+            totalDistanceText.text = "Totale afstand: " + ConvertToUnits(totalDistanceInMeters);
         }
 
         private void RemoveElement(FirstPersonMeasurementElement element)
@@ -195,6 +201,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                     Vector3 start = pointList[i].transform.position;
                     Vector3 end = pointList[i - 1].transform.position;
                     pointList[i].SetLine(start, end);
+                    pointList[i].SetLineColor(lineColors[(i - 1) % lineColors.Length]);
 
                     Vector3 center = (start + end) / 2;
                     float dst = Vector3.Distance(start, end);
@@ -219,6 +226,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
                 newTotalDistance += dst;
                 measurementElements[i].UpdateMeasurement(GetAlphabetLetter(i), GetAlphabetLetter(i + 1), dst);
+                measurementElements[i].SetTextColor(lineColors[i % lineColors.Length]);
             }
 
             totalDistanceInMeters = newTotalDistance;

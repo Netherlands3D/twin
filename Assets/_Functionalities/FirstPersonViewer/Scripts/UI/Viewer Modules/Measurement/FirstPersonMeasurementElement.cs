@@ -37,6 +37,12 @@ namespace Netherlands3D
             distanceText.text = ConvertToUnits(dstInMeters);
         }
 
+        public void SetTextColor(Color32 color)
+        {
+            distanceText.color = color;
+            arrowImage.color = color;
+        }
+
         private string ConvertToUnits(float valueInMeters)
         {
             string units = "m";
