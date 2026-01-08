@@ -9,7 +9,7 @@ using Netherlands3D.Twin.Tools;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Netherlands3D.FirstPersonViewer.Layer
+namespace Netherlands3D.FirstPersonViewer.Layers
 {
     public class FirstPersonCameraLayerGameObject : HierarchicalObjectLayerGameObject
     {

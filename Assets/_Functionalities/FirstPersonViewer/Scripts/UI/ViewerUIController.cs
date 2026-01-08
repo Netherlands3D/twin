@@ -25,6 +25,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
         private PointerToWorldPosition pointerToWorld;
         private FirstPersonViewer firstPersonViewer;
 
+        private bool isInFPV;
+
         private void Start()
         {
             pointerToWorld = FindFirstObjectByType<PointerToWorldPosition>();
@@ -47,7 +49,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void EnterViewer(ViewerState state, Dictionary<string, object> settings)
         {
-            if (firstPersonViewer.IsInFPV) return;
+            if (isInFPV) return;
+            isInFPV = true;
 
             uiToDisable.ForEach(ui => ui.SetActive(false));
 
@@ -68,6 +71,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             uiToDisable.ForEach(ui => ui.SetActive(true));
 
             pointerToWorld.SetActiveCamera(Camera.main);
+            isInFPV = false;
         }
 
         /// <summary>

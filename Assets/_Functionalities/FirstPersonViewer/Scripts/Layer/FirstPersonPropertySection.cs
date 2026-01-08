@@ -9,7 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Netherlands3D.FirstPersonViewer.Layer
+namespace Netherlands3D.FirstPersonViewer.Layers
 {
     [PropertySection(typeof(FirstPersonLayerPropertyData))]
     public class FirstPersonPropertySection : MonoBehaviour, IVisualizationWithPropertyData

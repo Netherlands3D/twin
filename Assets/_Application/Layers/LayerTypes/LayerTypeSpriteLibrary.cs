@@ -8,7 +8,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
-using Netherlands3D.FirstPersonViewer.Layer;
+using Netherlands3D.FirstPersonViewer.Layers;
 using UnityEngine;
 using UnityEngine.Serialization;
 

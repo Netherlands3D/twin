@@ -32,7 +32,7 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private SpawnLocation spawnLocation;
         public string PrefabIdentifier => prefabIdentifier;
         public SpriteState Thumbnail => thumbnail;
-        public SpawnLocation SpawnLocation => spawnLocation;
+        public SpawnLocation SpawnLocation { get => spawnLocation; set => spawnLocation = value; }
 
         public string Name
         {

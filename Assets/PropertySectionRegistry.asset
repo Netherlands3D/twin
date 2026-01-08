@@ -17,7 +17,7 @@ MonoBehaviour:
       eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     Prefab: {fileID: 7185160580400989932, guid: f241bd5b609aa4447ae89fb4325470ef,
       type: 3}
-  - TypeName: Netherlands3D.FirstPersonViewer.Layer.FirstPersonLayerPropertyData,
+  - TypeName: Netherlands3D.FirstPersonViewer.Layers.FirstPersonLayerPropertyData,
       eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     Prefab: {fileID: 2190456828730654180, guid: 6a978cded680e5e47b1f2eafa8f88211,
       type: 3}
