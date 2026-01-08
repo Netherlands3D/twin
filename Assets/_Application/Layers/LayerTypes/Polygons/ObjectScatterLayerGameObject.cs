@@ -6,7 +6,6 @@ using Netherlands3D.LayerStyles;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
@@ -42,10 +41,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private Bounds polygonBounds = new();
         private SampleTexture sampleTexture;
-        
+
+        private TileHandler tileHandler;
+        private List<Layer> layersThatCauseUpdates = new();
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            InitProperty<ToggleScatterPropertyData>(properties, InitializePropertyForBackwardsCompatibility); 
+            InitProperty<ToggleScatterPropertyData>(properties, InitializePropertyForBackwardsCompatibility);
 
             SetParentPolygonLayer(LayerData.ParentLayer);
             var scatterSettings = properties.Get<ScatterGenerationSettingsPropertyData>();
@@ -57,20 +58,47 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             data.AllowScatter = true;
             data.IsScattered = true;
         }
-        
-        protected override void OnVisualizationReady()
+
+        protected override void OnVisualizationInitialize()
         {
-            base.OnVisualizationReady();
-            
-            TransformLayerPropertyData transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
-            transformProperty.IsEditable = false;
-            RecalculatePolygonsAndSamplerTexture();
+            base.OnVisualizationInitialize();
+            tileHandler = FindAnyObjectByType<TileHandler>();
         }
 
         protected override void RegisterEventListeners()
         {
             base.RegisterEventListeners();
             AddReScatterListeners();
+            tileHandler.layerAdded.AddListener(AddListenersToCartesianTerrainTiles);
+            tileHandler.layerRemoved.AddListener(RemoveListenersFromCartesianTerrainTiles);
+
+            foreach (var layer in tileHandler.layers)
+            {
+                AddListenersToCartesianTerrainTiles(layer);
+            }
+        }
+        
+        protected override void UnregisterEventListeners()
+        {
+            base.UnregisterEventListeners();
+            RemoveReScatterListeners();
+            tileHandler.layerAdded.RemoveListener(AddListenersToCartesianTerrainTiles);
+            tileHandler.layerRemoved.RemoveListener(RemoveListenersFromCartesianTerrainTiles);
+
+            for (var i = layersThatCauseUpdates.Count - 1; i >= 0; i--)
+            {
+                var layer = layersThatCauseUpdates[i];
+                RemoveListenersFromCartesianTerrainTiles(layer);
+            }
+        }
+        
+        protected override void OnVisualizationReady()
+        {
+            base.OnVisualizationReady();
+
+            TransformLayerPropertyData transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformProperty.IsEditable = false;
+            RecalculatePolygonsAndSamplerTexture();
         }
 
         private void InitializeScatterMesh(string prefabId)
@@ -116,7 +144,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             settings.ScatterShapeChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
 
             PolygonSelectionLayerPropertyData polygonProperties = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
-            polygonProperties.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
+            polygonProperties.polygonCoordinatesChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
             polygonProperties.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
 
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
@@ -131,17 +159,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             settings.ScatterShapeChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
 
             PolygonSelectionLayerPropertyData polygonProperties = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
-            polygonProperties.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
+            polygonProperties.polygonCoordinatesChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
             polygonProperties.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
 
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
             toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToHierarchicalLayerGameObject);
-        }
-
-        protected override void UnregisterEventListeners()
-        {
-            base.UnregisterEventListeners();
-            RemoveReScatterListeners();
         }
 
         private List<CompoundPolygon> CalculateAndVisualisePolygons(CompoundPolygon basePolygon)
@@ -168,7 +190,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             return polygons;
         }
-        
+
         private PolygonVisualisation CreatePolygonMesh(CompoundPolygon polygon)
         {
             var contours = new List<List<Vector3>>(polygon.Paths.Count);
@@ -176,7 +198,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 contours.Add(polygon.Paths[i].ToVector3List());
             }
-            
+
             var polygonVisualisation = PolygonVisualisationUtility.CreateAndReturnPolygonObject(contours, 1f, false, false, false, polygonMaterial);
             polygonVisualisation.DrawLine = true;
 
@@ -324,16 +346,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             {
                 var autoRotate = polygonProperties.ShapeType == ShapeType.Line;
                 LayerData.GetProperty<ScatterGenerationSettingsPropertyData>().AutoRotateToLine = autoRotate;
-                
-                polygonProperties.polygonChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
+
+                polygonProperties.polygonCoordinatesChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
                 polygonProperties.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
-                polygonProperties.polygonChanged.RemoveListener(AddListenersToCartesianTiles);
+                // polygonProperties.polygonCoordinatesChanged.RemoveListener(AddListenersToCartesianTiles);
 
                 polygonLayer = newPolygonParent;
                 RecalculatePolygonsAndSamplerTexture();
                 polygonProperties.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
-                polygonProperties.polygonChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
-                polygonProperties.polygonChanged.AddListener(AddListenersToCartesianTiles);
+                polygonProperties.polygonCoordinatesChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
+                // polygonProperties.polygonCoordinatesChanged.AddListener(AddListenersToCartesianTiles);
             }
             else //the layer is no longer parented to a polygon layer
             {
@@ -341,28 +363,40 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
         }
 
-        private void AddListenersToCartesianTiles()
+        private void AddListenersToCartesianTerrainTiles(Netherlands3D.CartesianTiles.Layer layer)
         {
-            var areaReference = FindObjectsByType<CartesianTileLayerGameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None)
-                .Where(o => o.gameObject.layer == LayerMask.NameToLayer("Terrain"))
-                .OrderBy(o => o.LayerData.RootIndex)
-                .FirstOrDefault();
-            if (areaReference == null) return;
+            //only listen to the terrain layer
+            if (layer == null || layer.gameObject.layer != LayerMask.NameToLayer("Terrain"))
+                return;
 
-            BinaryMeshLayer bml = areaReference.Layer as BinaryMeshLayer;
+            BinaryMeshLayer bml = layer as BinaryMeshLayer;
+            bml.OnTileObjectCreated.AddListener(OnTerrainTileCreated);
+            layersThatCauseUpdates.Add(bml);
+            RecalculatePolygonsAndSamplerTexture();
+        }
+        
+        private void RemoveListenersFromCartesianTerrainTiles(Netherlands3D.CartesianTiles.Layer layer)
+        {
+            //only listen to the terrain layer
+            if (layer == null || layer.gameObject.layer != LayerMask.NameToLayer("Terrain"))
+                return;
 
+            BinaryMeshLayer bml = layer as BinaryMeshLayer;
+            bml.OnTileObjectCreated.RemoveListener(OnTerrainTileCreated);
+            layersThatCauseUpdates.Remove(bml);
+            RecalculatePolygonsAndSamplerTexture();
+        }
+
+        private void OnTerrainTileCreated(Tile tile)
+        {
             var polygonBoundingBox = GetPolygonBoundingBox();
             polygonBoundingBox.Convert(CoordinateSystem.RD);
-
-            bml?.OnTileObjectCreated.AddListener(tile => //todo: this is now not unsubscribed
+            BoundingBox tileBox = GetBoundingBoxForTile(tile);
+            //is a tile being loaded intersecting with the polygon then regenerate the sampler texture
+            if (tileBox.Intersects(polygonBoundingBox))
             {
-                BoundingBox tileBox = GetBoundingBoxForTile(tile);
-                //is a tile being loaded intersecting with the polygon then regenerate the sampler texture
-                if (tileBox.Intersects(polygonBoundingBox))
-                {
-                    RecalculatePolygonsAndSamplerTexture();
-                }
-            });
+                RecalculatePolygonsAndSamplerTexture();
+            }
         }
 
         private BoundingBox GetPolygonBoundingBox()

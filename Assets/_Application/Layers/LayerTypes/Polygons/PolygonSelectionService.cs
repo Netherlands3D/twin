@@ -85,9 +85,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     if(!propertyData.IsMask)
                         propertyData.polygonEnabled.Invoke(false);
                 
-                    propertyData.OnPolygonInitialized.RemoveListener(referenceListener);
+                    propertyData.polygonInitialized.RemoveListener(referenceListener);
                 };
-                propertyData.OnPolygonInitialized.AddListener(referenceListener);
+                propertyData.polygonInitialized.AddListener(referenceListener);
             }
         }
 

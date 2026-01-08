@@ -113,9 +113,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             LayerData.OnPrefabIdChanged.AddListener(OnSwitchVisualisation);
 
             PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            data.OnIsMaskChanged.AddListener(OnIsMaskChanged);
-            data.OnInvertMaskChanged.AddListener(OnInvertMaskChanged); 
-            data.OnPolygonSetShape.AddListener(UpdatePolygonVisualisation);
+            data.isMaskChanged.AddListener(OnIsMaskChanged);
+            data.invertMaskChanged.AddListener(OnInvertMaskChanged); 
+            data.polygonCoordinatesChanged.AddListener(UpdatePolygonVisualisation);
             data.polygonEnabled.AddListener(SetActive);
         }
 
@@ -128,9 +128,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             LayerData.OnPrefabIdChanged.RemoveListener(OnSwitchVisualisation);
 
             PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            data.OnIsMaskChanged.RemoveListener(OnIsMaskChanged);
-            data.OnInvertMaskChanged.RemoveListener(OnInvertMaskChanged);
-            data.OnPolygonSetShape.RemoveListener(UpdatePolygonVisualisation);
+            data.isMaskChanged.RemoveListener(OnIsMaskChanged);
+            data.invertMaskChanged.RemoveListener(OnInvertMaskChanged);
+            data.polygonCoordinatesChanged.RemoveListener(UpdatePolygonVisualisation);
             data.polygonEnabled.RemoveListener(SetActive);
         }
 
@@ -157,7 +157,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             //Silent update of the polygon shape, so the visualisation is updated without notifying the listeners
             PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            data.polygonChanged.Invoke(); //todo: why is this needed?
+            // data.polygonChanged.Invoke(); //todo: why is this needed?
             data.polygonMoved.Invoke();
         }
 
@@ -262,8 +262,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             InitProperty<PolygonSelectionLayerPropertyData>(properties);
             
             PolygonSelectionLayerPropertyData data = properties.Get<PolygonSelectionLayerPropertyData>();
-            data.polygonChanged.Invoke(); //todo: why is this needed?
-            data.OnPolygonInitialized.Invoke();
+            // data.polygonChanged.Invoke(); //todo: why is this needed?
+            data.polygonInitialized.Invoke();
             
             var vertices = PolygonUtility.CoordinatesToVertices(data.OriginalPolygon, data.LineWidth);
             UpdateVisualisation(vertices, data.ExtrusionHeight);

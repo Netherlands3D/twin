@@ -22,11 +22,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [DataMember] private List<Coordinate> originalPolygon;  
         [DataMember] private ShapeType shapeType;
 
-        [JsonIgnore] public readonly UnityEvent<float> OnLineWidthChanged = new();
-        [JsonIgnore] public readonly UnityEvent<float> OnExtrusionHeightChanged = new();
-        [JsonIgnore] public readonly UnityEvent<bool> OnIsMaskChanged = new();
-        [JsonIgnore] public readonly UnityEvent<bool> OnInvertMaskChanged = new();
-        [JsonIgnore] public readonly UnityEvent<int> OnMaskBitIndexChanged = new();
+        [JsonIgnore] public readonly UnityEvent<float> lineWidthChanged = new();
+        [JsonIgnore] public readonly UnityEvent<float> extrusionHeightChanged = new();
+        [JsonIgnore] public readonly UnityEvent<bool> isMaskChanged = new();
+        [JsonIgnore] public readonly UnityEvent<bool> invertMaskChanged = new();
+        [JsonIgnore] public readonly UnityEvent<int> maskBitIndexChanged = new();
 
         private static List<int> availableMaskChannels = new List<int>() { 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
         public static int NumAvailableMasks => availableMaskChannels.Count;
@@ -39,11 +39,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         //runtime only generated bounding box
         [JsonIgnore] public BoundingBox PolygonBoundingBox;
         
+        // [JsonIgnore] public UnityEvent polygonChanged = new();
+        [JsonIgnore] public UnityEvent polygonCoordinatesChanged = new();
+        [JsonIgnore] public UnityEvent polygonShapeTypeChanged = new();
+        
         [JsonIgnore] public UnityEvent polygonMoved = new();
-        [JsonIgnore] public UnityEvent polygonChanged = new();
-        [JsonIgnore] public UnityEvent OnPolygonSetShape = new();
         [JsonIgnore] public UnityEvent<bool> polygonEnabled = new();
-        [JsonIgnore] public UnityEvent OnPolygonInitialized = new();
+        [JsonIgnore] public UnityEvent polygonInitialized = new();
 
         public PolygonSelectionLayerPropertyData()
         {
@@ -64,7 +66,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             set
             {
                 shapeType = value;
-                OnPolygonSetShape.Invoke();
+                polygonShapeTypeChanged.Invoke();
             }
         }
 
@@ -75,7 +77,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             set
             {
                 originalPolygon = value;
-                OnPolygonSetShape.Invoke();
+                polygonCoordinatesChanged.Invoke();
             }
         }
 
@@ -86,8 +88,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             set
             {
                 lineWidth = value;
-                OnPolygonSetShape.Invoke();
-                OnLineWidthChanged.Invoke(lineWidth);
+                polygonCoordinatesChanged.Invoke();
+                lineWidthChanged.Invoke(lineWidth);
             }
         }
         
@@ -98,7 +100,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             set
             {
                 extrusionHeight = value;
-                OnExtrusionHeightChanged.Invoke(extrusionHeight);
+                extrusionHeightChanged.Invoke(extrusionHeight);
             }
         }
         
@@ -109,7 +111,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             set
             {
                 isMask = value;
-                OnIsMaskChanged.Invoke(isMask);
+                isMaskChanged.Invoke(isMask);
             }
         }
         
@@ -120,7 +122,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             set
             {
                 invertMask = value;
-                OnInvertMaskChanged.Invoke(invertMask);
+                invertMaskChanged.Invoke(invertMask);
             }
         }
         
@@ -131,7 +133,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
             set
             {
                 maskBitIndex = value;
-                OnMaskBitIndexChanged.Invoke(maskBitIndex);
+                maskBitIndexChanged.Invoke(maskBitIndex);
             }
         }
     }

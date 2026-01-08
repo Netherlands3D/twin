@@ -22,6 +22,7 @@ using UnityEngine;
 
 using System.Linq;
 using Netherlands3D.Coordinates;
+using UnityEngine.Events;
 using UnityEngine.Networking;
 
 
@@ -112,6 +113,9 @@ namespace Netherlands3D.CartesianTiles
 
         private float groundLevelClipRange = 1000;
 
+        public UnityEvent<Layer> layerAdded = new();
+        public UnityEvent<Layer> layerRemoved = new();
+        
         void Start()
         {
             layers = GetComponentsInChildren<Layer>(false).ToList();
@@ -139,6 +143,7 @@ namespace Netherlands3D.CartesianTiles
         {
             layers.Add(layer);
             GetTilesizes();
+            layerAdded.Invoke(layer);
         }
 
         public void RemoveLayer(Layer layer)
@@ -188,6 +193,7 @@ namespace Netherlands3D.CartesianTiles
             }
 
             layers.Remove(layer);
+            layerRemoved.Invoke(layer);
         }
 
         private void CacheCameraFrustum()
