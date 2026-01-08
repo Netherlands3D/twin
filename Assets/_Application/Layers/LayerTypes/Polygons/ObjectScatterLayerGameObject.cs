@@ -145,7 +145,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             PolygonSelectionLayerPropertyData polygonProperties = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
             polygonProperties.polygonCoordinatesChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
-            polygonProperties.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
 
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
             toggleScatterPropertyData.IsScatteredChanged.AddListener(ConvertToHierarchicalLayerGameObject);
@@ -160,7 +159,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             PolygonSelectionLayerPropertyData polygonProperties = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
             polygonProperties.polygonCoordinatesChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
-            polygonProperties.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
 
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
             toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToHierarchicalLayerGameObject);
@@ -348,14 +346,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 LayerData.GetProperty<ScatterGenerationSettingsPropertyData>().AutoRotateToLine = autoRotate;
 
                 polygonProperties.polygonCoordinatesChanged.RemoveListener(RecalculatePolygonsAndSamplerTexture);
-                polygonProperties.polygonMoved.RemoveListener(RecalculatePolygonsAndSamplerTexture);
-                // polygonProperties.polygonCoordinatesChanged.RemoveListener(AddListenersToCartesianTiles);
 
                 polygonLayer = newPolygonParent;
                 RecalculatePolygonsAndSamplerTexture();
-                polygonProperties.polygonMoved.AddListener(RecalculatePolygonsAndSamplerTexture);
                 polygonProperties.polygonCoordinatesChanged.AddListener(RecalculatePolygonsAndSamplerTexture);
-                // polygonProperties.polygonCoordinatesChanged.AddListener(AddListenersToCartesianTiles);
             }
             else //the layer is no longer parented to a polygon layer
             {

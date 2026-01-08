@@ -155,10 +155,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void ShiftedPolygon(Coordinate fromOrigin, Coordinate toOrigin)
         {
-            //Silent update of the polygon shape, so the visualisation is updated without notifying the listeners
-            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            // data.polygonChanged.Invoke(); //todo: why is this needed?
-            data.polygonMoved.Invoke();
+            UpdatePolygonVisualisation();
         }
 
         private void UpdatePolygonVisualisation()
