@@ -9,6 +9,8 @@ namespace Netherlands3D.Twin.Tests.PageObjectModel
     {
         public Element<GameObject> DefaultMaaiveld => E2E.Find("Functionalities/CartesianTiles/Maaiveld");
 
+         public Element<GameObject> projectdataHandler => E2E.Find("ProjectDataHandler");
+
         public WorldviewElements.Minimap Minimap => WorldviewElements.Minimap.For(E2E.FindComponentOfType<MinimapUI>());
     }
 }

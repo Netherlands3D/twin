@@ -24,7 +24,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             if (fpv != null)
             {
                 switcher = fpv.MovementSwitcher;
-                switcher.OnMovementPresetChanged += SwitchModeUI;
+                //switcher.OnMovementPresetChanged += SwitchModeUI;
             }
         }
 

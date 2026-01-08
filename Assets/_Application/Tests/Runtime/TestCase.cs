@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Tests.PageObjectModel;
+using UnityEngine;
 
 namespace Netherlands3D.Twin.Tests
 {
@@ -9,12 +11,9 @@ namespace Netherlands3D.Twin.Tests
         
         internal Scene Scene { get; private set; }
 
-        public override IEnumerator LoadSceneOnce()
-        {
-            yield return base.LoadSceneOnce();
-            
-            this.Sidebar = new Sidebar();
-            this.Scene = new Scene();
-        }
+        private bool projectIsLoaded;
+
+        //setup the test-environment
+        
     }
 }
