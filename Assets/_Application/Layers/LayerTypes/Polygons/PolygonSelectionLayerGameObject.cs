@@ -259,7 +259,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             InitProperty<PolygonSelectionLayerPropertyData>(properties);
             
             PolygonSelectionLayerPropertyData data = properties.Get<PolygonSelectionLayerPropertyData>();
-            // data.polygonChanged.Invoke(); //todo: why is this needed?
             data.polygonInitialized.Invoke();
             
             var vertices = PolygonUtility.CoordinatesToVertices(data.OriginalPolygon, data.LineWidth);

@@ -39,7 +39,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         //runtime only generated bounding box
         [JsonIgnore] public BoundingBox PolygonBoundingBox;
         
-        // [JsonIgnore] public UnityEvent polygonChanged = new();
         [JsonIgnore] public UnityEvent polygonCoordinatesChanged = new();
         [JsonIgnore] public UnityEvent polygonShapeTypeChanged = new();
         
