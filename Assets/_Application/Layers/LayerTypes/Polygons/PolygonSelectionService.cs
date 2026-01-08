@@ -77,17 +77,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 if (propertyData == null) continue;
 
                 RegisterPolygon(layer);
-                
-                UnityAction referenceListener = null;
-                referenceListener = () =>
-                {
-                    layers.Add(layer);
-                    if(!propertyData.IsMask)
-                        propertyData.polygonEnabled.Invoke(false);
-                
-                    propertyData.polygonInitialized.RemoveListener(referenceListener);
-                };
-                propertyData.polygonInitialized.AddListener(referenceListener);
+                layers.Add(layer);
             }
         }
 
@@ -192,19 +182,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
             //Align the input sytem by reselecting using layer polygon
             polygonCreationService.UpdateInputByType(layer);
-        }
-        
-        public void ShowPolygonVisualisations(bool enabled)
-        {
-            foreach (var layer in layers)
-            {
-                PolygonSelectionLayerPropertyData propertyData = layer.GetProperty<PolygonSelectionLayerPropertyData>();
-                if (propertyData.IsMask)
-                {
-                    continue;
-                }
-                propertyData.polygonEnabled.Invoke(enabled);
-            }
         }
 
         public static bool IsBoundsInView(Bounds bounds, Plane[] frustumPlanes)

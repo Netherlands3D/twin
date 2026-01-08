@@ -42,9 +42,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [JsonIgnore] public UnityEvent polygonCoordinatesChanged = new();
         [JsonIgnore] public UnityEvent polygonShapeTypeChanged = new();
         
-        [JsonIgnore] public UnityEvent<bool> polygonEnabled = new();
-        [JsonIgnore] public UnityEvent polygonInitialized = new();
-
         public PolygonSelectionLayerPropertyData()
         {
          

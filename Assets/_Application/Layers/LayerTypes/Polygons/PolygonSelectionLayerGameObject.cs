@@ -7,6 +7,7 @@ using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Events;
@@ -23,6 +24,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private bool isMask;   
 
         public UnityEvent OnPolygonVisualisationUpdated = new();
+
+        [SerializeField] private Tool layerTool;
 
         /// <summary>
         /// Create or update PolygonVisualisation
@@ -116,7 +119,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             data.isMaskChanged.AddListener(OnIsMaskChanged);
             data.invertMaskChanged.AddListener(OnInvertMaskChanged); 
             data.polygonCoordinatesChanged.AddListener(UpdatePolygonVisualisation);
-            data.polygonEnabled.AddListener(SetActive);
+            
+            layerTool?.onOpen.AddListener(OnLayerPanelOpen);
+            layerTool?.onClose.AddListener(OnLayerPanelClose);
         }
 
         protected override void UnregisterEventListeners()
@@ -131,7 +136,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             data.isMaskChanged.RemoveListener(OnIsMaskChanged);
             data.invertMaskChanged.RemoveListener(OnInvertMaskChanged);
             data.polygonCoordinatesChanged.RemoveListener(UpdatePolygonVisualisation);
-            data.polygonEnabled.RemoveListener(SetActive);
+            
+            layerTool?.onOpen.RemoveListener(OnLayerPanelOpen);
+            layerTool?.onClose.RemoveListener(OnLayerPanelClose);
         }
 
         private void SetActive(bool active)
@@ -243,8 +250,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             return LayerMask.NameToLayer("PolygonMask");
         }
 
-        public void SetVisualisationActive(bool active)
+        private void OnLayerPanelOpen()
         {
+            SetVisualisationActive(LayerData.ActiveInHierarchy);
+        }
+
+        private void OnLayerPanelClose()
+        {
+            if(!isMask)
+                SetVisualisationActive(false);
+        }
+
+        private void SetVisualisationActive(bool active)
+        {
+            Debug.Log("setting "+LayerData.Name+" active to " + active);
             PolygonVisualisation.gameObject.SetActive(active);
         }
 
@@ -259,7 +278,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             InitProperty<PolygonSelectionLayerPropertyData>(properties);
             
             PolygonSelectionLayerPropertyData data = properties.Get<PolygonSelectionLayerPropertyData>();
-            data.polygonInitialized.Invoke();
             
             var vertices = PolygonUtility.CoordinatesToVertices(data.OriginalPolygon, data.LineWidth);
             UpdateVisualisation(vertices, data.ExtrusionHeight);
@@ -268,6 +286,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OnInvertMaskChanged(data.InvertMask); 
             
             UpdatePolygonVisualisation();
+        }
+
+        protected override void OnVisualizationReady()
+        {
+            base.OnVisualizationReady();
+            if(!isMask && layerTool != null && !layerTool.Open)
+                SetVisualisationActive(false);
         }
     }
 }
