@@ -2571,12 +2571,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8467061882609208209}
   - {fileID: 8440998852324857446}
   - {fileID: 6341075373502081645}
   - {fileID: 3640375761372532312}
   - {fileID: 7203067224783940340}
   - {fileID: 6151074720974636489}
-  - {fileID: 8467061882609208209}
   m_Father: {fileID: 4997419578823107694}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
@@ -2601,7 +2601,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 2
+  m_ChildAlignment: 5
   m_Spacing: 8
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -7893,7 +7893,7 @@ PrefabInstance:
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 40.33
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
@@ -8834,7 +8834,7 @@ PrefabInstance:
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -152
+      value: -176
       objectReference: {fileID: 0}
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
@@ -9186,7 +9186,7 @@ PrefabInstance:
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
@@ -9196,7 +9196,7 @@ PrefabInstance:
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
@@ -9246,12 +9246,12 @@ PrefabInstance:
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 198.7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -52
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
@@ -9273,11 +9273,42 @@ PrefabInstance:
       propertyPath: m_Name
       value: PinToggle
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8914441939371076810, guid: f939def7c11707f4db20126953723a9d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5010762564675923836, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7341286472978046028}
   m_SourcePrefab: {fileID: 100100000, guid: f939def7c11707f4db20126953723a9d, type: 3}
+--- !u!1 &730425370973872604 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5010762564675923836, guid: f939def7c11707f4db20126953723a9d,
+    type: 3}
+  m_PrefabInstance: {fileID: 5740734928224636576}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7341286472978046028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 730425370973872604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!224 &8467061882609208209 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
