@@ -128,7 +128,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void ApplyStyling()
         {
             base.ApplyStyling();
-            //LayerFeature feature = CreateFeature(annotation.TextField);
             List<LayerFeature> features = CreateFeaturesByType<Image>(annotation.gameObject);
             foreach (var feature in features)
             {
