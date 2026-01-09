@@ -50,11 +50,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         private void EnablePolygonSelection()
         {
+            polygonSelectionEnabled = true;
             OnPolygonSelectionEnabled.Invoke(true);
         }
 
         private void DisablePolygonSelection()
         {
+            polygonSelectionEnabled = false;
             OnPolygonSelectionEnabled.Invoke(false);
         }
 

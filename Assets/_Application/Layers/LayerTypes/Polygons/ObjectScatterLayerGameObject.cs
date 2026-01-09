@@ -231,7 +231,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 settings.Angle = CalculateLineAngle(polygonProperties);
             }
 
-            var boundingBox = GetPolygonBoundingBox();
+            var boundingBox = polygonProperties.PolygonBoundingBox;
+            if (boundingBox == null)
+                return new Bounds();
+            
             polygonBounds = boundingBox.ToUnityBounds();
 
             var vertices = PolygonUtility.CoordinatesToVertices(polygonProperties.OriginalPolygon, polygonProperties.LineWidth);
@@ -383,33 +386,17 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void OnTerrainTileCreated(Tile tile)
         {
-            var polygonBoundingBox = GetPolygonBoundingBox();
+            var polygonBoundingBox = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>().PolygonBoundingBox;
             polygonBoundingBox.Convert(CoordinateSystem.RD);
-            BoundingBox tileBox = GetBoundingBoxForTile(tile);
+            int size = tile.layer.tileSize;
+            BoundingBox tileBox = new BoundingBox(
+                new Coordinate(CoordinateSystem.RD, tile.tileKey.x, tile.tileKey.y), 
+                new Coordinate(CoordinateSystem.RD, tile.tileKey.x + size, tile.tileKey.y + size));
             //is a tile being loaded intersecting with the polygon then regenerate the sampler texture
             if (tileBox.Intersects(polygonBoundingBox))
             {
                 RecalculatePolygonsAndSamplerTexture();
             }
-        }
-
-        private BoundingBox GetPolygonBoundingBox()
-        {
-            var polygonCoordinates = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>().OriginalPolygon;
-            BoundingBox polygonBoundingBox = new BoundingBox(polygonCoordinates[0], polygonCoordinates[0]);
-            for (var i = 1; i < polygonCoordinates.Count; i++)
-            {
-                polygonBoundingBox.Encapsulate(polygonCoordinates[i]);
-            }
-
-            return polygonBoundingBox;
-        }
-
-        private static BoundingBox GetBoundingBoxForTile(Tile tile)
-        {
-            int size = tile.layer.tileSize;
-            BoundingBox boundingBox = new BoundingBox(new Coordinate(CoordinateSystem.RD, tile.tileKey.x, tile.tileKey.y), new Coordinate(CoordinateSystem.RD, tile.tileKey.x + size, tile.tileKey.y + size));
-            return boundingBox;
         }
 
         private static Mesh CombineHierarchicalMeshes(Transform transform)

@@ -280,9 +280,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         protected override void OnVisualizationReady()
         {
             base.OnVisualizationReady();
-            PolygonSelectionService service = ServiceLocator.GetService<PolygonSelectionService>();
-            if(!isMask && service != null && !service.PolygonSelectionEnabled)
-                SetVisualisationActive(false);
+            OnVisualisationsEnabled(ServiceLocator.GetService<PolygonSelectionService>().PolygonSelectionEnabled);
         }
     }
 }
