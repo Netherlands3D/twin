@@ -138,6 +138,95 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a65c112c3823c462c9b40a4d7247bded, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &139379595
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 139379597}
+  - component: {fileID: 139379599}
+  - component: {fileID: 139379598}
+  - component: {fileID: 139379596}
+  m_Layer: 0
+  m_Name: Tilekit - Wms
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &139379596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139379595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34cdf5754e8e4f8d8fa787445f2a3fb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  left: 133900
+  right: 189100
+  top: 514500
+  bottom: 472500
+  depth: 7
+  textureDecalProjectorPrefab: {fileID: 4500353898809890024, guid: d62ffe26c4958754e9ee3be0a03b28f6,
+    type: 3}
+  Url: https://service.pdok.nl/prorail/spoorwegen/wms/v1_0?request=GetMap&service=WMS&version=1.3.0&layers={layers}&styles={styles}&CRS=EPSG%3a28992&width=1024&height=1024&format=image%2fpng&transparent=true
+  Layers:
+  - kilometrering
+  Styles:
+  - kilometrering
+--- !u!4 &139379597
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139379595}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &139379598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139379595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4841547077d9411594fe49e00f350545, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startsPaused: 1
+  updateInterval: 200
+  tick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &139379599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139379595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa552ad4a3ed4d579aea7f189ffd5302, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Timer>k__BackingField: {fileID: 139379598}
+  <DataSet>k__BackingField: {fileID: 139379596}
 --- !u!1001 &184687856
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -844,6 +933,50 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 452902734}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &984403915
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 984403917}
+  - component: {fileID: 984403916}
+  m_Layer: 0
+  m_Name: TilekitTelemetry
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &984403916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984403915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45f1325787734660a362e01a3cd4a814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &984403917
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984403915}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1114164023 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6129593076402616864, guid: bd3bbf33ef31d3e4a8147797007911a1,
@@ -1442,22 +1575,22 @@ PrefabInstance:
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.7512772
+      value: 0.20369802
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.6012348
+      value: 0.08629283
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.21253234
+      value: 0.8979701
       objectReference: {fileID: 0}
     - target: {fileID: 3849934062868920522, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.17008613
+      value: -0.38040814
       objectReference: {fileID: 0}
     - target: {fileID: 3919916255551741050, guid: 5fbb7c7c8ec47e849afba1b658f3e07e,
         type: 3}
@@ -2611,7 +2744,7 @@ PrefabInstance:
     - target: {fileID: 1651626281808748735, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 169
+      value: 165
       objectReference: {fileID: 0}
     - target: {fileID: 1651626281808748735, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
         type: 3}
@@ -2621,7 +2754,7 @@ PrefabInstance:
     - target: {fileID: 1651626281808748735, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 377.5
+      value: 82.5
       objectReference: {fileID: 0}
     - target: {fileID: 1651626281808748735, guid: 02c20fd0e6c83ab46afacb4c2e6263df,
         type: 3}
@@ -4733,3 +4866,5 @@ SceneRoots:
   - {fileID: 2997518761711757160}
   - {fileID: 452902734}
   - {fileID: 4739918432538025027}
+  - {fileID: 139379597}
+  - {fileID: 984403917}
