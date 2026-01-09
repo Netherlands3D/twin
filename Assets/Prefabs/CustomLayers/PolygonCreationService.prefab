@@ -319,7 +319,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8252544850299417775}
   - component: {fileID: 6970481386311860828}
-  - component: {fileID: 1166426914008804660}
   - component: {fileID: 6055517019102079451}
   - component: {fileID: 5075749786647668795}
   - component: {fileID: 2199620996234264513}
@@ -328,6 +327,7 @@ GameObject:
   - component: {fileID: 5204133725323682888}
   - component: {fileID: 4084062005155970036}
   - component: {fileID: -7824704156598368423}
+  - component: {fileID: 1071724843943495835}
   m_Layer: 0
   m_Name: PolygonCreationService
   m_TagString: Untagged
@@ -372,41 +372,6 @@ MonoBehaviour:
   polygonInput: {fileID: 2971444630074657358}
   lineInput: {fileID: 6819746166564945398}
   defaultLineWidth: 10
---- !u!114 &1166426914008804660
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4543035819173704079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bda199de660f4334b8a50d8e350bdf29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onEvent: {fileID: 11400000, guid: 271a09cff13d5466d9d355af09c8c900, type: 2}
-  onTriggered:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6970481386311860828}
-        m_TargetAssemblyTypeName: Netherlands3D.Twin.Layers.LayerTypes.Polygons.PolygonInputToLayer,
-          eu.netherlands3d.twin
-        m_MethodName: SetGridInputModeToEdit
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onTrue:
-    m_PersistentCalls:
-      m_Calls: []
-  onFalse:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &6055517019102079451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -703,6 +668,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   service: {fileID: 6970481386311860828}
+--- !u!114 &1071724843943495835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4543035819173704079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda199de660f4334b8a50d8e350bdf29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEvent: {fileID: 11400000, guid: 271a09cff13d5466d9d355af09c8c900, type: 2}
+  onTriggered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4543035819173704079}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTrue:
+    m_PersistentCalls:
+      m_Calls: []
+  onFalse:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4868054342503346395
 GameObject:
   m_ObjectHideFlags: 0

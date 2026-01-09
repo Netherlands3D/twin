@@ -90,7 +90,7 @@ namespace Netherlands3D.Twin.Layers
         {
             layerGameObject.InitProperty<MaskingLayerPropertyData>(properties);
             maskingLayerPropertyData = properties.Get<MaskingLayerPropertyData>();
-            layerGameObject.ConvertOldStylingDataIntoProperty(properties, "default", maskingLayerPropertyData, false);
+            layerGameObject.ConvertOldStylingDataIntoProperty(properties, "default", maskingLayerPropertyData);
             
             ApplyMasking();
             maskingLayerPropertyData.OnStylingChanged.AddListener(ApplyMasking);

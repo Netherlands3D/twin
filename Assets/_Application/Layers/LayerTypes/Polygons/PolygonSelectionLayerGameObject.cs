@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
@@ -116,7 +117,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             data.isMaskChanged.AddListener(OnIsMaskChanged);
             data.invertMaskChanged.AddListener(OnInvertMaskChanged); 
             data.polygonCoordinatesChanged.AddListener(UpdatePolygonVisualisation);
-            data.polygonEnabled.AddListener(SetActive);
+
+            PolygonSelectionService service = ServiceLocator.GetService<PolygonSelectionService>();
+            service.OnPolygonSelectionEnabled.AddListener(OnVisualisationsEnabled);
         }
 
         protected override void UnregisterEventListeners()
@@ -131,12 +134,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             data.isMaskChanged.RemoveListener(OnIsMaskChanged);
             data.invertMaskChanged.RemoveListener(OnInvertMaskChanged);
             data.polygonCoordinatesChanged.RemoveListener(UpdatePolygonVisualisation);
-            data.polygonEnabled.RemoveListener(SetActive);
-        }
-
-        private void SetActive(bool active)
-        {
-            gameObject.SetActive(active);
+            
+            PolygonSelectionService service = ServiceLocator.GetService<PolygonSelectionService>();
+            service.OnPolygonSelectionEnabled.RemoveListener(OnVisualisationsEnabled);
         }
 
         private void OnSwitchVisualisation()
@@ -243,7 +243,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             return LayerMask.NameToLayer("PolygonMask");
         }
 
-        public void SetVisualisationActive(bool active)
+        private void OnVisualisationsEnabled(bool enabled)
+        {
+            if(enabled == false && !isMask)
+                SetVisualisationActive(false);
+            else
+                SetVisualisationActive(enabled);
+        }
+
+        private void SetVisualisationActive(bool active)
         {
             PolygonVisualisation.gameObject.SetActive(active);
         }
@@ -259,7 +267,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             InitProperty<PolygonSelectionLayerPropertyData>(properties);
             
             PolygonSelectionLayerPropertyData data = properties.Get<PolygonSelectionLayerPropertyData>();
-            data.polygonInitialized.Invoke();
             
             var vertices = PolygonUtility.CoordinatesToVertices(data.OriginalPolygon, data.LineWidth);
             UpdateVisualisation(vertices, data.ExtrusionHeight);
@@ -268,6 +275,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OnInvertMaskChanged(data.InvertMask); 
             
             UpdatePolygonVisualisation();
+        }
+
+        protected override void OnVisualizationReady()
+        {
+            base.OnVisualizationReady();
+            PolygonSelectionService service = ServiceLocator.GetService<PolygonSelectionService>();
+            if(!isMask && service != null && !service.PolygonSelectionEnabled)
+                SetVisualisationActive(false);
         }
     }
 }

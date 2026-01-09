@@ -90,7 +90,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void OnProjectChanged(ProjectData data)
         {
-            ClearMappingTree();
+            //ClearMappingTree(); //TODO the quadtree featuremappings should be cleared when loading a new project for efficiency. for now its not working properly for some reason
             ProjectData.Current.RootLayer.AddedSelectedLayer.AddListener(OnAddSelectedLayer);
             ProjectData.Current.RootLayer.RemovedSelectedLayer.AddListener(OnRemoveSelectedLayer);
         }
