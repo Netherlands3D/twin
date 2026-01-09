@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.ExtensionMethods;
@@ -199,6 +199,12 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             foreach (var layer in ProjectData.Current.RootLayer.SelectedLayers.ToList()) //to list makes a copy and avoids a collectionmodified error
             {
                 layer.DestroyLayer();
+            }
+
+            // 👇 Notify that the project data (layer tree) changed, so ScenarioManager & others can rebuild.
+            if (ProjectData.Current != null && ProjectData.Current.OnDataChanged != null)
+            {
+                ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
             }
         }
 
