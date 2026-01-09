@@ -96,6 +96,7 @@ namespace Netherlands3D.Twin.Layers
             ApplyStyling();
 
             OnVisualizationReady();
+            RemoveOldStylingData();
         }
 
         protected virtual void RegisterEventListeners()
@@ -348,7 +349,13 @@ namespace Netherlands3D.Twin.Layers
             onInit?.Invoke(property);
         }
 
-        public void ConvertOldStylingDataIntoProperty(List<LayerPropertyData> properties, string propertyName, StylingPropertyData targetStylingPropertyData, bool removeOldData = true)
+        #region BackwardsCompatibility
+
+        
+
+        
+        private List<StylingPropertyData> oldStylingData = new();
+        public void ConvertOldStylingDataIntoProperty(List<LayerPropertyData> properties, string propertyName, StylingPropertyData targetStylingPropertyData)
         {
             //BC conversion, finding all stylkingpropertydatas without any correct type and storing data in the correct places
             //and if needed clear the properties from old data
@@ -369,8 +376,7 @@ namespace Netherlands3D.Twin.Layers
                     rulesToCopy[kvp.Key] = kvp.Value;
                 }
                 
-                // if(removeOldData) //todo
-                //     properties.Remove(style);
+                oldStylingData.Add(style);
             }
             
             foreach (var kvp in rulesToCopy)
@@ -378,5 +384,14 @@ namespace Netherlands3D.Twin.Layers
                 targetStylingPropertyData.StylingRules[kvp.Key] = kvp.Value;
             }
         }
+
+        private void RemoveOldStylingData()
+        {
+            if(oldStylingData.Count == 0) return;
+            foreach (var style in oldStylingData)
+                LayerData.RemoveProperty(style);
+        }
+        
+        #endregion
     }
 }

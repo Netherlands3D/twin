@@ -71,6 +71,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             PolygonSelectionLayerPropertyData data = layer.GetProperty<PolygonSelectionLayerPropertyData>();
             EnablePolygonInputByType(data.ShapeType);
             var polygonAsUnityPoints = data.OriginalPolygon.ToUnityPositions().ToList();
+            if(data.PolygonBoundingBox == null)
+                return;
 
             switch (data.ShapeType)
             {

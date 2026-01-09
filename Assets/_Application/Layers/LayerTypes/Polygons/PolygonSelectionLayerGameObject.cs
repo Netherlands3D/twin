@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using UnityEngine.Events;
@@ -24,8 +24,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private bool isMask;   
 
         public UnityEvent OnPolygonVisualisationUpdated = new();
-
-        [SerializeField] private Tool layerTool;
 
         /// <summary>
         /// Create or update PolygonVisualisation
@@ -119,9 +117,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             data.isMaskChanged.AddListener(OnIsMaskChanged);
             data.invertMaskChanged.AddListener(OnInvertMaskChanged); 
             data.polygonCoordinatesChanged.AddListener(UpdatePolygonVisualisation);
-            
-            layerTool?.onOpen.AddListener(OnLayerPanelOpen);
-            layerTool?.onClose.AddListener(OnLayerPanelClose);
+
+            PolygonSelectionService service = ServiceLocator.GetService<PolygonSelectionService>();
+            service.OnPolygonSelectionEnabled.AddListener(OnVisualisationsEnabled);
         }
 
         protected override void UnregisterEventListeners()
@@ -137,13 +135,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             data.invertMaskChanged.RemoveListener(OnInvertMaskChanged);
             data.polygonCoordinatesChanged.RemoveListener(UpdatePolygonVisualisation);
             
-            layerTool?.onOpen.RemoveListener(OnLayerPanelOpen);
-            layerTool?.onClose.RemoveListener(OnLayerPanelClose);
-        }
-
-        private void SetActive(bool active)
-        {
-            gameObject.SetActive(active);
+            PolygonSelectionService service = ServiceLocator.GetService<PolygonSelectionService>();
+            service.OnPolygonSelectionEnabled.RemoveListener(OnVisualisationsEnabled);
         }
 
         private void OnSwitchVisualisation()
@@ -250,20 +243,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             return LayerMask.NameToLayer("PolygonMask");
         }
 
-        private void OnLayerPanelOpen()
+        private void OnVisualisationsEnabled(bool enabled)
         {
-            SetVisualisationActive(LayerData.ActiveInHierarchy);
-        }
-
-        private void OnLayerPanelClose()
-        {
-            if(!isMask)
+            if(enabled == false && !isMask)
                 SetVisualisationActive(false);
+            else
+                SetVisualisationActive(enabled);
         }
 
         private void SetVisualisationActive(bool active)
         {
-            Debug.Log("setting "+LayerData.Name+" active to " + active);
             PolygonVisualisation.gameObject.SetActive(active);
         }
 
@@ -291,7 +280,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         protected override void OnVisualizationReady()
         {
             base.OnVisualizationReady();
-            if(!isMask && layerTool != null && !layerTool.Open)
+            PolygonSelectionService service = ServiceLocator.GetService<PolygonSelectionService>();
+            if(!isMask && service != null && !service.PolygonSelectionEnabled)
                 SetVisualisationActive(false);
         }
     }
