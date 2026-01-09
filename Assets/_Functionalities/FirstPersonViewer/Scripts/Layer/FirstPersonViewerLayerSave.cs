@@ -35,6 +35,7 @@ namespace Netherlands3D.FirstPersonViewer.Layers
 
             layerData.SetProperty<TransformLayerPropertyData>(new TransformLayerPropertyData(new Coordinate(fpv.transform.position), fpv.transform.eulerAngles, fpv.transform.localScale));
 
+            //Copy the current settings
             Dictionary<string, object> settings = new Dictionary<string, object>();
             foreach (ViewerSetting setting in fpv.MovementSwitcher.CurrentMovement.editableSettings.list)
             {
@@ -49,7 +50,7 @@ namespace Netherlands3D.FirstPersonViewer.Layers
             StartCoroutine(ResetPrefab(layerData));
         }
 
-        //Fix for resetting layer, because setting it in LayerCallback will do it too early. 
+        //Fix for resetting layer prefab, because setting it in LayerCallback will do it too early. 
         private IEnumerator ResetPrefab(LayerData layerData)
         {
             yield return new WaitForEndOfFrame();

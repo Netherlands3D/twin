@@ -82,7 +82,6 @@ namespace Netherlands3D.FirstPersonViewer.Layers
                 if (!firstPersonData.settingValues.ContainsKey(settingKey))
                     firstPersonData.settingValues.Add(settingKey, setting.GetDefaultValue());
 
-                //Debug.Log(firstPersonData.settingValues[settingKey]);
                 settingObject.SetValue(firstPersonData.settingValues[settingKey]);
 
                 if (setting is ViewerSettingValue valueInput)
