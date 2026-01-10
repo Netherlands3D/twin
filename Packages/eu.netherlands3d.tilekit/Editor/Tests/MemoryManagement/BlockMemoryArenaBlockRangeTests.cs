@@ -5,13 +5,13 @@ using Unity.Collections.LowLevel.Unsafe;
 
 namespace Netherlands3D.Tilekit.Tests.MemoryManagement
 {
-    public class BufferBlockRangeTests
+    public class BlockMemoryArenaBlockRangeTests
     {
         [Test]
         [Category("Unit")]
         public void Ctor_StoresValues()
         {
-            var r = new BufferBlockRange(5, 3);
+            var r = new BlockMemoryArenaBlockRange(5, 3);
             Assert.That(r.Offset, Is.EqualTo(5));
             Assert.That(r.Count, Is.EqualTo(3));
         }
@@ -20,21 +20,21 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
         [Category("Unit")]
         public void Ctor_Throws_OnNegativeOffset()
         {
-            Assert.That(() => new BufferBlockRange(-1, 1), Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => new BlockMemoryArenaBlockRange(-1, 1), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
         [Category("Unit")]
         public void Ctor_Throws_OnNegativeCount()
         {
-            Assert.That(() => new BufferBlockRange(0, -1), Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => new BlockMemoryArenaBlockRange(0, -1), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
         [Category("Unit")]
         public void Ctor_AllowsZeroOffsetAndCount()
         {
-            var r = new BufferBlockRange(0, 0);
+            var r = new BlockMemoryArenaBlockRange(0, 0);
             Assert.That(r.Offset, Is.EqualTo(0));
             Assert.That(r.Count, Is.EqualTo(0));
         }
@@ -43,9 +43,9 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
         [Category("Unit")]
         public void Equals_EqualBasedOnValues()
         {
-            var r1 = new BufferBlockRange(5, 3);
-            var r2 = new BufferBlockRange(5, 3);
-            var r3 = new BufferBlockRange(3, 5);
+            var r1 = new BlockMemoryArenaBlockRange(5, 3);
+            var r2 = new BlockMemoryArenaBlockRange(5, 3);
+            var r3 = new BlockMemoryArenaBlockRange(3, 5);
             
             Assert.That(r1, Is.EqualTo(r2));
             Assert.That(r1, Is.Not.EqualTo(r3));
@@ -58,7 +58,7 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             // Not a regular test: but as a safeguard against multiplicative size increases we want to
             // very that this class is always this many bytes in size - this can also be used as living
             // documentation
-            Assert.That(UnsafeUtility.SizeOf<BufferBlockRange>(), Is.EqualTo(8));
+            Assert.That(UnsafeUtility.SizeOf<BlockMemoryArenaBlockRange>(), Is.EqualTo(8));
         }
     }
 }

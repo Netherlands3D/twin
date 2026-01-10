@@ -5,7 +5,7 @@ using Unity.Collections;
 
 namespace Netherlands3D.Tilekit.Tests.MemoryManagement
 {
-    public class BufferBlockTests
+    public class BlockMemoryArenaBlockTests
     {
         [Test]
         [Category("Unit")]
@@ -14,8 +14,8 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             var arr = new NativeArray<int>(10, Allocator.Temp);
             try
             {
-                var range = new BufferBlockRange(offset: 2, count: 4);
-                var block = BufferBlock<int>.From(arr, range);
+                var range = new BlockMemoryArenaBlockRange(offset: 2, count: 4);
+                var block = BlockMemoryArenaBlock<int>.From(arr, range);
 
                 Assert.That(block.Length, Is.EqualTo(range.Count));
             }
@@ -34,7 +34,7 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             {
                 for (int i = 0; i < arr.Length; i++) arr[i] = 100 + i; // 100..109
 
-                var block = BufferBlock<int>.From(arr, new BufferBlockRange(offset: 3, count: 4)); // 103..106
+                var block = BlockMemoryArenaBlock<int>.From(arr, new BlockMemoryArenaBlockRange(offset: 3, count: 4)); // 103..106
 
                 Assert.That(block[0], Is.EqualTo(103));
                 Assert.That(block[1], Is.EqualTo(104));
@@ -54,7 +54,7 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             var arr = new NativeArray<int>(10, Allocator.Temp);
             try
             {
-                var block = BufferBlock<int>.From(arr, new BufferBlockRange(offset: 0, count: 3));
+                var block = BlockMemoryArenaBlock<int>.From(arr, new BlockMemoryArenaBlockRange(offset: 0, count: 3));
 
                 Assert.That(() => { _ = block[-1]; }, Throws.TypeOf<IndexOutOfRangeException>());
             }
@@ -71,7 +71,7 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             var arr = new NativeArray<int>(10, Allocator.Temp);
             try
             {
-                var block = BufferBlock<int>.From(arr, new BufferBlockRange(offset: 0, count: 3));
+                var block = BlockMemoryArenaBlock<int>.From(arr, new BlockMemoryArenaBlockRange(offset: 0, count: 3));
 
                 Assert.That(() => { _ = block[block.Length]; }, Throws.TypeOf<IndexOutOfRangeException>());
             }
@@ -90,8 +90,8 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             {
                 for (int i = 0; i < 10; i++) list.Add(i);
 
-                var range = new BufferBlockRange(offset: 4, count: 5);
-                var block = BufferBlock<int>.From(list, range);
+                var range = new BlockMemoryArenaBlockRange(offset: 4, count: 5);
+                var block = BlockMemoryArenaBlock<int>.From(list, range);
 
                 Assert.That(block.Length, Is.EqualTo(range.Count));
             }
@@ -110,7 +110,7 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             {
                 for (int i = 0; i < 10; i++) list.Add(200 + i); // 200..209
 
-                var block = BufferBlock<int>.From(list, new BufferBlockRange(offset: 6, count: 3)); // 206..208
+                var block = BlockMemoryArenaBlock<int>.From(list, new BlockMemoryArenaBlockRange(offset: 6, count: 3)); // 206..208
 
                 Assert.That(block[0], Is.EqualTo(206));
                 Assert.That(block[1], Is.EqualTo(207));
@@ -131,7 +131,7 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             {
                 for (int i = 0; i < arr.Length; i++) arr[i] = i; // 0..7
 
-                var block = BufferBlock<int>.From(arr, new BufferBlockRange(offset: 2, count: 3)); // arr[2..4]
+                var block = BlockMemoryArenaBlock<int>.From(arr, new BlockMemoryArenaBlockRange(offset: 2, count: 3)); // arr[2..4]
 
                 // Sanity: initial snapshot through block
                 Assert.That(block[0], Is.EqualTo(2));
@@ -159,7 +159,7 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             {
                 for (int i = 0; i < arr.Length; i++) arr[i] = i * 10;
 
-                var block = BufferBlock<int>.From(arr, new BufferBlockRange(2, 4));
+                var block = BlockMemoryArenaBlock<int>.From(arr, new BlockMemoryArenaBlockRange(2, 4));
 
                 Assert.That(block.Length, Is.EqualTo(4));
                 Assert.That(block[0], Is.EqualTo(20));
@@ -182,7 +182,7 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             {
                 for (int i = 0; i < 10; i++) list.Add(i + 1); // 1..10
 
-                var block = BufferBlock<int>.From(list, new BufferBlockRange(3, 3)); // 4,5,6
+                var block = BlockMemoryArenaBlock<int>.From(list, new BlockMemoryArenaBlockRange(3, 3)); // 4,5,6
 
                 Assert.That(block.Length, Is.EqualTo(3));
                 Assert.That(block[0], Is.EqualTo(4));
@@ -204,7 +204,7 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             {
                 for (int i = 0; i < arr.Length; i++) arr[i] = i + 1; // 1..6
 
-                var block = BufferBlock<int>.From(arr, new BufferBlockRange(1, 3)); // 2,3,4
+                var block = BlockMemoryArenaBlock<int>.From(arr, new BlockMemoryArenaBlockRange(1, 3)); // 2,3,4
 
                 int sum = 0;
                 foreach (var v in block) sum += v;
@@ -231,7 +231,7 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
                 replacement[1] = 20;
                 replacement[2] = 30;
 
-                var block = BufferBlock<int>.From(arr, new BufferBlockRange(3, 3));
+                var block = BlockMemoryArenaBlock<int>.From(arr, new BlockMemoryArenaBlockRange(3, 3));
                 block.Replace(replacement);
 
                 Assert.That(arr[3], Is.EqualTo(10));
@@ -253,7 +253,7 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             var replacement = new NativeArray<int>(2, Allocator.Temp);
             try
             {
-                var block = BufferBlock<int>.From(arr, new BufferBlockRange(3, 3));
+                var block = BlockMemoryArenaBlock<int>.From(arr, new BlockMemoryArenaBlockRange(3, 3));
 
                 Assert.That(() => block.Replace(replacement), Throws.TypeOf<ArgumentException>());
             }
@@ -272,14 +272,14 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             try
             {
                 // Warm up JIT / static initialization noise.
-                _ = BufferBlock<int>.From(arr, new BufferBlockRange(0, 1));
+                _ = BlockMemoryArenaBlock<int>.From(arr, new BlockMemoryArenaBlockRange(0, 1));
 
                 long before = GC.GetAllocatedBytesForCurrentThread();
 
                 // Create many blocks to amplify any accidental allocation.
                 for (int i = 0; i < 10_000; i++)
                 {
-                    _ = BufferBlock<int>.From(arr, new BufferBlockRange(0, 1));
+                    _ = BlockMemoryArenaBlock<int>.From(arr, new BlockMemoryArenaBlockRange(0, 1));
                 }
 
                 long after = GC.GetAllocatedBytesForCurrentThread();

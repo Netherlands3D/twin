@@ -5,20 +5,20 @@ using Unity.Collections;
 namespace Netherlands3D.Tilekit.MemoryManagement
 {
     /// <summary>
-    /// A lightweight, non-allocating view over a contiguous block within a flat buffer.
+    /// A lightweight, non-allocating view over a contiguous block within a flat arena.
     /// </summary>
     /// <typeparam name="T">The element type stored in the underlying Unity native container.</typeparam>
     /// <remarks>
     /// <para>
     /// This type wraps a <see cref="NativeSlice{T}"/> and is intended to be used as a transient "block view"
-    /// into a larger append-only buffer (<see cref="NativeArray{T}"/> or <see cref="NativeList{T}"/>).
+    /// into a larger append-only arena (<see cref="NativeArray{T}"/> or <see cref="NativeList{T}"/>).
     /// </para>
     /// <para>
     /// <b>Lifetime:</b> When created from a <see cref="NativeList{T}"/>, the slice becomes invalid if the list
     /// reallocates (e.g., growth beyond capacity). Prefer using it immediately and avoid storing it long-term.
     /// </para>
     /// </remarks>
-    public struct BufferBlock<T> where T : unmanaged
+    public struct BlockMemoryArenaBlock<T> where T : unmanaged
     {
         private NativeSlice<T> s;
 
@@ -33,7 +33,7 @@ namespace Netherlands3D.Tilekit.MemoryManagement
         public int Length => s.Length;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private BufferBlock(NativeSlice<T> slice)
+        private BlockMemoryArenaBlock(NativeSlice<T> slice)
         {
             s = slice;
         }
@@ -49,23 +49,23 @@ namespace Netherlands3D.Tilekit.MemoryManagement
         /// <summary>
         /// Creates a block from a flat <see cref="NativeArray{T}"/> using the provided range.
         /// </summary>
-        /// <param name="flat">The flat buffer that contains the block.</param>
+        /// <param name="flat">The flat arena that contains the block.</param>
         /// <param name="r">The offset and count describing the block.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static BufferBlock<T> From(NativeArray<T> flat, BufferBlockRange r)
+        public static BlockMemoryArenaBlock<T> From(NativeArray<T> flat, BlockMemoryArenaBlockRange r)
             => new(new NativeSlice<T>(flat, r.Offset, r.Count));
 
         /// <summary>
         /// Creates a block from a flat <see cref="NativeList{T}"/> using the provided range.
         /// </summary>
-        /// <param name="flat">The list whose underlying buffer contains the block.</param>
+        /// <param name="flat">The list whose underlying arena contains the block.</param>
         /// <param name="r">The offset and count describing the block.</param>
         /// <remarks>
         /// The returned block is a transient view. If <paramref name="flat"/> grows beyond capacity and reallocates,
         /// previously created blocks become invalid.
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static BufferBlock<T> From(NativeList<T> flat, BufferBlockRange r) => From(flat.AsArray(), r);
+        public static BlockMemoryArenaBlock<T> From(NativeList<T> flat, BlockMemoryArenaBlockRange r) => From(flat.AsArray(), r);
 
         /// <summary>
         /// Replaces the contents of this block with values from <paramref name="replacement"/>.

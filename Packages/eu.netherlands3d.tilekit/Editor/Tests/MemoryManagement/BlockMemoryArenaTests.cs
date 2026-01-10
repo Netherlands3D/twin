@@ -6,7 +6,7 @@ using Unity.Collections.LowLevel.Unsafe;
 
 namespace Netherlands3D.Tilekit.Tests.MemoryManagement
 {
-    public class BufferTests
+    public class BlockMemoryArenaTests
     {
         [Test]
         [Category("Scenario")]
@@ -21,7 +21,7 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             // 1. Create a buffer that can hold up to 8 blocks (tiles) and at most 32 indices total.
             // Beware: a Buffer is an IDisposable, usually you want to use a Using statement to ensure it is disposed,
             // for demonstration purposes we don't and dispose manually.
-            var children = new Buffer<int>(blockCapacity: 8, itemCapacity: 32, alloc: Allocator.Temp);
+            var children = new BlockMemoryArena<int>(blockCapacity: 8, itemCapacity: 32, alloc: Allocator.Temp);
 
             // 2. Add a (root) tile's 3 children and get an integer id representing the list of children.
             int rootTile = children.Add(stackalloc int[] { 1, 2 });
@@ -62,7 +62,7 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
         [Category("Unit")]
         public void Add_ReturnsSequentialIds_AndDataIsReadable()
         {
-            using var buffer = new Buffer<int>(blockCapacity: 8, itemCapacity: 32, alloc: Allocator.Temp);
+            using var buffer = new BlockMemoryArena<int>(blockCapacity: 8, itemCapacity: 32, alloc: Allocator.Temp);
 
             int idA = buffer.Add(stackalloc int[] { 1, 2, 3 });
             int idB = buffer.Add(stackalloc int[] { 10, 20 });
@@ -88,21 +88,21 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
         [Category("Unit")]
         public void Add_EmptySpanReturnsAnEmptyBlock()
         {
-            using var buffer = new Buffer<int>(blockCapacity: 8, itemCapacity: 32, alloc: Allocator.Temp);
+            using var buffer = new BlockMemoryArena<int>(blockCapacity: 8, itemCapacity: 32, alloc: Allocator.Temp);
 
             long usedBefore = buffer.GetUsedBytes();
             int id = buffer.Add(ReadOnlySpan<int>.Empty);
 
             Assert.That(id, Is.EqualTo(0));
             Assert.That(buffer.Length, Is.EqualTo(1));
-            Assert.That(buffer.GetUsedBytes(), Is.EqualTo(usedBefore + UnsafeUtility.SizeOf<BufferBlockRange>()));
+            Assert.That(buffer.GetUsedBytes(), Is.EqualTo(usedBefore + UnsafeUtility.SizeOf<BlockMemoryArenaBlockRange>()));
         }
 
         [Test]
         [Category("Unit")]
         public void Add_ThrowsWhenItemsCapacityExceeded()
         {
-            using var buffer = new Buffer<int>(blockCapacity: 8, itemCapacity: 4, alloc: Allocator.Temp);
+            using var buffer = new BlockMemoryArena<int>(blockCapacity: 8, itemCapacity: 4, alloc: Allocator.Temp);
 
             var index = buffer.Add(stackalloc int[] { 1, 2, 3, 4 });
             Assert.That(index, Is.EqualTo(0));
@@ -118,7 +118,7 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
         [Category("Unit")]
         public void Clear_ResetsLength_ButKeepsCapacity()
         {
-            using var buffer = new Buffer<int>(blockCapacity: 4, itemCapacity: 16, alloc: Allocator.Temp);
+            using var buffer = new BlockMemoryArena<int>(blockCapacity: 4, itemCapacity: 16, alloc: Allocator.Temp);
 
             buffer.Add(stackalloc int[] { 1, 2, 3 });
             int capBefore = buffer.Capacity;
@@ -138,21 +138,21 @@ namespace Netherlands3D.Tilekit.Tests.MemoryManagement
             var itemCapacity = 16;
             Span<int> items = stackalloc int[] { 1, 2, 3 };
             
-            using var buffer = new Buffer<int>(blockCapacity, itemCapacity, alloc: Allocator.Temp);
+            using var buffer = new BlockMemoryArena<int>(blockCapacity, itemCapacity, alloc: Allocator.Temp);
             buffer.Add(items);
 
             long reserved = buffer.GetReservedBytes();
             long used = buffer.GetUsedBytes();
 
-            Assert.That(reserved, Is.EqualTo(nativeListBaseMemoryUse + itemCapacity*UnsafeUtility.SizeOf<int>() + nativeListBaseMemoryUse+blockCapacity*UnsafeUtility.SizeOf<BufferBlockRange>()));
-            Assert.That(used, Is.EqualTo(buffer.Length * UnsafeUtility.SizeOf<BufferBlockRange>() + items.Length * UnsafeUtility.SizeOf<int>()));
+            Assert.That(reserved, Is.EqualTo(nativeListBaseMemoryUse + itemCapacity*UnsafeUtility.SizeOf<int>() + nativeListBaseMemoryUse+blockCapacity*UnsafeUtility.SizeOf<BlockMemoryArenaBlockRange>()));
+            Assert.That(used, Is.EqualTo(buffer.Length * UnsafeUtility.SizeOf<BlockMemoryArenaBlockRange>() + items.Length * UnsafeUtility.SizeOf<int>()));
         }
 
         [Test]
         [Category("Unit")]
         public void Dispose_CanBeCalledAfterClear()
         {
-            var buffer = new Buffer<int>(blockCapacity: 4, itemCapacity: 16, alloc: Allocator.Temp);
+            var buffer = new BlockMemoryArena<int>(blockCapacity: 4, itemCapacity: 16, alloc: Allocator.Temp);
             buffer.Add(stackalloc int[] { 1, 2, 3 });
 
             buffer.Clear();
