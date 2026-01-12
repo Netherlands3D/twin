@@ -43,7 +43,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private SampleTexture sampleTexture;
 
         private TileHandler tileHandler;
-        private List<Layer> layersThatCauseUpdates = new();
+        private HashSet<BinaryMeshLayer> layersThatCauseUpdates = new();
+        private bool samplingDirty = true;
+        
+        
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             InitProperty<ToggleScatterPropertyData>(properties, InitializePropertyForBackwardsCompatibility);
@@ -85,9 +88,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             tileHandler.layerAdded.RemoveListener(AddListenersToCartesianTerrainTiles);
             tileHandler.layerRemoved.RemoveListener(RemoveListenersFromCartesianTerrainTiles);
 
-            for (var i = layersThatCauseUpdates.Count - 1; i >= 0; i--)
+            foreach (var layer in layersThatCauseUpdates.ToArray())
             {
-                var layer = layersThatCauseUpdates[i];
                 RemoveListenersFromCartesianTerrainTiles(layer);
             }
         }
@@ -206,6 +208,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void RecalculatePolygonsAndSamplerTexture()
         {
+            samplingDirty = true;
+        }
+
+        private void CalculatePolygonsAndSamplerTexture()
+        {
             RecalculatePolygonsAndGetBounds();
             if (polygonBounds.size.sqrMagnitude == 0)
                 return; // the stroke/fill is clipped out because of the stroke width and no further processing is needed
@@ -297,6 +304,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void Update()
         {
+            if (samplingDirty)
+            {
+                samplingDirty = false;
+                CalculatePolygonsAndSamplerTexture();
+            }
             RenderBatches();
         }
 
@@ -365,10 +377,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             //only listen to the terrain layer
             if (layer == null || layer.gameObject.layer != LayerMask.NameToLayer("Terrain"))
                 return;
-
+            
             BinaryMeshLayer bml = layer as BinaryMeshLayer;
+            if (!layersThatCauseUpdates.Add(bml))
+                return;
+            
             bml.OnTileObjectCreated.AddListener(OnTerrainTileCreated);
-            layersThatCauseUpdates.Add(bml);
             RecalculatePolygonsAndSamplerTexture();
         }
         
@@ -379,8 +393,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 return;
 
             BinaryMeshLayer bml = layer as BinaryMeshLayer;
+            if (!layersThatCauseUpdates.Remove(bml))
+                return;
+            
             bml.OnTileObjectCreated.RemoveListener(OnTerrainTileCreated);
-            layersThatCauseUpdates.Remove(bml);
             RecalculatePolygonsAndSamplerTexture();
         }
 
