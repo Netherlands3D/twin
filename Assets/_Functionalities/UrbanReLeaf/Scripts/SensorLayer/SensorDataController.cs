@@ -2,22 +2,33 @@ using Netherlands3D.CartesianTiles;
 using Netherlands3D.Coordinates;
 using System;
 using System.Collections.Generic;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.Networking;
 
 namespace Netherlands3D.Functionalities.UrbanReLeaf
 {
-    public abstract class SensorDataController : MonoBehaviour
+    public abstract class SensorDataController : MonoBehaviour, IVisualizationWithPropertyData
     {
         public bool StaticSensorData = false;
         public enum SensorPropertyType { None, Temperature, RelativeHumidity, ThermalDiscomfort }
         public SensorPropertyType propertyType;
         public List<SensorCell> Cells { get { return StaticSensorData ? staticCells : cells; } }
+        
         public float Maximum;
         public float Minimum;        
         public Color MaxColor;
         public Color MinColor;
-
+        public float defaultMinValue;
+        public float defaultMaxValue;
+        public Color defaultMinColor;
+        public Color defaultMaxColor;
+        protected DateTime startDate;
+        protected DateTime endDate;
+        protected DateTime defaultStartDate = new();
+        protected DateTime defaultEndDate = new();
+        
         public float heightMultiplier = 500; //how high will the tile rise on selection, multiplication scale per measurement
         public bool MeasurementsIsValue = false;
 
@@ -34,12 +45,7 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
         protected List<SensorCell> staticCells = new List<SensorCell>();        
         protected float edgeMultiplier = 1.15f; //lets add 15% to the edges of the polygon to cover the seems between tiles
         protected int observationLimit = 5000; //the maximum data points per tile retrieved. a low number sometimes causes cells not to properly overlap with other tiles
-
-
-        protected DateTime startDate;
-        protected DateTime endDate;
-        protected DateTime defaultStartDate = new();
-        protected DateTime defaultEndDate = new();
+      
 
         public struct SensorCell
         {
@@ -50,15 +56,68 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             public Vector3 unityPosition;
         }
 
-        public virtual void Start()
+        public virtual void Awake()
         {
-            SetTimeWindow(defaultStartDate, defaultEndDate);
+            defaultMinValue = Minimum;
+            defaultMaxValue = Maximum;
+            defaultMinColor = MinColor;
+            defaultMaxColor = MaxColor;
+            startDate = defaultStartDate;
+            endDate = defaultEndDate;
         }
 
-        public void SetTimeWindow(DateTime startDate, DateTime endDate)
+        private SensorPropertyData sensorPropertyData;
+        
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            this.startDate = startDate;
-            this.endDate = endDate;
+            sensorPropertyData = properties.Get<SensorPropertyData>();
+
+            sensorPropertyData.OnMinValueChanged.AddListener(UpdateMinValue);
+            sensorPropertyData.OnMaxValueChanged.AddListener(UpdateMaxValue);
+            sensorPropertyData.OnMinColorChanged.AddListener(UpdateMinColor);
+            sensorPropertyData.OnMaxColorChanged.AddListener(UpdateMaxColor);
+            sensorPropertyData.OnStartDateChanged.AddListener(UpdateStartDate);
+            sensorPropertyData.OnEndDateChanged.AddListener(UpdateEndDate);
+        }
+        
+        private void OnDestroy()
+        {
+            sensorPropertyData.OnMinValueChanged.RemoveListener(UpdateMinValue);
+            sensorPropertyData.OnMaxValueChanged.RemoveListener(UpdateMaxValue);
+            sensorPropertyData.OnMinColorChanged.RemoveListener(UpdateMinColor);
+            sensorPropertyData.OnMaxColorChanged.RemoveListener(UpdateMaxColor);
+            sensorPropertyData.OnStartDateChanged.RemoveListener(UpdateStartDate);
+            sensorPropertyData.OnEndDateChanged.RemoveListener(UpdateEndDate);
+        }
+
+        private void UpdateMinValue(float value)
+        {
+            Minimum = value;
+        }
+        
+        private void UpdateMaxValue(float value)
+        {
+            Maximum = value;
+        }
+
+        private void UpdateMinColor(Color color)
+        {
+            MinColor = color;
+        }
+
+        private void UpdateMaxColor(Color color)
+        {
+            MaxColor = color;
+        }
+
+        private void UpdateStartDate(DateTime date)
+        {
+            startDate = date;
+        }
+
+        private void UpdateEndDate(DateTime date)
+        {
+            endDate = date;
         }
 
         public abstract UnityWebRequest GetRequest(Tile tile, string baseUrl);
@@ -144,5 +203,6 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             unityCoordinate.y = height;
             return unityCoordinate;
         }
+
     }
 }
