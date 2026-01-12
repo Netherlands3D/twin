@@ -122,6 +122,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "OpenOverlay",
+                    "type": "Button",
+                    "id": "a70a1e88-fa36-48c0-99e7-a1eac12976eb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -749,6 +758,17 @@
                     "processors": "",
                     "groups": ";Keyboard & Mouse",
                     "action": "ExitModifier",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "53f7d462-f90a-4c52-b272-6b4ce1eb0751",
+                    "path": "<Keyboard>/f2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard & Mouse",
+                    "action": "OpenOverlay",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
