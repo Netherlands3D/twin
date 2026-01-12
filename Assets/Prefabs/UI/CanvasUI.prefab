@@ -4352,7 +4352,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 3982017221395532381}
+      objectReference: {fileID: 1232191089274940061}
+    - target: {fileID: 1772937474164282176, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ToggleUIHider
+      objectReference: {fileID: 0}
+    - target: {fileID: 1772937474164282176, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Netherlands3D.UIHider, eu.netherlands3d.twin
+      objectReference: {fileID: 0}
     - target: {fileID: 2138596249708571949, guid: f941f5beb3eb2814fa6d4bc592c0d47e,
         type: 3}
       propertyPath: m_AnchorMax.y
