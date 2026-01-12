@@ -11,21 +11,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public Vector3 Coordinates = Vector3.zero;
         [SerializeField] private CoordinateSystem coordinateSystem;
 
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
-            base.OnLayerReady();
+            base.OnVisualizationReady();
             var transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
             transformProperty.Position = new Coordinate(coordinateSystem, Coordinates.y, Coordinates.x, Coordinates.z);
             transformProperty.EulerRotation = transform.rotation.eulerAngles;
             transformProperty.LocalScale = transform.localScale;
         }
 
-        public override void OnSelect()
+        public override void OnSelect(LayerData layer)
         {
             //this is to prevent executing base class functionality
         }
 
-        public override void OnDeselect()
+        public override void OnDeselect(LayerData layer)
         {
             //this is to prevent executing base class functionality
         }

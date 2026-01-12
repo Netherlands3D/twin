@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
@@ -28,9 +28,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
         public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one), new Coordinate(transform.position + 5 * Vector3.one));
 
-        protected override void OnLayerInitialize()
+        protected override void OnVisualizationInitialize()
         {
-            base.OnLayerInitialize();
+            base.OnVisualizationInitialize();
 
             CreateTextPopup();
            
@@ -52,12 +52,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.transform.SetSiblingIndex(1); //0 is for the blocker plane, and we want this to be in front of that, but behind the rest           
             annotation.ReadOnly = !layerTool.Open;       
         }
-
-        protected override void OnDestroy()
+        
+        private void OnDestroy()
         {
-            base.OnDestroy();
-            WorldInteractionBlocker.ClickedOnBlocker.RemoveListener(OnBlockerClicked);
-            
             Destroy(annotation.gameObject);
         }
 
@@ -125,6 +122,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.Update();
             annotation.StickTo(WorldTransform.Coordinate);
         }
+        
+        public override void ApplyStyling()
+        {
+            base.ApplyStyling();
+            List<LayerFeature> features = CreateFeaturesByType<Image>(annotation.gameObject);
+            foreach (var feature in features)
+            {
+                if (feature.Geometry is not Image image) continue;
+
+                Symbolizer styling = GetStyling(feature);
+                var fillColor = styling.GetFillColor();
+
+                // Keep the original material color if fill color is not set (null)
+                if (!fillColor.HasValue) continue;
+
+                image.color = fillColor.Value;
+            }
+        }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -133,9 +148,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             
         }
 
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
-            base.OnLayerReady();
+            base.OnVisualizationReady();
             AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
             annotation.Show(annotationPropertyData.AnnotationText, WorldTransform.Coordinate, true);
             UpdateAnnotation(annotationPropertyData.AnnotationText);
@@ -163,6 +178,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             annotation.TextFieldSelected.RemoveListener(OnAnnotationSelected);
             annotation.TextFieldDoubleClicked.RemoveListener(OnAnnotationDoubleClicked);
             annotation.TextFieldInputConfirmed.RemoveListener(OnAnnotationTextConfirmed);
+            
+            WorldInteractionBlocker.ClickedOnBlocker.RemoveListener(OnBlockerClicked);
         }
 
         private void UpdateAnnotation(string newText)

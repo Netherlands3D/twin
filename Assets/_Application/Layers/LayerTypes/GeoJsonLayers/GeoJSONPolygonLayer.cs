@@ -26,7 +26,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 return applicator;
             }
         }
-
+        
         public override BoundingBox Bounds => GetBoundingBoxOfVisibleFeatures();
         public bool IsPolygon => true;
         public Transform Transform { get => transform; }

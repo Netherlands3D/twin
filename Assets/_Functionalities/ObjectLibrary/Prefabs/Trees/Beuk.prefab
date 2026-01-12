@@ -161,23 +161,11 @@ MonoBehaviour:
   prefabIdentifier: a324f799961a34de6967402e40a749dc
   thumbnail: {fileID: 0}
   spawnLocation: 0
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onHide:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerInitialized:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerReady:
-    m_PersistentCalls:
-      m_Calls: []
   DebugBoundingBox: 0
   objectCreated:
     m_PersistentCalls:
       m_Calls: []
-  scaleUnitCharacter: '%'
+  scaleUnitCharacter: m
 --- !u!114 &4831181432255528813
 MonoBehaviour:
   m_ObjectHideFlags: 0

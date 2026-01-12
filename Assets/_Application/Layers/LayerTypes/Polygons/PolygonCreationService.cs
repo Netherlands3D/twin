@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
@@ -20,38 +20,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         Grid = 3
     }
 
-    public class PolygonInputToLayer : MonoBehaviour
+    public class PolygonCreationService : MonoBehaviour
     {
-        [SerializeField] private PolygonSelectionLayerGameObject polygonSelectionLayerGameObjectPrefab;
-
-        private Dictionary<PolygonSelectionLayerPropertyData, LayerData> layers = new();
-
-        private LayerData activeLayer;
-
-        private LayerData ActiveLayer
-        {
-            get { return activeLayer; }
-            set { activeLayer = value; }
-        }
-
-        [SerializeField] private PolygonSelectionCalculator selectionCalculator;
+        public AreaSelection GridInput => gridInput;
+        public PolygonInput PolygonInput => polygonInput;
+        public PolygonInput LineInput => lineInput;
+        
+        [SerializeField] private PolygonSelectionLayerGameObject polygonVisualisationPrefab;
+        [SerializeField] private AreaSelection gridInput;
         [SerializeField] private PolygonInput polygonInput;
-
-        [Header("Line settings")] [SerializeField]
-        private PolygonInput lineInput;
+        [SerializeField] private PolygonInput lineInput;
 
         [SerializeField] private float defaultLineWidth = 10.0f;
-        [SerializeField] private PolygonPropertySection polygonPropertySectionPrefab;
+        
+        private PolygonSelectionService polygonSelectionService;
 
-        [Header("Grid Settings")] [SerializeField]
-        private AreaSelection gridInput;
-
-        public static PolygonPropertySection PolygonPropertySectionPrefab { get; private set; }
-
-        private void Awake()
-        {
-            PolygonPropertySectionPrefab = polygonPropertySectionPrefab;
-        }
 
         private void OnEnable()
         {
@@ -62,33 +45,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             lineInput.editedPolygonArea.AddListener(UpdateLayer);
 
             gridInput.whenAreaIsSelected.AddListener(CreateOrEditGridLayer);
-
-            ProjectData.Current.OnDataChanged.AddListener(ReregisterAllPolygons);
-        }
-
-        private void ReregisterAllPolygons(ProjectData newData)
-        {
-            layers.Clear();
-
-            foreach (var layer in newData.RootLayer.ChildrenLayers)
-            {
-                PolygonSelectionLayerPropertyData propertyData = layer.GetProperty<PolygonSelectionLayerPropertyData>();
-                if (propertyData == null) continue;
-
-                //TODO after refactoring the layersystem and onreferencechanged this should also be refactored! 
-                propertyData.polygonSelected.AddListener(ProcessPolygonSelection);
-                UnityAction referenceListener = null;
-                referenceListener = () =>
-                {
-                    layers.Add(propertyData, layer);
-
-                    // if (!propertyData.IsMask)
-                    //     match.SetVisualisationActive(enabled); //todo: check if this works
-
-                    layer.OnPrefabIdChanged.RemoveListener(referenceListener);
-                };
-                layer.OnPrefabIdChanged.AddListener(referenceListener);
-            }
         }
 
         private void OnDisable()
@@ -102,61 +58,31 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             gridInput.whenAreaIsSelected.RemoveListener(CreateOrEditGridLayer);
         }
 
-        private void ProcessPolygonSelection(LayerData layer)
+        private void Start()
         {
-            PolygonSelectionLayerPropertyData data = layer?.GetProperty<PolygonSelectionLayerPropertyData>();
-            //we don't reselect immediately in case of a grid, but we already register the active layer
-            if (data?.ShapeType == ShapeType.Grid)
-            {
-                ActiveLayer = layer;
-                ReselectInputByType(layer);
-                gridInput.SetSelectionVisualEnabled(true);
-                return;
-            }
-
-            //Do not allow selecting a new polygon if we are still creating one
-            if (polygonInput.Mode == PolygonInput.DrawMode.Create || lineInput.Mode == PolygonInput.DrawMode.Create)
-                return;
-
-            ClearSelection();
-
-            ActiveLayer = layer;
-            ReselectLayerPolygon(layer);
-        }
-
-        private void ReselectLayerPolygon(LayerData layer)
-        {
-            if (layer == null)
-            {
-                // reselecting nothing, disabling all polygon selections
-                polygonInput.gameObject.SetActive(false);
-                lineInput.gameObject.SetActive(false);
-                gridInput.gameObject.SetActive(false);
-                return;
-            }
-
-            //Align the input sytem by reselecting using layer polygon
-            ReselectInputByType(layer);
+            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
         }
 
         /// <summary>
         /// Enable the proper line or poly input system based on layer type
         /// </summary>
-        private void ReselectInputByType(LayerData layer)
+        public void UpdateInputByType(LayerData layer)
         {
             PolygonSelectionLayerPropertyData data = layer.GetProperty<PolygonSelectionLayerPropertyData>();
             EnablePolygonInputByType(data.ShapeType);
             var polygonAsUnityPoints = data.OriginalPolygon.ToUnityPositions().ToList();
+            if(data.PolygonBoundingBox == null)
+                return;
 
             switch (data.ShapeType)
             {
-                case ShapeType.Polygon: polygonInput.ReselectPolygon(polygonAsUnityPoints); break;
-                case ShapeType.Line: lineInput.ReselectPolygon(polygonAsUnityPoints); break;
-                case ShapeType.Grid: gridInput.ReselectAreaFromPolygon(polygonAsUnityPoints); break;
+                case ShapeType.Polygon: polygonInput.SetPolygon(polygonAsUnityPoints); break;
+                case ShapeType.Line: lineInput.SetPolygon(polygonAsUnityPoints); break;
+                case ShapeType.Grid: gridInput.SetAreaFromPolygon(polygonAsUnityPoints); break;
                 default:
                     Debug.LogError("Polygon shape type undefined, defaulting to PolygonInput");
                     polygonInput.gameObject.SetActive(true);
-                    polygonInput.ReselectPolygon(polygonAsUnityPoints);
+                    polygonInput.SetPolygon(polygonAsUnityPoints);
                     break;
             }
         }
@@ -173,37 +99,19 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
         }
-
-        public void ClearSelection()
+        
+        public void ClearInputs()
         {
             //Clear inputs if no layer is selected by default
-            var emptyList = new List<Vector3>();
             lineInput.ClearPolygon(true);
             polygonInput.ClearPolygon(true);
             gridInput.SetSelectionVisualEnabled(false);
         }
 
-        public void ShowPolygonVisualisations(bool enabled)
-        {
-            foreach (var polygonLayer in layers.Values)
-            {
-                PolygonSelectionLayerPropertyData propertyData = polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
-                if (propertyData.IsMask)
-                {
-                    continue;
-                }
-                //todo:
-                // var key = layers.FirstOrDefault(x => x.Value == polygonLayer).Key;
-                // key.gameObject.SetActive(enabled);
-            }
-
-            selectionCalculator.gameObject.SetActive(enabled);
-        }
-
         private void CreatePolygonLayer(List<Vector3> unityPolygon)
         {
             ILayerBuilder layerBuilder = LayerBuilder.Create()
-                .OfType(polygonSelectionLayerGameObjectPrefab.PrefabIdentifier)
+                .OfType(polygonVisualisationPrefab.PrefabIdentifier)
                 .NamedAs("Polygon")
                 .AddProperty(new PolygonSelectionLayerPropertyData
                 {
@@ -211,22 +119,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     OriginalPolygon = unityPolygon.ToCoordinates().ToList()
                 });
             var layer = App.Layers.Add(layerBuilder);
-            var polygonPropertyData = layer.LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            layers.Add(polygonPropertyData, layer.LayerData);
-            polygonPropertyData.polygonSelected.AddListener(ProcessPolygonSelection);
+            polygonSelectionService.RegisterPolygon(layer.LayerData);
             polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit);
-            ProcessPolygonSelection(layer.LayerData);
+           
         }
 
         private void UpdateLayer(List<Vector3> editedPolygon)
         {
-            ActiveLayer.GetProperty<PolygonSelectionLayerPropertyData>().OriginalPolygon = editedPolygon.ToCoordinates().ToList();
+            polygonSelectionService.ActiveLayer.GetProperty<PolygonSelectionLayerPropertyData>().OriginalPolygon = editedPolygon.ToCoordinates().ToList();
         }
 
         private void CreateLineLayer(List<Vector3> unityLine)
         {
             ILayerBuilder layerBuilder = LayerBuilder.Create()
-                .OfType(polygonSelectionLayerGameObjectPrefab.PrefabIdentifier)
+                .OfType(polygonVisualisationPrefab.PrefabIdentifier)
                 .NamedAs("Line")
                 .AddProperty(new PolygonSelectionLayerPropertyData
                 {
@@ -235,11 +141,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     LineWidth = defaultLineWidth
                 });
             var layer = App.Layers.Add(layerBuilder);
-            PolygonSelectionLayerPropertyData data = layer.LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            layers.Add(data, layer.LayerData);
-            data.polygonSelected.AddListener(ProcessPolygonSelection);
+            polygonSelectionService.RegisterPolygon(layer.LayerData);
             lineInput.SetDrawMode(PolygonInput.DrawMode.Edit);
-            ProcessPolygonSelection(layer.LayerData);
         }
 
         //called in the inspector
@@ -250,7 +153,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             Vector3 topRight = new Vector3(bounds.max.x, 0, bounds.max.z);
             Vector3 bottomRight = new Vector3(bounds.max.x, 0, bounds.min.z);
 
-            PolygonSelectionLayerPropertyData data = ActiveLayer?.GetProperty<PolygonSelectionLayerPropertyData>();
+            PolygonSelectionLayerPropertyData data = polygonSelectionService.ActiveLayer?.GetProperty<PolygonSelectionLayerPropertyData>();
 
             //is the current selected layer already a grid and the current input mode is not selected, then we can adjust the polygon
             if (data?.ShapeType == ShapeType.Grid && gridInput.Mode != PolygonInput.DrawMode.Selected)
@@ -261,7 +164,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             }
 
             ILayerBuilder layerBuilder = LayerBuilder.Create()
-                .OfType(polygonSelectionLayerGameObjectPrefab.PrefabIdentifier)
+                .OfType(polygonVisualisationPrefab.PrefabIdentifier)
                 .NamedAs("Grid")
                 .AddProperty(new PolygonSelectionLayerPropertyData
                 {
@@ -269,16 +172,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                     OriginalPolygon = new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(topLeft), new Coordinate(topRight), new Coordinate(bottomRight) },
                 });
             var layer = App.Layers.Add(layerBuilder);
-            data = layer.LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            layers.Add(data, layer.LayerData);
-            data.polygonSelected.AddListener(ProcessPolygonSelection);
+            polygonSelectionService.RegisterPolygon(layer.LayerData);
             gridInput.SetDrawMode(PolygonInput.DrawMode.Edit);
-            ProcessPolygonSelection(layer.LayerData);
         }
 
         public void SetPolygonInputModeToCreate(bool isCreateMode)
         {
-            ActiveLayer?.DeselectLayer();
+            polygonSelectionService.ActiveLayer?.DeselectLayer();
 
             EnablePolygonInputByType(ShapeType.Polygon);
             polygonInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
@@ -286,7 +186,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public void SetLineInputModeToCreate(bool isCreateMode)
         {
-            ActiveLayer?.DeselectLayer();
+            polygonSelectionService.ActiveLayer?.DeselectLayer();
 
             EnablePolygonInputByType(ShapeType.Line);
             lineInput.SetDrawMode(isCreateMode ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Edit);
@@ -294,7 +194,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         public void SetGridInputModeToCreate(bool active)
         {
-            ActiveLayer?.DeselectLayer();
+            polygonSelectionService.ActiveLayer?.DeselectLayer();
 
             EnablePolygonInputByType(ShapeType.Grid);
             gridInput.SetDrawMode(active ? PolygonInput.DrawMode.Create : PolygonInput.DrawMode.Selected);

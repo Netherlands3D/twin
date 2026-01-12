@@ -26,7 +26,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         public UnityEvent<float> progressEvent = new();
 
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
             RecalculateColorPriorities();
             StartCoroutine(ReadAsync(propertyData.Data, 100));
@@ -60,10 +60,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             GeometryColorizer.RecalculatePrioritizedColors();
         }
 
-        protected override void OnDestroy()
+        private void OnDestroy()
         {
             RemoveCustomColorSet();
-            base.OnDestroy();
         }
 
         public void RemoveCustomColorSet()
