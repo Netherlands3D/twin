@@ -52,7 +52,9 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            GetComponent<LayerGameObject>().InitProperty<WindmillPropertyData>(properties, null, defaultHeight, defaultDiameter);
+            var lgo = GetComponent<LayerGameObject>();
+            lgo.InitProperty<WindmillPropertyData>(properties, null, defaultHeight, defaultDiameter);
+            propertyData = lgo.LayerData.GetProperty<WindmillPropertyData>();
             AddListeners();
         }
 

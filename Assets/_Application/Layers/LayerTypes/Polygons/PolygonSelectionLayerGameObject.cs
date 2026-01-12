@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
@@ -15,16 +16,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 {
     public class PolygonSelectionLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
     {
-        private BoundingBox polygonBounds;
-        public override BoundingBox Bounds => polygonBounds;
+        public override BoundingBox Bounds => LayerData.GetProperty<PolygonSelectionLayerPropertyData>().PolygonBoundingBox;
         public PolygonVisualisation PolygonVisualisation { get; private set; }
         public Material PolygonMeshMaterial;
 
         [SerializeField] private Material polygonMaskMaterial;
-        private bool isMask;        
+        private bool isMask;   
 
         public UnityEvent OnPolygonVisualisationUpdated = new();
-       
 
         /// <summary>
         /// Create or update PolygonVisualisation
@@ -43,10 +42,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 PolygonVisualisation.UpdateVisualisation(polygon3D);
             }
             
-            polygonBounds = new(PolygonVisualisation.GetComponent<Renderer>().bounds);
+            BoundingBox polygonBounds = new(PolygonVisualisation.GetComponent<Renderer>().bounds);
             var crs2D = CoordinateSystems.To2D(polygonBounds.CoordinateSystem);
             polygonBounds.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
 
+            //also cache the polygonbounds in the propertydata
+            var data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
+            data.PolygonBoundingBox = polygonBounds;
+            
             PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
 
             OnPolygonVisualisationUpdated.Invoke();
@@ -64,7 +67,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             return polygonVisualisation;
         }
 
-        protected override void OnDestroy()
+        private void OnDestroy()
         {
             Destroy(PolygonVisualisation.gameObject);
         }
@@ -101,19 +104,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             this.isMask = true;
         }
 
-        public override void SetData(LayerData layerData)
-        {
-            LayerData previousData = LayerData;
-            if(previousData != null && previousData != layerData)
-            {
-                PolygonSelectionCalculator.UnregisterPolygon(LayerData);
-            }
-            base.SetData(layerData);
-            var data = layerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            data.polygonChanged.Invoke(); //todo: why is this needed?
-            PolygonSelectionCalculator.RegisterPolygon(LayerData);
-        }
-
         protected override void RegisterEventListeners()
         {
             base.RegisterEventListeners();
@@ -124,10 +114,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             LayerData.OnPrefabIdChanged.AddListener(OnSwitchVisualisation);
 
             PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            data.OnIsMaskChanged.AddListener(OnIsMaskChanged);
-            data.OnInvertMaskChanged.AddListener(OnInvertMaskChanged); 
-            
-            data.OnPolygonSetShape.AddListener(UpdatePolygonVisualisation);
+            data.isMaskChanged.AddListener(OnIsMaskChanged);
+            data.invertMaskChanged.AddListener(OnInvertMaskChanged); 
+            data.polygonCoordinatesChanged.AddListener(UpdatePolygonVisualisation);
+
+            PolygonSelectionService service = ServiceLocator.GetService<PolygonSelectionService>();
+            service.OnPolygonSelectionEnabled.AddListener(OnVisualisationsEnabled);
         }
 
         protected override void UnregisterEventListeners()
@@ -139,9 +131,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             LayerData.OnPrefabIdChanged.RemoveListener(OnSwitchVisualisation);
 
             PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            data.OnIsMaskChanged.RemoveListener(OnIsMaskChanged);
-            data.OnInvertMaskChanged.RemoveListener(OnInvertMaskChanged);
+            data.isMaskChanged.RemoveListener(OnIsMaskChanged);
+            data.invertMaskChanged.RemoveListener(OnInvertMaskChanged);
+            data.polygonCoordinatesChanged.RemoveListener(UpdatePolygonVisualisation);
             
+            PolygonSelectionService service = ServiceLocator.GetService<PolygonSelectionService>();
+            service.OnPolygonSelectionEnabled.RemoveListener(OnVisualisationsEnabled);
         }
 
         private void OnSwitchVisualisation()
@@ -160,10 +155,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void ShiftedPolygon(Coordinate fromOrigin, Coordinate toOrigin)
         {
-            //Silent update of the polygon shape, so the visualisation is updated without notifying the listeners
-            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            data.polygonChanged.Invoke(); //todo: why is this needed?
-            data.polygonMoved.Invoke();
+            UpdatePolygonVisualisation();
         }
 
         private void UpdatePolygonVisualisation()
@@ -251,29 +243,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             return LayerMask.NameToLayer("PolygonMask");
         }
 
-        public void SetVisualisationActive(bool active)
+        private void OnVisualisationsEnabled(bool enabled)
+        {
+            if(enabled == false && !isMask)
+                SetVisualisationActive(false);
+            else
+                SetVisualisationActive(enabled);
+        }
+
+        private void SetVisualisationActive(bool active)
         {
             PolygonVisualisation.gameObject.SetActive(active);
-        }
-
-        public override void OnSelect()
-        {
-            base.OnSelect();
-            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            data.polygonSelected.Invoke(LayerData);
-        }
-
-        public override void OnDeselect()
-        {
-            base.OnDeselect();
-            PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
-            data.polygonSelected.Invoke(null);
         }
 
         public override void DestroyLayer()
         {
             base.DestroyLayer();
-            PolygonSelectionCalculator.UnregisterPolygon(LayerData);
             CleanupMasking();            
         }
 
@@ -282,6 +267,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             InitProperty<PolygonSelectionLayerPropertyData>(properties);
             
             PolygonSelectionLayerPropertyData data = properties.Get<PolygonSelectionLayerPropertyData>();
+            
             var vertices = PolygonUtility.CoordinatesToVertices(data.OriginalPolygon, data.LineWidth);
             UpdateVisualisation(vertices, data.ExtrusionHeight);
             
@@ -289,6 +275,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             OnInvertMaskChanged(data.InvertMask); 
             
             UpdatePolygonVisualisation();
+        }
+
+        protected override void OnVisualizationReady()
+        {
+            base.OnVisualizationReady();
+            OnVisualisationsEnabled(ServiceLocator.GetService<PolygonSelectionService>().PolygonSelectionEnabled);
         }
     }
 }

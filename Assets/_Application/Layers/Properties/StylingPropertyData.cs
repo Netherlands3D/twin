@@ -18,20 +18,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         [JsonIgnore] public string StyleName => styleName;
         
-
-        [DataMember] private string activeToolProperty = Symbolizer.FillColorProperty; //default
-
-        [JsonIgnore]
-        public string ActiveToolProperty
-        {
-            get => activeToolProperty;
-            set
-            {
-                activeToolProperty = value;
-                ToolPropertyChanged.Invoke(value);
-            }
-        }
-        
         private const string DefaultRuleName = "default";
         
         [DataMember(Name = "metadata")] public Metadata Metadata { get; } = new();
@@ -56,7 +42,7 @@ namespace Netherlands3D.Twin.Layers.Properties
 
 
         [JsonIgnore] public readonly UnityEvent OnStylingChanged = new();
-        [JsonIgnore] public readonly UnityEvent<string> ToolPropertyChanged = new();
+        [JsonIgnore] public readonly UnityEvent<string> ColorTypeChanged = new();
 
         public StylingPropertyData()
         {   
@@ -67,18 +53,6 @@ namespace Netherlands3D.Twin.Layers.Properties
             StylingRules[stylingRuleName] = stylingRule;
             OnStylingChanged.Invoke();
         }
-
-        public void SetDefaultSymbolizerColor(Color? color)
-        {
-            var symbolizer = AnyFeature.Symbolizer;
-            symbolizer.SetColor(ActiveToolProperty, color);
-            OnStylingChanged.Invoke();
-        }
         
-        public Color? GetDefaultSymbolizerColor()
-        {
-            var symbolizer = AnyFeature.Symbolizer;
-            return symbolizer.GetColor(ActiveToolProperty);
-        }
     }
 }

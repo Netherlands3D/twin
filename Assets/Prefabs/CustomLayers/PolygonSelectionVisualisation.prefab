@@ -47,21 +47,10 @@ MonoBehaviour:
   prefabIdentifier: 0dd48855510674827b667fa4abd5cf60
   thumbnail: {fileID: 0}
   spawnLocation: 0
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onHide:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerInitialized:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerReady:
-    m_PersistentCalls:
-      m_Calls: []
-  PropertySections: []
   PolygonMeshMaterial: {fileID: 2100000, guid: c7fb2e346bb0d4f6da1f26f4c0bcf533, type: 2}
-  polygonMaskMaterial: {fileID: -876546973899608171, guid: c7d81ed14ccbe4efb816be8947f31ab3, type: 3}
+  polygonMaskMaterial: {fileID: -876546973899608171, guid: c7d81ed14ccbe4efb816be8947f31ab3,
+    type: 3}
   OnPolygonVisualisationUpdated:
     m_PersistentCalls:
       m_Calls: []
+  layerTool: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}

@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             layerGameObject = GetComponent<ObjectScatterLayerGameObject>();
             UpdateGrid();
             PolygonSelectionLayerPropertyData data = layerGameObject.polygonLayer.GetProperty<PolygonSelectionLayerPropertyData>();
-            data.polygonChanged.AddListener(UpdateGrid);
+            data.polygonCoordinatesChanged.AddListener(UpdateGrid);
             var scatterSettings = layerGameObject.LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
             scatterSettings.ScatterSettingsChanged.AddListener(UpdateGrid);
         }

@@ -13,7 +13,9 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "Prefab")] //todo: this should not be named Prefab
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "Layer")]
+    [DataContractAliases(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Names = new[] { "Folder", "Prefab", "PolygonSelection" })]
+    [JsonConverter(typeof(LayerDataJsonConverter))]
     public class LayerData : IEquatable<LayerData>, IDisposable
     {
         [SerializeField, DataMember] protected Guid UUID = Guid.NewGuid();
@@ -157,9 +159,9 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<Color> ColorChanged = new();
         [JsonIgnore] public readonly UnityEvent LayerDestroyed = new();
         [JsonIgnore] public readonly UnityEvent<int> LayerOrderChanged = new();
-
-        [JsonIgnore] public readonly UnityEvent LayerSelected = new();
-        [JsonIgnore] public readonly UnityEvent LayerDeselected = new();
+        
+        [JsonIgnore] public readonly UnityEvent<LayerData> LayerSelected = new();
+        [JsonIgnore] public readonly UnityEvent<LayerData> LayerDeselected = new();
         [JsonIgnore] public UnityEvent<LayerData> LayerDoubleClicked = new();
 
         [JsonIgnore] public readonly UnityEvent ParentChanged = new();
@@ -169,6 +171,7 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
        
         [JsonIgnore] public readonly UnityEvent<bool> HasValidCredentialsChanged = new();
+        [JsonIgnore] public bool IsDisposed {get; private set;}
 
         /// <summary>
         /// Track whether this data object is new, in other words instantiated during this session, or whether it comes
@@ -182,7 +185,11 @@ namespace Netherlands3D.Twin.Layers
             IsNew = false;
         }
 
-        public void InitializeParent(LayerData initialParent = null)
+        /// <summary>
+        /// This is needed because we cannot serialize both the parent and children since that would give a circular reference. Therefore, we need to initialize the parent value at runtime
+        /// </summary>
+        /// <param name="initialParent"></param>
+        public void InitializeParent(LayerData initialParent)
         { 
             parent = initialParent;            
             if (initialParent == null)
@@ -192,22 +199,22 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public virtual void SelectLayer(bool deselectOthers = false)
+        public void SelectLayer(bool deselectOthers = false)
         {
             if (deselectOthers)
                 Root.DeselectAllLayers();
 
             Root.AddLayerToSelection(this);
-            LayerSelected.Invoke();
+            LayerSelected.Invoke(this);
         }
 
-        public virtual void DeselectLayer()
+        public void DeselectLayer()
         {
             Root.RemoveLayerFromSelection(this);
-            LayerDeselected.Invoke();
+            LayerDeselected.Invoke(this);
         }
 
-        public virtual void DoubleClickLayer()
+        public void DoubleClickLayer()
         {
             LayerDoubleClicked.Invoke(this);
         }
@@ -304,11 +311,11 @@ namespace Netherlands3D.Twin.Layers
             }
 
             ParentLayer.ChildrenLayers.Remove(this);
+            IsDisposed = true;
             parent.ChildrenChanged.Invoke(); //call event on old parent
             ParentOrSiblingIndexChanged.RemoveListener(Root.UpdateLayerTreeOrder);
             LayerDestroyed.Invoke();
         }
-
         public bool HasProperty<T>() where T : LayerPropertyData
         {
             return LayerProperties.Contains<T>();

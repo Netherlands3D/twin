@@ -170,7 +170,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6195754652070294114}
         m_TargetAssemblyTypeName: Netherlands3D.SelectionTools.PolygonInput, Netherlands3D.SelectionTools.Runtime
-        m_MethodName: ReselectPolygon
+        m_MethodName: SetPolygon
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

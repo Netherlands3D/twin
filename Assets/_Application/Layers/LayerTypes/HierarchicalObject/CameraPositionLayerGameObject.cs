@@ -16,9 +16,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         [SerializeField] private GameObject ghostGameObject;
         private Color defaultColor;
         
-        protected override void OnLayerInitialize()
+        protected override void OnVisualizationInitialize()
         {
-            base.OnLayerInitialize();
+            base.OnVisualizationInitialize();
             defaultColor = ghostMaterial.color;
             
             layerTool.onOpen.AddListener(EnableGhost);
@@ -49,11 +49,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.UnregisterEventListeners();
             var cameraPropertyData = LayerData.GetProperty<CameraPropertyData>();
             cameraPropertyData.OnOrthographicChanged.RemoveListener(SetOrthographic);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();           
+            
             layerTool.onOpen.RemoveListener(EnableGhost);
             layerTool.onClose.RemoveListener(DisableGhost);
         }
@@ -74,7 +70,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             Camera.main.GetComponent<MoveCameraToCoordinate>().LoadCameraData(cameraPropertyData);
         }
         
-        public override void OnSelect()
+        public override void OnSelect(LayerData layer)
         {
             //do not call base to not set transform handles
             foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
@@ -83,9 +79,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
         }
 
-        public override void OnDeselect()
+        public override void OnDeselect(LayerData layer)
         {
-            base.OnDeselect();
+            base.OnDeselect(layer);
             foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
             {
                 renderer.material.color = defaultColor;

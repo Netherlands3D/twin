@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
@@ -39,7 +38,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
             // Ensure that PointRenderer3D.Material has a Material Instance to prevent accidental destruction
             // of a material asset when replacing the material - no destroy of the old material must be done because
