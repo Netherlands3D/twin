@@ -1218,7 +1218,7 @@ GameObject:
   - component: {fileID: 8087624944514358859}
   - component: {fileID: 2918654089687910781}
   - component: {fileID: 5629545662794770054}
-  - component: {fileID: 9140429340946983251}
+  - component: {fileID: 8439303367492933833}
   m_Layer: 5
   m_Name: Bottom Right Elements
   m_TagString: Untagged
@@ -1326,7 +1326,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
---- !u!114 &9140429340946983251
+--- !u!114 &8439303367492933833
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1335,38 +1335,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1846566059775952021}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb9690ba894e6704296ba4295371d145, type: 3}
+  m_Script: {fileID: 11500000, guid: cd8d5b3005a78014f867326b789e729b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  side: 3
-  pinned: 0
-  offscreenMargin: 24
-  slideTime: 0.25
-  ease:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   pinToggle: {fileID: 6458385394041893046}
+  rectSize: {x: -1, y: -1}
+  exitDirection: 3
+  duration: 0.25
+  easeType: 4
+  offscreenMargin: 0
+  bufferInPixels: 50
 --- !u!1 &2159625892727245797
 GameObject:
   m_ObjectHideFlags: 0
@@ -2594,7 +2572,7 @@ GameObject:
   - component: {fileID: 8335112322699570573}
   - component: {fileID: 1632857893540766809}
   - component: {fileID: 1273383416425145244}
-  - component: {fileID: 1390611319374302311}
+  - component: {fileID: 2923308544203776656}
   m_Layer: 5
   m_Name: TopRightButtons
   m_TagString: Untagged
@@ -2667,7 +2645,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
---- !u!114 &1390611319374302311
+--- !u!114 &2923308544203776656
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2676,38 +2654,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 3830592937773682161}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb9690ba894e6704296ba4295371d145, type: 3}
+  m_Script: {fileID: 11500000, guid: cd8d5b3005a78014f867326b789e729b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  side: 2
-  pinned: 0
-  offscreenMargin: 24
-  slideTime: 0.25
-  ease:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   pinToggle: {fileID: 3355355597565196264}
+  rectSize: {x: -1, y: -1}
+  exitDirection: 2
+  duration: 0.25
+  easeType: 4
+  offscreenMargin: 0
+  bufferInPixels: 50
 --- !u!1 &3867875466575842227
 GameObject:
   m_ObjectHideFlags: 0
@@ -3443,6 +3399,7 @@ RectTransform:
   - {fileID: 8462948391208365614}
   - {fileID: 8053657985104781170}
   - {fileID: 3718516019775066091}
+  - {fileID: 4130113755013832224}
   m_Father: {fileID: 9058064651103236474}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
@@ -3988,7 +3945,7 @@ GameObject:
   - component: {fileID: 1695974297560088171}
   - component: {fileID: 4921064676016318814}
   - component: {fileID: 8806089794291773564}
-  - component: {fileID: 729416872475608841}
+  - component: {fileID: 9160049059333041715}
   m_Layer: 5
   m_Name: Bottom Left Elements
   m_TagString: Untagged
@@ -4011,7 +3968,6 @@ RectTransform:
   - {fileID: 1651815029518827557}
   - {fileID: 2332269176774250663}
   - {fileID: 3875553650319833043}
-  - {fileID: 4130113755013832224}
   m_Father: {fileID: 4997419578823107694}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4061,7 +4017,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 0
---- !u!114 &729416872475608841
+--- !u!114 &9160049059333041715
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4070,38 +4026,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 4890162003372801892}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb9690ba894e6704296ba4295371d145, type: 3}
+  m_Script: {fileID: 11500000, guid: cd8d5b3005a78014f867326b789e729b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  side: 3
-  pinned: 0
-  offscreenMargin: 24
-  slideTime: 0.25
-  ease:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   pinToggle: {fileID: 7079809640214307417}
+  rectSize: {x: -1, y: -1}
+  exitDirection: 0
+  duration: 0.25
+  easeType: 4
+  offscreenMargin: 30
+  bufferInPixels: 50
 --- !u!1 &4993723240850037153
 GameObject:
   m_ObjectHideFlags: 0
@@ -4224,7 +4158,6 @@ GameObject:
   - component: {fileID: 898963798061876152}
   - component: {fileID: 790557086420049307}
   - component: {fileID: 901389181492682019}
-  - component: {fileID: 2122173355475925642}
   m_Layer: 5
   m_Name: FPV Panel
   m_TagString: Untagged
@@ -4325,28 +4258,6 @@ MonoBehaviour:
   zoomScale: 7
   frustum: {fileID: 5807535840269500478}
   wmtsMap: {fileID: 5807535839578935270}
---- !u!114 &2122173355475925642
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5031786889156781905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5eab4b3b9f20d6b47bc5ff070daf59f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startActive: 1
-  toggleKey: 291
-  edgeRevealThickness: 28
-  hoverDelay: 0.08
-  revealOnlyInPresentation: 1
-  rootCanvas: {fileID: 0}
-  panels:
-  - {fileID: 729416872475608841}
-  - {fileID: 1390611319374302311}
-  - {fileID: 9140429340946983251}
 --- !u!1 &5095550009212007317
 GameObject:
   m_ObjectHideFlags: 0
@@ -6114,7 +6025,6 @@ GameObject:
   - component: {fileID: 2093446520428563817}
   - component: {fileID: 141644868931229304}
   - component: {fileID: 5605894596699867571}
-  - component: {fileID: 10221472216294222}
   m_Layer: 5
   m_Name: Toolbar Display
   m_TagString: Untagged
@@ -6204,18 +6114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   underBar: {fileID: 2332269176774250663}
   contentParent: {fileID: 3975450050322068602}
---- !u!114 &10221472216294222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7627108531174032736}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37ea20068fd120849a07008a6d5d6a3b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  parentRect: {fileID: 9058064651103236474}
 --- !u!1 &7639648915274152027
 GameObject:
   m_ObjectHideFlags: 0
@@ -7957,12 +7856,12 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 9058064651103236474}
+    m_TransformParent: {fileID: 3875553650319833043}
     m_Modifications:
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
       propertyPath: m_Pivot.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
@@ -7977,7 +7876,7 @@ PrefabInstance:
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
@@ -7987,7 +7886,7 @@ PrefabInstance:
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
@@ -8037,12 +7936,12 @@ PrefabInstance:
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 14.200012
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -43
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4191228286387209521, guid: f939def7c11707f4db20126953723a9d,
         type: 3}
@@ -8063,6 +7962,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PinToggle
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 9160049059333041715}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: TogglePin
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Netherlands3D.UIPanel, eu.netherlands3d.twin
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9017,6 +8951,41 @@ PrefabInstance:
       propertyPath: m_Name
       value: PinToggle
       objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 8439303367492933833}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: TogglePin
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Netherlands3D.UIPanel, eu.netherlands3d.twin
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9445,6 +9414,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PinToggle
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 2923308544203776656}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: TogglePin
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Netherlands3D.UIPanel, eu.netherlands3d.twin
+      objectReference: {fileID: 0}
+    - target: {fileID: 7006385111012489544, guid: f939def7c11707f4db20126953723a9d,
+        type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8914441939371076810, guid: f939def7c11707f4db20126953723a9d, type: 3}
