@@ -221,7 +221,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             transformPropertyData?.OnScaleChanged.RemoveListener(UpdateScale);
 
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
-            toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToScatterLayer);
+            if (toggleScatterPropertyData != null) toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToScatterLayer);
             
             var importedObject = GetComponent<IImportedObject>();
             if (importedObject != null)

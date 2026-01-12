@@ -21,6 +21,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private FirstPersonViewerStateMachine fsm;
         private WorldTransform worldTransform;
+        private CameraSwitcher cameraSwitcher;
 
         //Movement
         private Coordinate startPosition;
@@ -55,7 +56,6 @@ namespace Netherlands3D.FirstPersonViewer
         public Action<ViewerState, Dictionary<string, object>> OnViewerEntered;
         public Action<bool> OnViewerExited;
 
-        public bool IsInFPV { private set; get; }
         private void Awake()
         {
             Input = GetComponent<FirstPersonViewerInput>();
@@ -70,6 +70,8 @@ namespace Netherlands3D.FirstPersonViewer
         private void Start()
         {
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
+            cameraSwitcher = ServiceLocator.GetService<CameraSwitcher>();
+
             MovementSwitcher.SetViewerInput(Input);
             MovementSwitcher.OnMovementPresetChanged += SetMovementModus;
 
@@ -80,7 +82,7 @@ namespace Netherlands3D.FirstPersonViewer
         private void ViewerEnterd(ViewerState startState, Dictionary<string, object> settings)
         {
             //Catch Postion picker double enter call (When FPS is low).
-            if (IsInFPV && startState == null) return;  
+            if (cameraSwitcher.IsCameraActive(this) && startState == null) return;  
 
             startPosition = new Coordinate(transform.position);
             startRotation = transform.rotation;
@@ -94,20 +96,21 @@ namespace Netherlands3D.FirstPersonViewer
             SetMovementVisual(null);
 
             //When entering the FPV for the first time use the cool animation :).
-            if (!IsInFPV)
-            {
-                Input.OnFPVEnter();
-                
-                FirstPersonCamera.SetupViewer(() =>
-                {
-                    if (startState != null) MovementSwitcher.LoadMovementPreset(startState, settings);
-                    else MovementSwitcher.LoadMovementPreset(0);
-                });
-
-                ServiceLocator.GetService<CameraSwitcher>().SwitchCamera(this);
-                IsInFPV = true;
-            }
+            if (!cameraSwitcher.IsCameraActive(this)) EnterAnimation(startState, settings);
             else if (startState != null) MovementSwitcher.LoadMovementPreset(startState, settings);
+        }
+
+        private void EnterAnimation(ViewerState startState, Dictionary<string, object> settings)
+        {
+            Input.OnFPVEnter();
+
+            FirstPersonCamera.SetupViewer(() =>
+            {
+                if (startState != null) MovementSwitcher.LoadMovementPreset(startState, settings);
+                else MovementSwitcher.LoadMovementPreset(0);
+            });
+
+            cameraSwitcher.SwitchCamera(this);
         }
 
         private void OnDestroy()
@@ -237,9 +240,8 @@ namespace Netherlands3D.FirstPersonViewer
             OnViewerExited?.Invoke(exitOriginalPosition);
 
             Input.ViewerExited();
-            IsInFPV = false;
 
-            ServiceLocator.GetService<CameraSwitcher>().SwitchToPreviousCamera();
+            cameraSwitcher.SwitchToPreviousCamera();
         }
 
         public void SetVelocity(Vector2 velocity) => this.velocity = velocity;
