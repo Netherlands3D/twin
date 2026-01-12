@@ -245,10 +245,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void OnVisualisationsEnabled(bool enabled)
         {
-            if(enabled == false && !isMask)
-                SetVisualisationActive(false);
+            if(!isMask)
+                SetVisualisationActive(enabled); // if this is not a mask, we need to set the visibility state to match if we want to see all the visualisation or not (currently: when the layer panel is closed we don't want to see polygon areas)
             else
-                SetVisualisationActive(enabled);
+                SetVisualisationActive(LayerData.ActiveInHierarchy); //if this is a mask, we just need to match the layer active state to see all enabled masks, and not see the disabled masks
         }
 
         private void SetVisualisationActive(bool active)
