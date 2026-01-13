@@ -87,7 +87,8 @@ namespace Netherlands3D.Functionalities.Wms
 
             // Because requestConfig is by-ref, changing it will change all requests in flight; as such we clone the config before
             // assigning a payload
-            var configWithPayload = Config.BasedOn(requestConfig).WithPayload(new WMSTileDataLayerChangePayload(tileChange, url));
+            var configWithPayload = Config.BasedOn(requestConfig);
+            configWithPayload = configWithPayload.WithPayload(new WMSTileDataLayerChangePayload(tileChange, url));
 
             var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(url), configWithPayload);
             promise.Then(OnDownloadedTexture);
