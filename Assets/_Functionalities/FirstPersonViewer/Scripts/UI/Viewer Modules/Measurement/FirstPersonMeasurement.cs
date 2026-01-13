@@ -2,6 +2,7 @@ using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Samplers;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using TMPro;
@@ -271,20 +272,29 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
         public void ExportToCSV()
         {
-            string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-            string filename = $"export_{timestamp}.csv";
+            string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd_HHmm");
+            string filename = $"meting_export_{timestamp}.csv";
 
-            string csv = "Punt 1; Punt 2; Afstand\n";
+            string csv = "Punt 1; Punt 2; Afstand in meters; Afstand vanaf A\n";
 
+            float totalDst = 0; 
             measurementElements.ForEach(measurement =>
             {
-                csv += measurement.GetCSVOutput() + "\n";
+                totalDst += measurement.GetMeasurementDistance();
+                csv += measurement.GetCSVOutput() + $";{totalDst.ToString("0.##", CultureInfo.InvariantCulture).Replace('.', ',')}\n";
             });
 
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(csv);
 
 #if UNITY_WEBGL && !UNITY_EDITOR
             DownloadFileImmediate(gameObject.name, "", filename, bytes, bytes.Length);
+#elif UNITY_EDITOR
+            string path = UnityEditor.EditorUtility.SaveFilePanel("Export CSV", "", filename, "csv");
+
+            if (!string.IsNullOrEmpty(path))
+            {
+                System.IO.File.WriteAllBytes(path, bytes);
+            }
 #endif
         }
     }

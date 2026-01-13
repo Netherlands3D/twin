@@ -60,15 +60,10 @@ namespace Netherlands3D
             return "~" + valueInMeters.ToString("F2") + units;
         }
 
-        public string GetCSVOutput()
-        {
-            return $"{firstPointText.text}; {secondPointText.text}; {dstInMeters.ToString("0.##", CultureInfo.InvariantCulture)}";
-        }
-        
-        public void RemoveMeasurement()
-        {
-            onDeleteCallback?.Invoke(this);
-        }
+        public string GetCSVOutput() => $"{firstPointText.text}; {secondPointText.text}; {dstInMeters.ToString("0.##", CultureInfo.InvariantCulture).Replace('.', ',')}";
+        public float GetMeasurementDistance() => dstInMeters;
+
+        public void RemoveMeasurement() => onDeleteCallback?.Invoke(this);
 
         public void OnPointerEnter(PointerEventData eventData)
         {
