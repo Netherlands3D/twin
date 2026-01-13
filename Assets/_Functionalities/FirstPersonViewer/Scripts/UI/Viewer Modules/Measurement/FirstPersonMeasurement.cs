@@ -274,7 +274,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
             string filename = $"export_{timestamp}.csv";
 
-            string csv = "Punt 1, Punt 2, Afstand\n";
+            string csv = "Punt 1; Punt 2; Afstand\n";
 
             measurementElements.ForEach(measurement =>
             {

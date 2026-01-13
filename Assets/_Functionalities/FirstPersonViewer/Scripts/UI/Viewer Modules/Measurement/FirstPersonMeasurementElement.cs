@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -27,6 +28,7 @@ namespace Netherlands3D
             distanceText.text = ConvertToUnits(dstInMeters);
             distanceText.color = color;
             arrowImage.color = color;
+            this.dstInMeters = dstInMeters;
 
             this.onDeleteCallback = onDeleteCallback;
         }
@@ -60,7 +62,7 @@ namespace Netherlands3D
 
         public string GetCSVOutput()
         {
-            return $"{firstPointText.text}, {secondPointText.text}, {dstInMeters}";
+            return $"{firstPointText.text}; {secondPointText.text}; {dstInMeters.ToString("0.##", CultureInfo.InvariantCulture)}";
         }
         
         public void RemoveMeasurement()
