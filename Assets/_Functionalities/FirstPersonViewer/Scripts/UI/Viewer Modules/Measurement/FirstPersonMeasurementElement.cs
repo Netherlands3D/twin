@@ -17,7 +17,8 @@ namespace Netherlands3D
         [SerializeField] private CanvasGroup deleteButtonGroup;
 
         private Action<FirstPersonMeasurementElement> onDeleteCallback;
-
+        private float dstInMeters;
+        
         public void Init(string firstLetter, string secondLetter, float dstInMeters, Color32 color, Action<FirstPersonMeasurementElement> onDeleteCallback)
         {
             firstPointText.text = firstLetter;
@@ -32,6 +33,7 @@ namespace Netherlands3D
 
         public void UpdateMeasurement(string firstLetter, string secondLetter, float dstInMeters)
         {
+            this.dstInMeters = dstInMeters;
             firstPointText.text = firstLetter;
             secondPointText.text = secondLetter;
             distanceText.text = ConvertToUnits(dstInMeters);
@@ -54,6 +56,11 @@ namespace Netherlands3D
             }
 
             return "~" + valueInMeters.ToString("F2") + units;
+        }
+
+        public string GetCSVOutput()
+        {
+            return $"{firstPointText.text}, {secondPointText.text}, {dstInMeters}";
         }
         
         public void RemoveMeasurement()

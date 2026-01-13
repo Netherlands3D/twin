@@ -3,6 +3,7 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin.Samplers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,6 +12,9 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 {
     public class FirstPersonMeasurement : MonoBehaviour
     {
+        [DllImport("__Internal")]
+        private static extern void DownloadFileImmediate(string gameObjectName, string callbackMethodName, string filename, byte[] data, int dataSize);
+
         [Header("Measuring")]
         [SerializeField] private InputActionReference mouseClick;
         [SerializeField] private InputActionReference measuringYLockModifier;
@@ -263,6 +267,25 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             }
 
             return "~" + valueInMeters.ToString("F2") + units;
+        }
+
+        public void ExportToCSV()
+        {
+            string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+            string filename = $"export_{timestamp}.csv";
+
+            string csv = "Punt 1, Punt 2, Afstand\n";
+
+            measurementElements.ForEach(measurement =>
+            {
+                csv += measurement.GetCSVOutput() + "\n";
+            });
+
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(csv);
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+            DownloadFileImmediate(gameObject.name, "", filename, bytes, bytes.Length);
+#endif
         }
     }
 }
