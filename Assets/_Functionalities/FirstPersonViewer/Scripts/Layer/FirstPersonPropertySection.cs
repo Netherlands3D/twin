@@ -26,7 +26,6 @@ namespace Netherlands3D.FirstPersonViewer.Layers
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             firstPersonData = properties.Get<FirstPersonLayerPropertyData>();
-            if (firstPersonData == null) return;
 
             InitalizeDropdown(firstPersonData.MovementID);
         }

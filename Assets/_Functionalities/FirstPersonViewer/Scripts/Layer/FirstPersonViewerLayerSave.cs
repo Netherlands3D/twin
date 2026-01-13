@@ -4,6 +4,7 @@ using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Services;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,18 +25,6 @@ namespace Netherlands3D.FirstPersonViewer.Layers
             prefab.transform.position = fpv.transform.position;
             prefab.transform.rotation = fpv.transform.rotation;
 
-            ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs("First person positie");
-            layerBuilder.WhenBuilt(LayerCallback);
-            Layer layer = App.Layers.Add(layerBuilder);
-        }
-
-        private void LayerCallback(LayerData layerData)
-        {
-            FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer>();
-
-            layerData.SetProperty<TransformLayerPropertyData>(new TransformLayerPropertyData(new Coordinate(fpv.transform.position), fpv.transform.eulerAngles, fpv.transform.localScale));
-
-            //Copy the current settings
             Dictionary<string, object> settings = new Dictionary<string, object>();
             foreach (ViewerSetting setting in fpv.MovementSwitcher.CurrentMovement.editableSettings.list)
             {
@@ -45,13 +34,18 @@ namespace Netherlands3D.FirstPersonViewer.Layers
                 settings.Add(setting.GetSettingName(), setting.GetValue());
             }
 
-            layerData.SetProperty<FirstPersonLayerPropertyData>(new FirstPersonLayerPropertyData(fpv.MovementSwitcher.CurrentMovement.id, settings));
+            LayerPropertyData[] propertiesToAdd = {
+                new TransformLayerPropertyData(new Coordinate(fpv.transform.position), fpv.transform.eulerAngles, fpv.transform.localScale),
+                new FirstPersonLayerPropertyData(fpv.MovementSwitcher.CurrentMovement.id, settings)
+            };
 
-            StartCoroutine(ResetPrefab(layerData));
+            ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs("First person positie").AddProperties(propertiesToAdd);
+            Layer layer = App.Layers.Add(layerBuilder);
+            StartCoroutine(ResetPrefab());
         }
 
         //Fix for resetting layer prefab, because setting it in LayerCallback will do it too early. 
-        private IEnumerator ResetPrefab(LayerData layerData)
+        private IEnumerator ResetPrefab()
         {
             yield return new WaitForEndOfFrame();
             prefab.SpawnLocation = SpawnLocation.OpticalCenter;

@@ -16,7 +16,6 @@ namespace Netherlands3D.FirstPersonViewer.Layers
 
         [JsonIgnore] public int MovementID => movementID;
 
-
         [JsonConstructor]
         public FirstPersonLayerPropertyData()
         {
