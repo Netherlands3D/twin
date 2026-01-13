@@ -282,10 +282,6 @@ MonoBehaviour:
   viewerUI: {fileID: 1578982259095661951}
   uiToDisable:
   - {fileID: 7002829453032552845}
-  hideButton: {fileID: 4738308340472357476, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
-    type: 3}
-  snackbarEvent: {fileID: 11400000, guid: 882c7f2cbbcbc4ae68cd7ae166c6a838, type: 2}
-  uiHideText: Druk op 'H' om de interfaces weer te tonen.
 --- !u!114 &1232191089274940061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,6 +294,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5453711dc373a2b4bb896334a71bf2d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hideButton: {fileID: 4738308340472357476, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
+    type: 3}
+  snackbarEvent: {fileID: 11400000, guid: 882c7f2cbbcbc4ae68cd7ae166c6a838, type: 2}
+  uiHideText: Druk op H om de presentatiemodus te verlaten.
+  showHideText:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 882c7f2cbbcbc4ae68cd7ae166c6a838, type: 2}
+        m_TargetAssemblyTypeName: Netherlands3D.Events.StringEvent, eu.netherlands3d.event-system.Runtime
+        m_MethodName: InvokeStarted
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Druk op H om de presentatiemodus te verlaten.
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &7469098017232618684
 MonoBehaviour:
   m_ObjectHideFlags: 0

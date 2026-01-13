@@ -14,13 +14,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private GameObject viewerUI;
         [SerializeField] private List<GameObject> uiToDisable;
 
-        [Space(5)]
-        [SerializeField] private InputActionReference hideButton;
-
-        [Header("Snackbar")]
-        [SerializeField] private StringEvent snackbarEvent;
-        [SerializeField] private string uiHideText;
-
         private PointerToWorldPosition pointerToWorld;
         private FirstPersonViewer firstPersonViewer;
 
@@ -34,14 +27,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             firstPersonViewer.OnViewerEntered += EnterViewer;
             firstPersonViewer.OnViewerExited += ExitViewer;
 
-            hideButton.action.performed += OnHideUIPressed;
-
             viewerUI.SetActive(false);
-        }
-
-        private void OnDestroy()
-        {
-            hideButton.action.performed -= OnHideUIPressed;
         }
 
         private void EnterViewer()
@@ -66,16 +52,5 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
             pointerToWorld.SetActiveCamera(Camera.main);
         }
-
-        /// <summary>
-        /// Temp Function for UI hiding (Will be replaced by the UI Hider)
-        /// </summary>
-        public void HideUI()
-        {
-            viewerUI.SetActive(!viewerUI.activeSelf);
-            if (!viewerUI.activeSelf) snackbarEvent.InvokeStarted(uiHideText);
-        }
-
-        private void OnHideUIPressed(InputAction.CallbackContext context) => HideUI();
     }
 }

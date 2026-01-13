@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Netherlands3D
@@ -8,8 +9,23 @@ namespace Netherlands3D
 
     public class UIHider : MonoBehaviour
     {
+        [SerializeField] private InputActionReference hideButton;
+
         private List<IPanelHider> panelHiders = new List<IPanelHider>();
         private bool hideUI;
+
+        [Header("Snackbar")]
+        [SerializeField] private UnityEvent showHideText;
+
+        private void Start()
+        {
+            hideButton.action.performed += OnHideUIPressed;
+        }
+
+        private void OnDestroy()
+        {
+            hideButton.action.performed -= OnHideUIPressed;
+        }
 
         public void Register(IPanelHider panelHider)
         {
@@ -43,6 +59,7 @@ namespace Netherlands3D
             hideUI = !hideUI;
 
             panelHiders.ForEach(panel => SetPanelHide(panel));
+            if (hideUI) showHideText.Invoke();
         }
 
         private void SetPanelHide(IPanelHider panel)
@@ -51,5 +68,7 @@ namespace Netherlands3D
             if (hideUI && !panel.Pinned) panel.Hide();
             else if (!hideUI) panel.Show();
         }
+
+        private void OnHideUIPressed(InputAction.CallbackContext context) => ToggleUIHider();
     }
 }
