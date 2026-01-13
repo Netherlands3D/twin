@@ -37,7 +37,7 @@ namespace Netherlands3D.Functionalities.GeoJSON.LayerPresets
                 .WithColor(color)
                 .NamedAs(geoJsonArgs.Name)
                 .SetDefaultStyling(styling)
-                .AddProperty(new LayerURLPropertyData { Data = geoJsonArgs.Url });
+                .AddProperty(new LayerURLPropertyData { Url = geoJsonArgs.Url });
         }
 
         public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args)

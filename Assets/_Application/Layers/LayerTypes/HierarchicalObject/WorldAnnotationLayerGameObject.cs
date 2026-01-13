@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.UI;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
@@ -15,9 +16,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         [SerializeField] private TextPopout popoutPrefab;
         [SerializeField] private Tool layerTool;
 
-        public override bool IsMaskable => false;
         private TextPopout annotation;
-        private AnnotationPropertyData annotationPropertyData => (AnnotationPropertyData)TransformPropertyData;
         private enum EditMode
         {
             Disabled, // Neither move the annotation, nor edit the text
@@ -29,12 +28,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         //set the Bbox to 10x10 meters to make the jump to object functionality work.
         public override BoundingBox Bounds => new BoundingBox(new Coordinate(transform.position - 5 * Vector3.one), new Coordinate(transform.position + 5 * Vector3.one));
 
-        protected override void OnLayerInitialize()
+        protected override void OnVisualizationInitialize()
         {
-            base.OnLayerInitialize();
+            base.OnVisualizationInitialize();
 
             CreateTextPopup();
-            annotationPropertyData.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
+           
             WorldInteractionBlocker.ClickedOnBlocker.AddListener(OnBlockerClicked);
         }
 
@@ -44,46 +43,18 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 SetEditMode(EditMode.Move);
         }
 
-        protected override void InitializePropertyData()
-        {
-            LayerData.SetProperty(
-                new AnnotationPropertyData(
-                    new Coordinate(transform.position), 
-                    transform.eulerAngles, 
-                    transform.localScale, 
-                    ""
-                )
-            );
-        }
-
         private void CreateTextPopup()
         {
             Canvas canvas = CanvasID.GetCanvasByType(CanvasType.World);
 
             annotation = Instantiate(popoutPrefab, canvas.transform);
             annotation.RectTransform().SetPivot(PivotPresets.BottomCenter);
-            annotation.transform.SetSiblingIndex(1); //0 is for the blocker plane, and we want this to be in front of that, but behind the rest
-            annotation.Show(annotationPropertyData.AnnotationText, WorldTransform.Coordinate, true);
-            annotation.ReadOnly = !layerTool.Open;
-            
-            annotation.OnEndEdit.AddListener(SetPropertyDataText);
-            annotation.TextFieldSelected.AddListener(OnAnnotationSelected); // avoid transform handles from being able to move the annotation when trying to select text
-            annotation.TextFieldDoubleClicked.AddListener(OnAnnotationDoubleClicked);
-            annotation.TextFieldInputConfirmed.AddListener(OnAnnotationTextConfirmed);
+            annotation.transform.SetSiblingIndex(1); //0 is for the blocker plane, and we want this to be in front of that, but behind the rest           
+            annotation.ReadOnly = !layerTool.Open;       
         }
-
-        protected override void OnDestroy()
+        
+        private void OnDestroy()
         {
-            base.OnDestroy();
-            annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
-            
-            annotation.OnEndEdit.RemoveListener(SetPropertyDataText);
-            annotation.TextFieldSelected.RemoveListener(OnAnnotationSelected);
-            annotation.TextFieldDoubleClicked.RemoveListener(OnAnnotationDoubleClicked);
-            annotation.TextFieldInputConfirmed.RemoveListener(OnAnnotationTextConfirmed);
-
-            WorldInteractionBlocker.ClickedOnBlocker.RemoveListener(OnBlockerClicked);
-            
             Destroy(annotation.gameObject);
         }
 
@@ -142,6 +113,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         
         private void SetPropertyDataText(string annotationText)
         {
+            var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
             annotationPropertyData.AnnotationText = annotationText;
         }
 
@@ -150,23 +122,64 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             base.Update();
             annotation.StickTo(WorldTransform.Coordinate);
         }
+        
+        public override void ApplyStyling()
+        {
+            base.ApplyStyling();
+            List<LayerFeature> features = CreateFeaturesByType<Image>(annotation.gameObject);
+            foreach (var feature in features)
+            {
+                if (feature.Geometry is not Image image) continue;
+
+                Symbolizer styling = GetStyling(feature);
+                var fillColor = styling.GetFillColor();
+
+                // Keep the original material color if fill color is not set (null)
+                if (!fillColor.HasValue) continue;
+
+                image.color = fillColor.Value;
+            }
+        }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
         {
             base.LoadProperties(properties);
-    
-            var annotationProperty = properties.Get<AnnotationPropertyData>();
-            if (annotationProperty == null) return;
-            if (annotationPropertyData != null) //unsubscribe events from previous property object, resubscribe to new object at the end of this if block
-            {
-                annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
-            }
+            InitProperty<AnnotationPropertyData>(properties, null, "");
+            
+        }
 
-            LayerData.SetProperty(annotationProperty); 
+        protected override void OnVisualizationReady()
+        {
+            base.OnVisualizationReady();
+            AnnotationPropertyData annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
+            annotation.Show(annotationPropertyData.AnnotationText, WorldTransform.Coordinate, true);
+            UpdateAnnotation(annotationPropertyData.AnnotationText);
+        }
 
-            UpdateAnnotation(annotationProperty.AnnotationText);
+        protected override void RegisterEventListeners()
+        {
+            base.RegisterEventListeners();
+            var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
+            annotationPropertyData.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
 
-            annotationProperty.OnAnnotationTextChanged.AddListener(UpdateAnnotation);
+            annotation.OnEndEdit.AddListener(SetPropertyDataText);
+            annotation.TextFieldSelected.AddListener(OnAnnotationSelected); // avoid transform handles from being able to move the annotation when trying to select text
+            annotation.TextFieldDoubleClicked.AddListener(OnAnnotationDoubleClicked);
+            annotation.TextFieldInputConfirmed.AddListener(OnAnnotationTextConfirmed);
+        }
+
+        protected override void UnregisterEventListeners()
+        {
+            base.UnregisterEventListeners();
+            var annotationPropertyData = LayerData.GetProperty<AnnotationPropertyData>();
+            annotationPropertyData.OnAnnotationTextChanged.RemoveListener(UpdateAnnotation);
+
+            annotation.OnEndEdit.RemoveListener(SetPropertyDataText);
+            annotation.TextFieldSelected.RemoveListener(OnAnnotationSelected);
+            annotation.TextFieldDoubleClicked.RemoveListener(OnAnnotationDoubleClicked);
+            annotation.TextFieldInputConfirmed.RemoveListener(OnAnnotationTextConfirmed);
+            
+            WorldInteractionBlocker.ClickedOnBlocker.RemoveListener(OnBlockerClicked);
         }
 
         private void UpdateAnnotation(string newText)

@@ -60,6 +60,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             this.maxMappings = maxObjects;
             this.maxDepth = maxDepth;
         }
+        
+        public void Clear()
+        {
+            root.Children = null;
+            root.MappingCount = 0;
+            Array.Clear(root.Mappings, 0, root.Mappings.Length);
+        }
 
         public void RootInsert(IMapping obj)
         {
