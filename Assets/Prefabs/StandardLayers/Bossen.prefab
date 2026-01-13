@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -8208161768726854444}
   - component: {fileID: -6705508870883772296}
   - component: {fileID: 2570833008177719654}
+  - component: {fileID: 8816560366063312878}
   m_Layer: 10
   m_Name: Bossen
   m_TagString: Untagged
@@ -72,6 +73,9 @@ MonoBehaviour:
   OnMappingRemoved:
     m_PersistentCalls:
       m_Calls: []
+  OnTileObjectCreated:
+    m_PersistentCalls:
+      m_Calls: []
   hasMetaData: 0
   removeFromID: 
   DefaultMaterialList:
@@ -94,21 +98,6 @@ MonoBehaviour:
   prefabIdentifier: 65e87ace5e7c94c2dba27317474f1179
   thumbnail: {fileID: 0}
   spawnLocation: -1
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onHide:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerInitialized:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerReady:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStylingApplied:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &-8208161768726854444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,5 +159,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8816560366063312878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3712503248906199988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7cf6eebb305744f697547e83f79458c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

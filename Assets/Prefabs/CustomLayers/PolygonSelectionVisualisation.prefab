@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4784300685805219416}
   - component: {fileID: 2578961074007820944}
-  - component: {fileID: 5962417615404079703}
   m_Layer: 0
   m_Name: PolygonSelectionVisualisation
   m_TagString: Untagged
@@ -48,27 +47,10 @@ MonoBehaviour:
   prefabIdentifier: 0dd48855510674827b667fa4abd5cf60
   thumbnail: {fileID: 0}
   spawnLocation: 0
-  OnStylingApplied:
-    m_PersistentCalls:
-      m_Calls: []
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onHide:
-    m_PersistentCalls:
-      m_Calls: []
   PolygonMeshMaterial: {fileID: 2100000, guid: c7fb2e346bb0d4f6da1f26f4c0bcf533, type: 2}
   polygonMaskMaterial: {fileID: -876546973899608171, guid: c7d81ed14ccbe4efb816be8947f31ab3,
     type: 3}
---- !u!114 &5962417615404079703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1532706497964853861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 164adf020c1954cd5910d88b453b0ff2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  OnPolygonVisualisationUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  layerTool: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}

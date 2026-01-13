@@ -27,6 +27,7 @@ namespace Netherlands3D.CityJson.Visualisation
                 var collections = GetPositionCollections(geometry.BoundaryObject, cityObject.CoordinateSystem);
                 batchedMeshInstanceRenderer.AppendCollections(collections);
             }
+
             cityObjectVisualized?.Invoke(this);
         }
 

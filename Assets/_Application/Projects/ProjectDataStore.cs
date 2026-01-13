@@ -41,7 +41,7 @@ namespace Netherlands3D.Twin.Projects
 
         public void LoadFromFile(string filePath)
         {
-            ProjectData.Current.RootLayer.DestroyLayer();
+            App.Layers.Remove(ProjectData.Current.RootLayer);
             ProjectData.Current.ClearFunctionalityData();
             
             Resources.UnloadUnusedAssets();
@@ -75,12 +75,21 @@ namespace Netherlands3D.Twin.Projects
         
         private void LoadJSON(string json)
         {
-            JsonConvert.PopulateObject(json, ProjectData.Current, serializerSettings);
+            try
+            {
+                JsonConvert.PopulateObject(json, ProjectData.Current, serializerSettings);
+            }
+            catch(Exception e)
+            {
+                Debug.LogException(e);
+            }
+
             ProjectData.Current.RootLayer.ReconstructParentsRecursive();
 
             ProjectData.Current.RootLayer.UpdateLayerTreeOrder(0);
             Debug.Log("Loaded project with uuid: " + ProjectData.Current.UUID);
             ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
+            ProjectData.Current.LoadVisualizations();
         }
 
         public void SaveAsFile(ProjectDataHandler projectDataHandler)

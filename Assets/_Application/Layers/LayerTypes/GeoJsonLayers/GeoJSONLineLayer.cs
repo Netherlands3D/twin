@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
+using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Rendering;
 using Netherlands3D.Twin.Utility;
@@ -13,16 +13,13 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 {
     [Serializable]
-    public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer
+    public partial class GeoJSONLineLayer : LayerGameObject, IGeoJsonVisualisationLayer, IVisualizationWithPropertyData
     {
         public bool IsPolygon => false;
-        public override bool IsMaskable => false;
 
         public Transform Transform => transform;
 
-        public delegate void GeoJSONLineHandler(Feature feature);
-
-        public event GeoJSONLineHandler FeatureRemoved;
+        public event IGeoJsonVisualisationLayer.GeoJsonHandler FeatureRemoved;
 
         private Dictionary<Feature, FeatureLineVisualisations> spawnedVisualisations = new();
         private List<List<Coordinate>> visualisationsToRemove = new();
@@ -52,12 +49,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             set => lineRenderer3D = value;
         }
 
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
             // Ensure that LineRenderer3D.Material has a Material Instance to prevent accidental destruction
             // of a material asset when replacing the material - no destroy of the old material must be done because
             // that is an asset and not an instance
             lineRenderer3D.LineMaterial = new Material(lineRenderer3D.LineMaterial);
+            var stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
+            stylingPropertyData.ColorType = Symbolizer.StrokeColorProperty;
         }
 
         public List<Mesh> GetMeshData(Feature feature)
@@ -134,8 +133,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             LineRenderer3D.gameObject.SetActive(activeInHierarchy);
         }
 
-        public void AddAndVisualizeFeature<T>(Feature feature, CoordinateSystem originalCoordinateSystem)
-            where T : GeoJSONObject
+        public void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem)          
         {
             // Skip if feature already exists (comparison is done using hashcode based on geometry)
             if (spawnedVisualisations.ContainsKey(feature)) return;
@@ -164,10 +162,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public override void ApplyStyling()
         {
-            // The color in the Layer Panel represents the default stroke color for this layer
-            LayerData.Color = LayerData.DefaultSymbolizer?.GetStrokeColor() ?? LayerData.Color;
-
-            MaterialApplicator.Apply(this.Applicator);
+            MaterialApplicator.Apply(Applicator);
+            // The color in the Layer Panel represents the default line color for this layer
+            LayerData.Color = Applicator.GetMaterial().color;
         }
 
         public void ApplyStyling(FeatureLineVisualisations newFeatureVisualisation)
@@ -239,26 +236,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             bbox.Convert(crs2D); //remove the height, since a GeoJSON is always 2D. This is needed to make the centering work correctly
             return bbox;
         }
-
-        private List<IPropertySectionInstantiator> propertySections;
-
-        protected List<IPropertySectionInstantiator> PropertySections
+        
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            get
-            {
-                if (propertySections == null)
-                {
-                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
-                }
-
-                return propertySections;
-            }
-            set => propertySections = value;
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return PropertySections;
+            InitProperty<ColorPropertyData>(properties); 
         }
     }
 }

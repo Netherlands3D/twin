@@ -94,10 +94,10 @@ namespace Netherlands3D.AssetLibrary
             if (item is DataService processItem) Trigger(processItem);
         }
 
-        public async void Load(RecordItem recordItem)
+        public void Load(RecordItem recordItem)
         {
             var layerBuilder = CreateLayerBuilder(recordItem);
-            await App.Layers.Add(layerBuilder);
+            App.Layers.Add(layerBuilder);
         }
 
         public void Trigger(DataService dataService)

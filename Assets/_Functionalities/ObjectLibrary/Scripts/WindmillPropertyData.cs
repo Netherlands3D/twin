@@ -35,5 +35,12 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
                 OnAxisHeightChanged.Invoke(axisHeight);
             }
         }
+
+        [JsonConstructor]
+        public WindmillPropertyData(float axisHeight, float rotorDiameter)
+        {
+            this.axisHeight = axisHeight;
+            this.rotorDiameter = rotorDiameter;
+        }
     }
 }

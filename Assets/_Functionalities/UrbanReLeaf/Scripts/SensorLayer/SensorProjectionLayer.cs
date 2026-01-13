@@ -29,9 +29,19 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
 {
     public class SensorProjectionLayer : ImageProjectionLayer
     {        
-        public SensorDataController SensorDataController { get { return dataController; } private set { } }
+        private SensorDataController dataController;
 
-        private SensorDataController dataController;            
+        public SensorDataController SensorDataController
+        {
+            get
+            {
+                if (dataController == null)
+                {
+                    dataController = GetComponent<SensorDataController>();
+                }
+                return dataController;
+            }
+        }   
 
         public int RenderIndex
         {
