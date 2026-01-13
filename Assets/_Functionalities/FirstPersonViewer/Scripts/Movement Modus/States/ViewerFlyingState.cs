@@ -49,7 +49,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             float verticalInput = input.VerticalMoveAction.ReadValue<float>();
 
-            if (smoothFlight.Value)
+            if (smoothFlight.Value)//Smoothflight == on
             {
                 MoveFreeCamSmooth(moveInput);
                 MoveVerticalSmooth(verticalInput);
@@ -121,12 +121,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
                 targetSpeed = verticalInput * calculatedSpeed;
             }
 
-            float smoothedSpeed = Mathf.SmoothDamp(
-                verticalVelocity,
-                targetSpeed,
-                ref verticalVelocity,
-                verticalSmoothTime
-            );
+            float smoothedSpeed = Mathf.SmoothDamp(verticalVelocity, targetSpeed, ref verticalVelocity, verticalSmoothTime);
 
             transform.Translate(Vector3.up * smoothedSpeed * Time.deltaTime, Space.World);
         }
