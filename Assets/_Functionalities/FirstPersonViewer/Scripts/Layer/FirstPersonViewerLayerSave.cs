@@ -44,7 +44,7 @@ namespace Netherlands3D.FirstPersonViewer.Layers
             StartCoroutine(ResetPrefab());
         }
 
-        //Fix for resetting layer prefab, because setting it in LayerCallback will do it too early. 
+        //Fix for resetting layer prefab, because resetting it too early will still set the values. 
         private IEnumerator ResetPrefab()
         {
             yield return new WaitForEndOfFrame();
