@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using Netherlands3D.E2ETesting.PageObjectModel;
 using Netherlands3D.E2ETesting;
+using System.IO;
 
 
 namespace Netherlands3D.Twin.Tests.Projectsettings
@@ -22,7 +23,7 @@ namespace Netherlands3D.Twin.Tests.Projectsettings
         [UnitySetUp]
         public IEnumerator testsetup()
         {
-            yield return TestFunctions.TestSetup(Application.persistentDataPath+"/projectV1.nl3d");
+            yield return TestFunctions.TestSetup(Path.Combine(Application.persistentDataPath,Application.streamingAssetsPath,"testfiles/projectV1.nl3d"));
         }
 
         [UnityTest]
