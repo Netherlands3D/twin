@@ -243,7 +243,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             _ = new PolygonSelectionLayer(
                 "Grid", 
                 polygonSelectionVisualisationPrefab.PrefabIdentifier, 
-                new List<Vector3>() { bottomLeft, topLeft, topRight, bottomRight }, 
+                new List<Vector3>() { bottomLeft, bottomRight, topRight, topLeft }, 
                 ShapeType.Grid,
                 onSpawn: data =>
                 {
