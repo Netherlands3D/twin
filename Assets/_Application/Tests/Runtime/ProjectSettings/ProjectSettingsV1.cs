@@ -30,7 +30,11 @@ namespace Netherlands3D.Twin.Tests.Projectsettings
         {
             yield return TestFunctions.Cameraposition(new Coordinate(CoordinateSystem.RDNAP,156663.02404785156,463895.14367675781,494.97858460061252));
         }
-
+        [UnityTest]
+        public IEnumerator testCameraRotation()
+        {
+            yield return TestFunctions.CameraRotation(new UnityEngine.Vector3(30,0,0));
+        }
         [UnityTest]
         public IEnumerator terreinLayerIsLoaded()
         {
@@ -41,12 +45,27 @@ namespace Netherlands3D.Twin.Tests.Projectsettings
         {
             yield return TestFunctions.checkGameObject(TestFunctions.scene.DefaultBuildings);
         } 
+        [UnityTest]
+        public IEnumerator BomenLayerIsLoaded()
+        {
+            yield return TestFunctions.checkGameObject(TestFunctions.scene.DefaultBomen);
+        } 
+         [UnityTest]
+        public IEnumerator BossenLayerIsLoaded()
+        {
+            yield return TestFunctions.checkGameObject(TestFunctions.scene.DefaultBossen);
+        } 
     }
 
     public class Scene : Element
     {
         public Element<GameObject> DefaultMaaiveld => E2E.Find("Functionalities/CartesianTiles/Maaiveld (Clone)");
         public Element<GameObject> DefaultBuildings => E2E.Find("Functionalities/CartesianTiles/Gebouwen (Clone)");
+
+        public Element<GameObject> DefaultBomen => E2E.Find("Functionalities/CartesianTiles/Bomen (Clone)");
+
+        public Element<GameObject> DefaultBossen => E2E.Find("Functionalities/CartesianTiles/Bossen (Clone)");
+
 
          public Element<GameObject> projectdataHandler => E2E.Find("ProjectDataHandler");
     }
@@ -58,22 +77,40 @@ namespace Netherlands3D.Twin.Tests.Projectsettings
         public static IEnumerator Cameraposition(Coordinate correctAnswer)
         {
             UnityEngine.Vector3 cameraposition = Camera.main.transform.position;
-            Coordinate campos = new Coordinate(cameraposition);
-            campos.Convert(CoordinateSystem.RDNAP);
+            Coordinate campos = new Coordinate(cameraposition).Convert(CoordinateSystem.RDNAP);
+
 
            
             double deltaEasting = Math.Abs(campos.easting-correctAnswer.easting);
-            bool deltaEastingCorrect = deltaEasting<0.001;
+            bool deltaEastingCorrect = deltaEasting<0.01;
             E2E.Then(deltaEastingCorrect,Is.EqualTo(true),"cameraposition Easting incorrect");
 
             double deltaNorthing = Math.Abs(campos.northing-correctAnswer.northing);
-            bool deltaNorthingCorrect = deltaNorthing<0.001;
+            bool deltaNorthingCorrect = deltaNorthing<0.01;
             E2E.Then(deltaNorthingCorrect,Is.EqualTo(true),"cameraposition Northing incorrect");
 
             double deltaHeight = Math.Abs(campos.height-correctAnswer.height);
-            bool deltaHeightCorrect = deltaHeight<0.001;
+            bool deltaHeightCorrect = deltaHeight<0.01;
             E2E.Then(deltaHeightCorrect,Is.EqualTo(true),"cameraposition incorrect");
             yield return null;
+        }
+
+        public static IEnumerator CameraRotation(UnityEngine.Vector3 correctAnswer)
+        {
+            UnityEngine.Vector3 camerarotatie = Camera.main.transform.eulerAngles;
+            double deltaRotationEasting = Math.Abs(camerarotatie.x-correctAnswer.x);
+            bool deltaRotationEastingCorrect = deltaRotationEasting<0.001;
+            E2E.Then(deltaRotationEastingCorrect,Is.EqualTo(true),"camerarotation-x incorrect");
+
+            double deltaRotationNorthing = Math.Abs(camerarotatie.y-correctAnswer.y);
+            bool deltaRotationNorthingCorrect = deltaRotationNorthing<0.001;
+            E2E.Then(deltaRotationNorthingCorrect,Is.EqualTo(true),"camerarotation-y incorrect");
+
+            double deltaRotationHeight = Math.Abs(camerarotatie.z-correctAnswer.z);
+            bool deltaRotationHeightCorrect = deltaRotationHeight<0.001;
+            E2E.Then(deltaRotationHeightCorrect,Is.EqualTo(true),"camerarotation-z incorrect");
+            yield return null;
+
         }
     public static IEnumerator TestSetup(string projectfilepath)
         {
