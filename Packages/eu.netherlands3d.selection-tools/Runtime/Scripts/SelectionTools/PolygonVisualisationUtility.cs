@@ -140,56 +140,63 @@ namespace Netherlands3D.SelectionTools
             return new GeometryTriangulationData(triangulated, origin, u, v /*, normal*/);
         }
 
-        public static Mesh CreatePolygonMesh(List<GeometryTriangulationData> datas, Vector3 offset, bool invertTriangles = false)
+        public static Mesh CreatePolygonMesh(
+            List<GeometryTriangulationData> datas,
+            Vector3 offset
+        )
         {
-            // STEP 4: Build Unity Mesh in 3D
-            List<Vector3> verts = new List<Vector3>();
-            List<int> tris = new List<int>(); //we don't know the tri count, so make a guess
+            List<Vector3> verts = new();
+            List<int> tris = new();
 
             for (int i = 0; i < datas.Count; i++)
             {
                 var data = datas[i];
+                if (data == null) continue;
 
-                //TODO we maybe want to check here why the geometry is invalid here,
-                //but this causes application to crash or severe performance impact
-                if (data == null) continue; 
+                Vector3 expectedNormal = Vector3.Cross(data.u, data.v);
 
                 for (int j = 0; j < data.geometry.NumGeometries; j++)
                 {
-                    var tri = data.geometry.GetGeometryN(j);
-                    if (tri is Polygon tPoly)
-                    {
-                        var coords = tPoly.Coordinates;
-                        for (int k = 0; k <= 2; k++)
-                        {
-                            var c2D = coords[k];
-                            Vector3 v3 = To3D(c2D, data.origin, data.u, data.v) - offset;
-                            int idx = verts.Count;
-                            verts.Add(v3); //todo: skip duplicate vertices
-                            tris.Add(idx);
-                        }
-                    }
+                    var geom = data.geometry.GetGeometryN(j);
+                    if (geom is not Polygon poly) continue;
+
+                    var coords = poly.Coordinates;
+
+                    Vector3 v0 = To3D(coords[0], data.origin, data.u, data.v) - offset;
+                    Vector3 v1 = To3D(coords[1], data.origin, data.u, data.v) - offset;
+                    Vector3 v2 = To3D(coords[2], data.origin, data.u, data.v) - offset;
+
+                    Vector3 triNormal = Vector3.Cross(v1 - v0, v2 - v0);
+
+                    bool flip = Vector3.Dot(triNormal, expectedNormal) >= 0f;
+
+                    int baseIndex = verts.Count;
+
+                    verts.Add(v0);
+                    verts.Add(flip ? v2 : v1);
+                    verts.Add(flip ? v1 : v2);
+
+                    tris.Add(baseIndex);
+                    tris.Add(baseIndex + 1);
+                    tris.Add(baseIndex + 2);
                 }
             }
 
-            Mesh mesh = new Mesh();
-            int[] triArray = tris.ToArray();
-            if (invertTriangles)
+            Mesh mesh = new Mesh
             {
-                Array.Reverse(triArray);
-            }
-            mesh.vertices = verts.ToArray();
-            mesh.triangles = triArray;
+                vertices = verts.ToArray(),
+                triangles = tris.ToArray()
+            };
+
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
-
             return mesh;
         }
 
         public static Mesh CreatePolygonMesh(List<List<Vector3>> contours, bool invertWindingOrder = false)
         {
-            var triangulationData = CreatePolygonGeometryTriangulationData(contours, invertWindingOrder);
-            return CreatePolygonMesh(new List<GeometryTriangulationData>() { triangulationData }, Vector3.zero, !invertWindingOrder);
+            var triangulationData = CreatePolygonGeometryTriangulationData(contours); //invertWindingOrder
+            return CreatePolygonMesh(new List<GeometryTriangulationData>() { triangulationData }, Vector3.zero); //, !invertWindingOrder
         }
 
         private static Coordinate[] ConvertToCoordinateArray(List<Vector3> points, Vector3 origin, Vector3 u, Vector3 v, bool shouldBeCCW)
