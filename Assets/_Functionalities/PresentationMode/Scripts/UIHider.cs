@@ -40,7 +40,6 @@ namespace Netherlands3D
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.L)) ToggleUIHider();
             Vector2 mousePosition = Pointer.current.position.ReadValue();
 
             if (!hideUI) return;
