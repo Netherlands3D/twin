@@ -23,6 +23,7 @@ namespace Netherlands3D.Twin.Tests.Projectsettings
         [UnitySetUp]
         public IEnumerator testsetup()
         {
+            yield return new WaitForSeconds(1);
             yield return TestFunctions.TestSetup(Path.Combine(Application.persistentDataPath,Application.streamingAssetsPath,"testfiles/projectV1.nl3d"));
         }
 
@@ -82,17 +83,17 @@ namespace Netherlands3D.Twin.Tests.Projectsettings
 
 
            
-            double deltaEasting = Math.Abs(campos.easting-correctAnswer.easting);
-            bool deltaEastingCorrect = deltaEasting<0.01;
-            E2E.Then(deltaEastingCorrect,Is.EqualTo(true),"cameraposition Easting incorrect");
+            double deltaEasting = Math.Abs(campos.easting - correctAnswer.easting);
+            bool deltaEastingCorrect = deltaEasting<0.001;
+            E2E.Then(deltaEastingCorrect , Is.EqualTo(true) , "cameraposition Easting incorrect");
 
-            double deltaNorthing = Math.Abs(campos.northing-correctAnswer.northing);
-            bool deltaNorthingCorrect = deltaNorthing<0.01;
-            E2E.Then(deltaNorthingCorrect,Is.EqualTo(true),"cameraposition Northing incorrect");
+            double deltaNorthing = Math.Abs(campos.northing - correctAnswer.northing);
+            bool deltaNorthingCorrect = deltaNorthing<0.001;
+            E2E.Then(deltaNorthingCorrect , Is.EqualTo(true) , "cameraposition Northing incorrect");
 
-            double deltaHeight = Math.Abs(campos.height-correctAnswer.height);
-            bool deltaHeightCorrect = deltaHeight<0.01;
-            E2E.Then(deltaHeightCorrect,Is.EqualTo(true),"cameraposition incorrect");
+            double deltaHeight = Math.Abs(campos.height - correctAnswer.height);
+            bool deltaHeightCorrect = deltaHeight<0.001;
+            E2E.Then(deltaHeightCorrect , Is.EqualTo(true) , "cameraposition incorrect");
             yield return null;
         }
 
