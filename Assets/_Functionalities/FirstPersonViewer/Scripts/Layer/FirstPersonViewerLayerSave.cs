@@ -19,12 +19,6 @@ namespace Netherlands3D.FirstPersonViewer.Layers
         public void SaveLayer()
         {
             FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer>();
-
-            //Using this weird way of doing things. Because PositionedAt and Rotated aren't working.
-            prefab.SpawnLocation = SpawnLocation.PrefabPosition;
-            prefab.transform.position = fpv.transform.position;
-            prefab.transform.rotation = fpv.transform.rotation;
-
             Dictionary<string, object> settings = new Dictionary<string, object>();
             foreach (ViewerSetting setting in fpv.MovementSwitcher.CurrentMovement.editableSettings.list)
             {
@@ -40,17 +34,7 @@ namespace Netherlands3D.FirstPersonViewer.Layers
             };
 
             ILayerBuilder layerBuilder = LayerBuilder.Create().OfType(prefab.PrefabIdentifier).NamedAs("First person positie").AddProperties(propertiesToAdd);
-            Layer layer = App.Layers.Add(layerBuilder);
-            StartCoroutine(ResetPrefab());
-        }
-
-        //Fix for resetting layer prefab, because resetting it too early will still set the values. 
-        private IEnumerator ResetPrefab()
-        {
-            yield return new WaitForEndOfFrame();
-            prefab.SpawnLocation = SpawnLocation.OpticalCenter;
-            prefab.transform.position = Vector3.zero;
-            prefab.transform.rotation = Quaternion.identity;
+            App.Layers.Add(layerBuilder);
         }
     }
 }
