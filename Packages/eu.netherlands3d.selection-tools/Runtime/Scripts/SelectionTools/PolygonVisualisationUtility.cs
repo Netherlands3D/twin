@@ -193,10 +193,10 @@ namespace Netherlands3D.SelectionTools
             return mesh;
         }
 
-        public static Mesh CreatePolygonMesh(List<List<Vector3>> contours, bool invertWindingOrder = false)
+        public static Mesh CreatePolygonMesh(List<List<Vector3>> contours)
         {
-            var triangulationData = CreatePolygonGeometryTriangulationData(contours); //invertWindingOrder
-            return CreatePolygonMesh(new List<GeometryTriangulationData>() { triangulationData }, Vector3.zero); //, !invertWindingOrder
+            var triangulationData = CreatePolygonGeometryTriangulationData(contours); 
+            return CreatePolygonMesh(new List<GeometryTriangulationData>() { triangulationData }, Vector3.zero);
         }
 
         private static Coordinate[] ConvertToCoordinateArray(List<Vector3> points, Vector3 origin, Vector3 u, Vector3 v, bool shouldBeCCW)

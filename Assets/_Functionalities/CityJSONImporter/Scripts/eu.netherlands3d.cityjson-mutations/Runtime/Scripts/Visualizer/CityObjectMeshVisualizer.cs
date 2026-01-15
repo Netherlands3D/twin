@@ -250,39 +250,6 @@ namespace Netherlands3D.CityJson.Visualisation
             return dictionary;
         }
 
-        private static List<Mesh> CombineBoundaryMeshesWithTheSameSemanticObject(List<BoundaryMeshData> boundaryMeshData, Vector3 offset, out List<SurfaceSemanticType> types)
-        {
-            List<Mesh> combinedMeshes = new List<Mesh>(boundaryMeshData.Count);
-            types = new List<SurfaceSemanticType>(boundaryMeshData.Count);
-
-            while (boundaryMeshData.Count > 0)
-            {
-                List<GeometryTriangulationData> meshDataToCombine = new List<GeometryTriangulationData>();
-                CityGeometrySemanticsObject activeSemanticsObject = boundaryMeshData[boundaryMeshData.Count - 1].SemanticsObject;
-                for (int i = boundaryMeshData.Count - 1; i >= 0; i--) //go backwards because collection will be modified
-                {
-                    var boundaryMesh = boundaryMeshData[i];
-                    if (boundaryMesh.SemanticsObject == activeSemanticsObject)
-                    {
-                        if (boundaryMesh.TriangulationData != null) //skip invalid polygons
-                            meshDataToCombine.Add(boundaryMesh.TriangulationData);
-                        boundaryMeshData.Remove(boundaryMesh);
-                    }
-                }
-
-                var combinedMesh = PolygonVisualisationUtility.CreatePolygonMesh(meshDataToCombine, offset);
-                combinedMeshes.Add(combinedMesh);
-                meshDataToCombine.Clear();
-
-                if (activeSemanticsObject != null)
-                    types.Add(activeSemanticsObject.SurfaceType);
-                else
-                    types.Add(SurfaceSemanticType.Null);
-            }
-
-            return combinedMeshes;
-        }
-
         private static List<Mesh> CombineBoundaryMeshesWithTheSameMaterial(List<BoundaryMeshData> boundaryMeshData, Vector3 offset, int themeIndex, out List<int> materialIndices)
         {
             List<Mesh> combinedMeshes = new List<Mesh>(boundaryMeshData.Count);
