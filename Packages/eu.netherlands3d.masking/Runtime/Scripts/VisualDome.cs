@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using Netherlands3D.JavascriptConnection;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 
 namespace Netherlands3D.Masking
 {
@@ -44,8 +43,6 @@ namespace Netherlands3D.Masking
         [Header("References")]
         [SerializeField] private DomeScaleHandle scaleHandle;
 
-        private int domeMaskBitIndex = PolygonSelectionLayerPropertyData.MaxAvailableMasks;
-
         public bool AllowInteraction
         {
             get => sphereCollider.enabled;
@@ -62,17 +59,8 @@ namespace Netherlands3D.Masking
             sphereCollider = GetComponent<SphereCollider>();
             meshRenderer = this.GetComponent<MeshRenderer>();
             domeMaterial = meshRenderer.material;
-            // SetMaterial(domeMaterial);
 
             sphereCollider.enabled = false;
-        }
-
-        private void SetMaterial(Material material)
-        {
-            int maskValue = 1 << domeMaskBitIndex;
-            float floatMaskValue = (float)maskValue;
-            var bitMask = new Vector4(floatMaskValue, 0, 0, 1); //regular masks use the red channel
-            material.SetVector("_MaskBitMask", bitMask);
         }
 
         private void Start()
