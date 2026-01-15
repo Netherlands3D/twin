@@ -12,14 +12,13 @@ namespace Netherlands3D.FirstPersonViewer.Layers
     public class FirstPersonLayerPropertyData : LayerPropertyData
     {
         [DataMember] private int movementID;
-        [DataMember] public Dictionary<string, object> settingValues; 
+        [DataMember] public Dictionary<string, object> settingValues = new Dictionary<string, object>(); //Used for storing value types not classes.
 
         [JsonIgnore] public int MovementID => movementID;
 
-        [JsonConstructor]
         public FirstPersonLayerPropertyData()
         {
-            settingValues = new Dictionary<string, object>();
+
         }
 
         public FirstPersonLayerPropertyData(int movementID, Dictionary<string, object> settingValues)

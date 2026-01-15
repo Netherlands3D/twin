@@ -85,8 +85,10 @@ namespace Netherlands3D.FirstPersonViewer.Layers
 
                 if (setting is ViewerSettingValue valueInput)
                 {
+                    // TODO: Tried several approaches but couldn't change this because of generics in the settings component.
+                    // We use ViewerSettingValue to access the setting, since the type is otherwise unknown.
                     UnityAction<float> callback = value => firstPersonData.settingValues[settingKey] = value;
-                    
+
                     valueInput.movementSetting.OnValueChanged.AddListener(callback);
                     addedCallbacks.Add((valueInput, callback));
                 }

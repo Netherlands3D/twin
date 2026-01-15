@@ -53,7 +53,7 @@ namespace Netherlands3D.FirstPersonViewer
         public Action OnSetCameraNorth;
         public UnityEvent<Coordinate> OnPositionUpdated = new();
 
-        public Action<ViewerState, Dictionary<string, object>> OnViewerEntered;
+        public Action OnViewerEntered;
         public Action<bool> OnViewerExited;
 
         private void Awake()
@@ -63,7 +63,6 @@ namespace Netherlands3D.FirstPersonViewer
 
             worldTransform = GetComponent<WorldTransform>();
 
-            OnViewerEntered += ViewerEnterd;
             Input.SetExitCallback(ExitViewer);
         }
 
@@ -75,14 +74,17 @@ namespace Netherlands3D.FirstPersonViewer
             MovementSwitcher.SetViewerInput(Input);
             MovementSwitcher.OnMovementPresetChanged += SetMovementModus;
 
+            FirstPersonCamera.onSetupComplete.AddListener(OnAnimationCompleted);
+
             SetupFSM();
             gameObject.SetActive(false);
         }
 
-        private void ViewerEnterd(ViewerState startState, Dictionary<string, object> settings)
+
+        public void EnterViewer(ViewerState startState, Dictionary<string, object> settings)
         {
             //Catch Postion picker double enter call (When FPS is low).
-            if (cameraSwitcher.IsCameraActive(this) && startState == null) return;  
+            if (cameraSwitcher.IsCameraActive(this) && startState == null) return;
 
             startPosition = new Coordinate(transform.position);
             startRotation = transform.rotation;
@@ -95,32 +97,32 @@ namespace Netherlands3D.FirstPersonViewer
             fsm.SwitchState(null);
             SetMovementVisual(null);
 
+            MovementSwitcher.SetViewer(startState, settings);
+
             //When entering the FPV for the first time use the cool animation :).
-            if (!cameraSwitcher.IsCameraActive(this)) EnterAnimation(startState, settings);
-            else if (startState != null) MovementSwitcher.LoadMovementPreset(startState, settings);
+            if (!cameraSwitcher.IsCameraActive(this))
+            {
+                cameraSwitcher.SwitchCamera(this);
+                FirstPersonCamera.SetupViewer();
+                OnViewerEntered?.Invoke();
+            }
+            else if (startState != null) MovementSwitcher.ApplyViewer();
         }
 
-        private void EnterAnimation(ViewerState startState, Dictionary<string, object> settings)
+        private void OnAnimationCompleted()
         {
             Input.OnFPVEnter();
-
-            FirstPersonCamera.SetupViewer(() =>
-            {
-                if (startState != null) MovementSwitcher.LoadMovementPreset(startState, settings);
-                else MovementSwitcher.LoadMovementPreset(0);
-            });
-
-            cameraSwitcher.SwitchCamera(this);
+            MovementSwitcher.ApplyViewer();
         }
 
         private void OnDestroy()
         {
             MovementSwitcher.OnMovementPresetChanged -= SetMovementModus;
+            FirstPersonCamera.onSetupComplete.RemoveListener(OnAnimationCompleted);
             OnViewerEntered = null;
             OnResetToStart = null;
             OnResetToGround = null;
             OnSetCameraNorth = null;
-            OnViewerEntered = null;
             OnViewerExited = null;
         }
 

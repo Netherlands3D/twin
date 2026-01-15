@@ -16,6 +16,9 @@ namespace Netherlands3D.FirstPersonViewer
 
         public event Action<ViewerState> OnMovementPresetChanged;
 
+        private ViewerState setViewerState;
+        private Dictionary<string, object> setViewerSettings;
+
         public void SetViewerInput(FirstPersonViewerInput input)
         {
             this.input = input;
@@ -63,6 +66,17 @@ namespace Netherlands3D.FirstPersonViewer
         }
 
         public void LoadMovementPreset(int index) => LoadMovementPreset(MovementPresets[index]);
+
+
+        public void SetViewer(ViewerState viewerState, Dictionary<string, object> settings)
+        {
+            if (viewerState == null) viewerState = MovementPresets[0];
+
+            setViewerState = viewerState;
+            setViewerSettings = settings;
+        }
+
+        public void ApplyViewer() => LoadMovementPreset(setViewerState, setViewerSettings);
 
         private void OnDestroy()
         {

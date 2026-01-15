@@ -4,6 +4,7 @@ using Netherlands3D.Twin.Cameras;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -41,6 +42,8 @@ namespace Netherlands3D.FirstPersonViewer
         private int prevCameraCullingMask;
         private bool prevCameraOrthographic;
 
+        public UnityEvent onSetupComplete = new();
+
         private void Awake()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -51,7 +54,7 @@ namespace Netherlands3D.FirstPersonViewer
             FPVCamera = firstPersonViewerCamera;
         }
 
-        public void SetupViewer(Action setupCompleteCallback)
+        public void SetupViewer()
         {
             mainCam = Camera.main;
             prevCameraPosition = mainCam.transform.position;
@@ -74,11 +77,11 @@ namespace Netherlands3D.FirstPersonViewer
             Quaternion targetRot = Quaternion.LookRotation(forward, Vector3.up);
 
             transform.DOLocalMove(Vector3.zero + Vector3.up * CameraHeightOffset, 2f).SetEase(Ease.InOutSine);
-            transform.DORotateQuaternion(targetRot, 2f).SetEase(Ease.InOutSine).OnComplete(() => CameraSetupComplete(setupCompleteCallback));
+            transform.DORotateQuaternion(targetRot, 2f).SetEase(Ease.InOutSine).OnComplete(CameraSetupComplete);
         }
 
         //From Setup Viewer
-        private void CameraSetupComplete(Action setupCompleteCallback)
+        private void CameraSetupComplete()
         {
             startRotation = transform.rotation;
             mainCam.transform.position = transform.position + Vector3.up * cameraHeightAboveGround;
@@ -90,7 +93,7 @@ namespace Netherlands3D.FirstPersonViewer
             viewer.OnResetToStart += ResetToStart;
             viewer.OnSetCameraNorth += SetCameraNorth;
 
-            setupCompleteCallback?.Invoke();
+            onSetupComplete.Invoke();
 
             input.RemoveInputLockConstrain(this);
         }

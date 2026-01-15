@@ -18,17 +18,18 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public void OnValueChanged(string value)
         {
-            ViewerSettingValue input = setting as ViewerSettingValue;
-
             //We assume that the value is a float value. That's prob not a nice thing to do :/
             if (float.TryParse(value, out float newValue))
             {
+                ViewerSettingValue input = setting as ViewerSettingValue;
+
                 newValue = Mathf.Clamp(newValue, input.minValue, input.maxValue);
 
                 setting.InvokeOnValueChanged(newValue);
-                
+
                 SetValue(newValue);
-            } else valueInput.text = prevValue;
+            }
+            else valueInput.text = prevValue;
         }
     }
 }
