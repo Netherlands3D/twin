@@ -14,7 +14,6 @@ namespace Netherlands3D.FirstPersonViewer
         [SerializeField] private FirstPersonViewer viewer;
         private Camera firstPersonViewerCamera;
         public static Camera FPVCamera;
-
         public float CameraHeightOffset { private set; get; } = 1.75f;
         private float previousCameraHeight;
         private float currentSensitivity = .11f;
@@ -30,7 +29,6 @@ namespace Netherlands3D.FirstPersonViewer
         private Quaternion viewerRotationVelocity;
         private Quaternion cameraRotationVelocity;
         private Quaternion startRotation;
-
 
         [Header("Settings")]
         [SerializeField] private MovementFloatSetting fovSetting;
@@ -246,8 +244,6 @@ namespace Netherlands3D.FirstPersonViewer
         public Vector3 GetPreviousCameraHeight() => transform.position + Vector3.up * previousCameraHeight;
         public void SetSensitivity(float sensitivity) => currentSensitivity = sensitivity;
         public float GetSensitivity() => currentSensitivity;
-
-
         private void ResetToStart() => transform.rotation = startRotation;
 
         private Quaternion SmoothDampQuaternion(Quaternion rot, Quaternion target, ref Quaternion deriv, float time)
