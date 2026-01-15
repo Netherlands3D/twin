@@ -91,9 +91,8 @@ namespace Netherlands3D.Functionalities.Wms
                 Debug.LogError("Url you are trying to register is empty");
                 return;
             }
-
+            
             var getCapabilitiesUrl = OgcWebServicesUtility.CreateGetCapabilitiesURL(wmsUrl, ServiceType.Wms);
-            Uri uri = new Uri(getCapabilitiesUrl);
             if (log) Debug.Log("registering Url: " + getCapabilitiesUrl);
             if (legendUrlDictionary.TryGetValue(getCapabilitiesUrl, out var container)) //if we don't have the legend url info yet, we need to request it
             {
@@ -109,21 +108,15 @@ namespace Netherlands3D.Functionalities.Wms
             }
 
             if (log) Debug.Log("No urls found, requesting urls: " + wmsUrl);
-            if (!OgcWebServicesUtility.IsValidUrl(uri, RequestType.GetCapabilities))
+            if (!OgcWebServicesUtility.IsValidUrl(new Uri(getCapabilitiesUrl), RequestType.GetCapabilities))
             {
                 Debug.LogError("Bounding boxes not in dictionary, and invalid getCapabilities url provided");
                 return;
             }
 
             if (log) Debug.Log("Requesting credentials: " + getCapabilitiesUrl);
-            if (uri == credentialHandler.Uri && credentialHandler.Authorization != null)
-            {
-                HandleCredentials(uri, credentialHandler.Authorization);
-                return;
-            }
-            
             pendingUrlRequests.Add(getCapabilitiesUrl, null); //we cannot create the coroutine until we have the credentials
-            credentialHandler.Uri = uri;
+            credentialHandler.Uri = new Uri(getCapabilitiesUrl);
             credentialHandler.ApplyCredentials(); //we assume the credentials are already filled in elsewhere in the application
         }
 

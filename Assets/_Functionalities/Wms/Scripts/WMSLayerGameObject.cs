@@ -42,13 +42,16 @@ namespace Netherlands3D.Functionalities.Wms
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             UpdateURL(urlPropertyData.Url);
             SetRenderOrder(LayerData.RootIndex);
-            Legend.Instance.ShowLegend(urlPropertyData.Url.ToString(), ShowLegendOnSelect && LayerData.IsSelected);
+            SetLegendActive(ShowLegendOnSelect && LayerData.IsSelected);
         }
 
         public void SetLegendActive(bool active)
         {
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             if (urlPropertyData.Url == null) return;
+
+            if (!LayerData.HasValidCredentials)
+                active = false;
             
             Legend.Instance.ShowLegend(urlPropertyData.Url.ToString(), active);
         }
@@ -89,6 +92,9 @@ namespace Netherlands3D.Functionalities.Wms
             LayerData.HasValidCredentials = true;           
             wmsProjectionLayer.isEnabled = LayerData.ActiveInHierarchy;
             wmsProjectionLayer.RefreshTiles();
+            
+            if(LayerData.IsSelected)
+                LayerData.SelectLayer();
         }
 
         public void ClearCredentials()

@@ -119,7 +119,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
             else if (urlPropertyData.Url.IsRemoteAsset())
             {
-                //RequestCredentials();
                 UpdateURL(urlPropertyData.Url);
             }
         }
@@ -139,6 +138,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             
             LayerData.HasValidCredentials = true;
             StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
+            
+            if(LayerData.IsSelected)
+                LayerData.SelectLayer();
         }
 
         protected override void RegisterEventListeners()

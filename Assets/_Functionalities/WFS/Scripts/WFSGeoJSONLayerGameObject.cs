@@ -28,8 +28,6 @@ namespace Netherlands3D.Functionalities.Wfs
         protected override void StartLoadingData()
         {
             var wfsUrl = LayerData.GetProperty<LayerURLPropertyData>().Url;
-
-            // RequestCredentials();
             UpdateURL(wfsUrl);
         }
 

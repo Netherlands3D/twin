@@ -23,7 +23,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             sections.ClearAllChildren();
             
             CredentialsRequiredPropertyData credentials = layer.LayerProperties.Get<CredentialsRequiredPropertyData>();
-            if (credentials != null)
+            if (credentials != null&& !layer.HasValidCredentials)
             {
                 bool showingCredentials = ShowPanelsForProperty(credentials, layer.LayerProperties);
                 if (showingCredentials) return;
