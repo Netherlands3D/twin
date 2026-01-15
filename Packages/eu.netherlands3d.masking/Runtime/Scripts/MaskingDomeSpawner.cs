@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.EventSystems;
 
 namespace Netherlands3D.Masking
@@ -25,9 +22,7 @@ namespace Netherlands3D.Masking
         private int positionPropertyID;
         private int radiusPropertyID;
         private int bitIndexPropertyID;
-
-        private int maskingDomeBitIndex = PolygonSelectionLayerPropertyData.MaxAvailableMasks;
-
+        
         [SerializeField] private VisualDome domeVisualisation;
 
         private Camera mainCamera;
@@ -43,7 +38,7 @@ namespace Netherlands3D.Masking
             
             //setting the bitIndex only needs to happen once, so it is done outside of the ApplyGlobalShaderVariables function.
             bitIndexPropertyID = Shader.PropertyToID(sphericalMaskBitIndexName);
-            Shader.SetGlobalInt(bitIndexPropertyID, maskingDomeBitIndex);
+            Shader.SetGlobalInt(bitIndexPropertyID, MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX);
         }
 
         private void OnEnable() {
