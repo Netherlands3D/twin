@@ -67,7 +67,7 @@ namespace Netherlands3D.Functionalities.Wms
         {
             requestConfig = new Config();
         }
-        
+
         protected override IEnumerator DownloadDataAndGenerateTexture(TileChange tileChange, Action<TileChange> callback = null)
         {
             var tileKey = new Vector2Int(tileChange.X, tileChange.Y);
@@ -84,17 +84,26 @@ namespace Netherlands3D.Functionalities.Wms
 
             var boundingBox = DetermineBoundingBox(tileChange, mapData);
             string url = wmsUrl.Replace("{0}", boundingBox.ToString());
-            
-            var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(url), requestConfig);
-            promise.Then(response => OnDownloadedTexture(tileKey, response.Data as Texture2D));
-            promise.Catch(exception => OnFailedToDownloadTexture(url, exception, tileKey));
-            promise.Finally(() => callback?.Invoke(tileChange)); // Always issue the callback
+
+            // Because requestConfig is by-ref, changing it will change all requests in flight; as such we clone the config before
+            // assigning a payload
+            var configWithPayload = Config.BasedOn(requestConfig);
+            configWithPayload = configWithPayload.WithPayload(new WMSTileDataLayerChangePayload(tileChange, url));
+
+            var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(url), configWithPayload);
+            promise.Then(OnDownloadedTexture);
+            promise.Catch(OnFailedToDownloadTexture);
 
             yield return Uxios.WaitForRequest(promise);
+            callback?.Invoke(tileChange);
         }
 
-        private void OnDownloadedTexture(Vector2Int tileKey, Texture2D tex)
+        private void OnDownloadedTexture(IResponse response)
         {
+            var payload = response.Config.GetPayload<WMSTileDataLayerChangePayload>();
+            var tileKey = payload.TileKey;
+            var tex = response.Data as Texture2D;
+
             if (!tex)
             {
                 onLogMessage.Invoke(LogType.Warning, $"Texture could not load for tile '{tileKey.x},{tileKey.y}'");
@@ -122,10 +131,20 @@ namespace Netherlands3D.Functionalities.Wms
             projector.Project(tex, tileSize, ProjectorHeight, renderIndex, ProjectorMinDepth, isEnabled);
         }
 
-        private void OnFailedToDownloadTexture(string url, Exception exception, Vector2Int tileKey)
+        private void OnFailedToDownloadTexture(Exception exception)
         {
-            Debug.LogError($"Could not download {url}: " + exception.Message);
-            RemoveGameObjectFromTile(tileKey);
+            // An unknown exception occurred - log the outcome and don't do much since we don't know anything about
+            // it. This should not occur in normal operation.
+            if (exception is not Error uxiosError)
+            {
+                Debug.LogException(exception);
+                return;
+            }
+
+            var payload = uxiosError.Config.GetPayload<WMSTileDataLayerChangePayload>();
+
+            Debug.LogError($"Could not download {payload.Url}: " + exception.Message);
+            RemoveGameObjectFromTile(payload.TileKey);
         }
 
         private BoundingBox DetermineBoundingBox(TileChange tileChange, MapFilters mapFilters)
