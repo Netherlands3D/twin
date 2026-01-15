@@ -39,3 +39,5 @@ MonoBehaviour:
     SecondarySprite: {fileID: 0}
   - PrimarySprite: {fileID: 21300000, guid: dcb7e9de9d2b4429ba1476b040a73dd0, type: 3}
     SecondarySprite: {fileID: 0}
+  - PrimarySprite: {fileID: 21300000, guid: 3e42e81365be0b84786de62405a72ba7, type: 3}
+    SecondarySprite: {fileID: 0}

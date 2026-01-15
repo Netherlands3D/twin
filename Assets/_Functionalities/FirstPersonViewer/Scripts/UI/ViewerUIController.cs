@@ -5,6 +5,7 @@ using Netherlands3D.Twin.Samplers;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Netherlands3D.FirstPersonViewer.ViewModus;
 
 namespace Netherlands3D.FirstPersonViewer.UI
 {
@@ -42,6 +43,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
         private void OnDestroy()
         {
             hideButton.action.performed -= OnHideUIPressed;
+            firstPersonViewer.OnViewerEntered -= EnterViewer;
+            firstPersonViewer.OnViewerExited -= ExitViewer;
         }
 
         private void EnterViewer()

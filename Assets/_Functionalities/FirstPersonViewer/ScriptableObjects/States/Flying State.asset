@@ -15,6 +15,7 @@ MonoBehaviour:
   movementVisualController: {fileID: 0}
   <CameraConstrain>k__BackingField: 1
   viewName: Vliegen
+  id: 1
   viewIcon: {fileID: 21300000, guid: 26f707f416c041342b3259ca9920c3a3, type: 3}
   viewPrefab: {fileID: 0}
   editableSettings:

@@ -15,6 +15,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
         [Header("Visuals")]
         public string viewName;
+        public int id;
         public Sprite viewIcon;
         public MovementVisualController viewPrefab;
 

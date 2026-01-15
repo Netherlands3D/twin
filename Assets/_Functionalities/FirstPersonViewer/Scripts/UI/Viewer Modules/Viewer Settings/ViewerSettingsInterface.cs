@@ -11,7 +11,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
     public class ViewerSettingsInterface : MonoBehaviour
     {
         [Header("Settings Label")]
-        [SerializeField] private List<ViewerSettingPrefab> settingPrefabs;
+        [SerializeField] private ViewerSettingComponentsList componentList;
         [SerializeField] private Transform settingParent;
 
         [Header("Movement Button")]
@@ -52,7 +52,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void RefreshSettings(ViewerState viewerState)
         {
-            foreach(Transform child in settingParent)
+            foreach (Transform child in settingParent)
             {
                 Destroy(child.gameObject);
             }
@@ -62,7 +62,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
                 if (!setting.isVisible) continue;
 
                 //Gets a prefab based on the settings class name.
-                ViewerSettingComponent componentprefab = settingPrefabs.First(s => s.className == setting.GetType().Name).prefab;
+                ViewerSettingComponent componentprefab = componentList.settingPrefabs.First(s => s.className == setting.GetType().Name).prefab;
 
                 ViewerSettingComponent settingObject = Instantiate(componentprefab, settingParent);
                 settingObject.Init(setting);
@@ -73,12 +73,5 @@ namespace Netherlands3D.FirstPersonViewer.UI
         {
             modusSwitcher.LoadMovementPreset(preset);
         }
-    }
-
-    [System.Serializable]
-    public class ViewerSettingPrefab
-    {
-        public string className;
-        public ViewerSettingComponent prefab;
     }
 }

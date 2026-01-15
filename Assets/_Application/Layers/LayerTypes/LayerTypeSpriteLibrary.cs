@@ -8,6 +8,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.FirstPersonViewer.Layers;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -54,6 +55,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return layerTypeSprites[10];
                 case CameraPositionLayerGameObject _:
                     return layerTypeSprites[11];
+                case FirstPersonCameraLayerGameObject _:
+                    return layerTypeSprites[13];
                 case HierarchicalObjectLayerGameObject _:
                     return layerTypeSprites[3];
                 case ObjectScatterLayerGameObject _:

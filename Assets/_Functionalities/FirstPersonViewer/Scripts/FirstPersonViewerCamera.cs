@@ -1,7 +1,10 @@
 using DG.Tweening;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Twin.Cameras;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -39,6 +42,8 @@ namespace Netherlands3D.FirstPersonViewer
         private int prevCameraCullingMask;
         private bool prevCameraOrthographic;
 
+        public UnityEvent onSetupComplete = new();
+
         private void Awake()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -63,10 +68,11 @@ namespace Netherlands3D.FirstPersonViewer
             transform.position = mainCam.transform.position;
             transform.rotation = mainCam.transform.rotation;
 
-            Vector3 forward = mainCam.transform.forward;
+            Vector3 forward = transform.parent.forward;
             forward.y = 0;
             forward.Normalize();
 
+            SetCameraFOV(60);
             SetupMainCam();
             Quaternion targetRot = Quaternion.LookRotation(forward, Vector3.up);
 
@@ -78,6 +84,7 @@ namespace Netherlands3D.FirstPersonViewer
         private void CameraSetupComplete()
         {
             startRotation = transform.rotation;
+            mainCam.transform.position = transform.position + Vector3.up * cameraHeightAboveGround;
 
             //Setup events when done with animation.
             fovSetting.OnValueChanged.AddListener(SetCameraFOV);
@@ -86,7 +93,8 @@ namespace Netherlands3D.FirstPersonViewer
             viewer.OnResetToStart += ResetToStart;
             viewer.OnSetCameraNorth += SetCameraNorth;
 
-            viewer.MovementSwitcher.LoadMovementPreset(0);
+            onSetupComplete.Invoke();
+
             input.RemoveInputLockConstrain(this);
         }
 
