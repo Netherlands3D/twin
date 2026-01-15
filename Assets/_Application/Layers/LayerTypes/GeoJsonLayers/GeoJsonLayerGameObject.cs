@@ -159,7 +159,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             var originalCoordinateSystem = GeoJSONParser.GetCoordinateSystem(feature.CRS);
             VisualizeFeature(feature, originalCoordinateSystem);
-            ProcessFeatureMapping(feature);
         }
 
         /// <summary>
@@ -303,6 +302,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
 
             layer.AddAndVisualizeFeature(feature, originalCoordinateSystem);
+            ProcessFeatureMapping(feature);
         }
 
         private void CreateLayer(LayerGameObject prefab, UnityAction<LayerGameObject> callBack)
