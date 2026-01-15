@@ -124,8 +124,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 		{
             objectSelector.SelectSubObjectWithBagId.RemoveListener(SelectBuildingOnHit);
             objectSelector.SelectFeature.RemoveListener(SelectFeatureOnHit);
-
-            Deselect();
+            objectSelector.OnDeselect.RemoveListener(Deselect);
 		}
 
 		public void LoadBuildingContent(string bagID)
