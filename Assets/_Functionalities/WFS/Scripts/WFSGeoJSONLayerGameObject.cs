@@ -3,6 +3,7 @@ using UnityEngine;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.OgcWebServices.Shared;
+using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Utility;
 
@@ -26,15 +27,25 @@ namespace Netherlands3D.Functionalities.Wfs
 
         protected override void StartLoadingData()
         {
-            var wfsUrl = LayerData.GetProperty<LayerURLPropertyData>().Url.ToString();
+            var wfsUrl = LayerData.GetProperty<LayerURLPropertyData>().Url;
 
-            RequestCredentials();
-            
-            cartesianTileWFSLayer.WfsUrl = wfsUrl;
+            // RequestCredentials();
+            UpdateURL(wfsUrl);
+        }
+
+        protected override void UpdateURL(Uri storedUri)
+        {
+            base.UpdateURL(storedUri);
+            cartesianTileWFSLayer.WfsUrl = storedUri.ToString();
         }
 
         protected override void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
+            if (auth.GetType() != typeof(Public))//if it is public, we don't want the property panel to show up
+            {
+                InitProperty<CredentialsRequiredPropertyData>(LayerData.LayerProperties);
+            }
+            
             if(auth is FailedOrUnsupported)
             {
                 cartesianTileWFSLayer.isEnabled = false;
@@ -52,8 +63,8 @@ namespace Netherlands3D.Functionalities.Wfs
             );
             
             cartesianTileWFSLayer.SetAuthorization(auth);
-            cartesianTileWFSLayer.isEnabled = LayerData.ActiveInHierarchy;
             LayerData.HasValidCredentials = true;
+            cartesianTileWFSLayer.isEnabled = LayerData.ActiveInHierarchy;
         }       
 
         public void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)

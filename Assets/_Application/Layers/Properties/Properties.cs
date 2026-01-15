@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using Netherlands3D.Twin.ExtensionMethods;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
+using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.Properties
@@ -19,21 +22,35 @@ namespace Netherlands3D.Twin.Layers.Properties
             card.SetActive(true);
             sections.ClearAllChildren();
             
+            CredentialsRequiredPropertyData credentials = layer.LayerProperties.Get<CredentialsRequiredPropertyData>();
+            if (credentials != null)
+            {
+                bool showingCredentials = ShowPanelsForProperty(credentials, layer.LayerProperties);
+                if (showingCredentials) return;
+            }
+            
             foreach (var property in layer.LayerProperties)
             {
                 if(property.IsEditable == false) continue;
-
-                var type = property.GetType();
-                var prefabs = registry.GetPanelPrefabs(type, property);                
-                if (prefabs.Count > 0)
-                {
-                    foreach(var prefab in prefabs)
-                    {
-                        var panel = Instantiate(prefab, sections);
-                        panel.GetComponent<IVisualizationWithPropertyData>().LoadProperties(layer.LayerProperties);
-                    }
-                }
+                
+                ShowPanelsForProperty(property, layer.LayerProperties);
             }
+        }
+
+        private bool ShowPanelsForProperty(LayerPropertyData property, List<LayerPropertyData> properties)
+        {
+            var type = property.GetType();
+            var prefabs = registry.GetPanelPrefabs(type, property);                
+            if (prefabs.Count > 0)
+            {
+                foreach(var prefab in prefabs)
+                {
+                    var panel = Instantiate(prefab, sections);
+                    panel.GetComponent<IVisualizationWithPropertyData>().LoadProperties(properties);
+                }
+                return true;
+            }
+            return false;
         }
 
         public void Hide()
