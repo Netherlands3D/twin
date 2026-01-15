@@ -146,7 +146,10 @@ namespace Netherlands3D.Functionalities.Wms
 
             if (log) Debug.Log("Should download graphics, requesting credentials: " + wmsUrl);
             credentialHandler.Uri = new Uri(getCapabilitiesUrl);
-            credentialHandler.ApplyCredentials();
+            if(credentialHandler.Authorization == null || credentialHandler.Authorization is FailedOrUnsupported)
+                credentialHandler.ApplyCredentials();
+            else
+                HandleCredentials(credentialHandler.Uri, credentialHandler.Authorization);
         }
 
         public void UnregisterUrl(string layerUrl)

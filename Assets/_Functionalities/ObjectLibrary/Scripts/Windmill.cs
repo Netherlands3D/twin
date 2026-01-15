@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.ObjectLibrary
 {
     [RequireComponent(typeof(LayerGameObject))]
-    public class Windmill : MonoBehaviour, ILayerWithPropertyData
+    public class Windmill : MonoBehaviour, IVisualizationWithPropertyData
     {
         public float RotorDiameter
         {
@@ -15,7 +16,6 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
             set => propertyData.RotorDiameter = value;
         }
         private WindmillPropertyData propertyData;
-        public LayerPropertyData PropertyData => propertyData;
 
         public float AxisHeight
         {
@@ -52,21 +52,9 @@ namespace Netherlands3D.Functionalities.ObjectLibrary
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var windmillProperties = (WindmillPropertyData)properties.FirstOrDefault(p => p is WindmillPropertyData);
-            if (windmillProperties != null)
-            {
-                propertyData = windmillProperties;
-            }
-
-            if (propertyData == null)
-            {
-                propertyData = new()
-                {
-                    AxisHeight = defaultHeight,
-                    RotorDiameter = defaultDiameter
-                };
-            }
-
+            var lgo = GetComponent<LayerGameObject>();
+            lgo.InitProperty<WindmillPropertyData>(properties, null, defaultHeight, defaultDiameter);
+            propertyData = lgo.LayerData.GetProperty<WindmillPropertyData>();
             AddListeners();
         }
 

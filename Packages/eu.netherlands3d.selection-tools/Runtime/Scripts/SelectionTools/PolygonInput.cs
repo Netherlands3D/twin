@@ -235,7 +235,7 @@ namespace Netherlands3D.SelectionTools
             UpdatePreviewLine();
         }
 
-        public void ReselectPolygon(List<Vector3> points)
+        public void SetPolygon(List<Vector3> points)
         {
             if (mode == DrawMode.Create)
             {
