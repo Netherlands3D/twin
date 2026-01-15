@@ -275,7 +275,7 @@
     "m_FunctionName": "Bitshift",
     "m_FunctionSource": "",
     "m_FunctionSourceUsePragmas": true,
-    "m_FunctionBody": "uint intValue = uint(Value);\nuint intBitIndex = uint(BitIndex);\nShiftedValue = float(intValue << intBitIndex);"
+    "m_FunctionBody": "uint intValue = (uint)max(Value, 0.0);\nuint safeBitIndex = min((uint)BitIndex, 31u);\nShiftedValue = (float)(intValue << safeBitIndex);"
 }
 
 {
