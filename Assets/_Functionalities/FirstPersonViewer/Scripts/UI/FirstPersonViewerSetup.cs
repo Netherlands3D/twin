@@ -2,6 +2,7 @@ using Netherlands3D.FirstPersonViewer;
 using Netherlands3D.Minimap;
 using Netherlands3D.Services;
 using System.Collections;
+using Netherlands3D.Twin.Cameras;
 using UnityEngine;
 
 using SnapshotComponent = Netherlands3D.Snapshots.Snapshots;
@@ -24,21 +25,23 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnDisable()
         {
-            frustum.SetActiveCamera(Camera.main);
-            wmtsMap.SetActiveCamera(Camera.main);
-            ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(Camera.main);
+            Camera camera = ServiceLocator.GetService<CameraService>().PreviousCamera;
+            
+            frustum.SetCamera(camera);
+            wmtsMap.SetCamera(camera);
+            ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(camera);
         }
 
         private IEnumerator SetupViewer()
         {
             //We need to wait 1 frame to allow the map to load or we get an unloaded map that's zoomed in. (That will never load)
             yield return null;
-            Camera activeCam = FirstPersonViewerCamera.FPVCamera;
+            Camera activeCam = ServiceLocator.GetService<FirstPersonViewer>().FirstPersonCamera.FPVCamera;
 
             minimap.SetZoom(zoomScale);
 
-            frustum.SetActiveCamera(activeCam);
-            wmtsMap.SetActiveCamera(activeCam);
+            frustum.SetCamera(activeCam);
+            wmtsMap.SetCamera(activeCam);
 
             ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(activeCam);
         }

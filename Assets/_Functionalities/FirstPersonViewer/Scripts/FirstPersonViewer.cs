@@ -72,7 +72,7 @@ namespace Netherlands3D.FirstPersonViewer
             MovementSwitcher.OnMovementPresetChanged += SetMovementModus;
 
             SetupFSM();
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
         }
 
         private void ViewerEnterd()
@@ -89,7 +89,7 @@ namespace Netherlands3D.FirstPersonViewer
             fsm.SwitchState(null);
             SetMovementVisual(null);
 
-            ServiceLocator.GetService<CameraSwitcher>().SwitchCamera(this);
+            ServiceLocator.GetService<CameraService>().SwitchCamera(FirstPersonCamera.FPVCamera);
         }
 
         private void OnDestroy()
@@ -112,6 +112,8 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void Update()
         {
+            if (!FirstPersonCamera.FPVCamera.gameObject.activeSelf) return;
+            
             CheckGroundCollision();
 
             fsm.OnUpdate();
@@ -220,7 +222,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             Input.ViewerExited();
 
-            ServiceLocator.GetService<CameraSwitcher>().SwitchToPreviousCamera();
+            ServiceLocator.GetService<CameraService>().SwitchToPreviousCamera();
         }
 
         public void SetVelocity(Vector2 velocity) => this.velocity = velocity;

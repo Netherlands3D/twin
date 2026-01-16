@@ -1,6 +1,7 @@
 using System;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -28,16 +29,20 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             decalProjector = GetComponent<DecalProjector>();
             ProjectionCamera = GetComponent<Camera>();
-            mainCamera =  Camera.main;
+            
         }
 
         private void Start()
         {
             heightMap = ServiceLocator.GetService<HeightMap>();
+            CameraService cameraService = ServiceLocator.GetService<CameraService>();
+            mainCamera = cameraService.ActiveCamera;
         }
 
         private void Update()
         {
+            if(!mainCamera.isActiveAndEnabled) return;
+            
             var lookingForward = 1-Math.Abs(Vector3.Dot(Vector3.down, mainCamera.transform.forward)); //0 is looking top down, 1 is looking straight to the horizon
             var sampleMaxDistance = Mathf.Lerp(maxDistance, minDistance, lookDirectionResolution.Evaluate(lookingForward));
 

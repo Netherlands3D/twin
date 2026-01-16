@@ -3,6 +3,7 @@ using Netherlands3D.Services;
 using Netherlands3D.Events;
 using Netherlands3D.Twin.Samplers;
 using System.Collections.Generic;
+using Netherlands3D.Twin.Cameras;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -56,7 +57,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
             }
             viewerUI.SetActive(true);
 
-            pointerToWorld.SetActiveCamera(FirstPersonViewerCamera.FPVCamera);
+            Camera camera = ServiceLocator.GetService<FirstPersonViewer>().FirstPersonCamera.FPVCamera;
+            pointerToWorld.SetActiveCamera(camera);
         }
 
         private void ExitViewer(bool modified)
@@ -64,7 +66,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
             viewerUI?.SetActive(false);
             uiToDisable.ForEach(ui => ui.SetActive(true));
 
-            pointerToWorld.SetActiveCamera(Camera.main);
+            Camera camera = ServiceLocator.GetService<CameraService>().PreviousCamera;
+            pointerToWorld.SetActiveCamera(camera);
         }
 
         /// <summary>

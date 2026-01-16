@@ -22,10 +22,9 @@ using UnityEngine;
 
 using System.Linq;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Services;
 using UnityEngine.Events;
-using UnityEngine.Networking;
-
-
+using Netherlands3D.Twin.Cameras;
 
 namespace Netherlands3D.CartesianTiles
 {
@@ -116,8 +115,14 @@ namespace Netherlands3D.CartesianTiles
         public UnityEvent<Layer> layerAdded = new();
         public UnityEvent<Layer> layerRemoved = new();
         
+        private Camera activeCamera;
+
         void Start()
         {
+            CameraService cameraService = ServiceLocator.GetService<CameraService>();
+            SetActiveCamera(cameraService.ActiveCamera);
+            cameraService.OnSwitchCamera.AddListener(SetActiveCamera);
+            
             layers = GetComponentsInChildren<Layer>(false).ToList();
             if (layers.Count == 0)
             {
@@ -127,7 +132,7 @@ namespace Netherlands3D.CartesianTiles
             pauseLoading = false;
             CacheCameraFrustum();
 
-            if (!Camera.main)
+            if (!activeCamera)
             {
                 Debug.LogWarning("The TileHandler requires a camera. Make sure your scene has a camera, and it is tagged as MainCamera.");
                 this.enabled = false;
@@ -137,6 +142,13 @@ namespace Netherlands3D.CartesianTiles
             {
                 GetTilesizes();
             }
+        }
+
+        public void SetActiveCamera(Camera camera)
+        {
+            activeCamera = camera;
+            if(activeCamera != null)
+                this.enabled = true;
         }
 
         public void AddLayer(Layer layer)
@@ -308,15 +320,15 @@ namespace Netherlands3D.CartesianTiles
         private Vector4 GetViewRange()
         {
             Extent cameraExtent;
-            if (Camera.main.transform.position.y > 20)
+            if (activeCamera.transform.position.y > 20)
             {
                 useRadialDistanceCheck = false;
-                cameraExtent = Camera.main.GetRDExtent(Camera.main.farClipPlane + maxTileSize);
+                cameraExtent = activeCamera.GetRDExtent(activeCamera.farClipPlane + maxTileSize);
             }
             else
             {
                 useRadialDistanceCheck = true;
-                var cameraRD = new Coordinate(Camera.main.transform.position).Convert(CoordinateSystem.RD); ;
+                var cameraRD = new Coordinate(activeCamera.transform.position).Convert(CoordinateSystem.RD); ;
                 cameraExtent = new Extent(
                     cameraRD.easting - groundLevelClipRange,
                     cameraRD.northing - groundLevelClipRange,
@@ -336,7 +348,7 @@ namespace Netherlands3D.CartesianTiles
 
         private Vector3Int GetRDCameraPosition()
         {
-            var cameraPositionRD = new Coordinate(Camera.main.transform.position).Convert(CoordinateSystem.RDNAP);
+            var cameraPositionRD = new Coordinate(activeCamera.transform.position).Convert(CoordinateSystem.RDNAP);
             Vector3Int cameraPosition = new Vector3Int();
             cameraPosition.x = (int)cameraPositionRD.easting;
             cameraPosition.y = (int)cameraPositionRD.northing;
@@ -396,7 +408,7 @@ namespace Netherlands3D.CartesianTiles
             //Godview only frustum check
             if (filterByCameraFrustum && !useRadialDistanceCheck)
             {
-                GeometryUtility.CalculateFrustumPlanes(Camera.main, cameraFrustumPlanes);
+                GeometryUtility.CalculateFrustumPlanes(activeCamera, cameraFrustumPlanes);
             }
 
             maxTileDistances = 0;
