@@ -22,10 +22,8 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
             if (settingNameText != null) settingNameText.text = setting.GetDisplayName();
 
-            if (settingUnitText != null)
-            {
-                settingUnitText.text = setting.GetDisplayUnits();
-            }
+            if (settingUnitText != null) settingUnitText.text = setting.GetDisplayUnits();
+
 
             SetValue(setting.GetValue());
         }

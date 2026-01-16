@@ -14,6 +14,12 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         private Vector3 smoothVelocity = Vector3.zero;
         private Vector3 lastMovementInput;
 
+        private const float VERTICAL_DAMPENING_MULTIPLIER = .4f;
+        private const float SMOOTH_VELOCITY_SLERP_FACTOR = 10f;
+        private const float ACCELERATION_MULTIPLIER = .15f;
+        private const float DECELERATOIN_MULTIPLIER = .5f;
+        private const float MINIMAL_ACCELERATION_TARGET = .1f;
+
         public override void OnEnter()
         {
             base.OnEnter();
@@ -67,9 +73,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             Vector3 direction = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
 
-            float calculatedSpeed = MovementSpeed * (input.SprintAction.IsPressed() ? speedMultiplierSetting.Value : 1);
-
-            transform.Translate(direction * calculatedSpeed * Time.deltaTime, Space.World);
+            transform.Translate(direction * CalculateSpeed() * Time.deltaTime, Space.World);
         }
 
         private void MoveFreeCamSmooth(Vector2 moveInput)
@@ -79,8 +83,8 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             Vector3 targetSpeed = moveInput * MovementSpeed * currentMultiplier;
 
             //Accelleratie/ decelleratie
-            if (targetSpeed.magnitude > 0.1f) currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed.magnitude, (MovementSpeed * .15f) * currentMultiplier * Time.deltaTime);
-            else currentSpeed = Mathf.MoveTowards(currentSpeed, 0, (MovementSpeed * .5f) * currentMultiplier * Time.deltaTime);
+            if (targetSpeed.magnitude > MINIMAL_ACCELERATION_TARGET) currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed.magnitude, (MovementSpeed * ACCELERATION_MULTIPLIER) * currentMultiplier * Time.deltaTime);
+            else currentSpeed = Mathf.MoveTowards(currentSpeed, 0, (MovementSpeed * DECELERATOIN_MULTIPLIER) * currentMultiplier * Time.deltaTime);
 
             Vector3 targetTransformation = direction * currentSpeed;
 
@@ -92,7 +96,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             if (direction == Vector3.zero)
                 targetTransformation = smoothVelocity.normalized * currentSpeed;
 
-            smoothVelocity = Vector3.Slerp(smoothVelocity, targetTransformation, 10f * Time.deltaTime);
+            smoothVelocity = Vector3.Slerp(smoothVelocity, targetTransformation, SMOOTH_VELOCITY_SLERP_FACTOR * Time.deltaTime);
 
             transform.Translate(smoothVelocity * Time.deltaTime, Space.World);
 
@@ -104,9 +108,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             if (verticalInput == 0) return;
 
-            float calculatedSpeed = MovementSpeed * (input.SprintAction.IsPressed() ? speedMultiplierSetting.Value : 1);
-
-            transform.Translate(Vector3.up * verticalInput * calculatedSpeed * Time.deltaTime, Space.World);
+            transform.Translate(Vector3.up * verticalInput * CalculateSpeed() * Time.deltaTime, Space.World);
         }
 
         private void MoveVerticalSmooth(float verticalInput)
@@ -115,9 +117,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
 
             if (verticalInput != 0f)
             {
-                float calculatedSpeed = MovementSpeed * .4f * (input.SprintAction.IsPressed() ? speedMultiplierSetting.Value : 1);
-
-                targetSpeed = verticalInput * calculatedSpeed;
+                targetSpeed = verticalInput * CalculateSpeed(VERTICAL_DAMPENING_MULTIPLIER);
             }
 
             float smoothedSpeed = Mathf.SmoothDamp(verticalVelocity, targetSpeed, ref verticalVelocity, verticalSmoothTime);
@@ -133,6 +133,11 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         private void ResetSmoothVelocity()
         {
             smoothVelocity = Vector3.zero;
+        }
+
+        private float CalculateSpeed(float dampeningMultiplier = 1)
+        {
+            return MovementSpeed * dampeningMultiplier * (input.SprintAction.IsPressed() ? speedMultiplierSetting.Value : 1);
         }
     }
 }

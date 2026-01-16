@@ -23,7 +23,7 @@ namespace Netherlands3D.FirstPersonViewer
         public CameraConstrain cameraConstrain;
 
         //Smoothing
-        public bool useRotationDampening = true;
+        private bool useRotationDampening = true;
         private float smoothTime = 0.15f;
         private Quaternion rotationVelocity; // must be stored!
         private Quaternion viewerRotationVelocity;
@@ -43,6 +43,7 @@ namespace Netherlands3D.FirstPersonViewer
         private Quaternion prevCameraRotation;
         private int prevCameraCullingMask;
         private bool prevCameraOrthographic;
+        private const float DAMPENING_MULTIPLIER = 3;
 
         private void Awake()
         {
@@ -154,7 +155,7 @@ namespace Netherlands3D.FirstPersonViewer
         //Sets the rotation of the camera or the viewerBase based on the current Camera Constrain.
         private void RotateCamera(Vector2 pointerDelta)
         {
-            float localCurrentSensitivity = currentSensitivity * (useRotationDampening ? 3 : 1);
+            float localCurrentSensitivity = currentSensitivity * (useRotationDampening ? DAMPENING_MULTIPLIER : 1);
 
             Vector2 mouseLook = pointerDelta * localCurrentSensitivity;
 
