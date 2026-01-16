@@ -131,6 +131,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "MeasuringYLock",
+                    "type": "Button",
+                    "id": "f10973bf-a3c8-42c2-895b-b036886baa9f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MeasuringZXLock",
+                    "type": "Button",
+                    "id": "518476c6-d521-4576-8d5b-2d6393f12d76",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -769,6 +787,28 @@
                     "processors": "",
                     "groups": ";Keyboard & Mouse",
                     "action": "OpenOverlay",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "67789186-d054-48ff-a7f0-1de23e5368d6",
+                    "path": "<Keyboard>/n",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard & Mouse",
+                    "action": "MeasuringYLock",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5a205940-217c-41be-9a32-0d2898114b4a",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MeasuringZXLock",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
