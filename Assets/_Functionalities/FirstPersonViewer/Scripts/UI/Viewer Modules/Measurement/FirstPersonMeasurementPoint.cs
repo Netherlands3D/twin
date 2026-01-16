@@ -35,7 +35,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
         public void SetText(Vector3 center, float distance)
         {
-            lineDistanceText.text =  $"{distance.ToString("F2")}m";
+            lineDistanceText.text =  $"~{distance.ToString("F2")}m";
             lineDistanceText.transform.position = center;
             lineDistanceText.gameObject.SetActive(true);
         }
