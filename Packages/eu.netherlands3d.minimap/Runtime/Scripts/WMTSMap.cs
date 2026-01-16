@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -126,8 +128,6 @@ namespace Netherlands3D.Minimap
 
         private void Awake()
         {
-			if(!cameraMoveTarget) cameraMoveTarget = Camera.main;
-
 			parentMinimapUI = GetComponentInParent<MinimapUI>();
 			parentUIRectTransform = (RectTransform)parentMinimapUI.transform;
 			mapRectTransform = GetComponent<RectTransform>();
@@ -135,6 +135,8 @@ namespace Netherlands3D.Minimap
 
         private void Start()
 		{
+			
+			
 			layerIndex = layerStartIndex;
 
 			// Use config values
@@ -159,6 +161,15 @@ namespace Netherlands3D.Minimap
 			startMeterInPixels = (float)tileSizeInMeters / (float)baseTileSize;
 
 			pointer.gameObject.SetActive(true);
+			
+			CameraService cameraService = ServiceLocator.GetService<CameraService>();
+			SetCamera(cameraService.ActiveCamera);
+			cameraService.OnSwitchCamera.AddListener(SetCamera);
+		}
+
+		public void SetCamera(Camera camera)
+		{
+			cameraMoveTarget = camera;
 		}
 
 		private void Update()
@@ -428,11 +439,5 @@ namespace Netherlands3D.Minimap
 				tileList.Remove(tileKey);
 			}
 		}
-
-		/// <summary>
-		/// Sets the camera that needs to be used for the map view.
-		/// </summary>
-		/// <param name="camera"></param>
-		public void SetActiveCamera(Camera camera) => cameraMoveTarget = camera;
 	}
 }

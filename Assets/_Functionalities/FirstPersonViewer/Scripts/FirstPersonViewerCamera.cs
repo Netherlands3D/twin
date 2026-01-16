@@ -13,7 +13,7 @@ namespace Netherlands3D.FirstPersonViewer
         [SerializeField] private FirstPersonViewerInput input;
         [SerializeField] private FirstPersonViewer viewer;
         private Camera firstPersonViewerCamera;
-        public static Camera FPVCamera;
+        public Camera FPVCamera;
 
         public float CameraHeightOffset { private set; get; } = 1.75f;
         private float previousCameraHeight;

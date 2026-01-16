@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7470763439909778047}
   - component: {fileID: 6938902015790729898}
   m_Layer: 0
-  m_Name: CameraSwitcher
+  m_Name: CameraService
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
