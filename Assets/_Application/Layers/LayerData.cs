@@ -331,7 +331,7 @@ namespace Netherlands3D.Twin.Layers
             return LayerProperties.OfType<T>();
         }
 
-        public void SetProperty<T>(T propertyData) where T : LayerPropertyData
+        public void SetProperty(LayerPropertyData propertyData)
         {
             if (LayerProperties.Set(propertyData))
             {
