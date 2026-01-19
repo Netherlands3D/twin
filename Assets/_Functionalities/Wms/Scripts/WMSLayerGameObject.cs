@@ -161,10 +161,9 @@ namespace Netherlands3D.Functionalities.Wms
             
             var parameters = QueryString.Decode(LayerData.GetProperty<LayerURLPropertyData>().Url.Query);
             string layerType = parameters.Single("layers");
-            if(string.IsNullOrEmpty(layerType)) return;
+            if(!string.IsNullOrEmpty(layerType))
+                Legend.Instance.ToggleLayer(layerType, isActive);
             
-            Legend.Instance.ToggleLayer(layerType, isActive);
-
             if (wmsProjectionLayer.isEnabled == isActive) return;
 
             wmsProjectionLayer.isEnabled = isActive;

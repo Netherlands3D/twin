@@ -37,13 +37,9 @@ namespace Netherlands3D.Functionalities.Wms
             ActiveLayerCount--;
         }
 
-        public void RegisterImage(LegendImage legendImage, Uri uri)
+        public void RegisterImage(LegendImage legendImage, string layerName)
         {
-            var parameters = QueryString.Decode(uri.Query);
-            string layerType = parameters.Single("layer");
-            if(string.IsNullOrEmpty(layerType)) return;
-            
-            LegendImageDictionary.Add(layerType, legendImage);
+            LegendImageDictionary.Add(layerName, legendImage);
         }
     }
 
@@ -264,25 +260,25 @@ namespace Netherlands3D.Functionalities.Wms
                 yield break;
             }
 
-            foreach (string url in urlContainer.LayerNameLegendUrlDictionary.Values)
+            foreach (var kv in urlContainer.LayerNameLegendUrlDictionary)
             {
                 var config = new Config() { TypeOfResponseType = new TextureResponse() { Readable = true } };
                 config = auth.AddToConfig(config);
                 
                 var configWithPayload = Config.BasedOn(config);
-                Uri uri = new Uri(url);
-                configWithPayload = configWithPayload.WithPayload(new LegendContainerPayload(urlContainer, uri));
+                Uri uri = new Uri(kv.Value);
+                configWithPayload = configWithPayload.WithPayload(new LegendContainerPayload(urlContainer, kv.Key));
                
                 var promise = Uxios.DefaultInstance.Get<Texture2D>(uri, configWithPayload);
                 promise.Then(response =>
                 {
                     var payload = response.Config.GetPayload<LegendContainerPayload>();
                     LegendUrlContainer container = payload.container;
-                    Uri uri = payload.uri;
+                    string layerName = payload.layerName;
                     
                     Texture2D tex = response.Data as Texture2D;
                     tex.Apply(false, true);
-                    AddGraphic(container, uri, Sprite.Create(
+                    AddGraphic(container, layerName, Sprite.Create(
                         tex,
                         new Rect(0f, 0f, tex.width, tex.height),
                         Vector2.one * 0.5f,
@@ -294,13 +290,13 @@ namespace Netherlands3D.Functionalities.Wms
             }
         }
 
-        private void AddGraphic(LegendUrlContainer container, Uri uri, Sprite sprite)
+        private void AddGraphic(LegendUrlContainer container, string layerName, Sprite sprite)
         {
             LegendImage image = Instantiate(graphicPrefab, graphicPrefab.transform.parent);
             image.gameObject.SetActive(true);
             image.SetSprite(sprite);
             graphics.Add(image);
-            container.RegisterImage(image, uri);
+            container.RegisterImage(image, layerName);
 
             legendClampHeight.AdjustRectHeight();
             mainPanelContentFitterRefresh.RefreshContentFitters();
@@ -321,13 +317,14 @@ namespace Netherlands3D.Functionalities.Wms
 
         public void ToggleLayer(string layerUrl, bool isActive)
         {
+            if(activeLegendUrl == null) return;
+            
             if (legendUrlDictionary.TryGetValue(activeLegendUrl, out var container))
             {
                 if (container.LegendImageDictionary.TryGetValue(layerUrl, out LegendImage image))
                 {
-                    Debug.Log(image);    
+                    image.gameObject.SetActive(isActive);
                 }
-                
             }
         }
 
@@ -337,9 +334,9 @@ namespace Netherlands3D.Functionalities.Wms
         }
     }
     
-    public record LegendContainerPayload(LegendUrlContainer container, Uri uri)
+    public record LegendContainerPayload(LegendUrlContainer container, string layerName)
     {
         public LegendUrlContainer container { get; } = container;
-        public Uri uri { get; } = uri;
+        public string layerName { get; } = layerName;
     }
 }
