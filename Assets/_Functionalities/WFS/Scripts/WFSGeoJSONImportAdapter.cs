@@ -8,14 +8,14 @@ using Netherlands3D.Functionalities.Wfs.LayerPresets;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Services;
 using Netherlands3D.Web;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wfs
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WFSImportAdapter", fileName = "WFSImportAdapter", order = 0)]
-    public class WFSGeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter
+    public class WFSGeoJSONImportAdapter : ScriptableObject, ILayerAdapter
     {
         [SerializeField] private WFSGeoJsonLayerGameObject layerPrefab;
 
@@ -68,7 +68,7 @@ namespace Netherlands3D.Functionalities.Wfs
             return true;
         }
 
-        public void Execute(LocalFile localFile)
+        public Layer Execute(LocalFile localFile)
         {
             var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
@@ -99,7 +99,7 @@ namespace Netherlands3D.Functionalities.Wfs
                     Debug.Log("Adding WFS layer for featureType: " + featureType);
                     AddWFSLayer(featureType.Name, sourceUrl, crs, wfsFolder, featureType.Title, geoJsonOutputFormatString);
                 }
-                return;
+                return new Layer(wfsFolder);
             }
 
             var isWfsGetFeature = OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wfs, RequestType.GetFeature);
@@ -128,12 +128,12 @@ namespace Netherlands3D.Functionalities.Wfs
                 {                     
                     // Can't deduct a human-readable title at the moment, we should add that we always query for the
                     // capabilities; this also helps with things like outputFormat and CRS
-                    AddWFSLayer(featureType, sourceUrl, crs, wfsFolder, featureType, geoJsonOutputFormatString);
+                    return AddWFSLayer(featureType, sourceUrl, crs, wfsFolder, featureType, geoJsonOutputFormatString);
                 }
-                return;
             }
             
             Debug.LogError("Unrecognized WFS request type: " + url);
+            return null;
         }
         
         private LayerData AddFolderLayer(string folderName)
@@ -143,7 +143,7 @@ namespace Netherlands3D.Functionalities.Wfs
             return wfsFolder.LayerData;
         }
 
-        private void AddWFSLayer(string featureType, string sourceUrl, string crsType, LayerData folderLayer, string title, string geoJsonOutputFormatString)
+        private Layer AddWFSLayer(string featureType, string sourceUrl, string crsType, LayerData folderLayer, string title, string geoJsonOutputFormatString)
         {
             // Create a GetFeature URL for the specific featureType
             UriBuilder uriBuilder = CreateLayerGetFeatureUri(featureType, sourceUrl, crsType, geoJsonOutputFormatString);
@@ -151,7 +151,7 @@ namespace Netherlands3D.Functionalities.Wfs
 
             Debug.Log($"Adding WFS layer '{featureType}' with url '{getFeatureUrl}'");
 
-            App.Layers.Add(
+            return App.Layers.Add(
                 new WfsLayerPreset.Args(
                     getFeatureUrl,
                     title,

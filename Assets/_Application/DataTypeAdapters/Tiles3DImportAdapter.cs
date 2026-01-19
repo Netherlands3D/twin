@@ -1,17 +1,16 @@
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.OGC3DTiles;
 using System.IO;
 using Netherlands3D.Functionalities.OGC3DTiles.LayerPresets;
-using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Services;
 using Newtonsoft.Json;
 
 namespace Netherlands3D.Twin.DataTypeAdapters
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/Tiles3DImportAdapter", fileName = "Tiles3DImportAdapter", order = 0)]
-    public class Tiles3DImportAdapter : ScriptableObject, IDataTypeAdapter
+    public class Tiles3DImportAdapter : ScriptableObject, ILayerAdapter
     {
         [SerializeField] private Tile3DLayerGameObject layerPrefab;
 
@@ -90,9 +89,9 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             }
         }
 
-        public void Execute(LocalFile localFile)
+        public Layer Execute(LocalFile localFile)
         {
-            App.Layers.Add(new OGC3DTilesPreset.Args(localFile.SourceUrl));
+            return App.Layers.Add(new OGC3DTilesPreset.Args(localFile.SourceUrl));
         }
     }
 }

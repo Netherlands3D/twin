@@ -62,12 +62,7 @@ namespace Netherlands3D.Twin.Services
         private Layer ImportFromFile(LayerBuilder layerBuilder)
         {
             var url = RetrieveUrlForLayer(layerBuilder);
-            fromFileImporter.ProcessFile(url.ToString());
-
-            // Return null to indicate that adding this flow does not directly result in a Layer, it may do so
-            // indirectly (DataTypeAdapters call this Layer service again).
-            //todo: the fileTypeAdapter should be refactored to return the resulting objects
-            return null;
+            return fromFileImporter.FileToLayer(url.ToString());
         }
 
         private Layer ImportFromUrl(LayerBuilder layerBuilder)

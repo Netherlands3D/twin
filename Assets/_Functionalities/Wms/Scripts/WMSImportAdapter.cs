@@ -1,26 +1,17 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using Netherlands3D.DataTypeAdapters;
-using Netherlands3D.Functionalities.OBJImporter.LayerPresets;
 using Netherlands3D.Functionalities.Wms.LayerPresets;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Services;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wms
 {
-    public class CoroutineRunner : MonoBehaviour
-    {
-    }
-
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WMSImportAdapter", fileName = "WMSImportAdapter", order = 0)]
-    public class WMSImportAdapter : ScriptableObject, IDataTypeAdapter
+    public class WMSImportAdapter : ScriptableObject, IDataTypeAdapter<Layer>
     {
         [SerializeField] private WMSLayerGameObject layerPrefab;
 
@@ -49,7 +40,7 @@ namespace Netherlands3D.Functionalities.Wms
             return true;
         }
 
-        public void Execute(LocalFile localFile)
+        public Layer Execute(LocalFile localFile)
         {
             var url = new Uri(localFile.SourceUrl);
             var wmsFolder = AddFolderLayer(url.AbsoluteUri);
@@ -68,10 +59,13 @@ namespace Netherlands3D.Functionalities.Wms
                     layerPrefab.TransparencyEnabled
                 );
                 
-                var coroutineRunner = new GameObject("WMSImportAdapter coroutine runner").AddComponent<CoroutineRunner>();
-                coroutineRunner.StartCoroutine(CreateMapLayers(maps, url, wmsFolder, coroutineRunner.gameObject));
+                for (var i = 0; i < maps.Count; i++) //todo test if this is now performant due to async visualisations
+                {
+                    var map = maps[i];
+                    CreateLayer(map, url, wmsFolder, i < layerPrefab.DefaultEnabledLayersMax);
+                }
 
-                return;
+                return new Layer(wmsFolder);
             }
 
             if (OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wms, RequestType.GetMap))
@@ -83,12 +77,11 @@ namespace Netherlands3D.Functionalities.Wms
                     layerPrefab.PreferredImageSize.y,
                     layerPrefab.TransparencyEnabled
                 );
-                CreateLayer(map, url, wmsFolder, true);
-
-                return;
+                return CreateLayer(map, url, wmsFolder, true);
             }
             
             Debug.LogError("Unrecognized WMS request type at " + url);
+            return null;
         }
 
         private LayerData AddFolderLayer(string folderName)
@@ -97,23 +90,10 @@ namespace Netherlands3D.Functionalities.Wms
             var wfsFolder = App.Layers.Add(builder);
             return wfsFolder.LayerData;
         }
-        
-        private IEnumerator CreateMapLayers(List<MapFilters> maps, Uri url, LayerData wmsFolder, GameObject coroutineRunner)
-        {
-            for (int i = 0; i < maps.Count; i++)
-            {
-                CreateLayer(maps[i], url, wmsFolder, i < layerPrefab.DefaultEnabledLayersMax);
-                
-                if (i % 10 == 0)
-                    yield return null;
-            }
 
-            Destroy(coroutineRunner);
-        }
-
-        private void CreateLayer(MapFilters mapFilters, Uri url, LayerData folderLayer, bool defaultEnabled)
+        private Layer CreateLayer(MapFilters mapFilters, Uri url, LayerData folderLayer, bool defaultEnabled)
         {
-            App.Layers.Add(
+            return App.Layers.Add(
                 new WmsLayerPreset.Args(url, mapFilters, folderLayer, defaultEnabled)
             );
         }
