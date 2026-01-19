@@ -2,11 +2,10 @@ using System;
 using System.Collections;
 using System.IO;
 using KindMen.Uxios;
-using KindMen.Uxios.Api;
-using KindMen.Uxios.Http;
 using Netherlands3D.Credentials.StoredAuthorization;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.DataTypeAdapters
 {
@@ -17,9 +16,11 @@ namespace Netherlands3D.DataTypeAdapters
 
         [Header("Data type adapters")] [Space(5)]
         [SerializeField] private ScriptableObject[] dataTypeAdapters;
-        private IDataTypeAdapter[] dataTypeAdapterInterfaces;
-        public UnityEvent<IDataTypeAdapter> OnAdapterFound = new();
+        private IDataTypeAdapter<object>[] dataTypeAdapterInterfaces;
+        [FormerlySerializedAs("OnAdapterFound")] public UnityEvent<IDataTypeAdapter<object>> OnGenericAdapterFound = new();
+        public UnityEvent<IDataTypeAdapter<object>> OnLayerAdapterFound = new();
 
+        
         [Header("Events invoked on failures")] [Space(5)]
         public UnityEvent<string> CouldNotFindAdapter = new();
         public UnityEvent<string> OnDownloadFailed = new();
@@ -27,6 +28,21 @@ namespace Netherlands3D.DataTypeAdapters
         
         private Coroutine chain;
 
+        private void Awake() {
+            if(!Application.isPlaying || !gameObject.activeInHierarchy)
+                return;
+
+            // Make sure all scriptable objects we plug in are of the correct type
+            for (int i = 0; i < dataTypeAdapters.Length; i++)
+            {
+                if (dataTypeAdapters[i] is not IDataTypeAdapter<object>)
+                {
+                    if(debugLog) Debug.LogError("ScriptableObject does not have the IDataTypeAdapter interface implemented. Removing from chain.", dataTypeAdapters[i]);
+                    dataTypeAdapters[i] = null;
+                }
+            }
+        }
+        
         private void OnDisable() {
             AbortChain();
         }
@@ -37,6 +53,7 @@ namespace Netherlands3D.DataTypeAdapters
         /// <param name="url">Url to file or service</param>
         public void DetermineAdapter(Uri sourceUri, StoredAuthorization auth)
         {
+            Debug.Log("dtc on: " + gameObject.name);
             AbortChain();
             chain = StartCoroutine(DownloadAndCheckSupport(sourceUri, auth));
         }
@@ -113,7 +130,7 @@ namespace Netherlands3D.DataTypeAdapters
         private IEnumerator AdapterChain(LocalFile urlAndData)
         {
             // Get our interface references
-            dataTypeAdapterInterfaces = new IDataTypeAdapter[dataTypeAdapters.Length];
+            dataTypeAdapterInterfaces = new IDataTypeAdapter<object>[dataTypeAdapters.Length];
             for (int i = 0; i < dataTypeAdapters.Length; i++)
             {
                 if(dataTypeAdapters[i] == null)
@@ -121,8 +138,8 @@ namespace Netherlands3D.DataTypeAdapters
                     Debug.LogError("An adapter in chain is null. Please check your dataTypeAdapters list.",this.gameObject);
                     yield break;
                 }
-
-                dataTypeAdapterInterfaces[i] = dataTypeAdapters[i] as IDataTypeAdapter;
+            
+                dataTypeAdapterInterfaces[i] = dataTypeAdapters[i] as IDataTypeAdapter<object>;
             }
 
             // Check data type per adapter using order set in inspector
@@ -132,26 +149,11 @@ namespace Netherlands3D.DataTypeAdapters
 
                 if(debugLog) Debug.Log("<color=green>Adapter found: " + adapter.GetType().Name + "</color>");
                 adapter.Execute(urlAndData);
-                OnAdapterFound.Invoke(adapter);
+                OnGenericAdapterFound.Invoke(adapter);
                 yield break;
             }
 
             CouldNotFindAdapter.Invoke(urlAndData.SourceUrl);
-        }
-
-        private void OnValidate() {
-            if(!Application.isPlaying || !gameObject.activeInHierarchy)
-                return;
-
-            // Make sure all scriptable objects we plug in are of the correct type
-            for (int i = 0; i < dataTypeAdapters.Length; i++)
-            {
-                if (dataTypeAdapters[i] is not IDataTypeAdapter)
-                {
-                    if(debugLog) Debug.LogError("ScriptableObject does not have the IDataTypeAdapter interface implemented. Removing from chain.", dataTypeAdapters[i]);
-                    dataTypeAdapters[i] = null;
-                }
-            }
         }
     }
 }

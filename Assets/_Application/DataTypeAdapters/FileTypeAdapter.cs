@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             return AdapterChain(localFile, possibleFileTypeEvents);
         }
 
-        public Layer AdapterChain(LocalFile localFile, IEnumerable<FileTypeEvent> possibleFileTypeEvents = null)
+        private Layer AdapterChain(LocalFile localFile, IEnumerable<FileTypeEvent> possibleFileTypeEvents = null)
         {
             if(possibleFileTypeEvents == null)
                 possibleFileTypeEvents = fileTypeEvents;
