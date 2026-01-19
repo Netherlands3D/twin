@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
+using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.DataTypeAdapters;
 using Netherlands3D.Twin.Layers;
@@ -27,7 +27,7 @@ namespace Netherlands3D.Twin.Services
         {
             spawner = new VisualizationSpawner(prefabLibrary);
         }
-
+        
         /// <summary>
         /// Adds a new layer to the current project using the given preset.
         /// </summary>
@@ -45,12 +45,6 @@ namespace Netherlands3D.Twin.Services
             {
                 throw new NotSupportedException("Unsupported layer builder type: " + builder.GetType().Name);
             }
-            
-            switch (layerBuilder.Type)
-            {
-                case "url": return ImportFromUrl(layerBuilder);
-                case "file": return ImportFromFile(layerBuilder);
-            }
 
             var layerData = builder.Build();
             var layer = new Layer(layerData);
@@ -58,31 +52,12 @@ namespace Netherlands3D.Twin.Services
             LayerAdded.Invoke(layer);
             return layer;
         }
-
-        private Layer ImportFromFile(LayerBuilder layerBuilder)
+        
+        public void AddFromUrl(Uri uri, StoredAuthorization authorization, UnityAction<LayerGameObject> callback = null)
         {
-            var url = RetrieveUrlForLayer(layerBuilder);
-            return fromFileImporter.FileToLayer(url.ToString());
+            fromUrlImporter.DetermineAdapter(uri, authorization);
         }
-
-        private Layer ImportFromUrl(LayerBuilder layerBuilder)
-        {
-            var url = RetrieveUrlForLayer(layerBuilder);
-            if (url.Scheme == "prefab-library")
-            {
-                // This is a stored prefab identifier from the prefab library, so let's try it again but
-                // then as a direct build
-                return Add(layerBuilder.OfType(url.AbsolutePath.Trim('/')));
-            }
-                    
-            fromUrlImporter.DetermineAdapter(url, layerBuilder.Credentials);
-                
-            // Return null to indicate that adding this flow does not directly result in a Layer, it may do so
-            // indirectly (DataTypeAdapters call this Layer service again).
-            //todo: the DataTypeChain should be refactored to return the resulting objects
-            return null;
-        }
-
+        
         /// <summary>
         /// Force a LayerData object to be visualized as a specific prefab.
         ///

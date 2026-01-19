@@ -32,11 +32,11 @@ namespace Netherlands3D.Twin.Layers
 
         public static ILayerBuilder Create(LayerPresetArgs args) => LayerPresetRegistry.Create(args);
 
-        public ILayerBuilder FromUrl(Uri url) => OfType("url").At(url).WithCredentials(new Public(url));
+        // public ILayerBuilder FromUrl(Uri url) => OfType("url").At(url).WithCredentials(new Public(url));
 
-        public ILayerBuilder FromUrl(string url) => FromUrl(new Uri(url));
+        // public ILayerBuilder FromUrl(string url) => FromUrl(new Uri(url));
 
-        public ILayerBuilder FromFile(Uri url) => OfType("file").At(url);
+        // public ILayerBuilder FromFile(Uri url) => OfType("file").At(url);
 
         public ILayerBuilder OfType(string type)
         {
