@@ -15,7 +15,7 @@ using UnityEngine;
 namespace Netherlands3D.Functionalities.Wfs
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WFSImportAdapter", fileName = "WFSImportAdapter", order = 0)]
-    public class WFSGeoJSONImportAdapter : ScriptableObject, ILayerAdapter
+    public class WFSGeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter<Layer>
     {
         [SerializeField] private WFSGeoJsonLayerGameObject layerPrefab;
 

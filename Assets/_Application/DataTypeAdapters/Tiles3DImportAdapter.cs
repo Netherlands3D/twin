@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Netherlands3D.Twin.DataTypeAdapters
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/Tiles3DImportAdapter", fileName = "Tiles3DImportAdapter", order = 0)]
-    public class Tiles3DImportAdapter : ScriptableObject, ILayerAdapter
+    public class Tiles3DImportAdapter : ScriptableObject, IDataTypeAdapter<Layer>
     {
         [SerializeField] private Tile3DLayerGameObject layerPrefab;
 

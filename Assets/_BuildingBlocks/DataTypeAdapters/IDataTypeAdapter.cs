@@ -13,7 +13,7 @@ namespace Netherlands3D.DataTypeAdapters
         public List<string> log = new();
     }
 
-    public interface IDataTypeAdapter<T>
+    public interface IDataTypeAdapter<out T>
     {
         public bool Supports(LocalFile localFile);
         public T Execute(LocalFile localFile);
@@ -23,10 +23,5 @@ namespace Netherlands3D.DataTypeAdapters
     {
         public bool Supports(LocalFile localFile);
         public void Execute(LocalFile localFile);
-    }
-
-    public interface ILayerAdapter : IDataTypeAdapter<Layer>
-    {
-        
     }
 }
