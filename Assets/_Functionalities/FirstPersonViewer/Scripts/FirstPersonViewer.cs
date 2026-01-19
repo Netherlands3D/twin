@@ -46,10 +46,10 @@ namespace Netherlands3D.FirstPersonViewer
         private MovementVisualController viewObject;
 
         //Events
-        public Action OnResetToStart;
-        public Action OnResetToGround;
-        public Action OnSetCameraNorth;
-        public UnityEvent<Coordinate> OnPositionUpdated = new();
+        public UnityEvent OnResetToStart = new UnityEvent();
+        public UnityEvent OnResetToGround = new UnityEvent();
+        public UnityEvent OnSetCameraNorth = new UnityEvent();
+        public UnityEvent<Coordinate> OnPositionUpdated = new UnityEvent<Coordinate>();
 
         public Action OnViewerEntered;
         public Action<bool> OnViewerExited;
@@ -196,7 +196,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             transform.position += Vector3.up * fsm.CurrentState.GetGroundHeightOffset();
 
-            OnResetToStart?.Invoke();
+            OnResetToStart.Invoke();
         }
 
         public void ResetToGround()
@@ -209,7 +209,7 @@ namespace Netherlands3D.FirstPersonViewer
                     yPositionTarget = point.y;
                     transform.position = new Vector3(transform.position.x, yPositionTarget + fsm.CurrentState.GetGroundHeightOffset(), transform.position.z);
 
-                    OnResetToGround?.Invoke();
+                    OnResetToGround.Invoke();
                 }
             }, snappingCullingMask);
         }

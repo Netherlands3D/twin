@@ -32,14 +32,14 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             currentSpeed = 0;
             viewer.SetVelocity(Vector2.zero);
 
-            viewer.OnResetToGround += ResetCurrentSpeed;
-            viewer.OnResetToStart += ResetCurrentSpeed;
+            viewer.OnResetToGround.AddListener(ResetCurrentSpeed);
+            viewer.OnResetToStart.AddListener(ResetCurrentSpeed);
         }
 
         public override void OnExit()
         {
-            viewer.OnResetToGround -= ResetCurrentSpeed;
-            viewer.OnResetToStart -= ResetCurrentSpeed;
+            viewer.OnResetToGround.RemoveListener(ResetCurrentSpeed);
+            viewer.OnResetToStart.RemoveListener(ResetCurrentSpeed);
 
             viewer.FirstPersonCamera.SetCameraRotationDampening(false);
             ResetSmoothVelocity();

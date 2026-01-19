@@ -89,8 +89,8 @@ namespace Netherlands3D.FirstPersonViewer
             fovSetting.OnValueChanged.AddListener(SetCameraFOV);
             viewHeightSetting.OnValueChanged.AddListener(SetCameraHeight);
 
-            viewer.OnResetToStart += ResetToStart;
-            viewer.OnSetCameraNorth += SetCameraNorth;
+            viewer.OnResetToStart.AddListener(ResetToStart);
+            viewer.OnSetCameraNorth.AddListener(SetCameraNorth);
 
             viewer.MovementSwitcher.LoadMovementPreset(0);
             input.RemoveInputLockConstrain(this);
@@ -119,8 +119,8 @@ namespace Netherlands3D.FirstPersonViewer
             fovSetting.OnValueChanged.RemoveListener(SetCameraFOV);
             viewHeightSetting.OnValueChanged.RemoveListener(SetCameraHeight);
 
-            viewer.OnResetToStart -= ResetToStart;
-            viewer.OnSetCameraNorth -= SetCameraNorth;
+            viewer.OnResetToStart.RemoveListener(ResetToStart);
+            viewer.OnSetCameraNorth.RemoveListener(SetCameraNorth);
             viewer.OnViewerExited -= ExitViewer;
 
 

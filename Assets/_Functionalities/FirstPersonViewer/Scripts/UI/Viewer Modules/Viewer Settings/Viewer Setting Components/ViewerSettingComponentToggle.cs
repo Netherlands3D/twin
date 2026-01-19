@@ -8,15 +8,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
     public class ViewerSettingComponentToggle : ViewerSettingComponent
     {
         [SerializeField] private Toggle toggle;
-        private ViewerSettingBool settingBool;
-
-        public override void Init(ViewerSetting setting)
-        {
-            base.Init(setting);
-
-            settingBool = setting as ViewerSettingBool;
-            settingBool.movementSetting.OnValueChanged.AddListener(SetValue);
-        }
 
         public void SetValue(bool value)
         {
@@ -30,7 +21,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public void OnValueChanged(bool value)
         {
-            ViewerSettingValue input = setting as ViewerSettingValue;
+            ViewerSettingBool input = setting as ViewerSettingBool;
 
             setting.InvokeOnValueChanged(value);
             SetValue(value);
