@@ -80,24 +80,6 @@ namespace Netherlands3D.Twin.Services
             LayerRemoved.Invoke(layerData);
         }
 
-        private Uri RetrieveUrlForLayer(LayerBuilder layerBuilder)
-        {
-            // We prefer the direct approach
-            if (layerBuilder.Url != null)
-            {
-                return layerBuilder.Url;
-            }
-
-            // But we need a fallback for project-loaded layers
-            var urlPropertyData = layerBuilder.Properties.Get<LayerURLPropertyData>();
-            if (urlPropertyData == null)
-            {
-                throw new Exception("Cannot add layer with type 'url' without a URL");
-            }
-
-            return urlPropertyData.Url;
-        }
-
         public void VisualizeData(LayerData layerData, UnityAction<LayerGameObject> callback = null)
         {
             Layer layer = new Layer(layerData);
