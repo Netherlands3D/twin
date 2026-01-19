@@ -69,24 +69,13 @@ MonoBehaviour:
   prefabIdentifier: 78184c91e673b6142a99465863a32fa5
   thumbnail: {fileID: 11400000, guid: f467b74bf30d9bb4f90a71be6964cf53, type: 2}
   spawnLocation: 0
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onHide:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerInitialized:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerReady:
-    m_PersistentCalls:
-      m_Calls: []
   DebugBoundingBox: 0
   objectCreated:
     m_PersistentCalls:
       m_Calls: []
   scaleUnitCharacter: '%'
   layerTool: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
+  heightSetting: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1, type: 2}
 --- !u!114 &6628375546731435886
 MonoBehaviour:
   m_ObjectHideFlags: 0

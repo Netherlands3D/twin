@@ -68,31 +68,26 @@ namespace Netherlands3D.FirstPersonViewer.Layers
             foreach (ViewerSetting setting in viewerState.editableSettings.list)
             {
                 if (!setting.isVisible) continue;
-                if (setting is ViewerSettingLabel label) continue;
+                if (setting is not ViewerSettingValue) continue;
 
-                string settingKey = setting.GetSettingName();
-
-                //Gets a prefab based on the settings class name.
-                ViewerSettingComponent componentprefab = componentList.settingPrefabs.First(s => s.className == setting.GetType().Name).prefab;
-
-                ViewerSettingComponent settingObject = Instantiate(componentprefab, settingParent);
-                settingObject.Init(setting);
-
-                if (!firstPersonData.settingValues.ContainsKey(settingKey))
-                    firstPersonData.settingValues.Add(settingKey, setting.GetDefaultValue());
-
-                settingObject.SetValue(firstPersonData.settingValues[settingKey]);
-
-                if (setting is ViewerSettingValue valueInput)
-                {
-                    // TODO: Tried several approaches but couldn't change this because of generics in the settings component.
-                    // We use ViewerSettingValue to access the setting, since the type is otherwise unknown.
-                    UnityAction<float> callback = value => firstPersonData.settingValues[settingKey] = value;
-
-                    valueInput.movementSetting.OnValueChanged.AddListener(callback);
-                    addedCallbacks.Add((valueInput, callback));
-                }
+                CreateSettingsUI(setting);
             }
+        }
+
+        private void CreateSettingsUI(ViewerSetting setting)
+        {
+            string settingKey = setting.GetSettingName();
+
+            //Gets a prefab based on the settings class name.
+            ViewerSettingComponentInput componentprefab = componentList.settingPrefabs.First(s => s.className == setting.GetType().Name).prefab as ViewerSettingComponentInput;
+            ViewerSettingComponentInput settingObject = Instantiate(componentprefab, settingParent);
+            settingObject.Init(setting);
+
+            if (!firstPersonData.settingValues.ContainsKey(settingKey))
+                firstPersonData.settingValues.Add(settingKey, setting.GetDefaultValue());
+
+            settingObject.SetValue(firstPersonData.settingValues[settingKey]);
+            settingObject.SetPropertyData(firstPersonData);
         }
 
         private void ClearSettings()
