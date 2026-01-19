@@ -1,6 +1,7 @@
 using System;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
+using KindMen.Uxios;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
@@ -157,10 +158,16 @@ namespace Netherlands3D.Functionalities.Wms
             {
                 UpdateURL(LayerData.GetProperty<LayerURLPropertyData>().Url);
             }
+            
+            var parameters = QueryString.Decode(LayerData.GetProperty<LayerURLPropertyData>().Url.Query);
+            string layerType = parameters.Single("layers");
+            if(string.IsNullOrEmpty(layerType)) return;
+            
+            Legend.Instance.ToggleLayer(layerType, isActive);
 
             if (wmsProjectionLayer.isEnabled == isActive) return;
 
-            wmsProjectionLayer.isEnabled = isActive;           
+            wmsProjectionLayer.isEnabled = isActive;
         }
 
         private void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 using KindMen.Uxios;
 using KindMen.Uxios.ExpectedTypesOfResponse;
 using Netherlands3D.Credentials;
@@ -16,6 +17,7 @@ namespace Netherlands3D.Functionalities.Wms
     {
         public string GetCapabilitiesUrl;
         public Dictionary<string, string> LayerNameLegendUrlDictionary;
+        public Dictionary<string, LegendImage> LegendImageDictionary = new(StringComparer.Ordinal);
         public int ActiveLayerCount;
 
         public LegendUrlContainer(string getCapabilitiesUrl, Dictionary<string, string> legendDictionary)
@@ -33,6 +35,15 @@ namespace Netherlands3D.Functionalities.Wms
         public void DecrementLayerCount()
         {
             ActiveLayerCount--;
+        }
+
+        public void RegisterImage(LegendImage legendImage, Uri uri)
+        {
+            var parameters = QueryString.Decode(uri.Query);
+            string layerType = parameters.Single("layer");
+            if(string.IsNullOrEmpty(layerType)) return;
+            
+            LegendImageDictionary.Add(layerType, legendImage);
         }
     }
 
@@ -53,7 +64,7 @@ namespace Netherlands3D.Functionalities.Wms
         private string activeLegendUrl; //the currently visible legend url in the panel
         private bool legendActive = false;
         private Coroutine runningCoroutine;
-        private List<LegendImage> graphics = new List<LegendImage>();
+        private List<LegendImage> graphics = new();
 
         private static Legend instance;
 
@@ -257,13 +268,21 @@ namespace Netherlands3D.Functionalities.Wms
             {
                 var config = new Config() { TypeOfResponseType = new TextureResponse() { Readable = true } };
                 config = auth.AddToConfig(config);
-
-                var promise = Uxios.DefaultInstance.Get<Texture2D>(new Uri(url), config);
+                
+                var configWithPayload = Config.BasedOn(config);
+                Uri uri = new Uri(url);
+                configWithPayload = configWithPayload.WithPayload(new LegendContainerPayload(urlContainer, uri));
+               
+                var promise = Uxios.DefaultInstance.Get<Texture2D>(uri, configWithPayload);
                 promise.Then(response =>
                 {
+                    var payload = response.Config.GetPayload<LegendContainerPayload>();
+                    LegendUrlContainer container = payload.container;
+                    Uri uri = payload.uri;
+                    
                     Texture2D tex = response.Data as Texture2D;
                     tex.Apply(false, true);
-                    AddGraphic(Sprite.Create(
+                    AddGraphic(container, uri, Sprite.Create(
                         tex,
                         new Rect(0f, 0f, tex.width, tex.height),
                         Vector2.one * 0.5f,
@@ -275,12 +294,13 @@ namespace Netherlands3D.Functionalities.Wms
             }
         }
 
-        private void AddGraphic(Sprite sprite)
+        private void AddGraphic(LegendUrlContainer container, Uri uri, Sprite sprite)
         {
             LegendImage image = Instantiate(graphicPrefab, graphicPrefab.transform.parent);
             image.gameObject.SetActive(true);
             image.SetSprite(sprite);
             graphics.Add(image);
+            container.RegisterImage(image, uri);
 
             legendClampHeight.AdjustRectHeight();
             mainPanelContentFitterRefresh.RefreshContentFitters();
@@ -299,9 +319,27 @@ namespace Netherlands3D.Functionalities.Wms
             graphics.Clear();
         }
 
+        public void ToggleLayer(string layerUrl, bool isActive)
+        {
+            if (legendUrlDictionary.TryGetValue(activeLegendUrl, out var container))
+            {
+                if (container.LegendImageDictionary.TryGetValue(layerUrl, out LegendImage image))
+                {
+                    Debug.Log(image);    
+                }
+                
+            }
+        }
+
         private void ShowInactive(bool show)
         {
             inactive.gameObject.SetActive(show);
         }
+    }
+    
+    public record LegendContainerPayload(LegendUrlContainer container, Uri uri)
+    {
+        public LegendUrlContainer container { get; } = container;
+        public Uri uri { get; } = uri;
     }
 }
