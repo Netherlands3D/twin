@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-namespace Netherlands3D.PresentationModus.UIHider
+namespace Netherlands3D.Twin.PresentationModus.UIHider
 {
     public enum UIExitDirection {  Left, Right, Up, Down }
 
