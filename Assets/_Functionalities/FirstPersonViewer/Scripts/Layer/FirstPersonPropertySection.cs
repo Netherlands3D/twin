@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.FirstPersonViewer.Layers
 {
@@ -20,9 +19,7 @@ namespace Netherlands3D.FirstPersonViewer.Layers
         [SerializeField] private Transform settingParent;
 
         [SerializeField] private TMP_Dropdown modusDropdown;
-
-        private List<(ViewerSettingValue setting, UnityAction<float> callback)> addedCallbacks = new List<(ViewerSettingValue setting, UnityAction<float> callback)>();
-
+        
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             firstPersonData = properties.Get<FirstPersonLayerPropertyData>();
@@ -92,12 +89,6 @@ namespace Netherlands3D.FirstPersonViewer.Layers
 
         private void ClearSettings()
         {
-            foreach (var (setting, callback) in addedCallbacks)
-            {
-                if (setting != null) setting.movementSetting.OnValueChanged.RemoveListener(callback);
-            }
-            addedCallbacks.Clear();
-
             foreach (Transform child in settingParent)
             {
                 Destroy(child.gameObject);
