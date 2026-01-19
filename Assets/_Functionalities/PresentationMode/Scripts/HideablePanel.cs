@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Netherlands3D
+namespace Netherlands3D.Twin.PresentationModus.UIHider
 {
     public class HideablePanel : MonoBehaviour, IPanelHider
     {
@@ -18,19 +18,18 @@ namespace Netherlands3D
 
         [SerializeField] private Toggle pinToggle;
 
-        [SerializeField] private Vector2 rectSize = new Vector2(-1, -1);
+        [SerializeField] private Vector2 rectSize;
 
         [Header("Animation")]
         [SerializeField] private UIExitDirection exitDirection;
         [SerializeField] private float duration = .25f;
         [SerializeField] private Ease easeType = Ease.InOutSine;
         [SerializeField] private float offscreenMargin;
+        [SerializeField, Tooltip("Buffer reveal size")] private float bufferInPixels = 50;
         private Tween currentTween;
 
         private Vector2 shownPosition;
         private Vector2 hiddenPosition;
-
-        [SerializeField] private float bufferInPixels = 50;
 
         private void Awake()
         {
@@ -48,7 +47,7 @@ namespace Netherlands3D
         {
             ServiceLocator.GetService<UIHider>()?.Register(this);
 
-            if(hiddenPosition == Vector2.zero)
+            if (hiddenPosition == Vector2.zero)
             {
                 StartCoroutine(SetupElement());
             }
@@ -56,16 +55,20 @@ namespace Netherlands3D
 
         private IEnumerator SetupElement()
         {
-            //We need to wait 1 frame for the rect calculation.
-            yield return new WaitForEndOfFrame();
+            //When the rectsize is not set. Use the size delta instead.
+            if (rectSize == Vector2.zero)
+            {
+                //We need to wait 1 frame for the rect calculation.
+                yield return new WaitForEndOfFrame();
+                rectSize = rt.sizeDelta;
+            }
 
-            if(rectSize == new Vector2(-1, -1)) rectSize = rt.sizeDelta;
             CalculateHiddenPos();
         }
 
         private void OnDisable()
         {
-            ServiceLocator.GetService<UIHider>().Unregister(this);
+            ServiceLocator.GetService<UIHider>()?.Unregister(this);
         }
 
         private void CalculateHiddenPos()
@@ -101,7 +104,6 @@ namespace Netherlands3D
             currentTween?.Kill();
             isHidden = false;
 
-
             currentTween = rt.DOAnchorPos(shownPosition, duration).SetEase(easeType);
         }
 
@@ -113,14 +115,11 @@ namespace Netherlands3D
             currentTween = rt.DOAnchorPos(hiddenPosition, duration).SetEase(easeType);
         }
 
-        public void TogglePin(bool enable)
-        {
-            pinned = enable;
-        }
+        public void TogglePin(bool enable) => pinned = enable;
 
         public bool IsMouseOver(Vector2 mousePos)
         {
-            //This is a bit dirty I guess...
+            //We move the object to get an accurate calculation.
             Vector2 original = rt.anchoredPosition;
             rt.anchoredPosition = shownPosition;
 

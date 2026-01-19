@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Netherlands3D
+namespace Netherlands3D.Twin.PresentationModus.UIHider
 {
     public interface IPanelHider
     {
