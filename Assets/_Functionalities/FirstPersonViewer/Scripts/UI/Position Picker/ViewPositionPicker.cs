@@ -45,7 +45,7 @@ namespace Netherlands3D.FirstPersonViewer
                     //{
                     FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer>();
                     fpv.transform.position = point;
-                    fpv.OnViewerEntered?.Invoke();
+                    fpv.OnViewerEntered.Invoke();
 
                     //}
                 }

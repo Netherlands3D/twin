@@ -46,13 +46,13 @@ namespace Netherlands3D.FirstPersonViewer
         private MovementVisualController viewObject;
 
         //Events
-        public UnityEvent OnResetToStart = new UnityEvent();
-        public UnityEvent OnResetToGround = new UnityEvent();
-        public UnityEvent OnSetCameraNorth = new UnityEvent();
-        public UnityEvent<Coordinate> OnPositionUpdated = new UnityEvent<Coordinate>();
+        public UnityEvent OnResetToStart = new();
+        public UnityEvent OnResetToGround = new();
+        public UnityEvent OnSetCameraNorth = new();
+        public UnityEvent<Coordinate> OnPositionUpdated = new();
 
-        public Action OnViewerEntered;
-        public Action<bool> OnViewerExited;
+        public UnityEvent OnViewerEntered;
+        public UnityEvent<bool> OnViewerExited = new();
 
         private void Awake()
         {
@@ -61,7 +61,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             worldTransform = GetComponent<WorldTransform>();
 
-            OnViewerEntered += ViewerEnterd;
+            OnViewerEntered.AddListener(ViewerEnterd);
             Input.SetExitCallback(ExitViewer);
         }
 
@@ -216,7 +216,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void ExitViewer(bool exitOriginalPosition)
         {
-            OnViewerExited?.Invoke(exitOriginalPosition);
+            OnViewerExited.Invoke(exitOriginalPosition);
 
             Input.ViewerExited();
 

@@ -25,7 +25,6 @@ namespace Netherlands3D.FirstPersonViewer
         //Smoothing
         private bool useRotationDampening = true;
         private float smoothTime = 0.15f;
-        private Quaternion rotationVelocity; // must be stored!
         private Quaternion viewerRotationVelocity;
         private Quaternion cameraRotationVelocity;
         private Quaternion startRotation;
@@ -64,7 +63,7 @@ namespace Netherlands3D.FirstPersonViewer
             prevCameraOrthographic = mainCam.orthographic;
 
             input.AddInputLockConstrain(this);
-            viewer.OnViewerExited += ExitViewer;
+            viewer.OnViewerExited.AddListener(ExitViewer);
 
             transform.position = mainCam.transform.position;
             transform.rotation = mainCam.transform.rotation;
@@ -121,7 +120,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             viewer.OnResetToStart.RemoveListener(ResetToStart);
             viewer.OnSetCameraNorth.RemoveListener(SetCameraNorth);
-            viewer.OnViewerExited -= ExitViewer;
+            viewer.OnViewerExited.RemoveListener(ExitViewer);
 
 
             if (modified)
@@ -187,6 +186,11 @@ namespace Netherlands3D.FirstPersonViewer
                     break;
             }
 
+            ApplyRotation(targetLocalRotation, targetViewerRotation);
+        }
+
+        private void ApplyRotation(Quaternion targetLocalRotation, Quaternion targetViewerRotation)
+        {
             if (useRotationDampening)
             {
                 transform.localRotation = SmoothDampQuaternion(transform.localRotation, targetLocalRotation, ref cameraRotationVelocity, smoothTime);
