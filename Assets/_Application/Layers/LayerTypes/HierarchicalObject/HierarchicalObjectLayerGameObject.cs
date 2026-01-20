@@ -296,8 +296,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             else
             {
                 ToggleScatterPropertyData toggleScatterPropertyData = LayerData.LayerProperties.Get<ToggleScatterPropertyData>();
-                if(toggleScatterPropertyData != null && toggleScatterPropertyData.IsScattered)
+                if (toggleScatterPropertyData != null && toggleScatterPropertyData.IsScattered)
+                {
+                    transformInterfaceToggle.ClearTransformTarget();
                     return;
+                }
                 
                 transformInterfaceToggle.SetTransformTarget(gameObject);
                 transformInterfaceToggle.SnapTarget.AddListener(SnapToGround);
@@ -368,7 +371,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
            
             InitProperty<ScatterGenerationSettingsPropertyData>(LayerData.LayerProperties, null, LayerData.PrefabIdentifier);
 
-            LayerData.DeselectLayer(); //remove any transform interaction that might be present
+            var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
+            transformInterfaceToggle.ClearTransformTarget();
 
             TransformLayerPropertyData transformLayerPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
             transformLayerPropertyData.IsEditable = false;
