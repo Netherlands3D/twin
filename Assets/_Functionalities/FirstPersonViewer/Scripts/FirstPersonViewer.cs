@@ -114,7 +114,9 @@ namespace Netherlands3D.FirstPersonViewer
             if (!cameraSwitcher.IsCameraActive(this))
             {
                 cameraSwitcher.SwitchCamera(this);
-                FirstPersonCamera.SetupViewer();
+
+                bool usePitch = startState != null && startState.CameraConstrain != CameraConstrain.CONTROL_NONE;
+                FirstPersonCamera.SetupViewer(usePitch);
                 OnViewerEntered?.Invoke();
             }
             else if (startState != null) MovementSwitcher.ApplyViewer();

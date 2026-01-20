@@ -5,8 +5,6 @@ using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Services;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,8 +26,10 @@ namespace Netherlands3D.FirstPersonViewer.Layers
                 settings.Add(setting.GetSettingName(), setting.GetValue());
             }
 
+            Vector3 rotationToSave = fpv.FirstPersonCamera.GetStateRotation();
+
             LayerPropertyData[] propertiesToAdd = {
-                new TransformLayerPropertyData(new Coordinate(fpv.transform.position), fpv.transform.eulerAngles, fpv.transform.localScale),
+                new TransformLayerPropertyData(new Coordinate(fpv.transform.position), rotationToSave, fpv.transform.localScale),
                 new FirstPersonLayerPropertyData(fpv.MovementSwitcher.CurrentMovement.id, settings)
             };
 
