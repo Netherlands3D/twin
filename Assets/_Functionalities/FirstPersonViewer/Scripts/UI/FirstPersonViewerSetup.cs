@@ -26,9 +26,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
         private void OnDisable()
         {
             Camera camera = ServiceLocator.GetService<CameraService>().PreviousCamera;
-            
-            frustum.SetCamera(camera);
-            wmtsMap.SetCamera(camera);
             ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(camera);
         }
 
@@ -39,10 +36,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
             Camera activeCam = ServiceLocator.GetService<FirstPersonViewer>().FirstPersonCamera.FPVCamera;
 
             minimap.SetZoom(zoomScale);
-
-            frustum.SetCamera(activeCam);
-            wmtsMap.SetCamera(activeCam);
-
             ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(activeCam);
         }
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
@@ -135,8 +136,6 @@ namespace Netherlands3D.Minimap
 
         private void Start()
 		{
-			
-			
 			layerIndex = layerStartIndex;
 
 			// Use config values
@@ -438,6 +437,12 @@ namespace Netherlands3D.Minimap
 				Destroy(tileList[tileKey].gameObject);
 				tileList.Remove(tileKey);
 			}
+		}
+		
+		private void OnDestroy()
+		{
+			CameraService cameraService = ServiceLocator.GetService<CameraService>();
+			cameraService.OnSwitchCamera.RemoveListener(SetCamera);
 		}
 	}
 }

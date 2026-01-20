@@ -132,12 +132,6 @@ namespace Netherlands3D.CartesianTiles
             pauseLoading = false;
             CacheCameraFrustum();
 
-            if (!activeCamera)
-            {
-                Debug.LogWarning("The TileHandler requires a camera. Make sure your scene has a camera, and it is tagged as MainCamera.");
-                this.enabled = false;
-            }
-
             if (tileSizes.Count == 0)
             {
                 GetTilesizes();
@@ -149,6 +143,11 @@ namespace Netherlands3D.CartesianTiles
             activeCamera = camera;
             if(activeCamera != null)
                 this.enabled = true;
+            else
+            {
+                Debug.LogWarning("The TileHandler requires a camera. Make sure your scene has a camera, and it is tagged as MainCamera.");
+                this.enabled = false;
+            }
         }
 
         public void AddLayer(Layer layer)
@@ -712,6 +711,12 @@ namespace Netherlands3D.CartesianTiles
                 }
             }
             return highestPriorityTileChange;
+        }
+        
+        private void OnDestroy()
+        {
+            CameraService cameraService = ServiceLocator.GetService<CameraService>();
+            cameraService.OnSwitchCamera.RemoveListener(SetActiveCamera);
         }
     }
 

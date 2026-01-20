@@ -10,7 +10,27 @@ namespace Netherlands3D.Twin.Cameras
         
         public UnityEvent<Camera> OnSwitchCamera = new();
 
-        public Camera ActiveCamera => current == null ? cameraObjects[0] : current; //on load this will be null
+        public Camera ActiveCamera
+        {
+            get
+            {
+                if (current == null)
+                {
+                    if (cameraObjects[0] == null || cameraObjects.Count == 0)
+                    {
+                        if (cameraObjects.Count == 0)
+                        {
+                            Debug.LogError("please assign cameras to the cameraobjects");
+                            cameraObjects.Add(Camera.main);
+                        }
+                        cameraObjects[0] = Camera.main;
+                    }
+                    current = cameraObjects[0];
+                }
+                return current;
+            }
+        }
+
         public Camera PreviousCamera => previous;
 
         private Camera current;
@@ -20,6 +40,9 @@ namespace Netherlands3D.Twin.Cameras
         {
             if (cameraObjects != null && cameraObjects.Count > 0)
             {
+                foreach(Camera c in cameraObjects)
+                    if(c != cameraObjects[0])
+                        c.gameObject.SetActive(false);
                 SwitchCamera(cameraObjects[0]);
             }
         }
@@ -35,21 +58,11 @@ namespace Netherlands3D.Twin.Cameras
             //Save previous
             previous = current;
             current = cameraObject;
-            
-            foreach(Camera c in cameraObjects)
-                if(c != cameraObject)
-                    c.gameObject.SetActive(false);
-
-            //Enable new
+            previous.gameObject.SetActive(false);
             cameraObject.gameObject.SetActive(true);
             
             OnSwitchCamera.Invoke(cameraObject);
         }
-
-        // public void SwitchCamera(int index)
-        // {
-        //     SwitchCamera(cameraObjects[index]);
-        // }
 
         public void SwitchToPreviousCamera()
         {

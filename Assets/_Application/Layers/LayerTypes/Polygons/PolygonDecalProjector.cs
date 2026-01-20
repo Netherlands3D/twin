@@ -36,7 +36,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             heightMap = ServiceLocator.GetService<HeightMap>();
             CameraService cameraService = ServiceLocator.GetService<CameraService>();
+            cameraService.OnSwitchCamera.AddListener(SetCamera);
             mainCamera = cameraService.ActiveCamera;
+        }
+
+        public void SetCamera(Camera camera)
+        {
+            mainCamera = camera;
         }
 
         private void Update()
@@ -68,6 +74,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 var size = new Vector3(maxDimension, maxDimension, decalProjector.size.z);
                 decalProjector.size = size;
             }
+        }
+        
+        private void OnDestroy()
+        {
+            CameraService cameraService = ServiceLocator.GetService<CameraService>();
+            cameraService.OnSwitchCamera.RemoveListener(SetCamera);
         }
     }
 }

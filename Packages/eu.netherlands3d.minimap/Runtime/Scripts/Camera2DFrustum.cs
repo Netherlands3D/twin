@@ -16,6 +16,7 @@
 *  permissions and limitations under the License.
 */
 
+using System;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Cameras;
@@ -68,5 +69,11 @@ namespace Netherlands3D.Minimap
 				uiQuad.Redraw();
 			}
 		}
-	}
+
+		private void OnDestroy()
+		{
+			CameraService cameraService = ServiceLocator.GetService<CameraService>();
+			cameraService.OnSwitchCamera.RemoveListener(SetCamera);
+		}
+    }
 }

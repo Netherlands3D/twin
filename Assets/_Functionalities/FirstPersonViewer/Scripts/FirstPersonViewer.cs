@@ -72,24 +72,6 @@ namespace Netherlands3D.FirstPersonViewer
             MovementSwitcher.OnMovementPresetChanged += SetMovementModus;
 
             SetupFSM();
-            //gameObject.SetActive(false);
-        }
-
-        private void ViewerEnterd()
-        {
-            startPosition = new Coordinate(transform.position);
-            startRotation = transform.rotation;
-            yPositionTarget = transform.position.y;
-
-            worldTransform.MoveToCoordinate(startPosition);
-            Input.OnFPVEnter();
-            FirstPersonCamera.SetupViewer();
-
-            //Remove old visual (So no weird transition will happen)
-            fsm.SwitchState(null);
-            SetMovementVisual(null);
-
-            ServiceLocator.GetService<CameraService>().SwitchCamera(FirstPersonCamera.FPVCamera);
         }
 
         private void OnDestroy()
@@ -214,6 +196,23 @@ namespace Netherlands3D.FirstPersonViewer
                     OnResetToGround?.Invoke();
                 }
             }, snappingCullingMask);
+        }
+        
+        private void ViewerEnterd()
+        {
+            startPosition = new Coordinate(transform.position);
+            startRotation = transform.rotation;
+            yPositionTarget = transform.position.y;
+
+            worldTransform.MoveToCoordinate(startPosition);
+            Input.OnFPVEnter();
+            FirstPersonCamera.SetupViewer();
+
+            //Remove old visual (So no weird transition will happen)
+            fsm.SwitchState(null);
+            SetMovementVisual(null);
+
+            ServiceLocator.GetService<CameraService>().SwitchCamera(FirstPersonCamera.FPVCamera);
         }
 
         public void ExitViewer(bool exitOriginalPosition)

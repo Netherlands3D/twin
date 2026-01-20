@@ -100,5 +100,11 @@ namespace Netherlands3D.Twin.Quality
             Destroy(renderTexture);
             CreateNewRenderTexture();
         }
+        
+        private void OnDestroy()
+        {
+            CameraService cameraService = ServiceLocator.GetService<CameraService>();
+            cameraService.OnSwitchCamera.RemoveListener(SetCamera);
+        }
     }
 }
