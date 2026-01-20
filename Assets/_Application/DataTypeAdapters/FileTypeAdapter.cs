@@ -14,7 +14,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
     {
         public string Extension;
         [SerializeField] private ScriptableObject Adapter;
-        public IDataTypeAdapter<Layer> DataTypeAdapter => (IDataTypeAdapter<Layer>)Adapter; //unfortunately interfaces are not serializable
+        public IDataTypeAdapter<object> DataTypeAdapter => (IDataTypeAdapter<object>)Adapter; //unfortunately interfaces are not serializable
     }
 
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/FileTypeAdapter", fileName = "FileTypeAdapter", order = 0)]
@@ -36,7 +36,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             FileToLayer(file);
         }
         
-        public Layer FileToLayer(string file)
+        public object FileToLayer(string file)
         {
             if (file.EndsWith(','))
                 file = file.Remove(file.Length - 1);
@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             return AdapterChain(localFile, possibleFileTypeEvents);
         }
 
-        private Layer AdapterChain(LocalFile localFile, IEnumerable<FileTypeEvent> possibleFileTypeEvents = null)
+        private object AdapterChain(LocalFile localFile, IEnumerable<FileTypeEvent> possibleFileTypeEvents = null)
         {
             if(possibleFileTypeEvents == null)
                 possibleFileTypeEvents = fileTypeEvents;
