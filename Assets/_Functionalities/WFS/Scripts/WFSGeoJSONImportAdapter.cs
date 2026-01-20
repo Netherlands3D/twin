@@ -99,6 +99,7 @@ namespace Netherlands3D.Functionalities.Wfs
                     Debug.Log("Adding WFS layer for featureType: " + featureType);
                     AddWFSLayer(featureType.Name, sourceUrl, crs, wfsFolder, featureType.Title, geoJsonOutputFormatString);
                 }
+                // we return the parent layer, the sub layers will be created internally by the parent
                 return new Layer(wfsFolder);
             }
 

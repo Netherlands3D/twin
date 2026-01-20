@@ -65,6 +65,7 @@ namespace Netherlands3D.Functionalities.Wms
                     CreateLayer(map, url, wmsFolder, i < layerPrefab.DefaultEnabledLayersMax);
                 }
 
+                // we return the parent layer, the sub layers will be created internally by the parent
                 return new Layer(wmsFolder);
             }
 
