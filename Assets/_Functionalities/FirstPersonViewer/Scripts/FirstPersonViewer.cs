@@ -85,11 +85,9 @@ namespace Netherlands3D.FirstPersonViewer
             transform.position = position;
 
             Vector3 euler = rotation.eulerAngles;
-            float yaw = euler.y;
-            float pitch = euler.x;
 
-            transform.rotation = Quaternion.Euler(0f, yaw, 0f);
-            FirstPersonCamera.transform.localRotation = Quaternion.Euler(pitch, 0f, 0f);
+            transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
+            FirstPersonCamera.transform.localRotation = Quaternion.Euler(euler.x, 0f, 0f);
         }
 
         public void EnterViewer(ViewerState startState, Dictionary<string, object> settings)

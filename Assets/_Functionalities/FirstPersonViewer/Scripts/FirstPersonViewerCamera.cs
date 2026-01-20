@@ -12,6 +12,8 @@ namespace Netherlands3D.FirstPersonViewer
 
     public class FirstPersonViewerCamera : MonoBehaviour
     {
+        private const float DEFAULT_CAMERA_FOV = 60f;
+
         [Header("Input")]
         [SerializeField] private FirstPersonViewerInput input;
         [SerializeField] private FirstPersonViewer viewer;
@@ -77,11 +79,10 @@ namespace Netherlands3D.FirstPersonViewer
             Quaternion yawRot = Quaternion.LookRotation(forward, Vector3.up);
             Quaternion pitchRot = Quaternion.Euler(startPitch, 0f, 0f);
 
-            Quaternion targetRot;
+            Quaternion targetRot = yawRot;
             if (usePitch) targetRot = yawRot * pitchRot;
-            else targetRot = yawRot;
 
-            SetCameraFOV(60);
+            SetCameraFOV(DEFAULT_CAMERA_FOV);
             SetupMainCam();
 
             transform.DOLocalMove(Vector3.zero + Vector3.up * CameraHeightOffset, 2f).SetEase(Ease.InOutSine);
