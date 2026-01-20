@@ -14,8 +14,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
 
         public ProjectData Execute(LocalFile localFile)
         {
-            ProjectDataHandler.Instance.LoadFromFile(localFile.LocalFilePath);
-            return ProjectData.Current;
+            return ProjectDataHandler.Instance.LoadFromFile(localFile.LocalFilePath);
         }
     }
 }

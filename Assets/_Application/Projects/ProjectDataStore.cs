@@ -39,7 +39,7 @@ namespace Netherlands3D.Twin.Projects
 
         private string lastSavePath;
 
-        public void LoadFromFile(string filePath)
+        public ProjectData LoadFromFile(string filePath)
         {
             App.Layers.Remove(ProjectData.Current.RootLayer);
             ProjectData.Current.ClearFunctionalityData();
@@ -71,6 +71,8 @@ namespace Netherlands3D.Twin.Projects
                 using FileStream streamWriter = File.Create(fullZipToPath);
                 zipStream.CopyTo(streamWriter);
             }
+
+            return ProjectData.Current;
         }
         
         private void LoadJSON(string json)
