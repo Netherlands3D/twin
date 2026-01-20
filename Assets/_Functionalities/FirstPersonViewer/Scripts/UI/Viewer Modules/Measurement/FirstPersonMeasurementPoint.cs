@@ -11,6 +11,8 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         [SerializeField] private LineRenderer lineRenderer;
         [SerializeField] private TextMeshPro lineDistanceText;
 
+        public float LineDistance => (lineRenderer.GetPosition(0) - lineRenderer.GetPosition(1)).magnitude;
+
         public void Init(string pointLetter)
         {
             UpdatePointerLetter(pointLetter);
