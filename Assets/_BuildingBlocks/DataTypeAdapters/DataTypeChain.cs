@@ -92,6 +92,9 @@ namespace Netherlands3D.DataTypeAdapters
             }
 
             token.ThrowIfCancellationRequested();
+            
+            cancellationTokenSource.Dispose();
+            cancellationTokenSource = null;
             // Find the proper adapter in a chain of responsibility
             return AdapterChain(urlAndData);
         }
