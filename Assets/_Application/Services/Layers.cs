@@ -14,7 +14,6 @@ namespace Netherlands3D.Twin.Services
     public class Layers : MonoBehaviour, ILayersServiceFacade
     {
         [SerializeField] private PrefabLibrary prefabLibrary;
-        [SerializeField] private FileTypeAdapter fromFileImporter;
         [SerializeField] private DataTypeChain fromUrlImporter;
         private VisualizationSpawner spawner;
 
