@@ -33,8 +33,7 @@ namespace Netherlands3D.FirstPersonViewer.Layers
             
             ViewerState viewerState = fpv.MovementSwitcher.MovementPresets.Find(m => m.id == firstPersonPropertyData.MovementID);
 
-            fpv.transform.position = transform.position;
-            fpv.transform.rotation = transform.rotation;
+            fpv.SetPositionAndRotation(transform.position, transform.rotation);
             fpv.EnterViewer(viewerState, firstPersonPropertyData.settingValues);
         }
     }
