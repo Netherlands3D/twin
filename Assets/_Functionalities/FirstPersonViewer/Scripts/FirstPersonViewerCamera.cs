@@ -56,6 +56,8 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void SetupViewer()
         {
+            float startPitch = transform.eulerAngles.x;
+
             mainCam = Camera.main;
             prevCameraPosition = mainCam.transform.position;
             prevCameraRotation = mainCam.transform.rotation;
@@ -69,12 +71,16 @@ namespace Netherlands3D.FirstPersonViewer
             transform.rotation = mainCam.transform.rotation;
 
             Vector3 forward = transform.parent.forward;
-            forward.y = 0;
+            forward.y = 0f;
             forward.Normalize();
+
+            Quaternion yawRot = Quaternion.LookRotation(forward, Vector3.up);
+            Quaternion pitchRot = Quaternion.Euler(startPitch, 0f, 0f);
+
+            Quaternion targetRot = yawRot * pitchRot;
 
             SetCameraFOV(60);
             SetupMainCam();
-            Quaternion targetRot = Quaternion.LookRotation(forward, Vector3.up);
 
             transform.DOLocalMove(Vector3.zero + Vector3.up * CameraHeightOffset, 2f).SetEase(Ease.InOutSine);
             transform.DORotateQuaternion(targetRot, 2f).SetEase(Ease.InOutSine).OnComplete(CameraSetupComplete);
