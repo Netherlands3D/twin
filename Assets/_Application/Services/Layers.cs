@@ -4,9 +4,7 @@ using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.DataTypeAdapters;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerPresets;
-using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
@@ -19,7 +17,7 @@ namespace Netherlands3D.Twin.Services
         [SerializeField] private FileTypeAdapter fromFileImporter;
         [SerializeField] private DataTypeChain fromUrlImporter;
         private VisualizationSpawner spawner;
-        
+
         public UnityEvent<Layer> LayerAdded { get; } = new();
         public UnityEvent<LayerData> LayerRemoved { get; } = new();
 
@@ -27,7 +25,7 @@ namespace Netherlands3D.Twin.Services
         {
             spawner = new VisualizationSpawner(prefabLibrary);
         }
-        
+
         /// <summary>
         /// Adds a new layer to the current project using the given preset.
         /// </summary>
@@ -52,12 +50,16 @@ namespace Netherlands3D.Twin.Services
             LayerAdded.Invoke(layer);
             return layer;
         }
-        
-        public void AddFromUrl(Uri uri, StoredAuthorization authorization, UnityAction<LayerGameObject> callback = null)
+
+        public async Task<Layer> AddFromUrl(Uri uri, StoredAuthorization authorization)
         {
-            fromUrlImporter.DetermineAdapter(uri, authorization);
+            var result = await fromUrlImporter.DetermineAdapterAndReturnResult(uri, authorization);
+            if (result is Layer layer)
+                return layer;
+            
+            return null;
         }
-        
+
         /// <summary>
         /// Force a LayerData object to be visualized as a specific prefab.
         ///
@@ -76,16 +78,17 @@ namespace Netherlands3D.Twin.Services
         /// </summary>
         public void Remove(LayerData layerData)
         {
-            layerData.Dispose();  
+            layerData.Dispose();
             LayerRemoved.Invoke(layerData);
         }
 
-        public void VisualizeData(LayerData layerData, UnityAction<LayerGameObject> callback = null)
+        public Layer VisualizeData(LayerData layerData, UnityAction<LayerGameObject> callback = null)
         {
             Layer layer = new Layer(layerData);
             Visualize(layer, spawner, callback);
+            return layer;
         }
-        
+
         private static async void Visualize(Layer layer, ILayerSpawner spawner, UnityAction<LayerGameObject> callback = null) //todo: change callbacks for promises?
         {
             try
@@ -96,7 +99,7 @@ namespace Netherlands3D.Twin.Services
                     visualizationTask = spawner.Spawn(layer.LayerData);
                     layer.SetVisualizationTask(visualizationTask);
                 }
-                
+
                 var visualization = await visualizationTask;
 
                 if (layer.LayerData == null || layer.LayerData.IsDisposed)
@@ -105,7 +108,7 @@ namespace Netherlands3D.Twin.Services
                     Destroy(visualization.gameObject);
                     return;
                 }
-                
+
                 visualization?.SetData(layer.LayerData);
                 callback?.Invoke(visualization);
             }

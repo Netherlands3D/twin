@@ -1,35 +1,37 @@
 using System;
-using System.Collections;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
 using KindMen.Uxios;
 using Netherlands3D.Credentials.StoredAuthorization;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 namespace Netherlands3D.DataTypeAdapters
 {
     public class DataTypeChain : MonoBehaviour
     {
-        [Header("Settings")]
-        [SerializeField] private bool debugLog = false;
+        [Header("Settings")] [SerializeField] private bool debugLog = false;
 
-        [Header("Data type adapters")] [Space(5)]
-        [SerializeField] private ScriptableObject[] dataTypeAdapters;
+        [Header("Data type adapters")] [Space(5)] [SerializeField]
+        private ScriptableObject[] dataTypeAdapters;
+
         private IDataTypeAdapter<object>[] dataTypeAdapterInterfaces;
-        [FormerlySerializedAs("OnAdapterFound")] public UnityEvent<IDataTypeAdapter<object>> OnGenericAdapterFound = new();
-        public UnityEvent<IDataTypeAdapter<object>> OnLayerAdapterFound = new();
+        public UnityEvent<IDataTypeAdapter<object>> OnAdapterFound = new();
 
-        
+
         [Header("Events invoked on failures")] [Space(5)]
         public UnityEvent<string> CouldNotFindAdapter = new();
+
         public UnityEvent<string> OnDownloadFailed = new();
         public UnityEvent<string> OnLocalCacheFailed = new();
-        
-        private Coroutine chain;
 
-        private void Awake() {
-            if(!Application.isPlaying || !gameObject.activeInHierarchy)
+        private CancellationTokenSource cancellationTokenSource;
+
+        private void Awake()
+        {
+            if (!Application.isPlaying || !gameObject.activeInHierarchy)
                 return;
 
             // Make sure all scriptable objects we plug in are of the correct type
@@ -37,51 +39,60 @@ namespace Netherlands3D.DataTypeAdapters
             {
                 if (dataTypeAdapters[i] is not IDataTypeAdapter<object>)
                 {
-                    if(debugLog) Debug.LogError("ScriptableObject does not have the IDataTypeAdapter interface implemented. Removing from chain.", dataTypeAdapters[i]);
+                    if (debugLog) Debug.LogError("ScriptableObject does not have the IDataTypeAdapter interface implemented. Removing from chain.", dataTypeAdapters[i]);
                     dataTypeAdapters[i] = null;
                 }
             }
         }
-        
-        private void OnDisable() {
+
+        private void OnDisable()
+        {
             AbortChain();
         }
 
+        public void DetermineAdapter(Uri sourceUri, StoredAuthorization auth)
+        {
+            DetermineAdapterAndReturnResult(sourceUri, auth);
+        }
+        
         /// <summary>
         /// Determine the type of data using chain of responsibility
         /// </summary>
         /// <param name="url">Url to file or service</param>
-        public void DetermineAdapter(Uri sourceUri, StoredAuthorization auth)
+        public Task<object> DetermineAdapterAndReturnResult(Uri sourceUri, StoredAuthorization auth)
         {
-            Debug.Log("dtc on: " + gameObject.name);
             AbortChain();
-            chain = StartCoroutine(DownloadAndCheckSupport(sourceUri, auth));
+            cancellationTokenSource = new CancellationTokenSource();
+            return DownloadAndCheckSupport(sourceUri, auth, cancellationTokenSource.Token);
         }
 
         private void AbortChain()
         {
-            if (chain == null) return;
+            if (cancellationTokenSource == null)
+                return;
 
-            StopCoroutine(chain);
+            cancellationTokenSource.Cancel();
+            cancellationTokenSource.Dispose();
+            cancellationTokenSource = null;
         }
 
-        private IEnumerator DownloadAndCheckSupport(Uri sourceUri, StoredAuthorization auth)
+        private async Task<object> DownloadAndCheckSupport(Uri sourceUri, StoredAuthorization auth, CancellationToken token)
         {
             // Start by download the file, so we can do a detailed check of the content to determine the type
-            var urlAndData = new LocalFile { SourceUrl = sourceUri.ToString(), LocalFilePath = "" };
-
-            yield return DownloadDataToLocalCache(auth, urlAndData);
+            var urlAndData = await DownloadDataToLocalCache(sourceUri, auth, token);
+            token.ThrowIfCancellationRequested();
 
             // No local cache? Download failed.
             if (string.IsNullOrEmpty(urlAndData.LocalFilePath))
             {
                 Debug.LogError("No local cache found, download failed");
                 OnLocalCacheFailed?.Invoke(urlAndData.SourceUrl);
-                yield break;
+                return null;
             }
 
+            token.ThrowIfCancellationRequested();
             // Find the proper adapter in a chain of responsibility
-            yield return AdapterChain(urlAndData);
+            return AdapterChain(urlAndData);
         }
 
         /// <summary>
@@ -90,55 +101,66 @@ namespace Netherlands3D.DataTypeAdapters
         /// </summary>
         /// <param name="urlAndData">The local file object where the path will set</param>
         /// <returns></returns>
-        private IEnumerator DownloadDataToLocalCache(StoredAuthorization auth, LocalFile urlAndData)
+        [ItemCanBeNull]
+        private Task<LocalFile> DownloadDataToLocalCache(Uri url, StoredAuthorization auth, CancellationToken token)
         {
-            var url = new Uri(urlAndData.SourceUrl);
+            var tcs = new TaskCompletionSource<LocalFile>();
+
+            var localFile = new LocalFile
+            {
+                SourceUrl = url.ToString(),
+                LocalFilePath = ""
+            };
+
             var config = Config.Default();
             config = auth.AddToConfig(config);
             var promise = Uxios.DefaultInstance.Get<FileInfo>(url, config);
 
             // We want to use and manipulate urlAndData, so we 'curry' it by wrapping a method call in a lambda 
             promise.Then(response =>
-            {                
-                DownloadSucceeded(urlAndData, response.Data as FileInfo);
-            });        
+            {
+                if (token.IsCancellationRequested)
+                {
+                    tcs.TrySetCanceled(token);
+                    return;
+                }
+                
+                var info = response.Data as FileInfo;
+                localFile.LocalFilePath = info.FullName;
+                tcs.TrySetResult(localFile);
+            });
             promise.Catch(error =>
             {
-                DownloadFailed(urlAndData, error);
+                if (token.IsCancellationRequested)
+                {
+                    tcs.TrySetCanceled(token);
+                    return;
+                }
+                localFile.LocalFilePath = "";
+                if (debugLog)
+                {
+                    Debug.LogError("Download failed: " + error.Message);
+                }
+
+                tcs.TrySetException(error);
+                OnDownloadFailed.Invoke(localFile.SourceUrl);
             });
-            
-            yield return Uxios.WaitForRequest(promise);
+
+            return tcs.Task;
         }
 
-        private string DownloadSucceeded(LocalFile urlAndData, FileSystemInfo info)
-        {
-            // Ideally, we want to keep the fileInfo object because you can do cool stuff with it, but for now:
-            // let's fit it in the existing LocalFile object.
-            return urlAndData.LocalFilePath = info.FullName;
-        }
 
-        private void DownloadFailed(LocalFile urlAndData, Exception error)
-        {
-            urlAndData.LocalFilePath = "";
-            OnDownloadFailed.Invoke(urlAndData.SourceUrl);
-            if (debugLog)
-            {
-                Debug.LogError("Download failed: " + error.Message);
-            }
-        }
-
-        private IEnumerator AdapterChain(LocalFile urlAndData)
+        private object AdapterChain(LocalFile urlAndData)
         {
             // Get our interface references
             dataTypeAdapterInterfaces = new IDataTypeAdapter<object>[dataTypeAdapters.Length];
             for (int i = 0; i < dataTypeAdapters.Length; i++)
             {
-                if(dataTypeAdapters[i] == null)
+                if (dataTypeAdapters[i] == null)
                 {
-                    Debug.LogError("An adapter in chain is null. Please check your dataTypeAdapters list.",this.gameObject);
-                    yield break;
+                    throw new NullReferenceException("An adapter in chain is null. Please check your dataTypeAdapters list.");
                 }
-            
+
                 dataTypeAdapterInterfaces[i] = dataTypeAdapters[i] as IDataTypeAdapter<object>;
             }
 
@@ -147,13 +169,13 @@ namespace Netherlands3D.DataTypeAdapters
             {
                 if (!adapter.Supports(urlAndData)) continue;
 
-                if(debugLog) Debug.Log("<color=green>Adapter found: " + adapter.GetType().Name + "</color>");
-                adapter.Execute(urlAndData);
-                OnGenericAdapterFound.Invoke(adapter);
-                yield break;
+                if (debugLog) Debug.Log("<color=green>Adapter found: " + adapter.GetType().Name + "</color>");
+                OnAdapterFound.Invoke(adapter);
+                return adapter.Execute(urlAndData);
             }
 
             CouldNotFindAdapter.Invoke(urlAndData.SourceUrl);
+            return null;
         }
     }
 }
