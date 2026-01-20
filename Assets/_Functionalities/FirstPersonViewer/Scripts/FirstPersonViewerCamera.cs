@@ -57,7 +57,7 @@ namespace Netherlands3D.FirstPersonViewer
         public void SetupViewer(bool usePitch)
         {
             float startPitch = transform.eulerAngles.x;
-            
+
             mainCam = Camera.main;
             prevCameraPosition = mainCam.transform.position;
             prevCameraRotation = mainCam.transform.rotation;
@@ -81,7 +81,7 @@ namespace Netherlands3D.FirstPersonViewer
             if (usePitch) targetRot = yawRot * pitchRot;
             else targetRot = yawRot;
 
-                SetCameraFOV(60);
+            SetCameraFOV(60);
             SetupMainCam();
 
             transform.DOLocalMove(Vector3.zero + Vector3.up * CameraHeightOffset, 2f).SetEase(Ease.InOutSine);
@@ -192,7 +192,7 @@ namespace Netherlands3D.FirstPersonViewer
         }
 
         public void SetCameraConstrain(CameraConstrain state) => cameraConstrain = state;
-        
+
         private void SetCameraHeight(float height)
         {
             previousCameraHeight = CameraHeightOffset;
