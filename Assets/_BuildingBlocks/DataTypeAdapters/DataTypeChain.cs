@@ -50,6 +50,7 @@ namespace Netherlands3D.DataTypeAdapters
             AbortChain();
         }
 
+        //the void signature is needed for event listeners
         public void DetermineAdapter(Uri sourceUri, StoredAuthorization auth)
         {
             DetermineAdapterAndReturnResult(sourceUri, auth);

@@ -18,10 +18,4 @@ namespace Netherlands3D.DataTypeAdapters
         public bool Supports(LocalFile localFile);
         public T Execute(LocalFile localFile);
     }
-
-    // public interface IDataTypeAdapter
-    // {
-    //     public bool Supports(LocalFile localFile);
-    //     public void Execute(LocalFile localFile);
-    // }
 }

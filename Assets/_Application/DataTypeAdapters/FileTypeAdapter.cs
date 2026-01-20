@@ -31,6 +31,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             }
         }
 
+        //the void signature is needed for event listeners
         public void ProcessFile(string file)
         {
             FileToLayer(file);
