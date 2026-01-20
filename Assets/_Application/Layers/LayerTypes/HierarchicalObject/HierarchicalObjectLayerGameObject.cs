@@ -295,6 +295,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
             else
             {
+                ToggleScatterPropertyData toggleScatterPropertyData = LayerData.LayerProperties.Get<ToggleScatterPropertyData>();
+                if(toggleScatterPropertyData != null && toggleScatterPropertyData.IsScattered)
+                    return;
+                
                 transformInterfaceToggle.SetTransformTarget(gameObject);
                 transformInterfaceToggle.SnapTarget.AddListener(SnapToGround);
             }
@@ -366,6 +370,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
             LayerData.DeselectLayer(); //remove any transform interaction that might be present
 
+            TransformLayerPropertyData transformLayerPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformLayerPropertyData.IsEditable = false;
+            ScatterGenerationSettingsPropertyData scatterGenerationSettings = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
+            scatterGenerationSettings.IsEditable = true;
             App.Layers.VisualizeAs(LayerData, ObjectScatterLayerGameObject.ScatterBasePrefabID);
            
         }

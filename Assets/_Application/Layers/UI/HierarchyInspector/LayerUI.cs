@@ -570,7 +570,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void DeselectUI()
         {
-            if (propertyToggle.isOn) propertyToggle.isOn = false;
+            //if (propertyToggle.isOn) propertyToggle.isOn = false;
             SetHighlight(InteractionState.Default);
         }
 
@@ -768,7 +768,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             MarkLayerUIAsDirty();
             var properties = ServiceLocator.GetService<Properties.Properties>();
             RegisterWithPropertiesPanel(properties);
-            propertyToggle.isOn = false;
+            //propertyToggle.isOn = false;
         }
 
         private void RegisterWithPropertiesPanel(Properties.Properties propertiesPanel)
