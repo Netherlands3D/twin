@@ -130,7 +130,7 @@ namespace Netherlands3D.Functionalities.Wms
             LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            Legend.Instance.RegisterUrl(urlPropertyData.Url.ToString());
+            Legend.Instance.RegisterUrl(urlPropertyData.Url.ToString(), LayerData.ActiveSelf);
         }
 
         protected override void UnregisterEventListeners()
@@ -154,16 +154,16 @@ namespace Netherlands3D.Functionalities.Wms
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             if (isActive)
             {
-                UpdateURL(LayerData.GetProperty<LayerURLPropertyData>().Url);
+                UpdateURL(urlPropertyData.Url);
             }
             
             //we need to parse the layertype from the getmap request url
-            var parameters = QueryString.Decode(LayerData.GetProperty<LayerURLPropertyData>().Url.Query);
-            string layerType = parameters.Single("layers");
-            if(!string.IsNullOrEmpty(layerType))
-                Legend.Instance.ToggleLayer(layerType, isActive);
+            var wmsUrl = urlPropertyData.Url.ToString();
+            if(OgcWebServicesUtility.GetLayerNameFromURL(wmsUrl, out var layerName))
+                Legend.Instance.ToggleLayer(layerName, isActive);
             
             if (wmsProjectionLayer.isEnabled == isActive) return;
 

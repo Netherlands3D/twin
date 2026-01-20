@@ -10,20 +10,41 @@ using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Functionalities.Wms.UI;
 using Netherlands3D.Twin.UI;
+using RSG;
+using KeyValuePair = Netherlands3D.Twin.UI.KeyValuePair;
 
 namespace Netherlands3D.Functionalities.Wms
 {
     public class LegendUrlContainer
     {
         public string GetCapabilitiesUrl;
-        public Dictionary<string, string> LayerNameLegendUrlDictionary;
-        public Dictionary<string, LegendImage> LegendImageDictionary = new(StringComparer.Ordinal);
+        public Dictionary<string, LegendEntry> LayerNameLegendUrlDictionary = new();
         public int ActiveLayerCount;
+        
+        public sealed class LegendEntry
+        {
+            public readonly string LayerName;
+            public readonly string Url;
+
+            public LegendImage Image;
+            public bool Active;
+
+            public LegendEntry(string layerName, string url)
+            {
+                LayerName = layerName;
+                Url = url;
+                Active = true;
+            }
+            
+            public void SetImage(LegendImage image) => Image = image;
+            public void SetActive(bool active) => Active = active;
+        }
 
         public LegendUrlContainer(string getCapabilitiesUrl, Dictionary<string, string> legendDictionary)
         {
             GetCapabilitiesUrl = getCapabilitiesUrl;
-            LayerNameLegendUrlDictionary = legendDictionary;
+            foreach(KeyValuePair<string, string> kv in  legendDictionary)
+                LayerNameLegendUrlDictionary.Add(kv.Key, new LegendEntry(kv.Key, kv.Value));
             ActiveLayerCount = 1; // when creating a new object, we assume it has been created by one layer
         }
 
@@ -39,7 +60,12 @@ namespace Netherlands3D.Functionalities.Wms
 
         public void RegisterImage(LegendImage legendImage, string layerName)
         {
-            LegendImageDictionary.Add(layerName, legendImage);
+            LayerNameLegendUrlDictionary[layerName].SetImage(legendImage);
+        }
+
+        public void RegisterActiveLayer(string layerName, bool active)
+        {
+            LayerNameLegendUrlDictionary[layerName].Active = active;
         }
     }
 
@@ -91,7 +117,7 @@ namespace Netherlands3D.Functionalities.Wms
             credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
         }
 
-        public void RegisterUrl(string wmsUrl)
+        public void RegisterUrl(string wmsUrl, bool activeLayer)
         {
             if (string.IsNullOrEmpty(wmsUrl))
             {
@@ -103,6 +129,9 @@ namespace Netherlands3D.Functionalities.Wms
             if (log) Debug.Log("registering Url: " + getCapabilitiesUrl);
             if (legendUrlDictionary.TryGetValue(getCapabilitiesUrl, out var container)) //if we don't have the legend url info yet, we need to request it
             {
+                if(OgcWebServicesUtility.GetLayerNameFromURL(wmsUrl, out var layerName))
+                    container.RegisterActiveLayer(layerName, activeLayer);
+                
                 container.IncrementLayerCount();
                 return;
             }
@@ -218,7 +247,6 @@ namespace Netherlands3D.Functionalities.Wms
                 var urls = getCapabilities.GetLegendUrls();
                 var newContainer = new LegendUrlContainer(getCapabilitiesUri.ToString(), urls); //already add an empty container to keep track of the amount of layers
                 legendUrlDictionary.Add(newContainer.GetCapabilitiesUrl, newContainer);
-                legendUrlDictionary[getCapabilitiesUri.ToString()].LayerNameLegendUrlDictionary = urls;
                 var a = pendingUrlRequests.Remove(newContainer.GetCapabilitiesUrl);
                 if(log) Debug.Log("Successfully downloaded " + urls.Count + " legend urls");
                 ShowLegend(requestedLegendUrl, legendActive); //update the legend graphics if we were waiting for the legend urls
@@ -262,32 +290,41 @@ namespace Netherlands3D.Functionalities.Wms
 
             foreach (var kv in urlContainer.LayerNameLegendUrlDictionary)
             {
-                var config = new Config() { TypeOfResponseType = new TextureResponse() { Readable = true } };
-                config = auth.AddToConfig(config);
+                //is the layer inactive or the image already loaded then do not request the download
+                if(kv.Value.Active == false || kv.Value.Image != null)
+                    continue;
                 
-                var configWithPayload = Config.BasedOn(config);
-                Uri uri = new Uri(kv.Value);
-                configWithPayload = configWithPayload.WithPayload(new LegendContainerPayload(urlContainer, kv.Key));
-               
-                var promise = Uxios.DefaultInstance.Get<Texture2D>(uri, configWithPayload);
-                promise.Then(response =>
-                {
-                    var payload = response.Config.GetPayload<LegendContainerPayload>();
-                    LegendUrlContainer container = payload.container;
-                    string layerName = payload.layerName;
-                    
-                    Texture2D tex = response.Data as Texture2D;
-                    tex.Apply(false, true);
-                    AddGraphic(container, layerName, Sprite.Create(
-                        tex,
-                        new Rect(0f, 0f, tex.width, tex.height),
-                        Vector2.one * 0.5f,
-                        100
-                    ));
-                });
-
+                var promise = RequestAndCreateImage(urlContainer, kv.Value, auth);
                 yield return Uxios.WaitForRequest(promise);
             }
+        }
+
+        private Promise<IResponse> RequestAndCreateImage(LegendUrlContainer urlContainer, LegendUrlContainer.LegendEntry entry, StoredAuthorization auth)
+        {
+            var config = new Config() { TypeOfResponseType = new TextureResponse() { Readable = true } };
+            config = auth.AddToConfig(config);
+                
+            var configWithPayload = Config.BasedOn(config);
+            Uri uri = new Uri(entry.Url);
+            configWithPayload = configWithPayload.WithPayload(new LegendContainerPayload(urlContainer, entry.LayerName));
+               
+            var promise = Uxios.DefaultInstance.Get<Texture2D>(uri, configWithPayload);
+            promise.Then(response =>
+            {
+                var payload = response.Config.GetPayload<LegendContainerPayload>();
+                LegendUrlContainer container = payload.container;
+                string layerName = payload.layerName;
+                    
+                Texture2D tex = response.Data as Texture2D;
+                tex.Apply(false, true);
+                AddGraphic(container, layerName, Sprite.Create(
+                    tex,
+                    new Rect(0f, 0f, tex.width, tex.height),
+                    Vector2.one * 0.5f,
+                    100
+                ));
+            });
+            return promise;
         }
 
         private void AddGraphic(LegendUrlContainer container, string layerName, Sprite sprite)
@@ -315,16 +352,19 @@ namespace Netherlands3D.Functionalities.Wms
             graphics.Clear();
         }
 
-        public void ToggleLayer(string layerUrl, bool isActive)
+        public void ToggleLayer(string layerName, bool isActive)
         {
             if(activeLegendUrl == null) return;
             
             if (legendUrlDictionary.TryGetValue(activeLegendUrl, out var container))
             {
-                if (container.LegendImageDictionary.TryGetValue(layerUrl, out LegendImage image))
-                {
-                    image.gameObject.SetActive(isActive);
-                }
+                if(!container.LayerNameLegendUrlDictionary.ContainsKey(layerName)) return;
+                
+                LegendUrlContainer.LegendEntry entry = container.LayerNameLegendUrlDictionary[layerName]; 
+                if(entry.Image != null)
+                    entry.Image.gameObject.SetActive(isActive);
+                else if(isActive)
+                    RequestAndCreateImage(container, entry, credentialHandler.Authorization);
             }
         }
 
