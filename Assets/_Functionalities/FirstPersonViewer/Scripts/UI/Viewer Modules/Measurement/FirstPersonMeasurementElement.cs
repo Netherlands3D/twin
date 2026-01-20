@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Netherlands3D
+namespace Netherlands3D.FirstPersonViewer.Measurement
 {
     public class FirstPersonMeasurementElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
