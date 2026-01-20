@@ -26,7 +26,7 @@ namespace Netherlands3D.Functionalities.Wfs.LayerPresets
                 FeatureUrl = featureUrl ?? throw new ArgumentNullException(nameof(featureUrl));
                 Title = !string.IsNullOrWhiteSpace(title) ? title
                     : throw new ArgumentException("Title is required.", nameof(title));
-                Parent = parent ?? throw new ArgumentNullException(nameof(parent));
+                Parent = parent;
             }
         }
 
