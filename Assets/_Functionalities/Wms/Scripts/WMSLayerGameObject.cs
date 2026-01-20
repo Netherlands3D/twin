@@ -159,6 +159,7 @@ namespace Netherlands3D.Functionalities.Wms
                 UpdateURL(LayerData.GetProperty<LayerURLPropertyData>().Url);
             }
             
+            //we need to parse the layertype from the getmap request url
             var parameters = QueryString.Decode(LayerData.GetProperty<LayerURLPropertyData>().Url.Query);
             string layerType = parameters.Single("layers");
             if(!string.IsNullOrEmpty(layerType))
