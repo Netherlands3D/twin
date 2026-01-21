@@ -21,8 +21,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public event Action<ViewerModuleButton> OnViewerToolChanged;
 
-        private FirstPersonViewer firstPersonViewer;
-
         private void Start()
         {
             rect = GetComponent<RectTransform>();

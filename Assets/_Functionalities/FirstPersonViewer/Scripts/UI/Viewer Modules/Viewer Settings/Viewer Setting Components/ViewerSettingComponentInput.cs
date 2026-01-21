@@ -19,7 +19,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             valueInput.text = value.ToString();
         }
 
-        public void SetPropertyData(FirstPersonLayerPropertyData propertyData)
+        public override void SetPropertyData(FirstPersonLayerPropertyData propertyData)
         {
             this.propertyData = propertyData; 
             ViewerSettingValue.movementSetting.OnValueChanged.AddListener(OnValueChanged);

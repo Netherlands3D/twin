@@ -23,7 +23,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             toggle.SetValue(value);
         }
 
-        public void SetPropertyData(FirstPersonLayerPropertyData propertyData)
+        public override void SetPropertyData(FirstPersonLayerPropertyData propertyData)
         {
             this.propertyData = propertyData;
             ViewerSettingBool.movementSetting.OnValueChanged.AddListener(BoolValueChanged);

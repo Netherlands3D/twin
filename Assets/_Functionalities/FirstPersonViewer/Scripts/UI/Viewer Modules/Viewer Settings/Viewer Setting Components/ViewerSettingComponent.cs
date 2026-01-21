@@ -1,3 +1,4 @@
+using Netherlands3D.FirstPersonViewer.Layers;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using TMPro;
 using UnityEngine;
@@ -24,5 +25,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
         }
 
         public abstract void SetValue(object value);
+        public virtual void SetPropertyData(FirstPersonLayerPropertyData propertyData) { }
     }
 }
