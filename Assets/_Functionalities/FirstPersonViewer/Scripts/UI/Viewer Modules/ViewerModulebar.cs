@@ -29,13 +29,12 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
             underBarYSize = underBar.sizeDelta.y;
 
-            firstPersonViewer = ServiceLocator.GetService<FirstPersonViewer>();
-            firstPersonViewer.OnViewerExited.AddListener(ViewerExited);
+            ServiceLocator.GetService<FirstPersonViewer>().OnViewerExited.AddListener(ViewerExited);
         }
 
         private void OnDestroy()
         {
-            firstPersonViewer.OnViewerExited.RemoveListener(ViewerExited);
+            ServiceLocator.GetService<FirstPersonViewer>()?.OnViewerExited.RemoveListener(ViewerExited);
         }
 
         public void OpenWindow(RectTransform windowPrefab, ViewerModuleButton viewTool)

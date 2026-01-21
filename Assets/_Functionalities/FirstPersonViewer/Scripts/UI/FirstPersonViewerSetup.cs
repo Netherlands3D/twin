@@ -29,8 +29,10 @@ namespace Netherlands3D.FirstPersonViewer.UI
         {
             frustum.SetActiveCamera(Camera.main);
             wmtsMap.SetActiveCamera(Camera.main);
-            ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(Camera.main);
-            ServiceLocator.GetService<TransformHandleInterfaceToggle>().SetTransformHandleEnabled(true);
+            
+            //When stopping Unity without null check this will always throw an error.
+            ServiceLocator.GetService<SnapshotComponent>()?.SetActiveCamera(Camera.main);
+            ServiceLocator.GetService<TransformHandleInterfaceToggle>()?.SetTransformHandleEnabled(true);
         }
 
         private IEnumerator SetupViewer()

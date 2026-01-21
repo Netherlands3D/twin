@@ -30,6 +30,7 @@ namespace Netherlands3D.FirstPersonViewer
         [Header("Raycasting")]
         [SerializeField] private LayerMask snappingCullingMask;
         private OpticalRaycaster raycaster;
+        private Action<Vector3, bool> groundCallback;
 
         //Falling
         [Header("Ground")]
@@ -78,6 +79,8 @@ namespace Netherlands3D.FirstPersonViewer
 
             SetupFSM();
             gameObject.SetActive(false);
+
+            groundCallback = UpdateGroundPosition;
         }
 
         public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
@@ -130,11 +133,11 @@ namespace Netherlands3D.FirstPersonViewer
         {
             MovementSwitcher.OnMovementPresetChanged -= SetMovementModus;
             FirstPersonCamera.onSetupComplete.RemoveListener(OnAnimationCompleted);
-            OnViewerEntered = null;
-            OnResetToStart = null;
-            OnResetToGround = null;
-            OnSetCameraNorth = null;
-            OnViewerExited = null;
+            OnViewerEntered.RemoveAllListeners();
+            OnResetToStart.RemoveAllListeners();
+            OnResetToGround.RemoveAllListeners();
+            OnSetCameraNorth.RemoveAllListeners();
+            OnViewerExited.RemoveAllListeners();
         }
 
         private void SetupFSM()
@@ -159,13 +162,12 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void GetGroundPosition()
         {
-            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * stepHeight, Vector3.down, (point, hit) =>
-            {
-                if (hit)
-                {
-                    yPositionTarget = point.y;
-                }
-            }, snappingCullingMask);
+            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * stepHeight, Vector3.down, UpdateGroundPosition, snappingCullingMask);
+        }
+
+        private void UpdateGroundPosition(Vector3 point, bool hit)
+        {
+            if (hit) yPositionTarget = point.y;
         }
 
         private void CheckGroundCollision()
