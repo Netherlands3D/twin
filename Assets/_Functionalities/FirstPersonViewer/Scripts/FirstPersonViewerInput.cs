@@ -175,7 +175,7 @@ namespace Netherlands3D.FirstPersonViewer
                     OnInputExit.Invoke(exitModifier.IsPressed());
                 }
             }
-            else if (ExitInput.WasReleasedThisFrame()) ExitDuration.Invoke(-1); //Reset the visual
+            else if (ExitInput.WasReleasedThisFrame()) ExitDuration.Invoke(-1); //Reset the visual, -1 signifies a non-value for the durationcounter.
             else exitTimer = exitDuration;
         }
 
