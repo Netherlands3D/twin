@@ -1,6 +1,6 @@
-using Netherlands3D.FirstPersonViewer;
 using Netherlands3D.Minimap;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.UI;
 using System.Collections;
 using UnityEngine;
 
@@ -19,6 +19,9 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnEnable()
         {
+            TransformHandleInterfaceToggle handle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
+            if (handle != null) handle.SetTransformHandleEnabled(false);
+
             StartCoroutine(SetupViewer());
         }
 
@@ -27,6 +30,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
             frustum.SetActiveCamera(Camera.main);
             wmtsMap.SetActiveCamera(Camera.main);
             ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(Camera.main);
+            ServiceLocator.GetService<TransformHandleInterfaceToggle>().SetTransformHandleEnabled(true);
         }
 
         private IEnumerator SetupViewer()
