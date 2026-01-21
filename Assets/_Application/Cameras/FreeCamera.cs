@@ -98,7 +98,6 @@ namespace Netherlands3D.Twin.Cameras
         private bool dragging = false;
         private bool lockDraggingInput = false;
         private bool rotate = false;
-        private bool rotatingAroundPoint = false;
         private bool firstPersonRotate = false;
 
         private Vector3 dragStartPointerPosition;
@@ -234,8 +233,7 @@ namespace Netherlands3D.Twin.Cameras
             currentPointerDelta = pointerDelta;
 
             if (rotate)
-            {                
-                rotatingAroundPoint = true;
+            {  
                 RotateAroundPoint(pointerDelta);
             }
             else if (dragging && firstPersonRotate)
@@ -343,7 +341,6 @@ namespace Netherlands3D.Twin.Cameras
         public void Rotate(bool rotate)
         {
             this.rotate = rotate;
-            rotatingAroundPoint = rotate;
         }
 
         /// <summary>
@@ -355,14 +352,16 @@ namespace Netherlands3D.Twin.Cameras
             this.firstPersonRotate = rotateFirstPerson;
         }
 
+        private bool rotatePreviousFrame = false;
+
         void Update()
         {
-            if(!rotatingAroundPoint)
+            if(!rotate)
                 UpdateWorldPoint();
             EaseDragTarget();
             SetCrosshair();
             UpdateZoomVector();
-            if (!lockDraggingInput && !rotatingAroundPoint)
+            if (!lockDraggingInput && !rotate)
             {
                 Clamp();
             }
@@ -373,9 +372,9 @@ namespace Netherlands3D.Twin.Cameras
             if (!crosshairVisual)
                 return;
             
-            bool visible = rotatingAroundPoint;
+            bool visible = rotate;
             crosshairVisual.gameObject.SetActive(visible);
-            crosshairVisual.transform.position = rotatingAroundPoint ? rotateTarget.ToUnity() : dragStart;
+            crosshairVisual.transform.position = rotate ? rotateTarget.ToUnity() : dragStart;
         }
 
         /// <summary>
@@ -435,7 +434,7 @@ namespace Netherlands3D.Twin.Cameras
                 dragStart = this.transform.position;
                 dragStartPointerPosition = currentPointerPosition.ToUnity();
             }
-            else if (dragging && !rotatingAroundPoint && currentPointerDelta.magnitude > 0 && !firstPersonRotate)
+            else if (dragging && !rotate && currentPointerDelta.magnitude > 0 && !firstPersonRotate)
             {
                 CalculateSpeed();
                 var screenMove = currentPointerDelta / Screen.height;
@@ -468,6 +467,9 @@ namespace Netherlands3D.Twin.Cameras
         /// <param name="amount">Zoom delta where 1 is towards, and -1 is backing up from zoompoint</param>
         public void ZoomToPointer(float amount)
         {
+            if (rotate)
+                return;
+
             float signedAmount = Mathf.Sign(amount);
            
             if (Mathf.Sign(zoomVector) != signedAmount)
@@ -487,6 +489,10 @@ namespace Netherlands3D.Twin.Cameras
 
         public void UpdateZoomVector()
         {
+            if (rotate)
+                return;
+
+
             bool modifierKeysPressed = IsModifierKeyIsPressed();
 
             //we devide by the Time.deltaTime because on slower machines we dont want the vector to stay large on frame drop
@@ -594,7 +600,7 @@ namespace Netherlands3D.Twin.Cameras
 
         private void OnDrawGizmos()
         {
-            if (dragging || rotatingAroundPoint)
+            if (dragging || rotate)
             {
                 Gizmos.DrawSphere(dragStart, 1.0f);
             }

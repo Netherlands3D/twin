@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using System;
+using UnityEngine.UIElements;
 #endif
 
 /* Copyright(C)  X Gemeente
@@ -130,10 +131,18 @@ namespace Netherlands3D.Twin.Cameras.Input
             firstPersonModifierAction = cameraActionMap.FindAction("FirstPersonModifier");
             pointerAction = cameraActionMap.FindAction("Point");
 
+            rotateModifierAction.performed += OnRotate;
+            rotateModifierAction.canceled += OnRotate;
+
             SetOriginalProcessors(zoomAction);
             
             if (UseZoomScaleValue)
                 ApplyInputActionScaling(zoomAction, scrollScaleValue);
+        }
+
+        private void OnRotate(InputAction.CallbackContext ctx)
+        {
+            rotateModifier.InvokeStarted(ctx.ReadValueAsButton());
         }
 
         private void SetOriginalProcessors(InputAction action)
@@ -280,7 +289,8 @@ namespace Netherlands3D.Twin.Cameras.Input
 
             //Send modifiers
             draggingModifier.InvokeStarted(dragging);
-            rotateModifier.InvokeStarted(rotate);
+            //if(rotate)
+            //    rotateModifier.InvokeStarted(rotate);
             firstPersonModifier.InvokeStarted(firstPerson);
 
             //Always send main pointer position
