@@ -7,9 +7,9 @@ namespace Netherlands3D.Twin.Layers.ExtensionMethods
 {
     public static class LayerPropertyListExtensions
     {
-        public static bool Set<T>(this List<LayerPropertyData> properties, T propertyData) where T : LayerPropertyData
+        public static bool Set(this List<LayerPropertyData> properties, LayerPropertyData propertyData)
         {
-            var existingProperty = properties.Get<T>();
+            var existingProperty = properties.Get(propertyData.GetType()); //use explicit GetType to ensure the subclass type is used
             if (existingProperty == null)
             {
                 properties.Add(propertyData);

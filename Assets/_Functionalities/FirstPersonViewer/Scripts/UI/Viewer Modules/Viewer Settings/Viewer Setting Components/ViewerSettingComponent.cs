@@ -1,3 +1,4 @@
+using Netherlands3D.FirstPersonViewer.Layers;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using TMPro;
 using UnityEngine;
@@ -10,11 +11,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private TextMeshProUGUI settingUnitText;
 
         protected ViewerSetting setting;
-
-        private void Start()
-        {
-            if (setting != null) Init(setting);
-        }
 
         public virtual void Init(ViewerSetting setting)
         {
@@ -29,5 +25,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
         }
 
         public abstract void SetValue(object value);
+        public virtual void SetPropertyData(FirstPersonLayerPropertyData propertyData) { }
     }
 }

@@ -5,6 +5,7 @@ using Netherlands3D.Twin.Samplers;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Netherlands3D.FirstPersonViewer.ViewModus;
 
 namespace Netherlands3D.FirstPersonViewer.UI
 {

@@ -1,7 +1,10 @@
 using DG.Tweening;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Twin.Cameras;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -9,6 +12,8 @@ namespace Netherlands3D.FirstPersonViewer
 
     public class FirstPersonViewerCamera : MonoBehaviour
     {
+        private const float DEFAULT_CAMERA_FOV = 60f;
+
         [Header("Input")]
         [SerializeField] private FirstPersonViewerInput input;
         [SerializeField] private FirstPersonViewer viewer;
@@ -44,6 +49,8 @@ namespace Netherlands3D.FirstPersonViewer
         private bool prevCameraOrthographic;
         private const float DAMPENING_MULTIPLIER = 3;
 
+        public UnityEvent onSetupComplete = new();
+
         private void Awake()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -54,8 +61,10 @@ namespace Netherlands3D.FirstPersonViewer
             FPVCamera = firstPersonViewerCamera;
         }
 
-        public void SetupViewer()
+        public void SetupViewer(bool usePitch)
         {
+            float startPitch = transform.eulerAngles.x;
+
             mainCam = Camera.main;
             prevCameraPosition = mainCam.transform.position;
             prevCameraRotation = mainCam.transform.rotation;
@@ -68,12 +77,18 @@ namespace Netherlands3D.FirstPersonViewer
             transform.position = mainCam.transform.position;
             transform.rotation = mainCam.transform.rotation;
 
-            Vector3 forward = mainCam.transform.forward;
-            forward.y = 0;
+            Vector3 forward = transform.parent.forward;
+            forward.y = 0f;
             forward.Normalize();
 
+            Quaternion yawRot = Quaternion.LookRotation(forward, Vector3.up);
+            Quaternion pitchRot = Quaternion.Euler(startPitch, 0f, 0f);
+
+            Quaternion targetRot = yawRot;
+            if (usePitch) targetRot = yawRot * pitchRot;
+
+            SetCameraFOV(DEFAULT_CAMERA_FOV);
             SetupMainCam();
-            Quaternion targetRot = Quaternion.LookRotation(forward, Vector3.up);
 
             transform.DOLocalMove(Vector3.zero + Vector3.up * CameraHeightOffset, 2f).SetEase(Ease.InOutSine);
             transform.DORotateQuaternion(targetRot, 2f).SetEase(Ease.InOutSine).OnComplete(CameraSetupComplete);
@@ -83,6 +98,7 @@ namespace Netherlands3D.FirstPersonViewer
         private void CameraSetupComplete()
         {
             startRotation = transform.rotation;
+            mainCam.transform.position = transform.position + Vector3.up * cameraHeightAboveGround;
 
             //Setup events when done with animation.
             fovSetting.OnValueChanged.AddListener(SetCameraFOV);
@@ -91,7 +107,8 @@ namespace Netherlands3D.FirstPersonViewer
             viewer.OnResetToStart.AddListener(ResetToStart);
             viewer.OnSetCameraNorth.AddListener(SetCameraNorth);
 
-            viewer.MovementSwitcher.LoadMovementPreset(0);
+            onSetupComplete.Invoke();
+
             input.RemoveInputLockConstrain(this);
         }
 
