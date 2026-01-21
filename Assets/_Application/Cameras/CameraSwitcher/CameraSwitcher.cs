@@ -74,5 +74,7 @@ namespace Netherlands3D.Twin.Cameras
                 state.Camera.gameObject.SetActive(enable);
             }
         }
+
+        public bool IsCameraActive(MonoBehaviour cameraObject) => current.Camera == cameraObject;
     }
 }
