@@ -1912,6 +1912,7 @@ GameObject:
   - component: {fileID: 8381190895725350302}
   - component: {fileID: 635757392017939203}
   - component: {fileID: 1660072092271493632}
+  - component: {fileID: 7041144190466622278}
   m_Layer: 5
   m_Name: Export Button
   m_TagString: Untagged
@@ -2043,8 +2044,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9152394062576075889}
-        m_TargetAssemblyTypeName: Netherlands3D.FirstPersonViewer.Measurement.FirstPersonMeasurement,
+      - m_Target: {fileID: 7041144190466622278}
+        m_TargetAssemblyTypeName: Netherlands3D.FirstPersonViewer.Measurement.FirstPersonMeasurementExport,
           eu.netherlands3d.twin
         m_MethodName: ExportToCSV
         m_Mode: 1
@@ -2146,6 +2147,19 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &7041144190466622278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7035946851434814316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 443e02de11bda414e9b75c45965bfbf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  measurement: {fileID: 9152394062576075889}
 --- !u!1 &7295285985406868435
 GameObject:
   m_ObjectHideFlags: 0
@@ -2803,12 +2817,12 @@ PrefabInstance:
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_Size
-      value: 1
+      value: 0.39422852
       objectReference: {fileID: 0}
     - target: {fileID: 5797817625417347508, guid: 115ed422e629e4645bfb5c97e46c2e9b,
         type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 0.9999989
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
