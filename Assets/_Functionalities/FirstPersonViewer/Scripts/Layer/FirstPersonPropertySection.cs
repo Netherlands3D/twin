@@ -65,25 +65,37 @@ namespace Netherlands3D.FirstPersonViewer.Layers
             foreach (ViewerSetting setting in viewerState.editableSettings.list)
             {
                 if (!setting.isVisible) continue;
-                if (setting is not ViewerSettingValue) continue;
+                if (setting is not ViewerSettingValue && setting is not ViewerSettingBool) continue;
 
-                CreateSettingsUI(setting);
+                string settingKey = setting.GetSettingName();
+
+                if (!firstPersonData.settingValues.ContainsKey(settingKey))
+                    firstPersonData.settingValues.Add(settingKey, setting.GetDefaultValue());
+
+                if (setting is ViewerSettingValue) CreateValueSettingsUI(setting);
+                else if (setting is ViewerSettingBool) CreateBoolSettingUI(setting);
             }
         }
 
-        private void CreateSettingsUI(ViewerSetting setting)
+        private void CreateValueSettingsUI(ViewerSetting setting)
         {
-            string settingKey = setting.GetSettingName();
-
             //Gets a prefab based on the settings class name.
             ViewerSettingComponentInput componentprefab = componentList.settingPrefabs.First(s => s.className == setting.GetType().Name).prefab as ViewerSettingComponentInput;
             ViewerSettingComponentInput settingObject = Instantiate(componentprefab, settingParent);
             settingObject.Init(setting);
 
-            if (!firstPersonData.settingValues.ContainsKey(settingKey))
-                firstPersonData.settingValues.Add(settingKey, setting.GetDefaultValue());
+            settingObject.SetValue(firstPersonData.settingValues[setting.GetSettingName()]);
+            settingObject.SetPropertyData(firstPersonData);
+        }
 
-            settingObject.SetValue(firstPersonData.settingValues[settingKey]);
+        private void CreateBoolSettingUI(ViewerSetting setting)
+        {
+            //Gets a prefab based on the settings class name.
+            ViewerSettingComponentToggle componentprefab = componentList.settingPrefabs.First(s => s.className == setting.GetType().Name).prefab as ViewerSettingComponentToggle;
+            ViewerSettingComponentToggle settingObject = Instantiate(componentprefab, settingParent);
+            settingObject.Init(setting);
+
+            settingObject.SetValue(firstPersonData.settingValues[setting.GetSettingName()]);
             settingObject.SetPropertyData(firstPersonData);
         }
 
