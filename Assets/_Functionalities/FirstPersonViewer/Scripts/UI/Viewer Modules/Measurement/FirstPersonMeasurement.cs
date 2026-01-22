@@ -89,13 +89,17 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                         FirstPersonMeasurementPoint prevPoint = pointList[index - 1];
                         Color32 objectColor = lineColors[(index - 1) % lineColors.Length];
 
-                        float dst = prevPoint.LineDistance; //First one returns 1!
+                        SetPointLine(newPoint, prevPoint, objectColor);
+
+                        float dst = newPoint.LineDistance;
                         totalDistanceInMeters += dst;
                         totalDistanceText.text = "Totale afstand: " + ConvertToUnits(totalDistanceInMeters);
 
-                        CreateNewElement(index, objectColor, dst);
+                        //Text center on line.
+                        Vector3 center = (newPoint.transform.position + prevPoint.transform.position) * .5f;
+                        newPoint.SetText(center + Vector3.up * textHeightAboveLines, dst);
 
-                        SetPointLine(newPoint, prevPoint, objectColor, dst);
+                        CreateNewElement(index, objectColor, dst);
                     }
                 }
             }, FirstPersonViewerCamera.FPVCamera, measurementLayerMask);
@@ -118,13 +122,10 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             measurementElements.Add(measurementElement);
         }
 
-        private void SetPointLine(FirstPersonMeasurementPoint newPoint, FirstPersonMeasurementPoint prevPoint, Color32 color, float dst)
+        private void SetPointLine(FirstPersonMeasurementPoint newPoint, FirstPersonMeasurementPoint prevPoint, Color32 color)
         {
             newPoint.SetLine(newPoint.transform.position, prevPoint.transform.position);
             newPoint.SetLineColor(color);
-
-            Vector3 center = (newPoint.transform.position + prevPoint.transform.position) * .5f;
-            newPoint.SetText(center + Vector3.up * textHeightAboveLines, dst);
         }
 
         private void RemoveMeasuringPoint()
@@ -203,23 +204,24 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
         private void RefreshMeasurements()
         {
-            for (int i = 0; i < pointList.Count; i++)
+            for (int i = 0; i < pointList.Count - 1; i++)
             {
+                if(i == 0) pointList[i].DisableVisuals();
+
                 pointList[i].UpdatePointerLetter(GetAlphabetLetter(i));
 
-                if (i > 0)
-                {
-                    Vector3 start = pointList[i].transform.position;
-                    Vector3 end = pointList[i - 1].transform.position;
-                    pointList[i].SetLine(start, end);
-                    pointList[i].SetLineColor(lineColors[(i - 1) % lineColors.Length]);
+                Vector3 start = pointList[i].transform.position;
+                Vector3 end = pointList[i + 1].transform.position;
 
-                    Vector3 center = (start + end) / 2;
-                    float dst = pointList[i].LineDistance;
-                    pointList[i].SetText(center + Vector3.up * textHeightAboveLines, dst);
-                }
-                else if (i == 0) pointList[i].DisableVisuals();
+                pointList[i].SetLine(start, end);
+                pointList[i].SetLineColor(lineColors[i % lineColors.Length]);
+
+                Vector3 center = (start + end) * 0.5f;
+                pointList[i].SetText(center + Vector3.up * textHeightAboveLines, pointList[i].LineDistance);
             }
+
+            if(pointList.Count > 0) pointList[^1].UpdatePointerLetter(GetAlphabetLetter(pointList.Count - 1));
+
 
             float newTotalDistance = 0;
             for (int i = 0; i < measurementElements.Count; i++)
@@ -230,10 +232,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                     continue;
                 }
 
-                Vector3 pos1 = pointList[i].transform.position;
-                Vector3 pos2 = pointList[i + 1].transform.position;
-
-                float dst = Vector3.Distance(pos1, pos2);
+                float dst = pointList[i + 1].LineDistance;
 
                 newTotalDistance += dst;
                 measurementElements[i].UpdateMeasurement(GetAlphabetLetter(i), GetAlphabetLetter(i + 1), dst);
