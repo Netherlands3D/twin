@@ -71,7 +71,7 @@ namespace Netherlands3D.SelectionTools
             var newPolygonObject = new GameObject();
             newPolygonObject.name = "PolygonVisualisation";
 
-            var meshFilter = newPolygonObject.AddComponent<MeshFilter>(); //mesh is created by the PolygonVisualisation script
+            newPolygonObject.AddComponent<MeshFilter>(); //mesh is created by the PolygonVisualisation script
             var meshRenderer = newPolygonObject.AddComponent<MeshRenderer>();
             meshRenderer.material = meshMaterial;
             meshRenderer.receiveShadows = receiveShadows;
@@ -106,17 +106,12 @@ namespace Netherlands3D.SelectionTools
             // STEP 1: Compute polygon plane
             var solidPlane = contours[0];
             Plane plane = ComputeBestFitPlane(solidPlane);
-            Vector3 normal = plane.normal.normalized;
-
-            //u and v are the x and y axis relative to the plane we project on
-            Vector3 u = Vector3.Cross(normal, Vector3.up);
-            if (u.sqrMagnitude < 1e-6f)
-                u = Vector3.Cross(normal, Vector3.right);
-
-            u.Normalize();
+            Vector3 normal = invertWindingOrder ? -plane.normal.normalized : plane.normal.normalized;
+            Vector3 tangent = (Mathf.Abs(normal.x) > 0.1f || Mathf.Abs(normal.z) > 0.1f) ? Vector3.up : Vector3.right;
+            Vector3 u = Vector3.Cross(tangent, normal).normalized;
             Vector3 v = Vector3.Cross(normal, u);
             Vector3 origin = contours[0][0];
-
+            
             // === STEP 2: Build NTS polygon ===
             LinearRing outerRing = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[0], origin, u, v, !invertWindingOrder));
             LinearRing[] holes = new LinearRing[contours.Count - 1];
@@ -124,7 +119,6 @@ namespace Netherlands3D.SelectionTools
                 holes[h - 1] = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[h], origin, u, v, invertWindingOrder));
 
             var polygon = geometryFactory.CreatePolygon(outerRing, holes);
-
             
             // todo: this check is needed, but very garbage intensive if possible use a different check to determine polygon validity
             // a try catch block is not possible, since it does not work in webgl and the app can end up in an infinite loop
@@ -134,9 +128,7 @@ namespace Netherlands3D.SelectionTools
             }
 
             // STEP 3: Triangulate in 2D
-            Geometry triangulated;
-            triangulated = ConstrainedDelaunayTriangulator.Triangulate(polygon);
-
+            Geometry triangulated = ConstrainedDelaunayTriangulator.Triangulate(polygon);
             return new GeometryTriangulationData(triangulated, origin, u, v /*, normal*/);
         }
 
@@ -153,8 +145,6 @@ namespace Netherlands3D.SelectionTools
                 var data = datas[i];
                 if (data == null) continue;
 
-                Vector3 expectedNormal = Vector3.Cross(data.u, data.v);
-
                 for (int j = 0; j < data.geometry.NumGeometries; j++)
                 {
                     var geom = data.geometry.GetGeometryN(j);
@@ -166,15 +156,11 @@ namespace Netherlands3D.SelectionTools
                     Vector3 v1 = To3D(coords[1], data.origin, data.u, data.v) - offset;
                     Vector3 v2 = To3D(coords[2], data.origin, data.u, data.v) - offset;
 
-                    Vector3 triNormal = Vector3.Cross(v1 - v0, v2 - v0);
-
-                    bool flip = Vector3.Dot(triNormal, expectedNormal) >= 0f;
-
                     int baseIndex = verts.Count;
 
                     verts.Add(v0);
-                    verts.Add(flip ? v2 : v1);
-                    verts.Add(flip ? v1 : v2);
+                    verts.Add(v1);
+                    verts.Add(v2);
 
                     tris.Add(baseIndex);
                     tris.Add(baseIndex + 1);
@@ -268,14 +254,30 @@ namespace Netherlands3D.SelectionTools
 
         /// <summary>
         /// Computes a best-fit plane for a polygon (assumes it's planar).
-        /// </summary>
-        private static Plane ComputeBestFitPlane(List<Vector3> contour)
+        private static Plane ComputeBestFitPlane(List<Vector3> contour, bool onePolygon = false)
         {
             if (contour.Count < 3)
                 throw new ArgumentException("Need at least 3 points for a plane");
 
-            Vector3 normal = Vector3.Cross(contour[1] - contour[0], contour[2] - contour[0]).normalized;
-            return new Plane(normal, contour[0]);
+            // Newell's method
+            Vector3 normal = Vector3.zero;
+            int n = onePolygon ? 3 : contour.Count;
+            for (int i = 0; i < n; i++)
+            {
+                Vector3 current = contour[i];
+                Vector3 next = contour[(i + 1) % n];
+                normal.x += (current.y - next.y) * (current.z + next.z);
+                normal.y += (current.z - next.z) * (current.x + next.x);
+                normal.z += (current.x - next.x) * (current.y + next.y);
+            }
+            normal.Normalize();
+
+            // Use centroid as a point on the plane
+            Vector3 centroid = Vector3.zero;
+            foreach (var v in contour) centroid += v;
+            centroid /= n;
+
+            return new Plane(normal, centroid);
         }
     }
 }
