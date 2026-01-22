@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Rendering;
 using UnityEngine;
 
@@ -66,7 +68,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 }
                 
                 //when the data is counter clock wise we will flip the winding order so the polygon will always be visible for polygon visualisations
-                var positions2D = PolygonCalculator.FlattenPolygon(convertCoordinatesToListVector3(ring), new Plane(Vector3.zero, Vector3.up));
+                var positions2D = PolygonCalculator.FlattenPolygon(ring.ToUnityPositions().ToList(), new Plane(Vector3.zero, Vector3.up));
                 var polygonIsClockwise = PolygonCalculator.PolygonIsClockwise(positions2D);
                 if (!polygonIsClockwise)
                 {
@@ -213,14 +215,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 coord.height = defaultNAPHeight;
             }
             return coord;
-        }
-
-        private static List<Vector3> convertCoordinatesToListVector3(List<Coordinate> coordinates)
-        {
-            List<Vector3> convertedCoordinates = new List<Vector3>();
-            foreach (Coordinate coordinate in coordinates)
-                convertedCoordinates.Add(coordinate.ToUnity());
-            return convertedCoordinates;
         }
     }
 }
