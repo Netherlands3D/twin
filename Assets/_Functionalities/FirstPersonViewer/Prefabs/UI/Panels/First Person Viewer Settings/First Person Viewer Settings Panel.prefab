@@ -754,14 +754,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e836f638899b78f41a1c1b5038770694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  contentFitterRefresh: {fileID: 363397338669215778}
-  settingPrefabs:
-  - className: ViewerSettingValue
-    prefab: {fileID: 5244323761953340163, guid: f38b307865f9c3e47a01341f297ab4fe,
-      type: 3}
-  - className: ViewerSettingLabel
-    prefab: {fileID: 8854216575236322387, guid: f38aab42851dd5a429316da08cc64fc1,
-      type: 3}
+  componentList: {fileID: 11400000, guid: 75d6cddbd511b234f8e11c3f84bfb85b, type: 2}
   settingParent: {fileID: 245325743934915806}
   movementModusButtonPrefab: {fileID: 463382143704097879, guid: 53f22b1e4ad9f154e8f2890cc863be25,
     type: 3}

@@ -237,10 +237,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private LayerMask GetLayer(bool isMask)
         {
-            var layer = LayerMask.NameToLayer("Projected");
-            if (!isMask) return layer;
-
-            return LayerMask.NameToLayer("PolygonMask");
+            var layerName = isMask ? "PolygonMask" : "Projected";
+            return LayerMask.NameToLayer(layerName);
         }
 
         private void OnVisualisationsEnabled(bool enabled)

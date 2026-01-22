@@ -83,8 +83,8 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
                 projector.SetTexture(tileSensorData.DataTexture);
 
                 //force the depth to be at least larger than its height to prevent z-fighting
-                DecalProjector decalProjector = tile.gameObject.GetComponent<DecalProjector>();
                 TextureDecalProjector textureDecalProjector = tile.gameObject.GetComponent<TextureDecalProjector>();
+                DecalProjector decalProjector = textureDecalProjector.GetComponentInChildren<DecalProjector>();
                 if (ProjectorHeight >= decalProjector.size.z)
                     textureDecalProjector.SetSize(decalProjector.size.x, decalProjector.size.y, ProjectorMinDepth);
 
