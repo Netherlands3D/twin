@@ -106,7 +106,7 @@ namespace Netherlands3D.SelectionTools
             // STEP 1: Compute polygon plane
             var solidPlane = contours[0];
             Plane plane = ComputeBestFitPlane(solidPlane);
-            Vector3 normal = invertWindingOrder ? -plane.normal.normalized : plane.normal.normalized;
+            Vector3 normal = plane.normal.normalized;
             Vector3 tangent = (Mathf.Abs(normal.x) > 0.1f || Mathf.Abs(normal.z) > 0.1f) ? Vector3.up : Vector3.right;
             Vector3 u = Vector3.Cross(tangent, normal).normalized;
             Vector3 v = Vector3.Cross(normal, u);
@@ -179,9 +179,9 @@ namespace Netherlands3D.SelectionTools
             return mesh;
         }
 
-        public static Mesh CreatePolygonMesh(List<List<Vector3>> contours)
+        public static Mesh CreatePolygonMesh(List<List<Vector3>> contours, bool invertWindingOrder = false)
         {
-            var triangulationData = CreatePolygonGeometryTriangulationData(contours); 
+            var triangulationData = CreatePolygonGeometryTriangulationData(contours, invertWindingOrder); 
             return CreatePolygonMesh(new List<GeometryTriangulationData>() { triangulationData }, Vector3.zero);
         }
 
@@ -254,14 +254,14 @@ namespace Netherlands3D.SelectionTools
 
         /// <summary>
         /// Computes a best-fit plane for a polygon (assumes it's planar).
-        private static Plane ComputeBestFitPlane(List<Vector3> contour, bool onePolygon = false)
+        private static Plane ComputeBestFitPlane(List<Vector3> contour)
         {
             if (contour.Count < 3)
                 throw new ArgumentException("Need at least 3 points for a plane");
-
+            
             // Newell's method
             Vector3 normal = Vector3.zero;
-            int n = onePolygon ? 3 : contour.Count;
+            int n = contour.Count;
             for (int i = 0; i < n; i++)
             {
                 Vector3 current = contour[i];
@@ -271,13 +271,7 @@ namespace Netherlands3D.SelectionTools
                 normal.z += (current.x - next.x) * (current.y + next.y);
             }
             normal.Normalize();
-
-            // Use centroid as a point on the plane
-            Vector3 centroid = Vector3.zero;
-            foreach (var v in contour) centroid += v;
-            centroid /= n;
-
-            return new Plane(normal, centroid);
+            return new Plane(normal, contour[0]);
         }
     }
 }

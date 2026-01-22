@@ -118,7 +118,14 @@ namespace Netherlands3D.SelectionTools
             
             DestroyPolygonMesh(); //cleanup to avoid memory leaks
 
-            PolygonMesh = PolygonVisualisationUtility.CreatePolygonMesh(polygons);
+            bool invertWindingOrder = false;
+            if (newPolygon.Count > 0)
+            {
+                var polygon2D = PolygonCalculator.FlattenPolygon(newPolygon[0], new Plane(Vector3.up, 0));
+                invertWindingOrder = PolygonCalculator.PolygonIsClockwise(polygon2D) == createInwardMesh;
+            }
+
+            PolygonMesh = PolygonVisualisationUtility.CreatePolygonMesh(polygons, invertWindingOrder);
             var meshFilter = GetComponent<MeshFilter>();
 
             meshFilter.sharedMesh = PolygonMesh;
