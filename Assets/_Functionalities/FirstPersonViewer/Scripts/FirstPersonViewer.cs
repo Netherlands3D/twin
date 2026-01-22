@@ -162,7 +162,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void GetGroundPosition()
         {
-            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * stepHeight, Vector3.down, UpdateGroundPosition, snappingCullingMask);
+            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * stepHeight, Vector3.down, groundCallback, snappingCullingMask);
         }
 
         private void UpdateGroundPosition(Vector3 point, bool hit)
