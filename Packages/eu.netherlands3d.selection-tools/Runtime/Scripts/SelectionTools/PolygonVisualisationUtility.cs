@@ -4,6 +4,7 @@ using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Implementation;
 using NetTopologySuite.Triangulate.Polygon;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Netherlands3D.SelectionTools
@@ -104,7 +105,13 @@ namespace Netherlands3D.SelectionTools
                 return null;
 
             // STEP 1: Compute polygon plane
-            var solidPlane = contours[0];
+            var coordsArray = contours[0].ToList(); //We have to reverse the contour to make the computebestfitplane work because of the algorithm
+            if (!invertWindingOrder)
+            {
+                coordsArray.Reverse();
+            }
+            
+            var solidPlane = coordsArray;
             Plane plane = ComputeBestFitPlane(solidPlane);
             Vector3 normal = plane.normal.normalized;
             Vector3 tangent = (Mathf.Abs(normal.x) > 0.1f || Mathf.Abs(normal.z) > 0.1f) ? Vector3.up : Vector3.right;
@@ -126,7 +133,10 @@ namespace Netherlands3D.SelectionTools
             {
                 return null;
             }
-
+            var isCW = !NetTopologySuite.Algorithm.Orientation.IsCCW(polygon.Coordinates);
+          
+            Debug.Log("polygon coordinates are CW" + isCW );
+            
             // STEP 3: Triangulate in 2D
             Geometry triangulated = ConstrainedDelaunayTriangulator.Triangulate(polygon);
             return new GeometryTriangulationData(triangulated, origin, u, v /*, normal*/);
@@ -173,9 +183,15 @@ namespace Netherlands3D.SelectionTools
                 vertices = verts.ToArray(),
                 triangles = tris.ToArray()
             };
+            
+           
 
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
+            
+            var polygon2D = PolygonCalculator.FlattenPolygon(mesh.vertices, new Plane(Vector3.up, 0));
+            bool isCW = PolygonCalculator.PolygonIsClockwise(polygon2D); 
+            Debug.Log("mesh vertices are CW" + isCW );
             return mesh;
         }
 
