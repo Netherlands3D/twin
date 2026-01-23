@@ -8,7 +8,6 @@ using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
-using Netherlands3D.Functionalities.Wfs;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
@@ -96,8 +95,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         
         protected virtual void UpdateURL(Uri storedUri)
         {
-            if(credentialHandler == null) return;
-            
             if (storedUri == credentialHandler.Uri && credentialHandler.Authorization != null)
             {
                 HandleCredentials(storedUri, credentialHandler.Authorization);
@@ -139,8 +136,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             LayerData.HasValidCredentials = true;
             StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
             
-            if(LayerData.IsSelected)
-                LayerData.SelectLayer();
+            // if(LayerData.IsSelected)
+            //     LayerData.SelectLayer();
+        }
+
+        public override void OnDeselect(LayerData layer)
+        {
+            base.OnDeselect(layer);
         }
 
         protected override void RegisterEventListeners()
