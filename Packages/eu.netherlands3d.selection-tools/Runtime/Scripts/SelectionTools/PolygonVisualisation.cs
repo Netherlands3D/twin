@@ -122,7 +122,7 @@ namespace Netherlands3D.SelectionTools
             if (newPolygon.Count > 0)
             {
                 var polygon2D = PolygonCalculator.FlattenPolygon(newPolygon[0], new Plane(Vector3.up, 0));
-                invertWindingOrder = !PolygonCalculator.PolygonIsClockwise(polygon2D);// == createInwardMesh;
+                invertWindingOrder = !PolygonCalculator.PolygonIsClockwise(polygon2D);
             }
 
             PolygonMesh = PolygonVisualisationUtility.CreatePolygonMesh(polygons, invertWindingOrder);

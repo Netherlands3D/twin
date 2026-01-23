@@ -103,7 +103,7 @@ namespace Netherlands3D.SelectionTools
         {
             if (contours == null || contours.Count == 0 || contours[0].Count < 3)
                 return null;
-
+            
             // STEP 1: Compute polygon plane
             var coordsArray = contours[0].ToList(); //We have to reverse the contour to make the computebestfitplane work because of the algorithm
             if (!invertWindingOrder)
@@ -133,10 +133,6 @@ namespace Netherlands3D.SelectionTools
             {
                 return null;
             }
-            var isCW = !NetTopologySuite.Algorithm.Orientation.IsCCW(polygon.Coordinates);
-          
-            Debug.Log("polygon coordinates are CW" + isCW );
-            
             // STEP 3: Triangulate in 2D
             Geometry triangulated = ConstrainedDelaunayTriangulator.Triangulate(polygon);
             return new GeometryTriangulationData(triangulated, origin, u, v /*, normal*/);
@@ -188,10 +184,6 @@ namespace Netherlands3D.SelectionTools
 
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
-            
-            var polygon2D = PolygonCalculator.FlattenPolygon(mesh.vertices, new Plane(Vector3.up, 0));
-            bool isCW = PolygonCalculator.PolygonIsClockwise(polygon2D); 
-            Debug.Log("mesh vertices are CW" + isCW );
             return mesh;
         }
 
