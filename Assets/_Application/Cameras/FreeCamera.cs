@@ -352,8 +352,6 @@ namespace Netherlands3D.Twin.Cameras
             this.firstPersonRotate = rotateFirstPerson;
         }
 
-        private bool rotatePreviousFrame = false;
-
         void Update()
         {
             if(!rotate)
@@ -456,11 +454,7 @@ namespace Netherlands3D.Twin.Cameras
 
             dragging = isDragging;
         }
-
-
-
-      
-
+        
         /// <summary>
         /// Move towards/from zoompoint
         /// </summary>

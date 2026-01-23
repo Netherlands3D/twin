@@ -289,8 +289,6 @@ namespace Netherlands3D.Twin.Cameras.Input
 
             //Send modifiers
             draggingModifier.InvokeStarted(dragging);
-            //if(rotate)
-            //    rotateModifier.InvokeStarted(rotate);
             firstPersonModifier.InvokeStarted(firstPerson);
 
             //Always send main pointer position
