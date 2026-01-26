@@ -93,10 +93,6 @@ namespace Netherlands3D.Functionalities.Wms
             LayerData.HasValidCredentials = true;           
             wmsProjectionLayer.isEnabled = LayerData.ActiveInHierarchy;
             wmsProjectionLayer.RefreshTiles();
-            
-            //TODO We need this for now because the child layers are destroyed and readded to keep selection after credential validation, this needs to be removed after https://gemeente-amsterdam.atlassian.net/browse/S3DA-1935
-            if(LayerData.IsSelected)
-                LayerData.SelectLayer();
         }
 
         public void ClearCredentials()
