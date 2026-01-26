@@ -1,3 +1,4 @@
+using Netherlands3D.FirstPersonViewer.Layers;
 using Netherlands3D.FirstPersonViewer.ViewModus;
 using TMPro;
 using UnityEngine;
@@ -17,12 +18,13 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
             if (settingNameText != null) settingNameText.text = setting.GetDisplayName();
 
-            if (setting.GetDisplayUnits() == null) settingUnitText.gameObject.SetActive(false);
-            else settingUnitText.text = setting.GetDisplayUnits();
+            if (settingUnitText != null) settingUnitText.text = setting.GetDisplayUnits();
+
 
             SetValue(setting.GetValue());
         }
 
         public abstract void SetValue(object value);
+        public virtual void SetPropertyData(FirstPersonLayerPropertyData propertyData) { }
     }
 }

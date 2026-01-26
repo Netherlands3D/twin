@@ -19,7 +19,6 @@ namespace Netherlands3D.FirstPersonViewer
         [SerializeField] private FirstPersonViewer viewer;
         private Camera firstPersonViewerCamera;
         public static Camera FPVCamera;
-
         public float CameraHeightOffset { private set; get; } = 1.75f;
         private float previousCameraHeight;
         private float currentSensitivity = .11f;
@@ -28,6 +27,11 @@ namespace Netherlands3D.FirstPersonViewer
         [SerializeField] private Transform viewerBase;
         public CameraConstrain cameraConstrain;
 
+        //Smoothing
+        private bool useRotationDampening = true;
+        private float smoothTime = 0.15f;
+        private Quaternion viewerRotationVelocity;
+        private Quaternion cameraRotationVelocity;
         private Quaternion startRotation;
 
         [Header("Settings")]
@@ -43,6 +47,7 @@ namespace Netherlands3D.FirstPersonViewer
         private Quaternion prevCameraRotation;
         private int prevCameraCullingMask;
         private bool prevCameraOrthographic;
+        private const float DAMPENING_MULTIPLIER = 3;
 
         public UnityEvent onSetupComplete = new();
 
@@ -67,7 +72,7 @@ namespace Netherlands3D.FirstPersonViewer
             prevCameraOrthographic = mainCam.orthographic;
 
             input.AddInputLockConstrain(this);
-            viewer.OnViewerExited += ExitViewer;
+            viewer.OnViewerExited.AddListener(ExitViewer);
 
             transform.position = mainCam.transform.position;
             transform.rotation = mainCam.transform.rotation;
@@ -99,8 +104,8 @@ namespace Netherlands3D.FirstPersonViewer
             fovSetting.OnValueChanged.AddListener(SetCameraFOV);
             viewHeightSetting.OnValueChanged.AddListener(SetCameraHeight);
 
-            viewer.OnResetToStart += ResetToStart;
-            viewer.OnSetCameraNorth += SetCameraNorth;
+            viewer.OnResetToStart.AddListener(ResetToStart);
+            viewer.OnSetCameraNorth.AddListener(SetCameraNorth);
 
             onSetupComplete.Invoke();
 
@@ -130,9 +135,9 @@ namespace Netherlands3D.FirstPersonViewer
             fovSetting.OnValueChanged.RemoveListener(SetCameraFOV);
             viewHeightSetting.OnValueChanged.RemoveListener(SetCameraHeight);
 
-            viewer.OnResetToStart -= ResetToStart;
-            viewer.OnSetCameraNorth -= SetCameraNorth;
-            viewer.OnViewerExited -= ExitViewer;
+            viewer.OnResetToStart.RemoveListener(ResetToStart);
+            viewer.OnSetCameraNorth.RemoveListener(SetCameraNorth);
+            viewer.OnViewerExited.RemoveListener(ExitViewer);
 
 
             if (modified)
@@ -166,7 +171,9 @@ namespace Netherlands3D.FirstPersonViewer
         //Sets the rotation of the camera or the viewerBase based on the current Camera Constrain.
         private void RotateCamera(Vector2 pointerDelta)
         {
-            Vector2 mouseLook = pointerDelta * currentSensitivity;
+            float localCurrentSensitivity = currentSensitivity * (useRotationDampening ? DAMPENING_MULTIPLIER : 1);
+
+            Vector2 mouseLook = pointerDelta * localCurrentSensitivity;
 
             Vector2 currentRot = GetCameraRotation();
             if (currentRot.x > 180) currentRot.x -= 360;
@@ -175,22 +182,45 @@ namespace Netherlands3D.FirstPersonViewer
             float xRotation = Mathf.Clamp(currentRot.x - mouseLook.y, -90, 90);
             float yRotation = currentRot.y + mouseLook.x;
 
+            Quaternion targetLocalRotation = transform.localRotation;
+            Quaternion targetViewerRotation = viewerBase.rotation;
+
             switch (cameraConstrain)
             {
                 case CameraConstrain.CONTROL_Y:
-                    transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
-                    viewerBase.Rotate(Vector3.up * mouseLook.x);
+                    targetLocalRotation = Quaternion.Euler(xRotation, 0, 0);
+                    targetViewerRotation = viewerBase.rotation * Quaternion.Euler(0, mouseLook.x, 0);
                     break;
+
                 case CameraConstrain.CONTROL_BOTH:
-                    viewerBase.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+                    targetViewerRotation = Quaternion.Euler(xRotation, yRotation, 0);
                     break;
+
                 case CameraConstrain.CONTROL_NONE:
                     xRotation = Mathf.Clamp(xRotation, -45, 45);
                     yRotation = Mathf.Clamp(yRotation, -90, 90);
-                    transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
+                    targetLocalRotation = Quaternion.Euler(xRotation, yRotation, 0);
                     break;
             }
+
+            ApplyRotation(targetLocalRotation, targetViewerRotation);
         }
+
+        private void ApplyRotation(Quaternion targetLocalRotation, Quaternion targetViewerRotation)
+        {
+            if (useRotationDampening)
+            {
+                transform.localRotation = SmoothDampQuaternion(transform.localRotation, targetLocalRotation, ref cameraRotationVelocity, smoothTime);
+                viewerBase.rotation = SmoothDampQuaternion(viewerBase.rotation, targetViewerRotation, ref viewerRotationVelocity, smoothTime);
+            }
+            else
+            {
+                transform.localRotation = targetLocalRotation;
+                viewerBase.rotation = targetViewerRotation;
+            }
+        }
+
+        public void SetCameraRotationDampening(bool enable) => useRotationDampening = enable;
 
         public void SetCameraConstrain(CameraConstrain state) => cameraConstrain = state;
 
@@ -234,9 +264,33 @@ namespace Netherlands3D.FirstPersonViewer
         }
 
         public Vector3 GetPreviousCameraHeight() => transform.position + Vector3.up * previousCameraHeight;
-
-        private void ResetToStart() => transform.rotation = startRotation;
         public void SetSensitivity(float sensitivity) => currentSensitivity = sensitivity;
         public float GetSensitivity() => currentSensitivity;
+        private void ResetToStart() => transform.rotation = startRotation;
+
+        private Quaternion SmoothDampQuaternion(Quaternion rot, Quaternion target, ref Quaternion deriv, float time)
+        {
+            // account for double-cover
+            float dot = Quaternion.Dot(rot, target);
+            float multi = dot > 0f ? 1f : -1f;
+            target = new Quaternion(target.x * multi, target.y * multi, target.z * multi, target.w * multi);
+
+            // smooth damp each component
+            Vector4 result = new Vector4(
+                Mathf.SmoothDamp(rot.x, target.x, ref deriv.x, time),
+                Mathf.SmoothDamp(rot.y, target.y, ref deriv.y, time),
+                Mathf.SmoothDamp(rot.z, target.z, ref deriv.z, time),
+                Mathf.SmoothDamp(rot.w, target.w, ref deriv.w, time)
+            ).normalized;
+
+            // recompute derivative as tangent
+            float dtInv = 1f / Time.deltaTime;
+            deriv.x = (result.x - rot.x) * dtInv;
+            deriv.y = (result.y - rot.y) * dtInv;
+            deriv.z = (result.z - rot.z) * dtInv;
+            deriv.w = (result.w - rot.w) * dtInv;
+
+            return new Quaternion(result.x, result.y, result.z, result.w);
+        }
     }
 }
