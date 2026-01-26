@@ -31,7 +31,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnDisable()
         {
-            firstPersonInput?.OnLockStateChanged.RemoveListener(PlayUnlockCircleAnimation);
+            firstPersonInput?.OnLockStateChanged.RemoveListener(PlayUnlockCircleAnimation); //this can be null sometimes, maybe check in the future if properly unsubscribed
         }
 
         void Update()
