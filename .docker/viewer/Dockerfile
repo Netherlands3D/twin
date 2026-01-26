@@ -17,11 +17,13 @@ COPY .docker/viewer/app.config.dist.json /usr/share/nginx/html
 COPY .docker/viewer/bin/startup.sh /startup.sh
 RUN chmod +x /startup.sh
 
-WORKDIR /usr/share/nginx/html
+WORKDIR /app/cors-proxy
 
 # needed to run the local cors proxy in proxy.js
 RUN npm install cors-anywhere
-COPY .docker/viewer/proxy.js /usr/share/nginx/html/
+COPY .docker/viewer/proxy.js /app/cors-proxy
+
+WORKDIR /usr/share/nginx/html
 
 CMD ["/startup.sh"]
 EXPOSE 80
