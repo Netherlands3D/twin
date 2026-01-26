@@ -2,6 +2,7 @@ using Netherlands3D.FirstPersonViewer;
 using Netherlands3D.Minimap;
 using Netherlands3D.Services;
 using System.Collections;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Cameras;
 using UnityEngine;
 
@@ -25,8 +26,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnDisable()
         {
-            Camera camera = ServiceLocator.GetService<CameraService>().PreviousCamera;
-            ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(camera);
+            ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(App.Cameras.PreviousCamera);
         }
 
         private IEnumerator SetupViewer()

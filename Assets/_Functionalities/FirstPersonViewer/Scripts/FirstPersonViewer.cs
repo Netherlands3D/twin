@@ -5,6 +5,7 @@ using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
 using System;
+using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -212,7 +213,7 @@ namespace Netherlands3D.FirstPersonViewer
             fsm.SwitchState(null);
             SetMovementVisual(null);
 
-            ServiceLocator.GetService<CameraService>().SwitchCamera(FirstPersonCamera.FPVCamera);
+            App.Cameras.SwitchCamera(FirstPersonCamera.FPVCamera);
         }
 
         public void ExitViewer(bool exitOriginalPosition)
@@ -221,7 +222,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             Input.ViewerExited();
 
-            ServiceLocator.GetService<CameraService>().SwitchToPreviousCamera();
+            App.Cameras.SwitchToPreviousCamera();
         }
 
         public void SetVelocity(Vector2 velocity) => this.velocity = velocity;

@@ -27,9 +27,8 @@ namespace Netherlands3D.Twin.Samplers
 
         private void Start()
         {
-            CameraService cameraService = ServiceLocator.GetService<CameraService>();
-            activeCamera = cameraService.ActiveCamera;
-            cameraService.OnSwitchCamera.AddListener(SetActiveCamera);
+            activeCamera = App.Cameras.ActiveCamera;
+            App.Cameras.OnSwitchCamera.AddListener(SetActiveCamera);
             worldPointCallback = (w,h) =>
             {
                 if (h)
@@ -128,8 +127,7 @@ namespace Netherlands3D.Twin.Samplers
         
         private void OnDestroy()
         {
-            CameraService cameraService = ServiceLocator.GetService<CameraService>();
-            cameraService.OnSwitchCamera.RemoveListener(SetActiveCamera);
+            App.Cameras.OnSwitchCamera.RemoveListener(SetActiveCamera);
         }
     }
 }

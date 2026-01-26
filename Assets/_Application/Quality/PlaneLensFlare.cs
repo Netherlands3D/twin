@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin.Quality
 
         private void Start()
         {
-            mainCamera = ServiceLocator.GetService<CameraService>().ActiveCamera;
+            mainCamera = App.Cameras.ActiveCamera;
         }
 
         void Update()

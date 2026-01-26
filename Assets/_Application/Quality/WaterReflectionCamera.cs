@@ -33,9 +33,8 @@ namespace Netherlands3D.Twin.Quality
 
         private void Start()
         {
-            CameraService cameraService = ServiceLocator.GetService<CameraService>();
-            followCamera = cameraService.ActiveCamera;
-            cameraService.OnSwitchCamera.AddListener(SetCamera);
+            followCamera = App.Cameras.ActiveCamera;
+            App.Cameras.OnSwitchCamera.AddListener(SetCamera);
 
             if (!renderTexture)
                 CreateNewRenderTexture();
@@ -103,8 +102,7 @@ namespace Netherlands3D.Twin.Quality
         
         private void OnDestroy()
         {
-            CameraService cameraService = ServiceLocator.GetService<CameraService>();
-            cameraService.OnSwitchCamera.RemoveListener(SetCamera);
+            App.Cameras.OnSwitchCamera.RemoveListener(SetCamera);
         }
     }
 }

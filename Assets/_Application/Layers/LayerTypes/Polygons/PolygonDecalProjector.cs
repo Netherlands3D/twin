@@ -35,9 +35,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         private void Start()
         {
             heightMap = ServiceLocator.GetService<HeightMap>();
-            CameraService cameraService = ServiceLocator.GetService<CameraService>();
-            cameraService.OnSwitchCamera.AddListener(SetCamera);
-            mainCamera = cameraService.ActiveCamera;
+            App.Cameras.OnSwitchCamera.AddListener(SetCamera);
+            mainCamera = App.Cameras.ActiveCamera;
         }
 
         public void SetCamera(Camera camera)
@@ -78,8 +77,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         
         private void OnDestroy()
         {
-            CameraService cameraService = ServiceLocator.GetService<CameraService>();
-            cameraService.OnSwitchCamera.RemoveListener(SetCamera);
+            App.Cameras.OnSwitchCamera.RemoveListener(SetCamera);
         }
     }
 }
