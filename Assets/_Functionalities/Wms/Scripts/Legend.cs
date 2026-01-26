@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Linq;
 using KindMen.Uxios;
 using KindMen.Uxios.ExpectedTypesOfResponse;
 using Netherlands3D.Credentials;
@@ -86,7 +85,6 @@ namespace Netherlands3D.Functionalities.Wms
         private string activeLegendUrl; //the currently visible legend url in the panel
         private bool legendActive = false;
         private Coroutine runningCoroutine;
-        private List<LegendImage> graphics = new();
 
         private static Legend instance;
 
@@ -332,7 +330,6 @@ namespace Netherlands3D.Functionalities.Wms
             LegendImage image = Instantiate(graphicPrefab, graphicPrefab.transform.parent);
             image.gameObject.SetActive(true);
             image.SetSprite(sprite);
-            graphics.Add(image);
             container.RegisterImage(image, layerName);
 
             legendClampHeight.AdjustRectHeight();
@@ -341,15 +338,19 @@ namespace Netherlands3D.Functionalities.Wms
 
         private void ClearGraphics()
         {
-            if (graphics.Count == 0)
-                return;
+            if(activeLegendUrl == null) return;
 
-            for (int i = graphics.Count - 1; i >= 0; i--)
+            if (legendUrlDictionary.TryGetValue(activeLegendUrl, out var container))
             {
-                Destroy(graphics[i].gameObject);
+                foreach(KeyValuePair<string, LegendUrlContainer.LegendEntry> entry in container.LayerNameLegendUrlDictionary)
+                {
+                    if (entry.Value.Image != null)
+                    {
+                        Destroy(entry.Value.Image.gameObject);
+                        entry.Value.Image = null;
+                    }
+                }
             }
-
-            graphics.Clear();
         }
 
         public void ToggleLayer(string layerName, bool isActive)

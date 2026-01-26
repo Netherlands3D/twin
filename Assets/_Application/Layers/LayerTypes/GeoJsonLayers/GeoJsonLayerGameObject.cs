@@ -136,13 +136,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             LayerData.HasValidCredentials = true;
             StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
             
-            // if(LayerData.IsSelected)
-            //     LayerData.SelectLayer();
-        }
-
-        public override void OnDeselect(LayerData layer)
-        {
-            base.OnDeselect(layer);
+            if(LayerData.IsSelected)
+                 LayerData.SelectLayer();
         }
 
         protected override void RegisterEventListeners()
