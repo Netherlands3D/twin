@@ -43,7 +43,7 @@ namespace Netherlands3D.Twin.Cameras
                 foreach(Camera c in cameraObjects)
                     if(c != cameraObjects[0])
                         c.gameObject.SetActive(false);
-                SwitchCamera(cameraObjects[0]);
+                SwitchCamera(ActiveCamera);
             }
         }
 
