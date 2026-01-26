@@ -3,7 +3,6 @@ using UnityEngine;
 using System;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.Cameras;
 
 namespace Netherlands3D.Twin.Samplers
 {
@@ -23,12 +22,11 @@ namespace Netherlands3D.Twin.Samplers
         private void Awake()
         {
             opticalRaycaster = GetComponent<OpticalRaycaster>();
+            activeCamera = Camera.main;
         }
 
         private void Start()
         {
-            activeCamera = App.Cameras.ActiveCamera;
-            App.Cameras.OnSwitchCamera.AddListener(SetActiveCamera);
             worldPointCallback = (w,h) =>
             {
                 if (h)
@@ -116,7 +114,7 @@ namespace Netherlands3D.Twin.Samplers
             Coordinate initialCoordinate = new Coordinate(position);
             HeightMap heightMap = ServiceLocator.GetService<HeightMap>();   
             float height = heightMap.GetHeight(initialCoordinate);
-            Vector3 origin = activeCamera.transform.position;
+            Vector3 origin = Camera.main.transform.position;
             Vector3 dir = screenRay.direction;
             float t = (height - origin.y) / dir.y;
             Vector3 intersection = origin + dir * t;
@@ -124,10 +122,5 @@ namespace Netherlands3D.Twin.Samplers
         }
 
         public void SetActiveCamera(Camera camera) => activeCamera = camera;
-        
-        private void OnDestroy()
-        {
-            App.Cameras.OnSwitchCamera.RemoveListener(SetActiveCamera);
-        }
     }
 }

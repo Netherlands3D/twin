@@ -11,6 +11,5 @@ namespace Netherlands3D.Twin
     public static class App
     {
         public static ILayersServiceFacade Layers => ServiceLocator.GetService<Services.Layers>();
-        public static Cameras.CameraService Cameras => ServiceLocator.GetService<Cameras.CameraService>();
     }
 }

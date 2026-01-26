@@ -6,7 +6,6 @@ using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
 using System;
 using System.Collections.Generic;
-using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -22,6 +21,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private FirstPersonViewerStateMachine fsm;
         private WorldTransform worldTransform;
+        private CameraSwitcher cameraSwitcher;
 
         //Movement
         private Coordinate startPosition;
@@ -70,12 +70,15 @@ namespace Netherlands3D.FirstPersonViewer
         private void Start()
         {
             raycaster = ServiceLocator.GetService<OpticalRaycaster>();
+            cameraSwitcher = ServiceLocator.GetService<CameraSwitcher>();
+
             MovementSwitcher.SetViewerInput(Input);
             MovementSwitcher.OnMovementPresetChanged += SetMovementModus;
 
             FirstPersonCamera.onSetupComplete.AddListener(OnAnimationCompleted);
 
             SetupFSM();
+            gameObject.SetActive(false);
 
             groundCallback = UpdateGroundPosition;
         }
@@ -93,7 +96,7 @@ namespace Netherlands3D.FirstPersonViewer
         public void EnterViewer(ViewerState startState, Dictionary<string, object> settings)
         {
             //Catch Postion picker double enter call (When FPS is low).
-            if (FirstPersonCamera.FPVCamera.gameObject.activeInHierarchy && startState == null) return;
+            if (cameraSwitcher.IsCameraActive(this) && startState == null) return;
 
             startPosition = new Coordinate(transform.position);
             startRotation = transform.rotation;
@@ -109,9 +112,9 @@ namespace Netherlands3D.FirstPersonViewer
             MovementSwitcher.SetViewer(startState, settings);
 
             //When entering the FPV for the first time use the cool animation :).
-            if (!FirstPersonCamera.FPVCamera.gameObject.activeInHierarchy)
+            if (!cameraSwitcher.IsCameraActive(this))
             {
-                App.Cameras.SwitchCamera(FirstPersonCamera.FPVCamera);
+                cameraSwitcher.SwitchCamera(this);
 
                 bool usePitch = startState != null && startState.CameraConstrain != CameraConstrain.CONTROL_NONE;
                 FirstPersonCamera.SetupViewer(usePitch);
@@ -146,8 +149,6 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void Update()
         {
-            if (!FirstPersonCamera.FPVCamera.gameObject.activeInHierarchy) return;
-            
             CheckGroundCollision();
 
             fsm.OnUpdate();
@@ -255,7 +256,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             Input.ViewerExited();
 
-            App.Cameras.SwitchToPreviousCamera();
+            cameraSwitcher.SwitchToPreviousCamera();
         }
 
         public void SetVelocity(Vector2 velocity) => this.velocity = velocity;

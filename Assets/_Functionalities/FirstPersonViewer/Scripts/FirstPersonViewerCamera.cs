@@ -3,7 +3,6 @@ using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Twin.Cameras;
 using System;
 using System.Collections.Generic;
-using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,8 +18,7 @@ namespace Netherlands3D.FirstPersonViewer
         [SerializeField] private FirstPersonViewerInput input;
         [SerializeField] private FirstPersonViewer viewer;
         private Camera firstPersonViewerCamera;
-        public Camera FPVCamera;
-
+        public static Camera FPVCamera;
         public float CameraHeightOffset { private set; get; } = 1.75f;
         private float previousCameraHeight;
         private float currentSensitivity = .11f;
@@ -67,7 +65,7 @@ namespace Netherlands3D.FirstPersonViewer
         {
             float startPitch = transform.eulerAngles.x;
 
-            mainCam = App.Cameras.PreviousCamera;
+            mainCam = Camera.main;
             prevCameraPosition = mainCam.transform.position;
             prevCameraRotation = mainCam.transform.rotation;
             prevCameraCullingMask = mainCam.cullingMask;

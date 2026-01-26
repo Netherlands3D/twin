@@ -1,7 +1,4 @@
-﻿using System;
-using Netherlands3D.Services;
-using Netherlands3D.Twin.Cameras;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Netherlands3D.Twin.Quality
 {
@@ -11,22 +8,15 @@ namespace Netherlands3D.Twin.Quality
         [SerializeField] private Transform sunHalo;
         [SerializeField] private float haloScale = 1.0f;
         [SerializeField] private float offset = 0.01f;
-        
-        private Camera mainCamera;
 
         private void Awake() {
             if(!directionalLightSunTransform)
                 directionalLightSunTransform = FindObjectOfType<Light>().transform;
         }
 
-        private void Start()
-        {
-            mainCamera = App.Cameras.ActiveCamera;
-        }
-
         void Update()
         {
-            if(!mainCamera.isActiveAndEnabled) return;
+            var mainCamera = Camera.main;
 
             this.transform.rotation = directionalLightSunTransform.rotation;
             this.transform.position = mainCamera.transform.position;
