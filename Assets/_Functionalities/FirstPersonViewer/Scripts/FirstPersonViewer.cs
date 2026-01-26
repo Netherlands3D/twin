@@ -116,6 +116,7 @@ namespace Netherlands3D.FirstPersonViewer
                 bool usePitch = startState != null && startState.CameraConstrain != CameraConstrain.CONTROL_NONE;
                 FirstPersonCamera.SetupViewer(usePitch);
                 OnViewerEntered.Invoke();
+                Input.ViewerEntered();
             }
             else if (startState != null) MovementSwitcher.ApplyViewer();
         }
