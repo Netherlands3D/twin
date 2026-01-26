@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.DataTypeAdapters;
@@ -103,7 +104,6 @@ namespace Netherlands3D.Twin.Services
         /// </summary>
         public Layer VisualizeAs(LayerData layerData, string prefabIdentifier, UnityAction<LayerGameObject> callback = null)
         {
-            // string previousId = layerData.PrefabIdentifier;
             layerData.PrefabIdentifier = prefabIdentifier;
             var layer = new Layer(layerData);
             Visualize(layer, spawner, callback);
@@ -147,9 +147,23 @@ namespace Netherlands3D.Twin.Services
         {
             try
             {
-                LayerGameObject visualization = await spawner.Spawn(layer.LayerData);
-                layer.SetVisualization(visualization);
-                visualization.SetData(layer.LayerData);
+                Task<LayerGameObject> visualizationTask = layer.LayerGameObjectTask;
+                if (layer.LayerGameObjectTask == null)
+                {
+                    visualizationTask = spawner.Spawn(layer.LayerData);
+                    layer.SetVisualizationTask(visualizationTask);
+                }
+                
+                var visualization = await visualizationTask;
+
+                if (layer.LayerData == null || layer.LayerData.IsDisposed)
+                {
+                    Debug.Log("Layer " + layer.LayerData.Name + " was disposed before the visualisation was spawned, destroying the visualisation");
+                    Destroy(visualization.gameObject);
+                    return;
+                }
+                
+                visualization?.SetData(layer.LayerData);
                 callback?.Invoke(visualization);
             }
             catch (Exception e)

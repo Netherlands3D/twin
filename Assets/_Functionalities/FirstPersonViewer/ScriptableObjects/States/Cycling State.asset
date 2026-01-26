@@ -15,6 +15,7 @@ MonoBehaviour:
   movementVisualController: {fileID: 0}
   <CameraConstrain>k__BackingField: 2
   viewName: Fiets
+  id: 2
   viewIcon: {fileID: 21300000, guid: f71b77857e5c8c140860739d260f2af9, type: 3}
   viewPrefab: {fileID: 6794650892179964076, guid: fb3f8605b71bb8b46a1a38fa58deeec4,
     type: 3}

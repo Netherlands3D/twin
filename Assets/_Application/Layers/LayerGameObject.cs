@@ -10,6 +10,7 @@ using UnityEngine.Events;
 using Netherlands3D.Twin.Samplers;
 using Netherlands3D.Services;
 using System.Linq;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -32,7 +33,7 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField] private SpawnLocation spawnLocation;
         public string PrefabIdentifier => prefabIdentifier;
         public SpriteState Thumbnail => thumbnail;
-        public SpawnLocation SpawnLocation => spawnLocation;
+        public SpawnLocation SpawnLocation { get => spawnLocation; set => spawnLocation = value; }
 
         public string Name
         {
@@ -44,13 +45,6 @@ namespace Netherlands3D.Twin.Layers
 
         private LayerData layerData;
         public LayerData LayerData => layerData;
-
-        [Space] public UnityEvent onShow = new();
-        public UnityEvent onHide = new();
-        public UnityEvent onLayerInitialized = new();
-        public UnityEvent onLayerReady = new();
-
-
         public abstract BoundingBox Bounds { get; }
 
 #if UNITY_EDITOR
@@ -58,12 +52,7 @@ namespace Netherlands3D.Twin.Layers
         {
             if(Application.isPlaying)
                 return;
-            
-            // If the application is in the editor and not playing, we need to fill the property list with fake property data
-            // so that the inspector knows which property panels should be able to be togglable in the inspector.
-            // todo: this is very hacky, and should be done either with a new LayerData() to temporarily assign to this gameObject,
-            // todo: or even better: split StylingPropertyData so that this property data has a single responsibility instead of a a generic stylingPropertyData  
-
+         
             if (string.IsNullOrEmpty(prefabIdentifier) || prefabIdentifier == "00000000000000000000000000000000")
             {
                 var pathToPrefab = AssetDatabase.GetAssetPath(this);
@@ -83,7 +72,7 @@ namespace Netherlands3D.Twin.Layers
         {
         }
 
-        public virtual void SetData(LayerData layerData)
+        public void SetData(LayerData layerData)
         {
             if (this.LayerData == layerData) return;
 
@@ -94,22 +83,18 @@ namespace Netherlands3D.Twin.Layers
             //todo: what if layerData is null? e.g. because it was destroyed before the visualisation was loaded
             this.layerData = layerData;
 
-            OnLayerInitialize();
-            onLayerInitialized.Invoke();
+            OnVisualizationInitialize();
             // Call a template method that children are free to play with - this way we can avoid using
             // the start method directly and prevent forgetting to call the base.Start() from children
             LoadPropertiesInVisualisations();
             RegisterEventListeners();
-            OnLayerReady();
-            // Event invocation is separate from template method on purpose to ensure child classes complete their
-            // readiness before external classes get to act - it also prevents forgetting calling the base method
-            // when overriding OnLayerReady
             OnLayerActiveInHierarchyChanged(LayerData.ActiveInHierarchy); //initialize the visualizations with the correct visibility
 
             //todo move this into loadproperties?
             ApplyStyling();
 
-            onLayerReady.Invoke();
+            OnVisualizationReady();
+            RemoveOldStylingData();
         }
 
         protected virtual void RegisterEventListeners()
@@ -156,18 +141,18 @@ namespace Netherlands3D.Twin.Layers
         /// When using the LayerSpawner, the OnLayerReady will be called once after this method is fired the first time.
         /// When you have a custom instantiation flow this is not guaranteed.
         /// </summary>
-        protected virtual void OnLayerInitialize()
+        protected virtual void OnVisualizationInitialize()
         {
             // Intentionally left blank as it is a template method and child classes should not have to
             // call `base.OnLayerInitialize` (and possibly forget to do that)
         }
 
-        [Obsolete("Do not use Awake in subclasses, use OnLayerReady instead", true)]
+        [Obsolete("Do not use Start in subclasses, use OnLayerReady instead", true)]
         private void Start()
         {
         }
 
-        protected virtual void OnLayerReady()
+        protected virtual void OnVisualizationReady()
         {
             // Intentionally left blank as it is a template method and child classes should not have to
             // call `base.OnLayerReady` (and possibly forget to do that)
@@ -183,25 +168,19 @@ namespace Netherlands3D.Twin.Layers
 
         protected virtual void OnEnable()
         {
-            onShow.Invoke();
+           
         }
 
         protected virtual void OnDisable()
         {
-            onHide.Invoke();
-        }
-        protected virtual void OnDestroy()
-        {
-            //don't unsubscribe in OnDisable, because we still want to be able to center to a 
-
-            UnregisterEventListeners();
+           
         }
 
-        public virtual void OnSelect()
+        public virtual void OnSelect(LayerData layer)
         {
         }
 
-        public virtual void OnDeselect()
+        public virtual void OnDeselect(LayerData layer)
         {
         }
 
@@ -212,6 +191,8 @@ namespace Netherlands3D.Twin.Layers
 
         public virtual void DestroyLayerGameObject()
         {
+            //don't unsubscribe in OnDisable, because we still want to be able to center to a LayerGameObject
+            UnregisterEventListeners();
             Destroy(gameObject);
         }
 
@@ -293,11 +274,16 @@ namespace Netherlands3D.Twin.Layers
         /// </summary>
         protected List<LayerFeature> CreateFeaturesByType<T>() where T : Component
         {
+            return CreateFeaturesByType<T>(this.gameObject);
+        }
+        
+        protected List<LayerFeature> CreateFeaturesByType<T>(GameObject target) where T : Component
+        {
             var cachedFeatures = new List<LayerFeature>();
 
             // By default, consider each Unity.Component of type T as a "Feature" and create an ExpressionContext to
             // select the correct styling Rule to apply to the given "Feature". 
-            var components = GetComponentsInChildren<T>();
+            var components = target.GetComponentsInChildren<T>();
 
             foreach (var component in components)
             {
@@ -357,7 +343,53 @@ namespace Netherlands3D.Twin.Layers
             
             property = (T)Activator.CreateInstance(typeof(T), constructorArgs);
             LayerData.SetProperty(property);
+            
             onInit?.Invoke(property);
         }
+
+        #region BackwardsCompatibility
+
+        
+
+        
+        private List<StylingPropertyData> oldStylingData = new();
+        public void ConvertOldStylingDataIntoProperty(List<LayerPropertyData> properties, string propertyName, StylingPropertyData targetStylingPropertyData)
+        {
+            //BC conversion, finding all stylkingpropertydatas without any correct type and storing data in the correct places
+            //and if needed clear the properties from old data
+            var styles = properties.GetAll<StylingPropertyData>().ToList();
+            Dictionary<string, StylingRule> rulesToCopy = new();
+
+            foreach (var style in styles)
+            {
+                //must not be subclass of StylingPropertyData and be this exact type
+                if (style.GetType() != typeof(StylingPropertyData))
+                    continue;
+               
+                if (!style.StylingRules.Keys.Any(k => k.Contains(propertyName)))
+                    continue;
+
+                foreach (var kvp in style.StylingRules)
+                {
+                    rulesToCopy[kvp.Key] = kvp.Value;
+                }
+                
+                oldStylingData.Add(style);
+            }
+            
+            foreach (var kvp in rulesToCopy)
+            {
+                targetStylingPropertyData.StylingRules[kvp.Key] = kvp.Value;
+            }
+        }
+
+        private void RemoveOldStylingData()
+        {
+            if(oldStylingData.Count == 0) return;
+            foreach (var style in oldStylingData)
+                LayerData.RemoveProperty(style);
+        }
+        
+        #endregion
     }
 }

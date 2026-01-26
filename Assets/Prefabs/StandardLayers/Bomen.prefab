@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -6617633297429980398}
   - component: {fileID: -5577781340233138085}
   - component: {fileID: -7741956206036526357}
-  - component: {fileID: -6708588430167576258}
+  - component: {fileID: 5382952495892163022}
   m_Layer: 10
   m_Name: Bomen
   m_TagString: Untagged
@@ -98,18 +98,6 @@ MonoBehaviour:
   prefabIdentifier: 6915dd70276474a0688a5fb1a9c248c0
   thumbnail: {fileID: 0}
   spawnLocation: -1
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onHide:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerInitialized:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerReady:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &-6617633297429980398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,7 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2f5ce46c2e453f85e8e5a75fff8862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-6708588430167576258
+--- !u!114 &5382952495892163022
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -182,6 +170,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 3712503248906199988}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b050df83d47a4b0aa83cc328c57a63b, type: 3}
+  m_Script: {fileID: 11500000, guid: e7cf6eebb305744f697547e83f79458c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

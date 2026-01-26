@@ -18,9 +18,9 @@ namespace Netherlands3D.Functionalities.Wfs
 
         public WFSGeoJSONTileDataLayer CartesianTileWFSLayer => cartesianTileWFSLayer;
 
-        protected override void OnLayerInitialize()
+        protected override void OnVisualizationInitialize()
         {
-            base.OnLayerInitialize();
+            base.OnVisualizationInitialize();
             CartesianTileWFSLayer.WFSGeoJSONLayer = this;
         }
 

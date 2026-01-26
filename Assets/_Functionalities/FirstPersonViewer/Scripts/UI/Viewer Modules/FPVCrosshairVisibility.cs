@@ -10,11 +10,11 @@ namespace Netherlands3D.FirstPersonViewer.UI
             FirstPersonViewerInput input = ServiceLocator.GetService<FirstPersonViewer>().Input;
             if (enable)
             {
-                input.OnLockStateChanged += OnLockStateChanged;
+                input.OnLockStateChanged.AddListener(OnLockStateChanged);
             }
             else
             {
-                input.OnLockStateChanged -= OnLockStateChanged;
+                input.OnLockStateChanged.RemoveListener(OnLockStateChanged);
             }
         }
 

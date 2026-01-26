@@ -12,15 +12,14 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
     {
         private SensorProjectionLayer SensorProjectionLayer { get; set; }
         
-        protected override void OnLayerInitialize()
+        protected override void OnVisualizationInitialize()
         {
             SensorProjectionLayer = GetComponent<SensorProjectionLayer>();
-            base.OnLayerInitialize();
+            base.OnVisualizationInitialize();
         }
 
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
-            LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
         }
 
@@ -29,13 +28,6 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
         {
             //we have to flip the value because a lower layer with a higher index needs a lower render index
             SensorProjectionLayer.RenderIndex = -order;
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-
-            LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
         }
 
         protected override void RegisterEventListeners()
@@ -49,6 +41,8 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             propertyData.OnMinColorChanged.AddListener(RefreshTiles);
             propertyData.OnMaxColorChanged.AddListener(RefreshTiles);
             propertyData.OnResetValues.AddListener(ResetValues);
+
+            LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
         }
 
         protected override void UnregisterEventListeners()
@@ -62,6 +56,8 @@ namespace Netherlands3D.Functionalities.UrbanReLeaf
             propertyData.OnMinColorChanged.RemoveListener(RefreshTiles);
             propertyData.OnMaxColorChanged.RemoveListener(RefreshTiles);
             propertyData.OnResetValues.RemoveListener(ResetValues);
+            
+            LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
         }
 
         private void RefreshTiles<T>(T value)

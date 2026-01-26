@@ -12,13 +12,13 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void Start()
         {
-            ServiceLocator.GetService<FirstPersonViewer>().Input.ExitDuration += UpdateTimer;
+            ServiceLocator.GetService<FirstPersonViewer>().Input.ExitDuration.AddListener(UpdateTimer);
             gameObject.SetActive(false);
         }
 
         private void OnDestroy()
         {
-            ServiceLocator.GetService<FirstPersonViewer>().Input.ExitDuration -= UpdateTimer;
+            ServiceLocator.GetService<FirstPersonViewer>().Input.ExitDuration.RemoveListener(UpdateTimer);
         }
 
         public void UpdateTimer(float percentage)

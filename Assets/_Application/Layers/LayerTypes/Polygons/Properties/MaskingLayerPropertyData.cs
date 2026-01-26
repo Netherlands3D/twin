@@ -1,11 +1,11 @@
-using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
     public class MaskingLayerPropertyData : StylingPropertyData
     {
-        public const int DEFAULT_MASK_BIT_MASK = 16777215; //(2^24)-1; 
-        
+        public const int DEFAULT_MASK_BIT_MASK = 16777215 & ~(1<<MASKING_DOME_BIT_INDEX); //(2^24)-1, disable the bit used for the masking dome (22); 
+        public const int MASKING_DOME_BIT_INDEX =  PolygonSelectionLayerPropertyData.MaxAvailableMasks;
         /// <summary>
         /// Sets a bitmask to the layer to determine which masks affect the provided LayerGameObject
         /// </summary>

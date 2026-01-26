@@ -49,14 +49,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             set => lineRenderer3D = value;
         }
 
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
             // Ensure that LineRenderer3D.Material has a Material Instance to prevent accidental destruction
             // of a material asset when replacing the material - no destroy of the old material must be done because
             // that is an asset and not an instance
             lineRenderer3D.LineMaterial = new Material(lineRenderer3D.LineMaterial);
             var stylingPropertyData = LayerData.GetProperty<ColorPropertyData>();
-            stylingPropertyData.ActiveToolProperty = Symbolizer.StrokeColorProperty;
+            stylingPropertyData.ColorType = Symbolizer.StrokeColorProperty;
         }
 
         public List<Mesh> GetMeshData(Feature feature)

@@ -33,18 +33,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             layer.isEnabled = isActive;
         }
 
-        protected override void OnLayerInitialize()
+        protected override void OnVisualizationInitialize()
         {
             tileHandler = FindAnyObjectByType<TileHandler>();
             transform.SetParent(tileHandler.transform);
             layer = GetComponent<Layer>();
 
-            tileHandler.AddLayer(layer);           
-        }
-
-        protected override void OnLayerReady()
-        {
-            base.OnLayerReady();
+            tileHandler.AddLayer(layer);         
+            
             SetupFeatures();
         }
 
@@ -154,34 +150,36 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             return null;
         }
 
-        public override void OnSelect()
+        public override void OnSelect(LayerData layer)
         {
             var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
             if (transformInterfaceToggle)
                 transformInterfaceToggle.ShowVisibilityPanel(true);
         }
 
-        public override void OnDeselect()
+        public override void OnDeselect(LayerData layer)
         {
             var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
             if (transformInterfaceToggle)
                 transformInterfaceToggle.ShowVisibilityPanel(false);
         }
 
-        protected override void OnDestroy()
+        protected override void UnregisterEventListeners()
         {
-            base.OnDestroy();
+            base.UnregisterEventListeners();
             if(layer is BinaryMeshLayer binaryMeshLayer)
             {
                 binaryMeshLayer.OnMappingCreated.RemoveListener(OnAddedMapping);
                 binaryMeshLayer.OnMappingRemoved.RemoveListener(OnRemovedMapping);
-
             }
+        }
+
+        protected void OnDestroy()
+        {
             if (Application.isPlaying && tileHandler && layer)
             {
                 tileHandler.RemoveLayer(layer);
             }
-
         }
         
         public override void ApplyStyling()

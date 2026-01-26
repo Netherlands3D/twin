@@ -7,6 +7,7 @@ using Netherlands3D.Twin.Utility;
 using UnityEngine;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 
 namespace Netherlands3D.Functionalities.Wms
@@ -30,20 +31,13 @@ namespace Netherlands3D.Functionalities.Wms
         public bool ShowLegendOnSelect { get; set; } = true;
         public override BoundingBox Bounds => WMSProjectionLayer?.BoundingBox;
         
-        protected override void OnLayerInitialize()
-        {
-            base.OnLayerInitialize();
-            CredentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
-        }
 
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
-            base.OnLayerReady();
+            base.OnVisualizationReady();
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             UpdateURL(urlPropertyData.Url);
-            LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
             SetRenderOrder(LayerData.RootIndex);
-            Legend.Instance.RegisterUrl(urlPropertyData.Url.ToString());
             Legend.Instance.ShowLegend(urlPropertyData.Url.ToString(), ShowLegendOnSelect && LayerData.IsSelected);
         }
 
@@ -117,21 +111,30 @@ namespace Netherlands3D.Functionalities.Wms
                 CredentialHandler.ApplyCredentials();
         }
 
-        protected override void OnDestroy()
+        protected override void RegisterEventListeners()
         {
-            base.OnDestroy();
+            base.RegisterEventListeners();
+            LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
+            CredentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            Legend.Instance.RegisterUrl(urlPropertyData.Url.ToString());
+        }
+
+        protected override void UnregisterEventListeners()
+        {
+            base.UnregisterEventListeners();
             LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
             CredentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             Legend.Instance.UnregisterUrl(urlPropertyData.Url.ToString());
         }
 
-        public override void OnSelect()
+        public override void OnSelect(LayerData layer)
         {
             SetLegendActive(ShowLegendOnSelect);
         }
 
-        public override void OnDeselect()
+        public override void OnDeselect(LayerData layer)
         {
             SetLegendActive(false);
         }
