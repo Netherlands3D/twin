@@ -21,21 +21,18 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public event Action<ViewerModuleButton> OnViewerToolChanged;
 
-        private FirstPersonViewer firstPersonViewer;
-
         private void Start()
         {
             rect = GetComponent<RectTransform>();
 
             underBarYSize = underBar.sizeDelta.y;
 
-            firstPersonViewer = ServiceLocator.GetService<FirstPersonViewer>();
-            firstPersonViewer.OnViewerExited += ViewerExited;
+            ServiceLocator.GetService<FirstPersonViewer>().OnViewerExited.AddListener(ViewerExited);
         }
 
         private void OnDestroy()
         {
-            firstPersonViewer.OnViewerExited -= ViewerExited;
+            ServiceLocator.GetService<FirstPersonViewer>()?.OnViewerExited.RemoveListener(ViewerExited);
         }
 
         public void OpenWindow(RectTransform windowPrefab, ViewerModuleButton viewTool)

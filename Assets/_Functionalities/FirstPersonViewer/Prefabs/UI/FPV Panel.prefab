@@ -1339,7 +1339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pinToggle: {fileID: 6458385394041893046}
-  rectSize: {x: -1, y: -1}
+  rectSize: {x: 0, y: 0}
   exitDirection: 3
   duration: 0.25
   easeType: 4
@@ -2658,7 +2658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pinToggle: {fileID: 3355355597565196264}
-  rectSize: {x: -1, y: -1}
+  rectSize: {x: 0, y: 0}
   exitDirection: 2
   duration: 0.25
   easeType: 4
@@ -4030,7 +4030,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pinToggle: {fileID: 7079809640214307417}
-  rectSize: {x: -1, y: -1}
+  rectSize: {x: 0, y: 0}
   exitDirection: 0
   duration: 0.25
   easeType: 4

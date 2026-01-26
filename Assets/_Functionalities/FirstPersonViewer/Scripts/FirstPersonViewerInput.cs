@@ -47,9 +47,9 @@ namespace Netherlands3D.FirstPersonViewer
         private bool isLocked;
 
         //Events
-        public event Action<float> ExitDuration;
-        public event Action<bool> OnLockStateChanged;
-        private event Action<bool> OnInputExit;
+        public UnityEvent<float> ExitDuration = new();
+        public UnityEvent<bool> OnLockStateChanged = new();
+        private Action<bool> OnInputExit; //Callback
 
         private void Awake()
         {
@@ -152,7 +152,7 @@ namespace Netherlands3D.FirstPersonViewer
             isLocked = !unlock;
             LockCamera = unlock;
 
-            OnLockStateChanged?.Invoke(isLocked);
+            OnLockStateChanged.Invoke(isLocked);
         }
 
         //When holding the exit key and not editing any inputfield. Start the exiting proceidure. 
@@ -166,16 +166,16 @@ namespace Netherlands3D.FirstPersonViewer
                 if (exitTimer < exitDuration - exitViewDelay)
                 {
                     float percentageTime = Mathf.Clamp01(1f - ((exitTimer + exitViewDelay) / exitDuration));
-                    ExitDuration?.Invoke(percentageTime);
+                    ExitDuration.Invoke(percentageTime);
                 }
 
                 if (exitTimer == 0)
                 {
                     ExitDuration?.Invoke(-1);
-                    OnInputExit?.Invoke(exitModifier.IsPressed());
+                    OnInputExit.Invoke(exitModifier.IsPressed());
                 }
             }
-            else if (ExitInput.WasReleasedThisFrame()) ExitDuration?.Invoke(-1); //Reset the visual
+            else if (ExitInput.WasReleasedThisFrame()) ExitDuration.Invoke(-1); //Reset the visual, -1 signifies a non-value for the durationcounter.
             else exitTimer = exitDuration;
         }
 

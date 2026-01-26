@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35bdea6ab0d1e564da4fad3d28d585b3, type: 3}
+  m_Name: ViewerSettingComponentList
+  m_EditorClassIdentifier: 
+  settingPrefabs:
+  - className: ViewerSettingValue
+    prefab: {fileID: 5244323761953340163, guid: f38b307865f9c3e47a01341f297ab4fe,
+      type: 3}
+  - className: ViewerSettingLabel
+    prefab: {fileID: 8854216575236322387, guid: f38aab42851dd5a429316da08cc64fc1,
+      type: 3}
+  - className: ViewerSettingBool
+    prefab: {fileID: 6121471200796864116, guid: 5ed69da346e190a4aad83c08be31e3ca,
+      type: 3}
