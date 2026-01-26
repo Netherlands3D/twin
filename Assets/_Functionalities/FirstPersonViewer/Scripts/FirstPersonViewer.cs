@@ -95,7 +95,7 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void Update()
         {
-            if (!FirstPersonCamera.FPVCamera.gameObject.activeSelf) return;
+            if (!FirstPersonCamera.FPVCamera.gameObject.activeInHierarchy) return;
             
             CheckGroundCollision();
 
