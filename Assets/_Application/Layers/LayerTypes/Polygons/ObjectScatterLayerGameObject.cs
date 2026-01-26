@@ -461,7 +461,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             if (isScattered)
                 return;
 
-            App.Layers.VisualizeAs(LayerData, LayerData.GetProperty<ScatterGenerationSettingsPropertyData>().OriginalPrefabId);
+            TransformLayerPropertyData transformLayerPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformLayerPropertyData.IsEditable = true;
+            ScatterGenerationSettingsPropertyData scatterGenerationSettingsPropertyData = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
+            scatterGenerationSettingsPropertyData.IsEditable = false;
+            App.Layers.VisualizeAs(LayerData, scatterGenerationSettingsPropertyData.OriginalPrefabId);
         }
     }
 }
