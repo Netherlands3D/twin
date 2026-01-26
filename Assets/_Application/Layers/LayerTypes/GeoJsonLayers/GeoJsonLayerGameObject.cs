@@ -136,8 +136,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             LayerData.HasValidCredentials = true;
             StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
             
+            //TODO We need this for now because the child layers are destroyed and readded to keep selection after credential validation, this needs to be removed after https://gemeente-amsterdam.atlassian.net/browse/S3DA-1935
             if(LayerData.IsSelected)
-                 LayerData.SelectLayer();
+                LayerData.SelectLayer();
         }
 
         protected override void RegisterEventListeners()
