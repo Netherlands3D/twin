@@ -15,6 +15,7 @@ MonoBehaviour:
   movementVisualController: {fileID: 0}
   <CameraConstrain>k__BackingField: 1
   viewName: Vliegen
+  id: 1
   viewIcon: {fileID: 21300000, guid: 26f707f416c041342b3259ca9920c3a3, type: 3}
   viewPrefab: {fileID: 0}
   editableSettings:
@@ -24,11 +25,14 @@ MonoBehaviour:
     - rid: 1516422325167980650
     - rid: 1516422325167980653
     - rid: 1516422325167980654
+    - rid: 7467378353108418663
   maxSpeedSetting: {fileID: 11400000, guid: cd0bfff29f21d414289d5bf00a07faad, type: 2}
   speedMultiplierSetting: {fileID: 11400000, guid: 238246fd8535293479b916db1ac470bc,
     type: 2}
   groundResetHeightOffsetSetting: {fileID: 11400000, guid: 4c40903bf39dba84f8368fc1996e6354,
     type: 2}
+  smoothFlight: {fileID: 11400000, guid: bfddc625dc41fe44ba70e8f59496d3f7, type: 2}
+  verticalSmoothTime: 0.5
   references:
     version: 2
     RefIds:
@@ -82,3 +86,11 @@ MonoBehaviour:
         defaultValue: 1.75
         minValue: 0
         maxValue: 0
+    - rid: 7467378353108418663
+      type: {class: ViewerSettingBool, ns: Netherlands3D.FirstPersonViewer.ViewModus,
+        asm: eu.netherlands3d.twin}
+      data:
+        isVisible: 1
+        movementSetting: {fileID: 11400000, guid: bfddc625dc41fe44ba70e8f59496d3f7,
+          type: 2}
+        defaultValue: 0

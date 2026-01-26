@@ -1,9 +1,9 @@
 using Netherlands3D.FirstPersonViewer;
 using Netherlands3D.Minimap;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.UI;
 using System.Collections;
 using Netherlands3D.Twin;
-using Netherlands3D.Twin.Cameras;
 using UnityEngine;
 
 using SnapshotComponent = Netherlands3D.Snapshots.Snapshots;
@@ -21,12 +21,17 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnEnable()
         {
+            TransformHandleInterfaceToggle handle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
+            if (handle != null) handle.SetTransformHandleEnabled(false);
+
             StartCoroutine(SetupViewer());
         }
 
         private void OnDisable()
         {
+            //When stopping Unity without null check this will always throw an error.
             ServiceLocator.GetService<SnapshotComponent>().SetActiveCamera(App.Cameras.PreviousCamera);
+            ServiceLocator.GetService<TransformHandleInterfaceToggle>()?.SetTransformHandleEnabled(true);
         }
 
         private IEnumerator SetupViewer()

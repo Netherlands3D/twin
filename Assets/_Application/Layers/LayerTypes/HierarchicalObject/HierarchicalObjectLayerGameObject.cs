@@ -84,7 +84,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             UpdateScale(transformProperty.LocalScale);
 
             ToggleScatterPropertyData scatterProperty = LayerData.GetProperty<ToggleScatterPropertyData>();
-            scatterProperty.AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
+            if(scatterProperty != null) scatterProperty.AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
 
             WorldTransform.RecalculatePositionAndRotation();
             previousCoordinate = WorldTransform.Coordinate;
@@ -203,7 +203,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
 
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
-            toggleScatterPropertyData.IsScatteredChanged.AddListener(ConvertToScatterLayer);
+            if(toggleScatterPropertyData != null) toggleScatterPropertyData.IsScatteredChanged.AddListener(ConvertToScatterLayer);
 
             var importedObject = GetComponent<IImportedObject>();
             if (importedObject != null)
@@ -221,7 +221,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             transformPropertyData?.OnScaleChanged.RemoveListener(UpdateScale);
 
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
-            toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToScatterLayer);
+            if (toggleScatterPropertyData != null) toggleScatterPropertyData.IsScatteredChanged.RemoveListener(ConvertToScatterLayer);
             
             var importedObject = GetComponent<IImportedObject>();
             if (importedObject != null)
@@ -295,6 +295,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
             else
             {
+                ToggleScatterPropertyData toggleScatterPropertyData = LayerData.LayerProperties.Get<ToggleScatterPropertyData>();
+                if (toggleScatterPropertyData != null && toggleScatterPropertyData.IsScattered)
+                {
+                    transformInterfaceToggle.ClearTransformTarget();
+                    return;
+                }
+                
                 transformInterfaceToggle.SetTransformTarget(gameObject);
                 transformInterfaceToggle.SnapTarget.AddListener(SnapToGround);
             }
@@ -364,8 +371,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
            
             InitProperty<ScatterGenerationSettingsPropertyData>(LayerData.LayerProperties, null, LayerData.PrefabIdentifier);
 
-            LayerData.DeselectLayer(); //remove any transform interaction that might be present
+            var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
+            transformInterfaceToggle.ClearTransformTarget();
 
+            TransformLayerPropertyData transformLayerPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
+            transformLayerPropertyData.IsEditable = false;
+            ScatterGenerationSettingsPropertyData scatterGenerationSettings = LayerData.GetProperty<ScatterGenerationSettingsPropertyData>();
+            scatterGenerationSettings.IsEditable = true;
             App.Layers.VisualizeAs(LayerData, ObjectScatterLayerGameObject.ScatterBasePrefabID);
            
         }

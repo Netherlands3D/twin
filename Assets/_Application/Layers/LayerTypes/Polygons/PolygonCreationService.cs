@@ -158,7 +158,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             //is the current selected layer already a grid and the current input mode is not selected, then we can adjust the polygon
             if (data?.ShapeType == ShapeType.Grid && gridInput.Mode != PolygonInput.DrawMode.Selected)
             {
-                var newPolygon = new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(topLeft), new Coordinate(topRight), new Coordinate(bottomRight) };
+                var newPolygon = new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(bottomRight), new Coordinate(topRight), new Coordinate(topLeft)  };
                 data.OriginalPolygon = newPolygon;
                 return;
             }
@@ -169,7 +169,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 .AddProperty(new PolygonSelectionLayerPropertyData
                 {
                     ShapeType = ShapeType.Grid,
-                    OriginalPolygon = new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(topLeft), new Coordinate(topRight), new Coordinate(bottomRight) },
+                    OriginalPolygon = new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(bottomRight), new Coordinate(topRight), new Coordinate(topLeft)  },
                 });
             var layer = App.Layers.Add(layerBuilder);
             polygonSelectionService.RegisterPolygon(layer.LayerData);
