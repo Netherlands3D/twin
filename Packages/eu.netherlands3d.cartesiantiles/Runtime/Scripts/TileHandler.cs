@@ -121,6 +121,8 @@ namespace Netherlands3D.CartesianTiles
         {
             CameraService cameraService = ServiceLocator.GetService<CameraService>();
             SetActiveCamera(cameraService.ActiveCamera);
+            
+            //todo we want to listen to current active camera, but for now commented until a new fpv algorithm is introduced to calculate the tilehandler camera extents for optimal loading tiles
             //cameraService.OnSwitchCamera.AddListener(SetActiveCamera);
             
             layers = GetComponentsInChildren<Layer>(false).ToList();
@@ -715,6 +717,7 @@ namespace Netherlands3D.CartesianTiles
         
         private void OnDestroy()
         {
+            //todo we want to listen to current active camera, but for now commented until a new fpv algorithm is introduced to calculate the tilehandler camera extents for optimal loading tiles
             // CameraService cameraService = ServiceLocator.GetService<CameraService>();
             // cameraService.OnSwitchCamera.RemoveListener(SetActiveCamera);
         }
