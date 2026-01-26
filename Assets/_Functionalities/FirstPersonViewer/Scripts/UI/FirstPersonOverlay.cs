@@ -27,7 +27,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnEnable()
         {
-            if (firstPersonViewer != null) firstPersonViewer.OnPositionUpdated.AddListener(UpdateOverlayInformation);
+            firstPersonViewer?.OnPositionUpdated.AddListener(UpdateOverlayInformation);
         }
 
         private void Start()
@@ -40,7 +40,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnDisable()
         {
-            if (firstPersonViewer != null) firstPersonViewer.OnPositionUpdated.RemoveListener(UpdateOverlayInformation);
+            firstPersonViewer?.OnPositionUpdated.RemoveListener(UpdateOverlayInformation);
         }
 
         private void OnDestroy()

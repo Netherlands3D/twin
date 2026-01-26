@@ -19,3 +19,6 @@ MonoBehaviour:
   - className: ViewerSettingLabel
     prefab: {fileID: 8854216575236322387, guid: f38aab42851dd5a429316da08cc64fc1,
       type: 3}
+  - className: ViewerSettingBool
+    prefab: {fileID: 6121471200796864116, guid: 5ed69da346e190a4aad83c08be31e3ca,
+      type: 3}

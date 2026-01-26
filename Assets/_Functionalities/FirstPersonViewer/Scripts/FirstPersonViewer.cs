@@ -30,6 +30,7 @@ namespace Netherlands3D.FirstPersonViewer
         [Header("Raycasting")]
         [SerializeField] private LayerMask snappingCullingMask;
         private OpticalRaycaster raycaster;
+        private Action<Vector3, bool> groundCallback;
 
         //Falling
         [Header("Ground")]
@@ -48,13 +49,13 @@ namespace Netherlands3D.FirstPersonViewer
         private MovementVisualController viewObject;
 
         //Events
-        public Action OnResetToStart;
-        public Action OnResetToGround;
-        public Action OnSetCameraNorth;
+        public UnityEvent OnResetToStart = new();
+        public UnityEvent OnResetToGround = new();
+        public UnityEvent OnSetCameraNorth = new();
         public UnityEvent<Coordinate> OnPositionUpdated = new();
 
-        public Action OnViewerEntered;
-        public Action<bool> OnViewerExited;
+        public UnityEvent OnViewerEntered;
+        public UnityEvent<bool> OnViewerExited = new();
 
         private void Awake()
         {
@@ -78,6 +79,8 @@ namespace Netherlands3D.FirstPersonViewer
 
             SetupFSM();
             gameObject.SetActive(false);
+
+            groundCallback = UpdateGroundPosition;
         }
 
         public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
@@ -115,7 +118,7 @@ namespace Netherlands3D.FirstPersonViewer
 
                 bool usePitch = startState != null && startState.CameraConstrain != CameraConstrain.CONTROL_NONE;
                 FirstPersonCamera.SetupViewer(usePitch);
-                OnViewerEntered?.Invoke();
+                OnViewerEntered.Invoke();
             }
             else if (startState != null) MovementSwitcher.ApplyViewer();
         }
@@ -130,11 +133,11 @@ namespace Netherlands3D.FirstPersonViewer
         {
             MovementSwitcher.OnMovementPresetChanged -= SetMovementModus;
             FirstPersonCamera.onSetupComplete.RemoveListener(OnAnimationCompleted);
-            OnViewerEntered = null;
-            OnResetToStart = null;
-            OnResetToGround = null;
-            OnSetCameraNorth = null;
-            OnViewerExited = null;
+            OnViewerEntered.RemoveAllListeners();
+            OnResetToStart.RemoveAllListeners();
+            OnResetToGround.RemoveAllListeners();
+            OnSetCameraNorth.RemoveAllListeners();
+            OnViewerExited.RemoveAllListeners();
         }
 
         private void SetupFSM()
@@ -159,13 +162,12 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void GetGroundPosition()
         {
-            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * stepHeight, Vector3.down, (point, hit) =>
-            {
-                if (hit)
-                {
-                    yPositionTarget = point.y;
-                }
-            }, snappingCullingMask);
+            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * stepHeight, Vector3.down, groundCallback, snappingCullingMask);
+        }
+
+        private void UpdateGroundPosition(Vector3 point, bool hit)
+        {
+            if (hit) yPositionTarget = point.y;
         }
 
         private void CheckGroundCollision()
@@ -230,7 +232,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             transform.position += Vector3.up * fsm.CurrentState.GetGroundHeightOffset();
 
-            OnResetToStart?.Invoke();
+            OnResetToStart.Invoke();
         }
 
         public void ResetToGround()
@@ -243,14 +245,14 @@ namespace Netherlands3D.FirstPersonViewer
                     yPositionTarget = point.y;
                     transform.position = new Vector3(transform.position.x, yPositionTarget + fsm.CurrentState.GetGroundHeightOffset(), transform.position.z);
 
-                    OnResetToGround?.Invoke();
+                    OnResetToGround.Invoke();
                 }
             }, snappingCullingMask);
         }
 
         public void ExitViewer(bool exitOriginalPosition)
         {
-            OnViewerExited?.Invoke(exitOriginalPosition);
+            OnViewerExited.Invoke(exitOriginalPosition);
 
             Input.ViewerExited();
 

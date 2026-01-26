@@ -4,6 +4,7 @@ using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Implementation;
 using NetTopologySuite.Triangulate.Polygon;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Netherlands3D.SelectionTools
@@ -71,7 +72,7 @@ namespace Netherlands3D.SelectionTools
             var newPolygonObject = new GameObject();
             newPolygonObject.name = "PolygonVisualisation";
 
-            var meshFilter = newPolygonObject.AddComponent<MeshFilter>(); //mesh is created by the PolygonVisualisation script
+            newPolygonObject.AddComponent<MeshFilter>(); //mesh is created by the PolygonVisualisation script
             var meshRenderer = newPolygonObject.AddComponent<MeshRenderer>();
             meshRenderer.material = meshMaterial;
             meshRenderer.receiveShadows = receiveShadows;
@@ -102,21 +103,22 @@ namespace Netherlands3D.SelectionTools
         {
             if (contours == null || contours.Count == 0 || contours[0].Count < 3)
                 return null;
-
+            
             // STEP 1: Compute polygon plane
-            var solidPlane = contours[0];
+            var coordsArray = contours[0].ToList(); //We have to reverse the contour to make the computebestfitplane work because of the algorithm
+            if (!invertWindingOrder)
+            {
+                coordsArray.Reverse();
+            }
+            
+            var solidPlane = coordsArray;
             Plane plane = ComputeBestFitPlane(solidPlane);
             Vector3 normal = plane.normal.normalized;
-
-            //u and v are the x and y axis relative to the plane we project on
-            Vector3 u = Vector3.Cross(normal, Vector3.up);
-            if (u.sqrMagnitude < 1e-6f)
-                u = Vector3.Cross(normal, Vector3.right);
-
-            u.Normalize();
+            Vector3 tangent = (Mathf.Abs(normal.x) > 0.1f || Mathf.Abs(normal.z) > 0.1f) ? Vector3.up : Vector3.right;
+            Vector3 u = Vector3.Cross(tangent, normal).normalized;
             Vector3 v = Vector3.Cross(normal, u);
             Vector3 origin = contours[0][0];
-
+            
             // === STEP 2: Build NTS polygon ===
             LinearRing outerRing = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[0], origin, u, v, !invertWindingOrder));
             LinearRing[] holes = new LinearRing[contours.Count - 1];
@@ -124,7 +126,6 @@ namespace Netherlands3D.SelectionTools
                 holes[h - 1] = geometryFactory.CreateLinearRing(ConvertToCoordinateArray(contours[h], origin, u, v, invertWindingOrder));
 
             var polygon = geometryFactory.CreatePolygon(outerRing, holes);
-
             
             // todo: this check is needed, but very garbage intensive if possible use a different check to determine polygon validity
             // a try catch block is not possible, since it does not work in webgl and the app can end up in an infinite loop
@@ -132,64 +133,64 @@ namespace Netherlands3D.SelectionTools
             {
                 return null;
             }
-
             // STEP 3: Triangulate in 2D
-            Geometry triangulated;
-            triangulated = ConstrainedDelaunayTriangulator.Triangulate(polygon);
-
+            Geometry triangulated = ConstrainedDelaunayTriangulator.Triangulate(polygon);
             return new GeometryTriangulationData(triangulated, origin, u, v /*, normal*/);
         }
 
-        public static Mesh CreatePolygonMesh(List<GeometryTriangulationData> datas, Vector3 offset, bool invertTriangles = false)
+        public static Mesh CreatePolygonMesh(
+            List<GeometryTriangulationData> datas,
+            Vector3 offset
+        )
         {
-            // STEP 4: Build Unity Mesh in 3D
-            List<Vector3> verts = new List<Vector3>();
-            List<int> tris = new List<int>(); //we don't know the tri count, so make a guess
+            List<Vector3> verts = new();
+            List<int> tris = new();
 
             for (int i = 0; i < datas.Count; i++)
             {
                 var data = datas[i];
-
-                //TODO we maybe want to check here why the geometry is invalid here,
-                //but this causes application to crash or severe performance impact
-                if (data == null) continue; 
+                if (data == null) continue;
 
                 for (int j = 0; j < data.geometry.NumGeometries; j++)
                 {
-                    var tri = data.geometry.GetGeometryN(j);
-                    if (tri is Polygon tPoly)
-                    {
-                        var coords = tPoly.Coordinates;
-                        for (int k = 0; k <= 2; k++)
-                        {
-                            var c2D = coords[k];
-                            Vector3 v3 = To3D(c2D, data.origin, data.u, data.v) - offset;
-                            int idx = verts.Count;
-                            verts.Add(v3); //todo: skip duplicate vertices
-                            tris.Add(idx);
-                        }
-                    }
+                    var geom = data.geometry.GetGeometryN(j);
+                    if (geom is not Polygon poly) continue;
+
+                    var coords = poly.Coordinates;
+
+                    Vector3 v0 = To3D(coords[0], data.origin, data.u, data.v) - offset;
+                    Vector3 v1 = To3D(coords[1], data.origin, data.u, data.v) - offset;
+                    Vector3 v2 = To3D(coords[2], data.origin, data.u, data.v) - offset;
+
+                    int baseIndex = verts.Count;
+
+                    verts.Add(v0);
+                    verts.Add(v1);
+                    verts.Add(v2);
+
+                    tris.Add(baseIndex);
+                    tris.Add(baseIndex + 1);
+                    tris.Add(baseIndex + 2);
                 }
             }
 
-            Mesh mesh = new Mesh();
-            int[] triArray = tris.ToArray();
-            if (invertTriangles)
+            Mesh mesh = new Mesh
             {
-                Array.Reverse(triArray);
-            }
-            mesh.vertices = verts.ToArray();
-            mesh.triangles = triArray;
+                vertices = verts.ToArray(),
+                triangles = tris.ToArray()
+            };
+            
+           
+
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
-
             return mesh;
         }
 
         public static Mesh CreatePolygonMesh(List<List<Vector3>> contours, bool invertWindingOrder = false)
         {
-            var triangulationData = CreatePolygonGeometryTriangulationData(contours, invertWindingOrder);
-            return CreatePolygonMesh(new List<GeometryTriangulationData>() { triangulationData }, Vector3.zero, !invertWindingOrder);
+            var triangulationData = CreatePolygonGeometryTriangulationData(contours, invertWindingOrder); 
+            return CreatePolygonMesh(new List<GeometryTriangulationData>() { triangulationData }, Vector3.zero);
         }
 
         private static Coordinate[] ConvertToCoordinateArray(List<Vector3> points, Vector3 origin, Vector3 u, Vector3 v, bool shouldBeCCW)
@@ -261,13 +262,23 @@ namespace Netherlands3D.SelectionTools
 
         /// <summary>
         /// Computes a best-fit plane for a polygon (assumes it's planar).
-        /// </summary>
         private static Plane ComputeBestFitPlane(List<Vector3> contour)
         {
             if (contour.Count < 3)
                 throw new ArgumentException("Need at least 3 points for a plane");
-
-            Vector3 normal = Vector3.Cross(contour[1] - contour[0], contour[2] - contour[0]).normalized;
+            
+            // Newell's method
+            Vector3 normal = Vector3.zero;
+            int n = contour.Count;
+            for (int i = 0; i < n; i++)
+            {
+                Vector3 current = contour[i];
+                Vector3 next = contour[(i + 1) % n];
+                normal.x += (current.y - next.y) * (current.z + next.z);
+                normal.y += (current.z - next.z) * (current.x + next.x);
+                normal.z += (current.x - next.x) * (current.y + next.y);
+            }
+            normal.Normalize();
             return new Plane(normal, contour[0]);
         }
     }
