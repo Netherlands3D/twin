@@ -121,7 +121,7 @@ namespace Netherlands3D.CartesianTiles
         {
             CameraService cameraService = ServiceLocator.GetService<CameraService>();
             SetActiveCamera(cameraService.ActiveCamera);
-            cameraService.OnSwitchCamera.AddListener(SetActiveCamera);
+            //cameraService.OnSwitchCamera.AddListener(SetActiveCamera);
             
             layers = GetComponentsInChildren<Layer>(false).ToList();
             if (layers.Count == 0)
@@ -715,8 +715,8 @@ namespace Netherlands3D.CartesianTiles
         
         private void OnDestroy()
         {
-            CameraService cameraService = ServiceLocator.GetService<CameraService>();
-            cameraService.OnSwitchCamera.RemoveListener(SetActiveCamera);
+            // CameraService cameraService = ServiceLocator.GetService<CameraService>();
+            // cameraService.OnSwitchCamera.RemoveListener(SetActiveCamera);
         }
     }
 
