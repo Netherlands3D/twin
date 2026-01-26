@@ -1,3 +1,4 @@
+using Netherlands3D.SelectionTools;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -8,11 +9,15 @@ namespace Netherlands3D.FirstPersonViewer.Miscellaneous
     {
         [SerializeField] private InputActionReference keyEvent;
 
-        [SerializeField] private UnityEvent OnKeyPressed;
+        [SerializeField] private UnityEvent OnKeyPressed = new();
 
         private void Update()
         {
-            if (keyEvent.action.triggered) OnKeyPressed?.Invoke();
+            if (keyEvent.action.triggered)
+            {
+                if (Interface.CurrentInputModuleIsInputSystemUIInputModule()) return;
+                OnKeyPressed.Invoke();
+            }
         }
     }
 }
