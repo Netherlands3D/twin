@@ -1,3 +1,4 @@
+using Netherlands3D.Services;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -68,6 +69,12 @@ namespace Netherlands3D.Twin.PresentationModus.UIHider
             else if (!hideUI) panel.Show();
         }
 
-        private void OnHideUIPressed(InputAction.CallbackContext context) => ToggleUIHider();
+        private void OnHideUIPressed(InputAction.CallbackContext context)
+        {
+            //TODO: Switch this out for a inputfield checker instead of using the one from the FPV.
+            if (ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>().Input.IsInputfieldSelected()) return;
+
+            ToggleUIHider();
+        }
     }
 }
