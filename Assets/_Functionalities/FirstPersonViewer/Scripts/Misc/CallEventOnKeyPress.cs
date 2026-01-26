@@ -1,4 +1,5 @@
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Services;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -15,7 +16,9 @@ namespace Netherlands3D.FirstPersonViewer.Miscellaneous
         {
             if (keyEvent.action.triggered)
             {
-                if (Interface.CurrentInputModuleIsInputSystemUIInputModule()) return;
+                //TODO: Switch this out for a inputfield checker instead of using the one from the FPV.
+                if (ServiceLocator.GetService<FirstPersonViewer>().Input.IsInputfieldSelected()) return;
+
                 OnKeyPressed.Invoke();
             }
         }
