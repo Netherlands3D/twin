@@ -3,6 +3,7 @@ using Netherlands3D.FirstPersonViewer.ViewModus;
 using Netherlands3D.Twin.Cameras;
 using System;
 using System.Collections.Generic;
+using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -66,7 +67,7 @@ namespace Netherlands3D.FirstPersonViewer
         {
             float startPitch = transform.eulerAngles.x;
 
-            mainCam = Camera.main;
+            mainCam = App.Cameras.PreviousCamera;
             prevCameraPosition = mainCam.transform.position;
             prevCameraRotation = mainCam.transform.rotation;
             prevCameraCullingMask = mainCam.cullingMask;

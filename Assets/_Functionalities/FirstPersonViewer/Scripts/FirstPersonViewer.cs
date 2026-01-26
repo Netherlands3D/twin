@@ -76,7 +76,6 @@ namespace Netherlands3D.FirstPersonViewer
             FirstPersonCamera.onSetupComplete.AddListener(OnAnimationCompleted);
 
             SetupFSM();
-            gameObject.SetActive(false);
 
             groundCallback = UpdateGroundPosition;
         }
