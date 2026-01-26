@@ -7,6 +7,7 @@ using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.Wfs.LayerPresets;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Web;
 using UnityEngine;
@@ -75,13 +76,14 @@ namespace Netherlands3D.Functionalities.Wfs
             var bodyContents = File.ReadAllText(cachedDataPath);
 
             var isWfsGetCapabilities = OgcWebServicesUtility.IsSupportedGetCapabilitiesUrl(url, bodyContents, ServiceType.Wfs);
-            FolderLayer wfsFolder = null;
+            LayerData wfsFolder = null;
             string geoJsonOutputFormatString = "application/json";
             
             if (isWfsGetCapabilities)
             {
                 var wfsGetCapabilities = new WfsGetCapabilities(new Uri(sourceUrl), bodyContents);
-                wfsFolder = new FolderLayer(!string.IsNullOrEmpty(wfsGetCapabilities.GetTitle()) ? wfsGetCapabilities.GetTitle() : sourceUrl);
+                var folderName = string.IsNullOrEmpty(wfsGetCapabilities.GetTitle()) ? sourceUrl : wfsGetCapabilities.GetTitle();
+                wfsFolder = AddFolderLayer(folderName);
                 var geoJsonOutputFormatStringFromGetCapabilities = wfsGetCapabilities.GetGeoJsonOutputFormatString();
                 if (!string.IsNullOrEmpty(geoJsonOutputFormatStringFromGetCapabilities))
                     geoJsonOutputFormatString = geoJsonOutputFormatStringFromGetCapabilities; 
@@ -133,8 +135,15 @@ namespace Netherlands3D.Functionalities.Wfs
             
             Debug.LogError("Unrecognized WFS request type: " + url);
         }
+        
+        private LayerData AddFolderLayer(string folderName)
+        {
+            var builder = new LayerBuilder().OfType("folder").NamedAs(folderName); //todo: make preset?
+            var wfsFolder = App.Layers.Add(builder);
+            return wfsFolder.LayerData;
+        }
 
-        private async void AddWFSLayer(string featureType, string sourceUrl, string crsType, FolderLayer folderLayer, string title, string geoJsonOutputFormatString)
+        private void AddWFSLayer(string featureType, string sourceUrl, string crsType, LayerData folderLayer, string title, string geoJsonOutputFormatString)
         {
             // Create a GetFeature URL for the specific featureType
             UriBuilder uriBuilder = CreateLayerGetFeatureUri(featureType, sourceUrl, crsType, geoJsonOutputFormatString);
@@ -142,7 +151,7 @@ namespace Netherlands3D.Functionalities.Wfs
 
             Debug.Log($"Adding WFS layer '{featureType}' with url '{getFeatureUrl}'");
 
-            await App.Layers.Add(
+            App.Layers.Add(
                 new WfsLayerPreset.Args(
                     getFeatureUrl,
                     title,

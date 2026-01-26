@@ -33,7 +33,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public void OnCompassClick()
         {
-            ServiceLocator.GetService<FirstPersonViewer>().OnSetCameraNorth?.Invoke();
+            ServiceLocator.GetService<FirstPersonViewer>().OnSetCameraNorth.Invoke();
         }
     }
 }

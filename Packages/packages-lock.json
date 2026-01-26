@@ -35,7 +35,7 @@
       "url": "https://package.openupm.com"
     },
     "com.kind-men.uxios": {
-      "version": "0.4.1",
+      "version": "0.4.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -516,6 +516,14 @@
       "dependencies": {
         "eu.netherlands3d.coordinates": "1.1.0",
         "eu.netherlands3d.geotimezone": "1.1.0"
+      }
+    },
+    "eu.netherlands3d.tilekit": {
+      "version": "file:eu.netherlands3d.tilekit",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.mathematics": "1.2.6"
       }
     },
     "eu.netherlands3d.tiles3d": {

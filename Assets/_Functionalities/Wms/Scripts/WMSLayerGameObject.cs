@@ -1,14 +1,14 @@
 using System;
-using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
-using UnityEngine.Events;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -17,9 +17,8 @@ namespace Netherlands3D.Functionalities.Wms
     /// </summary>
     [RequireComponent(typeof(WMSTileDataLayer))]
     [RequireComponent(typeof(ICredentialHandler))]
-    public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels
+    public class WMSLayerGameObject : CartesianTileLayerGameObject, IVisualizationWithPropertyData
     {
-        public override bool IsMaskable => false;
         private WMSTileDataLayer wmsProjectionLayer;
         private WMSTileDataLayer WMSProjectionLayer => GetAndCacheComponent(ref wmsProjectionLayer);
 
@@ -29,34 +28,25 @@ namespace Netherlands3D.Functionalities.Wms
         public bool TransparencyEnabled = true; //this gives the requesting url the extra param to set transparancy enabled by default       
         public int DefaultEnabledLayersMax = 5; //in case the dataset is very large with many layers. lets topggle the layers after this count to not visible.
         public Vector2Int PreferredImageSize = Vector2Int.one * 512;
-        public LayerPropertyData PropertyData => URLPropertyData;
-        private LayerURLPropertyData URLPropertyData => LayerData.GetProperty<LayerURLPropertyData>();
         public bool ShowLegendOnSelect { get; set; } = true;
         public override BoundingBox Bounds => WMSProjectionLayer?.BoundingBox;
-
-        public UnityEvent<Uri> OnURLChanged => URLPropertyData.OnDataChanged;
         
-        protected override void OnLayerInitialize()
-        {
-            base.OnLayerInitialize();
-            CredentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
-        }
 
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
-            base.OnLayerReady();
-            UpdateURL(URLPropertyData.Data);
-            LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
+            base.OnVisualizationReady();
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            UpdateURL(urlPropertyData.Url);
             SetRenderOrder(LayerData.RootIndex);
-            Legend.Instance.RegisterUrl(URLPropertyData.Data.ToString());
-            Legend.Instance.ShowLegend(URLPropertyData.Data.ToString(), ShowLegendOnSelect && LayerData.IsSelected);
+            Legend.Instance.ShowLegend(urlPropertyData.Url.ToString(), ShowLegendOnSelect && LayerData.IsSelected);
         }
 
         public void SetLegendActive(bool active)
         {
-            if (URLPropertyData.Data == null) return;
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            if (urlPropertyData.Url == null) return;
             
-            Legend.Instance.ShowLegend(URLPropertyData.Data.ToString(), active);
+            Legend.Instance.ShowLegend(urlPropertyData.Url.ToString(), active);
         }
 
         //a higher order means rendering over lower indices
@@ -70,6 +60,11 @@ namespace Netherlands3D.Functionalities.Wms
         {
             ClearCredentials();
 
+            if (auth.GetType() != typeof(Public))//if it is public, we don't want the property panel to show up
+            {
+                InitProperty<CredentialsRequiredPropertyData>(LayerData.LayerProperties);
+            }
+            
             if (auth is FailedOrUnsupported)
             {
                 LayerData.HasValidCredentials = false;
@@ -99,9 +94,10 @@ namespace Netherlands3D.Functionalities.Wms
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
-            if (URLPropertyData == null) return;
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            if (urlPropertyData == null) return;
             
-            UpdateURL(URLPropertyData.Data);
+            UpdateURL(urlPropertyData.Url);
         }
 
         private void UpdateURL(Uri storedUri)
@@ -115,20 +111,30 @@ namespace Netherlands3D.Functionalities.Wms
                 CredentialHandler.ApplyCredentials();
         }
 
-        protected override void OnDestroy()
+        protected override void RegisterEventListeners()
         {
-            base.OnDestroy();
-            LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
-            CredentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
-            Legend.Instance.UnregisterUrl(URLPropertyData.Data.ToString());
+            base.RegisterEventListeners();
+            LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
+            CredentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            Legend.Instance.RegisterUrl(urlPropertyData.Url.ToString());
         }
 
-        public override void OnSelect()
+        protected override void UnregisterEventListeners()
+        {
+            base.UnregisterEventListeners();
+            LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
+            CredentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            Legend.Instance.UnregisterUrl(urlPropertyData.Url.ToString());
+        }
+
+        public override void OnSelect(LayerData layer)
         {
             SetLegendActive(ShowLegendOnSelect);
         }
 
-        public override void OnDeselect()
+        public override void OnDeselect(LayerData layer)
         {
             SetLegendActive(false);
         }
@@ -137,7 +143,7 @@ namespace Netherlands3D.Functionalities.Wms
         {
             if (isActive)
             {
-                UpdateURL(URLPropertyData.Data);
+                UpdateURL(LayerData.GetProperty<LayerURLPropertyData>().Url);
             }
 
             if (WMSProjectionLayer.isEnabled == isActive) return;
@@ -149,7 +155,8 @@ namespace Netherlands3D.Functionalities.Wms
         {
             if (boundingBoxContainer == null) return;
 
-            var wmsUrl = URLPropertyData.Data.ToString();
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            var wmsUrl = urlPropertyData.Url.ToString();
             var featureLayerName = OgcWebServicesUtility.GetParameterFromURL(wmsUrl, "layers");
 
             if (boundingBoxContainer.LayerBoundingBoxes.ContainsKey(featureLayerName))

@@ -8,12 +8,13 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     {
         [Header("Defaults")]
         public bool isVisible = true;
+        public abstract bool IsEditable { get; } 
 
         public abstract object GetValue();
         public abstract object GetDefaultValue();
         public abstract string GetDisplayName();
+        public abstract string GetSettingName();
         public abstract string GetDisplayUnits();
-
         public abstract void InvokeOnValueChanged(object value);
     }
 
@@ -22,7 +23,9 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
     {
         public MovementSetting<T> movementSetting;
         public override string GetDisplayName() => movementSetting.displayName;
+        public override string GetSettingName() => movementSetting.settingName;
         public override string GetDisplayUnits() => movementSetting.units;
+        public override object GetValue() => movementSetting.Value;
 
         public override void InvokeOnValueChanged(object value)
         {
@@ -47,15 +50,26 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         public float minValue;
         public float maxValue;
 
-        public override object GetDefaultValue() => defaultValue;
+        public override bool IsEditable => true;
 
-        public override object GetValue() => movementSetting.Value;
+        public override object GetDefaultValue() => defaultValue;
     }
 
     [Serializable]
     public class ViewerSettingLabel : ViewerSettingGeneric<string>
     {
+        public override bool IsEditable => false;
         public override object GetDefaultValue() => "";
-        public override object GetValue() => movementSetting.Value;
+    }
+
+    [Serializable]
+    public class ViewerSettingBool : ViewerSettingGeneric<bool>
+    {
+        [Header("Settings")]
+        public bool defaultValue;
+
+        public override bool IsEditable => true;
+
+        public override object GetDefaultValue() => defaultValue;
     }
 }

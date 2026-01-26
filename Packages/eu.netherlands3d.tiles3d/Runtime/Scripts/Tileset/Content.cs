@@ -31,7 +31,7 @@ namespace Netherlands3D.Tiles3D
 
         private UnityEngine.Material overrideMaterial;
 
-        private GltfImport gltf;
+        public GltfImport gltf;
         Dictionary<string, string> headers = null;
         public enum ContentLoadState
         {

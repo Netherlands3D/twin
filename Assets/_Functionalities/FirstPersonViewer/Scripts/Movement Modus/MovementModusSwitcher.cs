@@ -2,6 +2,7 @@ using Netherlands3D.FirstPersonViewer.ViewModus;
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace Netherlands3D.FirstPersonViewer
 {
@@ -14,6 +15,9 @@ namespace Netherlands3D.FirstPersonViewer
         public ViewerState CurrentMovement { private set; get; }
 
         public event Action<ViewerState> OnMovementPresetChanged;
+
+        private ViewerState setViewerState;
+        private Dictionary<string, object> setViewerSettings;
 
         public void SetViewerInput(FirstPersonViewerInput input)
         {
@@ -38,14 +42,23 @@ namespace Netherlands3D.FirstPersonViewer
             LoadMovementPreset(MovementPresets[currentIndex]);
         }
 
-        public void LoadMovementPreset(ViewerState viewerState)
+        public void LoadMovementPreset(ViewerState viewerState, Dictionary<string, object> settings = null)
         {
             CurrentMovement = viewerState;
             
-            //$$ TODO Only supports floats for now should be revisited
             foreach (ViewerSetting setting in CurrentMovement.editableSettings.list)
             {
                 setting.InvokeOnValueChanged(setting.GetDefaultValue());
+            }
+
+            //Load override settings if provided.
+            if (settings != null)
+            {
+                foreach (KeyValuePair<string, object> setting in settings)
+                {
+                    ViewerSetting viewerSetting = CurrentMovement.editableSettings.list.FirstOrDefault(s => s.GetSettingName() == setting.Key);
+                    if (viewerSetting != null) viewerSetting.InvokeOnValueChanged(setting.Value);
+                }
             }
 
             //Send events
@@ -53,6 +66,17 @@ namespace Netherlands3D.FirstPersonViewer
         }
 
         public void LoadMovementPreset(int index) => LoadMovementPreset(MovementPresets[index]);
+
+
+        public void SetViewer(ViewerState viewerState, Dictionary<string, object> settings)
+        {
+            if (viewerState == null) viewerState = MovementPresets[0];
+
+            setViewerState = viewerState;
+            setViewerSettings = settings;
+        }
+
+        public void ApplyViewer() => LoadMovementPreset(setViewerState, setViewerSettings);
 
         private void OnDestroy()
         {
