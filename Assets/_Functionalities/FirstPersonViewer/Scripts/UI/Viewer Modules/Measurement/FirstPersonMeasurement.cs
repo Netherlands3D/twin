@@ -1,5 +1,6 @@
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Services;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.Samplers;
 using System.Collections.Generic;
 using TMPro;
@@ -102,7 +103,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                         CreateNewElement(index, objectColor, dst);
                     }
                 }
-            }, FirstPersonViewerCamera.FPVCamera, measurementLayerMask);
+            }, App.Cameras.ActiveCamera, measurementLayerMask);
         }
 
         private FirstPersonMeasurementPoint CreateNewPoint(Vector3 point)
@@ -145,7 +146,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                         }
                     }
                 }
-            }, FirstPersonViewerCamera.FPVCamera, measurementLayerMask);
+            }, App.Cameras.ActiveCamera, measurementLayerMask);
         }
 
         public void ResetMeasurements()

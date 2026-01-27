@@ -155,7 +155,8 @@ namespace Netherlands3D.Tiles3D
             root = null;
             visibleTiles = new();
 
-            InitializeURLAndLoadTileSet();
+            if(gameObject.activeInHierarchy) //todo: quick fix to avoid coroutine errors, might need to be refactored to be more stable
+                InitializeURLAndLoadTileSet();
         }
 
         /// <summary>

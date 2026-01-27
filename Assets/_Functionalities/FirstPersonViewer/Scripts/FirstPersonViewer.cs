@@ -5,6 +5,8 @@ using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.FloatingOrigin;
 using Netherlands3D.Twin.Samplers;
 using System;
+using System.Collections.Generic;
+using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -28,6 +30,7 @@ namespace Netherlands3D.FirstPersonViewer
         [Header("Raycasting")]
         [SerializeField] private LayerMask snappingCullingMask;
         private OpticalRaycaster raycaster;
+        private Action<Vector3, bool> groundCallback;
 
         //Falling
         [Header("Ground")]
@@ -46,13 +49,13 @@ namespace Netherlands3D.FirstPersonViewer
         private MovementVisualController viewObject;
 
         //Events
-        public Action OnResetToStart;
-        public Action OnResetToGround;
-        public Action OnSetCameraNorth;
+        public UnityEvent OnResetToStart = new();
+        public UnityEvent OnResetToGround = new();
+        public UnityEvent OnSetCameraNorth = new();
         public UnityEvent<Coordinate> OnPositionUpdated = new();
 
-        public Action OnViewerEntered;
-        public Action<bool> OnViewerExited;
+        public UnityEvent OnViewerEntered;
+        public UnityEvent<bool> OnViewerExited = new();
 
         private void Awake()
         {
@@ -61,7 +64,6 @@ namespace Netherlands3D.FirstPersonViewer
 
             worldTransform = GetComponent<WorldTransform>();
 
-            OnViewerEntered += ViewerEnterd;
             Input.SetExitCallback(ExitViewer);
         }
 
@@ -71,36 +73,69 @@ namespace Netherlands3D.FirstPersonViewer
             MovementSwitcher.SetViewerInput(Input);
             MovementSwitcher.OnMovementPresetChanged += SetMovementModus;
 
+            FirstPersonCamera.onSetupComplete.AddListener(OnAnimationCompleted);
+
             SetupFSM();
-            gameObject.SetActive(false);
+
+            groundCallback = UpdateGroundPosition;
         }
 
-        private void ViewerEnterd()
+        public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
         {
+            transform.position = position;
+
+            Vector3 euler = rotation.eulerAngles;
+
+            transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
+            FirstPersonCamera.transform.localRotation = Quaternion.Euler(euler.x, 0f, 0f);
+        }
+
+        public void EnterViewer(ViewerState startState, Dictionary<string, object> settings)
+        {
+            //Catch Postion picker double enter call (When FPS is low).
+            if (FirstPersonCamera.FPVCamera.gameObject.activeInHierarchy && startState == null) return;
+
             startPosition = new Coordinate(transform.position);
             startRotation = transform.rotation;
             yPositionTarget = transform.position.y;
 
             worldTransform.MoveToCoordinate(startPosition);
-            Input.OnFPVEnter();
-            FirstPersonCamera.SetupViewer();
+            worldTransform.SetRotation(startRotation);
 
             //Remove old visual (So no weird transition will happen)
             fsm.SwitchState(null);
             SetMovementVisual(null);
 
-            ServiceLocator.GetService<CameraSwitcher>().SwitchCamera(this);
+            MovementSwitcher.SetViewer(startState, settings);
+
+            //When entering the FPV for the first time use the cool animation :).
+            if (!FirstPersonCamera.FPVCamera.gameObject.activeInHierarchy)
+            {
+                App.Cameras.SwitchCamera(FirstPersonCamera.FPVCamera);
+
+                bool usePitch = startState != null && startState.CameraConstrain != CameraConstrain.CONTROL_NONE;
+                FirstPersonCamera.SetupViewer(usePitch);
+                OnViewerEntered.Invoke();
+                Input.ViewerEntered();
+            }
+            else if (startState != null) MovementSwitcher.ApplyViewer();
+        }
+
+        private void OnAnimationCompleted()
+        {
+            Input.OnFPVEnter();
+            MovementSwitcher.ApplyViewer();
         }
 
         private void OnDestroy()
         {
             MovementSwitcher.OnMovementPresetChanged -= SetMovementModus;
-            OnViewerEntered = null;
-            OnResetToStart = null;
-            OnResetToGround = null;
-            OnSetCameraNorth = null;
-            OnViewerEntered = null;
-            OnViewerExited = null;
+            FirstPersonCamera.onSetupComplete.RemoveListener(OnAnimationCompleted);
+            OnViewerEntered.RemoveAllListeners();
+            OnResetToStart.RemoveAllListeners();
+            OnResetToGround.RemoveAllListeners();
+            OnSetCameraNorth.RemoveAllListeners();
+            OnViewerExited.RemoveAllListeners();
         }
 
         private void SetupFSM()
@@ -112,6 +147,8 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void Update()
         {
+            if (!FirstPersonCamera.FPVCamera.gameObject.activeInHierarchy) return;
+            
             CheckGroundCollision();
 
             fsm.OnUpdate();
@@ -125,13 +162,12 @@ namespace Netherlands3D.FirstPersonViewer
 
         public void GetGroundPosition()
         {
-            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * stepHeight, Vector3.down, (point, hit) =>
-            {
-                if (hit)
-                {
-                    yPositionTarget = point.y;
-                }
-            }, snappingCullingMask);
+            raycaster.GetWorldPointFromDirectionAsync(transform.position + Vector3.up * stepHeight, Vector3.down, groundCallback, snappingCullingMask);
+        }
+
+        private void UpdateGroundPosition(Vector3 point, bool hit)
+        {
+            if (hit) yPositionTarget = point.y;
         }
 
         private void CheckGroundCollision()
@@ -196,7 +232,7 @@ namespace Netherlands3D.FirstPersonViewer
 
             transform.position += Vector3.up * fsm.CurrentState.GetGroundHeightOffset();
 
-            OnResetToStart?.Invoke();
+            OnResetToStart.Invoke();
         }
 
         public void ResetToGround()
@@ -209,18 +245,18 @@ namespace Netherlands3D.FirstPersonViewer
                     yPositionTarget = point.y;
                     transform.position = new Vector3(transform.position.x, yPositionTarget + fsm.CurrentState.GetGroundHeightOffset(), transform.position.z);
 
-                    OnResetToGround?.Invoke();
+                    OnResetToGround.Invoke();
                 }
             }, snappingCullingMask);
         }
 
         public void ExitViewer(bool exitOriginalPosition)
         {
-            OnViewerExited?.Invoke(exitOriginalPosition);
+            OnViewerExited.Invoke(exitOriginalPosition);
 
             Input.ViewerExited();
 
-            ServiceLocator.GetService<CameraSwitcher>().SwitchToPreviousCamera();
+            App.Cameras.SwitchToPreviousCamera();
         }
 
         public void SetVelocity(Vector2 velocity) => this.velocity = velocity;

@@ -12,7 +12,7 @@ using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
-    public class CartesianTileSubObjectColorLayerGameObject : LayerGameObject, ILayerWithPropertyData
+    public class CartesianTileSubObjectColorLayerGameObject : LayerGameObject, IVisualizationWithPropertyData
     {
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
         public int PriorityIndex
@@ -21,14 +21,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             set { transform.SetSiblingIndex(value); }
         }
 
-        public override bool IsMaskable => false;
         public ColorSetLayer ColorSetLayer { get; private set; } = new(0, new());
         private CartesianTileSubObjectColorPropertyData propertyData = new();
-        public LayerPropertyData PropertyData => propertyData;
 
         public UnityEvent<float> progressEvent = new();
 
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
             RecalculateColorPriorities();
             StartCoroutine(ReadAsync(propertyData.Data, 100));
@@ -62,10 +60,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             GeometryColorizer.RecalculatePrioritizedColors();
         }
 
-        protected override void OnDestroy()
+        private void OnDestroy()
         {
             RemoveCustomColorSet();
-            base.OnDestroy();
         }
 
         public void RemoveCustomColorSet()
@@ -81,9 +78,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 GeometryColorizer.RecalculatePrioritizedColors();
         }
 
-        public override void OnProxyTransformParentChanged()
+        public override void OnLayerDataParentChanged()
         {
-            base.OnProxyTransformParentChanged();
+            base.OnLayerDataParentChanged();
             RecalculateColorPriorities();
         }
 
@@ -103,26 +100,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             var list = new List<CartesianTileSubObjectColorLayerGameObject>();
 
-            AddLayersRecursive(root, list);
+            //TODO broken feature fix this!
+            // AddLayersRecursive(root, list);
 
             return list;
         }
 
-        private void AddLayersRecursive(LayerData layer, List<CartesianTileSubObjectColorLayerGameObject> list)
-        {
-            if (layer is ReferencedLayerData proxyLayer)
-            {
-                if (proxyLayer.Reference is CartesianTileSubObjectColorLayerGameObject datasetLayer)
-                {
-                    list.Add(datasetLayer);
-                }
-            }
+        //private void AddLayersRecursive(LayerData layer, List<CartesianTileSubObjectColorLayerGameObject> list)
+        //{
+        //    if (layer.Visualization is CartesianTileSubObjectColorLayerGameObject datasetLayer)
+        //    {
+        //        list.Add(datasetLayer);
+        //    }
 
-            foreach (var child in layer.ChildrenLayers)
-            {
-                AddLayersRecursive(child, list);
-            }
-        }
+        //    foreach (var child in layer.ChildrenLayers)
+        //    {
+        //        AddLayersRecursive(child, list);
+        //    }
+        //}
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
