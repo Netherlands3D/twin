@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Netherlands3D.SelectionTools;
 using System;
-using Netherlands3D.Events;
 using UnityEngine.Events;
 
 namespace Netherlands3D.FirstPersonViewer
@@ -45,6 +44,7 @@ namespace Netherlands3D.FirstPersonViewer
         public bool LockCamera { private set; get; }
         private bool lockMouseModus;
         private bool isLocked;
+        private bool isActive;
 
         //Events
         public UnityEvent<float> ExitDuration = new();
@@ -93,6 +93,8 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void Update()
         {
+            if (!isActive) return;
+            
             HandleCursorLocking();
 
             isEditingInputfield = IsInputfieldSelected();
@@ -179,8 +181,14 @@ namespace Netherlands3D.FirstPersonViewer
             else exitTimer = exitDuration;
         }
 
+        public void ViewerEntered()
+        {
+            isActive = true;
+        }
+
         public void ViewerExited()
         {
+            isActive = false;
             //TODO Move this to a application wide cursor manager.
             ToggleCursor(true);
         }

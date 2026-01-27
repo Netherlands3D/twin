@@ -199,7 +199,7 @@ namespace Netherlands3D.Credentials
             return exception switch
             {
                 AuthenticationError => false,
-                HttpClientError => true,
+                HttpClientError error => (int)(error.Status) != 498, //when statuscode 498 on invalid token, we wish to return false here
                 HttpServerError error => throw new Exception(
                     $"the request returned a response that is not implemented: {error.Status} from Uri: {error.Config.Url}"
                 ),

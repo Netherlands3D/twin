@@ -27,13 +27,24 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties
         [JsonIgnore] public readonly UnityEvent<bool> invertMaskChanged = new();
         [JsonIgnore] public readonly UnityEvent<int> maskBitIndexChanged = new();
 
-        private static List<int> availableMaskChannels = new List<int>() { 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+        private static readonly List<int> availableMaskChannels = new List<int>() { 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+        public static int LastAvailableMaskChannel() => availableMaskChannels.Last();
         public static int NumAvailableMasks => availableMaskChannels.Count;
         public const int MaxAvailableMasks = 22;
-        public static UnityEvent<int> MaskDestroyed = new();
-        public static void AddAvailableMaskChannel(int maskBitIndex) => availableMaskChannels.Add(maskBitIndex);
-        public static void RemoveAvailableMaskChannel(int maskBitIndex) => availableMaskChannels.Remove(maskBitIndex);
-        public static int LastAvailableMaskChannel() => availableMaskChannels.Last();
+        public static readonly UnityEvent<int> MaskRemoved = new();
+        public static readonly UnityEvent<int> MaskAdded = new();
+
+        public static void AddAvailableMaskChannel(int maskBitIndex)
+        {
+            availableMaskChannels.Add(maskBitIndex);
+            MaskRemoved.Invoke(maskBitIndex);
+        }
+
+        public static void RemoveAvailableMaskChannel(int maskBitIndex)
+        {
+            availableMaskChannels.Remove(maskBitIndex);
+            MaskAdded.Invoke(maskBitIndex);
+        }
 
         //runtime only generated bounding box
         [JsonIgnore] public BoundingBox PolygonBoundingBox;
