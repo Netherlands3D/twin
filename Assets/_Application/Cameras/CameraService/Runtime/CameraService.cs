@@ -58,7 +58,7 @@ namespace Netherlands3D.Twin.Cameras
             //Save previous
             previous = current;
             current = cameraObject;
-            previous.gameObject.SetActive(false);
+            previous?.gameObject.SetActive(false);
             cameraObject.gameObject.SetActive(true);
             
             OnSwitchCamera.Invoke(cameraObject);

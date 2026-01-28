@@ -20,7 +20,7 @@ namespace Netherlands3D.Twin.Layers
 
         protected virtual void OnEnable()
         {
-            PolygonSelectionLayerPropertyData.MaskDestroyed.AddListener(ResetMask);
+            PolygonSelectionLayerPropertyData.MaskRemoved.AddListener(ResetMask);
             var importedObject = GetComponent<IImportedObject>();
             if (importedObject != null)
             {
@@ -30,7 +30,7 @@ namespace Netherlands3D.Twin.Layers
 
         protected virtual void OnDisable()
         {
-            PolygonSelectionLayerPropertyData.MaskDestroyed.RemoveListener(ResetMask);
+            PolygonSelectionLayerPropertyData.MaskRemoved.RemoveListener(ResetMask);
             var importedObject = GetComponent<IImportedObject>();
             if (importedObject != null)
             {
@@ -52,7 +52,7 @@ namespace Netherlands3D.Twin.Layers
         {
             maskingLayerPropertyData.SetMaskBit(maskBitIndex, true); //reset accepting masks
         }
-
+        
         private void ApplyMasking()
         {
             var bitMask = GetBitMask();
