@@ -30,7 +30,7 @@ namespace Netherlands3D.FirstPersonViewer
         public CameraConstrain cameraConstrain;
 
         //Smoothing
-        private bool useRotationDampening = true;
+        private bool useRotationDampening;
         private float smoothTime = 0.15f;
         private Quaternion viewerRotationVelocity;
         private Quaternion cameraRotationVelocity;
