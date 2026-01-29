@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Twin.PresentationModus.UIHider
 {
-    public enum UIExitDirection {  Left, Right, Up, Down }
+    public enum UIExitDirection { Left, Right, Up, Down }
 
     public class UIHider : MonoBehaviour
     {
@@ -30,13 +30,16 @@ namespace Netherlands3D.Twin.PresentationModus.UIHider
 
         public void Register(IPanelHider panelHider)
         {
-            if (!panelHiders.Contains(panelHider)) panelHiders.Add(panelHider);
+            if (!panelHiders.Contains(panelHider))
+                panelHiders.Add(panelHider);
+
             SetPanelHide(panelHider);
         }
 
         public void Unregister(IPanelHider panelHider)
         {
-            if (panelHiders.Contains(panelHider)) panelHiders.Remove(panelHider);
+            if (panelHiders.Contains(panelHider))
+                panelHiders.Remove(panelHider);
         }
 
         private void Update()
@@ -49,8 +52,10 @@ namespace Netherlands3D.Twin.PresentationModus.UIHider
             {
                 bool isMouseOver = panel.IsMouseOver(mousePosition);
 
-                if (isMouseOver && panel.IsHidden) panel.Show();
-                else if(!isMouseOver && !panel.Pinned && !panel.IsHidden) panel.Hide();
+                if (isMouseOver && panel.IsHidden)
+                    panel.Show();
+                else if (!isMouseOver && !panel.Pinned && !panel.IsHidden)
+                    panel.Hide();
             });
         }
 
@@ -65,14 +70,18 @@ namespace Netherlands3D.Twin.PresentationModus.UIHider
         private void SetPanelHide(IPanelHider panel)
         {
             panel.HideUI(hideUI);
-            if (hideUI && !panel.Pinned) panel.Hide();
-            else if (!hideUI) panel.Show();
+
+            if (hideUI && !panel.Pinned)
+                panel.Hide();
+            else if (!hideUI)
+                panel.Show();
         }
 
         private void OnHideUIPressed(InputAction.CallbackContext context)
         {
             //TODO: Switch this out for a inputfield checker instead of using the one from the FPV.
-            if (ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>().Input.IsInputfieldSelected()) return;
+            if (ServiceLocator.GetService<FirstPersonViewer.FirstPersonViewer>().Input.IsInputfieldSelected()) 
+                return;
 
             ToggleUIHider();
         }

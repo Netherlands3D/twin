@@ -45,12 +45,9 @@ namespace Netherlands3D.Twin.PresentationModus.UIHider
 
         private void OnEnable()
         {
-            ServiceLocator.GetService<UIHider>()?.Register(this);
+            ServiceLocator.GetService<UIHider>().Register(this);
 
-            if (hiddenPosition == Vector2.zero)
-            {
-                StartCoroutine(SetupElement());
-            }
+            StartCoroutine(SetupElement());
         }
 
         private IEnumerator SetupElement()
@@ -68,7 +65,7 @@ namespace Netherlands3D.Twin.PresentationModus.UIHider
 
         private void OnDisable()
         {
-            ServiceLocator.GetService<UIHider>()?.Unregister(this);
+            ServiceLocator.GetService<UIHider>().Unregister(this);
         }
 
         private void CalculateHiddenPos()
@@ -96,7 +93,8 @@ namespace Netherlands3D.Twin.PresentationModus.UIHider
 
         public void HideUI(bool hideUI)
         {
-            if (pinToggle != null) pinToggle.gameObject.SetActive(hideUI);
+            if (pinToggle != null) 
+                pinToggle.gameObject.SetActive(hideUI);
         }
 
         public void Show()
