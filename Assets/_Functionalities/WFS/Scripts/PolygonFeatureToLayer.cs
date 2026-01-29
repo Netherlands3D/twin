@@ -4,6 +4,7 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
@@ -18,11 +19,13 @@ namespace Netherlands3D
     {
         [SerializeField] private Button button;
         private ObjectSelectorService objectSelector;
+        private PolygonSelectionService polygonSelectionService;
         private Feature feature;
 
         private void Awake()
         {
-            objectSelector = FindAnyObjectByType<ObjectSelectorService>();
+            objectSelector = ServiceLocator.GetService<ObjectSelectorService>();
+            polygonSelectionService = ServiceLocator.GetService<PolygonSelectionService>();
         }
 
         private void OnEnable()
@@ -40,10 +43,6 @@ namespace Netherlands3D
                 return;
             }
 
-            // if (feature.Geometry is not MultiPolygon multiPolygon && feature.Geometry is not Polygon polygon)
-            // {
-            //     return;
-            // }
             if (feature.Geometry is MultiPolygon multiPolygon)
             {
                 foreach (var polygon in multiPolygon.Coordinates)
@@ -70,7 +69,8 @@ namespace Netherlands3D
                 ShapeType.Polygon,
                 list
             );
-            App.Layers.Add(preset);
+            var layer = App.Layers.Add(preset);
+            polygonSelectionService.RegisterPolygon(layer.LayerData);
         }
 
         private void OnDisable()
