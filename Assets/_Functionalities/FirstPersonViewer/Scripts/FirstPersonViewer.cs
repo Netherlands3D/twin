@@ -17,8 +17,8 @@ namespace Netherlands3D.FirstPersonViewer
     {
         [Header("Camera")]
         [field: SerializeField] public FirstPersonViewerCamera FirstPersonCamera { private set; get; }
-        public FirstPersonViewerInput Input { private set; get; }
-        public MovementModusSwitcher MovementSwitcher { private set; get; }
+        [field: SerializeField] public FirstPersonViewerInput Input { private set; get; }
+        [field: SerializeField] public MovementModusSwitcher MovementSwitcher { private set; get; }
 
         private FirstPersonViewerStateMachine fsm;
         private WorldTransform worldTransform;
@@ -59,9 +59,6 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void Awake()
         {
-            Input = GetComponent<FirstPersonViewerInput>();
-            MovementSwitcher = GetComponent<MovementModusSwitcher>();
-
             worldTransform = GetComponent<WorldTransform>();
 
             Input.SetExitCallback(ExitViewer);
@@ -148,16 +145,16 @@ namespace Netherlands3D.FirstPersonViewer
         private void Update()
         {
             if (!FirstPersonCamera.FPVCamera.gameObject.activeInHierarchy) return;
-            
+
             CheckGroundCollision();
+
+            if (Input.ResetInput.triggered) ResetToGround();
 
             fsm.OnUpdate();
 
             transform.position += Vector3.up * velocity.y * Time.deltaTime;
 
             OnPositionUpdated.Invoke(new Coordinate(transform.position));
-
-            if (Input.ResetInput.triggered) ResetToGround();
         }
 
         public void GetGroundPosition()

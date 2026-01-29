@@ -69,8 +69,8 @@ MonoBehaviour:
         movementSetting: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1,
           type: 2}
         defaultValue: 1.8
-        minValue: -20
-        maxValue: 20
+        minValue: 1.5
+        maxValue: 10
     - rid: 1516422325167980661
       type: {class: ViewerSettingValue, ns: Netherlands3D.FirstPersonViewer.ViewModus,
         asm: eu.netherlands3d.twin}
