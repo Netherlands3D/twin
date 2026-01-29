@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.FloatingOrigin;
@@ -282,6 +283,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            ObjectSelectorService selectionService = ServiceLocator.GetService<ObjectSelectorService>();
+            if(!selectionService.IsAnyToolActive()) return;
+            
             LayerData.SelectLayer(true);
         }
 
