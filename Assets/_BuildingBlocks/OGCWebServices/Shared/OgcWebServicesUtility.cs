@@ -52,6 +52,12 @@ namespace Netherlands3D.OgcWebServices.Shared
             return queryParameters.Single(parameter);
         }
 
+        public static bool GetLayerNameFromURL(string url, out string layerName)
+        {
+            layerName = GetParameterFromURL(url, "layers");
+            return !string.IsNullOrEmpty(layerName);
+        }
+
         public static string GetVersionFromUrl(Uri url)
         {
             var urlLower = url.ToString().ToLower();
