@@ -204,12 +204,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input: {fileID: 6660788825186363282}
   viewer: {fileID: 3034395081720571745}
+  FPVCamera: {fileID: 0}
   viewerBase: {fileID: 2359970039064756521}
   cameraConstrain: 0
   fovSetting: {fileID: 11400000, guid: 7fbf429f21052864cb8f7d4890613225, type: 2}
   viewHeightSetting: {fileID: 11400000, guid: 19f0e40dd36a5c94a84720d974fe1fe1, type: 2}
   cameraHeightAboveGround: 500
   returnFocusDistance: 150
+  onSetupComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8111522683061574636
 GameObject:
   m_ObjectHideFlags: 0
@@ -347,6 +351,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <FirstPersonCamera>k__BackingField: {fileID: 2754359901435342932}
+  <Input>k__BackingField: {fileID: 6660788825186363282}
+  <MovementSwitcher>k__BackingField: {fileID: 6417052032803972631}
   snappingCullingMask:
     serializedVersion: 2
     m_Bits: 193
@@ -354,6 +360,24 @@ MonoBehaviour:
   isGrounded: 0
   stepHeight: 1.5
   returnFocusDistance: 150
+  OnResetToStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnResetToGround:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSetCameraNorth:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPositionUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  OnViewerEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  OnViewerExited:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1609831314963826710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -399,6 +423,12 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   fpvExitText: Druk op 'backspace' om je muis te ontgrendelen.
+  ExitDuration:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLockStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6417052032803972631
 MonoBehaviour:
   m_ObjectHideFlags: 0
