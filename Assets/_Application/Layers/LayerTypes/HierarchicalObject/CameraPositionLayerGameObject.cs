@@ -4,7 +4,6 @@ using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 {
