@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 4114483817524287800}
   - component: {fileID: 4477177290477694669}
   - component: {fileID: -4083834515804018632}
-  - component: {fileID: 6043936318322923024}
   - component: {fileID: 1295341047705622134}
   - component: {fileID: 726991121810335857}
   - component: {fileID: 6074292130841963842}
-  m_Layer: 6
+  - component: {fileID: 8871023317034153284}
+  m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,25 +69,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630f741154ed48488dc6602ef25dab3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldTransformShifter: {fileID: 6043936318322923024}
+  worldTransformShifter: {fileID: 0}
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
   onPostShift:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6043936318322923024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3354824856556962616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50fab43e07a540b89d245bd4ec8e4887, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!33 &1295341047705622134
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -155,3 +143,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraToFollow: {fileID: 0}
   centerOfViewport: 0
+--- !u!114 &8871023317034153284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3354824856556962616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4d878bc3b3f47745960e6be7203cfc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PositionLocked: 0
+  RotationLocked: 1
+  ScaleLocked: 1
+  positionAxes: 1
+  rotationAxes: 7
+  scaleAxes: 7

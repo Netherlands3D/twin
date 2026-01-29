@@ -55,7 +55,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private Vector3 previousScale;
         public WorldTransform WorldTransform { get; private set; }
 
-        [SerializeField] private string scaleUnitCharacter = "%";
+        [SerializeField] protected string scaleUnitCharacter = "%";
         
         protected override void OnVisualizationInitialize()
         {
