@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraToFollow: {fileID: 0}
-  centerOfViewport: 0
+  centerOfViewport: 1
 --- !u!114 &8871023317034153284
 MonoBehaviour:
   m_ObjectHideFlags: 0
