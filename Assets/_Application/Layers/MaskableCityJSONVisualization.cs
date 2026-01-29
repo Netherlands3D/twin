@@ -9,7 +9,7 @@ namespace Netherlands3D.Twin.Layers
     [RequireComponent(typeof(CityJSONLayerGameObject))]
     public class MaskableCityJSONVisualization : MaskableVisualization
     {
-        CityJSONLayerGameObject cityJsonLayerGameObject => layerGameObject as CityJSONLayerGameObject;
+        private CityJSONLayerGameObject cityJsonLayerGameObject => layerGameObject as CityJSONLayerGameObject;
 
         private void ApplyMaskingToFeature(CityObjectVisualizer visualizer)
         {
@@ -19,10 +19,9 @@ namespace Netherlands3D.Twin.Layers
 
         protected override void UpdateMaskBitMask(int bitmask)
         {
-            StylingPropertyData stylingPropertyData = cityJsonLayerGameObject.LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
-            if (stylingPropertyData == null) return;
+            if (cityJsonLayerGameObject.DefaultStylingPropertyData == null) return;
             
-            foreach (var geometry in stylingPropertyData.LayerFeatures.Keys)
+            foreach (var geometry in cityJsonLayerGameObject.DefaultStylingPropertyData.LayerFeatures.Keys)
             {
                 var visualizer = geometry as CityObjectVisualizer;
                 ApplyMaskingToFeature(visualizer);

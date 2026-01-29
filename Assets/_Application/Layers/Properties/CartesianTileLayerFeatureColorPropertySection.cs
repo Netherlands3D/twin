@@ -32,6 +32,8 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
+            //todo we need to decide whether we want per stylingpropertydata container a full set of temporary layerfeatures in a dictionairy and thus storing more data but cleaner separation OR
+            //always having a default first found stylingpropertydata to always store the layerfeatures. this is more efficient since keys are reused.
             stylingPropertyData = properties.GetDefaultStylingPropertyData<LayerFeatureColorPropertyData>(); 
             defaultStylingPropertyData = properties.GetDefaultStylingPropertyData<StylingPropertyData>();
 
@@ -63,16 +65,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             swatches.Clear();
             layerContent.ClearAllChildren();
-            
-            // CartesianTileLayerGameObject visualization = FindObjectsByType<CartesianTileLayerGameObject>(FindObjectsSortMode.None).ToList()
-            //     .FirstOrDefault(v => v.LayerData.GetProperty<LayerFeatureColorPropertyData>() == stylingPropertyData);
-
-            // if(visualization == null) 
-            // {
-            //     Debug.LogError("invalid visualisation!");
-            //     return;
-            // }
-            
             
             foreach (var layerFeature in defaultStylingPropertyData.LayerFeatures.Values)
             {

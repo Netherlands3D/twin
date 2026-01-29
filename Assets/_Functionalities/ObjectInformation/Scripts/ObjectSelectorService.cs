@@ -96,14 +96,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             ProjectData.Current.RootLayer.RemovedSelectedLayer.AddListener(OnRemoveSelectedLayer);
         }
 
-        private void ClearMappingTree()
-        {
-            mappingTreeInstance.Clear();
-            BoundingBox bbox = StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds;
-            MappingTree tree = new MappingTree(bbox, 4, 12);                    
-            mappingTreeInstance = tree;
-        }
-
         private void OnAddSelectedLayer(LayerData data)
         {
             //we need to check this before Isclicked because it checks if its over the ui
@@ -320,12 +312,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             ObjectMappingItem item = GetMappingItemForBagID(bagID, selectedMapping, out layer);
             if (layer == null)
                 return null;
-           
-            StylingPropertyData stylingPropertyData = layer.LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
-            if (!stylingPropertyData.LayerFeatures.ContainsKey(item))
-                return null;
-            
-            return stylingPropertyData.LayerFeatures[item]; 
+
+            return layer.DefaultStylingPropertyData.GetLayerFeatureByGeometry(item);
         }
 
         /// <summary>

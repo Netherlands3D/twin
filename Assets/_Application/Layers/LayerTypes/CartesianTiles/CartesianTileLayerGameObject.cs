@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers.Properties;
@@ -10,7 +9,6 @@ using Netherlands3D.SubObjects;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
@@ -43,8 +41,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             
             SetupFeatures();
         }
-
-        public int TileHandlerLayerIndex => tileHandler.layers.IndexOf(layer);
         
         /// <summary>
         /// Cartesian Tiles have 'virtual' features, each type of terrain (grass, cycling path, etc) can be styled
@@ -66,9 +62,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             {
                 ObjectSelectorService.MappingTree.OnMappingAdded.AddListener(OnDebugMapping);
             }
-
-            StylingPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
-            if(stylingPropertyData == null) return;
+           
+            if(DefaultStylingPropertyData == null) return;
                 
             for (var materialIndex = 0; materialIndex < binaryMeshLayer.DefaultMaterialList.Count; materialIndex++)
             {
@@ -79,7 +74,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                 binaryMeshLayer.DefaultMaterialList[materialIndex] = material;
 
                 var layerFeature = CreateFeature(material);
-                stylingPropertyData.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                DefaultStylingPropertyData.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             }
         }
        
@@ -106,28 +101,27 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         private void OnAddedMapping(ObjectMapping mapping)
         {   
-            StylingPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
-            if (stylingPropertyData == null) return;
+            if (DefaultStylingPropertyData == null) return;
             
             foreach (ObjectMappingItem item in mapping.items)
             {
                 var layerFeature = CreateFeature(item);
-                stylingPropertyData.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+                DefaultStylingPropertyData.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             }
             ApplyStyling();
         }
 
         private void OnRemovedMapping(ObjectMapping mapping)
         {
-            StylingPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
-            if (stylingPropertyData == null) return;
+            if (DefaultStylingPropertyData == null) return;
             
             foreach (ObjectMappingItem item in mapping.items)
             {
-                stylingPropertyData.LayerFeatures.Remove(item);
+                DefaultStylingPropertyData.LayerFeatures.Remove(item);
             }
         }
 
+        //todo check if this method probably needs a refactor since the between step of a layerfeature is not needed to store hiddenobject data
         public static LayerFeature GetLayerFeatureFromBagId(string bagId)
         {
             CartesianTileLayerGameObject[] cartesianTileLayerGameObjects = FindObjectsByType<CartesianTileLayerGameObject>(FindObjectsSortMode.None);
@@ -187,10 +181,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             // WMS and other projection layers also use this class as base - but they should not apply this styling
             if (layer is BinaryMeshLayer binaryMeshLayer)
             {
-                StylingPropertyData stylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
-                if (stylingPropertyData == null) return;
+                if (DefaultStylingPropertyData == null) return;
                 
-                foreach (var (_, feature) in stylingPropertyData.LayerFeatures)
+                foreach (var (_, feature) in DefaultStylingPropertyData.LayerFeatures)
                 {
                     //do cascading to get css result styling
                     Symbolizer symbolizer = GetStyling(feature);

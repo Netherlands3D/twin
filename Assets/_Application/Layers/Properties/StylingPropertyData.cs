@@ -55,6 +55,12 @@ namespace Netherlands3D.Twin.Layers.Properties
             StylingRules[stylingRuleName] = stylingRule;
             OnStylingChanged.Invoke();
         }
+
+        public LayerFeature GetLayerFeatureByGeometry(object geometry)
+        {
+            LayerFeatures.TryGetValue(geometry, out var feature);
+            return feature;
+        }
         
     }
 }

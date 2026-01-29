@@ -47,6 +47,19 @@ namespace Netherlands3D.Twin.Layers
         public LayerData LayerData => layerData;
         public abstract BoundingBox Bounds { get; }
 
+        public StylingPropertyData DefaultStylingPropertyData
+        {
+            get
+            {
+                if(defaultStylingPropertyData == null)
+                    defaultStylingPropertyData = LayerData.LayerProperties.GetDefaultStylingPropertyData<StylingPropertyData>();
+                return defaultStylingPropertyData;
+            }
+        }
+
+        //dont make this protected we need to use the public property in subclasses
+        private StylingPropertyData defaultStylingPropertyData; 
+
 #if UNITY_EDITOR
         private void OnValidate()
         {
