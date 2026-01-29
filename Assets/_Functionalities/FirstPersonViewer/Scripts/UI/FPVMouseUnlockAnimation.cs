@@ -19,11 +19,9 @@ namespace Netherlands3D.FirstPersonViewer.UI
         private void OnEnable()
         {
             FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer>();
-            if (fpv != null)
-            {
-                firstPersonInput = fpv.Input;
-                firstPersonInput.OnLockStateChanged.AddListener(PlayUnlockCircleAnimation);
-            }
+
+            firstPersonInput = fpv.Input;
+            firstPersonInput.OnLockStateChanged.AddListener(PlayUnlockCircleAnimation);
 
             unlockCircleImage = GetComponent<Image>();
             unlockCircleImageTransform = GetComponent<Transform>();
@@ -31,7 +29,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnDisable()
         {
-            firstPersonInput?.OnLockStateChanged.RemoveListener(PlayUnlockCircleAnimation); //this can be null sometimes, maybe check in the future if properly unsubscribed
+            firstPersonInput?.OnLockStateChanged.RemoveListener(PlayUnlockCircleAnimation); //TODO: This can be null sometimes, maybe check in the future if properly unsubscribed
         }
 
         void Update()
