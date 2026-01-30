@@ -143,8 +143,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                 measurementSegments[index + 1].pointA = segment.pointA;
             }
 
-            Destroy(segment.pointB.gameObject);
-            Destroy(segment.measurementElement.gameObject);
+            segment.RemovePoint(true);
 
             measurementSegments.RemoveAt(index);
 
@@ -189,8 +188,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             if (index + 1 < measurementSegments.Count)
                 measurementSegments[index + 1].pointA = segment.pointA;
 
-            Destroy(segment.pointB.gameObject);
-            Destroy(segment.measurementElement.gameObject);
+            segment.RemovePoint(true);
 
             measurementSegments.RemoveAt(index);
 
@@ -206,8 +204,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
             FirstPersonMeasurementSegment firstSegment = measurementSegments[0];
 
-            Destroy(firstSegment.pointA.gameObject);
-            Destroy(firstSegment.measurementElement.gameObject);
+            firstSegment.RemovePoint(false);
 
             measurementSegments.RemoveAt(0);
 
@@ -242,17 +239,10 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
         public void ResetMeasurements()
         {
-            for (int i = measurementSegments.Count - 1; i >= 0; i--)
+            foreach (FirstPersonMeasurementSegment segment in measurementSegments)
             {
-                FirstPersonMeasurementSegment segment = measurementSegments[i];
-
-                Destroy(segment.pointA.gameObject);
-                if (segment.pointB != null)
-                {
-                    Destroy(segment.pointB.gameObject);
-                    Destroy(segment.measurementElement.gameObject);
-                }
-            }
+                segment.Dispose();
+            }       
 
             measurementSegments.Clear();
 

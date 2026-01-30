@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using UnityEngine;
+using UnityEngine.tvOS;
 
 namespace Netherlands3D.FirstPersonViewer.Measurement
 {
@@ -67,6 +68,24 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                 measurementElement.SetTextColor(color);
             }
         }
+
+        public void RemovePoint(bool removeB)
+        {
+            if (removeB) GameObject.Destroy(pointB.gameObject);
+            else GameObject.Destroy(pointA.gameObject);
+            GameObject.Destroy(measurementElement.gameObject);
+        }
+
+        public void Dispose()
+        {
+            GameObject.Destroy(pointA.gameObject);
+            if (pointB != null)
+            {
+                GameObject.Destroy(pointB.gameObject);
+                GameObject.Destroy(measurementElement.gameObject);
+            }
+        }
+
 
         public string GetCSVOutput() => $"{pointA.GetLetter()}; {pointB.GetLetter()}; {LineDistance.ToString("0.##", CultureInfo.InvariantCulture).Replace('.', ',')}";
 
