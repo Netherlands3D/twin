@@ -19,10 +19,13 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             string csv = "Punt 1; Punt 2; Afstand in meters; Afstand vanaf A\n";
 
             float totalDst = 0;
-            measurement.GetMeasurementElements().ForEach(measurement =>
+            measurement.GetMeasurementSegments().ForEach(measurement =>
             {
-                totalDst += measurement.GetMeasurementDistance();
-                csv += measurement.GetCSVOutput() + $";{totalDst.ToString("0.##", CultureInfo.InvariantCulture).Replace('.', ',')}\n";
+                if (measurement.pointB != null)
+                {
+                    totalDst += measurement.LineDistance;
+                    csv += measurement.GetCSVOutput() + $";{totalDst.ToString("0.##", CultureInfo.InvariantCulture).Replace('.', ',')}\n";
+                }
             });
 
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(csv);

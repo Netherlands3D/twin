@@ -13,10 +13,10 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
     public class FirstPersonMeasurement : MonoBehaviour
     {
         private const float POINT_DELETE_DISTANCE = 1f;
-        private const string ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
 
         private OpticalRaycaster raycaster;
+
+        private List<FirstPersonMeasurementSegment> measurementSegments = new List<FirstPersonMeasurementSegment>();
 
         [Header("Measuring")]
         [SerializeField] private InputActionReference mouseClick;
@@ -28,13 +28,11 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         private Vector2 clickPosition;
 
         [SerializeField] private FirstPersonMeasurementPoint pointObject;
-        private List<FirstPersonMeasurementPoint> pointList = new List<FirstPersonMeasurementPoint>();
         [SerializeField] private float textHeightAboveLines = .65f;
 
         [Header("UI")]
         [SerializeField] private FirstPersonMeasurementElement measurementElementPrefab;
         [SerializeField] private Transform measurementParent;
-        private List<FirstPersonMeasurementElement> measurementElements = new List<FirstPersonMeasurementElement>();
 
         [SerializeField] private Color32[] lineColors;
         [SerializeField] private TextMeshProUGUI totalDistanceText;
@@ -42,6 +40,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
         private Action<Vector3, bool> setMeasurementPointCallback;
         private Action<Vector3, bool> removeMeasurementPointCallback;
+        private Action<FirstPersonMeasurementElement> removeElementCallback;
 
         private void Start()
         {
@@ -49,6 +48,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
             setMeasurementPointCallback = SetMeasuringPoint;
             removeMeasurementPointCallback = RemoveMeasuringPoint;
+            removeElementCallback = OnElementRemoved;
         }
 
         private void OnDisable()
@@ -72,7 +72,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                     raycaster.GetWorldPointAsync(clickPosition, setMeasurementPointCallback, App.Cameras.ActiveCamera, measurementLayerMask);
             }
 
-            if (Mouse.current.rightButton.wasPressedThisFrame && pointList.Count > 0)
+            if (Mouse.current.rightButton.wasPressedThisFrame && measurementSegments.Count > 0)
                 raycaster.GetWorldPointAsync(Pointer.current.position.ReadValue(), removeMeasurementPointCallback, App.Cameras.ActiveCamera, measurementLayerMask);
         }
 
@@ -84,37 +84,42 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
             FirstPersonMeasurementPoint newPoint = CreateNewPoint(point);
 
-            if (pointList.Count > 1)
+            if (measurementSegments.Count > 0)
             {
-                //Get the last added item.
-                int index = pointList.Count - 1;
-                FirstPersonMeasurementPoint prevPoint = pointList[index - 1];
-                Color32 objectColor = lineColors[(index - 1) % lineColors.Length];
+                Color32 objectColor = lineColors[measurementSegments.Count % lineColors.Length];
+                FirstPersonMeasurementSegment prevSegment = measurementSegments[^1];
 
-                SetPointLine(newPoint, prevPoint, objectColor);
+                prevSegment.CreateLine(newPoint, objectColor);
 
-                float dst = newPoint.LineDistance;
-                totalDistanceInMeters += dst;
+                totalDistanceInMeters += prevSegment.LineDistance;
                 totalDistanceText.text = "Totale afstand: " + ConvertToUnits(totalDistanceInMeters);
 
-                //Text center on line.
-                Vector3 center = (newPoint.transform.position + prevPoint.transform.position) * .5f;
-                newPoint.SetText(center + Vector3.up * textHeightAboveLines, dst);
-
-                CreateNewElement(index, objectColor, dst);
+                FirstPersonMeasurementElement measurementElement = Instantiate(measurementElementPrefab, measurementParent);
+                measurementElement.transform.SetSiblingIndex(measurementParent.childCount - 2);
+                prevSegment.SetElement(measurementElement, measurementSegments.Count, removeElementCallback);
             }
+
+            FirstPersonMeasurementSegment measurementSegment = new FirstPersonMeasurementSegment(newPoint, measurementSegments.Count);
+            measurementSegments.Add(measurementSegment);
         }
 
         private Vector3 CheckForModifiersPressed(Vector3 position)
         {
-            //When the Lock key is pressed use the previous y position. 
-            if (measuringYLockModifier.action.IsPressed() && pointList.Count > 0)
-                position.y = pointList[pointList.Count - 1].transform.position.y;
+            if (measurementSegments.Count == 0)
+                return position;
 
-            if (measuringXZLockModifier.action.IsPressed() && pointList.Count > 0)
+            FirstPersonMeasurementSegment lastSegment = measurementSegments[^1];
+            Vector3 lastPoint = lastSegment.pointB != null ? lastSegment.pointB.transform.position : lastSegment.pointA.transform.position;
+
+            // Y-lock
+            if (measuringYLockModifier.action.IsPressed())
+                position.y = lastPoint.y;
+
+            // XZ-lock
+            if (measuringXZLockModifier.action.IsPressed())
             {
-                position.x = pointList[pointList.Count - 1].transform.position.x;
-                position.z = pointList[pointList.Count - 1].transform.position.z;
+                position.x = lastPoint.x;
+                position.z = lastPoint.z;
             }
 
             return position;
@@ -123,152 +128,136 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         private FirstPersonMeasurementPoint CreateNewPoint(Vector3 point)
         {
             FirstPersonMeasurementPoint newPoint = Instantiate(pointObject, point, Quaternion.identity);
-            newPoint.Init(GetAlphabetLetter(pointList.Count));
-            pointList.Add(newPoint);
             return newPoint;
         }
 
-        private void CreateNewElement(int index, Color32 color, float dst)
+        public void OnElementRemoved(FirstPersonMeasurementElement element)
         {
-            FirstPersonMeasurementElement measurementElement = Instantiate(measurementElementPrefab, measurementParent);
-            measurementElement.transform.SetSiblingIndex(measurementParent.childCount - 2);
+            int index = measurementSegments.FindIndex(s => s.measurementElement == element);
+            if (index == -1) return;
 
-            measurementElement.Init(GetAlphabetLetter(index - 1), GetAlphabetLetter(index), dst, color, RemoveElement);
-            measurementElements.Add(measurementElement);
-        }
+            FirstPersonMeasurementSegment segment = measurementSegments[index];
 
-        private void SetPointLine(FirstPersonMeasurementPoint newPoint, FirstPersonMeasurementPoint prevPoint, Color32 color)
-        {
-            newPoint.SetLine(newPoint.transform.position, prevPoint.transform.position);
-            newPoint.SetLineColor(color);
+            if (index + 1 < measurementSegments.Count)
+            {
+                measurementSegments[index + 1].pointA = segment.pointA;
+            }
+
+            Destroy(segment.pointB.gameObject);
+            Destroy(segment.measurementElement.gameObject);
+
+            measurementSegments.RemoveAt(index);
+
+            for (int i = index; i < measurementSegments.Count; i++)
+            {
+                measurementSegments[i].Refresh(i, lineColors[(i + 1) % lineColors.Length]);
+            }
+
+            RecalculateTotalDistance();
         }
 
         private void RemoveMeasuringPoint(Vector3 point, bool hit)
         {
             if (!hit) return;
 
-            for (int i = pointList.Count - 1; i >= 0; i--)
+            for (int i = measurementSegments.Count - 1; i >= 0; i--)
             {
-                float sqrDist = (point - pointList[i].transform.position).sqrMagnitude;
-                if (sqrDist < POINT_DELETE_DISTANCE * POINT_DELETE_DISTANCE)
+                FirstPersonMeasurementSegment segment = measurementSegments[i];
+
+                if (segment.pointB == null) continue;
+
+                if (IsPointClose(point, segment.pointB.transform.position, POINT_DELETE_DISTANCE))
                 {
-                    RemovePoint(pointList[i]);
+                    RemoveSegmentAt(i);
+                    break;
+                }
+
+                if (i == 0 && IsPointClose(point, segment.pointA.transform.position, POINT_DELETE_DISTANCE))
+                {
+                    RemoveFirstSegment();
                     break;
                 }
             }
         }
 
+        private bool IsPointClose(Vector3 a, Vector3 b, float distance) => (a - b).sqrMagnitude <= distance * distance;
+
+        private void RemoveSegmentAt(int index)
+        {
+            FirstPersonMeasurementSegment segment = measurementSegments[index];
+
+            if (index + 1 < measurementSegments.Count)
+                measurementSegments[index + 1].pointA = segment.pointA;
+
+            Destroy(segment.pointB.gameObject);
+            Destroy(segment.measurementElement.gameObject);
+
+            measurementSegments.RemoveAt(index);
+
+            for (int i = index; i < measurementSegments.Count; i++)
+                measurementSegments[i].Refresh(i, lineColors[(i + 1) % lineColors.Length]);
+
+            RecalculateTotalDistance();
+        }
+
+        private void RemoveFirstSegment()
+        {
+            if (measurementSegments.Count == 0) return;
+
+            FirstPersonMeasurementSegment firstSegment = measurementSegments[0];
+
+            Destroy(firstSegment.pointA.gameObject);
+            Destroy(firstSegment.measurementElement.gameObject);
+
+            measurementSegments.RemoveAt(0);
+
+            for (int i = 0; i < measurementSegments.Count; i++)
+            {
+                if (i == 0)
+                {
+                    measurementSegments[0].Refresh(0, lineColors[(i + 1) % lineColors.Length]);
+                    measurementSegments[0].pointA.DisableVisuals();
+                }
+                else
+                {
+                    measurementSegments[i].pointA = measurementSegments[i - 1].pointB;
+                    measurementSegments[i].Refresh(i, lineColors[(i + 1) % lineColors.Length]);
+                }
+            }
+
+            RecalculateTotalDistance();
+        }
+
+        private void RecalculateTotalDistance()
+        {
+            totalDistanceInMeters = 0;
+
+            for (int i = 0; i < measurementSegments.Count; i++)
+            {
+                totalDistanceInMeters += measurementSegments[i].LineDistance;
+            }
+
+            totalDistanceText.text = "Totale afstand: " + ConvertToUnits(totalDistanceInMeters);
+        }
+
         public void ResetMeasurements()
         {
-            for (int i = pointList.Count - 1; i >= 0; i--)
+            for (int i = measurementSegments.Count - 1; i >= 0; i--)
             {
-                Destroy(pointList[i].gameObject);
+                FirstPersonMeasurementSegment segment = measurementSegments[i];
+
+                Destroy(segment.pointA.gameObject);
+                if (segment.pointB != null)
+                {
+                    Destroy(segment.pointB.gameObject);
+                    Destroy(segment.measurementElement.gameObject);
+                }
             }
 
-            pointList.Clear();
-
-            for (int i = measurementElements.Count - 1; i >= 0; i--)
-            {
-                Destroy(measurementElements[i].gameObject);
-            }
-
-            measurementElements.Clear();
+            measurementSegments.Clear();
 
             totalDistanceInMeters = 0;
             totalDistanceText.text = "Totale afstand: " + ConvertToUnits(totalDistanceInMeters);
-        }
-
-        private void RemoveElement(FirstPersonMeasurementElement element)
-        {
-            int index = measurementElements.IndexOf(element);
-
-            Destroy(pointList[index + 1].gameObject);
-            pointList.RemoveAt(index + 1);
-
-            measurementElements.Remove(element);
-            Destroy(element.gameObject);
-
-            RefreshMeasurements();
-        }
-
-        private void RemovePoint(FirstPersonMeasurementPoint point)
-        {
-            int index = pointList.IndexOf(point);
-
-            //We can't remove point A withouth breaking everything
-            if (index == 0)
-            {
-                Destroy(pointList[index].gameObject);
-                pointList.RemoveAt(index);
-
-                if (measurementElements.Count > 0)
-                {
-                    Destroy(measurementElements[0].gameObject);
-                    measurementElements.RemoveAt(0);
-                }
-
-                RefreshMeasurements();
-            }
-            else RemoveElement(measurementElements[index - 1]);
-        }
-
-        private void RefreshMeasurements()
-        {
-            for (int i = 0; i < pointList.Count - 1; i++)
-            {
-                if (i == 0) pointList[i].DisableVisuals();
-
-                pointList[i].UpdatePointerLetter(GetAlphabetLetter(i));
-
-                Vector3 start = pointList[i].transform.position;
-                Vector3 end = pointList[i + 1].transform.position;
-
-                pointList[i].SetLine(start, end);
-                pointList[i].SetLineColor(lineColors[i % lineColors.Length]);
-
-                Vector3 center = (start + end) * 0.5f;
-                pointList[i].SetText(center + Vector3.up * textHeightAboveLines, pointList[i].LineDistance);
-            }
-
-            if (pointList.Count > 0) pointList[^1].UpdatePointerLetter(GetAlphabetLetter(pointList.Count - 1));
-
-
-            float newTotalDistance = 0;
-            for (int i = 0; i < measurementElements.Count; i++)
-            {
-                if (i + 1 >= pointList.Count)
-                {
-                    measurementElements[i].UpdateMeasurement(GetAlphabetLetter(i), "-", -1);
-                    continue;
-                }
-
-                float dst = pointList[i + 1].LineDistance;
-
-                newTotalDistance += dst;
-                measurementElements[i].UpdateMeasurement(GetAlphabetLetter(i), GetAlphabetLetter(i + 1), dst);
-                measurementElements[i].SetTextColor(lineColors[i % lineColors.Length]);
-            }
-
-            totalDistanceInMeters = newTotalDistance;
-            totalDistanceText.text = "Totale afstand: " + ConvertToUnits(totalDistanceInMeters);
-        }
-
-        private string GetAlphabetLetter(int index)
-        {
-            int baseVal = ALPHABET.Length;
-
-            string result = "";
-
-            index++;
-
-            while (index > 0)
-            {
-                index--;
-                result = ALPHABET[index % baseVal] + result;
-                index /= baseVal;
-            }
-
-            return result;
         }
 
         private string ConvertToUnits(float valueInMeters)
@@ -284,6 +273,6 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             return "~" + valueInMeters.ToString("F2") + units;
         }
 
-        public List<FirstPersonMeasurementElement> GetMeasurementElements() => measurementElements;
+        public List<FirstPersonMeasurementSegment> GetMeasurementSegments() => measurementSegments;
     }
 }

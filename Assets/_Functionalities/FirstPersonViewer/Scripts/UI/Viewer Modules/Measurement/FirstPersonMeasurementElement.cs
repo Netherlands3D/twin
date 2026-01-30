@@ -18,7 +18,6 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         [SerializeField] private CanvasGroup deleteButtonGroup;
 
         private Action<FirstPersonMeasurementElement> onDeleteCallback;
-        private float dstInMeters;
         
         public void Init(string firstLetter, string secondLetter, float dstInMeters, Color32 color, Action<FirstPersonMeasurementElement> onDeleteCallback)
         {
@@ -28,14 +27,12 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             distanceText.text = ConvertToUnits(dstInMeters);
             distanceText.color = color;
             arrowImage.color = color;
-            this.dstInMeters = dstInMeters;
 
             this.onDeleteCallback = onDeleteCallback;
         }
 
         public void UpdateMeasurement(string firstLetter, string secondLetter, float dstInMeters)
         {
-            this.dstInMeters = dstInMeters;
             firstPointText.text = firstLetter;
             secondPointText.text = secondLetter;
             distanceText.text = ConvertToUnits(dstInMeters);
@@ -59,9 +56,6 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
             return "~" + valueInMeters.ToString("F2") + units;
         }
-
-        public string GetCSVOutput() => $"{firstPointText.text}; {secondPointText.text}; {dstInMeters.ToString("0.##", CultureInfo.InvariantCulture).Replace('.', ',')}";
-        public float GetMeasurementDistance() => dstInMeters;
 
         public void RemoveMeasurement() => onDeleteCallback?.Invoke(this);
 

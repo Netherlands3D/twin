@@ -49,5 +49,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             lineRenderer.gameObject.SetActive(false);
             lineDistanceText.gameObject.SetActive(false);
         }
+
+        public string GetLetter() => pointLetterText.text;
     }
 }
