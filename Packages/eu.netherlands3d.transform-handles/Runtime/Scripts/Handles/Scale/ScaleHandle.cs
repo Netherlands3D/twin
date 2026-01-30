@@ -26,11 +26,11 @@ namespace RuntimeHandle
             
             if (_parentTransformHandle.axes == HandleAxes.Y || _parentTransformHandle.axes == HandleAxes.XY || _parentTransformHandle.axes == HandleAxes.YZ || _parentTransformHandle.axes == HandleAxes.XYZ)
                 _axes.Add(new GameObject().AddComponent<ScaleAxis>()
-                    .Initialize(_parentTransformHandle, Vector3.up, yColor));
+                    .Initialize(_parentTransformHandle,Vector3.forward, zColor)); 
 
             if (_parentTransformHandle.axes == HandleAxes.Z || _parentTransformHandle.axes == HandleAxes.XZ || _parentTransformHandle.axes == HandleAxes.YZ || _parentTransformHandle.axes == HandleAxes.XYZ)
                 _axes.Add(new GameObject().AddComponent<ScaleAxis>()
-                    .Initialize(_parentTransformHandle, Vector3.forward, zColor));
+                    .Initialize(_parentTransformHandle, Vector3.up, yColor));
 
             if (_parentTransformHandle.axes != HandleAxes.X && _parentTransformHandle.axes != HandleAxes.Y && _parentTransformHandle.axes != HandleAxes.Z)
             {

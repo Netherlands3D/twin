@@ -25,25 +25,37 @@ namespace RuntimeHandle
             
             if (_parentTransformHandle.axes == HandleAxes.Y || _parentTransformHandle.axes == HandleAxes.XY || _parentTransformHandle.axes == HandleAxes.YZ || _parentTransformHandle.axes == HandleAxes.XYZ)
                 _axes.Add(new GameObject().AddComponent<PositionAxis>()
-                    .Initialize(_parentTransformHandle, Vector3.up, yColor));
+                    .Initialize(_parentTransformHandle, Vector3.forward, zColor));
 
             if (_parentTransformHandle.axes == HandleAxes.Z || _parentTransformHandle.axes == HandleAxes.XZ || _parentTransformHandle.axes == HandleAxes.YZ || _parentTransformHandle.axes == HandleAxes.XYZ)
                 _axes.Add(new GameObject().AddComponent<PositionAxis>()
-                    .Initialize(_parentTransformHandle, Vector3.forward, zColor));
+                    .Initialize(_parentTransformHandle, Vector3.up, yColor));
 
             _planes = new List<PositionPlane>();
-            
+
             if (_parentTransformHandle.axes == HandleAxes.XY || _parentTransformHandle.axes == HandleAxes.XYZ)
                 _planes.Add(new GameObject().AddComponent<PositionPlane>()
-                    .Initialize(_parentTransformHandle, Vector3.right, Vector3.up, -Vector3.forward, new Color(xColor.r,xColor.g,xColor.b,0.2f)));
+                    .Initialize(_parentTransformHandle, 
+                        Vector3.right,  // X
+                        Vector3.forward, // Y (forward)
+                        -Vector3.up,    // Normal = -Z (down)
+                        new Color(xColor.r, xColor.g, xColor.b, 0.2f)));
 
             if (_parentTransformHandle.axes == HandleAxes.YZ || _parentTransformHandle.axes == HandleAxes.XYZ)
                 _planes.Add(new GameObject().AddComponent<PositionPlane>()
-                    .Initialize(_parentTransformHandle, Vector3.up, Vector3.forward, Vector3.right, new Color(yColor.r,yColor.g,yColor.b,0.2f)));
+                    .Initialize(_parentTransformHandle, 
+                        Vector3.forward, // Y (forward)
+                        Vector3.up,      // Z (up)
+                        Vector3.right,   // Normal = X
+                        new Color(yColor.r, yColor.g, yColor.b, 0.2f)));
 
             if (_parentTransformHandle.axes == HandleAxes.XZ || _parentTransformHandle.axes == HandleAxes.XYZ)
                 _planes.Add(new GameObject().AddComponent<PositionPlane>()
-                    .Initialize(_parentTransformHandle, Vector3.right, Vector3.forward, Vector3.up, new Color(zColor.r,zColor.g,zColor.b,0.2f)));
+                    .Initialize(_parentTransformHandle, 
+                        Vector3.right,   // X
+                        Vector3.up,      // Z (up)
+                        Vector3.forward, // Normal = Y
+                        new Color(zColor.r, zColor.g, zColor.b, 0.2f)));
 
             return this;
         }
