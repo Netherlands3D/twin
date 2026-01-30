@@ -1,6 +1,5 @@
 using DG.Tweening;
 using System;
-using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;

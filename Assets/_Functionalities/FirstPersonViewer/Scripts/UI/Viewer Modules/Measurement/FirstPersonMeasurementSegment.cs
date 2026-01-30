@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using UnityEngine;
-using UnityEngine.tvOS;
 
 namespace Netherlands3D.FirstPersonViewer.Measurement
 {
