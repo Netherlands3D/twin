@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 726991121810335857}
   - component: {fileID: 6074292130841963842}
   - component: {fileID: 8871023317034153284}
+  - component: {fileID: -4541368788071780707}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -161,3 +162,15 @@ MonoBehaviour:
   positionAxes: 1
   rotationAxes: 7
   scaleAxes: 7
+--- !u!114 &-4541368788071780707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3354824856556962616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b050df83d47a4b0aa83cc328c57a63b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
