@@ -5,6 +5,7 @@ using System;
 using Netherlands3D.Coordinates;
 using KindMen.Uxios;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Utility;
 
@@ -180,7 +181,8 @@ namespace Netherlands3D.Functionalities.Wfs
 
         private IEnumerator DownloadGeoJSON(TileChange tileChange, Tile tile, Action<TileChange> callback = null)
         {
-            var queryParameters = QueryString.Decode(new Uri(wfsUrl).Query);
+            Uri wfsUri = new Uri(wfsUrl); 
+            var queryParameters = QueryString.Decode(wfsUri.Query);
             string spatialReference = queryParameters.Single("srsname");
 
             CoordinateSystem system = DefaultEpsgCoordinateSystem;
@@ -199,13 +201,17 @@ namespace Netherlands3D.Functionalities.Wfs
             {
                 url += "," + spatialReference;
             }
-            
+
+            string version = OgcWebServicesUtility.GetVersionFromUrl(wfsUri);
+            bool version2 = version.StartsWith("2");
+            string paramCount = version2 ? "count" : "maxFeatures";
+            string paramStart = version2 ? "startIndex" : "startPosition";
             int startIndex = 0;
-            requestConfig.AddParam("count", DefaultPageSize.ToString());
+            requestConfig.AddParam(paramCount, DefaultPageSize.ToString());
 
             while (true)
             {
-                requestConfig.Params.Set("startIndex", startIndex.ToString());
+                requestConfig.Params.Set(paramStart, startIndex.ToString());
 
                 string jsonString = null;
                 var geoJsonRequest = Uxios.DefaultInstance.Get<string>(new Uri(url), requestConfig);
@@ -227,6 +233,8 @@ namespace Netherlands3D.Functionalities.Wfs
 
                 if (parsedThisPage == 0) // stop if no features
                     break;
+                else
+                    Debug.Log((startIndex + parsedThisPage) + " parsed features for " + url); 
 
                 startIndex += parsedThisPage;
             }
