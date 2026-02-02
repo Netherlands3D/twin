@@ -177,7 +177,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return default;
         }
 
-        private bool IsAnyToolActive()
+        public bool IsAnyToolActive()
         {
             foreach (Tool tool in activeForTools)
                 if (tool.Open)
