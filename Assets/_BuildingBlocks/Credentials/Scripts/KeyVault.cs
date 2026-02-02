@@ -7,6 +7,7 @@ using Netherlands3D.Credentials.StoredAuthorization;
 using KindMen.Uxios;
 using KindMen.Uxios.Errors;
 using KindMen.Uxios.Errors.Http;
+using Netherlands3D.Twin.Projects.ExtensionMethods;
 using RSG;
 
 namespace Netherlands3D.Credentials
@@ -57,7 +58,13 @@ namespace Netherlands3D.Credentials
         public void Authorize(Uri inputUri, string username, string passwordOrKey)
         {
             var domain = new Uri(inputUri.GetLeftPart(UriPartial.Path));
-
+            
+            if (inputUri.IsStoredInProject())
+            {
+                OnAuthorizationTypeDetermined.Invoke(new Public(domain));
+                return;
+            }
+            
             //check if we already have an authorization for this url 
             if (storedAuthorizations.TryGetValue(domain, out var authorization))
             {

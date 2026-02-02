@@ -89,8 +89,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             UpdateURL(urlPropertyData.Url);
-            
-            StartLoadingData();
         }
         
         protected virtual void UpdateURL(Uri storedUri)
@@ -103,21 +101,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
            
             credentialHandler.Uri = storedUri; //apply the URL from what is stored in the Project data
             credentialHandler.ApplyCredentials();
-        }
-
-        protected virtual void StartLoadingData()
-        {
-            LayerURLPropertyData urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            if (urlPropertyData.Url.IsStoredInProject())
-            {
-                UpdateURL(urlPropertyData.Url);
-                string path = AssetUriFactory.GetLocalPath(urlPropertyData.Url);
-                StartCoroutine(parser.ParseGeoJSONLocal(path));
-            }
-            else if (urlPropertyData.Url.IsRemoteAsset())
-            {
-                UpdateURL(urlPropertyData.Url);
-            }
         }
 
         protected virtual void HandleCredentials(Uri uri, StoredAuthorization auth)
@@ -134,7 +117,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
             
             LayerData.HasValidCredentials = true;
-            StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
+            
+            if (uri.IsStoredInProject())
+            {
+                string path = AssetUriFactory.GetLocalPath(uri);
+                StartCoroutine(parser.ParseGeoJSONLocal(path));
+            }
+            else if (uri.IsRemoteAsset())
+            {
+                StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
+            }
         }
 
         protected override void RegisterEventListeners()
