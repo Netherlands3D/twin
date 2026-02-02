@@ -283,6 +283,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            //todo this works for now, but we should redesign this in such a manner so this dependency is not the way around
             ObjectSelectorService selectionService = ServiceLocator.GetService<ObjectSelectorService>();
             if(!selectionService.IsAnyToolActive()) return;
             
