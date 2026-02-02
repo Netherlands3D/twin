@@ -78,14 +78,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         protected override void OnVisualizationReady()
         {
             TransformLayerPropertyData transformProperty = LayerData.GetProperty<TransformLayerPropertyData>();
-            if (transformProperty != null)
-            {
-                transformProperty.IsEditable = true;
-                UpdatePosition(transformProperty.Position);
-                UpdateRotation(transformProperty.EulerRotation);
-                UpdateScale(transformProperty.LocalScale);
-            }
-
+            transformProperty.IsEditable = true;
+            UpdatePosition(transformProperty.Position);
+            UpdateRotation(transformProperty.EulerRotation);
+            UpdateScale(transformProperty.LocalScale);
+            
             ToggleScatterPropertyData scatterProperty = LayerData.GetProperty<ToggleScatterPropertyData>();
             if(scatterProperty != null) scatterProperty.AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
 
@@ -201,9 +198,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         {
             base.RegisterEventListeners();
             var transformPropertyData = LayerData.GetProperty<TransformLayerPropertyData>();
-            transformPropertyData?.OnPositionChanged.AddListener(UpdatePosition);
-            transformPropertyData?.OnRotationChanged.AddListener(UpdateRotation);
-            transformPropertyData?.OnScaleChanged.AddListener(UpdateScale);
+            transformPropertyData.OnPositionChanged.AddListener(UpdatePosition);
+            transformPropertyData.OnRotationChanged.AddListener(UpdateRotation);
+            transformPropertyData.OnScaleChanged.AddListener(UpdateScale);
 
             var toggleScatterPropertyData = LayerData.GetProperty<ToggleScatterPropertyData>();
             if(toggleScatterPropertyData != null) toggleScatterPropertyData.IsScatteredChanged.AddListener(ConvertToScatterLayer);

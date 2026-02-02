@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
@@ -27,11 +26,5 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 scaleUnitCharacter);
             InitProperty<ColorPropertyData>(properties);
         }
-
-        // protected override void Update()
-        // {
-        //     //override the transform propertydata
-        //     //base.Update();
-        // }
     }
 }
