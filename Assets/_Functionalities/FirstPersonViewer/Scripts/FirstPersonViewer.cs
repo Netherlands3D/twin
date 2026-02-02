@@ -148,13 +148,13 @@ namespace Netherlands3D.FirstPersonViewer
 
             CheckGroundCollision();
 
+            if (Input.ResetInput.triggered) ResetToGround();
+
             fsm.OnUpdate();
 
             transform.position += Vector3.up * velocity.y * Time.deltaTime;
 
             OnPositionUpdated.Invoke(new Coordinate(transform.position));
-
-            if (Input.ResetInput.triggered) ResetToGround();
         }
 
         public void GetGroundPosition()

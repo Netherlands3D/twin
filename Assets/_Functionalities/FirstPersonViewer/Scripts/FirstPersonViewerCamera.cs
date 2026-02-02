@@ -30,7 +30,7 @@ namespace Netherlands3D.FirstPersonViewer
         public CameraConstrain cameraConstrain;
 
         //Smoothing
-        private bool useRotationDampening = true;
+        private bool useRotationDampening;
         private float smoothTime = 0.15f;
         private Quaternion viewerRotationVelocity;
         private Quaternion cameraRotationVelocity;
@@ -155,6 +155,11 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void Update()
         {
+            //Update Main Cam position
+            Vector3 camPos = transform.position;
+            camPos.y = cameraHeightAboveGround;
+            mainCam.transform.position = camPos;
+
             if (input.LockInput || input.LockCamera) return;
 
             Vector2 cameraMovement = input.LookInput.ReadValue<Vector2>();
@@ -163,11 +168,6 @@ namespace Netherlands3D.FirstPersonViewer
             {
                 RotateCamera(cameraMovement);
             }
-
-            //Update Main Cam position
-            Vector3 camPos = transform.position;
-            camPos.y = cameraHeightAboveGround;
-            mainCam.transform.position = camPos;
         }
 
         //Sets the rotation of the camera or the viewerBase based on the current Camera Constrain.
