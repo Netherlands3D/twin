@@ -103,21 +103,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             credentialHandler.ApplyCredentials();
         }
 
-        protected virtual void StartLoadingData()
-        {
-            LayerURLPropertyData urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            if (urlPropertyData.Url.IsStoredInProject())
-            {
-                UpdateURL(urlPropertyData.Url);
-                string path = AssetUriFactory.GetLocalPath(urlPropertyData.Url);
-                StartCoroutine(parser.ParseGeoJSONLocal(path));
-            }
-            else if (urlPropertyData.Url.IsRemoteAsset())
-            {
-                UpdateURL(urlPropertyData.Url);
-            }
-        }
-
         protected virtual void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
             if (auth.GetType() != typeof(Public)) //if it is public, we don't want the property panel to show up
