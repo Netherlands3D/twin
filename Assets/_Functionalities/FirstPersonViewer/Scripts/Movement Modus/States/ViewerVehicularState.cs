@@ -35,7 +35,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
         {
             Vector2 moveInput = GetMoveInput();
             MoveVehicle(moveInput);
-            if (input.SpaceAction.IsPressed())  Handbrake();
+            if (input.SpaceAction.IsPressed()) Handbrake();
 
             viewer.SnapToGround();
 
@@ -78,7 +78,7 @@ namespace Netherlands3D.FirstPersonViewer.ViewModus
             if (Mathf.Abs(currentSpeed) > 0) viewer.GetGroundPosition();
 
             int speedInKilometers = Mathf.RoundToInt(currentSpeed * 3.6f);
-            if(speedInKilometers != lastSpeed)
+            if (speedInKilometers != lastSpeed)
             {
                 currentSpeedLabel.Value = speedInKilometers.ToString();
                 lastSpeed = speedInKilometers;
