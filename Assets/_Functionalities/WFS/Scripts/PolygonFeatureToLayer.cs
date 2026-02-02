@@ -10,6 +10,7 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
+using Netherlands3D.Twin.Services;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,9 +46,12 @@ namespace Netherlands3D
 
             if (feature.Geometry is MultiPolygon multiPolygon)
             {
+                var builder = new LayerBuilder().OfType("folder").NamedAs("FeaturePolygons");
+                var folder = App.Layers.Add(builder);
                 foreach (var polygon in multiPolygon.Coordinates)
                 {
-                    CreatePolygonLayer(polygon);
+                    var layer = CreatePolygonLayer(polygon, folder.LayerData);
+                    layer.LayerData.SetParent(folder.LayerData);
                 }
             }
             else if (feature.Geometry is Polygon polygon)
@@ -56,7 +60,7 @@ namespace Netherlands3D
             }
         }
 
-        private void CreatePolygonLayer(Polygon polygon)
+        private Layer CreatePolygonLayer(Polygon polygon, LayerData parentLayer = null)
         {
             var solidPolygon = polygon.Coordinates[0];
             var list = GeometryVisualizationFactory.ConvertToUnityCoordinates(solidPolygon, GeoJSONParser.GetCoordinateSystem(feature.CRS));
@@ -71,6 +75,7 @@ namespace Netherlands3D
             );
             var layer = App.Layers.Add(preset);
             polygonSelectionService.RegisterPolygon(layer.LayerData);
+            return layer;
         }
 
         private void OnDisable()
