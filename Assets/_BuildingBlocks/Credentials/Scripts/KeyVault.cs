@@ -57,7 +57,13 @@ namespace Netherlands3D.Credentials
         public void Authorize(Uri inputUri, string username, string passwordOrKey)
         {
             var domain = new Uri(inputUri.GetLeftPart(UriPartial.Path));
-
+            
+            if (inputUri.Scheme == "project")
+            {
+                OnAuthorizationTypeDetermined.Invoke(new Public(domain));
+                return;
+            }
+            
             //check if we already have an authorization for this url 
             if (storedAuthorizations.TryGetValue(domain, out var authorization))
             {

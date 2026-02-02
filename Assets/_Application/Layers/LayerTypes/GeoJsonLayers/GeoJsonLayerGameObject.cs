@@ -89,8 +89,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             UpdateURL(urlPropertyData.Url);
-            
-            StartLoadingData();
         }
         
         protected virtual void UpdateURL(Uri storedUri)
@@ -134,7 +132,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
             
             LayerData.HasValidCredentials = true;
-            StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
+            
+            if (uri.IsStoredInProject())
+            {
+                string path = AssetUriFactory.GetLocalPath(uri);
+                StartCoroutine(parser.ParseGeoJSONLocal(path));
+            }
+            else if (uri.IsRemoteAsset())
+            {
+                StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
+            }
         }
 
         protected override void RegisterEventListeners()
