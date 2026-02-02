@@ -17,6 +17,8 @@ namespace Netherlands3D.Functionalities.Wfs
     /// </summary>
     public class WFSGeoJSONTileDataLayer : Layer
     {
+        private const uint DefaultPageSize = 1000;
+        
         private const CoordinateSystem DefaultEpsgCoordinateSystem = CoordinateSystem.RD;
         private Netherlands3D.CartesianTiles.TileHandler tileHandler;
         private Config requestConfig { get; set; } = Config.Default();
@@ -197,12 +199,9 @@ namespace Netherlands3D.Functionalities.Wfs
             {
                 url += "," + spatialReference;
             }
-
-            //todo make this page size dynamic?
-            const int pageSize = 1000;
-            int startIndex = 0;
             
-            requestConfig.AddParam("count", pageSize.ToString());
+            int startIndex = 0;
+            requestConfig.AddParam("count", DefaultPageSize.ToString());
 
             while (true)
             {
