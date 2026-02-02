@@ -198,28 +198,39 @@ namespace Netherlands3D.Functionalities.Wfs
                 url += "," + spatialReference;
             }
 
-            string jsonString = null;
-            var geoJsonRequest = Uxios.DefaultInstance.Get<string>(new Uri(url), requestConfig);
-            geoJsonRequest.Then(response => jsonString = response.Data as string);
-            geoJsonRequest.Catch(exception => Debug.LogWarning($"Request to {url} failed with message {exception.Message}")
-            );
+            //todo make this page size dynamic?
+            const int pageSize = 1000;
+            int startIndex = 0;
+            
+            requestConfig.AddParam("count", pageSize.ToString());
 
-            yield return Uxios.WaitForRequest(geoJsonRequest);
-
-            if (string.IsNullOrEmpty(jsonString) == false)
+            while (true)
             {
-                //the 250 comes from a standard empty featurecollection json response approximate text length
-                int minLength = Math.Min(250, jsonString.Length);
-                string emptyCheckString = jsonString.Substring(0, minLength).Replace(" ", "");
-                bool emptyCollection = emptyCheckString.Contains("\"totalFeatures\":0");
-                if (!emptyCollection)
-                {
-                    var parser = new GeoJSONParser(0.01f);
-                    parser.OnFeatureParsed.AddListener(wfsGeoJSONLayer.AddFeatureVisualisation);
-                    yield return parser.ParseJSONString(jsonString);
-                }
-            }
+                requestConfig.Params.Set("startIndex", startIndex.ToString());
 
+                string jsonString = null;
+                var geoJsonRequest = Uxios.DefaultInstance.Get<string>(new Uri(url), requestConfig);
+                geoJsonRequest.Then(r => jsonString = r.Data as string);
+                geoJsonRequest.Catch(e => Debug.LogWarning($"Request to {url} failed: {e.Message}"));
+
+                yield return Uxios.WaitForRequest(geoJsonRequest);
+
+                if (string.IsNullOrEmpty(jsonString))
+                    break;
+
+                int parsedThisPage = 0;
+                var parser = new GeoJSONParser(0.01f);
+                parser.OnFeatureParsed.AddListener(_ => parsedThisPage++);
+                parser.OnParseError.AddListener(_ => parsedThisPage++);
+                parser.OnFeatureParsed.AddListener(wfsGeoJSONLayer.AddFeatureVisualisation);
+
+                yield return parser.ParseJSONString(jsonString);
+
+                if (parsedThisPage == 0) // stop if no features
+                    break;
+
+                startIndex += parsedThisPage;
+            }
             callback?.Invoke(tileChange);
         }
 
