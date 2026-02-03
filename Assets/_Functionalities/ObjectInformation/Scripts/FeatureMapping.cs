@@ -22,6 +22,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public List<Mesh> FeatureMeshes { get { return visualisationLayer.GetMeshData(feature); } }
         public Feature Feature { get { return feature; } }
         public int LayerOrder { get { return geoJsonLayerParent.LayerData.RootIndex; } }
+        //todo: Mapping.BoundingBox should be the bbox of all meshes in the feature, this is currently not working correctly.
         public BoundingBox BoundingBox => boundingBox;
 
         private Feature feature;
@@ -88,7 +89,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 {
                     Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
                     GeoJSONPolygonLayer polygonLayer = visualisationLayer as GeoJSONPolygonLayer;
-                    PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes);
+                    PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes[i]);
                     bool isSelected = FeatureSelector.ProcessPolygonSelection(meshes[i], pv.transform, frustumPlanes, unityPos);
                     if (isSelected)
                     {

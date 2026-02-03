@@ -159,7 +159,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        private static List<Coordinate> ConvertToUnityCoordinates(
+        public static List<Coordinate> ConvertToUnityCoordinates(
             LineString lineString,
             CoordinateSystem originalCoordinateSystem,
             float defaultNAPHeight = 0
