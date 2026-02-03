@@ -21,14 +21,16 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         [Header("Debug")]
         [SerializeField] private bool debugLogging = false;
 
-        private struct ScenarioEntry
-        {
-            public LayerData Folder;
-            public Toggle Toggle;
-        }
-
-        private readonly List<ScenarioEntry> scenarios = new();
+        private readonly List<ScenarioToggleMarker> scenarios = new();
         private bool suppressToggleEvents;
+
+        private void Awake()
+        {
+            if (!scenarioToggleContainer || !scenarioTogglePrefab)
+            {
+                Log("ScenarioToggleContainer or ScenarioTogglePrefab is NOT assigned in the inspector.");
+            }
+        }
 
         private void Log(string msg)
         {
@@ -94,13 +96,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private void RebuildScenarioUI()
         {
             Log("RebuildScenarioUI called.");
-
-            if (!scenarioToggleContainer || !scenarioTogglePrefab)
-            {
-                Log("ScenarioToggleContainer or ScenarioTogglePrefab is NOT assigned in the inspector.");
-                return;
-            }
-
             // Default: hide the scenario bar; only show when we actually have scenarios
             scenarioToggleContainer.gameObject.SetActive(false);
 
@@ -109,12 +104,13 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 Log("ProjectData.Current or RootLayer is NULL. Cannot build scenarios yet.");
                 return;
             }
-
+ 
             // Clear existing UI
-            foreach (Transform child in scenarioToggleContainer)
+            ScenarioToggleMarker[] markers = scenarioToggleContainer.GetComponentsInChildren<ScenarioToggleMarker>();
+           
+            foreach (ScenarioToggleMarker marker in markers)
             {
-                if (child.GetComponent<ScenarioToggleMarker>())
-                    Destroy(child.gameObject);
+                Destroy(marker.gameObject);
             }
             scenarios.Clear();
 
@@ -127,11 +123,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                     scenarioFolders.Add(layer);
             }
             Log($"Found {scenarioFolders.Count} scenario folder(s) in the project.");
-
-            foreach (var f in scenarioFolders)
-            {
-                Log($"  Scenario folder: \"{f.Name}\" (ActiveSelf={f.ActiveSelf}, ActiveInHierarchy={f.ActiveInHierarchy})");
-            }
 
             if (!scenarioFolders.Any())
             {
@@ -147,50 +138,13 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
             foreach (var folder in scenarioFolders)
             {
+                Log($"  Scenario folder: \"{folder.Name}\" (ActiveSelf={folder.ActiveSelf}, ActiveInHierarchy={folder.ActiveInHierarchy})");
                 Log($"Creating toggle for scenario folder: \"{folder.Name}\"");
 
                 var toggle = Instantiate(scenarioTogglePrefab, scenarioToggleContainer);
-                toggle.isOn = false;
-
-                // Use the exact folder name as label (minus the 'Scenario:' prefix if you want)
-                string label = folder.Name;
-                int idx = label.IndexOf(':');
-                if (idx >= 0 && idx + 1 < label.Length)
-                    label = label[(idx + 1)..].Trim(); // keep this if you want shorter labels
-                // If you want the full name including "Scenario: ", just comment the 2 lines above
-                // and use: string label = folder.Name;
-
-                // TMP label first
-                TMP_Text tmpText = toggle.GetComponentInChildren<TMP_Text>();
-                if (tmpText)
-                {
-                    tmpText.text = label;
-                    Log($"  TMP_Text label set to \"{label}\"");
-                }
-                else
-                {
-                    // Fallback to legacy Text if needed
-                    var text = toggle.GetComponentInChildren<Text>();
-                    if (text)
-                    {
-                        text.text = label;
-                        Log($"  UnityEngine.UI.Text label set to \"{label}\"");
-                    }
-                    else
-                    {
-                        Log("  WARNING: No TMP_Text or Text component found under toggle prefab.");
-                    }
-                }
-                // Auto resize the toggle based on text width
-                var autoSize = toggle.GetComponent<AutoSizeTMPWidth>();
-                if (autoSize != null)
-                {
-                    autoSize.ResizeNow();
-                }
-
-                var entry = new ScenarioEntry { Folder = folder, Toggle = toggle };
-                scenarios.Add(entry);
-
+                ScenarioToggleMarker marker = toggle.GetComponent<ScenarioToggleMarker>();
+                marker.SetLabel(folder.Name);
+                marker.SetScenario(folder);
                 toggle.onValueChanged.AddListener(isOn =>
                 {
                     Log($"Toggle for scenario \"{folder.Name}\" changed to {(isOn ? "ON" : "OFF")}.");
@@ -206,46 +160,32 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                         return;
                     }
 
-                    ActivateScenario(entry.Folder);
-                    SetToggleStates(entry.Folder);
+                    ActivateScenario(marker.Scenario);
                 });
             }
 
             Log($"Activating initial scenario: \"{scenarioFolders[0].Name}\"");
-            ActivateScenario(scenarios[0].Folder);
-            SetToggleStates(scenarios[0].Folder);
+            ActivateScenario(scenarioFolders[0]);
 
             suppressToggleEvents = false;
 
             Log("RebuildScenarioUI finished.");
         }
 
-        private void SetToggleStates(LayerData activeFolder)
+        private void ActivateScenario(LayerData activeFolder)
         {
             Log($"SetToggleStates: activeFolder=\"{activeFolder.Name}\"");
 
             suppressToggleEvents = true;
             foreach (var scenario in scenarios)
             {
-                bool shouldBeOn = (scenario.Folder == activeFolder);
+                bool shouldBeOn = (scenario.Scenario == activeFolder);
                 scenario.Toggle.isOn = shouldBeOn;
-                Log($"  Toggle for \"{scenario.Folder.Name}\" set to {(shouldBeOn ? "ON" : "OFF")}");
+                scenario.Scenario.ActiveSelf = shouldBeOn;
+                Log($"  Toggle for \"{scenario.Scenario.Name}\" set to {(shouldBeOn ? "ON" : "OFF")}");
             }
             suppressToggleEvents = false;
         }
-
-        private void ActivateScenario(LayerData activeFolder)
-        {
-            Log($"ActivateScenario called for folder: \"{activeFolder.Name}\"");
-
-            var allScenarioFolders = scenarios.Select(s => s.Folder).ToList();
-
-            foreach (var folder in allScenarioFolders)
-            {
-                bool shouldBeActive = (folder == activeFolder);
-                Log($"  Setting ActiveSelf for \"{folder.Name}\" -> {shouldBeActive}");
-                folder.ActiveSelf = shouldBeActive;
-            }
-        }
+        
     }
 }

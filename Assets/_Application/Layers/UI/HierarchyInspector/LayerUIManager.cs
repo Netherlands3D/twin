@@ -178,12 +178,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             {
                 App.Layers.Remove(layer);
             }
-
-            // 👇 Notify that the project data (layer tree) changed, so ScenarioManager & others can rebuild.
-            if (ProjectData.Current != null && ProjectData.Current.OnDataChanged != null)
-            {
-                ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
-            }
         }
 
         private void OnLayerDeleted(LayerData layer)

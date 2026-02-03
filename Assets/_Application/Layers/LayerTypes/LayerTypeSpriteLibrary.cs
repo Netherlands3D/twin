@@ -28,7 +28,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         [SerializeField] private List<LayerSpriteCollection> layerTypeSprites;
         public LayerSpriteCollection GetLayerTypeSprite(LayerData layer)
         {
-            if(layer.PrefabIdentifier == FolderPreset.PrefabIdentifier)
+            if(layer.PrefabIdentifier == FolderPreset.PrefabIdentifier || layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
                 return layerTypeSprites[2];
             
             LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier);
