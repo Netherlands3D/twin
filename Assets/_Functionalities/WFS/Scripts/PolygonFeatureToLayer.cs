@@ -90,8 +90,11 @@ namespace Netherlands3D
 
         private void OnFeatureSelected(FeatureMapping featureMapping)
         {
-            button.gameObject.SetActive(true);
-            feature = featureMapping.Feature;
+            if (featureMapping.Feature.Geometry is Polygon || featureMapping.Feature.Geometry is MultiPolygon)
+            {
+                button.gameObject.SetActive(true);
+                feature = featureMapping.Feature;
+            }
         }
 
         private void OnFeatureDeselected()
