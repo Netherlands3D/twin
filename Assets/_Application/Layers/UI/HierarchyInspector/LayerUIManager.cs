@@ -4,6 +4,7 @@ using System.Linq;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Services;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -79,16 +80,16 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private void OnEnable()
         {
             ReconstructHierarchyUIs();
-            ProjectData.Current.LayerAdded.AddListener(CreateNewUI);
-            ProjectData.Current.LayerDeleted.AddListener(OnLayerDeleted);
+            App.Layers.LayerAdded.AddListener(CreateNewUI);
+            App.Layers.LayerRemoved.AddListener(OnLayerDeleted);
             ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
         }
 
         private void OnDisable()
         {
             ProjectData.Current.RootLayer.DeselectAllLayers();
-            ProjectData.Current.LayerAdded.RemoveListener(CreateNewUI);
-            ProjectData.Current.LayerDeleted.RemoveListener(OnLayerDeleted);
+            App.Layers.LayerAdded.RemoveListener(CreateNewUI);
+            App.Layers.LayerRemoved.RemoveListener(OnLayerDeleted);
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
         }
 
@@ -97,15 +98,15 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             ReconstructHierarchyUIs(); //ensure a clean ui hierarchy after a project is loaded 
         }
 
-        private void CreateNewUI(LayerData layer)
+        private void CreateNewUI(Layer layer)
         {
-            var layerUI = InstantiateLayerItem(layer, layer.ParentLayer);
+            var layerUI = InstantiateLayerItem(layer.LayerData, layer.LayerData.ParentLayer);
             RecalculateLayersVisibleInInspector();
             
             if(layerToSelectAtEndOfFrame == null)
                 StartCoroutine(SelectLayerAtEndOfFrame());
     
-            layerToSelectAtEndOfFrame = layer;
+            layerToSelectAtEndOfFrame = layer.LayerData;
         }
 
         private IEnumerator SelectLayerAtEndOfFrame()
@@ -148,34 +149,11 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 ProjectData.Current.RootLayer.DeselectAllLayers();
         }
 
-        public FolderLayer CreateFolderLayer()
-        {
-            var folder = new FolderLayer("Folder");
-            return folder;
-        }
-
         private void Update()
         {
             if (Keyboard.current.deleteKey.wasPressedThisFrame && !EventSystem.current.currentSelectedGameObject)
             {
                 DeleteSelectedLayers();
-            }
-        }
-
-        public void GroupSelectedLayers()
-        {
-            if (ProjectData.Current.RootLayer.SelectedLayers.Count == 0) 
-                return;
-            
-            var layersToGroup = new List<LayerData>(ProjectData.Current.RootLayer.SelectedLayers); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
-
-            var newGroup = CreateFolderLayer();
-            var referenceLayer = ProjectData.Current.RootLayer.SelectedLayers.Last();
-            newGroup.SetParent(referenceLayer.ParentLayer, referenceLayer.SiblingIndex);
-            SortSelectedLayers(layersToGroup);
-            foreach (var selectedLayer in layersToGroup)
-            {
-                selectedLayer.SetParent(newGroup);
             }
         }
 
@@ -198,7 +176,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         {
             foreach (var layer in ProjectData.Current.RootLayer.SelectedLayers.ToList()) //to list makes a copy and avoids a collectionmodified error
             {
-                layer.DestroyLayer();
+                App.Layers.Remove(layer);
             }
 
             // 👇 Notify that the project data (layer tree) changed, so ScenarioManager & others can rebuild.
@@ -236,6 +214,13 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             var ui = GetLayerUI(layer);
             ui.SetHighlight(layerState);
             ui.MarkLayerUIAsDirty();
+        }
+
+        public List<LayerData> GetLayersSortedByUI()
+        {
+            var layersToGroup = new List<LayerData>(ProjectData.Current.RootLayer.SelectedLayers); //make a copy because creating a new folder layer will cause this new layer to be selected and therefore the other layers to be deselected.
+            SortSelectedLayers(layersToGroup);
+            return layersToGroup;
         }
     }
 }

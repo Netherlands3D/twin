@@ -1,3 +1,6 @@
+using System;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Cameras;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -28,6 +31,20 @@ namespace Netherlands3D.Twin.Quality
 
         private GlobalKeyword exampleFeatureKeyword;
 
+        private void Start()
+        {
+            followCamera = App.Cameras.ActiveCamera;
+            App.Cameras.OnSwitchCamera.AddListener(SetCamera);
+
+            if (!renderTexture)
+                CreateNewRenderTexture();
+        }
+
+        public void SetCamera(Camera camera)
+        {
+            followCamera = camera;
+        }
+
         private void OnEnable()
         {
             exampleFeatureKeyword = GlobalKeyword.Create(waterReflectionsFeatureKeyword);
@@ -36,11 +53,7 @@ namespace Netherlands3D.Twin.Quality
             if (!camera)
                 camera = GetComponent<Camera>();
 
-            if (!followCamera)
-                followCamera = Camera.main;
-
-            if (!renderTexture)
-                CreateNewRenderTexture();
+            
         }
 
         private void OnDisable()
@@ -63,8 +76,6 @@ namespace Netherlands3D.Twin.Quality
 
         void LateUpdate()
         {
-            followCamera = Camera.main;
-
             camera.fieldOfView = followCamera.fieldOfView;
 
             if (Screen.width != followCamera.pixelHeight || screenHeightOnInit != followCamera.pixelHeight)
@@ -87,6 +98,11 @@ namespace Netherlands3D.Twin.Quality
 
             Destroy(renderTexture);
             CreateNewRenderTexture();
+        }
+        
+        private void OnDestroy()
+        {
+            App.Cameras.OnSwitchCamera.RemoveListener(SetCamera);
         }
     }
 }

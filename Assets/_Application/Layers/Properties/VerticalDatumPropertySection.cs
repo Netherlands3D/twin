@@ -1,25 +1,22 @@
+using System.Collections.Generic;
 using Netherlands3D.Coordinates;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    public class VerticalDatumPropertySection : PropertySectionWithLayerGameObject
+    [PropertySection(typeof(ILayerPropertyDataWithCRS))]
+    public class VerticalDatumPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         [SerializeField] private Toggle ellipsoidToggle;
         [SerializeField] private Toggle geoidToggle;
 
         private ILayerPropertyDataWithCRS propertyData;
         
-        private void Start()
+        public void LoadProperties(List<LayerPropertyData> properties)
         {
-            propertyData = LayerGameObject
-                .LayerData
-                .LayerProperties
-                .FindAll<ILayerPropertyDataWithCRS>().FirstOrDefault();
-            if (propertyData == null) return;
+            propertyData = properties.OfType<ILayerPropertyDataWithCRS>().FirstOrDefault();
 
             // Set initial toggle states
             var usesEllipsoid = propertyData.ContentCRS == (int)CoordinateSystem.WGS84_ECEF;

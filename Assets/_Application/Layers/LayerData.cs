@@ -1,4 +1,3 @@
-﻿using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
@@ -14,10 +13,11 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.Layers
 {
     [Serializable]
-    public abstract class LayerData : IEquatable<LayerData>
+    [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Name = "Layer")]
+    [DataContractAliases(Namespace = "https://netherlands3d.eu/schemas/projects/layers", Names = new[] { "Folder", "Prefab", "PolygonSelection" })]
+    [JsonConverter(typeof(LayerDataJsonConverter))]
+    public class LayerData : IEquatable<LayerData>, IDisposable
     {
-        private const string NameOfDefaultStyle = "default";
-
         [SerializeField, DataMember] protected Guid UUID = Guid.NewGuid();
         public Guid Id => UUID;
 
@@ -41,16 +41,7 @@ namespace Netherlands3D.Twin.Layers
         [SerializeField, DataMember] protected List<LayerData> children = new();
         [JsonIgnore] protected LayerData parent; //not serialized to avoid a circular reference
         [JsonIgnore] protected int rootIndex = -1;
-        [SerializeField, DataMember] protected List<LayerPropertyData> layerProperties = new();
-        
-        /// <summary>
-        /// A list of styles with their names (which are meant as machine-readable names and not human-readable names,
-        /// for the latter the 'title' field exists), including a default style that always applies.
-        /// </summary>
-        [SerializeField, DataMember] protected Dictionary<string, LayerStyle> styles = new()
-        {
-            {NameOfDefaultStyle, LayerStyle.CreateDefaultStyle()}
-        };
+        [SerializeField, DataMember] protected List<LayerPropertyData> layerProperties = new();        
 
         [JsonIgnore] private bool hasValidCredentials = true; //assume credentials are not needed. not serialized because we don't save credentials
         [JsonIgnore] public RootLayer Root => ProjectData.Current.RootLayer;
@@ -65,16 +56,8 @@ namespace Netherlands3D.Twin.Layers
             get => name;
             set
             {
-                if (name == value) return;          // optional: avoid redundant events
-
                 name = value;
                 NameChanged.Invoke(value);
-
-                // 🔽 NEW: notify project that something changed (e.g. layer renamed)
-                if (ProjectData.Current != null && ProjectData.Current.OnDataChanged != null)
-                {
-                    ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
-                }
             }
         }
 
@@ -154,27 +137,29 @@ namespace Netherlands3D.Twin.Layers
         }
 
         [JsonIgnore] public bool HasProperties => LayerProperties.Count > 0;
-
-        [JsonIgnore] public Dictionary<string, LayerStyle> Styles => styles;
         
-        /// <summary>
-        /// Every layer has a default style, this is a style that applies to all objects and features in this
-        /// layer without any conditions.
-        /// </summary>
-        [JsonIgnore] public LayerStyle DefaultStyle => Styles[NameOfDefaultStyle];
+        [DataMember] protected string prefabId;
 
-        /// <summary>
-        /// Every layer has a default symbolizer, drawn from the default style, that can be queried for the appropriate
-        /// properties.
-        /// </summary>
-        [JsonIgnore] public Symbolizer DefaultSymbolizer => DefaultStyle.StylingRules[NameOfDefaultStyle].Symbolizer;
+        public string PrefabIdentifier //todo: this being settable is now very error sensitive. Will be refactored in ticket 3/4
+        {
+            get
+            {
+                return prefabId;
+            }
+            set
+            {
+                prefabId = value;
+                OnPrefabIdChanged.Invoke();
+            }
+        }
+        public UnityEvent OnPrefabIdChanged = new();        
 
         [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
         [JsonIgnore] public readonly UnityEvent<Color> ColorChanged = new();
         [JsonIgnore] public readonly UnityEvent LayerDestroyed = new();
         [JsonIgnore] public readonly UnityEvent<int> LayerOrderChanged = new();
-
+        
         [JsonIgnore] public readonly UnityEvent<LayerData> LayerSelected = new();
         [JsonIgnore] public readonly UnityEvent<LayerData> LayerDeselected = new();
         [JsonIgnore] public UnityEvent<LayerData> LayerDoubleClicked = new();
@@ -184,9 +169,9 @@ namespace Netherlands3D.Twin.Layers
         [JsonIgnore] public readonly UnityEvent<int> ParentOrSiblingIndexChanged = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertySet = new();
         [JsonIgnore] public readonly UnityEvent<LayerPropertyData> PropertyRemoved = new();
-        [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleAdded = new();
-        [JsonIgnore] public readonly UnityEvent<LayerStyle> StyleRemoved = new();
+       
         [JsonIgnore] public readonly UnityEvent<bool> HasValidCredentialsChanged = new();
+        [JsonIgnore] public bool IsDisposed {get; private set;}
 
         /// <summary>
         /// Track whether this data object is new, in other words instantiated during this session, or whether it comes
@@ -200,7 +185,11 @@ namespace Netherlands3D.Twin.Layers
             IsNew = false;
         }
 
-        public void InitializeParent(LayerData initialParent = null)
+        /// <summary>
+        /// This is needed because we cannot serialize both the parent and children since that would give a circular reference. Therefore, we need to initialize the parent value at runtime
+        /// </summary>
+        /// <param name="initialParent"></param>
+        public void InitializeParent(LayerData initialParent)
         { 
             parent = initialParent;            
             if (initialParent == null)
@@ -210,7 +199,7 @@ namespace Netherlands3D.Twin.Layers
             }
         }
 
-        public virtual void SelectLayer(bool deselectOthers = false)
+        public void SelectLayer(bool deselectOthers = false)
         {
             if (deselectOthers)
                 Root.DeselectAllLayers();
@@ -219,30 +208,32 @@ namespace Netherlands3D.Twin.Layers
             LayerSelected.Invoke(this);
         }
 
-        public virtual void DeselectLayer()
+        public void DeselectLayer()
         {
             Root.RemoveLayerFromSelection(this);
             LayerDeselected.Invoke(this);
         }
 
-        public virtual void DoubleClickLayer()
+        public void DoubleClickLayer()
         {
             LayerDoubleClicked.Invoke(this);
+        }
+
+        public LayerData(string name, string prefabId) //TODO this should be refactored back in 3/4 of the layer stories
+        {
+            PrefabIdentifier = prefabId;
+            Name = name;
         }
 
         public LayerData(string name) //initialize without layer properties, needed when creating an object at runtime.
         {
             Name = name;
-            if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
-                InitializeParent();
         }
 
         [JsonConstructor]
         public LayerData(string name, List<LayerPropertyData> layerProperties) //initialize with explicit layer properties, needed when deserializing an object that already has properties.
         {
             Name = name;
-            if(this is not RootLayer) //todo: maybe move to inherited classes so this check is not needed?
-                InitializeParent();
             this.layerProperties = layerProperties ?? new List<LayerPropertyData>();
         }
 
@@ -310,22 +301,21 @@ namespace Netherlands3D.Twin.Layers
             return false;
         }
 
-        public virtual void DestroyLayer()
+        public virtual void Dispose()
         {
             DeselectLayer();
 
             foreach (var child in ChildrenLayers.ToList()) //use ToList to make a copy and avoid a CollectionWasModified error
             {
-                child.DestroyLayer();
+                child.Dispose();
             }
 
             ParentLayer.ChildrenLayers.Remove(this);
+            IsDisposed = true;
             parent.ChildrenChanged.Invoke(); //call event on old parent
             ParentOrSiblingIndexChanged.RemoveListener(Root.UpdateLayerTreeOrder);
-            ProjectData.Current.RemoveLayer(this);
             LayerDestroyed.Invoke();
         }
-
         public bool HasProperty<T>() where T : LayerPropertyData
         {
             return LayerProperties.Contains<T>();
@@ -335,8 +325,13 @@ namespace Netherlands3D.Twin.Layers
         {
             return LayerProperties.Get<T>();
         }
+        
+        public IEnumerable<T> GetProperties<T>() where T : LayerPropertyData
+        {
+            return LayerProperties.OfType<T>();
+        }
 
-        public void SetProperty<T>(T propertyData) where T : LayerPropertyData
+        public void SetProperty(LayerPropertyData propertyData)
         {
             if (LayerProperties.Set(propertyData))
             {
@@ -351,23 +346,7 @@ namespace Netherlands3D.Twin.Layers
                 PropertyRemoved.Invoke(propertyData);
             }
         }
-
-        public void AddStyle(LayerStyle style)
-        {
-            if (Styles.TryAdd(style.Metadata.Name, style))
-            {
-                StyleAdded.Invoke(style);
-            }
-        }
-
-        public void RemoveStyle(LayerStyle style)
-        {
-            if (Styles.Remove(style.Metadata.Name))
-            {
-                StyleRemoved.Invoke(style);
-            }
-        }
-
+        
         /// <summary>
         /// Recursively collect all assets from each of the property data elements for loading and saving
         /// purposes. 
@@ -401,6 +380,7 @@ namespace Netherlands3D.Twin.Layers
         public bool Equals(LayerData other) => other is not null && other.Id == Id;
         public override bool Equals(object obj) => Equals(obj as LayerData);
         public override int GetHashCode() => Id.GetHashCode();
+
         public static bool operator ==(LayerData left, LayerData right)
         {
             if (ReferenceEquals(left, right)) return true;

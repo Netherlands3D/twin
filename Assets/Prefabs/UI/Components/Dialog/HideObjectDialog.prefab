@@ -783,6 +783,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3965686943502194507, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
+        type: 3}
+      propertyPath: m_text
+      value: 'Weet je zeker dat je dit object wilt verbergen? Je kan verborgen objecten
+        later weer zichtbaar maken in het eigenschappen paneel van de bijbehorende
+        laag. '
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965686943502194507, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
+        type: 3}
+      propertyPath: m_fontStyle
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5751662582296243142, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
         type: 3}
       propertyPath: m_text
@@ -804,6 +816,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HideObjectDialog
+      objectReference: {fileID: 0}
+    - target: {fileID: 7180907269751338477, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
+        type: 3}
+      propertyPath: m_text
+      value: Dit object verbergen
       objectReference: {fileID: 0}
     - target: {fileID: 7316579983999821013, guid: 61ac1a60bfc7adf4895a456af0fc52f2,
         type: 3}

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ProjectData
   m_EditorClassIdentifier: 
   Version: 1
-  SavedTimestamp: 20241008130521
-  UUID: 6a9f1798-d710-4956-96da-f109deb1487c
+  SavedTimestamp: 20260115143241
+  UUID: db487c0a-b8f9-4255-8652-3ff1bf974e8d
   CameraRotation:
   - 60.000003814697266
   - 0
@@ -57,6 +57,8 @@ MonoBehaviour:
     IsEnabled: 1
   - Id: urbanreleaf
     IsEnabled: 1
-  - Id: first-person-viewer
+  - Id: debug-info
     IsEnabled: 0
+  - Id: first-person-viewer
+    IsEnabled: 1
   PrefabLibrary: {fileID: 11400000, guid: 03a0c2ac495a64c08b5dd612c9507bd7, type: 2}
