@@ -46,6 +46,12 @@ namespace Netherlands3D
 
             if (feature.Geometry is MultiPolygon multiPolygon)
             {
+                if (multiPolygon.Coordinates.Count == 1) //no folder for a single polygon
+                {
+                    CreatePolygonLayer(multiPolygon.Coordinates[0]);
+                    return;
+                }
+
                 var builder = new LayerBuilder().OfType("folder").NamedAs("FeaturePolygons");
                 var folder = App.Layers.Add(builder);
                 foreach (var polygon in multiPolygon.Coordinates)
@@ -64,10 +70,10 @@ namespace Netherlands3D
         {
             var solidPolygon = polygon.Coordinates[0];
             var list = GeometryVisualizationFactory.ConvertToUnityCoordinates(solidPolygon, GeoJSONParser.GetCoordinateSystem(feature.CRS));
-            
+
             var polygonPropertyData = new PolygonSelectionLayerPropertyData();
             polygonPropertyData.OriginalPolygon = list;
-            
+
             var preset = new PolygonLayerPreset.Args(
                 "GeoJSONFeature",
                 ShapeType.Polygon,
