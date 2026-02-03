@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.FirstPersonViewer.Measurement
 {
@@ -34,7 +35,10 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
         [Header("UI")]
         [SerializeField] private FirstPersonMeasurementElement measurementElementPrefab;
-        [SerializeField] private Transform measurementParent;
+
+        [SerializeField] private FirstPersonMeasurementSegment measurementSegmentPrefab;
+        [SerializeField] private Transform measurementUIParent;
+        private Transform measurementWorldParent;
 
         [SerializeField] private Color[] lineColors;
         [SerializeField] private TextMeshProUGUI totalDistanceText;
@@ -44,6 +48,8 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         private Action<Vector3, bool> setMeasurementPointCallback;
         private Action<Vector3, bool> removeMeasurementPointCallback;
         private Action<FirstPersonMeasurementElement> removeElementCallback;
+        
+        
 
         private void Start()
         {
@@ -52,6 +58,9 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             setMeasurementPointCallback = SetMeasuringPoint;
             removeMeasurementPointCallback = RemoveMeasuringPoint;
             removeElementCallback = OnElementRemoved;
+            
+            GameObject measurementParentObject = new GameObject("MeasurementToolParent");
+            measurementWorldParent = measurementParentObject.transform;
         }
 
         private void OnDisable()
@@ -106,20 +115,22 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             point = CheckForModifiersPressed(point);
 
             FirstPersonMeasurementPoint newPoint = Instantiate(pointObject, point, Quaternion.identity);
-
+            newPoint.transform.SetParent(measurementWorldParent);
             if (measurementSegments.Count > 0)
             {
                 Color objectColor = lineColors[measurementSegments.Count % lineColors.Length];
                 FirstPersonMeasurementSegment prevSegment = measurementSegments[^1];
 
-                prevSegment.CreateLine(newPoint, objectColor);
+                prevSegment.SetSecondPoint(newPoint, objectColor);
 
-                FirstPersonMeasurementElement measurementElement = Instantiate(measurementElementPrefab, measurementParent);
-                measurementElement.transform.SetSiblingIndex(measurementParent.childCount - 2);
+                FirstPersonMeasurementElement measurementElement = Instantiate(measurementElementPrefab, measurementUIParent);
+                measurementElement.transform.SetSiblingIndex(measurementUIParent.childCount - 2);
                 prevSegment.SetElement(measurementElement, measurementSegments.Count, removeElementCallback);
             }
-
-            FirstPersonMeasurementSegment measurementSegment = new FirstPersonMeasurementSegment(newPoint, measurementSegments.Count);
+            
+            FirstPersonMeasurementSegment measurementSegment = Instantiate(measurementSegmentPrefab, point, Quaternion.identity);
+            measurementSegment.SetFirstPoint(newPoint, measurementSegments.Count);
+            measurementSegment.transform.SetParent(measurementWorldParent);
             measurementSegments.Add(measurementSegment);
             calculateDistanceDirty = true;
         }
@@ -148,7 +159,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
         public void OnElementRemoved(FirstPersonMeasurementElement element)
         {
-            int index = measurementSegments.FindIndex(s => s.measurementElement == element);
+            int index = measurementSegments.FindIndex(s => s.Element == element);
             if (index == -1) return;
 
             RemoveSegmentAt(index);
@@ -158,10 +169,13 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         {
             FirstPersonMeasurementSegment segment = measurementSegments[index];
             if (index + 1 < measurementSegments.Count)
-                measurementSegments[index + 1].pointA = segment.pointA;
+            {
+                measurementSegments[index + 1].SetFirstPoint(segment.PointA, measurementSegments.Count);
+            }
 
-            segment.RemovePoint(true);
+            segment.RemoveSecondPoint();
             measurementSegments.RemoveAt(index);
+            Destroy(segment.gameObject);
 
             for (int i = index; i < measurementSegments.Count; i++)
                 measurementSegments[i].Refresh(i, lineColors[(i + 1) % lineColors.Length]);
@@ -174,7 +188,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             if (measurementSegments.Count == 0) return;
 
             FirstPersonMeasurementSegment firstSegment = measurementSegments[0];
-            firstSegment.RemovePoint(false);
+            firstSegment.Remove();
             measurementSegments.RemoveAt(0);
 
             for (int i = 0; i < measurementSegments.Count; i++)
@@ -182,15 +196,16 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                 if (i == 0)
                 {
                     measurementSegments[0].Refresh(0, lineColors[(i + 1) % lineColors.Length]);
-                    measurementSegments[0].pointA.DisableVisuals();
+                    measurementSegments[0].DisableVisuals();
+                    
                 }
                 else
                 {
-                    measurementSegments[i].pointA = measurementSegments[i - 1].pointB;
+                    measurementSegments[i].SetFirstPoint(measurementSegments[i - 1].PointB, measurementSegments.Count);
                     measurementSegments[i].Refresh(i, lineColors[(i + 1) % lineColors.Length]);
                 }
             }
-
+            Destroy(firstSegment.gameObject);
             calculateDistanceDirty = true;
         }
 
@@ -202,15 +217,15 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             {
                 FirstPersonMeasurementSegment segment = measurementSegments[i];
 
-                if (segment.pointB == null) continue;
+                if (segment.PointB == null) continue;
 
-                if (IsPointClose(point, segment.pointB.transform.position, POINT_DELETE_DISTANCE))
+                if (IsPointClose(point, segment.PointB.transform.position, POINT_DELETE_DISTANCE))
                 {
                     RemoveSegmentAt(i);
                     break;
                 }
 
-                if (i == 0 && IsPointClose(point, segment.pointA.transform.position, POINT_DELETE_DISTANCE))
+                if (i == 0 && IsPointClose(point, segment.PointA.transform.position, POINT_DELETE_DISTANCE))
                 {
                     RemoveFirstSegment();
                     break;
@@ -224,7 +239,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         {
             foreach (FirstPersonMeasurementSegment segment in measurementSegments)
             {
-                segment.Dispose();
+                segment.Remove();
             }       
             measurementSegments.Clear();
             calculateDistanceDirty = true;

@@ -1,44 +1,82 @@
 using System;
-using System.Globalization;
+using TMPro;
 using UnityEngine;
 
 namespace Netherlands3D.FirstPersonViewer.Measurement
 {
-    public class FirstPersonMeasurementSegment
+    public class FirstPersonMeasurementSegment : MonoBehaviour
     {
         private const string ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private const float TEXT_HEIGHT_ABOVE_LINE = .65f;
-
-        public FirstPersonMeasurementPoint pointA;
-        public FirstPersonMeasurementPoint pointB;
-
-        public FirstPersonMeasurementElement measurementElement;
-        private Color lineColor;
         
-        public float LineDistance => (pointA.Postion - pointB.Postion).magnitude;
+        public FirstPersonMeasurementPoint PointA => pointA;
+        public FirstPersonMeasurementPoint PointB => pointB;
+        public FirstPersonMeasurementElement Element => measurementElement;
 
-        public FirstPersonMeasurementSegment(FirstPersonMeasurementPoint start, int index)
+        private FirstPersonMeasurementPoint pointA;
+        private FirstPersonMeasurementPoint pointB;
+
+        private FirstPersonMeasurementElement measurementElement;
+        private Color lineColor;
+        [Header("Line")]
+        [SerializeField] private LineRenderer lineRenderer;
+        [SerializeField] private TextMeshPro lineDistanceText;
+        
+        
+        public float LineDistance => PointB == null ? 0 : (pointA.Postion - pointB.Postion).magnitude;
+
+        void Start()
+        {
+            lineDistanceText.isOverlay = true;
+        }
+        
+        public void SetFirstPoint(FirstPersonMeasurementPoint start, int index)
         {
             pointA = start;
             pointA.Init(GetAlphabetLetter(index));
         }
 
-        public void CreateLine(FirstPersonMeasurementPoint end, Color color)
+        public void SetSecondPoint(FirstPersonMeasurementPoint end, Color color)
         {
             pointB = end;
             lineColor = color;
 
-            pointB.SetLine(pointB.transform.position, pointA.transform.position);
-            pointB.SetLineColor(color);
+            SetLine();
+            SetLineColor(color);
             Vector3 center = (pointB.transform.position + pointA.transform.position) * .5f;
-            pointB.SetText(center + Vector3.up * TEXT_HEIGHT_ABOVE_LINE, LineDistance);
+            SetText(center + Vector3.up * TEXT_HEIGHT_ABOVE_LINE, LineDistance);
         }
 
         public void SetElement(FirstPersonMeasurementElement measurementElement, int index, Action<FirstPersonMeasurementElement> OnPointRemovedCallback)
         {
             this.measurementElement = measurementElement;
-
             measurementElement.Init(GetAlphabetLetter(index - 1), GetAlphabetLetter(index), LineDistance, lineColor, OnPointRemovedCallback);
+        }
+        
+        public void SetLine()
+        {
+            lineRenderer.SetPosition(0, pointB.Postion);
+            lineRenderer.SetPosition(1, pointA.Postion);
+            lineRenderer.gameObject.SetActive(true);
+        }
+        
+        public void SetLineColor(Color color)
+        {
+            lineRenderer.startColor = color;
+            lineRenderer.endColor = color;
+        }
+        
+        public void SetText(Vector3 center, float distance)
+        {
+            lineDistanceText.text =  $"~{distance.ToString("F2")}m";
+            lineDistanceText.transform.position = center;
+            lineDistanceText.gameObject.SetActive(true);
+        }
+
+        public void DisableVisuals()
+        {
+            lineRenderer.gameObject.SetActive(false);
+            lineDistanceText.gameObject.SetActive(false);
         }
 
         public void Refresh(int index, Color color)
@@ -52,11 +90,11 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             if (pointB != null)
             {
                 pointB.UpdatePointerLetter(pointBText);
-                pointB.SetLine(pointB.transform.position, pointA.transform.position);
-                pointB.SetLineColor(color);
+                SetLine();
+                SetLineColor(color);
 
                 Vector3 center = (pointB.transform.position + pointA.transform.position) * .5f;
-                pointB.SetText(center + Vector3.up * TEXT_HEIGHT_ABOVE_LINE, LineDistance);
+                SetText(center + Vector3.up * TEXT_HEIGHT_ABOVE_LINE, LineDistance);
 
                 measurementElement.UpdateMeasurement(pointAText, pointBText, LineDistance);
                 measurementElement.SetTextColor(color);
@@ -68,38 +106,30 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             return pointB != null ? pointB.transform.position : pointA.transform.position;
         }
 
-        public void RemovePoint(bool removeB)
+        public void Remove()
         {
-            if (removeB) GameObject.Destroy(pointB.gameObject);
-            else GameObject.Destroy(pointA.gameObject);
-            GameObject.Destroy(measurementElement.gameObject);
+            if(PointB != null) Destroy(pointB.gameObject);
+            Destroy(pointA.gameObject);
+            Destroy(measurementElement.gameObject);
         }
 
-        public void Dispose()
+        public void RemoveSecondPoint()
         {
-            GameObject.Destroy(pointA.gameObject);
-            if (pointB != null)
-            {
-                GameObject.Destroy(pointB.gameObject);
-                GameObject.Destroy(measurementElement.gameObject);
-            }
+            pointA = null;
+            if(PointB != null) Destroy(pointB.gameObject);
+            Destroy(measurementElement.gameObject);
         }
 
         private string GetAlphabetLetter(int index)
         {
             int baseVal = ALPHABET.Length;
-
             string result = "";
-
-            index++;
-
-            while (index > 0)
+            while (index >= 0)
             {
-                index--;
                 result = ALPHABET[index % baseVal] + result;
                 index /= baseVal;
+                index--;
             }
-
             return result;
         }
     }

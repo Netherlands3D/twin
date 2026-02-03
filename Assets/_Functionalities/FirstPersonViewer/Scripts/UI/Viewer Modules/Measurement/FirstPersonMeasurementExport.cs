@@ -19,12 +19,12 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
             foreach (var measurement in measurement.Segments)
             {
-                if (measurement.pointB != null)
+                if (measurement.PointB != null)
                 {
                     totalDst += measurement.LineDistance;
 
-                    sb.Append(measurement.pointA.GetLetter());
-                    sb.Append(';').Append(measurement.pointB.GetLetter());
+                    sb.Append(measurement.PointA.GetLetter());
+                    sb.Append(';').Append(measurement.PointB.GetLetter());
                     sb.Append(';').Append(measurement.LineDistance.ToString("0.##", CultureInfo.InvariantCulture).Replace('.', ','));
                     sb.Append(';').Append(totalDst.ToString("0.##", CultureInfo.InvariantCulture).Replace('.', ','));
                     sb.AppendLine();

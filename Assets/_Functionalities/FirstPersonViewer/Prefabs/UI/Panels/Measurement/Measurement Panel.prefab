@@ -1557,12 +1557,12 @@ MonoBehaviour:
   textHeightAboveLines: 0.65
   measurementElementPrefab: {fileID: 7208974482234406279, guid: bd2d37cd4a78b084c942e3fdb56b7ace,
     type: 3}
-  measurementParent: {fileID: 2746763837163628380}
+  measurementSegmentPrefab: {fileID: 3874997550682921209, guid: 62471426412a0af64a2c9abfc0dc0845,
+    type: 3}
+  measurementUIParent: {fileID: 2746763837163628380}
   lineColors:
-  - serializedVersion: 2
-    rgba: 4289769648
-  - serializedVersion: 2
-    rgba: 4282598211
+  - {r: 0.58807236, g: 0.74901974, b: 1.9532899e-27, a: 1}
+  - {r: 0.000000010490427, g: 1.6985818e+22, b: 8.402885e+20, a: 6.7110656e+22}
   totalDistanceText: {fileID: 6789790002799268453}
 --- !u!1 &5617049967120185613
 GameObject:
