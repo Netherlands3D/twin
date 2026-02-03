@@ -61,6 +61,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 			objectSelector = FindAnyObjectByType<ObjectSelectorService>();
 			objectSelector.SelectSubObjectWithBagId.AddListener(SelectBuildingOnHit);
 			objectSelector.SelectFeature.AddListener(SelectFeatureOnHit);
+			objectSelector.OnDeselect.AddListener(Deselect);
             //todo, update when the object information mode is opened so this will update with the current selected object
         }
 
@@ -117,16 +118,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 		{
             HideObjectInformation();
 			HideFeatureInformation();
-
-            objectSelector.Deselect();
 		}
 
 		private void OnDestroy()
 		{
             objectSelector.SelectSubObjectWithBagId.RemoveListener(SelectBuildingOnHit);
             objectSelector.SelectFeature.RemoveListener(SelectFeatureOnHit);
-
-            Deselect();
+            objectSelector.OnDeselect.RemoveListener(Deselect);
 		}
 
 		public void LoadBuildingContent(string bagID)

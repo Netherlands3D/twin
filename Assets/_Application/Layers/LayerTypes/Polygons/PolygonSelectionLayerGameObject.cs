@@ -165,7 +165,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 PolygonSelectionLayerPropertyData data = LayerData.GetProperty<PolygonSelectionLayerPropertyData>();
                 var vertices = PolygonUtility.CoordinatesToVertices(data.OriginalPolygon, data.LineWidth);
                 UpdateVisualisation(vertices, data.ExtrusionHeight);
-                PolygonProjectionMask.ForceUpdateVectorsAtEndOfFrame();
             }
         }
 
@@ -237,10 +236,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private LayerMask GetLayer(bool isMask)
         {
-            var layer = LayerMask.NameToLayer("Projected");
-            if (!isMask) return layer;
-
-            return LayerMask.NameToLayer("PolygonMask");
+            var layerName = isMask ? "PolygonMask" : "Projected";
+            return LayerMask.NameToLayer(layerName);
         }
 
         private void OnVisualisationsEnabled(bool enabled)
@@ -256,9 +253,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
             PolygonVisualisation.gameObject.SetActive(active);
         }
 
-        public override void DestroyLayer()
+        public override void DestroyLayerGameObject()
         {
-            base.DestroyLayer();
+            base.DestroyLayerGameObject();
             CleanupMasking();            
         }
 

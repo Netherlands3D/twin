@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using GeoJSON.Net;
 using GeoJSON.Net.Feature;
-using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers.Properties;
-using System.Linq;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Functionalities.ObjectInformation;
@@ -61,6 +59,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private GeoJSONPolygonLayer polygonFeaturesLayer;
         private GeoJSONLineLayer lineFeaturesLayer;
         private GeoJSONPointLayer pointFeaturesLayer;
+        
+        private ICredentialHandler credentialHandler;
 
         public struct PendingFeature
         {
@@ -80,35 +80,26 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         protected override void OnVisualizationInitialize()
         {
+            credentialHandler = GetComponent<ICredentialHandler>();
             parser.OnFeatureParsed.AddListener(AddFeatureVisualisation);
             parser.OnParseError.AddListener(onParseError.Invoke);
         }
 
         protected override void OnVisualizationReady()
         {
-            StartLoadingData();
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            UpdateURL(urlPropertyData.Url);
         }
-
-        protected virtual void StartLoadingData()
+        
+        protected virtual void UpdateURL(Uri storedUri)
         {
-            LayerURLPropertyData urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            if (urlPropertyData.Url.IsStoredInProject())
+            if (storedUri == credentialHandler.Uri && credentialHandler.Authorization != null)
             {
-                string path = AssetUriFactory.GetLocalPath(urlPropertyData.Url);
-                StartCoroutine(parser.ParseGeoJSONLocal(path));
+                HandleCredentials(storedUri, credentialHandler.Authorization);
+                return;
             }
-            else if (urlPropertyData.Url.IsRemoteAsset())
-            {
-                RequestCredentials();
-            }
-        }
-
-        protected void RequestCredentials()
-        {
-            var credentialHandler = GetComponent<ICredentialHandler>();
-            LayerURLPropertyData urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
-            credentialHandler.Uri = urlPropertyData.Url;
-            credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+           
+            credentialHandler.Uri = storedUri; //apply the URL from what is stored in the Project data
             credentialHandler.ApplyCredentials();
         }
 
@@ -124,9 +115,28 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 LayerData.HasValidCredentials = false;
                 return;
             }
-
+            
             LayerData.HasValidCredentials = true;
-            StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
+            StartLoadingData(uri, auth);
+        }
+
+        protected void StartLoadingData(Uri uri, StoredAuthorization auth)
+        {
+            if (uri.IsStoredInProject())
+            {
+                string path = AssetUriFactory.GetLocalPath(uri);
+                StartCoroutine(parser.ParseGeoJSONLocal(path));
+            }
+            else if (uri.IsRemoteAsset())
+            {
+                StartCoroutine(parser.ParseGeoJSONStreamRemote(uri, auth));
+            }
+        }
+
+        protected override void RegisterEventListeners()
+        {
+            base.RegisterEventListeners();
+            credentialHandler?.OnAuthorizationHandled.AddListener(HandleCredentials);
         }
 
         protected override void UnregisterEventListeners()
@@ -134,8 +144,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             base.UnregisterEventListeners();
             parser.OnFeatureParsed.RemoveListener(AddFeatureVisualisation);
             parser.OnParseError.RemoveListener(onParseError.Invoke);
-            var credentialHandler = GetComponent<ICredentialHandler>();
-            credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
+            credentialHandler?.OnAuthorizationHandled.RemoveListener(HandleCredentials);
         }
 
         public void AddFeatureVisualisation(Feature feature)

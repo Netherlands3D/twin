@@ -1,5 +1,6 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
+using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using UnityEngine;
 
 namespace Netherlands3D
@@ -18,6 +19,18 @@ namespace Netherlands3D
 
         private static bool forceUpdate;
         private static int usedInvertedMasks = 0;
+
+        private void OnEnable()
+        {
+            PolygonSelectionLayerPropertyData.MaskAdded.AddListener(ForceUpdateVectorsAtEndOfFrame);
+            PolygonSelectionLayerPropertyData.MaskRemoved.AddListener(ForceUpdateVectorsAtEndOfFrame);
+        }
+
+        private void OnDisable()
+        {
+            PolygonSelectionLayerPropertyData.MaskAdded.RemoveListener(ForceUpdateVectorsAtEndOfFrame);
+            PolygonSelectionLayerPropertyData.MaskRemoved.RemoveListener(ForceUpdateVectorsAtEndOfFrame);
+        }
 
         private IEnumerator Start()
         {
@@ -49,6 +62,11 @@ namespace Netherlands3D
             Shader.SetGlobalVector(extentsProperty, worldExtentsXZ);
         }
 
+        private void ForceUpdateVectorsAtEndOfFrame(int maskBit) // call this when updating the polygons that should be used as masks to update the texture at the end of this frame
+        {
+            ForceUpdateVectorsAtEndOfFrame();
+        }
+        
         public static void ForceUpdateVectorsAtEndOfFrame() // call this when updating the polygons that should be used as masks to update the texture at the end of this frame
         {
             forceUpdate = true;
