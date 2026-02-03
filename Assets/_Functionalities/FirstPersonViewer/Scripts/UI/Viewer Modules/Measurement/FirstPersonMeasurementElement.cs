@@ -18,12 +18,14 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
         private Action<FirstPersonMeasurementElement> onDeleteCallback;
         
-        public void Init(string firstLetter, string secondLetter, float dstInMeters, Color32 color, Action<FirstPersonMeasurementElement> onDeleteCallback)
+        
+        
+        public void Init(string firstLetter, string secondLetter, float dstInMeters, Color color, Action<FirstPersonMeasurementElement> onDeleteCallback)
         {
             firstPointText.text = firstLetter;
             secondPointText.text = secondLetter;
 
-            distanceText.text = ConvertToUnits(dstInMeters);
+            distanceText.text = FirstPersonMeasurement.ConvertToUnits(dstInMeters);
             distanceText.color = color;
             arrowImage.color = color;
 
@@ -34,26 +36,13 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         {
             firstPointText.text = firstLetter;
             secondPointText.text = secondLetter;
-            distanceText.text = ConvertToUnits(dstInMeters);
+            distanceText.text = FirstPersonMeasurement.ConvertToUnits(dstInMeters);
         }
 
-        public void SetTextColor(Color32 color)
+        public void SetTextColor(Color color)
         {
             distanceText.color = color;
             arrowImage.color = color;
-        }
-
-        private string ConvertToUnits(float valueInMeters)
-        {
-            string units = "m";
-
-            if(valueInMeters >= 1000)
-            {
-                units = "km";
-                valueInMeters /= 1000;
-            }
-
-            return "~" + valueInMeters.ToString("F2") + units;
         }
 
         public void RemoveMeasurement() => onDeleteCallback?.Invoke(this);

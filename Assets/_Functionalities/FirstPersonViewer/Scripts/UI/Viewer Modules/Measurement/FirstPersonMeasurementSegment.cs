@@ -13,9 +13,9 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         public FirstPersonMeasurementPoint pointB;
 
         public FirstPersonMeasurementElement measurementElement;
-
-        public float LineDistance { private set; get; }
-        private Color32 lineColor;
+        private Color lineColor;
+        
+        public float LineDistance => (pointA.Postion - pointB.Postion).magnitude;
 
         public FirstPersonMeasurementSegment(FirstPersonMeasurementPoint start, int index)
         {
@@ -23,16 +23,13 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             pointA.Init(GetAlphabetLetter(index));
         }
 
-        public void CreateLine(FirstPersonMeasurementPoint end, Color32 color)
+        public void CreateLine(FirstPersonMeasurementPoint end, Color color)
         {
             pointB = end;
             lineColor = color;
 
             pointB.SetLine(pointB.transform.position, pointA.transform.position);
             pointB.SetLineColor(color);
-
-            LineDistance = pointB.LineDistance;
-
             Vector3 center = (pointB.transform.position + pointA.transform.position) * .5f;
             pointB.SetText(center + Vector3.up * TEXT_HEIGHT_ABOVE_LINE, LineDistance);
         }
@@ -58,14 +55,17 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                 pointB.SetLine(pointB.transform.position, pointA.transform.position);
                 pointB.SetLineColor(color);
 
-                LineDistance = pointB.LineDistance;
-
                 Vector3 center = (pointB.transform.position + pointA.transform.position) * .5f;
                 pointB.SetText(center + Vector3.up * TEXT_HEIGHT_ABOVE_LINE, LineDistance);
 
                 measurementElement.UpdateMeasurement(pointAText, pointBText, LineDistance);
                 measurementElement.SetTextColor(color);
             }
+        }
+
+        public Vector3 GetLastPosition()
+        {
+            return pointB != null ? pointB.transform.position : pointA.transform.position;
         }
 
         public void RemovePoint(bool removeB)
@@ -84,9 +84,6 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                 GameObject.Destroy(measurementElement.gameObject);
             }
         }
-
-
-        public string GetCSVOutput() => $"{pointA.GetLetter()}; {pointB.GetLetter()}; {LineDistance.ToString("0.##", CultureInfo.InvariantCulture).Replace('.', ',')}";
 
         private string GetAlphabetLetter(int index)
         {

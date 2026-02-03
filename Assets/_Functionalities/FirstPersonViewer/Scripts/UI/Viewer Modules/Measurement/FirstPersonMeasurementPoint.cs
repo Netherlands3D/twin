@@ -11,7 +11,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         [SerializeField] private LineRenderer lineRenderer;
         [SerializeField] private TextMeshPro lineDistanceText;
 
-        public float LineDistance => (lineRenderer.GetPosition(0) - lineRenderer.GetPosition(1)).magnitude;
+        public Vector3 Postion => transform.position;
 
         public void Init(string pointLetter)
         {
@@ -29,7 +29,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             lineRenderer.gameObject.SetActive(true);
         }
         
-        public void SetLineColor(Color32 color)
+        public void SetLineColor(Color color)
         {
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;
@@ -42,7 +42,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             lineDistanceText.gameObject.SetActive(true);
         }
 
-        public void SetTextColor(Color32 color) => lineDistanceText.color = color;
+        public void SetTextColor(Color color) => lineDistanceText.color = color;
 
         public void DisableVisuals()
         {
