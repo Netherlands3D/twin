@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
@@ -63,7 +64,7 @@ namespace Netherlands3D
             //parse custom fields
             var typeToken = obj["$type"]?.ToString();
             if (typeToken == namespaceIdentifier + legacyFolderIdentifier)
-                layer.PrefabIdentifier = "folder";
+                layer.PrefabIdentifier = FolderPreset.PrefabIdentifier;
             else if (typeToken == namespaceIdentifier + legacyPolygonIdentifier)
             {
                 layer.PrefabIdentifier = polygonSelectionVisualizationPrefabID;

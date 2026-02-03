@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Services;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro; // <- for TMP_Text
@@ -19,9 +21,9 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         [Header("Debug")]
         [SerializeField] private bool debugLogging = false;
 
-        private class ScenarioEntry
+        private struct ScenarioEntry
         {
-            public FolderLayer Folder;
+            public LayerData Folder;
             public Toggle Toggle;
         }
 
@@ -51,8 +53,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             RebuildScenarioUI();
 
             ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
-            ProjectData.Current.LayerAdded.AddListener(OnLayerAdded);
-            ProjectData.Current.LayerDeleted.AddListener(OnLayerDeleted);
+            App.Layers.LayerAdded.AddListener(OnLayerAdded);
+            App.Layers.LayerRemoved.AddListener(OnLayerDeleted);
         }
 
         private void OnDisable()
@@ -66,8 +68,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             }
 
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
-            ProjectData.Current.LayerAdded.RemoveListener(OnLayerAdded);
-            ProjectData.Current.LayerDeleted.RemoveListener(OnLayerDeleted);
+            App.Layers.LayerAdded.RemoveListener(OnLayerAdded);
+            App.Layers.LayerRemoved.RemoveListener(OnLayerDeleted);
 
             Log("Unsubscribed from ProjectData events.");
         }
@@ -87,22 +89,6 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private void OnLayerDeleted(LayerData layer)
         {
             Log($"OnLayerDeleted: {layer?.Name ?? "(null)"} (type: {layer?.GetType().Name ?? "null"})");
-        }
-
-        /// <summary>
-        /// Convention: any FolderLayer with name starting with "Scenario:" is a Scenario.
-        /// </summary>
-        private bool IsScenarioFolder(FolderLayer folder)
-        {
-            bool isScenario = folder.Name != null
-                              && folder.Name.StartsWith("Scenario:", StringComparison.OrdinalIgnoreCase);
-
-            if (debugLogging)
-            {
-                Log($"IsScenarioFolder? name=\"{folder.Name}\" -> {isScenario}");
-            }
-
-            return isScenario;
         }
 
         private void RebuildScenarioUI()
@@ -133,7 +119,13 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             scenarios.Clear();
 
             // Find scenario folders in the whole layer tree
-            var scenarioFolders = FindScenarioFolders().ToList();
+            List<LayerData> scenarioFolders = new();
+            List<LayerData> layers = ProjectData.Current.RootLayer.GetFlatHierarchy();
+            foreach (LayerData layer in layers)
+            {
+                if (layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
+                    scenarioFolders.Add(layer);
+            }
             Log($"Found {scenarioFolders.Count} scenario folder(s) in the project.");
 
             foreach (var f in scenarioFolders)
@@ -228,27 +220,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             Log("RebuildScenarioUI finished.");
         }
 
-        private IEnumerable<FolderLayer> FindScenarioFolders()
-        {
-            var root = ProjectData.Current.RootLayer;
-            Log($"FindScenarioFolders starting from RootLayer. Root has {root.ChildrenLayers.Count} direct children.");
-
-            return FindScenarioFoldersRecursive(root);
-        }
-
-        private IEnumerable<FolderLayer> FindScenarioFoldersRecursive(LayerData layer)
-        {
-            foreach (var child in layer.ChildrenLayers)
-            {
-                if (child is FolderLayer folder && IsScenarioFolder(folder))
-                    yield return folder;
-
-                foreach (var sub in FindScenarioFoldersRecursive(child))
-                    yield return sub;
-            }
-        }
-
-        private void SetToggleStates(FolderLayer activeFolder)
+        private void SetToggleStates(LayerData activeFolder)
         {
             Log($"SetToggleStates: activeFolder=\"{activeFolder.Name}\"");
 
@@ -262,7 +234,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             suppressToggleEvents = false;
         }
 
-        private void ActivateScenario(FolderLayer activeFolder)
+        private void ActivateScenario(LayerData activeFolder)
         {
             Log($"ActivateScenario called for folder: \"{activeFolder.Name}\"");
 

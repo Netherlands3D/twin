@@ -9,6 +9,7 @@ using Netherlands3D.Twin.Layers.LayerTypes.Polygons;
 using Netherlands3D.Twin.Layers.LayerTypes.Polygons.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.FirstPersonViewer.Layers;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -27,7 +28,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         [SerializeField] private List<LayerSpriteCollection> layerTypeSprites;
         public LayerSpriteCollection GetLayerTypeSprite(LayerData layer)
         {
-            if(layer.PrefabIdentifier == "folder")
+            if(layer.PrefabIdentifier == FolderPreset.PrefabIdentifier)
                 return layerTypeSprites[2];
             
             LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier);

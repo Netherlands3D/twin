@@ -98,15 +98,15 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             ReconstructHierarchyUIs(); //ensure a clean ui hierarchy after a project is loaded 
         }
 
-        private void CreateNewUI(Layer layer)
+        private void CreateNewUI(LayerData layer)
         {
-            var layerUI = InstantiateLayerItem(layer.LayerData, layer.LayerData.ParentLayer);
+            var layerUI = InstantiateLayerItem(layer, layer.ParentLayer);
             RecalculateLayersVisibleInInspector();
             
             if(layerToSelectAtEndOfFrame == null)
                 StartCoroutine(SelectLayerAtEndOfFrame());
     
-            layerToSelectAtEndOfFrame = layer.LayerData;
+            layerToSelectAtEndOfFrame = layer;
         }
 
         private IEnumerator SelectLayerAtEndOfFrame()
