@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
-using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
@@ -43,39 +40,39 @@ namespace Netherlands3D
                 Debug.LogError("Feature mapping not set, cannot convert anything to layer.");
                 return;
             }
-
+            
             if (feature.Geometry is MultiPolygon multiPolygon)
             {
                 if (multiPolygon.Coordinates.Count == 1) //no folder for a single polygon
                 {
-                    CreatePolygonLayer(multiPolygon.Coordinates[0]);
+                    CreatePolygonLayer(multiPolygon.Coordinates[0], feature.Id);
                     return;
                 }
 
-                var builder = new LayerBuilder().OfType("folder").NamedAs("FeaturePolygons");
+                var builder = new LayerBuilder().OfType("folder").NamedAs(feature.Id);
                 var folder = App.Layers.Add(builder);
                 foreach (var polygon in multiPolygon.Coordinates)
                 {
-                    var layer = CreatePolygonLayer(polygon, folder.LayerData);
+                    var layer = CreatePolygonLayer(polygon, feature.Id);
                     layer.LayerData.SetParent(folder.LayerData);
                 }
             }
             else if (feature.Geometry is Polygon polygon)
             {
-                CreatePolygonLayer(polygon);
+                CreatePolygonLayer(polygon,  feature.Id);
             }
         }
 
-        private Layer CreatePolygonLayer(Polygon polygon, LayerData parentLayer = null)
+        private Layer CreatePolygonLayer(Polygon polygon, string name)
         {
             var solidPolygon = polygon.Coordinates[0];
             var list = GeometryVisualizationFactory.ConvertToUnityCoordinates(solidPolygon, GeoJSONParser.GetCoordinateSystem(feature.CRS));
 
             var polygonPropertyData = new PolygonSelectionLayerPropertyData();
             polygonPropertyData.OriginalPolygon = list;
-
+            
             var preset = new PolygonLayerPreset.Args(
-                "GeoJSONFeature",
+                name,
                 ShapeType.Polygon,
                 list
             );
