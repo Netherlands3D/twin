@@ -49,8 +49,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             {
                 AddScenario(layer);
                 SetScenarioContainerEnabled(true);
-                if(selectedScenario == null)
-                    SelectScenario(layer);
+                SelectScenario(layer);
             }
         }
         
@@ -69,14 +68,14 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private void AddScenario(LayerData layer)
         {
             var toggle = Instantiate(scenarioTogglePrefab, scenarioToggleContainer);
-            Scenario marker = toggle.GetComponent<Scenario>();
-            marker.SetLabel(layer.Name);
-            marker.SetLayer(layer);
-            scenarios.Add(marker);
+            Scenario scenario = toggle.GetComponent<Scenario>();
+            scenario.SetLabel(layer.Name);
+            scenario.SetLayer(layer);
+            scenarios.Add(scenario);
             toggle.onValueChanged.AddListener(isOn =>
             {
                 if (isOn)
-                    SelectScenario(marker.Layer);
+                    SelectScenario(scenario.Layer);
             });
             
         }

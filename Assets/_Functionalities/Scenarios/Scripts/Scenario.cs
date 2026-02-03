@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Scenario : MonoBehaviour
 {
     public LayerData Layer => layer;
-    public Toggle Toggle => toggle;
+    public Toggle Toggle => toggle == null ? GetComponent<Toggle>() : toggle;
     
     private Toggle toggle;
     private LayerData layer;
