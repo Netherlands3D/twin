@@ -8,7 +8,7 @@ namespace Netherlands3D.OgcWebServices.Shared
     {
         
         [Test]
-        public void NormalizeUrl_Lowercases_All_Query_Keys_But_Preserves_Values()
+        public void NormalizeUrl_LowercasesAllQueryKeysButPreservesValues()
         {
             var source = "https://example.org/wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0";
 
@@ -19,7 +19,7 @@ namespace Netherlands3D.OgcWebServices.Shared
         }
 
         [Test]
-        public void NormalizeUrl_Keeps_Path_And_Host_Intact()
+        public void NormalizeUrl_KeepsPathAndHostIntact()
         {
             var source = "https://tiles.example.com/ows/endpoint?SERVICE=WFS&Request=GetCapabilities";
 
@@ -32,7 +32,7 @@ namespace Netherlands3D.OgcWebServices.Shared
         }
 
         [Test]
-        public void NormalizeUrl_Preserves_Url_Encoding_And_Decoding_Roundtrip()
+        public void NormalizeUrl_PreservesUrlEncodingAndDecodingRoundtrip()
         {
             // Value contains a space and a slash which are typically encoded, represents "Bag Gebouwen/3D"
             var source = "https://example.com/wms?LaYeRs=Bag+Gebouwen%2f3D";
@@ -52,7 +52,7 @@ namespace Netherlands3D.OgcWebServices.Shared
         }
 
         [Test]
-        public void NormalizeUrl_No_Query_Remains_No_Query()
+        public void NormalizeUrl_NoQueryRemainsNoQuery()
         {
             var source = "https://example.com/ows";
 
@@ -62,7 +62,7 @@ namespace Netherlands3D.OgcWebServices.Shared
         }
 
         [Test]
-        public void NormalizeUrl_Handles_Duplicate_Keys_Differing_Only_By_Case_By_Collapsing_To_Lowercase()
+        public void NormalizeUrl_HandlesDuplicateKeysDifferingOnlyByCaseByCollapsingToLowercase()
         {
             // When both "SERVICE" and "service" are present, the method will:
             //  - detect "SERVICE" as to-be-replaced
@@ -84,7 +84,7 @@ namespace Netherlands3D.OgcWebServices.Shared
         }
 
         [Test]
-        public void NormalizeUrl_Leaves_Fragment_Intact()
+        public void NormalizeUrl_LeavesFragmentIntact()
         {
             var source = "https://example.com/wms?SERVICE=WMS#section-2";
 
