@@ -14,7 +14,7 @@ public class ScenarioToggleMarker : MonoBehaviour
     
     private void Start()
     {
-        
+        toggle = GetComponent<Toggle>();
         toggle.isOn = false;
 
         
