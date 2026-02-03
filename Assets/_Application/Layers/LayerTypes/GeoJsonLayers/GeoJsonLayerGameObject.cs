@@ -117,7 +117,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
             
             LayerData.HasValidCredentials = true;
-            
+            StartLoadingData(uri, auth);
+        }
+
+        protected void StartLoadingData(Uri uri, StoredAuthorization auth)
+        {
             if (uri.IsStoredInProject())
             {
                 string path = AssetUriFactory.GetLocalPath(uri);

@@ -25,12 +25,6 @@ namespace Netherlands3D.Functionalities.Wfs
             CartesianTileWFSLayer.WFSGeoJSONLayer = this;
         }
 
-        protected override void StartLoadingData()
-        {
-            var wfsUrl = LayerData.GetProperty<LayerURLPropertyData>().Url;
-            UpdateURL(wfsUrl);
-        }
-
         protected override void UpdateURL(Uri storedUri)
         {
             base.UpdateURL(storedUri);
@@ -63,8 +57,9 @@ namespace Netherlands3D.Functionalities.Wfs
             cartesianTileWFSLayer.SetAuthorization(auth);
             LayerData.HasValidCredentials = true;
             cartesianTileWFSLayer.isEnabled = LayerData.ActiveInHierarchy;
-        }       
-
+            StartLoadingData(uri, auth);
+        }
+        
         public void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)
         {
             var wfsUrl = LayerData.GetProperty<LayerURLPropertyData>().Url.ToString();
