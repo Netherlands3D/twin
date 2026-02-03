@@ -23,7 +23,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         [SerializeField] private TextMeshPro lineDistanceText;
         
         
-        public float LineDistance => PointB == null ? 0 : (pointA.Postion - pointB.Postion).magnitude;
+        public float LineDistance => PointB == null || PointA == null ? 0 : (pointA.Postion - pointB.Postion).magnitude;
 
         void Start()
         {
@@ -43,6 +43,9 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
             SetLine();
             SetLineColor(color);
+            
+            if(pointA == null || pointB == null) return;
+            
             Vector3 center = (pointB.transform.position + pointA.transform.position) * .5f;
             SetText(center + Vector3.up * TEXT_HEIGHT_ABOVE_LINE, LineDistance);
         }
@@ -55,6 +58,12 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         
         public void SetLine()
         {
+            if (pointB == null)
+            {
+                DisableVisuals();
+                return;
+            }
+            
             lineRenderer.SetPosition(0, pointB.Postion);
             lineRenderer.SetPosition(1, pointA.Postion);
             lineRenderer.gameObject.SetActive(true);
@@ -86,6 +95,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
             pointA.UpdatePointerLetter(pointAText);
 
+            measurementElement?.gameObject.SetActive(pointB != null);
             //The last element always has PointB as null (because a new point connects it).
             if (pointB != null)
             {
@@ -96,9 +106,12 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
                 Vector3 center = (pointB.transform.position + pointA.transform.position) * .5f;
                 SetText(center + Vector3.up * TEXT_HEIGHT_ABOVE_LINE, LineDistance);
 
+                if(measurementElement == null) return;
+                
                 measurementElement.UpdateMeasurement(pointAText, pointBText, LineDistance);
                 measurementElement.SetTextColor(color);
             }
+            
         }
 
         public Vector3 GetLastPosition()
@@ -110,14 +123,13 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         {
             if(PointB != null) Destroy(pointB.gameObject);
             Destroy(pointA.gameObject);
-            Destroy(measurementElement.gameObject);
+            if(measurementElement != null) Destroy(measurementElement.gameObject);
         }
 
-        public void RemoveSecondPoint()
+        public void RemoveFirstPoint()
         {
-            pointA = null;
-            if(PointB != null) Destroy(pointB.gameObject);
-            Destroy(measurementElement.gameObject);
+            Destroy(pointA.gameObject);
+            if(measurementElement != null) Destroy(measurementElement.gameObject);
         }
 
         private string GetAlphabetLetter(int index)
