@@ -1,22 +1,20 @@
-using System;
 using Netherlands3D.Twin.Layers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ScenarioToggleMarker : MonoBehaviour
+public class Scenario : MonoBehaviour
 {
-    public LayerData Scenario => scenario;
+    public LayerData Layer => layer;
     public Toggle Toggle => toggle;
     
     private Toggle toggle;
-    private LayerData scenario;
+    private LayerData layer;
     
     private void Start()
     {
         toggle = GetComponent<Toggle>();
         toggle.isOn = false;
-
         
         // Auto resize the toggle based on text width
         var autoSize = toggle.GetComponent<AutoSizeTMPWidth>();
@@ -26,9 +24,9 @@ public class ScenarioToggleMarker : MonoBehaviour
         }
     }
 
-    public void SetScenario(LayerData scenario)
+    public void SetLayer(LayerData layer)
     {
-        this.scenario = scenario;
+        this.layer = layer;
     }
 
     public void SetLabel(string name)
@@ -46,21 +44,13 @@ public class ScenarioToggleMarker : MonoBehaviour
         if (tmpText)
         {
             tmpText.text = label;
-            Debug.Log($"  TMP_Text label set to \"{label}\"");
         }
         else
         {
             // Fallback to legacy Text if needed
             var text = toggle.GetComponentInChildren<Text>();
             if (text)
-            {
                 text.text = label;
-                Debug.Log($"  UnityEngine.UI.Text label set to \"{label}\"");
-            }
-            else
-            {
-                Debug.Log("  WARNING: No TMP_Text or Text component found under toggle prefab.");
-            }
         }
     }
 }

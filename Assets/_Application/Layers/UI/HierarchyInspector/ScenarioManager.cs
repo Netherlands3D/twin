@@ -13,7 +13,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         [SerializeField] private RectTransform scenarioToggleContainer;
         [SerializeField] private Toggle scenarioTogglePrefab;
 
-        private readonly List<ScenarioToggleMarker> scenarios = new();
+        private readonly List<Scenario> scenarios = new();
+        private Scenario selectedScenario;
 
         private void Awake()
         {
@@ -48,6 +49,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             {
                 AddScenario(layer);
                 SetScenarioContainerEnabled(true);
+                if(selectedScenario == null)
+                    SelectScenario(layer);
             }
         }
         
@@ -56,6 +59,8 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             if (layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
             {
                 RemoveScenario(layer);
+                if(selectedScenario?.Layer == layer)
+                    selectedScenario = null;
                 if (scenarios.Count == 0)
                     SetScenarioContainerEnabled(false);
             }
@@ -64,18 +69,14 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         private void AddScenario(LayerData layer)
         {
             var toggle = Instantiate(scenarioTogglePrefab, scenarioToggleContainer);
-            ScenarioToggleMarker marker = toggle.GetComponent<ScenarioToggleMarker>();
+            Scenario marker = toggle.GetComponent<Scenario>();
             marker.SetLabel(layer.Name);
-            marker.SetScenario(layer);
+            marker.SetLayer(layer);
             scenarios.Add(marker);
             toggle.onValueChanged.AddListener(isOn =>
             {
-                if (!isOn)
-                {
-                    Debug.Log("  Ignoring OFF event (we treat toggles like radio buttons).");
-                    return;
-                }
-                ActivateScenario(marker.Scenario);
+                if (isOn)
+                    SelectScenario(marker.Layer);
             });
             
         }
@@ -84,10 +85,23 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         {
             foreach (var scenario in scenarios)
             {
-                if (scenario.Scenario == layer)
+                if (scenario.Layer == layer)
                 {
                     scenarios.Remove(scenario);
                     Destroy(scenario.gameObject);
+                    return;
+                }
+            }
+        }
+
+        private void SelectScenario(LayerData layer)
+        {
+            foreach (var scenario in scenarios)
+            {
+                if (scenario.Layer == layer)
+                {
+                    ActivateScenario(scenario.Layer);
+                    selectedScenario = scenario;
                     return;
                 }
             }
@@ -104,14 +118,13 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             SetScenarioContainerEnabled(false);
  
             // Clear existing UI
-            ScenarioToggleMarker[] markers = scenarioToggleContainer.GetComponentsInChildren<ScenarioToggleMarker>();
-            foreach (ScenarioToggleMarker marker in markers)
+            Scenario[] markers = scenarioToggleContainer.GetComponentsInChildren<Scenario>();
+            foreach (Scenario marker in markers)
             {
                 Destroy(marker.gameObject);
             }
             scenarios.Clear();
             // Find scenario folders in the whole layer tree
-            List<LayerData> scenarioFolders = new();
             List<LayerData> layers = ProjectData.Current.RootLayer.GetFlatHierarchy();
             foreach (LayerData layer in layers)
             {
@@ -121,7 +134,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             if (!scenarios.Any())  return;
             
             SetScenarioContainerEnabled(true);
-            ActivateScenario(scenarioFolders[0]);
+            SelectScenario(scenarios[0].Layer);
           
         }
 
@@ -129,11 +142,10 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         {
             foreach (var scenario in scenarios)
             {
-                bool shouldBeOn = (scenario.Scenario == activeFolder);
+                bool shouldBeOn = (scenario.Layer == activeFolder);
                 scenario.Toggle.isOn = shouldBeOn;
-                scenario.Scenario.ActiveSelf = shouldBeOn;
+                scenario.Layer.ActiveSelf = shouldBeOn;
             }
         }
-        
     }
 }
