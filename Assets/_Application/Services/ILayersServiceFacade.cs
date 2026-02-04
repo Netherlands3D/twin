@@ -13,7 +13,7 @@ namespace Netherlands3D.Twin.Services
         public Layer VisualizeAs(LayerData layerData, string prefabIdentifier, UnityAction<LayerGameObject> callback = null);
         public void Remove(LayerData layer);
 
-        public UnityEvent<Layer> LayerAdded { get; }
+        public UnityEvent<LayerData> LayerAdded { get; }
         public UnityEvent<LayerData> LayerRemoved { get; }
     }
 }
