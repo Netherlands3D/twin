@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Projects;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,24 +45,63 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void OnLayerAdded(LayerData layer)
         {
-            if (layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
-            {
-                AddScenario(layer);
-                SetScenarioContainerEnabled(true);
-                SelectScenario(layer);
-            }
+            layer.NameChanged.AddListener(ConvertToScenario);
+            layer.NameChanged.AddListener(ConvertScenarioToFolder);
+            layer.NameChanged.AddListener(UpdateLabelForScenario);           
+
+            //todo keep this code because in the future this is needed again
+            //if (layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
+            //{
+            //    AddScenario(layer);
+            //    SetScenarioContainerEnabled(true);
+            //    SelectScenario(layer);
+            //}            
         }
-        
         private void OnLayerDeleted(LayerData layer)
         {
-            if (layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
+            layer.NameChanged.RemoveListener(ConvertToScenario);
+            layer.NameChanged.RemoveListener(ConvertScenarioToFolder);
+            layer.NameChanged.RemoveListener(UpdateLabelForScenario);
+
+            //keep this code for when scenarios are added through a button again
+            //if (layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
+            //{
+            //    RemoveScenario(layer);
+            //    if(selectedScenario?.Layer == layer)
+            //        selectedScenario = null;
+            //    if (scenarios.Count == 0)
+            //        SetScenarioContainerEnabled(false);
+            //}
+        }
+
+
+        private void ConvertToScenario(LayerData folder, string name)
+        {
+            if(IsScenarioTag(folder.Name) && folder.PrefabIdentifier == FolderPreset.PrefabIdentifier)
             {
-                RemoveScenario(layer);
-                if(selectedScenario?.Layer == layer)
+                folder.PrefabIdentifier = ScenarioPreset.PrefabIdentifier;
+                AddScenario(folder);
+                SetScenarioContainerEnabled(true);
+                SelectScenario(folder);
+            }
+        }
+
+        private void ConvertScenarioToFolder(LayerData scenario, string name)
+        {
+            if (!IsScenarioTag(scenario.Name) && scenario.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
+            {
+                scenario.PrefabIdentifier = FolderPreset.PrefabIdentifier;
+                RemoveScenario(scenario);
+                if (selectedScenario?.Layer == scenario)
                     selectedScenario = null;
                 if (scenarios.Count == 0)
                     SetScenarioContainerEnabled(false);
             }
+        }   
+        
+        private bool IsScenarioTag(string tag)
+        {
+            return tag.StartsWith("Scenario:") || tag.StartsWith("scenario:");
         }
 
         private void AddScenario(LayerData layer)
@@ -127,14 +166,14 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             List<LayerData> layers = ProjectData.Current.RootLayer.GetFlatHierarchy();
             foreach (LayerData layer in layers)
             {
+                ConvertToScenario(layer, layer.Name);
                 if (layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
                     AddScenario(layer);
             }
             if (!scenarios.Any())  return;
             
             SetScenarioContainerEnabled(true);
-            SelectScenario(scenarios[0].Layer);
-          
+            SelectScenario(scenarios[0].Layer);          
         }
 
         private void ActivateScenario(LayerData activeFolder)
@@ -144,6 +183,20 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 bool shouldBeOn = (scenario.Layer == activeFolder);
                 scenario.Toggle.isOn = shouldBeOn;
                 scenario.Layer.ActiveSelf = shouldBeOn;
+            }
+        }
+
+        private void UpdateLabelForScenario(LayerData layer, string name)
+        {
+            if(layer.PrefabIdentifier != ScenarioPreset.PrefabIdentifier) return;
+
+            foreach (Scenario s in scenarios)
+            {
+                if (s.Layer == layer)
+                {
+                    s.SetLabel(name);
+                    return;
+                }
             }
         }
     }
