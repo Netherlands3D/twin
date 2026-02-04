@@ -1542,7 +1542,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83e9f2837ba24d841bf71075f3c0d0f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseClick: {fileID: -1253229678034407056, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
+  mouseLClick: {fileID: -1253229678034407056, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
+    type: 3}
+  mouseRClick: {fileID: 2214398342744894458, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
     type: 3}
   measuringYLockModifier: {fileID: 391016143580945670, guid: 9b4dd2d8935d8d3488ae9bc750727b7a,
     type: 3}

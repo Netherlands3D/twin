@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace Netherlands3D.FirstPersonViewer.Measurement
 {
@@ -20,9 +21,10 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         public List<FirstPersonMeasurementSegment> Segments => measurementSegments;
 
         private List<FirstPersonMeasurementSegment> measurementSegments = new();
-
+       
         [Header("Measuring")]
-        [SerializeField] private InputActionReference mouseClick;
+        [SerializeField] private InputActionReference mouseLClick;
+        [SerializeField] private InputActionReference mouseRClick;
         [SerializeField] private InputActionReference measuringYLockModifier;
         [SerializeField] private InputActionReference measuringXZLockModifier;
         [SerializeField] private LayerMask measurementLayerMask;
@@ -87,7 +89,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         {
             if (Interface.PointerIsOverUI()) return;
             
-            if (mouseClick.action.WasPressedThisFrame())
+            if (mouseLClick.action.WasPressedThisFrame())
             {
                  clickPosition = Pointer.current.position.ReadValue();
                  float heldTime = Time.time - LastClickTime;
@@ -96,7 +98,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
 
                  LastClickTime = Time.time;
             }
-            if (Mouse.current.rightButton.wasPressedThisFrame)
+            if (mouseRClick.action.WasPressedThisFrame())
             {
                 if(measurementSegments.Count > 0)
                     raycaster.GetWorldPointAsync(Pointer.current.position.ReadValue(), removeMeasurementPointCallback, App.Cameras.ActiveCamera, measurementLayerMask);
@@ -116,7 +118,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
         {
             if (!hit) return;
 
-            point = CheckForModifiersPressed(point);
+            point = ApplyLockModifier(point);
 
             FirstPersonMeasurementPoint newPoint = Instantiate(pointObject, point, Quaternion.identity);
             newPoint.transform.SetParent(measurementWorldParent);
@@ -140,7 +142,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             calculateDistanceDirty = true;
         }
 
-        private Vector3 CheckForModifiersPressed(Vector3 position)
+        private Vector3 ApplyLockModifier(Vector3 position)
         {
             if (measurementSegments.Count == 0)
                 return position;
@@ -193,10 +195,7 @@ namespace Netherlands3D.FirstPersonViewer.Measurement
             for (int i = measurementSegments.Count - 1; i >= 0; i--)
             {
                 FirstPersonMeasurementSegment segment = measurementSegments[i];
-                bool removeA = segment.PointA != null && IsPointClose(point, segment.PointA.transform.position, POINT_DELETE_DISTANCE);
-                bool removeB = segment.PointB != null && IsPointClose(point, segment.PointB.transform.position, POINT_DELETE_DISTANCE);
-                
-                if (removeA)
+                if (segment.PointA != null && IsPointClose(point, segment.PointA.transform.position, POINT_DELETE_DISTANCE))
                 {
                     RemoveSegmentAt(i);
                     break;

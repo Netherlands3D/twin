@@ -70,6 +70,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "RClick",
+                    "type": "Button",
+                    "id": "721fb740-4224-4144-90aa-1fb776da0c12",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "HideUI",
                     "type": "Button",
                     "id": "fb304462-8fd8-4f07-90cb-4b4c6350f24f",
@@ -589,6 +598,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "LClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c9421ba4-9e95-4069-ad69-d6fbce99bebf",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
