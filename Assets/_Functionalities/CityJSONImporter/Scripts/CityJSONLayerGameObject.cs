@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using Netherlands3D.CityJson.Visualisation;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.Properties;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
@@ -14,7 +12,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public override void ApplyStyling()
         {
             base.ApplyStyling();
-            foreach (var feature in DefaultStylingPropertyData.LayerFeatures.Values)
+            foreach (var feature in LayerFeatures.Values)
             {
                 ApplyStylingToFeature(feature);
             }
@@ -38,7 +36,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         public void AddFeature(CityObjectVisualizer visualizer)
         {
             var layerFeature = CreateFeature(visualizer);
-            DefaultStylingPropertyData.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
+            LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             ApplyStylingToFeature(layerFeature);
             OnFeatureAdded.Invoke(visualizer);
         }

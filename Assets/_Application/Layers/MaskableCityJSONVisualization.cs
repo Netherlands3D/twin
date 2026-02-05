@@ -1,7 +1,5 @@
 using Netherlands3D.CityJson.Visualisation;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject;
-using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers
@@ -19,9 +17,7 @@ namespace Netherlands3D.Twin.Layers
 
         protected override void UpdateMaskBitMask(int bitmask)
         {
-            if (cityJsonLayerGameObject.DefaultStylingPropertyData == null) return;
-            
-            foreach (var geometry in cityJsonLayerGameObject.DefaultStylingPropertyData.LayerFeatures.Keys)
+            foreach (var geometry in cityJsonLayerGameObject.LayerFeatures.Keys)
             {
                 var visualizer = geometry as CityObjectVisualizer;
                 ApplyMaskingToFeature(visualizer);

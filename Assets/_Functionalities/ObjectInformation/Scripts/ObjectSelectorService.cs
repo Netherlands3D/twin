@@ -3,7 +3,6 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
@@ -11,7 +10,6 @@ using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -313,7 +311,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (layer == null)
                 return null;
 
-            return layer.DefaultStylingPropertyData.GetLayerFeatureByGeometry(item);
+            return layer.GetLayerFeatureByGeometry(item);
         }
 
         /// <summary>

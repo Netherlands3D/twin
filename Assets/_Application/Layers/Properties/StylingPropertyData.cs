@@ -18,8 +18,6 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         [JsonIgnore] public string StyleName => styleName;
         
-        [JsonIgnore] public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
-        
         private const string DefaultRuleName = "default";
         
         [DataMember(Name = "metadata")] public Metadata Metadata { get; } = new();
@@ -50,17 +48,15 @@ namespace Netherlands3D.Twin.Layers.Properties
         {   
         }
         
-        public void SetStylingRule(string stylingRuleName, StylingRule stylingRule)
+        public void SetStylingRule(string stylingRuleKey, StylingRule stylingRule)
         {
-            StylingRules[stylingRuleName] = stylingRule;
+            StylingRules[stylingRuleKey] = stylingRule;
             OnStylingChanged.Invoke();
         }
-
-        public LayerFeature GetLayerFeatureByGeometry(object geometry)
-        {
-            LayerFeatures.TryGetValue(geometry, out var feature);
-            return feature;
-        }
         
+        public string GetStylingRuleName(string stylingRuleKey)
+        {
+            return StylingRules[stylingRuleKey].Name;
+        }
     }
 }
