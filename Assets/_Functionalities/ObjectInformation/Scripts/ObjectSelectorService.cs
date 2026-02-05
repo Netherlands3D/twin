@@ -3,7 +3,6 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
@@ -93,14 +92,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             //ClearMappingTree(); //TODO the quadtree featuremappings should be cleared when loading a new project for efficiency. for now its not working properly for some reason
             ProjectData.Current.RootLayer.AddedSelectedLayer.AddListener(OnAddSelectedLayer);
             ProjectData.Current.RootLayer.RemovedSelectedLayer.AddListener(OnRemoveSelectedLayer);
-        }
-
-        private void ClearMappingTree()
-        {
-            mappingTreeInstance.Clear();
-            BoundingBox bbox = StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds;
-            MappingTree tree = new MappingTree(bbox, 4, 12);                    
-            mappingTreeInstance = tree;
         }
 
         private void OnAddSelectedLayer(LayerData data)
@@ -319,11 +310,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             ObjectMappingItem item = GetMappingItemForBagID(bagID, selectedMapping, out layer);
             if (layer == null)
                 return null;
-           
-            if (!layer.LayerFeatures.ContainsKey(item))
-                return null;
-            
-            return layer.LayerFeatures[item]; 
+
+            return layer.GetLayerFeatureByGeometry(item);
         }
 
         /// <summary>
