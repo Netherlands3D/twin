@@ -196,19 +196,20 @@ namespace Netherlands3D.Twin.Projects
 #endif
         }
 
-        public void LoadFromFile(string filePath)
+        public ProjectData LoadFromFile(string filePath)
         {
             OnLoadStarted.Invoke();
 
             if (filePath.ToLower().EndsWith(".nl3d"))
             {
                 Debug.Log("loading nl3d file: " + filePath);
-                projectDataStore.LoadFromFile(filePath);
+                var project = projectDataStore.LoadFromFile(filePath);
                 OnLoadCompleted.Invoke();
-                return;
+                return project;
             }
 
             OnLoadFailed.Invoke();
+            return null;
         }
 
         public void Redo()
