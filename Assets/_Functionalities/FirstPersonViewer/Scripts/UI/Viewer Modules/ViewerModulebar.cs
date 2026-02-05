@@ -1,6 +1,5 @@
 using DG.Tweening;
 using Netherlands3D.Services;
-using Netherlands3D.Twin.UI;
 using System;
 using UnityEngine;
 
@@ -13,6 +12,7 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private RectTransform underBar;
         private float underBarYSize;
         [SerializeField] private RectTransform contentParent;
+        [SerializeField] private RectTransform parentRect;
 
         private bool isOpen;
         private bool isAnimating;
@@ -21,27 +21,24 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         public event Action<ViewerModuleButton> OnViewerToolChanged;
 
-        private FirstPersonViewer firstPersonViewer;
-
         private void Start()
         {
             rect = GetComponent<RectTransform>();
 
             underBarYSize = underBar.sizeDelta.y;
 
-            firstPersonViewer = ServiceLocator.GetService<FirstPersonViewer>();
-            firstPersonViewer.OnViewerExited += ViewerExited;
+            ServiceLocator.GetService<FirstPersonViewer>().OnViewerExited.AddListener(ViewerExited);
         }
 
         private void OnDestroy()
         {
-            firstPersonViewer.OnViewerExited -= ViewerExited;
+            ServiceLocator.GetService<FirstPersonViewer>()?.OnViewerExited.RemoveListener(ViewerExited);
         }
 
         public void OpenWindow(RectTransform windowPrefab, ViewerModuleButton viewTool)
         {
             if (isAnimating) return;
-            if(windowPrefab != null) isAnimating = true;
+            if (windowPrefab != null) isAnimating = true;
 
             currentSequence?.Kill();
             currentSequence = DOTween.Sequence();
@@ -89,7 +86,11 @@ namespace Netherlands3D.FirstPersonViewer.UI
             }
 
             OnViewerToolChanged?.Invoke(currentTool);
-            currentSequence.OnComplete(() => isAnimating = false);
+            currentSequence.OnComplete(() =>
+            {
+                isAnimating = false;
+                parentRect.sizeDelta = new Vector2(323, 65) + new Vector2(0, rect.sizeDelta.y);
+            });
             currentSequence.Play();
         }
 

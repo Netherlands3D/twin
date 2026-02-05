@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Netherlands3D.SelectionTools;
 using System;
-using Netherlands3D.Events;
 using UnityEngine.Events;
 
 namespace Netherlands3D.FirstPersonViewer
@@ -45,11 +44,12 @@ namespace Netherlands3D.FirstPersonViewer
         public bool LockCamera { private set; get; }
         private bool lockMouseModus;
         private bool isLocked;
+        private bool isActive;
 
         //Events
-        public event Action<float> ExitDuration;
-        public event Action<bool> OnLockStateChanged;
-        private event Action<bool> OnInputExit;
+        public UnityEvent<float> ExitDuration = new();
+        public UnityEvent<bool> OnLockStateChanged = new();
+        private Action<bool> OnInputExit; //Callback
 
         private void Awake()
         {
@@ -93,6 +93,8 @@ namespace Netherlands3D.FirstPersonViewer
 
         private void Update()
         {
+            if (!isActive) return;
+            
             HandleCursorLocking();
 
             isEditingInputfield = IsInputfieldSelected();
@@ -152,7 +154,7 @@ namespace Netherlands3D.FirstPersonViewer
             isLocked = !unlock;
             LockCamera = unlock;
 
-            OnLockStateChanged?.Invoke(isLocked);
+            OnLockStateChanged.Invoke(isLocked);
         }
 
         //When holding the exit key and not editing any inputfield. Start the exiting proceidure. 
@@ -166,21 +168,27 @@ namespace Netherlands3D.FirstPersonViewer
                 if (exitTimer < exitDuration - exitViewDelay)
                 {
                     float percentageTime = Mathf.Clamp01(1f - ((exitTimer + exitViewDelay) / exitDuration));
-                    ExitDuration?.Invoke(percentageTime);
+                    ExitDuration.Invoke(percentageTime);
                 }
 
                 if (exitTimer == 0)
                 {
                     ExitDuration?.Invoke(-1);
-                    OnInputExit?.Invoke(exitModifier.IsPressed());
+                    OnInputExit.Invoke(exitModifier.IsPressed());
                 }
             }
-            else if (ExitInput.WasReleasedThisFrame()) ExitDuration?.Invoke(-1); //Reset the visual
+            else if (ExitInput.WasReleasedThisFrame()) ExitDuration.Invoke(-1); //Reset the visual, -1 signifies a non-value for the durationcounter.
             else exitTimer = exitDuration;
+        }
+
+        public void ViewerEntered()
+        {
+            isActive = true;
         }
 
         public void ViewerExited()
         {
+            isActive = false;
             //TODO Move this to a application wide cursor manager.
             ToggleCursor(true);
         }

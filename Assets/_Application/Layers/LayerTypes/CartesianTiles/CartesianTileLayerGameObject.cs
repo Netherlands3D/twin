@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.CartesianTiles;
 using Netherlands3D.Services;
@@ -9,11 +9,13 @@ using UnityEngine;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.LayerStyles;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 {
     [RequireComponent(typeof(Layer))]
-    public class CartesianTileLayerGameObject : LayerGameObject, ILayerWithPropertyPanels
+    public class CartesianTileLayerGameObject : LayerGameObject
     {
         public override BoundingBox Bounds => StandardBoundingBoxes.RDBounds; //assume we cover the entire RD bounds area
 
@@ -24,18 +26,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
         bool debugFeatures = false;
 
-        public override IStyler Styler 
-        {  
-            get 
-            {
-                if (styler == null)
-                {
-                    styler = new CartesianTileLayerStyler(this);
-                }
-                return styler;
-            } 
-        }
-
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
             if (!layer || layer.isEnabled == isActive) return;
@@ -43,14 +33,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             layer.isEnabled = isActive;
         }
 
-        protected override void OnLayerInitialize()
+        protected override void OnVisualizationInitialize()
         {
             tileHandler = FindAnyObjectByType<TileHandler>();
             transform.SetParent(tileHandler.transform);
             layer = GetComponent<Layer>();
 
-            tileHandler.AddLayer(layer);
-
+            tileHandler.AddLayer(layer);         
+            
             SetupFeatures();
         }
 
@@ -95,6 +85,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         {
             if (debugFeatures)
             {
+                HiddenObjectsPropertyData hiddenPropertyData = LayerData.GetProperty<HiddenObjectsPropertyData>();
                 if (mapping is MeshMapping map)
                 {
                     for(int i = 0; i < 10; i++)
@@ -103,7 +94,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
                         ObjectMappingItem item = map.Items[i].ObjectMappingItem;
                         Coordinate coord = map.GetCoordinateForObjectMappingItem(map.ObjectMapping, item);
                         var layerFeature = CreateFeature(item);
-                        (Styler as CartesianTileLayerStyler).SetVisibilityForSubObject(layerFeature, false, coord);
+                        hiddenPropertyData.SetVisibilityForSubObject(layerFeature, false, coord);
                     }                    
                 }
                 debugFeatures = false;
@@ -111,12 +102,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
         }
 
         private void OnAddedMapping(ObjectMapping mapping)
-        {         
+        {   
             foreach (ObjectMappingItem item in mapping.items)
             {
                 var layerFeature = CreateFeature(item);
                 LayerFeatures.Add(layerFeature.Geometry, layerFeature);
-            }            
+            }
             ApplyStyling();
         }
 
@@ -128,95 +119,98 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
             }
         }
 
-        public LayerFeature GetLayerFeatureFromBagId(string bagId)
+        public static LayerFeature GetLayerFeatureFromBagId(string bagId)
         {
-            if (layer is not BinaryMeshLayer binaryMeshLayer) return null;
-
-            foreach (ObjectMapping mapping in binaryMeshLayer.Mappings.Values)
+            CartesianTileLayerGameObject[] cartesianTileLayerGameObjects = FindObjectsByType<CartesianTileLayerGameObject>(FindObjectsSortMode.None);
+            foreach(CartesianTileLayerGameObject cartesian in cartesianTileLayerGameObjects)
             {
-                foreach (ObjectMappingItem item in mapping.items)
+                if (cartesian.Layer is not BinaryMeshLayer binaryMeshLayer) continue;
+
+                foreach (ObjectMapping mapping in binaryMeshLayer.Mappings.Values)
                 {
-                    if (item.objectID == bagId)
+                    foreach (ObjectMappingItem item in mapping.items)
                     {
-                        var layerFeature = CreateFeature(item);
-                        return layerFeature;
+                        if (item.objectID == bagId)
+                        {
+                            var layerFeature = cartesian.CreateFeature(item);
+                            return layerFeature;
+                        }
                     }
                 }
-            }
+            }            
             return null;
         }
 
-        public override void OnSelect()
+        public override void OnSelect(LayerData layer)
         {
             var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
             if (transformInterfaceToggle)
                 transformInterfaceToggle.ShowVisibilityPanel(true);
         }
 
-        public override void OnDeselect()
+        public override void OnDeselect(LayerData layer)
         {
             var transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
             if (transformInterfaceToggle)
                 transformInterfaceToggle.ShowVisibilityPanel(false);
         }
 
-        protected override void OnDestroy()
+        protected override void UnregisterEventListeners()
         {
-            base.OnDestroy();
+            base.UnregisterEventListeners();
             if(layer is BinaryMeshLayer binaryMeshLayer)
             {
                 binaryMeshLayer.OnMappingCreated.RemoveListener(OnAddedMapping);
                 binaryMeshLayer.OnMappingRemoved.RemoveListener(OnRemovedMapping);
-
             }
+        }
+
+        protected void OnDestroy()
+        {
             if (Application.isPlaying && tileHandler && layer)
             {
                 tileHandler.RemoveLayer(layer);
             }
-
         }
-
-        private List<IPropertySectionInstantiator> propertySections;
-
-        protected List<IPropertySectionInstantiator> PropertySections
-        {
-            get
-            {
-                if (propertySections == null)
-                {
-                    propertySections = GetComponents<IPropertySectionInstantiator>().ToList();
-                }
-
-                return propertySections;
-            }
-            set => propertySections = value;
-        }
-
-        public List<IPropertySectionInstantiator> GetPropertySections()
-        {
-            return PropertySections;
-        }
-
+        
         public override void ApplyStyling()
-        {
+        {           
             // WMS and other projection layers also use this class as base - but they should not apply this styling
             if (layer is BinaryMeshLayer binaryMeshLayer)
             {
                 foreach (var (_, feature) in LayerFeatures)
                 {
-                    (Styler as CartesianTileLayerStyler).Apply(GetStyling(feature), feature);
+                    //do cascading to get css result styling
+                    Symbolizer symbolizer = GetStyling(feature);
+
+                    if (feature.Geometry is ObjectMappingItem item)
+                    {
+                        bool? visiblity = symbolizer.GetVisibility();
+                        if (visiblity.HasValue)
+                        {
+                            string id = feature.Attributes[HiddenObjectsPropertyData.VisibilityAttributeIdentifier];
+                            Color storedColor = symbolizer.GetFillColor() ?? Color.white;
+                            var visibilityColor = visiblity == true ? storedColor : Color.clear;
+                            GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, visibilityColor } });
+                        }
+                    }
+
+                    if (feature.Geometry is Material material)
+                    {
+                        Color? color = symbolizer.GetFillColor();
+                        if (color.HasValue)
+                        {
+                            if (int.TryParse(feature.Attributes[LayerFeatureColorPropertyData.MaterialIndexIdentifier], out var materialIndex))
+                            {
+                                binaryMeshLayer.DefaultMaterialList[materialIndex].color = color.Value;
+                            }
+                        }
+                    }
                 }
             }
             base.ApplyStyling();
         }
-
-        public override void UpdateMaskBitMask(int bitmask)
-        {
-            if (layer is BinaryMeshLayer binaryMeshLayer)
-            {
-                UpdateBitMaskForMaterials(bitmask, binaryMeshLayer.DefaultMaterialList);
-            }
-        }
+        
 
         protected override LayerFeature AddAttributesToLayerFeature(LayerFeature feature)
         {
@@ -225,16 +219,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles
 
             if(feature.Geometry is ObjectMappingItem item)
             {
-                feature.Attributes.Add(CartesianTileLayerStyler.VisibilityAttributeIdentifier, item.objectID); 
+                feature.Attributes.Add(HiddenObjectsPropertyData.VisibilityAttributeIdentifier, item.objectID); 
             }
 
             if (feature.Geometry is not Material mat) return feature;
 
             feature.Attributes.Add(
-                CartesianTileLayerStyler.MaterialIndexIdentifier,
+                LayerFeatureColorPropertyData.MaterialIndexIdentifier,
                 meshLayer.DefaultMaterialList.IndexOf(mat).ToString()
             );
-            feature.Attributes.Add(CartesianTileLayerStyler.MaterialNameIdentifier, mat.name);
+            feature.Attributes.Add(LayerFeatureColorPropertyData.MaterialNameIdentifier, mat.name);
 
             return feature;
         }

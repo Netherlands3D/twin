@@ -1,10 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
-using Netherlands3D.Twin.Projects;
 using Newtonsoft.Json;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes
@@ -13,9 +10,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
     public class RootLayer : LayerData
     {
         [JsonIgnore] public List<LayerData> SelectedLayers { get; private set; } = new();
-
-        [JsonIgnore] private UnityAction<ProjectData> projectDataListener;
-
+        
         public UnityEvent<LayerData> AddedSelectedLayer = new();
         public UnityEvent<LayerData> RemovedSelectedLayer = new();
 
@@ -49,21 +44,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             }
         }
 
-        public override void DestroyLayer()
+        public override void Dispose()
         {
-            Clear();
-            ProjectData.Current.RemoveLayer(this);
-            LayerDestroyed.Invoke();
-        }
-
-        public void Clear()
-        {
-            // use ToList to make a copy and avoid a CollectionWasModified error
-            var childLayers = ChildrenLayers.ToList();
-            foreach (var child in childLayers) 
+            foreach (var child in ChildrenLayers.ToList()) //use ToList to make a copy and avoid a CollectionWasModified error
             {
-                child.DestroyLayer();
+                child.Dispose();
             }
+            
+            LayerDestroyed.Invoke();
         }
 
         public void ReconstructParentsRecursive()
@@ -103,11 +91,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
             {
                 children[i].RootIndex = i;
             }
-        }
-        
-        public ReferencedLayerData GetFirstLayerByLayerMask(LayerMask mask)
-        {
-            return ChildrenLayers.OfType<ReferencedLayerData>().FirstOrDefault(refData => refData.Reference.gameObject.layer == mask);
         }
 
         public List<LayerData> GetFlatHierarchy()

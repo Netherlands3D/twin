@@ -27,20 +27,19 @@ namespace Netherlands3D.FirstPersonViewer.UI
 
         private void OnEnable()
         {
-            if (firstPersonViewer != null) firstPersonViewer.OnPositionUpdated.AddListener(UpdateOverlayInformation);
+            firstPersonViewer = ServiceLocator.GetService<FirstPersonViewer>();
+            firstPersonViewer.OnPositionUpdated.AddListener(UpdateOverlayInformation);
         }
 
         private void Start()
         {
-            firstPersonViewer = ServiceLocator.GetService<FirstPersonViewer>();
-
             openOverlayButton.action.performed += ToggleOverlay;
             gameObject.SetActive(false);
         }
 
         private void OnDisable()
         {
-            if (firstPersonViewer != null) firstPersonViewer.OnPositionUpdated.RemoveListener(UpdateOverlayInformation);
+            firstPersonViewer.OnPositionUpdated.RemoveListener(UpdateOverlayInformation);
         }
 
         private void OnDestroy()

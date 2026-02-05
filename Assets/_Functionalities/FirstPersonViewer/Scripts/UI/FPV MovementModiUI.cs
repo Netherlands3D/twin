@@ -21,11 +21,9 @@ namespace Netherlands3D.FirstPersonViewer.UI
         private void OnEnable()
         {
             FirstPersonViewer fpv = ServiceLocator.GetService<FirstPersonViewer>();
-            if (fpv != null)
-            {
-                switcher = fpv.MovementSwitcher;
-                switcher.OnMovementPresetChanged += SwitchModeUI;
-            }
+
+            switcher = fpv.MovementSwitcher;
+            switcher.OnMovementPresetChanged += SwitchModeUI;
         }
 
         private void OnDisable()

@@ -1,14 +1,15 @@
 using System;
-using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using System.Collections.Generic;
+using KindMen.Uxios;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
-using UnityEngine.Events;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.Credentials.Properties;
 
 namespace Netherlands3D.Functionalities.Wms
 {
@@ -17,63 +18,65 @@ namespace Netherlands3D.Functionalities.Wms
     /// </summary>
     [RequireComponent(typeof(WMSTileDataLayer))]
     [RequireComponent(typeof(ICredentialHandler))]
-    public class WMSLayerGameObject : CartesianTileLayerGameObject, ILayerWithPropertyData, ILayerWithPropertyPanels
+    public class WMSLayerGameObject : CartesianTileLayerGameObject, IVisualizationWithPropertyData
     {
-        public override bool IsMaskable => false;
         private WMSTileDataLayer wmsProjectionLayer;
-        private WMSTileDataLayer WMSProjectionLayer => GetAndCacheComponent(ref wmsProjectionLayer);
 
         private ICredentialHandler credentialHandler;
-        private ICredentialHandler CredentialHandler => GetAndCacheComponent(ref credentialHandler);
         
         public bool TransparencyEnabled = true; //this gives the requesting url the extra param to set transparancy enabled by default       
         public int DefaultEnabledLayersMax = 5; //in case the dataset is very large with many layers. lets topggle the layers after this count to not visible.
         public Vector2Int PreferredImageSize = Vector2Int.one * 512;
-        public LayerPropertyData PropertyData => URLPropertyData;
-        private LayerURLPropertyData URLPropertyData => LayerData.GetProperty<LayerURLPropertyData>();
         public bool ShowLegendOnSelect { get; set; } = true;
-        public override BoundingBox Bounds => WMSProjectionLayer?.BoundingBox;
+        public override BoundingBox Bounds => wmsProjectionLayer?.BoundingBox;
 
-        public UnityEvent<Uri> OnURLChanged => URLPropertyData.OnDataChanged;
-        
-        protected override void OnLayerInitialize()
+        protected override void OnVisualizationInitialize()
         {
-            base.OnLayerInitialize();
-            CredentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+            base.OnVisualizationInitialize();
+            wmsProjectionLayer = GetComponent<WMSTileDataLayer>();
+            credentialHandler = GetComponent<ICredentialHandler>();
         }
 
-        protected override void OnLayerReady()
+        protected override void OnVisualizationReady()
         {
-            base.OnLayerReady();
-            UpdateURL(URLPropertyData.Data);
-            LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
+            base.OnVisualizationReady();
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            UpdateURL(urlPropertyData.Url);
             SetRenderOrder(LayerData.RootIndex);
-            Legend.Instance.RegisterUrl(URLPropertyData.Data.ToString());
-            Legend.Instance.ShowLegend(URLPropertyData.Data.ToString(), ShowLegendOnSelect && LayerData.IsSelected);
+            SetLegendActive(ShowLegendOnSelect && LayerData.IsSelected);
         }
 
         public void SetLegendActive(bool active)
         {
-            if (URLPropertyData.Data == null) return;
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            if (urlPropertyData.Url == null) return;
+
+            if (!LayerData.HasValidCredentials)
+                active = false;
             
-            Legend.Instance.ShowLegend(URLPropertyData.Data.ToString(), active);
+            Legend.Instance.ShowLegend(urlPropertyData.Url.ToString(), active);
         }
 
         //a higher order means rendering over lower indices
         private void SetRenderOrder(int order)
         {
             //we have to flip the value because a lower layer with a higher index needs a lower render index
-            WMSProjectionLayer.RenderIndex = -order;
+            wmsProjectionLayer.RenderIndex = -order;
         }
 
         private void HandleCredentials(Uri uri, StoredAuthorization auth)
         {
             ClearCredentials();
 
+            if (auth.GetType() != typeof(Public))//if it is public, we don't want the property panel to show up
+            {
+                InitProperty<CredentialsRequiredPropertyData>(LayerData.LayerProperties);
+            }
+            
             if (auth is FailedOrUnsupported)
             {
                 LayerData.HasValidCredentials = false;
-                WMSProjectionLayer.isEnabled = false;
+                wmsProjectionLayer.isEnabled = false;
                 return;
             }
 
@@ -86,79 +89,99 @@ namespace Netherlands3D.Functionalities.Wms
                 SetBoundingBox
             );
 
-            WMSProjectionLayer.SetAuthorization(auth);
+            wmsProjectionLayer.SetAuthorization(auth);
             LayerData.HasValidCredentials = true;           
-            WMSProjectionLayer.isEnabled = LayerData.ActiveInHierarchy;
-            WMSProjectionLayer.RefreshTiles();
+            wmsProjectionLayer.isEnabled = LayerData.ActiveInHierarchy;
+            wmsProjectionLayer.RefreshTiles();
         }
 
         public void ClearCredentials()
         {
-            WMSProjectionLayer.ClearConfig();
+            wmsProjectionLayer.ClearConfig();
         }
 
         public virtual void LoadProperties(List<LayerPropertyData> properties)
         {
-            if (URLPropertyData == null) return;
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            if (urlPropertyData == null) return;
             
-            UpdateURL(URLPropertyData.Data);
+            UpdateURL(urlPropertyData.Url);
         }
 
         private void UpdateURL(Uri storedUri)
         {
-            CredentialHandler.Uri = storedUri; //apply the URL from what is stored in the Project data
-            WMSProjectionLayer.WmsUrl = storedUri.ToString();
-
-            //TODO this is a major problem, for now blocking the credential handler to invoke credential validation for all layers connected to 
-            //OnAuthorizationTypeDetermined.Invoke(authorization); within the key vault. The way we listen to this event should change to a per layer basis instead of global           
-            if (LayerData.ActiveInHierarchy)
-                CredentialHandler.ApplyCredentials();
+            if (storedUri == credentialHandler.Uri && credentialHandler.Authorization != null)
+            {
+                HandleCredentials(storedUri, credentialHandler.Authorization);
+                return;
+            }
+            
+            credentialHandler.Uri = storedUri; //apply the URL from what is stored in the Project data
+            wmsProjectionLayer.WmsUrl = storedUri.ToString();
+            credentialHandler.ApplyCredentials();
         }
 
-        protected override void OnDestroy()
+        protected override void RegisterEventListeners()
         {
-            base.OnDestroy();
-            LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
-            CredentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
-            Legend.Instance.UnregisterUrl(URLPropertyData.Data.ToString());
+            base.RegisterEventListeners();
+            LayerData.LayerOrderChanged.AddListener(SetRenderOrder);
+            credentialHandler.OnAuthorizationHandled.AddListener(HandleCredentials);
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            Legend.Instance.RegisterUrl(urlPropertyData.Url.ToString(), LayerData.ActiveSelf);
         }
 
-        public override void OnSelect()
+        protected override void UnregisterEventListeners()
+        {
+            base.UnregisterEventListeners();
+            LayerData.LayerOrderChanged.RemoveListener(SetRenderOrder);
+            credentialHandler.OnAuthorizationHandled.RemoveListener(HandleCredentials);
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            Legend.Instance.UnregisterUrl(urlPropertyData.Url.ToString());
+        }
+
+        public override void OnSelect(LayerData layer)
         {
             SetLegendActive(ShowLegendOnSelect);
         }
 
-        public override void OnDeselect()
+        public override void OnDeselect(LayerData layer)
         {
             SetLegendActive(false);
         }
 
         public override void OnLayerActiveInHierarchyChanged(bool isActive)
         {
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
             if (isActive)
             {
-                UpdateURL(URLPropertyData.Data);
+                UpdateURL(urlPropertyData.Url);
             }
+            
+            //we need to parse the layertype from the getmap request url
+            var wmsUrl = urlPropertyData.Url.ToString();
+            if(OgcWebServicesUtility.GetLayerNameFromURL(wmsUrl, out var layerName))
+                Legend.Instance.ToggleLayer(layerName, isActive);
+            
+            if (wmsProjectionLayer.isEnabled == isActive) return;
 
-            if (WMSProjectionLayer.isEnabled == isActive) return;
-
-            WMSProjectionLayer.isEnabled = isActive;           
+            wmsProjectionLayer.isEnabled = isActive;
         }
 
         private void SetBoundingBox(BoundingBoxContainer boundingBoxContainer)
         {
             if (boundingBoxContainer == null) return;
 
-            var wmsUrl = URLPropertyData.Data.ToString();
+            var urlPropertyData = LayerData.GetProperty<LayerURLPropertyData>();
+            var wmsUrl = urlPropertyData.Url.ToString();
             var featureLayerName = OgcWebServicesUtility.GetParameterFromURL(wmsUrl, "layers");
 
             if (boundingBoxContainer.LayerBoundingBoxes.ContainsKey(featureLayerName))
             {
-                WMSProjectionLayer.BoundingBox = boundingBoxContainer.LayerBoundingBoxes[featureLayerName];
+                wmsProjectionLayer.BoundingBox = boundingBoxContainer.LayerBoundingBoxes[featureLayerName];
                 return;
             }
 
-            WMSProjectionLayer.BoundingBox = boundingBoxContainer.GlobalBoundingBox;
+            wmsProjectionLayer.BoundingBox = boundingBoxContainer.GlobalBoundingBox;
         }
     }
 }

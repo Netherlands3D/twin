@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,30 +16,25 @@ using UnityEngine.Events;
 namespace Netherlands3D.Functionalities.OBJImporter
 {
     [RequireComponent(typeof(HierarchicalObjectLayerGameObject))]
-    public class OBJSpawner : MonoBehaviour, ILayerWithPropertyData
+    public class OBJSpawner : MonoBehaviour, IVisualizationWithPropertyData, IImportedObject
     {
         [Header("Required input")]
-        [SerializeField] private Material baseMaterial;
+        [SerializeField]
+        private Material baseMaterial;
+
         [SerializeField] private Netherlands3D.ObjImporter.ObjImporter importerPrefab;
 
-        [Header("Settings")]
-        [SerializeField] private bool createSubMeshes = false;
+        [Header("Settings")][SerializeField] private bool createSubMeshes = false;
         [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
-
-        private OBJPropertyData propertyData = new();
-        public LayerPropertyData PropertyData => propertyData;
-
+        
         private Netherlands3D.ObjImporter.ObjImporter importer;
         private GameObject importedObject;
-
-        private string ObjFilePath => propertyData.ObjFile != null ? AssetUriFactory.GetLocalPath(propertyData.ObjFile) : string.Empty;
-        private string MtlFilePath => propertyData.MtlFile != null ? AssetUriFactory.GetLocalPath(propertyData.MtlFile) : string.Empty;
-
-        public bool HasMtl => MtlFilePath != string.Empty;
-        public UnityEvent<bool> MtlImportSuccess = new();
+        
         private HierarchicalObjectLayerGameObject layerGameObject;
         private MoveCameraToCoordinate cameraMover;
-        private TransformLayerPropertyData TransformPropertyData => (TransformLayerPropertyData)((ILayerWithPropertyData)layerGameObject).PropertyData;
+
+        private OBJPropertyData propertyData;
+        public UnityEvent<GameObject> ObjectVisualized { get; } = new();
 
         private void Awake()
         {
@@ -49,23 +45,41 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            var propertyData = properties.Get<OBJPropertyData>();
+            propertyData = properties.Get<OBJPropertyData>();
             if (propertyData == null) return;
 
+            propertyData.OnObjUriChanged.AddListener(OnPathChanged);
+            propertyData.OnMtlUriChanged.AddListener(OnPathChanged);
+            
+            StartImport();
             // Property data is set here, and the parsing and loading of the actual data is done
             // in the start method, there a coroutine is started to load the data in a streaming fashion.
             // If we do that here, then this may conflict with the loading of the project file and it would
             // cause duplication when adding a layer manually instead of through the loading mechanism
-            this.propertyData = propertyData;
+            // this.propertyData = propertyData;
         }
 
-        private void Start()
+        private void OnPathChanged(Uri uri)
         {
-            StartImport(); //called after loading properties or after setting the file path through the import adapter
+            StartImport();
+        }
+
+        private string GetFilePath(Uri propertyDataUri)
+        {
+            var filePath = string.Empty;
+            if (propertyDataUri != null)
+            {
+                filePath = AssetUriFactory.GetLocalPath(propertyDataUri);
+            }
+
+            return filePath;
         }
 
         public void StartImport()
         {
+            var objFilePath = GetFilePath(propertyData.ObjFile);
+            var mtlFilePath = GetFilePath(propertyData.MtlFile);
+
             if (importedObject)
                 Destroy(importedObject);
 
@@ -73,7 +87,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
 
             importer = Instantiate(importerPrefab);
 
-            ImportObj(ObjFilePath, MtlFilePath);
+            ImportObj(objFilePath, mtlFilePath);
         }
 
         private void ImportObj(string objPath, string mtlPath = "")
@@ -92,7 +106,7 @@ namespace Netherlands3D.Functionalities.OBJImporter
                 string copiedMtlFilename = mtlPath + ".temp";
                 File.Copy(mtlPath, copiedMtlFilename);
                 importer.mtlFilePath = copiedMtlFilename;
-                importer.MtlImportSucceeded.AddListener(MtlImportSuccess.Invoke);
+                importer.MtlImportSucceeded.AddListener(propertyData.MtlImportSuccess.Invoke);
             }
 
             importer.imgFilePath = "";
@@ -105,22 +119,23 @@ namespace Netherlands3D.Functionalities.OBJImporter
         private void OnObjImported(GameObject returnedGameObject)
         {
             PositionImportedGameObject(returnedGameObject);
-            
+
             ParentImportedGameObject(returnedGameObject);
 
             importedObject = returnedGameObject;
             returnedGameObject.AddComponent<MeshCollider>();
             DisposeImporter();
-            
-            // Object is loaded / replaced - trigger the application of styling
-            layerGameObject.ApplyStyling();
+
+            //Object is loaded / replaced - trigger the application of styling
+            ObjectVisualized.Invoke(returnedGameObject);
         }
 
         private void PositionImportedGameObject(GameObject returnedGameObject)
         {
             if (IsGeoReferenced())
             {
-                PositionGeoReferencedObj(returnedGameObject, TransformPropertyData.Position);
+                var transformPropertyData = layerGameObject.LayerData.GetProperty<TransformLayerPropertyData>();
+                PositionGeoReferencedObj(returnedGameObject, transformPropertyData.Position);
                 return;
             }
 
@@ -128,7 +143,8 @@ namespace Netherlands3D.Functionalities.OBJImporter
             // current position.
             if (!layerGameObject.LayerData.IsNew)
             {
-                transform.position = TransformPropertyData.Position.ToUnity();
+                var transformPropertyData = layerGameObject.LayerData.GetProperty<TransformLayerPropertyData>();
+                transform.position = transformPropertyData.Position.ToUnity();
             }
         }
 
@@ -144,13 +160,13 @@ namespace Netherlands3D.Functionalities.OBJImporter
                 // georeferenced position as coordinate. todo: there is already precision lost in the importer, this should
                 // be preserved while parsing, as there is nothing we can do now anymore.
                 coordinate = new Coordinate(returnedGameObject.transform.position);
-            
+
                 // move the camera to the georeferenced position, this also shifts the origin if needed.
-                cameraMover.LookAtTarget(coordinate, cameraDistanceFromGeoReferencedObject); 
+                cameraMover.LookAtTarget(coordinate, cameraDistanceFromGeoReferencedObject);
             }
 
             //set this object to the georeferenced position, since this is the correct position.
-            layerGameObject.WorldTransform.MoveToCoordinate(coordinate); 
+            layerGameObject.WorldTransform.MoveToCoordinate(coordinate);
         }
 
         private void ParentImportedGameObject(GameObject returnedGameObject)
@@ -164,13 +180,14 @@ namespace Netherlands3D.Functionalities.OBJImporter
         {
             if (importer == null) return;
 
-            importer.MtlImportSucceeded.RemoveListener(MtlImportSuccess.Invoke);
+            importer.MtlImportSucceeded.RemoveListener(propertyData.MtlImportSuccess.Invoke);
             Destroy(importer.gameObject);
         }
 
-        public void SetMtlPathInPropertyData(string fullPath)
+        void OnDestroy()
         {
-            propertyData.MtlFile = AssetUriFactory.CreateProjectAssetUri(fullPath);
+            propertyData.OnObjUriChanged.RemoveListener(OnPathChanged);
+            propertyData.OnMtlUriChanged.RemoveListener(OnPathChanged);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Netherlands3D.Functionalities.OGC3DTiles.LayerPresets
             return builder
                 .NamedAs(args.Url.ToString())
                 .OfType(PrefabIdentifier)
-                .AddProperty(new Tile3DLayerPropertyData(args.Url.ToString()));
+                .AddProperty(new Tile3DLayerPropertyData(args.Url));
         }
         
         public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args) => Apply(builder, (Args)args);
