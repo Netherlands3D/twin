@@ -49,6 +49,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
             annotation = Instantiate(popoutPrefab, canvas.transform);
             annotation.RectTransform().SetPivot(PivotPresets.BottomCenter);
+            annotation.SetSnappingSide(TextPopout.SnappingSide.Above);
             annotation.transform.SetSiblingIndex(1); //0 is for the blocker plane, and we want this to be in front of that, but behind the rest           
             annotation.ReadOnly = !layerTool.Open;       
         }

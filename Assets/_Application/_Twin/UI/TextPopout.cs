@@ -25,6 +25,11 @@ namespace Netherlands3D.Twin.UI
         public UnityEvent TextFieldDeselected;
         public UnityEvent TextFieldDoubleClicked;
         public UnityEvent TextFieldInputConfirmed;
+
+        private float heightAboveWorldPosition = 0.5f;
+        
+        public enum SnappingSide { Side, Above }
+        private SnappingSide snappingSide = SnappingSide.Above;
         
         public TMP_InputField TextField => textField;
         
@@ -61,14 +66,11 @@ namespace Netherlands3D.Twin.UI
             textField.onEndEdit.AddListener(OnEndEdit.Invoke);
             textField.onSelect.AddListener(OnTextFieldSelect);
             textField.onDeselect.AddListener(OnTextFieldDeselect);
+        }
 
-            //the snapping pivot point is given to the parent, so lets inherit this so we can adjust the target point accordingly
-            pointTransform.pivot = rectTransform.pivot;
-            pointTransform.anchorMin = rectTransform.pivot;
-            pointTransform.anchorMax = rectTransform.pivot;
-            float half = Mathf.Sign(rectTransform.pivot.x - 0.5f) * 0.5f;
-            float childPosX = pointTransform.rect.width * half;
-            pointTransform.anchoredPosition = new Vector2(childPosX * pointTransform.localScale.x, 0);
+        public void SetSnappingSide(SnappingSide snap)
+        {
+            snappingSide = snap;
         }
 
         private void OnTextFieldSelect(string text)
@@ -145,6 +147,28 @@ namespace Netherlands3D.Twin.UI
             var scaledZ = atScreenPosition.z / disappearDistance * 1000;
             atScreenPosition.z = scaledZ;
             rectTransform.position = atScreenPosition;
+
+            switch (snappingSide)
+            {
+                case SnappingSide.Side:
+                {
+                    //the snapping pivot point is given to the parent, so lets inherit this so we can adjust the target point accordingly
+                    pointTransform.pivot = rectTransform.pivot;
+                    pointTransform.anchorMin = rectTransform.pivot;
+                    pointTransform.anchorMax = rectTransform.pivot;
+                    float half = Mathf.Sign(rectTransform.pivot.x - 0.5f) * 0.5f;
+                    float childPosX = pointTransform.rect.width * half;
+                    pointTransform.anchoredPosition = new Vector2(childPosX * pointTransform.localScale.x, 0);
+                    break;
+                }
+                case SnappingSide.Above:
+                {
+                    rectTransform.pivot = new Vector2(0.5f, -heightAboveWorldPosition);
+                    pointTransform.pivot = new Vector2(0.5f, 0.5f);
+                    pointTransform.position = atScreenPosition;
+                    break;
+                }
+            }
         }
 
         public void MoveTo(Coordinate atWorldPosition, bool stickToWorldPosition = false)

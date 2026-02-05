@@ -123,6 +123,7 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
         {
             var popout = Instantiate(popoutPrefab, canvasTransform);
             popout.RectTransform().SetPivot(pivotPoint);
+            popout.SetSnappingSide(TextPopout.SnappingSide.Side);
             popout.transform.SetSiblingIndex(0);
 
             return popout;

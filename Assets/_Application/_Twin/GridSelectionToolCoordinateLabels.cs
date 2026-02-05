@@ -54,6 +54,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             var popout = Instantiate(popoutPrefab, canvasTransform);
             popout.RectTransform().SetPivot(pivotPoint);
+            popout.SetSnappingSide(TextPopout.SnappingSide.Side);
             popout.transform.SetSiblingIndex(0);
 
             return popout;
