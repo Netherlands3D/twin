@@ -65,8 +65,7 @@ namespace Netherlands3D.Twin.layers.properties
                         string id = feature.Attributes[HiddenObjectsPropertyData.VisibilityAttributeIdentifier];
                         Color storedColor = symbolizer.GetFillColor() ?? Color.white;
                         var visibilityColor = visiblity == true ? storedColor : Color.clear;
-                        GeometryColorizer.InsertCustomColorSet(-2,
-                            new Dictionary<string, Color>() { { id, visibilityColor } });
+                        GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, visibilityColor } });
                     }
                 }
             }
@@ -146,6 +145,19 @@ namespace Netherlands3D.Twin.layers.properties
         private void OnDestroyCartesianTile()
         {
             HiddenObjectsPropertyData hiddenObjectsPropertyData = visualization.LayerData.GetProperty<HiddenObjectsPropertyData>();
+            
+            //we have to reset all meshcolors by all present styling rules because we cant do this automatically with applystyling
+            //that would mean we would reset the colors for a very large amount of layerfeatures causing enormous performance impact
+            foreach (KeyValuePair<string, StylingRule> kv in hiddenObjectsPropertyData.StylingRules)
+            {
+                if (kv.Key.Contains(HiddenObjectsPropertyData.VisibilityIdentifier))
+                {
+                    string objectId = hiddenObjectsPropertyData.GetStylingRuleName(kv.Key);
+                    bool? visibility = hiddenObjectsPropertyData.GetVisibilityForSubObjectById(objectId);
+                    if (visibility.HasValue)
+                        GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { objectId, Color.white } });
+                }
+            }
             
             visualization.OnFeatureCreated -= AddAttributesToLayerFeature;
             hiddenObjectsPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);
