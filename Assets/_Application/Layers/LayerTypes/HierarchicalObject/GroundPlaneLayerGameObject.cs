@@ -29,7 +29,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         
         public override void OnLayerDataParentChanged()
         {
-         
+            //we dont want to inherit properties logic, keep this override
         }
     }
 }
