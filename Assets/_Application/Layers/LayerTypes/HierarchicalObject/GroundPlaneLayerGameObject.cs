@@ -26,5 +26,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
                 scaleUnitCharacter);
             InitProperty<ColorPropertyData>(properties);
         }
+        
+        public override void OnLayerDataParentChanged()
+        {
+         
+        }
     }
 }
