@@ -18,6 +18,10 @@ namespace Netherlands3D.Twin.layers.properties
         
         private LayerGameObject visualization;
         
+        public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
+        private Dictionary<string, Color> hiddenColors = new Dictionary<string, Color>();
+        private int hiddenLayerId = -2;
+        
         public void LoadProperties(List<LayerPropertyData> properties)
         {
             visualization = GetComponent<LayerGameObject>();
@@ -31,6 +35,7 @@ namespace Netherlands3D.Twin.layers.properties
 
         private void SetupFeatures()
         {
+            ColorSetLayer = GeometryColorizer.InsertCustomColorSet(hiddenLayerId, hiddenColors);
             HiddenObjectsPropertyData hiddenObjectsPropertyData = visualization.LayerData.GetProperty<HiddenObjectsPropertyData>();
             
             visualization.OnFeatureCreated += AddAttributesToLayerFeature;
@@ -65,7 +70,8 @@ namespace Netherlands3D.Twin.layers.properties
                         string id = feature.Attributes[HiddenObjectsPropertyData.VisibilityAttributeIdentifier];
                         Color storedColor = symbolizer.GetFillColor() ?? Color.white;
                         var visibilityColor = visiblity == true ? storedColor : Color.clear;
-                        GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { id, visibilityColor } });
+                        hiddenColors.TryAdd(id, visibilityColor);
+                        ColorSetLayer = GeometryColorizer.InsertCustomColorSet(hiddenLayerId, hiddenColors);
                     }
                 }
             }
@@ -148,16 +154,17 @@ namespace Netherlands3D.Twin.layers.properties
             
             //we have to reset all meshcolors by all present styling rules because we cant do this automatically with applystyling
             //that would mean we would reset the colors for a very large amount of layerfeatures causing enormous performance impact
-            foreach (KeyValuePair<string, StylingRule> kv in hiddenObjectsPropertyData.StylingRules)
-            {
-                if (kv.Key.Contains(HiddenObjectsPropertyData.VisibilityIdentifier))
-                {
-                    string objectId = hiddenObjectsPropertyData.GetStylingRuleName(kv.Key);
-                    bool? visibility = hiddenObjectsPropertyData.GetVisibilityForSubObjectById(objectId);
-                    if (visibility.HasValue)
-                        GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { objectId, Color.white } });
-                }
-            }
+            // foreach (KeyValuePair<string, StylingRule> kv in hiddenObjectsPropertyData.StylingRules)
+            // {
+            //     if (kv.Key.Contains(HiddenObjectsPropertyData.VisibilityIdentifier))
+            //     {
+            //         string objectId = hiddenObjectsPropertyData.GetStylingRuleName(kv.Key);
+            //         bool? visibility = hiddenObjectsPropertyData.GetVisibilityForSubObjectById(objectId);
+            //         if (visibility.HasValue)
+            //             GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { objectId, Color.white } });
+            //     }
+            // }
+            GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
             
             visualization.OnFeatureCreated -= AddAttributesToLayerFeature;
             hiddenObjectsPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);
