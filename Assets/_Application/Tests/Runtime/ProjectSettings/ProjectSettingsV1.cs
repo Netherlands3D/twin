@@ -19,6 +19,7 @@ using System.Net.NetworkInformation;
 
 
 
+
 namespace Netherlands3D.Twin.Tests.Projectsettings
 {
     public class ProjectSettingsV1
@@ -42,7 +43,13 @@ namespace Netherlands3D.Twin.Tests.Projectsettings
             yield return TestFunctions.checkGameObject(TestFunctions.scene.DefaultBuildings,"gebouwen is niet ingeladen");
             yield return TestFunctions.checkGameObject(TestFunctions.scene.DefaultBomen,"bomen zijn niet ingeladen");
             yield return TestFunctions.checkGameObject(TestFunctions.scene.DefaultBossen, "bossen zijn niet ingeladen");
-            yield return TestFunctions.LaagCorrectInLagenMenu("Bomen",true,true);
+
+            yield return TestFunctions.LaagCorrectInLagenMenu("Straatnamen",true,true,0);
+            yield return TestFunctions.LaagCorrectInLagenMenu("Bomen",true,true,1);
+            yield return TestFunctions.LaagCorrectInLagenMenu("Bossen",true,true,2);
+            yield return TestFunctions.LaagCorrectInLagenMenu("Gebouwen",true,true,3);
+            yield return TestFunctions.LaagCorrectInLagenMenu("Maaiveld",true,true,4);
+            
             
 
         }
@@ -140,13 +147,22 @@ namespace Netherlands3D.Twin.Tests.Projectsettings
             
         }
     
-        public static IEnumerator LaagCorrectInLagenMenu(string laagnaam,bool shouldBeInList, bool shouldBeActive=true)
+        public static IEnumerator LaagCorrectInLagenMenu(string laagnaam,bool shouldBeInList, bool shouldBeActive=true, int laagindex=-1)
         {
             UnityEngine.GameObject layerspanel= (UnityEngine.GameObject)scene.Layerspanel;
-            UnityEngine.GameObject laagobject = layerspanel.transform.Find(laagnaam).gameObject;
-
+            UnityEngine.GameObject laagobject=null;
+            if(laagindex==-1)
+            {
+            laagobject = layerspanel.transform.Find(laagnaam).gameObject;
             bool laagobjectAanwezig = laagobject!=null;
             E2E.Then(laagobjectAanwezig,Is.EqualTo(shouldBeInList),laagnaam +"niet correct in lagenpaneel");
+            }
+            else
+            {
+                E2E.Then(laagindex,Is.AtMost(layerspanel.transform.childCount-1),laagnaam +" niet op correcte positie in lagenpaneel");
+                laagobject = layerspanel.transform.GetChild(laagindex).gameObject;
+                E2E.Then(laagobject.name,Is.EqualTo(laagnaam),laagnaam +" niet op correcte positie in lagenpaneel");
+            }
 
             UnityEngine.GameObject enableToggleObject = laagobject.transform.Find("ParentRow/EnableToggle").gameObject;
             UnityEngine.UI.Toggle Toggle = enableToggleObject.GetComponent<Toggle>();
@@ -154,5 +170,7 @@ namespace Netherlands3D.Twin.Tests.Projectsettings
             E2E.Then(ToggleValue,Is.EqualTo(shouldBeActive),laagnaam +" isActive niet correct in lagenpaneel");
             yield return null;
         }
+
+
     }
 }
