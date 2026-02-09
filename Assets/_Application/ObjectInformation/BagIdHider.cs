@@ -24,21 +24,18 @@ namespace Netherlands3D.Twin.ObjectInformation
 
         private void OnCheckInMapping(ObjectMapping mapping)
         {
-            Interaction.AddOverrideColors(buildingColors);
             ApplyStyling();
         }
 
         private void Start()
         {
             SetBuildingIdsToHide(data.bagIds);
-            Interaction.AddOverrideColors(buildingColors);
             ApplyStyling();
         }
 
         private void OnEnable()
         {
             SetBuildingIdsToHide(data.bagIds);
-            Interaction.AddOverrideColors(buildingColors);
             ApplyStyling();
         }
 
@@ -65,6 +62,8 @@ namespace Netherlands3D.Twin.ObjectInformation
                 buildingColors.Add(id, Color.clear);
                 selector.BlockBagId(id, true);
             }
+            
+            Interaction.AddOverrideColors(buildingColors);
         }
 
         private void ApplyStyling()
@@ -76,7 +75,7 @@ namespace Netherlands3D.Twin.ObjectInformation
                 
                 foreach (KeyValuePair<Vector2Int, ObjectMapping> kv in binaryMeshLayer.Mappings)
                 {
-                    Interaction.ApplyColors(buildingColors, kv.Value);
+                    Interaction.ApplyColors(kv.Value);
                 }
             }
         }

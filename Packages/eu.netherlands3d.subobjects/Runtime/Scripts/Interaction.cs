@@ -41,13 +41,17 @@ namespace Netherlands3D.SubObjects
                 overrideColors[kv.Key] = kv.Value; 
         }
         
+        public static void AddOverrideColor(string key, Color color) => overrideColors[key] = color;
+        
         public static void RemoveOverrideColors(Dictionary<string, Color> colorMap)
         {
             foreach (var kv in colorMap)
                 overrideColors.Remove(kv.Key);
         }
+        
+        public static void RemoveOverrideColor(string key) => overrideColors.Remove(key);
 
-        public static void ApplyColors(Dictionary<string, Color> colorMap, ObjectMapping mapping)
+        public static void ApplyColors(ObjectMapping mapping)
         {
             GameObject gameobject = mapping.gameObject;
             if (gameobject == null) return;
@@ -56,17 +60,16 @@ namespace Netherlands3D.SubObjects
           
             if (vertexcolors.Capacity < mesh.vertexCount)
                 vertexcolors.Capacity = mesh.vertexCount;
-           
+            
+            bool applied = false;
             foreach(KeyValuePair<string, ObjectMappingItem> item in mapping.items)
             {
-                //fix that it shouldnt be always applied
-                
-                
                 Color color;
                 if (overrideColors.ContainsKey(item.Key))
+                {
                     color = overrideColors[item.Key];
-                else if (colorMap.ContainsKey(item.Key))
-                    color = colorMap[item.Key];
+                    applied = true;
+                }
                 else
                     color = NO_OVERRIDE_COLOR;
                 
@@ -74,7 +77,8 @@ namespace Netherlands3D.SubObjects
                 for (int j = 0; j < vertexcount; j++)
                     vertexcolors.Add(color);
             }
-            mesh.SetColors(vertexcolors);
+            if(applied)
+                mesh.SetColors(vertexcolors);
             vertexcolors.Clear();
         }
     }

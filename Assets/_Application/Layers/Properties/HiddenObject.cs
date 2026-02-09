@@ -18,8 +18,6 @@ namespace Netherlands3D.Twin.layers.properties
         
         private LayerGameObject visualization;
         
-        private Dictionary<string, Color> hiddenColors = new Dictionary<string, Color>();
-        private int hiddenLayerId = -2;
         
         public void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -68,7 +66,7 @@ namespace Netherlands3D.Twin.layers.properties
                         string id = feature.Attributes[HiddenObjectsPropertyData.VisibilityAttributeIdentifier];
                         Color storedColor = symbolizer.GetFillColor() ?? Color.white;
                         var visibilityColor = visiblity == true ? storedColor : Color.clear;
-                        hiddenColors[id] = visibilityColor;
+                        Interaction.AddOverrideColor(id, visibilityColor);
                     }
                 }
             }
@@ -78,7 +76,7 @@ namespace Netherlands3D.Twin.layers.properties
 
             foreach (KeyValuePair<Vector2Int, ObjectMapping> kv in binaryMeshLayer.Mappings)
             {
-                Interaction.ApplyColors(hiddenColors, kv.Value);
+                Interaction.ApplyColors(kv.Value);
             }
         }
         
@@ -163,12 +161,6 @@ namespace Netherlands3D.Twin.layers.properties
             
             if(visualization is not CartesianTileLayerGameObject cartesianTile) return;
             if (cartesianTile.Layer is not BinaryMeshLayer binaryMeshLayer) return;
-            
-            hiddenColors.Clear();
-            foreach (KeyValuePair<Vector2Int, ObjectMapping> kv in binaryMeshLayer.Mappings)
-            {
-                Interaction.ApplyColors(hiddenColors, kv.Value);
-            }
             
             binaryMeshLayer.OnMappingCreated.RemoveListener(OnAddedMapping);
             binaryMeshLayer.OnMappingRemoved.RemoveListener(OnRemovedMapping);
