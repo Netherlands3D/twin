@@ -51,6 +51,11 @@ namespace Netherlands3D.SubObjects
         
         public static void RemoveOverrideColor(string key) => overrideColors.Remove(key);
 
+        //TODO we will need a cascading coloring system to apply colors, when multiple colors are registred to one bagid, is this still needed?
+        /// <summary>
+        /// This will color the final result from styling, by its objectmapping it will find the corresponding bagids in the override color dictionairy apply mesh vertex coloring
+        /// </summary>
+        /// <param name="mapping"></param>
         public static void ApplyColors(ObjectMapping mapping)
         {
             GameObject gameobject = mapping.gameObject;
