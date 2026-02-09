@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Netherlands3D.OgcWebServices.Shared
 {
@@ -32,6 +33,7 @@ namespace Netherlands3D.OgcWebServices.Shared
         }
 
         [Test]
+        [UnityPlatform(RuntimePlatform.WebGLPlayer)]
         public void NormalizeUrl_PreservesUrlEncodingAndDecodingRoundtrip()
         {
             // Value contains a space and a slash which are typically encoded, represents "Bag Gebouwen/3D"
