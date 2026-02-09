@@ -13,36 +13,21 @@ namespace Netherlands3D.Twin.ObjectInformation
     {
         [SerializeField] private HiddenBagIds data;
         [SerializeField] private HiddenBagIds alwaysHiddenData;
-        //public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
         private Dictionary<string, Color> buildingColors = new();
-
-        private void Awake()
-        {
-            Interaction.ObjectMappingCheckIn += OnCheckInMapping;
-            Interaction.ObjectMappingCheckOut += OnCheckInMapping;
-        }
-
-        private void OnCheckInMapping(ObjectMapping mapping)
-        {
-            ApplyStyling();
-        }
 
         private void Start()
         {
             SetBuildingIdsToHide(data.bagIds);
-            ApplyStyling();
         }
 
         private void OnEnable()
         {
             SetBuildingIdsToHide(data.bagIds);
-            ApplyStyling();
         }
 
         private void OnDisable()
         {
             Interaction.RemoveOverrideColors(buildingColors);
-            ApplyStyling();
         }
 
         public void SetBuildingIdsToHide(List<string> ids)
@@ -64,26 +49,6 @@ namespace Netherlands3D.Twin.ObjectInformation
             }
             
             Interaction.AddOverrideColors(buildingColors);
-        }
-
-        private void ApplyStyling()
-        {
-            CartesianTileLayerGameObject[] visualisations = FindObjectsOfType<CartesianTileLayerGameObject>();
-            foreach (CartesianTileLayerGameObject visualisation in visualisations)
-            {
-                if(visualisation.Layer is not BinaryMeshLayer binaryMeshLayer) return;
-                
-                foreach (KeyValuePair<Vector2Int, ObjectMapping> kv in binaryMeshLayer.Mappings)
-                {
-                    Interaction.ApplyColors(kv.Value);
-                }
-            }
-        }
-
-        private void OnDestroy()
-        {
-            Interaction.ObjectMappingCheckIn -= OnCheckInMapping;
-            Interaction.ObjectMappingCheckOut -= OnCheckInMapping;
         }
     }
 }

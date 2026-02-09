@@ -23,6 +23,8 @@ namespace Netherlands3D.SubObjects
             }
             mappings.Add(mapping);
             ObjectMappingCheckIn?.Invoke(mapping);
+            //apply after objectmappingcheckin invoke!
+            ApplyColors(mapping);
         }
 
         internal static void CheckOut(ObjectMapping mapping)

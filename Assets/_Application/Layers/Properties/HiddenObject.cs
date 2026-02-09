@@ -73,7 +73,7 @@ namespace Netherlands3D.Twin.layers.properties
             
             if(visualization is not CartesianTileLayerGameObject cartesianTile) return;
             if (cartesianTile.Layer is not BinaryMeshLayer binaryMeshLayer) return;
-
+            
             foreach (KeyValuePair<Vector2Int, ObjectMapping> kv in binaryMeshLayer.Mappings)
             {
                 Interaction.ApplyColors(kv.Value);
