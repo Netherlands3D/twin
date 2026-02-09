@@ -301,6 +301,22 @@ namespace Netherlands3D.Twin.Layers
             return false;
         }
 
+        public void SetSiblingIndex(int siblingIndex)
+        {
+            if (ParentLayer == null)
+                return;
+
+            if (siblingIndex < 0 || siblingIndex >= ParentLayer.ChildrenLayers.Count)
+                return;
+            
+            // adjust the new index if moving after oldIndex since we will be removing one from the list
+            if (siblingIndex > siblingIndex)
+                siblingIndex--;
+            
+            ParentLayer.ChildrenLayers.Remove(this);
+            ParentLayer.ChildrenLayers.Insert(siblingIndex, this);
+        }
+
         public virtual void Dispose()
         {
             DeselectLayer();

@@ -6,6 +6,7 @@ using Netherlands3D.Credentials;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.AssetBundles;
 using Netherlands3D.Twin.DataTypeAdapters;
+using Netherlands3D.Twin.Layers;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -203,12 +204,23 @@ namespace Netherlands3D.Twin.Projects
             if (filePath.ToLower().EndsWith(".nl3d"))
             {
                 Debug.Log("loading nl3d file: " + filePath);
-                projectDataStore.LoadFromFile(filePath);
+                var newProject = projectDataStore.LoadFromFile(filePath);
+                UpdateProjectVersion(newProject);
                 OnLoadCompleted.Invoke();
                 return;
             }
 
             OnLoadFailed.Invoke();
+        }
+
+        private void UpdateProjectVersion(ProjectData newProject)
+        {
+            if (newProject.Version < 2)
+            {
+                var groundLayer = App.Layers.Add(LayerBuilder.Create().NamedAs("Ondergrond").OfType("f60b3c7f11823a9ce86527101bac825b"));
+                groundLayer.LayerData.SetSiblingIndex(groundLayer.LayerData.ParentLayer.ChildrenLayers.Count - 1);
+                newProject.Version = 2;
+            }
         }
 
         public void Redo()
