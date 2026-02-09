@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 5648866956155822156}
   - component: {fileID: 6390242371133718726}
   - component: {fileID: 7109194962515795805}
-  - component: {fileID: -5530517851291887029}
   - component: {fileID: 4142489338678956943}
   - component: {fileID: -5688274655914667246}
   - component: {fileID: -3892557586120215936}
@@ -284,21 +283,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   showPriorityNumbers: 0
   downloadAvailable: 0
---- !u!114 &-5530517851291887029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7974831043381414785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe096534462cf714bb38d69e1ca829e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  idleMaximumScreenSpaceError: 10
-  movingMaximumScreenSpaceError: 40
-  detailIncrementStepPerFrame: 1
 --- !u!114 &4142489338678956943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,18 +298,6 @@ MonoBehaviour:
   prefabIdentifier: 71fff5c85650fcd4d9f59e4e182b5e95
   thumbnail: {fileID: 0}
   spawnLocation: -1
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onHide:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerInitialized:
-    m_PersistentCalls:
-      m_Calls: []
-  onLayerReady:
-    m_PersistentCalls:
-      m_Calls: []
   UnsupportedExtensionsMessage:
     m_PersistentCalls:
       m_Calls: []
