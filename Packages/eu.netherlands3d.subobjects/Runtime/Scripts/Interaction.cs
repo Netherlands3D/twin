@@ -36,7 +36,7 @@ namespace Netherlands3D.SubObjects
             }
         }
 
-
+        //todo solve duplicate colors
         public static void AddOverrideColors(Dictionary<string, Color> colorMap)
         {
             foreach (var kv in colorMap)
