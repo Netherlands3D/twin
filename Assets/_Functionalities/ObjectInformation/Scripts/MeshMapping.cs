@@ -2,7 +2,6 @@
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.ObjectInformation 
