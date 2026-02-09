@@ -56,7 +56,7 @@ namespace Netherlands3D.Twin.Services
             if (result is Layer layer)
                 return layer;
             
-            return null;
+            throw new NullReferenceException("Could not determine Layer adapter for the url:  " + uri);
         }
 
         /// <summary>

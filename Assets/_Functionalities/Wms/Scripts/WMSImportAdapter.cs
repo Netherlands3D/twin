@@ -81,8 +81,7 @@ namespace Netherlands3D.Functionalities.Wms
                 return CreateLayer(map, url, wmsFolder, true);
             }
             
-            Debug.LogError("Unrecognized WMS request type at " + url);
-            return null;
+            throw new ArgumentException("Unrecognized WMS request type: " + url);
         }
 
         private LayerData AddFolderLayer(string folderName)

@@ -133,8 +133,7 @@ namespace Netherlands3D.Functionalities.Wfs
                 }
             }
             
-            Debug.LogError("Unrecognized WFS request type: " + url);
-            return null;
+            throw new ArgumentException("Unrecognized WFS request type: " + url);
         }
         
         private LayerData AddFolderLayer(string folderName)
