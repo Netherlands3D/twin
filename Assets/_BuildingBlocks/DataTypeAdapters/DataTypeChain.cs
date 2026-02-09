@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,14 +36,18 @@ namespace Netherlands3D.DataTypeAdapters
                 return;
 
             // Make sure all scriptable objects we plug in are of the correct type
+            var list = new List<IDataTypeAdapter<object>>(dataTypeAdapters.Length);
             for (int i = 0; i < dataTypeAdapters.Length; i++)
             {
                 if (dataTypeAdapters[i] is not IDataTypeAdapter<object>)
                 {
                     if (debugLog) Debug.LogError("ScriptableObject does not have the IDataTypeAdapter interface implemented. Removing from chain.", dataTypeAdapters[i]);
-                    dataTypeAdapters[i] = null;
+                    continue;
                 }
+                list.Add(dataTypeAdapters[i] as IDataTypeAdapter<object>);
             }
+            
+            dataTypeAdapterInterfaces = list.ToArray();
         }
 
         private void OnDisable()
@@ -156,18 +161,6 @@ namespace Netherlands3D.DataTypeAdapters
 
         private object AdapterChain(LocalFile urlAndData)
         {
-            // Get our interface references
-            dataTypeAdapterInterfaces = new IDataTypeAdapter<object>[dataTypeAdapters.Length];
-            for (int i = 0; i < dataTypeAdapters.Length; i++)
-            {
-                if (dataTypeAdapters[i] == null)
-                {
-                    throw new NullReferenceException("An adapter in chain is null. Please check your dataTypeAdapters list.");
-                }
-
-                dataTypeAdapterInterfaces[i] = dataTypeAdapters[i] as IDataTypeAdapter<object>;
-            }
-
             // Check data type per adapter using order set in inspector
             foreach (var adapter in dataTypeAdapterInterfaces)
             {
