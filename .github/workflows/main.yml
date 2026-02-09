@@ -10,7 +10,7 @@ jobs:
   ## See: https://game.ci/docs/github/test-runner
   test:
     name: '🐞️ Automated testing in ${{ matrix.testMode }}'
-    permissions: { contents: read }
+    permissions: { contents: read, checks: write }
 
     strategy:
       fail-fast: false
