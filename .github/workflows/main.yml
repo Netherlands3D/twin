@@ -9,7 +9,7 @@ env:
 jobs:
   ## See: https://game.ci/docs/github/test-runner
   test:
-    name: '🐞️ Automated testing in ${{ matrix.testMode }}'
+    name: '🐞️ Automated tests (${{ matrix.testMode }})'
     permissions: { contents: read, checks: write }
 
     strategy:
@@ -40,7 +40,7 @@ jobs:
           testMode: ${{ matrix.testMode }}
           artifactsPath: ${{ matrix.testMode }}-artifacts
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          checkName: ${{ matrix.testMode }} Test Results
+          checkName: Test Results (${{ matrix.testMode }})
           coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;generateBadgeReport'
           customParameters: '-buildTarget webgl'
       - uses: actions/upload-artifact@v4
