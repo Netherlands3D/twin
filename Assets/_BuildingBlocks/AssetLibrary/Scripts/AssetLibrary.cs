@@ -9,6 +9,7 @@ using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Events;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Projects.ExtensionMethods;
 using UnityEngine;
 
 namespace Netherlands3D.AssetLibrary
@@ -100,10 +101,10 @@ namespace Netherlands3D.AssetLibrary
 
         public void Load(RecordItem recordItem)
         {
-            if (recordItem.Url.Scheme == PREFAB_IDENTIFIER)
-                App.Layers.Add(LayerBuilder.Create().NamedAs(recordItem.Title).OfType(recordItem.Url.AbsolutePath.Trim('/')));
-            else
+            if (recordItem.Url.IsRemoteAsset())
                 App.Layers.AddFromUrl(recordItem.Url, new Public(recordItem.Url));
+            else
+                App.Layers.Add(LayerBuilder.Create().NamedAs(recordItem.Title).OfType(recordItem.Url.AbsolutePath.Trim('/')));
         }
 
         public void Trigger(DataService dataService)
