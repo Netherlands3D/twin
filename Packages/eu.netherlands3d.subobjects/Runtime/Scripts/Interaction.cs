@@ -10,8 +10,10 @@ namespace Netherlands3D.SubObjects
         public static event ObjectMappingHandler ObjectMappingCheckIn;
         public static event ObjectMappingHandler ObjectMappingCheckOut;
 
-        static List<Color> vertexcolors;
+        private static List<Color> vertexcolors = new();
         static List<ObjectMapping> mappings;
+        
+        private static Dictionary<string, Color> overrideColors = new();
 
         internal static void CheckIn(ObjectMapping mapping)
         {
@@ -19,9 +21,7 @@ namespace Netherlands3D.SubObjects
             {
                 mappings = new List<ObjectMapping>();
             }
-
             mappings.Add(mapping);
-            ApplyColors(GeometryColorizer.PrioritizedColors, mapping);
             ObjectMappingCheckIn?.Invoke(mapping);
         }
 
@@ -34,84 +34,47 @@ namespace Netherlands3D.SubObjects
             }
         }
 
-        internal static void ApplyColorsToAll(Dictionary<string, Color> colorMap)
-        {
-            if (mappings == null)
-            {
-                return;
-            }
 
-            for (int i = 0; i < mappings.Count; i++)
-            {
-                ApplyColors(colorMap, mappings[i]);
-            }
+        public static void AddOverrideColors(Dictionary<string, Color> colorMap)
+        {
+            foreach (var kv in colorMap)
+                overrideColors[kv.Key] = kv.Value; 
+        }
+        
+        public static void RemoveOverrideColors(Dictionary<string, Color> colorMap)
+        {
+            foreach (var kv in colorMap)
+                overrideColors.Remove(kv.Key);
         }
 
-        private static void ApplyColors(Dictionary<string, Color> colorMap, ObjectMapping mapping)
+        public static void ApplyColors(Dictionary<string, Color> colorMap, ObjectMapping mapping)
         {
-            if (vertexcolors == null)
-            {
-                vertexcolors = new List<Color>();
-            }
-
             GameObject gameobject = mapping.gameObject;
-            //check if gameobject still exists
-            if (gameobject == null)
-            {
-                return;
-            }
-
-            //check if mesh still exists
-            Mesh mesh = gameobject.GetComponent<MeshFilter>().sharedMesh;
-            if (mesh == null)
-            {
-                return;
-            }
-
-            // remove the old coloring
-            mesh.colors = null;
-
-            //setup a colorArray
-
-
+            if (gameobject == null) return;
+            Mesh mesh = gameobject.GetComponent<MeshFilter>().mesh;
+            if (mesh == null)   return;
+          
             if (vertexcolors.Capacity < mesh.vertexCount)
-            {
                 vertexcolors.Capacity = mesh.vertexCount;
-            }
-
-            bool colorsApplied = false;
-            for (int i = 0; i < mapping.items.Count; i++)
+           
+            foreach(KeyValuePair<string, ObjectMappingItem> item in mapping.items)
             {
-                //Determine the color
-                string objectID = mapping.items[i].objectID;
+                //fix that it shouldnt be always applied
+                
+                
                 Color color;
-                if (colorMap.ContainsKey(objectID))
-                {
-                    color = colorMap[objectID];
-                    colorsApplied = true;
-                }
+                if (overrideColors.ContainsKey(item.Key))
+                    color = overrideColors[item.Key];
+                else if (colorMap.ContainsKey(item.Key))
+                    color = colorMap[item.Key];
                 else
-                {
                     color = NO_OVERRIDE_COLOR;
-                }
-
-                //Apply the color to the ColorArray
-                int firstVertex = mapping.items[i].firstVertex;
-                int vertexcount = mapping.items[i].verticesLength;
-                int endVertex = firstVertex + vertexcount;
-
+                
+                int vertexcount = item.Value.verticesLength;
                 for (int j = 0; j < vertexcount; j++)
-                {
                     vertexcolors.Add(color);
-                }
             }
-
-            //apply the colorArray to the mesh;
-            if (colorsApplied)
-            {
-                mesh.SetColors(vertexcolors);
-            }
-
+            mesh.SetColors(vertexcolors);
             vertexcolors.Clear();
         }
     }

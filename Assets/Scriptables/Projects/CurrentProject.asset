@@ -60,5 +60,5 @@ MonoBehaviour:
   - Id: debug-info
     IsEnabled: 0
   - Id: first-person-viewer
-    IsEnabled: 1
+    IsEnabled: 0
   PrefabLibrary: {fileID: 11400000, guid: 03a0c2ac495a64c08b5dd612c9507bd7, type: 2}

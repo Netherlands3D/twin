@@ -7,5 +7,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public string Id { get; }
         public object MappingObject { get; }
         public BoundingBox BoundingBox { get; }
+        
+        public void Select(string subId = null);
+        public void Deselect();
     }
 }

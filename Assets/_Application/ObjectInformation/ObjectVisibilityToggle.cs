@@ -94,6 +94,9 @@ namespace Netherlands3D.Twin.UI
                             Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
                             HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
                             hiddenPropertyData.SetVisibilityForSubObject(feature, false, coord);
+                            
+                            //when the object gets hidden, deselect the selection mesh.
+                            selector.SubObjectSelector.Deselect();
                         }
                     }
                     

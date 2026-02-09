@@ -12,7 +12,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public bool HasObjectMapping => foundObject != null;
         public MeshMapping Object => foundObject; 
 
-        private ColorSetLayer ColorSetLayer { get; set; } = new(0, new());
         private MeshMapping foundObject;
 
         private PointerToWorldPosition pointerToWorldPosition;
@@ -21,19 +20,18 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             pointerToWorldPosition = FindAnyObjectByType<PointerToWorldPosition>();
         }
-
+        
         public void Select(string bagId)
         {
             Deselect();
-            ColorSetLayer = GeometryColorizer.InsertCustomColorSet(
-                -1, 
-                new Dictionary<string, Color> 
-                {
-                    { bagId, new Color(1, 0, 0, 0) }
-                }
-            );
+            foundObject.Select(bagId);
         }
-
+        
+        public void Deselect()
+        {
+            foundObject?.Deselect();
+        }
+        
         public LayerData GetLayerDataForSubObject(ObjectMapping subObject)
         {
             Transform parent = subObject.gameObject.transform.parent;
@@ -45,11 +43,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return null;
         }
 
-        public void Deselect()
-        {
-            GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
-            ColorSetLayer = null;
-        }
 
         public string FindSubObjectAtPointerPosition()
         {
@@ -62,32 +55,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 return bagId;
 
             foreach (MeshMapping mapping in mappings)
-            {                
-                ObjectMapping objectMapping = mapping.ObjectMapping;
-                MeshMappingItem item = mapping.FindItemForPosition(groundPosition);
-                if (item != null)
-                {
-                    foundObject = mapping;
-                    bagId = item.ObjectMappingItem.objectID;
-                    break;
-                }
-            }
-            return bagId;
-        }
-
-        public string FindSubObjectAtPosition(Vector3 position)
-        {
-            foundObject = null;
-            string bagId = null;
-            Vector3 groundPosition = position;
-            Coordinate coord = new Coordinate(groundPosition);
-            List<IMapping> mappings = ObjectSelectorService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
-            if (mappings.Count == 0)
-                return bagId;
-
-            foreach (MeshMapping mapping in mappings)
-            {
-                ObjectMapping objectMapping = mapping.ObjectMapping;
+            { 
                 MeshMappingItem item = mapping.FindItemForPosition(groundPosition);
                 if (item != null)
                 {

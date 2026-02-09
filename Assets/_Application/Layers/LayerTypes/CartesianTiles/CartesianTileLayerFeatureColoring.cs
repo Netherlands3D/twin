@@ -40,7 +40,7 @@ namespace Netherlands3D.Twin.layers.properties
             
             visualization.OnFeatureCreated += AddAttributesToLayerFeature;
             featureColorPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
-            visualization.LayerData.LayerDestroyed.AddListener(OnDestroyCartesianTile);
+            visualization.LayerData.LayerDestroyed.AddListener(OnDestroyLayer);
             
             for (var materialIndex = 0; materialIndex < binaryMeshLayer.DefaultMaterialList.Count; materialIndex++)
             {
@@ -91,13 +91,13 @@ namespace Netherlands3D.Twin.layers.properties
         }
 
         
-        private void OnDestroyCartesianTile()
+        private void OnDestroyLayer()
         {
             LayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<LayerFeatureColorPropertyData>();
             
             visualization.OnFeatureCreated -= AddAttributesToLayerFeature;
             featureColorPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);
-            visualization.LayerData.LayerDestroyed.RemoveListener(OnDestroyCartesianTile);
+            visualization.LayerData.LayerDestroyed.RemoveListener(OnDestroyLayer);
         }
     }
 }

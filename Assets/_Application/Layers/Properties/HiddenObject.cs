@@ -18,7 +18,6 @@ namespace Netherlands3D.Twin.layers.properties
         
         private LayerGameObject visualization;
         
-        public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
         private Dictionary<string, Color> hiddenColors = new Dictionary<string, Color>();
         private int hiddenLayerId = -2;
         
@@ -35,12 +34,11 @@ namespace Netherlands3D.Twin.layers.properties
 
         private void SetupFeatures()
         {
-            ColorSetLayer = GeometryColorizer.InsertCustomColorSet(hiddenLayerId, hiddenColors);
             HiddenObjectsPropertyData hiddenObjectsPropertyData = visualization.LayerData.GetProperty<HiddenObjectsPropertyData>();
             
             visualization.OnFeatureCreated += AddAttributesToLayerFeature;
             hiddenObjectsPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
-            visualization.LayerData.LayerDestroyed.AddListener(OnDestroyCartesianTile);
+            visualization.LayerData.LayerDestroyed.AddListener(OnDestroyLayer);
 
             if(debugFeatures)
             {
@@ -70,10 +68,17 @@ namespace Netherlands3D.Twin.layers.properties
                         string id = feature.Attributes[HiddenObjectsPropertyData.VisibilityAttributeIdentifier];
                         Color storedColor = symbolizer.GetFillColor() ?? Color.white;
                         var visibilityColor = visiblity == true ? storedColor : Color.clear;
-                        hiddenColors.TryAdd(id, visibilityColor);
-                        ColorSetLayer = GeometryColorizer.InsertCustomColorSet(hiddenLayerId, hiddenColors);
+                        hiddenColors[id] = visibilityColor;
                     }
                 }
+            }
+            
+            if(visualization is not CartesianTileLayerGameObject cartesianTile) return;
+            if (cartesianTile.Layer is not BinaryMeshLayer binaryMeshLayer) return;
+
+            foreach (KeyValuePair<Vector2Int, ObjectMapping> kv in binaryMeshLayer.Mappings)
+            {
+                Interaction.ApplyColors(hiddenColors, kv.Value);
             }
         }
         
@@ -97,20 +102,20 @@ namespace Netherlands3D.Twin.layers.properties
                 debugFeatures = false;
             }
         }
-
+        
         private void OnAddedMapping(ObjectMapping mapping)
         {  
-            foreach (ObjectMappingItem item in mapping.items)
+            foreach (ObjectMappingItem item in mapping.items.Values)
             {
                 var layerFeature = visualization.CreateFeature(item);
                 visualization.LayerFeatures.Add(layerFeature.Geometry, layerFeature);
             }
-            visualization.ApplyStyling();
+            OnApplyStyling();
         }
 
         private void OnRemovedMapping(ObjectMapping mapping)
         {
-            foreach (ObjectMappingItem item in mapping.items)
+            foreach (ObjectMappingItem item in mapping.items.Values)
             {
                 visualization.LayerFeatures.Remove(item);
             }
@@ -126,7 +131,7 @@ namespace Netherlands3D.Twin.layers.properties
 
                 foreach (ObjectMapping mapping in binaryMeshLayer.Mappings.Values)
                 {
-                    foreach (ObjectMappingItem item in mapping.items)
+                    foreach (ObjectMappingItem item in mapping.items.Values)
                     {
                         if (item.objectID == bagId)
                         {
@@ -148,30 +153,22 @@ namespace Netherlands3D.Twin.layers.properties
             return feature;
         }
 
-        private void OnDestroyCartesianTile()
+        private void OnDestroyLayer()
         {
             HiddenObjectsPropertyData hiddenObjectsPropertyData = visualization.LayerData.GetProperty<HiddenObjectsPropertyData>();
             
-            //we have to reset all meshcolors by all present styling rules because we cant do this automatically with applystyling
-            //that would mean we would reset the colors for a very large amount of layerfeatures causing enormous performance impact
-            // foreach (KeyValuePair<string, StylingRule> kv in hiddenObjectsPropertyData.StylingRules)
-            // {
-            //     if (kv.Key.Contains(HiddenObjectsPropertyData.VisibilityIdentifier))
-            //     {
-            //         string objectId = hiddenObjectsPropertyData.GetStylingRuleName(kv.Key);
-            //         bool? visibility = hiddenObjectsPropertyData.GetVisibilityForSubObjectById(objectId);
-            //         if (visibility.HasValue)
-            //             GeometryColorizer.InsertCustomColorSet(-2, new Dictionary<string, Color>() { { objectId, Color.white } });
-            //     }
-            // }
-            GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
-            
             visualization.OnFeatureCreated -= AddAttributesToLayerFeature;
             hiddenObjectsPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);
-            visualization.LayerData.LayerDestroyed.RemoveListener(OnDestroyCartesianTile);
+            visualization.LayerData.LayerDestroyed.RemoveListener(OnDestroyLayer);
             
             if(visualization is not CartesianTileLayerGameObject cartesianTile) return;
             if (cartesianTile.Layer is not BinaryMeshLayer binaryMeshLayer) return;
+            
+            hiddenColors.Clear();
+            foreach (KeyValuePair<Vector2Int, ObjectMapping> kv in binaryMeshLayer.Mappings)
+            {
+                Interaction.ApplyColors(hiddenColors, kv.Value);
+            }
             
             binaryMeshLayer.OnMappingCreated.RemoveListener(OnAddedMapping);
             binaryMeshLayer.OnMappingRemoved.RemoveListener(OnRemovedMapping);
