@@ -24,7 +24,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void Select(string bagId)
         {
-            Deselect();
             ColorSetLayer = GeometryColorizer.InsertCustomColorSet(
                 -1, 
                 new Dictionary<string, Color> 

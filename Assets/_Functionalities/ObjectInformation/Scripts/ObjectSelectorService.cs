@@ -11,6 +11,7 @@ using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
 using System.Linq;
+using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -20,6 +21,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     public class ObjectSelectorService : MonoBehaviour
     {
         public SubObjectSelector SubObjectSelector => subObjectSelector;
+        public List<IMapping> SelectedMappings => selectedMappings;
 
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
@@ -28,7 +30,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
-        private List<IMapping> orderedMappings = new List<IMapping>();
+        private List<IMapping> orderedMappings = new();
+        private List<IMapping> selectedMappings = new();
         private Vector3 lastWorldClickedPosition;
         private PointerToWorldPosition pointerToWorldPosition;
         private float minClickDistance = 10;
@@ -191,7 +194,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             {    
                 if (IsClicked())
                 {
-                    Deselect();
+                    bool isModifierPressed = MultiSelectionUtility.AddToSelectionModifierKeyIsPressed();
+                    if (!isModifierPressed)
+                    {
+                        Deselect();
+                    }
                     //the following method calls need to run in order!
                     string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
                     IMapping mapping = FindObjectMapping();
@@ -208,9 +215,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                         if (!mappingVisible)
                             return;
 
-                        layerData.SelectLayer(true);
+                        if(!layerData.IsSelected)
+                            layerData.SelectLayer(true);
                         lastSelectedMappingLayerData = layerData;
-                        SelectBagId(bagId);
+                        SelectBagId(bagId, !isModifierPressed); 
+                        selectedMappings.Add(map);
                         SelectSubObjectWithBagId?.Invoke(map, bagId);
                     }
                     else if (mapping is FeatureMapping feature)
@@ -219,6 +228,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                         layerData.SelectLayer(true);
                         lastSelectedMappingLayerData = layerData;
                         SelectFeatureMapping(feature);
+                        selectedMappings.Add(feature);
                         SelectFeature?.Invoke(feature);
                     }
                 }
@@ -295,8 +305,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return subObjectSelector.FindSubObjectAtPointerPosition();            
         }
 
-        public void SelectBagId(string bagId)
+        public void SelectBagId(string bagId, bool deselectPrevious = true)
         {
+            if(deselectPrevious)
+                subObjectSelector.Deselect();
             subObjectSelector.Select(bagId);
         }
 
@@ -401,6 +413,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void Deselect()
         {
+            selectedMappings.Clear();
             subObjectSelector.Deselect();
             featureSelector.Deselect();
             OnDeselect.Invoke();

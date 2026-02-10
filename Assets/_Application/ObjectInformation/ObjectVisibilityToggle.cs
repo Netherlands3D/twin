@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
@@ -80,20 +81,40 @@ namespace Netherlands3D.Twin.UI
                 service.ActiveDialog.Confirm.AddListener(() =>
                 {
                     LayerGameObject layer;
-                    if(currentSelectedFeatureObject is MeshMapping mapping)
-                    {
-                        //was the mapping selected before a lod replacement?
-                        if (mapping.ObjectMapping == null)
-                            mapping = selector.GetReplacedMapping(mapping);
 
-                        LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, mapping, out layer);
-                        if (layer != null)
-                        {   
-                            Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
-                            HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
-                            hiddenPropertyData.SetVisibilityForSubObject(feature, false, coord);
+                    List<IMapping> selectedMappings = selector.SelectedMappings;
+                    foreach (var map in selectedMappings)
+                    {
+                        if (map is MeshMapping mapping)
+                        {
+                            //was the mapping selected before a lod replacement?
+                            if (mapping.ObjectMapping == null)
+                                mapping = selector.GetReplacedMapping(mapping);
+
+                            LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, mapping, out layer);
+                            if (layer != null)
+                            {   
+                                Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
+                                HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
+                                hiddenPropertyData.SetVisibilityForSubObject(feature, false, coord);
+                            }
                         }
                     }
+                    
+                    // if(currentSelectedFeatureObject is MeshMapping mapping)
+                    // {
+                    //     //was the mapping selected before a lod replacement?
+                    //     if (mapping.ObjectMapping == null)
+                    //         mapping = selector.GetReplacedMapping(mapping);
+                    //
+                    //     LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, mapping, out layer);
+                    //     if (layer != null)
+                    //     {   
+                    //         Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
+                    //         HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
+                    //         hiddenPropertyData.SetVisibilityForSubObject(feature, false, coord);
+                    //     }
+                    // }
                     
                     UpdateButton();
                 });
