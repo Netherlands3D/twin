@@ -218,7 +218,7 @@ namespace Netherlands3D.Twin.Projects
             if (newProject.Version < 2)
             {
                 var groundLayer = App.Layers.Add(LayerBuilder.Create().NamedAs("Ondergrond").OfType("f60b3c7f11823a9ce86527101bac825b"));
-                groundLayer.LayerData.SetSiblingIndex(groundLayer.LayerData.ParentLayer.ChildrenLayers.Count - 1);
+                groundLayer.LayerData.SetParent(groundLayer.LayerData.ParentLayer, groundLayer.LayerData.ParentLayer.ChildrenLayers.Count);
                 newProject.Version = 2;
             }
         }

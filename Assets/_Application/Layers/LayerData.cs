@@ -241,7 +241,7 @@ namespace Netherlands3D.Twin.Layers
         {
             if (newParent == null)
                 newParent = Root;
-
+            
             //in two cases we should not Set a new parent, since it would create a cyclical reference:
             //1. if you are trying to parent a layer to itself
             //2. if this LayerData is somewhere in the parent chain of the new parent.
@@ -299,22 +299,6 @@ namespace Netherlands3D.Twin.Layers
                 current = current.ParentLayer;
             }
             return false;
-        }
-
-        public void SetSiblingIndex(int siblingIndex)
-        {
-            if (ParentLayer == null)
-                return;
-
-            if (siblingIndex < 0 || siblingIndex >= ParentLayer.ChildrenLayers.Count)
-                return;
-            
-            // adjust the new index if moving after oldIndex since we will be removing one from the list
-            if (siblingIndex > siblingIndex)
-                siblingIndex--;
-            
-            ParentLayer.ChildrenLayers.Remove(this);
-            ParentLayer.ChildrenLayers.Insert(siblingIndex, this);
         }
 
         public virtual void Dispose()
