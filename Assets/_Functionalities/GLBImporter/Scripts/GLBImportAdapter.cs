@@ -2,6 +2,7 @@ using System.IO;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.GLBImporter.LayerPresets;
 using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Services;
 using UnityEngine;
@@ -9,7 +10,7 @@ using UnityEngine;
 namespace Netherlands3D.Functionalities.GLBImporter
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/GLBImportAdapter", fileName = "GLBImportAdapter", order = 0)]
-    public class GLBImportAdapter : ScriptableObject, IDataTypeAdapter<Layer>
+    public class GLBImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetArgs>
     {
         [SerializeField] private GLBSpawner layerPrefab;
 
@@ -38,11 +39,11 @@ namespace Netherlands3D.Functionalities.GLBImporter
             } 
         }
 
-        public Layer Execute(LocalFile localFile)
+        public LayerPresetArgs Execute(LocalFile localFile)
         {            
             var uri = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
 
-            return App.Layers.Add(new GltfPreset.Args(localFile.FileName, uri));
+            return new GltfPreset.Args(localFile.FileName, uri);
         }
     }
 }

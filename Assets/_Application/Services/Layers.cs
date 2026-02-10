@@ -53,8 +53,20 @@ namespace Netherlands3D.Twin.Services
         public async Task<Layer> AddFromUrl(Uri uri, StoredAuthorization authorization)
         {
             var result = await fromUrlImporter.DetermineAdapterAndReturnResult(uri, authorization);
-            if (result is Layer layer)
-                return layer;
+            if (result is LayerPresetArgs preset)
+            {
+                return Add(preset);
+            }
+            else if (result is LayerPresetArgs[] presets)
+            {
+                var builder = new LayerBuilder().OfType("folder").NamedAs(uri.ToString()); //todo: make preset?
+                var folder = App.Layers.Add(builder);
+                foreach (var p in presets)
+                {
+                    Add(p);
+                    // SetParent(folder);
+                }
+            }
             
             throw new NullReferenceException("Could not determine Layer adapter for the url:  " + uri);
         }

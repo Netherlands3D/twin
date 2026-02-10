@@ -20,13 +20,11 @@ namespace Netherlands3D.Functionalities.Wfs.LayerPresets
 
             public Args(
                 Uri featureUrl, 
-                string title, 
-                LayerData parent
+                string title
             ) {
                 FeatureUrl = featureUrl ?? throw new ArgumentNullException(nameof(featureUrl));
                 Title = !string.IsNullOrWhiteSpace(title) ? title
                     : throw new ArgumentException("Title is required.", nameof(title));
-                Parent = parent;
             }
         }
 

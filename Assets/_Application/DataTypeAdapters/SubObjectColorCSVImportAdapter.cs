@@ -1,6 +1,7 @@
 using System.IO;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.DataSets;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles.Properties;
 using Netherlands3D.Twin.Projects;
@@ -11,7 +12,7 @@ using UnityEngine.Events;
 namespace Netherlands3D.Twin.DataTypeAdapters
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/CSVImportAdapter", fileName = "CSVImportAdapter", order = 0)]
-    public class SubObjectColorCSVImportAdapter : ScriptableObject, IDataTypeAdapter<Layer>
+    public class SubObjectColorCSVImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetArgs>
     {
         [SerializeField] private CartesianTileSubObjectColorLayerGameObject layerGameObjectPrefab;
         [SerializeField] private UnityEvent<string> csvReplacedMessageEvent = new();
@@ -23,7 +24,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             return new CartesianTileSubObjectColorCsv(localFile.LocalFilePath).IsValid();
         }
 
-        public Layer Execute(LocalFile localFile)
+        public LayerPresetArgs Execute(LocalFile localFile)
         {
             //todo: temp fix to allow only 1 dataset layer
             if (activeCartesianTileSubObjectColorLayer != null)

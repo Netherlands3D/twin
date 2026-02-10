@@ -2,14 +2,13 @@ using System;
 using System.IO;
 using UnityEngine;
 using Netherlands3D.DataTypeAdapters;
-using Netherlands3D.Twin;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Projects;
-using Netherlands3D.Twin.Services;
 
 namespace Netherlands3D.Functionalities.CityJSON
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/CityJSONImportAdapter", fileName = "CityJSONImportAdapter", order = 0)]
-    public class CityJSONImportAdapter : ScriptableObject, IDataTypeAdapter<Layer>
+    public class CityJSONImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetArgs>
     {
         public bool Supports(LocalFile localFile)
         {
@@ -23,13 +22,13 @@ namespace Netherlands3D.Functionalities.CityJSON
                 );
         }
 
-        public Layer Execute(LocalFile localFile)
+        public LayerPresetArgs Execute(LocalFile localFile)
         {
             var preset = new LayerPresets.CityJSONPreset.Args(
                 CreateName(localFile),
                 AssetUriFactory.ConvertLocalFileToAssetUri(localFile)
             );
-            return App.Layers.Add(preset);
+            return preset;
         }
 
         private static string CreateName(LocalFile f)

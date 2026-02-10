@@ -20,12 +20,10 @@ namespace Netherlands3D.Functionalities.Wms.LayerPresets
             public Args(
                 Uri uri, 
                 MapFilters filters, 
-                LayerData parent, 
                 bool defaultEnabled = false
             ) {
                 Url = uri ?? throw new ArgumentNullException(nameof(uri));
                 Filters = filters;
-                Parent = parent;
                 DefaultEnabled = defaultEnabled;
             }
         }
