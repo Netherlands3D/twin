@@ -5,8 +5,6 @@ using JetBrains.Annotations;
 using Netherlands3D.Credentials;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.AssetBundles;
-using Netherlands3D.Twin.DataTypeAdapters;
-using Netherlands3D.Twin.Layers;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -45,7 +43,7 @@ namespace Netherlands3D.Twin.Projects
         public UnityEvent OnLoadStarted;
 
         [Tooltip("called when the load action completed successfully")]
-        public UnityEvent OnLoadCompleted;
+        public UnityEvent<ProjectData> OnLoadCompleted;
 
         [Tooltip("called when the load action failed")]
         public UnityEvent OnLoadFailed;
@@ -205,22 +203,11 @@ namespace Netherlands3D.Twin.Projects
             {
                 Debug.Log("loading nl3d file: " + filePath);
                 var newProject = projectDataStore.LoadFromFile(filePath);
-                UpdateProjectVersion(newProject);
-                OnLoadCompleted.Invoke();
+                OnLoadCompleted.Invoke(newProject);
                 return;
             }
 
             OnLoadFailed.Invoke();
-        }
-
-        private void UpdateProjectVersion(ProjectData newProject)
-        {
-            if (newProject.Version < 2)
-            {
-                var groundLayer = App.Layers.Add(LayerBuilder.Create().NamedAs("Ondergrond").OfType("f60b3c7f11823a9ce86527101bac825b"));
-                groundLayer.LayerData.SetParent(groundLayer.LayerData.ParentLayer, groundLayer.LayerData.ParentLayer.ChildrenLayers.Count);
-                newProject.Version = 2;
-            }
         }
 
         public void Redo()
