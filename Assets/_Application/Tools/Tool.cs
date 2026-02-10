@@ -21,6 +21,7 @@ namespace Netherlands3D.Twin.Tools
         [FormerlySerializedAs("onDeactivate")]
         public UnityEvent onClose = new();
         public UnityEvent<Tool> onToggleInspector = new();
+        public UnityEvent<GameObject> onSpawnedPrefab = new();
 
         [Header("Content")]
         [Tooltip("Prefab to show in the UI Inspector when this tool is activated")]
@@ -71,11 +72,12 @@ namespace Netherlands3D.Twin.Tools
         public GameObject[] SpawnPrefabInstances(Transform parent = null)
         {
             DestroyPrefabInstances();
-
+         
             functionalityInstances = new GameObject[functionalityPrefabs.Length];
             for (int i = 0; i < functionalityPrefabs.Length; i++)
             {
                 functionalityInstances[i] = Instantiate(functionalityPrefabs[i],parent,true);
+                onSpawnedPrefab.Invoke(functionalityInstances[i]);
             }
             return functionalityInstances;
         }
