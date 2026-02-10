@@ -41,7 +41,6 @@ namespace Netherlands3D.Twin.ObjectInformation
                 buildingColors.Add(id, Color.clear);
                 selector.BlockBagId(id, true);
             }
-
             foreach (string id in alwaysHiddenData.bagIds)
             {
                 buildingColors.Add(id, Color.clear);
