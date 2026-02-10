@@ -11,6 +11,7 @@ using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
 using System.Linq;
+using GG.Extensions;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -21,7 +22,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     public class ObjectSelectorService : MonoBehaviour
     {
         public SubObjectSelector SubObjectSelector => subObjectSelector;
-        public List<IMapping> SelectedMappings => selectedMappings;
+        public Dictionary<string, IMapping> SelectedMappings => selectedMappings;
 
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
@@ -31,7 +32,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
         private List<IMapping> orderedMappings = new();
-        private List<IMapping> selectedMappings = new();
+        private Dictionary<string, IMapping> selectedMappings = new();
         private Vector3 lastWorldClickedPosition;
         private PointerToWorldPosition pointerToWorldPosition;
         private float minClickDistance = 10;
@@ -219,7 +220,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                             layerData.SelectLayer(true);
                         lastSelectedMappingLayerData = layerData;
                         SelectBagId(bagId, !isModifierPressed); 
-                        selectedMappings.Add(map);
+                        selectedMappings.Add(bagId, map);
                         SelectSubObjectWithBagId?.Invoke(map, bagId);
                     }
                     else if (mapping is FeatureMapping feature)
@@ -228,7 +229,21 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                         layerData.SelectLayer(true);
                         lastSelectedMappingLayerData = layerData;
                         SelectFeatureMapping(feature);
-                        selectedMappings.Add(feature);
+
+                        string key = feature.Id;
+                        //when feature has no id, then get the newly created submesh name
+                        if (feature.Id == null) 
+                        {
+                            List<Transform> children = feature.VisualisationLayer.Transform.GetChildren();
+                            if (children.Count == 0)
+                            {
+                                key = "invalid mapping";
+                                Debug.LogError(key);
+                            }
+                            else
+                                key = children[children.Count - 1].gameObject.name;
+                        }
+                        selectedMappings.Add(key, feature);
                         SelectFeature?.Invoke(feature);
                     }
                 }

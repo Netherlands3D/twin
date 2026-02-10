@@ -82,16 +82,16 @@ namespace Netherlands3D.Twin.UI
                 {
                     LayerGameObject layer;
 
-                    List<IMapping> selectedMappings = selector.SelectedMappings;
-                    foreach (var map in selectedMappings)
+                    Dictionary<string, IMapping> selectedMappings = selector.SelectedMappings;
+                    foreach(KeyValuePair<string, IMapping> kv in selectedMappings)
                     {
-                        if (map is MeshMapping mapping)
+                        if (kv.Value is MeshMapping mapping)
                         {
                             //was the mapping selected before a lod replacement?
                             if (mapping.ObjectMapping == null)
                                 mapping = selector.GetReplacedMapping(mapping);
 
-                            LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, mapping, out layer);
+                            LayerFeature feature = selector.GetLayerFeatureFromBagID(kv.Key, mapping, out layer);
                             if (layer != null)
                             {   
                                 Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
@@ -122,7 +122,7 @@ namespace Netherlands3D.Twin.UI
                 if (currentSelectedBagId != null)
                 {
                     HideObjectDialog dialog = service.ActiveDialog as HideObjectDialog;
-                    dialog.SetBagId(currentSelectedBagId);
+                    dialog.SetBagId(new List<string>(){"0","1","2"});
                 }
             }
         }
