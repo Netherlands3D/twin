@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: ProjectData
   m_EditorClassIdentifier: 
   Version: 1
-  SavedTimestamp: 20241008130521
-  UUID: 6a9f1798-d710-4956-96da-f109deb1487c
+  SavedTimestamp: 20260115143241
+  UUID: db487c0a-b8f9-4255-8652-3ff1bf974e8d
   CameraRotation:
-  - 34.60002136230469
-  - 58.59999084472656
-  - -0.000008297763088194188
+  - 60.000003814697266
+  - 0
+  - 0
   UseCurrentTime: 0
   functionalities:
   - Id: terrein
