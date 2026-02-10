@@ -244,14 +244,15 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private List<GameObject> selectedGameObjects = new List<GameObject>();
 
-        public void Select(string subId = null)
+        public GameObject Select(string subId = null)
         {
             //transform for mesh world matrix
             selectedGameObjects = CreateFeatureGameObjects();
-            if (selectedGameObjects.Count == 0) return; 
+            if (selectedGameObjects.Count == 0) return null; 
 
             Color selectionColor = Color.blue;           
             visualisationLayer.SetVisualisationColor(selectedGameObjects[0].transform, meshes, selectionColor);
+            return SelectedGameObject;
         }
 
         public void Deselect()

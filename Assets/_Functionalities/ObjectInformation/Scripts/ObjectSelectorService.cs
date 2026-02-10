@@ -11,6 +11,7 @@ using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using GG.Extensions;
+using Netherlands3D.Twin;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -86,7 +87,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnEnable()
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
-
+            ClickNothingPlane.ClickedOnNothing.AddListener(OnPointerClick);
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.AddListener(Deselect);
         }
@@ -94,7 +95,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnDisable()
         {
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
-
+            ClickNothingPlane.ClickedOnNothing.RemoveListener(OnPointerClick);
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.RemoveListener(Deselect);
         }
@@ -187,94 +188,102 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     return true;
             return false;
         }
-
-        private void Update()
-        {            
+        
+        private void OnPointerClick()
+        {
             if (IsAnyToolActive())
-            {    
-                if (IsClicked())
+            {
+                bool isModifierPressed = MultiSelectionUtility.AddToSelectionModifierKeyIsPressed();
+                if (!isModifierPressed)
                 {
-                    bool isModifierPressed = MultiSelectionUtility.AddToSelectionModifierKeyIsPressed();
-                    if (!isModifierPressed)
-                    {
-                        Deselect();
-                    }
-                    //the following method calls need to run in order!
-                    string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
-                    IMapping mapping = FindObjectMapping();
-                    bool mappingVisible = IsMappingVisible(mapping, bagId);
-                    
-                    if ((mapping == null || !mappingVisible) && lastSelectedMappingLayerData != null)
-                    {
-                        //when nothing is selected but there was something selected, deselect the current active layer
-                        lastSelectedMappingLayerData.DeselectLayer();
-                        lastSelectedMappingLayerData = null;
-                    }
-                    if (mapping is MeshMapping map)
-                    {
-                        LayerData layerData = subObjectSelector.GetLayerDataForSubObject(map.ObjectMapping);
-                        if (!mappingVisible)
-                            return;
+                    Deselect();
+                }
+                //the following method calls need to run in order!
+                string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
+                IMapping mapping = FindObjectMapping();
+                bool mappingVisible = IsMappingVisible(mapping, bagId);
+                
+                //when nothing is selected but there was something selected, deselect the current active layer, but keep selection if modifier was pressed
+                if ((mapping == null || !mappingVisible) && lastSelectedMappingLayerData != null && !isModifierPressed)
+                {
+                    lastSelectedMappingLayerData.DeselectLayer();
+                    lastSelectedMappingLayerData = null;
+                }
+                if (mapping is MeshMapping map)
+                {
+                    LayerData layerData = subObjectSelector.GetLayerDataForSubObject(map.ObjectMapping);
+                    if (!mappingVisible)
+                        return;
 
-                        if(!layerData.IsSelected)
-                            layerData.SelectLayer(true);
-                        lastSelectedMappingLayerData = layerData;
-                        SelectBagId(bagId, !isModifierPressed); 
-                        selectedMappings.Add(bagId, map);
-                        SelectSubObjectWithBagId?.Invoke(map, bagId);
-                    }
-                    else if (mapping is FeatureMapping feature)
-                    {
-                        LayerData layerData = feature.VisualisationParent.LayerData;
+                    if(!layerData.IsSelected)
                         layerData.SelectLayer(true);
-                        lastSelectedMappingLayerData = layerData;
-                        SelectFeatureMapping(feature);
+                    lastSelectedMappingLayerData = layerData;
+                    SelectBagId(bagId, !isModifierPressed); 
+                    selectedMappings.TryAdd(bagId, map);
+                    SelectSubObjectWithBagId?.Invoke(map, bagId);
+                }
+                else if (mapping is FeatureMapping feature)
+                {
+                    LayerData layerData = feature.VisualisationParent.LayerData;
+                    layerData.SelectLayer(true);
+                    lastSelectedMappingLayerData = layerData;
+                    SelectFeatureMapping(feature);
 
-                        string key = feature.Id;
-                        //when feature has no id, then get the newly created submesh name
-                        if (feature.Id == null) 
+                    string key = feature.Id;
+                    //when feature has no id, then get the newly created submesh name
+                    if (feature.Id == null) 
+                    {
+                        List<Transform> children = feature.VisualisationLayer.Transform.GetChildren();
+                        if (children.Count == 0)
                         {
-                            List<Transform> children = feature.VisualisationLayer.Transform.GetChildren();
-                            if (children.Count == 0)
-                            {
-                                key = "invalid mapping";
-                                Debug.LogError(key);
-                            }
-                            else
-                                key = children[children.Count - 1].gameObject.name;
+                            key = "invalid mapping";
+                            Debug.LogError(key);
                         }
-                        selectedMappings.Add(key, feature);
-                        SelectFeature?.Invoke(feature);
+                        else
+                            key = children[children.Count - 1].gameObject.name;
                     }
+                    selectedMappings.TryAdd(key, feature);
+                    SelectFeature?.Invoke(feature);
                 }
             }
         }
 
-        private bool IsClicked()
-        {
-            var click = Pointer.current.press.wasPressedThisFrame;
+        // private void Update()
+        // {            
+        //     if (IsAnyToolActive())
+        //     {    
+        //         if (IsClicked())
+        //         {
+        //             
+        //         }
+        //     }
+        // }
 
-            if (click)
-            {
-                waitingForRelease = true;
-                draggedBeforeRelease = false;
-                return false;
-            }
-
-            if (waitingForRelease && !draggedBeforeRelease)
-            {
-                //Check if next release should be ignored ( if we dragged too much )
-                draggedBeforeRelease = Pointer.current.delta.ReadValue().sqrMagnitude > 0.5f;
-            }
-
-            if (Pointer.current.press.wasReleasedThisFrame == false) return false;
-
-            waitingForRelease = false;
-
-            if (draggedBeforeRelease) return false;
-
-            return cameraInputSystemProvider.OverLockingObject == false;
-        }
+        // private bool IsClicked()
+        // {
+        //     var click = Pointer.current.press.wasPressedThisFrame;
+        //
+        //     if (click)
+        //     {
+        //         waitingForRelease = true;
+        //         draggedBeforeRelease = false;
+        //         return false;
+        //     }
+        //
+        //     if (waitingForRelease && !draggedBeforeRelease)
+        //     {
+        //         //Check if next release should be ignored ( if we dragged too much )
+        //         draggedBeforeRelease = Pointer.current.delta.ReadValue().sqrMagnitude > 0.5f;
+        //     }
+        //
+        //     if (Pointer.current.press.wasReleasedThisFrame == false) return false;
+        //
+        //     waitingForRelease = false;
+        //
+        //     if (draggedBeforeRelease) return false;
+        //
+        //     return cameraInputSystemProvider.OverLockingObject == false;
+        // }
 
         public bool IsMappingVisible(IMapping mapping, string bagId)
         {

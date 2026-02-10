@@ -197,28 +197,24 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
-        private List<GameObject> selectedMeshes = new();
-
-        public void Select(string subId)
+        public GameObject Select(string subId)
         {
-            GameObject selectedMesh = new GameObject(subId);
             ObjectMappingItem item = objectMapping.items[subId];
-            if(item == null) return;
+            if(item == null) return null;
             
+            GameObject selectedMesh = new GameObject(subId);
             Mesh mesh = CreateMeshFromMapping(ObjectMapping, item, out Vector3 localCentroid);
             MeshFilter mFilter = selectedMesh.AddComponent<MeshFilter>();
             mFilter.mesh = mesh;
             MeshRenderer mRenderer = selectedMesh.AddComponent<MeshRenderer>();
             mRenderer.material = selectionMaterial;
             selectedMesh.transform.position = ObjectMapping.transform.TransformPoint(localCentroid);
-            
-            selectedMeshes.Add(selectedMesh);
+            return selectedMesh;
         }
 
         public void Deselect()
         {
-            foreach (GameObject selectedMesh in selectedMeshes)
-                GameObject.Destroy(selectedMesh);
+           
         }
     }
 

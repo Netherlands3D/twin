@@ -15,6 +15,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private MeshMapping foundObject;
 
         private PointerToWorldPosition pointerToWorldPosition;
+        private List<GameObject> selectedMeshes = new();
 
         private void Awake()
         {
@@ -23,12 +24,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         
         public void Select(string bagId)
         {
-            foundObject.Select(bagId);
+            GameObject visual = foundObject.Select(bagId);
+            if(visual != null)
+                selectedMeshes.Add(visual);
         }
         
         public void Deselect()
         {
             foundObject?.Deselect();
+            foreach (GameObject selectedMesh in selectedMeshes) 
+                Destroy(selectedMesh); 
+            selectedMeshes.Clear();
         }
         
         public LayerData GetLayerDataForSubObject(ObjectMapping subObject)
