@@ -147,28 +147,24 @@ namespace Netherlands3D.Twin.UI
             var scaledZ = atScreenPosition.z / disappearDistance * 1000;
             atScreenPosition.z = scaledZ;
             rectTransform.position = atScreenPosition;
+            pointTransform.pivot = new Vector2(0.5f, 0.5f);
+            pointTransform.position = atScreenPosition;
 
             switch (snappingSide)
             {
                 case SnappingSide.Left:
                 {
                     rectTransform.pivot = new Vector2(-localDistanceToPoint / rectTransform.rect.width, 0.5f);
-                    pointTransform.pivot = new Vector2(0.5f, 0.5f);
-                    pointTransform.position = atScreenPosition;
                     break;
                 }
                 case SnappingSide.Right:
                 {
                     rectTransform.pivot = new Vector2(1 + localDistanceToPoint / rectTransform.rect.width, 0.5f);
-                    pointTransform.pivot = new Vector2(0.5f, 0.5f);
-                    pointTransform.position = atScreenPosition;
                     break;
                 }
                 case SnappingSide.Above:
                 {
                     rectTransform.pivot = new Vector2(0.5f, -localDistanceToPoint / rectTransform.rect.height);
-                    pointTransform.pivot = new Vector2(0.5f, 0.5f);
-                    pointTransform.position = atScreenPosition;
                     break;
                 }
             }
