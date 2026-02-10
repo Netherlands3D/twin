@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3396860488134915228}
   - component: {fileID: 2562595831614236368}
   - component: {fileID: 2858451392867820117}
+  - component: {fileID: 161295898398469103}
   m_Layer: 0
   m_Name: ProjectDataHandler
   m_TagString: Untagged
@@ -104,6 +105,19 @@ MonoBehaviour:
   OnLoadCompleted:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 161295898398469103}
+        m_TargetAssemblyTypeName: Netherlands3D.Twin.Projects.ProjectDataVersionUpgrader,
+          eu.netherlands3d.twin
+        m_MethodName: UpdateProjectVersion
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 11400000, guid: 04532d925262d428a882e0fae89db4d1, type: 2}
         m_TargetAssemblyTypeName: Netherlands3D.Events.TriggerEvent, eu.netherlands3d.event-system.Runtime
         m_MethodName: InvokeStarted
@@ -202,3 +216,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
+--- !u!114 &161295898398469103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2174600510305605328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d954fc23cd95b4337a420beaea5b93f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
