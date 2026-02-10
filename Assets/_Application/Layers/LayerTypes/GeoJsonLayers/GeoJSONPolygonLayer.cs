@@ -92,10 +92,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// <param name="vertexColors"></param>
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
         {
-            PolygonVisualisation visualisation = GetPolygonVisualisationByMesh(meshes);
-            if(visualisation != null)
+            foreach (var mesh in meshes)
             {
-                visualisation.VisualisationMaterial = polygonSelectionVisualizationMaterial;
+                PolygonVisualisation visualisation = GetPolygonVisualisationByMesh(mesh);
+                if (visualisation != null)
+                {
+                    visualisation.VisualisationMaterial = polygonSelectionVisualizationMaterial;
+                }
             }
         }
 
@@ -105,16 +108,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// </summary>
         /// <param name="meshes"></param>
         /// <returns></returns>
-        public PolygonVisualisation GetPolygonVisualisationByMesh(List<Mesh> meshes)
+        public PolygonVisualisation GetPolygonVisualisationByMesh(Mesh mesh)
         {
             foreach (KeyValuePair<Feature, FeaturePolygonVisualisations> fpv in spawnedVisualisations)
             {
                 List<PolygonVisualisation> visualisations = fpv.Value.Data;
                 foreach (PolygonVisualisation pv in visualisations)
                 {
-                    if (!meshes.Contains(pv.PolygonMesh)) continue;
-    
-                    return pv;
+                    if (mesh == pv.PolygonMesh) 
+                        return pv;
                 }
             }
             return null;

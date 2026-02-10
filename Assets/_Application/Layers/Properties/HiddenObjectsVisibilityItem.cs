@@ -9,8 +9,8 @@ namespace Netherlands3D.Twin.Layers.Properties
     public class HiddenObjectsVisibilityItem : MonoBehaviour, IPointerDownHandler, ISelectable 
     {
         [SerializeField] private Toggle toggle;
-        [SerializeField] private TMP_Text objectId;
-
+        [SerializeField] private BagIdLabel objectId;
+        [SerializeField] private RectTransform bagIdContainer;
         [SerializeField] private Sprite visible;
         [SerializeField] private Sprite invisible;
 
@@ -18,7 +18,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         public UnityEvent<string> OnSelectItem = new();
 
         public bool IsSelected => selected;
-        public string ObjectId => objectId.text;
+        public string ObjectId => objectId.Text;
         public Image Image => image;
 
         private bool selected = false;
@@ -30,7 +30,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             toggle.onValueChanged.AddListener(OnToggle);
             image = toggle.targetGraphic.GetComponent<Image>();
             button = gameObject.GetComponent<HiddenObjectsSelectableButton>();
-
+            objectId = Instantiate(objectId, bagIdContainer);
         }
 
         void OnToggle(bool isOn)
@@ -57,12 +57,15 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public void SetObjectId(string id)
         {
-            objectId.text = id;
+            
+            
+            
+            objectId.SetText(id);
         }
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            OnSelectItem.Invoke(objectId.text);
+            OnSelectItem.Invoke(objectId.Text);
         }
 
         public void SetSelected(bool isSelected)

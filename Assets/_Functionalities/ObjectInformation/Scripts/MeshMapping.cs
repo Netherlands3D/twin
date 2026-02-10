@@ -197,11 +197,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
-        private GameObject selectedMesh;
+        private List<GameObject> selectedMeshes = new();
 
         public void Select(string subId)
         {
-            selectedMesh = new GameObject(subId);
+            GameObject selectedMesh = new GameObject(subId);
             ObjectMappingItem item = objectMapping.items[subId];
             if(item == null) return;
             
@@ -211,11 +211,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             MeshRenderer mRenderer = selectedMesh.AddComponent<MeshRenderer>();
             mRenderer.material = selectionMaterial;
             selectedMesh.transform.position = ObjectMapping.transform.TransformPoint(localCentroid);
+            
+            selectedMeshes.Add(selectedMesh);
         }
 
         public void Deselect()
         {
-            if(selectedMesh != null)
+            foreach (GameObject selectedMesh in selectedMeshes)
                 GameObject.Destroy(selectedMesh);
         }
     }

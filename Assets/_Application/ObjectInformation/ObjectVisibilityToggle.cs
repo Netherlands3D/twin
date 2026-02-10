@@ -75,7 +75,7 @@ namespace Netherlands3D.Twin.UI
             service.CloseDialog();
 
             if (currentSelectedFeatureObject == null) return;
-            
+
             if (toggle)
             {
                 service.ShowDialog(visibilityDialog, offset, visibilityToggle.GetComponent<RectTransform>());
@@ -85,7 +85,7 @@ namespace Netherlands3D.Twin.UI
                     LayerGameObject layer;
 
                     Dictionary<string, IMapping> selectedMappings = selector.SelectedMappings;
-                    foreach(KeyValuePair<string, IMapping> kv in selectedMappings)
+                    foreach (KeyValuePair<string, IMapping> kv in selectedMappings)
                     {
                         if (kv.Value is MeshMapping mapping)
                         {
@@ -93,18 +93,21 @@ namespace Netherlands3D.Twin.UI
                             if (mapping.ObjectMapping == null)
                                 mapping = selector.GetReplacedMapping(mapping);
 
-                        LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, mapping, out layer);
-                        if (layer != null)
-                        {   
-                            Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
-                            HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
-                            hiddenPropertyData.SetVisibilityForSubObject(feature, false, coord);
-                            
-                            //when the object gets hidden, deselect the selection mesh.
-                            selector.SubObjectSelector.Deselect();
+                            LayerFeature feature = selector.GetLayerFeatureFromBagID(kv.Key, mapping, out layer);
+                            if (layer != null)
+                            {
+                                Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping,
+                                    (ObjectMappingItem)feature.Geometry);
+                                HiddenObjectsPropertyData hiddenPropertyData =
+                                    layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
+                                hiddenPropertyData.SetVisibilityForSubObject(feature, false, coord);
+
+                                //when the object gets hidden, deselect the selection mesh.
+                                selector.SubObjectSelector.Deselect();
+                            }
                         }
                     }
-                    
+
                     // if(currentSelectedFeatureObject is MeshMapping mapping)
                     // {
                     //     //was the mapping selected before a lod replacement?
@@ -119,14 +122,14 @@ namespace Netherlands3D.Twin.UI
                     //         hiddenPropertyData.SetVisibilityForSubObject(feature, false, coord);
                     //     }
                     // }
-                    
+
                     UpdateButton();
                 });
 
                 if (currentSelectedBagId != null)
                 {
                     HideObjectDialog dialog = service.ActiveDialog as HideObjectDialog;
-                    dialog.SetBagId(new List<string>(){"0","1","2"});
+                    dialog.SetBagId(new List<string>() { "0", "1", "2" });
                 }
             }
         }
