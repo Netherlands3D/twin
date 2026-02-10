@@ -261,8 +261,6 @@ namespace Netherlands3D.SelectionTools
         public override void SetDrawMode(DrawMode mode)
         {
             this.mode = mode;
-            Debug.Log(this.mode);
-
             gridHighlight.gameObject.SetActive(mode != DrawMode.Selected);
 
         }
