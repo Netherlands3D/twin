@@ -241,7 +241,7 @@ namespace Netherlands3D.Twin.Layers
         {
             if (newParent == null)
                 newParent = Root;
-
+            
             //in two cases we should not Set a new parent, since it would create a cyclical reference:
             //1. if you are trying to parent a layer to itself
             //2. if this LayerData is somewhere in the parent chain of the new parent.
