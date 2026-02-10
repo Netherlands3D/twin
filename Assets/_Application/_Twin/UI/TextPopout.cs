@@ -26,9 +26,9 @@ namespace Netherlands3D.Twin.UI
         public UnityEvent TextFieldDoubleClicked;
         public UnityEvent TextFieldInputConfirmed;
 
-        private float heightAboveWorldPosition = 0.5f;
+        private float localDistanceToPoint = 20;
         
-        public enum SnappingSide { Side, Above }
+        public enum SnappingSide { Left, Right, Above }
         private SnappingSide snappingSide = SnappingSide.Above;
         
         public TMP_InputField TextField => textField;
@@ -150,20 +150,23 @@ namespace Netherlands3D.Twin.UI
 
             switch (snappingSide)
             {
-                case SnappingSide.Side:
+                case SnappingSide.Left:
                 {
-                    //the snapping pivot point is given to the parent, so lets inherit this so we can adjust the target point accordingly
-                    pointTransform.pivot = rectTransform.pivot;
-                    pointTransform.anchorMin = rectTransform.pivot;
-                    pointTransform.anchorMax = rectTransform.pivot;
-                    float half = Mathf.Sign(rectTransform.pivot.x - 0.5f) * 0.5f;
-                    float childPosX = pointTransform.rect.width * half;
-                    pointTransform.anchoredPosition = new Vector2(childPosX * pointTransform.localScale.x, 0);
+                    rectTransform.pivot = new Vector2(-localDistanceToPoint / rectTransform.rect.width, 0.5f);
+                    pointTransform.pivot = new Vector2(0.5f, 0.5f);
+                    pointTransform.position = atScreenPosition;
+                    break;
+                }
+                case SnappingSide.Right:
+                {
+                    rectTransform.pivot = new Vector2(1 + localDistanceToPoint / rectTransform.rect.width, 0.5f);
+                    pointTransform.pivot = new Vector2(0.5f, 0.5f);
+                    pointTransform.position = atScreenPosition;
                     break;
                 }
                 case SnappingSide.Above:
                 {
-                    rectTransform.pivot = new Vector2(0.5f, -heightAboveWorldPosition);
+                    rectTransform.pivot = new Vector2(0.5f, -localDistanceToPoint / rectTransform.rect.height);
                     pointTransform.pivot = new Vector2(0.5f, 0.5f);
                     pointTransform.position = atScreenPosition;
                     break;

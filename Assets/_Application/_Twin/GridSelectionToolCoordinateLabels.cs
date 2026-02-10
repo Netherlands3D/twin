@@ -47,16 +47,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         {
             Canvas canvas = CanvasID.GetCanvasByType(CanvasType.World);
             northEastTooltip = CreateCornerPopout(canvas.transform, PivotPresets.MiddleLeft);
+            northEastTooltip.SetSnappingSide(TextPopout.SnappingSide.Left);
             southWestTooltip = CreateCornerPopout(canvas.transform, PivotPresets.MiddleRight);
+            southWestTooltip.SetSnappingSide(TextPopout.SnappingSide.Right);
         }
         
         private TextPopout CreateCornerPopout(Transform canvasTransform, PivotPresets pivotPoint)
         {
             var popout = Instantiate(popoutPrefab, canvasTransform);
             popout.RectTransform().SetPivot(pivotPoint);
-            popout.SetSnappingSide(TextPopout.SnappingSide.Side);
             popout.transform.SetSiblingIndex(0);
-
             return popout;
         }
         
