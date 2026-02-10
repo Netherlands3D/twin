@@ -44,6 +44,7 @@ namespace Netherlands3D.SelectionTools
         [SerializeField] private GameObject gridHighlight;
         [SerializeField] private GameObject selectionBlock;
         [SerializeField] private Material triplanarGridMaterial;
+        
 
         private bool drawingArea = false;
 
@@ -76,10 +77,19 @@ namespace Netherlands3D.SelectionTools
             SetSelectionVisualEnabled(false);
 
             worldPlane = (useWorldSpace) ? new Plane(Vector3.up, Vector3.zero) : new Plane(this.transform.up, this.transform.position);
-            
+           
             SetDrawMode(DrawMode.Selected);
         }
 
+        //when spawned from a tool for instance, we need to override the drawmode from initialization
+        public void SetEditModeForSpawnedInstance(GameObject instance)
+        {
+            AreaSelection areaSelection = instance.GetComponent<AreaSelection>();
+            if (areaSelection == null) return;
+            
+            areaSelection.SetDrawMode(DrawMode.Edit);
+        }
+        
 #if UNITY_EDITOR
         private void OnValidate()
         {
@@ -251,6 +261,7 @@ namespace Netherlands3D.SelectionTools
         public override void SetDrawMode(DrawMode mode)
         {
             this.mode = mode;
+            Debug.Log(this.mode);
 
             gridHighlight.gameObject.SetActive(mode != DrawMode.Selected);
 
