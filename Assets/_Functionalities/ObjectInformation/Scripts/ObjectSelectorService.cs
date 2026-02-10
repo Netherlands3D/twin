@@ -3,7 +3,6 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
@@ -45,6 +44,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private CameraInputSystemProvider cameraInputSystemProvider;
 
         [SerializeField] private Tool[] activeForTools;
+        [SerializeField] private Material selectionMaterial;
+        
+        private Dictionary<string, bool> blockedBagIds = new Dictionary<string, bool>();
+
+        public void BlockBagId(string bagId, bool block)
+        {
+            blockedBagIds[bagId] = block;
+        }
 
         public static MappingTree MappingTree
         {
@@ -97,14 +104,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             //ClearMappingTree(); //TODO the quadtree featuremappings should be cleared when loading a new project for efficiency. for now its not working properly for some reason
             ProjectData.Current.RootLayer.AddedSelectedLayer.AddListener(OnAddSelectedLayer);
             ProjectData.Current.RootLayer.RemovedSelectedLayer.AddListener(OnRemoveSelectedLayer);
-        }
-
-        private void ClearMappingTree()
-        {
-            mappingTreeInstance.Clear();
-            BoundingBox bbox = StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds;
-            MappingTree tree = new MappingTree(bbox, 4, 12);                    
-            mappingTreeInstance = tree;
         }
 
         private void OnAddSelectedLayer(LayerData data)
@@ -204,6 +203,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
                     IMapping mapping = FindObjectMapping();
                     bool mappingVisible = IsMappingVisible(mapping, bagId);
+                    
                     if ((mapping == null || !mappingVisible) && lastSelectedMappingLayerData != null)
                     {
                         //when nothing is selected but there was something selected, deselect the current active layer
@@ -288,6 +288,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     if (v != true) return false;
                 }
             }
+            if (bagId == null || blockedBagIds.ContainsKey(bagId))
+                return false;
             return true;
         }
 
@@ -296,6 +298,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             MeshMapping objectMapping = new MeshMapping(mapping.name);
             objectMapping.SetMeshObject(mapping);
             objectMapping.UpdateBoundingBox();
+            objectMapping.SetSelectionMaterial(selectionMaterial);
             MappingTree.RootInsert(objectMapping);
         }
 
@@ -338,7 +341,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (selectedMapping is not MeshMapping mapping) return null;
 
             layer = GetLayerGameObjectFromMapping(selectedMapping);
-            return mapping.ObjectMapping.items.FirstOrDefault(item => bagID == item.objectID);
+            return mapping.ObjectMapping.items[bagID];
         }
 
         public LayerFeature GetLayerFeatureFromBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
@@ -346,11 +349,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             ObjectMappingItem item = GetMappingItemForBagID(bagID, selectedMapping, out layer);
             if (layer == null)
                 return null;
-           
-            if (!layer.LayerFeatures.ContainsKey(item))
-                return null;
-            
-            return layer.LayerFeatures[item]; 
+
+            return layer.GetLayerFeatureByGeometry(item);
         }
 
         /// <summary>

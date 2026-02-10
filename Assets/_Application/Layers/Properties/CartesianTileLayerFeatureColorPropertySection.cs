@@ -4,7 +4,6 @@ using System.Linq;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,7 +18,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         [SerializeField] private GameObject colorSwatchPrefab;
         [SerializeField] private RectTransform layerContent;
 
-        private readonly Dictionary<LayerFeature, ColorSwatch> swatches = new();
+        private readonly Dictionary<int, ColorSwatch> swatches = new();
         [SerializeField] private ColorPickerPropertySection colorPicker;
 
         public int SelectedButtonIndex { get; set; } = -1;
@@ -31,8 +30,10 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
+            //todo we need to decide whether we want per stylingpropertydata container a full set of temporary layerfeatures in a dictionairy and thus storing more data but cleaner separation OR
+            //always having a default first found stylingpropertydata to always store the layerfeatures. this is more efficient since keys are reused.
             stylingPropertyData = properties.GetDefaultStylingPropertyData<LayerFeatureColorPropertyData>(); 
-
+            
             CreateSwatches();
 
             stylingPropertyData.OnStylingChanged.AddListener(UpdateSwatches);
@@ -61,33 +62,30 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             swatches.Clear();
             layerContent.ClearAllChildren();
-
-            //TODO this could be personal, but a hunch these (runtime only) layerfeatures should be part of a data container so this propertysection and other logic should not be visualisation dependent
-            CartesianTileLayerGameObject visualization = FindObjectsByType<CartesianTileLayerGameObject>(FindObjectsSortMode.None).ToList()
-                .FirstOrDefault(v => v.LayerData.GetProperty<LayerFeatureColorPropertyData>() == stylingPropertyData);
-
-            if(visualization == null) 
+            
+            foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
             {
-                Debug.LogError("invalid visualisation!");
-                return;
-            }
-
-            foreach (var layerFeature in visualization.LayerFeatures.Values)
-            {
-                if (layerFeature.Geometry is not Material) continue;
-
-                swatches[layerFeature] = CreateSwatch(layerFeature);
-                SetSwatchColorFromFeature(layerFeature);
+                if(kv.Key.Contains(LayerFeatureColorPropertyData.ColoringIdentifier))
+                {
+                    int index = stylingPropertyData.GetMaterialIndexFromStyleRuleKey(kv.Key);                    
+                    Color? color = stylingPropertyData.GetColorByMaterialIndex(index);
+                    //we need to expect a value here or else the stylingrule is not properly initialized
+                    if (color.HasValue)
+                    {
+                        swatches[index] = CreateSwatch(index);
+                        SetSwatchColorFromFeature(index);
+                    }
+                }
             }
             Items = swatches.Values.OfType<ISelectable>().ToList();
         }
 
-        private ColorSwatch CreateSwatch(LayerFeature layerFeature)
+        private ColorSwatch CreateSwatch(int index)
         {
             GameObject swatchObject = Instantiate(colorSwatchPrefab, layerContent);
             ColorSwatch swatch = swatchObject.GetComponent<ColorSwatch>();
-                
-            string layerName = layerFeature.GetAttribute(LayerFeatureColorPropertyData.MaterialNameIdentifier);
+
+            string layerName = stylingPropertyData.GetStylingRuleNameByMaterialIndex(index);
                 
             swatch.SetLayerName(layerName);
             swatch.SetInputText(layerName);
@@ -118,12 +116,12 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void OnPickColor(Color color)
         {
-            foreach ((LayerFeature layerFeature, ColorSwatch swatch) in swatches)
+            foreach ((int index, ColorSwatch swatch) in swatches)
             {
                 if (!swatch.IsSelected) continue;
                 
                 swatch.SetColor(color);
-                stylingPropertyData.SetColor(layerFeature, color);
+                stylingPropertyData.SetColorByMaterialIndex(index, swatch.LayerName, color);
             }
         }
 
@@ -135,12 +133,12 @@ namespace Netherlands3D.Twin.Layers.Properties
             }
         }
 
-        private void SetSwatchColorFromFeature(LayerFeature layerFeature)
+        private void SetSwatchColorFromFeature(int index)
         {
             // if there is no swatch matching this layer feature, we can skip this update
-            if (!swatches.TryGetValue(layerFeature, out var swatch)) return;
+            if (!swatches.TryGetValue(index, out var swatch)) return;
             
-            var color = stylingPropertyData.GetColor(layerFeature);
+            var color = stylingPropertyData.GetColorByMaterialIndex(index);
 
             swatch.SetColor(color.GetValueOrDefault(Color.white));
         }

@@ -397,7 +397,7 @@ namespace Netherlands3D.Tiles3D
                 //Add subobjects to the spawned gameobject
                 child.gameObject.AddComponent<MeshCollider>();
                 ObjectMapping objectMapping = child.gameObject.AddComponent<ObjectMapping>();
-                objectMapping.items = new List<ObjectMappingItem>();
+                objectMapping.items = new();
 
                 //For each uniqueFeatureIds, add a subobject
                 int offset = 0;
@@ -415,7 +415,8 @@ namespace Netherlands3D.Tiles3D
                         firstVertex = offset,
                         verticesLength = uniqueFeatureId.y
                     };
-                    objectMapping.items.Add(subObject);
+                    //objectMapping.items.Add(subObject);
+                    objectMapping.items.Add(bagId, subObject);
                     offset += uniqueFeatureId.y;
                 }
             }

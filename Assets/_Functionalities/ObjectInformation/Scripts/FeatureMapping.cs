@@ -244,7 +244,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private List<GameObject> selectedGameObjects = new List<GameObject>();
 
-        public void SelectFeature()
+        public void Select(string subId = null)
         {
             //transform for mesh world matrix
             selectedGameObjects = CreateFeatureGameObjects();
@@ -252,16 +252,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
             Color selectionColor = Color.blue;           
             visualisationLayer.SetVisualisationColor(selectedGameObjects[0].transform, meshes, selectionColor);
-            foreach (Mesh mesh in meshes)
-            {
-                Color[] colors = new Color[mesh.vertexCount];
-                for (int i = 0; i < mesh.vertexCount; i++)
-                    colors[i] = THUMBNAIL_COLOR;
-                mesh.SetColors(colors);
-            }
         }
 
-        public void DeselectFeature()
+        public void Deselect()
         {
             if(selectedGameObjects.Count > 0)
             {
@@ -271,16 +264,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             selectedGameObjects.Clear();
 
             visualisationLayer.SetVisualisationColorToDefault();
-            foreach (Mesh mesh in meshes)
-            {
-                Color[] colors = new Color[mesh.vertexCount];
-                for (int i = 0; i < mesh.vertexCount; i++)
-                    colors[i] = NO_OVERRIDE_COLOR;
-                mesh.SetColors(colors);
-            }
         }
-
-        private static readonly Color NO_OVERRIDE_COLOR = new Color(0, 0, 1, 0);
-        private static readonly Color THUMBNAIL_COLOR = new Color(1, 0, 0, 0);
     }
 }

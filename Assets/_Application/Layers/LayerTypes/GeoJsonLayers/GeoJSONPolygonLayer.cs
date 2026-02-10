@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeoJSON.Net;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
-using Netherlands3D.LayerStyles;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Utility;
@@ -35,7 +33,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private Dictionary<Feature, FeaturePolygonVisualisations> spawnedVisualisations = new();     
         
         [SerializeField] private Material polygonVisualizationMaterial;
+        
         internal Material polygonVisualizationMaterialInstance;
+        [SerializeField] private Material polygonSelectionVisualizationMaterial;
 
         public Material PolygonVisualizationMaterial
         {
@@ -92,13 +92,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// <param name="vertexColors"></param>
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
         {
-            foreach (var mesh in meshes)
+            PolygonVisualisation visualisation = GetPolygonVisualisationByMesh(meshes);
+            if(visualisation != null)
             {
-                PolygonVisualisation visualisation = GetPolygonVisualisationByMesh(mesh);
-                if (visualisation != null)
-                {
-                    visualisation.VisualisationMaterial.color = color;
-                }
+                visualisation.VisualisationMaterial = polygonSelectionVisualizationMaterial;
             }
         }
 
@@ -108,15 +105,16 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// </summary>
         /// <param name="meshes"></param>
         /// <returns></returns>
-        public PolygonVisualisation GetPolygonVisualisationByMesh(Mesh mesh)
+        public PolygonVisualisation GetPolygonVisualisationByMesh(List<Mesh> meshes)
         {
             foreach (KeyValuePair<Feature, FeaturePolygonVisualisations> fpv in spawnedVisualisations)
             {
                 List<PolygonVisualisation> visualisations = fpv.Value.Data;
                 foreach (PolygonVisualisation pv in visualisations)
                 {
-                    if (mesh == pv.PolygonMesh) 
-                        return pv;
+                    if (!meshes.Contains(pv.PolygonMesh)) continue;
+    
+                    return pv;
                 }
             }
             return null;
@@ -124,14 +122,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public void SetVisualisationColorToDefault()
         {
-            Color defaultColor = GetRenderColor();
             foreach (KeyValuePair<Feature, FeaturePolygonVisualisations> fpv in spawnedVisualisations)
             {
                 List<PolygonVisualisation> visualisations = fpv.Value.Data;
                 foreach (PolygonVisualisation pv in visualisations)
                 {
                     if (pv != null)
-                        pv.VisualisationMaterial.color = defaultColor;
+                    {
+                        pv.VisualisationMaterial = polygonVisualizationMaterialInstance;
+                    }
                 }
             }
         }
