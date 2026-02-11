@@ -16,6 +16,7 @@ using Netherlands3D.E2ETesting;
 using System.IO;
 using System.Linq.Expressions;
 using System.Net.NetworkInformation;
+using System.Transactions;
 
 
 
@@ -25,34 +26,78 @@ namespace Netherlands3D.Twin.Tests.Projectsettings
     public class ProjectSettingsV1
     {
         
-        [UnitySetUp]
+        [UnityOneTimeSetUp]
         public IEnumerator testsetup()
         {
             yield return new WaitForSeconds(1);
             yield return TestFunctions.TestSetup(Path.Combine(Application.persistentDataPath,Application.streamingAssetsPath,"testfiles/projectV1.nl3d"));
+            
+            yield return TestFunctions.lagenmenuOpenen();
+            
+            
         }
+
+    [UnityTest]
+    public IEnumerator Camerapositie()
+        {
+            yield return TestFunctions.Cameraposition(new Coordinate(CoordinateSystem.RDNAP,156663.02404785156,463895.14367675781,494.97858460061252));
+        }
+        [UnityTest]
+      public IEnumerator Camerarotatie()
+        {
+            yield return TestFunctions.CameraRotation(new UnityEngine.Vector3(30,0,0));
+        }  
+         [UnityTest]
+        public IEnumerator DefaultMaaiveldCorrectGeladen()
+        {
+            yield return TestFunctions.checkGameObjectIsActive(TestFunctions.scene.DefaultMaaiveld,true, "Maaiveld is niet ingeladen");
+        } 
+        [UnityTest]
+        public IEnumerator DefaultGebouwenCorrectGeladen()
+        {
+            yield return TestFunctions.checkGameObjectIsActive(TestFunctions.scene.DefaultBuildings,true,"gebouwen is niet ingeladen");
+        } 
+
+        [UnityTest]
+        public IEnumerator DefaultBomenCorrectGeladen()
+        {
+            yield return TestFunctions.checkGameObjectIsActive(TestFunctions.scene.DefaultBomen,true,"bomen zijn niet ingeladen");
+        } 
+        [UnityTest]
+        public IEnumerator DefaultBossenCorrectGeladen()
+        {
+            yield return TestFunctions.checkGameObjectIsActive(TestFunctions.scene.DefaultBossen,true, "bossen zijn niet ingeladen");
+        }               
+        
 
 
         [UnityTest]
-        public IEnumerator Version1()
+        public IEnumerator DefaultStraatnamenLaagOpJuistePositieInLagenmenu()
         {
-            yield return TestFunctions.lagenmenuOpenen();
-            yield return TestFunctions.Cameraposition(new Coordinate(CoordinateSystem.RDNAP,156663.02404785156,463895.14367675781,494.97858460061252));
-            yield return TestFunctions.CameraRotation(new UnityEngine.Vector3(30,0,0));
-            yield return TestFunctions.checkGameObject(TestFunctions.scene.DefaultMaaiveld, "Maaiveld is niet ingeladen");
-            yield return TestFunctions.checkGameObject(TestFunctions.scene.DefaultBuildings,"gebouwen is niet ingeladen");
-            yield return TestFunctions.checkGameObject(TestFunctions.scene.DefaultBomen,"bomen zijn niet ingeladen");
-            yield return TestFunctions.checkGameObject(TestFunctions.scene.DefaultBossen, "bossen zijn niet ingeladen");
-
             yield return TestFunctions.LaagCorrectInLagenMenu("Straatnamen",true,true,0);
-            yield return TestFunctions.LaagCorrectInLagenMenu("Bomen",true,true,1);
-            yield return TestFunctions.LaagCorrectInLagenMenu("Bossen",true,true,2);
-            yield return TestFunctions.LaagCorrectInLagenMenu("Gebouwen",true,true,3);
-            yield return TestFunctions.LaagCorrectInLagenMenu("Maaiveld",true,true,4);
-            
-            
+        } 
+        [UnityTest]
 
+        public IEnumerator DefaultBomenLaagOpJuistePositieInLagenmenu()
+        {
+           yield return TestFunctions.LaagCorrectInLagenMenu("Bomen",true,true,2);
         }
+         [UnityTest]
+        public IEnumerator DefaultBossenLaagOpJuistePositieInLagenmenu()
+        {
+            yield return TestFunctions.LaagCorrectInLagenMenu("Bossen",true,true,3);
+        } 
+        [UnityTest]
+        public IEnumerator DefaultGebouwenLaagOpJuistePositieInLagenmenu()
+        {
+            yield return TestFunctions.LaagCorrectInLagenMenu("Gebouwen",true,true,4);
+        } 
+        [UnityTest]
+        public IEnumerator DefaultMaaiveldLaagOpJuistePositieInLagenmenu()
+        {
+            yield return TestFunctions.LaagCorrectInLagenMenu("Maaiveld",true,true,5);
+        } 
+      
         
 
 
@@ -115,14 +160,14 @@ namespace Netherlands3D.Twin.Tests.Projectsettings
         public static IEnumerator TestSetup(string projectfilepath)
         {
             yield return E2E.EnsureMainSceneIsLoaded();
-            
+            yield return new WaitForSeconds(2);
             //this.Sidebar = new Sidebar();
             scene = new Scene();
             
            ProjectDataHandler pdh  =(ProjectDataHandler)E2E.Find("ProjectDataHandler").Component<ProjectDataHandler>();
            projectIsLoaded=false;
            pdh.OnLoadCompleted.AddListener(ReCeiveProjectLoadedEvent);
-
+        
             pdh.LoadFromFile(projectfilepath);
            while( projectIsLoaded==false)
             {
@@ -134,16 +179,22 @@ namespace Netherlands3D.Twin.Tests.Projectsettings
         {
             projectIsLoaded=true;   
         }
-        public static IEnumerator checkGameObject(Netherlands3D.E2ETesting.PageObjectModel.Element<UnityEngine.GameObject> testSubject,string failMessage="")
+        
+        public static IEnumerator checkGameObjectDoesNotExist(Netherlands3D.E2ETesting.PageObjectModel.Element<UnityEngine.GameObject> testSubject, string failmessage)
         {
-            yield return E2E.Expect(()=>testSubject.IsActive,Is.True,20,failMessage);
+            yield return E2E.Expect(()=>testSubject,Is.EqualTo(null),10,failmessage);
+        }
+        public static IEnumerator checkGameObjectIsActive(Netherlands3D.E2ETesting.PageObjectModel.Element<UnityEngine.GameObject> testSubject,bool shouldBeActive,string failMessage="")
+        {
+            yield return E2E.Expect(()=>testSubject.IsActive,Is.EqualTo(shouldBeActive),20,failMessage);
         }
         public static IEnumerator lagenmenuOpenen()
         {
             UnityEngine.GameObject lagenmenuButton = (UnityEngine.GameObject)scene.LagenMenuButton;
             UnityEngine.UI.Button button = lagenmenuButton.GetComponent<Button>();
             button.onClick.Invoke();
-            yield return checkGameObject(scene.Layerspanel);
+            yield return checkGameObjectIsActive(scene.Layerspanel,true);
+
             
         }
     
@@ -155,11 +206,11 @@ namespace Netherlands3D.Twin.Tests.Projectsettings
             {
             laagobject = layerspanel.transform.Find(laagnaam).gameObject;
             bool laagobjectAanwezig = laagobject!=null;
-            E2E.Then(laagobjectAanwezig,Is.EqualTo(shouldBeInList),laagnaam +"niet correct in lagenpaneel");
+             E2E.Then(laagobjectAanwezig,Is.EqualTo(shouldBeInList),laagnaam +"niet correct in lagenpaneel");
             }
             else
             {
-                E2E.Then(laagindex,Is.AtMost(layerspanel.transform.childCount-1),laagnaam +" niet op correcte positie in lagenpaneel");
+                 E2E.Then(laagindex,Is.AtMost(layerspanel.transform.childCount-1),laagnaam +" niet op correcte positie in lagenpaneel");
                 laagobject = layerspanel.transform.GetChild(laagindex).gameObject;
                 E2E.Then(laagobject.name,Is.EqualTo(laagnaam),laagnaam +" niet op correcte positie in lagenpaneel");
             }
