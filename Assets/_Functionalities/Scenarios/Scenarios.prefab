@@ -378,7 +378,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scenarioToggleContainer: {fileID: 5639496280041998521}
-  scenarioTogglePrefab: {fileID: 7006385111012489544, guid: 1aed5fae01937bd45aa67f7180486a29,
+  scenarioTogglePrefab: {fileID: 641705527243059034, guid: 1aed5fae01937bd45aa67f7180486a29,
     type: 3}
 --- !u!1 &6554843381081410086
 GameObject:

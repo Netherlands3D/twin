@@ -11,7 +11,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
     {
         [Header("UI wiring")]
         [SerializeField] private RectTransform scenarioToggleContainer;
-        [SerializeField] private Toggle scenarioTogglePrefab;
+        [SerializeField] private Scenario scenarioTogglePrefab;
 
         private readonly List<Scenario> scenarios = new();
         private Scenario selectedScenario;
@@ -26,36 +26,26 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void OnEnable()
         {
-            ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
             App.Layers.LayerAdded.AddListener(OnLayerAdded);
             App.Layers.LayerRemoved.AddListener(OnLayerDeleted);
         }
 
         private void OnDisable()
         {
-            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
             App.Layers.LayerAdded.RemoveListener(OnLayerAdded);
             App.Layers.LayerRemoved.RemoveListener(OnLayerDeleted);
-        }
-
-        private void OnProjectDataChanged(ProjectData data)
-        {
-            RebuildScenarioUI();
         }
 
         private void OnLayerAdded(LayerData layer)
         {
             layer.NameChanged.AddListener(ConvertToScenario);
             layer.NameChanged.AddListener(ConvertScenarioToFolder);
-            layer.NameChanged.AddListener(UpdateLabelForScenario);           
+            layer.NameChanged.AddListener(UpdateLabelForScenario);  
 
-            //todo keep this code because in the future this is needed again
-            //if (layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
-            //{
-            //    AddScenario(layer);
-            //    SetScenarioContainerEnabled(true);
-            //    SelectScenario(layer);
-            //}            
+            if (layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
+            {
+                RebuildScenarioUI();
+            }            
         }
         private void OnLayerDeleted(LayerData layer)
         {
@@ -66,13 +56,13 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             if (layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
             {
                 RemoveScenario(layer);
-                if(selectedScenario?.Layer == layer)
-                    selectedScenario = null;
+                DeselectScenario(layer);
                 if (scenarios.Count == 0)
                     SetScenarioContainerEnabled(false);
+                
+                RebuildScenarioUI();
             }
         }
-
 
         private void ConvertToScenario(LayerData folder, string name)
         {
@@ -91,8 +81,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             {
                 scenario.PrefabIdentifier = FolderPreset.PrefabIdentifier;
                 RemoveScenario(scenario);
-                if (selectedScenario?.Layer == scenario)
-                    selectedScenario = null;
+                DeselectScenario(scenario);
                 if (scenarios.Count == 0)
                     SetScenarioContainerEnabled(false);
             }
@@ -105,17 +94,27 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void AddScenario(LayerData layer)
         {
-            var toggle = Instantiate(scenarioTogglePrefab, scenarioToggleContainer);
-            Scenario scenario = toggle.GetComponent<Scenario>();
+            Scenario scenario = Instantiate(scenarioTogglePrefab, scenarioToggleContainer);
             scenario.SetLabel(layer.Name);
             scenario.SetLayer(layer);
             scenarios.Add(scenario);
-            toggle.onValueChanged.AddListener(isOn =>
-            {
-                if (isOn)
-                    SelectScenario(scenario.Layer);
-            });
+            scenario.VisibilityChanged.AddListener(v => OnScenarioVisiblityChanged(v, scenario));
             
+        }
+
+        private void OnScenarioVisiblityChanged(bool visible, Scenario scenario)
+        {
+            if (visible)
+            {
+                if (selectedScenario != scenario)
+                {
+                    if(selectedScenario != null)
+                        DeselectScenario(selectedScenario.Layer);
+                    SelectScenario(scenario.Layer);
+                }
+            }
+            else
+                DeselectScenario(scenario.Layer);
         }
 
         private void RemoveScenario(LayerData layer)
@@ -137,8 +136,25 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             {
                 if (scenario.Layer == layer)
                 {
-                    ActivateScenario(scenario.Layer);
+                    ActivateScenario(scenario.Layer, true);
                     selectedScenario = scenario;
+                    layer.SelectLayer();
+                    return;
+                }
+            }
+        }
+
+        private void DeselectScenario(LayerData layer)
+        {
+            foreach (var scenario in scenarios)
+            {
+                if (scenario.Layer == layer)
+                {
+                    ActivateScenario(scenario.Layer, false);
+                    if(selectedScenario?.Layer == layer)
+                        selectedScenario = null;
+                  
+                    layer.DeselectLayer();
                     return;
                 }
             }
@@ -172,16 +188,22 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             if (!scenarios.Any())  return;
             
             SetScenarioContainerEnabled(true);
+            
+            if(selectedScenario?.Layer == scenarios[0].Layer) return;
+            
             SelectScenario(scenarios[0].Layer);          
         }
 
-        private void ActivateScenario(LayerData activeFolder)
+        private void ActivateScenario(LayerData activeFolder, bool activate)
         {
             foreach (var scenario in scenarios)
             {
-                bool shouldBeOn = (scenario.Layer == activeFolder);
-                scenario.Toggle.isOn = shouldBeOn;
-                scenario.Layer.ActiveSelf = shouldBeOn;
+                if (scenario.Layer == activeFolder)
+                {
+                    scenario.Toggle.isOn = activate;
+                    scenario.Layer.ActiveSelf = activate;
+                }
+                
             }
         }
 

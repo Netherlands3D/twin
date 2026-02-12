@@ -1,6 +1,7 @@
 using Netherlands3D.Twin.Layers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class Scenario : MonoBehaviour
@@ -10,6 +11,8 @@ public class Scenario : MonoBehaviour
     
     private Toggle toggle;
     private LayerData layer;
+
+    public UnityEvent<bool> VisibilityChanged = new();
     
     private void Start()
     {
@@ -22,6 +25,13 @@ public class Scenario : MonoBehaviour
         {
             autoSize.ResizeNow();
         }
+        
+        toggle.onValueChanged.AddListener(VisibilityChanged.Invoke);
+    }
+
+    public void SetToggleOn(bool selected)
+    {
+        Toggle.SetIsOnWithoutNotify(selected);
     }
 
     public void SetLayer(LayerData layer)
