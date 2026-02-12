@@ -154,7 +154,6 @@ namespace Netherlands3D.Functionalities.Wfs
             return new WfsLayerPreset.Args(
                 getFeatureUrl,
                 title
-                // folderLayer
             );
         }
 
