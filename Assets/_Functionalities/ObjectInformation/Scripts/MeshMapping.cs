@@ -28,6 +28,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private Transform mTransform;
 
         private string id;
+        private Material selectionMaterial;
 
         public MeshMapping(string id)
         {
@@ -39,6 +40,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             this.objectMapping = mapping;
             meshRenderer = this.objectMapping.GetComponent<MeshRenderer>();
             meshFilter = this.objectMapping.GetComponent<MeshFilter>();
+        }
+        
+        public void SetSelectionMaterial(Material material)
+        {
+            this.selectionMaterial = material;
         }
 
         public MeshMappingItem FindItemForPosition(Vector3 position)
@@ -68,12 +74,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public bool HasItemWithId(string id)
         {         
-            foreach (ObjectMappingItem item in ObjectMapping.items)
-            {
-                if (item.objectID == id)
-                    return true;
-            }
-            return false;
+            return objectMapping.items.ContainsKey(id);
         }
 
         public void CacheItems()
@@ -84,7 +85,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 triangles = meshFilter.sharedMesh.triangles;
                 mTransform = meshFilter.gameObject.transform;
                 items = new List<MeshMappingItem>();
-                foreach (ObjectMappingItem item in objectMapping.items)
+                foreach (ObjectMappingItem item in objectMapping.items.Values)
                 {
                     MeshMappingItem mapItem = new MeshMappingItem(item, vertices, mTransform);
                     items.Add(mapItem);
@@ -131,7 +132,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             for (int i = 0; i < len; i++)
             {
                 var v = srcV[start + i];
-                newV[i] = centerMesh ? (v - localCentroid) : v;
+                newV[i] = (centerMesh ? (v - localCentroid) : v);
                 if (newN != null) newN[i] = srcN[start + i];
             }
 
@@ -155,7 +156,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (newN != null) mesh.normals = newN;
             mesh.triangles = newTris.ToArray();
             mesh.RecalculateBounds();
-            if (newN == null || newN.Length == 0) mesh.RecalculateNormals();
+            mesh.RecalculateNormals();
 
             return mesh;
         }
@@ -194,6 +195,28 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     item.BoundingBox.Debug(color);
                 }
             }
+        }
+
+        private GameObject selectedMesh;
+
+        public void Select(string subId)
+        {
+            selectedMesh = new GameObject(subId);
+            ObjectMappingItem item = objectMapping.items[subId];
+            if(item == null) return;
+            
+            Mesh mesh = CreateMeshFromMapping(ObjectMapping, item, out Vector3 localCentroid);
+            MeshFilter mFilter = selectedMesh.AddComponent<MeshFilter>();
+            mFilter.mesh = mesh;
+            MeshRenderer mRenderer = selectedMesh.AddComponent<MeshRenderer>();
+            mRenderer.material = selectionMaterial;
+            selectedMesh.transform.position = ObjectMapping.transform.TransformPoint(localCentroid);
+        }
+
+        public void Deselect()
+        {
+            if(selectedMesh != null)
+                GameObject.Destroy(selectedMesh);
         }
     }
 

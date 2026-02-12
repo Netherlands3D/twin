@@ -35,7 +35,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private Dictionary<Feature, FeaturePolygonVisualisations> spawnedVisualisations = new();     
         
         [SerializeField] private Material polygonVisualizationMaterial;
+        
         internal Material polygonVisualizationMaterialInstance;
+        [SerializeField] private Material polygonSelectionVisualizationMaterial;
 
         public Material PolygonVisualizationMaterial
         {
@@ -97,7 +99,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 PolygonVisualisation visualisation = GetPolygonVisualisationByMesh(mesh);
                 if (visualisation != null)
                 {
-                    visualisation.VisualisationMaterial.color = color;
+                    visualisation.VisualisationMaterial = polygonSelectionVisualizationMaterial;
                 }
             }
         }
@@ -124,14 +126,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         public void SetVisualisationColorToDefault()
         {
-            Color defaultColor = GetRenderColor();
             foreach (KeyValuePair<Feature, FeaturePolygonVisualisations> fpv in spawnedVisualisations)
             {
                 List<PolygonVisualisation> visualisations = fpv.Value.Data;
                 foreach (PolygonVisualisation pv in visualisations)
                 {
                     if (pv != null)
-                        pv.VisualisationMaterial.color = defaultColor;
+                        pv.VisualisationMaterial = polygonVisualizationMaterialInstance;
                 }
             }
         }

@@ -217,7 +217,7 @@ namespace Netherlands3D.CartesianTiles
                 return;
 
             ObjectMapping objectMapping = gameobject.AddComponent<ObjectMapping>();
-            objectMapping.items = new List<ObjectMappingItem>();
+            objectMapping.items = new();
             using (var stream = new MemoryStream(results))
             {
                 using (BinaryReader reader = new BinaryReader(stream))
@@ -236,12 +236,13 @@ namespace Netherlands3D.CartesianTiles
                         if (removeFromID.Length > 0)
                             id = id.Replace(removeFromID, "");
 
-                        objectMapping.items.Add(new ObjectMappingItem()
-                        {
+                        ObjectMappingItem item = new ObjectMappingItem(){
                             objectID = id,
                             firstVertex = firstVertex,
                             verticesLength = vertexCount,
-                        });
+                        };
+                        objectMapping.items.Add(id,  item);
+                        
                     }
                 }
             }
