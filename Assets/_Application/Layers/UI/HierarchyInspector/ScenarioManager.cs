@@ -63,15 +63,14 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             layer.NameChanged.RemoveListener(ConvertScenarioToFolder);
             layer.NameChanged.RemoveListener(UpdateLabelForScenario);
 
-            //keep this code for when scenarios are added through a button again
-            //if (layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
-            //{
-            //    RemoveScenario(layer);
-            //    if(selectedScenario?.Layer == layer)
-            //        selectedScenario = null;
-            //    if (scenarios.Count == 0)
-            //        SetScenarioContainerEnabled(false);
-            //}
+            if (layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
+            {
+                RemoveScenario(layer);
+                if(selectedScenario?.Layer == layer)
+                    selectedScenario = null;
+                if (scenarios.Count == 0)
+                    SetScenarioContainerEnabled(false);
+            }
         }
 
 
