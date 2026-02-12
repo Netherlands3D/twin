@@ -9,6 +9,7 @@ using Netherlands3D.Functionalities.Wms.LayerPresets;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -93,8 +94,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         private LayerData AddFolderLayer(string folderName)
         {
-            var builder = new LayerBuilder().OfType("folder").NamedAs(folderName); //todo: make preset?
-            var wfsFolder = App.Layers.Add(builder);
+            var wfsFolder = App.Layers.Add(new FolderPreset.Args(folderName));
             return wfsFolder.LayerData;
         }
         
