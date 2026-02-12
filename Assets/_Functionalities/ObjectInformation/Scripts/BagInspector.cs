@@ -84,10 +84,17 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             {
                 GeoJSONPolygonLayer polygonLayer = mapping.VisualisationLayer as GeoJSONPolygonLayer;
                 List<Mesh> meshes = mapping.FeatureMeshes;
-                
-                PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(meshes);
-                Bounds currentObjectBounds = new Bounds(pv.transform.position, meshes[0].bounds.size);
-                featureThumbnail.RenderThumbnail(currentObjectBounds);
+
+                //todo: Mapping.BoundingBox should be the bbox of all meshes in the feature, this is currently not working correctly.
+                var center = mapping.BoundingBox.Center.ToUnity();
+                var bounds = new Bounds(center, Vector3.zero);
+                foreach (var mesh in meshes)
+                {
+	                PolygonVisualisation pv = polygonLayer.GetPolygonVisualisationByMesh(mesh);
+	                Bounds currentObjectBounds = new Bounds(pv.transform.position, mesh.bounds.size);
+	                bounds.Encapsulate(currentObjectBounds);
+                }
+                featureThumbnail.RenderThumbnail(bounds);
 				return;
             }
 

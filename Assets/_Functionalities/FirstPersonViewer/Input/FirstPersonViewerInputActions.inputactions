@@ -70,6 +70,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "RClick",
+                    "type": "Button",
+                    "id": "721fb740-4224-4144-90aa-1fb776da0c12",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "HideUI",
                     "type": "Button",
                     "id": "fb304462-8fd8-4f07-90cb-4b4c6350f24f",
@@ -127,6 +136,24 @@
                     "name": "OpenOverlay",
                     "type": "Button",
                     "id": "a70a1e88-fa36-48c0-99e7-a1eac12976eb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MeasuringYLock",
+                    "type": "Button",
+                    "id": "f10973bf-a3c8-42c2-895b-b036886baa9f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MeasuringZXLock",
+                    "type": "Button",
+                    "id": "518476c6-d521-4576-8d5b-2d6393f12d76",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -576,6 +603,17 @@
                 },
                 {
                     "name": "",
+                    "id": "c9421ba4-9e95-4069-ad69-d6fbce99bebf",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "f4f8a4b9-a7e6-48a9-848f-e1ad1dd7c4be",
                     "path": "<Keyboard>/h",
                     "interactions": "",
@@ -769,6 +807,28 @@
                     "processors": "",
                     "groups": ";Keyboard & Mouse",
                     "action": "OpenOverlay",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "67789186-d054-48ff-a7f0-1de23e5368d6",
+                    "path": "<Keyboard>/n",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard & Mouse",
+                    "action": "MeasuringYLock",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5a205940-217c-41be-9a32-0d2898114b4a",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MeasuringZXLock",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

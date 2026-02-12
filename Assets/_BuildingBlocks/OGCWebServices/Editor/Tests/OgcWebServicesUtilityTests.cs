@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Netherlands3D.OgcWebServices.Shared
 {
@@ -44,9 +45,9 @@ namespace Netherlands3D.OgcWebServices.Shared
             
             // The raw encoded representation should still decode to "Bag Gebouwen/3D"
             var normalizedStr = normalized.ToString();
-            Debug.Log(normalizedStr);
             Assert.IsTrue(
-                normalizedStr.Contains("layers=Bag+Gebouwen%2f3D"),
+                normalizedStr.Contains("layers=Bag+Gebouwen%2F3D") // Some platforms uppercase the encoded value 
+                || normalizedStr.Contains("layers=Bag+Gebouwen%2f3D"), // And some platforms lowercase the encoded value
                 "Value should remain 'Bag+Gebouwen%2f3D'"
             );
         }

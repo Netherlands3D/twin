@@ -26,7 +26,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public PolygonInput PolygonInput => polygonInput;
         public PolygonInput LineInput => lineInput;
         
-        [SerializeField] private PolygonSelectionLayerGameObject polygonVisualisationPrefab;
         [SerializeField] private AreaSelection gridInput;
         [SerializeField] private PolygonInput polygonInput;
         [SerializeField] private PolygonInput lineInput;
@@ -110,15 +109,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void CreatePolygonLayer(List<Vector3> unityPolygon)
         {
-            ILayerBuilder layerBuilder = LayerBuilder.Create()
-                .OfType(polygonVisualisationPrefab.PrefabIdentifier)
-                .NamedAs("Polygon")
-                .AddProperty(new PolygonSelectionLayerPropertyData
-                {
-                    ShapeType = ShapeType.Polygon,
-                    OriginalPolygon = unityPolygon.ToCoordinates().ToList()
-                });
-            var layer = App.Layers.Add(layerBuilder);
+            var preset = new PolygonLayerPreset.Args(
+                "Polygon",
+                ShapeType.Polygon,
+                unityPolygon.ToCoordinates().ToList()
+            );
+            
+            var layer = App.Layers.Add(preset);
             polygonSelectionService.RegisterPolygon(layer.LayerData);
             polygonInput.SetDrawMode(PolygonInput.DrawMode.Edit);
            
@@ -131,16 +128,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
 
         private void CreateLineLayer(List<Vector3> unityLine)
         {
-            ILayerBuilder layerBuilder = LayerBuilder.Create()
-                .OfType(polygonVisualisationPrefab.PrefabIdentifier)
-                .NamedAs("Line")
-                .AddProperty(new PolygonSelectionLayerPropertyData
-                {
-                    ShapeType = ShapeType.Line,
-                    OriginalPolygon = unityLine.ToCoordinates().ToList(),
-                    LineWidth = defaultLineWidth
-                });
-            var layer = App.Layers.Add(layerBuilder);
+            var preset = new PolygonLayerPreset.Args(
+                "Line",
+                ShapeType.Line,
+                unityLine.ToCoordinates().ToList(),
+                defaultLineWidth
+            );
+            
+            var layer = App.Layers.Add(preset);
             polygonSelectionService.RegisterPolygon(layer.LayerData);
             lineInput.SetDrawMode(PolygonInput.DrawMode.Edit);
         }
@@ -163,15 +158,13 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
                 return;
             }
 
-            ILayerBuilder layerBuilder = LayerBuilder.Create()
-                .OfType(polygonVisualisationPrefab.PrefabIdentifier)
-                .NamedAs("Grid")
-                .AddProperty(new PolygonSelectionLayerPropertyData
-                {
-                    ShapeType = ShapeType.Grid,
-                    OriginalPolygon = new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(bottomRight), new Coordinate(topRight), new Coordinate(topLeft)  },
-                });
-            var layer = App.Layers.Add(layerBuilder);
+            var preset = new PolygonLayerPreset.Args(
+                "Grid",
+                ShapeType.Grid,
+                new List<Coordinate>() { new Coordinate(bottomLeft), new Coordinate(bottomRight), new Coordinate(topRight), new Coordinate(topLeft) }
+            );
+            
+            var layer = App.Layers.Add(preset);
             polygonSelectionService.RegisterPolygon(layer.LayerData);
             gridInput.SetDrawMode(PolygonInput.DrawMode.Edit);
         }
