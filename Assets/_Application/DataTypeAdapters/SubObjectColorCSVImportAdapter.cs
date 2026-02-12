@@ -38,13 +38,12 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             propertyData.Data = AssetUriFactory.CreateProjectAssetUri(localFile.LocalFilePath);
             
             // TODO: Temporary proxying during refactoring, it would be better to simplify this.
-            activeCartesianTileSubObjectColorLayer
-                .progressEvent.AddListener(value => progressEvent.Invoke(value));
+            activeCartesianTileSubObjectColorLayer.progressEvent.AddListener(value => progressEvent.Invoke(value));
         }
 
         private void RemovePreviousColoring()
         {
-            activeCartesianTileSubObjectColorLayer.RemoveCustomColorSet(); //remove before destroying because otherwise the Start() function of the new colorset will apply the new colors before the OnDestroy function can clean up the old colorset. 
+            //activeCartesianTileSubObjectColorLayer.RemoveCustomColorSet(); //remove before destroying because otherwise the Start() function of the new colorset will apply the new colors before the OnDestroy function can clean up the old colorset. 
 
             activeCartesianTileSubObjectColorLayer.DestroyLayer();
             csvReplacedMessageEvent.Invoke("Het oude CSV bestand is vervangen door het nieuw gekozen CSV bestand.");

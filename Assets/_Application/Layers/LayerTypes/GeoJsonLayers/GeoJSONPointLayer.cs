@@ -76,7 +76,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return pointRenderer3D.PointMeshScale;
         }
 
-
         //here we have to local offset the vertices with the position of the transform because the transform gets shifted
         //also we are using the actual feature geometry to find the vertices in the targeted buffers
         public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
