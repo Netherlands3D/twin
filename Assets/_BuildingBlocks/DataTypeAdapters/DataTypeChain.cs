@@ -123,6 +123,7 @@ namespace Netherlands3D.DataTypeAdapters
 
             var config = Config.Default();
             config = auth.AddToConfig(config);
+            config.CancelToken = token;
             var promise = Uxios.DefaultInstance.Get<FileInfo>(url, config);
 
             // We want to use and manipulate urlAndData, so we 'curry' it by wrapping a method call in a lambda 
