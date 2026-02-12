@@ -1,10 +1,7 @@
 using DG.Tweening;
 using Netherlands3D.Services;
-using Netherlands3D.Events;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using Netherlands3D.FirstPersonViewer.ViewModus;
 
 namespace Netherlands3D.FirstPersonViewer.UI
 {
@@ -14,13 +11,6 @@ namespace Netherlands3D.FirstPersonViewer.UI
         [SerializeField] private GameObject viewerUI;
         [SerializeField] private List<GameObject> uiToDisable;
 
-        [Space(5)]
-        [SerializeField] private InputActionReference hideButton;
-
-        [Header("Snackbar")]
-        [SerializeField] private StringEvent snackbarEvent;
-        [SerializeField] private string uiHideText;
-       
         private FirstPersonViewer firstPersonViewer;
 
         private void Start()
@@ -32,14 +22,11 @@ namespace Netherlands3D.FirstPersonViewer.UI
             firstPersonViewer.OnViewerEntered.AddListener(EnterViewer);
             firstPersonViewer.OnViewerExited.AddListener(ExitViewer);
 
-            hideButton.action.performed += OnHideUIPressed;
-
             viewerUI.SetActive(false);
         }
 
         private void OnDestroy()
         {
-            hideButton.action.performed -= OnHideUIPressed;
             firstPersonViewer.OnViewerEntered.RemoveListener(EnterViewer);
             firstPersonViewer.OnViewerExited.RemoveListener(ExitViewer);
         }
@@ -62,16 +49,5 @@ namespace Netherlands3D.FirstPersonViewer.UI
             viewerUI?.SetActive(false);
             uiToDisable.ForEach(ui => ui.SetActive(true));
         }
-
-        /// <summary>
-        /// Temp Function for UI hiding (Will be replaced by the UI Hider)
-        /// </summary>
-        public void HideUI()
-        {
-            viewerUI.SetActive(!viewerUI.activeSelf);
-            if (!viewerUI.activeSelf) snackbarEvent.InvokeStarted(uiHideText);
-        }
-
-        private void OnHideUIPressed(InputAction.CallbackContext context) => HideUI();
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using KindMen.Uxios;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.OBJImporter.LayerPresets;
 using Netherlands3D.Functionalities.Wms.LayerPresets;
@@ -27,8 +28,7 @@ namespace Netherlands3D.Functionalities.Wms
         public bool Supports(LocalFile localFile)
         {
             var cachedDataPath = localFile.LocalFilePath;
-            var sourceUrl = localFile.SourceUrl;
-            var url = new Uri(sourceUrl);
+            var url = OgcWebServicesUtility.NormalizeUrl(localFile.SourceUrl);
 
             var bodyContents = File.ReadAllText(cachedDataPath);
 
@@ -51,7 +51,7 @@ namespace Netherlands3D.Functionalities.Wms
 
         public void Execute(LocalFile localFile)
         {
-            var url = new Uri(localFile.SourceUrl);
+            var url = OgcWebServicesUtility.NormalizeUrl(localFile.SourceUrl);
             var wmsFolder = AddFolderLayer(url.AbsoluteUri);
 
             var cachedDataPath = localFile.LocalFilePath;

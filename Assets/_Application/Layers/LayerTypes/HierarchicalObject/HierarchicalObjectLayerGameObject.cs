@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.FloatingOrigin;
@@ -55,7 +56,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         private Vector3 previousScale;
         public WorldTransform WorldTransform { get; private set; }
 
-        [SerializeField] private string scaleUnitCharacter = "%";
+        [SerializeField] protected string scaleUnitCharacter = "%";
         
         protected override void OnVisualizationInitialize()
         {
@@ -82,7 +83,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             UpdatePosition(transformProperty.Position);
             UpdateRotation(transformProperty.EulerRotation);
             UpdateScale(transformProperty.LocalScale);
-
+            
             ToggleScatterPropertyData scatterProperty = LayerData.GetProperty<ToggleScatterPropertyData>();
             if(scatterProperty != null) scatterProperty.AllowScatter = LayerData.ParentLayer.HasProperty<PolygonSelectionLayerPropertyData>();
 
@@ -282,6 +283,10 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            //todo this works for now, but we should redesign this in such a manner so this dependency is not the way around
+            ObjectSelectorService selectionService = ServiceLocator.GetService<ObjectSelectorService>();
+            if(!selectionService.IsAnyToolActive()) return;
+            
             LayerData.SelectLayer(true);
         }
 

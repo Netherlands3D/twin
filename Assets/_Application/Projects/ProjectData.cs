@@ -21,7 +21,7 @@ namespace Netherlands3D.Twin.Projects
         [JsonIgnore] private static ProjectData current;
         [JsonIgnore] public static ProjectData Current => current;
 
-        [Header("Serialized data")] public int Version = 1;
+        [Header("Serialized data")] public int Version = 2;
         public string SavedTimestamp = "";
         public string UUID = "";
         private double[] cameraPosition = new double[3]; //X, Y, Z,- Assume RD for now
