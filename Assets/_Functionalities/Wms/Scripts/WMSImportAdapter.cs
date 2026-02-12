@@ -6,7 +6,6 @@ using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerPresets;
-using Netherlands3D.Twin.Services;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wms
@@ -44,7 +43,7 @@ namespace Netherlands3D.Functionalities.Wms
         public LayerPresetArgs[] Execute(LocalFile localFile)
         {
             var url = OgcWebServicesUtility.NormalizeUrl(localFile.SourceUrl);
-            var wmsFolder = AddFolderLayer(url.AbsoluteUri);
+            var folderPreset = new FolderPreset.Args(url.AbsoluteUri); //todo: this folder should not be here, because it is not part of the imported data. This will be removed in a future ticket when selecting individual maps will be made possible
 
             var cachedDataPath = localFile.LocalFilePath;
             var bodyContents = File.ReadAllText(cachedDataPath);
@@ -60,12 +59,13 @@ namespace Netherlands3D.Functionalities.Wms
                     layerPrefab.TransparencyEnabled
                 );
 
-                var presets = new LayerPresetArgs[maps.Count];
+                var presets = new LayerPresetArgs[maps.Count + 1];
+                presets[0] = folderPreset;
                 for (var i = 0; i < maps.Count; i++) //todo test if this is now performant due to async visualisations
                 {
                     var map = maps[i];
                     var preset = CreatePreset(map, url, i < layerPrefab.DefaultEnabledLayersMax);
-                    presets[i] = preset;
+                    presets[i + 1] = preset;
                 }
 
                 // we return the parent layer, the sub layers will be created internally by the parent

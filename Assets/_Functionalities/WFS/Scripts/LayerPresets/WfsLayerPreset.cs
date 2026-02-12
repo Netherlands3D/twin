@@ -16,7 +16,6 @@ namespace Netherlands3D.Functionalities.Wfs.LayerPresets
         {
             public Uri FeatureUrl { get; }
             public string Title { get; }
-            public LayerData Parent { get; }
 
             public Args(
                 Uri featureUrl, 
@@ -39,7 +38,6 @@ namespace Netherlands3D.Functionalities.Wfs.LayerPresets
             return builder
                 .OfType(PrefabIdentifier)
                 .NamedAs(args.Title)
-                .ChildOf(args.Parent)
                 .WithColor(color)
                 .SetDefaultStyling(styling)
                 .AddProperty(new LayerURLPropertyData(args.FeatureUrl));

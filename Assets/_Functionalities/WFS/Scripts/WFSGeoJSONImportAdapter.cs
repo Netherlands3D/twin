@@ -84,8 +84,9 @@ namespace Netherlands3D.Functionalities.Wfs
             if (isWfsGetCapabilities)
             {
                 var wfsGetCapabilities = new WfsGetCapabilities(new Uri(sourceUrl), bodyContents);
-                // var folderName = string.IsNullOrEmpty(wfsGetCapabilities.GetTitle()) ? sourceUrl : wfsGetCapabilities.GetTitle();
-                // wfsFolder = AddFolderLayer(folderName);
+                var folderName = string.IsNullOrEmpty(wfsGetCapabilities.GetTitle()) ? sourceUrl : wfsGetCapabilities.GetTitle();
+                var folderPreset = new FolderPreset.Args(folderName); //todo: this folder should not be here, because it is not part of the imported data. This will be removed in a future ticket when selecting individual maps will be made possible
+
                 var geoJsonOutputFormatStringFromGetCapabilities = wfsGetCapabilities.GetGeoJsonOutputFormatString();
                 if (!string.IsNullOrEmpty(geoJsonOutputFormatStringFromGetCapabilities))
                     geoJsonOutputFormatString = geoJsonOutputFormatStringFromGetCapabilities; 
@@ -95,13 +96,15 @@ namespace Netherlands3D.Functionalities.Wfs
                 var featureTypes = wfsGetCapabilities.GetFeatureTypes();
 
                 //Create a folder layer 
-                var presets = new LayerPresetArgs[featureTypes.Count()];
-                for (int i = 0; i < presets.Length; i++)
+                var featureCount = featureTypes.Count();
+                var presets = new LayerPresetArgs[featureCount + 1];
+                presets[0] = folderPreset;
+                for (int i = 0; i < featureCount; i++)
                 {
                     var featureType = featureTypes.ElementAt(i);
                     string crs = featureType.DefaultCRS;
-                    Debug.Log("Adding WFS layer for featureType: " + featureType);
-                    presets[i] = CreateWFSPreset(featureType.Name, sourceUrl, crs, featureType.Title, geoJsonOutputFormatString);
+                    Debug.Log("Adding WFS preset for featureType: " + featureType);
+                    presets[i + 1] = CreateWFSPreset(featureType.Name, sourceUrl, crs, featureType.Title, geoJsonOutputFormatString);
                 }
                 return presets;
             }
@@ -139,13 +142,6 @@ namespace Netherlands3D.Functionalities.Wfs
             
             throw new ArgumentException("Unrecognized WFS request type: " + url);
         }
-        
-        // private LayerData AddFolderLayer(string folderName)
-        // {
-        //     var builder = new LayerBuilder().OfType("folder").NamedAs(folderName); //todo: make preset?
-        //     var wfsFolder = App.Layers.Add(builder);
-        //     return wfsFolder.LayerData;
-        // }
 
         private LayerPresetArgs CreateWFSPreset(string featureType, string sourceUrl, string crsType, string title, string geoJsonOutputFormatString)
         {

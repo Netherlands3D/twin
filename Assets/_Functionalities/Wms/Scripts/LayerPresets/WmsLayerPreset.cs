@@ -14,7 +14,6 @@ namespace Netherlands3D.Functionalities.Wms.LayerPresets
         {
             public Uri Url { get; }
             public MapFilters Filters { get; }
-            public LayerData Parent { get; }
             public bool DefaultEnabled { get; }
 
             public Args(
@@ -33,7 +32,6 @@ namespace Netherlands3D.Functionalities.Wms.LayerPresets
             return builder
                 .OfType(PrefabIdentifier)
                 .NamedAs(args.Filters.name)
-                .ChildOf(args.Parent)
                 .AddProperty(new LayerURLPropertyData(args.Filters.ToUrlBasedOn(args.Url)))
                 .WhenBuilt(layerData => layerData.ActiveSelf = args.DefaultEnabled);
         }

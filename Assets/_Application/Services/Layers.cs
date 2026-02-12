@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.DataTypeAdapters;
-using Netherlands3D.Twin.DataTypeAdapters;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Projects;
@@ -50,25 +49,40 @@ namespace Netherlands3D.Twin.Services
             return layer;
         }
 
-        public async Task<Layer> AddFromUrl(Uri uri, StoredAuthorization authorization)
+        public async Task<Layer[]> AddFromUrl(Uri uri, StoredAuthorization authorization)
         {
             var result = await fromUrlImporter.DetermineAdapterAndReturnResult(uri, authorization);
             if (result is LayerPresetArgs preset)
             {
-                return Add(preset);
-            }
-            else if (result is LayerPresetArgs[] presets)
-            {
-                var builder = new LayerBuilder().OfType("folder").NamedAs(uri.ToString()); //todo: make preset?
-                var folder = App.Layers.Add(builder);
-                foreach (var p in presets)
-                {
-                    Add(p);
-                    // SetParent(folder);
-                }
+                var layer = Add(preset);
+                return new[] { layer };
             }
             
-            throw new NullReferenceException("Could not determine Layer adapter for the url:  " + uri);
+            if (result is LayerPresetArgs[] presets)
+            {
+                Layer parent = null;
+                Layer[] layers =  new Layer[presets.Length];
+                for (var i = 0; i < presets.Length; i++)
+                {
+                    var p = presets[i];
+                    var layer = Add(p);
+                    layers[i] = layer;
+                    
+                    // todo: Currently we put presets[0] as the folder parent for wms/wfs. This is not part of the imported data, and once we will have a UI to allow users to select which layers will be imported, this will be removed.
+                    if (i == 0)
+                        parent = layer;
+                    
+                    if (i > 0 && presets[0] is FolderPreset.Args)
+                    {
+                        layer.LayerData.SetParent(parent.LayerData);
+                    }
+                }
+
+                return layers; //NB. An empty array is considered a success
+            }
+
+            Debug.LogError("Could not determine Layer adapter(s) for the url:  " + uri);
+            return null;
         }
 
         /// <summary>
