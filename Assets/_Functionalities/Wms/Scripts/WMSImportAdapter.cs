@@ -68,7 +68,6 @@ namespace Netherlands3D.Functionalities.Wms
                     presets[i + 1] = preset;
                 }
 
-                // we return the parent layer, the sub layers will be created internally by the parent
                 return presets;
             }
 
@@ -86,13 +85,6 @@ namespace Netherlands3D.Functionalities.Wms
             }
 
             throw new ArgumentException("Unrecognized WMS request type: " + url);
-        }
-
-        private LayerData AddFolderLayer(string folderName)
-        {
-            var builder = new LayerBuilder().OfType("folder").NamedAs(folderName); //todo: make preset?
-            var wfsFolder = App.Layers.Add(builder);
-            return wfsFolder.LayerData;
         }
 
         private LayerPresetArgs CreatePreset(MapFilters mapFilters, Uri url, bool defaultEnabled)
