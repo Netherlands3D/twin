@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Services;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.DataTypeAdapters
@@ -13,7 +14,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
     {
         public string Extension;
         [SerializeField] private ScriptableObject Adapter;
-        public IDataTypeAdapter DataTypeAdapter => (IDataTypeAdapter)Adapter; //unfortunately interfaces are not serializable
+        public IDataTypeAdapter<object> DataTypeAdapter => (IDataTypeAdapter<object>)Adapter; //unfortunately interfaces are not serializable
     }
 
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/FileTypeAdapter", fileName = "FileTypeAdapter", order = 0)]
@@ -30,7 +31,13 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             }
         }
 
+        //the void signature is needed for event listeners
         public void ProcessFile(string file)
+        {
+            FileToLayer(file);
+        }
+        
+        public object FileToLayer(string file)
         {
             if (file.EndsWith(','))
                 file = file.Remove(file.Length - 1);
@@ -40,24 +47,33 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 fileExtension = fileExtension.Substring(1);
 
             var possibleFileTypeEvents = fileTypeEvents.Where(fte => fte.Extension == fileExtension);
-            
+
             var path = Path.Combine(Application.persistentDataPath, file);
             var localFile = new LocalFile()
             {
                 SourceUrl = AssetUriFactory.CreateProjectAssetUri(file).ToString(),
                 LocalFilePath = path
             };
-            
-            foreach (var fte in possibleFileTypeEvents)
-            {
-                if (fte.DataTypeAdapter.Supports(localFile))
-                {
-                    fte.DataTypeAdapter.Execute(localFile);
-                    return;
-                }
-            }
 
             Debug.Log("file type {" + fileExtension + "} does not have an associated processing function");
+            return AdapterChain(localFile, possibleFileTypeEvents);
         }
+
+        private object AdapterChain(LocalFile localFile, IEnumerable<FileTypeEvent> possibleFileTypeEvents = null)
+        {
+            if(possibleFileTypeEvents == null)
+                possibleFileTypeEvents = fileTypeEvents;
+            
+            // Get our interface references
+            foreach (var fte in possibleFileTypeEvents)
+            {
+                var adapter = fte.DataTypeAdapter;
+                if (adapter.Supports(localFile))
+                {
+                    return adapter.Execute(localFile);
+                }
+            }
+            return null;
+        } 
     }
 }

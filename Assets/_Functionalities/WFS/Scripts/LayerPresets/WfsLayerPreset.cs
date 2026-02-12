@@ -16,17 +16,14 @@ namespace Netherlands3D.Functionalities.Wfs.LayerPresets
         {
             public Uri FeatureUrl { get; }
             public string Title { get; }
-            public LayerData Parent { get; }
 
             public Args(
                 Uri featureUrl, 
-                string title, 
-                LayerData parent
+                string title
             ) {
                 FeatureUrl = featureUrl ?? throw new ArgumentNullException(nameof(featureUrl));
                 Title = !string.IsNullOrWhiteSpace(title) ? title
                     : throw new ArgumentException("Title is required.", nameof(title));
-                Parent = parent;
             }
         }
 
@@ -41,7 +38,6 @@ namespace Netherlands3D.Functionalities.Wfs.LayerPresets
             return builder
                 .OfType(PrefabIdentifier)
                 .NamedAs(args.Title)
-                .ChildOf(args.Parent)
                 .WithColor(color)
                 .SetDefaultStyling(styling)
                 .AddProperty(new LayerURLPropertyData(args.FeatureUrl));
