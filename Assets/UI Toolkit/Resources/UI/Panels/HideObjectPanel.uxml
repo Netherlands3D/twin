@@ -1,0 +1,3 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" class="hide-object-panel">
+    <ui:VisualElement name="ContentRoot"/>
+</ui:UXML>
