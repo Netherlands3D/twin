@@ -9,7 +9,7 @@ namespace Netherlands3D.Twin.Layers.Properties
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "LayerFeatureColorData")]
     public class LayerFeatureColorPropertyData : StylingPropertyData
     {
-        public const string MaterialIndexIdentifier = "data-materialindex";
+        public const string MaterialIndexKey = "data-materialindex";
         public const string MaterialNameIdentifier = "data-materialname";
         public const string ColoringIdentifier = "colorize";
         
@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             if (layerFeature.Geometry is not Material mat) return;
             
-            int.TryParse(layerFeature.Attributes[MaterialIndexIdentifier], out int materialIndexIdentifier);
+            int.TryParse(layerFeature.Attributes[MaterialIndexKey], out int materialIndexIdentifier);
 
             SetColorByMaterialIndex(materialIndexIdentifier, mat.name, color);
         }
@@ -31,7 +31,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             var stylingRule = new StylingRule(
                 stylingRuleName,
                 Expression.EqualTo(
-                    Expression.Get(MaterialIndexIdentifier),
+                    Expression.Get(MaterialIndexKey),
                     index.ToString()
                 )
             );
@@ -44,7 +44,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             if (layerFeature.Geometry is not Material mat) return null;
 
-            int.TryParse(layerFeature.GetAttribute(MaterialIndexIdentifier), out int materialIndexIdentifier);
+            int.TryParse(layerFeature.GetAttribute(MaterialIndexKey), out int materialIndexIdentifier);
             var stylingRuleKey = ColorizationStyleRuleKey(materialIndexIdentifier);
             if (!StylingRules.TryGetValue(stylingRuleKey, out var stylingRule))
             {

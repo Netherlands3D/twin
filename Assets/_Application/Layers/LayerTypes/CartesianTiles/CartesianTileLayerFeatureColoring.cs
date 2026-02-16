@@ -68,7 +68,7 @@ namespace Netherlands3D.Twin.layers.properties
                     Color? color = symbolizer.GetFillColor();
                     if (color.HasValue)
                     {
-                        if (int.TryParse(feature.Attributes[LayerFeatureColorPropertyData.MaterialIndexIdentifier], out var materialIndex))
+                        if (int.TryParse(feature.Attributes[LayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
                         {
                             binaryMeshLayer.DefaultMaterialList[materialIndex].color = color.Value;
                         }
@@ -82,7 +82,7 @@ namespace Netherlands3D.Twin.layers.properties
             if (feature.Geometry is not Material mat) return feature;
 
             feature.Attributes.Add(
-                LayerFeatureColorPropertyData.MaterialIndexIdentifier,
+                LayerFeatureColorPropertyData.MaterialIndexKey,
                 binaryMeshLayer.DefaultMaterialList.IndexOf(mat).ToString()
             );
             feature.Attributes.Add(LayerFeatureColorPropertyData.MaterialNameIdentifier, mat.name);

@@ -29,6 +29,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private string id;
         private Material selectionMaterial;
+        private GameObject selectedMesh;
 
         public MeshMapping(string id)
         {
@@ -196,8 +197,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 }
             }
         }
-
-        private GameObject selectedMesh;
 
         public void Select(string subId)
         {

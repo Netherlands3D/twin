@@ -314,7 +314,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (selectedMapping is not MeshMapping mapping) return null;
 
             layer = GetLayerGameObjectFromMapping(selectedMapping);
-            return mapping.ObjectMapping.items[bagID];
+            mapping.ObjectMapping.items.TryGetValue(bagID, out var item);
+            return item;
         }
 
         public LayerFeature GetLayerFeatureFromBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
