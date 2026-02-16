@@ -43,3 +43,4 @@
 .icon.image-library { --icon-image: var(--icon-library); }
 .icon.image-library-add { --icon-image: var(--icon-libraryadd); }
 .icon.image-close { --icon-image: var(--icon-close); }
+.icon.image-visibility { --icon-image: var(--icon-visibility); }
