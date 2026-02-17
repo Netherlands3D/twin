@@ -71,7 +71,6 @@ namespace Netherlands3D.Twin.Projects
                 using FileStream streamWriter = File.Create(fullZipToPath);
                 zipStream.CopyTo(streamWriter);
             }
-            ProjectData.Current.OnDataChanged.Invoke(ProjectData.Current);
             return ProjectData.Current;
         }
         
