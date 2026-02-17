@@ -36,7 +36,7 @@ namespace Netherlands3D.Twin.Projects
             }
         }
 
-        public double[] CameraRotation = new double[3] { 60, 0, 0 };
+        public double[] CameraRotation = new double[3];
         private DateTime currentDateTime = new DateTime(2024, 08, 19, 13, 0, 0); // Default time
         public DateTime CurrentDateTime
         {
