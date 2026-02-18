@@ -1,9 +1,11 @@
 using Netherlands3D.Twin.Layers.LayerPresets;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.WSA;
 
 namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 {
@@ -42,7 +44,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             layer.NameChanged.AddListener(ConvertScenarioToFolder);
             layer.NameChanged.AddListener(UpdateLabelForScenario);  
 
-            if (layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
+            if (layer.HasProperty<ScenarioPropertyData>())
             {
                 RebuildScenarioUI();
             }            
@@ -53,7 +55,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             layer.NameChanged.RemoveListener(ConvertScenarioToFolder);
             layer.NameChanged.RemoveListener(UpdateLabelForScenario);
 
-            if (layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
+            if (layer.HasProperty<ScenarioPropertyData>())
             {
                 RemoveScenario(layer);
                 DeselectScenario(layer);
@@ -66,9 +68,10 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void ConvertToScenario(LayerData folder, string name)
         {
-            if(IsScenarioTag(folder.Name) && folder.PrefabIdentifier == FolderPreset.PrefabIdentifier)
+            if(IsScenarioTag(folder.Name) && folder.HasProperty<FolderPropertyData>())
             {
-                folder.PrefabIdentifier = ScenarioPreset.PrefabIdentifier;
+                folder.SetProperty(new ScenarioPropertyData());
+                folder.RemoveProperty(folder.GetProperty<FolderPropertyData>());
                 AddScenario(folder);
                 SetScenarioContainerEnabled(true);
                 SelectScenario(folder);
@@ -77,9 +80,10 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void ConvertScenarioToFolder(LayerData scenario, string name)
         {
-            if (!IsScenarioTag(scenario.Name) && scenario.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
+            if (!IsScenarioTag(scenario.Name) && scenario.HasProperty<ScenarioPropertyData>())
             {
-                scenario.PrefabIdentifier = FolderPreset.PrefabIdentifier;
+                scenario.SetProperty(new FolderPropertyData());
+                scenario.RemoveProperty(scenario.GetProperty<FolderPropertyData>());
                 RemoveScenario(scenario);
                 DeselectScenario(scenario);
                 if (scenarios.Count == 0)
@@ -182,7 +186,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             foreach (LayerData layer in layers)
             {
                 ConvertToScenario(layer, layer.Name);
-                if (layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
+                if (layer.HasProperty<ScenarioPropertyData>())
                     AddScenario(layer);
             }
             if (!scenarios.Any())  return;
@@ -209,7 +213,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 
         private void UpdateLabelForScenario(LayerData layer, string name)
         {
-            if(layer.PrefabIdentifier != ScenarioPreset.PrefabIdentifier) return;
+            if(!layer.HasProperty<ScenarioPropertyData>()) return;
 
             foreach (Scenario s in scenarios)
             {

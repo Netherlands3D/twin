@@ -63,8 +63,11 @@ namespace Netherlands3D
 
             //parse custom fields
             var typeToken = obj["$type"]?.ToString();
-            if (typeToken == namespaceIdentifier + legacyFolderIdentifier)
-                layer.PrefabIdentifier = FolderPreset.PrefabIdentifier;
+            if (typeToken == namespaceIdentifier + legacyFolderIdentifier || layer.PrefabIdentifier == "folder")
+            {
+                layer.PrefabIdentifier = "";
+                layer.LayerProperties.Add(new FolderPropertyData());
+            }
             else if (typeToken == namespaceIdentifier + legacyPolygonIdentifier)
             {
                 layer.PrefabIdentifier = polygonSelectionVisualizationPrefabID;

@@ -12,6 +12,7 @@ using Netherlands3D.FirstPersonViewer.Layers;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Netherlands3D.Twin.Layers.Properties;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes
 {
@@ -28,7 +29,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
         [SerializeField] private List<LayerSpriteCollection> layerTypeSprites;
         public LayerSpriteCollection GetLayerTypeSprite(LayerData layer)
         {
-            if(layer.PrefabIdentifier == FolderPreset.PrefabIdentifier || layer.PrefabIdentifier == ScenarioPreset.PrefabIdentifier)
+            if(layer.HasProperty<FolderPropertyData>() || layer.HasProperty<ScenarioPropertyData>())
                 return layerTypeSprites[2];
             
             LayerGameObject template = ProjectData.Current.PrefabLibrary.GetPrefabById(layer.PrefabIdentifier);

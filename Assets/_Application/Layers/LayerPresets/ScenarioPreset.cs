@@ -1,17 +1,10 @@
-using System;
-using Netherlands3D.LayerStyles;
-using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
-using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.Properties;
 
 namespace Netherlands3D.Twin.Layers.LayerPresets
 {
     [LayerPreset("scenario-layer")]
     public sealed class ScenarioPreset : ILayerPreset<ScenarioPreset.Args>
-    {
-        public const string PrefabIdentifier = "scenario_folder";
-
+    { 
         public sealed class Args : LayerPresetArgs<ScenarioPreset>
         {
             public string Name;
@@ -25,9 +18,9 @@ namespace Netherlands3D.Twin.Layers.LayerPresets
 
         public ILayerBuilder Apply(ILayerBuilder builder, Args args)
         {
-            return builder
-                .OfType(PrefabIdentifier)
-                .NamedAs(args.Name);
+            return builder               
+                .NamedAs(args.Name)
+                .AddProperty(new ScenarioPropertyData());
         }
 
         public ILayerBuilder Apply(ILayerBuilder builder, LayerPresetArgs args) => Apply(builder, (Args)args);
