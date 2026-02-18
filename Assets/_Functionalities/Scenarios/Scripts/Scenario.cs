@@ -13,14 +13,16 @@ public class Scenario : MonoBehaviour
     private LayerData layer;
 
     public UnityEvent<bool> VisibilityChanged = new();
-    
+
+    private AutoSizeTMPWidth autoSize;
+
     private void Start()
     {
         toggle = GetComponent<Toggle>();
         toggle.isOn = false;
         
         // Auto resize the toggle based on text width
-        var autoSize = toggle.GetComponent<AutoSizeTMPWidth>();
+        autoSize = toggle.GetComponent<AutoSizeTMPWidth>();
         if (autoSize != null)
         {
             autoSize.ResizeNow();
@@ -61,6 +63,11 @@ public class Scenario : MonoBehaviour
             var text = toggle.GetComponentInChildren<Text>();
             if (text)
                 text.text = label;
+        }
+        
+        if (autoSize != null)
+        {
+            autoSize.ResizeNow();
         }
     }
 }
