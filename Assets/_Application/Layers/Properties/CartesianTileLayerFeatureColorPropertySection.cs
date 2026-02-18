@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    [PropertySection(typeof(LayerFeatureColorPropertyData))]
+    [PropertySection(typeof(CartesianTileLayerFeatureColorPropertyData))]
     public class CartesianTileLayerFeatureColorPropertySection : MonoBehaviour, IVisualizationWithPropertyData, IMultiSelectable
     {  
         [SerializeField] private RectTransform content;
@@ -26,11 +26,11 @@ namespace Netherlands3D.Twin.Layers.Properties
         public List<ISelectable> Items { get; set; } = new();
         public ISelectable FirstSelectedItem { get; set; }
 
-        private LayerFeatureColorPropertyData stylingPropertyData;
+        private CartesianTileLayerFeatureColorPropertyData stylingPropertyData;
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            stylingPropertyData = properties.GetDefaultStylingPropertyData<LayerFeatureColorPropertyData>(); 
+            stylingPropertyData = properties.GetDefaultStylingPropertyData<CartesianTileLayerFeatureColorPropertyData>(); 
             
             CreateSwatches();
 
@@ -63,7 +63,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             
             foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
             {
-                if(kv.Key.Contains(LayerFeatureColorPropertyData.ColoringIdentifier))
+                if(kv.Key.Contains(CartesianTileLayerFeatureColorPropertyData.ColoringIdentifier))
                 {
                     int index = stylingPropertyData.GetMaterialIndexFromStyleRuleKey(kv.Key);                    
                     Color? color = stylingPropertyData.GetColorByMaterialIndex(index);

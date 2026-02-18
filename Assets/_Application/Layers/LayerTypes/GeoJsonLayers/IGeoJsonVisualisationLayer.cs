@@ -12,8 +12,8 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         Transform Transform { get; }
         Color GetRenderColor();
         List<Mesh> GetMeshData(Feature feature);
-        void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color);
-        void SetVisualisationColorToDefault();
+        void SetVisualisationSelected(Transform transform, List<Mesh> meshes, Color color);
+        void SetVisualisationDeselected();
         void AddAndVisualizeFeature(Feature feature, CoordinateSystem originalCoordinateSystem);
         Bounds GetFeatureBounds(Feature feature);
         float GetSelectionRange();

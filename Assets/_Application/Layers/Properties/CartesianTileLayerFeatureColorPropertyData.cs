@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Netherlands3D.Twin.Layers.Properties
 {
     [DataContract(Namespace = "https://netherlands3d.eu/schemas/projects/layers/properties", Name = "LayerFeatureColorData")]
-    public class LayerFeatureColorPropertyData : StylingPropertyData
+    public class CartesianTileLayerFeatureColorPropertyData : StylingPropertyData
     {
         public const string MaterialIndexKey = "data-materialindex";
         public const string MaterialNameIdentifier = "data-materialname";
@@ -92,7 +92,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         }     
         
         [JsonConstructor]
-        public LayerFeatureColorPropertyData()
+        public CartesianTileLayerFeatureColorPropertyData()
         {
             
         }

@@ -251,7 +251,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (selectedGameObjects.Count == 0) return; 
 
             Color selectionColor = Color.blue;           
-            visualisationLayer.SetVisualisationColor(selectedGameObjects[0].transform, meshes, selectionColor);
+            visualisationLayer.SetVisualisationSelected(selectedGameObjects[0].transform, meshes, selectionColor);
         }
 
         public void Deselect()
@@ -263,7 +263,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             selectedGameObjects.Clear();
 
-            visualisationLayer.SetVisualisationColorToDefault();
+            visualisationLayer.SetVisualisationDeselected();
         }
     }
 }

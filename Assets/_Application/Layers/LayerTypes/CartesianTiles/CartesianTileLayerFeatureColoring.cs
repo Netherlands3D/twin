@@ -18,10 +18,10 @@ namespace Netherlands3D.Twin.layers.properties
         {
             visualization = GetComponent<CartesianTileLayerGameObject>();
             binaryMeshLayer = visualization.Layer as BinaryMeshLayer;
-            visualization.InitProperty<LayerFeatureColorPropertyData>(properties);
+            visualization.InitProperty<CartesianTileLayerFeatureColorPropertyData>(properties);
             
             //BC
-            visualization.ConvertOldStylingDataIntoProperty(properties, LayerFeatureColorPropertyData.ColoringIdentifier, visualization.LayerData.GetProperty<LayerFeatureColorPropertyData>());
+            visualization.ConvertOldStylingDataIntoProperty(properties, CartesianTileLayerFeatureColorPropertyData.ColoringIdentifier, visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>());
             
             SetupFeatures();
         }
@@ -36,7 +36,7 @@ namespace Netherlands3D.Twin.layers.properties
         /// </summary>
         private void SetupFeatures()
         {
-            LayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<LayerFeatureColorPropertyData>();
+            CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
             
             visualization.OnFeatureCreated += AddAttributesToLayerFeature;
             featureColorPropertyData.OnStylingChanged.AddListener(OnApplyStyling);
@@ -68,7 +68,7 @@ namespace Netherlands3D.Twin.layers.properties
                     Color? color = symbolizer.GetFillColor();
                     if (color.HasValue)
                     {
-                        if (int.TryParse(feature.Attributes[LayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
+                        if (int.TryParse(feature.Attributes[CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey], out var materialIndex))
                         {
                             binaryMeshLayer.DefaultMaterialList[materialIndex].color = color.Value;
                         }
@@ -82,10 +82,10 @@ namespace Netherlands3D.Twin.layers.properties
             if (feature.Geometry is not Material mat) return feature;
 
             feature.Attributes.Add(
-                LayerFeatureColorPropertyData.MaterialIndexKey,
+                CartesianTileLayerFeatureColorPropertyData.MaterialIndexKey,
                 binaryMeshLayer.DefaultMaterialList.IndexOf(mat).ToString()
             );
-            feature.Attributes.Add(LayerFeatureColorPropertyData.MaterialNameIdentifier, mat.name);
+            feature.Attributes.Add(CartesianTileLayerFeatureColorPropertyData.MaterialNameIdentifier, mat.name);
             
             return feature;
         }
@@ -93,7 +93,7 @@ namespace Netherlands3D.Twin.layers.properties
         
         private void OnDestroyLayer()
         {
-            LayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<LayerFeatureColorPropertyData>();
+            CartesianTileLayerFeatureColorPropertyData featureColorPropertyData = visualization.LayerData.GetProperty<CartesianTileLayerFeatureColorPropertyData>();
             
             visualization.OnFeatureCreated -= AddAttributesToLayerFeature;
             featureColorPropertyData.OnStylingChanged.RemoveListener(OnApplyStyling);

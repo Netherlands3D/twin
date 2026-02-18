@@ -92,7 +92,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// </summary>
         /// <param name="meshes"></param>
         /// <param name="vertexColors"></param>
-        public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
+        public void SetVisualisationSelected(Transform transform, List<Mesh> meshes, Color color)
         {
             foreach (var mesh in meshes)
             {
@@ -124,7 +124,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return null;
         }
 
-        public void SetVisualisationColorToDefault()
+        public void SetVisualisationDeselected()
         {
             foreach (KeyValuePair<Feature, FeaturePolygonVisualisations> fpv in spawnedVisualisations)
             {
