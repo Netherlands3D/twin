@@ -118,7 +118,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.Polygons
         public override void ApplyStyling()
         {
             base.ApplyStyling();
-
             // Apply style to the features that was discovered
             foreach (var feature in LayerFeatures.Values)
             {

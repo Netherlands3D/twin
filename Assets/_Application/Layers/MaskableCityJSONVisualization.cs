@@ -7,7 +7,7 @@ namespace Netherlands3D.Twin.Layers
     [RequireComponent(typeof(CityJSONLayerGameObject))]
     public class MaskableCityJSONVisualization : MaskableVisualization
     {
-        CityJSONLayerGameObject cityJsonLayerGameObject => layerGameObject as CityJSONLayerGameObject;
+        private CityJSONLayerGameObject cityJsonLayerGameObject => layerGameObject as CityJSONLayerGameObject;
 
         private void ApplyMaskingToFeature(CityObjectVisualizer visualizer)
         {

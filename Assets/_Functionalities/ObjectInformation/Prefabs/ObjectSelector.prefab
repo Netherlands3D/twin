@@ -51,9 +51,16 @@ MonoBehaviour:
   SelectFeature:
     m_PersistentCalls:
       m_Calls: []
+  OnDeselect:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSelectDifferentLayer:
+    m_PersistentCalls:
+      m_Calls: []
   activeForTools:
   - {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
   - {fileID: 11400000, guid: ca2d8a328016a5640ac4872c78c151ad, type: 2}
+  selectionMaterial: {fileID: 2100000, guid: 5880f2f37a5ca3f978db30bc2fc25ef6, type: 2}
   debugMappingTree: 0
 --- !u!114 &257279920832339002
 MonoBehaviour:

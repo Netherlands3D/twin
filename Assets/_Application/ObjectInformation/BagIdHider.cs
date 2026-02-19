@@ -1,6 +1,10 @@
+using System;
 using Netherlands3D.SubObjects;
 using System.Collections.Generic;
+using Netherlands3D.CartesianTiles;
 using Netherlands3D.Functionalities.ObjectInformation;
+using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.ObjectInformation
@@ -9,40 +13,42 @@ namespace Netherlands3D.Twin.ObjectInformation
     {
         [SerializeField] private HiddenBagIds data;
         [SerializeField] private HiddenBagIds alwaysHiddenData;
-        public ColorSetLayer ColorSetLayer { get; private set; } = new ColorSetLayer(0, new());
-        private Dictionary<string, Color> buildingColors = new Dictionary<string, Color>();
+        private Dictionary<string, Color> buildingColors = new();
 
         private void Start()
         {
             SetBuildingIdsToHide(data.bagIds);
-            SetBuildingColorsHidden(true);
         }
 
         private void OnEnable()
         {
-            SetBuildingColorsHidden(true);
+            SetBuildingIdsToHide(data.bagIds);
         }
 
         private void OnDisable()
         {
-            SetBuildingColorsHidden(false);
+            Interaction.RemoveOverrideColors(buildingColors);
         }
 
         public void SetBuildingIdsToHide(List<string> ids)
         {
+            ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
+            foreach (string id in buildingColors.Keys)
+                selector.BlockBagId(id, false);
             buildingColors.Clear();
             foreach (string id in ids)
+            {
                 buildingColors.Add(id, Color.clear);
+                selector.BlockBagId(id, true);
+            }
+            
             foreach (string id in alwaysHiddenData.bagIds)
+            {
                 buildingColors.Add(id, Color.clear);
-        }
-
-        public void SetBuildingColorsHidden(bool enabled)
-        {
-            if (enabled)
-                ColorSetLayer = GeometryColorizer.InsertCustomColorSet(-2, buildingColors);
-            else
-                GeometryColorizer.RemoveCustomColorSet(ColorSetLayer);
+                selector.BlockBagId(id, true);
+            }
+            
+            Interaction.AddOverrideColors(buildingColors);
         }
     }
 }
