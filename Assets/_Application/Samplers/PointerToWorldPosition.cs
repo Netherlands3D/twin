@@ -51,6 +51,8 @@ namespace Netherlands3D.Twin.Samplers
             opticalRaycaster.GetWorldPointAsync(screenPoint, worldPointCallback, activeCamera);
             worldPointHeightMap = GetWorldPoint(screenPoint, activeCamera);
 
+            worldPointSync = new Coordinate(opticalRaycaster.GetWorldPointAtCameraScreenPoint(activeCamera, screenPoint));
+
             if(debugHeightmapPosition)
             {
                 if(testPosition == null)
