@@ -18,7 +18,6 @@ namespace Netherlands3D.Twin.Layers
         internal Uri Url { get; private set; }
         private string Name { get; set; }
         private Color? Color { get; set; }
-        private LayerData Parent { get; set; }
         internal StoredAuthorization Credentials { get; set; }
         internal List<LayerPropertyData> Properties { get; } = new();
         [CanBeNull] private Symbolizer DefaultSymbolizer { get; set; }
@@ -57,13 +56,6 @@ namespace Netherlands3D.Twin.Layers
         {
             Url = url;
 
-            return this;
-        }
-
-        public ILayerBuilder ChildOf(LayerData parent)
-        {
-            Parent = parent;
-            
             return this;
         }
 
@@ -120,15 +112,8 @@ namespace Netherlands3D.Twin.Layers
         {            
             LayerData layerData = new LayerData(Name, Type);
             
-            /// todo: the following 2 lines of code should not be done here, but in the Layers service.
-            /// but we must set the new layer as child of the rootLayer before the SetParent function works, which is also done in this function.
-            /// this will be addressed in ticket 1926
-            layerData.InitializeParent(ProjectData.Current.RootLayer);
-            ProjectData.Current.RootLayer.AddChild(layerData, 0);
-
             if (!string.IsNullOrEmpty(Name)) layerData.Name = Name;
             if (Color.HasValue) layerData.Color = Color.Value;
-            if (Parent != null) layerData.SetParent(Parent);
 
             foreach (var property in Properties)
             {

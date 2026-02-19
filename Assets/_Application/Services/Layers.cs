@@ -43,6 +43,10 @@ namespace Netherlands3D.Twin.Services
             }
 
             var layerData = builder.Build();
+            
+            layerData.InitializeParent(ProjectData.Current.RootLayer);
+            ProjectData.Current.RootLayer.AddChild(layerData, 0);
+            
             var layer = new Layer(layerData);
             Visualize(layer, spawner, callback);
             LayerAdded.Invoke(layer);
