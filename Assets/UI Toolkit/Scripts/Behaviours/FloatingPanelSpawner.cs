@@ -47,8 +47,20 @@ namespace Netherlands3D.UI.Panels
             pointerData.position = screenPos;
             var results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(pointerData, results);
-            if (results.Count > 0 && !results[0].gameObject.GetComponent<ClickNothingPlane>())
+            bool clickedInWorld = false;
+            foreach (var result in results)
+            {
+                if (result.gameObject.layer == LayerMask.NameToLayer("UI"))
+                    break;
+                if (result.gameObject.GetComponent<ClickNothingPlane>())
+                    clickedInWorld = true;
+            }
+
+            if (!clickedInWorld)
+            {
+                Debug.Log("not clicked in world");
                 return;
+            }
             
             screenPos.y = Screen.height - screenPos.y;
             Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(root.panel, screenPos);
