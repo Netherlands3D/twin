@@ -1,0 +1,3 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" class="floating-panel">
+    <ui:Label text="Floating Panel"/>
+</ui:UXML>

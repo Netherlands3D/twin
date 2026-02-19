@@ -9,6 +9,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class SubObjectSelector : MonoBehaviour, IObjectSelector
     {
+        public List<IMapping> SelectedMappings { get; private set; } = new List<IMapping>();
+        
         public bool HasObjectMapping => foundObject != null;
         public MeshMapping Object => foundObject; 
 

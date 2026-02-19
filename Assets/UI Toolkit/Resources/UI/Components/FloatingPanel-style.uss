@@ -1,0 +1,7 @@
+.floating-panel {
+    width: 300px;
+    height: 200px;
+    background-color: rgba(30,30,30,0.95);
+    border-radius: 6px;
+    padding: 8px;
+}

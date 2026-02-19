@@ -13,5 +13,6 @@
         Library = 8,
         LibraryAdd = 9,
         Close = 10,
+        Visibility = 11,
     }
 }

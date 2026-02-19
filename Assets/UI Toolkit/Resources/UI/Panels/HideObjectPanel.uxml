@@ -1,0 +1,7 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" name="HideObjectPanel" class="floating-panel hide-object-panel">
+    <ui:VisualElement name="Header" style="flex-direction: row;">
+        <nl3d:Icon name="Icon" image="visibility" />
+        <ui:Label name="Label" text="Objecten verbergen" />
+    </ui:VisualElement>
+    <nl3d:ListView name="ItemListView" virtualization-method="DynamicHeight" style="flex-grow: 1;" />
+</ui:UXML>

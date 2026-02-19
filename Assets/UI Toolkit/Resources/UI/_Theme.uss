@@ -83,6 +83,7 @@
     --icon-library: url("project://database/Assets/Sprites/UI/Icons/Type=Library,%20Color=white,%20Size=large.png");
     --icon-libraryadd: url("project://database/Assets/Sprites/UI/Icons/Type=LibraryAdd,%20Color=white,%20Size=large.png");
     --icon-close: url("project://database/Assets/Sprites/UI/Icons/Type=Cross,%20Color=white,%20Size=large.png");
+    --icon-visibility: url("project://database/Assets/Sprites/UI/Layers/Visibility/Property%201=Visable.png");
     
     --unity-font: "Inter";
     --nl3d-default-font: url("project://database/Assets/Fonts/Inter-Regular.ttf?fileID=12800000&guid=37ff50315a0d57a48a81f6f17f30a981&type=3#Inter-Regular");
