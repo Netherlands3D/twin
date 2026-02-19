@@ -3,7 +3,6 @@ using Netherlands3D.Coordinates;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Cameras.Input;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Samplers;
@@ -11,6 +10,9 @@ using Netherlands3D.Twin.Tools;
 using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
 using System.Linq;
+using GG.Extensions;
+using Netherlands3D.Twin;
+using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -20,6 +22,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     public class ObjectSelectorService : MonoBehaviour
     {
         public SubObjectSelector SubObjectSelector => subObjectSelector;
+        public Dictionary<string, IMapping> SelectedMappings => selectedMappings;
 
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
@@ -28,7 +31,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
-        private List<IMapping> orderedMappings = new List<IMapping>();
+        private List<IMapping> orderedMappings = new();
+        private Dictionary<string, IMapping> selectedMappings = new();
         private Vector3 lastWorldClickedPosition;
         private PointerToWorldPosition pointerToWorldPosition;
         private float minClickDistance = 10;
@@ -41,6 +45,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private CameraInputSystemProvider cameraInputSystemProvider;
 
         [SerializeField] private Tool[] activeForTools;
+        [SerializeField] private Material selectionMaterial;
+        
+        private Dictionary<string, bool> blockedBagIds = new Dictionary<string, bool>();
+
+        public void BlockBagId(string bagId, bool block)
+        {
+            blockedBagIds[bagId] = block;
+        }
 
         public static MappingTree MappingTree
         {
@@ -75,7 +87,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnEnable()
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
-
+            ClickNothingPlane.ClickedOnNothing.AddListener(OnPointerClick);
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.AddListener(Deselect);
         }
@@ -83,7 +95,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnDisable()
         {
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
-
+            ClickNothingPlane.ClickedOnNothing.RemoveListener(OnPointerClick);
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.RemoveListener(Deselect);
         }
@@ -93,14 +105,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             //ClearMappingTree(); //TODO the quadtree featuremappings should be cleared when loading a new project for efficiency. for now its not working properly for some reason
             ProjectData.Current.RootLayer.AddedSelectedLayer.AddListener(OnAddSelectedLayer);
             ProjectData.Current.RootLayer.RemovedSelectedLayer.AddListener(OnRemoveSelectedLayer);
-        }
-
-        private void ClearMappingTree()
-        {
-            mappingTreeInstance.Clear();
-            BoundingBox bbox = StandardBoundingBoxes.Wgs84LatLon_NetherlandsBounds;
-            MappingTree tree = new MappingTree(bbox, 4, 12);                    
-            mappingTreeInstance = tree;
         }
 
         private void OnAddSelectedLayer(LayerData data)
@@ -184,71 +188,90 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     return true;
             return false;
         }
-
-        private void Update()
-        {            
+        
+        private void OnPointerClick()
+        {
             if (IsAnyToolActive())
-            {    
-                if (IsClicked())
+            {
+                string previousSelectedBagId = null;
+                bool isModifierPressed = MultiSelectionUtility.AddToSelectionModifierKeyIsPressed();
+                if (!isModifierPressed)
                 {
+                    previousSelectedBagId = selectedMappings.Count == 1 ? selectedMappings.Keys.ElementAt(0) : null;
                     Deselect();
-                    //the following method calls need to run in order!
-                    string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
-                    IMapping mapping = FindObjectMapping();
-                    bool mappingVisible = IsMappingVisible(mapping, bagId);
-                    if ((mapping == null || !mappingVisible) && lastSelectedMappingLayerData != null)
-                    {
-                        //when nothing is selected but there was something selected, deselect the current active layer
-                        lastSelectedMappingLayerData.DeselectLayer();
-                        lastSelectedMappingLayerData = null;
-                    }
-                    if (mapping is MeshMapping map)
-                    {
-                        LayerData layerData = subObjectSelector.GetLayerDataForSubObject(map.ObjectMapping);
-                        if (!mappingVisible)
-                            return;
+                }
+                //the following method calls need to run in order!
+                string bagId = FindBagId(); //for now this seems to be better than an out param on findobjectmapping
+                IMapping mapping = FindObjectMapping();
+                bool mappingVisible = IsMappingVisible(mapping, bagId);
+                
+                //when nothing is selected but there was something selected, deselect the current active layer, but keep selection if modifier was pressed
+                if ((mapping == null || !mappingVisible) && lastSelectedMappingLayerData != null && !isModifierPressed)
+                {
+                    lastSelectedMappingLayerData.DeselectLayer();
+                    lastSelectedMappingLayerData = null;
+                }
+                if (mapping is MeshMapping map) 
+                    ProcessMeshMappingSelection(map, bagId, previousSelectedBagId, mappingVisible, isModifierPressed);   
+                else if (mapping is FeatureMapping feature) 
+                    ProcessFeatureMappingSelection(feature);
+            }
+        }
 
-                        layerData.SelectLayer(true);
-                        lastSelectedMappingLayerData = layerData;
-                        SelectBagId(bagId);
-                        SelectSubObjectWithBagId?.Invoke(map, bagId);
-                    }
-                    else if (mapping is FeatureMapping feature)
-                    {
-                        LayerData layerData = feature.VisualisationParent.LayerData;
-                        layerData.SelectLayer(true);
-                        lastSelectedMappingLayerData = layerData;
-                        SelectFeatureMapping(feature);
-                        SelectFeature?.Invoke(feature);
-                    }
+        private void ProcessMeshMappingSelection(MeshMapping map, string bagId, string previousBagId, bool mappingVisible, bool isModifierPressed)
+        {
+            LayerData layerData = subObjectSelector.GetLayerDataForSubObject(map.ObjectMapping);
+            if (!mappingVisible)
+                return;
+
+            if(!layerData.IsSelected)
+                layerData.SelectLayer(true);
+                    
+            lastSelectedMappingLayerData = layerData;
+
+            if (!selectedMappings.ContainsKey(bagId) && previousBagId != bagId)
+            {
+                SelectBagId(bagId, !isModifierPressed);
+                selectedMappings.Add(bagId, map);
+                SelectSubObjectWithBagId?.Invoke(map, bagId);
+            }
+            else
+            {
+                DeselectBagId(bagId);
+                selectedMappings.Remove(bagId);
+                SelectSubObjectWithBagId?.Invoke(selectedMappings.Count > 0 ? map : null, bagId);
+                if (selectedMappings.Count == 0)
+                {
+                    lastSelectedMappingLayerData.DeselectLayer();
+                    lastSelectedMappingLayerData = null;
                 }
             }
         }
 
-        private bool IsClicked()
+        private void ProcessFeatureMappingSelection(FeatureMapping feature)
         {
-            var click = Pointer.current.press.wasPressedThisFrame;
+            LayerData layerData = feature.VisualisationParent.LayerData;
+            if(!layerData.IsSelected)
+                layerData.SelectLayer(true);
+                    
+            lastSelectedMappingLayerData = layerData;
+            SelectFeatureMapping(feature);
 
-            if (click)
+            string key = feature.Id;
+            //when feature has no id, then get the newly created submesh name
+            if (feature.Id == null) 
             {
-                waitingForRelease = true;
-                draggedBeforeRelease = false;
-                return false;
+                List<Transform> children = feature.VisualisationLayer.Transform.GetChildren();
+                if (children.Count == 0)
+                {
+                    key = "invalid mapping";
+                    Debug.LogError(key);
+                }
+                else
+                    key = children[children.Count - 1].gameObject.name;
             }
-
-            if (waitingForRelease && !draggedBeforeRelease)
-            {
-                //Check if next release should be ignored ( if we dragged too much )
-                draggedBeforeRelease = Pointer.current.delta.ReadValue().sqrMagnitude > 0.5f;
-            }
-
-            if (Pointer.current.press.wasReleasedThisFrame == false) return false;
-
-            waitingForRelease = false;
-
-            if (draggedBeforeRelease) return false;
-
-            return cameraInputSystemProvider.OverLockingObject == false;
+            selectedMappings.TryAdd(key, feature);
+            SelectFeature?.Invoke(feature);
         }
 
         public bool IsMappingVisible(IMapping mapping, string bagId)
@@ -263,6 +286,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     if (v != true) return false;
                 }
             }
+            if (bagId == null || blockedBagIds.ContainsKey(bagId))
+                return false;
             return true;
         }
 
@@ -271,6 +296,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             MeshMapping objectMapping = new MeshMapping(mapping.name);
             objectMapping.SetMeshObject(mapping);
             objectMapping.UpdateBoundingBox();
+            objectMapping.SetSelectionMaterial(selectionMaterial);
             MappingTree.RootInsert(objectMapping);
         }
 
@@ -295,9 +321,16 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return subObjectSelector.FindSubObjectAtPointerPosition();            
         }
 
-        public void SelectBagId(string bagId)
+        public void SelectBagId(string bagId, bool deselectPrevious = true)
         {
+            if(deselectPrevious)
+                subObjectSelector.Deselect();
             subObjectSelector.Select(bagId);
+        }
+        
+        public void DeselectBagId(string bagId)
+        {
+            subObjectSelector.Deselect(bagId);
         }
 
         public void SelectFeatureMapping(FeatureMapping feature)
@@ -311,7 +344,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (selectedMapping is not MeshMapping mapping) return null;
 
             layer = GetLayerGameObjectFromMapping(selectedMapping);
-            return mapping.ObjectMapping.items.FirstOrDefault(item => bagID == item.objectID);
+            return mapping.ObjectMapping.items[bagID];
         }
 
         public LayerFeature GetLayerFeatureFromBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
@@ -319,11 +352,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             ObjectMappingItem item = GetMappingItemForBagID(bagID, selectedMapping, out layer);
             if (layer == null)
                 return null;
-           
-            if (!layer.LayerFeatures.ContainsKey(item))
-                return null;
-            
-            return layer.LayerFeatures[item]; 
+
+            return layer.GetLayerFeatureByGeometry(item);
         }
 
         /// <summary>
@@ -332,8 +362,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         /// <returns></returns>
         public IMapping FindObjectMapping()
         {
-            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.WorldPoint.ToUnity()) < minClickDistance;
-            lastWorldClickedPosition = pointerToWorldPosition.WorldPoint.ToUnity();
+            bool clickedSamePosition = Vector3.Distance(lastWorldClickedPosition, pointerToWorldPosition.WorldPointSync.ToUnity()) < minClickDistance;
+            lastWorldClickedPosition = pointerToWorldPosition.WorldPointSync.ToUnity();
 
             bool refreshSelection = Time.time - lastTimeClicked > minClickTime;
             lastTimeClicked = Time.time;
@@ -401,6 +431,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void Deselect()
         {
+            selectedMappings.Clear();
             subObjectSelector.Deselect();
             featureSelector.Deselect();
             OnDeselect.Invoke();

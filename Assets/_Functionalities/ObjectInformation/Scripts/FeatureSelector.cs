@@ -49,7 +49,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void Select(FeatureMapping mapping)
         {
-            mapping.SelectFeature();
+            mapping.Select(null);
         }
 
         public void Deselect()
@@ -58,7 +58,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             {
                 foreach (var mapping in featureMappings.SelectMany(pair => pair.Value))
                 {
-                    mapping.DeselectFeature();
+                    mapping.Deselect();
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void FindFeatureAtPointerPosition()
         {            
-            Vector3 groundPosition = pointerToWorldPosition.WorldPoint.ToUnity();
+            Vector3 groundPosition = pointerToWorldPosition.WorldPointSync.ToUnity();
             FindFeatureByPosition(groundPosition);            
         }
 

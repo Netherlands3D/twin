@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Netherlands3D.Coordinates;
 using Netherlands3D.LayerStyles;
 using Netherlands3D.SerializableGisExpressions;
-using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
@@ -20,21 +15,29 @@ namespace Netherlands3D.Twin.Layers.Properties
         
         public void SetColor(LayerFeature layerFeature, Color color)
         {
+            if (layerFeature.Geometry is not Material mat) return;
+            
             int.TryParse(layerFeature.Attributes[MaterialIndexIdentifier], out int materialIndexIdentifier);
 
-            var stylingRuleName = ColorizationStyleRuleName(materialIndexIdentifier);
+            SetColorByMaterialIndex(materialIndexIdentifier, mat.name, color);
+        }
+        
+        public void SetColorByMaterialIndex(int index, string name, Color color)
+        {
+            var stylingRuleName = name;
+            var stylingRuleKey = ColorizationStyleRuleKey(index);
 
             // Add or set the colorization of this feature by its material index
             var stylingRule = new StylingRule(
                 stylingRuleName,
                 Expression.EqualTo(
                     Expression.Get(MaterialIndexIdentifier),
-                    materialIndexIdentifier.ToString()
+                    index.ToString()
                 )
             );
             stylingRule.Symbolizer.SetFillColor(color);
 
-            SetStylingRule(stylingRuleName, stylingRule);
+            SetStylingRule(stylingRuleKey, stylingRule);
         }
         
         public Color? GetColor(LayerFeature layerFeature)
@@ -42,9 +45,8 @@ namespace Netherlands3D.Twin.Layers.Properties
             if (layerFeature.Geometry is not Material mat) return null;
 
             int.TryParse(layerFeature.GetAttribute(MaterialIndexIdentifier), out int materialIndexIdentifier);
-            var stylingRuleName = ColorizationStyleRuleName(materialIndexIdentifier);
-
-            if (!StylingRules.TryGetValue(stylingRuleName, out var stylingRule))
+            var stylingRuleKey = ColorizationStyleRuleKey(materialIndexIdentifier);
+            if (!StylingRules.TryGetValue(stylingRuleKey, out var stylingRule))
             {
                 if(mat.HasProperty("_Color") || mat.HasProperty("_BaseColor")) //TODO check a list of standardized tags for color properties
                     return mat.color;
@@ -54,10 +56,40 @@ namespace Netherlands3D.Twin.Layers.Properties
             return stylingRule.Symbolizer.GetFillColor();
         }
         
-        private string ColorizationStyleRuleName(int materialIndexIdentifier)
+        public Color? GetColorByMaterialIndex(int index)
+        {
+            var stylingRuleKey = ColorizationStyleRuleKey(index);
+            if (!StylingRules.TryGetValue(stylingRuleKey, out var stylingRule))
+            {
+                return null;
+            }
+            return stylingRule.Symbolizer.GetFillColor();
+        }
+        
+        private string ColorizationStyleRuleKey(int materialIndexIdentifier)
         {
             return $"feature.{materialIndexIdentifier}.{ColoringIdentifier}";
-        }    
+        }
+
+        public string GetStylingRuleNameByMaterialIndex(int materialIndexIdentifier)
+        {
+            string key = ColorizationStyleRuleKey(materialIndexIdentifier);
+            return GetStylingRuleName(key);
+        }
+        
+        public int GetMaterialIndexFromStyleRuleKey(string styleRuleKey)
+        {
+            int startIndex = styleRuleKey.IndexOf('.') + 1;
+            int endIndex = styleRuleKey.LastIndexOf('.');
+            if (startIndex > 0 && endIndex > startIndex)
+            {
+                int index;
+                string key = styleRuleKey.Substring(startIndex, endIndex - startIndex);
+                int.TryParse(key, out index);
+                return index;
+            }
+            return -1;
+        }     
         
         [JsonConstructor]
         public LayerFeatureColorPropertyData()
