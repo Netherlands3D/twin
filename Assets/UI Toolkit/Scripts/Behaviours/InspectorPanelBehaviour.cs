@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.CatalogItems;
+using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.Events;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
@@ -208,8 +209,7 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnUriImportStarted(Uri uri)
         {
-            App.Layers.Add(LayerBuilder.Create().FromUrl(uri));
-            
+            App.Layers.AddFromUrl(uri, new Public(uri));
             Close();
         }
         
