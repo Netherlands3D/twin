@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" name="DomePanel" class="floating-panel dome-panel">
+    <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/_Foundation.uss?fileID=7433441132597879392&amp;guid=9848e3ac5abe4964f8b6998ccbde0eef&amp;type=3#_Foundation"/>
+    <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/_Theme.uss?fileID=7433441132597879392&amp;guid=0f24ef838c8e4bf49a89503faf584878&amp;type=3#_Theme"/>
+    <ui:VisualElement name="Header" style="flex-direction: row;">
+        <nl3d:Icon name="Icon" image="visibility"/>
+        <ui:Label name="Label" text="Uitsnijden lagen binnen de dome"/>
+    </ui:VisualElement>
+    <ui:Label text="Kies hieronder welke lagen zichtbaar zijn binnen de dome. Verborgen lagen worden niet meegenomen in deze uitsnede." class="text-base" style="flex-wrap: wrap;"/>
+    <nl3d:ListView name="ItemListView" virtualization-method="DynamicHeight" style="flex-grow: 1;"/>
+</ui:UXML>
