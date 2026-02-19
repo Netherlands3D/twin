@@ -94,11 +94,7 @@ namespace Netherlands3D.DataTypeAdapters
                 OnLocalCacheFailed?.Invoke(urlAndData.SourceUrl);
                 return null;
             }
-
-            token.ThrowIfCancellationRequested();
             
-            cancellationTokenSource.Dispose();
-            cancellationTokenSource = null;
             // Find the proper adapter in a chain of responsibility
             return AdapterChain(urlAndData);
         }
