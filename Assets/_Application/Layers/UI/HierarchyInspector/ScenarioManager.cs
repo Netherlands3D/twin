@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
@@ -24,6 +25,11 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             {
                 Debug.LogError("ScenarioToggleContainer or ScenarioTogglePrefab is NOT assigned in the inspector.");
             }
+        }
+
+        private void Start()
+        {
+            SetScenarioContainerEnabled(false);
         }
 
         private void OnEnable()

@@ -1,3 +1,4 @@
+using System;
 using Netherlands3D.Twin.Layers;
 using TMPro;
 using UnityEngine;
@@ -15,6 +16,8 @@ public class Scenario : MonoBehaviour
     public UnityEvent<bool> VisibilityChanged = new();
 
     private AutoSizeTMPWidth autoSize;
+    
+    private const string ScenarioPrefix = "Scenario:";
 
     private void Start()
     {
@@ -45,11 +48,8 @@ public class Scenario : MonoBehaviour
     {
         // Use the exact folder name as label (minus the 'Scenario:' prefix if you want)
         string label = name;
-        int idx = label.IndexOf(':');
-        if (idx >= 0 && idx + 1 < label.Length)
-            label = label[(idx + 1)..].Trim(); // keep this if you want shorter labels
-        // If you want the full name including "Scenario: ", just comment the 2 lines above
-        // and use: string label = folder.Name;
+        if (label.StartsWith(ScenarioPrefix, StringComparison.OrdinalIgnoreCase))
+            label = label.Substring(ScenarioPrefix.Length).Trim();
 
         // TMP label first
         TMP_Text tmpText = gameObject.GetComponentInChildren<TMP_Text>();
