@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using KindMen.Uxios;
 using Netherlands3D.Credentials.StoredAuthorization;
 using UnityEngine;
@@ -110,7 +109,6 @@ namespace Netherlands3D.DataTypeAdapters
         /// </summary>
         /// <param name="urlAndData">The local file object where the path will set</param>
         /// <returns></returns>
-        [ItemCanBeNull]
         private Task<LocalFile> DownloadDataToLocalCache(Uri url, StoredAuthorization auth, CancellationToken token)
         {
             var tcs = new TaskCompletionSource<LocalFile>();
