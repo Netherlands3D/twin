@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
+using Netherlands3D.Credentials.StoredAuthorization;
 using Netherlands3D.DataTypeAdapters;
-using Netherlands3D.Twin.DataTypeAdapters;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerPresets;
-using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,10 +13,9 @@ namespace Netherlands3D.Twin.Services
     public class Layers : MonoBehaviour, ILayersServiceFacade
     {
         [SerializeField] private PrefabLibrary prefabLibrary;
-        [SerializeField] private FileTypeAdapter fromFileImporter;
         [SerializeField] private DataTypeChain fromUrlImporter;
         private VisualizationSpawner spawner;
-        
+
         public UnityEvent<Layer> LayerAdded { get; } = new();
         public UnityEvent<LayerData> LayerRemoved { get; } = new();
 
@@ -45,13 +41,6 @@ namespace Netherlands3D.Twin.Services
             {
                 throw new NotSupportedException("Unsupported layer builder type: " + builder.GetType().Name);
             }
-            
-            switch (layerBuilder.Type)
-            {
-                case "url": return ImportFromUrl(layerBuilder);
-                case "file": return ImportFromFile(layerBuilder);
-                case "folder": return AddFolderLayer(layerBuilder);
-            }
 
             var layerData = builder.Build();
             var layer = new Layer(layerData);
@@ -60,41 +49,39 @@ namespace Netherlands3D.Twin.Services
             return layer;
         }
 
-        private Layer AddFolderLayer(LayerBuilder layerBuilder)
+        public async Task<Layer[]> AddFromUrl(Uri uri, StoredAuthorization authorization)
         {
-            var folderLayer = layerBuilder.Build();
-            var folder = new Layer(folderLayer);
-            LayerAdded.Invoke(folder);
-            return folder;
-        }
-
-        private Layer ImportFromFile(LayerBuilder layerBuilder)
-        {
-            var url = RetrieveUrlForLayer(layerBuilder);
-            fromFileImporter.ProcessFile(url.ToString());
-
-            // Return null to indicate that adding this flow does not directly result in a Layer, it may do so
-            // indirectly (DataTypeAdapters call this Layer service again).
-            //todo: the fileTypeAdapter should be refactored to return the resulting objects
-            return null;
-        }
-
-        private Layer ImportFromUrl(LayerBuilder layerBuilder)
-        {
-            var url = RetrieveUrlForLayer(layerBuilder);
-            if (url.Scheme == "prefab-library")
+            var result = await fromUrlImporter.DetermineAdapterAndReturnResult(uri, authorization);
+            if (result is LayerPresetArgs preset)
             {
-                // This is a stored prefab identifier from the prefab library, so let's try it again but
-                // then as a direct build
-                return Add(layerBuilder.OfType(url.AbsolutePath.Trim('/')));
+                var layer = Add(preset);
+                return new[] { layer };
             }
+            
+            if (result is LayerPresetArgs[] presets)
+            {
+                Layer parent = null;
+                Layer[] layers =  new Layer[presets.Length];
+                for (var i = 0; i < presets.Length; i++)
+                {
+                    var p = presets[i];
+                    var layer = Add(p);
+                    layers[i] = layer;
                     
-            fromUrlImporter.DetermineAdapter(url, layerBuilder.Credentials);
-                
-            // Return null to indicate that adding this flow does not directly result in a Layer, it may do so
-            // indirectly (DataTypeAdapters call this Layer service again).
-            //todo: the DataTypeChain should be refactored to return the resulting objects
-            return null;
+                    // todo: Currently we put presets[0] as the folder parent for wms/wfs. This is not part of the imported data, and once we will have a UI to allow users to select which layers will be imported, this will be removed.
+                    if (i == 0)
+                        parent = layer;
+                    
+                    if (i > 0 && presets[0] is FolderPreset.Args)
+                    {
+                        layer.LayerData.SetParent(parent.LayerData);
+                    }
+                }
+
+                return layers; //NB. An empty array is considered a success
+            }
+
+            throw new AdapterNotFoundException("Could not determine Layer adapter(s) for the url:  " + uri);
         }
 
         /// <summary>
@@ -115,34 +102,17 @@ namespace Netherlands3D.Twin.Services
         /// </summary>
         public void Remove(LayerData layerData)
         {
-            layerData.Dispose();  
+            layerData.Dispose();
             LayerRemoved.Invoke(layerData);
         }
 
-        private Uri RetrieveUrlForLayer(LayerBuilder layerBuilder)
-        {
-            // We prefer the direct approach
-            if (layerBuilder.Url != null)
-            {
-                return layerBuilder.Url;
-            }
-
-            // But we need a fallback for project-loaded layers
-            var urlPropertyData = layerBuilder.Properties.Get<LayerURLPropertyData>();
-            if (urlPropertyData == null)
-            {
-                throw new Exception("Cannot add layer with type 'url' without a URL");
-            }
-
-            return urlPropertyData.Url;
-        }
-
-        public void VisualizeData(LayerData layerData, UnityAction<LayerGameObject> callback = null)
+        public Layer VisualizeData(LayerData layerData, UnityAction<LayerGameObject> callback = null)
         {
             Layer layer = new Layer(layerData);
             Visualize(layer, spawner, callback);
+            return layer;
         }
-        
+
         private static async void Visualize(Layer layer, ILayerSpawner spawner, UnityAction<LayerGameObject> callback = null) //todo: change callbacks for promises?
         {
             try
@@ -153,7 +123,7 @@ namespace Netherlands3D.Twin.Services
                     visualizationTask = spawner.Spawn(layer.LayerData);
                     layer.SetVisualizationTask(visualizationTask);
                 }
-                
+
                 var visualization = await visualizationTask;
 
                 if (layer.LayerData == null || layer.LayerData.IsDisposed)
@@ -162,7 +132,7 @@ namespace Netherlands3D.Twin.Services
                     Destroy(visualization.gameObject);
                     return;
                 }
-                
+
                 visualization?.SetData(layer.LayerData);
                 callback?.Invoke(visualization);
             }
