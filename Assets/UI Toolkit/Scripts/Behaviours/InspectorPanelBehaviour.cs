@@ -209,7 +209,7 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnUriImportStarted(Uri uri)
         {
-            App.Layers.AddFromUrl(uri, new Public(uri));
+            App.Layers.AddFromUrl(uri, new Public(uri)); //todo: Exceptions should still be handled
             Close();
         }
         
