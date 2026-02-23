@@ -1,12 +1,8 @@
-using System;
-using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.WSA;
 
 namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
 {
