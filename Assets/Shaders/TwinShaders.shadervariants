@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!200 &20000000
+ShaderVariantCollection:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TwinShaders
+  m_Shaders:
+  - first: {fileID: -6465566751694194690, guid: 3b5ad576a7d85d745bb1094377662046,
+      type: 3}
+    second:
+      variants: []
+  - first: {fileID: -6465566751694194690, guid: c43d943999b82fb4a9b29c6e62a2c801,
+      type: 3}
+    second:
+      variants: []
+  - first: {fileID: -6465566751694194690, guid: b721ead5c6c4c8d4d9cfb89f4c09cb21,
+      type: 3}
+    second:
+      variants: []
+  - first: {fileID: -6465566751694194690, guid: 8ebfa318f2201a749b9ff7d16e5ae727,
+      type: 3}
+    second:
+      variants: []
+  - first: {fileID: -6465566751694194690, guid: a9c0c09940ee94ca18a37ebcd59ecca9,
+      type: 3}
+    second:
+      variants: []
+  - first: {fileID: -6465566751694194690, guid: 885ac3670a51697469c9f66affc50fde,
+      type: 3}
+    second:
+      variants: []
+  - first: {fileID: -6465566751694194690, guid: 5532de98ab7d64f0c8f097877aa3f77d,
+      type: 3}
+    second:
+      variants: []
