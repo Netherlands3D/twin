@@ -69,12 +69,9 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                     if (preset is LayerPresetArgs layerPresetArgs) 
                     {
                         App.Layers.Add(layerPresetArgs);
-                        return;
                     }
                 }
             }
-
-            throw new AdapterNotFoundException("file {" + localFile.LocalFilePath + "} does not have an associated import adapter");
         }
     }
 }
