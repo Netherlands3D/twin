@@ -81,8 +81,7 @@ namespace Netherlands3D.Twin.Services
                 return layers; //NB. An empty array is considered a success
             }
 
-            Debug.LogError("Could not determine Layer adapter(s) for the url:  " + uri);
-            return null;
+            throw new AdapterNotFoundException("Could not determine Layer adapter(s) for the url:  " + uri);
         }
 
         /// <summary>
