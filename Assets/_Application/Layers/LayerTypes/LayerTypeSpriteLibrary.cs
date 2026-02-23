@@ -52,6 +52,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes
                     return layerTypeSprites[8];
                 case CartesianTileLayerGameObject _:
                 case Tile3DLayerGameObject _:
+                case GroundPlaneLayerGameObject: 
                     return layerTypeSprites[1];
                 case WorldAnnotationLayerGameObject _:
                     return layerTypeSprites[10];
