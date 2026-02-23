@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
+using Netherlands3D.Catalogs;
 using Netherlands3D.Catalogs.Catalogs;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Events;
@@ -11,7 +13,7 @@ namespace Netherlands3D.Twin.Functionalities.Catalogs
         fileName = "OgcApiCatalogImportAdapter",
         order = 0
     )]
-    public class OgcApiCatalogImportAdapter : ScriptableObject, IDataTypeAdapter
+    public class OgcApiCatalogImportAdapter : ScriptableObject, IDataTypeAdapter<Task<ICatalogItem>>
     {
         [SerializeField] private AssetLibrary.AssetLibrary assetLibrary;
         [SerializeField] private TriggerEvent openAssetLibrary;
@@ -24,11 +26,13 @@ namespace Netherlands3D.Twin.Functionalities.Catalogs
                 && ContentMatches.JsonContainsLinkWithRelation(reader, "conformance");
         }
 
-        public async void Execute(LocalFile localFile)
+        public async Task<ICatalogItem> Execute(LocalFile localFile)
         {
-            assetLibrary.Import(await OgcApiCatalog.CreateAsync(localFile.SourceUrl));
+            var catalogItem = await OgcApiCatalog.CreateAsync(localFile.SourceUrl);
+            assetLibrary.Import(catalogItem);
             
             openAssetLibrary.Invoke();
+            return catalogItem;
         }
     }
 }

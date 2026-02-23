@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Services;
 using UnityEngine;
 
 namespace Netherlands3D.Twin.DataTypeAdapters
@@ -13,7 +15,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
     {
         public string Extension;
         [SerializeField] private ScriptableObject Adapter;
-        public IDataTypeAdapter DataTypeAdapter => (IDataTypeAdapter)Adapter; //unfortunately interfaces are not serializable
+        public IDataTypeAdapter<object> DataTypeAdapter => (IDataTypeAdapter<object>)Adapter; //unfortunately interfaces are not serializable
     }
 
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/FileTypeAdapter", fileName = "FileTypeAdapter", order = 0)]
@@ -30,6 +32,7 @@ namespace Netherlands3D.Twin.DataTypeAdapters
             }
         }
 
+        //the void signature is needed for event listeners
         public void ProcessFile(string file)
         {
             if (file.EndsWith(','))
@@ -40,24 +43,38 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 fileExtension = fileExtension.Substring(1);
 
             var possibleFileTypeEvents = fileTypeEvents.Where(fte => fte.Extension == fileExtension);
-            
+
             var path = Path.Combine(Application.persistentDataPath, file);
             var localFile = new LocalFile()
             {
                 SourceUrl = AssetUriFactory.CreateProjectAssetUri(file).ToString(),
                 LocalFilePath = path
             };
-            
+
+            AdapterChain(localFile, possibleFileTypeEvents);
+        }
+
+        private void AdapterChain(LocalFile localFile, IEnumerable<FileTypeEvent> possibleFileTypeEvents = null)
+        {
+            if (possibleFileTypeEvents == null)
+                possibleFileTypeEvents = fileTypeEvents;
+
+            // Get our interface references
             foreach (var fte in possibleFileTypeEvents)
             {
-                if (fte.DataTypeAdapter.Supports(localFile))
+                var adapter = fte.DataTypeAdapter;
+                if (adapter.Supports(localFile))
                 {
-                    fte.DataTypeAdapter.Execute(localFile);
-                    return;
+                    var preset = adapter.Execute(localFile);
+                    if (preset is LayerPresetArgs layerPresetArgs) 
+                    {
+                        App.Layers.Add(layerPresetArgs);
+                        return;
+                    }
                 }
             }
 
-            Debug.Log("file type {" + fileExtension + "} does not have an associated processing function");
+            throw new AdapterNotFoundException("file {" + localFile.LocalFilePath + "} does not have an associated import adapter");
         }
     }
 }

@@ -1,27 +1,17 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using KindMen.Uxios;
 using Netherlands3D.DataTypeAdapters;
-using Netherlands3D.Functionalities.OBJImporter.LayerPresets;
 using Netherlands3D.Functionalities.Wms.LayerPresets;
 using Netherlands3D.OgcWebServices.Shared;
 using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
-using Netherlands3D.Twin.Layers.LayerTypes;
-using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wms
 {
-    public class CoroutineRunner : MonoBehaviour
-    {
-    }
-
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WMSImportAdapter", fileName = "WMSImportAdapter", order = 0)]
-    public class WMSImportAdapter : ScriptableObject, IDataTypeAdapter
+    public class WMSImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetArgs[]>
     {
         [SerializeField] private WMSLayerGameObject layerPrefab;
 
@@ -37,22 +27,23 @@ namespace Netherlands3D.Functionalities.Wms
             {
                 return OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wms, RequestType.GetMap);
             }
-            
+
             var request = new WmsGetCapabilities(url, bodyContents);
-                
+
             // it should not just be a capabilities file, we also want to support BBOX!
             if (!request.CapableOfBoundingBoxes)
             {
                 Debug.Log("<color=orange>WMS BBOX filter not supported.</color>");
                 return false;
             }
+
             return true;
         }
 
-        public void Execute(LocalFile localFile)
+        public LayerPresetArgs[] Execute(LocalFile localFile)
         {
             var url = OgcWebServicesUtility.NormalizeUrl(localFile.SourceUrl);
-            var wmsFolder = AddFolderLayer(url.AbsoluteUri);
+            var folderPreset = new FolderPreset.Args(url.AbsoluteUri); //todo: this folder should not be here, because it is not part of the imported data. This will be removed in a future ticket when selecting individual maps will be made possible
 
             var cachedDataPath = localFile.LocalFilePath;
             var bodyContents = File.ReadAllText(cachedDataPath);
@@ -63,15 +54,21 @@ namespace Netherlands3D.Functionalities.Wms
                 BoundingBoxCache.AddBoundingBoxContainer(request);
 
                 var maps = request.GetMaps(
-                    layerPrefab.PreferredImageSize.x, 
+                    layerPrefab.PreferredImageSize.x,
                     layerPrefab.PreferredImageSize.y,
                     layerPrefab.TransparencyEnabled
                 );
-                
-                var coroutineRunner = new GameObject("WMSImportAdapter coroutine runner").AddComponent<CoroutineRunner>();
-                coroutineRunner.StartCoroutine(CreateMapLayers(maps, url, wmsFolder, coroutineRunner.gameObject));
 
-                return;
+                var presets = new LayerPresetArgs[maps.Count + 1];
+                presets[0] = folderPreset;
+                for (var i = 0; i < maps.Count; i++) //todo test if this is now performant due to async visualisations
+                {
+                    var map = maps[i];
+                    var preset = CreatePreset(map, url, i < layerPrefab.DefaultEnabledLayersMax);
+                    presets[i + 1] = preset;
+                }
+
+                return presets;
             }
 
             if (OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wms, RequestType.GetMap))
@@ -79,43 +76,20 @@ namespace Netherlands3D.Functionalities.Wms
                 var request = new GetMapRequest(url, bodyContents);
                 var map = request.CreateMapFromCapabilitiesUrl(
                     url,
-                    layerPrefab.PreferredImageSize.x, 
+                    layerPrefab.PreferredImageSize.x,
                     layerPrefab.PreferredImageSize.y,
                     layerPrefab.TransparencyEnabled
                 );
-                CreateLayer(map, url, wmsFolder, true);
-
-                return;
-            }
-            
-            Debug.LogError("Unrecognized WMS request type at " + url);
-        }
-
-        private LayerData AddFolderLayer(string folderName)
-        {
-            var builder = new LayerBuilder().OfType("folder").NamedAs(folderName); //todo: make preset?
-            var wfsFolder = App.Layers.Add(builder);
-            return wfsFolder.LayerData;
-        }
-        
-        private IEnumerator CreateMapLayers(List<MapFilters> maps, Uri url, LayerData wmsFolder, GameObject coroutineRunner)
-        {
-            for (int i = 0; i < maps.Count; i++)
-            {
-                CreateLayer(maps[i], url, wmsFolder, i < layerPrefab.DefaultEnabledLayersMax);
-                
-                if (i % 10 == 0)
-                    yield return null;
+                var preset = CreatePreset(map, url, true);
+                return new[] { preset };
             }
 
-            Destroy(coroutineRunner);
+            throw new ArgumentException("Unrecognized WMS request type: " + url);
         }
 
-        private void CreateLayer(MapFilters mapFilters, Uri url, LayerData folderLayer, bool defaultEnabled)
+        private LayerPresetArgs CreatePreset(MapFilters mapFilters, Uri url, bool defaultEnabled)
         {
-            App.Layers.Add(
-                new WmsLayerPreset.Args(url, mapFilters, folderLayer, defaultEnabled)
-            );
+            return new WmsLayerPreset.Args(url, mapFilters, defaultEnabled);
         }
     }
 }
