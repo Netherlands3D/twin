@@ -58,15 +58,11 @@ namespace Netherlands3D
             try
             {
                 var layers = await App.Layers.AddFromUrl(uri, auth);
-                if (layers != null)
-                {
-                    if(layers.Length == 0)
-                        Debug.LogWarning("The import of the dataset succeeded, but the dataset is empty and contains no layers");
-                    
-                    importSucceeded.Invoke();
-                    return;
-                }
-                importFailed.Invoke();
+
+                if (layers.Length == 0)
+                    Debug.LogWarning("The import of the dataset succeeded, but the dataset is empty and contains no layers");
+
+                importSucceeded.Invoke();
             }
             catch (Exception e)
             {

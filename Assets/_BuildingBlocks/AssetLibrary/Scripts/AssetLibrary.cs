@@ -102,7 +102,7 @@ namespace Netherlands3D.AssetLibrary
         public void Load(RecordItem recordItem)
         {
             if (recordItem.Url.IsRemoteAsset())
-                App.Layers.AddFromUrl(recordItem.Url, new Public(recordItem.Url));
+                App.Layers.AddFromUrl(recordItem.Url, new Public(recordItem.Url)); //todo: Exceptions should still be handled
             else
                 App.Layers.Add(LayerBuilder.Create().NamedAs(recordItem.Title).OfType(recordItem.Url.AbsolutePath.Trim('/')));
         }

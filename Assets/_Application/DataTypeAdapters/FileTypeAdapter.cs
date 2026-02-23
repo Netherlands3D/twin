@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Projects;
 using Netherlands3D.Twin.Services;
 using UnityEngine;
@@ -34,11 +35,6 @@ namespace Netherlands3D.Twin.DataTypeAdapters
         //the void signature is needed for event listeners
         public void ProcessFile(string file)
         {
-            FileToLayer(file);
-        }
-        
-        public object FileToLayer(string file)
-        {
             if (file.EndsWith(','))
                 file = file.Remove(file.Length - 1);
 
@@ -55,25 +51,30 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 LocalFilePath = path
             };
 
-            Debug.Log("file type {" + fileExtension + "} does not have an associated processing function");
-            return AdapterChain(localFile, possibleFileTypeEvents);
+            AdapterChain(localFile, possibleFileTypeEvents);
         }
 
-        private object AdapterChain(LocalFile localFile, IEnumerable<FileTypeEvent> possibleFileTypeEvents = null)
+        private void AdapterChain(LocalFile localFile, IEnumerable<FileTypeEvent> possibleFileTypeEvents = null)
         {
-            if(possibleFileTypeEvents == null)
+            if (possibleFileTypeEvents == null)
                 possibleFileTypeEvents = fileTypeEvents;
-            
+
             // Get our interface references
             foreach (var fte in possibleFileTypeEvents)
             {
                 var adapter = fte.DataTypeAdapter;
                 if (adapter.Supports(localFile))
                 {
-                    return adapter.Execute(localFile);
+                    var preset = adapter.Execute(localFile);
+                    if (preset is LayerPresetArgs layerPresetArgs) 
+                    {
+                        App.Layers.Add(layerPresetArgs);
+                        return;
+                    }
                 }
             }
-            return null;
-        } 
+
+            throw new AdapterNotFoundException("file {" + localFile.LocalFilePath + "} does not have an associated import adapter");
+        }
     }
 }
