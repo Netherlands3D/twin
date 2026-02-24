@@ -32,12 +32,14 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
         {
             App.Layers.LayerAdded.AddListener(OnLayerAdded);
             App.Layers.LayerRemoved.AddListener(OnLayerDeleted);
+            ProjectData.Current.OnDataChanged.AddListener(OnProjectDataChanged);
         }
 
         private void OnDisable()
         {
             App.Layers.LayerAdded.RemoveListener(OnLayerAdded);
             App.Layers.LayerRemoved.RemoveListener(OnLayerDeleted);
+            ProjectData.Current.OnDataChanged.RemoveListener(OnProjectDataChanged);
         }
 
         private void OnLayerAdded(LayerData layer)
@@ -51,6 +53,7 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
                 RebuildScenarioUI();
             }            
         }
+        
         private void OnLayerDeleted(LayerData layer)
         {
             layer.NameChanged.RemoveListener(ConvertToScenario);
@@ -68,6 +71,11 @@ namespace Netherlands3D.Twin.Layers.UI.HierarchyInspector
             }
         }
 
+        private void OnProjectDataChanged(ProjectData newProject)
+        {
+            RebuildScenarioUI();
+        }
+        
         private void ConvertToScenario(LayerData folder, string name)
         {
             if(IsScenarioTag(folder.Name) && folder.HasProperty<FolderPropertyData>())
