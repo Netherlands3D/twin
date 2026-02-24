@@ -210,6 +210,15 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             MeshRenderer mRenderer = selectedMesh.AddComponent<MeshRenderer>();
             mRenderer.material = selectionMaterial;
             selectedMesh.transform.position = ObjectMapping.transform.TransformPoint(localCentroid);
+            selectedMesh.layer = LayerMask.NameToLayer("Buildings");
+
+            Color col = new Color(1, 0, 0, 0);
+            List<Color> colors = new List<Color>();
+            foreach (Vector3 v in mesh.vertices)
+                colors.Add(col);
+
+            mFilter.mesh.SetColors(colors);
+
         }
 
         public void Deselect()

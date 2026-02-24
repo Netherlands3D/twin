@@ -100,6 +100,14 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 if (visualisation != null)
                 {
                     visualisation.VisualisationMaterial = polygonSelectionVisualizationMaterial;
+
+                    Color col = new Color(1, 0, 0, 0);
+                    List<Color> colors = new List<Color>();
+                    foreach (Vector3 v in visualisation.PolygonMesh.vertices)
+                        colors.Add(col);
+
+                    visualisation.PolygonMesh.SetColors(colors);
+
                 }
             }
         }
@@ -132,7 +140,15 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 foreach (PolygonVisualisation pv in visualisations)
                 {
                     if (pv != null)
+                    {
                         pv.VisualisationMaterial = polygonVisualizationMaterialInstance;
+                        Color col = new Color(0, 0, 0, 0);
+                        List<Color> colors = new List<Color>();
+                        foreach (Vector3 v in pv.PolygonMesh.vertices)
+                            colors.Add(col);
+
+                        pv.PolygonMesh.SetColors(colors);
+                    }
                 }
             }
         }

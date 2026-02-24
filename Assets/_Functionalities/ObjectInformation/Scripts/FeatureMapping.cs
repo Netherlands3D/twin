@@ -232,6 +232,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     }
                 }
 
+                Color col = new Color(1, 0, 0, 0);
+                List<Color> colors = new List<Color>();
+                foreach (Vector3 v in mesh.vertices)
+                    colors.Add(col);
+
+                mesh.SetColors(colors);
+
                 mesh.RecalculateBounds();
                 subObject.transform.SetParent(visualisationLayer.Transform);
                 subObject.layer = LayerMask.NameToLayer("Projected");
