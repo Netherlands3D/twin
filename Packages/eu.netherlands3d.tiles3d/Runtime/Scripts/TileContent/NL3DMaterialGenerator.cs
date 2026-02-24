@@ -82,7 +82,7 @@ namespace Netherlands3D.Tiles3D
                 if (specGloss != null)
                 {
                     baseColorLinear = specGloss.DiffuseColor;
-                    var success = TrySetTexture(
+                    var success = TrySetTexture2(
                         specGloss.diffuseTexture,
                         material,
                         gltf,
@@ -107,7 +107,7 @@ namespace Netherlands3D.Tiles3D
                 if (materialType != MaterialType.SpecularGlossiness)
                 {
                     // baseColorTexture can be used by both MetallicRoughness AND Unlit materials
-                    var success = TrySetTexture(
+                    var success = TrySetTexture2(
                         gltfMaterial.PbrMetallicRoughness.BaseColorTexture,
                         material,
                         gltf,
