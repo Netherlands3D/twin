@@ -3,7 +3,7 @@ Shader "Custom/Tiles3DUnlitWithShadows"
     Properties
     {
         _Color ("Color", Color) = (1,1,1,1)
-        _MainTex ("Base Color Texture", 2D) = "white" {}
+        _MainTexture ("Base Color Texture", 2D) = "white" {}
         _ShadowStrength ("Shadow Strength", Range(0, 1)) = 0.5
     }
     SubShader
@@ -54,7 +54,7 @@ Shader "Custom/Tiles3DUnlitWithShadows"
                 float4 shadowCoord : TEXCOORD3;
             };
 
-            sampler2D _MainTex;
+            sampler2D _MainTexture;
             float4 _Color;
             float _ShadowStrength;
 
@@ -87,7 +87,7 @@ Shader "Custom/Tiles3DUnlitWithShadows"
                    i.shadowCoord = TransformWorldToShadowCoord(i.worldPos);
                  #endif
 
-                float4 texColor = tex2D(_MainTex, i.uv);
+                float4 texColor = tex2D(_MainTexture, i.uv);
                 float4 color = texColor * _Color;
                 Light mainLight = GetMainLight(i.shadowCoord); //get dir light
 

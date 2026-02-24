@@ -7,9 +7,9 @@ namespace Netherlands3D.Tiles3D
         public static Shader UnlitShader;
         public static Shader MetallicShader;
         public static Shader SpecularShader;
-
+        
         /// <summary>Shader property ID for property MainTexture</summary>
-        public static int MainTextureShaderProperty = Shader.PropertyToID("_MainTex");
+        public static int MainTextureShaderProperty = Shader.PropertyToID("_MainTexture");
 
         /// <summary>Shader property ID for property BaseColor</summary>
         public static int BaseColorShaderProperty = Shader.PropertyToID("_BaseColor");
