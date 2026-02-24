@@ -102,7 +102,7 @@ MonoBehaviour:
   - {fileID: -6529169233301359828}
   m_RendererFeatureMap: 64b18a1cd8fd544a511f44df160d4c6bd3b897979c39c3b0fb489473d8d78e0d2cb3a9e22cbb63a5
   m_UseNativeRenderPass: 0
-  xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
+  xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   m_AssetVersion: 3
   m_PrepassLayerMask:
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   m_Settings:
-    technique: 0
+    technique: 2
     maxDrawDistance: 30000
     decalLayers: 0
     dBufferSettings:
