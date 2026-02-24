@@ -82,11 +82,15 @@ namespace Netherlands3D.Tiles3D
                 if (specGloss != null)
                 {
                     baseColorLinear = specGloss.DiffuseColor;
-                    var success = TrySetTexture2(
+                    var success = TrySetTexture(
                         specGloss.diffuseTexture,
                         material,
                         gltf,
-                        NL3DShaders.MainTextureShaderProperty
+                        NL3DShaders.MainTextureShaderProperty,
+                        NL3DShaders.MainTextureScaleTransformPropertyId,
+                        NL3DShaders.MainTextureRotationPropertyId,
+                        NL3DShaders.MainTextureUVChannelPropertyId
+                        
                     );
                     if(!success)
                         Debug.LogError("Could not set texture");
@@ -103,11 +107,14 @@ namespace Netherlands3D.Tiles3D
                 if (materialType != MaterialType.SpecularGlossiness)
                 {
                     // baseColorTexture can be used by both MetallicRoughness AND Unlit materials
-                    var success = TrySetTexture2(
+                    var success = TrySetTexture(
                         gltfMaterial.PbrMetallicRoughness.BaseColorTexture,
                         material,
                         gltf,
-                        NL3DShaders.MainTextureShaderProperty
+                        NL3DShaders.MainTextureShaderProperty,
+                        NL3DShaders.MainTextureScaleTransformPropertyId,
+                        NL3DShaders.MainTextureRotationPropertyId,
+                        NL3DShaders.MainTextureUVChannelPropertyId
                     );
                     if(!success)
                         Debug.LogError("Could not set texture");
