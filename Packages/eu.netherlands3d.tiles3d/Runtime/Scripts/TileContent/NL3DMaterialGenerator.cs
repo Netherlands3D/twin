@@ -26,6 +26,10 @@ namespace Netherlands3D.Tiles3D
                 defaultMaterial.name = DefaultMaterialName;
             }
 
+            defaultMaterial.EnableKeyword("USE_MESH_UV");
+            defaultMaterial.DisableKeyword("USE_WORLD_SPACE_UV");
+            defaultMaterial.DisableKeyword("DOUBLE_WORLD_SPACE_UV");
+            defaultMaterial.DisableKeyword("SKIP_TEXTURE");
             return defaultMaterial;
         }
 
