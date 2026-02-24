@@ -75,10 +75,16 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 		{
 		    ShowFeatureInformation();
 			LoadFeatureContent(mapping);
-			RenderThumbnailForFeature(mapping);            
+			StartCoroutine(RenderFeatureMappingNextFrame(mapping)); 
         }
 
-		private void RenderThumbnailForFeature(FeatureMapping mapping)
+		private IEnumerator RenderFeatureMappingNextFrame(FeatureMapping mapping)
+		{
+			yield return null;
+			RenderThumbnailForFeature(mapping);
+        }
+
+        private void RenderThumbnailForFeature(FeatureMapping mapping)
 		{
             if (mapping.VisualisationLayer is GeoJSONPolygonLayer)
             {
