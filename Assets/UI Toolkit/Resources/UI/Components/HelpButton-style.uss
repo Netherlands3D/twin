@@ -1,5 +1,6 @@
 .helpbutton {
     --button-bg-color: transparent;
+    --button-hover-contrast-color: var(--color-blue-700);
     --button-active-contrast-color: var(--color-blue-700);
     --button-border-padding: 0px;
     --button-border-color: transparent;
@@ -21,8 +22,8 @@
 }
 
 .helpbutton > #Icon {
-    width: 24px;
-    height: 24px;
+    width: var(--spacing-6);
+    height: var(--spacing-6);
     --icon-image: var(--icon-help); 
 }
 
@@ -30,10 +31,8 @@
     display: none;
 }
 
-.helpbutton:hover {
-}
-
-.helpbutton:active {
+.helpbutton:hover > #Icon {
+    -unity-background-image-tint-color: var(--button-hover-contrast-color);
 }
 
 .helpbutton:active > #Icon {

@@ -2,10 +2,10 @@
     --container-input-padding-x: var(--spacing-3);
     --container-input-padding-y: var(--spacing-3);
     --container-bg-color: var(--color-white);
-    --divider-bg-color: var(--color-blue-100);
+    --divider-bg-color: var(--color-blue-200);
     --container-border-color: var(--color-blue-200);
-    --container-border-width: 2px;
-    --container-border-radius: 4px;
+    --container-border-width: var(--spacing-0_5);
+    --container-border-radius: var(--spacing-1);
     --container-icon-gap: var(--spacing-2);
 
     padding-top: var(--container-input-padding-y);
@@ -20,7 +20,7 @@
 }
 
 .contentcontainer:checked {
-    padding-bottom: var(--spacing-4);
+    padding-bottom: var(--spacing-3);
 }
 
 .contentcontainer .unity-foldout__content {
@@ -69,6 +69,7 @@
     min-height: var(--spacing-0_5);
     margin-bottom: var(--spacing-3);
     background-color: var(--divider-bg-color);
+    border-radius: 1px;
 }
 .contentcontainer.divider-active .divider-header {
     display: flex;

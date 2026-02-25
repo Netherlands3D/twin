@@ -1,0 +1,29 @@
+.toolbar-main {
+    flex-direction: column;
+    flex-shrink: 0;
+    flex-grow: 0;
+    align-self: flex-start;
+    align-content: flex-start;
+    width: 44px;
+    min-width: 44px;
+    max-width: 52px;
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-right: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+    background-color: transparent;
+}
+
+.toolbar-main > .divider {
+    width: var(--spacing-6);       
+    min-height: var(--spacing-0_5);
+    max-height: var(--spacing-0_5);
+    background-color: var(--color-white);
+    border-radius: 1px;
+    align-self: center;
+    margin-bottom: var(--spacing-2);
+}
+
+.toolbar-main .button {
+    margin-bottom: var(--spacing-2);
+}

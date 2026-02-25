@@ -1,0 +1,16 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    editor-extension-mode="False"  
+    class="toolbar-main"
+>
+    <ui:VisualElement name="Divider" class="divider" style="flex-shrink: 0;" />
+    <nl3d:Button name="Layer" button-type="Transparent" button-style="IconOnly" icon="Sheets" />
+    <nl3d:Button name="Library" button-type="Transparent" button-style="IconOnly" icon="Library" />
+    <nl3d:Button name="Add" button-type="Transparent" button-style="IconOnly" icon="Plus" />
+    <nl3d:Button name="Search" button-type="Transparent" button-style="IconOnly" icon="Search" />
+    <nl3d:Button name="SunPosition" button-type="Transparent" button-style="IconOnly" icon="Sun" />
+    <nl3d:Button name="DownloadTile" button-type="Transparent" button-style="IconOnly" icon="DownloadTile" />
+</ui:UXML>

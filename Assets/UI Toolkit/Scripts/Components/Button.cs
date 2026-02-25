@@ -9,6 +9,12 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class Button : UnityEngine.UIElements.Button
     {
+        public enum ButtonType
+        {
+            Standard,
+            transparent
+        }
+
         public enum ButtonStyle
         {
             Normal,
@@ -33,6 +39,14 @@ namespace Netherlands3D.UI.Components
         // New elements provided by UXML (robust class lookup)
         private VisualElement TypeDivider => this.Q<VisualElement>("Divider") ?? this.Q<VisualElement>(null, "divider");
         private Label TypeLabelElement => this.Q<Label>("TypeLabel") ?? this.Q<Label>(null, "type-label");
+
+        private ButtonType buttonType = ButtonType.Standard;
+        [UxmlAttribute("button-type")]
+        public ButtonType Type
+        {
+            get => buttonType;
+            set { buttonType = value; UpdateClassList(); }
+        }
 
         private ButtonStyle buttonStyle = ButtonStyle.WithIcon;
         [UxmlAttribute("button-style")]
@@ -102,6 +116,7 @@ namespace Netherlands3D.UI.Components
 
         private void UpdateClassList()
         {
+            this.ReplacePrefixedValueInClassList("button-type-", buttonType.ToString().ToKebabCase());
             this.ReplacePrefixedValueInClassList("button-style-", buttonStyle.ToString().ToKebabCase());
             this.ReplacePrefixedValueInClassList("button-icon-position-", buttonIconPosition.ToString().ToKebabCase());
         }

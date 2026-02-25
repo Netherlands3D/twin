@@ -22,7 +22,7 @@
 
 .inspector-header-title {
     -unity-font-definition: var(--nl3d-inspector-header-font);
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-lg);
     -unity-font-style: normal;
     color: var(--color-text);
 }

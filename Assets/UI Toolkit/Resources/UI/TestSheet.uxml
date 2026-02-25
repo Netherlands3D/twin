@@ -1,0 +1,17 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/_Foundation.uss?fileID=7433441132597879392&amp;guid=9848e3ac5abe4964f8b6998ccbde0eef&amp;type=3#_Foundation" />
+    <Netherlands3D.UI.Components.InspectorPanel style="height: 388px;">
+        <Netherlands3D.UI.Components.ContentContainer>
+            <Netherlands3D.UI.Components.ScrollView>
+                <Netherlands3D.UI.Components.Breadcrumb />
+                <Netherlands3D.UI.Components.Button />
+                <Netherlands3D.UI.Components.HelpButton />
+                <Netherlands3D.UI.Components.Icon />
+                <Netherlands3D.UI.Components.BackButton />
+                <Netherlands3D.UI.Components.Toggle />
+                <Netherlands3D.UI.Components.TextField />
+                <Netherlands3D.UI.Components.TextCallOut />
+            </Netherlands3D.UI.Components.ScrollView>
+        </Netherlands3D.UI.Components.ContentContainer>
+    </Netherlands3D.UI.Components.InspectorPanel>
+</ui:UXML>

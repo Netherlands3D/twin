@@ -15,6 +15,7 @@
 .scrollview .unity-scroll-view__content-container {
   display: flex;
   flex-direction: column;
+  padding-right: var(--spacing-2);
   padding-bottom: var(--scroll-item-gap);
 }
 

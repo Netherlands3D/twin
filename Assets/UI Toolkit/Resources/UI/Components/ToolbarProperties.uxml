@@ -1,0 +1,14 @@
+<ui:UXML 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:ui="UnityEngine.UIElements" 
+  xmlns:nl3d="Netherlands3D.UI.Components" 
+  noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+  editor-extension-mode="False" 
+  class="toolbar-properties"
+>
+
+    <nl3d:Toggle name="Information" class="toggle" toggle-style="IconOnly" icon="SelectionPointer" />
+    <nl3d:Toggle name="Properties" class="toggle" toggle-style="IconOnly" icon="AdjustmentsHorizontal" />
+    <nl3d:Toggle name="Styles" class="toggle" toggle-style="IconOnly" icon="Paint" />
+            
+</ui:UXML>

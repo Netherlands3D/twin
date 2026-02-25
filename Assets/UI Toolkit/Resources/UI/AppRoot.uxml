@@ -1,5 +1,27 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="App" picking-mode="Ignore" class="app" style="flex-grow: 1;">
-        <nl3d:InspectorPanel name="Inspector" header-text="Label" toolbar-style="Normal" />
+    <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/_Foundation.uss?fileID=7433441132597879392&amp;guid=9848e3ac5abe4964f8b6998ccbde0eef&amp;type=3#_Foundation" />
+    <ui:VisualElement name="App" picking-mode="Ignore" class="app" style="flex-grow: 1; margin-top: 8px; margin-left: 8px; margin-right: 8px; margin-bottom: 4px; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px;">
+        <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1; flex-direction: row;">
+            <ui:VisualElement picking-mode="Ignore" name="LeftSection">
+                <ui:VisualElement name="BurgerMenu" style="height: 40px; margin-bottom: 12px;" />
+                <ui:VisualElement name="MidSection" picking-mode="Ignore" class="app" style="flex-grow: 1; flex-direction: row;">
+                    <nl3d:ToolbarMain name="ToolbarMain" />
+                    <nl3d:InspectorPanel name="Inspector" header-text="Label" toolbar-style="Normal" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="MidSection" picking-mode="Ignore" style="flex-grow: 1; flex-shrink: 0;">
+                <nl3d:ToolbarToolbox name="ToolbarToolbox" />
+                <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1;" />
+            </ui:VisualElement>
+            <nl3d:PropertiesPanel />
+        </ui:VisualElement>
+        <ui:VisualElement name="BottomSection" picking-mode="Ignore" style="align-items: flex-end; flex-direction: row;">
+            <nl3d:Footer />
+            <ui:VisualElement name="BottomTools" picking-mode="Ignore" style="flex-shrink: 0; flex-basis: auto;">
+                <nl3d:ToolbarNavigation />
+                <ui:VisualElement name="CameraSlider" />
+            </ui:VisualElement>
+            <ui:VisualElement name="MiniMapPlaceholder" style="width: 288px; height: 188px; background-color: rgb(211, 211, 211); border-top-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; border-bottom-left-radius: 8px;" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -1,0 +1,21 @@
+.toolbar-navigation {
+    flex-direction: row;
+    flex-shrink: 0;
+    flex-grow: 0;
+    align-self: flex-end;
+    align-content: flex-start;
+    height: 44px;
+    min-height: 44px;
+    max-height: 52px;
+    margin-left: 0px;
+    margin-top: var(--spacing-2);
+    margin-right: 0px;
+    margin-bottom: 0px;
+    background-color: transparent;
+}
+
+.toolbar-navigation .toggle {
+    flex-shrink: 0;
+    flex-grow: 0;
+    margin-right: var(--spacing-2);
+}

@@ -1,0 +1,20 @@
+.toolbar-toolbox {
+    flex-direction: row;
+    flex-shrink: 0;
+    flex-grow: 1;
+    justify-content: center;
+    align-self: stretch;
+    align-content: flex-start;
+    height: 44px;
+    min-height: 44px;
+    max-height: 52px;
+    margin-left: var(--spacing-3);
+    margin-top: 0px;
+    margin-right: var(--spacing-1);
+    margin-bottom: var(--spacing-3);
+    background-color: transparent;
+}
+
+.toolbar-toolbox .toggle {
+    margin-right: var(--spacing-2);
+}

@@ -8,8 +8,8 @@
     background-size: contain;
     -unity-background-image-tint-color: var(--icon-tint-color);
     background-image: var(--icon-image);
-    width: 32px;
-    height: 32px;
+    width: var(--spacing-6);
+    height: var(--spacing-6);
 
     flex-shrink: 0;
     flex-grow: 0;
@@ -32,14 +32,97 @@
 .icon.tint-blue-700 { --icon-tint-color: var(--color-blue-700); }
 .icon.tint-blue-900 { --icon-tint-color: var(--color-blue-900); }
 
-.icon.image-plus { --icon-image: var(--icon-plus); }
-.icon.image-folder { --icon-image: var(--icon-folder); }
-.icon.image-map { --icon-image: var(--icon-map); }
-.icon.image-trash { --icon-image: var(--icon-trash); }
-.icon.image-help { --icon-image: var(--icon-help); }
+/* List of all known icons */
+.icon.image-adjustments-horizontal { --icon-image: var(--icon-adjustmentshorizontal); }
+.icon.image-annotation { --icon-image: var(--icon-annotation); }
 .icon.image-back { --icon-image: var(--icon-back); }
+.icon.image-backward { --icon-image: var(--icon-backward); }
+.icon.image-backward-blocked { --icon-image: var(--icon-backwardblocked); }
+.icon.image-burger-menu { --icon-image: var(--icon-burgermenu); }
+.icon.image-camera { --icon-image: var(--icon-camera); }
+.icon.image-checkmark { --icon-image: var(--icon-checkmark); }
 .icon.image-chevron-down { --icon-image: var(--icon-chevrondown); }
+.icon.image-small-chevron-down { --icon-image: var(--icon-smallchevrondown); }
+.icon.image-chevron-left { --icon-image: var(--icon-chevronleft); }
 .icon.image-chevron-right { --icon-image: var(--icon-chevronright); }
+.icon.image-small-chevron-right { --icon-image: var(--icon-smallchevronright); }
+.icon.image-chevron-up { --icon-image: var(--icon-chevronup); }
+.icon.image-close { --icon-image: var(--icon-close); }
+.icon.image-clock { --icon-image: var(--icon-clock); }
+.icon.image-collection { --icon-image: var(--icon-collection); }
+.icon.image-color-wheel { --icon-image: var(--icon-colorwheel); }
+.icon.image-copy-paste { --icon-image: var(--icon-copypaste); }
+.icon.image-credentials { --icon-image: var(--icon-credentials); }
+.icon.image-c-s-v { --icon-image: var(--icon-csv); }
+.icon.image-down { --icon-image: var(--icon-down); }
+.icon.image-download-tile { --icon-image: var(--icon-downloadtile); }
+.icon.image-edit { --icon-image: var(--icon-edit); }
+.icon.image-eyedropper-full { --icon-image: var(--icon-eyedropperfull); }
+.icon.image-filters{ --icon-image: var(--icon-filters); }
+.icon.image-folder { --icon-image: var(--icon-folder); }
+.icon.image-forward { --icon-image: var(--icon-forward); }
+.icon.image-forward-blocked { --icon-image: var(--icon-forwardblocked); }
+.icon.image-f-p-v { --icon-image: var(--icon-fpv); }
+.icon.image-height { --icon-image: var(--icon-height); }
+.icon.image-help { --icon-image: var(--icon-help); }
+.icon.image-picture { --icon-image: var(--icon-picture); }
+.icon.image-key { --icon-image: var(--icon-key); }
+.icon.image-key-token-code { --icon-image: var(--icon-keytokencode); }
+.icon.image-layer-mask { --icon-image: var(--icon-layermask); }
+.icon.image-legend { --icon-image: var(--icon-legend); }
 .icon.image-library { --icon-image: var(--icon-library); }
 .icon.image-library-add { --icon-image: var(--icon-libraryadd); }
-.icon.image-close { --icon-image: var(--icon-close); }
+.icon.image-line { --icon-image: var(--icon-line); }
+.icon.image-line-of-sight { --icon-image: var(--icon-lineofsight); }
+.icon.image-link { --icon-image: var(--icon-link); }
+.icon.image-location { --icon-image: var(--icon-location); }
+.icon.image-map { --icon-image: var(--icon-map); }
+.icon.image-measure { --icon-image: var(--icon-measure); }
+.icon.image-meta-data { --icon-image: var(--icon-metadata); }
+.icon.image-moon { --icon-image: var(--icon-moon); }
+.icon.image-move { --icon-image: var(--icon-move); }
+.icon.image-next { --icon-image: var(--icon-next); }
+.icon.image-no-edit { --icon-image: var(--icon-noedit); }
+.icon.image-north-arrow { --icon-image: var(--icon-northarrow); }
+.icon.image-object { --icon-image: var(--icon-object); }
+.icon.image-orthogonal-view { --icon-image: var(--icon-orthogonalview); }
+.icon.image-paint { --icon-image: var(--icon-paint); }
+.icon.image-pause { --icon-image: var(--icon-pause); }
+.icon.image-perspective-view { --icon-image: var(--icon-perspectiveview); }
+.icon.image-pinned { --icon-image: var(--icon-pinned); }
+.icon.image-play { --icon-image: var(--icon-play); }
+.icon.image-plus { --icon-image: var(--icon-plus); }
+.icon.image-point { --icon-image: var(--icon-point); }
+.icon.image-polygon { --icon-image: var(--icon-polygon); }
+.icon.image-presentation-chart { --icon-image: var(--icon-presentationchart); }
+.icon.image-raster { --icon-image: var(--icon-raster); }
+.icon.image-reset-time { --icon-image: var(--icon-resettime); }
+.icon.image-rotate-v-1 { --icon-image: var(--icon-rotatev1); }
+.icon.image-rotate-v-2 { --icon-image: var(--icon-rotatev2); }
+.icon.image-save { --icon-image: var(--icon-save); }
+.icon.image-scale-v-1 { --icon-image: var(--icon-scalev1); }
+.icon.image-scale-v-2 { --icon-image: var(--icon-scalev2); }
+.icon.image-scatter-object { --icon-image: var(--icon-scatterobject); }
+.icon.image-search { --icon-image: var(--icon-search); }
+.icon.image-section { --icon-image: var(--icon-section); }
+.icon.image-selection-box { --icon-image: var(--icon-selectionbox); }
+.icon.image-selection-pointer { --icon-image: var(--icon-selectionpointer); }
+.icon.image-settings { --icon-image: var(--icon-settings); }
+.icon.image-sheets { --icon-image: var(--icon-sheets); }
+.icon.image-snap-to-ground { --icon-image: var(--icon-snaptoground); }
+.icon.image-squares { --icon-image: var(--icon-squares); }
+.icon.image-square { --icon-image: var(--icon-square); }
+.icon.image-sun { --icon-image: var(--icon-sun); }
+.icon.image-surface-dome { --icon-image: var(--icon-surfacedome); }
+.icon.image-tile { --icon-image: var(--icon-tile); }
+.icon.image-trash { --icon-image: var(--icon-trash); }
+.icon.image-tree { --icon-image: var(--icon-tree); }
+.icon.image-unpinned { --icon-image: var(--icon-unpinned); }
+.icon.image-up { --icon-image: var(--icon-up); }
+.icon.image-upload-folder { --icon-image: var(--icon-uploadfolder); }
+.icon.image-update-credentials { --icon-image: var(--icon-updatecredentials); }
+.icon.image-username { --icon-image: var(--icon-username); }
+.icon.image-username-password { --icon-image: var(--icon-usernamepassword); }
+.icon.image-video-camera { --icon-image: var(--icon-videocamera); }
+.icon.image-warning { --icon-image: var(--icon-warning); }
+.icon.image-width { --icon-image: var(--icon-width); }

@@ -6,6 +6,8 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ToolbarInspector : VisualElement
     {
+        // TODO: clean-up OpenLibrary and AddToLibrary after removing buttons 
+        // also clean-up corresponding behaviours in InspectorPanelBehaviour.cs
         public Toggle OpenLibrary => this.Q<Toggle>("OpenLibrary");
         private Button AddFolder => this.Q<Button>("AddFolder");
         private Button Delete => this.Q<Button>("Delete");

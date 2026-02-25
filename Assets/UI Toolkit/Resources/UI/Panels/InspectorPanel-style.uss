@@ -1,12 +1,23 @@
 .inspector {
-    display: none; /* Invisible by default, only shown when the `active` class is present */
-    margin-left: 88px;
-    margin-bottom: var(--spacing-11);
-    background-color: rgb(255, 255, 255);
-    padding-top: var(--spacing-5);
-    width: 512px;
-    flex-grow: 1;
+    --inspector-bg-color: var(--color-white);
+    --inspector-border-radius: var(--spacing-2);
+    --inspector-width: 400px;
+
+    /* display: none; /* Invisible by default, only shown when the `active` class is present */
     justify-content: space-between;
+    flex-shrink: 0;
+    flex-grow: 0;
+    align-self: stretch;
+    min-width: 320px;
+    width: var(--inspector-width);
+    max-width: 520px;
+    margin: 0px;
+    padding: var(--spacing-5);
+    padding-top: var(--spacing-4);
+    padding-right: var(--spacing-5);
+    padding-bottom: var(--spacing-5);
+    background-color: var(--inspector-bg-color);
+    border-radius: var(--inspector-border-radius);
 }
 
 .inspector .inspector-header {
@@ -14,8 +25,8 @@
     flex-shrink: 0;
     align-content: stretch;
     align-items: center;
-    margin-bottom: var(--spacing-4);
-    padding-right: var(--spacing-6);
+    margin-bottom: var(--spacing-5);
+    padding: 0;
 }
 
 .inspector .inspector-header-title {
@@ -26,8 +37,8 @@
 .inspector .inspector-header-button-close {
     flex-grow: 0;
     flex-shrink: 0;
-    width: var(--spacing-12);
-    height: var(--spacing-12);
+    width: var(--spacing-6);
+    height: var(--spacing-6);
     align-items: center;
     flex-wrap: nowrap;
     align-content: center;
@@ -35,14 +46,14 @@
     background-size: cover;
 }
 .inspector .inspector-header-button-close .icon {
-    background-size: var(--spacing-8);
+    background-size: var(--spacing-6);
 }
 .inspector .inspector-content {
-    margin-bottom: var(--spacing-4);
+    
     flex-grow: 1;
     flex-shrink: 1;
-    padding-left: var(--spacing-6);
-    padding-right: var(--spacing-6);
+    margin-bottom: var(--spacing-5);
+    padding: 0px;
 }
 
 .inspector.active {
@@ -52,7 +63,7 @@
 /* ============================================================================================= */
 /* TODO: remove these overrides as soon as we have implemented the whole inspector               */
 /* These override make sure that the inspector aligns nicely as an overlay to the UGUI inspector */
-.inspector {
+/*.inspector {
     margin-left: var(--spacing-28);
     width: 488px;
 }

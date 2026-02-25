@@ -1,0 +1,24 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    editor-extension-mode="False"  
+    class="footer"
+>
+    
+    <ui:VisualElement name="Divider" class="divider" />
+    <ui:VisualElement class="footer-content">
+        <ui:Label name="AppName" class="app-name text-header" text="Netherlands3D" />
+        <ui:Label name="Attribution" class="attribution text-base" text="Placeholdertekst bronvermelding" />
+
+            <ui:Label name="X" class="axis text-header" text="x" />
+            <ui:Label name="CoordinateX" class="coordinate text-base" text="00000000" />
+            <ui:Label name="Y" class="axis text-header" text="y" />
+            <ui:Label name="CoordinateY" class="coordinate text-base" text="00000000" />
+            <ui:Label name="Z" class="axis text-header" text="z" />
+            <ui:Label name="CoordinateZ" class="coordinate text-base" text="0000" />
+
+    </ui:VisualElement>
+
+</ui:UXML>
