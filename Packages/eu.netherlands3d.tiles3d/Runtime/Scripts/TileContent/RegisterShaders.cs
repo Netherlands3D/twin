@@ -10,6 +10,9 @@ namespace Netherlands3D.Tiles3D
         
         /// <summary>Shader property ID for property MainTexture</summary>
         public static int MainTextureShaderProperty = Shader.PropertyToID("_MainTexture");
+        public static int MainTextureUVChannelPropertyId = Shader.PropertyToID("_Base_Color_Tex_UV");
+        public static int MainTextureRotationPropertyId = Shader.PropertyToID("_Base_Color_Tex_Rotation");
+        public static int MainTextureScaleTransformPropertyId = Shader.PropertyToID("_Base_Color_Tex_ST");
 
         /// <summary>Shader property ID for property BaseColor</summary>
         public static int BaseColorShaderProperty = Shader.PropertyToID("_BaseColor");
@@ -19,6 +22,7 @@ namespace Netherlands3D.Tiles3D
 
         /// <summary>Shader property ID for property Smoothness</summary>
         public static int SmoothnessShaderProperty = Shader.PropertyToID("_Smoothness");
+        
     }
 
     public class RegisterShaders : MonoBehaviour
