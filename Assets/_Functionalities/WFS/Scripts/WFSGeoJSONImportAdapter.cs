@@ -7,10 +7,8 @@ using KindMen.Uxios.Http;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.Wfs.LayerPresets;
 using Netherlands3D.OgcWebServices.Shared;
-using Netherlands3D.Twin;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerPresets;
-using Netherlands3D.Twin.Services;
 using Netherlands3D.Web;
 using UnityEngine;
 
