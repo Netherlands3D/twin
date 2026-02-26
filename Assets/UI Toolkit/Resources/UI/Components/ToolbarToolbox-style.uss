@@ -1,7 +1,12 @@
 .toolbar-toolbox {
-    flex-direction: row;
+    margin-left: 0px;
+    margin-top: 0px;
     flex-shrink: 0;
     flex-grow: 1;
+}
+
+.unity-button-group {    
+    flex-direction: row;
     justify-content: center;
     align-self: stretch;
     align-content: flex-start;
@@ -15,6 +20,8 @@
     background-color: transparent;
 }
 
-.toolbar-toolbox .toggle {
+.toolbar-toolbox__group .button {
+    flex-shrink: 0;
+    flex-grow: 0;
     margin-right: var(--spacing-2);
 }

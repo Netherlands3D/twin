@@ -6,11 +6,13 @@
     editor-extension-mode="False"  
     class="toolbar-main"
 >
-    <ui:VisualElement name="Divider" class="divider" style="flex-shrink: 0;" />
-    <nl3d:Button name="Layer" button-type="Transparent" button-style="IconOnly" icon="Sheets" />
-    <nl3d:Button name="Library" button-type="Transparent" button-style="IconOnly" icon="Library" />
-    <nl3d:Button name="Add" button-type="Transparent" button-style="IconOnly" icon="Plus" />
-    <nl3d:Button name="Search" button-type="Transparent" button-style="IconOnly" icon="Search" />
-    <nl3d:Button name="SunPosition" button-type="Transparent" button-style="IconOnly" icon="Sun" />
-    <nl3d:Button name="DownloadTile" button-type="Transparent" button-style="IconOnly" icon="DownloadTile" />
+    <ui:VisualElement name="Divider" class="divider" />
+    <ui:ToggleButtonGroup name="ButtonGroup" class="toolbar-main__group">
+        <nl3d:Button name="Layer" button-type="Transparent" button-style="IconOnly" icon="Sheets" />
+        <nl3d:Button name="Library" button-type="Transparent" button-style="IconOnly" icon="Library" />
+        <nl3d:Button name="Add" button-type="Transparent" button-style="IconOnly" icon="Plus" />
+        <nl3d:Button name="Search" button-type="Transparent" button-style="IconOnly" icon="Search" />
+        <nl3d:Button name="SunPosition" button-type="Transparent" button-style="IconOnly" icon="Sun" />
+        <nl3d:Button name="DownloadTile" button-type="Transparent" button-style="IconOnly" icon="DownloadTile" />
+    </ui:ToggleButtonGroup>
 </ui:UXML>

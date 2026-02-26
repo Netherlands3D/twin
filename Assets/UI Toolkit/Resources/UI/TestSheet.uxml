@@ -6,6 +6,7 @@
                 <Netherlands3D.UI.Components.Breadcrumb />
                 <Netherlands3D.UI.Components.Button />
                 <Netherlands3D.UI.Components.HelpButton />
+                <Netherlands3D.UI.Components.RadioButtonGroup />
                 <Netherlands3D.UI.Components.Icon />
                 <Netherlands3D.UI.Components.BackButton />
                 <Netherlands3D.UI.Components.Toggle />

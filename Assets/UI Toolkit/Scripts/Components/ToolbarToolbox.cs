@@ -6,14 +6,24 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ToolbarToolbox : VisualElement
     {
-        public Toggle LayerButton => this.Q<Toggle>("Screenshot");
-        public Toggle LibraryButton => this.Q<Toggle>("Dome");
-
+        public ToggleButtonGroup Group => this.Q<ToggleButtonGroup>("ButtonGroup");
+        public Button Dome => this.Q<Button>("Screenshot");
+        public Button Screenshot => this.Q<Button>("Dome");
         public ToolbarToolbox()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-            // TODO: Register events
+
+            RegisterCallback<AttachToPanelEvent>(_ =>
+            {
+                // Defaults: single selection, empty selection allowed
+                Group.allowEmptySelection = true;
+                Group.isMultipleSelection = false;
+
+                // Clear selection: bitmask 0, length = number of options
+                int optionCount = Group.childCount;
+                Group.SetValueWithoutNotify(new ToggleButtonGroupState(0ul, optionCount));
+            });
         }
     }
 }

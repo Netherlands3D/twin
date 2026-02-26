@@ -6,9 +6,9 @@
   editor-extension-mode="False" 
   class="toolbar-properties"
 >
-
-    <nl3d:Toggle name="Information" class="toggle" toggle-style="IconOnly" icon="SelectionPointer" />
-    <nl3d:Toggle name="Properties" class="toggle" toggle-style="IconOnly" icon="AdjustmentsHorizontal" />
-    <nl3d:Toggle name="Styles" class="toggle" toggle-style="IconOnly" icon="Paint" />
-            
+    <ui:ToggleButtonGroup name="ButtonGroup" class="toolbar-properties__group">
+        <nl3d:Button name="Information" button-style="IconOnly" icon="SelectionPointer" />
+        <nl3d:Button name="Properties" button-style="IconOnly" icon="AdjustmentsHorizontal" />
+        <nl3d:Button name="Styles" button-style="IconOnly" icon="Paint" />
+    </ui:ToggleButtonGroup>       
 </ui:UXML>

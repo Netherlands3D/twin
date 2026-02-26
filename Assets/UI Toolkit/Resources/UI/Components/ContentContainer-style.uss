@@ -65,11 +65,11 @@
 .divider-header {
     display: flex;
     flex-grow: 1;
-    height: var(--spacing-0_5);
-    min-height: var(--spacing-0_5);
+    height: 1px;
+    min-height: 1px;
     margin-bottom: var(--spacing-3);
     background-color: var(--divider-bg-color);
-    border-radius: 1px;
+    border-radius: 100%;
 }
 .contentcontainer.divider-active .divider-header {
     display: flex;

@@ -153,3 +153,21 @@
 .button.show-type:disabled .type-label {
     color: var(--button-disabled-color);
 }
+
+/* Selected (checked) state: persistent for ToggleButtonGroups */
+.button:checked {
+    background-color: var(--button-active-color);
+    border-color: var(--button-active-color);
+}
+
+.button:checked .unity-label {
+    color: var(--button-active-contrast-color);
+}
+
+.button:checked > #Icon {
+    -unity-background-image-tint-color: var(--button-active-contrast-color);
+}
+
+.button.button-type-transparent:checked {
+    --button-active-contrast-color: var(--color-white);
+}

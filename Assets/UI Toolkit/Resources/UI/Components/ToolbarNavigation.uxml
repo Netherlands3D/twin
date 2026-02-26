@@ -6,9 +6,9 @@
     editor-extension-mode="False"  
     class="toolbar-navigation"
 >
-
-    <nl3d:Toggle name="FPV" toggle-type="Transparent" toggle-style="IconOnly" icon="FPV" />
-    <nl3d:Toggle name="North" toggle-type="Transparent" toggle-style="IconOnly" icon="NorthArrow" />
-    <nl3d:Toggle name="Perspective" toggle-type="Transparent" toggle-style="IconOnly" icon="OrthogonalView" />
-
+    <ui:ToggleButtonGroup name="ButtonGroup" class="toolbar-navigation__group">
+        <nl3d:Button name="FPV" button-type="Transparent" button-style="IconOnly" icon="FPV" />
+        <nl3d:Button name="North" button-type="Transparent" button-style="IconOnly" icon="NorthArrow" />
+        <nl3d:Button name="Perspective" button-type="Transparent" button-style="IconOnly" icon="OrthogonalView" />
+    </ui:ToggleButtonGroup>
 </ui:UXML>

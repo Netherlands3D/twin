@@ -6,8 +6,8 @@
     editor-extension-mode="False"  
     class="toolbar-toolbox"
 >
-
-    <nl3d:Toggle name="Dome" toggle-type="Transparent" toggle-style="IconOnly" icon="SurfaceDome" />
-    <nl3d:Toggle name="Screenshot" toggle-type="Transparent" toggle-style="IconOnly" icon="Camera" />
-
+    <ui:ToggleButtonGroup name="ButtonGroup" class="toolbar-toolbox__group">
+        <nl3d:Button name="Dome" button-type="Transparent" button-style="IconOnly" icon="SurfaceDome" />
+        <nl3d:Button name="Screenshot" button-type="Transparent" button-style="IconOnly" icon="Camera" />
+    </ui:ToggleButtonGroup>
 </ui:UXML>

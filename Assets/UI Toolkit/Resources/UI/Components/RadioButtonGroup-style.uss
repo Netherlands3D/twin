@@ -1,0 +1,60 @@
+.radio-group {
+    flex-direction: column;
+    margin: 0px;
+    padding: 0px;
+}
+
+.radio-group .unity-base-field__label {
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: var(--spacing-3);
+    padding: 0px;
+}
+
+.radio-group .unity-radio-button {
+    margin: 0px;
+    padding: 0px;
+}
+
+/* Item rows */
+.radio-group .unity-radio-button .unity-radio-button__input {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;  
+    margin-bottom: var(--spacing-3);
+    padding: 0px;
+}
+
+/* Hover (zoals screenshot) */
+.radio-group .unity-radio-button:hover .unity-radio-button__checkmark-background  {
+    background-color: var(--color-blue-700-hover);
+}
+
+/* Outer circle */
+.unity-radio-button__checkmark-background {
+    justify-content: center;
+    align-items: center;  
+    width: var(--spacing-5);  
+    height: var(--spacing-5);
+    margin-right: var(--spacing-2);
+    padding: 0px;
+    background-color: var(--color-white);
+    border-color: var(--color-blue-700);
+    border-width: 1.5px;
+}
+
+/* Dot */
+.radio-group .unity-radio-button__checkmark {
+    width: var(--spacing-3);
+    height: var(--spacing-3);
+    border-radius: 100%;
+    background-color: transparent;
+}
+
+/* Checked */
+.radio-group .unity-radio-button:checked .unity-radio-button__checkmark-background  {
+}
+.radio-group .unity-radio-button:checked .unity-radio-button__checkmark {
+    background-color: var(--color-blue-700);
+}

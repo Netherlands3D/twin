@@ -1,5 +1,13 @@
 .toolbar-main {
     flex-direction: column;
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-right: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+}
+
+.unity-button-group {
+    flex-direction: column;
     flex-shrink: 0;
     flex-grow: 0;
     align-self: flex-start;
@@ -7,10 +15,8 @@
     width: 44px;
     min-width: 44px;
     max-width: 52px;
-    margin-left: 0px;
-    margin-top: 0px;
-    margin-right: var(--spacing-3);
-    margin-bottom: var(--spacing-3);
+    margin: 0px;
+    padding: 0px;
     background-color: transparent;
 }
 
@@ -24,6 +30,6 @@
     margin-bottom: var(--spacing-2);
 }
 
-.toolbar-main .button {
+.toolbar-main__group .button {
     margin-bottom: var(--spacing-2);
 }

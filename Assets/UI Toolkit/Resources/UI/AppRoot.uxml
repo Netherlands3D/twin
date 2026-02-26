@@ -5,12 +5,12 @@
             <ui:VisualElement picking-mode="Ignore" name="LeftSection">
                 <ui:VisualElement name="BurgerMenu" style="height: 40px; margin-bottom: 12px;" />
                 <ui:VisualElement name="MidSection" picking-mode="Ignore" class="app" style="flex-grow: 1; flex-direction: row;">
-                    <nl3d:ToolbarMain name="ToolbarMain" />
+                    <nl3d:ToolbarMain />
                     <nl3d:InspectorPanel name="Inspector" header-text="Label" toolbar-style="Normal" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="MidSection" picking-mode="Ignore" style="flex-grow: 1; flex-shrink: 0;">
-                <nl3d:ToolbarToolbox name="ToolbarToolbox" />
+                <nl3d:ToolbarToolbox />
                 <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1;" />
             </ui:VisualElement>
             <nl3d:PropertiesPanel />
