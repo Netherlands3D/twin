@@ -87,7 +87,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.cloud.gltfast": {
-      "version": "6.14.1",
+      "version": "6.16.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -180,12 +180,12 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.meshopt.decompress": {
-      "version": "0.1.0-preview.5",
+      "version": "0.2.0-exp.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.burst": "1.4.11",
-        "com.unity.mathematics": "1.2.1"
+        "com.unity.burst": "1.8.24",
+        "com.unity.mathematics": "1.2.6"
       },
       "url": "https://packages.unity.com"
     },
@@ -534,8 +534,8 @@
       "source": "embedded",
       "dependencies": {
         "eu.netherlands3d.coordinates": "2.2.0",
-        "com.unity.cloud.gltfast": "6.12.1",
-        "com.unity.meshopt.decompress": "0.1.0-preview.5"
+        "com.unity.cloud.gltfast": "6.16.0",
+        "com.unity.meshopt.decompress": "0.2.0-exp.1"
       }
     },
     "eu.netherlands3d.transform-handles": {
