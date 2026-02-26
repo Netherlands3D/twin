@@ -1,14 +1,11 @@
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Netherlands3D.Twin.Layers.LayerPresets;
-using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Projects;
 using UnityEngine.EventSystems;
 
 namespace Netherlands3D.Twin.Layers.UI.AddLayer
 {
-    public class LayerToolBarButtonAddFolder : LayerToolBarButtonBase
+    public class LayerToolBarButtonAddScenario : LayerToolBarButtonBase
     {
         public override void ButtonAction()
         {
@@ -22,7 +19,7 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
         
         private LayerData CreateFolderLayer()
         {
-            var folder = App.Layers.Add(new FolderPreset.Args("Folder"));
+            var folder = App.Layers.Add(new ScenarioPreset.Args("Scenario"));
             return folder.LayerData;
         }
         
