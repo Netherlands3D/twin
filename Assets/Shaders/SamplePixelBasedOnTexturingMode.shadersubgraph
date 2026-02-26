@@ -413,7 +413,7 @@
     "m_StageCapability": 2,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "m_DefaultType": 0
@@ -670,7 +670,8 @@
         "y": 0.0,
         "z": 0.0,
         "w": 0.0
-    }
+    },
+    "m_LiteralMode": false
 }
 
 {
@@ -805,7 +806,8 @@
     "m_StageCapability": 2,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
-    "m_Labels": []
+    "m_Labels": [],
+    "m_LiteralMode": false
 }
 
 {
@@ -915,7 +917,7 @@
     "m_StageCapability": 2,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "m_DefaultType": 0
@@ -928,6 +930,9 @@
     "m_Guid": {
         "m_GuidSerialized": "fa21e491-16a4-4d21-9d60-8c53d7c1fafb"
     },
+    "promotedFromAssetID": "",
+    "promotedFromCategoryName": "",
+    "promotedOrdering": -1,
     "m_Name": "SecondaryTexture",
     "m_DefaultRefNameVersion": 1,
     "m_RefNameGeneratedByDisplayName": "SecondaryTexture",
@@ -941,12 +946,15 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
+    "m_PerRendererData": false,
+    "m_customAttributes": [],
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "isMainTexture": false,
     "useTilingAndOffset": false,
+    "useTexelSize": true,
     "m_Modifiable": true,
     "m_DefaultType": 0
 }
@@ -1040,6 +1048,9 @@
     "m_Guid": {
         "m_GuidSerialized": "fa1ef3c8-7d04-4e64-96ce-5f71b444c403"
     },
+    "promotedFromAssetID": "",
+    "promotedFromCategoryName": "",
+    "promotedOrdering": -1,
     "m_Name": "TilingMainTexture",
     "m_DefaultRefNameVersion": 1,
     "m_RefNameGeneratedByDisplayName": "TilingMainTexture",
@@ -1053,6 +1064,8 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
+    "m_PerRendererData": false,
+    "m_customAttributes": [],
     "m_Value": {
         "x": 0.0,
         "y": 0.0,
@@ -1082,7 +1095,8 @@
         "y": 0.0,
         "z": 0.0,
         "w": 0.0
-    }
+    },
+    "m_LiteralMode": false
 }
 
 {
@@ -1233,7 +1247,8 @@
         "y": 0.0,
         "z": 0.0,
         "w": 0.0
-    }
+    },
+    "m_LiteralMode": true
 }
 
 {
@@ -1243,7 +1258,7 @@
     "m_Group": {
         "m_Id": "eb07d741853b4732b30ea9fc053a24d3"
     },
-    "m_Name": "ColorizeTexture",
+    "m_Name": "Colorize Texture",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -1303,7 +1318,8 @@
     "m_StageCapability": 2,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
-    "m_Labels": []
+    "m_Labels": [],
+    "m_LiteralMode": false
 }
 
 {
@@ -1313,7 +1329,7 @@
     "m_Group": {
         "m_Id": "eb07d741853b4732b30ea9fc053a24d3"
     },
-    "m_Name": "ShiftUVBasedOnWorldOrigin",
+    "m_Name": "Shift UV Based On World Origin",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -1399,6 +1415,9 @@
     "m_Guid": {
         "m_GuidSerialized": "787bbbcc-4f55-4b9d-a6ab-6ad11964d72d"
     },
+    "promotedFromAssetID": "",
+    "promotedFromCategoryName": "",
+    "promotedOrdering": -1,
     "m_Name": "TexturingMode",
     "m_DefaultRefNameVersion": 1,
     "m_RefNameGeneratedByDisplayName": "TexturingMode",
@@ -1409,7 +1428,7 @@
     "m_CustomSlotLabel": "",
     "m_DismissedVersion": 0,
     "m_KeywordType": 1,
-    "m_KeywordDefinition": 0,
+    "m_KeywordDefinition": 1,
     "m_KeywordScope": 0,
     "m_KeywordStages": 63,
     "m_Entries": [
@@ -1450,7 +1469,7 @@
     "m_StageCapability": 3,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "m_DefaultType": 0
@@ -1488,7 +1507,7 @@
     "m_Group": {
         "m_Id": "eb07d741853b4732b30ea9fc053a24d3"
     },
-    "m_Name": "ColorizeTexture",
+    "m_Name": "Colorize Texture",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -1671,7 +1690,7 @@
     "m_Group": {
         "m_Id": "eb07d741853b4732b30ea9fc053a24d3"
     },
-    "m_Name": "ShiftUVBasedOnWorldOrigin",
+    "m_Name": "Shift UV Based On World Origin",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -1765,7 +1784,8 @@
     "m_StageCapability": 2,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
-    "m_Labels": []
+    "m_Labels": [],
+    "m_LiteralMode": false
 }
 
 {
@@ -1868,6 +1888,9 @@
     "m_Guid": {
         "m_GuidSerialized": "9652c9c1-9d75-4968-81d2-dd1d06559a28"
     },
+    "promotedFromAssetID": "",
+    "promotedFromCategoryName": "",
+    "promotedOrdering": -1,
     "m_Name": "TilingSecondaryTexture",
     "m_DefaultRefNameVersion": 1,
     "m_RefNameGeneratedByDisplayName": "TilingSecondaryTexture",
@@ -1881,6 +1904,8 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
+    "m_PerRendererData": false,
+    "m_customAttributes": [],
     "m_Value": {
         "x": 0.0,
         "y": 0.0,
@@ -1937,7 +1962,8 @@
     "m_StageCapability": 2,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
-    "m_Labels": []
+    "m_Labels": [],
+    "m_LiteralMode": false
 }
 
 {
@@ -1997,6 +2023,9 @@
     "m_Guid": {
         "m_GuidSerialized": "30ffacaa-9f5a-4a82-b2e4-b315580eff3e"
     },
+    "promotedFromAssetID": "",
+    "promotedFromCategoryName": "",
+    "promotedOrdering": -1,
     "m_Name": "MainTexture",
     "m_DefaultRefNameVersion": 1,
     "m_RefNameGeneratedByDisplayName": "MainTexture",
@@ -2010,12 +2039,15 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
+    "m_PerRendererData": false,
+    "m_customAttributes": [],
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "isMainTexture": false,
     "useTilingAndOffset": false,
+    "useTexelSize": true,
     "m_Modifiable": true,
     "m_DefaultType": 0
 }
@@ -2165,6 +2197,9 @@
     "m_Guid": {
         "m_GuidSerialized": "5abdcacf-0ebb-4ff5-9c16-a81bd938dcfa"
     },
+    "promotedFromAssetID": "",
+    "promotedFromCategoryName": "",
+    "promotedOrdering": -1,
     "m_Name": "WorldOriginOffset",
     "m_DefaultRefNameVersion": 1,
     "m_RefNameGeneratedByDisplayName": "WorldOriginOffset",
@@ -2178,6 +2213,8 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
+    "m_PerRendererData": false,
+    "m_customAttributes": [],
     "m_Value": {
         "x": 0.0,
         "y": 0.0,
@@ -2299,7 +2336,8 @@
         "y": 0.0,
         "z": 0.0,
         "w": 0.0
-    }
+    },
+    "m_LiteralMode": false
 }
 
 {
@@ -2308,8 +2346,8 @@
     "m_ObjectId": "eb07d741853b4732b30ea9fc053a24d3",
     "m_Title": "Color and texture",
     "m_Position": {
-        "x": -5748.0,
-        "y": -1238.000244140625
+        "x": -1460.0001220703125,
+        "y": -771.0000610351563
     }
 }
 
@@ -2386,6 +2424,9 @@
     "m_Guid": {
         "m_GuidSerialized": "c33b1954-e9da-43d7-834c-61f53b4af5d4"
     },
+    "promotedFromAssetID": "",
+    "promotedFromCategoryName": "",
+    "promotedOrdering": -1,
     "m_Name": "Color",
     "m_DefaultRefNameVersion": 1,
     "m_RefNameGeneratedByDisplayName": "Color",
@@ -2399,6 +2440,8 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
+    "m_PerRendererData": false,
+    "m_customAttributes": [],
     "m_Value": {
         "x": 0.0,
         "y": 0.0,
@@ -2428,6 +2471,7 @@
         "y": 0.0,
         "z": 0.0,
         "w": 0.0
-    }
+    },
+    "m_LiteralMode": false
 }
 
