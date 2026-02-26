@@ -107,7 +107,7 @@ namespace Netherlands3D.Twin.Layers
         {
             get
             {
-                if (this is RootLayer)
+                if (parent == null)
                     return activeSelf;
 
                 return ParentLayer.ActiveInHierarchy && activeSelf;
