@@ -3,8 +3,6 @@ using System.IO;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.Wms.LayerPresets;
 using Netherlands3D.OgcWebServices.Shared;
-using Netherlands3D.Twin;
-using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerPresets;
 using UnityEngine;
 
