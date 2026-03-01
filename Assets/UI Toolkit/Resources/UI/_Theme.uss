@@ -80,6 +80,7 @@
     --icon-backwardblocked: url("project://database/Assets/Sprites/UI/Icons/Type=BackwardBlocked,%20Color=white,%20Size=medium.png");
     --icon-burgermenu: url("project://database/Assets/Sprites/UI/Icons/Type=BurgerMenu,%20Color=white,%20Size=medium.png");
     --icon-camera: url("project://database/Assets/Sprites/UI/Icons/Type=Camera,%20Color=white,%20Size=medium.png");
+    --icon-check: url("project://database/Assets/Sprites/UI/Icons/Type=Check,%20Color=white,%20Size=medium.png");
     --icon-checkmark: url("project://database/Assets/Sprites/UI/Icons/Type=Checkmark,%20Color=white,%20Size=medium.png");
     --icon-chevrondown: url("project://database/Assets/Sprites/UI/Icons/Type=ChevronDown,%20Color=white,%20Size=medium.png");
     --icon-smallchevrondown: url("project://database/Assets/Sprites/UI/Icons/Type=ChevronDown,%20Color=white,%20Size=small.png");
@@ -94,6 +95,7 @@
     --icon-copypaste: url("project://database/Assets/Sprites/UI/Icons/Type=CopyPaste,%20Color=white,%20Size=medium.png");
     --icon-credentials: url("project://database/Assets/Sprites/UI/Icons/Type=Credentials,%20Color=white,%20Size=medium.png");
     --icon-csv: url("project://database/Assets/Sprites/UI/Icons/Type=CSV,%20Color=white,%20Size=medium.png");
+    --icon-dot: url("project://database/Assets/Sprites/UI/Icons/Type=Dot,%20Color=white,%20Size=medium.png");
     --icon-down: url("project://database/Assets/Sprites/UI/Icons/Type=Down,%20Color=white,%20Size=medium.png");
     --icon-downloadtile: url("project://database/Assets/Sprites/UI/Icons/Type=DownloadTile,%20Color=white,%20Size=medium.png");
     --icon-edit: url("project://database/Assets/Sprites/UI/Icons/Type=Edit,%20Color=white,%20Size=medium.png");

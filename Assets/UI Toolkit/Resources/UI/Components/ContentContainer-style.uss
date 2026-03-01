@@ -30,10 +30,7 @@
     margin: 0;
 }
 
-.contentcontainer .unity-toggle__input {
-}
-
-.contentcontainer:checked .unity-toggle__input {
+.contentcontainer:checked .unity-foldout__toggle > .unity-toggle__input {
     margin-bottom: var(--spacing-3);
 }
 
@@ -69,7 +66,7 @@
     min-height: 1px;
     margin-bottom: var(--spacing-3);
     background-color: var(--divider-bg-color);
-    border-radius: 100%;
+    border-radius: 0.5px;
 }
 .contentcontainer.divider-active .divider-header {
     display: flex;

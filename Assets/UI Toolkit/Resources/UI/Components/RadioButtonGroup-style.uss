@@ -10,6 +10,16 @@
     margin-right: 0px;
     margin-bottom: var(--spacing-3);
     padding: 0px;
+    white-space: normal;
+}
+
+.radio-group .unity-radio-button__text {
+    flex-grow: 0;
+    flex-shrink: 1;
+    margin: 0px;
+    padding: 0px;
+    min-width: 0;
+    white-space: normal;
 }
 
 .radio-group .unity-radio-button {
@@ -18,26 +28,23 @@
 }
 
 /* Item rows */
-.radio-group .unity-radio-button .unity-radio-button__input {
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;  
+.radio-group .unity-radio-button__input {
+    flex-grow: 0;
+    flex-shrink: 1;
     margin-bottom: var(--spacing-3);
     padding: 0px;
 }
 
-/* Hover (zoals screenshot) */
-.radio-group .unity-radio-button:hover .unity-radio-button__checkmark-background  {
-    background-color: var(--color-blue-700-hover);
-}
-
 /* Outer circle */
 .unity-radio-button__checkmark-background {
-    justify-content: center;
+    flex-grow: 0;
+    flex-shrink: 0;
     align-items: center;  
+    justify-content: center;
+    align-self: flex-start;
     width: var(--spacing-5);  
     height: var(--spacing-5);
-    margin-right: var(--spacing-2);
+    margin-right: var(--spacing-3);
     padding: 0px;
     background-color: var(--color-white);
     border-color: var(--color-blue-700);
@@ -50,6 +57,11 @@
     height: var(--spacing-3);
     border-radius: 100%;
     background-color: transparent;
+}
+
+/* Hover (zoals screenshot) */
+.radio-group .unity-radio-button:hover .unity-radio-button__checkmark-background  {
+    background-color: var(--color-blue-700-hover);
 }
 
 /* Checked */

@@ -40,6 +40,7 @@
 .icon.image-backward-blocked { --icon-image: var(--icon-backwardblocked); }
 .icon.image-burger-menu { --icon-image: var(--icon-burgermenu); }
 .icon.image-camera { --icon-image: var(--icon-camera); }
+.icon.image-check { --icon-image: var(--icon-check); }
 .icon.image-checkmark { --icon-image: var(--icon-checkmark); }
 .icon.image-chevron-down { --icon-image: var(--icon-chevrondown); }
 .icon.image-small-chevron-down { --icon-image: var(--icon-smallchevrondown); }
@@ -54,6 +55,7 @@
 .icon.image-copy-paste { --icon-image: var(--icon-copypaste); }
 .icon.image-credentials { --icon-image: var(--icon-credentials); }
 .icon.image-c-s-v { --icon-image: var(--icon-csv); }
+.icon.image-dot { --icon-image: var(--icon-dot); }
 .icon.image-down { --icon-image: var(--icon-down); }
 .icon.image-download-tile { --icon-image: var(--icon-downloadtile); }
 .icon.image-edit { --icon-image: var(--icon-edit); }
