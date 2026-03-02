@@ -98,7 +98,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         //because the transfrom will always be at the V3zero position we dont want to offset with the localoffset
         //the vertex positions will equal world space
         //also we are using the actual feature geometry to find the vertices in the targeted buffers
-        public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
+        public void SetVisualisationSelected(Transform transform, List<Mesh> meshes, Color color)
         {
             selectionList.Clear();
             foreach (Mesh mesh in meshes)
@@ -118,7 +118,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             selectionLineRenderer3D.SetPositionCollections(selectionList);
         }
 
-        public void SetVisualisationColorToDefault() //todo rename this?
+        public void SetVisualisationDeselected() //todo rename this?
         {
             selectionLineRenderer3D.Clear();
         }

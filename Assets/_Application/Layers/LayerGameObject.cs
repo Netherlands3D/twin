@@ -46,8 +46,15 @@ namespace Netherlands3D.Twin.Layers
         private LayerData layerData;
         public LayerData LayerData => layerData;
         public abstract BoundingBox Bounds { get; }
-
+        
         public Dictionary<object, LayerFeature> LayerFeatures { get; private set; } = new();
+        public Func<LayerFeature, LayerFeature> OnFeatureCreated;
+        
+        public LayerFeature GetLayerFeatureByGeometry(object geometry)
+        {
+            LayerFeatures.TryGetValue(geometry, out var feature);
+            return feature;
+        }
 
 #if UNITY_EDITOR
         private void OnValidate()
@@ -252,7 +259,7 @@ namespace Netherlands3D.Twin.Layers
 
         #region Styling
 
-        protected Symbolizer GetStyling(LayerFeature feature)
+        public Symbolizer GetStyling(LayerFeature feature)
         {
             var stylingPropertyDatas = LayerData.GetProperties<StylingPropertyData>();
             if (stylingPropertyDatas == null || !stylingPropertyDatas.Any()) return null;
@@ -301,11 +308,12 @@ namespace Netherlands3D.Twin.Layers
         ///
         /// For example: to be able to match on material names you need to include the material names in the attributes.
         /// </summary>
-        protected LayerFeature CreateFeature(object geometry)
+        public LayerFeature CreateFeature(object geometry)
         {
             LayerFeature feature = LayerFeature.Create(this, geometry);
             AddAttributesToLayerFeature(feature);
-
+            if(OnFeatureCreated != null)
+                feature = OnFeatureCreated.Invoke(feature);
             return feature;
         }
 

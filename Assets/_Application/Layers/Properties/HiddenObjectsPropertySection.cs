@@ -9,6 +9,7 @@ using Netherlands3D.Twin.Cameras;
 using Netherlands3D.Twin.ExtensionMethods;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
+using Netherlands3D.Twin.layers.properties;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -69,8 +70,8 @@ namespace Netherlands3D.Twin.Layers.Properties
             {
                 if(kv.Key.Contains(HiddenObjectsPropertyData.VisibilityIdentifier))
                 {
-                    string objectId = stylingPropertyData.ObjectIdFromVisibilityStyleRuleName(kv.Key);                    
-                    bool? visibility = stylingPropertyData.GetVisibilityForSubObjectByAttributeTag(objectId);
+                    string objectId = stylingPropertyData.GetStylingRuleName(kv.Key);                    
+                    bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(objectId);
                     if (visibility == false)
                         CreateVisibilityItem(objectId);
                 }
@@ -98,7 +99,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             //update the toggles based on visibility attributes in data
             foreach (HiddenObjectsVisibilityItem item in Items.OfType<HiddenObjectsVisibilityItem>())
             {
-                bool? visibility = stylingPropertyData.GetVisibilityForSubObjectByAttributeTag(item.ObjectId);
+                bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(item.ObjectId);
                 item.SetToggleState(visibility == true);
             }
         }        
@@ -107,7 +108,7 @@ namespace Netherlands3D.Twin.Layers.Properties
         {
             //the feature being changed should always have its coordinate within the styling rule!
             Coordinate? coord;
-            LayerFeature layerFeature = CartesianTileLayerGameObject.GetLayerFeatureFromBagId(objectId);
+            LayerFeature layerFeature = HiddenObject.GetLayerFeatureFromBagId(objectId);
             if(layerFeature != null)
             {               
                 coord = stylingPropertyData.GetVisibilityCoordinateForSubObject(layerFeature);
@@ -119,13 +120,13 @@ namespace Netherlands3D.Twin.Layers.Properties
                 stylingPropertyData.SetVisibilityForSubObject(layerFeature, visible, (Coordinate)coord);
                 return;
             }
-            coord = (Coordinate)stylingPropertyData.GetVisibilityCoordinateForSubObjectByTag(objectId);
+            coord = (Coordinate)stylingPropertyData.GetVisibilityCoordinateForSubObjectById(objectId);
             if (coord == null)
             {
                 Debug.LogError("the styling rule does not contain a coordinate for this feature!");
                 return;
             }
-            stylingPropertyData.SetVisibilityForSubObjectByAttributeTag(objectId, visible, (Coordinate)coord);            
+            stylingPropertyData.SetVisibilityForSubObjectById(objectId, visible, (Coordinate)coord);            
         }
 
         private void ToggleVisibilityForSelectedFeatures(string objectId, bool visible)
@@ -188,14 +189,14 @@ namespace Netherlands3D.Twin.Layers.Properties
 
         private void HiddenFeatureSelected(string objectId)
         {
-            Coordinate ? coord = stylingPropertyData.GetVisibilityCoordinateForSubObjectByTag(objectId);
+            Coordinate ? coord = stylingPropertyData.GetVisibilityCoordinateForSubObjectById(objectId);
             if (coord == null)
             {
                 Debug.LogError("the styling rule does not contain a coordinate for this feature!");
                 return;
             }
 
-            LayerFeature layerFeature = CartesianTileLayerGameObject.GetLayerFeatureFromBagId(objectId);
+            LayerFeature layerFeature = HiddenObject.GetLayerFeatureFromBagId(objectId);
             if(layerFeature == null)
             {
                 //there is no layerfeature present, lets attach a listener to wait for the mapping to be loaded
@@ -250,13 +251,13 @@ namespace Netherlands3D.Twin.Layers.Properties
         public void ShowGhostMesh(string objectId)
         {
             DestroyGhostMesh();
-            bool? visibility = stylingPropertyData.GetVisibilityForSubObjectByAttributeTag(objectId);
+            bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(objectId);
             if (visibility == true)
             {
                 return;
             }
 
-            Coordinate? coord = stylingPropertyData.GetVisibilityCoordinateForSubObjectByTag(objectId);
+            Coordinate? coord = stylingPropertyData.GetVisibilityCoordinateForSubObjectById(objectId);
             if (coord == null)
             {
                 Debug.LogError("the styling rule does not contain a coordinate for this feature!");
@@ -304,14 +305,14 @@ namespace Netherlands3D.Twin.Layers.Properties
             {
                 if (kv.Key.Contains(HiddenObjectsPropertyData.VisibilityIdentifier))
                 {
-                    string objectId = stylingPropertyData.ObjectIdFromVisibilityStyleRuleName(kv.Key);
-                    bool? visibility = stylingPropertyData.GetVisibilityForSubObjectByAttributeTag(objectId);
+                    string objectId = stylingPropertyData.GetStylingRuleName(kv.Key);
+                    bool? visibility = stylingPropertyData.GetVisibilityForSubObjectById(objectId);
                     if (visibility == true)
                         idsToRemove.Add(objectId);
                 }
             }
             foreach (string id in idsToRemove)
-                stylingPropertyData.RemoveVisibilityForSubObjectByAttributeTag(id);
+                stylingPropertyData.RemoveVisibilityForSubObjectById(id);
         }
     }
 }
