@@ -20,6 +20,11 @@
     background-color: transparent;
 }
 
+.unity-toggle-button-group {
+    margin: 0px;
+    padding: 0px;
+}
+
 .toolbar-main > .divider {
     width: var(--spacing-6);       
     min-height: var(--spacing-0_5);
