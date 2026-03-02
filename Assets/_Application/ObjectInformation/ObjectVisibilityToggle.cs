@@ -86,7 +86,7 @@ namespace Netherlands3D.Twin.UI
                         if (mapping.ObjectMapping == null)
                             mapping = selector.GetReplacedMapping(mapping);
 
-                        LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, mapping, out layer);
+                        LayerFeature feature = selector.SubObjectSelector.GetLayerFeatureFromBagID(currentSelectedBagId, mapping, out layer);
                         if (layer != null)
                         {   
                             Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
@@ -161,7 +161,7 @@ namespace Netherlands3D.Twin.UI
             if (currentSelectedBagId != null && currentSelectedFeatureObject != null)
             {
                 bool? v;
-                LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out LayerGameObject layer);
+                LayerFeature feature = selector.SubObjectSelector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out LayerGameObject layer);
                 HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.LayerProperties.GetDefaultStylingPropertyData<HiddenObjectsPropertyData>();
                 if (feature == null)
                     v = hiddenPropertyData.GetVisibilityForSubObjectById(currentSelectedBagId);

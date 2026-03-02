@@ -52,13 +52,30 @@ namespace Netherlands3D.SubObjects
         }
         
         public static void RemoveOverrideColor(string key) => overrideColors.Remove(key);
+        
+        private static readonly Dictionary<(string layerId, string objectId), Color> layerColors = new();
+
+        public static void AddLayerColor(string layerId, string objectId, Color color)
+        {
+            layerColors[(layerId, objectId)] = color;
+        }
+
+        public static bool TryGetLayerColor(string layerId, string objectId, out Color color)
+        {
+            return layerColors.TryGetValue((layerId, objectId), out color);
+        }
+
+        public static void RemoveLayerColor(string layerId, string objectId)
+        {
+            layerColors.Remove((layerId, objectId));
+        }
 
         //TODO we will need a cascading coloring system to apply colors, when multiple colors are registred to one bagid, is this still needed?
         /// <summary>
         /// This will color the final result from styling, by its objectmapping it will find the corresponding bagids in the override color dictionairy apply mesh vertex coloring
         /// </summary>
         /// <param name="mapping"></param>
-        public static void ApplyColors(ObjectMapping mapping)
+        public static void ApplyColors(ObjectMapping mapping, string layerId = null)
         {
             GameObject gameobject = mapping.gameObject;
             if (gameobject == null) return;
@@ -76,6 +93,10 @@ namespace Netherlands3D.SubObjects
                 {
                     color = overrideColors[item.Key];
                     applied = true;
+                }
+                else if(layerId != null && TryGetLayerColor(layerId, item.Key, out var layerColor))
+                {
+                    color = layerColor;
                 }
                 else
                     color = NO_OVERRIDE_COLOR;

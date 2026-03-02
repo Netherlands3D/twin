@@ -66,7 +66,7 @@ namespace Netherlands3D.Twin.layers.properties
                         string id = feature.Attributes[HiddenObjectsPropertyData.VisibilityAttributeIdentifier];
                         Color storedColor = symbolizer.GetFillColor() ?? Color.white;
                         var visibilityColor = visiblity == true ? storedColor : Color.clear;
-                        Interaction.AddOverrideColor(id, visibilityColor);
+                        Interaction.AddLayerColor(visualization.LayerData.Id.ToString(), id, visibilityColor);
                     }
                 }
             }
@@ -76,7 +76,7 @@ namespace Netherlands3D.Twin.layers.properties
             
             foreach (KeyValuePair<Vector2Int, ObjectMapping> kv in binaryMeshLayer.Mappings)
             {
-                Interaction.ApplyColors(kv.Value);
+                Interaction.ApplyColors(kv.Value, visualization.LayerData.Id.ToString());
             }
         }
         

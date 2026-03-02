@@ -42,11 +42,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         [SerializeField] private Tool[] activeForTools;
         [SerializeField] private Material selectionMaterial;
         
-        private Dictionary<string, bool> blockedBagIds = new Dictionary<string, bool>();
+        
 
         public void BlockBagId(string bagId, bool block)
         {
-            blockedBagIds[bagId] = block;
+            subObjectSelector.BlockBagId(bagId, block);
         }
 
         public static MappingTree MappingTree
@@ -137,45 +137,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
-        public LayerGameObject GetLayerGameObjectFromMapping(IMapping mapping)
-        {
-            if (mapping is FeatureMapping featureMapping)
-            {
-                return featureMapping.VisualisationParent;
-            }
-
-            if (mapping is MeshMapping meshMapping)
-            {
-                MeshMapping map = meshMapping;
-                if (meshMapping.ObjectMapping == null)                    
-                {
-                    //when tile is replacing lod the objectmapping can be missing
-                    map = GetReplacedMapping(meshMapping);
-                }
-                if (map == null) return null;
-                
-                Transform parent = map.ObjectMapping.gameObject.transform.parent;
-                LayerGameObject layerGameObject = parent.GetComponent<LayerGameObject>();
-                return layerGameObject;
-            }
-            return null;
-        }
-
-        public T GetReplacedMapping<T>(T mapping) where T : IMapping
-        {
-            List<IMapping> mappings = MappingTree.QueryMappingsContainingNode<T>(mapping.BoundingBox.Center);
-            if (mappings.Count == 0)
-                return default;
-
-            foreach (IMapping map in mappings)
-            {
-                if (map.MappingObject == null || map.Id != mapping.Id) continue;
-
-                return (T)map;
-            }
-            return default;
-        }
-
         public bool IsAnyToolActive()
         {
             foreach (Tool tool in activeForTools)
@@ -251,21 +212,19 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return cameraInputSystemProvider.OverLockingObject == false;
         }
 
-        public bool IsMappingVisible(IMapping mapping, string bagId)
+        public T GetReplacedMapping<T>(T mapping) where T : IMapping
         {
-            if (mapping is MeshMapping map)
+            List<IMapping> mappings = MappingTree.QueryMappingsContainingNode<T>(mapping.BoundingBox.Center);
+            if (mappings.Count == 0)
+                return default;
+
+            foreach (IMapping map in mappings)
             {
-                LayerFeature feature = GetLayerFeatureFromBagID(bagId, map, out LayerGameObject layer);
-                if (feature != null)
-                {
-                    HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
-                    bool? v = hiddenPropertyData.GetVisibilityForSubObject(feature);
-                    if (v != true) return false;
-                }
+                if (map.MappingObject == null || map.Id != mapping.Id) continue;
+
+                return (T)map;
             }
-            if (bagId == null || blockedBagIds.ContainsKey(bagId))
-                return false;
-            return true;
+            return default;
         }
 
         private void OnAddObjectMapping(ObjectMapping mapping)
@@ -308,23 +267,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             featureSelector.Select(feature);
         }
 
-        public ObjectMappingItem GetMappingItemForBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
+        public bool IsMappingVisible(IMapping mapping, string bagId)
         {
-            layer = null;
-            if (selectedMapping is not MeshMapping mapping) return null;
-
-            layer = GetLayerGameObjectFromMapping(selectedMapping);
-            mapping.ObjectMapping.items.TryGetValue(bagID, out var item);
-            return item;
-        }
-
-        public LayerFeature GetLayerFeatureFromBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
-        {
-            ObjectMappingItem item = GetMappingItemForBagID(bagID, selectedMapping, out layer);
-            if (layer == null)
-                return null;
-
-            return layer.GetLayerFeatureByGeometry(item);
+            if (mapping is MeshMapping map)
+            {
+                return subObjectSelector.IsMappingVisible(map, bagId);
+            }
+            return true;
         }
 
         /// <summary>
