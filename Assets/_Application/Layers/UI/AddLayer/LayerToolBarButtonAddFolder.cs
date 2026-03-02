@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Projects;
 using UnityEngine.EventSystems;
@@ -21,8 +22,7 @@ namespace Netherlands3D.Twin.Layers.UI.AddLayer
         
         private LayerData CreateFolderLayer()
         {
-            var builder = new LayerBuilder().OfType("folder").NamedAs("Folder"); //todo: make preset?
-            var folder = App.Layers.Add(builder);
+            var folder = App.Layers.Add(new FolderPreset.Args("Folder"));
             return folder.LayerData;
         }
         

@@ -22,7 +22,7 @@ namespace Netherlands3D.AssetLibrary.Entries
                 return null;
             }
             
-            var resolved = $"prefab-library:///{prefab.PrefabIdentifier}";
+            var resolved = $"{AssetLibrary.PREFAB_IDENTIFIER}:///{prefab.PrefabIdentifier}";
 
             var uri = string.IsNullOrWhiteSpace(resolved) ? null : new Uri(resolved, UriKind.Absolute);
             return InMemoryCatalog.CreateRecord(Id, Title, Description, uri);

@@ -57,7 +57,7 @@ namespace Netherlands3D.Twin.Layers
             set
             {
                 name = value;
-                NameChanged.Invoke(value);
+                NameChanged.Invoke(this, value);
             }
         }
 
@@ -107,7 +107,7 @@ namespace Netherlands3D.Twin.Layers
         {
             get
             {
-                if (this is RootLayer)
+                if (parent == null)
                     return activeSelf;
 
                 return ParentLayer.ActiveInHierarchy && activeSelf;
@@ -154,7 +154,7 @@ namespace Netherlands3D.Twin.Layers
         }
         public UnityEvent OnPrefabIdChanged = new();        
 
-        [JsonIgnore] public readonly UnityEvent<string> NameChanged = new();
+        [JsonIgnore] public readonly UnityEvent<LayerData, string> NameChanged = new();
         [JsonIgnore] public readonly UnityEvent<bool> LayerActiveInHierarchyChanged = new();
         [JsonIgnore] public readonly UnityEvent<Color> ColorChanged = new();
         [JsonIgnore] public readonly UnityEvent LayerDestroyed = new();
@@ -241,7 +241,7 @@ namespace Netherlands3D.Twin.Layers
         {
             if (newParent == null)
                 newParent = Root;
-
+            
             //in two cases we should not Set a new parent, since it would create a cyclical reference:
             //1. if you are trying to parent a layer to itself
             //2. if this LayerData is somewhere in the parent chain of the new parent.
