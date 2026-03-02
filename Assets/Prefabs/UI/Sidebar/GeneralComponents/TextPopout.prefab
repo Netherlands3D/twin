@@ -692,6 +692,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textField: {fileID: 1425523206420374518}
   disappearDistance: 2000
+  doubleClickThreshold: 0.5
+  pointTransform: {fileID: 7596494640156600639}
   OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -699,6 +701,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   TextFieldDeselected:
+    m_PersistentCalls:
+      m_Calls: []
+  TextFieldDoubleClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  TextFieldInputConfirmed:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &8809455047887477227

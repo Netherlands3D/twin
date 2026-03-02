@@ -7,11 +7,15 @@ namespace Netherlands3D.Twin.Layers.LayerPresets
 {
     public static class LayerPresetRegistry
     {
-        private static bool initialized;
         private static readonly Dictionary<string, Type> IdToPresetType = new();
         private static readonly Dictionary<Type, ILayerPreset> PresetTypeToInstance = new();
         private static readonly Dictionary<Type, Type> ArgsTypeToPresetType = new();
 
+        static LayerPresetRegistry()
+        {
+            AutoRegisterFromAssemblies();
+        }
+        
         public static void Register(string kind, ILayerPreset preset)
         {
             var presetType = preset.GetType();
@@ -30,7 +34,6 @@ namespace Netherlands3D.Twin.Layers.LayerPresets
 
         public static ILayerBuilder Create<TPreset>(LayerPresetArgs<TPreset> args) where TPreset : ILayerPreset
         {
-            EnsureInit();
             var builder = new LayerBuilder();
 
             if (!PresetTypeToInstance.TryGetValue(typeof(TPreset), out var preset))
@@ -41,7 +44,6 @@ namespace Netherlands3D.Twin.Layers.LayerPresets
 
         public static ILayerBuilder Create(LayerPresetArgs args)
         {
-            EnsureInit();
             var builder = new LayerBuilder();
 
             if (!ArgsTypeToPresetType.TryGetValue(args.GetType(), out var presetType))
@@ -50,7 +52,7 @@ namespace Netherlands3D.Twin.Layers.LayerPresets
             return PresetTypeToInstance[presetType].Apply(builder, args);
         }
 
-        public static void AutoRegisterFromAssemblies(params Assembly[] assemblies)
+        private static void AutoRegisterFromAssemblies(params Assembly[] assemblies)
         {
             if (assemblies is not { Length: > 0 })
                 assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -70,14 +72,6 @@ namespace Netherlands3D.Twin.Layers.LayerPresets
                     Register(attr.Kind, preset);
                 }
             }
-
-            initialized = true;
-        }
-
-        private static void EnsureInit()
-        {
-            if (initialized) return;
-            AutoRegisterFromAssemblies();
         }
     }
 }

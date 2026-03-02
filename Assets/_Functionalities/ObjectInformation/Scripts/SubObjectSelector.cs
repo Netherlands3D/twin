@@ -74,5 +74,29 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             return bagId;
         }
+
+        public string FindSubObjectAtPosition(Vector3 position)
+        {
+            foundObject = null;
+            string bagId = null;
+            Vector3 groundPosition = position;
+            Coordinate coord = new Coordinate(groundPosition);
+            List<IMapping> mappings = ObjectSelectorService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
+            if (mappings.Count == 0)
+                return bagId;
+
+            foreach (MeshMapping mapping in mappings)
+            {
+                ObjectMapping objectMapping = mapping.ObjectMapping;
+                MeshMappingItem item = mapping.FindItemForPosition(groundPosition);
+                if (item != null)
+                {
+                    foundObject = mapping;
+                    bagId = item.ObjectMappingItem.objectID;
+                    break;
+                }
+            }
+            return bagId;
+        }
     }
 }

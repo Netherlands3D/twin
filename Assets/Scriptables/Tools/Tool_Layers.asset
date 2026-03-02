@@ -37,7 +37,7 @@ MonoBehaviour:
   onClose:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 271a09cff13d5466d9d355af09c8c900, type: 2}
+      - m_Target: {fileID: 11400000, guid: 6e1951c1f4825a64e8bd337dc0a50df3, type: 2}
         m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
         m_MethodName: InvokeStarted
         m_Mode: 6
@@ -49,7 +49,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: 6e1951c1f4825a64e8bd337dc0a50df3, type: 2}
+      - m_Target: {fileID: 11400000, guid: 271a09cff13d5466d9d355af09c8c900, type: 2}
         m_TargetAssemblyTypeName: Netherlands3D.Events.BoolEvent, eu.netherlands3d.event-system.Runtime
         m_MethodName: InvokeStarted
         m_Mode: 6
@@ -67,4 +67,4 @@ MonoBehaviour:
   inspectorPrefab: {fileID: 4151227325010422218, guid: c9c980a6d72fe49d6b1b7e465edd594f,
     type: 3}
   functionalityPrefabs: []
-  open: 1
+  open: 0

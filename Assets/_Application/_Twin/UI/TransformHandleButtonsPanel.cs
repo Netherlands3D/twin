@@ -1,3 +1,4 @@
+using RuntimeHandle;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,7 @@ namespace Netherlands3D.Twin.UI
         [SerializeField] private ToggleGroupItem rotationToggle;
         [SerializeField] private ToggleGroupItem scaleToggle;
         [SerializeField] private Button snapButton;
-       public TransformHandleInterfaceToggle TransformHandleInterfaceToggle { get; set; }
+        public TransformHandleInterfaceToggle TransformHandleInterfaceToggle { get; set; }
         private TransformAxes transformLocks;
 
         private void OnEnable()
@@ -70,11 +71,31 @@ namespace Netherlands3D.Twin.UI
             if(!transformLocks) return;
 
             if (positionToggle.Toggle.isOn)
-                TransformHandleInterfaceToggle.RuntimeTransformHandle.SetAxis(transformLocks.positionAxes);
+                TransformHandleInterfaceToggle.RuntimeTransformHandle.SetAxis(ConvertAxis(transformLocks.positionAxes));
             else if (rotationToggle.Toggle.isOn)
-                TransformHandleInterfaceToggle.RuntimeTransformHandle.SetAxis(transformLocks.rotationAxes);
+                TransformHandleInterfaceToggle.RuntimeTransformHandle.SetAxis(ConvertAxis(transformLocks.rotationAxes));
             else if (scaleToggle.Toggle.isOn)
-                TransformHandleInterfaceToggle.RuntimeTransformHandle.SetAxis(transformLocks.scaleAxes);
+                TransformHandleInterfaceToggle.RuntimeTransformHandle.SetAxis(ConvertAxis(transformLocks.scaleAxes));
+        }
+        
+        /// <summary>
+        /// Convert current axis to match the xyz orientation 
+        /// </summary>
+        /// <param name="zUpAxis"></param>
+        /// <returns></returns>
+        private HandleAxes ConvertAxis(HandleAxes zUpAxis)
+        {
+            //split up the input axis into individual axis components and check if the bit is on
+            var xOn = ((int)zUpAxis & (int)HandleAxes.X); 
+            var yOn = ((int)zUpAxis & (int)HandleAxes.Y);
+            var zOn = ((int)zUpAxis & (int)HandleAxes.Z);
+
+            //move the yBit one to the right to take the z position, and move the zbit one to the left to take the y position.
+            yOn >>= 1; 
+            zOn <<= 1;
+    
+            //add the result to recombine the axes
+            return (HandleAxes)(xOn + yOn + zOn);
         }
  
         public void ClearLocks()

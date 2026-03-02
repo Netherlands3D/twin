@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 486974600061382359}
   - component: {fileID: 5640076176564817079}
   - component: {fileID: 5447569626426196056}
-  - component: {fileID: 5220079711769434805}
   m_Layer: 12
   m_Name: GeoJsonPolygonLayer
   m_TagString: Untagged
@@ -47,12 +46,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabIdentifier: 509ce6cf579d6ed4b946913dff7eaed4
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
     m_PersistentCalls:
       m_Calls: []
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
+  PropertySections:
+  - type: Netherlands3D.Twin.Layers.Properties.ColorPickerPropertySection, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+  - type: Netherlands3D.Twin.Layers.Properties.CartesianTileLayerFeatureColorPropertySection,
+      eu.netherlands3d.twin, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+  - type: Netherlands3D.Twin.Layers.Properties.HiddenObjectsPropertySection, eu.netherlands3d.twin,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
   polygonVisualizationMaterial: {fileID: 2100000, guid: c8a5ac8f61e049f428ed0069b973e2be,
     type: 2}
 --- !u!114 &5447569626426196056
@@ -68,7 +85,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldTransformShifter: {fileID: 0}
-  referenceCoordinateSystem: 4979
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
@@ -87,17 +103,3 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &5220079711769434805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 764337386758102018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6303d72dc2aa4f61bcacd10f6b5e3e43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: -7451032918455945531, guid: 406f5bee41b4db1468d9ccf9d1e5be2c,
-    type: 3}

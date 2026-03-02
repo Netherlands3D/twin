@@ -14,50 +14,43 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
         [SerializeField] private Tool layerTool;
         [SerializeField] private GameObject ghostGameObject;
         private Color defaultColor;
-        private CameraPropertyData cameraPropertyData => LayerData.GetProperty<CameraPropertyData>();
-        public override bool IsMaskable => false;
-
-        protected override void OnLayerInitialize()
+        
+        protected override void OnVisualizationInitialize()
         {
-            base.OnLayerInitialize();
-            cameraPropertyData.OnOrthographicChanged.AddListener(SetOrthographic);
-
+            base.OnVisualizationInitialize();
             defaultColor = ghostMaterial.color;
             
             layerTool.onOpen.AddListener(EnableGhost);
             layerTool.onClose.AddListener(DisableGhost);
         }
 
-        protected override void InitializePropertyData()
-        {
-            if (cameraPropertyData != null) return;
-
-            var cam = Camera.main;
-            var camTransform = cam.transform;
-
-            LayerData.SetProperty(
-                new CameraPropertyData(
-                    new Coordinate(camTransform.position), 
-                    camTransform.eulerAngles, 
-                    camTransform.localScale, 
-                    cam.orthographic
-                )
-            );
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            cameraPropertyData.OnOrthographicChanged.RemoveListener(SetOrthographic);
-            layerTool.onOpen.RemoveListener(EnableGhost);
-            layerTool.onClose.RemoveListener(DisableGhost);
-        }
-
         public override void LoadProperties(List<LayerPropertyData> properties)
         {
             base.LoadProperties(properties);
+            InitProperty<CameraPropertyData>(properties, null, new Coordinate(Camera.main.transform.position),
+                    Camera.main.transform.eulerAngles,
+                    Camera.main.transform.localScale,
+                    Camera.main.orthographic);
+            
 
-            SetOrthographic(cameraPropertyData.Orthographic);
+            SetOrthographic(LayerData.GetProperty<CameraPropertyData>().Orthographic);
+        }
+
+        protected override void RegisterEventListeners()
+        {
+            base.RegisterEventListeners();
+            var cameraPropertyData = LayerData.GetProperty<CameraPropertyData>();
+            cameraPropertyData.OnOrthographicChanged.AddListener(SetOrthographic);
+        }
+
+        protected override void UnregisterEventListeners()
+        {
+            base.UnregisterEventListeners();
+            var cameraPropertyData = LayerData.GetProperty<CameraPropertyData>();
+            cameraPropertyData.OnOrthographicChanged.RemoveListener(SetOrthographic);
+            
+            layerTool.onOpen.RemoveListener(EnableGhost);
+            layerTool.onClose.RemoveListener(DisableGhost);
         }
 
         private void SetOrthographic(bool orthographic)
@@ -72,10 +65,11 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
 
         private void MoveCameraToSavedLocation()
         {
+            var cameraPropertyData = LayerData.GetProperty<CameraPropertyData>();
             Camera.main.GetComponent<MoveCameraToCoordinate>().LoadCameraData(cameraPropertyData);
         }
         
-        public override void OnSelect()
+        public override void OnSelect(LayerData layer)
         {
             //do not call base to not set transform handles
             foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
@@ -84,9 +78,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject
             }
         }
 
-        public override void OnDeselect()
+        public override void OnDeselect(LayerData layer)
         {
-            base.OnDeselect();
+            base.OnDeselect(layer);
             foreach (var renderer in GetComponentsInChildren<MeshRenderer>())
             {
                 renderer.material.color = defaultColor;

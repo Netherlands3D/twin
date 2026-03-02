@@ -14,11 +14,10 @@ GameObject:
   - component: {fileID: 7109194962515795805}
   - component: {fileID: 4142489338678956943}
   - component: {fileID: -2324982978833452817}
-  - component: {fileID: 7164105335501555170}
   - component: {fileID: 2740582493697960923}
   - component: {fileID: 1859171214202950123}
   - component: {fileID: -2689954650890677593}
-  - component: {fileID: -8752877683470413536}
+  - component: {fileID: 3077997549703185236}
   m_Layer: 7
   m_Name: Nieuwe laag (3D Tiles)
   m_TagString: Untagged
@@ -267,10 +266,6 @@ MonoBehaviour:
   onLayerReady:
     m_PersistentCalls:
       m_Calls: []
-  OnStylingApplied:
-    m_PersistentCalls:
-      m_Calls: []
-  usePropertySections: 1
   UnsupportedExtensionsMessage:
     m_PersistentCalls:
       m_Calls:
@@ -318,20 +313,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &7164105335501555170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7974831043381414785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 217db7c8cb91f974daf1e7f820fb6a30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputPropertySectionPrefab: {fileID: 7185160580400989932, guid: f241bd5b609aa4447ae89fb4325470ef,
-    type: 3}
 --- !u!114 &2740582493697960923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,7 +357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}
---- !u!114 &-8752877683470413536
+--- !u!114 &3077997549703185236
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -385,8 +366,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7974831043381414785}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de5cd78f3fd5c1842b127eafceb944e3, type: 3}
+  m_Script: {fileID: 11500000, guid: dbec0784a8dc94e72a12ea2e00678bfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 2842465798221092780, guid: aec1cc38c05be4c69b9adb0159593506,
-    type: 3}

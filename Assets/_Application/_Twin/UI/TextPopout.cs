@@ -12,6 +12,7 @@ namespace Netherlands3D.Twin.UI
         [SerializeField] private TMP_InputField textField;
         [SerializeField] private float disappearDistance = 2000f;
         [SerializeField] private float doubleClickThreshold = 0.5f;
+        [SerializeField] private RectTransform pointTransform;
         private float lastClickTime = -0.5f;
         private float originalSelectionColorAlpha;
 
@@ -24,6 +25,13 @@ namespace Netherlands3D.Twin.UI
         public UnityEvent TextFieldDeselected;
         public UnityEvent TextFieldDoubleClicked;
         public UnityEvent TextFieldInputConfirmed;
+
+        private float localDistanceToPoint = 20;
+        
+        public enum SnappingSide { Left, Right, Above }
+        private SnappingSide snappingSide = SnappingSide.Above;
+        
+        public TMP_InputField TextField => textField;
         
         public bool ReadOnly
         {
@@ -58,6 +66,11 @@ namespace Netherlands3D.Twin.UI
             textField.onEndEdit.AddListener(OnEndEdit.Invoke);
             textField.onSelect.AddListener(OnTextFieldSelect);
             textField.onDeselect.AddListener(OnTextFieldDeselect);
+        }
+
+        public void SetSnappingSide(SnappingSide snap)
+        {
+            snappingSide = snap;
         }
 
         private void OnTextFieldSelect(string text)
@@ -134,6 +147,27 @@ namespace Netherlands3D.Twin.UI
             var scaledZ = atScreenPosition.z / disappearDistance * 1000;
             atScreenPosition.z = scaledZ;
             rectTransform.position = atScreenPosition;
+            pointTransform.pivot = new Vector2(0.5f, 0.5f);
+            pointTransform.position = atScreenPosition;
+
+            switch (snappingSide)
+            {
+                case SnappingSide.Left:
+                {
+                    rectTransform.pivot = new Vector2(-localDistanceToPoint / rectTransform.rect.width, 0.5f);
+                    break;
+                }
+                case SnappingSide.Right:
+                {
+                    rectTransform.pivot = new Vector2(1 + localDistanceToPoint / rectTransform.rect.width, 0.5f);
+                    break;
+                }
+                case SnappingSide.Above:
+                {
+                    rectTransform.pivot = new Vector2(0.5f, -localDistanceToPoint / rectTransform.rect.height);
+                    break;
+                }
+            }
         }
 
         public void MoveTo(Coordinate atWorldPosition, bool stickToWorldPosition = false)

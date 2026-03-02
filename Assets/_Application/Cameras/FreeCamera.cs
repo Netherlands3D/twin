@@ -98,7 +98,6 @@ namespace Netherlands3D.Twin.Cameras
         private bool dragging = false;
         private bool lockDraggingInput = false;
         private bool rotate = false;
-        private bool rotatingAroundPoint = false;
         private bool firstPersonRotate = false;
 
         private Vector3 dragStartPointerPosition;
@@ -115,7 +114,10 @@ namespace Netherlands3D.Twin.Cameras
 
             pointer = FindAnyObjectByType<PointerToWorldPosition>();
             orthographicSwitcher = orthographicSwitcher ? orthographicSwitcher : GetComponent<OrthographicSwitcher>();            
+        }
 
+        private void OnEnable()
+        {
             horizontalInput.AddListenerStarted(MoveHorizontally);
             verticalInput.AddListenerStarted(MoveForwardBackwards);
             upDownInput.AddListenerStarted(MoveUpDown);
@@ -134,7 +136,28 @@ namespace Netherlands3D.Twin.Cameras
             if (ortographicEnabled) ortographicEnabled.AddListenerStarted(EnableOrtographic);
             if (focusOnObject) focusOnObject.AddListenerStarted(FocusOnObject);
         }
-                
+
+        private void OnDisable()
+        {
+            horizontalInput.RemoveListenerStarted(MoveHorizontally);
+            verticalInput.RemoveListenerStarted(MoveForwardBackwards);
+            upDownInput.RemoveListenerStarted(MoveUpDown);
+            lookInput.RemoveListenerStarted(PointerDelta);
+            flyInput.RemoveListenerStarted(FreeFly);
+            rotateInput.RemoveListenerStarted(RotateAroundOwnAxis);
+
+            zoomToPointerInput.RemoveListenerStarted(ZoomToPointer);
+            pointerPosition.RemoveListenerStarted(SetPointerPosition);
+
+            dragModifier.RemoveListenerStarted(Drag);
+            rotateModifier.RemoveListenerStarted(Rotate);
+            firstPersonModifier.RemoveListenerStarted(RotateFirstPerson);
+
+            if (blockCameraDrag) blockCameraDrag.RemoveListenerStarted(LockDragging);
+            if (ortographicEnabled) ortographicEnabled.RemoveListenerStarted(EnableOrtographic);
+            if (focusOnObject) focusOnObject.RemoveListenerStarted(FocusOnObject);
+        }
+
         /// <summary>
         /// Switch camera to ortographic mode and limit its controls
         /// </summary>
@@ -174,6 +197,24 @@ namespace Netherlands3D.Twin.Cameras
         }
 
         /// <summary>
+        /// Focus camera on a point in the world
+        /// </summary>
+        /// <param name="point">The focus point</param>
+        public void FocusOnPoint(Vector3 point) => FocusOnPoint(point, focusDistanceMultiplier);
+
+        /// <summary>
+        /// Focus camera on a point in the world
+        /// </summary>
+        /// <param name="point">The focus point</param>
+        /// <param name="distanceMultiplier">Distance from point</param>
+        public void FocusOnPoint(Vector3 point, float distanceMultiplier)
+        {
+            transform.position = point;
+            transform.eulerAngles = new Vector3((cameraComponent.orthographic) ? 90 : focusAngle, 0, 0);
+            transform.Translate(Vector3.back * distanceMultiplier, Space.Self);
+        }
+
+        /// <summary>
         /// Set dragging input to locked/unlocked. This ignores pointer drag input while still allowing other movement inputs.
         /// If another feature used mouse pointer but want to stop the camera from dragging while click+dragging, set this to locked.
         /// </summary>
@@ -192,8 +233,7 @@ namespace Netherlands3D.Twin.Cameras
             currentPointerDelta = pointerDelta;
 
             if (rotate)
-            {                
-                rotatingAroundPoint = true;
+            {  
                 RotateAroundPoint(pointerDelta);
             }
             else if (dragging && firstPersonRotate)
@@ -301,7 +341,6 @@ namespace Netherlands3D.Twin.Cameras
         public void Rotate(bool rotate)
         {
             this.rotate = rotate;
-            rotatingAroundPoint = rotate;
         }
 
         /// <summary>
@@ -315,12 +354,12 @@ namespace Netherlands3D.Twin.Cameras
 
         void Update()
         {
-            if(!rotatingAroundPoint)
+            if(!rotate)
                 UpdateWorldPoint();
             EaseDragTarget();
             SetCrosshair();
             UpdateZoomVector();
-            if (!lockDraggingInput && !rotatingAroundPoint)
+            if (!lockDraggingInput && !rotate)
             {
                 Clamp();
             }
@@ -331,9 +370,9 @@ namespace Netherlands3D.Twin.Cameras
             if (!crosshairVisual)
                 return;
             
-            bool visible = rotatingAroundPoint;
+            bool visible = rotate;
             crosshairVisual.gameObject.SetActive(visible);
-            crosshairVisual.transform.position = rotatingAroundPoint ? rotateTarget.ToUnity() : dragStart;
+            crosshairVisual.transform.position = rotate ? rotateTarget.ToUnity() : dragStart;
         }
 
         /// <summary>
@@ -393,7 +432,7 @@ namespace Netherlands3D.Twin.Cameras
                 dragStart = this.transform.position;
                 dragStartPointerPosition = currentPointerPosition.ToUnity();
             }
-            else if (dragging && !rotatingAroundPoint && currentPointerDelta.magnitude > 0 && !firstPersonRotate)
+            else if (dragging && !rotate && currentPointerDelta.magnitude > 0 && !firstPersonRotate)
             {
                 CalculateSpeed();
                 var screenMove = currentPointerDelta / Screen.height;
@@ -415,17 +454,16 @@ namespace Netherlands3D.Twin.Cameras
 
             dragging = isDragging;
         }
-
-
-
-      
-
+        
         /// <summary>
         /// Move towards/from zoompoint
         /// </summary>
         /// <param name="amount">Zoom delta where 1 is towards, and -1 is backing up from zoompoint</param>
         public void ZoomToPointer(float amount)
         {
+            if (rotate)
+                return;
+
             float signedAmount = Mathf.Sign(amount);
            
             if (Mathf.Sign(zoomVector) != signedAmount)
@@ -445,6 +483,10 @@ namespace Netherlands3D.Twin.Cameras
 
         public void UpdateZoomVector()
         {
+            if (rotate)
+                return;
+
+
             bool modifierKeysPressed = IsModifierKeyIsPressed();
 
             //we devide by the Time.deltaTime because on slower machines we dont want the vector to stay large on frame drop
@@ -552,7 +594,7 @@ namespace Netherlands3D.Twin.Cameras
 
         private void OnDrawGizmos()
         {
-            if (dragging || rotatingAroundPoint)
+            if (dragging || rotate)
             {
                 Gizmos.DrawSphere(dragStart, 1.0f);
             }

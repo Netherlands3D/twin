@@ -16,6 +16,7 @@ namespace Netherlands3D.Twin.Layers.Editor
 
             root.Add(LayerDataVisualElements.Divider(2, 8));
             
+
             InspectorElement.FillDefaultInspector(root, serializedObject, this);
 
             return root;

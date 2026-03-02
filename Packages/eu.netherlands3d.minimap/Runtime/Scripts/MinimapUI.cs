@@ -22,6 +22,8 @@ namespace Netherlands3D.Minimap
         [SerializeField] private float hoverResizeSpeed = 10.0f;
         [Tooltip("The new rect delta size when hovered")]
         [SerializeField] private Vector2 hoverSize;
+        [Tooltip("Allow clicking on the minimap")]
+        [SerializeField] private bool isClickable = true;
 
         [SerializeField] private float scrollTimeOut = 0.05f;
         private float lastScrollTime;
@@ -110,7 +112,7 @@ namespace Netherlands3D.Minimap
         private void StartedMapInteraction()
         {
             navigation.gameObject.SetActive(true);
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
+            if(isClickable) ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
 
             StopAllCoroutines();
             if (hoverResize)
@@ -231,7 +233,9 @@ namespace Netherlands3D.Minimap
         public void OnEndDrag(PointerEventData eventData)
         {
             dragging = false;
-            ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
+            
+            if(isClickable) ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.POINTER);
+            else ChangePointerStyleHandler.ChangeCursor(ChangePointerStyleHandler.Style.AUTO);
         }
 
         public void OnScroll(PointerEventData eventData)
@@ -266,7 +270,7 @@ namespace Netherlands3D.Minimap
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (dragging) return;
+            if (dragging || !isClickable) return;
 
             Debug.Log("Clicked on minimap");
             wmtsMap.ClickedMap(eventData);

@@ -1,20 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using KindMen.Uxios;
 using KindMen.Uxios.Http;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.Wfs.LayerPresets;
 using Netherlands3D.OgcWebServices.Shared;
-using Netherlands3D.Twin;
-using Netherlands3D.Twin.Layers.LayerTypes;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Web;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.Wfs
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/WFSImportAdapter", fileName = "WFSImportAdapter", order = 0)]
-    public class WFSGeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter
+    public class WFSGeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetArgs[]>
     {
         [SerializeField] private WFSGeoJsonLayerGameObject layerPrefab;
 
@@ -67,7 +68,7 @@ namespace Netherlands3D.Functionalities.Wfs
             return true;
         }
 
-        public void Execute(LocalFile localFile)
+        public LayerPresetArgs[] Execute(LocalFile localFile)
         {
             var cachedDataPath = localFile.LocalFilePath;
             var sourceUrl = localFile.SourceUrl;
@@ -75,13 +76,15 @@ namespace Netherlands3D.Functionalities.Wfs
             var bodyContents = File.ReadAllText(cachedDataPath);
 
             var isWfsGetCapabilities = OgcWebServicesUtility.IsSupportedGetCapabilitiesUrl(url, bodyContents, ServiceType.Wfs);
-            FolderLayer wfsFolder = null;
+            LayerData wfsFolder = null;
             string geoJsonOutputFormatString = "application/json";
             
             if (isWfsGetCapabilities)
             {
                 var wfsGetCapabilities = new WfsGetCapabilities(new Uri(sourceUrl), bodyContents);
-                wfsFolder = new FolderLayer(!string.IsNullOrEmpty(wfsGetCapabilities.GetTitle()) ? wfsGetCapabilities.GetTitle() : sourceUrl);
+                var folderName = string.IsNullOrEmpty(wfsGetCapabilities.GetTitle()) ? sourceUrl : wfsGetCapabilities.GetTitle();
+                var folderPreset = new FolderPreset.Args(folderName); //todo: this folder should not be here, because it is not part of the imported data. This will be removed in a future ticket when selecting individual maps will be made possible
+
                 var geoJsonOutputFormatStringFromGetCapabilities = wfsGetCapabilities.GetGeoJsonOutputFormatString();
                 if (!string.IsNullOrEmpty(geoJsonOutputFormatStringFromGetCapabilities))
                     geoJsonOutputFormatString = geoJsonOutputFormatStringFromGetCapabilities; 
@@ -91,13 +94,17 @@ namespace Netherlands3D.Functionalities.Wfs
                 var featureTypes = wfsGetCapabilities.GetFeatureTypes();
 
                 //Create a folder layer 
-                foreach (var featureType in featureTypes)
+                var featureCount = featureTypes.Count();
+                var presets = new LayerPresetArgs[featureCount + 1];
+                presets[0] = folderPreset;
+                for (int i = 0; i < featureCount; i++)
                 {
+                    var featureType = featureTypes.ElementAt(i);
                     string crs = featureType.DefaultCRS;
-                    Debug.Log("Adding WFS layer for featureType: " + featureType);
-                    AddWFSLayer(featureType.Name, sourceUrl, crs, wfsFolder, featureType.Title, geoJsonOutputFormatString);
+                    Debug.Log("Adding WFS preset for featureType: " + featureType);
+                    presets[i + 1] = CreateWFSPreset(featureType.Name, sourceUrl, crs, featureType.Title, geoJsonOutputFormatString);
                 }
-                return;
+                return presets;
             }
 
             var isWfsGetFeature = OgcWebServicesUtility.IsValidUrl(url, ServiceType.Wfs, RequestType.GetFeature);
@@ -126,15 +133,15 @@ namespace Netherlands3D.Functionalities.Wfs
                 {                     
                     // Can't deduct a human-readable title at the moment, we should add that we always query for the
                     // capabilities; this also helps with things like outputFormat and CRS
-                    AddWFSLayer(featureType, sourceUrl, crs, wfsFolder, featureType, geoJsonOutputFormatString);
+                    var preset = CreateWFSPreset(featureType, sourceUrl, crs, featureType, geoJsonOutputFormatString);
+                    return new[] { preset };
                 }
-                return;
             }
             
-            Debug.LogError("Unrecognized WFS request type: " + url);
+            throw new ArgumentException("Unrecognized WFS request type: " + url);
         }
 
-        private async void AddWFSLayer(string featureType, string sourceUrl, string crsType, FolderLayer folderLayer, string title, string geoJsonOutputFormatString)
+        private LayerPresetArgs CreateWFSPreset(string featureType, string sourceUrl, string crsType, string title, string geoJsonOutputFormatString)
         {
             // Create a GetFeature URL for the specific featureType
             UriBuilder uriBuilder = CreateLayerGetFeatureUri(featureType, sourceUrl, crsType, geoJsonOutputFormatString);
@@ -142,12 +149,9 @@ namespace Netherlands3D.Functionalities.Wfs
 
             Debug.Log($"Adding WFS layer '{featureType}' with url '{getFeatureUrl}'");
 
-            await App.Layers.Add(
-                new WfsLayerPreset.Args(
-                    getFeatureUrl,
-                    title,
-                    folderLayer
-                )
+            return new WfsLayerPreset.Args(
+                getFeatureUrl,
+                title
             );
         }
 

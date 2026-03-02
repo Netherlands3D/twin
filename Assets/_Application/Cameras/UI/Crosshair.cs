@@ -17,7 +17,7 @@ namespace Netherlands3D.Twin.Cameras
 
         private void OnDisable()
         {
-            crosshair.gameObject.SetActive(false);
+            crosshair?.gameObject.SetActive(false);
         }
 
         private void Start()

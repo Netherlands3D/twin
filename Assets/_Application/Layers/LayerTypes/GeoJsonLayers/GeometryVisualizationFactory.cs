@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
 using Netherlands3D.Twin.FloatingOrigin;
+using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Rendering;
 using UnityEngine;
 
@@ -25,7 +27,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
                 visualizations.Add(visualization);
             }
-
             return visualizations;
         }
 
@@ -65,16 +66,21 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     Vector3 c = coord.ToUnity() - centroid;
                     unityRing.Add(c);
                 }
-
+                
+                //when the data is counter clock wise we will flip the winding order so the polygon will always be visible for polygon visualisations
+                var positions2D = PolygonCalculator.FlattenPolygon(ring.ToUnityPositions().ToList(), new Plane(Vector3.zero, Vector3.up));
+                var polygonIsClockwise = PolygonCalculator.PolygonIsClockwise(positions2D);
+                if (!polygonIsClockwise)
+                {
+                    unityRing.Reverse();
+                }
                 ringList.Add(unityRing);
             }
-
             PolygonVisualisation polygonVisualisation = CreatePolygonMesh(ringList, 10f, visualizationMaterial);
             if (polygonVisualisation)
             {
                 polygonVisualisation.transform.position += centroid;
             }
-
             return polygonVisualisation;
         }
 
@@ -90,9 +96,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 var convertedLineString = ConvertToUnityCoordinates(lineString, coordinateSystem);
                 lines.Add(convertedLineString);
             }
-
             renderer.AppendCollections(lines);
-
             return lines;
         }
 
@@ -104,7 +108,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             var linePoints = ConvertToUnityCoordinates(geometry, coordinateSystem);
             renderer.AppendCollection(linePoints);
-
             return linePoints;
         }
 
@@ -116,7 +119,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         {
             var convertedPoints = ConvertToUnityCoordinates(geometry, coordinateSystem);
             renderer.AppendCollection(convertedPoints);
-
             return convertedPoints;
         }
 
@@ -129,7 +131,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             var convertedPoint = ConvertToCoordinate(coordinateSystem, geometry.Coordinates);
             var singlePointList = new List<Coordinate>() { convertedPoint };
             renderer.AppendCollection(singlePointList);
-
             return singlePointList;
         }
 
@@ -149,7 +150,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                     false; //lines will be drawn per layer, but a single mesh will receive clicks to select
                 polygonVisualisation.gameObject.layer = LayerMask.NameToLayer("Projected");
                 polygonVisualisation.gameObject.AddComponent<WorldTransform>();
-
                 return polygonVisualisation;
             }
             catch (Exception e)
@@ -159,7 +159,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        private static List<Coordinate> ConvertToUnityCoordinates(
+        public static List<Coordinate> ConvertToUnityCoordinates(
             LineString lineString,
             CoordinateSystem originalCoordinateSystem,
             float defaultNAPHeight = 0
@@ -173,7 +173,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 var coordinate = ConvertToCoordinate(originalCoordinateSystem, point, defaultNAPHeight);
                 convertedCoordinates.Add(coordinate);
             }
-
             return convertedCoordinates;
         }
 
@@ -184,14 +183,12 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         )
         {
             var convertedCoordinates = new List<Coordinate>(multiPoint.Coordinates.Count);
-
             for (var i = 0; i < multiPoint.Coordinates.Count; i++)
             {
                 var point = multiPoint.Coordinates[i];
                 var coordinate = ConvertToCoordinate(originalCoordinateSystem, point.Coordinates, defaultNAPHeight);
                 convertedCoordinates.Add(coordinate);
             }
-
             return convertedCoordinates;
         }
 
@@ -217,7 +214,6 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
                 coord = coord.Convert(CoordinateSystem.RDNAP);
                 coord.height = defaultNAPHeight;
             }
-
             return coord;
         }
     }

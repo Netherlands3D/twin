@@ -154,7 +154,9 @@ namespace Netherlands3D.Twin.Utility
 
         public Bounds ToUnityBounds()
         {
-            return new Bounds(Center.ToUnity(), Size.ToUnity());
+            // size.ToUnity does not create an accurate size, we should consider returning a Vector3Double instead of a Coordinate if we do calculations on coordinates 
+            var size = new Vector3((float)Size.easting, (float)Size.height, (float)Size.northing);
+            return new Bounds(Center.ToUnity(), size);
         }
 
         private static double Min(double lhs, double rhs)

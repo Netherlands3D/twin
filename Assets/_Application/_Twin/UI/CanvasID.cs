@@ -19,7 +19,8 @@ namespace Netherlands3D.Twin.UI
             Canvas canvas = GetComponent<Canvas>();
             if (canvas != null) 
             {
-                canvas.sortingOrder = (int)type;
+                // Ensure there is some spacing in the sorting order for other elements to be sorted within
+                canvas.sortingOrder = (int)type * 100;
                 return;
             }
             //if this object is not a canvas it means it this object needs to be moved to its corresponding canvas 

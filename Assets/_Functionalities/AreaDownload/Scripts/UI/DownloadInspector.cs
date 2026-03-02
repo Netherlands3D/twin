@@ -16,6 +16,7 @@
  *  permissions and limitations under the License.
  */
 
+using System.Collections;
 using System.Runtime.InteropServices;
 using GG.Extensions;
 using Netherlands3D.Coordinates;
@@ -59,7 +60,9 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
 
             var canvasTransform = transform.GetComponentInParent<Canvas>().transform;
             northEastTooltip = CreateCornerPopout(canvasTransform, PivotPresets.MiddleLeft);
+            northEastTooltip.SetSnappingSide(TextPopout.SnappingSide.Left);
             southWestTooltip = CreateCornerPopout(canvasTransform, PivotPresets.MiddleRight);
+            southWestTooltip.SetSnappingSide(TextPopout.SnappingSide.Right);
         }
 
         private void OnDisable()
@@ -88,6 +91,13 @@ namespace Netherlands3D.Functionalities.AreaDownload.UI
 
         private void OnSelectionBoundsChanged(Bounds selectedArea)
         {
+            StartCoroutine(WaitFrameToRenderThumbnail(selectedArea));
+        }
+
+        private IEnumerator WaitFrameToRenderThumbnail(Bounds selectedArea)
+        {            
+            //wait a frame to ensure that the previous area is not rendered in the thumbnail
+            yield return null; 
             renderedThumbnail.RenderThumbnail(selectedArea);
         }
 

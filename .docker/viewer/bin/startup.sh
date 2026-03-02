@@ -37,7 +37,9 @@ rm app.config.dist.json
 # Start a CORS Proxy in the background if one is set
 if [ "${NL3D_CORS_PROXY_LOCAL}" == "true" ]; then
 echo "Proxy URL provided, starting Proxy in the background"
+cd /app/cors-proxy
 node -r cors-anywhere proxy.js &
+cd /usr/share/nginx/html
 fi
 
 # Boot the application

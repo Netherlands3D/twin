@@ -13,21 +13,22 @@ using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D.Functionalities.GLBImporter
 {
     [RequireComponent(typeof(HierarchicalObjectLayerGameObject))]
-    public class GLBSpawner : MonoBehaviour, ILayerWithPropertyData
+    public class GLBSpawner : MonoBehaviour, IVisualizationWithPropertyData, IImportedObject
     {
         private GLBPropertyData propertyData = new();
-        public LayerPropertyData PropertyData => propertyData;
         private GameObject importedObject;
         private HierarchicalObjectLayerGameObject layerGameObject;
         private MoveCameraToCoordinate cameraMover;
-        private TransformLayerPropertyData TransformPropertyData => (TransformLayerPropertyData)((ILayerWithPropertyData)layerGameObject).PropertyData;
         
         [Header("Settings")]
         [SerializeField] private float cameraDistanceFromGeoReferencedObject = 150f;
+
+        public UnityEvent<GameObject> ObjectVisualized { get; } = new();
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -122,8 +123,7 @@ namespace Netherlands3D.Functionalities.GLBImporter
                 meshFilter.gameObject.AddComponent<MeshCollider>();
             }
 
-            // Object is loaded / replaced - trigger the application of styling
-            layerGameObject.ApplyStyling();
+            ObjectVisualized.Invoke(returnedGameObject);
         }
 
         private void PositionImportedGameObject(GameObject returnedGameObject)
@@ -193,7 +193,7 @@ namespace Netherlands3D.Functionalities.GLBImporter
             Coordinate position = origin;
             if (!layerGameObject.LayerData.IsNew)
             {
-                position = TransformPropertyData.Position;
+                position = layerGameObject.LayerData.GetProperty<TransformLayerPropertyData>().Position;
             }
             
             layerGameObject.WorldTransform.MoveToCoordinate(position);

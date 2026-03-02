@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3322842894136088838}
   - component: {fileID: -18391829949753534}
   - component: {fileID: 8026439383914201504}
-  - component: {fileID: 4985722426523753970}
   - component: {fileID: 5901895080740193470}
   m_Layer: 0
   m_Name: Annotatie
@@ -75,26 +74,20 @@ MonoBehaviour:
   onHide:
     m_PersistentCalls:
       m_Calls: []
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
+  DebugBoundingBox: 0
   objectCreated:
     m_PersistentCalls:
       m_Calls: []
+  scaleUnitCharacter: '%'
   popoutPrefab: {fileID: 1268885788563908924, guid: 0c75754029f6c6940848c9f8bfe7edb9,
     type: 3}
   layerTool: {fileID: 11400000, guid: 6cda70866461ecd42b5c485b8e4c3319, type: 2}
---- !u!114 &4985722426523753970
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3937650689336427930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8cceefce4ff4530b78245056d126688, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 964705144372893445, guid: b2b695c4876427c439761dd2521bf672,
-    type: 3}
 --- !u!114 &5901895080740193470
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 121414271217785244}
   - component: {fileID: 8704022603555858576}
   - component: {fileID: -5293961980780918241}
-  - component: {fileID: 6927920033585568931}
-  - component: {fileID: 5255875011013651193}
   - component: {fileID: -6061652039040134668}
+  - component: {fileID: -6979387854770576388}
   m_Layer: 0
   m_Name: Canadapopulier
   m_TagString: Untagged
@@ -74,41 +73,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabIdentifier: e78ad354330e64902b24d08795d54efb
+  thumbnail: {fileID: 0}
+  spawnLocation: 0
   onShow:
     m_PersistentCalls:
       m_Calls: []
   onHide:
     m_PersistentCalls:
       m_Calls: []
+  onLayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerReady:
+    m_PersistentCalls:
+      m_Calls: []
+  DebugBoundingBox: 0
   objectCreated:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6927920033585568931
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4573407623913318474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8cceefce4ff4530b78245056d126688, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propertySectionPrefab: {fileID: 796619874070242168, guid: cab41e04a3b554cd69a854280daaaa2d,
-    type: 3}
---- !u!114 &5255875011013651193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4573407623913318474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ffc363b02a0945c7ad8cdc45e55f5ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  scaleUnitCharacter: m
 --- !u!114 &-6061652039040134668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,13 +105,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldTransformShifter: {fileID: 0}
-  referenceCoordinateSystem: 4326
   onPreShift:
     m_PersistentCalls:
       m_Calls: []
   onPostShift:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-6979387854770576388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4573407623913318474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b050df83d47a4b0aa83cc328c57a63b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5193155301075726062
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,6 +181,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

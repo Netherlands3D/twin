@@ -44,6 +44,7 @@ namespace Netherlands3D.SelectionTools
         [SerializeField] private GameObject gridHighlight;
         [SerializeField] private GameObject selectionBlock;
         [SerializeField] private Material triplanarGridMaterial;
+        
 
         private bool drawingArea = false;
 
@@ -76,8 +77,19 @@ namespace Netherlands3D.SelectionTools
             SetSelectionVisualEnabled(false);
 
             worldPlane = (useWorldSpace) ? new Plane(Vector3.up, Vector3.zero) : new Plane(this.transform.up, this.transform.position);
+           
+            SetDrawMode(DrawMode.Selected);
         }
 
+        //when spawned from a tool for instance, we need to override the drawmode from initialization
+        public void SetEditModeForSpawnedInstance(GameObject instance)
+        {
+            AreaSelection areaSelection = instance.GetComponent<AreaSelection>();
+            if (areaSelection == null) return;
+            
+            areaSelection.SetDrawMode(DrawMode.Edit);
+        }
+        
 #if UNITY_EDITOR
         private void OnValidate()
         {
@@ -108,7 +120,7 @@ namespace Netherlands3D.SelectionTools
 
             if (!drawingArea && clickAction.IsPressed() && modifierAction.IsPressed())
             {
-                if (Interface.PointerIsOverUI()) return;
+                if (Interface.PointerIsOverUI() || mode == DrawMode.Selected) return;
 
                 drawingArea = true;
                 SetSelectionVisualEnabled(true);
@@ -169,6 +181,7 @@ namespace Netherlands3D.SelectionTools
             if (mode == DrawMode.Selected) return;
 
             var bounds = boundsMeshRenderer.bounds;
+            SetSelectionVisualEnabled(true);
             whenAreaIsSelected.Invoke(bounds);
         }
 
@@ -209,14 +222,12 @@ namespace Netherlands3D.SelectionTools
         {
             var xDifference = (currentWorldCoordinate.x - startWorldCoordinate.x);
             var zDifference = (currentWorldCoordinate.z - startWorldCoordinate.z);
-
             selectionBlock.transform.position = startWorldCoordinate;
-            selectionBlock.transform.Translate(xDifference / 2.0f, 0, zDifference / 2.0f);
-            selectionBlock.transform.localScale = new Vector3(
-                    (currentWorldCoordinate.x - startWorldCoordinate.x) + ((xDifference < 0) ? -gridSize : gridSize),
-                    gridSize,
-                    (currentWorldCoordinate.z - startWorldCoordinate.z) + ((zDifference < 0) ? -gridSize : gridSize));
-
+            selectionBlock.transform.Translate(xDifference * 0.5f, 0, zDifference * 0.5f);
+            float x = Mathf.Abs(currentWorldCoordinate.x - startWorldCoordinate.x) + gridSize;
+            float y = gridSize;
+            float z = Mathf.Abs(currentWorldCoordinate.z - startWorldCoordinate.z) + gridSize;
+            selectionBlock.transform.localScale = new Vector3(x, y, z);
             var bounds = boundsMeshRenderer.bounds;
             whenDrawingArea.Invoke(bounds);
         }
@@ -231,17 +242,18 @@ namespace Netherlands3D.SelectionTools
             selectionBlock.gameObject.SetActive(enabled);
         }
 
-        public void ReselectAreaFromPolygon(List<Vector3> points)
+        public void SetAreaFromPolygon(List<Vector3> points)
         {
             Bounds bounds = new Bounds(points[0], Vector3.zero);
             for (var i = 1; i < points.Count; i++)
             {
                 bounds.Encapsulate(points[i]);
             }
-
-            bounds.Expand(-0.01f * Vector3.one); // inset the bounds slightly to avoid issues with reselecting the exact edge 
-            selectionStartPosition = GetGridPosition(bounds.min);
-            var selectionEndPosition = GetGridPosition(bounds.max);
+            //we need to inset the bounds by half a grid size so that the selection aligns with the grid properly
+            //when selection is drawn the size of the selection will be increased by one gridsize
+            Vector3 insetHalfGridSize = new Vector3(0.5f * gridSize, 0, 0.5f * gridSize);
+            selectionStartPosition = GetGridPosition(bounds.min + insetHalfGridSize);
+            var selectionEndPosition = GetGridPosition(bounds.max - insetHalfGridSize);
 
             DrawSelectionArea(selectionStartPosition, selectionEndPosition);
         }
@@ -249,7 +261,6 @@ namespace Netherlands3D.SelectionTools
         public override void SetDrawMode(DrawMode mode)
         {
             this.mode = mode;
-
             gridHighlight.gameObject.SetActive(mode != DrawMode.Selected);
 
         }

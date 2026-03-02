@@ -158,6 +158,8 @@ namespace Netherlands3D.SelectionTools
                 Debug.LogWarning("polygonSelectionActionMap was not enabled, but assigned as the input action map. Enabling the input action map", this);
                 polygonSelectionActionMap.Enable();
             }
+
+            SetDrawMode(DrawMode.Edit);
         }
 
 #if UNITY_EDITOR
@@ -233,7 +235,7 @@ namespace Netherlands3D.SelectionTools
             UpdatePreviewLine();
         }
 
-        public void ReselectPolygon(List<Vector3> points)
+        public void SetPolygon(List<Vector3> points)
         {
             if (mode == DrawMode.Create)
             {

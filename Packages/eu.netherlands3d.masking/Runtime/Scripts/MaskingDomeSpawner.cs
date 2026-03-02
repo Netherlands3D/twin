@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.EventSystems;
 
 namespace Netherlands3D.Masking
@@ -19,10 +17,12 @@ namespace Netherlands3D.Masking
         [SerializeField] private string sphericalMaskFeatureKeyword = "_SPHERICAL_MASKING";
         [SerializeField] private string sphericalMaskPositionName = "_SphericalMaskPosition";
         [SerializeField] private string sphericalMaskRadiusName = "_SphericalMaskRadius";
+        [SerializeField] private string sphericalMaskBitIndexName = "_SphericalMaskBitIndex";
         [SerializeField] private bool resetMaskOnDisable = true;
         private int positionPropertyID;
         private int radiusPropertyID;
-
+        private int bitIndexPropertyID;
+        
         [SerializeField] private VisualDome domeVisualisation;
 
         private Camera mainCamera;
@@ -35,6 +35,10 @@ namespace Netherlands3D.Masking
             
             GetPropertyIDs();
             ApplyGlobalShaderVariables();
+            
+            //setting the bitIndex only needs to happen once, so it is done outside of the ApplyGlobalShaderVariables function.
+            bitIndexPropertyID = Shader.PropertyToID(sphericalMaskBitIndexName);
+            Shader.SetGlobalInt(bitIndexPropertyID, MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX);
         }
 
         private void OnEnable() {
