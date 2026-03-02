@@ -41,10 +41,7 @@ namespace Netherlands3D.Twin.UI
         private void OnEnable()
         {            
             transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
-            if (transformInterfaceToggle == null) return;
             selector = ServiceLocator.GetService<ObjectSelectorService>();
-            if (selector == null) return;
-
             transformInterfaceToggle.SetTarget.AddListener(OnTransformObjectFound);          
 
             selector.SelectSubObjectWithBagId.AddListener(OnBagIdFound);
