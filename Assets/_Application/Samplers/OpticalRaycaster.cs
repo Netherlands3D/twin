@@ -9,6 +9,8 @@ namespace Netherlands3D.Twin.Samplers
 {
     public class OpticalRaycaster : MonoBehaviour
     {
+        private const int MINIMUM_DEPTH_BUFFER_FORMAT = 16; //In the render graph API, the output Render Texture must have a depth buffer, this is the minimum value to keep the render texture light weight.
+        
         public Camera depthCameraPrefab;
         public Material depthToWorldMaterial; //capture depth data shader
         public Material visualizationMaterial; //convert to temp position data
@@ -245,9 +247,8 @@ namespace Netherlands3D.Twin.Samplers
             //RenderTexture.Create failed: format unsupported for random writes - RGBA32 SFloat (52).
             //weirdly enough creating a depthtexture in project and passing it through a serializefield is ok on webgl
             //but we cannot do this since we need a pool and create a rendertexture for each request
-            RenderTexture renderTexture = new RenderTexture(1, 1, 0, RenderTextureFormat.Depth);
+            RenderTexture renderTexture = new RenderTexture(1, 1, MINIMUM_DEPTH_BUFFER_FORMAT, RenderTextureFormat.Depth);
             renderTexture.graphicsFormat = SystemInfo.GetCompatibleFormat(GraphicsFormat.R32G32B32A32_SFloat, FormatUsage.Render);
-            renderTexture.depthStencilFormat = GraphicsFormat.None;
             renderTexture.Create();
             return renderTexture;
         }

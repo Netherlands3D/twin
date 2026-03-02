@@ -1,8 +1,10 @@
 using System;
 using Netherlands3D.Credentials;
 using Netherlands3D.Credentials.StoredAuthorization;
-using Netherlands3D.DataTypeAdapters;
+using Netherlands3D.Twin;
+using Netherlands3D.Twin.Tools.UI;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Netherlands3D
 {
@@ -14,18 +16,17 @@ namespace Netherlands3D
     //3b. if no: set UI so user inputs credentials and go to step 2
 
     [RequireComponent(typeof(CredentialHandler))]
-    [RequireComponent(typeof(DataTypeChain))]
     public class CredentialToImportUI : MonoBehaviour
     {
         private CredentialHandler handler;
-        private DataTypeChain chain;
+        public UnityEvent importSucceeded = new();
+        public UnityEvent importFailed = new();
 
         [SerializeField] private GameObject credentialsUI;
 
         private void Awake()
         {
             handler = GetComponent<CredentialHandler>();
-            chain = GetComponent<DataTypeChain>();
         }
 
         private void OnEnable()
@@ -47,9 +48,27 @@ namespace Netherlands3D
                 return;
             }
 
-            //3a. if yes: pass this to the DataTypeChain
+            //3a. if yes: pass this to the Layer service
             SetCredentialsUIActive(false);
-            chain.DetermineAdapter(uri, auth);
+            AddLayerFromUrl(uri, auth);
+        }
+
+        private async void AddLayerFromUrl(Uri uri, StoredAuthorization auth)
+        {
+            try
+            {
+                var layers = await App.Layers.AddFromUrl(uri, auth);
+
+                if (layers.Length == 0)
+                    Debug.LogWarning("The import of the dataset succeeded, but the dataset is empty and contains no layers");
+
+                importSucceeded.Invoke();
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                importFailed.Invoke();
+            }
         }
 
         private void SetCredentialsUIActive(bool enabled)
