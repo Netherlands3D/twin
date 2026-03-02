@@ -11,7 +11,6 @@ namespace Netherlands3D.Twin.Layers
         ILayerBuilder OfType(string type);
         ILayerBuilder NamedAs(string name);
         ILayerBuilder WithColor(Color color);
-        ILayerBuilder ChildOf(LayerData parent);
         ILayerBuilder WithCredentials(StoredAuthorization creds);
         ILayerBuilder AddProperty(LayerPropertyData property);
         ILayerBuilder AddProperties(params LayerPropertyData[] properties);

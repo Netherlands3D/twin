@@ -16,7 +16,7 @@ namespace Netherlands3D.Twin.Services
         [SerializeField] private DataTypeChain fromUrlImporter;
         private VisualizationSpawner spawner;
 
-        public UnityEvent<Layer> LayerAdded { get; } = new();
+        public UnityEvent<LayerData> LayerAdded { get; } = new();
         public UnityEvent<LayerData> LayerRemoved { get; } = new();
 
         private void Awake()
@@ -43,9 +43,13 @@ namespace Netherlands3D.Twin.Services
             }
 
             var layerData = builder.Build();
+            
+            layerData.InitializeParent(ProjectData.Current.RootLayer);
+            ProjectData.Current.RootLayer.AddChild(layerData, 0);
+            
             var layer = new Layer(layerData);
             Visualize(layer, spawner, callback);
-            LayerAdded.Invoke(layer);
+            LayerAdded.Invoke(layerData);
             return layer;
         }
 

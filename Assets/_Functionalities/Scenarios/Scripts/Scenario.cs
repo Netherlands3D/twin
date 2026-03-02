@@ -1,0 +1,73 @@
+using System;
+using Netherlands3D.Twin.Layers;
+using TMPro;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
+
+public class Scenario : MonoBehaviour
+{
+    public LayerData Layer => layer;
+    public Toggle Toggle => toggle == null ? GetComponent<Toggle>() : toggle;
+    
+    private Toggle toggle;
+    private LayerData layer;
+
+    public UnityEvent<bool> VisibilityChanged = new();
+
+    private AutoSizeTMPWidth autoSize;
+    
+    private const string ScenarioPrefix = "Scenario:";
+
+    private void Start()
+    {
+        toggle = GetComponent<Toggle>();
+        toggle.isOn = false;
+        
+        // Auto resize the toggle based on text width
+        autoSize = toggle.GetComponent<AutoSizeTMPWidth>();
+        if (autoSize != null)
+        {
+            autoSize.ResizeNow();
+        }
+        
+        toggle.onValueChanged.AddListener(VisibilityChanged.Invoke);
+    }
+
+    public void SetToggleOn(bool selected)
+    {
+        Toggle.SetIsOnWithoutNotify(selected);
+    }
+
+    public void SetLayer(LayerData layer)
+    {
+        this.layer = layer;
+    }
+
+    public void SetLabel(string name)
+    {
+        // Use the exact folder name as label (minus the 'Scenario:' prefix if you want)
+        string label = name;
+        if (label.StartsWith(ScenarioPrefix, StringComparison.OrdinalIgnoreCase))
+            label = label.Substring(ScenarioPrefix.Length).Trim();
+
+        // TMP label first
+        TMP_Text tmpText = gameObject.GetComponentInChildren<TMP_Text>();
+        if (tmpText)
+        {
+            tmpText.text = label;
+        }
+        else
+        {
+            // Fallback to legacy Text if needed
+            var text = toggle.GetComponentInChildren<Text>();
+            if (text)
+                text.text = label;
+        }
+        
+        if (autoSize != null)
+        {
+            autoSize.ResizeNow();
+        }
+    }
+}

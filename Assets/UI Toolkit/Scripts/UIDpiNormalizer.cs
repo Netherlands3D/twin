@@ -36,6 +36,7 @@ namespace Netherlands3D.UI
 
             doc.runtimePanel.panelSettings.scale *= factor;
             previousScaleFactor = doc.runtimePanel.panelSettings.scale;
+            Debug.Log("Detected zooming of the canvas, readjusting scale factor");
         }
 #endif
 
@@ -44,7 +45,6 @@ namespace Netherlands3D.UI
 #if UNITY_WEBGL && !UNITY_EDITOR
             if (Mathf.Approximately(doc.runtimePanel.panelSettings.scale, previousScaleFactor) == false)
             {
-                Debug.Log("Detected zooming of the canvas, readjusting scale factor");
                 ScaleCanvasForWindows();
             }
 #endif
