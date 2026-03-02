@@ -35,7 +35,9 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         private Dictionary<Feature, FeaturePolygonVisualisations> spawnedVisualisations = new();     
         
         [SerializeField] private Material polygonVisualizationMaterial;
+        
         internal Material polygonVisualizationMaterialInstance;
+        [SerializeField] private Material polygonSelectionVisualizationMaterial;
 
         public Material PolygonVisualizationMaterial
         {
@@ -90,14 +92,22 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
         /// </summary>
         /// <param name="meshes"></param>
         /// <param name="vertexColors"></param>
-        public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
+        public void SetVisualisationSelected(Transform transform, List<Mesh> meshes, Color color)
         {
             foreach (var mesh in meshes)
             {
                 PolygonVisualisation visualisation = GetPolygonVisualisationByMesh(mesh);
                 if (visualisation != null)
                 {
-                    visualisation.VisualisationMaterial.color = color;
+                    visualisation.VisualisationMaterial = polygonSelectionVisualizationMaterial;
+
+                    Color col = new Color(1, 0, 0, 0);
+                    List<Color> colors = new List<Color>();
+                    foreach (Vector3 v in visualisation.PolygonMesh.vertices)
+                        colors.Add(col);
+
+                    visualisation.PolygonMesh.SetColors(colors);
+
                 }
             }
         }
@@ -122,16 +132,23 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             return null;
         }
 
-        public void SetVisualisationColorToDefault()
+        public void SetVisualisationDeselected()
         {
-            Color defaultColor = GetRenderColor();
             foreach (KeyValuePair<Feature, FeaturePolygonVisualisations> fpv in spawnedVisualisations)
             {
                 List<PolygonVisualisation> visualisations = fpv.Value.Data;
                 foreach (PolygonVisualisation pv in visualisations)
                 {
                     if (pv != null)
-                        pv.VisualisationMaterial.color = defaultColor;
+                    {
+                        pv.VisualisationMaterial = polygonVisualizationMaterialInstance;
+                        Color col = new Color(0, 0, 0, 0);
+                        List<Color> colors = new List<Color>();
+                        foreach (Vector3 v in pv.PolygonMesh.vertices)
+                            colors.Add(col);
+
+                        pv.PolygonMesh.SetColors(colors);
+                    }
                 }
             }
         }

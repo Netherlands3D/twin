@@ -92,6 +92,9 @@ namespace Netherlands3D.Twin.UI
                             Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
                             HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
                             hiddenPropertyData.SetVisibilityForSubObject(feature, false, coord);
+                            
+                            //when the object gets hidden, deselect the selection mesh.
+                            selector.SubObjectSelector.Deselect();
                         }
                     }
                     
@@ -161,7 +164,7 @@ namespace Netherlands3D.Twin.UI
                 LayerFeature feature = selector.GetLayerFeatureFromBagID(currentSelectedBagId, currentSelectedFeatureObject, out LayerGameObject layer);
                 HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.LayerProperties.GetDefaultStylingPropertyData<HiddenObjectsPropertyData>();
                 if (feature == null)
-                    v = hiddenPropertyData.GetVisibilityForSubObjectByAttributeTag(currentSelectedBagId);
+                    v = hiddenPropertyData.GetVisibilityForSubObjectById(currentSelectedBagId);
                 else
                     v = hiddenPropertyData.GetVisibilityForSubObject(feature);
                 if (v == true) visible = true;                
