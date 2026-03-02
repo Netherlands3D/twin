@@ -232,6 +232,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     }
                 }
 
+                Color col = new Color(1, 0, 0, 0);
+                List<Color> colors = new List<Color>();
+                foreach (Vector3 v in mesh.vertices)
+                    colors.Add(col);
+
+                mesh.SetColors(colors);
+
                 mesh.RecalculateBounds();
                 subObject.transform.SetParent(visualisationLayer.Transform);
                 subObject.layer = LayerMask.NameToLayer("Projected");
@@ -251,8 +258,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             if (selectedGameObjects.Count == 0) return null; 
 
             Color selectionColor = Color.blue;           
-            visualisationLayer.SetVisualisationColor(selectedGameObjects[0].transform, meshes, selectionColor);
+            visualisationLayer.SetVisualisationSelected(selectedGameObjects[0].transform, meshes, selectionColor);
             return SelectedGameObject;
+            
         }
 
         public void Deselect()
@@ -264,7 +272,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
             selectedGameObjects.Clear();
 
-            visualisationLayer.SetVisualisationColorToDefault();
+            visualisationLayer.SetVisualisationDeselected();
         }
     }
 }

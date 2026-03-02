@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Twin.Layers.Properties
 {
-    [PropertySection(typeof(LayerFeatureColorPropertyData))]
+    [PropertySection(typeof(CartesianTileLayerFeatureColorPropertyData))]
     public class CartesianTileLayerFeatureColorPropertySection : MonoBehaviour, IVisualizationWithPropertyData, IMultiSelectable
     {  
         [SerializeField] private RectTransform content;
@@ -26,13 +26,11 @@ namespace Netherlands3D.Twin.Layers.Properties
         public List<ISelectable> Items { get; set; } = new();
         public ISelectable FirstSelectedItem { get; set; }
 
-        private LayerFeatureColorPropertyData stylingPropertyData;
+        private CartesianTileLayerFeatureColorPropertyData stylingPropertyData;
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
-            //todo we need to decide whether we want per stylingpropertydata container a full set of temporary layerfeatures in a dictionairy and thus storing more data but cleaner separation OR
-            //always having a default first found stylingpropertydata to always store the layerfeatures. this is more efficient since keys are reused.
-            stylingPropertyData = properties.GetDefaultStylingPropertyData<LayerFeatureColorPropertyData>(); 
+            stylingPropertyData = properties.GetDefaultStylingPropertyData<CartesianTileLayerFeatureColorPropertyData>(); 
             
             CreateSwatches();
 
@@ -65,7 +63,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             
             foreach(KeyValuePair<string, StylingRule> kv in stylingPropertyData.StylingRules)
             {
-                if(kv.Key.Contains(LayerFeatureColorPropertyData.ColoringIdentifier))
+                if(kv.Key.Contains(CartesianTileLayerFeatureColorPropertyData.ColoringIdentifier))
                 {
                     int index = stylingPropertyData.GetMaterialIndexFromStyleRuleKey(kv.Key);                    
                     Color? color = stylingPropertyData.GetColorByMaterialIndex(index);
@@ -75,6 +73,8 @@ namespace Netherlands3D.Twin.Layers.Properties
                         swatches[index] = CreateSwatch(index);
                         SetSwatchColorFromFeature(index);
                     }
+                    else
+                        Debug.LogError("stylingrule not initialized because the colorvalue is missing");
                 }
             }
             Items = swatches.Values.OfType<ISelectable>().ToList();

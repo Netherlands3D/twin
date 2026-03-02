@@ -70,6 +70,10 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
             foreach (MeshMapping mapping in mappings)
             { 
+                LayerGameObject subObjectParent = mapping.ObjectMapping.transform.GetComponentInParent<LayerGameObject>();
+                if (subObjectParent == null || !subObjectParent.LayerData.ActiveInHierarchy)
+                    continue;
+                
                 MeshMappingItem item = mapping.FindItemForPosition(groundPosition);
                 if (item != null)
                 {

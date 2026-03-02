@@ -415,7 +415,6 @@ namespace Netherlands3D.Tiles3D
                         firstVertex = offset,
                         verticesLength = uniqueFeatureId.y
                     };
-                    //objectMapping.items.Add(subObject);
                     objectMapping.items.Add(bagId, subObject);
                     offset += uniqueFeatureId.y;
                 }

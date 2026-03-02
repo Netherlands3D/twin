@@ -78,7 +78,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
 
         //here we have to local offset the vertices with the position of the transform because the transform gets shifted
         //also we are using the actual feature geometry to find the vertices in the targeted buffers
-        public void SetVisualisationColor(Transform transform, List<Mesh> meshes, Color color)
+        public void SetVisualisationSelected(Transform transform, List<Mesh> meshes, Color color)
         {
             foreach (Mesh mesh in meshes)
             {
@@ -93,7 +93,7 @@ namespace Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers
             }
         }
 
-        public void SetVisualisationColorToDefault() //todo rename this?
+        public void SetVisualisationDeselected() 
         {
             selectionPointRenderer3D.Clear();
         }
