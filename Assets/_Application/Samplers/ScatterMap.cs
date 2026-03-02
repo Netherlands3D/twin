@@ -257,7 +257,7 @@ namespace Netherlands3D.Twin.Samplers
             var width = Mathf.CeilToInt(gridSampleSize * gridBounds.size.x);
             var height = Mathf.CeilToInt(gridSampleSize * gridBounds.size.z);
 
-            var renderTexture = new RenderTexture(width, height, GraphicsFormat.R32G32B32A32_SFloat, GraphicsFormat.D16_UNorm);
+            var renderTexture = new RenderTexture(width, height, GraphicsFormat.R32G32B32A32_SFloat, GraphicsFormat.D16_UNorm); //In the render graph API, the output Render Texture must have a depth buffer, GraphicsFormat.D16_UNorm is the minimum value to keep the render texture light weight.
             depthCamera.targetTexture = renderTexture;
             if (depthCamera.targetTexture.width > 4096 || depthCamera.targetTexture.height > 4096)
                 throw new ArgumentOutOfRangeException("Texture size should not be higher than 4096");

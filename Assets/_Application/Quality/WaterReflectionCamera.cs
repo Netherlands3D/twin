@@ -5,6 +5,7 @@ namespace Netherlands3D.Twin.Quality
 {
     public class WaterReflectionCamera : MonoBehaviour
     {
+        private const int MINIMUM_DEPTH_BUFFER_FORMAT = 16; //In the render graph API, the output Render Texture must have a depth buffer, this is the minimum value to keep the render texture light weight.
         private RenderTexture renderTexture;
 
         [SerializeField] private float scaleMultiplier = 0.1f;
@@ -63,7 +64,7 @@ namespace Netherlands3D.Twin.Quality
 
         private void CreateNewRenderTexture()
         {
-            renderTexture = new RenderTexture(Mathf.RoundToInt(followCamera.pixelWidth * ScaleMultiplier), Mathf.RoundToInt(followCamera.pixelHeight * ScaleMultiplier), 16);
+            renderTexture = new RenderTexture(Mathf.RoundToInt(followCamera.pixelWidth * ScaleMultiplier), Mathf.RoundToInt(followCamera.pixelHeight * ScaleMultiplier), MINIMUM_DEPTH_BUFFER_FORMAT);
             screenWidthOnInit = followCamera.pixelWidth;
             screenHeightOnInit = followCamera.pixelHeight;
             camera.targetTexture = renderTexture;
