@@ -1,6 +1,3 @@
-using System;
-using Netherlands3D.Services;
-using Netherlands3D.Twin.Cameras;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -66,8 +63,7 @@ namespace Netherlands3D.Twin.Quality
 
         private void CreateNewRenderTexture()
         {
-            renderTexture = new RenderTexture(Mathf.RoundToInt(followCamera.pixelWidth * ScaleMultiplier), Mathf.RoundToInt(followCamera.pixelHeight * ScaleMultiplier), 0);
-
+            renderTexture = new RenderTexture(Mathf.RoundToInt(followCamera.pixelWidth * ScaleMultiplier), Mathf.RoundToInt(followCamera.pixelHeight * ScaleMultiplier), 16);
             screenWidthOnInit = followCamera.pixelWidth;
             screenHeightOnInit = followCamera.pixelHeight;
             camera.targetTexture = renderTexture;

@@ -151,9 +151,8 @@ namespace Netherlands3D.Twin.Samplers
             //RenderTexture.Create failed: format unsupported for random writes - RGBA32 SFloat (52).
             //weirdly enough creating a depthtexture in project and passing it through a serializefield is ok on webgl
             //but we cannot do this since we need a pool and create a rendertexture for each request
-            RenderTexture renderTexture = new RenderTexture(1, 1, 0, RenderTextureFormat.Depth);
+            RenderTexture renderTexture = new RenderTexture(1, 1, 16, RenderTextureFormat.Depth);
             renderTexture.graphicsFormat = SystemInfo.GetCompatibleFormat(GraphicsFormat.R32G32B32A32_SFloat, FormatUsage.Render);
-            renderTexture.depthStencilFormat = GraphicsFormat.None;
             renderTexture.Create();
             return renderTexture;
         }
