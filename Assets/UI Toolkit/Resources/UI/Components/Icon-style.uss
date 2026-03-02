@@ -78,6 +78,7 @@
 .icon.image-line-of-sight { --icon-image: var(--icon-lineofsight); }
 .icon.image-link { --icon-image: var(--icon-link); }
 .icon.image-location { --icon-image: var(--icon-location); }
+.icon.image-location-pin { --icon-image: var(--icon-locationpin); }
 .icon.image-map { --icon-image: var(--icon-map); }
 .icon.image-measure { --icon-image: var(--icon-measure); }
 .icon.image-meta-data { --icon-image: var(--icon-metadata); }

@@ -118,6 +118,7 @@
     --icon-lineofsight: url("project://database/Assets/Sprites/UI/Icons/Type=LineOfSight,%20Color=white,%20Size=medium.png");
     --icon-link: url("project://database/Assets/Sprites/UI/Icons/Type=Link,%20Color=white,%20Size=medium.png");
     --icon-location: url("project://database/Assets/Sprites/UI/Icons/Type=Location,%20Color=white,%20Size=medium.png");
+    --icon-locationpin: url("project://database/Assets/Sprites/UI/Icons/Type=LocationPin,%20Color=white,%20Size=large.png");
     --icon-map: url("project://database/Assets/Sprites/UI/Icons/Type=Map,%20Color=white,%20Size=medium.png");
     --icon-measure: url("project://database/Assets/Sprites/UI/Icons/Type=Measure,%20Color=white,%20Size=medium.png");
     --icon-metadata: url("project://database/Assets/Sprites/UI/Icons/Type=MetaData,%20Color=white,%20Size=medium.png");

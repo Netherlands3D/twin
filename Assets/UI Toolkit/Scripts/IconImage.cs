@@ -46,6 +46,7 @@
         LineOfSight = 85,
         Link = 28,
         Location = 57,
+        LocationPin = 95,
         Map = 1,
         Measure = 86,
         MetaData = 58,
