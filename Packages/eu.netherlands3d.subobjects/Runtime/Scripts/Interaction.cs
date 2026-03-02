@@ -97,6 +97,7 @@ namespace Netherlands3D.SubObjects
                 else if(layerId != null && TryGetLayerColor(layerId, item.Key, out var layerColor))
                 {
                     color = layerColor;
+                    applied = true;
                 }
                 else
                     color = NO_OVERRIDE_COLOR;
