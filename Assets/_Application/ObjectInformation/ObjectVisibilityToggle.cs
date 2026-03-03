@@ -90,7 +90,7 @@ namespace Netherlands3D.Twin.UI
                             if (mapping.ObjectMapping == null)
                                 mapping = selector.GetReplacedMapping(mapping);
 
-                            LayerFeature feature = selector.GetLayerFeatureFromBagID(kv.Key, mapping, out layer);
+                            LayerFeature feature = selector.SubObjectSelector.GetLayerFeatureFromBagID(kv.Key, mapping, out layer);
                             if (layer != null)
                             {
                                 Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);

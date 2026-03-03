@@ -181,7 +181,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private void ProcessMeshMappingSelection(MeshMapping map, string bagId, string previousBagId, bool mappingVisible, bool isModifierPressed)
         {
-            LayerData layerData = subObjectSelector.GetLayerDataForSubObject(map.ObjectMapping);
+            LayerData layerData = map.LayerData;
             if (!mappingVisible)
                 return;
 
@@ -243,7 +243,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
             foreach (IMapping map in mappings)
             {
-                if (map.MappingObject == null || map.Id != mapping.Id) continue;
+                if (map.MappingObject == null || map.Id != mapping.Id || map.LayerData.Id != mapping.LayerData.Id) continue;
 
                 return (T)map;
             }
@@ -257,6 +257,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             objectMapping.UpdateBoundingBox();
             objectMapping.SetSelectionMaterial(selectionMaterial);
             MappingTree.RootInsert(objectMapping);
+            
+            subObjectSelector.UpdateReplacedSelectedMappings();
         }
 
         private void OnRemoveObjectMapping(ObjectMapping mapping)

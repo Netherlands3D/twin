@@ -5,6 +5,7 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Netherlands3D.Coordinates;
 using Netherlands3D.SelectionTools;
+using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
 using Netherlands3D.Twin.Utility;
 using UnityEngine;
@@ -24,6 +25,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public int LayerOrder { get { return geoJsonLayerParent.LayerData.RootIndex; } }
         //todo: Mapping.BoundingBox should be the bbox of all meshes in the feature, this is currently not working correctly.
         public BoundingBox BoundingBox => boundingBox;
+        public LayerData LayerData => geoJsonLayerParent.LayerData;
 
         private Feature feature;
         private List<Mesh> meshes;
@@ -251,16 +253,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private List<GameObject> selectedGameObjects = new List<GameObject>();
 
-        public GameObject Select(string subId = null)
+        public void Select(string subId = null)
         {
             //transform for mesh world matrix
             selectedGameObjects = CreateFeatureGameObjects();
-            if (selectedGameObjects.Count == 0) return null; 
+            if (selectedGameObjects.Count == 0) return; 
 
             Color selectionColor = Color.blue;           
             visualisationLayer.SetVisualisationSelected(selectedGameObjects[0].transform, meshes, selectionColor);
-            return SelectedGameObject;
-            
         }
 
         public void Deselect()

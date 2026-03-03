@@ -2,6 +2,7 @@
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
+using Netherlands3D.Twin.Layers;
 using UnityEngine;
 
 namespace Netherlands3D.Functionalities.ObjectInformation 
@@ -15,6 +16,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public object MappingObject => objectMapping;
         public ObjectMapping ObjectMapping => objectMapping;
         public BoundingBox BoundingBox => boundingBox;
+        
+        public LayerData LayerData => layerData;
         public List<MeshMappingItem> Items => items;
 
         private ObjectMapping objectMapping;
@@ -28,6 +31,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private Transform mTransform;
 
         private string id;
+        private LayerData layerData;
         private Material selectionMaterial;
 
         public MeshMapping(string id)
@@ -40,6 +44,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             this.objectMapping = mapping;
             meshRenderer = this.objectMapping.GetComponent<MeshRenderer>();
             meshFilter = this.objectMapping.GetComponent<MeshFilter>();
+
+            layerData = this.objectMapping.GetComponentInParent<LayerGameObject>().LayerData;
         }
         
         public void SetSelectionMaterial(Material material)
@@ -197,28 +203,28 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
-        public GameObject Select(string subId)
+        public void Select(string subId)
         {
             ObjectMappingItem item = objectMapping.items[subId];
-            if(item == null) return null;
+            if(item == null) return;
             
-            GameObject selectedMesh = new GameObject(subId);
-            Mesh mesh = CreateMeshFromMapping(ObjectMapping, item, out Vector3 localCentroid);
-            MeshFilter mFilter = selectedMesh.AddComponent<MeshFilter>();
-            mFilter.mesh = mesh;
-            MeshRenderer mRenderer = selectedMesh.AddComponent<MeshRenderer>();
-            mRenderer.material = selectionMaterial;
-            selectedMesh.transform.position = ObjectMapping.transform.TransformPoint(localCentroid);
-            
-            selectedMesh.layer = LayerMask.NameToLayer("Buildings");
-
-            Color col = new Color(1, 0, 0, 0);
-            List<Color> colors = new List<Color>();
-            foreach (Vector3 v in mesh.vertices)
-                colors.Add(col);
-
-            mFilter.mesh.SetColors(colors);
-            return selectedMesh;
+            // GameObject selectedMesh = new GameObject(subId);
+            // Mesh mesh = CreateMeshFromMapping(ObjectMapping, item, out Vector3 localCentroid);
+            // MeshFilter mFilter = selectedMesh.AddComponent<MeshFilter>();
+            // mFilter.mesh = mesh;
+            // MeshRenderer mRenderer = selectedMesh.AddComponent<MeshRenderer>();
+            // mRenderer.material = selectionMaterial;
+            // selectedMesh.transform.position = ObjectMapping.transform.TransformPoint(localCentroid);
+            //
+            // selectedMesh.layer = LayerMask.NameToLayer("Buildings");
+            //
+            // Color col = new Color(1, 0, 0, 0);
+            // List<Color> colors = new List<Color>();
+            // foreach (Vector3 v in mesh.vertices)
+            //     colors.Add(col);
+            //
+            // mFilter.mesh.SetColors(colors);
+            // return selectedMesh;
         }
 
         public void Deselect()
