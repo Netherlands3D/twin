@@ -96,7 +96,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 {
                     Interaction.RemoveSelectionColor(data.Id.ToString(), bagId);
                 }
-                Interaction.ApplyColors(kvp.Key.ObjectMapping, data.Id.ToString());
+                if(kvp.Key.ObjectMapping != null)
+                    Interaction.ApplyColors(kvp.Key.ObjectMapping, data.Id.ToString());
             }
             selectedMappings.Clear();
         }
@@ -119,6 +120,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             layer = null;
             if (selectedMapping is not MeshMapping mapping) return null;
+            if(mapping.ObjectMapping == null) return null;
 
             layer = GetLayerGameObjectFromMapping(selectedMapping);
             mapping.ObjectMapping.items.TryGetValue(bagID, out var item);

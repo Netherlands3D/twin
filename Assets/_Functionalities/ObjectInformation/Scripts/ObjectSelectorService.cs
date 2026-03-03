@@ -15,6 +15,7 @@ using Netherlands3D.Twin;
 using Netherlands3D.Twin.UI;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Netherlands3D.Functionalities.ObjectInformation
@@ -47,7 +48,9 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         [SerializeField] private Tool[] activeForTools;
         [SerializeField] private Material selectionMaterial;
         
-        
+        [SerializeField] private InputActionAsset inputActionAsset;
+        private InputAction leftClickAction;
+
 
         public void BlockBagId(string bagId, bool block)
         {
@@ -87,17 +90,24 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnEnable()
         {
             ProjectData.Current.OnDataChanged.AddListener(OnProjectChanged);
-            ClickNothingPlane.ClickedOnNothing.AddListener(OnPointerClick);
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.AddListener(Deselect);
+            
+            var map = inputActionAsset.FindActionMap("UI", true);
+            leftClickAction = map.FindAction("LeftClick", true);
+
+            leftClickAction.performed += OnLeftClick;
+            leftClickAction.Enable();
         }
 
         private void OnDisable()
         {
             ProjectData.Current.OnDataChanged.RemoveListener(OnProjectChanged);
-            ClickNothingPlane.ClickedOnNothing.RemoveListener(OnPointerClick);
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.RemoveListener(Deselect);
+            
+            leftClickAction.performed -= OnLeftClick;
+            leftClickAction.Disable();
         }
 
         private void OnProjectChanged(ProjectData data)
@@ -150,8 +160,14 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             return false;
         }
         
-        private void OnPointerClick()
+        private void OnLeftClick(InputAction.CallbackContext ctx)
         {
+            if (cameraInputSystemProvider.OverLockingObject)
+            {
+                Deselect();
+                return;
+            }
+            
             if (IsAnyToolActive())
             {
                 string previousSelectedBagId = null;
