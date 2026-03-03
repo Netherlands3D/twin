@@ -76,16 +76,7 @@ namespace Netherlands3D.Twin.Projects
         {
             //TODO: Implement undo copy with just the data we want to move between undo/redo states
         }
-
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            if (Application.isPlaying)
-                OnDataChanged.Invoke(this);
-        }
-
-#endif
-
+        
         public static void SetCurrentProject(ProjectData initialProjectTemplate)
         {
             Assert.IsNull(current);

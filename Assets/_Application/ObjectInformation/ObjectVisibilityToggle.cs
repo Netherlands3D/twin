@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Coordinates;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
@@ -40,7 +42,6 @@ namespace Netherlands3D.Twin.UI
         {            
             transformInterfaceToggle = ServiceLocator.GetService<TransformHandleInterfaceToggle>();
             selector = ServiceLocator.GetService<ObjectSelectorService>();
-
             transformInterfaceToggle.SetTarget.AddListener(OnTransformObjectFound);          
 
             selector.SelectSubObjectWithBagId.AddListener(OnBagIdFound);
@@ -72,7 +73,7 @@ namespace Netherlands3D.Twin.UI
             service.CloseDialog();
 
             if (currentSelectedFeatureObject == null) return;
-            
+
             if (toggle)
             {
                 service.ShowDialog(visibilityDialog, offset, visibilityToggle.GetComponent<RectTransform>());
@@ -80,31 +81,33 @@ namespace Netherlands3D.Twin.UI
                 service.ActiveDialog.Confirm.AddListener(() =>
                 {
                     LayerGameObject layer;
-                    if(currentSelectedFeatureObject is MeshMapping mapping)
+                    Dictionary<string, IMapping> selectedMappings = selector.SelectedMappings;
+                    foreach (KeyValuePair<string, IMapping> kv in selectedMappings)
                     {
-                        //was the mapping selected before a lod replacement?
-                        if (mapping.ObjectMapping == null)
-                            mapping = selector.GetReplacedMapping(mapping);
+                        if (kv.Value is MeshMapping mapping)
+                        {
+                            //was the mapping selected before a lod replacement?
+                            if (mapping.ObjectMapping == null)
+                                mapping = selector.GetReplacedMapping(mapping);
 
-                        LayerFeature feature = selector.SubObjectSelector.GetLayerFeatureFromBagID(currentSelectedBagId, mapping, out layer);
-                        if (layer != null)
-                        {   
-                            Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
-                            HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
-                            hiddenPropertyData.SetVisibilityForSubObject(feature, false, coord);
-                            
-                            //when the object gets hidden, deselect the selection mesh.
-                            selector.SubObjectSelector.Deselect();
+                            LayerFeature feature = selector.GetLayerFeatureFromBagID(kv.Key, mapping, out layer);
+                            if (layer != null)
+                            {
+                                Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
+                                HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
+                                hiddenPropertyData.SetVisibilityForSubObject(feature, false, coord);
+                            }
                         }
                     }
-                    
+                    //when the object gets hidden, deselect the selection mesh.
+                    selector.SubObjectSelector.Deselect();
                     UpdateButton();
                 });
-
-                if (currentSelectedBagId != null)
+                Dictionary<string, IMapping> selectedMappings = selector.SelectedMappings;
+                if (selectedMappings.Keys.Count > 0)
                 {
                     HideObjectDialog dialog = service.ActiveDialog as HideObjectDialog;
-                    dialog.SetBagId(currentSelectedBagId);
+                    dialog.SetBagId(selectedMappings.Keys.ToList());
                 }
             }
         }

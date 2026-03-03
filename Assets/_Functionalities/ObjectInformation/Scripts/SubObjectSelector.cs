@@ -31,13 +31,26 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         
         public void Select(string bagId)
         {
-            Deselect();
-            foundObject.Select(bagId);
+            GameObject visual = foundObject.Select(bagId);
+            if(visual != null)
+                selectedMeshes.Add(bagId, visual);
+        }
+
+        public void Deselect(string bagId)
+        {
+            if(!selectedMeshes.ContainsKey(bagId)) return;
+            
+            GameObject visual = selectedMeshes[bagId];
+            selectedMeshes.Remove(bagId);
+            Destroy(visual);
         }
         
         public void Deselect()
         {
             foundObject?.Deselect();
+            foreach(GameObject selectedMesh in selectedMeshes.Values) 
+                Destroy(selectedMesh); 
+            selectedMeshes.Clear();
         }
         
         public LayerData GetLayerDataForSubObject(ObjectMapping subObject)
@@ -114,7 +127,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         {
             foundObject = null;
             string bagId = null;
-            Vector3 groundPosition = pointerToWorldPosition.WorldPoint.ToUnity();
+            Vector3 groundPosition = pointerToWorldPosition.WorldPointSync.ToUnity();
             Coordinate coord = new Coordinate(groundPosition);
             List<IMapping> mappings = ObjectSelectorService.MappingTree.QueryMappingsContainingNode<MeshMapping>(coord);
             if (mappings.Count == 0)

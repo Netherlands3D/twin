@@ -2,15 +2,14 @@ using System;
 using System.IO;
 using Netherlands3D.DataTypeAdapters;
 using Netherlands3D.Functionalities.GeoJSON.LayerPresets;
-using Netherlands3D.Twin.Layers.LayerTypes.GeoJsonLayers;
+using Netherlands3D.Twin.Layers.LayerPresets;
 using Netherlands3D.Twin.Projects;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Netherlands3D.Twin.DataTypeAdapters
 {
     [CreateAssetMenu(menuName = "Netherlands3D/Adapters/GeoJSONImportAdapter", fileName = "GeoJSONImportAdapter", order = 0)]
-    public class GeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter
+    public class GeoJSONImportAdapter : ScriptableObject, IDataTypeAdapter<LayerPresetArgs>
     {
         public bool Supports(LocalFile localFile)
         {
@@ -25,17 +24,12 @@ namespace Netherlands3D.Twin.DataTypeAdapters
                 );
         }
 
-        public void Execute(LocalFile localFile)
-        {
-            ParseGeoJSON(localFile);
-        }
-
-        private void ParseGeoJSON(LocalFile localFile)
+        public LayerPresetArgs Execute(LocalFile localFile)
         {
             var layerName = CreateName(localFile);
             var url = AssetUriFactory.ConvertLocalFileToAssetUri(localFile);
 
-            var layer =  App.Layers.Add(new GeoJSONPreset.Args(layerName, url));
+            return new GeoJSONPreset.Args(layerName, url);
         }
 
         private static string CreateName(LocalFile localFile)

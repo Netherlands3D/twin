@@ -29,7 +29,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         private string id;
         private Material selectionMaterial;
-        private GameObject selectedMesh;
 
         public MeshMapping(string id)
         {
@@ -198,18 +197,19 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             }
         }
 
-        public void Select(string subId)
+        public GameObject Select(string subId)
         {
-            selectedMesh = new GameObject(subId);
             ObjectMappingItem item = objectMapping.items[subId];
-            if(item == null) return;
+            if(item == null) return null;
             
+            GameObject selectedMesh = new GameObject(subId);
             Mesh mesh = CreateMeshFromMapping(ObjectMapping, item, out Vector3 localCentroid);
             MeshFilter mFilter = selectedMesh.AddComponent<MeshFilter>();
             mFilter.mesh = mesh;
             MeshRenderer mRenderer = selectedMesh.AddComponent<MeshRenderer>();
             mRenderer.material = selectionMaterial;
             selectedMesh.transform.position = ObjectMapping.transform.TransformPoint(localCentroid);
+            
             selectedMesh.layer = LayerMask.NameToLayer("Buildings");
 
             Color col = new Color(1, 0, 0, 0);
@@ -218,13 +218,12 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 colors.Add(col);
 
             mFilter.mesh.SetColors(colors);
-
+            return selectedMesh;
         }
 
         public void Deselect()
         {
-            if(selectedMesh != null)
-                GameObject.Destroy(selectedMesh);
+           
         }
     }
 
