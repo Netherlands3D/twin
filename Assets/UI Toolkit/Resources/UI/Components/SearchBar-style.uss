@@ -1,0 +1,75 @@
+@import url("TextField-style.uss");
+
+.search-bar {
+    flex-direction: column;
+    margin: 0px;
+    padding-left: var(--spacing-3);
+    padding-top: var(--spacing-2);
+    padding-right: var(--spacing-3);
+    padding-bottom: var(--spacing-2);
+    background-color: var(--color-white);
+    border-radius: var(--spacing-2);
+    border-width: 2px;
+    border-color: var(--color-blue-200);
+}
+
+.search-bar__row {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.textfield {
+}
+
+.search-bar .textfield .unity-base-text-field__input {
+    background-color: var(--color-white);
+    padding: 0px;
+}
+
+.search-bar .textfield .unity-base-text-field__input:hover {
+    background-color: var(--color-white);
+}
+
+.search-bar .iconbutton {
+}
+
+.search-bar__results {
+    display: none; /* default closed */
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.search-bar--open .search-bar__results {
+    display: flex;
+}
+
+.search-bar__divider {
+    margin-top: var(--spacing-2);
+    height: 1.5px;
+    background-color: var(--color-blue-200);
+    border-radius: 0.75px;
+}
+
+/* nl3d ListView */
+/* TODO: adjust ListView max-height when first searchbar is implemented */
+.search-bar__list {
+    max-height: 200px;
+}
+
+/* TODO: check if listview label styling works when first searchbar is implemented */
+
+/* default: “blue 300” */
+.search-bar__list .listview-item > .label {
+    color: var(--color-blue-300);
+}
+
+/* hover */
+.search-bar__list .listview-item .unity-collection-view__item:hover > .label {
+    color: var(--color-blue-900);
+}
+
+/* selected */
+.search-bar__list .listview-item .unity-collection-view__item--selected > .label {
+    color: var(--color-blue-900);
+}

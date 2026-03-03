@@ -1,0 +1,19 @@
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+    editor-extension-mode="False"
+    class="search-bar"
+>
+    <ui:VisualElement class="search-bar__row" name="SearchRow">
+        <nl3d:TextField class="search-bar__field" name="QueryField" label="" value="" />
+        <nl3d:IconButton class="search-bar__button" name="SearchButton" button-style="IconOnly" icon="search" />
+    </ui:VisualElement>
+
+    <ui:VisualElement class="search-bar__results" name="ResultsContainer">
+        <ui:VisualElement class="search-bar__divider divider" name="ResultsDivider" />
+        <nl3d:ListView class="search-bar__list" name="ResultsList" />
+    </ui:VisualElement>
+
+</ui:UXML>

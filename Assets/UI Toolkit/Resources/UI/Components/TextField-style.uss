@@ -9,6 +9,8 @@
     --textfield-icon-size: var(--spacing-6);
     --textfield-icon-gap: var(--spacing-2);
 
+    flex-shrink: 1;
+    flex-grow: 1;
     flex-wrap: wrap;
     margin: 0;
 }
@@ -16,7 +18,9 @@
 /* Built-in Unity label is hidden by default; only shown in the WithLabel variant */
 .textfield > .unity-label {
     display: none;
-    min-width: auto;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
 }
 .textfield.textfield-style-WithLabel > .unity-label {
     display: flex;
@@ -24,6 +28,9 @@
 
 /* The actual text input element */
 .textfield .unity-base-text-field__input {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
     flex-wrap: wrap;
     padding-left: var(--textfield-input-padding-x);
     padding-right: var(--textfield-input-padding-x);
@@ -46,5 +53,6 @@
 
 .textfield TextElement {
     white-space: normal;
+    overflow: hidden;
     padding: 0;
 }
