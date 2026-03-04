@@ -93,7 +93,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             foreach (Tool tool  in activeForTools) 
                 tool.onClose.AddListener(Deselect);
             
-            var map = inputActionAsset.FindActionMap("UI", true);
+            var map = inputActionAsset.FindActionMap("Camera", true);
             leftClickAction = map.FindAction("LeftClick", true);
 
             leftClickAction.performed += OnLeftClick;
@@ -162,12 +162,18 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         
         private void OnLeftClick(InputAction.CallbackContext ctx)
         {
-            if (cameraInputSystemProvider.OverLockingObject)
+            //TODO this should be refactored when UITOOLKIT will be implemented fully
+            //is the click on any other button than the objectvisibilitytoggle button then deselect
+            if (cameraInputSystemProvider.OverLockingObject(out GameObject clickedObject))
             {
+                ObjectVisibilityToggle toggle = clickedObject.GetComponentInParent<ObjectVisibilityToggle>();
+                if (toggle != null) return;
+              
                 Deselect();
                 return;
             }
             
+            //is the layerpanel or objectinspector tool active?
             if (IsAnyToolActive())
             {
                 string previousSelectedBagId = null;
