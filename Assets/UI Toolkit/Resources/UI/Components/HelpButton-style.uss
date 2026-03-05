@@ -1,16 +1,12 @@
 @import url("IconButton-style.uss");
 
 .helpbutton {
-    --button-hover-contrast-color: var(--color-blue-700);
-    --button-active-contrast-color: var(--color-blue-700);
 }
 
 .helpbutton > #Icon {
-    --icon-image: var(--icon-help);
 }
 
 .helpbutton > .unity-label {
-    display: none;
 }
 
 .helpbutton:hover > #Icon {

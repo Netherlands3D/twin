@@ -2,11 +2,9 @@
 
 .backbutton {
     --button-hover-contrast-color: var(--color-blue-300);
-    --button-active-contrast-color: var(--color-blue-700);
 }
 
 .backbutton #Icon {
-    --icon-image: var(--icon-back); 
 }
 
 .backbutton > .unity-label {
@@ -18,5 +16,4 @@
 }
 
 .backbutton:active > #Icon {
-    -unity-background-image-tint-color: var(--button-active-contrast-color);
 }

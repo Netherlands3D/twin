@@ -21,8 +21,6 @@
 }
 
 .iconbutton > #Icon {
-    width: var(--spacing-6);
-    height: var(--spacing-6);
 }
 
 .iconbutton > .unity-label {
