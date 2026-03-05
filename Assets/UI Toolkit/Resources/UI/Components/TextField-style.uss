@@ -13,6 +13,7 @@
     flex-grow: 1;
     flex-wrap: wrap;
     margin: 0;
+    min-height: var(--spacing-8);
 }
 
 /* Built-in Unity label is hidden by default; only shown in the WithLabel variant */
@@ -55,4 +56,22 @@
     white-space: normal;
     overflow: hidden;
     padding: 0;
+}
+
+/* Disabled */
+.textfield:disabled {
+    opacity: 1;
+}
+
+.textfield:disabled .unity-base-text-field__input {
+    background-color: var(--color-white);
+    border-color: var(--color-blue-200);
+}
+
+.textfield:disabled .unity-base-text-field__input--placeholder {
+    color: var(--color-blue-200);
+}
+
+.textfield:disabled TextElement {
+    color: var(--color-blue-200);
 }

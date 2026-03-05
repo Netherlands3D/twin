@@ -6,6 +6,7 @@
 }
 
 .helpbutton > #Icon {
+    --icon-image: var(--icon-help);
 }
 
 .helpbutton > .unity-label {
@@ -17,3 +18,5 @@
 
 .helpbutton:active > #Icon {
 }
+
+

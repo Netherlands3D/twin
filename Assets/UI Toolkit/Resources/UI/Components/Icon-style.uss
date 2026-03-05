@@ -23,6 +23,11 @@
     padding-left: 0;
 }
 
+.icon:disabled {
+    opacity: 1;
+    -unity-background-image-tint-color: var(--color-blue-200);
+}
+
 .icon.tint-white { --icon-tint-color: var(--color-white); }
 .icon.tint-black { --icon-tint-color: var(--color-black); }
 .icon.tint-blue-50 { --icon-tint-color: var(--color-blue-50); }

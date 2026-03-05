@@ -6,7 +6,7 @@
     editor-extension-mode="False"  
 >
     <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/_Foundation.uss?fileID=7433441132597879392&amp;guid=9848e3ac5abe4964f8b6998ccbde0eef&amp;type=3#_Foundation"/>
-    <ui:VisualElement name="App" picking-mode="Ignore" class="app" style="flex-grow: 1; margin-top: 8px; margin-left: 8px; margin-right: 8px; margin-bottom: 4px; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px;">
+    <ui:VisualElement name="App" picking-mode="Ignore" class="app" style="flex-grow: 1; margin: 8px; padding: 4px;">
         <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1; flex-direction: row;">
             <ui:VisualElement picking-mode="Ignore" name="LeftSection">
                 <nl3d:HamburgerMenu/>

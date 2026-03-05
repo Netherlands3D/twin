@@ -3,6 +3,7 @@
 .search-bar {
     flex-direction: column;
     margin: 0px;
+    height: var(--spacing-10);
     padding-left: var(--spacing-3);
     padding-top: var(--spacing-2);
     padding-right: var(--spacing-3);
@@ -49,6 +50,16 @@
     height: 1.5px;
     background-color: var(--color-blue-200);
     border-radius: 0.75px;
+}
+
+/* Disabled */
+.search-bar:disabled {
+    opacity: 1;
+}
+
+.search-bar .textfield:disabled .unity-base-text-field__input {
+    background-color: var(--color-white);
+    border-width: 0px;
 }
 
 /* nl3d ListView */

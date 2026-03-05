@@ -36,3 +36,8 @@
 .iconbutton:active > #Icon {
     -unity-background-image-tint-color: var(--button-active-contrast-color);
 }
+
+/* Disabled */
+.iconbutton:disabled {
+    opacity: 1;
+}

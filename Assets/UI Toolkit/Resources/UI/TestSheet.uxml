@@ -4,21 +4,21 @@
         <Netherlands3D.UI.Components.ContentContainer>
             <Netherlands3D.UI.Components.ScrollView>
                 <Netherlands3D.UI.Components.Breadcrumb/>
-                <Netherlands3D.UI.Components.Button/>
                 <Netherlands3D.UI.Components.IconButton/>
+                <Netherlands3D.UI.Components.BackButton/>
                 <Netherlands3D.UI.Components.HelpButton/>
+                <Netherlands3D.UI.Components.Button/>
+                <Netherlands3D.UI.Components.Toggle/>
+                <Netherlands3D.UI.Components.Icon/>
                 <Netherlands3D.UI.Components.Slider/>
                 <Netherlands3D.UI.Components.SliderRange/>
                 <Netherlands3D.UI.Components.CheckboxToggle/>
                 <Netherlands3D.UI.Components.RadioButtonGroup label="Header label lange tekst check of dit goed gaat" choices="Label,Label"/>
-                <Netherlands3D.UI.Components.Icon/>
                 <Netherlands3D.UI.Components.MapViewport/>
-                <Netherlands3D.UI.Components.SearchBar is-open="false"/>
-                <Netherlands3D.UI.Components.BackButton/>
-                <Netherlands3D.UI.Components.Toggle/>
+                <Netherlands3D.UI.Components.SearchBar/>
+                <Netherlands3D.UI.Components.ValueField/>
                 <Netherlands3D.UI.Components.TextField/>
                 <Netherlands3D.UI.Components.TextCallOut/>
-                <Netherlands3D.UI.Components.Slider/>
             </Netherlands3D.UI.Components.ScrollView>
         </Netherlands3D.UI.Components.ContentContainer>
     </Netherlands3D.UI.Components.InspectorPanel>
