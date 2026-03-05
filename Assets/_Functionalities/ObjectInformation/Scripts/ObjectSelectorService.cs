@@ -164,7 +164,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnLeftClick(InputAction.CallbackContext ctx)
         {
             //TODO this should be refactored when UITOOLKIT will be implemented fully
-            //is the click on any other button than the objectvisibilitytoggle button then deselect
+            //is the click on any other button than the excluded ui elements then deselect
             if (cameraInputSystemProvider.OverLockingObject(out GameObject clickedObject))
             {
                 Transform t = clickedObject.transform;
