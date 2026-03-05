@@ -14,7 +14,7 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class ScrollView : UnityEngine.UIElements.ScrollView
     {
-        private float itemGap = 8f;
+        private float itemGap = 12f;
         private int _lastGapChildCount = -1;
 
         [UxmlAttribute("mode")]

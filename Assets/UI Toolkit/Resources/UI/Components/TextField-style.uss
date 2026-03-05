@@ -4,10 +4,10 @@
     --textfield-input-border-color: transparent;
     --textfield-input-border-width: var(--spacing-0_5);
     --textfield-input-radius: var(--spacing-1);
-    --textfield-input-padding-x: var(--spacing-2);
+    --textfield-input-padding-x: var(--spacing-1);
     --textfield-input-padding-y: var(--spacing-1);
     --textfield-icon-size: var(--spacing-6);
-    --textfield-icon-gap: var(--spacing-3);
+    --textfield-icon-gap: var(--spacing-2);
 
     flex-wrap: wrap;
     margin: 0;

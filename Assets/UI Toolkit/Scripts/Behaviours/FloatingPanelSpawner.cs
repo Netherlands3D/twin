@@ -14,6 +14,7 @@ namespace Netherlands3D.UI.Panels
         [SerializeField] private InputActionAsset inputActionAsset;
         private VisualElement root;
         private InputAction rightClickAction;
+        private FloatingPanel activePanel;
 
         void OnEnable()
         {
@@ -33,10 +34,19 @@ namespace Netherlands3D.UI.Panels
 
         private void SpawnFloatingPanel<T>(Vector2 screenPos, object context = null) where T : FloatingPanel, new()
         {
-            var panel = new T();
-            panel.Initialize(screenPos, context);
-            panel.SetPosition(screenPos);
-            root.Add(panel);
+            activePanel = new T();
+            activePanel.Initialize(screenPos, context);
+            activePanel.SetPosition(screenPos);
+            root.Add(activePanel);
+        }
+
+        private void ClearActivePanel()
+        {
+            if (activePanel == null)
+                return;
+
+            root.Remove(activePanel);
+            activePanel = null;
         }
 
         private void OnRightClick(InputAction.CallbackContext ctx)
@@ -61,7 +71,7 @@ namespace Netherlands3D.UI.Panels
                 Debug.Log("not clicked in world");
                 return;
             }
-            
+
             screenPos.y = Screen.height - screenPos.y;
             Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(root.panel, screenPos);
             var picked = root.panel.Pick(panelPos);
@@ -69,8 +79,9 @@ namespace Netherlands3D.UI.Panels
             // block if we hit something other than the root background
             if (picked != null && picked != root)
                 return;
-            
+
             List<IMapping> selectedMappings = ServiceLocator.GetService<ObjectSelectorService>().SubObjectSelector.SelectedMappings;
+            ClearActivePanel();
             SpawnFloatingPanel<HideObjectPanel>(panelPos, selectedMappings);
         }
     }

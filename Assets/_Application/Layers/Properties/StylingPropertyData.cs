@@ -48,11 +48,15 @@ namespace Netherlands3D.Twin.Layers.Properties
         {   
         }
         
-        public void SetStylingRule(string stylingRuleName, StylingRule stylingRule)
+        public void SetStylingRule(string stylingRuleKey, StylingRule stylingRule)
         {
-            StylingRules[stylingRuleName] = stylingRule;
+            StylingRules[stylingRuleKey] = stylingRule;
             OnStylingChanged.Invoke();
         }
         
+        public string GetStylingRuleName(string stylingRuleKey)
+        {
+            return StylingRules[stylingRuleKey].Name;
+        }
     }
 }

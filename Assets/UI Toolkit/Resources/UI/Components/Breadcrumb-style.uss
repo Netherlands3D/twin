@@ -5,6 +5,7 @@
     flex-wrap: nowrap;
 }
 
+/* TODO: Lijkt niet toegepast te worden, check Mike */
 .breadcrumb .leadingicon {
     width: var(--spacing-6);
     height: var(--spacing-6);
@@ -12,7 +13,7 @@
 }
 
 .breadcrumb .backbutton {
-    margin-right: var(--spacing-2);
+    margin-right: var(--spacing-3);
 }
 
 .breadcrumb .trail {
@@ -39,7 +40,7 @@
 .breadcrumb .separator.icon {
     width: var(--spacing-6);
     height: var(--spacing-6);
-    --icon-image: var(--icon-chevronright);
+    --icon-image: var(--icon-smallchevronright);
     margin-left: var(--spacing-1);
     margin-right: var(--spacing-1);
 }

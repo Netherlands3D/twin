@@ -1,0 +1,21 @@
+<ui:UXML 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:ui="UnityEngine.UIElements" 
+  xmlns:nl3d="Netherlands3D.UI.Components" 
+  noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+  editor-extension-mode="False" 
+  class="hamburger-menu text-header unity-foldout">
+
+  <!--
+    NOTE:
+    - Project title uses Foldout's internal Label (unity-label). Hidden via USS.
+    - Hamburger icon uses Foldout's internal checkmark (unity-foldout__checkmark), restyled via USS.
+  -->
+
+  <ui:ToggleButtonGroup name="ButtonGroup" class="hamburger-menu__group">
+    <nl3d:Button name="Open" button-type="Transparent" button-style="IconOnly" icon="UploadFolder" />
+    <nl3d:Button name="Save" button-type="Transparent" button-style="IconOnly" icon="Save" />
+    <nl3d:Button name="Settings" button-type="Transparent" button-style="IconOnly" icon="Settings" />
+    <nl3d:Button name="Help" button-type="Transparent" button-style="IconOnly" icon="Help" />
+  </ui:ToggleButtonGroup>
+</ui:UXML>

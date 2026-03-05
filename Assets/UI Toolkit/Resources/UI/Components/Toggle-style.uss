@@ -2,7 +2,9 @@
     --toggle-bg-color: var(--color-white);
     --toggle-active-color: var(--color-blue-700);
     --toggle-active-contrast-color: var(--toggle-bg-color);
-    --toggle-padding: var(--spacing-3);
+    --toggle-disabled-color: var(--color-blue-200);
+    --toggle-padding: var(--spacing-2);
+    --toggle-margin: 0px;
     --toggle-border-color: var(--color-blue-200);
     --toggle-border-width: var(--spacing-0_5);
     --toggle-border-radius: var(--spacing-2);
@@ -14,25 +16,47 @@
     flex-wrap: wrap;
     align-items: center;
     align-self: flex-start;
+    min-height: var(--spacing-11);
     padding: var(--toggle-padding);
+    margin: var(--toggle-margin);
     background-color: var(--toggle-bg-color);
     border-color: var(--toggle-border-color);
     border-width: var(--toggle-border-width);
     border-radius: var(--toggle-border-radius);
     flex-basis: auto;
 }
+/* Type: transparent (toolbar) */
+.toggle.toggle-type-transparent {
+    --toggle-bg-color: transparent;
+    --toggle-border-color: var(--color-white);
+}
+
+.toggle .unity-checkmark,
+.toggle .unity-toggle__checkmark {
+    display: none;
+}
 
 .toggle > #Icon {
     width: var(--spacing-6);
     height: var(--spacing-6);
 }
-
-.toggle.toggle-style-normal > #Icon {
-    display: none;
+.toggle.toggle-type-transparent > #Icon {
+    --icon-tint-color: var(--color-white);
 }
 
-.toggle > #Label {
-    white-space: normal;
+.toggle.toggle-style-normal > #Icon { display: none; }
+.toggle.toggle-style-wide { 
+    align-self: stretch; 
+    flex-grow: 1; 
+}
+
+.toggle > #Label { 
+    white-space: normal; 
+    padding: 0px;
+    margin: 0px;
+}
+.toggle.toggle-type-transparent > #Label {
+    color: var(--color-white);
 }
 
 .toggle.toggle-style-icon-only > #Label {
@@ -51,23 +75,45 @@
     margin-left: var(--toggle-icon-gap);
 }
 
+/* Hover/checked/disabled */
 .toggle:hover {
-    border-color: var(--color-blue-700);
+    border-color: var(--toggle-active-color);
 }
+.toggle.toggle-type-transparent:hover {
+    background-color: var(--color-blue-700-hover);
+}
+.toggle:disabled:hover {
+    border-color: var(--toggle-disabled-color);
+}
+
 
 .toggle:checked {
     background-color: var(--toggle-active-color);
     border-color: var(--toggle-active-color);
 }
-
-.toggle:checked > #Label {
+.toggle.toggle-type-transparent:checked {
+    /* Active state should keep contrast white */
+    --toggle-active-contrast-color: var(--color-white);
+    background-color: var(--toggle-active-color);
+}
+.toggle:checked .unity-label {
     color: var(--toggle-active-contrast-color);
 }
-
 .toggle:checked > #Icon {
     -unity-background-image-tint-color: var(--toggle-active-contrast-color);
 }
 
-.toggle .unity-base-field__input {
-    display: none;
+.toggle:disabled {
+    opacity: 1;
+    border-color: var(--toggle-disabled-color);
+}
+.toggle.toggle-type-transparent:disabled {
+    opacity: 1;
+    background-color: transparent;
+}
+.toggle:disabled > #Label {
+    color: var(--toggle-disabled-color);
+}
+.toggle:disabled > #Icon {
+    --icon-tint-color: var(--toggle-disabled-color);
 }

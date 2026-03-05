@@ -1,0 +1,15 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    class="properties"
+>
+    <ui:VisualElement name="Header" class="properties-header">
+        <ui:Label text="Label" class="inspector-header-title"/>
+        <nl3d:Button name="PropertiesHeaderCloseButton" button-style="IconOnly" icon="close" class="properties-header-button-close"/>
+    </ui:VisualElement>
+    <nl3d:ToolbarProperties />
+    <ui:VisualElement class="properties-content" name="Content" />
+</ui:UXML>

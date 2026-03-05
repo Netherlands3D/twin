@@ -11,7 +11,7 @@ namespace Netherlands3D.UI.Components
         [UxmlAttribute("image")]
         public IconImage Image { get => image; set { image = value; UpdateClassList(); } }
 
-        private ThemeColor color = ThemeColor.Black;
+        private ThemeColor color = ThemeColor.Blue900;
         [UxmlAttribute("color")]
         public ThemeColor Color { get => color; set { color = value; UpdateClassList(); } }
 
