@@ -1,0 +1,73 @@
+@import url("TextField-style.uss");
+
+/* Shared base for both slider components */
+.slider,
+.slider-range {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    min-height: auto;
+}
+
+.unity-base-field__label {
+    margin-bottom: var(--spacing-3);
+    white-space: normal;
+}
+
+.slider.slider-header-no-header > .unity-base-field__label,
+.slider-range.slider-header-no-header > .unity-base-field__label {
+    display: none;
+}
+
+/* Override automatic color change for unity slider label (header) on focus */
+.slider:focus > .unity-base-field__label,
+.slider-range:focus > .unity-base-field__label {
+    color: var(--color-text);
+}
+
+.textfield {
+    flex-grow: 0;
+    flex-shrink: 1;
+    min-width: 0;
+    width: var(--spacing-15);
+}
+
+.unity-base-slider__drag-container, 
+.unity-min-max-slider__input {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    flex-direction: row;
+    align-items: center;
+    height: auto;
+    min-height: var(--spacing-4);
+}
+
+.unity-base-slider__tracker, 
+.unity-min-max-slider__tracker {
+    translate: 0 -4px; /* Override automatic off-center positioning */
+    height: var(--spacing-2);
+    background-color: var(--color-white);
+    border-color: var(--color-blue-700);
+    border-width: 1.5px;
+    border-radius: var(--spacing-1);
+}
+
+.slider .unity-base-slider__dragger, 
+.unity-min-max-slider__min-thumb, 
+.unity-min-max-slider__max-thumb {
+    align-self: center;
+    width: var(--spacing-4);
+    height: var(--spacing-4);
+    min-width: var(--spacing-4);
+    min-height: var(--spacing-4);
+    background-color: var(--color-white);
+    background-image: var(--icon-dot); 
+    -unity-background-image-tint-color: var(--color-blue-700);
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    border-color: var(--color-blue-700);
+    border-width: 1.5px;
+    border-radius: 100%;
+}

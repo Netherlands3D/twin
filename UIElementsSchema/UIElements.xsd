@@ -6,17 +6,19 @@
   <xs:import schemaLocation="UnityEditor.Rendering.xsd" namespace="UnityEditor.Rendering" />
   <xs:import schemaLocation="Unity.MemoryProfiler.Editor.UI.xsd" namespace="Unity.MemoryProfiler.Editor.UI" />
   <xs:import schemaLocation="UnityEditor.U2D.Sprites.SpriteEditorTool.xsd" namespace="UnityEditor.U2D.Sprites.SpriteEditorTool" />
+  <xs:import schemaLocation="Netherlands3D.UI.Components.xsd" namespace="Netherlands3D.UI.Components" />
+  <xs:import schemaLocation="Netherlands3D.UI.Panels.xsd" namespace="Netherlands3D.UI.Panels" />
   <xs:import schemaLocation="UnityEditor.UIElements.Debugger.xsd" namespace="UnityEditor.UIElements.Debugger" />
   <xs:import schemaLocation="Unity.UI.Builder.xsd" namespace="Unity.UI.Builder" />
   <xs:import schemaLocation="UnityEditor.Search.xsd" namespace="UnityEditor.Search" />
   <xs:import schemaLocation="UnityEditor.Experimental.GraphView.xsd" namespace="UnityEditor.Experimental.GraphView" />
+  <xs:import schemaLocation="UnityEditor.ShortcutManagement.xsd" namespace="UnityEditor.ShortcutManagement" />
   <xs:import schemaLocation="UnityEditor.PackageManager.UI.Internal.xsd" namespace="UnityEditor.PackageManager.UI.Internal" />
-  <xs:import schemaLocation="UnityEditor.UIElements.ProjectSettings.xsd" namespace="UnityEditor.UIElements.ProjectSettings" />
   <xs:import schemaLocation="UnityEditor.UIElements.xsd" namespace="UnityEditor.UIElements" />
+  <xs:import schemaLocation="UnityEditor.Inspector.GraphicsSettingsInspectors.xsd" namespace="UnityEditor.Inspector.GraphicsSettingsInspectors" />
   <xs:import schemaLocation="UnityEditor.Audio.UIElements.xsd" namespace="UnityEditor.Audio.UIElements" />
   <xs:import schemaLocation="Unity.Profiling.Editor.UI.xsd" namespace="Unity.Profiling.Editor.UI" />
-  <xs:import schemaLocation="UnityEditor.Inspector.GraphicsSettingsInspectors.xsd" namespace="UnityEditor.Inspector.GraphicsSettingsInspectors" />
-  <xs:import schemaLocation="UnityEditor.ShortcutManagement.xsd" namespace="UnityEditor.ShortcutManagement" />
+  <xs:import schemaLocation="UnityEditor.UIElements.ProjectSettings.xsd" namespace="UnityEditor.UIElements.ProjectSettings" />
   <xs:import schemaLocation="UnityEditor.Inspector.xsd" namespace="UnityEditor.Inspector" />
   <xs:import schemaLocation="UnityEditor.Overlays.xsd" namespace="UnityEditor.Overlays" />
   <xs:import schemaLocation="Unity.Profiling.Editor.xsd" namespace="Unity.Profiling.Editor" />

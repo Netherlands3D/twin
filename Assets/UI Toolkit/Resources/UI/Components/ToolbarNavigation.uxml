@@ -1,0 +1,14 @@
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    editor-extension-mode="False"  
+    class="toolbar-navigation"
+>
+    <ui:ToggleButtonGroup name="ButtonGroup" class="toolbar-navigation__group">
+        <nl3d:Button name="FPV" button-type="Transparent" button-style="IconOnly" icon="FPV" />
+        <nl3d:Button name="North" button-type="Transparent" button-style="IconOnly" icon="NorthArrow" />
+        <nl3d:Button name="Perspective" button-type="Transparent" button-style="IconOnly" icon="OrthogonalView" />
+    </ui:ToggleButtonGroup>
+</ui:UXML>

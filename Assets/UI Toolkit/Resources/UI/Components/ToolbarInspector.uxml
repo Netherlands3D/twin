@@ -12,7 +12,6 @@
         <ui:VisualElement class="toolbar-inspector-content right">
             <nl3d:Button name="AddFolder" class="toolbar-inspector-button" button-style="IconOnly" icon="Folder" />
             <nl3d:Button name="Delete" class="toolbar-inspector-button" button-style="IconOnly" icon="Trash" />
-            <nl3d:Toggle name="AddToLibrary" class="toolbar-inspector-button" toggle-style="IconOnly" icon="LibraryAdd" />
-            <nl3d:Toggle name="AddLayer" class="toolbar-inspector-button" toggle-style="IconOnly" icon="Plus" />
+            <nl3d:Toggle name="AddLayer" class="toolbar-inspector-button" toggle-style="Normal" LabelText="Toevoegen" />
         </ui:VisualElement>
 </ui:UXML>
