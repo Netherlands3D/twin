@@ -168,6 +168,7 @@
     --icon-videocamera: url("project://database/Assets/Sprites/UI/Icons/Type=VideoCamera,%20Color=white,%20Size=medium.png");
     --icon-width: url("project://database/Assets/Sprites/UI/Icons/Type=Width,%20Color=white,%20Size=medium.png");
     --icon-warning: url("project://database/Assets/Sprites/UI/Icons/Type=Warning,%20Color=white,%20Size=medium.png");
+    --icon-visibility: url("project://database/Assets/Sprites/UI/Layers/Visibility/Property%201=Visable.png");
     
 
     /* Font */
