@@ -47,6 +47,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         [SerializeField] private Tool[] activeForTools;
         [SerializeField] private Material selectionMaterial;
+        [SerializeField] private RectTransform[] excludedUIForDeselection;
         
         [SerializeField] private InputActionAsset inputActionAsset;
         private InputAction leftClickAction;
@@ -166,9 +167,13 @@ namespace Netherlands3D.Functionalities.ObjectInformation
             //is the click on any other button than the objectvisibilitytoggle button then deselect
             if (cameraInputSystemProvider.OverLockingObject(out GameObject clickedObject))
             {
-                ObjectVisibilityToggle toggle = clickedObject.GetComponentInParent<ObjectVisibilityToggle>();
-                if (toggle != null) return;
-              
+                Transform t = clickedObject.transform;
+                foreach (var excluded in excludedUIForDeselection)
+                {
+                    if (t.IsChildOf(excluded))
+                        return;
+                }
+                
                 Deselect();
                 return;
             }
