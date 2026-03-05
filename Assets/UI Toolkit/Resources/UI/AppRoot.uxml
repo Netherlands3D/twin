@@ -10,7 +10,7 @@
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="MidSection" picking-mode="Ignore" style="flex-grow: 1; flex-shrink: 0;">
-                <nl3d:ToolbarToolbox />
+                <nl3d:ToolbarToolbox picking-mode="Ignore" />
                 <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1;" />
             </ui:VisualElement>
             <nl3d:PropertiesPanel />
