@@ -97,5 +97,6 @@
         VideoCamera = 18,
         Warning = 17,
         Width = 16,
+        Visibility = 95,
     }
 }

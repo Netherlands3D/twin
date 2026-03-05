@@ -128,3 +128,4 @@
 .icon.image-video-camera { --icon-image: var(--icon-videocamera); }
 .icon.image-warning { --icon-image: var(--icon-warning); }
 .icon.image-width { --icon-image: var(--icon-width); }
+.icon.image-visibility { --icon-image: var(--icon-visibility); }
