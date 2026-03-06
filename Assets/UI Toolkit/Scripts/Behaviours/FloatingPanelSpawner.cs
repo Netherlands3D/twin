@@ -82,7 +82,7 @@ namespace Netherlands3D.UI.Panels
 
             List<IMapping> selectedMappings = ServiceLocator.GetService<ObjectSelectorService>().SubObjectSelector.SelectedMappings;
             ClearActivePanel();
-            SpawnFloatingPanel<HideObjectPanel>(panelPos, selectedMappings);
+            SpawnFloatingPanel<DomePanel>(panelPos, selectedMappings);
         }
     }
 }

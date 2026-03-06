@@ -1,10 +1,10 @@
-using System.Collections.Generic;
-using Netherlands3D.Functionalities.ObjectInformation;
-using Netherlands3D.UI_Toolkit.Scripts;
+using System.Linq;
+using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.Twin.Projects;
 using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Button = Netherlands3D.UI.Components.Button;
 using ListView = Netherlands3D.UI.Components.ListView;
 
 
@@ -13,60 +13,61 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class DomePanel : FloatingPanel
     {
-        private List<IMapping> mappings;
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
-        private Button hideButton;
+        // private Button hideButton;
 
         public override void Initialize(Vector2 screenPosition, object context = null)
         {
             base.Initialize(screenPosition, context);
-
-            mappings = context as List<IMapping>;
-            if (mappings == null) return;
-
-            // Virtualization and selection
+            
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             ListView.selectionType = SelectionType.None;
 
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
-
-            // Hide button
-            hideButton = this.Q<Button>("HideButton");
-            if (hideButton != null)
-            {
-                hideButton.clicked += () =>
-                {
-                    HideMappings(mappings);
-                    parent.Remove(this); // close panel after hiding
-                };
-            }
+            
+            PopulateMaskLayerPanel();
         }
-
+        
         private VisualElement MakeListViewItem()
         {
-            var button = new Button { name = "ToggleHidden" };
-            var listViewItem = new ListViewItem(button);
+            var rowElement = new MaskLayerRowElement();
+            var listViewItem = new ListViewItem(rowElement);
+            rowElement.MaskActiveToggle.RegisterCallback<ClickEvent>(_ => Debug.Log("toggle mask active: " +  rowElement.name));
             
             return listViewItem;
         }
-        
+
         private void BindListViewItem(VisualElement item, int index)
         {
             if (item is not ListViewItem listViewItem) return;
-            if (listViewItem.Q<Button>() is not Button button) return;
+            if (listViewItem.Q<MaskLayerRowElement>() is not MaskLayerRowElement maskLayerRowElement) return;
             
-            IMapping mapping = ListView.itemsSource[index] as IMapping;
-            button.LabelText = mapping.Id;
-            var icon = IconImage.Map;
-            button.Image = icon;
-            button.userData = mapping;
+            var layerData = ListView.itemsSource[index] as LayerData;
+            var layerPropertyData = layerData.GetProperty<MaskingLayerPropertyData>();
+            if (layerPropertyData == null)
+                return; //unmaskable layer
+            
+            maskLayerRowElement.LayerName = layerData.Name;
+            maskLayerRowElement.ToggleIsOn = GetIsDomeMaskingBitSet(layerPropertyData);
+
+            maskLayerRowElement.userData = layerData;
         }
-        
-        private void HideMappings(List<IMapping> mappings)
+
+        private bool GetIsDomeMaskingBitSet(MaskingLayerPropertyData layerPropertyData)
         {
-            
+            var currentLayerMask = layerPropertyData.GetMaskLayerMask();
+            int maskBitToCheck = 1 << MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX;
+            bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
+            return isBitSet;
+        }
+
+        private void PopulateMaskLayerPanel()
+        {
+            var layers = ProjectData.Current.RootLayer.GetFlatHierarchy(); //todo: should this be the context passed by the Initialize function?
+            ListView.itemsSource = layers.ToList();
+            ListView.RefreshItems();
         }
     }
 }
