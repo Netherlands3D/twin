@@ -98,7 +98,7 @@
         VideoCamera = 18,
         Warning = 17,
         Width = 16,
-        Visibility = 95,
-        Invisible = 96,
+        Visibility = 97,
+        Invisible = 98,
     }
 }
