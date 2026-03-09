@@ -20,9 +20,6 @@
     align-items: center;
 }
 
-.textfield {
-}
-
 .search-bar .textfield .unity-base-text-field__input {
     background-color: var(--color-white);
     padding: 0px;
@@ -30,9 +27,6 @@
 
 .search-bar .textfield .unity-base-text-field__input:hover {
     background-color: var(--color-white);
-}
-
-.search-bar .iconbutton {
 }
 
 .search-bar__results {
@@ -70,7 +64,7 @@
 
 /* TODO: check if listview label styling works when first searchbar is implemented */
 
-/* default: “blue 300” */
+/* default: ï¿½blue 300ï¿½ */
 .search-bar__list .listview-item > .label {
     color: var(--color-blue-300);
 }

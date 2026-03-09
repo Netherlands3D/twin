@@ -23,8 +23,6 @@
     right: 0;
     top: 0;
     bottom: 0;
-    width: 100%;
-    height: 100%;
 
     /* TODO: set background-image/RenderTexture */
     background-color: var(--color-blue-100);
@@ -36,14 +34,9 @@
     right: 0;
     top: 0;
     bottom: 0;
-    width: 100%;
-    height: 100%;
 
     justify-content: center;
     align-items: center;
-
-    /* Overlay can't block clicks */
-    pointer-events: none;
 }
 
 .map-viewport .map-viewport__pin.icon {
