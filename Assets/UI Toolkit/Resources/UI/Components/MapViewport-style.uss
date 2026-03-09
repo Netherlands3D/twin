@@ -1,0 +1,47 @@
+.map-viewport {
+    position: relative;
+    flex-shrink: 1;
+    flex-grow: 1;
+    align-items: flex-end;
+    
+    /* grenzen: voorkomt te klein/te groot */
+    aspect-ratio: 1.6;
+    min-width: 256px;
+    max-width: 320px; /* TODO: test on different screensizes if this is to big */
+    min-height: 160px;
+    max-height: 200px; /* TODO: test on different screensizes if this is to big */
+
+    border-radius: var(--spacing-2);
+    border-width: 0px;
+    background-color: transparent;
+    overflow: hidden;
+}
+
+.map-viewport__map {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    /* TODO: set background-image/RenderTexture */
+    background-color: var(--color-blue-100);
+}
+
+.map-viewport__overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.map-viewport .map-viewport__pin.icon {
+    width: var(--spacing-8);
+    height: var(--spacing-8);
+    --icon-image: var(--icon-locationpin);
+    -unity-background-image-tint-color: var(--color-blue-700);
+}
