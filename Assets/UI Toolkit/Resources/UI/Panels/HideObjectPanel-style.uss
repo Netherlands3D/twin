@@ -24,6 +24,22 @@
     margin-bottom: 0;
 }
 
+.hide-object-panel__content-separator{
+    flex-direction: row;
+}
+
+.hide-object-panel__selection-tag{
+    margin-right: 20px;
+}
+
+.hide-object-panel__selection-tag-text{
+    -unity-text-align: upper-left;
+    margin: 0;
+    padding: 0;
+    font-size: var(--font-size-sm);
+    -unity-font-definition: var(--nl3d-default-font-semi-bold);
+}
+
 .hide-object-panel__message {
     flex-grow: 0;
     flex-shrink: 0;

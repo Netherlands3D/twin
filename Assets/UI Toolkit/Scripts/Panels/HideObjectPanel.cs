@@ -40,8 +40,16 @@ namespace Netherlands3D.UI.Panels
             };
         }
 
+        public void PopulateBagIds(List<string> mappings)
+        {
+            ListView.itemsSource = mappings;
+            ListView.RefreshItems();
+        }
+        
         private VisualElement MakeListViewItem()
         {
+            
+            //component van maken + caputure meteen
             var button = new Button { name = "ToggleHidden" };
             var listViewItem = new ListViewItem(button);
             //button.RegisterCallback<ClickEvent>();
@@ -54,8 +62,8 @@ namespace Netherlands3D.UI.Panels
             if (item is not ListViewItem listViewItem) return;
             if (listViewItem.Q<Button>() is not Button button) return;
             
-            IMapping mapping = ListView.itemsSource[index] as IMapping;
-            button.LabelText = mapping.Id;
+            string mapping = ListView.itemsSource[index] as string;
+            button.LabelText = mapping;
             var icon = IconImage.Map;
             button.Image = icon;
             button.userData = mapping;

@@ -11,6 +11,8 @@ namespace Netherlands3D.UI.Panels
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
+            
+            //dit in stylesheet
             style.position = Position.Absolute;
         }
 

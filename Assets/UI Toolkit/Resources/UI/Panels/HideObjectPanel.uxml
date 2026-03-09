@@ -3,8 +3,13 @@
     <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/_Foundation.uss?fileID=7433441132597879392&amp;guid=9848e3ac5abe4964f8b6998ccbde0eef&amp;type=3#_Foundation"/>
     <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/_Theme.uss?fileID=7433441132597879392&amp;guid=0f24ef838c8e4bf49a89503faf584878&amp;type=3#_Theme"/>
     <nl3d:Header icon="Visibility" text="Objecten verbergen"/>
-    <ui:VisualElement class="hide-object-panel__body">
-        <nl3d:ListView name="ItemListView" virtualization-method="DynamicHeight" style="flex-grow: 1; height: 999px;"/>
+    <ui:VisualElement name="Content" class="hide-object-panel__body">
+        <ui:VisualElement name="Separator" class="hide-object-panel__content-separator">
+            <ui:VisualElement name="Selection" class="hide-object-panel__selection-tag">
+                <ui:Label text="Selectie: " class="hide-object-panel__selection-tag-text"/>
+            </ui:VisualElement>
+            <nl3d:ListView name="ItemListView" virtualization-method="DynamicHeight" style="flex-grow: 1; height: auto;"/>
+        </ui:VisualElement>
         <ui:VisualElement name="Message" class="hide-object-panel__message">
             <ui:Label text="Weet je zeker dat je dit object wilt verbergen? Je kan verborgen objecten later weer zichtbaar maken in het eigenschappen paneel van de bijbehorende laag. " class="hide-object-panel__message-text"/>
         </ui:VisualElement>
