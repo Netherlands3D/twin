@@ -205,26 +205,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void Select(string subId)
         {
-            ObjectMappingItem item = objectMapping.items[subId];
-            if(item == null) return;
             
-            // GameObject selectedMesh = new GameObject(subId);
-            // Mesh mesh = CreateMeshFromMapping(ObjectMapping, item, out Vector3 localCentroid);
-            // MeshFilter mFilter = selectedMesh.AddComponent<MeshFilter>();
-            // mFilter.mesh = mesh;
-            // MeshRenderer mRenderer = selectedMesh.AddComponent<MeshRenderer>();
-            // mRenderer.material = selectionMaterial;
-            // selectedMesh.transform.position = ObjectMapping.transform.TransformPoint(localCentroid);
-            //
-            // selectedMesh.layer = LayerMask.NameToLayer("Buildings");
-            //
-            // Color col = new Color(1, 0, 0, 0);
-            // List<Color> colors = new List<Color>();
-            // foreach (Vector3 v in mesh.vertices)
-            //     colors.Add(col);
-            //
-            // mFilter.mesh.SetColors(colors);
-            // return selectedMesh;
         }
 
         public void Deselect()

@@ -88,6 +88,7 @@ namespace Netherlands3D.Twin.Cameras.Input
 
         private string[] originalProcessors;
 
+        //TODO we need to remove/refactor this when UITOOLKIT is fully implemented
         public bool OverLockingObject(out GameObject clickedObject)
         {
             clickedObject = null;

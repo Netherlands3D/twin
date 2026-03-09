@@ -143,9 +143,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                     map = ServiceLocator.GetService<ObjectSelectorService>().GetReplacedMapping(meshMapping);
                 }
                 if (map == null) return null;
-                
-                Transform parent = map.ObjectMapping.gameObject.transform.parent;
-                LayerGameObject layerGameObject = parent.GetComponent<LayerGameObject>();
+
+                LayerGameObject layerGameObject = map.ObjectMapping.GetComponentInParent<LayerGameObject>();
                 return layerGameObject;
             }
             return null;
