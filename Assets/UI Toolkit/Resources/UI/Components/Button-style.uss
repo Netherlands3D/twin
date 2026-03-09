@@ -142,9 +142,6 @@
 .button:disabled > #Label {
     color: var(--button-disabled-color);
 }
-.button:disabled > #Icon {
-    --icon-tint-color: var(--button-disabled-color);
-}
 
 .button.button-type-transparent.show-type:disabled .divider {
     background-color: var(--button-disabled-color);
