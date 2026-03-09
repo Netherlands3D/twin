@@ -36,10 +36,6 @@ namespace Netherlands3D.UI.Components
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-            // RegisterCallback<AttachToPanelEvent>(_ =>
-            // {
-            //     
-            // });
         }
     }
 }

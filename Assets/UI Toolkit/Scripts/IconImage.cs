@@ -98,5 +98,6 @@
         Warning = 17,
         Width = 16,
         Visibility = 95,
+        Invisible = 96,
     }
 }

@@ -1,16 +1,11 @@
-
 using System.Collections.Generic;
-using System.Linq;
-using Netherlands3D.Catalogs;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.Components;
-using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
 using ListView = Netherlands3D.UI.Components.ListView;
-
 
 namespace Netherlands3D.UI.Panels
 {
@@ -20,7 +15,9 @@ namespace Netherlands3D.UI.Panels
         private List<IMapping> mappings;
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
-        private Button hideButton;
+        
+        private Button button;
+        private Button Button => button ??= this.Q<Button>("HideButton");
 
         public override void Initialize(Vector2 screenPosition, object context = null)
         {
@@ -36,16 +33,11 @@ namespace Netherlands3D.UI.Panels
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
 
-            // Hide button
-            hideButton = this.Q<Button>("HideButton");
-            if (hideButton != null)
+            Button.clicked += () =>
             {
-                hideButton.clicked += () =>
-                {
-                    HideMappings(mappings);
-                    parent.Remove(this); // close panel after hiding
-                };
-            }
+                HideMappings(mappings);
+                parent.Remove(this); // close panel after hiding
+            };
         }
 
         private VisualElement MakeListViewItem()

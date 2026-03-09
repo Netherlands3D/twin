@@ -41,6 +41,10 @@
     --spacing-11_12: 91.666667%;
     --spacing-auto: auto;
     --spacing-full: 100%;
+        
+    --border-radius-sm: 2px;
+    --border-radius-md: 4px;
+    --border-radius-lg: 8px;
 
     /* Default font sizes, Inspired by https://v2.tailwindcss.com/docs/font-size */
     --font-size-xs: var(--spacing-3);
@@ -169,7 +173,7 @@
     --icon-width: url("project://database/Assets/Sprites/UI/Icons/Type=Width,%20Color=white,%20Size=medium.png");
     --icon-warning: url("project://database/Assets/Sprites/UI/Icons/Type=Warning,%20Color=white,%20Size=medium.png");
     --icon-visibility: url("project://database/Assets/Sprites/UI/Layers/Visibility/Property%201=Visable.png");
-    
+    --icon-invisible: url("project://database/Assets/Sprites/UI/Layers/Visibility/Property%201=invisible.png");
 
     /* Font */
     --unity-font: "Inter";
