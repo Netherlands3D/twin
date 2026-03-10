@@ -41,13 +41,14 @@ namespace Netherlands3D.UI.Panels
             leftClickAction.Disable();
         }
 
-        private void SpawnFloatingPanel<T>(Vector2 screenPos, Dictionary<string, object> data = null) where T : FloatingPanel, new()
+        private T SpawnFloatingPanel<T>(Vector2 screenPos, Dictionary<string, object> data = null) where T : FloatingPanel, new()
         {
             activePanel = new T();
             activePanel.Initialize(screenPos, data);
             activePanel.SetPosition(screenPos);
             activePanel.OnClose.AddListener(ClearActivePanel);
             root.Add(activePanel);
+            return activePanel as T;
         }
 
         public void ClearActivePanel()
@@ -55,17 +56,36 @@ namespace Netherlands3D.UI.Panels
             if (activePanel == null)
                 return;
 
-            activePanel.OnClose.RemoveListener(ClearActivePanel);
+            activePanel.OnClose.RemoveAllListeners();
             root.Remove(activePanel);
             activePanel = null;
         }
 
         private void OnRightClick(InputAction.CallbackContext ctx)
         {
-            var screenPos = Pointer.current.position.ReadValue();
+            Vector2 panelPos = GetPanelClickPosition();
+            
+            if(IsActivePanelClicked(panelPos))
+                return;
+            
+            ClearActivePanel();
+            if(ClickedUI(panelPos))
+                return;
+            
+            CheckAndSpawnPanel(panelPos);
+        }
+
+        private bool ClickedUI(Vector2 screenPos)
+        {
+            var picked = root.panel.Pick(screenPos);
+            // block if we hit something other than the root background
+            if (picked != null && picked != root)
+                return true;
+            
+            var pointerPos = Pointer.current.position.ReadValue();
             // block if we hit anything except the ClickNothingPanel . todo: remove this once transition to UI Toolkit is completed
             var pointerData = new PointerEventData(EventSystem.current);
-            pointerData.position = screenPos;
+            pointerData.position = pointerPos;
             var results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(pointerData, results);
             bool clickedInWorld = false;
@@ -77,29 +97,38 @@ namespace Netherlands3D.UI.Panels
                     clickedInWorld = true;
             }
 
-            if (!clickedInWorld)
+            if (clickedInWorld)
             {
-                Debug.Log("not clicked in world");
-                return;
+                return false;
             }
-
-            screenPos.y = Screen.height - screenPos.y;
-            Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(root.panel, screenPos);
-            var picked = root.panel.Pick(panelPos);
-
-            // block if we hit something other than the root background
-            if (picked != null && picked != root)
-                return;
             
-            ClearActivePanel();
-            CheckAndSpawnPanel(panelPos);
+            return true;
+        }
+
+        private bool IsActivePanelClicked(Vector2 screenPos)
+        {
+            if(activePanel == null) return false;
+            
+            var picked = activePanel.panel.Pick(screenPos);
+            return picked != null && activePanel.Contains(picked);
         }
 
         private void OnLeftClick(InputAction.CallbackContext ctx)
         {
+            Vector2 panelPos = GetPanelClickPosition();
+            if(IsActivePanelClicked(panelPos))
+                return;
+            
             ClearActivePanel();
         }
 
+        private Vector2 GetPanelClickPosition()
+        {
+            var screenPos = Pointer.current.position.ReadValue();
+            screenPos.y = Screen.height - screenPos.y;
+            return RuntimePanelUtils.ScreenToPanel(root.panel, screenPos);
+        }
+        
         private void CheckAndSpawnPanel(Vector2 screenPos)
         {
            SpawnHideObjectPanel(screenPos);
@@ -107,11 +136,13 @@ namespace Netherlands3D.UI.Panels
 
         public void SpawnHideObjectPanel(Vector2 screenPos)
         {
-            Dictionary<string, IMapping> selectedMappings = ServiceLocator.GetService<ObjectSelectorService>().SelectedMappings;
+            ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
+            Dictionary<string, IMapping> selectedMappings = selectorService.SelectedMappings;
             if(selectedMappings.Count == 0) return;
             
             Dictionary<string, object> data = selectedMappings.ToDictionary(kvp => kvp.Key, kvp => (object)null);
-            SpawnFloatingPanel<HideObjectPanel>(screenPos, data);
+            HideObjectPanel panel = SpawnFloatingPanel<HideObjectPanel>(screenPos, data);
+            panel.OnClose.AddListener(selectorService.SubObjectSelector.HideSelectedMappings);
         }
     }
 }

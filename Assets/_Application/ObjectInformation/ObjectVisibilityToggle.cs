@@ -69,9 +69,6 @@ namespace Netherlands3D.Twin.UI
 
         private void OnToggle(bool toggle)
         {
-            // FloatingPanelSpawner spawner = ServiceLocator.GetService<FloatingPanelSpawner>();
-            // spawner.ClearActivePanel();
-            
             DialogService service = ServiceLocator.GetService<DialogService>();
             service.CloseDialog();
 
