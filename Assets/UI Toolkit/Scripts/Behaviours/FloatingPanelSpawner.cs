@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using Netherlands3D.Twin;
@@ -14,28 +15,36 @@ namespace Netherlands3D.UI.Panels
         [SerializeField] private InputActionAsset inputActionAsset;
         private VisualElement root;
         private InputAction rightClickAction;
+        private InputAction leftClickAction;
         private FloatingPanel activePanel;
 
         void OnEnable()
         {
             root = GetComponent<UIDocument>().rootVisualElement;
-            var map = inputActionAsset.FindActionMap("UI", true);
+            var map = inputActionAsset.FindActionMap("Camera", true);
             rightClickAction = map.FindAction("RightClick", true);
+            leftClickAction = map.FindAction("LeftClick", true);
 
             rightClickAction.performed += OnRightClick;
             rightClickAction.Enable();
+
+            leftClickAction.performed += OnLeftClick;
+            leftClickAction.Enable();
         }
 
         void OnDisable()
         {
             rightClickAction.performed -= OnRightClick;
             rightClickAction.Disable();
+            
+            leftClickAction.performed -= OnLeftClick;
+            leftClickAction.Disable();
         }
 
-        private void SpawnFloatingPanel<T>(Vector2 screenPos, object context = null) where T : FloatingPanel, new()
+        private void SpawnFloatingPanel<T>(Vector2 screenPos, Dictionary<string, object> data = null) where T : FloatingPanel, new()
         {
             activePanel = new T();
-            activePanel.Initialize(screenPos, context);
+            activePanel.Initialize(screenPos, data);
             activePanel.SetPosition(screenPos);
             activePanel.OnClose.AddListener(ClearActivePanel);
             root.Add(activePanel);
@@ -81,10 +90,23 @@ namespace Netherlands3D.UI.Panels
             // block if we hit something other than the root background
             if (picked != null && picked != root)
                 return;
-
-            List<IMapping> selectedMappings = ServiceLocator.GetService<ObjectSelectorService>().SubObjectSelector.SelectedMappings;
+            
             ClearActivePanel();
-            SpawnFloatingPanel<HideObjectPanel>(panelPos, selectedMappings);
+            CheckAndSpawnPanel(panelPos);
+        }
+
+        private void OnLeftClick(InputAction.CallbackContext ctx)
+        {
+            ClearActivePanel();
+        }
+
+        private void CheckAndSpawnPanel(Vector2 screenPos)
+        {
+            Dictionary<string, IMapping> selectedMappings = ServiceLocator.GetService<ObjectSelectorService>().SelectedMappings;
+            if(selectedMappings.Count == 0) return;
+            
+            Dictionary<string, object> data = selectedMappings.ToDictionary(kvp => kvp.Key, kvp => (object)null);
+            SpawnFloatingPanel<HideObjectPanel>(screenPos, data);
         }
     }
 }

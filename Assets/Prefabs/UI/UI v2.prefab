@@ -56,9 +56,13 @@ MonoBehaviour:
   sourceAsset: {fileID: 9197481963319205126, guid: 6647caf475c8b1c4d997f363bebbaf1e,
     type: 3}
   m_SortingOrder: 0
+  m_Position: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
   m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
 --- !u!114 &9214300892430282656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,5 +271,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78da410b8ae506f2689c101c958c6956, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputActionAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  inputActionAsset: {fileID: -944628639613478452, guid: d5b2b155332606d44ac795422ed556b6,
     type: 3}

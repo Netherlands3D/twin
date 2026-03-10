@@ -13,17 +13,15 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class DomePanel : FloatingPanel
     {
-        private List<IMapping> mappings;
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
-        private Button hideButton;
+        
+        private Button button;
+        private Button Button => button ??= this.Q<Button>("HideButton");
 
-        public override void Initialize(Vector2 screenPosition, object context = null)
+        public override void Initialize(Vector2 screenPosition, Dictionary<string, object> data)
         {
-            base.Initialize(screenPosition, context);
-
-            mappings = context as List<IMapping>;
-            if (mappings == null) return;
+            base.Initialize(screenPosition, data);
 
             // Virtualization and selection
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
@@ -32,16 +30,10 @@ namespace Netherlands3D.UI.Panels
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
 
-            // Hide button
-            hideButton = this.Q<Button>("HideButton");
-            if (hideButton != null)
+            Button.clicked += () =>
             {
-                hideButton.clicked += () =>
-                {
-                    HideMappings(mappings);
-                    parent.Remove(this); // close panel after hiding
-                };
-            }
+                OnClose.Invoke();
+            };
         }
 
         private VisualElement MakeListViewItem()
@@ -62,11 +54,6 @@ namespace Netherlands3D.UI.Panels
             var icon = IconImage.Map;
             button.Image = icon;
             button.userData = mapping;
-        }
-        
-        private void HideMappings(List<IMapping> mappings)
-        {
-            
         }
     }
 }

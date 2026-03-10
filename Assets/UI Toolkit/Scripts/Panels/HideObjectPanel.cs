@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.Components;
@@ -13,19 +14,15 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class HideObjectPanel : FloatingPanel
     {
-        private List<IMapping> mappings;
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
         
         private Button button;
         private Button Button => button ??= this.Q<Button>("HideButton");
 
-        public override void Initialize(Vector2 screenPosition, object context = null)
+        public override void Initialize(Vector2 screenPosition, Dictionary<string, object> data)
         {
-            base.Initialize(screenPosition, context);
-
-            mappings = context as List<IMapping>;
-            if (mappings == null) return;
+            base.Initialize(screenPosition, data);
 
             // Virtualization and selection
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
@@ -36,11 +33,10 @@ namespace Netherlands3D.UI.Panels
 
             Button.clicked += () =>
             {
-                HideMappings(mappings);
                 OnClose.Invoke();
             };
             
-            PopulateBagIds(new List<string>(){"343905873409534","343905873409534","343905873409534"});
+            PopulateBagIds(data.Keys.ToList());
         }
 
         public void PopulateBagIds(List<string> mappings)
@@ -60,11 +56,6 @@ namespace Netherlands3D.UI.Panels
             
             string mapping = ListView.itemsSource[index] as string;
             listViewItem.ID = mapping;
-        }
-        
-        private void HideMappings(List<IMapping> mappings)
-        {
-            
         }
     }
 }
