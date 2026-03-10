@@ -50,7 +50,7 @@ namespace Netherlands3D.UI.Panels
             root.Add(activePanel);
         }
 
-        private void ClearActivePanel()
+        public void ClearActivePanel()
         {
             if (activePanel == null)
                 return;
@@ -101,6 +101,11 @@ namespace Netherlands3D.UI.Panels
         }
 
         private void CheckAndSpawnPanel(Vector2 screenPos)
+        {
+           SpawnHideObjectPanel(screenPos);
+        }
+
+        public void SpawnHideObjectPanel(Vector2 screenPos)
         {
             Dictionary<string, IMapping> selectedMappings = ServiceLocator.GetService<ObjectSelectorService>().SelectedMappings;
             if(selectedMappings.Count == 0) return;

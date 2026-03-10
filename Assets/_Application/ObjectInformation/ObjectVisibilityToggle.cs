@@ -7,6 +7,7 @@ using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.ExtensionMethods;
 using Netherlands3D.Twin.Layers.LayerTypes.CartesianTiles;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -68,6 +69,9 @@ namespace Netherlands3D.Twin.UI
 
         private void OnToggle(bool toggle)
         {
+            // FloatingPanelSpawner spawner = ServiceLocator.GetService<FloatingPanelSpawner>();
+            // spawner.ClearActivePanel();
+            
             DialogService service = ServiceLocator.GetService<DialogService>();
             service.CloseDialog();
 
