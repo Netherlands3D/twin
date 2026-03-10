@@ -45,7 +45,6 @@ namespace Netherlands3D.UI.Panels
         {
             activePanel = new T();
             activePanel.Initialize(screenPos, data);
-            activePanel.SetPosition(screenPos);
             activePanel.OnClose.AddListener(ClearActivePanel);
             root.Add(activePanel);
             return activePanel as T;
@@ -64,7 +63,6 @@ namespace Netherlands3D.UI.Panels
         private void OnRightClick(InputAction.CallbackContext ctx)
         {
             Vector2 panelPos = GetPanelClickPosition();
-            
             if(IsActivePanelClicked(panelPos))
                 return;
             
@@ -73,6 +71,22 @@ namespace Netherlands3D.UI.Panels
                 return;
             
             CheckAndSpawnPanel(panelPos);
+        }
+        
+        private void OnLeftClick(InputAction.CallbackContext ctx)
+        {
+            Vector2 panelPos = GetPanelClickPosition();
+            if(IsActivePanelClicked(panelPos))
+                return;
+            
+            ClearActivePanel();
+        }
+
+        private Vector2 GetPanelClickPosition()
+        {
+            var screenPos = Pointer.current.position.ReadValue();
+            screenPos.y = Screen.height - screenPos.y;
+            return RuntimePanelUtils.ScreenToPanel(root.panel, screenPos);
         }
 
         private bool ClickedUI(Vector2 screenPos)
@@ -111,22 +125,6 @@ namespace Netherlands3D.UI.Panels
             
             var picked = activePanel.panel.Pick(screenPos);
             return picked != null && activePanel.Contains(picked);
-        }
-
-        private void OnLeftClick(InputAction.CallbackContext ctx)
-        {
-            Vector2 panelPos = GetPanelClickPosition();
-            if(IsActivePanelClicked(panelPos))
-                return;
-            
-            ClearActivePanel();
-        }
-
-        private Vector2 GetPanelClickPosition()
-        {
-            var screenPos = Pointer.current.position.ReadValue();
-            screenPos.y = Screen.height - screenPos.y;
-            return RuntimePanelUtils.ScreenToPanel(root.panel, screenPos);
         }
         
         private void CheckAndSpawnPanel(Vector2 screenPos)

@@ -1,11 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Functionalities.ObjectInformation;
-using Netherlands3D.Services;
-using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.Components;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
 using ListView = Netherlands3D.UI.Components.ListView;
@@ -24,14 +20,14 @@ namespace Netherlands3D.UI.Panels
         public override void Initialize(Vector2 screenPosition, Dictionary<string, object> data)
         {
             base.Initialize(screenPosition, data);
-
-            // Virtualization and selection
+            
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             ListView.selectionType = SelectionType.None;
             
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
 
+            //TODO should this be in the base for any floating panel?
             Button.clicked += () =>
             {
                 OnClose.Invoke();

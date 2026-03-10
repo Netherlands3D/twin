@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.Events;
@@ -17,9 +16,6 @@ namespace Netherlands3D.UI.Panels
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
-            
-            //dit in stylesheet
-            style.position = Position.Absolute;
         }
 
         public virtual void Initialize(Vector2 screenPosition, Dictionary<string,object> data = null)
