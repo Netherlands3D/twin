@@ -37,6 +37,7 @@ namespace Netherlands3D.UI.Panels
             activePanel = new T();
             activePanel.Initialize(screenPos, context);
             activePanel.SetPosition(screenPos);
+            activePanel.OnClose.AddListener(ClearActivePanel);
             root.Add(activePanel);
         }
 
@@ -45,6 +46,7 @@ namespace Netherlands3D.UI.Panels
             if (activePanel == null)
                 return;
 
+            activePanel.OnClose.RemoveListener(ClearActivePanel);
             root.Remove(activePanel);
             activePanel = null;
         }

@@ -3,6 +3,7 @@ using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.Components;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
 using ListView = Netherlands3D.UI.Components.ListView;
@@ -36,7 +37,7 @@ namespace Netherlands3D.UI.Panels
             Button.clicked += () =>
             {
                 HideMappings(mappings);
-                parent.Remove(this); // close panel after hiding
+                OnClose.Invoke();
             };
         }
 
