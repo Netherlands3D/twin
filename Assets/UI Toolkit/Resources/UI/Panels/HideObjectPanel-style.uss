@@ -1,5 +1,5 @@
 .hide-object-panel {
-    width: 340px;
+    width: 380px;
     height: auto;
     background-color: var(--color-white);
     border-radius: var(--border-radius-md);

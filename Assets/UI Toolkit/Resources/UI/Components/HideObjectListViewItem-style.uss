@@ -1,0 +1,43 @@
+.hide-object-listview-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.hide-object-listview-item > * {
+    align-items: stretch;
+}
+
+.hide-object-listview-item .icon {
+    margin: 0 var(--spacing-2) 0 0;
+}
+
+
+.hide-object-listview-item.unity-list-view__item {
+    background-color: transparent;
+}
+
+.hide-object-listview-item.unity-list-view__item:hover {
+    background-color: transparent;
+}
+
+.hide-object-listview-item.unity-collection-view__item {
+    background-color: transparent;
+}
+
+.hide-object-listview-item.unity-collection-view__item:hover {
+    background-color: transparent;
+}
+
+.hide-object-listview-item__title {
+    -unity-font-definition: var(--nl3d-default-font-semi-bold);
+    margin: 0 var(--spacing-2) 0 0;
+    padding: 0;
+}
+
+.hide-object-listview-item__id {
+    margin: 0;
+    padding: 0;
+}

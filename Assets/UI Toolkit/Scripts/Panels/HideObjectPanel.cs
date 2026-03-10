@@ -30,7 +30,7 @@ namespace Netherlands3D.UI.Panels
             // Virtualization and selection
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             ListView.selectionType = SelectionType.None;
-
+            
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
 
@@ -39,6 +39,8 @@ namespace Netherlands3D.UI.Panels
                 HideMappings(mappings);
                 OnClose.Invoke();
             };
+            
+            PopulateBagIds(new List<string>(){"343905873409534","343905873409534","343905873409534"});
         }
 
         public void PopulateBagIds(List<string> mappings)
@@ -49,25 +51,15 @@ namespace Netherlands3D.UI.Panels
         
         private VisualElement MakeListViewItem()
         {
-            
-            //component van maken + caputure meteen
-            var button = new Button { name = "ToggleHidden" };
-            var listViewItem = new ListViewItem(button);
-            //button.RegisterCallback<ClickEvent>();
-            
-            return listViewItem;
+            return new HideObjectListViewItem();
         }
         
         private void BindListViewItem(VisualElement item, int index)
         {
-            if (item is not ListViewItem listViewItem) return;
-            if (listViewItem.Q<Button>() is not Button button) return;
+            if (item is not HideObjectListViewItem listViewItem) return;
             
             string mapping = ListView.itemsSource[index] as string;
-            button.LabelText = mapping;
-            var icon = IconImage.Map;
-            button.Image = icon;
-            button.userData = mapping;
+            listViewItem.ID = mapping;
         }
         
         private void HideMappings(List<IMapping> mappings)
