@@ -18,13 +18,24 @@ namespace Netherlands3D.UI.Panels
 
         public virtual void Initialize(Vector2 screenPosition, Dictionary<string,object> data = null)
         {
-            SetPosition(screenPosition);
+            schedule.Execute(() => SetPosition(screenPosition));
         }
 
         public void SetPosition(Vector2 screenPosition)
         {
-            style.left = screenPosition.x;
-            style.top = screenPosition.y;
+            var root = panel.visualTree;
+
+            float width = resolvedStyle.width;
+            float height = resolvedStyle.height;
+
+            float maxX = root.resolvedStyle.width - width;
+            float maxY = root.resolvedStyle.height - height;
+
+            float x = Mathf.Clamp(screenPosition.x, 0, maxX);
+            float y = Mathf.Clamp(screenPosition.y, 0, maxY);
+
+            style.left = x;
+            style.top = y;
         }
     }
 }
