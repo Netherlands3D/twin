@@ -15,10 +15,26 @@ namespace Netherlands3D.UI.Panels
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");
         }
-
+       
         public virtual void Initialize(Vector2 screenPosition, Dictionary<string,object> data = null)
         {
-            schedule.Execute(() => SetPosition(screenPosition));
+            schedule.Execute(() =>
+            {
+                InitializeDefaultStyleProperties();
+                SetPosition(screenPosition);
+            });
+        }
+
+        //we never want to override these properties because all panels should have these properties
+        private void InitializeDefaultStyleProperties()
+        {
+            var root = panel.visualTree;
+
+            //find from _Theme constants
+            if (root.customStyle.TryGet(new("--floating-panel-max-height"), out float px))
+                style.maxHeight = px;
+            
+            style.position = Position.Absolute;
         }
 
         public void SetPosition(Vector2 screenPosition)

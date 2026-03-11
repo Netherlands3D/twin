@@ -37,7 +37,7 @@
                     "name": "RotateModifier",
                     "type": "Button",
                     "id": "4aa66dc8-128f-4bfb-9b60-6c9c5c91b6b3",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -46,7 +46,7 @@
                     "name": "FirstPersonModifier",
                     "type": "Button",
                     "id": "52c16aa0-20d8-4e13-88eb-fb80ad21aa53",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -109,6 +109,24 @@
                     "name": "LeftClick",
                     "type": "Button",
                     "id": "bc25bbf8-997c-4f9c-a1af-1d0d1fd20f1a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LongPress",
+                    "type": "Button",
+                    "id": "4b612021-0190-4870-9880-e561d4e2c265",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Touch",
+                    "type": "Button",
+                    "id": "c89ef584-936c-4a84-8740-5b2e713d2960",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -487,6 +505,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "LeftClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1ed9bb10-feca-4472-b81a-3231f8a63576",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LongPress",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d37ffdcc-5a49-4130-a5a6-34db589f09de",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

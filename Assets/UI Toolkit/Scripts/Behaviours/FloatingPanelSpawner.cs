@@ -1,8 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using Netherlands3D.Functionalities.ObjectInformation;
-using Netherlands3D.Services;
 using Netherlands3D.Twin;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,6 +15,8 @@ namespace Netherlands3D.UI.Panels
         private VisualElement root;
         private InputAction rightClickAction;
         private InputAction leftClickAction;
+        private InputAction longPressAction;
+        private InputAction touchAction;
         private FloatingPanel activePanel;
 
         private void Awake()
@@ -32,12 +30,21 @@ namespace Netherlands3D.UI.Panels
             var map = inputActionAsset.FindActionMap("Camera", true);
             rightClickAction = map.FindAction("RightClick", true);
             leftClickAction = map.FindAction("LeftClick", true);
+            longPressAction = map.FindAction("LongPress", true);
+            touchAction = map.FindAction("Touch", true);
+            
 
             rightClickAction.performed += OnRightClick;
             rightClickAction.Enable();
 
             leftClickAction.performed += OnLeftClick;
             leftClickAction.Enable();
+
+            longPressAction.performed += OnRightClick;
+            longPressAction.Enable();
+            
+            touchAction.performed += OnLeftClick;
+            touchAction.Enable();
         }
 
         void OnDisable()
@@ -47,6 +54,12 @@ namespace Netherlands3D.UI.Panels
             
             leftClickAction.performed -= OnLeftClick;
             leftClickAction.Disable();
+            
+            longPressAction.performed -= OnRightClick;
+            longPressAction.Disable();
+            
+            touchAction.performed -= OnLeftClick;
+            touchAction.Disable();
         }
 
         
@@ -64,6 +77,8 @@ namespace Netherlands3D.UI.Panels
         private void OnRightClick(InputAction.CallbackContext ctx)
         {
             Vector2 panelPos = GetPanelClickPosition();
+            ClickedUI(panelPos);
+            
             if(IsActivePanelClicked(panelPos))
                 return;
             

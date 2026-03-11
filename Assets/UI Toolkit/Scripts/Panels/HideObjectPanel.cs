@@ -32,7 +32,12 @@ namespace Netherlands3D.UI.Panels
             {
                 OnClose.Invoke();
             };
-            
+
+            // List<string> keys = new List<string>()
+            // {
+            //     "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test",
+            //     "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test"
+            // };
             PopulateBagIds(data.Keys.ToList());
         }
 

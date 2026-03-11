@@ -45,6 +45,8 @@
     --border-radius-sm: 2px;
     --border-radius-md: 4px;
     --border-radius-lg: 8px;
+    
+    --floating-panel-max-height: 600px;
 
     /* Default font sizes, Inspired by https://v2.tailwindcss.com/docs/font-size */
     --font-size-xs: var(--spacing-3);
