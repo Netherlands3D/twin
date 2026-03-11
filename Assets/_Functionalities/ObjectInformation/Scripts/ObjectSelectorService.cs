@@ -314,6 +314,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public ObjectMappingItem GetMappingItemForBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
         {
             layer = null;
+            if(string.IsNullOrEmpty(bagID)) return null;
             if (selectedMapping is not MeshMapping mapping) return null;
 
             layer = GetLayerGameObjectFromMapping(selectedMapping);
@@ -324,8 +325,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public LayerFeature GetLayerFeatureFromBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
         {
             ObjectMappingItem item = GetMappingItemForBagID(bagID, selectedMapping, out layer);
-            if (layer == null)
-                return null;
+            if (layer == null) return null;
+            if (item == null) return null;
 
             return layer.GetLayerFeatureByGeometry(item);
         }

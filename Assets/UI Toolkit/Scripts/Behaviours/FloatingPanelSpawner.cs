@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Functionalities.ObjectInformation;
@@ -13,10 +14,17 @@ namespace Netherlands3D.UI.Panels
     public class FloatingPanelSpawner : MonoBehaviour
     {
         [SerializeField] private InputActionAsset inputActionAsset;
+        private FloatingPanelBehaviour[] panelBehaviours;
+        
         private VisualElement root;
         private InputAction rightClickAction;
         private InputAction leftClickAction;
         private FloatingPanel activePanel;
+
+        private void Awake()
+        {
+            panelBehaviours = GetComponentsInChildren<FloatingPanelBehaviour>();
+        }
 
         void OnEnable()
         {
@@ -41,14 +49,7 @@ namespace Netherlands3D.UI.Panels
             leftClickAction.Disable();
         }
 
-        private T SpawnFloatingPanel<T>(Vector2 screenPos, Dictionary<string, object> data = null) where T : FloatingPanel, new()
-        {
-            activePanel = new T();
-            activePanel.Initialize(screenPos, data);
-            activePanel.OnClose.AddListener(ClearActivePanel);
-            root.Add(activePanel);
-            return activePanel as T;
-        }
+        
 
         public void ClearActivePanel()
         {
@@ -129,18 +130,16 @@ namespace Netherlands3D.UI.Panels
         
         private void CheckAndSpawnPanel(Vector2 screenPos)
         {
-           SpawnHideObjectPanel(screenPos);
-        }
-
-        public void SpawnHideObjectPanel(Vector2 screenPos)
-        {
-            ObjectSelectorService selectorService = ServiceLocator.GetService<ObjectSelectorService>();
-            Dictionary<string, IMapping> selectedMappings = selectorService.SelectedMappings;
-            if(selectedMappings.Count == 0) return;
-            
-            Dictionary<string, object> data = selectedMappings.ToDictionary(kvp => kvp.Key, kvp => (object)null);
-            HideObjectPanel panel = SpawnFloatingPanel<HideObjectPanel>(screenPos, data);
-            panel.OnClose.AddListener(selectorService.SubObjectSelector.HideSelectedMappings);
+            foreach (var panelBehaviour in panelBehaviours)
+            {
+                if(!panelBehaviour.ShouldBeActive()) continue;
+                
+                FloatingPanel panel = panelBehaviour.SpawnFloatingPanel(screenPos);
+                activePanel = panel;
+                activePanel.OnClose.AddListener(ClearActivePanel);
+                root.Add(activePanel);
+                break;
+            }
         }
     }
 }

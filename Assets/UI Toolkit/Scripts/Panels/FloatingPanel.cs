@@ -8,8 +8,6 @@ namespace Netherlands3D.UI.Panels
 {
     public abstract class FloatingPanel : VisualElement
     {
-        private Dictionary<string, object> data;
-        
         public UnityEvent OnClose = new();
         
         public FloatingPanel()
@@ -20,7 +18,6 @@ namespace Netherlands3D.UI.Panels
 
         public virtual void Initialize(Vector2 screenPosition, Dictionary<string,object> data = null)
         {
-            this.data = data;
             SetPosition(screenPosition);
         }
 
