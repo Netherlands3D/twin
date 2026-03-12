@@ -69,23 +69,6 @@
 
     <!-- Parallax Script -->
     <script>
-        (function () {
-            const layers = {
-                back: document.getElementById('layer-back'),
-                mid: document.getElementById('layer-mid'),
-                front: document.getElementById('layer-front')
-            };
-            const maxTranslate = { back: 0, mid: 20, front: 40 };
-            window.addEventListener('mousemove', e => {
-                const w = window.innerWidth, h = window.innerHeight;
-                const nx = (e.clientX / w) - 0.5, ny = (e.clientY / h) - 0.5;
-                layers.back.style.transform = 'translate(0px, 0px)';
-                layers.mid.style.transform = `translate(${-nx * maxTranslate.mid}px, ${-ny * maxTranslate.mid}px)`;
-                layers.front.style.transform = `translate(${-nx * maxTranslate.front}px, ${-ny * maxTranslate.front}px)`;
-            });
-        })();
-
-
         // Mobile detection - isMobileDevice can be used in jslib files.
         const md = new MobileDetect(window.navigator.userAgent);
         const isMobileDevice = md.mobile() !== null;
@@ -100,6 +83,7 @@
         const progressBarFull = document.querySelector("#unity-progress-bar-full");
         const mobileWarning = document.querySelector("#unity-mobile-warning");
         const loadError = document.querySelector("#unity-load-error");
+        const parallaxContainer = document.querySelector("#parallaxContainer");
 
         function ShowDebugPanel() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -110,6 +94,24 @@
                 document.querySelector("#nl3d-user-agent").innerHTML = window.navigator.userAgent;
             }
         }
+
+        (function () {
+            const layers = {
+                back: document.getElementById('layer-back'),
+                mid: document.getElementById('layer-mid'),
+                front: document.getElementById('layer-front')
+            };
+            const maxTranslate = { back: 0, mid: 20, front: 40 };
+            window.addEventListener('mousemove', e => {
+                if (!parallaxContainer) return;
+
+                const w = window.innerWidth, h = window.innerHeight;
+                const nx = (e.clientX / w) - 0.5, ny = (e.clientY / h) - 0.5;
+                layers.back.style.transform = 'translate(0px, 0px)';
+                layers.mid.style.transform = `translate(${-nx * maxTranslate.mid}px, ${-ny * maxTranslate.mid}px)`;
+                layers.front.style.transform = `translate(${-nx * maxTranslate.front}px, ${-ny * maxTranslate.front}px)`;
+            });
+        })();
 
       function LoadUnity() {
           var buildUrl = "Build";
@@ -153,16 +155,25 @@
               loadingBar.remove();
           }
           script.onload = () => {
-              createUnityInstance(canvas, config, (progress) => {
+              createUnityInstance(
+                  canvas, 
+                  config, 
+                  (progress) => {
                       const pct = Math.round(progress * 100);
                       document.getElementById('progressBar').style.width = `${pct}%`;
                       document.getElementById('progressPercent').textContent = `${pct}%`;
                       if (pct === 100) setTimeout(() => overlay.style.display = 'none', 500);
                   }
-              ).then(instance => { unityInstance = instance; })
-                  .catch((message) => {
-                      alert(message);
-                  });
+              )
+                  .then(instance => { 
+                      unityInstance = instance;
+
+                      // Completely delete the parallax container after loading is done to prevent click issues
+                      // and to stop the parallax script from  
+                      parallaxContainer.remove();
+                      parallaxContainer = null;
+                  })
+                  .catch((message) => { alert(message); });
           };
           document.body.appendChild(script);
       }
