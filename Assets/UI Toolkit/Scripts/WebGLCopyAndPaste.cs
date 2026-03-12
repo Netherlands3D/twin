@@ -35,7 +35,6 @@ using UnityEngine.Scripting;
 using UnityEngine.EventSystems;
 using System.Runtime.InteropServices;
 using UnityEngine.UIElements;
-using TextField = Netherlands3D.UI.Components.TextField;
 
 //This makes sure the assembly is linked in when built as a player
 [assembly: AlwaysLinkAssembly]
@@ -113,21 +112,17 @@ public class WebGLCopyAndPasteAPI
             return;
         }
         
-        if (key == "x") // cut OR copy
+        if (key == "x") 
         {
             string selected = CutFromNL3DTextField(field);
-            Debug.Log($"CUT {selected} to browser");
-
             GUIUtility.systemCopyBuffer = selected;
             passCopyToBrowser(selected);
             return;
         }
 
-        if (key == "c") // cut OR copy
+        if (key == "c") 
         {
             string selected = CopyFromNL3DTextField(field);
-            Debug.Log($"COPY {selected} to browser");
-
             GUIUtility.systemCopyBuffer = selected;
             passCopyToBrowser(selected);
             return;
@@ -152,32 +147,24 @@ public class WebGLCopyAndPasteAPI
         //   - Chrome 118.0.5993.70 on macOS Ventura 13.6, Unity 2022.3.10.
         //   - Firefox 120.0.1 on macOS Ventura 13.6, Unity 2022.3.10.
         GUIUtility.systemCopyBuffer = str;
-Debug.Log(str + "IS BEING PASTED ");
         PasteIntoUIToolkit(str);
         SendKey("v", true);
         GUIUtility.systemCopyBuffer = null;
     }
-
+    
     #region uitoolkit
 
     private static Netherlands3D.UI.Components.TextField GetFocusedUIToolkitField()
     {
       var documents = Object.FindObjectsOfType<UIDocument>();
-
       foreach (var doc in documents)
       {
-          if (doc.rootVisualElement?.panel == null)
-              continue;
+          if (doc.rootVisualElement?.panel == null) continue;
 
           var focused = doc.rootVisualElement.panel.focusController.focusedElement;
-
           if (focused is Netherlands3D.UI.Components.TextField tf)
-          {
-              Debug.Log("FOUND FIELD");
               return tf;
-          }
       }
-        Debug.Log("FOUND NO FOCUSED FIELD");
       return null;
     }
 
@@ -188,21 +175,16 @@ Debug.Log(str + "IS BEING PASTED ");
             return;
 
         string current = field.value ?? "";
-
         int start = Mathf.Min(field.selectIndex, field.cursorIndex);
         int end   = Mathf.Max(field.selectIndex, field.cursorIndex);
-
         start = Mathf.Clamp(start, 0, current.Length);
         end   = Mathf.Clamp(end, 0, current.Length);
-
-        // Replace selection (or insert if no selection)
         field.value =
             current.Substring(0, start) +
             text +
             current.Substring(end);
 
         int newCursor = start + text.Length;
-
         field.cursorIndex = newCursor;
         field.selectIndex = newCursor;
     }
@@ -214,7 +196,7 @@ Debug.Log(str + "IS BEING PASTED ");
         int start = Mathf.Min(field.SelectionStart, field.SelectionEnd);
         int end   = Mathf.Max(field.SelectionStart, field.SelectionEnd);
 
-        if (start == end) return ""; // nothing selected
+        if (start == end) return "";
         return field.value.Substring(start, end - start);
     }
     private static string CutFromNL3DTextField(Netherlands3D.UI.Components.TextField field)

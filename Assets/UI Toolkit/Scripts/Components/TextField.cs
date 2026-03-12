@@ -128,7 +128,6 @@ namespace Netherlands3D.UI.Components
             SelectionStart = this.selectIndex;
             SelectionEnd = this.cursorIndex;
             
-            
             int start = Mathf.Min(SelectionStart, SelectionEnd);
             int end   = Mathf.Max(SelectionStart, SelectionEnd);
 
@@ -136,8 +135,6 @@ namespace Netherlands3D.UI.Components
                 CachedSelection = value.Substring(start, end - start);
             else
                 CachedSelection = "";
-            
-            Debug.Log("CACHED SELECTION" + CachedSelection);
         }
         
         /// <summary>
