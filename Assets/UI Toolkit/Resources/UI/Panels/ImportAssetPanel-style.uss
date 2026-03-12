@@ -6,9 +6,7 @@
     opacity: 0;
 }
 
-.import-asset-panel .contentcontainer {
-    margin-left: var(--spacing-1);
-    margin-right: var(--spacing-1);
+.import-asset-panel .contentcontainer {    
     margin-top: var(--spacing-0_5);
     margin-bottom: var(--spacing-0_5);
 }
@@ -31,6 +29,11 @@
     flex-direction: row;
     flex-shrink: 0;
     align-content: auto;
+    margin-bottom: var(--spacing-3);
+}
+
+.import-asset-panel__open-url-icon {
+    display: none;
 }
 
 .import-asset-panel__open-url-field {

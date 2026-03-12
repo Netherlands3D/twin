@@ -28,6 +28,7 @@ namespace Netherlands3D.UI.Panels
         public EventCallback<ClickEvent> FileImportFromUrlStarted { get; set; }
         public EventCallback<ClickEvent> FileUploadStarted { get; set; }
         public Action<Uri> UriImportStarted { get; set; }
+        public Action<string> UriImportFailed { get; set; }
 
         public override ToolbarInspector.ToolbarStyle ToolbarStyle => ToolbarInspector.ToolbarStyle.AddLayer;
 
@@ -63,6 +64,7 @@ namespace Netherlands3D.UI.Panels
             {
                 // TODO: Add better error handling
                 Debug.LogException(e);
+                UriImportFailed?.Invoke(e.ToString());
             }
         }
     }

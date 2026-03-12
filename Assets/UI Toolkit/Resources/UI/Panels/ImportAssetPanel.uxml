@@ -7,7 +7,7 @@
     </nl3d:ListViewItem>
     <nl3d:ContentContainer class="import-asset-panel__open-url" container-type="NoFoldout" show-divider="true" leading-icon="LibraryAdd" text="Toevoegen vanaf link">
         <ui:VisualElement name="Row">
-            <nl3d:Icon />
+            <nl3d:Icon class="import-asset-panel__open-url-icon"/>
             <nl3d:TextField class="import-asset-panel__open-url-field" name="ImportUriField" />
         </ui:VisualElement>
         <nl3d:Button LabelText="Toevoegen" button-style="Normal" class="import-asset-panel__open-url-button" name="ImportUriButton" />
