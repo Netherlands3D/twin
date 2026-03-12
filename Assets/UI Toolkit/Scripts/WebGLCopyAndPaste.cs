@@ -35,6 +35,7 @@ using UnityEngine.Scripting;
 using UnityEngine.EventSystems;
 using System.Runtime.InteropServices;
 using UnityEngine.UIElements;
+using TextField = Netherlands3D.UI.Components.TextField;
 
 //This makes sure the assembly is linked in when built as a player
 [assembly: AlwaysLinkAssembly]
@@ -105,24 +106,38 @@ public class WebGLCopyAndPasteAPI
     [AOT.MonoPInvokeCallback(typeof(StringCallback))]
     private static void GetClipboard(string key)
     {
-        string uiToolkitText = CopyFromUIToolkit();
-
-        if (!string.IsNullOrEmpty(uiToolkitText))
-        {
-            GUIUtility.systemCopyBuffer = uiToolkitText;
-        }
-        else
+        var field = GetFocusedUIToolkitField();
+        if (field == null)
         {
             SendKey(key);
+            return;
+        }
+        
+        if (key == "x") // cut OR copy
+        {
+            string selected = CutFromNL3DTextField(field);
+            Debug.Log($"CUT {selected} to browser");
+
+            GUIUtility.systemCopyBuffer = selected;
+            passCopyToBrowser(selected);
+            return;
         }
 
-        passCopyToBrowser(GUIUtility.systemCopyBuffer);
+        if (key == "c") // cut OR copy
+        {
+            string selected = CopyFromNL3DTextField(field);
+            Debug.Log($"COPY {selected} to browser");
+
+            GUIUtility.systemCopyBuffer = selected;
+            passCopyToBrowser(selected);
+            return;
+        }
     }
 
 
-      [AOT.MonoPInvokeCallback( typeof(StringCallback) )]
-      private static void ReceivePaste(string str)
-      {
+    [AOT.MonoPInvokeCallback( typeof(StringCallback) )]
+    private static void ReceivePaste(string str)
+    {
         // Assigning the text to "GUIUtility.systemCopyBuffer" causes it to be automatically pasted on some browsers on the next frame,
         // but not on all (e.g. Firefox 120.0.1, Windows 10, Unity 2022.3.10).
         // Using "SendKey" with the "v" key properly pastes the text on all tested browsers (in the current frame),
@@ -137,61 +152,79 @@ public class WebGLCopyAndPasteAPI
         //   - Chrome 118.0.5993.70 on macOS Ventura 13.6, Unity 2022.3.10.
         //   - Firefox 120.0.1 on macOS Ventura 13.6, Unity 2022.3.10.
         GUIUtility.systemCopyBuffer = str;
+Debug.Log(str + "IS BEING PASTED ");
         PasteIntoUIToolkit(str);
         SendKey("v", true);
         GUIUtility.systemCopyBuffer = null;
-      }
+    }
 
-      #region uitoolkit
+    #region uitoolkit
 
-      private static TextField GetFocusedUIToolkitField()
+    private static Netherlands3D.UI.Components.TextField GetFocusedUIToolkitField()
+    {
+      var documents = Object.FindObjectsOfType<UIDocument>();
+
+      foreach (var doc in documents)
       {
-          var documents = Object.FindObjectsOfType<UIDocument>();
+          if (doc.rootVisualElement?.panel == null)
+              continue;
 
-          foreach (var doc in documents)
+          var focused = doc.rootVisualElement.panel.focusController.focusedElement;
+
+          if (focused is Netherlands3D.UI.Components.TextField tf)
           {
-              if (doc.rootVisualElement?.panel == null)
-                  continue;
-
-              var focused = doc.rootVisualElement.panel.focusController.focusedElement;
-
-              if (focused is TextField tf)
-                  return tf;
+              Debug.Log("FOUND FIELD");
+              return tf;
           }
-
-          return null;
       }
+        Debug.Log("FOUND NO FOCUSED FIELD");
+      return null;
+    }
 
-      private static void PasteIntoUIToolkit(string text)
-      {
-          var field = GetFocusedUIToolkitField();
+    private static void PasteIntoUIToolkit(string text)
+    {
+        var field = GetFocusedUIToolkitField();
+        if (field == null)
+            return;
 
-          if (field == null)
-              return;
+        string current = field.value ?? "";
 
-          int cursor = field.cursorIndex;
+        int start = Mathf.Min(field.selectIndex, field.cursorIndex);
+        int end   = Mathf.Max(field.selectIndex, field.cursorIndex);
 
-          string current = field.value ?? "";
+        start = Mathf.Clamp(start, 0, current.Length);
+        end   = Mathf.Clamp(end, 0, current.Length);
 
-          field.value =
-              current.Substring(0, cursor) +
-              text +
-              current.Substring(cursor);
+        // Replace selection (or insert if no selection)
+        field.value =
+            current.Substring(0, start) +
+            text +
+            current.Substring(end);
 
-          field.cursorIndex += text.Length;
-          field.selectIndex = field.cursorIndex;
-      }
+        int newCursor = start + text.Length;
 
-      private static string CopyFromUIToolkit()
-      {
-          var field = GetFocusedUIToolkitField();
+        field.cursorIndex = newCursor;
+        field.selectIndex = newCursor;
+    }
 
-          if (field == null)
-              return null;
+    private static string CopyFromNL3DTextField(Netherlands3D.UI.Components.TextField field)
+    {
+        if (field == null) return null;
 
-          return field.value;
-      }
-      #endregion
+        int start = Mathf.Min(field.SelectionStart, field.SelectionEnd);
+        int end   = Mathf.Max(field.SelectionStart, field.SelectionEnd);
+
+        if (start == end) return ""; // nothing selected
+        return field.value.Substring(start, end - start);
+    }
+    private static string CutFromNL3DTextField(Netherlands3D.UI.Components.TextField field)
+    {
+        if (field == null) return null;
+
+        return field.CachedSelection;
+    }
+    
+    #endregion
 
 #endif
 
