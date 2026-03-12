@@ -30,6 +30,7 @@ namespace Netherlands3D.UI.Panels
             data = selectedMappings.ToDictionary(kvp => kvp.Key, kvp => (object)null);
             HideObjectPanel panel = base.SpawnFloatingPanel(screenPos, data) as HideObjectPanel;
             panel.OnClose.AddListener(objectSelectorService.SubObjectSelector.HideSelectedMappings);
+            panel.OnClose.AddListener(objectSelectorService.Deselect);
             return panel;
         }
     }
