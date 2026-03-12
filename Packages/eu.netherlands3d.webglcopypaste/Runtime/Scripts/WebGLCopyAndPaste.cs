@@ -34,6 +34,7 @@ using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.EventSystems;
 using System.Runtime.InteropServices;
+using UnityEngine.UIElements;
 
 //This makes sure the assembly is linked in when built as a player
 [assembly: AlwaysLinkAssembly]
@@ -101,12 +102,23 @@ public class WebGLCopyAndPasteAPI
         }
       }
 
-      [AOT.MonoPInvokeCallback( typeof(StringCallback) )]
-      private static void GetClipboard(string key)
-      {
-        SendKey(key);
+    [AOT.MonoPInvokeCallback(typeof(StringCallback))]
+    private static void GetClipboard(string key)
+    {
+        string uiToolkitText = CopyFromUIToolkit();
+
+        if (!string.IsNullOrEmpty(uiToolkitText))
+        {
+            GUIUtility.systemCopyBuffer = uiToolkitText;
+        }
+        else
+        {
+            SendKey(key);
+        }
+
         passCopyToBrowser(GUIUtility.systemCopyBuffer);
-      }
+    }
+
 
       [AOT.MonoPInvokeCallback( typeof(StringCallback) )]
       private static void ReceivePaste(string str)
@@ -125,9 +137,61 @@ public class WebGLCopyAndPasteAPI
         //   - Chrome 118.0.5993.70 on macOS Ventura 13.6, Unity 2022.3.10.
         //   - Firefox 120.0.1 on macOS Ventura 13.6, Unity 2022.3.10.
         GUIUtility.systemCopyBuffer = str;
+        PasteIntoUIToolkit(str);
         SendKey("v", true);
         GUIUtility.systemCopyBuffer = null;
       }
+
+      #region uitoolkit
+
+      private static TextField GetFocusedUIToolkitField()
+      {
+          var documents = Object.FindObjectsOfType<UIDocument>();
+
+          foreach (var doc in documents)
+          {
+              if (doc.rootVisualElement?.panel == null)
+                  continue;
+
+              var focused = doc.rootVisualElement.panel.focusController.focusedElement;
+
+              if (focused is TextField tf)
+                  return tf;
+          }
+
+          return null;
+      }
+
+      private static void PasteIntoUIToolkit(string text)
+      {
+          var field = GetFocusedUIToolkitField();
+
+          if (field == null)
+              return;
+
+          int cursor = field.cursorIndex;
+
+          string current = field.value ?? "";
+
+          field.value =
+              current.Substring(0, cursor) +
+              text +
+              current.Substring(cursor);
+
+          field.cursorIndex += text.Length;
+          field.selectIndex = field.cursorIndex;
+      }
+
+      private static string CopyFromUIToolkit()
+      {
+          var field = GetFocusedUIToolkitField();
+
+          if (field == null)
+              return null;
+
+          return field.value;
+      }
+      #endregion
 
 #endif
 
