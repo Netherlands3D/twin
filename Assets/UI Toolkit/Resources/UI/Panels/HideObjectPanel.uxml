@@ -7,9 +7,6 @@
     name="HideObjectPanel" 
     class="hide-object-panel"
 >
-    <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/Panels/HideObjectPanel-style.uss?fileID=7433441132597879392&amp;guid=9b845979ef14c02d58bcbdd81e6eb557&amp;type=3#HideObjectPanel-style"/>
-    <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/_Foundation.uss?fileID=7433441132597879392&amp;guid=9848e3ac5abe4964f8b6998ccbde0eef&amp;type=3#_Foundation"/>
-    <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/_Theme.uss?fileID=7433441132597879392&amp;guid=0f24ef838c8e4bf49a89503faf584878&amp;type=3#_Theme"/>
     <nl3d:Header icon="Visibility" text="Objecten verbergen"/>
     <ui:VisualElement name="Content" class="hide-object-panel__body">
         <ui:VisualElement name="Separator" class="hide-object-panel__content-separator">

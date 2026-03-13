@@ -2,6 +2,7 @@
     /* Default spacing, taken from https://v2.tailwindcss.com/docs/customizing-spacing#default-spacing-scale */
     --spacing-0_5: 2px;
     --spacing-1: 4px;
+    --spacing-1_25: 5px;
     --spacing-2: 8px;
     --spacing-3: 12px;
     --spacing-3_5: 14px;
