@@ -37,10 +37,5 @@ namespace Netherlands3D.UI.Components
 
             Image = IconImage.Object;
         }
-
-        // public HideObjectListViewItem(VisualElement content) : this()
-        // {
-        //     Add(content);
-        // }
     }
 }

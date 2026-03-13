@@ -13,7 +13,7 @@
             <ui:VisualElement name="Selection" class="hide-object-panel__selection-tag">
                 <ui:Label text="Selectie: " class="hide-object-panel__selection-tag-text"/>
             </ui:VisualElement>
-            <nl3d:ListView name="ItemListView" virtualization-method="DynamicHeight" style="flex-grow: 1; height: auto;"/>
+            <nl3d:ListView name="ItemListView" class="hide-object-panel__list-view"/>
         </ui:VisualElement>
         <ui:VisualElement name="Message" class="hide-object-panel__message">
             <ui:Label text="Weet je zeker dat je dit object wilt verbergen? Je kan verborgen objecten later weer zichtbaar maken in het eigenschappen paneel van de bijbehorende laag. " class="hide-object-panel__message-text"/>

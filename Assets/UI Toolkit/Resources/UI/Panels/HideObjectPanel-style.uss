@@ -63,3 +63,8 @@
 .hide-object-panel__body > * {
     margin-bottom: var(--spacing-3);    
 }
+
+.hide-object-panel__list-view{
+    flex-grow: 1;
+    height: auto;
+}

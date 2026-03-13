@@ -27,17 +27,18 @@ namespace Netherlands3D.UI.Panels
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
 
-            //TODO should this be in the base for any floating panel?
             Button.clicked += () =>
             {
                 OnClose.Invoke();
             };
 
+            //todo leave this temp keys test code until meerdere gebouwen is merged
             // List<string> keys = new List<string>()
             // {
             //     "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test",
             //     "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test"
             // };
+            //PopulateBagIds(keys);
             PopulateBagIds(data.Keys.ToList());
         }
 
