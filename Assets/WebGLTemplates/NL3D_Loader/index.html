@@ -83,7 +83,9 @@
         const progressBarFull = document.querySelector("#unity-progress-bar-full");
         const mobileWarning = document.querySelector("#unity-mobile-warning");
         const loadError = document.querySelector("#unity-load-error");
-        const parallaxContainer = document.querySelector("#parallaxContainer");
+        
+        // Not a const because we want to reset it to null once loading is done
+        let parallaxContainer = document.querySelector("#parallaxContainer");
 
         function ShowDebugPanel() {
             const urlParams = new URLSearchParams(window.location.search);
