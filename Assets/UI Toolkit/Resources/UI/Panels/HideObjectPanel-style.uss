@@ -1,5 +1,6 @@
 .hide-object-panel {
     flex-direction: column;
+    padding: var(--spacing-4);
 }
 
 .hide-object-panel > * {

@@ -3,7 +3,6 @@
     height: auto;
     background-color: var(--color-white);
     border-radius: var(--border-radius-md);
-    padding: var(--spacing-4);
     max-height: 600px;
 }
 
