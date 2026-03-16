@@ -38,21 +38,19 @@ namespace Netherlands3D.UI.Panels
             this.floatingPanel = floatingPanel; 
             panel = new HideObjectPanel(data);
             panel.Button.clicked += CloseFloatingPanel;
-            floatingPanel.OnClose.AddListener(objectSelectorService.SubObjectSelector.HideSelectedMappings);
-            floatingPanel.OnClose.AddListener(objectSelectorService.Deselect);
             return panel;
         }
 
         private void CloseFloatingPanel()
         {
             floatingPanel.OnClose.Invoke();
+            objectSelectorService.SubObjectSelector.HideSelectedMappings();
+            objectSelectorService.Deselect();
         }
 
         public override void Dispose()
         {
             panel.Button.clicked -= CloseFloatingPanel;
-            floatingPanel.OnClose.RemoveListener(objectSelectorService.SubObjectSelector.HideSelectedMappings);
-            floatingPanel.OnClose.RemoveListener(objectSelectorService.Deselect);
             floatingPanel = null;
             panel = null;
         }
