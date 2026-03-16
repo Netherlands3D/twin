@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Panels
 {
-    public class FloatingPanelSpawner : MonoBehaviour
+    public class ContextMenuBehaviour : MonoBehaviour
     {
         [SerializeField] private InputActionAsset inputActionAsset;
         private FloatingPanelBehaviour[] panelBehaviours;
@@ -20,6 +20,8 @@ namespace Netherlands3D.UI.Panels
         private FloatingPanel floatingPanel;
         private VisualElement content;
 
+        private FloatingPanelBehaviour selectedBehaviour;
+
         private void Awake()
         {
             panelBehaviours = GetComponentsInChildren<FloatingPanelBehaviour>();
@@ -30,6 +32,7 @@ namespace Netherlands3D.UI.Panels
             root = GetComponent<UIDocument>().rootVisualElement;
             floatingPanel = new FloatingPanel();
             root.Add(floatingPanel);
+            floatingPanel.OnClose.AddListener(ClearActivePanel);
             var map = inputActionAsset.FindActionMap("Camera", true);
             rightClickAction = map.FindAction("RightClick", true);
             leftClickAction = map.FindAction("LeftClick", true);
@@ -67,14 +70,12 @@ namespace Netherlands3D.UI.Panels
             floatingPanel = null;
         }
 
-        
-
         public void ClearActivePanel()
         {
             if (content == null)
                 return;
 
-            // activePanel.OnClose.RemoveAllListeners();
+            selectedBehaviour?.Dispose();
             floatingPanel.Remove(content);
             content = null;
         }
@@ -154,10 +155,11 @@ namespace Netherlands3D.UI.Panels
             {
                 if(!panelBehaviour.ShouldBeActive()) continue;
 
+                selectedBehaviour = panelBehaviour;
                 floatingPanel.SetPosition(screenPos);
                 
                 var data = panelBehaviour.GetData();
-                content = panelBehaviour.SpawnFloatingPanelContent(data);
+                content = panelBehaviour.SpawnFloatingPanelContent(floatingPanel, data);
                 floatingPanel.Add(content);
                 break;
             }

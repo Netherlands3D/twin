@@ -11,6 +11,8 @@ namespace Netherlands3D.UI.Panels
     public class HideObjectPanelBehaviour : FloatingPanelBehaviour
     {
         private ObjectSelectorService objectSelectorService;
+        private HideObjectPanel panel;
+        private FloatingPanel floatingPanel;
         
         private void Awake()
         {
@@ -31,12 +33,28 @@ namespace Netherlands3D.UI.Panels
             return selectedMappings.ToDictionary(kvp => kvp.Key, kvp => (object)null);
         }
 
-        public override VisualElement SpawnFloatingPanelContent(Dictionary<string,object> data = null)
+        public override VisualElement SpawnFloatingPanelContent(FloatingPanel floatingPanel, Dictionary<string,object> data = null)
         {
-            HideObjectPanel panel = new HideObjectPanel(data);
-            panel.OnClose.AddListener(objectSelectorService.SubObjectSelector.HideSelectedMappings);
-            panel.OnClose.AddListener(objectSelectorService.Deselect);
+            this.floatingPanel = floatingPanel; 
+            panel = new HideObjectPanel(data);
+            panel.Button.clicked += CloseFloatingPanel;
+            floatingPanel.OnClose.AddListener(objectSelectorService.SubObjectSelector.HideSelectedMappings);
+            floatingPanel.OnClose.AddListener(objectSelectorService.Deselect);
             return panel;
+        }
+
+        private void CloseFloatingPanel()
+        {
+            floatingPanel.OnClose.Invoke();
+        }
+
+        public override void Dispose()
+        {
+            panel.Button.clicked -= CloseFloatingPanel;
+            floatingPanel.OnClose.RemoveListener(objectSelectorService.SubObjectSelector.HideSelectedMappings);
+            floatingPanel.OnClose.RemoveListener(objectSelectorService.Deselect);
+            floatingPanel = null;
+            panel = null;
         }
     }
 }
