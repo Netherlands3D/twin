@@ -1,0 +1,12 @@
+:root {
+}
+
+.mask-layer-row {
+    align-items: center;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.mask-layer-row-element {
+    padding-right: var(--spacing-1);
+}
