@@ -6,7 +6,7 @@ namespace Netherlands3D.UI.Panels
     public abstract class FloatingPanelBehaviour : MonoBehaviour
     {
         public abstract bool ShouldBeActive();
-
+        public abstract Dictionary<string, object> GetData();
         public abstract FloatingPanel SpawnFloatingPanel(Vector2 screenPos, Dictionary<string,object> data = null);
     }
     

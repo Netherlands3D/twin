@@ -24,10 +24,14 @@ namespace Netherlands3D.UI.Panels
             return true;
         }
 
-        public override FloatingPanel SpawnFloatingPanel(Vector2 screenPos, Dictionary<string,object> data = null)
+        public override Dictionary<string, object> GetData()
         {
             Dictionary<string, IMapping> selectedMappings = objectSelectorService.SelectedMappings;
-            data = selectedMappings.ToDictionary(kvp => kvp.Key, kvp => (object)null);
+            return selectedMappings.ToDictionary(kvp => kvp.Key, kvp => (object)null);
+        }
+
+        public override FloatingPanel SpawnFloatingPanel(Vector2 screenPos, Dictionary<string,object> data = null)
+        {
             HideObjectPanel panel = base.SpawnFloatingPanel(screenPos, data) as HideObjectPanel;
             panel.OnClose.AddListener(objectSelectorService.SubObjectSelector.HideSelectedMappings);
             panel.OnClose.AddListener(objectSelectorService.Deselect);

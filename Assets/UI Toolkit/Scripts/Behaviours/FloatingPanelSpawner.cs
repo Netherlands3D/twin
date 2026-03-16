@@ -98,7 +98,7 @@ namespace Netherlands3D.UI.Panels
             ClearActivePanel();
         }
 
-        private Vector2 GetPanelClickPosition()
+        public Vector2 GetPanelClickPosition()
         {
             var screenPos = Pointer.current.position.ReadValue();
             screenPos.y = Screen.height - screenPos.y;
@@ -148,8 +148,9 @@ namespace Netherlands3D.UI.Panels
             foreach (var panelBehaviour in panelBehaviours)
             {
                 if(!panelBehaviour.ShouldBeActive()) continue;
-                
-                FloatingPanel panel = panelBehaviour.SpawnFloatingPanel(screenPos);
+
+                var data = panelBehaviour.GetData();
+                FloatingPanel panel = panelBehaviour.SpawnFloatingPanel(screenPos, data);
                 activePanel = panel;
                 activePanel.OnClose.AddListener(ClearActivePanel);
                 root.Add(activePanel);
