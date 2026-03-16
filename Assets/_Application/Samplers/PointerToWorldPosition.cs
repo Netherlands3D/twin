@@ -10,11 +10,15 @@ namespace Netherlands3D.Twin.Samplers
     public class PointerToWorldPosition : MonoBehaviour
     {       
         public Coordinate WorldPoint => worldPoint;
+        public Coordinate WorldPointSync => worldPointSync;
+        public Vector3 WorldPointHeightMap => worldPointHeightMap;
         public bool debugHeightmapPosition = false;
         
         private OpticalRaycaster opticalRaycaster;
         private Action<Vector3, bool> worldPointCallback;
         private Coordinate worldPoint;
+        private Vector3 worldPointHeightMap;
+        private Coordinate worldPointSync;
         private float maxDistance = 10000;
 
         private GameObject testPosition;
@@ -45,6 +49,9 @@ namespace Netherlands3D.Twin.Samplers
         {
             var screenPoint = Pointer.current.position.ReadValue();
             opticalRaycaster.GetWorldPointAsync(screenPoint, worldPointCallback, activeCamera);
+            worldPointHeightMap = GetWorldPoint(screenPoint, activeCamera);
+
+            worldPointSync = new Coordinate(opticalRaycaster.GetWorldPointAtCameraScreenPoint(activeCamera, screenPoint));
 
             if(debugHeightmapPosition)
             {
