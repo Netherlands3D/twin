@@ -10,10 +10,15 @@ using Meshoptimizer;
 using Unity.Collections;
 using Netherlands3D.Coordinates;
 using SimpleJSON;
+using System.IO;
 
 
 #if SUBOBJECT
 using Netherlands3D.SubObjects;
+#endif
+
+#if UNITY_EDITOR
+using UnityEditor;
 #endif
 
 namespace Netherlands3D.Tiles3D
@@ -21,6 +26,13 @@ namespace Netherlands3D.Tiles3D
     [Serializable]
     public class ParsedGltf
     {
+        private const string TestDataDirectoryRelativePath = "Packages/eu.netherlands3d.tiles3d/TestData";
+        private const string CaptureFilePrefix = "capture";
+        private const string CaptureFileExtension = ".csv";
+
+        private static int nextCaptureIndex = -1;
+        private static bool captureEnabled;
+
         public GltfImport gltfImport;
         public byte[] glbBuffer;
         public byte[] gltfJsonData;
@@ -72,6 +84,14 @@ namespace Netherlands3D.Tiles3D
         public List<int> featureTableFloats = new List<int>();
         Transform parentTransform;
         Tile tile;
+        private static string activeCaptureFilePath;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void ResetCaptureSession()
+        {
+            activeCaptureFilePath = null;
+            captureEnabled = GetCapturePreference();
+        }
         /// <summary>
         /// Iterate through all scenes and instantiate them
         /// </summary>
@@ -239,9 +259,280 @@ namespace Netherlands3D.Tiles3D
             scenepos.contentposition = sceneCoordinate;
             scene.position = sceneCoordinate.ToUnity();
             scene.rotation = sceneCoordinate.RotationToLocalGravityUp() * rotation;
-            
+
+            if (!TryCaptureGlbUrlAndPosition(scene, scale, tile))
+            {
+                DisableCapturePreference();
+            }
 
         }
+
+        private static bool TryCaptureGlbUrlAndPosition(Transform scene, Vector3 scale, Tile tile)
+        {
+#if UNITY_EDITOR
+            captureEnabled = GetCapturePreference();
+#endif
+            if (!captureEnabled || !IsCaptureEnvironmentAllowed())
+            {
+                return true;
+            }
+
+            if (tile?.content == null || string.IsNullOrEmpty(tile.content.uri))
+            {
+                return true;
+            }
+
+            try
+            {
+                string sanitizedUrl = StripAuthParameters(tile.content.uri, "session", "key");
+                string csvLine = $"{sanitizedUrl},{scene.position.x},{scene.position.y},{scene.position.z},{scene.rotation.x},{scene.rotation.y},{scene.rotation.z},{scene.rotation.w},{scale.x},{scale.y},{scale.z}";
+
+                if (!TryWriteTransformCapture(csvLine))
+                {
+                    Debug.LogError("Failed to persist 3D Tiles transform capture.");
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Failed to write transform data: {ex.Message}");
+                return false;
+            }
+        }
+
+        private static bool TryWriteTransformCapture(string csvLine)
+        {
+#if UNITY_EDITOR
+            captureEnabled = GetCapturePreference();
+#endif
+            if (!captureEnabled || !IsCaptureEnvironmentAllowed())
+            {
+                return true;
+            }
+
+            if (!TryEnsureTestDataDirectory(out string directory))
+            {
+                return false;
+            }
+
+            bool isNewCapture = false;
+            if (string.IsNullOrEmpty(activeCaptureFilePath))
+            {
+                if (!TryGetNextCaptureFilePath(directory, out activeCaptureFilePath))
+                {
+                    return false;
+                }
+
+                isNewCapture = true;
+            }
+
+            try
+            {
+                File.AppendAllText(activeCaptureFilePath, csvLine + Environment.NewLine);
+
+                if (isNewCapture)
+                {
+                    Debug.Log($"Stored 3D Tiles capture at {MakeProjectRelativePath(activeCaptureFilePath)}.");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Failed to persist GLB transform capture: {ex.Message}");
+                return false;
+            }
+        }
+
+        private static bool TryEnsureTestDataDirectory(out string directory)
+        {
+            directory = null;
+
+            string assetsPath = Application.dataPath;
+            if (string.IsNullOrEmpty(assetsPath))
+            {
+                return false;
+            }
+
+            string projectRoot = Directory.GetParent(assetsPath)?.FullName;
+            if (string.IsNullOrEmpty(projectRoot))
+            {
+                return false;
+            }
+
+            directory = Path.GetFullPath(Path.Combine(projectRoot, TestDataDirectoryRelativePath.Replace('/', Path.DirectorySeparatorChar)));
+
+            try
+            {
+                Directory.CreateDirectory(directory);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Failed to create TestData directory '{directory}': {ex.Message}");
+                return false;
+            }
+        }
+
+        private static bool TryGetNextCaptureFilePath(string directory, out string capturePath)
+        {
+            capturePath = null;
+
+            try
+            {
+                EnsureCaptureIndexInitialized(directory);
+                string fileName = $"{CaptureFilePrefix}{nextCaptureIndex}{CaptureFileExtension}";
+                capturePath = Path.Combine(directory, fileName);
+                nextCaptureIndex++;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Failed to determine capture filename: {ex.Message}");
+                return false;
+            }
+        }
+
+        private static void DisableCapturePreference()
+        {
+#if UNITY_EDITOR
+            EditorPrefs.SetBool("Netherlands3D.Tiles3D.EnableTransformCapture", false);
+#endif
+            captureEnabled = false;
+            activeCaptureFilePath = null;
+        }
+
+        private static void EnsureCaptureIndexInitialized(string directory)
+        {
+            if (nextCaptureIndex >= 0)
+            {
+                return;
+            }
+
+            int maxIndex = 0;
+            foreach (string filePath in Directory.GetFiles(directory, $"{CaptureFilePrefix}*{CaptureFileExtension}"))
+            {
+                string name = Path.GetFileNameWithoutExtension(filePath);
+                if (!name.StartsWith(CaptureFilePrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                string suffix = name.Substring(CaptureFilePrefix.Length);
+                if (int.TryParse(suffix, out int existingIndex) && existingIndex > maxIndex)
+                {
+                    maxIndex = existingIndex;
+                }
+            }
+
+            nextCaptureIndex = maxIndex + 1;
+        }
+
+        private static string MakeProjectRelativePath(string absolutePath)
+        {
+            string assetsPath = Application.dataPath;
+            if (string.IsNullOrEmpty(assetsPath))
+            {
+                return absolutePath;
+            }
+
+            string projectRoot = Directory.GetParent(assetsPath)?.FullName;
+            if (string.IsNullOrEmpty(projectRoot))
+            {
+                return absolutePath;
+            }
+
+            if (absolutePath.StartsWith(projectRoot, StringComparison.OrdinalIgnoreCase))
+            {
+                int startIndex = projectRoot.Length;
+                if (absolutePath.Length > startIndex && (absolutePath[startIndex] == Path.DirectorySeparatorChar || absolutePath[startIndex] == Path.AltDirectorySeparatorChar))
+                {
+                    startIndex++;
+                }
+
+                if (absolutePath.Length > startIndex)
+                {
+                    return absolutePath.Substring(startIndex);
+                }
+
+                return absolutePath;
+            }
+
+            return absolutePath;
+        }
+
+        private static string StripAuthParameters(string url, params string[] keysToRemove)
+        {
+            if (string.IsNullOrEmpty(url) || keysToRemove == null || keysToRemove.Length == 0)
+            {
+                return url;
+            }
+
+            int queryIndex = url.IndexOf('?');
+            if (queryIndex < 0)
+            {
+                return url;
+            }
+
+            string baseUrl = url.Substring(0, queryIndex);
+            string query = url.Substring(queryIndex + 1);
+            string[] parts = query.Split(new[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (parts.Length == 0)
+            {
+                return baseUrl;
+            }
+
+            HashSet<string> keys = new HashSet<string>(keysToRemove, StringComparer.OrdinalIgnoreCase);
+            StringBuilder filteredQuery = new StringBuilder();
+
+            foreach (string part in parts)
+            {
+                int equalsIndex = part.IndexOf('=');
+                string key = equalsIndex >= 0 ? part.Substring(0, equalsIndex) : part;
+
+                if (keys.Contains(Uri.UnescapeDataString(key)))
+                {
+                    continue;
+                }
+
+                if (filteredQuery.Length > 0)
+                {
+                    filteredQuery.Append('&');
+                }
+
+                filteredQuery.Append(part);
+            }
+
+            if (filteredQuery.Length == 0)
+            {
+                return baseUrl;
+            }
+
+            return $"{baseUrl}?{filteredQuery}";
+        }
+
+        private static bool IsCaptureEnvironmentAllowed()
+        {
+#if UNITY_EDITOR
+            return true;
+#else
+            return false;
+#endif
+        }
+
+        private static bool GetCapturePreference()
+        {
+#if UNITY_EDITOR
+            const string key = "Netherlands3D.Tiles3D.EnableTransformCapture";
+            return UnityEditor.EditorPrefs.GetBool(key, false);
+#else
+            return false;
+#endif
+        }
+
         public void ParseAssetMetaData(Content content)
         {
             string gltfJsonText = null;
