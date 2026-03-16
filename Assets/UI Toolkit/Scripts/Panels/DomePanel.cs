@@ -15,7 +15,6 @@ namespace Netherlands3D.UI.Panels
     {
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
-        // private Button hideButton;
 
         public override void Initialize(Vector2 screenPosition, object context = null)
         {

@@ -1,0 +1,98 @@
+@import url("TextField-style.uss");
+
+.value-field {
+    flex-direction: row;
+    align-items: stretch;
+    height: var(--spacing-10);
+    margin: 0;
+}
+
+/* Left label container */
+.value-field__label {
+    min-width: var(--spacing-10);
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-2);
+
+    background-color: var(--color-blue-200);
+    border-width: 2px;
+    border-color: var(--color-blue-200);
+
+    border-top-left-radius: var(--spacing-2);
+    border-bottom-left-radius: var(--spacing-2);
+}
+
+.value-field__label-text {
+    margin: 0;
+    -unity-text-align: middle-center;
+}
+
+/* Value input field */
+.value-field__input {
+    flex-grow: 0;
+    flex-shrink: 1;
+    min-width: var(--spacing-16);
+}
+
+.value-field .textfield .unity-base-text-field__input {
+    padding-left: var(--spacing-4);
+    padding-top: var(--spacing-2);
+    padding-right: var(--spacing-4);
+    padding-bottom: var(--spacing-2);
+    border-width: var(--spacing-0_5);
+    border-left-width: 0px;
+    border-color: var(--color-blue-200);
+    background-color: var(--color-white);
+
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: var(--spacing-2);
+    border-bottom-right-radius: var(--spacing-2);
+}
+
+.value-field .textfield .unity-base-text-field__input:hover {
+    background-color: var(--color-blue-100);
+}
+
+.value-field .textfield TextElement {
+    -unity-text-align: middle-right;
+}
+
+/* Disabled */
+.value-field:disabled {
+    opacity: 1;
+}
+
+.value-field .value-field__label:disabled {
+    background-color: var(--color-white);
+}
+
+.value-field:disabled .value-field__label-text {
+    color: var(--color-blue-200);
+}
+
+/* Variant for PropertiesPanel */
+.value-field.value-field-style-properties-panel {
+    align-self: flex-start;
+    width: var(--spacing-24);
+    min-width: var(--spacing-12);
+    height: var(--spacing-7);
+}
+
+.value-field.value-field-style-properties-panel .value-field__label {
+    padding: var(--spacing-1);
+    width: var(--spacing-6);
+    min-width: var(--spacing-6);
+    border-top-left-radius: var(--spacing-1);
+    border-bottom-left-radius: var(--spacing-1);
+}
+
+.value-field.value-field-style-properties-panel .textfield .unity-base-text-field__input {
+    padding: var(--spacing-1);
+    border-top-right-radius: var(--spacing-1);
+    border-bottom-right-radius: var(--spacing-1);
+}
+
+.value-field.value-field-style-properties-panel .textfield TextElement {
+    -unity-text-align: middle-left;
+}

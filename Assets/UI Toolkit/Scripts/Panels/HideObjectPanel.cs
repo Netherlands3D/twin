@@ -1,77 +1,64 @@
-
 using System.Collections.Generic;
 using System.Linq;
-using Netherlands3D.Catalogs;
-using Netherlands3D.Functionalities.ObjectInformation;
-using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.Components;
-using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
 using ListView = Netherlands3D.UI.Components.ListView;
-
 
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
     public partial class HideObjectPanel : FloatingPanel
     {
-        private List<IMapping> mappings;
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
-        private Button hideButton;
+        
+        private Button button;
+        private Button Button => button ??= this.Q<Button>("HideButton");
 
-        public override void Initialize(Vector2 screenPosition, object context = null)
+        public override void Initialize(Vector2 screenPosition, Dictionary<string, object> data)
         {
-            base.Initialize(screenPosition, context);
-
-            mappings = context as List<IMapping>;
-            if (mappings == null) return;
-
-            // Virtualization and selection
+            base.Initialize(screenPosition, data);
+            
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             ListView.selectionType = SelectionType.None;
-
+            
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
 
-            // Hide button
-            hideButton = this.Q<Button>("HideButton");
-            if (hideButton != null)
+            Button.clicked += () =>
             {
-                hideButton.clicked += () =>
-                {
-                    HideMappings(mappings);
-                    parent.Remove(this); // close panel after hiding
-                };
-            }
+                OnClose.Invoke();
+            };
+
+            //todo leave this temp keys test code until meerdere gebouwen is merged
+            // List<string> keys = new List<string>()
+            // {
+            //     "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test",
+            //     "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test"
+            // };
+            //PopulateBagIds(keys);
+            PopulateBagIds(data.Keys.ToList());
         }
 
+        public void PopulateBagIds(List<string> mappings)
+        {
+            ListView.itemsSource = mappings;
+            ListView.RefreshItems();
+        }
+        
         private VisualElement MakeListViewItem()
         {
-            var button = new Button { name = "ToggleHidden" };
-            var listViewItem = new ListViewItem(button);
-            //button.RegisterCallback<ClickEvent>();
-            
-            return listViewItem;
+            return new HideObjectListViewItem();
         }
         
         private void BindListViewItem(VisualElement item, int index)
         {
-            if (item is not ListViewItem listViewItem) return;
-            if (listViewItem.Q<Button>() is not Button button) return;
+            if (item is not HideObjectListViewItem listViewItem) return;
             
-            IMapping mapping = ListView.itemsSource[index] as IMapping;
-            button.LabelText = mapping.Id;
-            var icon = IconImage.Map;
-            button.Image = icon;
-            button.userData = mapping;
-        }
-        
-        private void HideMappings(List<IMapping> mappings)
-        {
-            
+            string mapping = ListView.itemsSource[index] as string;
+            listViewItem.ID = mapping;
         }
     }
 }

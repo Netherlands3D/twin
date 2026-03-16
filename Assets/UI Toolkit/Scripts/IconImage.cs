@@ -46,6 +46,7 @@
         LineOfSight = 85,
         Link = 28,
         Location = 57,
+        LocationPin = 95,
         Map = 1,
         Measure = 86,
         MetaData = 58,
@@ -97,6 +98,7 @@
         VideoCamera = 18,
         Warning = 17,
         Width = 16,
-        Visibility = 95,
+        Visibility = 200,
+        Invisible = 201,
     }
 }

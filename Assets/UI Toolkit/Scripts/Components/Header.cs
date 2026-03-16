@@ -1,7 +1,5 @@
 ﻿using Netherlands3D.UI_Toolkit.Scripts;
-using Netherlands3D.UI;
 using Netherlands3D.UI.ExtensionMethods;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -36,10 +34,6 @@ namespace Netherlands3D.UI.Components
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
-            // RegisterCallback<AttachToPanelEvent>(_ =>
-            // {
-            //     
-            // });
         }
     }
 }

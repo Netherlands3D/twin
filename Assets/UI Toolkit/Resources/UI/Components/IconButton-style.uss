@@ -1,0 +1,41 @@
+.iconbutton {
+    --button-bg-color: transparent;
+    --button-hover-contrast-color: var(--color-blue-700);
+    --button-active-contrast-color: var(--color-blue-700);
+    --button-border-padding: 0px;
+    --button-border-color: transparent;
+    --button-border-width: 0px;
+    --button-border-radius: 0px;
+    
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: var(--button-border-padding);
+    background-color: var(--button-bg-color);
+    border-color: var(--button-border-color);
+    border-width: var(--button-border-width);
+    border-radius: var(--button-border-radius);
+    flex-basis: auto;
+}
+
+.iconbutton > #Icon {
+}
+
+.iconbutton > .unity-label {
+    display: none;
+}
+
+.iconbutton:hover > #Icon {
+    -unity-background-image-tint-color: var(--button-hover-contrast-color);
+}
+
+.iconbutton:active > #Icon {
+    -unity-background-image-tint-color: var(--button-active-contrast-color);
+}
+
+/* Disabled */
+.iconbutton:disabled {
+    opacity: 1;
+}

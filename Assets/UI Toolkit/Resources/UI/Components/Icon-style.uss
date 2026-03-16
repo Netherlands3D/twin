@@ -23,6 +23,11 @@
     padding-left: 0;
 }
 
+.icon:disabled {
+    opacity: 1;
+    -unity-background-image-tint-color: var(--color-blue-200);
+}
+
 .icon.tint-white { --icon-tint-color: var(--color-white); }
 .icon.tint-black { --icon-tint-color: var(--color-black); }
 .icon.tint-blue-50 { --icon-tint-color: var(--color-blue-50); }
@@ -78,6 +83,7 @@
 .icon.image-line-of-sight { --icon-image: var(--icon-lineofsight); }
 .icon.image-link { --icon-image: var(--icon-link); }
 .icon.image-location { --icon-image: var(--icon-location); }
+.icon.image-location-pin { --icon-image: var(--icon-locationpin); }
 .icon.image-map { --icon-image: var(--icon-map); }
 .icon.image-measure { --icon-image: var(--icon-measure); }
 .icon.image-meta-data { --icon-image: var(--icon-metadata); }
@@ -129,3 +135,4 @@
 .icon.image-warning { --icon-image: var(--icon-warning); }
 .icon.image-width { --icon-image: var(--icon-width); }
 .icon.image-visibility { --icon-image: var(--icon-visibility); }
+.icon.image-invisible { --icon-image: var(--icon-invisible); }

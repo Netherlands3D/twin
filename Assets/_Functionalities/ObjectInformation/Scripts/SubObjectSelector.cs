@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using Netherlands3D.Coordinates;
+using Netherlands3D.Services;
 using Netherlands3D.SubObjects;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.Twin.Samplers;
 using UnityEngine;
 
@@ -9,8 +11,6 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 {
     public class SubObjectSelector : MonoBehaviour, IObjectSelector
     {
-        public List<IMapping> SelectedMappings { get; private set; } = new List<IMapping>();
-        
         public bool HasObjectMapping => foundObject != null;
         public MeshMapping Object => foundObject; 
 
@@ -71,6 +71,33 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                 }
             }
             return bagId;
+        }
+
+        public void HideSelectedMappings()
+        {
+            ObjectSelectorService selector = ServiceLocator.GetService<ObjectSelectorService>();
+            Dictionary<string, IMapping> selectedMappings = selector.SelectedMappings;
+            
+            foreach(KeyValuePair<string, IMapping> selectedMapping in selectedMappings)
+            {
+                LayerGameObject layer;
+                if (selectedMapping.Value is MeshMapping mapping)
+                {
+                    if (mapping.ObjectMapping == null)
+                        mapping = selector.GetReplacedMapping(mapping);
+
+                    LayerFeature feature = selector.GetLayerFeatureFromBagID(selectedMapping.Key, mapping, out layer);
+                    if (layer != null)
+                    {   
+                        Coordinate coord = mapping.GetCoordinateForObjectMappingItem(mapping.ObjectMapping, (ObjectMappingItem)feature.Geometry);
+                        HiddenObjectsPropertyData hiddenPropertyData = layer.LayerData.GetProperty<HiddenObjectsPropertyData>();
+                        hiddenPropertyData.SetVisibilityForSubObject(feature, false, coord);
+                            
+                        //when the object gets hidden, deselect the selection mesh.
+                        Deselect();
+                    }
+                }
+            }
         }
     }
 }

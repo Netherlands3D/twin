@@ -4,7 +4,7 @@
     noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
     xmlns:nl3d="Netherlands3D.UI.Components"
     editor-extension-mode="False" 
-    class="backbutton unity-button"
+    class="backbutton iconbutton unity-button"
 >
-    <nl3d:Icon name="Icon"/>
+    <nl3d:Icon name="Icon" image="Back"/>
 </ui:UXML>

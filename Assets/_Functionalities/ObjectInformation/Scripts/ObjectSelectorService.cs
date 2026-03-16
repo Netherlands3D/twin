@@ -19,6 +19,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
     public class ObjectSelectorService : MonoBehaviour
     {
         public SubObjectSelector SubObjectSelector => subObjectSelector;
+        public Dictionary<string, IMapping> SelectedMappings => selectedMappings;
 
         public UnityEvent<MeshMapping, string> SelectSubObjectWithBagId;
         public UnityEvent<FeatureMapping> SelectFeature;
@@ -28,6 +29,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private FeatureSelector featureSelector;
         private SubObjectSelector subObjectSelector;
         private List<IMapping> orderedMappings = new List<IMapping>();
+        private Dictionary<string, IMapping> selectedMappings = new();
         private Vector3 lastWorldClickedPosition;
         private PointerToWorldPosition pointerToWorldPosition;
         private float minClickDistance = 10;
@@ -211,6 +213,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
                         layerData.SelectLayer(true);
                         lastSelectedMappingLayerData = layerData;
                         SelectBagId(bagId);
+                        selectedMappings.Add(bagId, map);
                         SelectSubObjectWithBagId?.Invoke(map, bagId);
                     }
                     else if (mapping is FeatureMapping feature)
@@ -311,6 +314,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public ObjectMappingItem GetMappingItemForBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
         {
             layer = null;
+            if(string.IsNullOrEmpty(bagID)) return null;
             if (selectedMapping is not MeshMapping mapping) return null;
 
             layer = GetLayerGameObjectFromMapping(selectedMapping);
@@ -321,8 +325,8 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         public LayerFeature GetLayerFeatureFromBagID(string bagID, IMapping selectedMapping, out LayerGameObject layer)
         {
             ObjectMappingItem item = GetMappingItemForBagID(bagID, selectedMapping, out layer);
-            if (layer == null)
-                return null;
+            if (layer == null) return null;
+            if (item == null) return null;
 
             return layer.GetLayerFeatureByGeometry(item);
         }
@@ -402,6 +406,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
 
         public void Deselect()
         {
+            selectedMappings.Clear();
             subObjectSelector.Deselect();
             featureSelector.Deselect();
             OnDeselect.Invoke();

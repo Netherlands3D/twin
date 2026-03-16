@@ -1,23 +1,25 @@
-<ui:UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ui="UnityEngine.UIElements"
-    xmlns:nl3d="Netherlands3D.UI.Components"
-    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
-    editor-extension-mode="False"
-    name="HideObjectPanel"
-    class="floating-panel hide-object-panel"
+<ui:UXML 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    name="HideObjectPanel" 
+    class="hide-object-panel"
 >
-
-    <nl3d:Header
-        name="Header"
-        icon="Visibility"
-        text="Objecten verbergen"
-    />
-
-    <nl3d:ListView
-        name="ItemListView"
-        virtualization-method="DynamicHeight"
-        style="flex-grow: 1;"
-    />
-
+    <nl3d:Header icon="Visibility" text="Objecten verbergen"/>
+    <ui:VisualElement name="Content" class="hide-object-panel__body">
+        <ui:VisualElement name="Separator" class="hide-object-panel__content-separator">
+            <ui:VisualElement name="Selection" class="hide-object-panel__selection-tag">
+                <ui:Label text="Selectie: " class="hide-object-panel__selection-tag-text"/>
+            </ui:VisualElement>
+            <nl3d:ListView name="ItemListView" class="hide-object-panel__list-view"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="Message" class="hide-object-panel__message">
+            <ui:Label text="Weet je zeker dat je dit object wilt verbergen? Je kan verborgen objecten later weer zichtbaar maken in het eigenschappen paneel van de bijbehorende laag. " class="hide-object-panel__message-text"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement class="hide-object-panel__footer">
+        <nl3d:Button name="HideButton" icon="Invisible" LabelText="Verbergen" class="hide-object-panel__hide-button"/>
+    </ui:VisualElement>
 </ui:UXML>

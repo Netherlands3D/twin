@@ -1,0 +1,14 @@
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:nl3d="Netherlands3D.UI.Components"
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+    editor-extension-mode="False"
+    class="value-field"
+>
+        <ui:VisualElement class="value-field__label" name="LabelContainer">
+            <ui:Label class="value-field__label-text text-base" name="LabelText" text="" />
+        </ui:VisualElement>
+
+        <nl3d:TextField class="value-field__input" name="InputField" label="" value="" />
+</ui:UXML>

@@ -1,13 +1,11 @@
 <ui:UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ui="UnityEngine.UIElements"
-    xmlns:nl3d="Netherlands3D.UI.Components"
-    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
-    editor-extension-mode="False"
-    class="Header"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ui="UnityEngine.UIElements" 
+    xmlns:nl3d="Netherlands3D.UI.Components" 
+    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
+    editor-extension-mode="False" 
+    class="header"
 >
-    <ui:VisualElement name="Container" style="flex-direction: row;">
-        <nl3d:Icon name="Icon" />
-        <ui:Label name="Label" text="headertext" />
-    </ui:VisualElement>
+    <nl3d:Icon name="Icon"/>
+    <ui:Label name="Label" text="headertext" class="header__label"/>
 </ui:UXML>
