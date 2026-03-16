@@ -17,7 +17,8 @@ namespace Netherlands3D.UI.Panels
         private InputAction leftClickAction;
         private InputAction longPressAction;
         private InputAction touchAction;
-        private FloatingPanel activePanel;
+        private FloatingPanel floatingPanel;
+        private VisualElement content;
 
         private void Awake()
         {
@@ -27,13 +28,14 @@ namespace Netherlands3D.UI.Panels
         void OnEnable()
         {
             root = GetComponent<UIDocument>().rootVisualElement;
+            floatingPanel = new FloatingPanel();
+            root.Add(floatingPanel);
             var map = inputActionAsset.FindActionMap("Camera", true);
             rightClickAction = map.FindAction("RightClick", true);
             leftClickAction = map.FindAction("LeftClick", true);
             longPressAction = map.FindAction("LongPress", true);
             touchAction = map.FindAction("Touch", true);
             
-
             rightClickAction.performed += OnRightClick;
             rightClickAction.Enable();
 
@@ -60,18 +62,21 @@ namespace Netherlands3D.UI.Panels
             
             touchAction.performed -= OnLeftClick;
             touchAction.Disable();
+            
+            root.Remove(floatingPanel);
+            floatingPanel = null;
         }
 
         
 
         public void ClearActivePanel()
         {
-            if (activePanel == null)
+            if (content == null)
                 return;
 
-            activePanel.OnClose.RemoveAllListeners();
-            root.Remove(activePanel);
-            activePanel = null;
+            // activePanel.OnClose.RemoveAllListeners();
+            floatingPanel.Remove(content);
+            content = null;
         }
 
         private void OnRightClick(InputAction.CallbackContext ctx)
@@ -137,10 +142,10 @@ namespace Netherlands3D.UI.Panels
 
         private bool IsActivePanelClicked(Vector2 screenPos)
         {
-            if(activePanel == null) return false;
+            if(floatingPanel == null) return false;
             
-            var picked = activePanel.panel.Pick(screenPos);
-            return picked != null && activePanel.Contains(picked);
+            var picked = floatingPanel.panel.Pick(screenPos);
+            return picked != null && floatingPanel.Contains(picked);
         }
         
         private void CheckAndSpawnPanel(Vector2 screenPos)
@@ -149,11 +154,11 @@ namespace Netherlands3D.UI.Panels
             {
                 if(!panelBehaviour.ShouldBeActive()) continue;
 
+                floatingPanel.SetPosition(screenPos);
+                
                 var data = panelBehaviour.GetData();
-                FloatingPanel panel = panelBehaviour.SpawnFloatingPanel(screenPos, data);
-                activePanel = panel;
-                activePanel.OnClose.AddListener(ClearActivePanel);
-                root.Add(activePanel);
+                content = panelBehaviour.SpawnFloatingPanelContent(data);
+                floatingPanel.Add(content);
                 break;
             }
         }

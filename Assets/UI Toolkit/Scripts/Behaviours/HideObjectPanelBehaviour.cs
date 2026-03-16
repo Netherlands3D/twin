@@ -4,10 +4,11 @@ using System.Linq;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Panels
 {
-    public class HideObjectPanelBehaviour : FloatingPanelBehaviour<HideObjectPanel>
+    public class HideObjectPanelBehaviour : FloatingPanelBehaviour
     {
         private ObjectSelectorService objectSelectorService;
         
@@ -30,9 +31,9 @@ namespace Netherlands3D.UI.Panels
             return selectedMappings.ToDictionary(kvp => kvp.Key, kvp => (object)null);
         }
 
-        public override FloatingPanel SpawnFloatingPanel(Vector2 screenPos, Dictionary<string,object> data = null)
+        public override VisualElement SpawnFloatingPanelContent(Dictionary<string,object> data = null)
         {
-            HideObjectPanel panel = base.SpawnFloatingPanel(screenPos, data) as HideObjectPanel;
+            HideObjectPanel panel = new HideObjectPanel(data);
             panel.OnClose.AddListener(objectSelectorService.SubObjectSelector.HideSelectedMappings);
             panel.OnClose.AddListener(objectSelectorService.Deselect);
             return panel;
