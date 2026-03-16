@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.UI.Components;
+using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 using Button = Netherlands3D.UI.Components.Button;
 using ListView = Netherlands3D.UI.Components.ListView;
@@ -9,18 +11,23 @@ using ListView = Netherlands3D.UI.Components.ListView;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    public partial class HideObjectPanel : FloatingPanel
+    public partial class HideObjectPanel : VisualElement
     {
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
         
         private Button button;
         private Button Button => button ??= this.Q<Button>("HideButton");
+        public UnityEvent OnClose = new();
 
-        public override void Initialize(Vector2 screenPosition, Dictionary<string, object> data)
+        public HideObjectPanel()
         {
-            base.Initialize(screenPosition, data);
-            
+            this.CloneComponentTree("Panels");
+            this.AddComponentStylesheet("Panels");
+        }
+        
+        public HideObjectPanel(Dictionary<string, object> data) :  this()
+        {
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             ListView.selectionType = SelectionType.None;
             
@@ -38,7 +45,7 @@ namespace Netherlands3D.UI.Panels
             //     "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test",
             //     "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test"
             // };
-            //PopulateBagIds(keys);
+            // PopulateBagIds(keys);
             PopulateBagIds(data.Keys.ToList());
         }
 

@@ -1,9 +1,4 @@
 .hide-object-panel {
-    width: 380px;
-    height: auto;
-    background-color: var(--color-white); 
-    border-radius: var(--border-radius-md);
-    padding: var(--spacing-4);
     flex-direction: column;
 }
 
