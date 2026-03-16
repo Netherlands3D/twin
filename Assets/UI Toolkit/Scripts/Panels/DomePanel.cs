@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
-using Netherlands3D.Twin.Projects;
 using Netherlands3D.UI.Components;
+using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
 using UnityEngine.UIElements;
 using ListView = Netherlands3D.UI.Components.ListView;
@@ -11,22 +12,26 @@ using ListView = Netherlands3D.UI.Components.ListView;
 namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
-    public partial class DomePanel : FloatingPanel
+    public partial class DomePanel : VisualElement
     {
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
 
-        public override void Initialize(Vector2 screenPosition, object context = null)
+        public DomePanel()
         {
-            base.Initialize(screenPosition, context);
-            
+            this.CloneComponentTree("Panels");
+            this.AddComponentStylesheet("Panels");    
+        }
+        
+        public DomePanel(Dictionary<string, object> data) : this()
+        {
             ListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             ListView.selectionType = SelectionType.None;
-
+        
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
             
-            PopulateMaskLayerPanel();
+            PopulateMaskLayerPanel(data);
         }
         
         private VisualElement MakeListViewItem()
@@ -37,7 +42,7 @@ namespace Netherlands3D.UI.Panels
             
             return listViewItem;
         }
-
+    
         private void BindListViewItem(VisualElement item, int index)
         {
             if (item is not ListViewItem listViewItem) return;
@@ -50,10 +55,10 @@ namespace Netherlands3D.UI.Panels
             
             maskLayerRowElement.LayerName = layerData.Name;
             maskLayerRowElement.ToggleIsOn = GetIsDomeMaskingBitSet(layerPropertyData);
-
+    
             maskLayerRowElement.userData = layerData;
         }
-
+    
         private bool GetIsDomeMaskingBitSet(MaskingLayerPropertyData layerPropertyData)
         {
             var currentLayerMask = layerPropertyData.GetMaskLayerMask();
@@ -61,11 +66,10 @@ namespace Netherlands3D.UI.Panels
             bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
             return isBitSet;
         }
-
-        private void PopulateMaskLayerPanel()
+    
+        private void PopulateMaskLayerPanel(Dictionary<string, object> data)
         {
-            var layers = ProjectData.Current.RootLayer.GetFlatHierarchy(); //todo: should this be the context passed by the Initialize function?
-            ListView.itemsSource = layers.ToList();
+            ListView.itemsSource = data.Values.ToList();
             ListView.RefreshItems();
         }
     }

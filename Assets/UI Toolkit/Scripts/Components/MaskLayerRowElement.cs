@@ -27,11 +27,5 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
         }
-
-        public MaskLayerRowElement(string name, bool isActive) : this()
-        {
-            MaskActiveToggle.value = isActive;
-            LayerNameLabel.text = name;
-        }
     }
 }
