@@ -6,7 +6,7 @@ namespace Netherlands3D.Twin.Cameras
     [RequireComponent(typeof(CameraService))]
     public class CameraPositionWatcher : MonoBehaviour
     {
-        public UnityEvent<Vector3, Vector3> OnPositionChanged;
+        public UnityEvent<Vector3> OnPositionChanged;
 
         private CameraService cameraService;
         private Transform cameraTransform;
@@ -17,7 +17,6 @@ namespace Netherlands3D.Twin.Cameras
             cameraService = GetComponent<CameraService>();
             cameraService.OnSwitchCamera.AddListener(SwitchCamera);
         }
-
 
         private void OnDestroy()
         {
@@ -48,7 +47,7 @@ namespace Netherlands3D.Twin.Cameras
         /// </summary>
         private void SwitchCamera(Camera cam)
         {
-            cameraTransform = cameraService.ActiveCamera.transform;
+            cameraTransform = cam.transform;
             PositionChanged();
         }
 
@@ -57,7 +56,7 @@ namespace Netherlands3D.Twin.Cameras
         /// </summary>
         private void PositionChanged()
         {
-            OnPositionChanged.Invoke(lastPosition, cameraTransform.position);
+            OnPositionChanged.Invoke(cameraTransform.position);
             lastPosition = cameraTransform.position;
         }
     }
