@@ -47,10 +47,6 @@ namespace Netherlands3D.UI.Panels
             if (listViewItem.Q<MaskLayerRowElement>() is not MaskLayerRowElement maskLayerRowElement) return;
             
             var layerData = ListView.itemsSource[index] as LayerData;
-            var layerPropertyData = layerData.GetProperty<MaskingLayerPropertyData>();
-            if (layerPropertyData == null)
-                return; //unmaskable layer
-            
             maskLayerRowElement.Initialize(layerData);
         }
         

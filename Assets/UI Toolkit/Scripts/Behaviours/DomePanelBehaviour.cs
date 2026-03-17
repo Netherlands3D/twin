@@ -15,7 +15,7 @@ namespace Netherlands3D.UI.Panels
         public override Dictionary<string, object> GetData()
         {
             var layers = ProjectData.Current.RootLayer.GetFlatHierarchy();
-            return layers.ToDictionary(layer => layer.Id.ToString(), layer => (object)layer);
+            return layers.Where(layer => layer.GetProperty<MaskingLayerPropertyData>() != null).ToDictionary(layer => layer.Id.ToString(), layer => (object)layer); //keep only the maskable layers
         }
         
         public override VisualElement SpawnFloatingPanelContent(FloatingPanel floatingPanel, Dictionary<string,object> data = null)
