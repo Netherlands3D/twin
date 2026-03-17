@@ -8,10 +8,23 @@ namespace Netherlands3D.UI.Panels
    
     public abstract class FloatingPanelBehaviour : ScriptableObject, IVisualizationWithPropertyData
     {
+        protected FloatingPanel floatingPanel;
+        protected VisualElement content;
+        
         public abstract bool ShouldBeActive();
         public abstract Dictionary<string, object> GetData();
-        public abstract VisualElement SpawnFloatingPanelContent(FloatingPanel panel, Dictionary<string,object> data = null);
-        public abstract void Dispose();
+
+        public virtual VisualElement SpawnFloatingPanelContent(FloatingPanel panel, Dictionary<string, object> data = null)
+        {
+            floatingPanel = panel;
+            return content;
+        }
+
+        public virtual void Dispose()
+        {
+            content = null;
+            floatingPanel = null;
+        }
 
         //public abstract List<VisualElement> SpawnPropertyData(IVisualizationWithPropertyData data);
         public abstract void LoadProperties(List<LayerPropertyData> properties);

@@ -17,8 +17,7 @@ namespace Netherlands3D.UI.Panels
         private ListView ListView => listView ??= this.Q<ListView>();
         
         private Button button;
-        private Button Button => button ??= this.Q<Button>("HideButton");
-        public UnityEvent OnClose = new();
+        public Button Button => button ??= this.Q<Button>("HideButton");
 
         public HideObjectPanel()
         {
@@ -33,11 +32,6 @@ namespace Netherlands3D.UI.Panels
             
             ListView.makeItem = MakeListViewItem;
             ListView.bindItem = BindListViewItem;
-
-            Button.clicked += () =>
-            {
-                OnClose.Invoke();
-            };
 
             //todo leave this temp keys test code until meerdere gebouwen is merged
             // List<string> keys = new List<string>()

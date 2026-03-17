@@ -12,9 +12,6 @@ namespace Netherlands3D.UI.Panels
     [CreateAssetMenu(fileName = "HideObjectPanelBehaviour", menuName = "ScriptableObjects/FloatingPanelBehaviours/HideObjectPanelBehaviour", order = 1)]
     public class HideObjectPanelBehaviour : FloatingPanelBehaviour
     {
-        private HideObjectPanel panel;
-        private FloatingPanel floatingPanel;
-     
         public override bool ShouldBeActive()
         {
             ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
@@ -33,10 +30,11 @@ namespace Netherlands3D.UI.Panels
 
         public override VisualElement SpawnFloatingPanelContent(FloatingPanel floatingPanel, Dictionary<string,object> data = null)
         {
-            this.floatingPanel = floatingPanel; 
-            panel = new HideObjectPanel(data);
+            base.SpawnFloatingPanelContent(floatingPanel, data);
+            content = new HideObjectPanel(data);
+            HideObjectPanel panel = content as HideObjectPanel;
             panel.Button.clicked += CloseFloatingPanel;
-            return panel;
+            return content;
         }
 
         private void CloseFloatingPanel()
@@ -49,9 +47,9 @@ namespace Netherlands3D.UI.Panels
 
         public override void Dispose()
         {
+            HideObjectPanel panel = content as HideObjectPanel;
             panel.Button.clicked -= CloseFloatingPanel;
-            floatingPanel = null;
-            panel = null;
+            base.Dispose();
         }
 
         public override void LoadProperties(List<LayerPropertyData> properties)
