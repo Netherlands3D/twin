@@ -38,11 +38,9 @@ namespace Netherlands3D.UI.Panels
         {
             var rowElement = new MaskLayerRowElement();
             var listViewItem = new ListViewItem(rowElement);
-            rowElement.MaskActiveToggle.RegisterCallback<ClickEvent>(_ => Debug.Log("toggle mask active: " +  rowElement.name));
-            
             return listViewItem;
         }
-    
+
         private void BindListViewItem(VisualElement item, int index)
         {
             if (item is not ListViewItem listViewItem) return;
@@ -53,20 +51,9 @@ namespace Netherlands3D.UI.Panels
             if (layerPropertyData == null)
                 return; //unmaskable layer
             
-            maskLayerRowElement.LayerName = layerData.Name;
-            maskLayerRowElement.ToggleIsOn = GetIsDomeMaskingBitSet(layerPropertyData);
-    
-            maskLayerRowElement.userData = layerData;
+            maskLayerRowElement.Initialize(layerData);
         }
-    
-        private bool GetIsDomeMaskingBitSet(MaskingLayerPropertyData layerPropertyData)
-        {
-            var currentLayerMask = layerPropertyData.GetMaskLayerMask();
-            int maskBitToCheck = 1 << MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX;
-            bool isBitSet = (currentLayerMask & maskBitToCheck) != 0;
-            return isBitSet;
-        }
-    
+        
         private void PopulateMaskLayerPanel(Dictionary<string, object> data)
         {
             ListView.itemsSource = data.Values.ToList();
