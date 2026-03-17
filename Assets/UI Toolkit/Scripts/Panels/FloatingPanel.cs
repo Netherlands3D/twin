@@ -1,12 +1,16 @@
 using System.Collections.Generic;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Panels
 {
     public class FloatingPanel : VisualElement
     {
+        public UnityEvent OnClose = new();
+        public UnityEvent OnOpen = new();
+        
         public FloatingPanel()
         {
             this.CloneComponentTree("Panels");
