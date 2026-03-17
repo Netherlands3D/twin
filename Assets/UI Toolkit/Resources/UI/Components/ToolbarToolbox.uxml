@@ -1,13 +1,7 @@
-<ui:UXML 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:ui="UnityEngine.UIElements" 
-    noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" 
-    xmlns:nl3d="Netherlands3D.UI.Components"
-    editor-extension-mode="False"  
-    class="toolbar-toolbox"
->
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" class="toolbar-toolbox">
     <ui:ToggleButtonGroup name="ButtonGroup" class="toolbar-toolbox__group">
-        <nl3d:Button name="Dome" button-type="Transparent" button-style="IconOnly" icon="SurfaceDome" />
-        <nl3d:Button name="Screenshot" button-type="Transparent" button-style="IconOnly" icon="Camera" />
+        <nl3d:Button name="Dome" button-type="Transparent" button-style="IconOnly" icon="SurfaceDome"/>
+        <nl3d:Button name="Dome" button-type="transparent" button-style="IconOnly" icon="Sun" display-tooltip-when-elided="true"/>
+        <nl3d:Button name="Screenshot" button-type="Transparent" button-style="IconOnly" icon="Camera"/>
     </ui:ToggleButtonGroup>
 </ui:UXML>
