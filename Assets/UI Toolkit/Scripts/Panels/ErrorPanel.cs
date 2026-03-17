@@ -23,16 +23,7 @@ namespace Netherlands3D.UI.Panels
 
             OnShow += () => EnableInClassList("active", true);
             OnHide += () => EnableInClassList("active", false);
-            //RetryButton.clicked += Hide;
-
-            // this.schedule.Execute(() =>
-            // {
-            //     var icon = this.Q("LeadingIcon");
-            //     if (icon != null)
-            //         icon.style.display = DisplayStyle.None;
-            // });
-            
-            Show();
+            RetryButton.clicked += Hide;
         }
         
         public void Show() => OnShow?.Invoke();
