@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Netherlands3D.Functionalities.ObjectInformation;
 using Netherlands3D.Services;
+using Netherlands3D.Twin.Layers.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -51,6 +52,11 @@ namespace Netherlands3D.UI.Panels
             panel.Button.clicked -= CloseFloatingPanel;
             floatingPanel = null;
             panel = null;
+        }
+
+        public override void LoadProperties(List<LayerPropertyData> properties)
+        {
+            //has no data for now
         }
     }
 }
