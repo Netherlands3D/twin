@@ -107,13 +107,11 @@ namespace Netherlands3D.UI.Behaviours
         private void OnImportSucceeded()
         {
             panel.Hide();
-            Debug.Log("Import Succeeded");
         }
 
         private void OnImportFailed()
         {
-            // optional: keep open or show feedback
-            Debug.Log("Import Failed");
+           
         }
 
         [Obsolete]
