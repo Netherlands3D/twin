@@ -23,6 +23,9 @@ namespace Netherlands3D.UI.Panels
         private TextField ImportUriField => importUriField ??= this.Q<TextField>("ImportUriField");
         private Button importUriButton;
         private Button ImportUriButton => importUriButton ??= this.Q<Button>("ImportUriButton");
+        
+        private ErrorPanel errorPanel;
+        private ErrorPanel ErrorPanel =>  errorPanel ??= this.Q<ErrorPanel>("ErrorPanel");
 
         public EventCallback<ClickEvent> OpenAssetLibrary { get; set; }
         public EventCallback<ClickEvent> FileImportFromUrlStarted { get; set; }
