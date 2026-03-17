@@ -33,7 +33,7 @@ namespace Netherlands3D.UI.Panels
             base.SpawnFloatingPanelContent(floatingPanel, data);
             content = new HideObjectPanel(data);
             HideObjectPanel panel = content as HideObjectPanel;
-            panel.Button.clicked += CloseFloatingPanel;
+            panel.OnClose.AddListener(CloseFloatingPanel);
             return content;
         }
 
@@ -48,7 +48,7 @@ namespace Netherlands3D.UI.Panels
         public override void Dispose()
         {
             HideObjectPanel panel = content as HideObjectPanel;
-            panel.Button.clicked -= CloseFloatingPanel;
+            panel.OnClose.RemoveListener(CloseFloatingPanel);
             base.Dispose();
         }
 
