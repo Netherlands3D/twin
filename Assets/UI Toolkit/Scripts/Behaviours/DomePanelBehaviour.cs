@@ -24,15 +24,6 @@ namespace Netherlands3D.UI.Panels
             DomePanel content = new DomePanel(data);
             return content;
         }
-
-        public override void Dispose()
-        {
-        }
-
-        public override void LoadProperties(List<LayerPropertyData> properties)
-        {
-            //Dome is not a layer so it has no properties to load. We also do not want to keep the selected layers that the dome affects between sessions.
-        }
         
         public override bool ShouldBeActive()
         {
