@@ -158,7 +158,8 @@
     --icon-surfacedome: resource("UI/Icons/surface-dome");
     --icon-sun: url("project://database/Assets/Sprites/UI/Icons/Type=SurfaceDome,%20Color=white,%20Size=medium.png");
     /*--icon-sun: url("project://database/Assets/Sprites/UI/Icons/Type=Sun,%20Color=white,%20Size=medium.png");*/
-    --icon-tile: url("project://database/Assets/Sprites/UI/Icons/Type=3Dtile,%20Color=white,%20Size=medium.png");
+    --icon-tile: url("project://database/Assets/Sprites/UI/Icons/SVG/surface-dome.svg");
+    /*--icon-tile: url("project://database/Assets/Sprites/UI/Icons/Type=3Dtile,%20Color=white,%20Size=medium.png");*/
     --icon-tree: url("project://database/Assets/Sprites/UI/Icons/Type=Tree,%20Color=white,%20Size=medium.png");
     --icon-trash: url("project://database/Assets/Sprites/UI/Icons/Type=Trash,%20Color=white,%20Size=medium.png");
     --icon-unpinned: url("project://database/Assets/Sprites/UI/Icons/Type=Unpinned,%20Color=white,%20Size=medium.png");
