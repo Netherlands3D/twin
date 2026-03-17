@@ -9,6 +9,7 @@ namespace Netherlands3D.UI.Panels
     public class FloatingPanel : VisualElement
     {
         public UnityEvent OnClose = new();
+        public UnityEvent OnOpen = new();
         
         public FloatingPanel()
         {

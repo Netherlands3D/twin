@@ -10,7 +10,7 @@ namespace Netherlands3D.UI.Panels
     public class ContextMenuBehaviour : MonoBehaviour
     {
         [SerializeField] private InputActionAsset inputActionAsset;
-        private FloatingPanelBehaviour[] panelBehaviours;
+        [SerializeField] private FloatingPanelBehaviour[] panelBehaviours;
         
         private VisualElement root;
         private InputAction rightClickAction;
@@ -19,13 +19,7 @@ namespace Netherlands3D.UI.Panels
         private InputAction touchAction;
         private FloatingPanel floatingPanel;
         private VisualElement content;
-
         private FloatingPanelBehaviour selectedBehaviour;
-
-        private void Awake()
-        {
-            panelBehaviours = GetComponentsInChildren<FloatingPanelBehaviour>();
-        }
 
         void OnEnable()
         {

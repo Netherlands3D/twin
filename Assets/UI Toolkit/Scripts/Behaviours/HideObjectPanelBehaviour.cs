@@ -8,19 +8,15 @@ using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Panels
 {
+    [CreateAssetMenu(fileName = "HideObjectPanelBehaviour", menuName = "ScriptableObjects/FloatingPanelBehaviours/HideObjectPanelBehaviour", order = 1)]
     public class HideObjectPanelBehaviour : FloatingPanelBehaviour
     {
-        private ObjectSelectorService objectSelectorService;
         private HideObjectPanel panel;
         private FloatingPanel floatingPanel;
-        
-        private void Awake()
-        {
-            objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
-        }
-
+     
         public override bool ShouldBeActive()
         {
+            ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
             Dictionary<string, IMapping> selectedMappings = objectSelectorService.SelectedMappings;
             if(selectedMappings.Count == 0) return false;
 
@@ -29,7 +25,8 @@ namespace Netherlands3D.UI.Panels
 
         public override Dictionary<string, object> GetData()
         {
-            Dictionary<string, IMapping> selectedMappings = objectSelectorService.SelectedMappings;
+             ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
+             Dictionary<string, IMapping> selectedMappings = objectSelectorService.SelectedMappings;
             return selectedMappings.ToDictionary(kvp => kvp.Key, kvp => (object)null);
         }
 
@@ -44,6 +41,7 @@ namespace Netherlands3D.UI.Panels
         private void CloseFloatingPanel()
         {
             floatingPanel.OnClose.Invoke();
+            ObjectSelectorService objectSelectorService = ServiceLocator.GetService<ObjectSelectorService>();
             objectSelectorService.SubObjectSelector.HideSelectedMappings();
             objectSelectorService.Deselect();
         }
