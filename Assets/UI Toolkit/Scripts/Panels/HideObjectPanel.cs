@@ -13,6 +13,8 @@ namespace Netherlands3D.UI.Panels
     [UxmlElement]
     public partial class HideObjectPanel : VisualElement
     {
+        public UnityEvent OnClose = new();
+        
         private ListView listView;
         private ListView ListView => listView ??= this.Q<ListView>();
         
@@ -41,6 +43,13 @@ namespace Netherlands3D.UI.Panels
             // };
             // PopulateBagIds(keys);
             PopulateBagIds(data.Keys.ToList());
+
+            Button.clicked += OnClose.Invoke;
+        }
+        
+        ~HideObjectPanel()
+        {
+            Button.clicked -= OnClose.Invoke;
         }
 
         public void PopulateBagIds(List<string> mappings)
