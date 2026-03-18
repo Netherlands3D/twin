@@ -36,12 +36,12 @@ namespace Netherlands3D.UI.Panels
         
         private VisualElement MakeListViewItem()
         {
-            return new MaskLayerRowElement();
+            return new MaskLayerListViewItem();
         }
 
         private void BindListViewItem(VisualElement item, int index)
         {
-            if (item is not MaskLayerRowElement maskLayerRowElement) return;
+            if (item is not MaskLayerListViewItem maskLayerRowElement) return;
             
             var layerData = ListView.itemsSource[index] as LayerData;
             maskLayerRowElement.Initialize(layerData);

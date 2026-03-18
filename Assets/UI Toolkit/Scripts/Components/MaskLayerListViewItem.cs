@@ -7,25 +7,24 @@ using UnityEngine.UIElements;
 namespace Netherlands3D.UI.Components
 {
     [UxmlElement]
-    public partial class MaskLayerRowElement : VisualElement, IVisualizationWithPropertyData
+    public partial class MaskLayerListViewItem : VisualElement, IVisualizationWithPropertyData
     {
         private Toggle MaskActiveToggle => this.Q<Toggle>("MaskActiveToggle"); //todo: this is now wrapped in a visual element for layout, should this be a component?
         private Label LayerNameLabel => this.Q<Label>("LayerNameLabel"); //todo: this is now wrapped in a visual element for layout, should this be a component?
 
         private LayerData layerData => userData as LayerData;
 
-        public MaskLayerRowElement()
+        public MaskLayerListViewItem()
         {
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
             MaskActiveToggle.RegisterValueChangedCallback(OnToggleChanged);
         }
-
+        
         private void OnToggleChanged(ChangeEvent<bool> evt)
         {
             SetDomeMaskingBit(evt.newValue);
         }
-
 
         public void LoadProperties(List<LayerPropertyData> properties)
         {
@@ -54,6 +53,5 @@ namespace Netherlands3D.UI.Components
             MaskingLayerPropertyData propertyData = layerData.GetProperty<MaskingLayerPropertyData>();
             propertyData.SetMaskBit(MaskingLayerPropertyData.MASKING_DOME_BIT_INDEX, active);
         }
-
     }
 }
