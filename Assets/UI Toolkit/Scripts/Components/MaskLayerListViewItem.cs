@@ -9,7 +9,7 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class MaskLayerListViewItem : VisualElement, IVisualizationWithPropertyData
     {
-        private Toggle MaskActiveToggle => this.Q<Toggle>("MaskActiveToggle"); //todo: this is now wrapped in a visual element for layout, should this be a component?
+        private EyeToggle MaskActiveToggle => this.Q<EyeToggle>("MaskActiveToggle");
         private Label LayerNameLabel => this.Q<Label>("LayerNameLabel"); //todo: this is now wrapped in a visual element for layout, should this be a component?
 
         private LayerData layerData => userData as LayerData;
@@ -30,7 +30,7 @@ namespace Netherlands3D.UI.Components
         {
             var layerPropertyData = layerData.GetProperty<MaskingLayerPropertyData>();
             var isOn = GetIsDomeMaskingBitSet(layerPropertyData);
-            MaskActiveToggle.SetValueWithoutNotify(isOn);
+            MaskActiveToggle.value = isOn;
         }
 
         public void Initialize(LayerData layerData)

@@ -6,7 +6,7 @@
     <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/Components/MaskLayerRowElement-style.uss?fileID=7433441132597879392&amp;guid=b85aaef1db7784c69b614077a888f600&amp;type=3#MaskLayerRowElement-style"/>
     <ui:VisualElement class="mask-layer-list-view-item">
         <ui:VisualElement class="mask-layer-list-view-item__cell">
-            <nl3d:Toggle name="MaskActiveToggle" toggle-style="IconOnly" icon="Visibility" class="toggle--borderless"/>
+            <nl3d:EyeToggle name="MaskActiveToggle" toggle-style="IconOnly" icon="Visibility"/>
         </ui:VisualElement>
         <ui:VisualElement class="mask-layer-row-item__cell">
             <nl3d:Icon/>
