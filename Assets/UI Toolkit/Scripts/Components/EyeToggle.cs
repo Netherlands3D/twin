@@ -10,8 +10,8 @@ namespace Netherlands3D.UI.Components
     {
         Visible = IconImage.Visibility, 
         Invisible = IconImage.Invisible, 
-        VisibleInInvisible,
-        ContainsInvisible
+        VisibleInInvisible, //todo: not implemented yet
+        ContainsInvisible //todo: not implemented yet
     }
     
     [UxmlElement]

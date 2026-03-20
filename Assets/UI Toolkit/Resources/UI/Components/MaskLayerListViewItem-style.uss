@@ -13,5 +13,5 @@
 }
 
 .mask-layer-list-view-item__cell {
-    padding-right: var(--spacing-1);
+    padding-right: var(--spacing-3);
 }

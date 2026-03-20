@@ -7,7 +7,7 @@
     name="DomePanel" 
     class="dome-panel"
 >
-    <nl3d:Header icon="Visibility" text="Uitsnijden lagen binnen de dome"/>
+    <nl3d:Header icon="LayerMask" text="Uitsnijden lagen binnen de dome"/>
     <ui:Label text="Kies hieronder welke lagen zichtbaar zijn binnen de dome. Verborgen lagen worden niet meegenomen in de uitsnede." class="dome-panel__message-text"/>
     <ui:VisualElement name="Content" class="dome-panel__body">
         <nl3d:ListView name="ItemListView" class="dome-panel__list-view"/>
