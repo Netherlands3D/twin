@@ -35,6 +35,10 @@ namespace Netherlands3D.UI.Behaviours
         [SerializeField] 
         [Obsolete("Replaced by the OnUriImportStarted event as soon as copy/paste and credential support is added")]
         private UnityEvent OpenLegacyFileImportContentPanel;
+        
+        private ToolbarMain toolbarMain;
+        private ToolbarMain ToolbarMain => toolbarMain ??= Root?.Q<ToolbarMain>();
+        
 
         private void Awake()
         {
@@ -55,6 +59,8 @@ namespace Netherlands3D.UI.Behaviours
 
             GetPanel<ImportAssetPanel>().OnShow += OnShowImportAssetPanel;
             GetPanel<ImportAssetPanel>().OnHide += OnHideImportAssetPanel;
+            
+            ToolbarMain.AddButton.clicked += ShowPanel<ImportAssetPanel>;
         }
 
         private void OnDisable()
@@ -69,6 +75,8 @@ namespace Netherlands3D.UI.Behaviours
 
             GetPanel<ImportAssetPanel>().OnShow -= OnShowImportAssetPanel;
             GetPanel<ImportAssetPanel>().OnHide -= OnHideImportAssetPanel;
+            
+            ToolbarMain.AddButton.clicked -= ShowPanel<ImportAssetPanel>;
         }
 
         public void Open()
@@ -95,8 +103,15 @@ namespace Netherlands3D.UI.Behaviours
 
         public void ShowPanel<T>() where T : BaseInspectorContentPanel
         {
+            BaseInspectorContentPanel previousPanel = activePanel;
             // only one panel can be open at a time
             HidePanel();
+
+            //was the activepanel already open? then toggle it to close
+            if (previousPanel == GetPanel<T>())
+            {
+                return;
+            }
             
             Open();
             activePanel = GetPanel<T>();
@@ -113,6 +128,7 @@ namespace Netherlands3D.UI.Behaviours
         public void HidePanel()
         {
             activePanel?.Hide();
+            activePanel = null;
         }
 
         public void OpenAssetLibrary() => ShowPanel<AssetLibraryPanel>();
