@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes;
 using Netherlands3D.Twin.Layers.Properties;
+using Netherlands3D.UI_Toolkit.Scripts;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 
@@ -11,7 +13,10 @@ namespace Netherlands3D.UI.Components
     {
         private EyeToggle MaskActiveToggle => this.Q<EyeToggle>("MaskActiveToggle");
         private Label LayerNameLabel => this.Q<Label>("LayerNameLabel"); //todo: this is now wrapped in a visual element for layout, should this be a component?
-
+        
+        private Icon layerTypeIcon;
+        private Icon LayerTypeIcon => layerTypeIcon ??= this.Q<Icon>("LayerTypeIcon");
+        
         private LayerData layerData => userData as LayerData;
 
         public MaskLayerListViewItem()
@@ -38,8 +43,14 @@ namespace Netherlands3D.UI.Components
             userData = layerData;
             LayerNameLabel.text = layerData.Name;
             LoadProperties(layerData.LayerProperties);
+            LayerTypeIcon.Image = GetImage(layerData);
         }
-        
+
+        private static IconImage GetImage(LayerData layerData)
+        {
+            return LayerTypeSpriteLibrary.GetIconImage(layerData);
+        }
+
         private bool GetIsDomeMaskingBitSet(MaskingLayerPropertyData layerPropertyData)
         {
             var currentLayerMask = layerPropertyData.GetMaskLayerMask();
