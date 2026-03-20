@@ -1,6 +1,4 @@
 using System;
-using Netherlands3D.UI_Toolkit.Scripts;
-using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
@@ -25,6 +23,12 @@ namespace Netherlands3D.UI.Panels
             OnHide += () => EnableInClassList("active", false);
             RetryButton.clicked += Hide;
         }
+
+        ~ErrorPanel()
+        {
+            RetryButton.clicked -= Hide;
+        }
+
         
         public void Show() => OnShow?.Invoke();
         public void Hide() => OnHide?.Invoke();
