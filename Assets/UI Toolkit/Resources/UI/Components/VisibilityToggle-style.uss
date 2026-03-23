@@ -1,4 +1,4 @@
-.eye-toggle {
+.visibility-toggle {
     --toggle-bg-color: var(--color-white);
     --toggle-active-color: var(--color-blue-700);
     --toggle-active-contrast-color: var(--toggle-bg-color);
@@ -26,18 +26,18 @@
     border-width: 0;
 }
 
-.eye-toggle .unity-checkmark,
-.eye-toggle .unity-toggle__input,
-.eye-toggle .unity-toggle__checkmark {
+.visibility-toggle .unity-checkmark,
+.visibility-toggle .unity-toggle__input,
+.visibility-toggle .unity-toggle__checkmark {
     display: none;
 }
 
-.eye-toggle > #Icon {
+.visibility-toggle > #Icon {
     width: var(--spacing-6);
     height: var(--spacing-6);
 }
 
-.eye-toggle:disabled {
+.visibility-toggle:disabled {
     opacity: 1;
     border-color: var(--toggle-disabled-color);
 }

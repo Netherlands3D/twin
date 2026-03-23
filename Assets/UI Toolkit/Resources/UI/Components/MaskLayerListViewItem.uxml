@@ -5,7 +5,7 @@
          editor-extension-mode="False" >
     <ui:VisualElement class="mask-layer-list-view-item">
         <ui:VisualElement class="mask-layer-list-view-item__cell">
-            <nl3d:EyeToggle name="MaskActiveToggle" toggle-style="IconOnly" icon="Visibility"/>
+            <nl3d:VisibilityToggle name="MaskActiveToggle" toggle-style="IconOnly" icon="Visibility"/>
         </ui:VisualElement>
         <ui:VisualElement class="mask-layer-list-view-item__cell">
             <nl3d:Icon name="LayerTypeIcon"/>

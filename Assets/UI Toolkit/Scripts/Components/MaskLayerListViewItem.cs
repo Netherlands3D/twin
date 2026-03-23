@@ -11,7 +11,7 @@ namespace Netherlands3D.UI.Components
     [UxmlElement]
     public partial class MaskLayerListViewItem : VisualElement, IVisualizationWithPropertyData
     {
-        private EyeToggle MaskActiveToggle => this.Q<EyeToggle>("MaskActiveToggle");
+        private VisibilityToggle MaskActiveToggle => this.Q<VisibilityToggle>("MaskActiveToggle");
         private Label LayerNameLabel => this.Q<Label>("LayerNameLabel"); //todo: this is now wrapped in a visual element for layout, should this be a component?
         
         private Icon layerTypeIcon;
