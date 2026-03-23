@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using Button = UnityEngine.UIElements.Button;
 
 namespace Netherlands3D.UI.Panels
 {
@@ -25,17 +27,13 @@ namespace Netherlands3D.UI.Panels
         {
             root = GetComponent<UIDocument>().rootVisualElement;
             propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
+            propertiesPanel.Q<Button>().clicked += ClearActivePanel; //todo: replace this with ClearActivePanel once the Property class is no longer needed
         }
 
-        void OnDisable()
-        {
-            // ClearActivePanel();
-        }
-        
         public void ClearActivePanel()
         {
             propertiesPanel.SetEnabled(false);
-
+            
             if (propertySections.Count == 0) //todo
                 return;
 
@@ -59,15 +57,9 @@ namespace Netherlands3D.UI.Panels
 
         private bool ShowPanelsForProperty(LayerData layer)
         {
-            // var type = property.GetType();
-            // var prefabs = registry.GetPanelPrefabs(type, property);
             if (layer.LayerProperties.Count > 0)
             {
-
-                    // var panel = Instantiate(prefab, sections);
-                    Debug.Log("spawn panels for: " + layer.Name);
-                    // panel.GetComponent<IVisualizationWithPropertyData>().LoadProperties(properties);
-
+                Debug.Log("spawn panels for: " + layer.Name);
                 return true;
             }
 

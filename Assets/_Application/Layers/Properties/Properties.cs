@@ -65,6 +65,7 @@ namespace Netherlands3D.Twin.Layers.Properties
             var propertyPanelBehaviour = FindAnyObjectByType<PropertyPanelBehaviour>();
             propertyPanelBehaviour.ClearActivePanel();
             
+            //todo: this is no longer needed after the transition to UI toolkit
             card.gameObject.SetActive(false);
             sections.ClearAllChildren();
         }
