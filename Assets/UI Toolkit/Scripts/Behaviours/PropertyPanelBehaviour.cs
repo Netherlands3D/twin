@@ -20,13 +20,15 @@ namespace Netherlands3D.UI.Panels
         private InputAction leftClickAction;
         private InputAction longPressAction;
         private InputAction touchAction;
-        private PropertiesPanel propertiesPanel; //main conatiner for property sections
+        private PropertiesPanel propertiesPanel; //main panel for property sections
+        private VisualElement propertySectionContainer;
         private List<ContentContainer> propertySections = new(); //property sections
 
         void OnEnable()
         {
             root = GetComponent<UIDocument>().rootVisualElement;
             propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
+            propertySectionContainer = propertiesPanel.Q("Content");
             propertiesPanel.Q<Button>().clicked += ClearActivePanel; //todo: replace this with ClearActivePanel once the Property class is no longer needed
         }
 
@@ -60,6 +62,7 @@ namespace Netherlands3D.UI.Panels
             if (layer.LayerProperties.Count > 0)
             {
                 Debug.Log("spawn panels for: " + layer.Name);
+                // propertySectionContainer.Add(new PropertySection()); //todo
                 return true;
             }
 
