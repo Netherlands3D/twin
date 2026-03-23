@@ -9,8 +9,8 @@ namespace Netherlands3D.UI.Components
     {
         Visible = IconImage.Visibility, 
         Invisible = IconImage.Invisible, 
-        VisibleInInvisible, //todo: not implemented yet
-        ContainsInvisible //todo: not implemented yet
+        PartiallyVisible, //todo: not implemented yet
+        VisibleInInvisible //todo: not implemented yet
     }
     
     [UxmlElement]
@@ -32,9 +32,14 @@ namespace Netherlands3D.UI.Components
             this.CloneComponentTree("Components");
             this.AddComponentStylesheet("Components");
             
-            SetImage(value);
             
             this.RegisterValueChangedCallback(OnValueChanged);
+            RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
+        }
+
+        private void OnAttachToPanel(AttachToPanelEvent evt)
+        {
+            SetImage(value);
         }
 
         private void OnValueChanged(ChangeEvent<bool> evt)
@@ -45,6 +50,10 @@ namespace Netherlands3D.UI.Components
         private void SetImage(bool newValue)
         {
             Image = newValue ? EyeState.Visible : EyeState.Invisible;
+            if (newValue)
+                Icon.Color = ThemeColor.Blue900;
+            else
+                Icon.Color = ThemeColor.Blue200;
         }
     }
 }
