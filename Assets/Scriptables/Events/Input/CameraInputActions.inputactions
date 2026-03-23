@@ -37,7 +37,7 @@
                     "name": "RotateModifier",
                     "type": "Button",
                     "id": "4aa66dc8-128f-4bfb-9b60-6c9c5c91b6b3",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -46,7 +46,7 @@
                     "name": "FirstPersonModifier",
                     "type": "Button",
                     "id": "52c16aa0-20d8-4e13-88eb-fb80ad21aa53",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false

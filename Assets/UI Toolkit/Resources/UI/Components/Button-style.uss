@@ -16,6 +16,7 @@
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
+   
     min-height: var(--spacing-11);
     padding: var(--button-padding);
     margin: var(--button-margin);
