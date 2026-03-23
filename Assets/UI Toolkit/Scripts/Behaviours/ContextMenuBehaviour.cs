@@ -105,7 +105,7 @@ namespace Netherlands3D.UI.Panels
             return RuntimePanelUtils.ScreenToPanel(root.panel, screenPos);
         }
 
-        private bool ClickedUI(Vector2 screenPos)
+        public bool ClickedUI(Vector2 screenPos)
         {
             var picked = root.panel.Pick(screenPos);
             // block if we hit something other than the root background

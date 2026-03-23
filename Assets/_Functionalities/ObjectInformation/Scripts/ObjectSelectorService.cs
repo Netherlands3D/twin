@@ -11,7 +11,9 @@ using Netherlands3D.Twin.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using GG.Extensions;
+using Netherlands3D.Services;
 using Netherlands3D.Twin.UI;
+using Netherlands3D.UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -163,6 +165,11 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         
         private void OnLeftClick(InputAction.CallbackContext ctx)
         {
+            //TODO this should be refactored when UITOOLKIT will be implemented fully
+            ContextMenuBehaviour contextMenu = ServiceLocator.GetService<ContextMenuBehaviour>();
+            if(contextMenu.ClickedUI(contextMenu.GetPanelClickPosition()))
+                return;
+            
             //TODO this should be refactored when UITOOLKIT will be implemented fully
             //is the click on any other button than the excluded ui elements then deselect
             if (cameraInputSystemProvider.OverLockingObject(out GameObject clickedObject))
