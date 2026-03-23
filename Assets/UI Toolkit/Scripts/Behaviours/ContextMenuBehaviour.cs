@@ -150,11 +150,10 @@ namespace Netherlands3D.UI.Panels
                 if(!panelBehaviour.ShouldBeActive()) continue;
 
                 selectedBehaviour = panelBehaviour;
-                floatingPanel.SetPosition(screenPos);
-                
                 var data = panelBehaviour.GetData();
                 content = panelBehaviour.SpawnFloatingPanelContent(floatingPanel, data);
                 floatingPanel.Add(content);
+                floatingPanel.SetPosition(screenPos);
                 break;
             }
         }

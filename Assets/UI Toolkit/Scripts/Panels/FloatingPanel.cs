@@ -10,6 +10,8 @@ namespace Netherlands3D.UI.Panels
     {
         public UnityEvent OnClose = new();
         public UnityEvent OnOpen = new();
+
+        private Vector2 screenPosition;
         
         public FloatingPanel()
         {
@@ -19,10 +21,13 @@ namespace Netherlands3D.UI.Panels
             schedule.Execute(() =>
             {
                 style.position = Position.Absolute; //todo: move to css if possible?
+                Debug.Log("style update");
             });
+            
+            RegisterCallback<GeometryChangedEvent>(ClampViewPort);
         }
-        
-        public void SetPosition(Vector2 screenPosition)
+
+        private void ClampViewPort(GeometryChangedEvent evt)
         {
             var root = panel.visualTree;
 
@@ -37,6 +42,13 @@ namespace Netherlands3D.UI.Panels
 
             style.left = x;
             style.top = y;
+        }
+
+        public void SetPosition(Vector2 screenPosition)
+        {
+           this.screenPosition = screenPosition;
+           style.left = screenPosition.x;
+           style.top = screenPosition.y;
         }
     }
 }
