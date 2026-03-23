@@ -98,14 +98,14 @@ namespace Netherlands3D.UI.Panels
             ClearActivePanel();
         }
 
-        public Vector2 GetPanelClickPosition()
+        private Vector2 GetPanelClickPosition()
         {
             var screenPos = Pointer.current.position.ReadValue();
             screenPos.y = Screen.height - screenPos.y;
             return RuntimePanelUtils.ScreenToPanel(root.panel, screenPos);
         }
 
-        public bool ClickedUI(Vector2 screenPos)
+        private bool ClickedUI(Vector2 screenPos)
         {
             var picked = root.panel.Pick(screenPos);
             // block if we hit something other than the root background
@@ -133,6 +133,11 @@ namespace Netherlands3D.UI.Panels
             }
             
             return true;
+        }
+
+        public bool IsUIClicked()
+        {
+            return ClickedUI(GetPanelClickPosition());
         }
 
         private bool IsActivePanelClicked(Vector2 screenPos)

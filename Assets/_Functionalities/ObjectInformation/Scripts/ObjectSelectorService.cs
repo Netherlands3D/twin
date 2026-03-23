@@ -166,8 +166,7 @@ namespace Netherlands3D.Functionalities.ObjectInformation
         private void OnLeftClick(InputAction.CallbackContext ctx)
         {
             //TODO this should be refactored when UITOOLKIT will be implemented fully
-            ContextMenuBehaviour contextMenu = ServiceLocator.GetService<ContextMenuBehaviour>();
-            if(contextMenu.ClickedUI(contextMenu.GetPanelClickPosition()))
+            if(ServiceLocator.GetService<ContextMenuBehaviour>().IsUIClicked())
                 return;
             
             //TODO this should be refactored when UITOOLKIT will be implemented fully

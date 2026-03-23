@@ -21,7 +21,6 @@ namespace Netherlands3D.UI.Panels
             schedule.Execute(() =>
             {
                 style.position = Position.Absolute; //todo: move to css if possible?
-                Debug.Log("style update");
             });
             
             RegisterCallback<GeometryChangedEvent>(ClampViewPort);
