@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 6924611943033293180}
   - component: {fileID: 7337907536587320542}
   - component: {fileID: 8758499406149279786}
+  - component: {fileID: 3044721998757012428}
+  - component: {fileID: 2685216372930973822}
   m_Layer: 5
   m_Name: UI v2
   m_TagString: Untagged
@@ -55,9 +57,13 @@ MonoBehaviour:
   sourceAsset: {fileID: 9197481963319205126, guid: 6647caf475c8b1c4d997f363bebbaf1e,
     type: 3}
   m_SortingOrder: 0
+  m_Position: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
   m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
 --- !u!114 &9214300892430282656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,3 +260,38 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &3044721998757012428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891704482898673965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a002345d35eb03b9fa224a363263ae75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: eu.netherlands3d.twin::Netherlands3D.UI.Behaviours.InspectorAssetPanelBehaviour
+  uploadFileEvent: {fileID: 0}
+  OpenLegacyFileImportContentPanel:
+    m_PersistentCalls:
+      m_Calls: []
+  importSucceeded:
+    m_PersistentCalls:
+      m_Calls: []
+  importFailed:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2685216372930973822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891704482898673965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47305cfe2cb7e244086256ab864036df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyVault: {fileID: 11400000, guid: dc14abcfb42578a4394b67591fc8ad1e, type: 2}

@@ -53,6 +53,7 @@
         Moon = 77,
         Move = 59,
         Next = 78,
+        None = -1,
         NoEdit = 79,
         NorthArrow = 23,
         Object = 22,

@@ -44,12 +44,12 @@ namespace Netherlands3D
             if (auth is FailedOrUnsupported)
             {
                 //3b. if no: set UI so user inputs credentials and go to step 2
-                SetCredentialsUIActive(true);
+                //SetCredentialsUIActive(true);
                 return;
             }
 
             //3a. if yes: pass this to the Layer service
-            SetCredentialsUIActive(false);
+            //SetCredentialsUIActive(false);
             AddLayerFromUrl(uri, auth);
         }
 
@@ -71,9 +71,9 @@ namespace Netherlands3D
             }
         }
 
-        private void SetCredentialsUIActive(bool enabled)
-        {
-            credentialsUI.SetActive(enabled);
-        }
+        // private void SetCredentialsUIActive(bool enabled)
+        // {
+        //     credentialsUI?.SetActive(enabled);
+        // }
     }
 }
