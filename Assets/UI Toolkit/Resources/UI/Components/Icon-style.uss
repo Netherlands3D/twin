@@ -36,6 +36,7 @@
 .icon.tint-blue-300 { --icon-tint-color: var(--color-blue-300); }
 .icon.tint-blue-700 { --icon-tint-color: var(--color-blue-700); }
 .icon.tint-blue-900 { --icon-tint-color: var(--color-blue-900); }
+.icon.tint-warning { --icon-tint-color: var(--color-warning); }
 
 /* List of all known icons */
 .icon.image-adjustments-horizontal { --icon-image: var(--icon-adjustmentshorizontal); }

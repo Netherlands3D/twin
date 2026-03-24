@@ -23,4 +23,6 @@
     </nl3d:ContentContainer>
     <nl3dP:ErrorPanel>
     </nl3dP:ErrorPanel>
+    <nl3dP:CredentialPanel>
+    </nl3dP:CredentialPanel>
 </ui:UXML>
