@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties
 {
-    [PropertySection(typeof(TransformLayerPropertyData))]
+    // [PropertySection(typeof(TransformLayerPropertyData))] //todo: this class can be deleted, now removed this attribute to avoid finding this one as the property section
     public class TransformPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         [Serializable]

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
@@ -14,7 +15,6 @@ namespace Netherlands3D.UI.Panels
     public class PropertyPanelBehaviour : MonoBehaviour
     {
         [SerializeField] private InputActionAsset inputActionAsset;
-        [SerializeField] private PropertySectionRegistry registry;
 
         private VisualElement root;
         private InputAction rightClickAction;
@@ -23,7 +23,7 @@ namespace Netherlands3D.UI.Panels
         private InputAction touchAction;
         private PropertiesPanel propertiesPanel; //main panel for property sections
         private VisualElement propertySectionContainer;
-        private List<ContentContainer> propertySections = new(); //property sections
+        private List<VisualElement> propertySections = new(); //property sections
 
         void OnEnable()
         {
@@ -35,13 +35,12 @@ namespace Netherlands3D.UI.Panels
 
         public void ClearActivePanel()
         {
-            propertiesPanel.SetEnabled(false);
             
-            if (propertySections.Count == 0) //todo
-                return;
-
             foreach (var section in propertySections)
-                propertiesPanel.Remove(section);
+                propertySectionContainer.Remove(section);
+            
+            propertySections.Clear();
+            propertiesPanel.SetEnabled(false);
         }
 
         public void SpawnPanel(LayerData layer)
@@ -53,35 +52,46 @@ namespace Netherlands3D.UI.Panels
 
         private void CheckAndSpawnPanel(LayerData layer)
         {
+            var hasPanels = false;
             foreach (var property in layer.LayerProperties)
             {
-                if(property.IsEditable == false) continue;
-                
-                ShowPanelsForProperty(property, layer.LayerProperties);
+                if (property.IsEditable == false) continue;
+
+                hasPanels |= ShowPanelsForProperty(property, layer.LayerProperties);
+            }
+
+            if (!hasPanels)
+            {
+                ClearActivePanel();
             }
         }
 
         private bool ShowPanelsForProperty(LayerPropertyData property, List<LayerPropertyData> properties)
         {
             var type = property.GetType();
-            //todo temp
-            if (type == typeof(TransformLayerPropertyData))
+            if (PropertySectionRegistry2.TypeRegistry.ContainsKey(type))
             {
-                var propertySection = new TransformPanel();
+                var panelType = PropertySectionRegistry2.TypeRegistry[type];
+
+                var propertySection = (VisualElement)Activator.CreateInstance(panelType);
+                propertySections.Add(propertySection);
                 propertySectionContainer.Add(propertySection);
-                propertySection.LoadProperties(properties);
-                
+                ((IVisualizationWithPropertyData)propertySection).LoadProperties(properties);
                 return true;
             }
-            
-            // if (layer.LayerProperties.Count > 0)
-            // {
-            //     Debug.Log("spawn panels for: " + layer.Name);
-            //     propertySectionContainer.Add(new PropertySection()); //todo
-            //     return true;
-            // }
 
             return false;
+            // var prefabs = registry.GetPanelPrefabs(type, property);                
+            // if (prefabs.Count > 0)
+            // {
+            //     foreach(var prefab in prefabs)
+            //     {
+            //         var panel = Instantiate(prefab, sections);
+            //         panel.GetComponent<IVisualizationWithPropertyData>().LoadProperties(properties);
+            //     }
+            //     return true;
+            // }
+            // return false;
         }
     }
 }
