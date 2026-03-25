@@ -12,7 +12,7 @@ namespace Netherlands3D.Twin.Layers.Properties
     {
         [SerializeField] private GameObject card;
         [SerializeField] private RectTransform sections;
-        [SerializeField] private PropertySectionRegistry registry;
+        // [SerializeField] private PropertySectionRegistry registry;
 
         private void Start()
         {
@@ -47,17 +47,20 @@ namespace Netherlands3D.Twin.Layers.Properties
         private bool ShowPanelsForProperty(LayerPropertyData property, List<LayerPropertyData> properties)
         {
             var type = property.GetType();
-            var prefabs = registry.GetPanelPrefabs(type, property);                
-            if (prefabs.Count > 0)
-            {
-                foreach(var prefab in prefabs)
-                {
-                    var panel = Instantiate(prefab, sections);
-                    panel.GetComponent<IVisualizationWithPropertyData>().LoadProperties(properties);
-                }
-                return true;
-            }
-            return false;
+            Debug.LogError("UI toolkit work in progress, if these errors show up the transition of property panels to UI toolkit is not complete yet");
+            return PropertySectionRegistry.TypeRegistry.ContainsKey(type);                
+
+            // var prefabs = registry.GetPanelPrefabs(type, property);                
+            // if (prefabs.Count > 0)
+            // {
+            //     foreach(var prefab in prefabs)
+            //     {
+            //         var panel = Instantiate(prefab, sections);
+            //         panel.GetComponent<IVisualizationWithPropertyData>().LoadProperties(properties);
+            //     }
+            //     return true;
+            // }
+            // return false;
         }
 
         public void Hide()
@@ -75,12 +78,14 @@ namespace Netherlands3D.Twin.Layers.Properties
             foreach (var property in layer.LayerProperties)
             {
                 var type = property.GetType();
-                if (registry.HasPanel(type))
+                // if (registry.HasPanel(type))
+                if(PropertySectionRegistry.TypeRegistry.ContainsKey(type))
                     return true;
                 
                 foreach (var interfaceType in type.GetInterfaces())
                 {
-                    if (registry.HasPanel(interfaceType))
+                    // if (registry.HasPanel(interfaceType))
+                    if(PropertySectionRegistry.TypeRegistry.ContainsKey(type))
                     {
                         return true;
                     }

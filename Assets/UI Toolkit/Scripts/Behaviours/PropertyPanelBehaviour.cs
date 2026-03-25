@@ -69,9 +69,9 @@ namespace Netherlands3D.UI.Panels
         private bool ShowPanelsForProperty(LayerPropertyData property, List<LayerPropertyData> properties)
         {
             var type = property.GetType();
-            if (PropertySectionRegistry2.TypeRegistry.ContainsKey(type))
+            if (PropertySectionRegistry.TypeRegistry.ContainsKey(type))
             {
-                var panelType = PropertySectionRegistry2.TypeRegistry[type];
+                var panelType = PropertySectionRegistry.TypeRegistry[type];
 
                 var propertySection = (VisualElement)Activator.CreateInstance(panelType);
                 propertySections.Add(propertySection);
@@ -81,17 +81,6 @@ namespace Netherlands3D.UI.Panels
             }
 
             return false;
-            // var prefabs = registry.GetPanelPrefabs(type, property);                
-            // if (prefabs.Count > 0)
-            // {
-            //     foreach(var prefab in prefabs)
-            //     {
-            //         var panel = Instantiate(prefab, sections);
-            //         panel.GetComponent<IVisualizationWithPropertyData>().LoadProperties(properties);
-            //     }
-            //     return true;
-            // }
-            // return false;
         }
     }
 }
