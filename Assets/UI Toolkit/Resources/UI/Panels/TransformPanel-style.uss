@@ -1,0 +1,16 @@
+.transform-panel-row {
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: var(--spacing-2);
+}
+
+.icon.transform-panel__icon{
+    margin-right: var(--spacing-2);
+}
+.value-field.transform-panel__value-field{
+    margin-right: var(--spacing-2);
+}
+
+.value-field.transform-panel__value-field--last{
+    margin-right: 0;
+}

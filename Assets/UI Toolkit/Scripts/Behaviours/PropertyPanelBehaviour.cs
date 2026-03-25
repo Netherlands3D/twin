@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Netherlands3D.Services;
 using Netherlands3D.Twin.Layers;
+using Netherlands3D.Twin.Layers.LayerTypes.HierarchicalObject.Properties;
 using Netherlands3D.Twin.Layers.Properties;
 using Netherlands3D.UI.Components;
 using UnityEngine;
@@ -29,7 +30,7 @@ namespace Netherlands3D.UI.Panels
             root = GetComponent<UIDocument>().rootVisualElement;
             propertiesPanel = root.Q<PropertiesPanel>("PropertiesPanel");
             propertySectionContainer = propertiesPanel.Q("Content");
-            propertiesPanel.Q<Button>().clicked += ClearActivePanel; //todo: replace this with ClearActivePanel once the Property class is no longer needed
+            propertiesPanel.Q<Button>().clicked += ClearActivePanel;
         }
 
         public void ClearActivePanel()
@@ -45,26 +46,40 @@ namespace Netherlands3D.UI.Panels
 
         public void SpawnPanel(LayerData layer)
         {
+            ClearActivePanel();
             propertiesPanel.SetEnabled(true);
             CheckAndSpawnPanel(layer);
         }
 
         private void CheckAndSpawnPanel(LayerData layer)
         {
-            if (!ShowPanelsForProperty(layer))
+            foreach (var property in layer.LayerProperties)
             {
-                Debug.Log(layer.Name + " has no property sections");
+                if(property.IsEditable == false) continue;
+                
+                ShowPanelsForProperty(property, layer.LayerProperties);
             }
         }
 
-        private bool ShowPanelsForProperty(LayerData layer)
+        private bool ShowPanelsForProperty(LayerPropertyData property, List<LayerPropertyData> properties)
         {
-            if (layer.LayerProperties.Count > 0)
+            var type = property.GetType();
+            //todo temp
+            if (type == typeof(TransformLayerPropertyData))
             {
-                Debug.Log("spawn panels for: " + layer.Name);
-                // propertySectionContainer.Add(new PropertySection()); //todo
+                var propertySection = new TransformPanel();
+                propertySectionContainer.Add(propertySection);
+                propertySection.LoadProperties(properties);
+                
                 return true;
             }
+            
+            // if (layer.LayerProperties.Count > 0)
+            // {
+            //     Debug.Log("spawn panels for: " + layer.Name);
+            //     propertySectionContainer.Add(new PropertySection()); //todo
+            //     return true;
+            // }
 
             return false;
         }

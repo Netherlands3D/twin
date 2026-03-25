@@ -93,6 +93,11 @@
     border-bottom-right-radius: var(--spacing-1);
 }
 
+.value-field.value-field-style-properties-panel .textfield {
+    min-height: var(--spacing-7);
+}
+
+
 .value-field.value-field-style-properties-panel .textfield TextElement {
     -unity-text-align: middle-left;
 }
