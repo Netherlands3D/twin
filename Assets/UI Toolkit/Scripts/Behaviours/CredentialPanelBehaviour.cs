@@ -11,10 +11,10 @@ namespace Netherlands3D.UI.Behaviours
     [RequireComponent(typeof(UIDocument), typeof(CredentialHandler))]
     public class CredentialPanelBehaviour : MonoBehaviour
     {
+        private UIDocument appDocument;
         public UnityEvent<Uri, StoredAuthorization> OnAuthorizationHandled;
         public CredentialHandler CredentialHandler => credentialHandler;
         
-        private UIDocument appDocument;
     
         private VisualElement root;
         private VisualElement Root => root ??= appDocument?.rootVisualElement;
@@ -25,21 +25,29 @@ namespace Netherlands3D.UI.Behaviours
         
         private CredentialHandler credentialHandler;
         
-        
-        
         private void Awake()
         {
+            appDocument = GetComponent<UIDocument>();
             credentialHandler = GetComponent<CredentialHandler>();
         }
 
-        private void OnEnable()
+        private void Start()
         {
             credentialHandler.OnAuthorizationHandled.AddListener(ProcessAuthorization);
+            Panel.OnConfirm += ApplyCredentials;
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             credentialHandler.OnAuthorizationHandled.RemoveListener(ProcessAuthorization);
+            Panel.OnConfirm -= ApplyCredentials;
+        }
+
+        private void ApplyCredentials()
+        {
+            credentialHandler.UserName = ""; //userNameInputField.text;
+            credentialHandler.PasswordOrKeyOrTokenOrCode = Panel.KeyField.value;
+            credentialHandler.ApplyCredentials();
         }
         
         private void ProcessAuthorization(Uri uri, StoredAuthorization auth)
@@ -47,12 +55,12 @@ namespace Netherlands3D.UI.Behaviours
             if (auth is FailedOrUnsupported)
             {
                 //3b. if no: set UI so user inputs credentials and go to step 2
-                //TODO show credentials panel
+                Panel.Show();
                 return;
             }
 
             //3a. if yes: pass this to the Layer service
-            //TODO close credentials panel
+            Panel.Hide();
             OnAuthorizationHandled?.Invoke(uri, auth);
         }
     }
