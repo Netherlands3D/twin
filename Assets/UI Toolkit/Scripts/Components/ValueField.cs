@@ -1,5 +1,6 @@
 using Netherlands3D.UI.ExtensionMethods;
 using Netherlands3D.UI_Toolkit.Scripts;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Components
@@ -23,6 +24,7 @@ namespace Netherlands3D.UI.Components
         private string label = "X";
         private string placeholderText = DefaultPlaceholder;
         private ValueFieldStyle valueFieldStyle = ValueFieldStyle.Default;
+        private float scrollStep = 1f;
 
         public VisualElement LabelContainer => labelContainer ??= this.Q<VisualElement>("LabelContainer");
         public Label LabelText => labelText ??= this.Q<Label>("LabelText");
@@ -62,6 +64,14 @@ namespace Netherlands3D.UI.Components
             }
         }
 
+        [UxmlAttribute("scroll-step")]
+        public float ScrollStep
+        {
+            get => scrollStep;
+            set => scrollStep = value;
+        }
+
+        
         public ValueField()
         {
             this.CloneComponentTree("Components");
@@ -75,6 +85,7 @@ namespace Netherlands3D.UI.Components
                 ApplyLabel();
                 ApplyLabelTypography();
                 ApplyPlaceholder();
+                RegisterScrollCallback();
             });
         }
 
@@ -111,6 +122,37 @@ namespace Netherlands3D.UI.Components
                 StyleClassPrefix,
                 valueFieldStyle.ToString().ToKebabCase()
             );
+        }
+        
+        private void RegisterScrollCallback()
+        {
+            if (InputField == null) return;
+
+            InputField.RegisterCallback<WheelEvent>(OnScroll, TrickleDown.TrickleDown);
+        }
+
+        private void OnScroll(WheelEvent evt)
+        {
+            var direction = evt.delta.y > 0f ? -1f : 1f;
+
+            var currentValue = 0f;
+            if (!string.IsNullOrWhiteSpace(InputField.value))
+                float.TryParse(InputField.value, System.Globalization.NumberStyles.Float,
+                    System.Globalization.CultureInfo.InvariantCulture, out currentValue);
+
+            var newValue = currentValue + direction * scrollStep;
+
+            // We cannot set the InputField.text directly, we need to set it and manually invoke the change events
+            var oldValue = InputField.text;
+            InputField.SetValueWithoutNotify(
+                newValue.ToString(System.Globalization.CultureInfo.InvariantCulture)
+            );
+
+            using var changeEvent = ChangeEvent<string>.GetPooled(oldValue, InputField.value);
+            changeEvent.target = InputField;
+            InputField.SendEvent(changeEvent);
+
+            evt.StopPropagation();
         }
     }
 }
