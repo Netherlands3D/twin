@@ -10,69 +10,57 @@ using UnityEngine.UIElements;
 
 namespace Netherlands3D.UI.Behaviours
 {
-    [RequireComponent(typeof(UIDocument), typeof(CredentialHandler))]
+    [RequireComponent(typeof(UIDocument), typeof(CredentialPanelBehaviour))]
     public class InspectorAssetPanelBehaviour : MonoBehaviour
     {
+        private UIDocument appDocument;
         [SerializeField] private TriggerEvent uploadFileEvent;
 
         [SerializeField]
         [Obsolete("Replaced by UriImportStarted")]
         private UnityEvent OpenLegacyFileImportContentPanel;
 
-        private ImportAssetPanel panel;
+        private VisualElement root;
+        private VisualElement Root => root ??= appDocument?.rootVisualElement;
         
-        private CredentialHandler credentialHandler;
+        private ImportAssetPanel panel;
+        private ImportAssetPanel Panel => panel ??= Root?.Q<ImportAssetPanel>();
+
+        private CredentialPanelBehaviour credentialBehaviour;
         
         public UnityEvent importSucceeded = new();
         public UnityEvent importFailed = new();
 
         private void Awake()
         {
-            panel = GetComponent<UIDocument>()
-                .rootVisualElement
-                .Q<ImportAssetPanel>();
-            
-            credentialHandler = GetComponent<CredentialHandler>();
+            appDocument = GetComponent<UIDocument>();
+            credentialBehaviour = GetComponent<CredentialPanelBehaviour>();
         }
 
-        private void OnEnable()
+        private void Start()
         {
-            panel.FileUploadStarted += OnUploadStarted;
-            panel.UriImportStarted += OnUriImportStarted;
+            Panel.FileUploadStarted += OnUploadStarted;
+            Panel.UriImportStarted += OnUriImportStarted;
 
             // legacy
-            panel.FileImportFromUrlStarted += OnFileImportFromUrlStarted;
-          
-            credentialHandler.OnAuthorizationHandled.AddListener(ProcessAuthorization);
+            Panel.FileImportFromUrlStarted += OnFileImportFromUrlStarted;
+            
             importSucceeded.AddListener(OnImportSucceeded);
             importFailed.AddListener(OnImportFailed);
+            credentialBehaviour.OnAuthorizationHandled.AddListener(AddLayerFromUrl);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
-            panel.FileUploadStarted -= OnUploadStarted;
-            panel.UriImportStarted -= OnUriImportStarted;
+            Panel.FileUploadStarted -= OnUploadStarted;
+            Panel.UriImportStarted -= OnUriImportStarted;
 
             // legacy
-            panel.FileImportFromUrlStarted -= OnFileImportFromUrlStarted;
+            Panel.FileImportFromUrlStarted -= OnFileImportFromUrlStarted;
             
-            credentialHandler.OnAuthorizationHandled.RemoveListener(ProcessAuthorization);
             importSucceeded.RemoveListener(OnImportSucceeded);
             importFailed.RemoveListener(OnImportFailed);
-        }
-        
-        private void ProcessAuthorization(Uri uri, StoredAuthorization auth)
-        {
-            if (auth is FailedOrUnsupported)
-            {
-                //3b. if no: set UI so user inputs credentials and go to step 2
-                //TODO show credentials panel
-                return;
-            }
-
-            //3a. if yes: pass this to the Layer service
-            //TODO close credentials panel
-            AddLayerFromUrl(uri, auth);
+            credentialBehaviour.OnAuthorizationHandled.RemoveListener(AddLayerFromUrl);
         }
 
         private async void AddLayerFromUrl(Uri uri, StoredAuthorization auth)
@@ -100,13 +88,13 @@ namespace Netherlands3D.UI.Behaviours
 
         private void OnUriImportStarted(Uri uri)
         {
-            credentialHandler.SetUri(uri.ToString());
-            credentialHandler.ApplyCredentials();
+            credentialBehaviour.CredentialHandler.SetUri(uri.ToString());
+            credentialBehaviour.CredentialHandler.ApplyCredentials();
         }
         
         private void OnImportSucceeded()
         {
-            panel.Hide();
+            Panel.Hide();
         }
 
         private void OnImportFailed()

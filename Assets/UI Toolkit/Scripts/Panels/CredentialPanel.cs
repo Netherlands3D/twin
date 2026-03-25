@@ -1,8 +1,6 @@
 using System;
-using Netherlands3D.UI.Components;
 using Netherlands3D.UI.ExtensionMethods;
 using UnityEngine.UIElements;
-using static Netherlands3D.UI.Components.Toggle;
 using Button = Netherlands3D.UI.Components.Button;
 
 namespace Netherlands3D.UI.Panels
@@ -16,6 +14,9 @@ namespace Netherlands3D.UI.Panels
         
         private Button button;
         private Button Button => button ??= this.Q<Button>("RetryButton");
+        
+        private TextField keyField;
+        public TextField KeyField => keyField ??= this.Q<TextField>("KeyField");
 
         private VisualElement warning;
         private VisualElement update;

@@ -26,9 +26,6 @@ namespace Netherlands3D.UI.Panels
         
         private ErrorPanel errorPanel;
         private ErrorPanel ErrorPanel =>  errorPanel ??= this.Q<ErrorPanel>();
-        
-        private CredentialPanel credentialPanel;
-        private CredentialPanel CredentialPanel =>  credentialPanel ??= this.Q<CredentialPanel>();
 
         public EventCallback<ClickEvent> OpenAssetLibrary { get; set; }
         public EventCallback<ClickEvent> FileImportFromUrlStarted { get; set; }
@@ -49,7 +46,6 @@ namespace Netherlands3D.UI.Panels
             UploadButton.RegisterCallback<ClickEvent>(OnUploadStarted);
             ImportUriButton.RegisterCallback<ClickEvent>(OnImportUri);
             UriImportFailed += ErrorPanel.Show; 
-            UriImportFailed += CredentialPanel.Show;
             // TODO: Remove once we have fixed the copy/paste and credential flow in UI Toolkit
             //ImportFromUrlButton.RegisterCallback<ClickEvent>(OnFileImportFromUrlStarted);
         }
