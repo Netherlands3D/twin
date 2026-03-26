@@ -1,5 +1,4 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" name="TransformPanel" class="transform-panel">
-    <Style src="project://database/Assets/UI%20Toolkit/Resources/UI/Panels/TransformPanel-style.uss?fileID=7433441132597879392&amp;guid=ec3f25e5e4ab84fcc9415fd9f5b04090&amp;type=3#TransformPanel-style"/>
     <nl3d:ContentContainer leading-icon="ScaleV1" text="Transformatie">
         <ui:VisualElement class="transform-panel__row">
             <nl3d:Icon image="Move" class="transform-panel__item"/>
