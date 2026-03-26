@@ -1,0 +1,3 @@
+.scatter-property-section.inactive {
+    display: none;
+}

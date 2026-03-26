@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False"
+         name="ScatterPropertySection" class="scatter-property-section">
+    <nl3d:ContentContainer leading-icon="ScatterObject" text="Object verspreiden">
+        <ui:VisualElement name="ToggleScatterSection">
+            <nl3d:CheckboxToggle LabelText="Verspreid objecten in tekengebied"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="ScatterSettingsSection">
+        </ui:VisualElement>
+    </nl3d:ContentContainer>
+</ui:UXML>
