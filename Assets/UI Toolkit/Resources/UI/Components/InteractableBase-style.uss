@@ -6,3 +6,8 @@
     border-width: 2px;
     border-color: var(--color-blue-900);
 }
+
+.interactable.green
+{
+    background-color: green;
+}
