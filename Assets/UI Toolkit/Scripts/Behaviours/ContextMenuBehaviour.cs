@@ -34,33 +34,18 @@ namespace Netherlands3D.UI.Panels
             touchAction = map.FindAction("Touch", true);
             
             rightClickAction.performed += OnRightClick;
-            rightClickAction.Enable();
-
             leftClickAction.performed += OnLeftClick;
-            leftClickAction.Enable();
-
             longPressAction.performed += OnRightClick;
-            longPressAction.Enable();
-            
             touchAction.performed += OnLeftClick;
-            touchAction.Enable();
         }
 
         void OnDisable()
         {
             rightClickAction.performed -= OnRightClick;
-            rightClickAction.Disable();
-            
             leftClickAction.performed -= OnLeftClick;
-            leftClickAction.Disable();
-            
             longPressAction.performed -= OnRightClick;
-            longPressAction.Disable();
-            
             touchAction.performed -= OnLeftClick;
-            touchAction.Disable();
-            
-            root.Remove(floatingPanel);
+            ClearActivePanel();
             floatingPanel = null;
         }
 
