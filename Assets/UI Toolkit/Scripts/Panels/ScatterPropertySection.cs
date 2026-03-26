@@ -17,6 +17,7 @@ namespace Netherlands3D.UI.Panels
     [PropertySection(typeof(ToggleScatterPropertyData))]
     public partial class ScatterPropertySection : VisualElement, IVisualizationWithPropertyData
     { 
+        const string inactiveUSSClassName = "inactive";
         private ToggleScatterPropertyData convertToScatterPropertyData;
 
         private VisualElement toggleScatterSection; 
@@ -44,9 +45,9 @@ namespace Netherlands3D.UI.Panels
         private void SetSectionVisible(bool isVisible)
         {
             if(isVisible)
-                RemoveFromClassList("inactive");
+                RemoveFromClassList(inactiveUSSClassName);
             else
-                AddToClassList("inactive");
+                AddToClassList(inactiveUSSClassName);
         }
         
         private void ToggleScatter(ChangeEvent<bool> evt)
