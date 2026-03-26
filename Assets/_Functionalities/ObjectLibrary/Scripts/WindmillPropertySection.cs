@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Netherlands3D.Functionalities.ObjectLibrary
 {
-    [PropertySection(typeof(WindmillPropertyData))]
+    // [PropertySection(typeof(WindmillPropertyData))] todo: delete this class and associated files
     public class WindmillPropertySection : MonoBehaviour, IVisualizationWithPropertyData
     {
         [SerializeField] private Slider axisHeightSlider;

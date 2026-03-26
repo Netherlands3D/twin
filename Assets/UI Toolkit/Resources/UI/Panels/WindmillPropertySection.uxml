@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:nl3d="Netherlands3D.UI.Components" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False" name="WindmillPropertySection">
+    <nl3d:ContentContainer leading-icon="Object" text="Object aanpassen">
+        <ui:VisualElement class="windmill-property-section__row">
+            <nl3d:Slider name="Ashoogte" label="Ashoogte" low-value="1" high-value="200" />
+        </ui:VisualElement>
+        <ui:VisualElement class="windmill-property-section__row">
+            <nl3d:Slider name="Rotordiameter" label="Rotordiameter" low-value="0.5" high-value="200" />
+        </ui:VisualElement>
+    </nl3d:ContentContainer>
+</ui:UXML>
