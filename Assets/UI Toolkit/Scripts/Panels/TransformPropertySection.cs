@@ -13,7 +13,7 @@ namespace Netherlands3D.UI.Panels
 {
     [UxmlElement]
     [PropertySection(typeof(TransformLayerPropertyData))]
-    public partial class TransformPanel : VisualElement, IVisualizationWithPropertyData
+    public partial class TransformPropertySection : VisualElement, IVisualizationWithPropertyData
     {
         private class SetOfXYZ
         {
@@ -42,7 +42,7 @@ namespace Netherlands3D.UI.Panels
         
         private TransformLayerPropertyData transformPropertyData;
         
-        public TransformPanel()
+        public TransformPropertySection()
         {
             this.CloneComponentTree("Panels");
             this.AddComponentStylesheet("Panels");    
